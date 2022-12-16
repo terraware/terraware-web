@@ -68,6 +68,9 @@ import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { defaultSelectedOrg } from 'src/providers/contexts';
 import strings from 'src/strings';
 import AppBootstrap from './AppBootstrap';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import { useAppVersion } from './hooks/useAppVersion';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -150,506 +153,511 @@ const MINIMAL_USER_ROUTES: string[] = [
 const isPlaceholderOrg = (id: number) => id === defaultSelectedOrg.id;
 
 function AppContent() {
-  const { isDesktop, type } = useDeviceInfo();
-  const classes = useStyles({ isDesktop });
-  const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences } = useOrganization();
-  const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
-  const [timeZoneInitializedForOrg, setTimeZoneInitializedForOrg] = useState<number>(defaultSelectedOrg.id);
-  const { isProduction } = useEnvironment();
-  const { user, reloadUser } = useUser();
-  const snackbar = useSnackbar();
-  const timeZones = useTimeZones();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
-  // seedSearchCriteria describes which criteria to apply when searching accession data.
-  const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
+    // manager hooks
+    useAppVersion();
 
-  // seedSearchSort describes which sort criterion to apply when searching accession data.
-  const [seedSearchSort, setSeedSearchSort] = useState<SearchSortOrder>(DEFAULT_SEED_SEARCH_SORT_ORDER);
+    const { isDesktop, type } = useDeviceInfo();
+    const classes = useStyles({ isDesktop });
+    const location = useStateLocation();
+    const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences } = useOrganization();
+    const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
+    const [timeZoneInitializedForOrg, setTimeZoneInitializedForOrg] = useState<number>(defaultSelectedOrg.id);
+    const { isProduction } = useEnvironment();
+    const { user, reloadUser } = useUser();
+    const snackbar = useSnackbar();
+    const timeZones = useTimeZones();
+    const timeZoneFeatureEnabled = isEnabled('Timezones');
 
-  // seedSearchColumns describes which accession columns to request when searching accession data.
-  const [seedSearchColumns, setSeedSearchColumns] = useState<string[]>(DefaultColumns.fields);
+    // seedSearchCriteria describes which criteria to apply when searching accession data.
+    const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
 
-  /*
-   * accessionsDisplayColumns describes which columns are displayed in the accessions list, and in which order.
-   * Differs from seedSearchSelectedColumns because the order matters. Also, sometimes the two lists won't have
-   * exactly the same columns. E.g. if the user adds the Withdrawal -> "Seeds Withdrawn" column,
-   * then seedSearchSelectedColumns will contain withdrawalQuantity and withdrawalUnits but this list will only
-   * contain withdrawalQuantity.
-   */
-  const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<string[]>(DefaultColumns.fields);
+    // seedSearchSort describes which sort criterion to apply when searching accession data.
+    const [seedSearchSort, setSeedSearchSort] = useState<SearchSortOrder>(DEFAULT_SEED_SEARCH_SORT_ORDER);
 
-  const history = useHistory();
-  const [species, setSpecies] = useState<Species[]>([]);
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
-  const [plotNames, setPlotNames] = useState<Record<number, string>>({});
-  const [showNavBar, setShowNavBar] = useState(true);
+    // seedSearchColumns describes which accession columns to request when searching accession data.
+    const [seedSearchColumns, setSeedSearchColumns] = useState<string[]>(DefaultColumns.fields);
 
-  const reloadSpecies = useCallback(() => {
-    const populateSpecies = async () => {
+    /*
+     * accessionsDisplayColumns describes which columns are displayed in the accessions list, and in which order.
+     * Differs from seedSearchSelectedColumns because the order matters. Also, sometimes the two lists won't have
+     * exactly the same columns. E.g. if the user adds the Withdrawal -> "Seeds Withdrawn" column,
+     * then seedSearchSelectedColumns will contain withdrawalQuantity and withdrawalUnits but this list will only
+     * contain withdrawalQuantity.
+     */
+    const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<string[]>(DefaultColumns.fields);
+
+    const history = useHistory();
+    const [species, setSpecies] = useState<Species[]>([]);
+    const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
+    const [plotNames, setPlotNames] = useState<Record<number, string>>({});
+    const [showNavBar, setShowNavBar] = useState(true);
+
+    const reloadSpecies = useCallback(() => {
+      const populateSpecies = async () => {
+        if (!isPlaceholderOrg(selectedOrganization.id)) {
+          const response = await getAllSpecies(selectedOrganization.id);
+          if (response.requestSucceeded) {
+            setSpecies(response.species);
+          }
+        }
+      };
+      populateSpecies();
+    }, [selectedOrganization]);
+
+    useEffect(() => {
+      reloadSpecies();
+    }, [reloadSpecies]);
+
+    const reloadTracking = useCallback(() => {
+      const populatePlantingSites = async () => {
+        if (!isPlaceholderOrg(selectedOrganization.id)) {
+          const response = await listPlantingSites(selectedOrganization.id, true);
+          if (response.requestSucceeded) {
+            setPlantingSites(response.sites || []);
+          }
+        }
+      };
+      populatePlantingSites();
+    }, [selectedOrganization]);
+
+    useEffect(() => {
+      reloadTracking();
+    }, [reloadTracking]);
+
+    useEffect(() => {
+      const plots: Record<number, string> = {};
+      for (const plantingSite of plantingSites) {
+        for (const plantingZone of plantingSite.plantingZones ?? []) {
+          for (const plot of plantingZone.plots ?? []) {
+            plots[plot.id] = plot.name;
+          }
+        }
+      }
+
+      setPlotNames(plots);
+    }, [plantingSites]);
+
+    const setDefaults = useCallback(() => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        const response = await getAllSpecies(selectedOrganization.id);
-        if (response.requestSucceeded) {
-          setSpecies(response.species);
+        setAccessionsDisplayColumns(DefaultColumns.fields);
+        setWithdrawalCreated(false);
+      }
+    }, [selectedOrganization.id]);
+
+    useEffect(() => {
+      setDefaults();
+    }, [setDefaults]);
+
+    useEffect(() => {
+      if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
+        history.push(APP_PATHS.WELCOME);
+      }
+    }, [organizations, location, history]);
+
+    useEffect(() => {
+      if (type === 'mobile' || type === 'tablet') {
+        setShowNavBar(false);
+      } else {
+        setShowNavBar(true);
+      }
+    }, [type]);
+
+    useEffect(() => {
+      const getDefaultTimeZone = (): TimeZoneDescription => {
+        const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        return getTimeZone(timeZones, browserTimeZone) || getUTC(timeZones);
+      };
+
+      const notifyTimeZoneUpdates = async (userTz: InitializedTimeZone, orgTz: InitializedTimeZone) => {
+        const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
+        const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
+        if (!notifyUser && !notifyOrg) {
+          return;
         }
-      }
-    };
-    populateSpecies();
-  }, [selectedOrganization]);
 
-  useEffect(() => {
-    reloadSpecies();
-  }, [reloadSpecies]);
+        let message: string | string[] = '';
 
-  const reloadTracking = useCallback(() => {
-    const populatePlantingSites = async () => {
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
-        const response = await listPlantingSites(selectedOrganization.id, true);
-        if (response.requestSucceeded) {
-          setPlantingSites(response.sites || []);
+        if (notifyUser && notifyOrg) {
+          message = strings.formatString<any>(
+            strings.TIME_ZONE_INITIALIZED_USER_ORG_MESSAGE,
+            getTimeZone(timeZones, userTz.timeZone)?.longName,
+            <Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>,
+            <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
+          );
+        } else if (notifyUser) {
+          message = strings.formatString<any>(
+            strings.TIME_ZONE_INITIALIZED_USER_MESSAGE,
+            getTimeZone(timeZones, userTz.timeZone)?.longName,
+            <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
+          );
+        } else if (notifyOrg) {
+          message = strings.formatString<any>(
+            strings.TIME_ZONE_INITIALIZED_ORG_MESSAGE,
+            getTimeZone(timeZones, orgTz.timeZone)?.longName,
+            <Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>
+          );
         }
-      }
-    };
-    populatePlantingSites();
-  }, [selectedOrganization]);
 
-  useEffect(() => {
-    reloadTracking();
-  }, [reloadTracking]);
+        snackbar.pageInfo(message, strings.TIME_ZONE_INITIALIZED_TITLE, () => {
+          if (notifyUser) {
+            updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
+          }
+          if (notifyOrg) {
+            updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
+          }
+        });
+      };
 
-  useEffect(() => {
-    const plots: Record<number, string> = {};
-    for (const plantingSite of plantingSites) {
-      for (const plantingZone of plantingSite.plantingZones ?? []) {
-        for (const plot of plantingZone.plots ?? []) {
-          plots[plot.id] = plot.name;
+      const initializeTimeZones = async () => {
+        if (!user) {
+          return;
         }
-      }
-    }
 
-    setPlotNames(plots);
-  }, [plantingSites]);
-
-  const setDefaults = useCallback(() => {
-    if (!isPlaceholderOrg(selectedOrganization.id)) {
-      setAccessionsDisplayColumns(DefaultColumns.fields);
-      setWithdrawalCreated(false);
-    }
-  }, [selectedOrganization.id]);
-
-  useEffect(() => {
-    setDefaults();
-  }, [setDefaults]);
-
-  useEffect(() => {
-    if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
-      history.push(APP_PATHS.WELCOME);
-    }
-  }, [organizations, location, history]);
-
-  useEffect(() => {
-    if (type === 'mobile' || type === 'tablet') {
-      setShowNavBar(false);
-    } else {
-      setShowNavBar(true);
-    }
-  }, [type]);
-
-  useEffect(() => {
-    const getDefaultTimeZone = (): TimeZoneDescription => {
-      const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      return getTimeZone(timeZones, browserTimeZone) || getUTC(timeZones);
-    };
-
-    const notifyTimeZoneUpdates = async (userTz: InitializedTimeZone, orgTz: InitializedTimeZone) => {
-      const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
-      const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
-      if (!notifyUser && !notifyOrg) {
-        return;
-      }
-
-      let message: string | string[] = '';
-
-      if (notifyUser && notifyOrg) {
-        message = strings.formatString<any>(
-          strings.TIME_ZONE_INITIALIZED_USER_ORG_MESSAGE,
-          getTimeZone(timeZones, userTz.timeZone)?.longName,
-          <Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>,
-          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-        );
-      } else if (notifyUser) {
-        message = strings.formatString<any>(
-          strings.TIME_ZONE_INITIALIZED_USER_MESSAGE,
-          getTimeZone(timeZones, userTz.timeZone)?.longName,
-          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-        );
-      } else if (notifyOrg) {
-        message = strings.formatString<any>(
-          strings.TIME_ZONE_INITIALIZED_ORG_MESSAGE,
-          getTimeZone(timeZones, orgTz.timeZone)?.longName,
-          <Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>
-        );
-      }
-
-      snackbar.pageInfo(message, strings.TIME_ZONE_INITIALIZED_TITLE, () => {
-        if (notifyUser) {
-          updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
+        const userTz: InitializedTimeZone = await initializeUserTimeZone(user, getDefaultTimeZone().id);
+        if (!userTz.timeZone) {
+          return;
         }
-        if (notifyOrg) {
-          updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
+
+        let orgTz: InitializedTimeZone = {};
+        if (!isPlaceholderOrg(selectedOrganization.id)) {
+          orgTz = await initializeOrganizationTimeZone(selectedOrganization, userTz.timeZone);
         }
-      });
-    };
 
-    const initializeTimeZones = async () => {
-      if (!user) {
-        return;
+        if (userTz.updated) {
+          reloadUser();
+        }
+
+        if (orgTz.updated) {
+          reloadData();
+        }
+
+        if (!userTz.updated && !orgTz.updated) {
+          notifyTimeZoneUpdates(userTz, orgTz);
+        }
+      };
+
+      if (
+        timeZoneFeatureEnabled &&
+        !isPlaceholderOrg(selectedOrganization.id) &&
+        timeZoneInitializedForOrg !== selectedOrganization.id
+      ) {
+        setTimeZoneInitializedForOrg(selectedOrganization.id);
+        initializeTimeZones();
       }
+    }, [
+      reloadData,
+      reloadUser,
+      selectedOrganization,
+      snackbar,
+      timeZoneFeatureEnabled,
+      timeZoneInitializedForOrg,
+      timeZones,
+      user,
+    ]);
 
-      const userTz: InitializedTimeZone = await initializeUserTimeZone(user, getDefaultTimeZone().id);
-      if (!userTz.timeZone) {
-        return;
-      }
+    const selectedOrgHasSpecies = (): boolean => species.length > 0;
 
-      let orgTz: InitializedTimeZone = {};
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
-        orgTz = await initializeOrganizationTimeZone(selectedOrganization, userTz.timeZone);
-      }
-
-      if (userTz.updated) {
-        reloadUser();
-      }
-
-      if (orgTz.updated) {
-        reloadData();
-      }
-
-      if (!userTz.updated && !orgTz.updated) {
-        notifyTimeZoneUpdates(userTz, orgTz);
+    const selectedOrgHasFacilityType = (facilityType: FacilityType): boolean => {
+      if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrganization.facilities) {
+        return selectedOrganization.facilities.some((facility: any) => {
+          return facility.type === facilityType;
+        });
+      } else {
+        return false;
       }
     };
 
-    if (
-      timeZoneFeatureEnabled &&
-      !isPlaceholderOrg(selectedOrganization.id) &&
-      timeZoneInitializedForOrg !== selectedOrganization.id
-    ) {
-      setTimeZoneInitializedForOrg(selectedOrganization.id);
-      initializeTimeZones();
-    }
-  }, [
-    reloadData,
-    reloadUser,
-    selectedOrganization,
-    snackbar,
-    timeZoneFeatureEnabled,
-    timeZoneInitializedForOrg,
-    timeZones,
-    user,
-  ]);
+    const selectedOrgHasSeedBanks = (): boolean => selectedOrgHasFacilityType('Seed Bank');
 
-  const selectedOrgHasSpecies = (): boolean => species.length > 0;
+    const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType('Nursery');
 
-  const selectedOrgHasFacilityType = (facilityType: FacilityType): boolean => {
-    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrganization.facilities) {
-      return selectedOrganization.facilities.some((facility: any) => {
-        return facility.type === facilityType;
-      });
-    } else {
+    const selectedOrgHasPlantingSites = (): boolean => plantingSites.length > 0;
+
+    const getSeedBanksView = (): JSX.Element => {
+      if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasSeedBanks()) {
+        return <SeedBanks organization={selectedOrganization} />;
+      }
+      return <EmptyStatePage pageName={'SeedBanks'} />;
+    };
+
+    const getNurseriesView = (): JSX.Element => {
+      if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasNurseries()) {
+        return <Nurseries organization={selectedOrganization} />;
+      }
+      return <EmptyStatePage pageName={'Nurseries'} />;
+    };
+
+    const viewHasBackgroundImage = (): boolean => {
+      if (
+        location.pathname.startsWith(APP_PATHS.HOME) ||
+        (location.pathname.startsWith(APP_PATHS.SPECIES) && !selectedOrgHasSpecies()) ||
+        (location.pathname.startsWith(APP_PATHS.ACCESSIONS) &&
+          (!selectedOrgHasSeedBanks() || !selectedOrgHasSpecies())) ||
+        (location.pathname.startsWith(APP_PATHS.MONITORING) && !selectedOrgHasSeedBanks()) ||
+        (location.pathname.startsWith(APP_PATHS.INVENTORY) && (!selectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||
+        (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
+        (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
+        (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites())
+      ) {
+        return true;
+      }
+
       return false;
-    }
-  };
+    };
 
-  const selectedOrgHasSeedBanks = (): boolean => selectedOrgHasFacilityType('Seed Bank');
-
-  const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType('Nursery');
-
-  const selectedOrgHasPlantingSites = (): boolean => plantingSites.length > 0;
-
-  const getSeedBanksView = (): JSX.Element => {
-    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasSeedBanks()) {
-      return <SeedBanks organization={selectedOrganization} />;
-    }
-    return <EmptyStatePage pageName={'SeedBanks'} />;
-  };
-
-  const getNurseriesView = (): JSX.Element => {
-    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasNurseries()) {
-      return <Nurseries organization={selectedOrganization} />;
-    }
-    return <EmptyStatePage pageName={'Nurseries'} />;
-  };
-
-  const viewHasBackgroundImage = (): boolean => {
-    if (
-      location.pathname.startsWith(APP_PATHS.HOME) ||
-      (location.pathname.startsWith(APP_PATHS.SPECIES) && !selectedOrgHasSpecies()) ||
-      (location.pathname.startsWith(APP_PATHS.ACCESSIONS) &&
-        (!selectedOrgHasSeedBanks() || !selectedOrgHasSpecies())) ||
-      (location.pathname.startsWith(APP_PATHS.MONITORING) && !selectedOrgHasSeedBanks()) ||
-      (location.pathname.startsWith(APP_PATHS.INVENTORY) && (!selectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||
-      (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
-      (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
-      (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites())
-    ) {
-      return true;
-    }
-
-    return false;
-  };
-
-  const getOrphanedUserContent = () => {
-    return (
-      <>
-        <Switch>
-          <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-            <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
-          </Route>
-          <Route exact path={APP_PATHS.MY_ACCOUNT}>
-            <MyAccount organizations={organizations} edit={false} />
-          </Route>
-          <Route exact path={APP_PATHS.WELCOME}>
-            <NoOrgLandingPage />
-          </Route>
-          {!isProduction && (
-            <Route exact path={APP_PATHS.OPT_IN}>
-              <OptInFeatures refresh={reloadPreferences} />
-            </Route>
-          )}
-          <Route path='/'>
-            <Redirect to={APP_PATHS.WELCOME} />
-          </Route>
-        </Switch>
-      </>
-    );
-  };
-
-  const getContent = () => (
-    <>
-      {showNavBar ? (
-        <div className={type !== 'desktop' ? classes.navBarOpened : ''}>
-          <div className='blurred'>
-            {type !== 'desktop' ? (
-              <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-                <div>
-                  <NavBar setShowNavBar={setShowNavBar} withdrawalCreated={withdrawalCreated} />
-                </div>
-              </Slide>
-            ) : (
-              <NavBar
-                setShowNavBar={setShowNavBar}
-                backgroundTransparent={viewHasBackgroundImage()}
-                withdrawalCreated={withdrawalCreated}
-              />
-            )}
-          </div>
-        </div>
-      ) : null}
-      <div
-        className={`${type === 'desktop' && showNavBar ? classes.contentWithNavBar : ''} ${
-          classes.content
-        } scrollable-content`}
-      >
-        <ErrorBoundary setShowNavBar={setShowNavBar}>
+    const getOrphanedUserContent = () => {
+      return (
+        <>
           <Switch>
-            {/* Routes, in order of their appearance down the side NavBar */}
-            <Route exact path={APP_PATHS.HOME}>
-              <Home />
-            </Route>
-            <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
-              <SeedSummary />
-            </Route>
-            <Route exact path={APP_PATHS.CHECKIN}>
-              <CheckIn />
-            </Route>
-            <Route exact path={APP_PATHS.ACCESSIONS}>
-              <Database
-                searchCriteria={seedSearchCriteria}
-                setSearchCriteria={setSeedSearchCriteria}
-                searchSortOrder={seedSearchSort}
-                setSearchSortOrder={setSeedSearchSort}
-                searchColumns={seedSearchColumns}
-                setSearchColumns={setSeedSearchColumns}
-                displayColumnNames={accessionsDisplayColumns}
-                setDisplayColumnNames={setAccessionsDisplayColumns}
-                hasSeedBanks={selectedOrgHasSeedBanks()}
-                hasSpecies={selectedOrgHasSpecies()}
-                reloadData={reloadData}
-                orgScopedPreferences={orgPreferences}
-              />
-            </Route>
-            <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
-              <Accession2Create />
-            </Route>
-            <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
-              <Accession2View />
-            </Route>
-            <Route exact path={APP_PATHS.MONITORING}>
-              <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
-            </Route>
-            <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
-              <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
-            </Route>
-            <Route exact path={APP_PATHS.SPECIES}>
-              {selectedOrgHasSpecies() ? (
-                <SpeciesList reloadData={reloadSpecies} species={species} />
-              ) : (
-                <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />
-              )}
-            </Route>
-            <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
-              <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
-            </Route>
-            <Route exact path={APP_PATHS.ORGANIZATION}>
-              <Organization />
-            </Route>
-            <Route exact path={APP_PATHS.PEOPLE_NEW}>
-              <NewPerson />
-            </Route>
-            <Route exact path={APP_PATHS.PEOPLE_EDIT}>
-              <NewPerson />
-            </Route>
-            <Route path={APP_PATHS.PEOPLE_VIEW}>
-              <PersonDetails />
-            </Route>
-            <Route exact path={APP_PATHS.PEOPLE}>
-              <People />
-            </Route>
-            <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
-              <NewSeedBank />
-            </Route>
-            <Route exact path={APP_PATHS.SEED_BANKS_EDIT}>
-              <NewSeedBank />
-            </Route>
-            <Route path={APP_PATHS.SEED_BANKS_VIEW}>
-              <SeedBankDetails />
-            </Route>
-            <Route exact path={APP_PATHS.SEED_BANKS}>
-              {getSeedBanksView()}
-            </Route>
-            <Route exact path={APP_PATHS.NURSERIES_NEW}>
-              <NewNursery />
-            </Route>
-            <Route exact path={APP_PATHS.NURSERIES_EDIT}>
-              <NewNursery />
-            </Route>
-            <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
-              <PlantsDashboard />
-            </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
-              <PlantsDashboard />
-            </Route>
-            <Route path={APP_PATHS.NURSERIES_VIEW}>
-              <NurseryDetails />
-            </Route>
-            <Route exact path={APP_PATHS.NURSERIES}>
-              {getNurseriesView()}
-            </Route>
-            <Route exact path={APP_PATHS.INVENTORY}>
-              <Inventory hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
-            </Route>
-            <Route exact path={APP_PATHS.INVENTORY_NEW}>
-              <InventoryCreate />
-            </Route>
-            <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
-              <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
-            </Route>
-            <Route path={APP_PATHS.INVENTORY_ITEM}>
-              <InventoryView species={species} />
-            </Route>
-            <Route path={APP_PATHS.BATCH_WITHDRAW}>
-              <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
-            </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITES_NEW}>
-              <CreatePlantingSite reloadPlantingSites={reloadTracking} />
-            </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
-              <CreatePlantingSite reloadPlantingSites={reloadTracking} />
-            </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITES}>
-              <PlantingSitesList />
-            </Route>
-            <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
-              <PlantingSiteView />
-            </Route>
-            <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
-              <NurseryWithdrawals />
-            </Route>
-            <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-              <NurseryWithdrawalsDetails species={species} plotNames={plotNames} />
-            </Route>
-            <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
-              <NurseryReassignment />
-            </Route>
-            <Route exact path={APP_PATHS.CONTACT_US}>
-              <ContactUs />
-            </Route>
             <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
               <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
             </Route>
             <Route exact path={APP_PATHS.MY_ACCOUNT}>
               <MyAccount organizations={organizations} edit={false} />
             </Route>
-
+            <Route exact path={APP_PATHS.WELCOME}>
+              <NoOrgLandingPage />
+            </Route>
             {!isProduction && (
               <Route exact path={APP_PATHS.OPT_IN}>
                 <OptInFeatures refresh={reloadPreferences} />
               </Route>
             )}
-
-            {/* Redirects. Invalid paths will redirect to the closest valid path. */}
-            {/* In alphabetical order for easy reference with APP_PATHS, except for /home which must go last */}
-            <Route path={APP_PATHS.ACCESSIONS + '/'}>
-              <Redirect to={APP_PATHS.ACCESSIONS} />
-            </Route>
-            <Route path={APP_PATHS.CHECKIN + '/'}>
-              <Redirect to={APP_PATHS.CHECKIN} />
-            </Route>
-            <Route path={APP_PATHS.CONTACT_US + '/'}>
-              <Redirect to={APP_PATHS.CONTACT_US} />
-            </Route>
-            <Route exact path={APP_PATHS.ORGANIZATION + '/'}>
-              <Redirect to={APP_PATHS.ORGANIZATION} />
-            </Route>
-            <Route exact path={APP_PATHS.PEOPLE + '/'}>
-              <Redirect to={APP_PATHS.PEOPLE} />
-            </Route>
-            <Route path={APP_PATHS.SEEDS_DASHBOARD + '/'}>
-              <Redirect to={APP_PATHS.SEEDS_DASHBOARD} />
-            </Route>
-            <Route path={APP_PATHS.SPECIES + '/'}>
-              <Redirect to={APP_PATHS.SPECIES} />
-            </Route>
             <Route path='/'>
-              <Redirect to={APP_PATHS.HOME} />
+              <Redirect to={APP_PATHS.WELCOME} />
             </Route>
           </Switch>
-        </ErrorBoundary>
-      </div>
-    </>
-  );
+        </>
+      );
+    };
 
-  // Localized strings are stored outside of React's state, but there's a state change when they're
-  // updated. Declare the dependency here so the app rerenders when the locale changes.
-  useLocalization();
+    const getContent = () => (
+      <>
+        {showNavBar ? (
+          <div className={type !== 'desktop' ? classes.navBarOpened : ''}>
+            <div className='blurred'>
+              {type !== 'desktop' ? (
+                <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
+                  <div>
+                    <NavBar setShowNavBar={setShowNavBar} withdrawalCreated={withdrawalCreated} />
+                  </div>
+                </Slide>
+              ) : (
+                <NavBar
+                  setShowNavBar={setShowNavBar}
+                  backgroundTransparent={viewHasBackgroundImage()}
+                  withdrawalCreated={withdrawalCreated}
+                />
+              )}
+            </div>
+          </div>
+        ) : null}
+        <div
+          className={`${type === 'desktop' && showNavBar ? classes.contentWithNavBar : ''} ${classes.content
+            } scrollable-content`}
+        >
+          <ErrorBoundary setShowNavBar={setShowNavBar}>
+            <Switch>
+              {/* Routes, in order of their appearance down the side NavBar */}
+              <Route exact path={APP_PATHS.HOME}>
+                <Home />
+              </Route>
+              <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
+                <SeedSummary />
+              </Route>
+              <Route exact path={APP_PATHS.CHECKIN}>
+                <CheckIn />
+              </Route>
+              <Route exact path={APP_PATHS.ACCESSIONS}>
+                <Database
+                  searchCriteria={seedSearchCriteria}
+                  setSearchCriteria={setSeedSearchCriteria}
+                  searchSortOrder={seedSearchSort}
+                  setSearchSortOrder={setSeedSearchSort}
+                  searchColumns={seedSearchColumns}
+                  setSearchColumns={setSeedSearchColumns}
+                  displayColumnNames={accessionsDisplayColumns}
+                  setDisplayColumnNames={setAccessionsDisplayColumns}
+                  hasSeedBanks={selectedOrgHasSeedBanks()}
+                  hasSpecies={selectedOrgHasSpecies()}
+                  reloadData={reloadData}
+                  orgScopedPreferences={orgPreferences}
+                />
+              </Route>
+              <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
+                <Accession2Create />
+              </Route>
+              <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
+                <Accession2View />
+              </Route>
+              <Route exact path={APP_PATHS.MONITORING}>
+                <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
+              </Route>
+              <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
+                <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
+              </Route>
+              <Route exact path={APP_PATHS.SPECIES}>
+                {selectedOrgHasSpecies() ? (
+                  <SpeciesList reloadData={reloadSpecies} species={species} />
+                ) : (
+                  <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />
+                )}
+              </Route>
+              <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
+                <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
+              </Route>
+              <Route exact path={APP_PATHS.ORGANIZATION}>
+                <Organization />
+              </Route>
+              <Route exact path={APP_PATHS.PEOPLE_NEW}>
+                <NewPerson />
+              </Route>
+              <Route exact path={APP_PATHS.PEOPLE_EDIT}>
+                <NewPerson />
+              </Route>
+              <Route path={APP_PATHS.PEOPLE_VIEW}>
+                <PersonDetails />
+              </Route>
+              <Route exact path={APP_PATHS.PEOPLE}>
+                <People />
+              </Route>
+              <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
+                <NewSeedBank />
+              </Route>
+              <Route exact path={APP_PATHS.SEED_BANKS_EDIT}>
+                <NewSeedBank />
+              </Route>
+              <Route path={APP_PATHS.SEED_BANKS_VIEW}>
+                <SeedBankDetails />
+              </Route>
+              <Route exact path={APP_PATHS.SEED_BANKS}>
+                {getSeedBanksView()}
+              </Route>
+              <Route exact path={APP_PATHS.NURSERIES_NEW}>
+                <NewNursery />
+              </Route>
+              <Route exact path={APP_PATHS.NURSERIES_EDIT}>
+                <NewNursery />
+              </Route>
+              <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
+                <PlantsDashboard />
+              </Route>
+              <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
+                <PlantsDashboard />
+              </Route>
+              <Route path={APP_PATHS.NURSERIES_VIEW}>
+                <NurseryDetails />
+              </Route>
+              <Route exact path={APP_PATHS.NURSERIES}>
+                {getNurseriesView()}
+              </Route>
+              <Route exact path={APP_PATHS.INVENTORY}>
+                <Inventory hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
+              </Route>
+              <Route exact path={APP_PATHS.INVENTORY_NEW}>
+                <InventoryCreate />
+              </Route>
+              <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
+                <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
+              </Route>
+              <Route path={APP_PATHS.INVENTORY_ITEM}>
+                <InventoryView species={species} />
+              </Route>
+              <Route path={APP_PATHS.BATCH_WITHDRAW}>
+                <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
+              </Route>
+              <Route exact path={APP_PATHS.PLANTING_SITES_NEW}>
+                <CreatePlantingSite reloadPlantingSites={reloadTracking} />
+              </Route>
+              <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
+                <CreatePlantingSite reloadPlantingSites={reloadTracking} />
+              </Route>
+              <Route exact path={APP_PATHS.PLANTING_SITES}>
+                <PlantingSitesList />
+              </Route>
+              <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
+                <PlantingSiteView />
+              </Route>
+              <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
+                <NurseryWithdrawals />
+              </Route>
+              <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
+                <NurseryWithdrawalsDetails species={species} plotNames={plotNames} />
+              </Route>
+              <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
+                <NurseryReassignment />
+              </Route>
+              <Route exact path={APP_PATHS.CONTACT_US}>
+                <ContactUs />
+              </Route>
+              <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
+                <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
+              </Route>
+              <Route exact path={APP_PATHS.MY_ACCOUNT}>
+                <MyAccount organizations={organizations} edit={false} />
+              </Route>
 
-  return (
-    <StyledEngineProvider injectFirst>
-      <CssBaseline />
-      <ToastSnackbar />
-      <TopBar>
-        <TopBarContent setShowNavBar={setShowNavBar} />
-      </TopBar>
-      <div className={classes.container}>{organizations.length === 0 ? getOrphanedUserContent() : getContent()}</div>
-    </StyledEngineProvider>
-  );
-}
+              {!isProduction && (
+                <Route exact path={APP_PATHS.OPT_IN}>
+                  <OptInFeatures refresh={reloadPreferences} />
+                </Route>
+              )}
 
-export default function App(): JSX.Element {
-  return (
-    <AppBootstrap>
-      <AppContent />
-    </AppBootstrap>
-  );
-}
+              {/* Redirects. Invalid paths will redirect to the closest valid path. */}
+              {/* In alphabetical order for easy reference with APP_PATHS, except for /home which must go last */}
+              <Route path={APP_PATHS.ACCESSIONS + '/'}>
+                <Redirect to={APP_PATHS.ACCESSIONS} />
+              </Route>
+              <Route path={APP_PATHS.CHECKIN + '/'}>
+                <Redirect to={APP_PATHS.CHECKIN} />
+              </Route>
+              <Route path={APP_PATHS.CONTACT_US + '/'}>
+                <Redirect to={APP_PATHS.CONTACT_US} />
+              </Route>
+              <Route exact path={APP_PATHS.ORGANIZATION + '/'}>
+                <Redirect to={APP_PATHS.ORGANIZATION} />
+              </Route>
+              <Route exact path={APP_PATHS.PEOPLE + '/'}>
+                <Redirect to={APP_PATHS.PEOPLE} />
+              </Route>
+              <Route path={APP_PATHS.SEEDS_DASHBOARD + '/'}>
+                <Redirect to={APP_PATHS.SEEDS_DASHBOARD} />
+              </Route>
+              <Route path={APP_PATHS.SPECIES + '/'}>
+                <Redirect to={APP_PATHS.SPECIES} />
+              </Route>
+              <Route path='/'>
+                <Redirect to={APP_PATHS.HOME} />
+              </Route>
+            </Switch>
+          </ErrorBoundary>
+        </div>
+      </>
+    );
+
+    // Localized strings are stored outside of React's state, but there's a state change when they're
+    // updated. Declare the dependency here so the app rerenders when the locale changes.
+    useLocalization();
+
+    return (
+      <StyledEngineProvider injectFirst>
+        <CssBaseline />
+        <ToastSnackbar />
+        <TopBar>
+          <TopBarContent setShowNavBar={setShowNavBar} />
+        </TopBar>
+        <div className={classes.container}>{organizations.length === 0 ? getOrphanedUserContent() : getContent()}</div>
+      </StyledEngineProvider>
+    );
+  }
+
+  export default function App(): JSX.Element {
+    return (
+      <AppBootstrap>
+        <Provider store={store}>
+          <AppContent />
+        </Provider>
+      </AppBootstrap>
+    );
+  }
