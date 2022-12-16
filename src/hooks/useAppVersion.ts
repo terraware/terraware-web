@@ -3,7 +3,7 @@ import { requestAppVersion } from 'src/redux/features/appVersion/appVersionThunk
 import { clearInterval } from 'timers';
 import { useAppDispatch } from './../redux/store';
 
-const ONE_MINUTE_INTERVAL_MS = 60 * 1000;
+const ONE_MINUTE_INTERVAL_MS = 5 * 1000;
 
 // variable used to track interval references
 let checkInterval: NodeJS.Timeout;
