@@ -43,9 +43,9 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
   const classes = useStyles();
 
   const zoneToDropdownItem = (zone?: ZoneInfo) =>
-    zone ? { label: zone.name, value: zone.id } : { label: ' ', value: '' };
+    zone ? { label: zone.name, value: zone.id } : { label: '', value: '' };
   const plotToDropdownItem = (plot?: PlotInfo) =>
-    plot ? { label: plot.fullName, value: plot.id } : { label: ' ', value: '' };
+    plot ? { label: plot.fullName, value: plot.id } : { label: '', value: '' };
 
   const onChangeZone = (zone: any) => {
     const foundZone = zones.find((zoneItem) => zoneItem.id.toString() === zone?.value?.toString());

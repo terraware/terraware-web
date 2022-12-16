@@ -4,7 +4,7 @@ import hexRgb from 'hex-rgb';
 import { MultiPolygon, PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import GenericMap from './GenericMap';
-import { MapEntityId, MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
+import { MapEntityOptions, MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
 import { getBoundingBox } from './MapUtils';
 import _ from 'lodash';
 
@@ -16,10 +16,12 @@ export type PlantingSiteMapProps = {
   contextRenderer?: MapPopupRenderer;
   // selected plot
   selectedPlotId?: number;
+  // selected zone
+  selectedZoneId?: number;
 };
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
-  const { plantingSite, style, contextRenderer, selectedPlotId } = props;
+  const { plantingSite, style, contextRenderer, selectedPlotId, selectedZoneId } = props;
   const theme = useTheme();
   const [snackbar] = useState(useSnackbar());
   const [mapOptions, setMapOptions] = useState<MapOptions>();
@@ -50,7 +52,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
           hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.4),
           selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
-          activeFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
+          highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
           lineColor: theme.palette.TwClrBaseBlue300 as string,
           lineWidth: 2,
         };
@@ -167,7 +169,13 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     fetchPlantingSite();
   }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractPlots, mapOptions]);
 
-  const activeEntity: MapEntityId = useMemo(() => ({ sourceId: 'plots', id: selectedPlotId }), [selectedPlotId]);
+  const entityOptions: MapEntityOptions = useMemo(
+    () => ({
+      highlight: { sourceId: 'plots', id: selectedPlotId },
+      focus: { sourceId: 'zones', id: selectedZoneId },
+    }),
+    [selectedPlotId, selectedZoneId]
+  );
 
   if (!mapOptions) {
     return (
@@ -179,7 +187,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
-      <GenericMap options={mapOptions} contextRenderer={contextRenderer} style={style} activeEntity={activeEntity} />
+      <GenericMap options={mapOptions} contextRenderer={contextRenderer} style={style} entityOptions={entityOptions} />
     </Box>
   );
 }

@@ -10,10 +10,12 @@ export interface Props {
   plantsDashboardPreferences?: { [key: string]: unknown };
   setPlantsDashboardPreferences: React.Dispatch<React.SetStateAction<{ [key: string]: unknown } | undefined>>;
   setSelectedPlotId: (id?: number) => void;
+  setSelectedZoneId: (id?: number) => void;
 }
 
 export default function SpeciesByPlotChart(props: Props): JSX.Element {
-  const { zones, plantsDashboardPreferences, setPlantsDashboardPreferences, setSelectedPlotId } = props;
+  const { zones, plantsDashboardPreferences, setPlantsDashboardPreferences, setSelectedPlotId, setSelectedZoneId } =
+    props;
   const [selectedPlot, setSelectedPlot] = useState<PlantingSitePlot>();
   const [selectedZone, setSelectedZone] = useState<PlantingSiteZone>();
   const [labels, setLabels] = useState<string[]>();
@@ -61,9 +63,22 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
   }, [selectedPlot, setSelectedPlotId]);
 
   useEffect(() => {
+    if (selectedZone) {
+      setSelectedZoneId(Number(selectedZone.id));
+    } else {
+      setSelectedZoneId(undefined);
+    }
+  }, [selectedZone, setSelectedZoneId]);
+
+  useEffect(() => {
     if (!zones?.length) {
       setSelectedZone(undefined);
       setSelectedPlot(undefined);
+      return;
+    }
+
+    if (selectedZone && zones.some((zoneInfo) => zoneInfo.id.toString() === selectedZone.id.toString())) {
+      // this site was already processed, we got here because the preferences were updated
       return;
     }
 
@@ -76,7 +91,7 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
     const plots = zoneToBeSelected.plots;
     const plot = plots.find((p) => p.id.toString() === lastPlot?.toString());
     setSelectedPlot(plot || plots[0]);
-  }, [plantsDashboardPreferences, zones]);
+  }, [plantsDashboardPreferences, zones, selectedZone]);
 
   return (
     <>

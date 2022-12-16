@@ -2,7 +2,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
-import { MapSource, MapEntityId, MapOptions, MapPopupRenderer } from './MapModels';
+import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer } from './MapModels';
+import { getBoundingBox } from './MapUtils';
+import isEnabled from 'src/features';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -38,25 +40,26 @@ export type MapProps = {
   // style overrides
   style?: object;
   bannerMessage?: string;
-  // active map entity
-  activeEntity?: MapEntityId;
+  // entity options
+  entityOptions?: MapEntityOptions;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, activeEntity } = props;
-  const [geoData, setGeoData] = useState();
+  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, entityOptions } = props;
+  const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const [deferredActiveEntity, setDeferredActiveEntity] = useState<MapEntityId | undefined>();
+  const [deferredHighlightEntity, setDeferredHighlightEntity] = useState<MapEntityId | undefined>();
+  const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId | undefined>();
   const mapRef = useRef(null);
   const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
   const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
-  const activeStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
+  const highlightStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
 
-  const getFillColor = (source: MapSource, type: 'active' | 'select' | 'hover' | 'default') => {
+  const getFillColor = (source: MapSource, type: 'highlight' | 'select' | 'hover' | 'default') => {
     switch (type) {
-      case 'active':
-        return source.activeFillColor || source.fillColor;
+      case 'highlight':
+        return source.highlightFillColor || source.fillColor;
       case 'select':
         return source.selectFillColor || source.fillColor;
       case 'hover':
@@ -114,6 +117,35 @@ export default function Map(props: MapProps): JSX.Element {
     [updateFeatureState, selectStateId]
   );
 
+  const drawFocusTo = useCallback(
+    (mapEntity: MapEntityId) => {
+      const map: any = mapRef?.current;
+      if (!map || !mapEntity.id || !mapEntity.sourceId) {
+        return;
+      }
+      const foundSource = geoData && geoData.find((geo) => geo.id === mapEntity.sourceId);
+      if (!foundSource || !foundSource.data) {
+        return;
+      }
+      const feature = foundSource.data.features.find((featureData: any) => featureData.id === mapEntity.id);
+      if (!feature) {
+        return;
+      }
+      const coordinates = feature.geometry.coordinates;
+      const bbox = getBoundingBox([[coordinates]]);
+      const [llx, lly] = bbox.lowerLeft;
+      const [urx, ury] = bbox.upperRight;
+      if (isEnabled('zoom to zone')) {
+        map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 200 });
+      } else {
+        // default pan to
+        const center = [(llx + urx) / 2, (lly + ury) / 2];
+        map.panTo(center, { padding: 200 });
+      }
+    },
+    [geoData]
+  );
+
   const onLoad = () => {
     const map: any = mapRef && mapRef.current;
     if (!map) {
@@ -121,7 +153,7 @@ export default function Map(props: MapProps): JSX.Element {
     }
     Object.keys(hoverStateId).forEach((key) => delete hoverStateId[key]);
     Object.keys(selectStateId).forEach((key) => delete selectStateId[key]);
-    Object.keys(activeStateId).forEach((key) => delete activeStateId[key]);
+    Object.keys(highlightStateId).forEach((key) => delete highlightStateId[key]);
 
     const { sources } = options;
     sources
@@ -140,9 +172,13 @@ export default function Map(props: MapProps): JSX.Element {
         });
       });
 
-    if (deferredActiveEntity) {
-      updateFeatureState(activeStateId, 'active', deferredActiveEntity);
-      setDeferredActiveEntity(undefined);
+    if (deferredHighlightEntity) {
+      updateFeatureState(highlightStateId, 'highlight', deferredHighlightEntity);
+      setDeferredHighlightEntity(undefined);
+    }
+    if (deferredFocusEntity) {
+      drawFocusTo(deferredFocusEntity);
+      setDeferredFocusEntity(undefined);
     }
   };
 
@@ -205,13 +241,13 @@ export default function Map(props: MapProps): JSX.Element {
                 // Use a case-expression to decide which color to use for fill
                 // see https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/#case
                 // and, https://docs.mapbox.com/mapbox-gl-js/api/map/#map#setfeaturestate
-                // if active, use active color
+                // if highlight, use highlight color
                 // else if selected, use select color
                 // else if hover, user hover color
                 // else use default fill color
                 'case',
-                ['boolean', ['feature-state', 'active'], false],
-                getFillColor(source, 'active'),
+                ['boolean', ['feature-state', 'highlight'], false],
+                getFillColor(source, 'highlight'),
                 ['boolean', ['feature-state', 'select'], false],
                 getFillColor(source, 'select'),
                 ['boolean', ['feature-state', 'hover'], false],
@@ -254,14 +290,24 @@ export default function Map(props: MapProps): JSX.Element {
   }, [options, geoData, setGeoData, token, popupRenderer]);
 
   useEffect(() => {
-    if (activeEntity) {
+    if (entityOptions?.highlight) {
       if (!mapRef || !mapRef.current) {
-        setDeferredActiveEntity(activeEntity);
+        setDeferredHighlightEntity(entityOptions?.highlight);
       } else {
-        updateFeatureState(activeStateId, 'active', activeEntity);
+        updateFeatureState(highlightStateId, 'highlight', entityOptions?.highlight);
       }
     }
-  }, [activeEntity, activeStateId, updateFeatureState]);
+  }, [entityOptions?.highlight, highlightStateId, updateFeatureState]);
+
+  useEffect(() => {
+    if (entityOptions?.focus) {
+      if (!mapRef || !mapRef.current) {
+        setDeferredFocusEntity(entityOptions?.focus);
+      } else {
+        drawFocusTo(entityOptions?.focus);
+      }
+    }
+  }, [drawFocusTo, entityOptions?.focus]);
 
   const mapSources = useMemo(() => {
     if (!geoData) {
