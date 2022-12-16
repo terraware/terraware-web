@@ -19,7 +19,11 @@ type OutplantReassignmentTableProps = {
   delivery?: Delivery;
 };
 
-export default function OutplantReassignmentTable({ delivery, species, plotNames }: OutplantReassignmentTableProps): JSX.Element {
+export default function OutplantReassignmentTable({
+  delivery,
+  species,
+  plotNames,
+}: OutplantReassignmentTableProps): JSX.Element {
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
 
   useEffect(() => {
@@ -37,20 +41,16 @@ export default function OutplantReassignmentTable({ delivery, species, plotNames
       const reassignmentFromPlanting = plantings?.find((pl) => pl.type === 'Reassignment From');
       const reassignmentToPlanting = plantings?.find((pl) => pl.type === 'Reassignment To');
 
-      // build delivery row
-      if (deliveryPlanting && reassignmentFromPlanting) {
+      // if reassignment plantings are found, create table rows
+      if (deliveryPlanting && reassignmentFromPlanting && reassignmentToPlanting) {
         rows.push({
           species: speciesName,
           from_plot: '',
           to_plot: deliveryPlanting.plotId ? plotNames[deliveryPlanting.plotId] : '',
           original_qty: deliveryPlanting.numPlants.toString(),
           final_qty: (deliveryPlanting.numPlants + reassignmentFromPlanting.numPlants).toString(),
-          notes: reassignmentFromPlanting.notes ?? '',
+          notes: reassignmentToPlanting.notes ?? '',
         });
-      }
-
-      // build reassignment row
-      if (deliveryPlanting && reassignmentToPlanting) {
         rows.push({
           species: speciesName,
           from_plot: deliveryPlanting.plotId ? plotNames[deliveryPlanting.plotId] : '',

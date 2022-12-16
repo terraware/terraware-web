@@ -1,13 +1,13 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import strings from 'src/strings';
 import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
-import { ServerOrganization } from '../../../types/Organization';
-import { Species } from '../../../types/Species';
-import { Batch, NurseryWithdrawal } from '../../../api/types/batch';
+import { ServerOrganization } from 'src/types/Organization';
+import { Species } from 'src/types/Species';
+import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
 import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';
-import { Delivery } from '../../../api/types/tracking';
-import OverviewItemCard from '../../common/OverviewItemCard';
-import useDeviceInfo from '../../../utils/useDeviceInfo';
+import { Delivery } from 'src/api/types/tracking';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type ReassignmentTabPanelContentProps = {
   organization: ServerOrganization;
