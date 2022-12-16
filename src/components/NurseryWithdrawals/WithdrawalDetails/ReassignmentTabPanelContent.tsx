@@ -55,14 +55,11 @@ export default function ReassignmentTabPanelContent({
         {strings.REASSIGNMENT}
       </Typography>
       <Grid container>
-        {overviewCardData.map(
-          (item) =>
-            item.data.length > 0 && (
-              <Grid item xs={isMobile ? 12 : 4} key={item.title}>
-                <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
-              </Grid>
-            )
-        )}
+        {overviewCardData.map((item) => (
+          <Grid item xs={isMobile ? 12 : 4} key={item.title}>
+            <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
+          </Grid>
+        ))}
       </Grid>
       <Box marginTop={theme.spacing(3)}>
         <OutplantReassignmentTable
