@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import {
@@ -22,6 +22,7 @@ import Divisor from 'src/components/common/Divisor';
 import { DatePicker, Dropdown, Textfield, DropdownItem } from '@terraware/web-components';
 import { getAllNurseries, isContributor } from 'src/utils/organization';
 import { listPlantingSites } from 'src/api/tracking/tracking';
+import { getAllSpecies } from 'src/api/species/species';
 import { PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import FormBottomBar from 'src/components/common/FormBottomBar';
@@ -79,6 +80,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const classes = useStyles();
   const [selectedPlot, setSelectedPlot] = useState<PlotInfo>();
   const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
+  const [speciesMap, setSpeciesMap] = useState<{ [key: string]: string }>({});
 
   const updateField = (field: keyof NurseryWithdrawalRequest, value: any) => {
     setLocalRecord((prev) => ({
@@ -378,6 +380,36 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     setNoReadySeedlings(false);
   }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, OUTPLANT, batches]);
 
+  useEffect(() => {
+    const fetchSpecies = async () => {
+      const result = await getAllSpecies(organization.id);
+      const speciesNamesMap = (result.species || []).reduce((acc, sp) => {
+        const { scientificName, commonName } = sp;
+        return {
+          ...acc,
+          [sp.id.toString()]: commonName ? `${scientificName} (${commonName})` : scientificName,
+        };
+      }, {});
+      setSpeciesMap(speciesNamesMap);
+    };
+
+    fetchSpecies();
+  }, [organization.id]);
+
+  const batchesFromNursery = useMemo(() => {
+    return batches.filter((batch) => !selectedNursery || batch.facility_id.toString() === selectedNursery);
+  }, [batches, selectedNursery]);
+
+  const batchSpeciesNames = useMemo(() => {
+    const batchSpeciesIds = batchesFromNursery.map((batch) => batch.species_id.toString());
+    const speciesIds: string[] = Array.from(new Set(batchSpeciesIds));
+    return speciesIds.map((speciesId: string) => speciesMap[speciesId] || strings.NAME_UNKNOWN);
+  }, [batchesFromNursery, speciesMap]);
+
+  const totalReadyQuantity = useMemo(() => {
+    return batchesFromNursery.reduce((acc, batch) => acc + (+batch.readyQuantity || 0), 0);
+  }, [batchesFromNursery]);
+
   return (
     <>
       <Container
@@ -407,6 +439,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             </Typography>
             <Typography>{strings.WITHDRAW_INSTRUCTIONS}</Typography>
             <Grid xs={12} padding={theme.spacing(4, 0, 0)}>
+              <Typography fontSize='14px' fontWeight={400} lineHeight='20px'>
+                {strings.SPECIES_SELECTED}
+              </Typography>
+              <Typography fontSize='16px' fontWeight={500} lineHeight='24px' marginTop='12px'>
+                {batchSpeciesNames.join(', ')}
+              </Typography>
+            </Grid>
+            <Grid xs={12} padding={theme.spacing(4, 0, 0)}>
               <FormControl>
                 <FormLabel sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
                   {strings.PURPOSE}
@@ -420,7 +460,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 {noReadySeedlings && <ErrorMessage message={strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS} />}
               </FormControl>
             </Grid>
-
             <Grid display='flex'>
               <Grid
                 item
@@ -488,17 +527,28 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             )}
             <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
               {isSingleBatch && isOutplant && (
-                <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginRight: theme.spacing(2) }}>
-                  <Textfield
-                    label={strings.WITHDRAW_QUANTITY_REQUIRED}
-                    id='withdrawnQuantity'
-                    onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
-                    type='text'
-                    value={withdrawnQuantity}
-                    errorText={fieldsErrors.withdrawnQuantity}
-                    className={classes.withdrawnQuantity}
-                  />
-                </Grid>
+                <>
+                  <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginRight: theme.spacing(2) }}>
+                    <Textfield
+                      label={strings.WITHDRAW_QUANTITY_REQUIRED}
+                      id='withdrawnQuantity'
+                      onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
+                      type='text'
+                      value={withdrawnQuantity}
+                      errorText={fieldsErrors.withdrawnQuantity}
+                      className={classes.withdrawnQuantity}
+                    />
+                  </Grid>
+                  <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
+                    <Textfield
+                      label={strings.TOTAL_READY_QUANTITY}
+                      id='totalReadyQuantity'
+                      type='text'
+                      value={totalReadyQuantity}
+                      display={true}
+                    />
+                  </Grid>
+                </>
               )}
             </Grid>
             <>
