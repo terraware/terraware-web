@@ -53,6 +53,8 @@ export default function NonOutplantWithdrawalTable({
       if (!speciesBatchMap[speciesId]) {
         speciesBatchMap[speciesId] = { name, notReady, ready, total: notReady + ready };
       } else {
+        speciesBatchMap[speciesId].notReady += notReady;
+        speciesBatchMap[speciesId].ready += ready;
         speciesBatchMap[speciesId].total += notReady + ready;
       }
     });
