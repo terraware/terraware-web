@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
-import { MapSource, MapEntityId, MapOptions, MapPopupRenderer } from './MapModels';
+import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer } from './MapModels';
 import { getBoundingBox } from './MapUtils';
 
 /**
@@ -39,20 +39,17 @@ export type MapProps = {
   // style overrides
   style?: object;
   bannerMessage?: string;
-  // highlight map entity (we could enhance this to be a list when needed)
-  highlightEntity?: MapEntityId;
-  // pan to entity
-  panToEntity?: MapEntityId;
+  // entity options
+  entityOptions?: MapEntityOptions;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, highlightEntity, panToEntity } =
-    props;
+  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, entityOptions } = props;
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [deferredHighlightEntity, setDeferredHighlightEntity] = useState<MapEntityId | undefined>();
-  const [deferredPanToEntity, setDeferredPanToEntity] = useState<MapEntityId | undefined>();
+  const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId | undefined>();
   const mapRef = useRef(null);
   const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
   const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
@@ -119,7 +116,7 @@ export default function Map(props: MapProps): JSX.Element {
     [updateFeatureState, selectStateId]
   );
 
-  const panTo = useCallback(
+  const drawFocusTo = useCallback(
     (mapEntity: MapEntityId) => {
       const map: any = mapRef?.current;
       if (!map || !mapEntity.id || !mapEntity.sourceId) {
@@ -137,7 +134,8 @@ export default function Map(props: MapProps): JSX.Element {
       const bbox = getBoundingBox([[coordinates]]);
       const [llx, lly] = bbox.lowerLeft;
       const [urx, ury] = bbox.upperRight;
-      map.panTo([(llx + urx) / 2, (lly + ury) / 2]);
+      const center = [(llx + urx) / 2, (lly + ury) / 2];
+      map.panTo(center, { padding: 20, zoom: 17 });
     },
     [geoData]
   );
@@ -172,9 +170,9 @@ export default function Map(props: MapProps): JSX.Element {
       updateFeatureState(highlightStateId, 'highlight', deferredHighlightEntity);
       setDeferredHighlightEntity(undefined);
     }
-    if (deferredPanToEntity) {
-      panTo(deferredPanToEntity);
-      setDeferredPanToEntity(undefined);
+    if (deferredFocusEntity) {
+      drawFocusTo(deferredFocusEntity);
+      setDeferredFocusEntity(undefined);
     }
   };
 
@@ -286,24 +284,24 @@ export default function Map(props: MapProps): JSX.Element {
   }, [options, geoData, setGeoData, token, popupRenderer]);
 
   useEffect(() => {
-    if (highlightEntity) {
+    if (entityOptions?.highlight) {
       if (!mapRef || !mapRef.current) {
-        setDeferredHighlightEntity(highlightEntity);
+        setDeferredHighlightEntity(entityOptions?.highlight);
       } else {
-        updateFeatureState(highlightStateId, 'highlight', highlightEntity);
+        updateFeatureState(highlightStateId, 'highlight', entityOptions?.highlight);
       }
     }
-  }, [highlightEntity, highlightStateId, updateFeatureState]);
+  }, [entityOptions?.highlight, highlightStateId, updateFeatureState]);
 
   useEffect(() => {
-    if (panToEntity) {
+    if (entityOptions?.focus) {
       if (!mapRef || !mapRef.current) {
-        setDeferredPanToEntity(panToEntity);
+        setDeferredFocusEntity(entityOptions?.focus);
       } else {
-        panTo(panToEntity);
+        drawFocusTo(entityOptions?.focus);
       }
     }
-  }, [panTo, panToEntity]);
+  }, [drawFocusTo, entityOptions?.focus]);
 
   const mapSources = useMemo(() => {
     if (!geoData) {

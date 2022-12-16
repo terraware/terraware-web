@@ -4,7 +4,7 @@ import hexRgb from 'hex-rgb';
 import { MultiPolygon, PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import GenericMap from './GenericMap';
-import { MapEntityId, MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
+import { MapEntityOptions, MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
 import { getBoundingBox } from './MapUtils';
 import _ from 'lodash';
 
@@ -169,8 +169,13 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     fetchPlantingSite();
   }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractPlots, mapOptions]);
 
-  const highlightEntity: MapEntityId = useMemo(() => ({ sourceId: 'plots', id: selectedPlotId }), [selectedPlotId]);
-  const panToEntity: MapEntityId = useMemo(() => ({ sourceId: 'zones', id: selectedZoneId }), [selectedZoneId]);
+  const entityOptions: MapEntityOptions = useMemo(
+    () => ({
+      highlight: { sourceId: 'plots', id: selectedPlotId },
+      focus: { sourceId: 'zones', id: selectedZoneId },
+    }),
+    [selectedPlotId, selectedZoneId]
+  );
 
   if (!mapOptions) {
     return (
@@ -182,13 +187,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
-      <GenericMap
-        options={mapOptions}
-        contextRenderer={contextRenderer}
-        style={style}
-        highlightEntity={highlightEntity}
-        panToEntity={panToEntity}
-      />
+      <GenericMap options={mapOptions} contextRenderer={contextRenderer} style={style} entityOptions={entityOptions} />
     </Box>
   );
 }

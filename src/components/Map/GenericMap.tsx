@@ -3,7 +3,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { getMapboxToken } from 'src/api/tracking/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import Map from './Map';
-import { MapEntityId, MapOptions, MapPopupRenderer } from './MapModels';
+import { MapEntityOptions, MapOptions, MapPopupRenderer } from './MapModels';
 
 const DUMMY_MAP_OPTIONS: MapOptions = {
   bbox: {
@@ -18,8 +18,7 @@ type GenericMapProps = {
   options?: MapOptions;
   style?: object;
   bannerMessage?: string;
-  highlightEntity?: MapEntityId;
-  panToEntity?: MapEntityId;
+  entityOptions?: MapEntityOptions;
 };
 
 export default function GenericMap({
@@ -27,8 +26,7 @@ export default function GenericMap({
   options,
   style,
   bannerMessage,
-  highlightEntity,
-  panToEntity,
+  entityOptions,
 }: GenericMapProps): JSX.Element | null {
   const [snackbar] = useState(useSnackbar());
   const [token, setToken] = useState<string>();
@@ -80,8 +78,7 @@ export default function GenericMap({
         style={style}
         popupRenderer={contextRenderer}
         bannerMessage={bannerMessage}
-        highlightEntity={highlightEntity}
-        panToEntity={panToEntity}
+        entityOptions={entityOptions}
       />
     </Box>
   );

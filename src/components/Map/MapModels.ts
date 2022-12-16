@@ -94,3 +94,11 @@ export type MapEntityId = {
   id?: number; // id of entity, undefined for unknown
   sourceId: string; // source type of entity 'plot', 'zone', 'site', etc.
 };
+
+/**
+ * map entity options
+ */
+export type MapEntityOptions = {
+  highlight?: MapEntityId;
+  focus?: MapEntityId;
+};
