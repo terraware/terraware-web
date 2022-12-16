@@ -20,8 +20,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelContent';
 import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
 import NurseryTransferContent from './WithdrawalDetails/NurseryTransferContent';
-import DeadContent from './WithdrawalDetails/DeadContent';
-import OtherContent from './WithdrawalDetails/OtherContent';
+import DeadOtherContent from './WithdrawalDetails/DeadOtherContent';
 import { Species } from 'src/types/Species';
 import BackToLink from 'src/components/common/BackToLink';
 
@@ -242,14 +241,13 @@ export default function NurseryWithdrawalsDetails({
             <NurseryTransferContent />
           </Box>
         )}
-        {withdrawal?.purpose === 'Dead' && (
+        {(withdrawal?.purpose === 'Dead' || withdrawal?.purpose === 'Other') && (
           <Box sx={contentPanelProps}>
-            <DeadContent />
-          </Box>
-        )}
-        {withdrawal?.purpose === 'Other' && (
-          <Box sx={contentPanelProps}>
-            <OtherContent />
+            <DeadOtherContent
+              organization={organization}
+              withdrawal={withdrawal}
+              withdrawalSummary={withdrawalSummary}
+            />
           </Box>
         )}
       </div>
