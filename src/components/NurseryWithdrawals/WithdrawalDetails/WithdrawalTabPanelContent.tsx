@@ -1,7 +1,7 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import Photos from './sections/Photos';
-import SpeciesTable from './sections/SpeciesTable';
+import OutplantWithdrawalTable from './sections/OutplantWithdrawalTable';
 import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
 import { Delivery } from 'src/api/types/tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -13,6 +13,7 @@ import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';
 type WithdrawalTabPanelContentProps = {
   organization: ServerOrganization;
   species: Species[];
+  plotNames: Record<number, string>;
   withdrawal?: NurseryWithdrawal;
   withdrawalSummary?: WithdrawalSummary;
   delivery?: Delivery;
@@ -22,6 +23,7 @@ type WithdrawalTabPanelContentProps = {
 export default function WithdrawalTabPanelContent({
   organization,
   species,
+  plotNames,
   withdrawal,
   withdrawalSummary,
   delivery,
@@ -67,19 +69,16 @@ export default function WithdrawalTabPanelContent({
         {strings.WITHDRAWAL}
       </Typography>
       <Grid container>
-        {overviewCardData.map(
-          (item) =>
-            item.data.length > 0 && (
-              <Grid item xs={isMobile ? 12 : 4} key={item.title}>
-                <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
-              </Grid>
-            )
-        )}
+        {overviewCardData.map((item) => (
+          <Grid item xs={isMobile ? 12 : 4} key={item.title}>
+            <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
+          </Grid>
+        ))}
       </Grid>
-      <Box marginTop={theme.spacing(1)}>
-        <SpeciesTable species={species} delivery={delivery} />
+      <Box marginTop={theme.spacing(3)}>
+        <OutplantWithdrawalTable species={species} plotNames={plotNames} delivery={delivery} />
       </Box>
-      <Box marginTop={theme.spacing(4)}>
+      <Box marginTop={theme.spacing(3)}>
         <Photos withdrawalId={withdrawal?.id} />
       </Box>
     </Box>

@@ -1,16 +1,74 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import ReassignmentTable from './sections/ReassignmentTable';
+import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
+import { ServerOrganization } from 'src/types/Organization';
+import { Species } from 'src/types/Species';
+import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
+import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';
+import { Delivery } from 'src/api/types/tracking';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-type ReassignmentTabPanelContentProps = {};
+type ReassignmentTabPanelContentProps = {
+  organization: ServerOrganization;
+  species: Species[];
+  plotNames: Record<number, string>;
+  withdrawal?: NurseryWithdrawal;
+  withdrawalSummary?: WithdrawalSummary;
+  delivery?: Delivery;
+  batches?: Batch[];
+};
 
-export default function ReassignmentTabPanelContent(props: ReassignmentTabPanelContentProps): JSX.Element {
+export default function ReassignmentTabPanelContent({
+  organization,
+  species,
+  plotNames,
+  withdrawal,
+  withdrawalSummary,
+  delivery,
+}: ReassignmentTabPanelContentProps): JSX.Element {
+  const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
+
+  const overviewCardData = [
+    {
+      title: strings.DATE,
+      data: withdrawal?.withdrawnDate ?? '',
+    },
+    {
+      title: strings.PURPOSE,
+      data: strings.REASSIGNMENT,
+    },
+    {
+      title: strings.QUANTITY,
+      data:
+        delivery?.plantings
+          ?.filter((planting) => planting.type === 'Reassignment To')
+          ?.reduce((acc, planting) => acc + planting.numPlants, 0)
+          .toString() ?? '',
+    },
+  ];
+
   return (
     <Box display='flex' flexDirection='column'>
       <Typography fontSize='20px' fontWeight={600}>
         {strings.REASSIGNMENT}
       </Typography>
-      <ReassignmentTable />
+      <Grid container>
+        {overviewCardData.map((item) => (
+          <Grid item xs={isMobile ? 12 : 4} key={item.title}>
+            <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
+          </Grid>
+        ))}
+      </Grid>
+      <Box marginTop={theme.spacing(3)}>
+        <OutplantReassignmentTable
+          species={species}
+          plotNames={plotNames}
+          delivery={delivery}
+          withdrawalNotes={withdrawal?.notes}
+        />
+      </Box>
     </Box>
   );
 }

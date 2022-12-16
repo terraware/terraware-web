@@ -174,6 +174,7 @@ export default function App() {
   const history = useHistory();
   const [species, setSpecies] = useState<Species[]>([]);
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
+  const [plotNames, setPlotNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
 
   const reloadData = useCallback(async (selectedOrgId?: number) => {
@@ -221,7 +222,7 @@ export default function App() {
   const reloadTracking = useCallback(() => {
     const populatePlantingSites = async () => {
       if (selectedOrganization) {
-        const response = await listPlantingSites(selectedOrganization.id, false);
+        const response = await listPlantingSites(selectedOrganization.id, true);
         if (response.requestSucceeded) {
           setPlantingSites(response.sites || []);
         }
@@ -233,6 +234,19 @@ export default function App() {
   useEffect(() => {
     reloadTracking();
   }, [reloadTracking]);
+
+  useEffect(() => {
+    const plots: Record<number, string> = {};
+    for (const plantingSite of plantingSites) {
+      for (const plantingZone of plantingSite.plantingZones ?? []) {
+        for (const plot of plantingZone.plots ?? []) {
+          plots[plot.id] = plot.name;
+        }
+      }
+    }
+
+    setPlotNames(plots);
+  }, [plantingSites]);
 
   const reloadPreferences = useCallback(() => {
     const getUserPreferences = async () => {
@@ -657,7 +671,11 @@ export default function App() {
               )}
               {trackingEnabled && selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-                  <NurseryWithdrawalsDetails organization={selectedOrganization} species={species} />
+                  <NurseryWithdrawalsDetails
+                    organization={selectedOrganization}
+                    species={species}
+                    plotNames={plotNames}
+                  />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
