@@ -141,6 +141,14 @@ export default function NurseryWithdrawalsDetails({
 
   const hasPlots = delivery?.plantings?.some((planting) => planting.plotId) ?? false;
 
+  const handleReassign = () => {
+    if (delivery) {
+      history.push({
+        pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', delivery.id.toString()),
+      });
+    }
+  };
+
   const handleTabChange = (newValue: string) => {
     query.set('tab', newValue);
     history.push(getLocation(location.pathname, location, query.toString()));
@@ -171,7 +179,7 @@ export default function NurseryWithdrawalsDetails({
               <Button
                 size='medium'
                 priority='secondary'
-                onClick={() => undefined}
+                onClick={handleReassign}
                 label={strings.REASSIGN}
                 disabled={withdrawalSummary?.hasReassignments}
               />
