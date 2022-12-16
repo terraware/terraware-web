@@ -110,7 +110,7 @@ export default function NurseryWithdrawalsDetails({
           plotNames: withdrawalSummaryRecord.plotNames as string,
           scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
           totalWithdrawn: Number(withdrawalSummaryRecord.totalWithdrawn),
-          hasReassignments: Boolean(withdrawalSummaryRecord.hasReassignments),
+          hasReassignments: withdrawalSummaryRecord.hasReassignments === 'true',
         });
       }
     };
