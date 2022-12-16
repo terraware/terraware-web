@@ -80,7 +80,7 @@ export default function OverviewItemCard({
             color: theme.palette.TwClrTxt,
             display: 'flex',
             fontSize: '16px',
-            fontWeight: 600,
+            fontWeight: 500,
             justifyContent: isMobile ? 'space-between' : 'normal',
             lineHeight: '24px',
             width: '100%',

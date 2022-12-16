@@ -17,12 +17,14 @@ type OutplantReassignmentTableProps = {
   species: Species[];
   plotNames: Record<number, string>;
   delivery?: Delivery;
+  withdrawalNotes?: string;
 };
 
 export default function OutplantReassignmentTable({
   delivery,
   species,
   plotNames,
+  withdrawalNotes,
 }: OutplantReassignmentTableProps): JSX.Element {
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
 
@@ -49,7 +51,7 @@ export default function OutplantReassignmentTable({
           to_plot: deliveryPlanting.plotId ? plotNames[deliveryPlanting.plotId] : '',
           original_qty: deliveryPlanting.numPlants.toString(),
           final_qty: (deliveryPlanting.numPlants + reassignmentFromPlanting.numPlants).toString(),
-          notes: reassignmentToPlanting.notes ?? '',
+          notes: withdrawalNotes ?? '',
         });
         rows.push({
           species: speciesName,
@@ -63,7 +65,7 @@ export default function OutplantReassignmentTable({
     }
 
     setRowData(rows);
-  }, [delivery, species, plotNames]);
+  }, [delivery, species, plotNames, withdrawalNotes]);
 
   return <Table id='outplant-reassignment-table' columns={columns} rows={rowData} orderBy={'name'} />;
 }

@@ -69,19 +69,16 @@ export default function WithdrawalTabPanelContent({
         {strings.WITHDRAWAL}
       </Typography>
       <Grid container>
-        {overviewCardData.map(
-          (item) =>
-            item.data.length > 0 && (
-              <Grid item xs={isMobile ? 12 : 4} key={item.title}>
-                <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
-              </Grid>
-            )
-        )}
+        {overviewCardData.map((item) => (
+          <Grid item xs={isMobile ? 12 : 4} key={item.title}>
+            <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
+          </Grid>
+        ))}
       </Grid>
-      <Box marginTop={theme.spacing(1)}>
+      <Box marginTop={theme.spacing(3)}>
         <OutplantWithdrawalTable species={species} plotNames={plotNames} delivery={delivery} />
       </Box>
-      <Box marginTop={theme.spacing(4)}>
+      <Box marginTop={theme.spacing(3)}>
         <Photos withdrawalId={withdrawal?.id} />
       </Box>
     </Box>

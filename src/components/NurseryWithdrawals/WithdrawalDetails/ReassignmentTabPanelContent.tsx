@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
 import { ServerOrganization } from 'src/types/Organization';
@@ -28,6 +28,7 @@ export default function ReassignmentTabPanelContent({
   delivery,
 }: ReassignmentTabPanelContentProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
 
   const overviewCardData = [
     {
@@ -63,7 +64,14 @@ export default function ReassignmentTabPanelContent({
             )
         )}
       </Grid>
-      <OutplantReassignmentTable species={species} plotNames={plotNames} delivery={delivery} />
+      <Box marginTop={theme.spacing(3)}>
+        <OutplantReassignmentTable
+          species={species}
+          plotNames={plotNames}
+          delivery={delivery}
+          withdrawalNotes={withdrawal?.notes}
+        />
+      </Box>
     </Box>
   );
 }
