@@ -18,11 +18,12 @@ type PlantingSiteDashboardMapProps = {
   organization: ServerOrganization;
   plots?: PlantingSitePlot[];
   selectedPlotId?: number;
+  selectedZoneId?: number;
   siteId?: number;
 };
 
 export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMapProps): JSX.Element {
-  const { organization, plots, selectedPlotId, siteId } = props;
+  const { organization, plots, selectedPlotId, selectedZoneId, siteId } = props;
   const { isMobile } = useDeviceInfo();
   const [snackbar] = useState(useSnackbar());
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
@@ -70,6 +71,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
           style={MAP_STYLE}
           contextRenderer={contextRenderer}
           selectedPlotId={selectedPlotId}
+          selectedZoneId={selectedZoneId}
         />
       ) : isMobile || !plots ? null : (
         <GenericMap

@@ -19,6 +19,7 @@ type GenericMapProps = {
   style?: object;
   bannerMessage?: string;
   highlightEntity?: MapEntityId;
+  panToEntity?: MapEntityId;
 };
 
 export default function GenericMap({
@@ -27,6 +28,7 @@ export default function GenericMap({
   style,
   bannerMessage,
   highlightEntity,
+  panToEntity,
 }: GenericMapProps): JSX.Element | null {
   const [snackbar] = useState(useSnackbar());
   const [token, setToken] = useState<string>();
@@ -79,6 +81,7 @@ export default function GenericMap({
         popupRenderer={contextRenderer}
         bannerMessage={bannerMessage}
         highlightEntity={highlightEntity}
+        panToEntity={panToEntity}
       />
     </Box>
   );

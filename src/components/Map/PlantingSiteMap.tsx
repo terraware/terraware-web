@@ -16,10 +16,12 @@ export type PlantingSiteMapProps = {
   contextRenderer?: MapPopupRenderer;
   // selected plot
   selectedPlotId?: number;
+  // selected zone
+  selectedZoneId?: number;
 };
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
-  const { plantingSite, style, contextRenderer, selectedPlotId } = props;
+  const { plantingSite, style, contextRenderer, selectedPlotId, selectedZoneId } = props;
   const theme = useTheme();
   const [snackbar] = useState(useSnackbar());
   const [mapOptions, setMapOptions] = useState<MapOptions>();
@@ -168,6 +170,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractPlots, mapOptions]);
 
   const highlightEntity: MapEntityId = useMemo(() => ({ sourceId: 'plots', id: selectedPlotId }), [selectedPlotId]);
+  const panToEntity: MapEntityId = useMemo(() => ({ sourceId: 'zones', id: selectedZoneId }), [selectedZoneId]);
 
   if (!mapOptions) {
     return (
@@ -184,6 +187,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         contextRenderer={contextRenderer}
         style={style}
         highlightEntity={highlightEntity}
+        panToEntity={panToEntity}
       />
     </Box>
   );

@@ -48,6 +48,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   const [zonesWithPlants, setZonesWithPlants] = useState<PlantingSiteZone[]>();
   const [hasZones, setHasZones] = useState<boolean>(false);
   const [selectedPlotId, setSelectedPlotId] = useState<number | undefined>();
+  const [selectedZoneId, setSelectedZoneId] = useState<number | undefined>();
 
   const widgetCardStyle = {
     backgroundColor: theme.palette.TwClrBg,
@@ -140,6 +141,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
           siteId={plantingSite?.id}
           organization={organization}
           selectedPlotId={selectedPlotId}
+          selectedZoneId={selectedZoneId}
         />
       </Grid>
       <Grid item xs={isMobile ? 12 : 4} sx={{ paddingLeft: isMobile ? 0 : 3 }}>
@@ -156,6 +158,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
               plantsDashboardPreferences={plantsDashboardPreferences}
               setPlantsDashboardPreferences={setPlantsDashboardPreferences}
               setSelectedPlotId={(id?: number) => setSelectedPlotId(id)}
+              setSelectedZoneId={(id?: number) => setSelectedZoneId(id)}
             />
           </Box>
         )}

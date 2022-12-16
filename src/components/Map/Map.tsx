@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
 import { MapSource, MapEntityId, MapOptions, MapPopupRenderer } from './MapModels';
+import { getBoundingBox } from './MapUtils';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -40,14 +41,18 @@ export type MapProps = {
   bannerMessage?: string;
   // highlight map entity (we could enhance this to be a list when needed)
   highlightEntity?: MapEntityId;
+  // pan to entity
+  panToEntity?: MapEntityId;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, highlightEntity } = props;
-  const [geoData, setGeoData] = useState();
+  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, highlightEntity, panToEntity } =
+    props;
+  const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [deferredHighlightEntity, setDeferredHighlightEntity] = useState<MapEntityId | undefined>();
+  const [deferredPanToEntity, setDeferredPanToEntity] = useState<MapEntityId | undefined>();
   const mapRef = useRef(null);
   const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
   const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
@@ -114,6 +119,29 @@ export default function Map(props: MapProps): JSX.Element {
     [updateFeatureState, selectStateId]
   );
 
+  const panTo = useCallback(
+    (mapEntity: MapEntityId) => {
+      const map: any = mapRef?.current;
+      if (!map || !mapEntity.id || !mapEntity.sourceId) {
+        return;
+      }
+      const foundSource = geoData && geoData.find((geo) => geo.id === mapEntity.sourceId);
+      if (!foundSource || !foundSource.data) {
+        return;
+      }
+      const feature = foundSource.data.features.find((featureData: any) => featureData.id === mapEntity.id);
+      if (!feature) {
+        return;
+      }
+      const coordinates = feature.geometry.coordinates;
+      const bbox = getBoundingBox([[coordinates]]);
+      const [llx, lly] = bbox.lowerLeft;
+      const [urx, ury] = bbox.upperRight;
+      map.panTo([(llx + urx) / 2, (lly + ury) / 2]);
+    },
+    [geoData]
+  );
+
   const onLoad = () => {
     const map: any = mapRef && mapRef.current;
     if (!map) {
@@ -143,6 +171,10 @@ export default function Map(props: MapProps): JSX.Element {
     if (deferredHighlightEntity) {
       updateFeatureState(highlightStateId, 'highlight', deferredHighlightEntity);
       setDeferredHighlightEntity(undefined);
+    }
+    if (deferredPanToEntity) {
+      panTo(deferredPanToEntity);
+      setDeferredPanToEntity(undefined);
     }
   };
 
@@ -262,6 +294,16 @@ export default function Map(props: MapProps): JSX.Element {
       }
     }
   }, [highlightEntity, highlightStateId, updateFeatureState]);
+
+  useEffect(() => {
+    if (panToEntity) {
+      if (!mapRef || !mapRef.current) {
+        setDeferredPanToEntity(panToEntity);
+      } else {
+        panTo(panToEntity);
+      }
+    }
+  }, [panTo, panToEntity]);
 
   const mapSources = useMemo(() => {
     if (!geoData) {
