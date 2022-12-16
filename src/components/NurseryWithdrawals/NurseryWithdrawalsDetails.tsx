@@ -19,9 +19,9 @@ import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelContent';
 import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
-import NurseryTransferContent from './WithdrawalDetails/NurseryTransferContent';
-import DeadOtherContent from './WithdrawalDetails/DeadOtherContent';
+import NonOutplantWithdrawalContent from './WithdrawalDetails/NonOutplantWithdrawalContent';
 import { Species } from 'src/types/Species';
+import { NurseryWithdrawalPurposes } from 'src/api/types/batch';
 import BackToLink from 'src/components/common/BackToLink';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -63,6 +63,7 @@ export default function NurseryWithdrawalsDetails({
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const [snackbar] = useState(useSnackbar());
+  const { OUTPLANT } = NurseryWithdrawalPurposes;
 
   const query = useQuery();
   const history = useHistory();
@@ -174,7 +175,7 @@ export default function NurseryWithdrawalsDetails({
             <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} fontStyle='italic'>
               {withdrawal?.withdrawnDate}
             </Typography>
-            {withdrawal?.purpose === 'Out Plant' && hasPlots && (
+            {withdrawal?.purpose === OUTPLANT && hasPlots && (
               <Button
                 size='medium'
                 priority='secondary'
@@ -188,7 +189,7 @@ export default function NurseryWithdrawalsDetails({
         </Box>
       </PageHeaderWrapper>
       <div ref={contentRef}>
-        {withdrawal?.purpose === 'Out Plant' && (
+        {withdrawal?.purpose === OUTPLANT && (
           <TabContext value={selectedTab}>
             <Box
               sx={{
@@ -236,17 +237,14 @@ export default function NurseryWithdrawalsDetails({
             </TabPanel>
           </TabContext>
         )}
-        {withdrawal?.purpose === 'Nursery Transfer' && (
+        {withdrawal?.purpose !== OUTPLANT && (
           <Box sx={contentPanelProps}>
-            <NurseryTransferContent />
-          </Box>
-        )}
-        {(withdrawal?.purpose === 'Dead' || withdrawal?.purpose === 'Other') && (
-          <Box sx={contentPanelProps}>
-            <DeadOtherContent
+            <NonOutplantWithdrawalContent
               organization={organization}
+              species={species}
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}
+              batches={batches}
             />
           </Box>
         )}
