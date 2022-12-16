@@ -38,25 +38,25 @@ export type MapProps = {
   // style overrides
   style?: object;
   bannerMessage?: string;
-  // active map entity
-  activeEntity?: MapEntityId;
+  // highlight map entity (we could enhance this to be a list when needed)
+  highlightEntity?: MapEntityId;
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, activeEntity } = props;
+  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, highlightEntity } = props;
   const [geoData, setGeoData] = useState();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const [deferredActiveEntity, setDeferredActiveEntity] = useState<MapEntityId | undefined>();
+  const [deferredHighlightEntity, setDeferredHighlightEntity] = useState<MapEntityId | undefined>();
   const mapRef = useRef(null);
   const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
   const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
-  const activeStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
+  const highlightStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
 
-  const getFillColor = (source: MapSource, type: 'active' | 'select' | 'hover' | 'default') => {
+  const getFillColor = (source: MapSource, type: 'highlight' | 'select' | 'hover' | 'default') => {
     switch (type) {
-      case 'active':
-        return source.activeFillColor || source.fillColor;
+      case 'highlight':
+        return source.highlightFillColor || source.fillColor;
       case 'select':
         return source.selectFillColor || source.fillColor;
       case 'hover':
@@ -121,7 +121,7 @@ export default function Map(props: MapProps): JSX.Element {
     }
     Object.keys(hoverStateId).forEach((key) => delete hoverStateId[key]);
     Object.keys(selectStateId).forEach((key) => delete selectStateId[key]);
-    Object.keys(activeStateId).forEach((key) => delete activeStateId[key]);
+    Object.keys(highlightStateId).forEach((key) => delete highlightStateId[key]);
 
     const { sources } = options;
     sources
@@ -140,9 +140,9 @@ export default function Map(props: MapProps): JSX.Element {
         });
       });
 
-    if (deferredActiveEntity) {
-      updateFeatureState(activeStateId, 'active', deferredActiveEntity);
-      setDeferredActiveEntity(undefined);
+    if (deferredHighlightEntity) {
+      updateFeatureState(highlightStateId, 'highlight', deferredHighlightEntity);
+      setDeferredHighlightEntity(undefined);
     }
   };
 
@@ -205,13 +205,13 @@ export default function Map(props: MapProps): JSX.Element {
                 // Use a case-expression to decide which color to use for fill
                 // see https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/#case
                 // and, https://docs.mapbox.com/mapbox-gl-js/api/map/#map#setfeaturestate
-                // if active, use active color
+                // if highlight, use highlight color
                 // else if selected, use select color
                 // else if hover, user hover color
                 // else use default fill color
                 'case',
-                ['boolean', ['feature-state', 'active'], false],
-                getFillColor(source, 'active'),
+                ['boolean', ['feature-state', 'highlight'], false],
+                getFillColor(source, 'highlight'),
                 ['boolean', ['feature-state', 'select'], false],
                 getFillColor(source, 'select'),
                 ['boolean', ['feature-state', 'hover'], false],
@@ -254,14 +254,14 @@ export default function Map(props: MapProps): JSX.Element {
   }, [options, geoData, setGeoData, token, popupRenderer]);
 
   useEffect(() => {
-    if (activeEntity) {
+    if (highlightEntity) {
       if (!mapRef || !mapRef.current) {
-        setDeferredActiveEntity(activeEntity);
+        setDeferredHighlightEntity(highlightEntity);
       } else {
-        updateFeatureState(activeStateId, 'active', activeEntity);
+        updateFeatureState(highlightStateId, 'highlight', highlightEntity);
       }
     }
-  }, [activeEntity, activeStateId, updateFeatureState]);
+  }, [highlightEntity, highlightStateId, updateFeatureState]);
 
   const mapSources = useMemo(() => {
     if (!geoData) {

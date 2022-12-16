@@ -63,7 +63,7 @@ export type MapSource = {
   isInteractive?: boolean;
   // property name to render as a polygon annotation
   annotation?: MapAnnotation;
-  activeFillColor?: string;
+  highlightFillColor?: string;
   hoverFillColor?: string;
   selectFillColor?: string;
 };
