@@ -145,6 +145,8 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
     });
   };
 
+  const isInvalidQuantity = (val: any) => isNaN(val) || +val < 0;
+
   const validateQuantities = () => {
     let noErrors = true;
     let newRecords: BatchWithdrawalForTable[] = [];
@@ -153,11 +155,16 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       newRecords = record.map((rec) => {
         let readyQuantityWithdrawnError = '';
         if (rec.readyQuantityWithdrawn) {
-          if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
-            readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+          if (isInvalidQuantity(rec.readyQuantityWithdrawn)) {
+            readyQuantityWithdrawnError = strings.INVALID_VALUE;
             noErrors = false;
           } else {
-            rec.error.readyQuantityWithdrawn = '';
+            if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
+              readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+              noErrors = false;
+            } else {
+              rec.error.readyQuantityWithdrawn = '';
+            }
           }
         } else {
           unsetValues++;
@@ -178,21 +185,31 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         let readyQuantityWithdrawnError = '';
         let notReadyQuantityWithdrawnError = '';
         if (rec.readyQuantityWithdrawn) {
-          if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
-            readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+          if (isInvalidQuantity(rec.readyQuantityWithdrawn)) {
+            readyQuantityWithdrawnError = strings.INVALID_VALUE;
             noErrors = false;
           } else {
-            readyQuantityWithdrawnError = '';
+            if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
+              readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+              noErrors = false;
+            } else {
+              readyQuantityWithdrawnError = '';
+            }
           }
         } else {
           unsetValues++;
         }
         if (rec.notReadyQuantityWithdrawn) {
-          if (+rec.notReadyQuantityWithdrawn > rec.notReadyQuantity) {
-            notReadyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+          if (isInvalidQuantity(rec.notReadyQuantityWithdrawn)) {
+            notReadyQuantityWithdrawnError = strings.INVALID_VALUE;
             noErrors = false;
           } else {
-            notReadyQuantityWithdrawnError = '';
+            if (+rec.notReadyQuantityWithdrawn > rec.notReadyQuantity) {
+              notReadyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+              noErrors = false;
+            } else {
+              notReadyQuantityWithdrawnError = '';
+            }
           }
         } else {
           unsetValues++;
