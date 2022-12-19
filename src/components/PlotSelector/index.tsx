@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Autocomplete } from '@terraware/web-components';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -57,8 +57,6 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
     onPlotSelected(foundPlot);
   };
 
-  const gridSize = () => (isMobile ? 12 : 6);
-
   const isEqual = (optionA: any, optionB: any) => {
     if (optionA?.value && optionB?.value) {
       return optionA.value === optionB.value;
@@ -72,7 +70,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
       fontWeight={500}
       color={theme.palette.ClrTextFill}
       marginRight={theme.spacing(1)}
-      minWidth={isMobile ? '40px' : 'auto'}
+      minWidth='40px'
       textAlign='right'
     >
       {text}
@@ -86,15 +84,17 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
   };
 
   return (
-    <Grid
+    <Box
       display='flex'
-      margin={theme.spacing(1, 0, 2)}
+      flexWrap='wrap'
       flexDirection={isMobile ? 'column' : 'row'}
+      flexGrow={1}
+      margin={theme.spacing(1, 0, 2)}
       className={horizontalLayout ? `${classes.horizontal}` : ''}
     >
-      <Grid
-        xs={gridSize()}
-        margin={theme.spacing(2, isMobile ? 0 : 2, 0, 0)}
+      <Box
+        flexGrow={1}
+        margin={theme.spacing(2, isMobile || horizontalLayout ? 0 : 2, 0, 0)}
         sx={horizontalLayout ? horizontalStyle : {}}
       >
         {horizontalLayout && horizontalLabel(strings.ZONE)}
@@ -111,8 +111,8 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
           freeSolo={false}
           hideClearIcon={true}
         />
-      </Grid>
-      <Grid xs={gridSize()} margin={theme.spacing(2, 0, 0)} sx={horizontalLayout ? horizontalStyle : {}}>
+      </Box>
+      <Box flexGrow={1} margin={theme.spacing(2, 0, 0)} sx={horizontalLayout ? horizontalStyle : {}}>
         {horizontalLayout && horizontalLabel(strings.PLOT)}
         <Autocomplete
           id='plot'
@@ -127,7 +127,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
           freeSolo={false}
           hideClearIcon={true}
         />
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 }
