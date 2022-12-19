@@ -88,7 +88,6 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
   return (
     <Grid
       display='flex'
-      margin={theme.spacing(1, 0, 2)}
       flexDirection={isMobile ? 'column' : 'row'}
       className={horizontalLayout ? `${classes.horizontal}` : ''}
     >
