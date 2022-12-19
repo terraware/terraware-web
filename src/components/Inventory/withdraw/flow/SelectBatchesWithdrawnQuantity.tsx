@@ -153,11 +153,16 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       newRecords = record.map((rec) => {
         let readyQuantityWithdrawnError = '';
         if (rec.readyQuantityWithdrawn) {
-          if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
-            readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+          if (isNaN(rec.readyQuantityWithdrawn) || +rec.readyQuantityWithdrawn < 0) {
+            readyQuantityWithdrawnError = strings.INVALID_VALUE;
             noErrors = false;
           } else {
-            rec.error.readyQuantityWithdrawn = '';
+            if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
+              readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+              noErrors = false;
+            } else {
+              rec.error.readyQuantityWithdrawn = '';
+            }
           }
         } else {
           unsetValues++;
@@ -178,21 +183,31 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         let readyQuantityWithdrawnError = '';
         let notReadyQuantityWithdrawnError = '';
         if (rec.readyQuantityWithdrawn) {
-          if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
-            readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+          if (isNaN(rec.readyQuantityWithdrawn) || +rec.readyQuantityWithdrawn < 0) {
+            readyQuantityWithdrawnError = strings.INVALID_VALUE;
             noErrors = false;
           } else {
-            readyQuantityWithdrawnError = '';
+            if (+rec.readyQuantityWithdrawn > +rec.readyQuantity) {
+              readyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+              noErrors = false;
+            } else {
+              readyQuantityWithdrawnError = '';
+            }
           }
         } else {
           unsetValues++;
         }
         if (rec.notReadyQuantityWithdrawn) {
-          if (+rec.notReadyQuantityWithdrawn > rec.notReadyQuantity) {
-            notReadyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+          if (isNaN(rec.notReadyQuantityWithdrawn) || +rec.notReadyQuantityWithdrawn < 0) {
+            notReadyQuantityWithdrawnError = strings.INVALID_VALUE;
             noErrors = false;
           } else {
-            notReadyQuantityWithdrawnError = '';
+            if (+rec.notReadyQuantityWithdrawn > rec.notReadyQuantity) {
+              notReadyQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+              noErrors = false;
+            } else {
+              notReadyQuantityWithdrawnError = '';
+            }
           }
         } else {
           unsetValues++;

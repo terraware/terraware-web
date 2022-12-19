@@ -41,12 +41,13 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         <Box display='flex' alignItems={row.error[id] ? 'start' : 'center'}>
           <Textfield
             id={id}
-            type='text'
+            type='number'
             onChange={(_, newValue) => onRowClick(newValue as string)}
             value={row[id]}
             label={''}
             errorText={row.error[id]}
             className={classes.input}
+            min={0}
           />
           <Typography paddingLeft={1} paddingTop={row.error[id] ? '10px' : 0}>
             / {row[valueProperty]}
@@ -61,12 +62,13 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
       return (
         <Textfield
           id='readyQuantityWithdrawn'
-          type='text'
+          type='number'
           onChange={(_, newValue) => onRowClick(newValue as string)}
           value={row.readyQuantityWithdrawn}
           label={''}
           errorText={row.error.readyQuantityWithdrawn}
           className={classes.input}
+          min={0}
         />
       );
     }
