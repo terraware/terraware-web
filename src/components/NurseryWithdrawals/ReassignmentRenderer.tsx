@@ -50,6 +50,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
 
     const otherPlots = plots
       .filter((otherPlot) => plot.id !== otherPlot.id)
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
       .map((otherPlot) => ({ ...otherPlot, value: otherPlot.id, label: otherPlot.name }));
 
     const onUpdateQuantity = (unused: string, value: any) => {

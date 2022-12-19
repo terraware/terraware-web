@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Autocomplete } from '@terraware/web-components';
@@ -83,6 +83,22 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
     alignItems: 'center',
   };
 
+  const zoneOptions: any[] = useMemo(() => {
+    return zones
+      .filter((zone) => zone.plots)
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+      .map((zone) => zoneToDropdownItem(zone));
+  }, [zones]);
+
+  const plotOptions: any[] = useMemo(() => {
+    if (!selectedZone?.plots) {
+      return [];
+    }
+    return selectedZone.plots
+      .sort((a, b) => a.fullName.localeCompare(b.fullName, undefined, { numeric: true }))
+      .map((plot) => plotToDropdownItem(plot));
+  }, [selectedZone]);
+
   return (
     <Box
       display='flex'
@@ -102,7 +118,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.ZONE}
           selected={zoneToDropdownItem(selectedZone)}
-          values={zones.filter((zone) => zone.plots).map((zone) => zoneToDropdownItem(zone)) as any[]}
+          values={zoneOptions}
           onChange={(id, value) => onChangeZone(value)}
           errorText={zoneError}
           disabled={!zones.length}
@@ -118,7 +134,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.PLOT}
           selected={plotToDropdownItem(selectedPlot)}
-          values={selectedZone?.plots?.map((plot) => plotToDropdownItem(plot)) || ([] as any[])}
+          values={plotOptions}
           onChange={(id, value) => onChangePlot(value)}
           errorText={plotError}
           disabled={!selectedZone?.plots?.length}
