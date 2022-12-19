@@ -94,7 +94,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
         <Box display='flex' alignItems={error.quantity ? 'start' : 'center'}>
           <Textfield
             id={`quantity_${plantingId}`}
-            type='text'
+            type='number'
             onChange={onUpdateQuantity}
             value={quantity}
             label={''}
