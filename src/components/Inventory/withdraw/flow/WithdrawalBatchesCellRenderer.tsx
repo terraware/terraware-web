@@ -11,6 +11,7 @@ const useStyles = makeStyles(() => ({
     fontSize: '14px',
     '& > p': {
       fontSize: '14px',
+      overflow: 'visible',
     },
   },
   input: {
