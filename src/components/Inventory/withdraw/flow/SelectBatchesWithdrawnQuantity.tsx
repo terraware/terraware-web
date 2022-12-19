@@ -145,6 +145,8 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
     });
   };
 
+  const isInvalidQuantity = (val: any) => isNaN(val) || +val < 0;
+
   const validateQuantities = () => {
     let noErrors = true;
     let newRecords: BatchWithdrawalForTable[] = [];
@@ -153,7 +155,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       newRecords = record.map((rec) => {
         let readyQuantityWithdrawnError = '';
         if (rec.readyQuantityWithdrawn) {
-          if (isNaN(rec.readyQuantityWithdrawn) || +rec.readyQuantityWithdrawn < 0) {
+          if (isInvalidQuantity(rec.readyQuantityWithdrawn)) {
             readyQuantityWithdrawnError = strings.INVALID_VALUE;
             noErrors = false;
           } else {
@@ -183,7 +185,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         let readyQuantityWithdrawnError = '';
         let notReadyQuantityWithdrawnError = '';
         if (rec.readyQuantityWithdrawn) {
-          if (isNaN(rec.readyQuantityWithdrawn) || +rec.readyQuantityWithdrawn < 0) {
+          if (isInvalidQuantity(rec.readyQuantityWithdrawn)) {
             readyQuantityWithdrawnError = strings.INVALID_VALUE;
             noErrors = false;
           } else {
@@ -198,7 +200,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           unsetValues++;
         }
         if (rec.notReadyQuantityWithdrawn) {
-          if (isNaN(rec.notReadyQuantityWithdrawn) || +rec.notReadyQuantityWithdrawn < 0) {
+          if (isInvalidQuantity(rec.notReadyQuantityWithdrawn)) {
             notReadyQuantityWithdrawnError = strings.INVALID_VALUE;
             noErrors = false;
           } else {
