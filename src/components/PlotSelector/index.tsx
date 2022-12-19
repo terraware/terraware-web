@@ -89,7 +89,6 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
       flexWrap='wrap'
       flexDirection={isMobile ? 'column' : 'row'}
       flexGrow={1}
-      margin={theme.spacing(1, 0, 2)}
       className={horizontalLayout ? `${classes.horizontal}` : ''}
     >
       <Box

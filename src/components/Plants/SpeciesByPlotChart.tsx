@@ -96,7 +96,7 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
   return (
     <>
       <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_PLOT_AND_SPECIES}</Typography>
-      <Box sx={{ marginTop: theme.spacing(3) }}>
+      <Box sx={{ marginTop: theme.spacing(2) }}>
         {zones && (
           <PlotSelector
             zones={zones as ZoneInfo[]}
