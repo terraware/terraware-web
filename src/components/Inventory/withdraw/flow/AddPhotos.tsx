@@ -3,7 +3,7 @@ import { Container, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import SelectPhotos, { ErrorType } from 'src/components/common/SelectPhotos';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import FormBottomBar from 'src/components/common/FormBottomBar';
+import PageForm from 'src/components/common/PageForm';
 import { NurseryWithdrawalPurposes } from 'src/api/types/batch';
 
 type AddPhotosProps = {
@@ -34,7 +34,7 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
   };
 
   return (
-    <>
+    <PageForm onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText}>
       <Container
         maxWidth={false}
         sx={{
@@ -44,7 +44,6 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
           paddingLeft: theme.spacing(isMobile ? 1 : 4),
           paddingRight: theme.spacing(isMobile ? 1 : 4),
           paddingTop: theme.spacing(5),
-          paddingBottom: isMobile ? '185px' : '105px',
         }}
       >
         <SelectPhotos
@@ -59,7 +58,6 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
           error={error}
         />
       </Container>
-      <FormBottomBar onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText} />
-    </>
+    </PageForm>
   );
 }

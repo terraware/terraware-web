@@ -25,7 +25,7 @@ import { listPlantingSites } from 'src/api/tracking/tracking';
 import { getAllSpecies } from 'src/api/species/species';
 import { PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
-import FormBottomBar from 'src/components/common/FormBottomBar';
+import PageForm from 'src/components/common/PageForm';
 import ErrorMessage from 'src/components/common/ErrorMessage';
 import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';
 
@@ -411,7 +411,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [batchesFromNursery]);
 
   return (
-    <>
+    <PageForm onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText} saveDisabled={noReadySeedlings}>
       <Container
         maxWidth={false}
         sx={{
@@ -421,7 +421,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           paddingLeft: theme.spacing(isMobile ? 0 : 4),
           paddingRight: theme.spacing(isMobile ? 0 : 4),
           paddingTop: theme.spacing(5),
-          paddingBottom: isMobile ? '185px' : '105px',
         }}
       >
         <Grid
@@ -626,12 +625,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           </Grid>
         </Grid>
       </Container>
-      <FormBottomBar
-        onCancel={onCancel}
-        onSave={onNextHandler}
-        saveButtonText={saveText}
-        saveDisabled={noReadySeedlings}
-      />
-    </>
+    </PageForm>
   );
 }

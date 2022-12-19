@@ -17,7 +17,7 @@ import {
   Species2Dropdown,
 } from '../properties';
 import Textfield from 'src/components/common/Textfield/Textfield';
-import FormBottomBar from 'src/components/common/FormBottomBar';
+import PageForm from 'src/components/common/PageForm';
 import Select from 'src/components/common/Select/Select';
 import { ACCESSION_2_CREATE_STATES } from 'src/types/Accession';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
@@ -89,92 +89,99 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
 
   return (
     <TfMain>
-      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 600, marginBottom: theme.spacing(4) }}>
-        {strings.ADD_AN_ACCESSION}
-      </Typography>
-      <Container
-        maxWidth={false}
-        sx={{
-          margin: '0 auto',
-          width: isMobile ? '100%' : '640px',
-          backgroundColor: theme.palette.TwClrBg,
-          borderRadius: '32px',
-          padding: theme.spacing(3),
-          marginBottom: isMobile ? theme.spacing(32) : theme.spacing(25),
-        }}
-      >
-        <Grid container>
-          <Grid item xs={12} display='flex' flexDirection='column'>
-            <Typography variant='h2' sx={SubTitleStyle}>
-              {strings.SEED_COLLECTION_DETAIL}
-            </Typography>
-            <Typography padding={theme.spacing(1, 0)} fontSize='14px' fontWeight={400}>
-              {strings.SEED_COLLECTION_DETAIL_DESC}
-            </Typography>
+      <PageForm onCancel={goToAccessions} onSave={saveAccession} saveButtonText={strings.CREATE}>
+        <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 600, marginBottom: theme.spacing(4) }}>
+          {strings.ADD_AN_ACCESSION}
+        </Typography>
+        <Container
+          maxWidth={false}
+          sx={{
+            margin: '0 auto',
+            width: isMobile ? '100%' : '640px',
+            backgroundColor: theme.palette.TwClrBg,
+            borderRadius: '32px',
+            padding: theme.spacing(3),
+            marginBottom: theme.spacing(8),
+          }}
+        >
+          <Grid container>
+            <Grid item xs={12} display='flex' flexDirection='column'>
+              <Typography variant='h2' sx={SubTitleStyle}>
+                {strings.SEED_COLLECTION_DETAIL}
+              </Typography>
+              <Typography padding={theme.spacing(1, 0)} fontSize='14px' fontWeight={400}>
+                {strings.SEED_COLLECTION_DETAIL_DESC}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sx={marginTop}>
+              <Species2Dropdown
+                record={record}
+                organization={organization}
+                setRecord={setRecord}
+                validate={validateFields}
+              />
+            </Grid>
+            <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
+            <Grid item xs={12} sx={marginTop}>
+              <Collectors2
+                organizationId={organization.id}
+                id='collectors'
+                collectors={record.collectors}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              display='flex'
+              flexDirection={isMobile ? 'column' : 'row'}
+              justifyContent='space-between'
+            >
+              <Grid item xs={gridSize()} sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}>
+                <Textfield
+                  id='collectionSiteName'
+                  value={record.collectionSiteName}
+                  onChange={onChange}
+                  type='text'
+                  label={strings.COLLECTION_SITE}
+                  tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} sx={marginTop}>
+                <Textfield
+                  id='collectionSiteLandowner'
+                  value={record.collectionSiteLandowner}
+                  onChange={onChange}
+                  type='text'
+                  label={strings.LANDOWNER}
+                />
+              </Grid>
+            </Grid>
+            <Accession2Address record={record} onChange={onChange} />
+            <Accession2GPS record={record} onChange={onChange} />
+            <Accession2PlantSiteDetails record={record} onChange={onChange} />
           </Grid>
-          <Grid item xs={12} sx={marginTop}>
-            <Species2Dropdown
-              record={record}
+          <Grid container>
+            <CollectedReceivedDate2 record={record} onChange={onChange} type='received' validate={validateFields} />
+            <Grid item xs={12} sx={marginTop}>
+              <Select
+                id='state'
+                selectedValue={record.state}
+                onChange={(value: string) => onChange('state', value)}
+                label={strings.PROCESSING_STATUS_REQUIRED}
+                options={ACCESSION_2_CREATE_STATES}
+                fullWidth={true}
+              />
+            </Grid>
+            <SeedBank2Selector
               organization={organization}
-              setRecord={setRecord}
+              record={record}
+              onChange={onChange}
               validate={validateFields}
             />
           </Grid>
-          <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
-          <Grid item xs={12} sx={marginTop}>
-            <Collectors2
-              organizationId={organization.id}
-              id='collectors'
-              collectors={record.collectors}
-              onChange={onChange}
-            />
-          </Grid>
-          <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between'>
-            <Grid item xs={gridSize()} sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}>
-              <Textfield
-                id='collectionSiteName'
-                value={record.collectionSiteName}
-                onChange={onChange}
-                type='text'
-                label={strings.COLLECTION_SITE}
-                tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop}>
-              <Textfield
-                id='collectionSiteLandowner'
-                value={record.collectionSiteLandowner}
-                onChange={onChange}
-                type='text'
-                label={strings.LANDOWNER}
-              />
-            </Grid>
-          </Grid>
-          <Accession2Address record={record} onChange={onChange} />
-          <Accession2GPS record={record} onChange={onChange} />
-          <Accession2PlantSiteDetails record={record} onChange={onChange} />
-        </Grid>
-        <Grid container>
-          <CollectedReceivedDate2 record={record} onChange={onChange} type='received' validate={validateFields} />
-          <Grid item xs={12} sx={marginTop}>
-            <Select
-              id='state'
-              selectedValue={record.state}
-              onChange={(value: string) => onChange('state', value)}
-              label={strings.PROCESSING_STATUS_REQUIRED}
-              options={ACCESSION_2_CREATE_STATES}
-              fullWidth={true}
-            />
-          </Grid>
-          <SeedBank2Selector
-            organization={organization}
-            record={record}
-            onChange={onChange}
-            validate={validateFields}
-          />
-        </Grid>
-      </Container>
-      <FormBottomBar onCancel={goToAccessions} onSave={saveAccession} saveButtonText={strings.CREATE} />
+        </Container>
+      </PageForm>
     </TfMain>
   );
 }

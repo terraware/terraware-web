@@ -15,7 +15,7 @@ import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
 import TitleDescription from 'src/components/common/TitleDescription';
 import Card from 'src/components/common/Card';
-import FormBottomBar from 'src/components/common/FormBottomBar';
+import PageForm from 'src/components/common/PageForm';
 import ReassignmentRenderer, { Reassignment, PlotInfo } from './ReassignmentRenderer';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -221,28 +221,29 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
         </Box>
       )}
       {plots ? (
-        <Box
-          paddingBottom={isMobile ? '185px' : '105px'}
-          paddingRight={theme.spacing(3)}
-          display='flex'
-          flexDirection={isMobile ? 'row' : 'column'}
-          marginTop={theme.spacing(3)}
-          minWidth='fit-content'
-          ref={contentRef}
-        >
-          {reassigning && <BusySpinner withSkrim={true} />}
-          <Card>
-            <Table
-              id='reassignments'
-              columns={columns}
-              rows={plantings as any[]}
-              Renderer={reassignmentRenderer}
-              orderBy='species'
-              showPagination={false}
-            />
-          </Card>
-          <FormBottomBar onCancel={goToWithdrawals} onSave={reassign} saveButtonText={strings.REASSIGN} />
-        </Box>
+        <PageForm onCancel={goToWithdrawals} onSave={reassign} saveButtonText={strings.REASSIGN}>
+          <Box
+            paddingRight={theme.spacing(3)}
+            paddingBottom={theme.spacing(8)}
+            display='flex'
+            flexDirection={isMobile ? 'row' : 'column'}
+            marginTop={theme.spacing(3)}
+            minWidth='fit-content'
+            ref={contentRef}
+          >
+            {reassigning && <BusySpinner withSkrim={true} />}
+            <Card>
+              <Table
+                id='reassignments'
+                columns={columns}
+                rows={plantings as any[]}
+                Renderer={reassignmentRenderer}
+                orderBy='species'
+                showPagination={false}
+              />
+            </Card>
+          </Box>
+        </PageForm>
       ) : (
         <CircularProgress sx={{ margin: 'auto' }} />
       )}
