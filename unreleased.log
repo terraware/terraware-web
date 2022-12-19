@@ -1,3 +1,4 @@
+67d0e34 SW-2443 Disable non-numeric and negative entries on withdrawal flow (#937)
 96c89e0 SW-2437 Fix wrapping of zone and plot selectors (#938)
 01ee97c SW-2444 Improvements to outplant withdraw flow (#934)
 0143b01 SW-2441 Fix Error focus active input field on withdrawal from batches cut off on left (#936)
