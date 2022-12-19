@@ -95,6 +95,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
           <Textfield
             id={`quantity_${plantingId}`}
             type='number'
+            min={0}
             onChange={onUpdateQuantity}
             value={quantity}
             label={''}
