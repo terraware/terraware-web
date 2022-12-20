@@ -43,15 +43,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     get: env().isForcedProductionView,
     set: env().forceProductionView,
   },
-  {
-    name: 'zoom to zone',
-    preferenceName: 'enableZoomTo',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['zoom to zone instead of pan to'],
-    disclosure: ['this is for internal evaluation'],
-  },
 ];
 
 type FeatureMap = { [key: string]: Feature };
