@@ -174,7 +174,7 @@ export default function NurseryWithdrawalsDetails({
             justifyContent='space-between'
             alignItems='center'
           >
-            <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} fontStyle='italic'>
+            <Typography color={theme.palette.ClrTextFill} fontSize='24px' lineHeight='32px' fontWeight={600}>
               {withdrawal?.withdrawnDate}
             </Typography>
             {withdrawal?.purpose === OUTPLANT && hasPlots && (

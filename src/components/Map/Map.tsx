@@ -132,7 +132,7 @@ export default function Map(props: MapProps): JSX.Element {
       }
       const coordinates = feature.geometry.coordinates;
       const bbox = getBoundingBox([[coordinates]]);
-      map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 200 });
+      map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
     },
     [geoData]
   );
