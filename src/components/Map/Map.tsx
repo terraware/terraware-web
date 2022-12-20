@@ -4,7 +4,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
 import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer } from './MapModels';
 import { getBoundingBox } from './MapUtils';
-import isEnabled from 'src/features';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -133,15 +132,7 @@ export default function Map(props: MapProps): JSX.Element {
       }
       const coordinates = feature.geometry.coordinates;
       const bbox = getBoundingBox([[coordinates]]);
-      const [llx, lly] = bbox.lowerLeft;
-      const [urx, ury] = bbox.upperRight;
-      if (isEnabled('zoom to zone')) {
-        map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 200 });
-      } else {
-        // default pan to
-        const center = [(llx + urx) / 2, (lly + ury) / 2];
-        map.panTo(center, { padding: 200 });
-      }
+      map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 200 });
     },
     [geoData]
   );
