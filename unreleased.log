@@ -1,3 +1,4 @@
+d4ee443 SW-2442 Fix popover behavior on chart inconsistent (#945)
 3f31d77 Fix github workflow deprecations in terraware-web (#942)
 232ff2c SW-2558 Change font size on withdrawals details pages (#944)
 d843b2e SW-2467 Use consistent spacing between page and bottom cancel/save bar (#940)
