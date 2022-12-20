@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { ServerOrganization } from 'src/types/Organization';
-import FormBottomBar from 'src/components/common/FormBottomBar';
+import PageForm from 'src/components/common/PageForm';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import strings from 'src/strings';
 import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/api/types/batch';
@@ -254,7 +254,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   };
 
   return (
-    <>
+    <PageForm onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText}>
       {errorPageMessage && (
         <Box sx={{ marginTop: 5, marginBottom: 3 }}>
           <ErrorBox text={errorPageMessage} className={classes.error} />
@@ -314,7 +314,6 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
             })}
         </Grid>
       </Container>
-      <FormBottomBar onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText} />
-    </>
+    </PageForm>
   );
 }

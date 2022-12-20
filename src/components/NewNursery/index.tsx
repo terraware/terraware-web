@@ -6,7 +6,7 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
-import FormBottomBar from '../common/FormBottomBar';
+import PageForm from '../common/PageForm';
 import { Facility } from 'src/api/types/facilities';
 import { createFacility, updateFacility } from 'src/api/facility/facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -91,43 +91,44 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
 
   return (
     <TfMain>
-      <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
-        <Typography fontSize='24px' fontWeight={600}>
-          {selectedNursery ? selectedNursery.name : strings.ADD_NURSERY}
-        </Typography>
-        <PageSnackbar />
-      </Box>
-      <Box
-        sx={{
-          backgroundColor: theme.palette.TwClrBg,
-          borderRadius: '32px',
-          padding: theme.spacing(3),
-        }}
-      >
-        <Grid container spacing={3}>
-          <Grid item xs={gridSize()}>
-            <TextField
-              id='name'
-              label={strings.NAME_REQUIRED}
-              type='text'
-              onChange={onChange}
-              value={record.name}
-              errorText={record.name ? '' : nameError}
-            />
+      <PageForm onCancel={goToNurseries} onSave={saveNursery}>
+        <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
+          <Typography fontSize='24px' fontWeight={600}>
+            {selectedNursery ? selectedNursery.name : strings.ADD_NURSERY}
+          </Typography>
+          <PageSnackbar />
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: theme.palette.TwClrBg,
+            borderRadius: '32px',
+            padding: theme.spacing(3),
+          }}
+        >
+          <Grid container spacing={3}>
+            <Grid item xs={gridSize()}>
+              <TextField
+                id='name'
+                label={strings.NAME_REQUIRED}
+                type='text'
+                onChange={onChange}
+                value={record.name}
+                errorText={record.name ? '' : nameError}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <TextField
+                id='description'
+                label={strings.DESCRIPTION_REQUIRED}
+                type='textarea'
+                onChange={onChange}
+                value={record.description}
+                errorText={record.description ? '' : descriptionError}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={gridSize()}>
-            <TextField
-              id='description'
-              label={strings.DESCRIPTION_REQUIRED}
-              type='textarea'
-              onChange={onChange}
-              value={record.description}
-              errorText={record.description ? '' : descriptionError}
-            />
-          </Grid>
-        </Grid>
-      </Box>
-      <FormBottomBar onCancel={goToNurseries} onSave={saveNursery} />
+        </Box>
+      </PageForm>
     </TfMain>
   );
 }

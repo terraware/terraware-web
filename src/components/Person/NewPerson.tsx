@@ -13,7 +13,7 @@ import ErrorBox from '../common/ErrorBox/ErrorBox';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { APP_PATHS } from 'src/constants';
 import dictionary from 'src/strings/dictionary';
-import FormBottomBar from '../common/FormBottomBar';
+import PageForm from '../common/PageForm';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -187,87 +187,88 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   // TODO: Handle the case where we cannot find the requested person to edit in the list of people.
   return (
     <TfMain>
-      <Grid container marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
-        <Grid item xs={12}>
-          <h2 className={classes.title}>{personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}</h2>
-          {!personSelectedToEdit ? <p className={classes.titleSubtitle}>{strings.ADD_PERSON_DESC}</p> : null}
-          <PageSnackbar />
-          {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
-            <ErrorBox
-              text={strings.ALREADY_INVITED_PERSON_ERROR}
-              buttonText={strings.GO_TO_PROFILE}
-              onClick={goToProfile}
-            />
-          )}
-          {pageError === 'INVALID_EMAIL' && (
-            <ErrorBox title={strings.UNABLE_TO_ADD_PERSON} text={strings.FIX_HIGHLIGHTED_FIELDS} />
-          )}
-        </Grid>
-      </Grid>
-      <Box
-        sx={{
-          backgroundColor: theme.palette.TwClrBg,
-          borderRadius: '32px',
-          padding: theme.spacing(3),
-          marginBottom: isMobile ? theme.spacing(32) : theme.spacing(25),
-        }}
-      >
-        <Grid container spacing={3}>
-          <Grid item xs={gridSize()}>
-            <TextField
-              id='email'
-              label={strings.EMAIL_REQUIRED}
-              type='text'
-              onChange={onChange}
-              value={newPerson.email}
-              disabled={!!personSelectedToEdit}
-              errorText={emailError}
-            />
-          </Grid>
-          <Grid item xs={gridSize()}>
-            <TextField
-              id='firstName'
-              label={strings.FIRST_NAME}
-              type='text'
-              onChange={onChange}
-              disabled={true}
-              value={newPerson.firstName}
-            />
-          </Grid>
-          <Grid item xs={gridSize()}>
-            <TextField
-              id='lastName'
-              label={strings.LAST_NAME}
-              type='text'
-              onChange={onChange}
-              disabled={true}
-              value={newPerson.lastName}
-            />
+      <PageForm onCancel={goToPeople} onSave={() => saveUser()}>
+        <Grid container marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
+          <Grid item xs={12}>
+            <h2 className={classes.title}>{personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}</h2>
+            {!personSelectedToEdit ? <p className={classes.titleSubtitle}>{strings.ADD_PERSON_DESC}</p> : null}
+            <PageSnackbar />
+            {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
+              <ErrorBox
+                text={strings.ALREADY_INVITED_PERSON_ERROR}
+                buttonText={strings.GO_TO_PROFILE}
+                onClick={goToProfile}
+              />
+            )}
+            {pageError === 'INVALID_EMAIL' && (
+              <ErrorBox title={strings.UNABLE_TO_ADD_PERSON} text={strings.FIX_HIGHLIGHTED_FIELDS} />
+            )}
           </Grid>
         </Grid>
-        <Box display='flex' flexDirection='column' marginTop={isDesktop ? theme.spacing(3) : theme.spacing(4)}>
-          <Box>
-            <p className={classes.roleDescription}>{strings.ROLES_INFO}</p>
-            <ul className={classes.rolesList}>
-              <li>{strings.CONTRIBUTOR_INFO}</li>
-              <li>{strings.MANAGER_INFO}</li>
-              <li>{strings.ADMIN_INFO}</li>
-            </ul>
-          </Box>
-          <Box width={roleSelectSize()} marginTop={theme.spacing(4)}>
-            <Select
-              id='role'
-              label={strings.ROLE_REQUIRED}
-              onChange={onChangeRole}
-              options={['Contributor', 'Admin', 'Manager']}
-              disabled={newPerson.role === 'Owner'}
-              selectedValue={newPerson.role}
-              fullWidth
-            />
+        <Box
+          sx={{
+            backgroundColor: theme.palette.TwClrBg,
+            borderRadius: '32px',
+            padding: theme.spacing(3),
+            marginBottom: theme.spacing(8),
+          }}
+        >
+          <Grid container spacing={3}>
+            <Grid item xs={gridSize()}>
+              <TextField
+                id='email'
+                label={strings.EMAIL_REQUIRED}
+                type='text'
+                onChange={onChange}
+                value={newPerson.email}
+                disabled={!!personSelectedToEdit}
+                errorText={emailError}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <TextField
+                id='firstName'
+                label={strings.FIRST_NAME}
+                type='text'
+                onChange={onChange}
+                disabled={true}
+                value={newPerson.firstName}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <TextField
+                id='lastName'
+                label={strings.LAST_NAME}
+                type='text'
+                onChange={onChange}
+                disabled={true}
+                value={newPerson.lastName}
+              />
+            </Grid>
+          </Grid>
+          <Box display='flex' flexDirection='column' marginTop={isDesktop ? theme.spacing(3) : theme.spacing(4)}>
+            <Box>
+              <p className={classes.roleDescription}>{strings.ROLES_INFO}</p>
+              <ul className={classes.rolesList}>
+                <li>{strings.CONTRIBUTOR_INFO}</li>
+                <li>{strings.MANAGER_INFO}</li>
+                <li>{strings.ADMIN_INFO}</li>
+              </ul>
+            </Box>
+            <Box width={roleSelectSize()} marginTop={theme.spacing(4)}>
+              <Select
+                id='role'
+                label={strings.ROLE_REQUIRED}
+                onChange={onChangeRole}
+                options={['Contributor', 'Admin', 'Manager']}
+                disabled={newPerson.role === 'Owner'}
+                selectedValue={newPerson.role}
+                fullWidth
+              />
+            </Box>
           </Box>
         </Box>
-      </Box>
-      <FormBottomBar onCancel={goToPeople} onSave={() => saveUser()} />
+      </PageForm>
     </TfMain>
   );
 }

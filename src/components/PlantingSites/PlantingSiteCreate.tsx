@@ -2,7 +2,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import TfMain from 'src/components/common/TfMain';
 import { Typography, Box, Container, Grid, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import FormBottomBar from '../common/FormBottomBar';
+import PageForm from 'src/components/common/PageForm';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import useForm from 'src/utils/useForm';
 import {
@@ -116,58 +116,68 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
 
   return (
     <TfMain>
-      <Container
-        maxWidth={false}
-        sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingBottom: theme.spacing(isMobile ? 20 : 10) }}
-      >
-        {loaded && (
-          <>
-            <Grid container spacing={3} flexGrow={0} display='flex' flexDirection='column'>
-              <Box paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)} display='flex' flexDirection='column'>
-                <Typography
-                  fontSize={selectedPlantingSite ? '20px' : '24px'}
-                  fontWeight={600}
-                  margin={theme.spacing(1, 0)}
-                >
-                  {record.id !== -1 && selectedPlantingSite ? selectedPlantingSite.name : strings.ADD_PLANTING_SITE}
-                </Typography>
-              </Box>
-              <PageSnackbar />
-              <Box
-                sx={{
-                  backgroundColor: theme.palette.TwClrBg,
-                  borderRadius: '32px',
-                  padding: theme.spacing(3),
-                }}
+      <PageForm onCancel={goToPlantingSites} onSave={savePlantingSite}>
+        <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+          {loaded && (
+            <>
+              <Grid
+                container
+                spacing={3}
+                flexGrow={0}
+                display='flex'
+                flexDirection='column'
+                marginTop={theme.spacing(3)}
               >
-                <Grid container spacing={3} flexGrow={0}>
-                  <Grid item xs={gridSize()}>
-                    <TextField
-                      id='name'
-                      label={strings.NAME_REQUIRED}
-                      type='text'
-                      onChange={onChange}
-                      value={record.name}
-                      errorText={record.name ? '' : nameError}
-                    />
+                <Box
+                  paddingLeft={theme.spacing(3)}
+                  marginBottom={theme.spacing(4)}
+                  display='flex'
+                  flexDirection='column'
+                >
+                  <Typography
+                    fontSize={selectedPlantingSite ? '20px' : '24px'}
+                    fontWeight={600}
+                    margin={theme.spacing(1, 0)}
+                  >
+                    {record.id !== -1 && selectedPlantingSite ? selectedPlantingSite.name : strings.ADD_PLANTING_SITE}
+                  </Typography>
+                </Box>
+                <PageSnackbar />
+                <Box
+                  sx={{
+                    backgroundColor: theme.palette.TwClrBg,
+                    borderRadius: '32px',
+                    padding: theme.spacing(3),
+                  }}
+                >
+                  <Grid container spacing={3} flexGrow={0}>
+                    <Grid item xs={gridSize()}>
+                      <TextField
+                        id='name'
+                        label={strings.NAME_REQUIRED}
+                        type='text'
+                        onChange={onChange}
+                        value={record.name}
+                        errorText={record.name ? '' : nameError}
+                      />
+                    </Grid>
+                    <Grid item xs={gridSize()}>
+                      <TextField
+                        id='description'
+                        label={strings.DESCRIPTION}
+                        type='textarea'
+                        onChange={onChange}
+                        value={record.description}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={gridSize()}>
-                    <TextField
-                      id='description'
-                      label={strings.DESCRIPTION}
-                      type='textarea'
-                      onChange={onChange}
-                      value={record.description}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-            </Grid>
-            <BoundariesAndPlots plantingSite={record} />
-          </>
-        )}
-      </Container>
-      <FormBottomBar onCancel={goToPlantingSites} onSave={savePlantingSite} />
+                </Box>
+              </Grid>
+              <BoundariesAndPlots plantingSite={record} />
+            </>
+          )}
+        </Container>
+      </PageForm>
     </TfMain>
   );
 }

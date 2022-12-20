@@ -7,7 +7,7 @@ import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import Select from '../common/Select/Select';
-import FormBottomBar from '../common/FormBottomBar';
+import PageForm from '../common/PageForm';
 import { Country, Subdivision } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
 import { updateOrganization } from 'src/api/organization/organization';
@@ -117,66 +117,67 @@ export default function OrganizationView({ organization, reloadOrganizationData 
 
   return (
     <TfMain>
-      <Box margin={theme.spacing(0, 3, 4, 3)}>
-        <Box display='flex' flexDirection='column' justifyContent='space-between' marginBottom={theme.spacing(1)}>
-          <Typography margin={0} fontSize='24px' fontWeight={600}>
-            {strings.ORGANIZATION}
-          </Typography>
-          <PageSnackbar />
+      <PageForm onCancel={goToOrganization} onSave={saveOrganization}>
+        <Box margin={theme.spacing(0, 3, 4, 3)}>
+          <Box display='flex' flexDirection='column' justifyContent='space-between' marginBottom={theme.spacing(1)}>
+            <Typography margin={0} fontSize='24px' fontWeight={600}>
+              {strings.ORGANIZATION}
+            </Typography>
+            <PageSnackbar />
+          </Box>
         </Box>
-      </Box>
-      <Grid
-        container
-        sx={{
-          backgroundColor: theme.palette.TwClrBg,
-          borderRadius: '32px',
-          padding: theme.spacing(3),
-          marginBottom: isMobile ? theme.spacing(40) : theme.spacing(6),
-        }}
-      >
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
-          <TextField
-            id='name'
-            label={strings.ORGANIZATION_NAME_REQUIRED}
-            type='text'
-            onChange={onChange}
-            value={organizationRecord.name}
-            errorText={organizationRecord.name ? '' : nameError}
-          />
-        </Grid>
-        <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)} paddingBottom={theme.spacing(4)}>
-          <TextField
-            id='description'
-            label={strings.DESCRIPTION}
-            type='textarea'
-            onChange={onChange}
-            value={organizationRecord.description}
-          />
-        </Grid>
-        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
-          <Select
-            label={strings.COUNTRY}
-            id='countyCode'
-            onChange={onChangeCountry}
-            options={countries?.map((country) => country.name)}
-            selectedValue={getSelectedCountry()?.name}
-            fullWidth
-          />
-        </Grid>
-        {getSelectedCountry()?.subdivisions && (
-          <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)}>
+        <Grid
+          container
+          sx={{
+            backgroundColor: theme.palette.TwClrBg,
+            borderRadius: '32px',
+            padding: theme.spacing(3),
+            marginBottom: theme.spacing(10),
+          }}
+        >
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+            <TextField
+              id='name'
+              label={strings.ORGANIZATION_NAME_REQUIRED}
+              type='text'
+              onChange={onChange}
+              value={organizationRecord.name}
+              errorText={organizationRecord.name ? '' : nameError}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)} paddingBottom={theme.spacing(4)}>
+            <TextField
+              id='description'
+              label={strings.DESCRIPTION}
+              type='textarea'
+              onChange={onChange}
+              value={organizationRecord.description}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
             <Select
-              label={strings.STATE}
-              id='countySubdivisionCode'
-              onChange={onChangeSubdivision}
-              options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
-              selectedValue={getSelectedSubdivision()?.name}
+              label={strings.COUNTRY}
+              id='countyCode'
+              onChange={onChangeCountry}
+              options={countries?.map((country) => country.name)}
+              selectedValue={getSelectedCountry()?.name}
               fullWidth
             />
           </Grid>
-        )}
-      </Grid>
-      <FormBottomBar onCancel={goToOrganization} onSave={saveOrganization} />
+          {getSelectedCountry()?.subdivisions && (
+            <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)}>
+              <Select
+                label={strings.STATE}
+                id='countySubdivisionCode'
+                onChange={onChangeSubdivision}
+                options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
+                selectedValue={getSelectedSubdivision()?.name}
+                fullWidth
+              />
+            </Grid>
+          )}
+        </Grid>
+      </PageForm>
     </TfMain>
   );
 }

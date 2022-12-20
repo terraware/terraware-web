@@ -7,7 +7,7 @@ import useForm from 'src/utils/useForm';
 import { Box, Container, Divider, Grid, Typography, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
-import FormBottomBar from 'src/components/common/FormBottomBar';
+import PageForm from 'src/components/common/PageForm';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
 import { DatePicker } from '@terraware/web-components';
@@ -101,135 +101,137 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
 
   return (
     <TfMain>
-      <Typography sx={{ paddingLeft: theme.spacing(3), fontWeight: 600, fontSize: '24px' }}>
-        {strings.ADD_INVENTORY}
-      </Typography>
-      <Box
-        display='flex'
-        flexDirection='column'
-        margin='0 auto'
-        maxWidth='584px'
-        marginTop={5}
-        marginBottom={5}
-        padding={theme.spacing(0, 3)}
-      >
-        <Typography variant='h2' sx={{ fontSize: '20px', fontWeight: 'bold', paddingBottom: 1 }}>
+      <PageForm onCancel={goToInventory} onSave={saveInventory} saveButtonText={strings.SAVE}>
+        <Typography sx={{ paddingLeft: theme.spacing(3), fontWeight: 600, fontSize: '24px' }}>
           {strings.ADD_INVENTORY}
         </Typography>
-        <Typography sx={{ fontSize: '14px' }}>{strings.ADD_INVENTORY_DESCRIPTION}</Typography>
-        <Container
-          maxWidth={false}
-          sx={{
-            width: isMobile ? '100%' : '640px',
-            marginTop: theme.spacing(3),
-            border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-            borderRadius: '16px',
-            paddingBottom: 3,
-            marginBottom: 5,
-          }}
+        <Box
+          display='flex'
+          flexDirection='column'
+          margin='0 auto'
+          maxWidth='584px'
+          marginTop={5}
+          marginBottom={5}
+          padding={theme.spacing(0, 3)}
         >
-          <Grid container padding={0}>
-            <Grid item xs={12} sx={marginTop}>
-              <Species2Dropdown
-                record={record}
-                organization={organization}
-                setRecord={setRecord}
-                validate={validateFields}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-              <NurseryDropdown
-                organization={organization}
-                record={record}
-                setRecord={setRecord}
-                validate={validateFields}
-                isSelectionValid={(r) => !!r?.facilityId}
-                label={strings.RECEIVING_NURSERY_REQUIRED}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-              <DatePicker
-                id='dateAdded'
-                label={strings.DATE_ADDED_REQUIRED}
-                aria-label={strings.DATE_ADDED_REQUIRED}
-                value={record.addedDate}
-                onChange={changeDate}
-                errorText={validateFields && !record.addedDate ? strings.REQUIRED_FIELD : ''}
-              />
-            </Grid>
+          <Typography variant='h2' sx={{ fontSize: '20px', fontWeight: 'bold', paddingBottom: 1 }}>
+            {strings.ADD_INVENTORY}
+          </Typography>
+          <Typography sx={{ fontSize: '14px' }}>{strings.ADD_INVENTORY_DESCRIPTION}</Typography>
+          <Container
+            maxWidth={false}
+            sx={{
+              width: isMobile ? '100%' : '640px',
+              marginTop: theme.spacing(3),
+              border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+              borderRadius: '16px',
+              paddingBottom: 3,
+              marginBottom: 5,
+              backgroundColor: theme.palette.TwClrBg,
+            }}
+          >
+            <Grid container padding={0}>
+              <Grid item xs={12} sx={marginTop}>
+                <Species2Dropdown
+                  record={record}
+                  organization={organization}
+                  setRecord={setRecord}
+                  validate={validateFields}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <NurseryDropdown
+                  organization={organization}
+                  record={record}
+                  setRecord={setRecord}
+                  validate={validateFields}
+                  isSelectionValid={(r) => !!r?.facilityId}
+                  label={strings.RECEIVING_NURSERY_REQUIRED}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+                <DatePicker
+                  id='dateAdded'
+                  label={strings.DATE_ADDED_REQUIRED}
+                  aria-label={strings.DATE_ADDED_REQUIRED}
+                  value={record.addedDate}
+                  onChange={changeDate}
+                  errorText={validateFields && !record.addedDate ? strings.REQUIRED_FIELD : ''}
+                />
+              </Grid>
 
-            <Grid item xs={12} sx={marginTop}>
-              <Divider />
-            </Grid>
+              <Grid item xs={12} sx={marginTop}>
+                <Divider />
+              </Grid>
 
-            <Grid
-              item
-              xs={gridSize()}
-              paddingRight={paddingSeparator}
-              sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
-            >
-              <Textfield
-                id='germinatingQuantity'
-                value={record.germinatingQuantity}
-                onChange={onChange}
-                type='text'
-                label={strings.GERMINATING_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-                errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
-              />
+              <Grid
+                item
+                xs={gridSize()}
+                paddingRight={paddingSeparator}
+                sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
+              >
+                <Textfield
+                  id='germinatingQuantity'
+                  value={record.germinatingQuantity}
+                  onChange={onChange}
+                  type='text'
+                  label={strings.GERMINATING_QUANTITY_REQUIRED}
+                  tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+                  errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
+                />
+              </Grid>
+              <Grid item xs={12} sx={marginTop}>
+                <Divider />
+              </Grid>
+              <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Textfield
+                  id='notReadyQuantity'
+                  value={record.notReadyQuantity}
+                  onChange={onChange}
+                  type='text'
+                  label={strings.NOT_READY_QUANTITY_REQUIRED}
+                  tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
+                  errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+                <DatePicker
+                  id='readyByDate'
+                  label={strings.ESTIMATED_READY_DATE}
+                  aria-label={strings.ESTIMATED_READY_DATE}
+                  value={record.readyByDate}
+                  onChange={changeDate}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Textfield
+                  id='readyQuantity'
+                  value={record.readyQuantity}
+                  onChange={onChange}
+                  type='text'
+                  label={strings.READY_QUANTITY_REQUIRED}
+                  tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
+                  errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}
+                />
+              </Grid>
+              <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
+                <Textfield
+                  id='totalQuantity'
+                  value={totalQuantity}
+                  onChange={onChange}
+                  type='text'
+                  label={strings.TOTAL_QUANTITY}
+                  display={true}
+                  tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
+                />
+              </Grid>
+              <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
+                <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sx={marginTop}>
-              <Divider />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-              <Textfield
-                id='notReadyQuantity'
-                value={record.notReadyQuantity}
-                onChange={onChange}
-                type='text'
-                label={strings.NOT_READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-              <DatePicker
-                id='readyByDate'
-                label={strings.ESTIMATED_READY_DATE}
-                aria-label={strings.ESTIMATED_READY_DATE}
-                value={record.readyByDate}
-                onChange={changeDate}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-              <Textfield
-                id='readyQuantity'
-                value={record.readyQuantity}
-                onChange={onChange}
-                type='text'
-                label={strings.READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-                errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}
-              />
-            </Grid>
-            <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
-              <Textfield
-                id='totalQuantity'
-                value={totalQuantity}
-                onChange={onChange}
-                type='text'
-                label={strings.TOTAL_QUANTITY}
-                display={true}
-                tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
-              />
-            </Grid>
-            <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
-              <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-      <FormBottomBar onCancel={goToInventory} onSave={saveInventory} saveButtonText={strings.SAVE} />
+          </Container>
+        </Box>
+      </PageForm>
     </TfMain>
   );
 }

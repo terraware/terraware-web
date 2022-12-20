@@ -10,7 +10,7 @@ import dictionary from 'src/strings/dictionary';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
 import useForm from 'src/utils/useForm';
-import FormBottomBar from '../common/FormBottomBar';
+import PageForm from '../common/PageForm';
 import TextField from '../common/Textfield/Textfield';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
 import { getOrganizationUsers, leaveOrganization, listOrganizationRoles } from 'src/api/organization/organization';
@@ -190,148 +190,148 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
 
   return (
     <TfMain>
-      {removedOrg && (
-        <>
-          <LeaveOrganizationDialog
-            open={leaveOrganizationModalOpened}
-            onClose={() => setLeaveOrganizationModalOpened(false)}
-            onSubmit={leaveOrgHandler}
-            orgName={removedOrg.name}
-          />
-          <AssignNewOwnerDialog
-            open={assignNewOwnerModalOpened}
-            onClose={() => setAssignNewOwnerModalOpened(false)}
-            people={orgPeople || []}
-            onSubmit={saveChanges}
-            setNewOwner={setNewOwner}
-            selectedOwner={newOwner}
-          />
-          <CannotRemoveOrgDialog
-            open={cannotRemoveOrgModalOpened}
-            onClose={() => setCannotRemoveOrgModalOpened(false)}
-            onSubmit={openDeleteOrgModal}
-          />
-          <DeleteOrgDialog
-            open={deleteOrgModalOpened}
-            onClose={() => setDeleteOrgModalOpened(false)}
-            orgName={removedOrg.name}
-            onSubmit={deleteOrgHandler}
-          />
-        </>
-      )}
-      <PageHeaderWrapper nextElement={contentRef.current}>
+      <PageForm onCancel={onCancel} onSave={saveChanges} hideEdit={!edit}>
+        {removedOrg && (
+          <>
+            <LeaveOrganizationDialog
+              open={leaveOrganizationModalOpened}
+              onClose={() => setLeaveOrganizationModalOpened(false)}
+              onSubmit={leaveOrgHandler}
+              orgName={removedOrg.name}
+            />
+            <AssignNewOwnerDialog
+              open={assignNewOwnerModalOpened}
+              onClose={() => setAssignNewOwnerModalOpened(false)}
+              people={orgPeople || []}
+              onSubmit={saveChanges}
+              setNewOwner={setNewOwner}
+              selectedOwner={newOwner}
+            />
+            <CannotRemoveOrgDialog
+              open={cannotRemoveOrgModalOpened}
+              onClose={() => setCannotRemoveOrgModalOpened(false)}
+              onSubmit={openDeleteOrgModal}
+            />
+            <DeleteOrgDialog
+              open={deleteOrgModalOpened}
+              onClose={() => setDeleteOrgModalOpened(false)}
+              orgName={removedOrg.name}
+              onSubmit={deleteOrgHandler}
+            />
+          </>
+        )}
+        <PageHeaderWrapper nextElement={contentRef.current}>
+          <Box
+            display='flex'
+            justifyContent='space-between'
+            marginBottom={theme.spacing(4)}
+            paddingLeft={theme.spacing(3)}
+          >
+            <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
+            <Button
+              id='edit-account'
+              icon='iconEdit'
+              label={isMobile ? '' : dictionary.EDIT_ACCOUNT}
+              onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
+              size='medium'
+              priority='primary'
+            />
+          </Box>
+        </PageHeaderWrapper>
         <Box
-          display='flex'
-          justifyContent='space-between'
-          marginBottom={theme.spacing(4)}
-          paddingLeft={theme.spacing(3)}
+          ref={contentRef}
+          sx={{
+            backgroundColor: theme.palette.TwClrBg,
+            padding: theme.spacing(3),
+            borderRadius: '32px',
+            minWidth: 'fit-content',
+          }}
         >
-          <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
-          <Button
-            id='edit-account'
-            icon='iconEdit'
-            label={isMobile ? '' : dictionary.EDIT_ACCOUNT}
-            onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
-            size='medium'
-            priority='primary'
-          />
-        </Box>
-      </PageHeaderWrapper>
-      <Box
-        ref={contentRef}
-        sx={{
-          backgroundColor: theme.palette.TwClrBg,
-          padding: theme.spacing(3),
-          borderRadius: '32px',
-          minWidth: 'fit-content',
-          marginBottom: edit ? (isMobile ? theme.spacing(16) : theme.spacing(8)) : 0,
-        }}
-      >
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography fontSize='20px' fontWeight={600}>
-              {dictionary.GENERAL}
-            </Typography>
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 4}>
-            <TextField
-              label={strings.FIRST_NAME}
-              id='firstName'
-              type='text'
-              value={record.firstName}
-              display={!edit}
-              onChange={onChange}
-            />
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 4}>
-            <TextField
-              label={strings.LAST_NAME}
-              id='lastName'
-              type='text'
-              value={record.lastName}
-              display={!edit}
-              onChange={onChange}
-            />
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 4}>
-            <TextField
-              label={strings.EMAIL}
-              id='email'
-              type='text'
-              value={record.email}
-              display={!edit}
-              readonly={true}
-            />
-          </Grid>
-          <Grid item xs={12} />
-          <Grid item xs={12}>
-            <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
-              {dictionary.NOTIFICATIONS}
-            </Typography>
-            <Typography fontSize='14px'>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Checkbox
-              disabled={!edit}
-              id='emailNotificationsEnabled'
-              name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
-              label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
-              value={record.emailNotificationsEnabled}
-              onChange={onChange}
-            />
-          </Grid>
-          <Grid item xs={12} />
-          <Grid item xs={12}>
-            <Typography fontSize='20px' fontWeight={600}>
-              {dictionary.ORGANIZATIONS}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <div>
-              <Grid container spacing={4}>
-                <Grid item xs={12}>
-                  {organizations && (
-                    <Table
-                      id='organizations-table'
-                      columns={columns}
-                      rows={personOrganizations}
-                      orderBy='name'
-                      selectedRows={selectedRows}
-                      setSelectedRows={setSelectedRows}
-                      showCheckbox={edit}
-                      showTopBar={edit}
-                      topBarButtons={[
-                        { buttonType: 'destructive', buttonText: strings.REMOVE, onButtonClick: removeSelectedOrgs },
-                      ]}
-                    />
-                  )}
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography fontSize='20px' fontWeight={600}>
+                {dictionary.GENERAL}
+              </Typography>
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <TextField
+                label={strings.FIRST_NAME}
+                id='firstName'
+                type='text'
+                value={record.firstName}
+                display={!edit}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <TextField
+                label={strings.LAST_NAME}
+                id='lastName'
+                type='text'
+                value={record.lastName}
+                display={!edit}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <TextField
+                label={strings.EMAIL}
+                id='email'
+                type='text'
+                value={record.email}
+                display={!edit}
+                readonly={true}
+              />
+            </Grid>
+            <Grid item xs={12} />
+            <Grid item xs={12}>
+              <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
+                {dictionary.NOTIFICATIONS}
+              </Typography>
+              <Typography fontSize='14px'>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Checkbox
+                disabled={!edit}
+                id='emailNotificationsEnabled'
+                name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+                label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+                value={record.emailNotificationsEnabled}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12} />
+            <Grid item xs={12}>
+              <Typography fontSize='20px' fontWeight={600}>
+                {dictionary.ORGANIZATIONS}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <div>
+                <Grid container spacing={4}>
+                  <Grid item xs={12}>
+                    {organizations && (
+                      <Table
+                        id='organizations-table'
+                        columns={columns}
+                        rows={personOrganizations}
+                        orderBy='name'
+                        selectedRows={selectedRows}
+                        setSelectedRows={setSelectedRows}
+                        showCheckbox={edit}
+                        showTopBar={edit}
+                        topBarButtons={[
+                          { buttonType: 'destructive', buttonText: strings.REMOVE, onButtonClick: removeSelectedOrgs },
+                        ]}
+                      />
+                    )}
+                  </Grid>
                 </Grid>
-              </Grid>
-            </div>
+              </div>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
-      {edit && <FormBottomBar onCancel={onCancel} onSave={saveChanges} />}
+        </Box>
+      </PageForm>
     </TfMain>
   );
 }
