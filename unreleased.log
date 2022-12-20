@@ -1,3 +1,4 @@
+d843b2e SW-2467 Use consistent spacing between page and bottom cancel/save bar (#940)
 4c7c161 SW-2470 Use zoom instead of pan - to zone, in plants dashboard (#943)
 5484aaa Fix sort order of zone and plot names (#941)
 fd26ba7 Use number texfield for reassignment flow (#939)
