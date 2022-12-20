@@ -107,8 +107,8 @@ export default function SpeciesByPlotChart(props: Props): JSX.Element {
             selectedPlot={selectedPlot}
           />
         )}
-        <Box sx={{ height: '180px', marginTop: 2 }}>
-          <DashboardChart chartId='speciesByPlotChart' chartLabels={labels} chartValues={values} />
+        <Box sx={{ marginTop: 2 }}>
+          <DashboardChart chartId='speciesByPlotChart' chartLabels={labels} chartValues={values} minHeight='126px' />
         </Box>
       </Box>
     </>
