@@ -1,6 +1,6 @@
-import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
@@ -17,11 +17,13 @@ type NavBarProps = {
   organization?: ServerOrganization;
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
   backgroundTransparent?: boolean;
+  withdrawalCreated?: boolean;
 };
 export default function NavBar({
   organization,
   setShowNavBar,
   backgroundTransparent,
+  withdrawalCreated,
 }: NavBarProps): JSX.Element | null {
   const [role, setRole] = useState<AllOrganizationRoles>();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
@@ -63,21 +65,27 @@ export default function NavBar({
     }
   };
 
+  const checkNurseryWithdrawals = useCallback(() => {
+    if (organization?.id) {
+      hasNurseryWithdrawals(organization.id).then((result) => {
+        setShowNurseryWithdrawals(result);
+      });
+    }
+  }, [organization?.id]);
+
   useEffect(() => {
-    let activeContext = true;
     setShowNurseryWithdrawals(false);
     if (organization) {
       setRole(organization.role);
-      hasNurseryWithdrawals(organization.id).then((result) => {
-        if (activeContext) {
-          setShowNurseryWithdrawals(result);
-        }
-      });
+      checkNurseryWithdrawals();
     }
-    return () => {
-      activeContext = false;
-    };
-  }, [organization]);
+  }, [organization, checkNurseryWithdrawals]);
+
+  useEffect(() => {
+    if (withdrawalCreated && !showNurseryWithdrawals) {
+      checkNurseryWithdrawals();
+    }
+  }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
 
   return (
     <Navbar setShowNavBar={setShowNavBar} backgroundTransparent={backgroundTransparent}>
