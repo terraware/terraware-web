@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, LinearProgress, Switch, Stack, Grid, useTheme } from '@mui/material';
+import hexRgb from 'hex-rgb';
 import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -119,7 +120,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
                 border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
                 padding: '10px',
                 borderRadius: '5px',
-                backgroundColor: 'rgba(255,255,255,0.8)',
+                backgroundColor: hexRgb(`${theme.palette.TwClrBg}`, { alpha: 0.8, format: 'css' }),
                 marginBottom: '10px',
               }}
               key={i}
