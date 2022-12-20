@@ -1,6 +1,7 @@
 import { ClickAwayListener, IconButton, Theme, Tooltip } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
+import hexRgb from 'hex-rgb';
 import { SpeciesProblemElement } from 'src/types/Species';
 import Icon from '../common/icon/Icon';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: 0,
     background: theme.palette.TwClrBg,
     border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    boxShadow: '0px 4px 8px rgba(58, 68, 69, 0.2)',
+    boxShadow: `0px 4px 8px ${hexRgb(`${theme.palette.TwClrShdw}`, { alpha: 0.2, format: 'css' })}`,
     borderRadius: '7px',
     color: theme.palette.TwClrTxt,
     fontSize: '12px',

@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       borderBottom: 'none',
     },
     '&:hover': {
-      backgroundColor: 'rgba(0, 103, 200, 0.1)',
+      backgroundColor: theme.palette.TwClrBgHover,
     },
   },
   notificationContent: {

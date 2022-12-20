@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   navBarOpened: {
     '& .blurred': {
       backdropFilter: 'blur(8px)',
-      background: 'rgba(249, 250, 250, 0.8)',
+      background: hexRgb(`${theme.palette.TwClrBgSecondary}`, { alpha: 0.8, format: 'css' }),
       height: '100%',
       alignItems: 'center',
       position: 'fixed',
