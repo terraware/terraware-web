@@ -1,12 +1,16 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
-import { useTheme } from '@mui/material';
+import { Theme, useTheme } from '@mui/material';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 import { Chart } from 'chart.js';
 
-const useStyles = makeStyles(() => ({
+export interface StyleProps {
+  minHeight?: string;
+}
+
+const useStyles = makeStyles<Theme, StyleProps>(() => ({
   chart: {
-    minHeight: '200px',
+    minHeight: (props) => props.minHeight ?? '200px',
   },
 }));
 
@@ -14,11 +18,12 @@ export interface DashboardChartProps {
   chartId: string;
   chartLabels?: string[];
   chartValues?: number[];
+  minHeight?: string;
 }
 
 export default function DashboardChart(props: DashboardChartProps): JSX.Element {
-  const { chartId, chartLabels, chartValues } = props;
-  const classes = useStyles();
+  const { chartId, chartLabels, chartValues, minHeight } = props;
+  const classes = useStyles({ minHeight });
   const chartRef = React.useRef<HTMLCanvasElement>(null);
   const theme = useTheme();
 
