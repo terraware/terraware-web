@@ -7,6 +7,7 @@ import {
   SearchResponseElement,
   convertToSearchNodePayload,
   search,
+  SearchSortOrder,
 } from 'src/api/search';
 import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
 import { Delivery } from 'src/api/types/tracking';
@@ -17,7 +18,8 @@ import { Delivery } from 'src/api/types/tracking';
 export async function listNurseryWithdrawals(
   organizationId: number,
   searchCriteria: SearchCriteria,
-  count = 1000
+  count = 1000,
+  sortOrder?: SearchSortOrder
 ): Promise<SearchResponseElement[] | null> {
   const searchParams: SearchRequestPayload = {
     prefix: 'nurseryWithdrawals',
@@ -34,7 +36,7 @@ export async function listNurseryWithdrawals(
       'hasReassignments',
     ],
     search: convertToSearchNodePayload(searchCriteria, organizationId),
-    sortOrder: [{ field: 'id', direction: 'Ascending' }],
+    sortOrder: sortOrder ? [sortOrder] : [{ field: 'id', direction: 'Ascending' }],
     count,
   };
 
