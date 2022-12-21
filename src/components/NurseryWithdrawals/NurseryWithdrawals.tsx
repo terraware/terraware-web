@@ -333,6 +333,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
                 orderBy={'name'}
                 onSelect={onWithdrawalClicked}
                 controlledOnSelect={true}
+                isClickable={() => false}
               />
             </Grid>
           </Grid>
