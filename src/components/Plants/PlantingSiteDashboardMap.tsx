@@ -59,12 +59,10 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
 
   const contextRenderer = useSpeciesPlantsRenderer(plotsMap);
   const hasPolygons = plantingSite && plantingSite.boundary && plantingSite.boundary.coordinates?.length > 0;
-  // we don't want to show the map if there are no plots with plants, in mobile-web
-  const hasPlotsWithPlants = plotsMap && Object.keys(plotsMap).length > 0;
 
   return (
     <Box display='flex' height='100%'>
-      {hasPolygons && (!isMobile || hasPlotsWithPlants) ? (
+      {hasPolygons ? (
         <PlantingSiteMap
           plantingSite={plantingSite}
           key={plantingSite?.id}
