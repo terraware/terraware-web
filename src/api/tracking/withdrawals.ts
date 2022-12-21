@@ -11,6 +11,13 @@ import {
 } from 'src/api/search';
 import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
 import { Delivery } from 'src/api/types/tracking';
+import strings from 'src/strings';
+
+const DELETED_SPECIES = [
+  {
+    batch_species_scientificName: `<${strings.DELETED_SPECIES}>`,
+  },
+];
 
 /**
  * List nursery withdrawals
@@ -44,7 +51,7 @@ export async function listNurseryWithdrawals(
   if (data) {
     return data.map((datum) => {
       const { batchWithdrawals, ...remaining } = datum;
-      const speciesScientificNames = (batchWithdrawals as any[]).map(
+      const speciesScientificNames = ((batchWithdrawals || DELETED_SPECIES) as any[]).map(
         (batchWithdrawal) => batchWithdrawal.batch_species_scientificName
       );
       // replace batchWithdrawals with species_scientificNames, which is an array of species names
