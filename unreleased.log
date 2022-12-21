@@ -1,3 +1,4 @@
+fd25a7a SW-2583 / SW-2574 Show planting site data for sites that don't have zones/plots (#954)
 0ac9633 SW-2575 Hierarchical nav updates from web-components (#951)
 59b1da5 SW-2588 Add asterisks to purpose, nursery, planting site, zone, and plot fields (#952)
 375f543 SW-2586 Fix date column on withdrawal log not sortable (#950)
