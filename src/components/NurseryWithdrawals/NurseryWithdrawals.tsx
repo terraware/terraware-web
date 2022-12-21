@@ -7,9 +7,9 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { makeStyles } from '@mui/styles';
-import { Table, TableColumnType } from '@terraware/web-components';
+import { SortOrder, Table, TableColumnType } from '@terraware/web-components';
 import { listNurseryWithdrawals } from 'src/api/tracking/withdrawals';
-import { FieldNodePayload, SearchResponseElement } from 'src/api/search';
+import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/api/search';
 import WithdrawalLogRenderer from './WithdrawalLogRenderer';
 import { APP_PATHS } from 'src/constants';
 import { useHistory } from 'react-router-dom';
@@ -64,6 +64,10 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
   const [filters, setFilters] = useForm<NurseryWithdrawalsFiltersType>({});
   const [species, setSpecies] = useState<Species[]>();
   const [snackbar] = useState(useSnackbar());
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
+    field: 'withdrawnDate',
+    direction: 'Descending',
+  } as SearchSortOrder);
 
   const onWithdrawalClicked = (withdrawal: any) => {
     history.push({
@@ -192,13 +196,13 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
     const searchChildren: FieldNodePayload[] = getSearchChildren();
     const requestId = Math.random().toString();
     setRequestId('searchWithdrawals', requestId);
-    const apiSearchResults = await listNurseryWithdrawals(organization.id, searchChildren);
+    const apiSearchResults = await listNurseryWithdrawals(organization.id, searchChildren, 1000, searchSortOrder);
     if (apiSearchResults) {
       if (getRequestId('searchWithdrawals') === requestId) {
         setSearchResults(apiSearchResults);
       }
     }
-  }, [getSearchChildren, organization.id]);
+  }, [getSearchChildren, organization.id, searchSortOrder]);
 
   useEffect(() => {
     onApplyFilters();
@@ -262,6 +266,13 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
         return filter;
       }
     }
+  };
+
+  const onSortChange = (order: SortOrder, orderBy: string) => {
+    setSearchSortOrder({
+      field: orderBy as string,
+      direction: order === 'asc' ? 'Ascending' : 'Descending',
+    });
   };
 
   return (
@@ -330,9 +341,11 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
                 columns={columns}
                 rows={searchResults || []}
                 Renderer={WithdrawalLogRenderer}
-                orderBy={'name'}
+                orderBy={searchSortOrder.field}
+                order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
                 onSelect={onWithdrawalClicked}
                 controlledOnSelect={true}
+                sortHandler={onSortChange}
                 isClickable={() => false}
               />
             </Grid>
