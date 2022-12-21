@@ -7,11 +7,12 @@ import BatchWithdrawFlow from './BatchWithdrawFlow';
 
 type BatchBulkWithdrawWrapperComponentProps = {
   organization: ServerOrganization;
+  withdrawalCreatedCallback?: () => void;
 };
 export default function BatchBulkWithdrawWrapperComponent(
   props: BatchBulkWithdrawWrapperComponentProps
 ): JSX.Element | null {
-  const { organization } = props;
+  const { organization, withdrawalCreatedCallback } = props;
   const [batchIds, setBatchIds] = useState<string[]>();
   const [source, setSource] = useState<string | null>();
   const query = useQuery();
@@ -28,6 +29,11 @@ export default function BatchBulkWithdrawWrapperComponent(
   }, [query, history]);
 
   return batchIds ? (
-    <BatchWithdrawFlow batchIds={batchIds} organization={organization} sourcePage={source || undefined} />
+    <BatchWithdrawFlow
+      batchIds={batchIds}
+      organization={organization}
+      sourcePage={source || undefined}
+      withdrawalCreatedCallback={withdrawalCreatedCallback}
+    />
   ) : null;
 }

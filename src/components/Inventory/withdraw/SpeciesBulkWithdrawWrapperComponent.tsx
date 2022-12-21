@@ -8,11 +8,12 @@ import { APP_PATHS } from 'src/constants';
 
 type SpeciesBulkWithdrawWrapperComponentProps = {
   organization: ServerOrganization;
+  withdrawalCreatedCallback?: () => void;
 };
 export default function SpeciesBulkWithdrawWrapperComponent(
   props: SpeciesBulkWithdrawWrapperComponentProps
 ): JSX.Element | null {
-  const { organization } = props;
+  const { organization, withdrawalCreatedCallback } = props;
   const [speciesIds, setSpeciesIds] = useState<string[]>();
   const [batchIds, setBatchIds] = useState<string[]>();
   const [source, setSource] = useState<string | null>();
@@ -61,6 +62,11 @@ export default function SpeciesBulkWithdrawWrapperComponent(
   }, [speciesIds, history]);
 
   return batchIds ? (
-    <BatchWithdrawFlow batchIds={batchIds} organization={organization} sourcePage={source || undefined} />
+    <BatchWithdrawFlow
+      batchIds={batchIds}
+      organization={organization}
+      sourcePage={source || undefined}
+      withdrawalCreatedCallback={withdrawalCreatedCallback}
+    />
   ) : null;
 }
