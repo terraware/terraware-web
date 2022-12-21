@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
-import { Box, Container, Divider, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import PageForm from 'src/components/common/PageForm';
@@ -112,24 +112,15 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
           maxWidth='584px'
           marginTop={5}
           marginBottom={5}
-          padding={theme.spacing(0, 3)}
+          padding={theme.spacing(3)}
+          borderRadius='16px'
+          sx={{ backgroundColor: theme.palette.TwClrBg }}
         >
           <Typography variant='h2' sx={{ fontSize: '20px', fontWeight: 'bold', paddingBottom: 1 }}>
             {strings.ADD_INVENTORY}
           </Typography>
           <Typography sx={{ fontSize: '14px' }}>{strings.ADD_INVENTORY_DESCRIPTION}</Typography>
-          <Container
-            maxWidth={false}
-            sx={{
-              width: isMobile ? '100%' : '640px',
-              marginTop: theme.spacing(3),
-              border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-              borderRadius: '16px',
-              paddingBottom: 3,
-              marginBottom: 5,
-              backgroundColor: theme.palette.TwClrBg,
-            }}
-          >
+          <Box marginTop={theme.spacing(3)}>
             <Grid container padding={0}>
               <Grid item xs={12} sx={marginTop}>
                 <Species2Dropdown
@@ -229,7 +220,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
               </Grid>
             </Grid>
-          </Container>
+          </Box>
         </Box>
       </PageForm>
     </TfMain>
