@@ -24,10 +24,11 @@ type BatchWithdrawFlowProps = {
   organization: ServerOrganization;
   batchIds: string[];
   sourcePage?: string;
+  withdrawalCreatedCallback?: () => void;
 };
 
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
-  const { organization, batchIds, sourcePage } = props;
+  const { organization, batchIds, sourcePage, withdrawalCreatedCallback } = props;
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
   const [record, setRecord] = useForm<NurseryWithdrawalRequest>({
@@ -145,6 +146,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     }
 
     setWithdrawInProgress(false);
+    if (withdrawalCreatedCallback) {
+      withdrawalCreatedCallback();
+    }
     // set snackbar with status
     snackbar.toastSuccess(getFormattedSuccessMessage(withdrawal as NurseryWithdrawal));
     // redirect to inventory

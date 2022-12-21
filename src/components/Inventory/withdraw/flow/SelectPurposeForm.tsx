@@ -70,7 +70,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>();
   const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>();
   const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>();
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
+  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const [zones, setZones] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<number>();
   const [snackbar] = useState(useSnackbar());
@@ -90,7 +90,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const fetchPlantingSites = useCallback(async () => {
-    if (plantingSites.length) {
+    if (plantingSites) {
       return;
     }
     const response = await listPlantingSites(organization.id, true);
@@ -121,7 +121,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     updateField('plantingSiteId', value);
     setSelectedZone(undefined);
     setSelectedPlot(undefined);
-    const plantingSite = plantingSites.find((site) => site.id.toString() === value.toString());
+    const plantingSite = plantingSites ? plantingSites.find((site) => site.id.toString() === value.toString()) : null;
     setZones(plantingSite?.plantingZones || []);
     setZoneId(undefined);
   };
@@ -331,6 +331,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const getPlantingSitesOptions = () => {
+    if (!plantingSites) {
+      return [];
+    }
     return plantingSites.map((plantingSite) => ({
       label: plantingSite.name,
       value: plantingSite.id.toString(),

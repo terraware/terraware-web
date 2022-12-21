@@ -146,6 +146,7 @@ export default function App() {
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
   const [orgScopedPreferences, setOrgScopedPreferences] = useState<{ [key: string]: unknown }>();
+  const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
   const trackingEnabled = isRouteEnabled('Tracking V1');
 
@@ -270,6 +271,7 @@ export default function App() {
     // reset display columns so we don't spill them across orgs
     setAccessionsDisplayColumns(DefaultColumns.fields);
     getOrgPreferences();
+    setWithdrawalCreated(false);
   }, [selectedOrganization]);
 
   useEffect(() => {
@@ -455,7 +457,11 @@ export default function App() {
               {type !== 'desktop' ? (
                 <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
                   <div>
-                    <NavBar organization={selectedOrganization} setShowNavBar={setShowNavBar} />
+                    <NavBar
+                      organization={selectedOrganization}
+                      setShowNavBar={setShowNavBar}
+                      withdrawalCreated={withdrawalCreated}
+                    />
                   </div>
                 </Slide>
               ) : (
@@ -463,6 +469,7 @@ export default function App() {
                   organization={selectedOrganization}
                   setShowNavBar={setShowNavBar}
                   backgroundTransparent={viewHasBackgroundImage()}
+                  withdrawalCreated={withdrawalCreated}
                 />
               )}
             </div>
@@ -631,7 +638,10 @@ export default function App() {
               )}
               {trackingEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
-                  <SpeciesBulkWithdrawWrapperComponent organization={selectedOrganization} />
+                  <SpeciesBulkWithdrawWrapperComponent
+                    organization={selectedOrganization}
+                    withdrawalCreatedCallback={() => setWithdrawalCreated(true)}
+                  />
                 </Route>
               )}
               {selectedOrganization && (
@@ -641,7 +651,10 @@ export default function App() {
               )}
               {trackingEnabled && selectedOrganization && (
                 <Route path={APP_PATHS.BATCH_WITHDRAW}>
-                  <BatchBulkWithdrawWrapperComponent organization={selectedOrganization} />
+                  <BatchBulkWithdrawWrapperComponent
+                    organization={selectedOrganization}
+                    withdrawalCreatedCallback={() => setWithdrawalCreated(true)}
+                  />
                 </Route>
               )}
               {trackingEnabled && selectedOrganization && (
