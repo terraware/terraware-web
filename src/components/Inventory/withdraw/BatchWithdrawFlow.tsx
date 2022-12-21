@@ -92,7 +92,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {
     setRecord(withdrawal);
-    if (batchIds.length === 1) {
+    if (batches?.length === 1) {
       setFlowState('photos');
     } else {
       setFlowState('select batches');
