@@ -26,11 +26,6 @@ export type PlantingSiteZone = {
   plots: PlantingSitePlot[];
 };
 
-export type PlantingSiteSpecies = {
-  species_scientificName: string;
-  totalPlants: string;
-};
-
 type PlantingSiteDetailsProps = {
   plantingSite?: PlantingSite;
   organization: ServerOrganization;
@@ -110,7 +105,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
 
     const populateTotals = async () => {
       if (plantingSite) {
-        const serverResponse: PlantingSiteSpecies[] | null = (await search({
+        const serverResponse: Population[] | null = (await search({
           prefix: 'plantingSites.populations',
           fields: ['species_scientificName', 'totalPlants'],
           search: {
@@ -119,7 +114,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
             values: [plantingSite.id],
           },
           count: 0,
-        })) as unknown as PlantingSiteSpecies[] | null;
+        })) as unknown as Population[] | null;
 
         if (serverResponse) {
           let totalPlantsOfSite = 0;
@@ -171,6 +166,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
         {(!plantingSite || hasZones) && (
           <Box sx={{ ...widgetCardStyle, minHeight: '240px' }}>
             <SpeciesByPlotChart
+              siteId={plantingSite?.id}
               zones={zonesWithPlants}
               plantsDashboardPreferences={plantsDashboardPreferences}
               setPlantsDashboardPreferences={setPlantsDashboardPreferences}
