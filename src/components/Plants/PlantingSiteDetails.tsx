@@ -11,7 +11,6 @@ import { ServerOrganization } from 'src/types/Organization';
 
 export type Population = {
   species_scientificName: string;
-  species_commonName: string;
   totalPlants: number;
 };
 
@@ -25,6 +24,11 @@ export type PlantingSiteZone = {
   id: string;
   name: string;
   plots: PlantingSitePlot[];
+};
+
+export type PlantingSiteSpecies = {
+  species_scientificName: string;
+  totalPlants: string;
 };
 
 type PlantingSiteDetailsProps = {
@@ -64,7 +68,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   };
 
   useEffect(() => {
-    const populateResults = async () => {
+    const populateZones = async () => {
       if (plantingSite) {
         const serverResponse: PlantingSiteZone[] | null = (await search({
           prefix: 'plantingSites.plantingZones',
@@ -72,7 +76,6 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
             'plots.id',
             'plots.fullName',
             'plots.populations.species_scientificName',
-            'plots.populations.species_commonName',
             'plots.populations.species_organization_id',
             'plots.populations.totalPlants',
             'id',
@@ -98,24 +101,6 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
             });
 
           setZonesWithPlants(validZones);
-          let totalPlantsOfSite = 0;
-          const plantsPerSpecies: { [key: string]: number } = validZones.reduce((acc, zone) => {
-            zone.plots.forEach((plot) => {
-              plot.populations.forEach((population) => {
-                totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
-                if (acc[population.species_scientificName]) {
-                  acc[population.species_scientificName] =
-                    +acc[population.species_scientificName] + +population.totalPlants;
-                } else {
-                  acc[population.species_scientificName] = +population.totalPlants;
-                }
-              });
-            });
-            return acc;
-          }, {} as { [key: string]: number });
-
-          setTotalPlants(totalPlantsOfSite);
-          setPlantsBySpecies(plantsPerSpecies);
           setHasZones(serverResponse.length > 0);
         } else {
           setHasZones(false);
@@ -123,7 +108,39 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
       }
     };
 
-    populateResults();
+    const populateTotals = async () => {
+      if (plantingSite) {
+        const serverResponse: PlantingSiteSpecies[] | null = (await search({
+          prefix: 'plantingSites.populations',
+          fields: ['species_scientificName', 'totalPlants'],
+          search: {
+            operation: 'field',
+            field: 'plantingSite_id',
+            values: [plantingSite.id],
+          },
+          count: 0,
+        })) as unknown as PlantingSiteSpecies[] | null;
+
+        if (serverResponse) {
+          let totalPlantsOfSite = 0;
+          const plantsPerSpecies: { [key: string]: number } = serverResponse.reduce((acc, population) => {
+            totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
+            if (acc[population.species_scientificName]) {
+              acc[population.species_scientificName] =
+                +acc[population.species_scientificName] + +population.totalPlants;
+            } else {
+              acc[population.species_scientificName] = +population.totalPlants;
+            }
+            return acc;
+          }, {} as { [key: string]: number });
+          setTotalPlants(totalPlantsOfSite);
+          setPlantsBySpecies(plantsPerSpecies);
+        }
+      }
+    };
+
+    populateZones();
+    populateTotals();
   }, [plantingSite, organization.id]);
 
   const plotsWithPlants = useMemo(() => {
