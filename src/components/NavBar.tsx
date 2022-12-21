@@ -42,9 +42,11 @@ export default function NavBar({
   const isSeedbanksRoute = useRouteMatch(APP_PATHS.SEED_BANKS + '/');
   const isNurseriesRoute = useRouteMatch(APP_PATHS.NURSERIES + '/');
   const isInventoryRoute = useRouteMatch(APP_PATHS.INVENTORY + '/');
+  const isBatchWithdrawRoute = useRouteMatch(APP_PATHS.BATCH_WITHDRAW + '/');
   const isPlantingSitesRoute = useRouteMatch(APP_PATHS.PLANTING_SITES + '/');
   const isPlantsDashboardRoute = useRouteMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
   const isWithdrawalLogRoute = useRouteMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
+  const isReassignmentRoute = useRouteMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
 
   const trackingEnabled = isEnabled('Tracking V1');
 
@@ -90,7 +92,7 @@ export default function NavBar({
   return (
     <Navbar setShowNavBar={setShowNavBar} backgroundTransparent={backgroundTransparent}>
       <NavItem
-        label='Home'
+        label={strings.HOME}
         icon='home'
         selected={!!isHomeRoute}
         onClick={() => {
@@ -108,17 +110,10 @@ export default function NavBar({
         id='speciesNb'
       />
       <NavSection />
-      <NavItem
-        label='Seeds'
-        icon='seeds'
-        id='seeds'
-        onClick={() => {
-          closeAndNavigateTo(isAccessionDashboardRoute ? '' : APP_PATHS.SEEDS_DASHBOARD);
-        }}
-      >
+      <NavItem label={strings.SEEDS} icon='seeds' id='seeds'>
         <SubNavbar>
           <NavItem
-            label='Dashboard'
+            label={strings.DASHBOARD}
             selected={!!isAccessionDashboardRoute}
             onClick={() => {
               closeAndNavigateTo(isAccessionDashboardRoute ? '' : APP_PATHS.SEEDS_DASHBOARD);
@@ -126,7 +121,7 @@ export default function NavBar({
             id='seeds-dashboard'
           />
           <NavItem
-            label='Accessions'
+            label={strings.ACCESSIONS}
             selected={isAccessionsRoute || isCheckinRoute ? true : false}
             onClick={() => {
               closeAndNavigateTo(APP_PATHS.ACCESSIONS);
@@ -143,18 +138,11 @@ export default function NavBar({
           />
         </SubNavbar>
       </NavItem>
-      <NavItem
-        label='Seedlings'
-        icon='iconSeedling'
-        id='seedlings'
-        onClick={() => {
-          closeAndNavigateTo(APP_PATHS.INVENTORY);
-        }}
-      >
+      <NavItem label={strings.SEEDLINGS} icon='iconSeedling' id='seedlings'>
         <SubNavbar>
           <NavItem
             label={strings.INVENTORY}
-            selected={!!isInventoryRoute}
+            selected={!!isInventoryRoute || !!isBatchWithdrawRoute}
             onClick={() => {
               closeAndNavigateTo(APP_PATHS.INVENTORY);
             }}
@@ -163,7 +151,7 @@ export default function NavBar({
           {trackingEnabled && showNurseryWithdrawals && (
             <NavItem
               label={strings.WITHDRAWAL_LOG}
-              selected={!!isWithdrawalLogRoute}
+              selected={!!isWithdrawalLogRoute || !!isReassignmentRoute}
               onClick={() => {
                 closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
               }}
@@ -173,14 +161,7 @@ export default function NavBar({
         </SubNavbar>
       </NavItem>
       {trackingEnabled && (
-        <NavItem
-          label={strings.PLANTS}
-          icon='iconRestorationSite'
-          id='plants'
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
-          }}
-        >
+        <NavItem label={strings.PLANTS} icon='iconRestorationSite' id='plants'>
           <SubNavbar>
             <NavItem
               label={strings.DASHBOARD}
@@ -214,14 +195,7 @@ export default function NavBar({
             }}
             id='people'
           />
-          <NavItem
-            label='Locations'
-            icon='seedbankNav'
-            id='locations'
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.SEED_BANKS);
-            }}
-          >
+          <NavItem label={strings.LOCATIONS} icon='seedbankNav' id='locations'>
             <SubNavbar>
               <NavItem
                 label={strings.SEED_BANKS}
