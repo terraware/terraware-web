@@ -116,7 +116,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
         <Autocomplete
           id='zone'
           placeholder={strings.SELECT}
-          label={horizontalLayout ? '' : strings.ZONE}
+          label={horizontalLayout ? '' : strings.ZONE_REQUIRED}
           selected={zoneToDropdownItem(selectedZone)}
           values={zoneOptions}
           onChange={(id, value) => onChangeZone(value)}
@@ -132,7 +132,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
         <Autocomplete
           id='plot'
           placeholder={strings.SELECT}
-          label={horizontalLayout ? '' : strings.PLOT}
+          label={horizontalLayout ? '' : strings.PLOT_REQUIRED}
           selected={plotToDropdownItem(selectedPlot)}
           values={plotOptions}
           onChange={(id, value) => onChangePlot(value)}

@@ -451,7 +451,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             <Grid xs={12} padding={theme.spacing(4, 0, 0)}>
               <FormControl>
                 <FormLabel sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
-                  {strings.PURPOSE}
+                  {strings.PURPOSE_REQUIRED}
                 </FormLabel>
                 <RadioGroup name='radio-buttons-purpose' value={localRecord.purpose} onChange={onChangePurpose}>
                   {!contributor && <FormControlLabel value={OUTPLANT} control={<Radio />} label={strings.OUTPLANT} />}
@@ -472,7 +472,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 <Dropdown
                   id='fromFacilityId'
                   placeholder={strings.SELECT}
-                  label={strings.FROM_NURSERY}
+                  label={strings.FROM_NURSERY_REQUIRED}
                   selectedValue={selectedNursery}
                   options={getNurseriesOptions()}
                   onChange={(newValue) => onChangeFromNursery(newValue)}
@@ -503,7 +503,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   <Dropdown
                     id='plantingSiteId'
                     placeholder={strings.SELECT}
-                    label={strings.TO_PLANTING_SITE}
+                    label={strings.TO_PLANTING_SITE_REQUIRED}
                     selectedValue={localRecord.plantingSiteId?.toString()}
                     options={getPlantingSitesOptions()}
                     onChange={(value) => onChangePlantingSite(value)}
