@@ -191,7 +191,7 @@ export default function NurseryWithdrawalsDetails({
         </Box>
       </PageHeaderWrapper>
       <div ref={contentRef}>
-        {withdrawal?.purpose === OUTPLANT && (
+        {withdrawal?.purpose === OUTPLANT && withdrawalSummary?.hasReassignments && (
           <TabContext value={selectedTab}>
             <Box
               sx={{
@@ -238,6 +238,19 @@ export default function NurseryWithdrawalsDetails({
               />
             </TabPanel>
           </TabContext>
+        )}
+        {withdrawal?.purpose === OUTPLANT && !withdrawalSummary?.hasReassignments && (
+          <Box sx={contentPanelProps}>
+            <WithdrawalTabPanelContent
+              organization={organization}
+              species={species}
+              plotNames={plotNames}
+              withdrawal={withdrawal}
+              withdrawalSummary={withdrawalSummary}
+              delivery={delivery}
+              batches={batches}
+            />
+          </Box>
         )}
         {withdrawal?.purpose !== OUTPLANT && (
           <Box sx={contentPanelProps}>
