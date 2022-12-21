@@ -1,3 +1,4 @@
+375f543 SW-2586 Fix date column on withdrawal log not sortable (#950)
 77187b0 SW-2584 Show withdrawal log menu after a withdrawal is created (#947)
 d941a39 SW-2585 When clicking batch Id in withdrawal flow,open link in new tab (#949)
 f5f9263 SW-2578 Remove table hover on withdrawal log table (#948)
