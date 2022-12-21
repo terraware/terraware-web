@@ -297,7 +297,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       plotId: isOutplant ? localRecord.plotId : undefined,
       facilityId: Number(selectedNursery as string),
       batchWithdrawals: batches
-        .filter((batch) => batch.facility_id.toString() === selectedNursery)
+        .filter((batch) => {
+          return batch.facility_id.toString() === selectedNursery && (!isOutplant || +batch.readyQuantity > 0);
+        })
         .map((batch) => ({
           batchId: batch.id,
           notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
@@ -315,12 +317,19 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const getNurseriesOptions = () => {
-    const nurseries = batches.reduce((acc, batch) => {
-      if (!acc[batch.facility_id.toString()]) {
-        acc[batch.facility_id.toString()] = { label: batch.facility_name, value: batch.facility_id };
-      }
-      return acc;
-    }, {});
+    const nurseries = batches
+      .filter((batch) => {
+        if (isOutplant) {
+          return +batch.readyQuantity > 0;
+        }
+        return +batch.totalQuantity > 0;
+      })
+      .reduce((acc, batch) => {
+        if (!acc[batch.facility_id.toString()]) {
+          acc[batch.facility_id.toString()] = { label: batch.facility_name, value: batch.facility_id };
+        }
+        return acc;
+      }, {});
 
     const options: DropdownItem[] = Object.values(nurseries);
 
