@@ -450,7 +450,15 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             </Grid>
             <Grid xs={12} padding={theme.spacing(4, 0, 0)}>
               <FormControl>
-                <FormLabel sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
+                <FormLabel
+                  sx={{
+                    color: theme.palette.TwClrTxtSecondary,
+                    fontSize: '14px',
+                    '&.MuiFormLabel-root.Mui-focused': {
+                      color: theme.palette.TwClrTxtSecondary,
+                    },
+                  }}
+                >
                   {strings.PURPOSE_REQUIRED}
                 </FormLabel>
                 <RadioGroup name='radio-buttons-purpose' value={localRecord.purpose} onChange={onChangePurpose}>
