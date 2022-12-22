@@ -72,7 +72,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   };
 
   const isSelectionWithdrawable = () => {
-    return selectedRows.some((row) => Number(row.totalQuantity) > 0);
+    return selectedRows.some((row) => row.species_id && Number(row.totalQuantity) > 0);
   };
 
   return (
@@ -104,17 +104,14 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 setSelectedRows={setSelectedRows}
                 showCheckbox={trackingEnabled}
                 showTopBar={true}
-                topBarButtons={
-                  isSelectionWithdrawable()
-                    ? [
-                        {
-                          buttonType: 'passive',
-                          buttonText: strings.WITHDRAW,
-                          onButtonClick: withdrawInventory,
-                        },
-                      ]
-                    : []
-                }
+                topBarButtons={[
+                  {
+                    buttonType: 'passive',
+                    buttonText: strings.WITHDRAW,
+                    onButtonClick: withdrawInventory,
+                    disabled: !isSelectionWithdrawable(),
+                  },
+                ]}
               />
             </Grid>
           </Grid>
