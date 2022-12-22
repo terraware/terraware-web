@@ -1,3 +1,4 @@
+f262bd5 SW-2594 Fix Zone field's width changing when selecting planting site (#960)
 4e8e9ca SW-2587 Avoid purpose label turn blue on selected (#959)
 bd62fb2 SW-2596 Show disabled withdraw button in inventory table when rows aren't withdrawable (#955)
 79f4215 SW-2598 Fix single batch flow switching to bulk, also fix inventory create view styles (#957)
