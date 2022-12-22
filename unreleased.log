@@ -1,3 +1,4 @@
+bd62fb2 SW-2596 Show disabled withdraw button in inventory table when rows aren't withdrawable (#955)
 79f4215 SW-2598 Fix single batch flow switching to bulk, also fix inventory create view styles (#957)
 e470ea2 SW-2600 Handle deleted species in list withdrawals wrapper (#956)
 1905218 SW-2595 Hide Reassignment Panel if no Reassignments (#953)
