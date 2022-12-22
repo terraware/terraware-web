@@ -104,11 +104,10 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
       display='flex'
       flexWrap='wrap'
       flexDirection={isMobile ? 'column' : 'row'}
-      flexGrow={1}
       className={horizontalLayout ? `${classes.horizontal}` : ''}
     >
       <Box
-        flexGrow={1}
+        flex={1}
         margin={theme.spacing(2, isMobile || horizontalLayout ? 0 : 2, 0, 0)}
         sx={horizontalLayout ? horizontalStyle : {}}
       >
@@ -127,7 +126,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
           hideClearIcon={true}
         />
       </Box>
-      <Box flexGrow={1} margin={theme.spacing(2, 0, 0)} sx={horizontalLayout ? horizontalStyle : {}}>
+      <Box flex={1} margin={theme.spacing(2, 0, 0)} sx={horizontalLayout ? horizontalStyle : {}}>
         {horizontalLayout && horizontalLabel(strings.PLOT)}
         <Autocomplete
           id='plot'
