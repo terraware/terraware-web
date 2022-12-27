@@ -642,7 +642,7 @@ const strings = new LocalizedStrings({
     TOTAL_SEEDS_GERMINATED_ERROR: 'Germinated amount should not be more than tested amount.',
     INVALID_VALUE: 'Invalid Value',
     RECORDING_DATE_ERROR: 'This should be later than Start Date',
-    VIABILITY_TEST_START_DATE_ERROR: 'This should be later than the date seeds were collected',
+    VIABILITY_TEST_START_DATE_ERROR: 'This should not be before the date seeds were collected',
     IMPORT: 'Import',
     IMPORT_ACCESSIONS: 'Import Accessions',
     IMPORT_ACCESSIONS_DESC: 'Browse or drag and drop a CSV with accessions.',
