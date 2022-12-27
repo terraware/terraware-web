@@ -192,6 +192,34 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     return true;
   };
 
+  const validateStartDate = () => {
+    if (!record?.startDate) {
+      setIndividualError('startDate', strings.REQUIRED_FIELD);
+      return false;
+    } else {
+      const startDateMs = new Date(record.startDate).getTime();
+      if (isNaN(startDateMs)) {
+        setIndividualError('startDate', strings.INVALID_DATE);
+        return false;
+      } else {
+        if (isInTheFuture(startDateMs)) {
+          setIndividualError('startDate', strings.NO_FUTURE_DATES);
+          return false;
+        } else {
+          if (accession.collectedDate) {
+            const collectedDateMs = new Date(accession.collectedDate).getTime();
+            if (startDateMs < collectedDateMs) {
+              setIndividualError('startDate', strings.VIABILITY_TEST_START_DATE_ERROR);
+              return false;
+            }
+          }
+        }
+      }
+    }
+    setIndividualError('startDate', '');
+    return true;
+  };
+
   const validateRecordingDate = () => {
     if (record?.testResults && record?.testResults.length > 0) {
       let errorFound = false;
@@ -203,6 +231,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         const dateMs = new Date(tr.recordingDate).getTime();
         if (isNaN(dateMs)) {
           setIndividualError(`recordingDate${index}`, strings.INVALID_DATE);
+          errorFound = true;
+        }
+        if (isInTheFuture(dateMs)) {
+          setIndividualError(`recordingDate${index}`, strings.NO_FUTURE_DATES);
           errorFound = true;
         }
         if (record.startDate) {
@@ -236,6 +268,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     if (record) {
       const seedTestedError = record.testType !== 'Cut' ? !validateSeedsTested(record.seedsTested) : false;
       const seedsGerminatedError = !validateSeedsGerminated();
+      const startDateError = !validateStartDate();
       const recordingDateError = !validateRecordingDate();
       let missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
       if (record.testResults && record.testResults.length > 0) {
@@ -245,7 +278,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         missingRequiredField =
           missingRequiredField || CUT_MANDATORY_FIELDS.some((field: MandatoryCutField) => !record[field]);
       }
-      return seedTestedError || seedsGerminatedError || recordingDateError || missingRequiredField;
+      return seedTestedError || seedsGerminatedError || startDateError || recordingDateError || missingRequiredField;
     }
   };
 
@@ -285,15 +318,6 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const onChangeUser = (newValue: OrganizationUser) => {
     onChange('withdrawnByUserId', newValue.id);
-  };
-
-  const onChangeDate = (id: string, value?: any) => {
-    const date = new Date(value);
-    if (isNaN(date.getTime()) || isInTheFuture(date)) {
-      return;
-    } else {
-      onChange(id, value);
-    }
   };
 
   const cleanAllErrors = () => {
@@ -533,9 +557,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     label={record?.testType === 'Cut' ? strings.TEST_DATE_REQUIRED : strings.START_DATE_REQUIRED}
                     aria-label={strings.DATE}
                     value={record?.startDate}
-                    onChange={onChangeDate}
+                    onChange={onChange}
                     disabled={readOnly}
-                    errorText={validateFields && !record?.startDate ? strings.REQUIRED_FIELD : ''}
+                    errorText={viabilityFieldsErrors['startDate']}
                   />
                 </Grid>
                 <Grid item xs={12} marginLeft={isMobile ? 0 : 1} marginBottom={isMobile ? 1 : 0}>
