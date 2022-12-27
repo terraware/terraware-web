@@ -192,6 +192,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         if (isNaN(withdrawnQuantity)) {
           setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
           return false;
+        } else {
+          if (withdrawnQuantity > +batches[0].readyQuantity) {
+            setIndividualError('withdrawnQuantity', strings.WITHDRAWN_QUANTITY_ERROR);
+            return false;
+          }
         }
       } else {
         setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
