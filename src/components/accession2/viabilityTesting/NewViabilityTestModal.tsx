@@ -559,7 +559,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     value={record?.startDate}
                     onChange={onChange}
                     disabled={readOnly}
-                    errorText={viabilityFieldsErrors['startDate']}
+                    errorText={viabilityFieldsErrors.startDate}
                   />
                 </Grid>
                 <Grid item xs={12} marginLeft={isMobile ? 0 : 1} marginBottom={isMobile ? 1 : 0}>
