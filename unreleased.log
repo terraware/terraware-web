@@ -1,3 +1,4 @@
+142cbf5 Remove step to generate license report
 688e9aa SW-2569 Add missing validations to dates when creating viability test (#963)
 8ab36c5 SW-2582 Validate withdrawal quantity for single/outplant withdrawal (#962)
 9fdbb3f SW-2591 Bump up version to update disabled style (#961)
