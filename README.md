@@ -54,7 +54,6 @@ yarn docker:stop
 Before putting up a pull request, make sure to run the following commands. The CI will check that these steps are completed.
 
 ```shell
-yarn license-report  # runs the npm license report for dependencies, we publish this in our repo
 yarn generate-types  # generate types for any server side API changes
 yarn format          # run code formatter
 yarn lint            # run linter to check for code quality issues
