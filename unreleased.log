@@ -1,3 +1,4 @@
+8a74b69 SW-659 Add search functionality to users list (#964)
 142cbf5 Remove step to generate license report
 688e9aa SW-2569 Add missing validations to dates when creating viability test (#963)
 8ab36c5 SW-2582 Validate withdrawal quantity for single/outplant withdrawal (#962)
