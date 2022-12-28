@@ -13,7 +13,7 @@
         j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl + auth;
         f.parentNode.insertBefore(j, f);
       }
-      if (w.location.hostname.match(/^(www.)?staging.terraware.io$/i)) {
+      if (window.location.hostname.match(/^(www.)?staging.terraware.io$/i)) {
         gtm(
           window,
           document,
@@ -22,7 +22,7 @@
           'GTM-TNX8NWM',
           '&gtm_auth=Iwp9NkwNGO7TelQuq94FhQ&gtm_preview=env-7&gtm_cookies_win=x'
         );
-      } else if (w.location.hostname.match(/^(www.)?terraware.io$/i)) {
+      } else if (window.location.hostname.match(/^(www.)?terraware.io$/i)) {
         gtm(
           window,
           document,
