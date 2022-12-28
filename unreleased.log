@@ -1,3 +1,4 @@
+3bbed23 Fix GTM init (#966)
 5757fc0 SW-2608 Replace Google analytics global site tag with Google tag manager (#965)
 8a74b69 SW-659 Add search functionality to users list (#964)
 142cbf5 Remove step to generate license report
