@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   deleteOrganization,
-  getOrganizationUsers,
   leaveOrganization,
   listOrganizationRoles,
   UpdateOrganizationResponse,
@@ -79,7 +78,6 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
-  const [people, setPeople] = useState<OrganizationUser[]>();
   const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const [removePeopleModalOpened, setRemovePeopleModalOpened] = useState(false);
@@ -95,69 +93,58 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   const contentRef = useRef(null);
 
   useEffect(() => {
-    const populatePeople = async () => {
-      if (organization) {
-        const response = await getOrganizationUsers(organization);
-        if (response.requestSucceeded) {
-          setPeople(response.users);
-        }
-      }
-    };
-
-    if (organization) {
-      populatePeople();
-    }
-  }, [organization]);
-
-  useEffect(() => {
     const refreshSearch = async () => {
-      if (debouncedSearchTerm) {
-        const params: SearchNodePayload = {
-          prefix: 'members',
-          fields: ['user_id', 'user_firstName', 'user_lastName', 'user_email', 'roleName', 'createdTime'],
-          search: {
-            operation: 'and',
+      const searchField = debouncedSearchTerm
+        ? {
+            operation: 'or',
             children: [
-              {
-                operation: 'or',
-                children: [
-                  { operation: 'field', field: 'user_firstName', type: 'Fuzzy', values: [debouncedSearchTerm] },
-                  { operation: 'field', field: 'user_lastName', type: 'Fuzzy', values: [debouncedSearchTerm] },
-                ],
-              },
-              {
-                operation: 'field',
-                field: 'organization_id',
-                type: 'Exact',
-                values: [organization?.id],
-              },
+              { operation: 'field', field: 'user_firstName', type: 'Fuzzy', values: [debouncedSearchTerm] },
+              { operation: 'field', field: 'user_lastName', type: 'Fuzzy', values: [debouncedSearchTerm] },
             ],
-          },
-          count: 0,
-        };
-        const requestId = Math.random().toString();
-        setRequestId('searchUsers', requestId);
-        const searchResults = await search(params);
-        const usersResults: OrganizationUser[] = [];
-        searchResults?.forEach((result) => {
-          usersResults.push({
-            firstName: result.user_firstName as string,
-            lastName: result.user_lastName as string,
-            email: result.user_email as string,
-            id: result.user_id as number,
-            role: result.roleName as AllOrganizationRoles,
-            addedTime: result.createdTime as string,
-          });
+          }
+        : null;
+
+      const params: SearchNodePayload = {
+        prefix: 'members',
+        fields: ['user_id', 'user_firstName', 'user_lastName', 'user_email', 'roleName', 'createdTime'],
+        search: {
+          operation: 'and',
+          children: [
+            {
+              operation: 'field',
+              field: 'organization_id',
+              type: 'Exact',
+              values: [organization?.id],
+            },
+          ],
+        },
+        count: 0,
+      };
+
+      if (searchField) {
+        params.search.children.push(searchField);
+      }
+
+      const requestId = Math.random().toString();
+      setRequestId('searchUsers', requestId);
+      const searchResults = await search(params);
+      const usersResults: OrganizationUser[] = [];
+      searchResults?.forEach((result) => {
+        usersResults.push({
+          firstName: result.user_firstName as string,
+          lastName: result.user_lastName as string,
+          email: result.user_email as string,
+          id: result.user_id as number,
+          role: result.roleName as AllOrganizationRoles,
+          addedTime: result.createdTime as string,
         });
-        if (getRequestId('searchUsers') === requestId) {
-          setResults(usersResults);
-        }
-      } else {
-        setResults(people);
+      });
+      if (getRequestId('searchUsers') === requestId) {
+        setResults(usersResults);
       }
     };
     refreshSearch();
-  }, [debouncedSearchTerm, people, organization]);
+  }, [debouncedSearchTerm, organization]);
 
   const goToNewPerson = () => {
     const newPersonLocation = {
@@ -182,7 +169,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
           const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
             setOrgPeople(
-              people?.filter((person) => {
+              results?.filter((person) => {
                 const found = selectedPeopleRows.find((selectedPeople) => selectedPeople.id === person.id);
                 if (found) {
                   return false;
@@ -345,11 +332,11 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
           <div className={classes.mainContent}>
             <Grid container spacing={4}>
               <Grid item xs={12}>
-                {people && (
+                {results && (
                   <Table
                     id='people-table'
                     columns={columns}
-                    rows={results || people}
+                    rows={results}
                     orderBy='name'
                     Renderer={TableCellRenderer}
                     showCheckbox={true}
