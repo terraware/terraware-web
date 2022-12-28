@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   deleteOrganization,
-  getOrganizationUsers,
   leaveOrganization,
   listOrganizationRoles,
   UpdateOrganizationResponse,
@@ -12,7 +11,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
 import TfMain from '../common/TfMain';
 import TableCellRenderer from './TableCellRenderer';
@@ -27,6 +26,10 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import TextField from '../common/Textfield/Textfield';
+import useDebounce from 'src/utils/useDebounce';
+import { search, SearchNodePayload } from 'src/api/search';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -40,11 +43,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: '32px',
     minWidth: 'fit-content',
   },
+  contentContainer: {
+    backgroundColor: theme.palette.TwClrBg,
+    padding: theme.spacing(3),
+    borderRadius: '32px',
+  },
   centered: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-end',
+    marginBottom: '32px',
+  },
+  searchField: {
+    width: '300px',
   },
 }));
 
@@ -66,7 +78,6 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
-  const [people, setPeople] = useState<OrganizationUser[]>();
   const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const [removePeopleModalOpened, setRemovePeopleModalOpened] = useState(false);
@@ -74,24 +85,66 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   const [cannotRemovePeopleModalOpened, setCannotRemovePeopleModalOpened] = useState(false);
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
+  const [temporalSearchValue, setTemporalSearchValue] = useState('');
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+  const [results, setResults] = useState<OrganizationUser[]>();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
 
   useEffect(() => {
-    const populatePeople = async () => {
-      if (organization) {
-        const response = await getOrganizationUsers(organization);
-        if (response.requestSucceeded) {
-          setPeople(response.users);
-        }
+    const refreshSearch = async () => {
+      const searchField = debouncedSearchTerm
+        ? {
+            operation: 'or',
+            children: [
+              { operation: 'field', field: 'user_firstName', type: 'Fuzzy', values: [debouncedSearchTerm] },
+              { operation: 'field', field: 'user_lastName', type: 'Fuzzy', values: [debouncedSearchTerm] },
+            ],
+          }
+        : null;
+
+      const params: SearchNodePayload = {
+        prefix: 'members',
+        fields: ['user_id', 'user_firstName', 'user_lastName', 'user_email', 'roleName', 'createdTime'],
+        search: {
+          operation: 'and',
+          children: [
+            {
+              operation: 'field',
+              field: 'organization_id',
+              type: 'Exact',
+              values: [organization?.id],
+            },
+          ],
+        },
+        count: 0,
+      };
+
+      if (searchField) {
+        params.search.children.push(searchField);
+      }
+
+      const requestId = Math.random().toString();
+      setRequestId('searchUsers', requestId);
+      const searchResults = await search(params);
+      const usersResults: OrganizationUser[] = [];
+      searchResults?.forEach((result) => {
+        usersResults.push({
+          firstName: result.user_firstName as string,
+          lastName: result.user_lastName as string,
+          email: result.user_email as string,
+          id: result.user_id as number,
+          role: result.roleName as AllOrganizationRoles,
+          addedTime: result.createdTime as string,
+        });
+      });
+      if (getRequestId('searchUsers') === requestId) {
+        setResults(usersResults);
       }
     };
-
-    if (organization) {
-      populatePeople();
-    }
-  }, [organization]);
+    refreshSearch();
+  }, [debouncedSearchTerm, organization]);
 
   const goToNewPerson = () => {
     const newPersonLocation = {
@@ -116,7 +169,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
           const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
             setOrgPeople(
-              people?.filter((person) => {
+              results?.filter((person) => {
                 const found = selectedPeopleRows.find((selectedPeople) => selectedPeople.id === person.id);
                 if (found) {
                   return false;
@@ -205,6 +258,14 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
     }
   };
 
+  const clearSearch = () => {
+    setTemporalSearchValue('');
+  };
+
+  const onChangeSearch = (id: string, value: unknown) => {
+    setTemporalSearchValue(value as string);
+  };
+
   return (
     <TfMain>
       {selectedPeopleRows.length > 0 && (
@@ -251,16 +312,31 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
           <PageSnackbar />
         </Grid>
       </PageHeaderWrapper>
-      <Grid container spacing={3} ref={contentRef}>
+      <Grid container className={classes.contentContainer} ref={contentRef}>
+        <Grid item xs={12}>
+          <TextField
+            placeholder={strings.SEARCH}
+            iconLeft='search'
+            label=''
+            id='search'
+            type='text'
+            className={classes.searchField}
+            onChange={onChangeSearch}
+            value={temporalSearchValue}
+            iconRight='cancel'
+            onClickRightIcon={clearSearch}
+          />
+        </Grid>
+
         <Grid item xs={12}>
           <div className={classes.mainContent}>
             <Grid container spacing={4}>
               <Grid item xs={12}>
-                {people && (
+                {results && (
                   <Table
                     id='people-table'
                     columns={columns}
-                    rows={people}
+                    rows={results}
                     orderBy='name'
                     Renderer={TableCellRenderer}
                     showCheckbox={true}
