@@ -3,7 +3,6 @@ import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
-import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import { ServerOrganization } from 'src/types/Organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
@@ -101,7 +100,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     if (!hasNurseries) {
       emptyState.push({
         title: strings.ADD_NURSERIES,
-        text: emptyMessageStrings.INVENTORY_ONBOARDING_NURSERIES_MSG,
+        text: strings.INVENTORY_ONBOARDING_NURSERIES_MSG,
         buttonText: strings.GO_TO_NURSERIES,
         onClick: () => goTo(APP_PATHS.NURSERIES),
       });
@@ -110,7 +109,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     if (!hasSpecies) {
       emptyState.push({
         title: strings.CREATE_SPECIES_LIST,
-        text: emptyMessageStrings.INVENTORY_ONBOARDING_SPECIES_MSG,
+        text: strings.INVENTORY_ONBOARDING_SPECIES_MSG,
         buttonText: strings.GO_TO_SPECIES,
         onClick: () => goTo(APP_PATHS.SPECIES),
         disabled: !hasNurseries,
@@ -363,14 +362,14 @@ export default function Inventory(props: InventoryProps): JSX.Element {
             {isAdmin(organization) ? (
               <EmptyMessage
                 className={classes.message}
-                title={emptyMessageStrings.ONBOARDING_ADMIN_TITLE}
+                title={strings.ONBOARDING_ADMIN_TITLE}
                 rowItems={getEmptyState()}
               />
             ) : (
               <EmptyMessage
                 className={classes.message}
-                title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
-                text={emptyMessageStrings.NO_NURSERIES_NON_ADMIN_MSG}
+                title={strings.REACH_OUT_TO_ADMIN_TITLE}
+                text={strings.NO_NURSERIES_NON_ADMIN_MSG}
               />
             )}
           </Container>

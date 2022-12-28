@@ -3,7 +3,6 @@ import { Theme } from '@mui/material';
 import React from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
-import dictionary from 'src/strings/dictionary';
 import Select from '../common/Select/Select';
 import { OrganizationUser } from 'src/types/User';
 import DialogBox from '../common/DialogBox/DialogBox';
@@ -35,7 +34,7 @@ export default function AssignNewOwnerDialog(props: AssignNewOwnerDialogProps): 
     <DialogBox
       onClose={onClose}
       open={open}
-      title={dictionary.ASSIGN_NEW_OWNER}
+      title={strings.ASSIGN_NEW_OWNER}
       size='medium'
       middleButtons={[
         <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} key='button-1' />,

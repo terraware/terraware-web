@@ -2,13 +2,12 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { IconName } from 'src/components/common/icon/icons';
 import PageCard from 'src/components/common/PageCard';
-import dictionary from 'src/strings/dictionary';
-import strings from 'src/strings/contactUsPage';
 import { TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import TfMain from './common/TfMain';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
+import strings from 'src/strings';
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -36,14 +35,14 @@ const listItemContent: ListItemContent[] = [
       strings.DESCRIPTION_REPORT_PROBLEM,
       <i>"{process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || 'n/a'}"</i>
     ) as string,
-    buttonText: dictionary.REPORT_PROBLEM,
+    buttonText: strings.REPORT_PROBLEM,
     link: TERRAWARE_SUPPORT_LINK,
   },
   {
     icon: 'sparkles',
     title: strings.TITLE_REQUEST_FEATURE,
     description: strings.DESCRIPTION_REQUEST_FEATURE,
-    buttonText: dictionary.REQUEST_FEATURE,
+    buttonText: strings.REQUEST_FEATURE,
     link: TERRAWARE_SUPPORT_LINK,
   },
 ];
@@ -54,7 +53,7 @@ export default function ContactUs(): JSX.Element {
 
   return (
     <TfMain>
-      <h1 className={classes.title}>{dictionary.CONTACT_US}</h1>
+      <h1 className={classes.title}>{strings.CONTACT_US}</h1>
       <PageSnackbar />
       <Grid container spacing={3}>
         {listItemContent.map((item) => {

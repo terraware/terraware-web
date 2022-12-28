@@ -24,7 +24,6 @@ import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
 import strings from 'src/strings';
-import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { getAllSeedBanks } from 'src/utils/organization';
 import PageHeader from '../PageHeader';
@@ -452,7 +451,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     if (!hasSeedBanks) {
       emptyState.push({
         title: strings.ADD_SEED_BANKS,
-        text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,
+        text: strings.ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,
         buttonText: strings.GO_TO_SEED_BANKS,
         onClick: () => goTo(APP_PATHS.SEED_BANKS),
       });
@@ -461,7 +460,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     if (!hasSpecies) {
       emptyState.push({
         title: strings.CREATE_SPECIES_LIST,
-        text: emptyMessageStrings.ACCESSIONS_ONBOARDING_SPECIES_MSG,
+        text: strings.ACCESSIONS_ONBOARDING_SPECIES_MSG,
         buttonText: strings.GO_TO_SPECIES,
         onClick: () => goTo(APP_PATHS.SPECIES),
         disabled: !hasSeedBanks,
@@ -660,7 +659,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                   {!isMobile && emptyStateSpacer()}
                   <EmptyMessage
                     className={classes.message}
-                    title={emptyMessageStrings.ONBOARDING_ADMIN_TITLE}
+                    title={strings.ONBOARDING_ADMIN_TITLE}
                     rowItems={getEmptyState()}
                   />
                 </>
@@ -669,8 +668,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
                   {!isMobile && emptyStateSpacer()}
                   <EmptyMessage
                     className={classes.message}
-                    title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
-                    text={emptyMessageStrings.NO_SEEDBANKS_NON_ADMIN_MSG}
+                    title={strings.REACH_OUT_TO_ADMIN_TITLE}
+                    text={strings.NO_SEEDBANKS_NON_ADMIN_MSG}
                   />
                 </>
               )}

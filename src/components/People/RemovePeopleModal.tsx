@@ -1,7 +1,6 @@
 import React from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
-import dictionary from 'src/strings/dictionary';
 import { OrganizationUser } from 'src/types/User';
 import DialogBox from '../common/DialogBox/DialogBox';
 
@@ -19,7 +18,7 @@ export default function RemovePeopleDialog(props: RemovePeopleDialogProps): JSX.
     <DialogBox
       onClose={onClose}
       open={open}
-      title={removedPeople.length > 1 ? dictionary.REMOVE_PEOPLE : dictionary.REMOVE_PERSON}
+      title={removedPeople.length > 1 ? strings.REMOVE_PEOPLE : strings.REMOVE_PERSON}
       size='medium'
       middleButtons={[
         <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} key='button-1' />,
@@ -27,8 +26,8 @@ export default function RemovePeopleDialog(props: RemovePeopleDialogProps): JSX.
       ]}
       message={
         removedPeople.length > 1
-          ? dictionary.REMOVE_PEOPLE_DESC
-          : strings.formatString(dictionary.REMOVE_PERSON_DESC, removedPeople[0].firstName || '')
+          ? strings.REMOVE_PEOPLE_DESC
+          : strings.formatString(strings.REMOVE_PERSON_DESC, removedPeople[0].firstName || '')
       }
       skrim={true}
     />

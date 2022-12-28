@@ -2,7 +2,6 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import EmptyMessage from '../common/EmptyMessage';
-import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 import { Facility } from 'src/api/types/facilities';
@@ -80,8 +79,8 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
           ) : (
             <EmptyMessage
               className={classes.message}
-              title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
-              text={emptyMessageStrings.NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG}
+              title={strings.REACH_OUT_TO_ADMIN_TITLE}
+              text={strings.NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG}
             />
           )}
         </>

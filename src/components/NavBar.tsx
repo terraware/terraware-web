@@ -7,7 +7,6 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import strings from 'src/strings';
-import dictionary from 'src/strings/dictionary';
 import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
 import { hasNurseryWithdrawals } from 'src/api/tracking/withdrawals';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -230,7 +229,7 @@ export default function NavBar({
 
       <NavFooter>
         <NavItem
-          label={dictionary.CONTACT_US}
+          label={strings.CONTACT_US}
           icon='mail'
           selected={!!isContactUsRoute}
           onClick={() => {

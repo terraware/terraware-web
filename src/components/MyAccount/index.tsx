@@ -6,7 +6,6 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import dictionary from 'src/strings/dictionary';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
 import useForm from 'src/utils/useForm';
@@ -231,7 +230,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
             <Button
               id='edit-account'
               icon='iconEdit'
-              label={isMobile ? '' : dictionary.EDIT_ACCOUNT}
+              label={isMobile ? '' : strings.EDIT_ACCOUNT}
               onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
               size='medium'
               priority='primary'
@@ -250,7 +249,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600}>
-                {dictionary.GENERAL}
+                {strings.GENERAL}
               </Typography>
             </Grid>
             <Grid item xs={isMobile ? 12 : 4}>
@@ -286,7 +285,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
             <Grid item xs={12} />
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
-                {dictionary.NOTIFICATIONS}
+                {strings.NOTIFICATIONS}
               </Typography>
               <Typography fontSize='14px'>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</Typography>
             </Grid>
@@ -303,7 +302,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
             <Grid item xs={12} />
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600}>
-                {dictionary.ORGANIZATIONS}
+                {strings.ORGANIZATIONS}
               </Typography>
             </Grid>
             <Grid item xs={12}>

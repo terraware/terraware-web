@@ -6,7 +6,6 @@ import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import homePageStrings from 'src/strings/homePage';
 import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import { isAdmin } from 'src/utils/organization';
@@ -88,11 +87,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
   return (
     <main className={classes.main}>
       <PageHeader
-        title={
-          user?.firstName
-            ? strings.formatString(homePageStrings.WELCOME_PERSON, user.firstName)
-            : homePageStrings.WELCOME
-        }
+        title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
         subtitle=''
       />
       <Container maxWidth={false} className={classes.mainContainer}>
@@ -103,9 +98,9 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                 <PageCard
                   name={strings.PEOPLE}
                   icon='person'
-                  description={homePageStrings.PEOPLE_CARD_DESCRIPTION}
+                  description={strings.PEOPLE_CARD_DESCRIPTION}
                   link={APP_PATHS.PEOPLE}
-                  linkText={strings.formatString(homePageStrings.GO_TO, strings.PEOPLE) as string}
+                  linkText={strings.formatString(strings.GO_TO, strings.PEOPLE) as string}
                   linkStyle={'plain'}
                 />
               </Grid>
@@ -113,9 +108,9 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
                 <PageCard
                   name={strings.SEED_BANKS}
                   icon='seedbankNav'
-                  description={homePageStrings.SEED_BANKS_CARD_DESCRIPTION}
+                  description={strings.SEED_BANKS_CARD_DESCRIPTION}
                   link={APP_PATHS.SEED_BANKS}
-                  linkText={strings.formatString(homePageStrings.GO_TO, strings.SEED_BANKS) as string}
+                  linkText={strings.formatString(strings.GO_TO, strings.SEED_BANKS) as string}
                   linkStyle={'plain'}
                 />
               </Grid>
@@ -125,9 +120,9 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
             <PageCard
               name={strings.SPECIES}
               icon='species'
-              description={homePageStrings.SPECIES_CARD_DESCRIPTION}
+              description={strings.SPECIES_CARD_DESCRIPTION}
               link={APP_PATHS.SPECIES}
-              linkText={strings.formatString(homePageStrings.GO_TO, strings.SPECIES) as string}
+              linkText={strings.formatString(strings.GO_TO, strings.SPECIES) as string}
               linkStyle={'plain'}
             />
           </Grid>
@@ -135,9 +130,9 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
             <PageCard
               name={strings.ACCESSIONS}
               icon='seeds'
-              description={homePageStrings.ACCESSIONS_CARD_DESCRIPTION}
+              description={strings.ACCESSIONS_CARD_DESCRIPTION}
               link={APP_PATHS.ACCESSIONS}
-              linkText={strings.formatString(homePageStrings.GO_TO, strings.ACCESSIONS) as string}
+              linkText={strings.formatString(strings.GO_TO, strings.ACCESSIONS) as string}
               linkStyle={'plain'}
             />
           </Grid>
@@ -145,9 +140,9 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
             <PageCard
               name={strings.MONITORING}
               icon='monitoringNav'
-              description={homePageStrings.MONITORING_CARD_DESCRIPTION}
+              description={strings.MONITORING_CARD_DESCRIPTION}
               link={APP_PATHS.MONITORING}
-              linkText={strings.formatString(homePageStrings.GO_TO, strings.MONITORING) as string}
+              linkText={strings.formatString(strings.GO_TO, strings.MONITORING) as string}
               linkStyle={'plain'}
             />
           </Grid>

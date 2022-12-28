@@ -907,6 +907,91 @@ const strings = new LocalizedStrings({
     TOTAL_READY_QUANTITY: 'Total Ready Quantity',
     HOME: 'Home',
     LOCATIONS: 'Locations',
+    DESCRIPTION_REPORT_PROBLEM: `If you’re having trouble using Terraware, please report any issues you’re having and we’ll make it right. Please mention this build version {0}.`,
+    DESCRIPTION_REQUEST_FEATURE:
+      'We’re always working to improve your Terraware experience and welcome your feedback on our products.',
+    DESCRIPTION_TEST_APP: 'Be the first to try our new, field-tested mobile app and let us know what you think.',
+    TITLE_REPORT_PROBLEM: 'Report a Problem',
+    TITLE_REQUEST_FEATURE: 'Request a Feature',
+    TITLE_TEST_APP: 'Test our Mobile App',
+    ADD_A_SPECIES: 'Add a Species',
+    ADD_CONTRIBUTORS: 'Add Contributors',
+    CONTRIBUTORS: 'Contributors',
+    CREATE_ORGANIZATION: 'Create Organization',
+    INCORRECT_EMAIL_FORMAT: 'Incorrect email format.',
+    PERSON_ADDED: 'Person Added',
+    REPORT_PROBLEM: 'Report Problem',
+    REQUEST_FEATURE: 'Request Feature',
+    EDIT_ACCOUNT: 'Edit Account',
+    ORGANIZATIONS: 'Organizations',
+    LEAVE_ORGANIZATION: 'Leave Organization',
+    ASSIGN_NEW_OWNER: 'Assign New Owner',
+    CANNOT_REMOVE: 'Cannot Remove',
+    DELETE_ORGANIZATION: 'Delete Organization',
+    REMOVE_PERSON: 'Remove Person',
+    REMOVE_PERSON_DESC:
+      'Are you sure you want to remove {0}? Removing {0} means they won’t have access to your organization’s data anymore.',
+    REMOVE_PEOPLE: 'Remove People',
+    REMOVE_PEOPLE_DESC:
+      'Are you sure you want to remove these people? Removing these people means they won’t have access to your organization’s data anymore.',
+    ADD_MANUALLY: 'Add Manually',
+    CHECK_BACK_LATER: 'Please check back later.',
+    SPECIES_EMPTY_MSG_BODY:
+      'Enter species that you collect or plant now to simplify your experience when you’re out in the field.',
+    ONBOARDING_ADMIN_TITLE: 'Just a moment, let’s complete setup first',
+    ACCESSIONS_ONBOARDING_SEEDBANKS_MSG: 'Define storage locations assigned to seed accessions',
+    ACCESSIONS_ONBOARDING_SPECIES_MSG: 'Define a list of species used in your seed inventory',
+    NO_SEEDBANKS_ADMIN_TITLE: 'Just a moment, let’s add a seed bank first.',
+    NO_SEEDBANKS_ADMIN_MSG: 'Start by adding a seed bank. You’ll then be able to access and create new accessions.',
+    NO_SEEDBANKS_MONITORING_ADMIN_MSG:
+      "Start by adding a seed bank. If your seed bank was built by Terraformation, you’ll then be able to monitor things like the seed bank's temperature and humidity.",
+    REACH_OUT_TO_ADMIN_TITLE: 'Please reach out to an administrator from your organization.',
+    NO_SEEDBANKS_NON_ADMIN_MSG:
+      'Before you can add and manage your accessions, you’ll need to have a seed bank and species within Terraware. Only admins can add seed banks and species, so please reach out to yours for assistance.',
+    NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG:
+      'Before you can begin remotely monitoring things like temperature and humidity through a seed bank’s sensor kit, you’ll need to add a seed bank within Terraware. Only admins can add seed banks, so please reach out to yours for assistance.',
+    NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG:
+      "If your seed bank was built by Terraformation, it is equipped with a sensor kit that you can remotely monitor things like the seed bank's temperature and humidity. Your seed bank either does not have a sensor kit, or it has not yet been set up by your administrator.",
+    NO_SPECIES_CONTRIBUTOR_MSG:
+      'There are no species in your species list yet. Only admins can add species, so please reach out to yours for assistance.',
+    NO_NURSERIES_NON_ADMIN_MSG:
+      'Before you can add and manage your nursery inventory, you’ll need to have a nursery and species within Terraware. Only admins can add nurseries and species, so please reach out to yours for assistance.',
+    INVENTORY_ONBOARDING_NURSERIES_MSG: 'Define nurseries assigned to seedlings inventory',
+    INVENTORY_ONBOARDING_SPECIES_MSG: 'Define a list of species used in your seedlings inventory',
+    NO_SPECIES_DESCRIPTION:
+      'It looks like you haven’t added any species yet. Having a master species list helps streamline your organization’s seed and plant data entry. You can either add species manually and individually, or import data from a CSV.',
+    IMPORT_SPECIES_DESCRIPTION: 'Upload a CSV with scientific names and other optional fields.',
+    ADD_SPECIES_MANUALLY_DESCRIPTION:
+      'Enter scientific name and other optional fields manually, one species at a time.',
+    ADD_SEED_BANK_SUBTITLE:
+      'How do you process and store your seeds? Set up your seed bank so you can keep track of where your seeds are stored.',
+    ADD_NURSERY_SUBTITLE:
+      'How do you manage your seedlings? Set up your nursery so you can keep track of your seedlings’ growth.',
+    NO_INVENTORY_DESCRIPTION:
+      'It looks like you haven’t added inventory yet. You can either import data from a CSV file, or add inventory using our inventory form.',
+    IMPORT_INVENTORY_DESCRIPTION: 'Upload a CSV with species, quantities, and other fields.',
+    ADD_INVENTORY_MANUALLY_DESCRIPTION:
+      'Enter species, quantities, and other relevant information using our inventory form.',
+    WELCOME: 'Welcome!',
+    WELCOME_PERSON: 'Welcome, {0}!',
+    GO_TO: 'Go to {0}',
+    PEOPLE_CARD_DESCRIPTION: 'We can’t do it alone! Add people to your Organization and assign them roles.',
+    PLANTS_CARD_DESCRIPTION: 'They’ve taken root! View all your plants in one place.',
+    ACCESSIONS_CARD_DESCRIPTION:
+      'Collect seeds and then record and view your accessions. Seed accessions can be viewed and analyzed by seed bank.',
+    SPECIES_CARD_DESCRIPTION: 'View the Species that are referenced by your Seed and Plant entries.',
+    SEED_BANKS_CARD_DESCRIPTION: 'How do you process and store your seeds? Add seed banks to your organization.',
+    MONITORING_CARD_DESCRIPTION:
+      'Add seed banks to your organization and then monitor things like temperature and humidity through their sensor kits.',
+    TITLE_WELCOME: 'Welcome to Terraware',
+    SUBTITLE_GET_STARTED:
+      "To get started, please create your organization now. You'll also be able to set up and manage information on people and species.",
+    DESCRIPTION_ORGANIZATION: 'Your organization may include people, and species.',
+    DESCRIPTION_PEOPLE: 'Invite those who contribute to the organization’s success.',
+    DESCRIPTION_SPECIES: 'Manage species that you collect or plant.',
+    FOOTNOTE_WAIT_FOR_INVITATION_1: 'Not interested in creating your own organization or expecting an invitation?',
+    FOOTNOTE_WAIT_FOR_INVITATION_2:
+      'Don’t worry. You’ll receive an email when your admin adds you to the organization.',
   },
 });
 

@@ -2,7 +2,6 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ServerOrganization } from 'src/types/Organization';
 import EmptyMessage from '../common/EmptyMessage';
-import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { useHistory, useParams } from 'react-router-dom';
@@ -216,8 +215,8 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
             <PageSnackbar />
             <EmptyMessage
               className={classes.message}
-              title={emptyMessageStrings.NO_SEEDBANKS_ADMIN_TITLE}
-              text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_ADMIN_MSG}
+              title={strings.NO_SEEDBANKS_ADMIN_TITLE}
+              text={strings.NO_SEEDBANKS_MONITORING_ADMIN_MSG}
               buttonText={strings.GO_TO_SEED_BANKS}
               onClick={goToSeedBanks}
             />
@@ -228,8 +227,8 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
             <PageSnackbar />
             <EmptyMessage
               className={classes.message}
-              title={emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE}
-              text={emptyMessageStrings.NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG}
+              title={strings.REACH_OUT_TO_ADMIN_TITLE}
+              text={strings.NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG}
             />
           </Grid>
         )}
