@@ -4,8 +4,6 @@ import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePag
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import emptyStateStrings from 'src/strings/emptyStatePages';
-import dictionary from 'src/strings/dictionary';
 import AddSpeciesModal from '../Species/AddSpeciesModal';
 import { useSetRecoilState } from 'recoil';
 import { ServerOrganization } from 'src/types/Organization';
@@ -17,7 +15,6 @@ import { makeStyles } from '@mui/styles';
 import useSnackbar from 'src/utils/useSnackbar';
 import { IconName } from 'src/components/common/icon/icons';
 import { isContributor } from 'src/utils/organization';
-import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportInventoryModal, { downloadInventoryCsvTemplate } from '../Inventory/ImportInventoryModal';
@@ -71,7 +68,7 @@ type PageContent = {
 const NO_SEEDBANKS_CONTENT: PageContent = {
   title1: strings.SEED_BANKS,
   title2: strings.ADD_A_SEED_BANK,
-  subtitle: emptyStateStrings.ADD_SEED_BANK_SUBTITLE,
+  subtitle: strings.ADD_SEED_BANK_SUBTITLE,
   listItems: [
     {
       icon: 'blobbyIconSeedBank',
@@ -87,7 +84,7 @@ const NO_SEEDBANKS_CONTENT: PageContent = {
 const NO_NURSERIES_CONTENT: PageContent = {
   title1: strings.NURSERIES,
   title2: strings.ADD_A_NURSERY,
-  subtitle: emptyStateStrings.ADD_NURSERY_SUBTITLE,
+  subtitle: strings.ADD_NURSERY_SUBTITLE,
   listItems: [
     {
       icon: 'blobbyIconNursery',
@@ -153,24 +150,24 @@ export default function EmptyStatePage({
   const NO_SPECIES_CONTENT: PageContent = {
     title1: strings.SPECIES,
     title2: strings.ADD_SPECIES,
-    subtitle: emptyStateStrings.NO_SPECIES_DESCRIPTION,
+    subtitle: strings.NO_SPECIES_DESCRIPTION,
     listItems: [
       {
         icon: 'uploadCloud',
-        title: dictionary.IMPORT_SPECIES_LIST,
-        description: emptyStateStrings.IMPORT_SPECIES_DESCRIPTION,
+        title: strings.IMPORT_SPECIES_LIST,
+        description: strings.IMPORT_SPECIES_DESCRIPTION,
         buttonText: strings.IMPORT_SPECIES,
         buttonIcon: 'iconImport',
         onClickButton: () => {
           setImportSpeciesModalOpened(true);
         },
-        linkText: emptyStateStrings.DOWNLOAD_CSV_TEMPLATE,
+        linkText: strings.DOWNLOAD_CSV_TEMPLATE,
         onLinkClick: downloadCsvTemplateHandler,
       },
       {
         icon: 'edit',
-        title: dictionary.ADD_MANUALLY,
-        description: emptyStateStrings.ADD_SPECIES_MANUALLY_DESCRIPTION,
+        title: strings.ADD_MANUALLY,
+        description: strings.ADD_SPECIES_MANUALLY_DESCRIPTION,
         buttonText: strings.ADD_SPECIES,
         buttonIcon: 'plus',
         onClickButton: () => {
@@ -182,24 +179,24 @@ export default function EmptyStatePage({
 
   const NO_INVENTORY_CONTENT: PageContent = {
     title2: strings.ADD_INVENTORY,
-    subtitle: emptyStateStrings.NO_INVENTORY_DESCRIPTION,
+    subtitle: strings.NO_INVENTORY_DESCRIPTION,
     listItems: [
       {
         icon: 'uploadCloud',
         title: strings.IMPORT_INVENTORY,
-        description: emptyStateStrings.IMPORT_INVENTORY_DESCRIPTION,
+        description: strings.IMPORT_INVENTORY_DESCRIPTION,
         buttonText: strings.IMPORT_INVENTORY,
         buttonIcon: 'iconImport',
         onClickButton: () => {
           setImportInventoryModalOpened(true);
         },
-        linkText: emptyStateStrings.DOWNLOAD_CSV_TEMPLATE,
+        linkText: strings.DOWNLOAD_CSV_TEMPLATE,
         onLinkClick: downloadInventoryCsvTemplateHandler,
       },
       {
         icon: 'edit',
-        title: dictionary.ADD_MANUALLY,
-        description: emptyStateStrings.ADD_INVENTORY_MANUALLY_DESCRIPTION,
+        title: strings.ADD_MANUALLY,
+        description: strings.ADD_INVENTORY_MANUALLY_DESCRIPTION,
         buttonText: strings.ADD_INVENTORY,
         buttonIcon: 'plus',
         onClickButton: () => {
@@ -211,8 +208,8 @@ export default function EmptyStatePage({
 
   const NO_SPECIES_CONTRIBUTOR_CONTENT: PageContent = {
     title1: strings.SPECIES,
-    title2: emptyMessageStrings.REACH_OUT_TO_ADMIN_TITLE,
-    subtitle: emptyMessageStrings.NO_SPECIES_CONTRIBUTOR_MSG,
+    title2: strings.REACH_OUT_TO_ADMIN_TITLE,
+    subtitle: strings.NO_SPECIES_CONTRIBUTOR_MSG,
     listItems: [],
   };
 

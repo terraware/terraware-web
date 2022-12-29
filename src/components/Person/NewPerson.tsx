@@ -12,7 +12,6 @@ import { addOrganizationUser, updateOrganizationUser } from 'src/api/user/user';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { APP_PATHS } from 'src/constants';
-import dictionary from 'src/strings/dictionary';
 import PageForm from '../common/PageForm';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -104,7 +103,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     setPageError(undefined);
 
     if (newPerson.email === '') {
-      setEmailError(dictionary.REQUIRED_FIELD);
+      setEmailError(strings.REQUIRED_FIELD);
       return;
     }
 
@@ -114,7 +113,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         newPerson.email
       )
     ) {
-      setEmailError(dictionary.INCORRECT_EMAIL_FORMAT);
+      setEmailError(strings.INCORRECT_EMAIL_FORMAT);
       return;
     }
 
@@ -135,14 +134,14 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
           return;
         } else if (response.errorDetails === 'INVALID_EMAIL') {
           setPageError('INVALID_EMAIL');
-          setEmailError(dictionary.INCORRECT_EMAIL_FORMAT);
+          setEmailError(strings.INCORRECT_EMAIL_FORMAT);
           return;
         }
       }
       if (response.requestSucceeded) {
         userId = response.newUserId;
       }
-      successMessage = response.requestSucceeded ? dictionary.PERSON_ADDED : null;
+      successMessage = response.requestSucceeded ? strings.PERSON_ADDED : null;
     }
 
     if (successMessage) {

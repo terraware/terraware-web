@@ -8,9 +8,7 @@ import EmptyMessage from 'src/components/common/EmptyMessage';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import speciesAtom from 'src/state/species';
-import dictionary from 'src/strings/dictionary';
 import strings from 'src/strings';
-import emptyMessageStrings from 'src/strings/emptyMessageModal';
 import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesProblemElement } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
@@ -719,8 +717,8 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
           ) : (
             <EmptyMessage
               className={classes.createSpeciesMessage}
-              title={dictionary.ADD_A_SPECIES}
-              text={emptyMessageStrings.SPECIES_EMPTY_MSG_BODY}
+              title={strings.ADD_A_SPECIES}
+              text={strings.SPECIES_EMPTY_MSG_BODY}
               buttonText={strings.ADD_SPECIES}
               onClick={onNewSpecies}
             />

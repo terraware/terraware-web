@@ -1,7 +1,6 @@
 import React from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
-import dictionary from 'src/strings/dictionary';
 import DialogBox from '../common/DialogBox/DialogBox';
 
 export interface CannotRemoveOrgDialogProps {
@@ -17,7 +16,7 @@ export default function CannotRemoveOrgDialog(props: CannotRemoveOrgDialogProps)
     <DialogBox
       onClose={onClose}
       open={open}
-      title={dictionary.CANNOT_REMOVE}
+      title={strings.CANNOT_REMOVE}
       size='medium'
       middleButtons={[
         <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} key='button-1' />,
