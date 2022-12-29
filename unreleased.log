@@ -1,3 +1,4 @@
+72fd219 terraware-web: Enable version upgrades to dependencies (#972)
 7966ff2 SW-2609 Remove error box from add species modal (#968)
 f244c29 SW-2036 Combine terraware-web strings into a single file (#967)
 3bbed23 Fix GTM init (#966)
