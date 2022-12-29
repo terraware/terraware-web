@@ -13,7 +13,6 @@ import useForm from 'src/utils/useForm';
 import Button from '../common/button/Button';
 import Checkbox from '../common/Checkbox';
 import DialogBox from '../common/DialogBox/DialogBox';
-import ErrorBox from '../common/ErrorBox/ErrorBox';
 import Select from '../common/Select/Select';
 import TextField from '../common/Textfield/Textfield';
 import TooltipLearnMoreModal, {
@@ -204,15 +203,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
         title={tooltipLearnMoreModalData?.title}
       />
       <Grid container spacing={4} className={classes.mainGrid}>
-        {nameFormatError && (
-          <ErrorBox
-            text={
-              nameFormatError === strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName)
-                ? strings.DUPLICATE_SPECIES_FOUND
-                : strings.FILL_OUT_ALL_FIELDS
-            }
-          />
-        )}
         <Grid item xs={12}>
           <Select
             id='scientificName'
