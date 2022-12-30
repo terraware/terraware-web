@@ -6,16 +6,12 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { PlantingSitePlot } from './PlantingSiteDetails';
 import { GenericMap, PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { ServerOrganization } from 'src/types/Organization';
-import { isContributor } from 'src/utils/organization';
-import strings from 'src/strings';
 
 const MAP_STYLE = {
   borderRadius: '24px',
 };
 
 type PlantingSiteDashboardMapProps = {
-  organization: ServerOrganization;
   plots?: PlantingSitePlot[];
   selectedPlotId?: number;
   selectedZoneId?: number;
@@ -23,11 +19,10 @@ type PlantingSiteDashboardMapProps = {
 };
 
 export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMapProps): JSX.Element {
-  const { organization, plots, selectedPlotId, selectedZoneId, siteId } = props;
+  const { plots, selectedPlotId, selectedZoneId, siteId } = props;
   const { isMobile } = useDeviceInfo();
   const [snackbar] = useState(useSnackbar());
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
-  const contributor = isContributor(organization);
 
   const plotsMap = useMemo(() => {
     if (!plots) {
@@ -72,10 +67,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
           selectedZoneId={selectedZoneId}
         />
       ) : isMobile || !plots ? null : (
-        <GenericMap
-          style={MAP_STYLE}
-          bannerMessage={contributor ? strings.GENERIC_MAP_MESSAGE_CONTRIBUTOR : strings.GENERIC_MAP_MESSAGE_ADMIN}
-        />
+        <GenericMap style={MAP_STYLE} />
       )}
     </Box>
   );
