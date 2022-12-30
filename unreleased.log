@@ -1,3 +1,4 @@
+ee755b4 SW-2056 Remove hardcoded colors from index.css (#976)
 dd0688e Fix file name for dependabot (#974)
 b077a7a SW-2610 Bump version to fix buttons active states cutoff (#973)
 72fd219 terraware-web: Enable version upgrades to dependencies (#972)
