@@ -8,6 +8,7 @@ import TotalCount from './TotalCount';
 import PlantingSiteDashboardMap from './PlantingSiteDashboardMap';
 import PlantBySpeciesChart from './PlantBySpeciesChart';
 import { ServerOrganization } from 'src/types/Organization';
+import BusySpinner from 'src/components/common/BusySpinner';
 
 export type Population = {
   species_scientificName: string;
@@ -43,6 +44,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const [fetchingData, setFetchingData] = useState<boolean>(false);
   const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
   const [zonesWithPlants, setZonesWithPlants] = useState<PlantingSiteZone[]>();
   const [hasZones, setHasZones] = useState<boolean>(false);
@@ -134,8 +136,10 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
       }
     };
 
+    setFetchingData(true);
     populateZones();
     populateTotals();
+    setFetchingData(false);
   }, [plantingSite, organization.id]);
 
   const plotsWithPlants = useMemo(() => {
@@ -145,13 +149,35 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
     return zonesWithPlants.flatMap((zone) => zone.plots);
   }, [zonesWithPlants]);
 
+  if (fetchingData) {
+    return <BusySpinner />;
+  }
+
+  // if we have a site without zones/plots,
+  // show information relevant to site (skip zone/plot related cards)
+  if (plantingSite && !hasZones) {
+    return (
+      <Grid container display='flex' flexGrow={1}>
+        <Grid item xs={isMobile ? 12 : 4}>
+          <Box sx={{ ...widgetCardStyle, minHeight: '160px', marginBottom: 3 }}>
+            <TotalCount totalCount={totalPlants} />
+          </Box>
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 8} sx={{ paddingLeft: isMobile ? 0 : 4 }}>
+          <Box sx={{ ...widgetCardStyle }} display='flex' flexGrow={1} flexDirection='column'>
+            <PlantBySpeciesChart plantsBySpecies={plantsBySpecies} />
+          </Box>
+        </Grid>
+      </Grid>
+    );
+  }
+
   return (
     <Grid container display='flex' flexGrow={1}>
       <Grid item xs={isMobile ? 12 : 8} sx={mapCardStyle}>
         <PlantingSiteDashboardMap
           plots={plotsWithPlants}
           siteId={plantingSite?.id}
-          organization={organization}
           selectedPlotId={selectedPlotId}
           selectedZoneId={selectedZoneId}
         />
