@@ -47,6 +47,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
     <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between'>
       <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginRight: isMobile ? 0 : theme.spacing(2) }}>
         <StorageLocationSelector
+          id='location'
           label={strings.LOCATION_REQUIRED}
           selectedStorageLocation={seedBanks.find((sb) => sb.id === record.facilityId)}
           storageLocations={seedBanks}
@@ -56,6 +57,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
       </Grid>
       <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
         <StorageSubLocationSelector
+          id='sub-location'
           label={strings.SUB_LOCATION}
           selectedStorageSubLocation={record.storageLocation}
           storageSubLocations={storageLocations.map((obj) => obj.storageLocation)}

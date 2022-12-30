@@ -4,6 +4,7 @@ import { Facility } from 'src/api/types/facilities';
 import { SelectT } from '@terraware/web-components';
 
 type StorageLocationSelectorProps = {
+  id?: string;
   label: string;
   selectedStorageLocation?: Facility;
   storageLocations: Facility[];
@@ -12,10 +13,11 @@ type StorageLocationSelectorProps = {
 };
 
 export default function StorageLocationSelector(props: StorageLocationSelectorProps): JSX.Element {
-  const { label, selectedStorageLocation, storageLocations, onChange, errorText } = props;
+  const { id, label, selectedStorageLocation, storageLocations, onChange, errorText } = props;
 
   return (
     <SelectT<Facility>
+      id={id}
       label={label}
       placeholder={strings.SELECT}
       options={storageLocations}
