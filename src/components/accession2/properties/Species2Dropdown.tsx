@@ -97,6 +97,7 @@ export default function Species2Dropdown<T extends AccessionPostRequestBody>(
     <>
       <Grid item xs={12}>
         <SelectT<Species>
+          id='species'
           label={strings.SPECIES_REQUIRED}
           disabled={disabled}
           placeholder={strings.SEARCH_OR_SELECT}

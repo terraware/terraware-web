@@ -89,6 +89,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
       <Grid item xs={12} textAlign='left'>
         <Grid item xs={12}>
           <StorageLocationSelector
+            id='location'
             label={strings.LOCATION}
             selectedStorageLocation={seedBanks.find((sb) => sb.id === record.facilityId)}
             storageLocations={seedBanks}
@@ -97,6 +98,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
           <StorageSubLocationSelector
+            id='sub-location'
             label={strings.SUB_LOCATION}
             selectedStorageSubLocation={record.storageLocation}
             storageSubLocations={storageLocations.map((obj) => obj.storageLocation)}

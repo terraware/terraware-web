@@ -3,6 +3,7 @@ import strings from 'src/strings';
 import { Select } from '@terraware/web-components';
 
 type StorageSubLocationSelectorProps = {
+  id?: string;
   label: string;
   selectedStorageSubLocation?: string;
   storageSubLocations: string[];
