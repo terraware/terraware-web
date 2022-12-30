@@ -9,7 +9,6 @@ import InventoryCellRenderer from './InventoryCellRenderer';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import Search from './Search';
 
 const columns: TableColumnType[] = [
@@ -55,7 +54,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const { organization, results, setTemporalSearchValue, temporalSearchValue, filters, setFilters } = props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
-  const trackingEnabled = isEnabled('Tracking V1');
   const theme = useTheme();
 
   const withdrawInventory = () => {
@@ -102,7 +100,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 isClickable={(row) => row.species_id}
                 selectedRows={selectedRows}
                 setSelectedRows={setSelectedRows}
-                showCheckbox={trackingEnabled}
+                showCheckbox={true}
                 showTopBar={true}
                 topBarButtons={[
                   {
