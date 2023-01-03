@@ -118,7 +118,7 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
             id='enable'
             name=''
             label={strings.TURN_ON_END_DRYING_REMINDER}
-            onChange={onEnable}
+            onChange={(value) => onEnable('enable', value)}
             value={enable}
           />
         </Grid>
@@ -127,7 +127,7 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
           label={strings.REMINDER_DATE}
           aria-label={strings.REMINDER_DATE}
           value={date}
-          onChange={changeDate}
+          onChange={(value) => changeDate('dryingEndDate', value)}
           errorText={dateError}
           disabled={!enable}
         />

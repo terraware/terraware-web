@@ -45,7 +45,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
           <Textfield
             id={id}
             type='number'
-            onChange={(_, newValue) => onRowClick(newValue as string)}
+            onChange={(newValue) => onRowClick(newValue as string)}
             value={row[id]}
             label={''}
             errorText={row.error[id]}
@@ -66,7 +66,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         <Textfield
           id='readyQuantityWithdrawn'
           type='number'
-          onChange={(_, newValue) => onRowClick(newValue as string)}
+          onChange={(newValue) => onRowClick(newValue as string)}
           value={row.readyQuantityWithdrawn}
           label={''}
           errorText={row.error.readyQuantityWithdrawn}

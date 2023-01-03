@@ -321,7 +321,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
             id='search'
             type='text'
             className={classes.searchField}
-            onChange={onChangeSearch}
+            onChange={(value) => onChangeSearch('search', value)}
             value={temporalSearchValue}
             iconRight='cancel'
             onClickRightIcon={clearSearch}

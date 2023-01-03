@@ -52,7 +52,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
           <Textfield
             id='plantsCollectedFrom'
             value={record.plantsCollectedFrom}
-            onChange={onChange}
+            onChange={(value) => onChange('plantsCollectedFrom', value)}
             type='number'
             min={0}
             label={strings.NUMBER_PLANTS_COLLECTED_FROM}
@@ -62,7 +62,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
           <Textfield
             id='plantId'
             value={record.plantId}
-            onChange={onChange}
+            onChange={(value) => onChange('plantId', value)}
             type='text'
             label={strings.PLANT_ID + ' ' + strings.IF_APPLICABLE}
             tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_PLANT_ID}
@@ -73,7 +73,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
         <Textfield
           id='notes'
           value={record.notes}
-          onChange={onChange}
+          onChange={(value) => onChange('notes', value)}
           type='textarea'
           label={strings.PLANT_DESCRIPTION}
         />

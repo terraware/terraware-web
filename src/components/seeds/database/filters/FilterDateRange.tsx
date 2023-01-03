@@ -74,7 +74,7 @@ export default function DateRange(props: Props): JSX.Element {
             id='startDate'
             autoFocus={true}
             value={startDate}
-            onChange={onChangeDate}
+            onChange={(value) => onChangeDate('startDate', value)}
             label={strings.START}
             aria-label='Start date'
             onKeyPress={(e) => onEnter(e)}
@@ -87,7 +87,7 @@ export default function DateRange(props: Props): JSX.Element {
           <DatePicker
             id='endDate'
             value={endDate}
-            onChange={onChangeDate}
+            onChange={(value) => onChangeDate('endDate', value)}
             label={strings.END}
             aria-label='End date'
             onKeyPress={(e) => onEnter(e)}

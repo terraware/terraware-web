@@ -72,7 +72,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
         <Autocomplete
           id={`newPlot_${plantingId}`}
           selected={newPlot}
-          onChange={(unused, newPlotValue: any) => {
+          onChange={(newPlotValue: any) => {
             if (newPlotValue.value) {
               updateReassignment('newPlot', newPlotValue);
             }
@@ -97,7 +97,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
             id={`quantity_${plantingId}`}
             type='number'
             min={0}
-            onChange={onUpdateQuantity}
+            onChange={(value) => onUpdateQuantity(`quantity_${plantingId}`, value)}
             value={quantity}
             label={''}
             errorText={error.quantity}
@@ -117,7 +117,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
         <Textfield
           id={`notes_${plantingId}`}
           type='text'
-          onChange={(unused, text: any) => updateReassignment('notes', text)}
+          onChange={(text: any) => updateReassignment('notes', text)}
           value={notes}
           label={''}
           className={classes.text}

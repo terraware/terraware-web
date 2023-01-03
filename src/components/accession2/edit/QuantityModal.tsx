@@ -166,7 +166,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
             <Textfield
               label={strings.SEED_COUNT}
               id='seedsQuantity'
-              onChange={(id, value) => onChangeRemainingQuantity(id, value as number)}
+              onChange={(value) => onChangeRemainingQuantity('seedsQuantity', Number(value))}
               type='text'
               value={
                 record.remainingQuantity?.units === 'Seeds' ? record.remainingQuantity?.quantity : record.estimatedCount
@@ -185,7 +185,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
               <Textfield
                 label={strings.OR_SEED_WEIGHT}
                 id='quantity'
-                onChange={(id, value) => onChangeRemainingQuantity(id, value as number)}
+                onChange={(value) => onChangeRemainingQuantity('quantity', Number(value))}
                 type='text'
                 value={record.remainingQuantity?.units !== 'Seeds' ? record.remainingQuantity?.quantity : ''}
               />

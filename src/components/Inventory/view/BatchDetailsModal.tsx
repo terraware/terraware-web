@@ -174,7 +174,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 <Textfield
                   id='scientificName'
                   value={speciesSelected?.scientificName}
-                  onChange={onChange}
+                  onChange={(value) => onChange('scientificName', value)}
                   type='text'
                   label={strings.SPECIES}
                   display={true}
@@ -184,7 +184,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 <Textfield
                   id='commonName'
                   value={speciesSelected?.commonName}
-                  onChange={onChange}
+                  onChange={(value) => onChange('commonName', value)}
                   type='text'
                   label={strings.COMMON_NAME}
                   display={true}
@@ -194,7 +194,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 <Textfield
                   id='seedilingBatch'
                   value={record.batchNumber}
-                  onChange={onChange}
+                  onChange={(value) => onChange('seedilingBatch', value)}
                   type='text'
                   label={strings.SEEDLING_BATCH}
                   display={true}
@@ -217,7 +217,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 <Textfield
                   id='nursery'
                   value={facilityName}
-                  onChange={onChange}
+                  onChange={(value) => onChange('nursery', value)}
                   type='text'
                   label={strings.NURSERY}
                   display={true}
@@ -251,7 +251,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               <Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
-                onChange={onChange}
+                onChange={(value) => onChange('germinatingQuantity', value)}
                 type='text'
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
@@ -265,7 +265,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               <Textfield
                 id='notReadyQuantity'
                 value={record.notReadyQuantity}
-                onChange={onChange}
+                onChange={(value) => onChange('notReadyQuantity', value)}
                 type='text'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
@@ -278,14 +278,14 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 label={strings.ESTIMATED_READY_DATE}
                 aria-label={strings.ESTIMATED_READY_DATE}
                 value={record.readyByDate}
-                onChange={changeDate}
+                onChange={(value) => onChange('readyByDate', value)}
               />
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='readyQuantity'
                 value={record.readyQuantity}
-                onChange={onChange}
+                onChange={(value) => onChange('readyQuantity', value)}
                 type='text'
                 label={strings.READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
@@ -298,7 +298,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               <Textfield
                 id='totalQuantity'
                 value={totalQuantity}
-                onChange={onChange}
+                onChange={(value) => onChange('totalQuantity', value)}
                 type='text'
                 label={strings.TOTAL_QUANTITY}
                 display={true}
@@ -312,11 +312,17 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 label={strings.DATE_ADDED_REQUIRED}
                 aria-label={strings.DATE_ADDED}
                 value={record.addedDate}
-                onChange={changeDate}
+                onChange={(value) => changeDate('dateAdded', value)}
               />
             </Grid>
             <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
-              <Textfield id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+              <Textfield
+                id='notes'
+                value={record?.notes}
+                onChange={(value) => onChange('notes', value)}
+                type='textarea'
+                label={strings.NOTES}
+              />
             </Grid>
           </Grid>
         </DialogBox>

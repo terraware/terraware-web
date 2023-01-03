@@ -152,7 +152,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                   label={strings.DATE_ADDED_REQUIRED}
                   aria-label={strings.DATE_ADDED_REQUIRED}
                   value={record.addedDate}
-                  onChange={changeDate}
+                  onChange={(value) => changeDate('dateAdded', value)}
                   errorText={validateFields && !record.addedDate ? strings.REQUIRED_FIELD : ''}
                 />
               </Grid>
@@ -170,7 +170,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 <Textfield
                   id='germinatingQuantity'
                   value={record.germinatingQuantity}
-                  onChange={onChange}
+                  onChange={(value) => onChange('germinatingQuantity', value)}
                   type='text'
                   label={strings.GERMINATING_QUANTITY_REQUIRED}
                   tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
@@ -184,7 +184,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 <Textfield
                   id='notReadyQuantity'
                   value={record.notReadyQuantity}
-                  onChange={onChange}
+                  onChange={(value) => onChange('notReadyQuantity', value)}
                   type='text'
                   label={strings.NOT_READY_QUANTITY_REQUIRED}
                   tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
@@ -197,14 +197,14 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                   label={strings.ESTIMATED_READY_DATE}
                   aria-label={strings.ESTIMATED_READY_DATE}
                   value={record.readyByDate}
-                  onChange={changeDate}
+                  onChange={(value) => onChange('readyByDate', value)}
                 />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
                   id='readyQuantity'
                   value={record.readyQuantity}
-                  onChange={onChange}
+                  onChange={(value) => onChange('readyQuantity', value)}
                   type='text'
                   label={strings.READY_QUANTITY_REQUIRED}
                   tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
@@ -215,7 +215,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 <Textfield
                   id='totalQuantity'
                   value={totalQuantity}
-                  onChange={onChange}
+                  onChange={(value) => onChange('totalQuantity', value)}
                   type='text'
                   label={strings.TOTAL_QUANTITY}
                   display={true}
@@ -223,7 +223,13 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 />
               </Grid>
               <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
-                <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+                <Textfield
+                  id='notes'
+                  value={record.notes}
+                  onChange={(value) => onChange('notes', value)}
+                  type='textarea'
+                  label={strings.NOTES}
+                />
               </Grid>
             </Grid>
           </Box>
