@@ -97,7 +97,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
             id={`quantity_${plantingId}`}
             type='number'
             min={0}
-            onChange={(value) => onUpdateQuantity(`quantity_${plantingId}`, value)}
+            onChange={(newValue) => onUpdateQuantity(`quantity_${plantingId}`, newValue)}
             value={quantity}
             label={''}
             errorText={error.quantity}
