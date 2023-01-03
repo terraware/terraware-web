@@ -82,7 +82,14 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
       title={strings.EDIT_LOCATION}
       size='large'
       middleButtons={[
-        <Button id='cancelEditLocation' label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
+        <Button
+          id='cancelEditLocation'
+          label={strings.CANCEL}
+          type='passive'
+          onClick={onCloseHandler}
+          priority='secondary'
+          key='button-1'
+        />,
         <Button id='saveEditLocation' onClick={saveLocation} label={strings.SAVE} key='button-2' />,
       ]}
     >

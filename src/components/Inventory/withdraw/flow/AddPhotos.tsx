@@ -34,7 +34,13 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
   };
 
   return (
-    <PageForm cancelID='cancelAddPhotos' saveID='saveAddPhotos' onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText}>
+    <PageForm
+      cancelID='cancelAddPhotos'
+      saveID='saveAddPhotos'
+      onCancel={onCancel}
+      onSave={onNextHandler}
+      saveButtonText={saveText}
+    >
       <Container
         maxWidth={false}
         sx={{

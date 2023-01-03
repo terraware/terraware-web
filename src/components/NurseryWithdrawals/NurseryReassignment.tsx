@@ -221,7 +221,13 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
         </Box>
       )}
       {plots ? (
-        <PageForm cancelID='cancelNurseryReassignment' saveID='saveNurseryReassignment' onCancel={goToWithdrawals} onSave={reassign} saveButtonText={strings.REASSIGN}>
+        <PageForm
+          cancelID='cancelNurseryReassignment'
+          saveID='saveNurseryReassignment'
+          onCancel={goToWithdrawals}
+          onSave={reassign}
+          saveButtonText={strings.REASSIGN}
+        >
           <Box
             paddingRight={theme.spacing(3)}
             paddingBottom={theme.spacing(8)}
