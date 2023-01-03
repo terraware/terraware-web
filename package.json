@@ -32,7 +32,7 @@
     "classnames": "^2.3.1",
     "cookies-js": "^1.2.3",
     "coordinate-parser": "^1.0.7",
-    "date-fns": "^2.28.0",
+    "date-fns": "^2.29.3",
     "hex-rgb": "^5.0.0",
     "jwt-decode": "^3.1.2",
     "license-report": "^6.0.0",
