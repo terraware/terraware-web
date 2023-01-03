@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }),
   listItem: {
     flex: '1 1 auto',
-    maxWidth: '205px',
+    maxWidth: '220px',
     textAlign: 'center',
     margin: (props: EmptyStateStyleProps) => (props.isMobile ? theme.spacing(4, 3, 0, 3) : theme.spacing(0, 3)),
     '&:first-child': {
