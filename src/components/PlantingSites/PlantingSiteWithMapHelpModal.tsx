@@ -1,10 +1,9 @@
 import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
 import React from 'react';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Typography } from '@mui/material';
 import { TERRAWARE_SUPPORT_LINK } from 'src/constants';
 import parseHtml from 'html-react-parser';
+import { Button, DialogBox } from '@terraware/web-components';
 
 export type PlantingSiteWithMapHelpModalProps = {
   open: boolean;

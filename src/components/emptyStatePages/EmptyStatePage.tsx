@@ -18,8 +18,7 @@ import { isContributor } from 'src/utils/organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportInventoryModal, { downloadInventoryCsvTemplate } from '../Inventory/ImportInventoryModal';
-import PlantingSiteSelectTypeModal from 'src/components/PlantingSites/PlantingSiteSelectTypeModal';
-import PlantingSiteWithMapHelpModal from 'src/components/PlantingSites/PlantingSiteWithMapHelpModal';
+import PlantingSiteTypeSelect from '../PlantingSites/PlantingSiteTypeSelect';
 
 interface StyleProps {
   isMobile: boolean;
@@ -123,13 +122,6 @@ export default function EmptyStatePage({
     history.push(newLocation);
   };
 
-  const goTo = (appPath: string) => {
-    const appPathLocation = {
-      pathname: appPath,
-    };
-    history.push(appPathLocation);
-  };
-
   const downloadCsvTemplateHandler = () => {
     downloadCsvTemplate();
   };
@@ -141,8 +133,7 @@ export default function EmptyStatePage({
   const [addSpeciesModalOpened, setAddSpeciesModalOpened] = useState(false);
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);
   const [importInventoryModalOpened, setImportInventoryModalOpened] = useState(false);
-  const [plantingSiteTypeModalOpen, setPlantingSiteTypeModalOpen] = useState(false);
-  const [plantingSiteTypeHelpModalOpen, setPlantingSiteTypeHelpModalOpen] = useState(false);
+  const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
 
   const NO_SPECIES_CONTENT: PageContent = {
     title1: strings.SPECIES,
@@ -220,7 +211,7 @@ export default function EmptyStatePage({
         buttonText: strings.ADD_PLANTING_SITE,
         buttonIcon: 'plus',
         onClickButton: () => {
-          setPlantingSiteTypeModalOpen(true);
+          setPlantingSiteTypeSelectOpen(true);
         },
       },
     ],
@@ -309,23 +300,7 @@ export default function EmptyStatePage({
           />
         </>
       )}
-      <>
-        <PlantingSiteSelectTypeModal
-          open={plantingSiteTypeModalOpen}
-          onNext={(goToCreate) => {
-            if (goToCreate) {
-              goTo(APP_PATHS.PLANTING_SITES_NEW);
-            } else {
-              setPlantingSiteTypeHelpModalOpen(true);
-            }
-          }}
-          onClose={() => setPlantingSiteTypeModalOpen(false)}
-        />
-        <PlantingSiteWithMapHelpModal
-          open={plantingSiteTypeHelpModalOpen}
-          onClose={() => setPlantingSiteTypeHelpModalOpen(false)}
-        />
-      </>
+      <PlantingSiteTypeSelect open={plantingSiteTypeSelectOpen} onClose={() => setPlantingSiteTypeSelectOpen(false)} />
       {content.title1 && (
         <>
           <PageHeader title={content.title1} subtitle='' />

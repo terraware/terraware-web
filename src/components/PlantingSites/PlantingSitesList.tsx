@@ -2,9 +2,7 @@ import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { search, SearchResponseElement } from 'src/api/search';
-import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useDebounce from 'src/utils/useDebounce';
@@ -13,8 +11,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import PlantingSitesTable from './PlantingSitesTable';
-import PlantingSiteSelectTypeModal from './PlantingSiteSelectTypeModal';
-import PlantingSiteWithMapHelpModal from './PlantingSiteWithMapHelpModal';
+import PlantingSiteTypeSelect from './PlantingSiteTypeSelect';
 
 type PlantingSitesListProps = {
   organization: ServerOrganization;
@@ -25,19 +22,10 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
   const contentRef = useRef(null);
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [plantingSites, setPlantingSites] = useState<SearchResponseElement[] | null>();
-  const [plantingSiteTypeModalOpen, setPlantingSiteTypeModalOpen] = useState(false);
-  const [plantingSiteTypeHelpModalOpen, setPlantingSiteTypeHelpModalOpen] = useState(false);
+  const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const { isMobile } = useDeviceInfo();
-  const history = useHistory();
-
-  const goTo = (appPath: string) => {
-    const appPathLocation = {
-      pathname: appPath,
-    };
-    history.push(appPathLocation);
-  };
 
   const onSearch = useCallback(async () => {
     const searchField = debouncedSearchTerm
@@ -88,23 +76,7 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
 
   return (
     <TfMain>
-      <>
-        <PlantingSiteSelectTypeModal
-          open={plantingSiteTypeModalOpen}
-          onNext={(goToCreate) => {
-            if (goToCreate) {
-              goTo(APP_PATHS.PLANTING_SITES_NEW);
-            } else {
-              setPlantingSiteTypeHelpModalOpen(true);
-            }
-          }}
-          onClose={() => setPlantingSiteTypeModalOpen(false)}
-        />
-        <PlantingSiteWithMapHelpModal
-          open={plantingSiteTypeHelpModalOpen}
-          onClose={() => setPlantingSiteTypeHelpModalOpen(false)}
-        />
-      </>
+      <PlantingSiteTypeSelect open={plantingSiteTypeSelectOpen} onClose={() => setPlantingSiteTypeSelectOpen(false)} />
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ padding: theme.spacing(0, 0, 4, 3), display: 'flex', justifyContent: 'space-between' }}>
           <Grid item xs={6}>
@@ -118,7 +90,7 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
                 <Button
                   id='new-planting-site'
                   icon='plus'
-                  onClick={() => setPlantingSiteTypeModalOpen(true)}
+                  onClick={() => setPlantingSiteTypeSelectOpen(true)}
                   size='medium'
                 />
               ) : (
@@ -126,7 +98,7 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
                   id='new-planting-site'
                   icon='plus'
                   label={strings.ADD_PLANTING_SITE}
-                  onClick={() => setPlantingSiteTypeModalOpen(true)}
+                  onClick={() => setPlantingSiteTypeSelectOpen(true)}
                   size='medium'
                 />
               )}

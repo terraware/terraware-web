@@ -1,9 +1,8 @@
 import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
 import React, { useState } from 'react';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { FormControlLabel, Radio, RadioGroup, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Button, DialogBox } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   buttonSpacing: {
