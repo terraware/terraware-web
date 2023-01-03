@@ -157,13 +157,14 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           size='large'
           middleButtons={[
             <Button
+              id='cancelBatchDetails'
               label={strings.CANCEL}
               type='passive'
               onClick={onCloseHandler}
               priority='secondary'
               key='button-1'
             />,
-            <Button onClick={saveBatch} label={strings.SAVE} key='button-2' />,
+            <Button id='saveBatchDetails' onClick={saveBatch} label={strings.SAVE} key='button-2' />,
           ]}
           scrolled={true}
         >

@@ -120,14 +120,19 @@ export default function CheckDataModal(props: CheckDataModalProps): JSX.Element 
       return [
         <Button
           onClick={handleCancel}
-          id='cancel'
+          id={error ? 'cancelDataCheck' : 'cancelSpeciesCheck'}
           label={error ? strings.CANCEL_DATA_CHECK : strings.CANCEL}
           priority='secondary'
           type='passive'
           className={classes.spacing}
           key='mb-1'
         />,
-        <Button onClick={startDataCheck} label={error ? strings.TRY_AGAIN : strings.RUN_A_DATABASE_CHECK} key='mb-2' />,
+        <Button
+          id={error ? 'tryAgainCheckData' : 'runDataCheck'}
+          onClick={startDataCheck}
+          label={error ? strings.TRY_AGAIN : strings.RUN_A_DATABASE_CHECK}
+          key='mb-2'
+        />,
       ];
     }
     if (completed && !speciesWithProblems?.length) {

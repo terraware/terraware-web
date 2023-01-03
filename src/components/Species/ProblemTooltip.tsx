@@ -116,7 +116,7 @@ export default function ProblemTooltip({
           <>
             <Button
               onClick={(event) => handleCancel(event)}
-              id='cancel'
+              id='cancelSpeciesFix'
               label={strings.CANCEL}
               priority='secondary'
               type='passive'
@@ -124,6 +124,7 @@ export default function ProblemTooltip({
             />
             <Button
               onClick={(event) => handleIgnore(problems[0].id, event)}
+              id='ignoreSpeciesFix'
               label={strings.IGNORE}
               priority='secondary'
               type='passive'
@@ -131,6 +132,7 @@ export default function ProblemTooltip({
             />
             <Button
               onClick={(event) => handleAccept(problems[0].id, event)}
+              id='acceptSpeciesFix'
               label={strings.ACCEPT}
               priority='secondary'
             />

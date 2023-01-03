@@ -59,7 +59,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
           type='passive'
           onClick={handleCancel}
           key='button-1'
-          id='cancel'
+          id='cancelDownloadReport'
         />,
         <Button label={strings.EXPORT} onClick={handleOk} key='button-2' id='downloadButton' />,
       ]}

@@ -330,8 +330,15 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       title={strings.WITHDRAW_SEEDS}
       size='medium'
       middleButtons={[
-        <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
-        <Button onClick={saveWithdrawal} label={strings.WITHDRAW} key='button-2' />,
+        <Button
+          id='cancelWithdraw'
+          label={strings.CANCEL}
+          type='passive'
+          onClick={onCloseHandler}
+          priority='secondary'
+          key='button-1'
+        />,
+        <Button id='saveWithdraw' onClick={saveWithdrawal} label={strings.WITHDRAW} key='button-2' />,
       ]}
       scrolled={true}
     >

@@ -60,6 +60,7 @@ export default function FormBottomBar({
       className={classes.bottomBar}
     >
       <Button
+        id='cancelBottomBar'
         size='medium'
         label={cancelButtonText || 'Cancel'}
         onClick={onCancel}
@@ -68,6 +69,7 @@ export default function FormBottomBar({
         className={classes.button}
       />
       <Button
+        id='saveBottomBar'
         size='medium'
         label={saveButtonText || 'Save'}
         onClick={onSave}
