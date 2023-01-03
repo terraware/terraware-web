@@ -278,7 +278,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 label={strings.ESTIMATED_READY_DATE}
                 aria-label={strings.ESTIMATED_READY_DATE}
                 value={record.readyByDate}
-                onChange={(value) => onChange('readyByDate', value)}
+                onChange={(value) => changeDate('readyByDate', value)}
               />
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>

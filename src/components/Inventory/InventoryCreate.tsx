@@ -197,7 +197,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                   label={strings.ESTIMATED_READY_DATE}
                   aria-label={strings.ESTIMATED_READY_DATE}
                   value={record.readyByDate}
-                  onChange={(value) => onChange('readyByDate', value)}
+                  onChange={(value) => changeDate('readyByDate', value)}
                 />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
