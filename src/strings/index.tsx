@@ -581,6 +581,9 @@ const strings = new LocalizedStrings({
     PLANT_ID: 'Plant ID',
     PLANT_LABEL: 'Plant',
     PLANT: 'plant',
+    PLANTING_SITE_TYPE: 'Planting Site Type',
+    PLANTING_SITE_WITH_MAP_HELP:
+      'If you are a Terraformation partner or accelerator participant, please {0} to create a site with a map.',
     PLANTING_SITE: 'Planting Site',
     PLANTING_SITES: 'Planting Sites',
     PLANTING_ZONE: 'Planting Zone',
@@ -718,6 +721,12 @@ const strings = new LocalizedStrings({
     SEEDS: 'Seeds',
     SELECT_BATCHES: 'Select Batches',
     SELECT_BUTTON: 'Select',
+    SELECT_PLANTING_SITE_TYPE_DESCRIPTION_1: 'Please select which type of planting site to add.',
+    SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2:
+      'Sites with maps allow you to track the location of plants within the site and perform live/dead monitoring. Sites without maps allow you to track how many and which species of plants have been planted on the site.',
+    SELECT_PLANTING_SITE_TYPE_DESCRIPTION_3:
+      'Please note that if you create a site without a map, you won’t be able to add a map to it later on.',
+    SELECT_PLANTING_SITE_TYPE: 'Select Planting Site Type',
     SELECT_SEED_BANK_INFO: 'Accessions require a seed bank storage location. Please select a seed bank.',
     SELECT_SEED_BANK: 'Select Seed Bank',
     SELECT: 'Select...',
@@ -968,6 +977,7 @@ const strings = new LocalizedStrings({
     WILD_IN_SITU_DESCRIPTION: 'Plants that occur naturally in wild areas and were not planted by people.',
     WILD_IN_SITU: 'Wild (In Situ)',
     WILD: 'Wild',
+    WITH_MAP: 'With Map',
     WITHDRAW_ALL: 'Withdraw all',
     WITHDRAW_DATE_REQUIRED: 'Withdraw Date *',
     WITHDRAW_FROM_BATCHES: 'Withdraw from Batches',
@@ -988,6 +998,7 @@ const strings = new LocalizedStrings({
     WITHDRAWN_ON: 'Withdrawn On',
     WITHDRAWN_QUANTITY_ERROR: 'Exceeds remaining quantity',
     WITHDRAWN: 'Withdrawn',
+    WITHOUT_MAP: 'Without Map',
     YES: 'Yes',
     ZERO: 'zero',
     ZONE_REQUIRED: 'Zone *',

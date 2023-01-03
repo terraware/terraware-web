@@ -173,7 +173,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                   </Grid>
                 </Box>
               </Grid>
-              <BoundariesAndPlots plantingSite={record} />
+              {record?.boundary && <BoundariesAndPlots plantingSite={record} />}
             </>
           )}
         </Container>

@@ -13,6 +13,8 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import PlantingSitesTable from './PlantingSitesTable';
+import PlantingSiteSelectTypeModal from './PlantingSiteSelectTypeModal';
+import PlantingSiteWithMapHelpModal from './PlantingSiteWithMapHelpModal';
 
 type PlantingSitesListProps = {
   organization: ServerOrganization;
@@ -23,6 +25,8 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
   const contentRef = useRef(null);
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [plantingSites, setPlantingSites] = useState<SearchResponseElement[] | null>();
+  const [plantingSiteTypeModalOpen, setPlantingSiteTypeModalOpen] = useState(false);
+  const [plantingSiteTypeHelpModalOpen, setPlantingSiteTypeHelpModalOpen] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const { isMobile } = useDeviceInfo();
@@ -84,6 +88,23 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
 
   return (
     <TfMain>
+      <>
+        <PlantingSiteSelectTypeModal
+          open={plantingSiteTypeModalOpen}
+          onNext={(goToCreate) => {
+            if (goToCreate) {
+              goTo(APP_PATHS.PLANTING_SITES_NEW);
+            } else {
+              setPlantingSiteTypeHelpModalOpen(true);
+            }
+          }}
+          onClose={() => setPlantingSiteTypeModalOpen(false)}
+        />
+        <PlantingSiteWithMapHelpModal
+          open={plantingSiteTypeHelpModalOpen}
+          onClose={() => setPlantingSiteTypeHelpModalOpen(false)}
+        />
+      </>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ padding: theme.spacing(0, 0, 4, 3), display: 'flex', justifyContent: 'space-between' }}>
           <Grid item xs={6}>
@@ -97,7 +118,7 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
                 <Button
                   id='new-planting-site'
                   icon='plus'
-                  onClick={() => goTo(APP_PATHS.PLANTING_SITES_NEW)}
+                  onClick={() => setPlantingSiteTypeModalOpen(true)}
                   size='medium'
                 />
               ) : (
@@ -105,7 +126,7 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
                   id='new-planting-site'
                   icon='plus'
                   label={strings.ADD_PLANTING_SITE}
-                  onClick={() => goTo(APP_PATHS.PLANTING_SITES_NEW)}
+                  onClick={() => setPlantingSiteTypeModalOpen(true)}
                   size='medium'
                 />
               )}

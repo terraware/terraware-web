@@ -101,7 +101,7 @@ export default function PlantingSiteView(): JSX.Element {
           />
         </Grid>
       </Grid>
-      {plantingSite && <BoundariesAndPlots plantingSite={plantingSite} />}
+      {plantingSite?.boundary && <BoundariesAndPlots plantingSite={plantingSite} />}
     </TfMain>
   );
 }
