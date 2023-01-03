@@ -1,3 +1,4 @@
+89a754e Fix spinner logic in plants dashboard (#982)
 a51e3ff SW-2607 Updates to plants dashboard for sites without zones/plots (#981)
 48961b2 SW-2608 Add IDs to some components to allow for easier tracking (#979)
 ee755b4 SW-2056 Remove hardcoded colors from index.css (#976)
