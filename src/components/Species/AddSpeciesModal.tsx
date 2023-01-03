@@ -181,7 +181,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       middleButtons={[
         <Button
           onClick={handleCancel}
-          id='cancel'
+          id='cancelAddSpecies'
           label={strings.CANCEL}
           priority='secondary'
           type='passive'
@@ -190,7 +190,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
         />,
         <Button
           onClick={initialSpecies ? saveChanges : createNewSpecies}
-          id='add-species'
+          id='saveAddSpecies'
           label={strings.SAVE}
           key='button-2'
         />,

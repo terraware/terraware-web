@@ -71,8 +71,15 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
         title={props.title}
         size='small'
         middleButtons={[
-          <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
-          <Button onClick={saveQuantity} label={strings.SAVE} key='button-2' />,
+          <Button
+            id='cancelEditViabilityTest'
+            label={strings.CANCEL}
+            type='passive'
+            onClick={onCloseHandler}
+            priority='secondary'
+            key='button-1'
+          />,
+          <Button id='saveEditViabilityTest' onClick={saveQuantity} label={strings.SAVE} key='button-2' />,
         ]}
       >
         <Grid container spacing={2} textAlign='left'>

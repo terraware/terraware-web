@@ -91,7 +91,7 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
 
   return (
     <TfMain>
-      <PageForm onCancel={goToNurseries} onSave={saveNursery}>
+      <PageForm cancelID='cancelCreateNursery' saveID='saveCreateNursery' onCancel={goToNurseries} onSave={saveNursery}>
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
             {selectedNursery ? selectedNursery.name : strings.ADD_NURSERY}

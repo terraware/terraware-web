@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export interface Props {
+  cancelID: string;
+  saveID: string;
   onCancel: () => void;
   onSave: () => void;
   cancelButtonText?: string;
@@ -43,6 +45,8 @@ export interface Props {
 }
 
 export default function FormBottomBar({
+  cancelID,
+  saveID,
   onCancel,
   onSave,
   cancelButtonText,
@@ -60,6 +64,7 @@ export default function FormBottomBar({
       className={classes.bottomBar}
     >
       <Button
+        id={cancelID || 'cancelBottomBar'}
         size='medium'
         label={cancelButtonText || 'Cancel'}
         onClick={onCancel}
@@ -68,6 +73,7 @@ export default function FormBottomBar({
         className={classes.button}
       />
       <Button
+        id={saveID || 'saveBottomBar'}
         size='medium'
         label={saveButtonText || 'Save'}
         onClick={onSave}

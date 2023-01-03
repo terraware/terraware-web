@@ -98,7 +98,12 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
 
   return (
     <TfMain>
-      <PageForm onCancel={goToSeedBanks} onSave={saveSeedBank}>
+      <PageForm
+        cancelID='cancelCreateSeedBank'
+        saveID='saveCreateSeedBank'
+        onCancel={goToSeedBanks}
+        onSave={saveSeedBank}
+      >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
             {selectedSeedBank ? selectedSeedBank?.name : strings.ADD_SEED_BANK}

@@ -432,8 +432,15 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         title={record?.id !== -1 ? strings.EDIT_VIABILITY_TEST : strings.ADD_VIABILITY_TEST}
         size='large'
         middleButtons={[
-          <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
-          <Button onClick={saveTest} label={strings.SAVE} key='button-2' />,
+          <Button
+            id='cancelNewViabilityTest'
+            label={strings.CANCEL}
+            type='passive'
+            onClick={onCloseHandler}
+            priority='secondary'
+            key='button-1'
+          />,
+          <Button id='saveNewViabilityTest' onClick={saveTest} label={strings.SAVE} key='button-2' />,
         ]}
         scrolled={true}
       >

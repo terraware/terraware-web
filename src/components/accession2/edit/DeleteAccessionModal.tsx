@@ -36,8 +36,21 @@ export default function DeleteAccessionModal(props: DeleteAccessionModalProps): 
       title={strings.DELETE_ACCESSION}
       size='medium'
       middleButtons={[
-        <Button label={strings.CANCEL} type='passive' onClick={onClose} priority='secondary' key='button-1' />,
-        <Button onClick={deleteHandler} type='destructive' label={strings.DELETE} key='button-2' />,
+        <Button
+          id='cancelDeleteAccession'
+          label={strings.CANCEL}
+          type='passive'
+          onClick={onClose}
+          priority='secondary'
+          key='button-1'
+        />,
+        <Button
+          id='saveDeleteAccession'
+          onClick={deleteHandler}
+          type='destructive'
+          label={strings.DELETE}
+          key='button-2'
+        />,
       ]}
       message={strings.formatString(strings.DELETE_ACCESSION_MESSAGE, accession.accessionNumber.toString())}
       skrim={true}

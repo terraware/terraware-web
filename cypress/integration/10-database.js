@@ -18,7 +18,7 @@ describe('Database', () => {
       cy.get('#more-options').click();
       cy.get('.MuiList-root > :nth-child(3)').click();
 
-      cy.get('#cancel').click();
+      cy.get('#cancelEditColumns').click();
       cy.get('#editColumnsDialog').should('not.exist');
 
       cy.get('#table-header').children().should('have.length', 8);

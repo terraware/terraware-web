@@ -428,7 +428,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [batchesFromNursery]);
 
   return (
-    <PageForm onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText} saveDisabled={noReadySeedlings}>
+    <PageForm
+      cancelID='cancelInventoryWithdraw'
+      saveID='saveInventoryWithdraw'
+      onCancel={onCancel}
+      onSave={onNextHandler}
+      saveButtonText={saveText}
+      saveDisabled={noReadySeedlings}
+    >
       <Container
         maxWidth={false}
         sx={{
