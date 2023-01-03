@@ -348,9 +348,6 @@ const strings = new LocalizedStrings({
     IMPORT_ACCESSIONS_DESC: 'Browse or drag and drop a CSV with accessions.',
     IMPORT_ACCESSIONS_WITH_TEMPLATE: 'Import accessions using our CSV template.',
     IMPORT_ACCESSIONS: 'Import Accessions',
-    IMPORT_BOUNDARIES_AND_PLOTS_DESCRIPTION:
-      'You’ll need to talk to your representative at Terraformation to import your map files to Terraware so you can work with your site’s boundaries and plots.',
-    IMPORT_BOUNDARIES_AND_PLOTS: 'Import boundaries and plots',
     IMPORT_DATA: 'Import Data',
     IMPORT_INVENTORY_ALT_TITLE: 'Already have an inventory database?',
     IMPORT_INVENTORY_DESC: 'Browse or drag and drop a CSV with inventory data.',
