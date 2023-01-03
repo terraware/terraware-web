@@ -44,7 +44,8 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const [fetchingData, setFetchingData] = useState<boolean>(false);
+  const [fetchingPlants, setFetchingPlants] = useState<boolean>(false);
+  const [fetchingZones, setFetchingZones] = useState<boolean>(false);
   const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
   const [zonesWithPlants, setZonesWithPlants] = useState<PlantingSiteZone[]>();
   const [hasZones, setHasZones] = useState<boolean>(false);
@@ -67,6 +68,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   useEffect(() => {
     const populateZones = async () => {
       if (plantingSite) {
+        setFetchingZones(true);
         const serverResponse: PlantingSiteZone[] | null = (await search({
           prefix: 'plantingSites.plantingZones',
           fields: [
@@ -102,11 +104,13 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
         } else {
           setHasZones(false);
         }
+        setFetchingZones(false);
       }
     };
 
     const populateTotals = async () => {
       if (plantingSite) {
+        setFetchingPlants(true);
         const serverResponse: Population[] | null = (await search({
           prefix: 'plantingSites.populations',
           fields: ['species_scientificName', 'totalPlants'],
@@ -133,13 +137,12 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
           setTotalPlants(totalPlantsOfSite);
           setPlantsBySpecies(plantsPerSpecies);
         }
+        setFetchingPlants(false);
       }
     };
 
-    setFetchingData(true);
     populateZones();
     populateTotals();
-    setFetchingData(false);
   }, [plantingSite, organization.id]);
 
   const plotsWithPlants = useMemo(() => {
@@ -149,7 +152,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
     return zonesWithPlants.flatMap((zone) => zone.plots);
   }, [zonesWithPlants]);
 
-  if (fetchingData) {
+  if (fetchingPlants || fetchingZones) {
     return <BusySpinner />;
   }
 
