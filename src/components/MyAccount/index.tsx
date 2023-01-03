@@ -189,7 +189,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
 
   return (
     <TfMain>
-      <PageForm onCancel={onCancel} onSave={saveChanges} hideEdit={!edit}>
+      <PageForm cancelID='cancelAccountChange' saveID='saveAccountChange' onCancel={onCancel} onSave={saveChanges} hideEdit={!edit}>
         {removedOrg && (
           <>
             <LeaveOrganizationDialog

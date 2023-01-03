@@ -186,7 +186,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
   // TODO: Handle the case where we cannot find the requested person to edit in the list of people.
   return (
     <TfMain>
-      <PageForm onCancel={goToPeople} onSave={() => saveUser()}>
+      <PageForm cancelID='cancelNewPerson' saveID='saveNewPerson' onCancel={goToPeople} onSave={() => saveUser()}>
         <Grid container marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Grid item xs={12}>
             <h2 className={classes.title}>{personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}</h2>

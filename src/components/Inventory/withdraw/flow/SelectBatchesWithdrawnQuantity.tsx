@@ -254,7 +254,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   };
 
   return (
-    <PageForm onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText}>
+    <PageForm cancelID='cancelSelectBatchesWithdrawnQty' saveID='saveSelectBatchesWithdrawnQty' onCancel={onCancel} onSave={onNextHandler} saveButtonText={saveText}>
       {errorPageMessage && (
         <Box sx={{ marginTop: 5, marginBottom: 3 }}>
           <ErrorBox text={errorPageMessage} className={classes.error} />

@@ -37,7 +37,7 @@ export default function DeleteViabilityTestModal(props: DeleteViabilityTestModal
       size='medium'
       middleButtons={[
         <Button
-          id='cancelDeleteViability'
+          id='cancelDeleteViabilityTest'
           label={strings.CANCEL}
           type='passive'
           onClick={onCancel}
@@ -45,7 +45,7 @@ export default function DeleteViabilityTestModal(props: DeleteViabilityTestModal
           key='button-1'
         />,
         <Button
-          id='deleteViability'
+          id='deleteViabilityTest'
           onClick={deleteHandler}
           type='destructive'
           label={strings.DELETE}
