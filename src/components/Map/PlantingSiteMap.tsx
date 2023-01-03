@@ -4,7 +4,7 @@ import hexRgb from 'hex-rgb';
 import { MultiPolygon, PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import GenericMap from './GenericMap';
-import { MapEntityOptions, MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
+import { MapEntityId, MapEntityOptions, MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
 import { getBoundingBox } from './MapUtils';
 import _ from 'lodash';
 
@@ -169,12 +169,16 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     fetchPlantingSite();
   }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractPlots, mapOptions]);
 
+  const plotEntity: MapEntityId = useMemo(() => ({ sourceId: 'plots', id: selectedPlotId }), [selectedPlotId]);
+
+  const zoneEntity: MapEntityId = useMemo(() => ({ sourceId: 'zones', id: selectedZoneId }), [selectedZoneId]);
+
   const entityOptions: MapEntityOptions = useMemo(
     () => ({
-      highlight: { sourceId: 'plots', id: selectedPlotId },
-      focus: { sourceId: 'zones', id: selectedZoneId },
+      highlight: plotEntity,
+      focus: zoneEntity,
     }),
-    [selectedPlotId, selectedZoneId]
+    [plotEntity, zoneEntity]
   );
 
   if (!mapOptions) {
