@@ -127,7 +127,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
                 organizationId={organization.id}
                 id='collectors'
                 collectors={record.collectors}
-                onChange={onChange}
+                onChange={(value) => onChange('collectors', value)}
               />
             </Grid>
             <Grid
@@ -141,7 +141,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
                 <Textfield
                   id='collectionSiteName'
                   value={record.collectionSiteName}
-                  onChange={onChange}
+                  onChange={(value) => onChange('collectionSiteName', value)}
                   type='text'
                   label={strings.COLLECTION_SITE}
                   tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
@@ -151,7 +151,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
                 <Textfield
                   id='collectionSiteLandowner'
                   value={record.collectionSiteLandowner}
-                  onChange={onChange}
+                  onChange={(value) => onChange('collectionSiteLandowner', value)}
                   type='text'
                   label={strings.LANDOWNER}
                 />

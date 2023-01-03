@@ -243,7 +243,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           <TextField
             id='familyName'
             value={record.familyName}
-            onChange={onChange}
+            onChange={(value) => onChange('familyName', value)}
             label={strings.FAMILY}
             aria-label={strings.FAMILY}
             type={'text'}

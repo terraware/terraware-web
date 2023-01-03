@@ -82,7 +82,7 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
           label={strings.COLLECTION_DATE_REQUIRED}
           aria-label={strings.COLLECTION_DATE_REQUIRED}
           value={dates.collectedDate}
-          onChange={changeDate}
+          onChange={(value) => changeDate('collectedDate', value)}
           errorText={dateErrors.collectedDate}
           maxDate={Date.now()}
         />
@@ -92,7 +92,7 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
           label={strings.RECEIVING_DATE_REQUIRED}
           aria-label={strings.RECEIVING_DATE_REQUIRED}
           value={dates.receivedDate}
-          onChange={changeDate}
+          onChange={(value) => changeDate('receivedDate', value)}
           errorText={dateErrors.receivedDate}
         />
       )}

@@ -156,7 +156,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                         id='name'
                         label={strings.NAME_REQUIRED}
                         type='text'
-                        onChange={onChange}
+                        onChange={(value) => onChange('name', value)}
                         value={record.name}
                         errorText={record.name ? '' : nameError}
                       />
@@ -166,7 +166,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                         id='description'
                         label={strings.DESCRIPTION}
                         type='textarea'
-                        onChange={onChange}
+                        onChange={(value) => onChange('description', value)}
                         value={record.description}
                       />
                     </Grid>

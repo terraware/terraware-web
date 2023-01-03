@@ -637,7 +637,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               id='search'
               type='text'
               className={classes.searchField}
-              onChange={onChangeSearch}
+              onChange={(value) => onChangeSearch('search', value)}
               value={searchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}

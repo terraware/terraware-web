@@ -556,7 +556,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Textfield
                       label={strings.WITHDRAW_QUANTITY_REQUIRED}
                       id='withdrawnQuantity'
-                      onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
+                      onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
                       type='text'
                       value={withdrawnQuantity}
                       errorText={fieldsErrors.withdrawnQuantity}
@@ -583,7 +583,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       <Textfield
                         label={strings.NOT_READY_QUANTITY_REQUIRED}
                         id='notReadyQuantityWithdrawn'
-                        onChange={(id: string, value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
+                        onChange={(value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
                         type='text'
                         value={notReadyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
@@ -597,7 +597,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         label={strings.ESTIMATED_READY_DATE}
                         aria-label={strings.ESTIMATED_READY_DATE}
                         value={localRecord.readyByDate}
-                        onChange={onChangeDate}
+                        onChange={(value) => onChangeDate('withdrawnDate', value)}
                       />
                     </Grid>
                   </Grid>
@@ -606,7 +606,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       <Textfield
                         label={strings.READY_QUANTITY_REQUIRED}
                         id='readyQuantityWithdrawn'
-                        onChange={(id: string, value: unknown) => setReadyQuantityWithdrawn(value as number)}
+                        onChange={(value: unknown) => setReadyQuantityWithdrawn(value as number)}
                         type='text'
                         value={readyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
@@ -618,7 +618,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       <Textfield
                         label={strings.WITHDRAW_QUANTITY}
                         id='withdrawQuantity'
-                        onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
+                        onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
                         type='text'
                         value={withdrawnQuantity}
                         display={true}
@@ -633,7 +633,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   label={strings.WITHDRAW_DATE_REQUIRED}
                   aria-label={strings.WITHDRAW_DATE_REQUIRED}
                   value={localRecord.withdrawnDate}
-                  onChange={onChangeDate}
+                  onChange={(value) => onChangeDate('withdrawnDate', value)}
                   errorText={fieldsErrors.withdrawnDate}
                 />
               </Grid>
@@ -642,7 +642,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               <Textfield
                 id='notes'
                 value={localRecord.notes}
-                onChange={(id, value) => updateField('notes', value)}
+                onChange={(value) => updateField('notes', value)}
                 type='textarea'
                 label={strings.NOTES}
               />

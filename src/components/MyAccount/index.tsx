@@ -259,7 +259,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
                 type='text'
                 value={record.firstName}
                 display={!edit}
-                onChange={onChange}
+                onChange={(value) => onChange('firstName', value)}
               />
             </Grid>
             <Grid item xs={isMobile ? 12 : 4}>
@@ -269,7 +269,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
                 type='text'
                 value={record.lastName}
                 display={!edit}
-                onChange={onChange}
+                onChange={(value) => onChange('lastName', value)}
               />
             </Grid>
             <Grid item xs={isMobile ? 12 : 4}>
@@ -296,7 +296,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
                 name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
                 label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
                 value={record.emailNotificationsEnabled}
-                onChange={onChange}
+                onChange={(value) => onChange('emailNotificationsEnabled', value)}
               />
             </Grid>
             <Grid item xs={12} />

@@ -59,7 +59,7 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
           <Autocomplete
             id={`collector${index}`}
             selected={collector}
-            onChange={(unused, value) => onCollectorChange(value, index)}
+            onChange={(value) => onCollectorChange(value, index)}
             label={index === 0 ? strings.COLLECTORS : ''}
             placeholder={strings.COLLECTORS}
             values={collectorsOpt || []}

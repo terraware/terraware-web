@@ -137,7 +137,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             label={strings.ORGANIZATION_NAME_REQUIRED}
             type='text'
             id='name'
-            onChange={onChange}
+            onChange={(value) => onChange('name', value)}
             errorText={newOrganization.name ? '' : nameError}
             value={newOrganization.name}
           />
@@ -147,7 +147,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             label={strings.DESCRIPTION}
             type='text'
             id='description'
-            onChange={onChange}
+            onChange={(value) => onChange('description', value)}
             value={newOrganization.description}
           />
         </Grid>

@@ -408,7 +408,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 )
                 .toString()}
               id='withdrawnQuantity'
-              onChange={(id, value) => onChangeWithdrawnQuantity(value as number)}
+              onChange={(value) => onChangeWithdrawnQuantity(Number(value))}
               type='text'
               value={
                 isNurseryTransfer
@@ -437,7 +437,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             id='withdrawAll'
             name=''
             label={strings.WITHDRAW_ALL}
-            onChange={onSelectAll}
+            onChange={(value) => onSelectAll('withdrawAll', value)}
             value={withdrawAllSelected}
           />
         </Grid>
@@ -464,7 +464,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 label={strings.ESTIMATED_READY_DATE}
                 aria-label={strings.ESTIMATED_READY_DATE}
                 value={nurseryTransferRecord.readyByDate}
-                onChange={onChangeDate}
+                onChange={(value) => onChangeDate('readyByDate', value)}
                 errorText={fieldsErrors.readyByDate}
               />
             </Grid>
@@ -476,13 +476,19 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             label={strings.DATE}
             aria-label={strings.DATE}
             value={record.date}
-            onChange={onChangeDate}
+            onChange={(value) => onChangeDate('date', value)}
             errorText={fieldsErrors.date}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
           {isNotesOpened ? (
-            <Textfield id='notes' value={record.notes} onChange={onChangeNotes} type='textarea' label={strings.NOTES} />
+            <Textfield
+              id='notes'
+              value={record.notes}
+              onChange={(value) => onChangeNotes('notes', value)}
+              type='textarea'
+              label={strings.NOTES}
+            />
           ) : (
             <Box display='flex' justifyContent='flex-start'>
               <AddLink id='addNotes' onClick={() => setIsNotesOpened(true)} text={strings.ADD_NOTES} large={true} />

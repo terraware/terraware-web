@@ -118,7 +118,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
                 id='name'
                 label={strings.NAME_REQUIRED}
                 type='text'
-                onChange={onChange}
+                onChange={(value) => onChange('name', value)}
                 value={record.name}
                 errorText={record.name ? '' : nameError}
               />
@@ -128,7 +128,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
                 id='description'
                 label={strings.DESCRIPTION_REQUIRED}
                 type='textarea'
-                onChange={onChange}
+                onChange={(value) => onChange('description', value)}
                 value={record.description}
                 errorText={record.description ? '' : descriptionError}
               />

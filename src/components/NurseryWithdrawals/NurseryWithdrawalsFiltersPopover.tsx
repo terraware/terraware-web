@@ -236,7 +236,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                       name={n.name}
                       label={n.name}
                       value={hasFilter('fromNurseryIds', n.id)}
-                      onChange={(id, value) => onChangeHandler(id, value, 'fromNurseryIds')}
+                      onChange={(value) => onChangeHandler(n.id.toString(), value, 'fromNurseryIds')}
                     />
                   </Grid>
                 ))}
@@ -252,7 +252,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                       name={purpose}
                       label={purpose}
                       value={hasFilter('purposes', purpose)}
-                      onChange={(id, value) => onChangeHandler(id, value, 'purposes')}
+                      onChange={(value) => onChangeHandler(purpose, value, 'purposes')}
                     />
                   </Grid>
                 ))}
@@ -266,14 +266,14 @@ export default function NurseryWithdrawalsFiltersPopover({
                   label={strings.START}
                   aria-label={strings.DATE}
                   value={temporalRecord.withdrawnDates ? temporalRecord.withdrawnDates[0] : ''}
-                  onChange={onChangeDate}
+                  onChange={(value) => onChangeDate('startDate', value)}
                 />
                 <DatePicker
                   id='endDate'
                   label={strings.END}
                   aria-label={strings.DATE}
                   value={temporalRecord.withdrawnDates ? temporalRecord.withdrawnDates[1] : ''}
-                  onChange={onChangeDate}
+                  onChange={(value) => onChangeDate('endDate', value)}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -287,7 +287,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                       name={plantingSite.name}
                       label={plantingSite.name}
                       value={hasFilter('destinationNames', plantingSite.name)}
-                      onChange={(id, value) => onChangeHandler(id, value, 'destinationNames')}
+                      onChange={(value) => onChangeHandler(plantingSite.name.toString(), value, 'destinationNames')}
                     />
                   </Grid>
                 ))}
@@ -303,7 +303,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                       name={iSpecies.scientificName}
                       label={iSpecies.scientificName}
                       value={hasFilter('speciesId', iSpecies.id)}
-                      onChange={(id, value) => onChangeHandler(id, value, 'speciesId')}
+                      onChange={(value) => onChangeHandler(iSpecies.id.toString(), value, 'speciesId')}
                     />
                   </Grid>
                 ))}
