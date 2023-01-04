@@ -108,7 +108,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
               label={strings.MOVE}
               id={'movedValue'}
               type={'number'}
-              onChange={(id, value) => onChangeMovedValue(value)}
+              onChange={(value) => onChangeMovedValue(value)}
             />
           </Box>
           <Box paddingLeft={1} paddingRight={3} paddingTop={4}>

@@ -564,7 +564,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     label={record?.testType === 'Cut' ? strings.TEST_DATE_REQUIRED : strings.START_DATE_REQUIRED}
                     aria-label={strings.DATE}
                     value={record?.startDate}
-                    onChange={onChange}
+                    onChange={(value) => onChange('startDate', value)}
                     disabled={readOnly}
                     errorText={viabilityFieldsErrors.startDate}
                   />
@@ -574,7 +574,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     <Textfield
                       label={strings.NUMBER_OF_SEEDS_FILLED_REQUIRED}
                       type='text'
-                      onChange={onChangeCutValue}
+                      onChange={(value) => onChangeCutValue('seedsFilled', value)}
                       id='seedsFilled'
                       value={record?.seedsFilled}
                       errorText={validateFields && !record?.seedsFilled ? strings.REQUIRED_FIELD : ''}
@@ -583,7 +583,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     <Textfield
                       label={strings.NUMBER_OF_SEEDS_TESTED_REQUIRED}
                       type='text'
-                      onChange={onChangeSeedsTested}
+                      onChange={(value) => onChangeSeedsTested('seedsTested', value)}
                       id='seedsTested'
                       value={record?.seedsTested}
                       disabled={readOnly}
@@ -600,7 +600,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       <Textfield
                         label={strings.NUMBER_OF_SEEDS_COMPROMISED_REQUIRED}
                         type='text'
-                        onChange={onChangeCutValue}
+                        onChange={(value) => onChangeCutValue('seedsCompromised', value)}
                         id='seedsCompromised'
                         value={record?.seedsCompromised}
                         errorText={validateFields && !record?.seedsCompromised ? strings.REQUIRED_FIELD : ''}
@@ -610,7 +610,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       <Textfield
                         label={strings.NUMBER_OF_SEEDS_EMPTY_REQUIRED}
                         type='text'
-                        onChange={onChangeCutValue}
+                        onChange={(value) => onChangeCutValue('seedsEmpty', value)}
                         id='seedsEmpty'
                         value={record?.seedsEmpty}
                         errorText={validateFields && !record?.seedsEmpty ? strings.REQUIRED_FIELD : ''}
@@ -640,7 +640,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       label={strings.CHECK_DATE_REQUIRED}
                       aria-label={strings.DATE}
                       value={testResult.recordingDate}
-                      onChange={(id, value) => onResultChange(id, value, index)}
+                      onChange={(value) => onResultChange('recordingDate', value, index)}
                       disabled={readOnly}
                       errorText={viabilityFieldsErrors[`recordingDate${index}`]}
                     />
@@ -650,7 +650,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       <Textfield
                         label={strings.NUMBER_OF_SEEDS_GERMINATED_REQUIRED}
                         type='text'
-                        onChange={(id, value) => onResultChange(id, value, index)}
+                        onChange={(value) => onResultChange('seedsGerminated', value, index)}
                         id='seedsGerminated'
                         value={testResult.seedsGerminated}
                         disabled={readOnly}
@@ -696,7 +696,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                   {record?.testResults && record.testResults.length > 0 && (
                     <Checkbox
                       label={strings.MARK_AS_COMPLETE}
-                      onChange={(id, value) => markTestAsComplete(value)}
+                      onChange={(value) => markTestAsComplete(value)}
                       id='markAsComplete'
                       name='markAsComplete'
                       value={testCompleted}
@@ -709,7 +709,13 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             </Grid>
           </Grid>
           <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-            <Textfield id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+            <Textfield
+              id='notes'
+              value={record?.notes}
+              onChange={(value) => onChange('notes', value)}
+              type='textarea'
+              label={strings.NOTES}
+            />
           </Grid>
         </Grid>
       </DialogBox>

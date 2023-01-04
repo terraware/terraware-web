@@ -218,7 +218,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
                 id='email'
                 label={strings.EMAIL_REQUIRED}
                 type='text'
-                onChange={onChange}
+                onChange={(value) => onChange('email', value)}
                 value={newPerson.email}
                 disabled={!!personSelectedToEdit}
                 errorText={emailError}
@@ -229,7 +229,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
                 id='firstName'
                 label={strings.FIRST_NAME}
                 type='text'
-                onChange={onChange}
+                onChange={(value) => onChange('firstName', value)}
                 disabled={true}
                 value={newPerson.firstName}
               />
@@ -239,7 +239,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
                 id='lastName'
                 label={strings.LAST_NAME}
                 type='text'
-                onChange={onChange}
+                onChange={(value) => onChange('lastName', value)}
                 disabled={true}
                 value={newPerson.lastName}
               />

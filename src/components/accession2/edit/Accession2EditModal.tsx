@@ -89,7 +89,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             type='text'
             label={strings.ID}
             value={record?.accessionNumber}
-            onChange={onChange}
+            onChange={(value) => onChange('accessionNumber', value)}
             readonly={true}
             tooltipTitle={strings.TOOLTIP_ACCESSIONS_ID}
           />
@@ -119,7 +119,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             type='text'
             label={strings.COLLECTING_SITE}
             value={record?.collectionSiteName}
-            onChange={onChange}
+            onChange={(value) => onChange('collectionSiteName', value)}
             tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
           />
         </Grid>
@@ -130,7 +130,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             type='text'
             label={strings.LANDOWNER}
             value={record?.collectionSiteLandowner}
-            onChange={onChange}
+            onChange={(value) => onChange('collectionSiteLandowner', value)}
           />
         </Grid>
         <Accession2Address record={record} onChange={onChange} opened={true} />

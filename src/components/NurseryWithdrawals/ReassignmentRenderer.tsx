@@ -53,7 +53,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
       .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
       .map((otherPlot) => ({ ...otherPlot, value: otherPlot.id, label: otherPlot.name }));
 
-    const onUpdateQuantity = (unused: string, value: any) => {
+    const onUpdateQuantity = (value: any) => {
       if (value === '') {
         updateReassignment('quantity', undefined);
         return;
@@ -72,7 +72,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
         <Autocomplete
           id={`newPlot_${plantingId}`}
           selected={newPlot}
-          onChange={(unused, newPlotValue: any) => {
+          onChange={(newPlotValue: any) => {
             if (newPlotValue.value) {
               updateReassignment('newPlot', newPlotValue);
             }
@@ -117,7 +117,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
         <Textfield
           id={`notes_${plantingId}`}
           type='text'
-          onChange={(unused, text: any) => updateReassignment('notes', text)}
+          onChange={(text: any) => updateReassignment('notes', text)}
           value={notes}
           label={''}
           className={classes.text}

@@ -71,7 +71,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
             type='text'
             id='reportName'
             value={name}
-            onChange={(id, value) => {
+            onChange={(value) => {
               setName(value as string);
             }}
             label={strings.REPORT_NAME}

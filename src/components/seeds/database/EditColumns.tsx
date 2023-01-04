@@ -115,7 +115,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
                           name={key}
                           label={oName}
                           value={value.includes(key)}
-                          onChange={(id, newValue) => onChange(key, newValue)}
+                          onChange={(newValue) => onChange(key, newValue)}
                         />
                       </Grid>
                     ))}

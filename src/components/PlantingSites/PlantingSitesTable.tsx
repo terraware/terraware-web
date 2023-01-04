@@ -47,7 +47,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             label=''
             id='search'
             type='text'
-            onChange={(id, value) => setTemporalSearchValue(value as string)}
+            onChange={(value) => setTemporalSearchValue(value as string)}
             value={temporalSearchValue}
             iconRight='cancel'
             onClickRightIcon={() => setTemporalSearchValue('')}
