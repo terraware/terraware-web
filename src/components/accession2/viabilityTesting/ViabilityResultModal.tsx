@@ -55,8 +55,15 @@ export default function ViabilityResultModal(props: ViabilityResultModalProps): 
       title={strings.VIABILITY_TEST}
       size='large'
       middleButtons={[
-        <Button label={strings.CANCEL} type='passive' onClick={onClose} priority='secondary' key='button-1' />,
-        <Button onClick={saveResult} label={strings.APPLY_RESULT} key='button-2' />,
+        <Button
+          id='cancelViabilityResult'
+          label={strings.CANCEL}
+          type='passive'
+          onClick={onClose}
+          priority='secondary'
+          key='button-1'
+        />,
+        <Button id='saveViabilityResult' onClick={saveResult} label={strings.APPLY_RESULT} key='button-2' />,
       ]}
       scrolled={true}
     >

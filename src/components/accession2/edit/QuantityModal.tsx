@@ -139,8 +139,21 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
         title={props.title}
         size='small'
         middleButtons={[
-          <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
-          <Button onClick={saveQuantity} label={strings.SAVE} key='button-2' disabled={!hasChanged} />,
+          <Button
+            id='cancelQuantity'
+            label={strings.CANCEL}
+            type='passive'
+            onClick={onCloseHandler}
+            priority='secondary'
+            key='button-1'
+          />,
+          <Button
+            id='saveQuantity'
+            onClick={saveQuantity}
+            label={strings.SAVE}
+            key='button-2'
+            disabled={!hasChanged}
+          />,
         ]}
       >
         {statusEdit === true && (

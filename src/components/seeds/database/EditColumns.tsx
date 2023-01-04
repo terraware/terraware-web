@@ -71,7 +71,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
           type='passive'
           onClick={handleCancel}
           key='button-1'
-          id='cancel'
+          id='cancelEditColumns'
         />,
         <Button label={strings.SAVE_CHANGES} onClick={handleOk} key='button-2' id='saveColumnsButton' />,
       ]}

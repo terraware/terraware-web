@@ -116,7 +116,12 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
 
   return (
     <TfMain>
-      <PageForm onCancel={goToPlantingSites} onSave={savePlantingSite}>
+      <PageForm
+        cancelID='cancelCreatePlantingSite'
+        saveID='saveCreatePlantingSite'
+        onCancel={goToPlantingSites}
+        onSave={savePlantingSite}
+      >
         <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           {loaded && (
             <>
@@ -173,7 +178,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                   </Grid>
                 </Box>
               </Grid>
-              <BoundariesAndPlots plantingSite={record} />
+              {record?.boundary && <BoundariesAndPlots plantingSite={record} />}
             </>
           )}
         </Container>

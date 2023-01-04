@@ -74,6 +74,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
       size='medium'
       middleButtons={[
         <Button
+          id='cancelChangeQuantity'
           label={strings.CANCEL}
           priority='secondary'
           type='passive'
@@ -81,7 +82,14 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
           size='medium'
           key='button-1'
         />,
-        <Button label={strings.SAVE} type='productive' onClick={onSubmit} size='medium' key='button-2' />,
+        <Button
+          id='saveChangeQuantity'
+          label={strings.SAVE}
+          type='productive'
+          onClick={onSubmit}
+          size='medium'
+          key='button-2'
+        />,
       ]}
     >
       <Grid>

@@ -5,6 +5,8 @@ import FormBottomBar from './FormBottomBar';
 
 export interface PageFormProps {
   children: ReactNode;
+  cancelID: string;
+  saveID: string;
   onCancel: () => void;
   onSave: () => void;
   cancelButtonText?: string;

@@ -37,8 +37,15 @@ export default function AssignNewOwnerDialog(props: AssignNewOwnerDialogProps): 
       title={strings.ASSIGN_NEW_OWNER}
       size='medium'
       middleButtons={[
-        <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onClose} key='button-1' />,
-        <Button label={strings.ASSIGN} onClick={onSubmit} key='button-2' />,
+        <Button
+          id='cancelAssignNewOwner'
+          label={strings.CANCEL}
+          priority='secondary'
+          type='passive'
+          onClick={onClose}
+          key='button-1'
+        />,
+        <Button id='saveAssignNewOwner' label={strings.ASSIGN} onClick={onSubmit} key='button-2' />,
       ]}
       skrim={true}
     >

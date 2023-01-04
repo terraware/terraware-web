@@ -18,6 +18,7 @@ import { isContributor } from 'src/utils/organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportInventoryModal, { downloadInventoryCsvTemplate } from '../Inventory/ImportInventoryModal';
+import PlantingSiteTypeSelect from '../PlantingSites/PlantingSiteTypeSelect';
 
 interface StyleProps {
   isMobile: boolean;
@@ -95,20 +96,6 @@ const NO_NURSERIES_CONTENT: PageContent = {
   linkLocation: APP_PATHS.NURSERIES_NEW,
 };
 
-const NO_PLANTING_SITES_CONTENT: PageContent = {
-  title1: strings.PLANTING_SITES,
-  title2: strings.ADD_A_PLANTING_SITE,
-  subtitle: strings.ADD_A_PLANTING_SITE_SUBTITLE,
-  listItems: [
-    {
-      icon: 'blobbyIconSite',
-    },
-  ],
-  buttonText: strings.ADD_PLANTING_SITE,
-  buttonIcon: 'plus',
-  linkLocation: APP_PATHS.PLANTING_SITES_NEW,
-};
-
 type EmptyStatePageProps = {
   backgroundImageVisible?: boolean;
   pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites';
@@ -146,6 +133,7 @@ export default function EmptyStatePage({
   const [addSpeciesModalOpened, setAddSpeciesModalOpened] = useState(false);
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);
   const [importInventoryModalOpened, setImportInventoryModalOpened] = useState(false);
+  const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
 
   const NO_SPECIES_CONTENT: PageContent = {
     title1: strings.SPECIES,
@@ -211,6 +199,22 @@ export default function EmptyStatePage({
     title2: strings.REACH_OUT_TO_ADMIN_TITLE,
     subtitle: strings.NO_SPECIES_CONTRIBUTOR_MSG,
     listItems: [],
+  };
+
+  const NO_PLANTING_SITES_CONTENT: PageContent = {
+    title1: strings.PLANTING_SITES,
+    title2: strings.ADD_A_PLANTING_SITE,
+    subtitle: strings.ADD_A_PLANTING_SITE_SUBTITLE,
+    listItems: [
+      {
+        icon: 'blobbyIconSite',
+        buttonText: strings.ADD_PLANTING_SITE,
+        buttonIcon: 'plus',
+        onClickButton: () => {
+          setPlantingSiteTypeSelectOpen(true);
+        },
+      },
+    ],
   };
 
   const pageContent = (): PageContent => {
@@ -296,6 +300,7 @@ export default function EmptyStatePage({
           />
         </>
       )}
+      <PlantingSiteTypeSelect open={plantingSiteTypeSelectOpen} onClose={() => setPlantingSiteTypeSelectOpen(false)} />
       {content.title1 && (
         <>
           <PageHeader title={content.title1} subtitle='' />

@@ -89,7 +89,13 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
 
   return (
     <TfMain>
-      <PageForm onCancel={goToAccessions} onSave={saveAccession} saveButtonText={strings.CREATE}>
+      <PageForm
+        cancelID='cancelCreateAccession'
+        saveID='saveCreateAccession'
+        onCancel={goToAccessions}
+        onSave={saveAccession}
+        saveButtonText={strings.CREATE}
+      >
         <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 600, marginBottom: theme.spacing(4) }}>
           {strings.ADD_AN_ACCESSION}
         </Typography>

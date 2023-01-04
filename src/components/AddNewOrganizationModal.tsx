@@ -127,8 +127,15 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       title={strings.ADD_ORGANIZATION}
       size='medium'
       middleButtons={[
-        <Button label={strings.CANCEL} priority='secondary' type='passive' onClick={onCancelWrapper} key='button-1' />,
-        <Button label={strings.SAVE} onClick={saveOrganization} key='button-2' />,
+        <Button
+          id='cancelCreateOrg'
+          label={strings.CANCEL}
+          priority='secondary'
+          type='passive'
+          onClick={onCancelWrapper}
+          key='button-1'
+        />,
+        <Button id='saveCreateOrg' label={strings.SAVE} onClick={saveOrganization} key='button-2' />,
       ]}
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>

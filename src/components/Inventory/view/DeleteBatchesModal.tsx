@@ -29,6 +29,7 @@ export default function DeleteBatchesModal(props: DeleteBatchesModalProps): JSX.
       size='medium'
       middleButtons={[
         <Button
+          id='cancelDeleteBatch'
           label={strings.CANCEL}
           priority='secondary'
           type='passive'
@@ -37,6 +38,7 @@ export default function DeleteBatchesModal(props: DeleteBatchesModalProps): JSX.
           key='button-1'
         />,
         <Button
+          id='saveDeleteBatch'
           label={strings.DELETE}
           icon='iconTrashCan'
           type='destructive'

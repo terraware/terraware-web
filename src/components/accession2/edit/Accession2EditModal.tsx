@@ -70,8 +70,15 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
       title={strings.EDIT_ACCESSION_DETAIL}
       size='x-large'
       middleButtons={[
-        <Button label={strings.CANCEL} type='passive' onClick={onCloseHandler} priority='secondary' key='button-1' />,
-        <Button onClick={saveAccession} label={strings.SAVE} key='button-2' />,
+        <Button
+          id='cancelEditAccession'
+          label={strings.CANCEL}
+          type='passive'
+          onClick={onCloseHandler}
+          priority='secondary'
+          key='button-1'
+        />,
+        <Button id='saveEditAccession' onClick={saveAccession} label={strings.SAVE} key='button-2' />,
       ]}
       scrolled={true}
     >

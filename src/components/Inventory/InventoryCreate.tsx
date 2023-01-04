@@ -101,7 +101,13 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
 
   return (
     <TfMain>
-      <PageForm onCancel={goToInventory} onSave={saveInventory} saveButtonText={strings.SAVE}>
+      <PageForm
+        cancelID='cancelAddInventory'
+        saveID='saveAddInventory'
+        onCancel={goToInventory}
+        onSave={saveInventory}
+        saveButtonText={strings.SAVE}
+      >
         <Typography sx={{ paddingLeft: theme.spacing(3), fontWeight: 600, fontSize: '24px' }}>
           {strings.ADD_INVENTORY}
         </Typography>
