@@ -53,7 +53,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
       .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
       .map((otherPlot) => ({ ...otherPlot, value: otherPlot.id, label: otherPlot.name }));
 
-    const onUpdateQuantity = (unused: string, value: any) => {
+    const onUpdateQuantity = (value: any) => {
       if (value === '') {
         updateReassignment('quantity', undefined);
         return;
@@ -97,7 +97,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
             id={`quantity_${plantingId}`}
             type='number'
             min={0}
-            onChange={(newValue) => onUpdateQuantity(`quantity_${plantingId}`, newValue)}
+            onChange={onUpdateQuantity}
             value={quantity}
             label={''}
             errorText={error.quantity}

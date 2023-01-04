@@ -173,7 +173,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 <Textfield
                   id='scientificName'
                   value={speciesSelected?.scientificName}
-                  onChange={(value) => onChange('scientificName', value)}
                   type='text'
                   label={strings.SPECIES}
                   display={true}
@@ -183,7 +182,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 <Textfield
                   id='commonName'
                   value={speciesSelected?.commonName}
-                  onChange={(value) => onChange('commonName', value)}
                   type='text'
                   label={strings.COMMON_NAME}
                   display={true}
@@ -191,9 +189,8 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
-                  id='seedilingBatch'
+                  id='seedlingBatch'
                   value={record.batchNumber}
-                  onChange={(value) => onChange('seedilingBatch', value)}
                   type='text'
                   label={strings.SEEDLING_BATCH}
                   display={true}
@@ -213,14 +210,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 )}
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                <Textfield
-                  id='nursery'
-                  value={facilityName}
-                  onChange={(value) => onChange('nursery', value)}
-                  type='text'
-                  label={strings.NURSERY}
-                  display={true}
-                />
+                <Textfield id='nursery' value={facilityName} type='text' label={strings.NURSERY} display={true} />
               </Grid>
             </Grid>
           )}
@@ -297,7 +287,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               <Textfield
                 id='totalQuantity'
                 value={totalQuantity}
-                onChange={(value) => onChange('totalQuantity', value)}
                 type='text'
                 label={strings.TOTAL_QUANTITY}
                 display={true}
