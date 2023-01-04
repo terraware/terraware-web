@@ -1,3 +1,5 @@
+yarn run v1.22.19
+$ /Users/kb/Work/terraformation/terraware-web/node_modules/.bin/prettier /Users/kb/Work/terraformation/terraware-web/public/index.html
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,24 +14,39 @@
         j.async = true;
         j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl + auth;
         f.parentNode.insertBefore(j, f);
-      };
+      }
       function gtmConfig(userId, internalUser, tagId, auth) {
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({ 'user-id': userId, 'internal-user': internalUser });
         gtm(window, document, 'script', 'dataLayer', tagId, auth);
-      };
+      }
       if (window.location.hostname.match(/^(www.)?staging.terraware.io$/i)) {
-        window.INIT_GTAG = function(userId, internalUser) {
-          gtmConfig(userId, internalUser, 'GTM-TNX8NWM', '&gtm_auth=Iwp9NkwNGO7TelQuq94FhQ&gtm_preview=env-7&gtm_cookies_win=x');
+        window.INIT_GTAG = function (userId, internalUser) {
+          gtmConfig(
+            userId,
+            internalUser,
+            'GTM-TNX8NWM',
+            '&gtm_auth=Iwp9NkwNGO7TelQuq94FhQ&gtm_preview=env-7&gtm_cookies_win=x'
+          );
         };
       } else if (window.location.hostname.match(/^(www.)?terraware.io$/i)) {
-        window.INIT_GTAG = function(userId, internalUser) {
-          gtmConfig(userId, internalUser, 'GTM-TNX8NWM', '&gtm_auth=oxl4mxgvnvET8ov_75EuYA&gtm_preview=env-1&gtm_cookies_win=x');
+        window.INIT_GTAG = function (userId, internalUser) {
+          gtmConfig(
+            userId,
+            internalUser,
+            'GTM-TNX8NWM',
+            '&gtm_auth=oxl4mxgvnvET8ov_75EuYA&gtm_preview=env-1&gtm_cookies_win=x'
+          );
         };
       } else {
         // Uncomment this function to track non-staging/prod environments
-        window.INIT_GTAG = function(userId, internalUser) {
-          gtmConfig(userId, internalUser, 'GTM-TNX8NWM', '&gtm_auth=1591mjZEVL_pulZkOX4gWg&gtm_preview=env-11&gtm_cookies_win=x');
+        window.INIT_GTAG = function (userId, internalUser) {
+          gtmConfig(
+            userId,
+            internalUser,
+            'GTM-TNX8NWM',
+            '&gtm_auth=1591mjZEVL_pulZkOX4gWg&gtm_preview=env-11&gtm_cookies_win=x'
+          );
         };
       }
     </script>
@@ -74,3 +91,4 @@
     -->
   </body>
 </html>
+Done in 3.22s.
