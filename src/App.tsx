@@ -315,10 +315,10 @@ export default function App() {
       const response = await getUser();
       if (response.requestSucceeded) {
         setUser(response.user ?? undefined);
-        if (response.user && !userState?.gtmInstrumented && window.dataLayer) {
+        if (response.user && !userState?.gtmInstrumented && (window as any).dataLayer) {
           setUserState({ gtmInstrumented: true });
-          window.dataLayer.push({
-            'internal_user': response.user.email.toLowerCase().endsWith('@terraformation.com') ? 'true' : 'false',
+          (window as any).dataLayer.push({
+            internal_user: response.user.email?.toLowerCase()?.endsWith('@terraformation.com') ? 'true' : 'false',
             'user-id': response.user.id.toString(),
           });
         }
