@@ -16,7 +16,7 @@
       };
       function gtmConfig(userId, internalUser, tagId, auth) {
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ 'user_id': userId, 'internal_user': internalUser });
+        window.dataLayer.push({ 'user-id': userId, 'internal-user': internalUser });
         gtm(window, document, 'script', 'dataLayer', tagId, auth);
       };
       if (window.location.hostname.match(/^(www.)?staging.terraware.io$/i)) {
