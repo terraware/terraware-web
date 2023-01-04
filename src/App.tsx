@@ -318,7 +318,7 @@ export default function App() {
         if (response.user && !userState?.gtmInstrumented && (window as any).dataLayer) {
           setUserState({ gtmInstrumented: true });
           (window as any).dataLayer.push({
-            internal_user: response.user.email?.toLowerCase()?.endsWith('@terraformation.com') ? 'true' : 'false',
+            'internal-user': response.user.email?.toLowerCase()?.endsWith('@terraformation.com') ? 'true' : 'false',
             'user-id': response.user.id.toString(),
           });
         }
