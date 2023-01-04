@@ -16,10 +16,10 @@
       function gtmConfig(userId, internalUser, tagId, auth) {
         window.dataLayer = window.dataLayer || [];
         if (userId) {
-          window.dataLayer.push({ 'user_id': userId });
+          window.dataLayer.push({ user_id: userId });
         }
         if (internalUser) {
-          window.dataLayer.push({ 'internal_user': internalUser });
+          window.dataLayer.push({ internal_user: internalUser });
         }
         gtm(window, document, 'script', 'dataLayer', tagId, auth);
       }
