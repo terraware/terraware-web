@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import hexRgb from 'hex-rgb';
+import { useRecoilState } from 'recoil';
+import userAtom from 'src/state/user';
 import useQuery from './utils/useQuery';
 import useStateLocation, { getLocation } from './utils/useStateLocation';
 import { getOrganizations } from 'src/api/organization/organization';
@@ -147,6 +149,7 @@ export default function App() {
   const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
   const [orgScopedPreferences, setOrgScopedPreferences] = useState<{ [key: string]: unknown }>();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
+  const [userState, setUserState] = useRecoilState(userAtom);
   const { isProduction } = useEnvironment();
   const trackingEnabled = isRouteEnabled('Tracking V1');
 
@@ -312,10 +315,17 @@ export default function App() {
       const response = await getUser();
       if (response.requestSucceeded) {
         setUser(response.user ?? undefined);
+        if (response.user && !userState?.gtmInstrumented && window.dataLayer) {
+          setUserState({ gtmInstrumented: true });
+          window.dataLayer.push({
+            'internal_user': response.user.email.toLowerCase().endsWith('@terraformation.com') ? 'true' : 'false',
+            'user-id': response.user.id.toString(),
+          });
+        }
       }
     };
     populateUser();
-  }, []);
+  }, [userState, setUserState]);
 
   useEffect(() => {
     if (
