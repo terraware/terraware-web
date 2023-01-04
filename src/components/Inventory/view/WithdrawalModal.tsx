@@ -178,7 +178,6 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
               <Textfield
                 id='scientificName'
                 value={speciesSelected?.scientificName}
-                onChange={(value) => onChange('scientificName', value)}
                 type='text'
                 label={strings.SPECIES}
                 display={true}
@@ -188,7 +187,6 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
               <Textfield
                 id='commonName'
                 value={speciesSelected?.commonName}
-                onChange={(value) => onChange('commonName', value)}
                 type='text'
                 label={strings.COMMON_NAME}
                 display={true}
@@ -196,9 +194,8 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
-                id='seedilingBatch'
+                id='seedlingBatch'
                 value={selectedBatch.batchNumber}
-                onChange={(value) => onChange('seedilingBatch', value)}
                 type='text'
                 label={strings.SEEDLING_BATCH}
                 display={true}
@@ -286,7 +283,6 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                       <Textfield
                         id='withdrawnQuantity'
                         value={withdrawQuantity}
-                        onChange={(value) => onChange('withdrawnQuantity', value)}
                         type='text'
                         label={strings.WITHDRAW_QUANTITY}
                         display={true}
