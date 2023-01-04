@@ -24,7 +24,7 @@ export const OPT_IN_FEATURES: Feature[] = [
     name: 'Tracking V1',
     preferenceName: 'enableTrackingV1',
     active: true,
-    enabled: false,
+    enabled: true,
     allowInternalProduction: false,
     description: ['Shows new tracking v1 workflows'],
     disclosure: ['This is WIP.'],
