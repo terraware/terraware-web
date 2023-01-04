@@ -68,7 +68,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
     <Typography
       fontSize='16px'
       fontWeight={500}
-      color={theme.palette.ClrTextFill}
+      color={theme.palette.TwClrTxt}
       marginRight={theme.spacing(1)}
       minWidth='40px'
       textAlign='right'
