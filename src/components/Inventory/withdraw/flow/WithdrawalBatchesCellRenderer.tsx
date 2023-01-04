@@ -28,14 +28,16 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   const { column, row, value, index, onRowClick } = props;
 
   const createLinkToBatchDetail = (iValue: React.ReactNode | unknown[]) => {
-    return (
-      <Link
-        to={`${APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.speciesId.toString())}?batch=${iValue}`}
-        target='_blank'
-      >
-        {iValue}
-      </Link>
-    );
+    if (!Array.isArray(iValue)) {
+      return (
+        <Link
+          to={`${APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.speciesId.toString())}?batch=${iValue}`}
+          target='_blank'
+        >
+          {iValue}
+        </Link>
+      );
+    }
   };
 
   const createQuantityInput = (id: string, valueProperty: string) => {

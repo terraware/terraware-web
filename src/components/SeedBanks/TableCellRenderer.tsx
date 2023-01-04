@@ -11,7 +11,9 @@ export default function SeedBanksCellRenderer(props: RendererProps<TableRowType>
     const seedBankLocation = {
       pathname: APP_PATHS.SEED_BANKS_VIEW.replace(':seedBankId', row.id.toString()),
     };
-    return <Link to={seedBankLocation.pathname}>{iValue}</Link>;
+    if (!Array.isArray(iValue)) {
+      return <Link to={seedBankLocation.pathname}>{iValue}</Link>;
+    }
   };
 
   if (column.key === 'name') {

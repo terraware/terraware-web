@@ -33,11 +33,15 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
   };
 
   const createLinkToBatch = (iValue: React.ReactNode | unknown[]) => {
-    return <Link onClick={rowClick}>{iValue}</Link>;
+    if (!Array.isArray(iValue)) {
+      return <Link onClick={rowClick}>{iValue}</Link>;
+    }
   };
 
   const createText = (iValue: React.ReactNode | unknown[]) => {
-    return <Typography className={classes.text}>{iValue}</Typography>;
+    if (!Array.isArray(iValue)) {
+      return <Typography className={classes.text}>{iValue}</Typography>;
+    }
   };
 
   if (column.key === 'withdraw') {

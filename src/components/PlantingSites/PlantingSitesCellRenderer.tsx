@@ -19,7 +19,9 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
   const { column, row, value, index } = props;
 
   const createLinkToPlantingSiteView = (iValue: React.ReactNode | unknown[]) => {
-    return <Link to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', row.id.toString())}>{iValue}</Link>;
+    if (!Array.isArray(iValue)) {
+      return <Link to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', row.id.toString())}>{iValue}</Link>;
+    }
   };
 
   if (column.key === 'name') {

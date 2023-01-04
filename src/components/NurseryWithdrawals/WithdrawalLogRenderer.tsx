@@ -37,11 +37,13 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
       ':withdrawalId',
       row.id.toString()
     );
-    return (
-      <Link to={nurseryWithdrawalDetailLocation} className={classes.link}>
-        {iValue}
-      </Link>
-    );
+    if (!Array.isArray(iValue)) {
+      return (
+        <Link to={nurseryWithdrawalDetailLocation} className={classes.link}>
+          {iValue}
+        </Link>
+      );
+    }
   };
 
   const getTruncated = (inputValues: any) => {
