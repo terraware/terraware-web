@@ -315,13 +315,12 @@ export default function App() {
       const response = await getUser();
       if (response.requestSucceeded) {
         setUser(response.user ?? undefined);
-        if (response.user && !userState?.gtmInstrumented && (window as any).dataLayer) {
+        if (response.user && !userState?.gtmInstrumented && (window as any).INIT_GTAG) {
           setUserState({ gtmInstrumented: true });
-          (window as any).dataLayer.push({
-            event: 'userIdSet',
-            'internal_user': response.user.email?.toLowerCase()?.endsWith('@terraformation.com') ? 'true' : 'false',
-            'user_id': response.user.id.toString(),
-          });
+          (window as any).INIT_GTAG(
+            response.user.id.toString(),
+            response.user.email?.toLowerCase()?.endsWith('@terraformation.com') ? 'true' : 'false'
+          );
         }
       }
     };
