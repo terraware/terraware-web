@@ -145,7 +145,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
               label=''
               id='search'
               type='text'
-              onChange={onChangeSearch}
+              onChange={(value) => onChangeSearch('search', value)}
               value={temporalSearchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}

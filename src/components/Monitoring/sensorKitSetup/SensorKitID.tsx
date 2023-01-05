@@ -110,7 +110,7 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
             id='sensor-kit-id'
             label={strings.ENTER_SIX_DIGIT_KEY}
             type='text'
-            onChange={onChange}
+            onChange={(value) => onChange('sensor-kit-id', value)}
             value={sensorKitId}
             errorText={error}
             placeholder={strings.SENSOR_KIT_ID_PLACEHOLDER}

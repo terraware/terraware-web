@@ -28,7 +28,7 @@ export default function Search(props: SearchProps): JSX.Element {
             label=''
             id='search'
             type='text'
-            onChange={(id, value) => onSearch(value as string)}
+            onChange={(value) => onSearch(value as string)}
             value={searchValue}
             iconRight='cancel'
             onClickRightIcon={() => onSearch('')}

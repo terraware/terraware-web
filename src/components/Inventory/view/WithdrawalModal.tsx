@@ -178,7 +178,6 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
               <Textfield
                 id='scientificName'
                 value={speciesSelected?.scientificName}
-                onChange={onChange}
                 type='text'
                 label={strings.SPECIES}
                 display={true}
@@ -188,7 +187,6 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
               <Textfield
                 id='commonName'
                 value={speciesSelected?.commonName}
-                onChange={onChange}
                 type='text'
                 label={strings.COMMON_NAME}
                 display={true}
@@ -196,9 +194,8 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
-                id='seedilingBatch'
+                id='seedlingsBatch'
                 value={selectedBatch.batchNumber}
-                onChange={onChange}
                 type='text'
                 label={strings.SEEDLING_BATCH}
                 display={true}
@@ -232,7 +229,7 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                       <Textfield
                         id='readyQuantityWithdrawn'
                         value={bw.readyQuantityWithdrawn}
-                        onChange={(id, value) => onChangeQuantity('readyQuantityWithdrawn', value)}
+                        onChange={(value) => onChangeQuantity('readyQuantityWithdrawn', value)}
                         type='text'
                         label={strings.WITHDRAW_QUANTITY_REQUIRED}
                         errorText={validateFields && bw.readyQuantityWithdrawn === 0 ? strings.REQUIRED_FIELD : ''}
@@ -266,7 +263,7 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                       <Textfield
                         id='notReadyQuantityWithdrawn'
                         value={bw.notReadyQuantityWithdrawn}
-                        onChange={(id, value) => onChangeQuantity('notReadyQuantityWithdrawn', value)}
+                        onChange={(value) => onChangeQuantity('notReadyQuantityWithdrawn', value)}
                         type='text'
                         label={strings.NOT_READY_QUANTITY_REQUIRED}
                         errorText={validateFields && bw.notReadyQuantityWithdrawn === 0 ? strings.REQUIRED_FIELD : ''}
@@ -276,7 +273,7 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                       <Textfield
                         id='readyQuantityWithdrawn'
                         value={bw.readyQuantityWithdrawn}
-                        onChange={(id, value) => onChangeQuantity('readyQuantityWithdrawn', value)}
+                        onChange={(value) => onChangeQuantity('readyQuantityWithdrawn', value)}
                         type='text'
                         label={strings.READY_QUANTITY_REQUIRED}
                         errorText={validateFields && bw.readyQuantityWithdrawn === 0 ? strings.REQUIRED_FIELD : ''}
@@ -286,7 +283,6 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                       <Textfield
                         id='withdrawnQuantity'
                         value={withdrawQuantity}
-                        onChange={onChange}
                         type='text'
                         label={strings.WITHDRAW_QUANTITY}
                         display={true}
@@ -308,12 +304,18 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
                 label={strings.WITHDRAW_DATE_REQUIRED}
                 aria-label={strings.WITHDRAW_DATE_REQUIRED}
                 value={record.withdrawnDate}
-                onChange={changeDate}
+                onChange={(value) => changeDate('withdrawnDate', value)}
                 errorText={validateFields && !record.withdrawnDate ? strings.REQUIRED_FIELD : ''}
               />
             </Grid>
             <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
-              <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+              <Textfield
+                id='notes'
+                value={record.notes}
+                onChange={(value) => onChange('notes', value)}
+                type='textarea'
+                label={strings.NOTES}
+              />
             </Grid>
           </Grid>
         </DialogBox>

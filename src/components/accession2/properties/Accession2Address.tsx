@@ -96,7 +96,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
         <Textfield
           id='collectionSiteCity'
           value={record.collectionSiteCity}
-          onChange={onChange}
+          onChange={(value) => onChange('collectionSiteCity', value)}
           type='text'
           label={strings.CITY}
         />
@@ -107,7 +107,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
             <Autocomplete
               id='collectionSiteCountryCode'
               selected={getSelectedCountry()?.name || temporalCountryValue}
-              onChange={(index, value: any) => onChangeCountry(value)}
+              onChange={(value: any) => onChangeCountry(value)}
               label={strings.COUNTRY}
               placeholder={strings.COUNTRY}
               values={countries?.map((country) => country.name) || []}
@@ -118,7 +118,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
             <Autocomplete
               id='collectionSiteCountrySubdivision'
               selected={getSelectedSubdivision()?.name || temporalSubValue}
-              onChange={(index, value: any) => onChangeSubdivision(value)}
+              onChange={(value: any) => onChangeSubdivision(value)}
               label={strings.STATE_PROVINCE_REGION}
               placeholder={strings.STATE_PROVINCE_REGION}
               values={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name) || []}
@@ -131,7 +131,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
         <Textfield
           id='collectionSiteNotes'
           value={record.collectionSiteNotes}
-          onChange={onChange}
+          onChange={(value) => onChange('collectionSiteNotes', value)}
           type='textarea'
           label={strings.DESCRIPTION_NOTES}
         />
