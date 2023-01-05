@@ -48,7 +48,7 @@ export const htmlLegendPlugin = {
         }
 
         li.onclick = () => {
-          if (item.datasetIndex) {
+          if (item.datasetIndex !== undefined) {
             chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex));
             chart.update();
           }
