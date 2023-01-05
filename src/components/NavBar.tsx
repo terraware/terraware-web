@@ -5,7 +5,6 @@ import Navbar from 'src/components/common/Navbar/Navbar';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import strings from 'src/strings';
 import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
 import { hasNurseryWithdrawals } from 'src/api/tracking/withdrawals';
@@ -47,8 +46,6 @@ export default function NavBar({
   const isWithdrawalLogRoute = useRouteMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
   const isReassignmentRoute = useRouteMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
 
-  const trackingEnabled = isEnabled('Tracking V1');
-
   const navigate = (url: string) => {
     history.push(url);
   };
@@ -87,6 +84,32 @@ export default function NavBar({
       checkNurseryWithdrawals();
     }
   }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
+
+  const getSeedlingsMenuItems = () => {
+    const inventoryMenu = (
+      <NavItem
+        label={strings.INVENTORY}
+        selected={!!isInventoryRoute || !!isBatchWithdrawRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.INVENTORY);
+        }}
+        id='inventory'
+      />
+    );
+
+    const withdrawalLogMenu = (
+      <NavItem
+        label={strings.WITHDRAWAL_LOG}
+        selected={!!isWithdrawalLogRoute || !!isReassignmentRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
+        }}
+        id='inventory'
+      />
+    );
+
+    return showNurseryWithdrawals ? [inventoryMenu, withdrawalLogMenu] : [inventoryMenu];
+  };
 
   return (
     <Navbar setShowNavBar={setShowNavBar} backgroundTransparent={backgroundTransparent}>
@@ -138,41 +161,20 @@ export default function NavBar({
         </SubNavbar>
       </NavItem>
       <NavItem label={strings.SEEDLINGS} icon='iconSeedling' id='seedlings'>
+        <SubNavbar>{getSeedlingsMenuItems()}</SubNavbar>
+      </NavItem>
+      <NavItem label={strings.PLANTS} icon='iconRestorationSite' id='plants'>
         <SubNavbar>
           <NavItem
-            label={strings.INVENTORY}
-            selected={!!isInventoryRoute || !!isBatchWithdrawRoute}
+            label={strings.DASHBOARD}
+            selected={!!isPlantsDashboardRoute}
             onClick={() => {
-              closeAndNavigateTo(APP_PATHS.INVENTORY);
+              closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
             }}
-            id='inventory'
+            id='plants-dashboard'
           />
-          {trackingEnabled && showNurseryWithdrawals && (
-            <NavItem
-              label={strings.WITHDRAWAL_LOG}
-              selected={!!isWithdrawalLogRoute || !!isReassignmentRoute}
-              onClick={() => {
-                closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
-              }}
-              id='inventory'
-            />
-          )}
         </SubNavbar>
       </NavItem>
-      {trackingEnabled && (
-        <NavItem label={strings.PLANTS} icon='iconRestorationSite' id='plants'>
-          <SubNavbar>
-            <NavItem
-              label={strings.DASHBOARD}
-              selected={!!isPlantsDashboardRoute}
-              onClick={() => {
-                closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
-              }}
-              id='plants-dashboard'
-            />
-          </SubNavbar>
-        </NavItem>
-      )}
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
@@ -212,16 +214,14 @@ export default function NavBar({
                 }}
                 id='nurseries'
               />
-              {trackingEnabled && (
-                <NavItem
-                  label={strings.PLANTING_SITES}
-                  selected={!!isPlantingSitesRoute}
-                  onClick={() => {
-                    closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
-                  }}
-                  id='plantingSites'
-                />
-              )}
+              <NavItem
+                label={strings.PLANTING_SITES}
+                selected={!!isPlantingSitesRoute}
+                onClick={() => {
+                  closeAndNavigateTo(APP_PATHS.PLANTING_SITES);
+                }}
+                id='plantingSites'
+              />
             </SubNavbar>
           </NavItem>
         </>
