@@ -125,7 +125,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: 'auto',
     minHeight: '100vh',
     '& .MuiCircularProgress-svg': {
-      color: theme.palette.ClrIconFillProductive,
+      color: theme.palette.TwClrIcnBrand,
       height: '193px',
     },
   },
