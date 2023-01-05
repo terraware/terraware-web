@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { User } from 'src/types/User';
 import strings from '../../src/strings';
 import Icon from './common/icon/Icon';
 import { APP_PATHS, TERRAFORMATION_PRIVACY_POLICY } from 'src/constants';
@@ -9,6 +8,7 @@ import { makeStyles } from '@mui/styles';
 import useEnvironment from 'src/utils/useEnvironment';
 import PopoverMenu from './common/PopoverMenu';
 import { DropdownItem } from '@terraware/web-components';
+import { UserContext } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
@@ -32,12 +32,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type UserMenuProps = {
-  user?: User;
-  reloadUser: () => void;
   hasOrganizations?: boolean;
 };
-export default function UserMenu({ user, reloadUser, hasOrganizations }: UserMenuProps): JSX.Element {
+export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Element {
   const classes = useStyles();
+  const { user } = useContext(UserContext);
   const { isProduction } = useEnvironment();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const history = useHistory();

@@ -62,6 +62,7 @@ import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { listPlantingSites } from './api/tracking/tracking';
 import { PlantingSite } from './api/types/tracking';
+import { UserProvider } from './providers';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -350,19 +351,19 @@ export default function App() {
     if (organizations?.length === 0) {
       return (
         <StyledEngineProvider injectFirst>
-          <TopBar fullWidth={true}>
-            <TopBarContent
-              organizations={organizations}
-              selectedOrganization={selectedOrganization}
-              setSelectedOrganization={setSelectedOrganization}
-              reloadOrganizationData={reloadData}
-              user={user}
-              reloadUser={reloadUser}
-              setShowNavBar={setShowNavBar}
-            />
-          </TopBar>
-          <ToastSnackbar />
-          <NoOrgLandingPage reloadOrganizationData={reloadData} />
+          <UserProvider data={{ user, reloadUser }}>
+            <TopBar fullWidth={true}>
+              <TopBarContent
+                organizations={organizations}
+                selectedOrganization={selectedOrganization}
+                setSelectedOrganization={setSelectedOrganization}
+                reloadOrganizationData={reloadData}
+                setShowNavBar={setShowNavBar}
+              />
+            </TopBar>
+            <ToastSnackbar />
+            <NoOrgLandingPage reloadOrganizationData={reloadData} />
+          </UserProvider>
         </StyledEngineProvider>
       );
     } else if (!selectedOrganization) {
@@ -433,9 +434,8 @@ export default function App() {
     return false;
   };
 
-  return (
-    <StyledEngineProvider injectFirst>
-      <CssBaseline />
+  const getContent = () => (
+    <>
       <ToastSnackbar />
       <TopBar>
         <TopBarContent
@@ -443,8 +443,6 @@ export default function App() {
           selectedOrganization={selectedOrganization}
           setSelectedOrganization={setSelectedOrganization}
           reloadOrganizationData={reloadData}
-          user={user}
-          reloadUser={reloadUser}
           setShowNavBar={setShowNavBar}
         />
       </TopBar>
@@ -518,7 +516,7 @@ export default function App() {
               )}
               {selectedOrganization && user && (
                 <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
-                  <Accession2View organization={selectedOrganization} user={user} />
+                  <Accession2View organization={selectedOrganization} />
                 </Route>
               )}
               {selectedOrganization && (
@@ -574,7 +572,7 @@ export default function App() {
                 <PersonDetails organization={organizationWithoutSB()} />
               </Route>
               <Route exact path={APP_PATHS.PEOPLE}>
-                <People organization={selectedOrganization} reloadData={reloadData} user={user} />
+                <People organization={selectedOrganization} reloadData={reloadData} />
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
@@ -699,18 +697,12 @@ export default function App() {
               </Route>
               {user && (
                 <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-                  <MyAccount
-                    user={user}
-                    organizations={organizations}
-                    edit={true}
-                    reloadUser={reloadUser}
-                    reloadData={reloadData}
-                  />
+                  <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
                 </Route>
               )}
               {user && (
                 <Route exact path={APP_PATHS.MY_ACCOUNT}>
-                  <MyAccount user={user} organizations={organizations} edit={false} reloadUser={reloadUser} />
+                  <MyAccount organizations={organizations} edit={false} />
                 </Route>
               )}
 
@@ -750,6 +742,13 @@ export default function App() {
           </ErrorBoundary>
         </div>
       </div>
+    </>
+  );
+
+  return (
+    <StyledEngineProvider injectFirst>
+      <CssBaseline />
+      <UserProvider data={{ user, reloadUser }}>{getContent()}</UserProvider>
     </StyledEngineProvider>
   );
 }

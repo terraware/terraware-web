@@ -13,7 +13,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import hexRgb from 'hex-rgb';
@@ -24,6 +24,7 @@ import { User } from 'src/types/User';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import Icon from './common/icon/Icon';
 import useEnvironment from 'src/utils/useEnvironment';
+import { UserContext } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -106,9 +107,9 @@ export default function SmallDeviceUserMenu({
   setSelectedOrganization,
   reloadOrganizationData,
   onLogout,
-  user,
   hasOrganizations,
 }: SmallDeviceUserMenuProps): JSX.Element | null {
+  const { user } = useContext(UserContext);
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
