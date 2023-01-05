@@ -111,7 +111,7 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
                 id='name'
                 label={strings.NAME_REQUIRED}
                 type='text'
-                onChange={onChange}
+                onChange={(value) => onChange('name', value)}
                 value={record.name}
                 errorText={record.name ? '' : nameError}
               />
@@ -121,7 +121,7 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
                 id='description'
                 label={strings.DESCRIPTION_REQUIRED}
                 type='textarea'
-                onChange={onChange}
+                onChange={(value) => onChange('description', value)}
                 value={record.description}
                 errorText={record.description ? '' : descriptionError}
               />

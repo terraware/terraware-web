@@ -14,10 +14,8 @@ import DeleteBatchesModal from './DeleteBatchesModal';
 import { deleteBatch } from 'src/api/batch/batch';
 import useSnackbar from 'src/utils/useSnackbar';
 import BatchDetailsModal from './BatchDetailsModal';
-import WithdrawalModal from './WithdrawalModal';
 import Search from '../Search';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { TopBarButton } from '@terraware/web-components/components/table';
 
 const columns: TableColumnType[] = [
@@ -53,12 +51,10 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
-  const [openWithdrawalModal, setOpenWithdrawalModal] = useState<boolean>(false);
   const [selectedBatch, setSelectedBatch] = useState<any>();
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const snackbar = useSnackbar();
   const history = useHistory();
-  const trackingEnabled = isEnabled('Tracking V1');
 
   useEffect(() => {
     let activeRequests = true;
@@ -194,14 +190,10 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
-      if (trackingEnabled) {
-        history.push({
-          pathname: APP_PATHS.BATCH_WITHDRAW,
-          search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
-        });
-      } else {
-        setOpenWithdrawalModal(true);
-      }
+      history.push({
+        pathname: APP_PATHS.BATCH_WITHDRAW,
+        search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
+      });
     } else if (fromColumn === 'quantitiesMenu') {
       reloadData();
     } else {
@@ -277,18 +269,6 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
         speciesId={speciesId}
         selectedBatch={selectedBatch}
       />
-      {selectedBatch && (
-        <WithdrawalModal
-          open={openWithdrawalModal}
-          reload={reloadData}
-          onClose={() => {
-            setOpenWithdrawalModal(false);
-          }}
-          organization={organization}
-          speciesId={speciesId}
-          selectedBatch={selectedBatch}
-        />
-      )}
       <DeleteBatchesModal
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}

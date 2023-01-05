@@ -97,7 +97,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
           <Textfield
             id={`gpsCoords${index}`}
             value={gpsCoords}
-            onChange={(unused, value) => onUpdateGPS(value, index)}
+            onChange={(value) => onUpdateGPS(value, index)}
             label={index === 0 ? strings.LATITUDE_LONGITUDE : ''}
             type='text'
           />

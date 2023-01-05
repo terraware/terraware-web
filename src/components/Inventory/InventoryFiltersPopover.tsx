@@ -168,7 +168,7 @@ export default function InventoryFiltersPopover({
                     name={n.name}
                     label={n.name}
                     value={hasFilter(n.id)}
-                    onChange={onChange}
+                    onChange={(value) => onChange(n.id.toString(), value)}
                   />
                 </Grid>
               ))}

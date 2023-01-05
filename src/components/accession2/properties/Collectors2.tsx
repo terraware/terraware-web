@@ -9,12 +9,11 @@ import AddLink from 'src/components/common/AddLink';
 
 interface Props {
   organizationId: number;
-  id: string;
   collectors?: string[];
   onChange: (id: string, value: string[]) => void;
 }
 
-export default function Collectors2({ organizationId, id, collectors = [''], onChange }: Props): JSX.Element {
+export default function Collectors2({ organizationId, collectors = [''], onChange }: Props): JSX.Element {
   const [collectorsList, setCollectorsList] = useState<string[]>([...collectors]);
   const [collectorsOpt, setCollectorsOpt] = useState<string[]>();
   const theme = useTheme();
@@ -38,7 +37,7 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
     setCollectorsList((prev) => {
       const updatedCollectors = [...prev];
       updatedCollectors[index] = value as string;
-      onChange(id, getNonEmptyCollectors(updatedCollectors));
+      onChange('collectors', getNonEmptyCollectors(updatedCollectors));
       return updatedCollectors;
     });
   };
@@ -47,7 +46,7 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
     setCollectorsList((prev) => {
       const updatedCollectors = [...prev];
       updatedCollectors.splice(index, 1);
-      onChange(id, getNonEmptyCollectors(updatedCollectors));
+      onChange('collectors', getNonEmptyCollectors(updatedCollectors));
       return updatedCollectors;
     });
   };
@@ -59,7 +58,7 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
           <Autocomplete
             id={`collector${index}`}
             selected={collector}
-            onChange={(unused, value) => onCollectorChange(value, index)}
+            onChange={(value) => onCollectorChange(value, index)}
             label={index === 0 ? strings.COLLECTORS : ''}
             placeholder={strings.COLLECTORS}
             values={collectorsOpt || []}

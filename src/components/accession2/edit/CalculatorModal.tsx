@@ -125,7 +125,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
                 <Textfield
                   label={strings.SUBSET_WEIGHT}
                   id='subsetWeight'
-                  onChange={(id, value) => onChangeSubsetWeight(value as number)}
+                  onChange={(value) => onChangeSubsetWeight(Number(value))}
                   type='text'
                   value={record.subsetWeight?.quantity}
                   errorText={subsetError}
@@ -147,7 +147,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
             <Textfield
               label={strings.SUBSET_COUNT}
               id='subsetCount'
-              onChange={onChange}
+              onChange={(value) => onChange('subsetCount', value)}
               type='text'
               value={record.subsetCount}
             />
@@ -157,7 +157,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
               <Textfield
                 label={strings.TOTAL_WEIGHT}
                 id='remainingQuantity'
-                onChange={(id, value) => onChangeRemainingQuantity(value as number)}
+                onChange={(value) => onChangeRemainingQuantity(Number(value))}
                 type='text'
                 value={record.remainingQuantity?.quantity}
               />

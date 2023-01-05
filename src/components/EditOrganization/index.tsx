@@ -140,7 +140,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               id='name'
               label={strings.ORGANIZATION_NAME_REQUIRED}
               type='text'
-              onChange={onChange}
+              onChange={(value) => onChange('name', value)}
               value={organizationRecord.name}
               errorText={organizationRecord.name ? '' : nameError}
             />
@@ -150,7 +150,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               id='description'
               label={strings.DESCRIPTION}
               type='textarea'
-              onChange={onChange}
+              onChange={(value) => onChange('description', value)}
               value={organizationRecord.description}
             />
           </Grid>

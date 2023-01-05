@@ -311,7 +311,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
                 className={classes.searchField}
                 iconRight='cancel'
                 value={searchValue}
-                onChange={(_id, value) => setSearchValue(value as string)}
+                onChange={(value) => setSearchValue(value as string)}
               />
               <NurseryWithdrawalsFiltersPopover
                 filters={filters}
