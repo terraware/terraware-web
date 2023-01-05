@@ -190,7 +190,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
-                  id='seedlingBatch'
+                  id='seedlingsBatch'
                   value={record.batchNumber}
                   type='text'
                   label={strings.SEEDLING_BATCH}

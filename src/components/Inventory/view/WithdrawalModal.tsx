@@ -194,7 +194,7 @@ export default function WithdrawalsModal(props: WithdrawalsModalProps): JSX.Elem
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
-                id='seedlingBatch'
+                id='seedlingsBatch'
                 value={selectedBatch.batchNumber}
                 type='text'
                 label={strings.SEEDLING_BATCH}
