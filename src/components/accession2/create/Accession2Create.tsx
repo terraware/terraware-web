@@ -129,12 +129,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
             </Grid>
             <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
             <Grid item xs={12} sx={marginTop}>
-              <Collectors2
-                organizationId={organization.id}
-                id='collectors'
-                collectors={record.collectors}
-                onChange={(value) => onChange('collectors', value)}
-              />
+              <Collectors2 organizationId={organization.id} collectors={record.collectors} onChange={onChange} />
             </Grid>
             <Grid
               item

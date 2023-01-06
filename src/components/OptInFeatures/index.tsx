@@ -129,10 +129,12 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
                 <Grid item xs={gridSize()}>
                   <Box sx={{ color: theme.palette.TwClrTxt, fontSize: '16px', whiteSpace: 'pre', alignSelf: 'center' }}>
                     <Switch
+                      disabled={f.enabled}
                       checked={preferences[f.preferenceName] === true}
                       onChange={(event) => savePreference(f, event.target.checked)}
                     />
                     &nbsp;{f.name}
+                    {f.enabled ? ' (Feature Ungated)' : ''}
                   </Box>
                 </Grid>
                 <Grid item xs={gridSize()} sx={gridStyle(false)}>

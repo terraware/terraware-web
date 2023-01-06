@@ -46,7 +46,6 @@ import { getPreferences, updatePreferences } from './api/preferences/preferences
 import useEnvironment from 'src/utils/useEnvironment';
 import { Accession2Create, Accession2View } from './components/accession2';
 import OptInFeatures from './components/OptInFeatures';
-import { isRouteEnabled } from 'src/features';
 import Nurseries from './components/Nurseries';
 import NewNursery from './components/NewNursery';
 import Inventory from './components/Inventory';
@@ -125,7 +124,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: 'auto',
     minHeight: '100vh',
     '& .MuiCircularProgress-svg': {
-      color: theme.palette.ClrIconFillProductive,
+      color: theme.palette.TwClrIcnBrand,
       height: '193px',
     },
   },
@@ -148,7 +147,6 @@ export default function App() {
   const [orgScopedPreferences, setOrgScopedPreferences] = useState<{ [key: string]: unknown }>();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
-  const trackingEnabled = isRouteEnabled('Tracking V1');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -606,12 +604,12 @@ export default function App() {
                   <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
                   <PlantsDashboard organization={selectedOrganization} />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
                   <PlantsDashboard organization={selectedOrganization} />
                 </Route>
@@ -636,7 +634,7 @@ export default function App() {
                   <InventoryCreate organization={selectedOrganization} />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
                   <SpeciesBulkWithdrawWrapperComponent
                     organization={selectedOrganization}
@@ -649,7 +647,7 @@ export default function App() {
                   <InventoryView organization={selectedOrganization} species={species} />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route path={APP_PATHS.BATCH_WITHDRAW}>
                   <BatchBulkWithdrawWrapperComponent
                     organization={selectedOrganization}
@@ -657,32 +655,32 @@ export default function App() {
                   />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITES_NEW}>
                   <CreatePlantingSite organization={selectedOrganization} reloadPlantingSites={reloadTracking} />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
                   <CreatePlantingSite organization={selectedOrganization} reloadPlantingSites={reloadTracking} />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITES}>
                   <PlantingSitesList organization={selectedOrganization} />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
                   <PlantingSiteView />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
                   <NurseryWithdrawals organization={selectedOrganization} />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
                   <NurseryWithdrawalsDetails
                     organization={selectedOrganization}
@@ -691,7 +689,7 @@ export default function App() {
                   />
                 </Route>
               )}
-              {trackingEnabled && selectedOrganization && (
+              {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
                   <NurseryReassignment organization={selectedOrganization} />
                 </Route>

@@ -103,12 +103,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
         />
         <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
         <Grid item xs={12}>
-          <Collectors2
-            organizationId={organization.id}
-            id='collectors'
-            onChange={onChange}
-            collectors={record.collectors}
-          />
+          <Collectors2 organizationId={organization.id} onChange={onChange} collectors={record.collectors} />
         </Grid>
         <Grid item xs={12}>
           <Typography>{strings.SITE_DETAIL} </Typography>

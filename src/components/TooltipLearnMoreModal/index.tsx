@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(2),
   },
   content: {
-    color: theme.palette.ClrBaseGray800,
+    color: theme.palette.TwClrTxt,
     textAlign: 'left',
   },
   learnMoreLink: {
