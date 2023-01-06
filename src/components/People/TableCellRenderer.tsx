@@ -11,9 +11,7 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
     const personLocation = {
       pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', row.id.toString()),
     };
-    if (!Array.isArray(iValue)) {
-      return <Link to={personLocation.pathname}>{iValue}</Link>;
-    }
+    return <Link to={personLocation.pathname}>{iValue as React.ReactNode}</Link>;
   };
 
   if (column.key === 'firstName' || column.key === 'lastName') {
