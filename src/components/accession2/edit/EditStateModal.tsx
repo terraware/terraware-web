@@ -3,7 +3,6 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Accession2 } from 'src/api/accessions2/accession';
-import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import { updateAccession2 } from 'src/api/accessions2/accession';
 import EditState from './EditState';
@@ -14,11 +13,10 @@ export interface EditStateModalProps {
   accession: Accession2;
   onClose: () => void;
   reload: () => void;
-  organization: ServerOrganization;
 }
 
 export default function EditStateModal(props: EditStateModalProps): JSX.Element {
-  const { onClose, open, accession, reload, organization } = props;
+  const { onClose, open, accession, reload } = props;
   const [record, setRecord, onChange] = useForm(accession);
   const [editUsedUpStatus] = useState<boolean>(accession.state === 'Used Up');
 
@@ -42,7 +40,6 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
         open={editUsedUpStatus}
         onClose={onClose}
         accession={accession}
-        organization={organization}
         reload={reload}
         statusEdit={true}
         title={strings.EDIT_STATUS}

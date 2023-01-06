@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme } from '@mui/material';
 import { Button, Table, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import useDebounce from 'src/utils/useDebounce';
 import { search } from 'src/api/search';
 import BatchesCellRenderer from './BatchesCellRenderer';
@@ -17,6 +16,7 @@ import BatchDetailsModal from './BatchDetailsModal';
 import Search from '../Search';
 import { APP_PATHS } from 'src/constants';
 import { TopBarButton } from '@terraware/web-components/components/table';
+import { useOrganization } from 'src/providers/hooks';
 
 const columns: TableColumnType[] = [
   { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
@@ -34,7 +34,6 @@ const columns: TableColumnType[] = [
 
 interface InventorySeedslingsTableProps {
   speciesId: number;
-  organization: ServerOrganization;
   modified: number;
   setModified: (val: number) => void;
   openBatchNumber: string | null;
@@ -42,7 +41,8 @@ interface InventorySeedslingsTableProps {
 }
 
 export default function InventorySeedslingsTable(props: InventorySeedslingsTableProps): JSX.Element {
-  const { speciesId, organization, modified, setModified, openBatchNumber, onUpdateOpenBatch } = props;
+  const {selectedOrganization} = useOrganization();
+  const { speciesId, modified, setModified, openBatchNumber, onUpdateOpenBatch } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
@@ -99,7 +99,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             {
               operation: 'field',
               field: 'species_organization_id',
-              values: [organization.id.toString()],
+              values: [selectedOrganization!!.id.toString()],
               type: 'Exact',
             },
           ],
@@ -154,7 +154,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return () => {
       activeRequests = false;
     };
-  }, [debouncedSearchTerm, organization.id, speciesId, filters.facilityIds, modified]);
+  }, [debouncedSearchTerm, selectedOrganization, speciesId, filters.facilityIds, modified]);
 
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
@@ -265,7 +265,6 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           onUpdateOpenBatch(null);
           setOpenNewBatchModal(false);
         }}
-        organization={organization}
         speciesId={speciesId}
         selectedBatch={selectedBatch}
       />
@@ -300,7 +299,6 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           />
         </Box>
         <Search
-          organization={organization}
           searchValue={temporalSearchValue}
           onSearch={(val) => setTemporalSearchValue(val)}
           filters={filters}

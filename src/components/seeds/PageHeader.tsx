@@ -1,6 +1,6 @@
 import React from 'react';
 import Title from '../common/Title';
-import { SelectedOrgInfo, ServerOrganization } from 'src/types/Organization';
+import { SelectedOrgInfo } from 'src/types/Organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { Container, Grid, Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -53,9 +53,7 @@ interface Props {
   parentPage?: string;
   back?: boolean;
   backUrl?: string;
-  organization?: ServerOrganization;
   allowAll?: boolean;
-  selectedOrgInfo?: SelectedOrgInfo;
   onChangeSelectedOrgInfo?: (selectedValues: SelectedOrgInfo) => void;
   showFacility?: boolean;
   titleClassName?: string;
@@ -70,9 +68,7 @@ export default function PageHeader({
   backUrl,
   page,
   parentPage,
-  organization,
   allowAll,
-  selectedOrgInfo,
   onChangeSelectedOrgInfo,
   showFacility,
   titleClassName,

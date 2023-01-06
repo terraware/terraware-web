@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { Table, TableColumnType } from '@terraware/web-components';
 import { Box, Grid, useTheme } from '@mui/material';
 import { SearchResponseElement } from 'src/api/search';
@@ -42,7 +41,6 @@ const columns: TableColumnType[] = [
 ];
 
 interface InventoryTableProps {
-  organization: ServerOrganization;
   results: SearchResponseElement[];
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
@@ -51,7 +49,7 @@ interface InventoryTableProps {
 }
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
-  const { organization, results, setTemporalSearchValue, temporalSearchValue, filters, setFilters } = props;
+  const { results, setTemporalSearchValue, temporalSearchValue, filters, setFilters } = props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
   const theme = useTheme();
@@ -80,7 +78,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       </Grid>
       <Box marginBottom={theme.spacing(2)}>
         <Search
-          organization={organization}
           searchValue={temporalSearchValue}
           onSearch={(val) => setTemporalSearchValue(val)}
           filters={filters}

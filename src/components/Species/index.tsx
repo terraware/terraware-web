@@ -9,7 +9,6 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import speciesAtom from 'src/state/species';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesProblemElement } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -39,9 +38,9 @@ import TooltipLearnMoreModal, {
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PopoverMenu from '../common/PopoverMenu';
 import { DropdownItem } from '@terraware/web-components';
+import { useOrganization } from 'src/providers/hooks';
 
 type SpeciesListProps = {
-  organization: ServerOrganization;
   reloadData: () => void;
   species: Species[];
 };
@@ -113,7 +112,8 @@ export type SpeciesFiltersType = {
 
 type SpeciesCS = Species & { conservationStatus?: string };
 
-export default function SpeciesList({ organization, reloadData, species }: SpeciesListProps): JSX.Element {
+export default function SpeciesList({ reloadData, species }: SpeciesListProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
   const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
@@ -237,7 +237,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     ),
     type: 'string',
   });
-  const userCanEdit = !isContributor(organization);
+  const userCanEdit = !isContributor(selectedOrganization);
   const { isMobile } = useDeviceInfo();
 
   const getParams = useCallback(() => {
@@ -261,7 +261,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
             operation: 'field',
             field: 'organization_id',
             type: 'Exact',
-            values: [organization.id],
+            values: [selectedOrganization!!.id],
           },
         ],
       },
@@ -332,7 +332,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     }
 
     return params;
-  }, [record, debouncedSearchTerm, organization.id]);
+  }, [record, debouncedSearchTerm, selectedOrganization]);
 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
@@ -430,7 +430,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     if (selectedSpeciesRows.length > 0) {
       await Promise.all(
         selectedSpeciesRows.map(async (iSelectedSpecies) => {
-          await deleteSpecies(iSelectedSpecies.id, organization.id);
+          await deleteSpecies(iSelectedSpecies.id, selectedOrganization!!.id);
         })
       );
       setDeleteSpeciesModalOpen(false);
@@ -599,13 +599,11 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         open={editSpeciesModalOpen}
         onClose={onCloseEditSpeciesModal}
         initialSpecies={selectedSpecies}
-        organization={organization}
         onError={setErrorSnackbar}
       />
       <ImportSpeciesModal
         open={importSpeciesModalOpen}
         onClose={onCloseImportSpeciesModal}
-        organization={organization}
         setCheckDataModalOpen={setCheckDataModalOpen}
       />
       <TooltipLearnMoreModal

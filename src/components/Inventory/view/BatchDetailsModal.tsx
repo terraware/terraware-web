@@ -2,7 +2,6 @@ import { Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DatePicker, DialogBox, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getTodaysDateFormatted, useDeviceInfo } from '@terraware/web-components/utils';
@@ -13,18 +12,19 @@ import { getSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
 import { APP_PATHS } from 'src/constants';
 import Link from 'src/components/common/Link';
+import { useOrganization } from 'src/providers/hooks';
 
 export interface BatchDetailsModalProps {
   open: boolean;
   onClose: () => void;
   reload: () => void;
-  organization: ServerOrganization;
   selectedBatch: any;
   speciesId: number;
 }
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
-  const { onClose, open, organization, reload, selectedBatch, speciesId } = props;
+  const { selectedOrganization}  = useOrganization();
+  const { onClose, open, reload, selectedBatch, speciesId } = props;
 
   const [record, setRecord, onChange] = useForm(selectedBatch);
   const snackbar = useSnackbar();
@@ -39,7 +39,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   useEffect(() => {
     if (record) {
       const populateSpecies = async () => {
-        const speciesResponse = await getSpecies(speciesId, organization.id.toString());
+        const speciesResponse = await getSpecies(speciesId, selectedOrganization!!.id.toString());
         if (speciesResponse.requestSucceeded) {
           setSpeciesSelected(speciesResponse.species);
         }
@@ -52,7 +52,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
       populateSpecies();
     }
-  }, [record, organization, speciesId]);
+  }, [record, selectedOrganization, speciesId]);
 
   useEffect(() => {
     const newBatch: CreateBatchRequestPayload = {
@@ -79,13 +79,13 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
     setRecord(initBatch());
 
-    const foundFacility = organization?.facilities?.find(
+    const foundFacility = selectedOrganization?.facilities?.find(
       (f) => f.id.toString() === selectedBatch?.facilityId.toString()
     );
     if (foundFacility) {
       setFacilityName(foundFacility.name);
     }
-  }, [selectedBatch, speciesId, setRecord, organization, open]);
+  }, [selectedBatch, speciesId, setRecord, selectedOrganization, open]);
 
   const MANDATORY_FIELDS = [
     'facilityId',
@@ -223,7 +223,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                   label={strings.NURSERY_REQUIRED}
                   record={record}
                   setRecord={setRecord as unknown as React.Dispatch<React.SetStateAction<Batch>>}
-                  organization={organization}
                   validate={validateFields}
                   isSelectionValid={(r) => !!r?.facilityId}
                 />

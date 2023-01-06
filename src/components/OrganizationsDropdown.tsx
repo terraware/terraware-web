@@ -9,6 +9,7 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import PopoverMenu from './common/PopoverMenu';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
@@ -24,19 +25,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type OrganizationsDropdownProps = {
-  organizations?: ServerOrganization[];
-  selectedOrganization?: ServerOrganization;
-  setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
-  reloadOrganizationData: (selectedOrgId?: number) => void;
-};
-
-export default function OrganizationsDropdown({
-  organizations,
-  selectedOrganization,
-  setSelectedOrganization,
-  reloadOrganizationData,
-}: OrganizationsDropdownProps): JSX.Element {
+export default function OrganizationsDropdown(): JSX.Element {
+  const { selectedOrganization, setSelectedOrganization, organizations } = useOrganization();
   const classes = useStyles();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -81,7 +71,6 @@ export default function OrganizationsDropdown({
       <AddNewOrganizationModal
         open={newOrganizationModalOpened}
         onCancel={onCloseCreateOrganizationModal}
-        reloadOrganizationData={reloadOrganizationData}
       />
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <p>{selectedOrganization?.name}</p>

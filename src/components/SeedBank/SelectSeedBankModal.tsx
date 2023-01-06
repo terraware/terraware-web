@@ -2,12 +2,12 @@ import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { Facility } from 'src/api/types/facilities';
 import Button from '../common/button/Button';
 import Select from '../common/Select/Select';
 import DialogBox from '../common/DialogBox/DialogBox';
 import { getAllSeedBanks } from 'src/utils/organization';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spacing: {
@@ -22,15 +22,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 export type SelectSeedBankProps = {
   open: boolean;
   onClose: (facility?: Facility) => void;
-  organization: ServerOrganization;
 };
 
 export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const classes = useStyles();
-  const { open, onClose, organization } = props;
+  const { open, onClose } = props;
   const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
 
-  const availableFacilities = getAllSeedBanks(organization) || [];
+  const availableFacilities = getAllSeedBanks(selectedOrganization!!) || [];
 
   const onChange = (facilityName: string) => {
     setSelectedFacility(availableFacilities.find((facility) => facility?.name === facilityName));

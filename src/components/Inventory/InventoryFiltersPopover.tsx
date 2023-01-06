@@ -3,12 +3,12 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import Button from '../common/button/Button';
 import { Checkbox } from '@terraware/web-components';
 import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useOrganization } from 'src/providers/hooks';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
@@ -69,14 +69,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 type InventoryFiltersPopoverProps = {
   filters: InventoryFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
-  organization: ServerOrganization;
 };
 
 export default function InventoryFiltersPopover({
   filters,
   setFilters,
-  organization,
 }: InventoryFiltersPopoverProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
@@ -161,7 +160,7 @@ export default function InventoryFiltersPopover({
               <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
                 {strings.NURSERIES}
               </Typography>
-              {getAllNurseries(organization).map((n) => (
+              {getAllNurseries(selectedOrganization!!).map((n) => (
                 <Grid item xs={12} key={n.id}>
                   <Checkbox
                     id={n.id.toString()}

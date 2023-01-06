@@ -1,30 +1,24 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
-import { ServerOrganization } from 'src/types/Organization';
 import { Species } from 'src/types/Species';
 import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
-import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';
 import { Delivery } from 'src/api/types/tracking';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type ReassignmentTabPanelContentProps = {
-  organization: ServerOrganization;
   species: Species[];
   plotNames: Record<number, string>;
   withdrawal?: NurseryWithdrawal;
-  withdrawalSummary?: WithdrawalSummary;
   delivery?: Delivery;
   batches?: Batch[];
 };
 
 export default function ReassignmentTabPanelContent({
-  organization,
   species,
   plotNames,
   withdrawal,
-  withdrawalSummary,
   delivery,
 }: ReassignmentTabPanelContentProps): JSX.Element {
   const { isMobile } = useDeviceInfo();

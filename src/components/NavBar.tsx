@@ -6,23 +6,23 @@ import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
+import { AllOrganizationRoles } from 'src/types/Organization';
 import { hasNurseryWithdrawals } from 'src/api/tracking/withdrawals';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import NavFooter from './common/Navbar/NavFooter';
+import { useOrganization } from 'src/providers/hooks';
 
 type NavBarProps = {
-  organization?: ServerOrganization;
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
   backgroundTransparent?: boolean;
   withdrawalCreated?: boolean;
 };
 export default function NavBar({
-  organization,
   setShowNavBar,
   backgroundTransparent,
   withdrawalCreated,
 }: NavBarProps): JSX.Element | null {
+  const { selectedOrganization } = useOrganization();
   const [role, setRole] = useState<AllOrganizationRoles>();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const { isDesktop } = useDeviceInfo();
@@ -64,20 +64,20 @@ export default function NavBar({
   };
 
   const checkNurseryWithdrawals = useCallback(() => {
-    if (organization?.id) {
-      hasNurseryWithdrawals(organization.id).then((result) => {
+    if (selectedOrganization?.id) {
+      hasNurseryWithdrawals(selectedOrganization.id).then((result) => {
         setShowNurseryWithdrawals(result);
       });
     }
-  }, [organization?.id]);
+  }, [selectedOrganization?.id]);
 
   useEffect(() => {
     setShowNurseryWithdrawals(false);
-    if (organization) {
-      setRole(organization.role);
+    if (selectedOrganization) {
+      setRole(selectedOrganization.role);
       checkNurseryWithdrawals();
     }
-  }, [organization, checkNurseryWithdrawals]);
+  }, [selectedOrganization, checkNurseryWithdrawals]);
 
   useEffect(() => {
     if (withdrawalCreated && !showNurseryWithdrawals) {

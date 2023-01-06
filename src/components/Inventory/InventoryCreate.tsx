@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -15,10 +14,6 @@ import { Species2Dropdown } from '../accession2/properties';
 import { createBatch, CreateBatchRequestPayload } from 'src/api/batch/batch';
 import NurseryDropdown from './NurseryDropdown';
 import TfMain from 'src/components/common/TfMain';
-
-type CreateInventoryProps = {
-  organization: ServerOrganization;
-};
 
 const defaultBatch = (): CreateBatchRequestPayload =>
   ({
@@ -41,8 +36,7 @@ const MANDATORY_FIELDS = [
 
 type MandatoryField = typeof MANDATORY_FIELDS[number];
 
-export default function CreateInventory(props: CreateInventoryProps): JSX.Element {
-  const { organization } = props;
+export default function CreateInventory(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const history = useHistory();
@@ -131,14 +125,12 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
               <Grid item xs={12} sx={marginTop}>
                 <Species2Dropdown
                   record={record}
-                  organization={organization}
                   setRecord={setRecord}
                   validate={validateFields}
                 />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
                 <NurseryDropdown
-                  organization={organization}
                   record={record}
                   setRecord={setRecord}
                   validate={validateFields}

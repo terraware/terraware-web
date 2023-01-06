@@ -2,7 +2,6 @@ import { Box, Grid, useTheme } from '@mui/material';
 import { Table, TableColumnType, Textfield } from '@terraware/web-components';
 import { SearchResponseElement } from 'src/api/search';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 
 const columns: TableColumnType[] = [
@@ -21,7 +20,6 @@ const columns: TableColumnType[] = [
 ];
 
 interface PlantingSitesTableProps {
-  organization: ServerOrganization;
   results: SearchResponseElement[];
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;

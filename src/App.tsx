@@ -63,6 +63,7 @@ import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } fr
 import { listPlantingSites } from './api/tracking/tracking';
 import { PlantingSite } from './api/types/tracking';
 import { UserProvider } from './providers';
+import OrganizationProvider from './providers/OrganizationProvider';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -352,17 +353,13 @@ export default function App() {
       return (
         <StyledEngineProvider injectFirst>
           <UserProvider data={{ user, reloadUser }}>
-            <TopBar fullWidth={true}>
-              <TopBarContent
-                organizations={organizations}
-                selectedOrganization={selectedOrganization}
-                setSelectedOrganization={setSelectedOrganization}
-                reloadOrganizationData={reloadData}
-                setShowNavBar={setShowNavBar}
-              />
-            </TopBar>
-            <ToastSnackbar />
-            <NoOrgLandingPage reloadOrganizationData={reloadData} />
+            <OrganizationProvider data={{ selectedOrganization, setSelectedOrganization, organizations, reloadData }}>
+              <TopBar fullWidth={true}>
+                <TopBarContent setShowNavBar={setShowNavBar} />
+              </TopBar>
+              <ToastSnackbar />
+              <NoOrgLandingPage />
+            </OrganizationProvider>
           </UserProvider>
         </StyledEngineProvider>
       );
@@ -438,13 +435,7 @@ export default function App() {
     <>
       <ToastSnackbar />
       <TopBar>
-        <TopBarContent
-          organizations={organizations}
-          selectedOrganization={selectedOrganization}
-          setSelectedOrganization={setSelectedOrganization}
-          reloadOrganizationData={reloadData}
-          setShowNavBar={setShowNavBar}
-        />
+        <TopBarContent setShowNavBar={setShowNavBar} />
       </TopBar>
       <div className={classes.container}>
         {showNavBar ? (
@@ -454,7 +445,6 @@ export default function App() {
                 <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
                   <div>
                     <NavBar
-                      organization={selectedOrganization}
                       setShowNavBar={setShowNavBar}
                       withdrawalCreated={withdrawalCreated}
                     />
@@ -462,7 +452,6 @@ export default function App() {
                 </Slide>
               ) : (
                 <NavBar
-                  organization={selectedOrganization}
                   setShowNavBar={setShowNavBar}
                   backgroundTransparent={viewHasBackgroundImage()}
                   withdrawalCreated={withdrawalCreated}
@@ -480,21 +469,16 @@ export default function App() {
             <Switch>
               {/* Routes, in order of their appearance down the side NavBar */}
               <Route exact path={APP_PATHS.HOME}>
-                <Home
-                  organizations={organizations}
-                  selectedOrganization={selectedOrganization}
-                  setSelectedOrganization={setSelectedOrganization}
-                />
+                <Home />
               </Route>
               <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
-                <SeedSummary organization={selectedOrganization} />
+                <SeedSummary />
               </Route>
               <Route exact path={APP_PATHS.CHECKIN}>
-                <CheckIn organization={selectedOrganization} />
+                <CheckIn />
               </Route>
               <Route exact path={APP_PATHS.ACCESSIONS}>
                 <Database
-                  organization={selectedOrganization}
                   searchCriteria={seedSearchCriteria}
                   setSearchCriteria={setSeedSearchCriteria}
                   searchSortOrder={seedSearchSort}
@@ -511,18 +495,17 @@ export default function App() {
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
-                  <Accession2Create organization={selectedOrganization} />
+                  <Accession2Create />
                 </Route>
               )}
               {selectedOrganization && user && (
                 <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
-                  <Accession2View organization={selectedOrganization} />
+                  <Accession2View />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.MONITORING}>
                   <Monitoring
-                    organization={selectedOrganization}
                     hasSeedBanks={selectedOrgHasSeedBanks()}
                     reloadData={reloadData}
                   />
@@ -531,7 +514,6 @@ export default function App() {
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
                   <Monitoring
-                    organization={selectedOrganization}
                     hasSeedBanks={selectedOrgHasSeedBanks()}
                     reloadData={reloadData}
                   />
@@ -540,11 +522,10 @@ export default function App() {
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SPECIES}>
                   {selectedOrgHasSpecies() ? (
-                    <SpeciesList organization={selectedOrganization} reloadData={reloadSpecies} species={species} />
+                    <SpeciesList reloadData={reloadSpecies} species={species} />
                   ) : (
                     <EmptyStatePage
                       pageName={'Species'}
-                      organization={selectedOrganization}
                       reloadData={reloadSpecies}
                     />
                   )}
@@ -576,16 +557,16 @@ export default function App() {
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
-                  <NewSeedBank organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                  <NewSeedBank />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SEED_BANKS_EDIT}>
-                  <NewSeedBank organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                  <NewSeedBank />
                 </Route>
               )}
               <Route path={APP_PATHS.SEED_BANKS_VIEW}>
-                <SeedBankDetails organization={selectedOrganization} />
+                <SeedBankDetails />
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SEED_BANKS}>
@@ -594,26 +575,26 @@ export default function App() {
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERIES_NEW}>
-                  <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                  <NewNursery />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERIES_EDIT}>
-                  <NewNursery organization={selectedOrganization} reloadOrganizationData={reloadData} />
+                  <NewNursery />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
-                  <PlantsDashboard organization={selectedOrganization} />
+                  <PlantsDashboard />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
-                  <PlantsDashboard organization={selectedOrganization} />
+                  <PlantsDashboard />
                 </Route>
               )}
               <Route path={APP_PATHS.NURSERIES_VIEW}>
-                <NurseryDetails organization={selectedOrganization} />
+                <NurseryDetails />
               </Route>
               <Route exact path={APP_PATHS.NURSERIES}>
                 {getNurseriesView()}
@@ -621,7 +602,6 @@ export default function App() {
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.INVENTORY}>
                   <Inventory
-                    organization={selectedOrganization}
                     hasNurseries={selectedOrgHasNurseries()}
                     hasSpecies={selectedOrgHasSpecies()}
                   />
@@ -629,43 +609,41 @@ export default function App() {
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.INVENTORY_NEW}>
-                  <InventoryCreate organization={selectedOrganization} />
+                  <InventoryCreate />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
                   <SpeciesBulkWithdrawWrapperComponent
-                    organization={selectedOrganization}
                     withdrawalCreatedCallback={() => setWithdrawalCreated(true)}
                   />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_ITEM}>
-                  <InventoryView organization={selectedOrganization} species={species} />
+                  <InventoryView species={species} />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route path={APP_PATHS.BATCH_WITHDRAW}>
                   <BatchBulkWithdrawWrapperComponent
-                    organization={selectedOrganization}
                     withdrawalCreatedCallback={() => setWithdrawalCreated(true)}
                   />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITES_NEW}>
-                  <CreatePlantingSite organization={selectedOrganization} reloadPlantingSites={reloadTracking} />
+                  <CreatePlantingSite reloadPlantingSites={reloadTracking} />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
-                  <CreatePlantingSite organization={selectedOrganization} reloadPlantingSites={reloadTracking} />
+                  <CreatePlantingSite reloadPlantingSites={reloadTracking} />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.PLANTING_SITES}>
-                  <PlantingSitesList organization={selectedOrganization} />
+                  <PlantingSitesList />
                 </Route>
               )}
               {selectedOrganization && (
@@ -675,13 +653,12 @@ export default function App() {
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
-                  <NurseryWithdrawals organization={selectedOrganization} />
+                  <NurseryWithdrawals />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
                   <NurseryWithdrawalsDetails
-                    organization={selectedOrganization}
                     species={species}
                     plotNames={plotNames}
                   />
@@ -689,7 +666,7 @@ export default function App() {
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
-                  <NurseryReassignment organization={selectedOrganization} />
+                  <NurseryReassignment />
                 </Route>
               )}
               <Route exact path={APP_PATHS.CONTACT_US}>
@@ -748,7 +725,11 @@ export default function App() {
   return (
     <StyledEngineProvider injectFirst>
       <CssBaseline />
-      <UserProvider data={{ user, reloadUser }}>{getContent()}</UserProvider>
+      <UserProvider data={{ user, reloadUser }}>
+        <OrganizationProvider data={{ selectedOrganization, setSelectedOrganization, organizations, reloadData }}>
+          {getContent()}
+        </OrganizationProvider>
+      </UserProvider>
     </StyledEngineProvider>
   );
 }

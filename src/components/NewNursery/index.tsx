@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
@@ -14,13 +13,10 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getAllNurseries } from 'src/utils/organization';
 import TfMain from 'src/components/common/TfMain';
+import { useOrganization } from 'src/providers/hooks';
 
-type SiteViewProps = {
-  organization: ServerOrganization;
-  reloadOrganizationData: () => void;
-};
-
-export default function NurseryView({ organization, reloadOrganizationData }: SiteViewProps): JSX.Element {
+export default function NurseryView(): JSX.Element {
+  const { selectedOrganization, reloadData } = useOrganization();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const snackbar = useSnackbar();
@@ -30,7 +26,7 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
     name: '',
     id: -1,
     type: 'Nursery',
-    organizationId: organization.id,
+    organizationId: selectedOrganization!!.id,
     connectionState: 'Not Connected',
   });
   const { nurseryId } = useParams<{ nurseryId: string }>();
@@ -45,20 +41,20 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
   };
 
   useEffect(() => {
-    const seedBanks = getAllNurseries(organization);
+    const seedBanks = getAllNurseries(selectedOrganization!!);
     setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
-  }, [nurseryId, organization]);
+  }, [nurseryId, selectedOrganization]);
 
   useEffect(() => {
     setRecord({
       name: selectedNursery?.name || '',
       description: selectedNursery?.description,
       id: -1,
-      organizationId: organization.id,
+      organizationId: selectedOrganization!!.id,
       type: 'Nursery',
       connectionState: 'Not Connected',
     });
-  }, [selectedNursery, setRecord, organization.id]);
+  }, [selectedNursery, setRecord, selectedOrganization]);
 
   const goToNurseries = () => {
     const nurseriesLocation = {
@@ -81,7 +77,7 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
       : await createFacility(record);
 
     if (response.requestSucceeded) {
-      reloadOrganizationData();
+      reloadData();
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
       goToNurseries();
     } else {

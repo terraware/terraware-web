@@ -20,11 +20,11 @@ import hexRgb from 'hex-rgb';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import { User } from 'src/types/User';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import Icon from './common/icon/Icon';
 import useEnvironment from 'src/utils/useEnvironment';
 import { useUser } from 'src/providers';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -93,22 +93,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type SmallDeviceUserMenuProps = {
-  organizations?: ServerOrganization[];
-  selectedOrganization?: ServerOrganization;
-  setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
-  reloadOrganizationData: (selectedOrgId?: number) => void;
   onLogout: () => void;
-  user?: User;
   hasOrganizations?: boolean;
 };
 export default function SmallDeviceUserMenu({
-  organizations,
-  selectedOrganization,
-  setSelectedOrganization,
-  reloadOrganizationData,
   onLogout,
   hasOrganizations,
 }: SmallDeviceUserMenuProps): JSX.Element | null {
+  const { selectedOrganization, setSelectedOrganization, organizations } = useOrganization();
   const { user } = useUser();
   const classes = useStyles();
   const theme = useTheme();
@@ -163,7 +155,6 @@ export default function SmallDeviceUserMenu({
       <AddNewOrganizationModal
         open={newOrganizationModalOpened}
         onCancel={onCloseCreateOrganizationModal}
-        reloadOrganizationData={reloadOrganizationData}
       />
       <Button ref={anchorRef} id='composition-button' onClick={handleToggle} className={classes.avatarButton}>
         <div className={classes.icon}>{iconLetter}</div>

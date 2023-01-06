@@ -3,7 +3,6 @@ import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
@@ -24,6 +23,7 @@ import { Button } from '@terraware/web-components';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from '../common/PopoverMenu';
+import { useOrganization } from 'src/providers/hooks';
 
 interface StyleProps {
   isMobile: boolean;
@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type InventoryProps = {
-  organization: ServerOrganization;
   hasNurseries: boolean;
   hasSpecies: boolean;
 };
@@ -70,11 +69,12 @@ type InventoryResult = {
 };
 
 export default function Inventory(props: InventoryProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const theme = useTheme();
   const history = useHistory();
-  const { organization, hasNurseries, hasSpecies } = props;
+  const { hasNurseries, hasSpecies } = props;
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [unfilteredInventory, setUnfilteredInventory] = useState<SearchResponseElement[] | null>(null);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
@@ -148,7 +148,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
           {
             operation: 'field',
             field: 'organization_id',
-            values: [organization.id],
+            values: [selectedOrganization!!.id],
           },
         ],
       },
@@ -212,7 +212,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     }
 
     return params;
-  }, [filters, debouncedSearchTerm, organization]);
+  }, [filters, debouncedSearchTerm, selectedOrganization]);
 
   const onApplyFilters = useCallback(async () => {
     const params: SearchNodePayload = getParams();
@@ -289,7 +289,6 @@ export default function Inventory(props: InventoryProps): JSX.Element {
       <ImportInventoryModal
         open={importInventoryModalOpen}
         onClose={() => setImportInventoryModalOpen(false)}
-        organization={organization}
         reloadData={onApplyFilters}
       />
       <PageHeaderWrapper nextElement={contentRef.current}>
@@ -335,7 +334,6 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         {isOnboarded ? (
           unfilteredInventory && unfilteredInventory.length > 0 ? (
             <InventoryTable
-              organization={organization}
               results={searchResults || []}
               temporalSearchValue={temporalSearchValue}
               setTemporalSearchValue={setTemporalSearchValue}
@@ -351,7 +349,6 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               <EmptyStatePage
                 backgroundImageVisible={false}
                 pageName={'Inventory'}
-                organization={organization}
                 reloadData={onApplyFilters}
               />
             </Container>
@@ -359,7 +356,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         ) : (
           <Container maxWidth={false} className={classes.mainContainer}>
             <PageSnackbar />
-            {isAdmin(organization) ? (
+            {isAdmin(selectedOrganization) ? (
               <EmptyMessage
                 className={classes.message}
                 title={strings.ONBOARDING_ADMIN_TITLE}

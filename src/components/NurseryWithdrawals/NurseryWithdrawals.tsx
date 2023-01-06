@@ -2,7 +2,6 @@ import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
@@ -22,6 +21,7 @@ import { getAllNurseries } from 'src/utils/organization';
 import { getAllSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useOrganization } from 'src/providers/hooks';
 
 export type NurseryWithdrawalsFiltersType = {
   fromNurseryIds?: string[];
@@ -29,10 +29,6 @@ export type NurseryWithdrawalsFiltersType = {
   destinationNames?: string[];
   speciesId?: string[];
   withdrawnDates?: string[];
-};
-
-type NurseryWithdrawalsProps = {
-  organization: ServerOrganization;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -52,8 +48,8 @@ const columns: TableColumnType[] = [
   { key: 'hasReassignments', name: '', type: 'string' },
 ];
 
-export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.Element {
-  const { organization } = props;
+export default function NurseryWithdrawals(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const contentRef = useRef(null);
   const classes = useStyles();
@@ -77,7 +73,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
 
   useEffect(() => {
     const populateSpecies = async () => {
-      const result = await getAllSpecies(organization.id);
+      const result = await getAllSpecies(selectedOrganization!!.id);
       if (result.requestSucceeded) {
         setSpecies(result.species);
       } else {
@@ -85,7 +81,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
       }
     };
     populateSpecies();
-  }, [organization, snackbar]);
+  }, [selectedOrganization, snackbar]);
 
   const getSearchChildren = useCallback(() => {
     const finalSearchValueChildren: FieldNodePayload[] = [];
@@ -196,13 +192,13 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
     const searchChildren: FieldNodePayload[] = getSearchChildren();
     const requestId = Math.random().toString();
     setRequestId('searchWithdrawals', requestId);
-    const apiSearchResults = await listNurseryWithdrawals(organization.id, searchChildren, 1000, searchSortOrder);
+    const apiSearchResults = await listNurseryWithdrawals(selectedOrganization!!.id, searchChildren, 1000, searchSortOrder);
     if (apiSearchResults) {
       if (getRequestId('searchWithdrawals') === requestId) {
         setSearchResults(apiSearchResults);
       }
     }
-  }, [getSearchChildren, organization.id, searchSortOrder]);
+  }, [getSearchChildren, selectedOrganization, searchSortOrder]);
 
   useEffect(() => {
     onApplyFilters();
@@ -219,7 +215,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
   };
 
   const getNurseryName = (facilityId: string) => {
-    const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
+    const found = getAllNurseries(selectedOrganization!!).find((n) => n.id.toString() === facilityId.toString());
     if (found) {
       return found.name;
     }
@@ -316,7 +312,6 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
               <NurseryWithdrawalsFiltersPopover
                 filters={filters}
                 setFilters={setFilters}
-                organization={organization}
                 species={species}
               />
             </Grid>
