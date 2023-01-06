@@ -1,4 +1,5 @@
 import axios from 'axios';
+import addQueryParams from '../helpers/addQueryParams';
 import { paths } from '../types/generated-schema';
 import { addError } from '../utils';
 
@@ -15,13 +16,17 @@ type GetTimeZonesResponse = {
   error?: string;
 };
 
-export const getTimeZones = async (): Promise<GetTimeZonesResponse> => {
+type GetTimeZonesQuery = paths[typeof TIMEZONES_ENDPOINT]['get']['parameters']['query'];
+
+export const getTimeZones = async (locale?: string): Promise<GetTimeZonesResponse> => {
   const response: GetTimeZonesResponse = {
     requestSucceeded: true,
     timeZones: undefined,
   };
   try {
-    const serverResponse: ListTimeZoneNamesResponsePayload = (await axios.get(TIMEZONES_ENDPOINT)).data;
+    const queryParams: GetTimeZonesQuery = { locale };
+    const endpoint = addQueryParams(TIMEZONES_ENDPOINT, queryParams);
+    const serverResponse: ListTimeZoneNamesResponsePayload = (await axios.get(endpoint)).data;
     response.timeZones = serverResponse.timeZones;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
