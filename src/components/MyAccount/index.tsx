@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { updateOrganizationUser, updateUserProfile } from 'src/api/user/user';
 import Button from 'src/components/common/button/Button';
@@ -24,7 +24,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TitleDescription from '../common/TitleDescription';
-import { UserContext } from 'src/providers';
+import { useUser } from 'src/providers';
 
 const columns: TableColumnType[] = [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
@@ -40,7 +40,7 @@ type MyAccountProps = {
 };
 
 export default function MyAccount(props: MyAccountProps): JSX.Element | null {
-  const { user, reloadUser } = useContext(UserContext);
+  const { user, reloadUser } = useUser();
 
   if (!user) {
     return null;

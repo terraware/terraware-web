@@ -3,7 +3,7 @@ import { useTheme, Box, Link as LinkMUI, Menu, Tab, Theme, Typography, Grid, Men
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import { checkIn } from 'src/api/seeds/accession';
@@ -35,7 +35,7 @@ import PageHeaderWrapper from '../../common/PageHeaderWrapper';
 import { APP_PATHS } from 'src/constants';
 import OverviewItemCard from '../../common/OverviewItemCard';
 import BackToLink from 'src/components/common/BackToLink';
-import { UserContext } from 'src/providers';
+import { useUser } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -74,7 +74,7 @@ interface Accession2ViewProps {
 }
 
 export default function Accession2View(props: Accession2ViewProps): JSX.Element {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();

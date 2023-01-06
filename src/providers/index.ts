@@ -1,5 +1,5 @@
 import UserProvider from './UserProvider';
-import { UserContext } from './contexts';
-export type { ProvidedUserData } from './DataTypes';
+import { useUser } from './hooks';
 
-export { UserContext, UserProvider };
+export type { ProvidedUserData } from './DataTypes';
+export { useUser, UserProvider };

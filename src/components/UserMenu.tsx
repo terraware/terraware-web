@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from '../../src/strings';
 import Icon from './common/icon/Icon';
@@ -8,7 +8,7 @@ import { makeStyles } from '@mui/styles';
 import useEnvironment from 'src/utils/useEnvironment';
 import PopoverMenu from './common/PopoverMenu';
 import { DropdownItem } from '@terraware/web-components';
-import { UserContext } from 'src/providers';
+import { useUser } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
@@ -36,7 +36,7 @@ type UserMenuProps = {
 };
 export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Element {
   const classes = useStyles();
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const { isProduction } = useEnvironment();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const history = useHistory();
