@@ -24,6 +24,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TitleDescription from '../common/TitleDescription';
+import { useUser } from 'src/providers';
 
 const columns: TableColumnType[] = [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
@@ -33,6 +34,22 @@ const columns: TableColumnType[] = [
 ];
 
 type MyAccountProps = {
+  organizations?: ServerOrganization[];
+  edit: boolean;
+  reloadData?: () => void;
+};
+
+export default function MyAccount(props: MyAccountProps): JSX.Element | null {
+  const { user, reloadUser } = useUser();
+
+  if (!user) {
+    return null;
+  }
+
+  return <MyAccountContent user={user} reloadUser={reloadUser} {...props} />;
+}
+
+type MyAccountContentProps = {
   user: User;
   organizations?: ServerOrganization[];
   edit: boolean;
@@ -40,7 +57,13 @@ type MyAccountProps = {
   reloadData?: () => void;
 };
 
-export default function MyAccount({ user, organizations, edit, reloadUser, reloadData }: MyAccountProps): JSX.Element {
+const MyAccountContent = ({
+  user,
+  organizations,
+  edit,
+  reloadUser,
+  reloadData,
+}: MyAccountContentProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [selectedRows, setSelectedRows] = useState<ServerOrganization[]>([]);
@@ -339,4 +362,4 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
       </PageForm>
     </TfMain>
   );
-}
+};

@@ -24,6 +24,7 @@ import { User } from 'src/types/User';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import Icon from './common/icon/Icon';
 import useEnvironment from 'src/utils/useEnvironment';
+import { useUser } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -106,9 +107,9 @@ export default function SmallDeviceUserMenu({
   setSelectedOrganization,
   reloadOrganizationData,
   onLogout,
-  user,
   hasOrganizations,
 }: SmallDeviceUserMenuProps): JSX.Element | null {
+  const { user } = useUser();
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();

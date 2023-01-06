@@ -94,6 +94,7 @@ export default function NavBar({
           closeAndNavigateTo(APP_PATHS.INVENTORY);
         }}
         id='inventory'
+        key='inventory'
       />
     );
 
@@ -104,7 +105,8 @@ export default function NavBar({
         onClick={() => {
           closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
         }}
-        id='inventory'
+        id='withdrawallog'
+        key='withdrawallog'
       />
     );
 

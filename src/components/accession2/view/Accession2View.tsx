@@ -9,7 +9,6 @@ import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import { checkIn } from 'src/api/seeds/accession';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import { User } from 'src/types/User';
 import TfMain from 'src/components/common/TfMain';
 import DeleteAccessionModal from '../edit/DeleteAccessionModal';
 import DetailPanel from './DetailPanel';
@@ -36,6 +35,7 @@ import PageHeaderWrapper from '../../common/PageHeaderWrapper';
 import { APP_PATHS } from 'src/constants';
 import OverviewItemCard from '../../common/OverviewItemCard';
 import BackToLink from 'src/components/common/BackToLink';
+import { useUser } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -71,10 +71,10 @@ const TABS = ['detail', 'history', 'viabilityTesting'];
 
 interface Accession2ViewProps {
   organization: ServerOrganization;
-  user: User;
 }
 
 export default function Accession2View(props: Accession2ViewProps): JSX.Element {
+  const { user } = useUser();
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();
@@ -99,7 +99,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState({ value: '', unit: '' });
   const [snackbar] = useState(useSnackbar());
-  const { organization, user } = props;
+  const { organization } = props;
   const userCanEdit = !isContributor(organization);
   const { isMobile, isTablet } = useDeviceInfo();
   const classes = useStyles({ isMobile });
@@ -363,18 +363,20 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             />
           )}
 
-          <NewViabilityTestModal
-            open={openNewViabilityTest}
-            reload={reloadData}
-            accession={accession}
-            onClose={() => {
-              setOpenNewViabilityTest(false);
-              setSelectedTest(undefined);
-            }}
-            organization={organization}
-            user={user}
-            viabilityTest={selectedTest}
-          />
+          {user && (
+            <NewViabilityTestModal
+              open={openNewViabilityTest}
+              reload={reloadData}
+              accession={accession}
+              onClose={() => {
+                setOpenNewViabilityTest(false);
+                setSelectedTest(undefined);
+              }}
+              organization={organization}
+              user={user}
+              viabilityTest={selectedTest}
+            />
+          )}
 
           <CheckedInConfirmationModal
             open={openCheckInConfirmationModal}
@@ -414,7 +416,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               accession={accession}
             />
           )}
-          {openWithdrawModal && (
+          {user && openWithdrawModal && (
             <WithdrawModal
               open={openWithdrawModal}
               onClose={() => setOpenWithdrawModal(false)}

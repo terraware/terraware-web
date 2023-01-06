@@ -4,7 +4,6 @@ import { Svg } from '@terraware/web-components';
 import React from 'react';
 
 import { ServerOrganization } from 'src/types/Organization';
-import { User } from 'src/types/User';
 import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
@@ -51,22 +50,12 @@ type TopBarProps = {
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
   selectedOrganization?: ServerOrganization;
   reloadOrganizationData: (selectedOrgId?: number) => void;
-  user?: User;
-  reloadUser: () => void;
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const classes = useStyles();
-  const {
-    setSelectedOrganization,
-    selectedOrganization,
-    organizations,
-    reloadOrganizationData,
-    user,
-    reloadUser,
-    setShowNavBar,
-  } = props;
+  const { setSelectedOrganization, selectedOrganization, organizations, reloadOrganizationData, setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
 
   const onHandleLogout = () => {
@@ -97,7 +86,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           reloadOrganizationData={reloadOrganizationData}
         />
         <div className={classes.separator} />
-        <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+        <UserMenu hasOrganizations={organizations && organizations.length > 0} />
       </div>
     </>
   ) : (
@@ -119,7 +108,6 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         />
         <SmallDeviceUserMenu
           onLogout={onHandleLogout}
-          user={user}
           organizations={organizations}
           selectedOrganization={selectedOrganization}
           setSelectedOrganization={setSelectedOrganization}
