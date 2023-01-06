@@ -10,6 +10,7 @@ export type ServerOrganization = {
   description?: string;
   createdTime?: string;
   totalUsers: number;
+  timeZone?: string;
 };
 
 export type HighOrganizationRoles = 'Admin' | 'Owner';
