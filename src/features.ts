@@ -34,6 +34,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     get: env().isForcedProductionView,
     set: env().forceProductionView,
   },
+  {
+    name: 'Timezones',
+    preferenceName: 'enableTimezones',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Allow choosing timezone'],
+    disclosure: ['This is WIP.'],
+  },
 ];
 
 type FeatureMap = { [key: string]: Feature };
