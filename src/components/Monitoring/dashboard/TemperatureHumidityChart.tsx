@@ -183,19 +183,21 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
               return { x: entry.timestamp, y: getTemperatureMinValue(selectedLocation?.name) };
             }),
             label: 'Temperature Thresholds',
-            showLine: false,
+            showLine: true,
             borderColor: ChartPalette.TEMPERATURE_THRESHOLD.borderColor,
             backgroundColor: ChartPalette.TEMPERATURE_THRESHOLD.backgroundColor,
             fill: false,
             pointRadius: 0,
+            borderWidth: 0,
           },
           {
             data: temperatureValues?.map((entry) => {
               return { x: entry.timestamp, y: getTemperatureMaxValue(selectedLocation?.name) };
             }),
-            showLine: false,
+            showLine: true,
             borderColor: ChartPalette.TEMPERATURE_THRESHOLD.borderColor,
             pointRadius: 0,
+            borderWidth: 0,
             fill: {
               target: 1, // fill to dataset 1
               above: ChartPalette.TEMPERATURE_THRESHOLD.fillColor,
@@ -207,18 +209,19 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
               return { x: entry.timestamp, y: getHumidityMinValue(selectedLocation?.name) };
             }),
             label: 'Humidity Thresholds',
-            showLine: false,
+            showLine: true,
             borderColor: ChartPalette.HUMIDITY_THRESHOLD.borderColor,
             backgroundColor: ChartPalette.HUMIDITY_THRESHOLD.backgroundColor,
             fill: false,
             pointRadius: 0,
             yAxisID: 'y1',
+            borderWidth: 0,
           },
           {
             data: humidityValues?.map((entry) => {
               return { x: entry.timestamp, y: getHumidityMaxValue(selectedLocation?.name) };
             }),
-            showLine: false,
+            showLine: true,
             borderColor: ChartPalette.HUMIDITY_THRESHOLD.borderColor,
             fill: {
               target: 3,
@@ -226,6 +229,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             },
             pointRadius: 0,
             yAxisID: 'y1',
+            borderWidth: 0,
           },
           {
             data: humidityValues?.map((entry) => {

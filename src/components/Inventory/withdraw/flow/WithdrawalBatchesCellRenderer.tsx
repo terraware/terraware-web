@@ -33,7 +33,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         to={`${APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.speciesId.toString())}?batch=${iValue}`}
         target='_blank'
       >
-        {iValue}
+        {iValue as React.ReactNode}
       </Link>
     );
   };

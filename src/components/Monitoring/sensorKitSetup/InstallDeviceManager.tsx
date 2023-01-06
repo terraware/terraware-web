@@ -53,7 +53,7 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
   };
 
   const checkDeviceManagerProgress = useCallback(
-    (sanityCheck) => {
+    (sanityCheck: any) => {
       const checkProgress = async () => {
         setKeepPolling(false);
         const response = await getDeviceManager(deviceManager!.id);

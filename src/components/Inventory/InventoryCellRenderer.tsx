@@ -37,7 +37,11 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
   };
 
   const createLinkToInventoryDetail = (iValue: React.ReactNode | unknown[]) => {
-    return <Link to={APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.species_id.toString())}>{iValue}</Link>;
+    return (
+      <Link to={APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.species_id.toString())}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
   };
 
   if (column.key === 'facilityInventories' && typeof value === 'string') {
