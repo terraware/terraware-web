@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { OrganizationContext, UserContext } from './contexts';
 
 export const useUser = () => useContext(UserContext);
@@ -6,9 +6,10 @@ export const useUser = () => useContext(UserContext);
 /**
  * Default time zones until we have a provider.
  */
-// const DEFAULT_TIME_ZONES = (Intl as any).supportedValuesOf('timeZone').map((tz: any) => ({ id: tz, longName: tz }));
-// const SUPPORTED_TIME_ZONES = [...DEFAULT_TIME_ZONES, { id: 'Etc/UTC', longName: 'Coordinated Universal Time' }];
-
-export const useTimeZones = () => [];
+export const useTimeZones = () => useMemo(() => {
+  const defaultTimeZones = (Intl as any).supportedValuesOf('timeZone').map((tz: any) => ({ id: tz, longName: tz }));
+  const supportedTimeZones = [...defaultTimeZones, { id: 'Etc/UTC', longName: 'Coordinated Universal Time' }];
+  return supportedTimeZones;
+}, []);
 
 export const useOrganization = () => useContext(OrganizationContext);
