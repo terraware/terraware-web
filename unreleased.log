@@ -1,3 +1,4 @@
+7e6df7c SW-2679 Initialize user timezone (#1005)
 7084ace SW-2674 Add timezones BE api (#998)
 80e6095 SW-2640 Fix theme initialization (#987)
 a00df26 SW-2667 Add a user-provider in the web-app react tree (#996)
