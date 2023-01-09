@@ -1,3 +1,5 @@
+1ff53f7 SW-2668 Organization Provider (#1006)
+9c7bedf SW-2679 Validate that browser time zone is in backend supported time zones (#1007)
 7e6df7c SW-2679 Initialize user timezone (#1005)
 7084ace SW-2674 Add timezones BE api (#998)
 80e6095 SW-2640 Fix theme initialization (#987)
