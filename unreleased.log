@@ -1,3 +1,4 @@
+e88015a Merge tag 'v20230105.2'
 1ff53f7 SW-2668 Organization Provider (#1006)
 9c7bedf SW-2679 Validate that browser time zone is in backend supported time zones (#1007)
 7e6df7c SW-2679 Initialize user timezone (#1005)
