@@ -356,7 +356,7 @@ export default function App() {
           <UserProvider data={{ user, reloadUser }}>
             <OrganizationProvider
               data={{
-                selectedOrganization: selectedOrganization || defaultSelectedOrg,
+                selectedOrganization: defaultSelectedOrg,
                 setSelectedOrganization,
                 organizations,
                 reloadData,
