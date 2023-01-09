@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getTimeZones } from 'src/api/timezones/timezones';
 import { updateUserProfile } from 'src/api/user/user';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
@@ -23,16 +24,25 @@ export default function UserProvider({ children, data }: UserProviderProps): JSX
         if (!data.user.timeZone) {
           // Should validate bowser time zone with supported time-zones returned by backend
           const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-          const updateResponse = await updateUserProfile({ ...data.user, timeZone: browserTimeZone });
-          if (updateResponse.requestSucceeded) {
-            data.reloadUser();
-            snackbar.pageSuccess(
-              strings.formatString(
-                strings.UPDATED_TIMEZONE_MSG,
-                <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-              ),
-              strings.formatString(strings.UPDATED_TIMEZONE_TITLE, browserTimeZone)
+          const backendTimeZonesResponse = await getTimeZones();
+          if (backendTimeZonesResponse.requestSucceeded) {
+            const foundTimeZone = backendTimeZonesResponse.timeZones?.find(
+              (timeZone) => timeZone.id === browserTimeZone
             );
+            const updateResponse = await updateUserProfile({
+              ...data.user,
+              timeZone: foundTimeZone ? browserTimeZone : strings.UTC,
+            });
+            if (updateResponse.requestSucceeded) {
+              data.reloadUser();
+              snackbar.pageSuccess(
+                strings.formatString(
+                  strings.UPDATED_TIMEZONE_MSG,
+                  <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
+                ),
+                strings.formatString(strings.UPDATED_TIMEZONE_TITLE, foundTimeZone ? browserTimeZone : strings.UTC)
+              );
+            }
           }
         }
       }
