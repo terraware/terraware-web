@@ -51,10 +51,7 @@ type NurseryWithdrawalsDetailsProps = {
   plotNames: Record<number, string>;
 };
 
-export default function NurseryWithdrawalsDetails({
-  species,
-  plotNames,
-}: NurseryWithdrawalsDetailsProps): JSX.Element {
+export default function NurseryWithdrawalsDetails({ species, plotNames }: NurseryWithdrawalsDetailsProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();

@@ -444,10 +444,7 @@ export default function App() {
               {type !== 'desktop' ? (
                 <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
                   <div>
-                    <NavBar
-                      setShowNavBar={setShowNavBar}
-                      withdrawalCreated={withdrawalCreated}
-                    />
+                    <NavBar setShowNavBar={setShowNavBar} withdrawalCreated={withdrawalCreated} />
                   </div>
                 </Slide>
               ) : (
@@ -505,18 +502,12 @@ export default function App() {
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.MONITORING}>
-                  <Monitoring
-                    hasSeedBanks={selectedOrgHasSeedBanks()}
-                    reloadData={reloadData}
-                  />
+                  <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
                 </Route>
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
-                  <Monitoring
-                    hasSeedBanks={selectedOrgHasSeedBanks()}
-                    reloadData={reloadData}
-                  />
+                  <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
                 </Route>
               )}
               {selectedOrganization && (
@@ -524,10 +515,7 @@ export default function App() {
                   {selectedOrgHasSpecies() ? (
                     <SpeciesList reloadData={reloadSpecies} species={species} />
                   ) : (
-                    <EmptyStatePage
-                      pageName={'Species'}
-                      reloadData={reloadSpecies}
-                    />
+                    <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />
                   )}
                 </Route>
               )}
@@ -601,10 +589,7 @@ export default function App() {
               </Route>
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.INVENTORY}>
-                  <Inventory
-                    hasNurseries={selectedOrgHasNurseries()}
-                    hasSpecies={selectedOrgHasSpecies()}
-                  />
+                  <Inventory hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
                 </Route>
               )}
               {selectedOrganization && (
@@ -614,9 +599,7 @@ export default function App() {
               )}
               {selectedOrganization && (
                 <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
-                  <SpeciesBulkWithdrawWrapperComponent
-                    withdrawalCreatedCallback={() => setWithdrawalCreated(true)}
-                  />
+                  <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
                 </Route>
               )}
               {selectedOrganization && (
@@ -626,9 +609,7 @@ export default function App() {
               )}
               {selectedOrganization && (
                 <Route path={APP_PATHS.BATCH_WITHDRAW}>
-                  <BatchBulkWithdrawWrapperComponent
-                    withdrawalCreatedCallback={() => setWithdrawalCreated(true)}
-                  />
+                  <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
                 </Route>
               )}
               {selectedOrganization && (
@@ -658,10 +639,7 @@ export default function App() {
               )}
               {selectedOrganization && (
                 <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-                  <NurseryWithdrawalsDetails
-                    species={species}
-                    plotNames={plotNames}
-                  />
+                  <NurseryWithdrawalsDetails species={species} plotNames={plotNames} />
                 </Route>
               )}
               {selectedOrganization && (

@@ -152,10 +152,7 @@ export default function SmallDeviceUserMenu({
 
   return (
     <div className={open ? classes.userMenuOpened : ''}>
-      <AddNewOrganizationModal
-        open={newOrganizationModalOpened}
-        onCancel={onCloseCreateOrganizationModal}
-      />
+      <AddNewOrganizationModal open={newOrganizationModalOpened} onCancel={onCloseCreateOrganizationModal} />
       <Button ref={anchorRef} id='composition-button' onClick={handleToggle} className={classes.avatarButton}>
         <div className={classes.icon}>{iconLetter}</div>
       </Button>

@@ -68,10 +68,7 @@ export default function OrganizationsDropdown(): JSX.Element {
 
   return (
     <div>
-      <AddNewOrganizationModal
-        open={newOrganizationModalOpened}
-        onCancel={onCloseCreateOrganizationModal}
-      />
+      <AddNewOrganizationModal open={newOrganizationModalOpened} onCancel={onCloseCreateOrganizationModal} />
       <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
         <p>{selectedOrganization?.name}</p>
         <Icon name='chevronDown' size='medium' className={classes.icon} />

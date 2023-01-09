@@ -34,7 +34,10 @@ export default function NurseryDropdown<T extends AccessionPostRequestBody>(
       id='facilityId'
       label={label}
       selectedValue={record.facilityId?.toString()}
-      options={getAllNurseries(selectedOrganization!!).map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))}
+      options={getAllNurseries(selectedOrganization!!).map((nursery) => ({
+        label: nursery.name,
+        value: nursery.id.toString(),
+      }))}
       onChange={onChangeHandler}
       errorText={validate && !isSelectionValid(record) ? strings.REQUIRED_FIELD : ''}
       fullWidth={true}

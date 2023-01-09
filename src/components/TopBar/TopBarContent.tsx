@@ -91,10 +91,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
       <Grid item xs={3} className={classes.right}>
         <NotificationsDropdown organizationId={selectedOrganization?.id} reloadOrganizationData={reloadData} />
-        <SmallDeviceUserMenu
-          onLogout={onHandleLogout}
-          hasOrganizations={organizations && organizations.length > 0}
-        />
+        <SmallDeviceUserMenu onLogout={onHandleLogout} hasOrganizations={organizations && organizations.length > 0} />
       </Grid>
     </Grid>
   );

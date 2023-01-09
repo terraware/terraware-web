@@ -192,7 +192,12 @@ export default function NurseryWithdrawals(): JSX.Element {
     const searchChildren: FieldNodePayload[] = getSearchChildren();
     const requestId = Math.random().toString();
     setRequestId('searchWithdrawals', requestId);
-    const apiSearchResults = await listNurseryWithdrawals(selectedOrganization!!.id, searchChildren, 1000, searchSortOrder);
+    const apiSearchResults = await listNurseryWithdrawals(
+      selectedOrganization!!.id,
+      searchChildren,
+      1000,
+      searchSortOrder
+    );
     if (apiSearchResults) {
       if (getRequestId('searchWithdrawals') === requestId) {
         setSearchResults(apiSearchResults);
@@ -309,11 +314,7 @@ export default function NurseryWithdrawals(): JSX.Element {
                 value={searchValue}
                 onChange={(value) => setSearchValue(value as string)}
               />
-              <NurseryWithdrawalsFiltersPopover
-                filters={filters}
-                setFilters={setFilters}
-                species={species}
-              />
+              <NurseryWithdrawalsFiltersPopover filters={filters} setFilters={setFilters} species={species} />
             </Grid>
             <Grid xs={12} display='flex' sx={{ marginBottom: 2 }}>
               {(Object.keys(filters) as (keyof typeof filters)[]).map((filter: keyof NurseryWithdrawalsFiltersType) => {

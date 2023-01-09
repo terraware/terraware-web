@@ -23,7 +23,7 @@ export interface BatchDetailsModalProps {
 }
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
-  const { selectedOrganization}  = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const { onClose, open, reload, selectedBatch, speciesId } = props;
 
   const [record, setRecord, onChange] = useForm(selectedBatch);

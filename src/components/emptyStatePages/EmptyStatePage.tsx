@@ -287,14 +287,8 @@ export default function EmptyStatePage({
       {selectedOrganization && (
         <>
           <AddSpeciesModal open={addSpeciesModalOpened} onClose={onCloseEditSpeciesModal} />
-          <ImportSpeciesModal
-            open={importSpeciesModalOpened}
-            onClose={onCloseImportSpeciesModal}
-          />
-          <ImportInventoryModal
-            open={importInventoryModalOpened}
-            onClose={onCloseImportInventoryModal}
-          />
+          <ImportSpeciesModal open={importSpeciesModalOpened} onClose={onCloseImportSpeciesModal} />
+          <ImportInventoryModal open={importInventoryModalOpened} onClose={onCloseImportInventoryModal} />
         </>
       )}
       <PlantingSiteTypeSelect open={plantingSiteTypeSelectOpen} onClose={() => setPlantingSiteTypeSelectOpen(false)} />

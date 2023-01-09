@@ -114,11 +114,7 @@ export default function CreateAccession(): JSX.Element {
               </Typography>
             </Grid>
             <Grid item xs={12} sx={marginTop}>
-              <Species2Dropdown
-                record={record}
-                setRecord={setRecord}
-                validate={validateFields}
-              />
+              <Species2Dropdown record={record} setRecord={setRecord} validate={validateFields} />
             </Grid>
             <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
             <Grid item xs={12} sx={marginTop}>
@@ -167,11 +163,7 @@ export default function CreateAccession(): JSX.Element {
                 fullWidth={true}
               />
             </Grid>
-            <SeedBank2Selector
-              record={record}
-              onChange={onChange}
-              validate={validateFields}
-            />
+            <SeedBank2Selector record={record} onChange={onChange} validate={validateFields} />
           </Grid>
         </Container>
       </PageForm>

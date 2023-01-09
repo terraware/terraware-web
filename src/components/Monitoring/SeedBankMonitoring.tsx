@@ -96,13 +96,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
           </span>
         </div>
       )}
-      {onboarding && (
-        <SensorKitSetup
-          seedBank={seedBank}
-          onFinish={onFinishOnboarding}
-          reloadData={reloadData}
-        />
-      )}
+      {onboarding && <SensorKitSetup seedBank={seedBank} onFinish={onFinishOnboarding} reloadData={reloadData} />}
     </>
   );
 }

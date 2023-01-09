@@ -346,11 +346,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
             </div>
           ) : (
             <Container maxWidth={false} className={classes.mainContainer}>
-              <EmptyStatePage
-                backgroundImageVisible={false}
-                pageName={'Inventory'}
-                reloadData={onApplyFilters}
-              />
+              <EmptyStatePage backgroundImageVisible={false} pageName={'Inventory'} reloadData={onApplyFilters} />
             </Container>
           )
         ) : (

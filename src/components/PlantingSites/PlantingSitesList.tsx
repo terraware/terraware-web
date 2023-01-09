@@ -14,7 +14,7 @@ import PlantingSiteTypeSelect from './PlantingSiteTypeSelect';
 import { useOrganization } from 'src/providers/hooks';
 
 export default function PlantingSitesList(): JSX.Element {
-  const {selectedOrganization} = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const contentRef = useRef(null);
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [plantingSites, setPlantingSites] = useState<SearchResponseElement[] | null>();

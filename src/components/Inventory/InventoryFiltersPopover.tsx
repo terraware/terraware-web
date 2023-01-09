@@ -71,10 +71,7 @@ type InventoryFiltersPopoverProps = {
   setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
 };
 
-export default function InventoryFiltersPopover({
-  filters,
-  setFilters,
-}: InventoryFiltersPopoverProps): JSX.Element {
+export default function InventoryFiltersPopover({ filters, setFilters }: InventoryFiltersPopoverProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();

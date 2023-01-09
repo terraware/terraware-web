@@ -72,10 +72,7 @@ export default function NoOrgLandingPage(): JSX.Element {
     <main className={classes.main}>
       <Container className={classes.mainContainer}>
         <PageSnackbar />
-        <AddNewOrganizationModal
-          open={isOrgModalOpen}
-          onCancel={() => setIsOrgModalOpen(false)}
-        />
+        <AddNewOrganizationModal open={isOrgModalOpen} onCancel={() => setIsOrgModalOpen(false)} />
         <EmptyStateContent
           title={strings.TITLE_WELCOME}
           subtitle={strings.SUBTITLE_GET_STARTED}

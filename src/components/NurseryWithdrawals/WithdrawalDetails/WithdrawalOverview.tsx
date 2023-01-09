@@ -11,10 +11,7 @@ type WithdrawalOverviewProps = {
   withdrawalSummary?: WithdrawalSummary;
 };
 
-export default function WithdrawalOverview({
-  withdrawal,
-  withdrawalSummary,
-}: WithdrawalOverviewProps): JSX.Element {
+export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: WithdrawalOverviewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
 

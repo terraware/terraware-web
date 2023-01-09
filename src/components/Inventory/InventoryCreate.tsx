@@ -123,11 +123,7 @@ export default function CreateInventory(): JSX.Element {
           <Box marginTop={theme.spacing(3)}>
             <Grid container padding={0}>
               <Grid item xs={12} sx={marginTop}>
-                <Species2Dropdown
-                  record={record}
-                  setRecord={setRecord}
-                  validate={validateFields}
-                />
+                <Species2Dropdown record={record} setRecord={setRecord} validate={validateFields} />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
                 <NurseryDropdown

@@ -41,7 +41,7 @@ interface InventorySeedslingsTableProps {
 }
 
 export default function InventorySeedslingsTable(props: InventorySeedslingsTableProps): JSX.Element {
-  const {selectedOrganization} = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const { speciesId, modified, setModified, openBatchNumber, onUpdateOpenBatch } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();

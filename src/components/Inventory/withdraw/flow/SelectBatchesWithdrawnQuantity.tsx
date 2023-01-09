@@ -39,7 +39,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
-  const {selectedOrganization} = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const { onNext, onCancel, saveText, batches, nurseryWithdrawal } = props;
   const { OUTPLANT } = NurseryWithdrawalPurposes;
   const theme = useTheme();
