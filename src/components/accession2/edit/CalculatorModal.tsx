@@ -5,7 +5,6 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, Theme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
-import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
@@ -23,7 +22,6 @@ export interface CalculatorModalProps {
   setRecord: React.Dispatch<React.SetStateAction<Accession2>>;
   onClose: () => void;
   reload: () => void;
-  organization: ServerOrganization;
   onChange: (id: string, value: unknown) => void;
   onPrevious: () => void;
 }

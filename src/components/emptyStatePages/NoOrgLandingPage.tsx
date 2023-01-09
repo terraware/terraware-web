@@ -63,11 +63,7 @@ const LIST_ITEM_CONTENT: ListItemContent[] = [
   { icon: 'species2', title: strings.SPECIES, description: strings.DESCRIPTION_SPECIES },
 ];
 
-type LandingPageProps = {
-  reloadOrganizationData: (selectedOrgId?: number) => void;
-};
-
-export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {
+export default function NoOrgLandingPage(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
@@ -76,11 +72,7 @@ export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {
     <main className={classes.main}>
       <Container className={classes.mainContainer}>
         <PageSnackbar />
-        <AddNewOrganizationModal
-          open={isOrgModalOpen}
-          onCancel={() => setIsOrgModalOpen(false)}
-          reloadOrganizationData={props.reloadOrganizationData}
-        />
+        <AddNewOrganizationModal open={isOrgModalOpen} onCancel={() => setIsOrgModalOpen(false)} />
         <EmptyStateContent
           title={strings.TITLE_WELCOME}
           subtitle={strings.SUBTITLE_GET_STARTED}

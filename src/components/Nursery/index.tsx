@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { getAllNurseries } from 'src/utils/organization';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
@@ -13,6 +12,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import TfMain from '../common/TfMain';
 import PageSnackbar from '../PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -23,25 +23,23 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type NurseryDetailsProps = {
-  organization?: ServerOrganization;
-};
-export default function NurseryDetails({ organization }: NurseryDetailsProps): JSX.Element {
+export default function NurseryDetails(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
   const history = useHistory();
 
   useEffect(() => {
-    if (organization) {
-      const selectedNursery = getAllNurseries(organization).find((n) => n?.id.toString() === nurseryId);
+    if (selectedOrganization) {
+      const selectedNursery = getAllNurseries(selectedOrganization).find((n) => n?.id.toString() === nurseryId);
       if (selectedNursery) {
         setNursery(selectedNursery);
       } else {
         history.push(APP_PATHS.SEED_BANKS);
       }
     }
-  }, [nurseryId, organization, history]);
+  }, [nurseryId, selectedOrganization, history]);
 
   const classes = useStyles();
 

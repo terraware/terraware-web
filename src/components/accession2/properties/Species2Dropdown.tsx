@@ -3,14 +3,13 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { getAllSpecies } from 'src/api/species/species';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { Species } from 'src/types/Species';
 import { SelectT } from '@terraware/web-components';
 import useDebounce from 'src/utils/useDebounce';
+import { useOrganization } from 'src/providers/hooks';
 
 interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
   speciesId?: number;
-  organization: ServerOrganization;
   record: T;
   setRecord: React.Dispatch<React.SetStateAction<T>>;
   disabled?: boolean;
@@ -20,14 +19,15 @@ interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
 export default function Species2Dropdown<T extends AccessionPostRequestBody>(
   props: SpeciesDropdownProps<T>
 ): JSX.Element {
-  const { speciesId, organization, record, setRecord, disabled, validate } = props;
+  const { selectedOrganization } = useOrganization();
+  const { speciesId, record, setRecord, disabled, validate } = props;
   const [speciesList, setSpeciesList] = useState<Species[]>([]);
   const [selectedValue, setSelectedValue] = useState<Species>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
   const populateSpecies = useCallback(async () => {
-    const response = await getAllSpecies(organization.id);
+    const response = await getAllSpecies(selectedOrganization.id);
     if (response.requestSucceeded) {
       const searchValue = debouncedSearchTerm ? debouncedSearchTerm.toLowerCase() : '';
       const speciesToUse = searchValue
@@ -40,11 +40,11 @@ export default function Species2Dropdown<T extends AccessionPostRequestBody>(
         : response.species;
       setSpeciesList(speciesToUse);
     }
-  }, [organization, debouncedSearchTerm]);
+  }, [selectedOrganization, debouncedSearchTerm]);
 
   useEffect(() => {
     populateSpecies();
-  }, [organization, populateSpecies]);
+  }, [selectedOrganization, populateSpecies]);
 
   useEffect(() => {
     if (speciesId && !selectedValue) {

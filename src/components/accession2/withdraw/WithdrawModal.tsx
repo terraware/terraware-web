@@ -12,7 +12,6 @@ import { postViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2
 import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
-import { ServerOrganization } from 'src/types/Organization';
 import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
 import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
 import { TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
@@ -22,18 +21,19 @@ import { isContributor, getAllNurseries } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 import AddLink from 'src/components/common/AddLink';
+import { useOrganization } from 'src/providers/hooks';
 
 export interface WithdrawDialogProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
   reload: () => void;
-  organization: ServerOrganization;
   user: User;
 }
 
 export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element {
-  const { onClose, open, accession, reload, organization, user } = props;
+  const { selectedOrganization } = useOrganization();
+  const { onClose, open, accession, reload, user } = props;
 
   const newWithdrawal: Withdrawal2 = {
     purpose: 'Nursery',
@@ -69,17 +69,17 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const contributor = isContributor(organization);
+  const contributor = isContributor(selectedOrganization);
 
   useEffect(() => {
     const getOrgUsers = async () => {
-      const response = await getOrganizationUsers(organization);
+      const response = await getOrganizationUsers(selectedOrganization);
       if (response.requestSucceeded) {
         setUsers(response.users);
       }
     };
     getOrgUsers();
-  }, [organization]);
+  }, [selectedOrganization]);
 
   const saveWithdrawal = async () => {
     let response;
@@ -360,7 +360,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 id='destinationFacilityId'
                 label={strings.DESTINATION_REQUIRED}
                 selectedValue={nurseryTransferRecord.destinationFacilityId.toString()}
-                options={getAllNurseries(organization).map((nursery) => ({
+                options={getAllNurseries(selectedOrganization).map((nursery) => ({
                   label: nursery.name,
                   value: nursery.id.toString(),
                 }))}

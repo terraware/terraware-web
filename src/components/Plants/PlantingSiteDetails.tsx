@@ -7,8 +7,8 @@ import SpeciesByPlotChart from './SpeciesByPlotChart';
 import TotalCount from './TotalCount';
 import PlantingSiteDashboardMap from './PlantingSiteDashboardMap';
 import PlantBySpeciesChart from './PlantBySpeciesChart';
-import { ServerOrganization } from 'src/types/Organization';
 import BusySpinner from 'src/components/common/BusySpinner';
+import { useOrganization } from 'src/providers/hooks';
 
 export type Population = {
   species_scientificName: string;
@@ -29,7 +29,6 @@ export type PlantingSiteZone = {
 
 type PlantingSiteDetailsProps = {
   plantingSite?: PlantingSite;
-  organization: ServerOrganization;
   plantsDashboardPreferences?: { [key: string]: unknown };
   setPlantsDashboardPreferences: React.Dispatch<React.SetStateAction<{ [key: string]: unknown } | undefined>>;
 };
@@ -40,7 +39,8 @@ export const cardTitleStyle = {
 };
 
 export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JSX.Element {
-  const { plantingSite, organization, plantsDashboardPreferences, setPlantsDashboardPreferences } = props;
+  const { selectedOrganization } = useOrganization();
+  const { plantingSite, plantsDashboardPreferences, setPlantsDashboardPreferences } = props;
   const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -143,7 +143,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
 
     populateZones();
     populateTotals();
-  }, [plantingSite, organization.id]);
+  }, [plantingSite, selectedOrganization]);
 
   const plotsWithPlants = useMemo(() => {
     if (!zonesWithPlants) {

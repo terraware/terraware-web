@@ -5,12 +5,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Facility } from 'src/api/types/facilities';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from 'src/api/types/uploadFile';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import Button from './button/Button';
 import DialogBox from './DialogBox/DialogBox';
 import Icon from './icon/Icon';
 import ProgressCircle from './ProgressCircle/ProgressCircle';
 import Link from 'src/components/common/Link';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spacing: {
@@ -68,7 +68,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 export type ImportSpeciesModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
-  organization?: ServerOrganization;
   facility?: Facility;
   setCheckDataModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   title: string;
@@ -97,11 +96,11 @@ export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>
 };
 
 export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const {
     open,
     onClose,
-    organization,
     facility,
     setCheckDataModalOpen,
     title,
@@ -209,8 +208,8 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
         id: 0,
         requestSucceeded: false,
       };
-      if (organization) {
-        response = await uploadApi(file, organization.id.toString());
+      if (selectedOrganization) {
+        response = await uploadApi(file, selectedOrganization.id.toString());
       }
       if (facility) {
         response = await uploadApi(file, facility.id.toString());

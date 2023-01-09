@@ -4,7 +4,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { search, SearchResponseElement } from 'src/api/search';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import useDebounce from 'src/utils/useDebounce';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -12,13 +11,10 @@ import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import PlantingSitesTable from './PlantingSitesTable';
 import PlantingSiteTypeSelect from './PlantingSiteTypeSelect';
+import { useOrganization } from 'src/providers/hooks';
 
-type PlantingSitesListProps = {
-  organization: ServerOrganization;
-};
-
-export default function PlantingSitesList(props: PlantingSitesListProps): JSX.Element {
-  const { organization } = props;
+export default function PlantingSitesList(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const contentRef = useRef(null);
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [plantingSites, setPlantingSites] = useState<SearchResponseElement[] | null>();
@@ -47,7 +43,7 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
           {
             field: 'organization_id',
             operation: 'field',
-            values: [organization.id],
+            values: [selectedOrganization.id],
           },
         ],
       },
@@ -64,11 +60,11 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
       setPlantingSites(apiSearchResults);
     }
     setSearchResults(apiSearchResults);
-  }, [organization, debouncedSearchTerm]);
+  }, [selectedOrganization, debouncedSearchTerm]);
 
   useEffect(() => {
     onSearch();
-  }, [organization, onSearch]);
+  }, [selectedOrganization, onSearch]);
 
   if (plantingSites && !plantingSites.length) {
     return <EmptyStatePage backgroundImageVisible={true} pageName={'PlantingSites'} />;
@@ -113,7 +109,6 @@ export default function PlantingSitesList(props: PlantingSitesListProps): JSX.El
         {plantingSites ? (
           <Box display='flex' flexDirection='column'>
             <PlantingSitesTable
-              organization={organization}
               results={searchResults || []}
               temporalSearchValue={temporalSearchValue}
               setTemporalSearchValue={setTemporalSearchValue}

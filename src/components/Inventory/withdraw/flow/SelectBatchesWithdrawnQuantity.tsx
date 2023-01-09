@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { ServerOrganization } from 'src/types/Organization';
 import PageForm from 'src/components/common/PageForm';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import strings from 'src/strings';
@@ -9,9 +8,9 @@ import { ErrorBox, Table, TableColumnType } from '@terraware/web-components';
 import WithdrawalBatchesCellRenderer from './WithdrawalBatchesCellRenderer';
 import useForm from 'src/utils/useForm';
 import { makeStyles } from '@mui/styles';
+import { useOrganization } from 'src/providers/hooks';
 
 type SelectBatchesWithdrawnQuantityProps = {
-  organization: ServerOrganization;
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
   onCancel: () => void;
   saveText: string;
@@ -40,7 +39,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
-  const { onNext, onCancel, saveText, batches, nurseryWithdrawal, organization } = props;
+  const { selectedOrganization } = useOrganization();
+  const { onNext, onCancel, saveText, batches, nurseryWithdrawal } = props;
   const { OUTPLANT } = NurseryWithdrawalPurposes;
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -83,7 +83,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
     };
 
     transformBatchesForTable();
-  }, [batches, nurseryWithdrawal, organization, setRecord]);
+  }, [batches, nurseryWithdrawal, selectedOrganization, setRecord]);
 
   const columns: TableColumnType[] = [
     {

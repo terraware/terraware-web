@@ -1,5 +1,4 @@
 import { useHistory, useParams } from 'react-router-dom';
-import { ServerOrganization } from 'src/types/Organization';
 import TfMain from 'src/components/common/TfMain';
 import { Box, Tab, Theme, Typography, useTheme } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
@@ -23,6 +22,7 @@ import NonOutplantWithdrawalContent from './WithdrawalDetails/NonOutplantWithdra
 import { Species } from 'src/types/Species';
 import { NurseryWithdrawalPurposes } from 'src/api/types/batch';
 import BackToLink from 'src/components/common/BackToLink';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backToWithdrawals: {
@@ -47,16 +47,12 @@ export interface WithdrawalSummary {
 }
 
 type NurseryWithdrawalsDetailsProps = {
-  organization: ServerOrganization;
   species: Species[];
   plotNames: Record<number, string>;
 };
 
-export default function NurseryWithdrawalsDetails({
-  organization,
-  species,
-  plotNames,
-}: NurseryWithdrawalsDetailsProps): JSX.Element {
+export default function NurseryWithdrawalsDetails({ species, plotNames }: NurseryWithdrawalsDetailsProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
   const { withdrawalId } = useParams<{ withdrawalId: string }>();
@@ -90,7 +86,7 @@ export default function NurseryWithdrawalsDetails({
         setBatches(withdrawalResponse.batches);
       }
       // get summary information
-      const apiSearchResults = await listNurseryWithdrawals(organization.id, [
+      const apiSearchResults = await listNurseryWithdrawals(selectedOrganization.id, [
         {
           operation: 'field',
           field: 'id',
@@ -116,7 +112,7 @@ export default function NurseryWithdrawalsDetails({
     };
 
     updateWithdrawal();
-  }, [organization.id, withdrawalId, snackbar]);
+  }, [selectedOrganization, withdrawalId, snackbar]);
 
   useEffect(() => {
     setSelectedTab((query.get('tab') || 'withdrawal') as string);
@@ -217,7 +213,6 @@ export default function NurseryWithdrawalsDetails({
             </Box>
             <TabPanel value='withdrawal' sx={contentPanelProps}>
               <WithdrawalTabPanelContent
-                organization={organization}
                 species={species}
                 plotNames={plotNames}
                 withdrawal={withdrawal}
@@ -228,11 +223,9 @@ export default function NurseryWithdrawalsDetails({
             </TabPanel>
             <TabPanel value='reassignment' sx={contentPanelProps}>
               <ReassignmentTabPanelContent
-                organization={organization}
                 species={species}
                 plotNames={plotNames}
                 withdrawal={withdrawal}
-                withdrawalSummary={withdrawalSummary}
                 delivery={delivery}
                 batches={batches}
               />
@@ -242,7 +235,6 @@ export default function NurseryWithdrawalsDetails({
         {withdrawal?.purpose === OUTPLANT && !withdrawalSummary?.hasReassignments && (
           <Box sx={contentPanelProps}>
             <WithdrawalTabPanelContent
-              organization={organization}
               species={species}
               plotNames={plotNames}
               withdrawal={withdrawal}
@@ -255,7 +247,6 @@ export default function NurseryWithdrawalsDetails({
         {withdrawal?.purpose !== OUTPLANT && (
           <Box sx={contentPanelProps}>
             <NonOutplantWithdrawalContent
-              organization={organization}
               species={species}
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}

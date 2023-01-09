@@ -14,16 +14,17 @@ import DialogBox from './common/DialogBox/DialogBox';
 import { Grid } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useOrganization } from 'src/providers/hooks';
 
 export type AddNewOrganizationModalProps = {
   open: boolean;
   onCancel: () => void;
-  reloadOrganizationData: (selectedOrgId?: number) => void;
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
+  const { reloadData } = useOrganization();
   const history = useHistory();
-  const { onCancel, open, reloadOrganizationData } = props;
+  const { onCancel, open } = props;
   const snackbar = useSnackbar();
   const [nameError, setNameError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
@@ -85,7 +86,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         strings.ORGANIZATION_CREATED_MSG,
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
       );
-      reloadOrganizationData(response.organization.id);
+      reloadData();
       history.push({ pathname: APP_PATHS.HOME });
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);

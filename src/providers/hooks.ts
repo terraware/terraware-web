@@ -1,4 +1,6 @@
 import { useContext } from 'react';
-import { UserContext } from './contexts';
+import { OrganizationContext, UserContext } from './contexts';
 
 export const useUser = () => useContext(UserContext);
+
+export const useOrganization = () => useContext(OrganizationContext);

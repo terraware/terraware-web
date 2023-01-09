@@ -1,4 +1,3 @@
-import { ServerOrganization } from 'src/types/Organization';
 import TfMain from 'src/components/common/TfMain';
 import { Typography, Box, Container, Grid, useTheme } from '@mui/material';
 import strings from 'src/strings';
@@ -20,16 +19,17 @@ import { useEffect, useState } from 'react';
 import PageSnackbar from '../PageSnackbar';
 import { PlantingSite } from 'src/api/types/tracking';
 import BoundariesAndPlots from './BoundariesAndPlots';
+import { useOrganization } from 'src/providers/hooks';
 
 type CreatePlantingSiteProps = {
-  organization: ServerOrganization;
   reloadPlantingSites: () => void;
 };
 
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { organization, reloadPlantingSites } = props;
+  const { reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const snackbar = useSnackbar();
@@ -56,7 +56,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     };
 
     fetchPlantingSite();
-  }, [plantingSiteId, organization]);
+  }, [plantingSiteId, selectedOrganization]);
   const [record, setRecord, onChange] = useForm<PlantingSite>(defaultPlantingSite());
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       const newPlantingSite: PlantingSitePostRequestBody = {
         name: record.name,
         description: record.description,
-        organizationId: organization.id,
+        organizationId: selectedOrganization.id,
       };
       response = await postPlantingSite(newPlantingSite);
     } else {
