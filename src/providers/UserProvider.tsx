@@ -43,10 +43,7 @@ export default function UserProvider({ children, data }: UserProviderProps): JSX
                   strings.UPDATED_TIMEZONE_MSG,
                   <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
                 ),
-                strings.formatString(
-                  strings.UPDATED_TIMEZONE_TITLE,
-                  foundTimeZone.id === 'Etc/UTC' ? foundTimeZone.longName : foundTimeZone.id
-                )
+                strings.formatString(strings.UPDATED_TIMEZONE_TITLE, foundTimeZone.longName)
               );
             }
           }
