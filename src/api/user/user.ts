@@ -36,6 +36,7 @@ export async function getUser(): Promise<GetUserResponse> {
       firstName: serverResponse.user.firstName,
       lastName: serverResponse.user.lastName,
       emailNotificationsEnabled: serverResponse.user.emailNotificationsEnabled,
+      timeZone: serverResponse.user.timeZone,
     };
     setCurrentUser(response.user);
   } catch {
@@ -56,6 +57,7 @@ export async function updateUserProfile(user: User): Promise<UpdateUserResponse>
     const serverRequest: UPDATE_USER_REQUEST_PAYLOAD = {
       firstName: user.firstName || '',
       lastName: user.lastName || '',
+      timeZone: user.timeZone,
     };
     if (user.emailNotificationsEnabled !== undefined) {
       serverRequest.emailNotificationsEnabled = user.emailNotificationsEnabled;

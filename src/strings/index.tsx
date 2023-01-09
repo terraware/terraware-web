@@ -940,6 +940,8 @@ const strings = new LocalizedStrings({
     UNSPECIFIED: 'Unspecified',
     UNSURE: 'Unsure',
     UPDATE_STATUS_WARNING: 'You‘re about to update the status',
+    UPDATED_TIMEZONE_MSG: 'You can edit this setting from {0}',
+    UPDATED_TIMEZONE_TITLE: 'Your time zone was updated to {0} zone.',
     UPLOAD_PHOTO_DESCRIPTION: 'Browse or drag and drop a file (JPG, PNG).',
     UPLOAD_PHOTO_MOBILE_DESCRIPTION: 'Browse files (JPG, PNG).',
     UPLOAD_PHOTO: 'Upload Photo...',
