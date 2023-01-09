@@ -266,6 +266,27 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [query, location, history, setSearchCriteria, selectedOrganization, searchCriteria]);
 
   useEffect(() => {
+    if (selectedOrganization) {
+      const populateUnfilteredResults = async () => {
+        const apiResponse = await search({
+          prefix: 'facilities.accessions',
+          fields: ['id'],
+          search: convertToSearchNodePayload({}, selectedOrganization.id),
+          count: 1000,
+        });
+
+        setUnfilteredResults(apiResponse);
+      };
+      const populatePendingAccessions = async () => {
+        const data = await getPendingAccessions(selectedOrganization.id);
+        setPendingAccessions(data);
+      };
+      populateUnfilteredResults();
+      populatePendingAccessions();
+    }
+  }, [selectedOrganization]);
+
+  useEffect(() => {
     let activeRequests = true;
     const getFieldsFromSearchColumns = () => {
       let columnsNamesToSearch = Array<string>();
@@ -279,20 +300,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     };
 
     if (selectedOrganization) {
-      const populateUnfilteredResults = async () => {
-        const apiResponse = await search({
-          prefix: 'facilities.accessions',
-          fields: getFieldsFromSearchColumns(),
-          sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload({}, selectedOrganization.id),
-          count: 1000,
-        });
-
-        if (activeRequests) {
-          setUnfilteredResults(apiResponse);
-        }
-      };
-
       const populateSearchResults = async () => {
         const apiResponse = await search({
           prefix: 'facilities.accessions',
@@ -316,16 +323,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
         }
       };
 
-      const populatePendingAccessions = async () => {
-        if (selectedOrganization) {
-          const data = await getPendingAccessions(selectedOrganization.id);
-
-          if (activeRequests) {
-            setPendingAccessions(data);
-          }
-        }
-      };
-
       const populateFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
         const allValues = await getAllFieldValues(singleAndMultiChoiceFields, selectedOrganization.id);
@@ -334,10 +331,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
           setFieldOptions(allValues);
         }
       };
-      populateUnfilteredResults();
-      populateSearchResults();
+      if (searchCriteria) {
+        populateSearchResults();
+      }
       populateAvailableFieldOptions();
-      populatePendingAccessions();
+
       populateFieldOptions();
     }
 
