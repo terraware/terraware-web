@@ -41,7 +41,7 @@ export default function Search(props: SearchProps): JSX.Element {
           <Pill
             key={id}
             filter={strings.NURSERY}
-            value={getNurseryName(id, selectedOrganization!!)}
+            value={getNurseryName(id, selectedOrganization)}
             onRemoveFilter={() => removeFilter(id, setFilters)}
           />
         ))}

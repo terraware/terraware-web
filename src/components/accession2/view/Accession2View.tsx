@@ -535,7 +535,7 @@ export default function Accession2View(): JSX.Element {
               title={strings.LOCATION}
               contents={
                 <Box>
-                  {getSeedBank(selectedOrganization!!, accession.facilityId)?.name}
+                  {getSeedBank(selectedOrganization, accession.facilityId)?.name}
                   {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
                 </Box>
               }

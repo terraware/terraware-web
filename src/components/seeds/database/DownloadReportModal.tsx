@@ -30,7 +30,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
       prefix: 'facilities.accessions',
       fields: searchColumns.includes('active') ? [...searchColumns] : [...searchColumns, 'active'],
       sortOrder: [searchSortOrder],
-      search: convertToSearchNodePayload(searchCriteria, selectedOrganization!!.id),
+      search: convertToSearchNodePayload(searchCriteria, selectedOrganization.id),
       count: 1000,
     });
 

@@ -72,7 +72,10 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         )}
       </div>
       <div className={classes.right}>
-        <NotificationsDropdown organizationId={selectedOrganization?.id} reloadOrganizationData={reloadData} />
+        <NotificationsDropdown
+          organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
+          reloadOrganizationData={reloadData}
+        />
         <div className={classes.separator} />
         <UserMenu hasOrganizations={organizations && organizations.length > 0} />
       </div>
@@ -80,7 +83,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   ) : (
     <Grid container className={`${classes.flex}  ${classes.backgroundLogo}`}>
       <Grid item xs={3} className={classes.left}>
-        {selectedOrganization && (
+        {selectedOrganization.id !== -1 && (
           <IconButton onClick={() => setShowNavBar(true)} size='small'>
             <Icon name='iconMenu' />
           </IconButton>
@@ -90,7 +93,10 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <Grid item xs={6} className={`${classes.center} logo`} />
 
       <Grid item xs={3} className={classes.right}>
-        <NotificationsDropdown organizationId={selectedOrganization?.id} reloadOrganizationData={reloadData} />
+        <NotificationsDropdown
+          organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
+          reloadOrganizationData={reloadData}
+        />
         <SmallDeviceUserMenu onLogout={onHandleLogout} hasOrganizations={organizations && organizations.length > 0} />
       </Grid>
     </Grid>

@@ -51,7 +51,7 @@ export default function NurseryReassignment(): JSX.Element {
   // populate map of species id to scientific name
   useEffect(() => {
     const populateSpecies = async () => {
-      const speciesResponse = await getAllSpecies(selectedOrganization!!.id);
+      const speciesResponse = await getAllSpecies(selectedOrganization.id);
       if (speciesResponse.requestSucceeded) {
         setSpeciesMap(
           speciesResponse.species.reduce((acc: any, current: any) => {

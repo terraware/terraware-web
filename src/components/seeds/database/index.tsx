@@ -387,9 +387,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const onCloseEditColumnsModal = (columnNames?: string[]) => {
     if (columnNames) {
       updateSearchColumns(columnNames);
-      if (selectedOrganization?.id) {
-        updatePreferences('accessionsColumns', columnNames, selectedOrganization.id);
-      }
+      updatePreferences('accessionsColumns', columnNames, selectedOrganization.id);
     }
     setEditColumnsModalOpen(false);
   };

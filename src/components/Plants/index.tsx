@@ -29,13 +29,13 @@ export default function PlantsDashboard(): JSX.Element {
 
   useEffect(() => {
     if (plantsDashboardPreferences) {
-      updatePreferences('lastDashboardPlantingSite', plantsDashboardPreferences, selectedOrganization!!.id);
+      updatePreferences('lastDashboardPlantingSite', plantsDashboardPreferences, selectedOrganization.id);
     }
   }, [plantsDashboardPreferences, selectedOrganization]);
 
   useEffect(() => {
     const populatePlantingSites = async () => {
-      const serverResponse = await listPlantingSites(selectedOrganization!!.id);
+      const serverResponse = await listPlantingSites(selectedOrganization.id);
       if (serverResponse.requestSucceeded) {
         setPlantingSites(serverResponse.sites ?? []);
       } else {
@@ -58,7 +58,7 @@ export default function PlantsDashboard(): JSX.Element {
     const initializePlantingSite = async () => {
       if (plantingSites && plantingSites.length) {
         let lastDashboardPlantingSite: any = {};
-        const response = await getPreferences(selectedOrganization!!.id);
+        const response = await getPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences?.lastDashboardPlantingSite) {
           lastDashboardPlantingSite = response.preferences.lastDashboardPlantingSite;
         }
@@ -70,7 +70,7 @@ export default function PlantsDashboard(): JSX.Element {
 
         if (plantingSiteToUse.id !== lastDashboardPlantingSite.plantingSiteId) {
           lastDashboardPlantingSite = { plantingSiteId: plantingSiteToUse.id };
-          updatePreferences('lastDashboardPlantingSite', lastDashboardPlantingSite, selectedOrganization!!.id);
+          updatePreferences('lastDashboardPlantingSite', lastDashboardPlantingSite, selectedOrganization.id);
         }
         setPlantsDashboardPreferences(lastDashboardPlantingSite);
         if (plantingSiteToUse.id.toString() === plantingSiteId) {

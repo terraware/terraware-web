@@ -53,7 +53,7 @@ function initSpecies(species?: Species): Species {
 
 export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const organizationId = selectedOrganization!!.id;
+  const organizationId = selectedOrganization.id;
   const classes = useStyles();
   const { open, onClose, initialSpecies } = props;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());

@@ -99,7 +99,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             {
               operation: 'field',
               field: 'species_organization_id',
-              values: [selectedOrganization!!.id.toString()],
+              values: [selectedOrganization.id.toString()],
               type: 'Exact',
             },
           ],

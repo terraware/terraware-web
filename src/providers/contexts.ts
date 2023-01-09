@@ -17,4 +17,10 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     // no-op
     return;
   },
+  selectedOrganization: {
+    id: -1,
+    name: '',
+    role: 'Contributor',
+    totalUsers: 0,
+  },
 });

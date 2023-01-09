@@ -24,7 +24,7 @@ export interface EditLocationModalProps {
 export default function EditLocationModal(props: EditLocationModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { onClose, open, accession, reload } = props;
-  const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization!!).filter((sb) => !!sb) as Facility[]) || [];
+  const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) as Facility[]) || [];
   const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
   const snackbar = useSnackbar();
 

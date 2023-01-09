@@ -34,7 +34,7 @@ export default function NurseryDropdown<T extends AccessionPostRequestBody>(
       id='facilityId'
       label={label}
       selectedValue={record.facilityId?.toString()}
-      options={getAllNurseries(selectedOrganization!!).map((nursery) => ({
+      options={getAllNurseries(selectedOrganization).map((nursery) => ({
         label: nursery.name,
         value: nursery.id.toString(),
       }))}

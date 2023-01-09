@@ -107,7 +107,7 @@ export default function NurseryWithdrawalsFiltersPopover({
 
   useEffect(() => {
     const populatePlantingSites = async () => {
-      const result = await listPlantingSites(selectedOrganization!!.id);
+      const result = await listPlantingSites(selectedOrganization.id);
       if (result.requestSucceeded) {
         setPlantingSites(result.sites);
       } else {
@@ -228,7 +228,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                 <Typography fontSize='16px' color={theme.palette.TwClrBaseGray500}>
                   {strings.FROM_NURSERY}
                 </Typography>
-                {getAllNurseries(selectedOrganization!!).map((n) => (
+                {getAllNurseries(selectedOrganization).map((n) => (
                   <Grid item xs={12} key={n.id}>
                     <Checkbox
                       id={n.id.toString()}

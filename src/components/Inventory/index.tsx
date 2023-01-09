@@ -148,7 +148,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
           {
             operation: 'field',
             field: 'organization_id',
-            values: [selectedOrganization!!.id],
+            values: [selectedOrganization.id],
           },
         ],
       },

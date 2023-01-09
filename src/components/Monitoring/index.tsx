@@ -66,7 +66,7 @@ type MonitoringProps = {
 
 export default function Monitoring(props: MonitoringProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const organizationId = selectedOrganization!!.id;
+  const organizationId = selectedOrganization.id;
   const { isDesktop, isMobile } = useDeviceInfo();
   const classes = useStyles({ isDesktop, isMobile });
   const theme = useTheme();
@@ -100,7 +100,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
 
   useEffect(() => {
     const facilities: Facility[] = [];
-    getAllSeedBanks(selectedOrganization!!).forEach((facility) => {
+    getAllSeedBanks(selectedOrganization).forEach((facility) => {
       if (facility !== undefined) {
         facilities.push(facility);
       }

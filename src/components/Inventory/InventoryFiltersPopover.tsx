@@ -157,7 +157,7 @@ export default function InventoryFiltersPopover({ filters, setFilters }: Invento
               <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
                 {strings.NURSERIES}
               </Typography>
-              {getAllNurseries(selectedOrganization!!).map((n) => (
+              {getAllNurseries(selectedOrganization).map((n) => (
                 <Grid item xs={12} key={n.id}>
                   <Checkbox
                     id={n.id.toString()}

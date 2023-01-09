@@ -87,7 +87,7 @@ export default function Home(): JSX.Element {
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3} sx={{ padding: 0 }}>
-          {selectedOrganization?.role && isAdmin(selectedOrganization) && (
+          {isAdmin(selectedOrganization) && (
             <>
               <Grid item xs={primaryGridSize()}>
                 <PageCard

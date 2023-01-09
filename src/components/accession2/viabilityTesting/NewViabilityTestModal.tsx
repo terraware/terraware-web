@@ -79,7 +79,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   useEffect(() => {
     const getOrgUsers = async () => {
-      const response = await getOrganizationUsers(selectedOrganization!!);
+      const response = await getOrganizationUsers(selectedOrganization);
       if (response.requestSucceeded) {
         setUsers(response.users);
       }

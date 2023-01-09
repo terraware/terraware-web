@@ -33,7 +33,7 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
 
   useEffect(() => {
     if (record && record.facilityId) {
-      const found = selectedOrganization?.facilities?.find((fac) => fac.id.toString() === record.facilityId.toString());
+      const found = selectedOrganization.facilities?.find((fac) => fac.id.toString() === record.facilityId.toString());
       setSelectedFacility(found);
     }
   }, [record, selectedOrganization]);

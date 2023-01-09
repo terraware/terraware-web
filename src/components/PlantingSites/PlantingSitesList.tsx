@@ -43,7 +43,7 @@ export default function PlantingSitesList(): JSX.Element {
           {
             field: 'organization_id',
             operation: 'field',
-            values: [selectedOrganization!!.id],
+            values: [selectedOrganization.id],
           },
         ],
       },

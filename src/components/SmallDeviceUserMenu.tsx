@@ -220,11 +220,11 @@ export default function SmallDeviceUserMenu({
                             key={`item-${index}`}
                           >
                             <Typography
-                              sx={{ fontSize: '14px', fontWeight: selectedOrganization?.id === org.id ? 600 : 400 }}
+                              sx={{ fontSize: '14px', fontWeight: selectedOrganization.id === org.id ? 600 : 400 }}
                             >
                               {org.name}
                             </Typography>
-                            {selectedOrganization?.id === org.id ? (
+                            {selectedOrganization.id === org.id ? (
                               <Box className={classes.checkmarkIcon}>
                                 <Icon name='checkmark' />
                               </Box>

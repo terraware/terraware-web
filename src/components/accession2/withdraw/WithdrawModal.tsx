@@ -73,7 +73,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
   useEffect(() => {
     const getOrgUsers = async () => {
-      const response = await getOrganizationUsers(selectedOrganization!!);
+      const response = await getOrganizationUsers(selectedOrganization);
       if (response.requestSucceeded) {
         setUsers(response.users);
       }
@@ -360,7 +360,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 id='destinationFacilityId'
                 label={strings.DESTINATION_REQUIRED}
                 selectedValue={nurseryTransferRecord.destinationFacilityId.toString()}
-                options={getAllNurseries(selectedOrganization!!).map((nursery) => ({
+                options={getAllNurseries(selectedOrganization).map((nursery) => ({
                   label: nursery.name,
                   value: nursery.id.toString(),
                 }))}

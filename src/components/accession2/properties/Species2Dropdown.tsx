@@ -27,7 +27,7 @@ export default function Species2Dropdown<T extends AccessionPostRequestBody>(
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
   const populateSpecies = useCallback(async () => {
-    const response = await getAllSpecies(selectedOrganization!!.id);
+    const response = await getAllSpecies(selectedOrganization.id);
     if (response.requestSucceeded) {
       const searchValue = debouncedSearchTerm ? debouncedSearchTerm.toLowerCase() : '';
       const speciesToUse = searchValue

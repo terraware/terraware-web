@@ -26,7 +26,7 @@ export default function NurseryView(): JSX.Element {
     name: '',
     id: -1,
     type: 'Nursery',
-    organizationId: selectedOrganization!!.id,
+    organizationId: selectedOrganization.id,
     connectionState: 'Not Connected',
   });
   const { nurseryId } = useParams<{ nurseryId: string }>();
@@ -41,7 +41,7 @@ export default function NurseryView(): JSX.Element {
   };
 
   useEffect(() => {
-    const seedBanks = getAllNurseries(selectedOrganization!!);
+    const seedBanks = getAllNurseries(selectedOrganization);
     setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
   }, [nurseryId, selectedOrganization]);
 
@@ -50,7 +50,7 @@ export default function NurseryView(): JSX.Element {
       name: selectedNursery?.name || '',
       description: selectedNursery?.description,
       id: -1,
-      organizationId: selectedOrganization!!.id,
+      organizationId: selectedOrganization.id,
       type: 'Nursery',
       connectionState: 'Not Connected',
     });

@@ -64,7 +64,7 @@ export default function CheckIn(): JSX.Element {
   useEffect(() => {
     const populatePendingAccessions = async () => {
       if (selectedOrganization) {
-        setPendingAccessions(await getPendingAccessions(selectedOrganization?.id));
+        setPendingAccessions(await getPendingAccessions(selectedOrganization.id));
       }
     };
     populatePendingAccessions();

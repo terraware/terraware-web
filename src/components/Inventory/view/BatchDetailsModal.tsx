@@ -39,7 +39,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   useEffect(() => {
     if (record) {
       const populateSpecies = async () => {
-        const speciesResponse = await getSpecies(speciesId, selectedOrganization!!.id.toString());
+        const speciesResponse = await getSpecies(speciesId, selectedOrganization.id.toString());
         if (speciesResponse.requestSucceeded) {
           setSpeciesSelected(speciesResponse.species);
         }
@@ -79,7 +79,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
     setRecord(initBatch());
 
-    const foundFacility = selectedOrganization?.facilities?.find(
+    const foundFacility = selectedOrganization.facilities?.find(
       (f) => f.id.toString() === selectedBatch?.facilityId.toString()
     );
     if (foundFacility) {

@@ -87,7 +87,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       const newPlantingSite: PlantingSitePostRequestBody = {
         name: record.name,
         description: record.description,
-        organizationId: selectedOrganization!!.id,
+        organizationId: selectedOrganization.id,
       };
       response = await postPlantingSite(newPlantingSite);
     } else {

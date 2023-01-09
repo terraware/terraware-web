@@ -26,7 +26,7 @@ export default function SeedBankView(): JSX.Element {
     name: '',
     id: -1,
     type: 'Seed Bank',
-    organizationId: selectedOrganization!!.id,
+    organizationId: selectedOrganization.id,
     connectionState: 'Not Connected',
   });
   const { seedBankId } = useParams<{ seedBankId: string }>();
@@ -41,7 +41,7 @@ export default function SeedBankView(): JSX.Element {
   };
 
   useEffect(() => {
-    const seedBanks = getAllSeedBanks(selectedOrganization!!);
+    const seedBanks = getAllSeedBanks(selectedOrganization);
     setSelectedSeedBank(seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10)));
   }, [seedBankId, selectedOrganization]);
 
@@ -50,7 +50,7 @@ export default function SeedBankView(): JSX.Element {
       name: selectedSeedBank?.name || '',
       description: selectedSeedBank?.description,
       id: -1,
-      organizationId: selectedOrganization!!.id,
+      organizationId: selectedOrganization.id,
       type: 'Seed Bank',
       connectionState: 'Not Connected',
     });

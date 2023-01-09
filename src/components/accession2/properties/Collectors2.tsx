@@ -21,7 +21,7 @@ export default function Collectors2({ collectors = [''], onChange }: Props): JSX
 
   useEffect(() => {
     const populateCollectors = async () => {
-      setCollectorsOpt(await getCollectors(selectedOrganization!!.id));
+      setCollectorsOpt(await getCollectors(selectedOrganization.id));
     };
     populateCollectors();
   }, [selectedOrganization]);

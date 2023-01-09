@@ -64,12 +64,10 @@ export default function NavBar({
   };
 
   const checkNurseryWithdrawals = useCallback(() => {
-    if (selectedOrganization?.id) {
-      hasNurseryWithdrawals(selectedOrganization.id).then((result) => {
-        setShowNurseryWithdrawals(result);
-      });
-    }
-  }, [selectedOrganization?.id]);
+    hasNurseryWithdrawals(selectedOrganization.id).then((result) => {
+      setShowNurseryWithdrawals(result);
+    });
+  }, [selectedOrganization.id]);
 
   useEffect(() => {
     setShowNurseryWithdrawals(false);

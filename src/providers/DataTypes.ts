@@ -8,7 +8,7 @@ export type ProvidedUserData = {
 };
 
 export type ProvidedOrganizationData = {
-  selectedOrganization?: ServerOrganization;
+  selectedOrganization: ServerOrganization;
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
   organizations?: ServerOrganization[];
   reloadData: () => void;

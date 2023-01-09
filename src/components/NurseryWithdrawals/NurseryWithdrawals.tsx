@@ -73,7 +73,7 @@ export default function NurseryWithdrawals(): JSX.Element {
 
   useEffect(() => {
     const populateSpecies = async () => {
-      const result = await getAllSpecies(selectedOrganization!!.id);
+      const result = await getAllSpecies(selectedOrganization.id);
       if (result.requestSucceeded) {
         setSpecies(result.species);
       } else {
@@ -193,7 +193,7 @@ export default function NurseryWithdrawals(): JSX.Element {
     const requestId = Math.random().toString();
     setRequestId('searchWithdrawals', requestId);
     const apiSearchResults = await listNurseryWithdrawals(
-      selectedOrganization!!.id,
+      selectedOrganization.id,
       searchChildren,
       1000,
       searchSortOrder
@@ -220,7 +220,7 @@ export default function NurseryWithdrawals(): JSX.Element {
   };
 
   const getNurseryName = (facilityId: string) => {
-    const found = getAllNurseries(selectedOrganization!!).find((n) => n.id.toString() === facilityId.toString());
+    const found = getAllNurseries(selectedOrganization).find((n) => n.id.toString() === facilityId.toString());
     if (found) {
       return found.name;
     }

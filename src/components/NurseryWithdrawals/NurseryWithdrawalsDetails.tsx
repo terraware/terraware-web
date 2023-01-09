@@ -86,7 +86,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
         setBatches(withdrawalResponse.batches);
       }
       // get summary information
-      const apiSearchResults = await listNurseryWithdrawals(selectedOrganization!!.id, [
+      const apiSearchResults = await listNurseryWithdrawals(selectedOrganization.id, [
         {
           operation: 'field',
           field: 'id',

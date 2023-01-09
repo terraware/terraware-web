@@ -261,7 +261,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
             operation: 'field',
             field: 'organization_id',
             type: 'Exact',
-            values: [selectedOrganization!!.id],
+            values: [selectedOrganization.id],
           },
         ],
       },
@@ -430,7 +430,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     if (selectedSpeciesRows.length > 0) {
       await Promise.all(
         selectedSpeciesRows.map(async (iSelectedSpecies) => {
-          await deleteSpecies(iSelectedSpecies.id, selectedOrganization!!.id);
+          await deleteSpecies(iSelectedSpecies.id, selectedOrganization.id);
         })
       );
       setDeleteSpeciesModalOpen(false);
