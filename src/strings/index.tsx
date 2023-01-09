@@ -946,7 +946,6 @@ const strings = new LocalizedStrings({
     UPLOAD_PHOTO_MOBILE_DESCRIPTION: 'Browse files (JPG, PNG).',
     UPLOAD_PHOTO: 'Upload Photo...',
     UPLOAD_PHOTOS: 'Upload Photo(s)',
-    UTC: 'UTC',
     VALUE_CANT_EXCEED_100: 'Value can’t exceed 100%',
     VIABILITY_RATE: 'Viability Rate',
     VIABILITY_RESULT: 'Viability Result',
