@@ -1,5 +1,5 @@
 import UserProvider from './UserProvider';
-import { useUser } from './hooks';
+import { useTimeZones, useUser } from './hooks';
 
 export type { ProvidedUserData } from './DataTypes';
-export { useUser, UserProvider };
+export { useTimeZones, useUser, UserProvider };
