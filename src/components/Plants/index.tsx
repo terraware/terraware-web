@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
@@ -14,13 +13,10 @@ import PlantingSiteDetails from './PlantingSiteDetails';
 import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PageSnackbar from 'src/components/PageSnackbar';
+import { useOrganization } from 'src/providers/hooks';
 
-type PlantsDashboardProps = {
-  organization: ServerOrganization;
-};
-
-export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Element {
-  const { organization } = props;
+export default function PlantsDashboard(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const theme = useTheme();
@@ -33,13 +29,13 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
 
   useEffect(() => {
     if (plantsDashboardPreferences) {
-      updatePreferences('lastDashboardPlantingSite', plantsDashboardPreferences, organization.id);
+      updatePreferences('lastDashboardPlantingSite', plantsDashboardPreferences, selectedOrganization.id);
     }
-  }, [plantsDashboardPreferences, organization.id]);
+  }, [plantsDashboardPreferences, selectedOrganization]);
 
   useEffect(() => {
     const populatePlantingSites = async () => {
-      const serverResponse = await listPlantingSites(organization.id);
+      const serverResponse = await listPlantingSites(selectedOrganization.id);
       if (serverResponse.requestSucceeded) {
         setPlantingSites(serverResponse.sites ?? []);
       } else {
@@ -47,7 +43,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
       }
     };
     populatePlantingSites();
-  }, [organization.id, snackbar]);
+  }, [selectedOrganization, snackbar]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
@@ -62,7 +58,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
     const initializePlantingSite = async () => {
       if (plantingSites && plantingSites.length) {
         let lastDashboardPlantingSite: any = {};
-        const response = await getPreferences(organization.id);
+        const response = await getPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences?.lastDashboardPlantingSite) {
           lastDashboardPlantingSite = response.preferences.lastDashboardPlantingSite;
         }
@@ -74,7 +70,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
 
         if (plantingSiteToUse.id !== lastDashboardPlantingSite.plantingSiteId) {
           lastDashboardPlantingSite = { plantingSiteId: plantingSiteToUse.id };
-          updatePreferences('lastDashboardPlantingSite', lastDashboardPlantingSite, organization.id);
+          updatePreferences('lastDashboardPlantingSite', lastDashboardPlantingSite, selectedOrganization.id);
         }
         setPlantsDashboardPreferences(lastDashboardPlantingSite);
         if (plantingSiteToUse.id.toString() === plantingSiteId) {
@@ -85,7 +81,7 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
       }
     };
     initializePlantingSite();
-  }, [plantingSites, plantingSiteId, setActivePlantingSite, organization.id]);
+  }, [plantingSites, plantingSiteId, setActivePlantingSite, selectedOrganization]);
 
   const onChangePlantingSite = (newValue: string) => {
     if (plantingSites) {
@@ -149,7 +145,6 @@ export default function PlantsDashboard(props: PlantsDashboardProps): JSX.Elemen
           setPlantsDashboardPreferences={(newPreferences) => {
             setPlantsDashboardPreferences((oldPreferences) => ({ ...oldPreferences, ...newPreferences }));
           }}
-          organization={organization}
         />
       </Box>
     </TfMain>

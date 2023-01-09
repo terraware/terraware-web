@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { getAllSeedBanks } from 'src/utils/organization';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
@@ -13,6 +12,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import TfMain from '../common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -23,25 +23,23 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type SeedBankDetailsProps = {
-  organization?: ServerOrganization;
-};
-export default function SeedBankDetails({ organization }: SeedBankDetailsProps): JSX.Element {
+export default function SeedBankDetails(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [seedBank, setSeedBank] = useState<Facility>();
   const history = useHistory();
 
   useEffect(() => {
-    if (organization) {
-      const selectedSeedBank = getAllSeedBanks(organization).find((sb) => sb?.id.toString() === seedBankId);
+    if (selectedOrganization) {
+      const selectedSeedBank = getAllSeedBanks(selectedOrganization).find((sb) => sb?.id.toString() === seedBankId);
       if (selectedSeedBank) {
         setSeedBank(selectedSeedBank);
       } else {
         history.push(APP_PATHS.SEED_BANKS);
       }
     }
-  }, [seedBankId, organization, history]);
+  }, [seedBankId, selectedOrganization, history]);
 
   const classes = useStyles();
 

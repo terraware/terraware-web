@@ -9,7 +9,6 @@ import MainPaper from 'src/components/MainPaper';
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
 import SummaryPaper from './SummaryPaper';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -18,6 +17,7 @@ import Icon from 'src/components/common/icon/Icon';
 import AccessionByStatus from './AccessionByStatus';
 import { useHistory } from 'react-router-dom';
 import Link from 'src/components/common/Link';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   accessionsLink: {
@@ -54,13 +54,9 @@ Cookies.defaults = {
   secure: true,
 };
 
-type SeedSummaryProps = {
-  organization?: ServerOrganization;
-};
-
-export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
+export default function SeedSummary(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const classes = useStyles();
-  const { organization } = props;
   const history = useHistory();
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
@@ -72,12 +68,12 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const theme = useTheme();
 
   useEffect(() => {
-    if (organization) {
+    if (selectedOrganization) {
       const seedbankFacility =
-        organization && organization.facilities?.find((facility) => facility.name === 'Seed Bank');
+        selectedOrganization && selectedOrganization.facilities?.find((facility) => facility.name === 'Seed Bank');
 
       const populateSummary = async () => {
-        const response = await getSummary(organization.id);
+        const response = await getSummary(selectedOrganization.id);
         if (!response.value?.activeAccessions) {
           setIsEmptyState(true);
         }
@@ -112,7 +108,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         return undefined;
       });
     };
-  }, [organization, setSelectedOrgInfo]);
+  }, [selectedOrganization, setSelectedOrgInfo]);
 
   const cardGridSize = () => {
     if (isMobile) {
@@ -125,7 +121,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
     <TfMain>
       <PageHeader subtitle={strings.WELCOME_MSG} page={strings.SEED_DASHBOARD} parentPage={strings.SEEDS} />
       <Container maxWidth={false} className={classes.mainContainer}>
-        {organization && summary ? (
+        {selectedOrganization && summary ? (
           <Grid container spacing={3}>
             {isEmptyState === true && (
               <Grid item xs={12} paddingBottom={theme.spacing(1)}>

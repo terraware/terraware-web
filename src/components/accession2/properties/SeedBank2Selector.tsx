@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { Grid, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -8,20 +7,21 @@ import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility, StorageLocationDetails } from 'src/api/types/facilities';
 import { listStorageLocations } from 'src/api/facility/facility';
 import { StorageSubLocationSelector, StorageLocationSelector } from './';
+import { useOrganization } from 'src/providers/hooks';
 
 type SeedBank2SelectorProps = {
-  organization: ServerOrganization;
   record: AccessionPostRequestBody;
   onChange: (id: string, value?: any) => void;
   validate?: boolean;
 };
 
 export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.Element {
-  const { organization, record, onChange, validate } = props;
+  const { selectedOrganization } = useOrganization();
+  const { record, onChange, validate } = props;
   const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const seedBanks: Facility[] = (getAllSeedBanks(organization).filter((sb) => !!sb) as Facility[]) || [];
+  const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) as Facility[]) || [];
 
   const gridSize = () => (isMobile ? 12 : 6);
 

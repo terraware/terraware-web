@@ -1,6 +1,5 @@
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { ServerOrganization } from 'src/types/Organization';
 import EmptyMessage from '../common/EmptyMessage';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
@@ -16,6 +15,7 @@ import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import { useOrganization } from 'src/providers/hooks';
 
 interface StyleProps {
   isMobile: boolean;
@@ -60,17 +60,18 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type MonitoringProps = {
-  organization: ServerOrganization;
   hasSeedBanks: boolean;
   reloadData: () => void;
 };
 
 export default function Monitoring(props: MonitoringProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
+  const organizationId = selectedOrganization.id;
   const { isDesktop, isMobile } = useDeviceInfo();
   const classes = useStyles({ isDesktop, isMobile });
   const theme = useTheme();
   const history = useHistory();
-  const { organization, hasSeedBanks, reloadData } = props;
+  const { hasSeedBanks, reloadData } = props;
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
   const [seedBanks, setSeedBanks] = useState<Facility[]>([]);
   const [monitoringPreferences, setMonitoringPreferences] = useState<{ [key: string]: unknown }>();
@@ -99,19 +100,19 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
 
   useEffect(() => {
     const facilities: Facility[] = [];
-    getAllSeedBanks(organization).forEach((facility) => {
+    getAllSeedBanks(selectedOrganization).forEach((facility) => {
       if (facility !== undefined) {
         facilities.push(facility);
       }
     });
     setSeedBanks(facilities);
-  }, [organization]);
+  }, [selectedOrganization]);
 
   useEffect(() => {
     const initializeSeedBank = async () => {
       if (seedBanks.length) {
         let lastMonitoringSeedBank: any = {};
-        const response = await getPreferences(organization.id);
+        const response = await getPreferences(organizationId);
         if (response.requestSucceeded && response.preferences?.lastMonitoringSeedBank) {
           lastMonitoringSeedBank = response.preferences.lastMonitoringSeedBank;
         }
@@ -121,7 +122,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
         if (seedBankToUse.id !== lastMonitoringSeedBank.facilityId) {
           lastMonitoringSeedBank = { facilityId: seedBankToUse.id };
           if (seedBankToUse.connectionState !== 'Configured') {
-            updatePreferences('lastMonitoringSeedBank', lastMonitoringSeedBank, organization.id); // no need to wait for response
+            updatePreferences('lastMonitoringSeedBank', lastMonitoringSeedBank, organizationId); // no need to wait for response
           }
         }
         setMonitoringPreferences(lastMonitoringSeedBank);
@@ -133,11 +134,11 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
       }
     };
     initializeSeedBank();
-  }, [seedBankId, seedBanks, setActiveSeedBank, organization.id]);
+  }, [seedBankId, seedBanks, setActiveSeedBank, organizationId]);
 
   const updateMonitoringPreferences = (data: { [key: string]: unknown }) => {
     setMonitoringPreferences(data);
-    updatePreferences('lastMonitoringSeedBank', data, organization.id); // no need to wait for response
+    updatePreferences('lastMonitoringSeedBank', data, organizationId); // no need to wait for response
   };
 
   const getPageHeading = () => (
@@ -203,13 +204,12 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
                   monitoringPreferences={monitoringPreferences}
                   updatePreferences={(data) => updateMonitoringPreferences(data)}
                   seedBank={selectedSeedBank}
-                  organization={organization}
                   reloadData={reloadData}
                 />
               </div>
             )}
           </>
-        ) : isAdmin(organization) ? (
+        ) : isAdmin(selectedOrganization) ? (
           <Grid item xs={12} className={isMobile ? '' : classes.titleContainer} flexDirection='column'>
             {getPageHeading()}
             <PageSnackbar />

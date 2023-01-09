@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { UserContext } from './contexts';
+import { OrganizationContext, UserContext } from './contexts';
 
 export const useUser = () => useContext(UserContext);
 
@@ -10,3 +10,5 @@ const DEFAULT_TIME_ZONES = (Intl as any).supportedValuesOf('timeZone').map((tz: 
 const SUPPORTED_TIME_ZONES = [...DEFAULT_TIME_ZONES, { id: 'Etc/UTC', longName: 'Coordinated Universal Time' }];
 
 export const useTimeZones = () => SUPPORTED_TIME_ZONES;
+
+export const useOrganization = () => useContext(OrganizationContext);

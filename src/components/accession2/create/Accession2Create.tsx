@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
@@ -24,10 +23,6 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 
-type CreateAccessionProps = {
-  organization: ServerOrganization;
-};
-
 const SubTitleStyle = {
   fontSize: '20px',
   fontWeight: 600,
@@ -43,8 +38,7 @@ const MANDATORY_FIELDS = ['speciesId', 'collectedDate', 'receivedDate', 'state',
 
 type MandatoryField = typeof MANDATORY_FIELDS[number];
 
-export default function CreateAccession(props: CreateAccessionProps): JSX.Element {
-  const { organization } = props;
+export default function CreateAccession(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const history = useHistory();
@@ -120,16 +114,11 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
               </Typography>
             </Grid>
             <Grid item xs={12} sx={marginTop}>
-              <Species2Dropdown
-                record={record}
-                organization={organization}
-                setRecord={setRecord}
-                validate={validateFields}
-              />
+              <Species2Dropdown record={record} setRecord={setRecord} validate={validateFields} />
             </Grid>
             <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
             <Grid item xs={12} sx={marginTop}>
-              <Collectors2 organizationId={organization.id} collectors={record.collectors} onChange={onChange} />
+              <Collectors2 collectors={record.collectors} onChange={onChange} />
             </Grid>
             <Grid
               item
@@ -174,12 +163,7 @@ export default function CreateAccession(props: CreateAccessionProps): JSX.Elemen
                 fullWidth={true}
               />
             </Grid>
-            <SeedBank2Selector
-              organization={organization}
-              record={record}
-              onChange={onChange}
-              validate={validateFields}
-            />
+            <SeedBank2Selector record={record} onChange={onChange} validate={validateFields} />
           </Grid>
         </Container>
       </PageForm>

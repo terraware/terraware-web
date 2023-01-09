@@ -16,7 +16,6 @@ import {
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/api/types/batch';
 import { isInTheFuture } from '@terraware/web-components/utils';
-import { ServerOrganization } from 'src/types/Organization';
 import { APP_PATHS } from 'src/constants';
 import Divisor from 'src/components/common/Divisor';
 import { DatePicker, Dropdown, Textfield, DropdownItem } from '@terraware/web-components';
@@ -28,6 +27,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import ErrorMessage from 'src/components/common/ErrorMessage';
 import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type SelectPurposeFormProps = {
-  organization: ServerOrganization;
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
   batches: any[];
   nurseryWithdrawal: NurseryWithdrawalRequest;
@@ -57,9 +56,10 @@ type SelectPurposeFormProps = {
 };
 
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
-  const { organization, nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
+  const { selectedOrganization } = useOrganization();
+  const { nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
   const { OUTPLANT, NURSERY_TRANSFER, DEAD, OTHER } = NurseryWithdrawalPurposes;
-  const contributor = isContributor(organization);
+  const contributor = isContributor(selectedOrganization);
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
   const [isOutplant, setIsOutplant] = useState(nurseryWithdrawal.purpose === OUTPLANT);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
@@ -93,13 +93,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (plantingSites) {
       return;
     }
-    const response = await listPlantingSites(organization.id, true);
+    const response = await listPlantingSites(selectedOrganization.id, true);
     if (response.requestSucceeded && response.sites) {
       setPlantingSites(response.sites);
     } else {
       snackbar.toastError(response.error);
     }
-  }, [organization.id, plantingSites, snackbar]);
+  }, [selectedOrganization, plantingSites, snackbar]);
 
   const onChangePurpose = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = (event.target as HTMLInputElement).value;
@@ -357,7 +357,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const gridSize = () => (isMobile ? 12 : 6);
 
   useEffect(() => {
-    const allNurseries = getAllNurseries(organization);
+    const allNurseries = getAllNurseries(selectedOrganization);
     const destinationNurseries = allNurseries.filter((nursery) => nursery.id.toString() !== selectedNursery);
     setDestinationNurseriesOptions(
       destinationNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
@@ -365,7 +365,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (isOutplant) {
       fetchPlantingSites();
     }
-  }, [selectedNursery, organization, fetchPlantingSites, isOutplant]);
+  }, [selectedNursery, selectedOrganization, fetchPlantingSites, isOutplant]);
 
   useEffect(() => {
     setWithdrawnQuantity(
@@ -399,7 +399,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   useEffect(() => {
     const fetchSpecies = async () => {
-      const result = await getAllSpecies(organization.id);
+      const result = await getAllSpecies(selectedOrganization.id);
       const speciesNamesMap = (result.species || []).reduce((acc, sp) => {
         const { scientificName, commonName } = sp;
         return {
@@ -411,7 +411,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     };
 
     fetchSpecies();
-  }, [organization.id]);
+  }, [selectedOrganization]);
 
   const batchesFromNursery = useMemo(() => {
     return batches.filter((batch) => !selectedNursery || batch.facility_id.toString() === selectedNursery);

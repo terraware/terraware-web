@@ -11,7 +11,6 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useStateLocation from 'src/utils/useStateLocation';
@@ -19,6 +18,7 @@ import PageHeader from '../PageHeader';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextField from '../../common/Textfield/Textfield';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -49,29 +49,26 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export type CheckInProps = {
-  organization?: ServerOrganization;
-};
-
-export default function CheckIn(props: CheckInProps): JSX.Element {
+export default function CheckIn(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const theme = useTheme();
-  const { organization } = props;
   const history = useHistory();
   const location = useStateLocation();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(checkInSelectedOrgInfo);
   const contentRef = useRef(null);
 
   useEffect(() => {
     const populatePendingAccessions = async () => {
-      if (organization) {
-        setPendingAccessions(await getPendingAccessions(organization?.id));
+      if (selectedOrganization) {
+        setPendingAccessions(await getPendingAccessions(selectedOrganization.id));
       }
     };
     populatePendingAccessions();
-  }, [organization]);
+  }, [selectedOrganization]);
 
   const transformPendingAccessions = () => {
     const accessionsById: Record<number, SearchResponseElement> = {};
@@ -115,8 +112,6 @@ export default function CheckIn(props: CheckInProps): JSX.Element {
             subtitle={getSubtitle()}
             back={true}
             backUrl={APP_PATHS.ACCESSIONS}
-            organization={organization}
-            selectedOrgInfo={selectedOrgInfo}
             onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
           />
         </PageHeaderWrapper>

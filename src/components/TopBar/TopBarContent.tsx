@@ -2,14 +2,13 @@ import { IconButton, Theme, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Svg } from '@terraware/web-components';
 import React from 'react';
-
-import { ServerOrganization } from 'src/types/Organization';
 import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {
@@ -46,16 +45,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type TopBarProps = {
-  organizations?: ServerOrganization[];
-  setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
-  selectedOrganization?: ServerOrganization;
-  reloadOrganizationData: (selectedOrgId?: number) => void;
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const classes = useStyles();
-  const { setSelectedOrganization, selectedOrganization, organizations, reloadOrganizationData, setShowNavBar } = props;
+  const { selectedOrganization, organizations, reloadData } = useOrganization();
+  const { setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
 
   const onHandleLogout = () => {
@@ -71,19 +67,14 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         {organizations && organizations.length > 0 && (
           <>
             <div className={classes.separator} />
-            <OrganizationsDropdown
-              organizations={organizations}
-              selectedOrganization={selectedOrganization}
-              setSelectedOrganization={setSelectedOrganization}
-              reloadOrganizationData={reloadOrganizationData}
-            />
+            <OrganizationsDropdown />
           </>
         )}
       </div>
       <div className={classes.right}>
         <NotificationsDropdown
-          organizationId={selectedOrganization?.id}
-          reloadOrganizationData={reloadOrganizationData}
+          organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
+          reloadOrganizationData={reloadData}
         />
         <div className={classes.separator} />
         <UserMenu hasOrganizations={organizations && organizations.length > 0} />
@@ -92,7 +83,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   ) : (
     <Grid container className={`${classes.flex}  ${classes.backgroundLogo}`}>
       <Grid item xs={3} className={classes.left}>
-        {selectedOrganization && (
+        {selectedOrganization.id !== -1 && (
           <IconButton onClick={() => setShowNavBar(true)} size='small'>
             <Icon name='iconMenu' />
           </IconButton>
@@ -103,17 +94,10 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
       <Grid item xs={3} className={classes.right}>
         <NotificationsDropdown
-          organizationId={selectedOrganization?.id}
-          reloadOrganizationData={reloadOrganizationData}
+          organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
+          reloadOrganizationData={reloadData}
         />
-        <SmallDeviceUserMenu
-          onLogout={onHandleLogout}
-          organizations={organizations}
-          selectedOrganization={selectedOrganization}
-          setSelectedOrganization={setSelectedOrganization}
-          reloadOrganizationData={reloadOrganizationData}
-          hasOrganizations={organizations && organizations.length > 0}
-        />
+        <SmallDeviceUserMenu onLogout={onHandleLogout} hasOrganizations={organizations && organizations.length > 0} />
       </Grid>
     </Grid>
   );

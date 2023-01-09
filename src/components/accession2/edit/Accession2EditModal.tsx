@@ -3,7 +3,6 @@ import { Grid, Typography } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import {
   Accession2Address,
@@ -19,7 +18,6 @@ export interface Accession2EditModalProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
-  organization: ServerOrganization;
   reload: () => void;
 }
 
@@ -28,7 +26,7 @@ const MANDATORY_FIELDS = ['speciesId', 'collectedDate'] as const;
 type MandatoryField = typeof MANDATORY_FIELDS[number];
 
 export default function Accession2EditModal(props: Accession2EditModalProps): JSX.Element {
-  const { onClose, open, accession, organization, reload } = props;
+  const { onClose, open, accession, reload } = props;
   const [record, setRecord, onChange] = useForm(accession);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const snackbar = useSnackbar();
@@ -97,13 +95,12 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
         <Species2Dropdown
           speciesId={record.speciesId}
           record={record}
-          organization={organization}
           setRecord={setRecord}
           validate={validateFields}
         />
         <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
         <Grid item xs={12}>
-          <Collectors2 organizationId={organization.id} onChange={onChange} collectors={record.collectors} />
+          <Collectors2 onChange={onChange} collectors={record.collectors} />
         </Grid>
         <Grid item xs={12}>
           <Typography>{strings.SITE_DETAIL} </Typography>

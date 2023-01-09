@@ -6,25 +6,25 @@ import { Grid } from '@mui/material';
 import { Facility, StorageLocationDetails } from 'src/api/types/facilities';
 import theme from 'src/theme';
 import { getAllSeedBanks } from 'src/utils/organization';
-import { ServerOrganization } from 'src/types/Organization';
 import { Accession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
 import { getLocations } from 'src/api/seeds/locations';
 import { updateAccession2 } from 'src/api/accessions2/accession';
 import { StorageLocationSelector, StorageSubLocationSelector } from '../properties';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useOrganization } from 'src/providers/hooks';
 
 export interface EditLocationModalProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
-  organization: ServerOrganization;
   reload: () => void;
 }
 
 export default function EditLocationModal(props: EditLocationModalProps): JSX.Element {
-  const { onClose, open, accession, organization, reload } = props;
-  const seedBanks: Facility[] = (getAllSeedBanks(organization).filter((sb) => !!sb) as Facility[]) || [];
+  const { selectedOrganization } = useOrganization();
+  const { onClose, open, accession, reload } = props;
+  const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) as Facility[]) || [];
   const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
   const snackbar = useSnackbar();
 

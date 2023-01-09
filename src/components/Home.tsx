@@ -6,11 +6,11 @@ import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { User } from 'src/types/User';
 import { isAdmin } from 'src/utils/organization';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -42,13 +42,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export type HomeProps = {
-  organizations?: ServerOrganization[];
-  selectedOrganization?: ServerOrganization;
-  setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
-};
-
-export default function Home({ organizations, selectedOrganization, setSelectedOrganization }: HomeProps): JSX.Element {
+export default function Home(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const [user, setUser] = useState<User>();
@@ -92,7 +87,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
       />
       <Container maxWidth={false} className={classes.mainContainer}>
         <Grid container spacing={3} sx={{ padding: 0 }}>
-          {selectedOrganization?.role && isAdmin(selectedOrganization) && (
+          {isAdmin(selectedOrganization) && (
             <>
               <Grid item xs={primaryGridSize()}>
                 <PageCard
