@@ -1,7 +1,7 @@
 import { Container, Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { getUser, updateUserProfile } from 'src/api/user/user';
+import { getUser } from 'src/api/user/user';
 import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
@@ -11,8 +11,6 @@ import { User } from 'src/types/User';
 import { isAdmin } from 'src/utils/organization';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useSnackbar from 'src/utils/useSnackbar';
-import Link from './common/Link';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -54,7 +52,6 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
   const { isTablet, isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const [user, setUser] = useState<User>();
-  const snackbar = useSnackbar();
 
   const primaryGridSize = () => {
     if (isMobile) {
