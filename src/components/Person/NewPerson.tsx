@@ -17,6 +17,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
+import { useOrganization } from '../../providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleSubtitle: {
@@ -34,12 +35,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type PersonViewProps = {
-  organization: ServerOrganization;
-  reloadOrganizationData: () => void;
-};
-
-export default function PersonView({ organization, reloadOrganizationData }: PersonViewProps): JSX.Element {
+export default function PersonView(): JSX.Element {
+  const { selectedOrganization, reloadData } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
@@ -70,22 +67,18 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         lastName: personSelectedToEdit.lastName,
       });
     }
-  }, [organization, personSelectedToEdit, setNewPerson]);
+  }, [selectedOrganization, personSelectedToEdit, setNewPerson]);
 
   useEffect(() => {
     const populatePeople = async () => {
-      if (organization) {
-        const response = await getOrganizationUsers(organization);
-        if (response.requestSucceeded) {
-          setPeople(response.users);
-          setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
-        }
+      const response = await getOrganizationUsers(selectedOrganization);
+      if (response.requestSucceeded) {
+        setPeople(response.users);
+        setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
       }
     };
-    if (organization) {
-      populatePeople();
-    }
-  }, [organization, personId]);
+    populatePeople();
+  }, [selectedOrganization, personId]);
 
   const onChangeRole = (newRole: string) => {
     onChange('role', newRole);
@@ -121,11 +114,11 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     let userId: number = -1;
 
     if (!!personSelectedToEdit) {
-      const response = await updateOrganizationUser(newPerson.id, organization.id, newPerson.role);
+      const response = await updateOrganizationUser(newPerson.id, selectedOrganization.id, newPerson.role);
       successMessage = response.requestSucceeded ? strings.CHANGES_SAVED : null;
       userId = newPerson.id;
     } else {
-      const response = await addOrganizationUser({ ...newPerson }, organization.id);
+      const response = await addOrganizationUser({ ...newPerson }, selectedOrganization.id);
       if (!response.requestSucceeded) {
         if (response.errorDetails === 'PRE_EXISTING_USER') {
           setRepeatedEmail(newPerson.email);
@@ -146,7 +139,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
 
     if (successMessage) {
       snackbar.toastSuccess(successMessage);
-      await reloadOrganizationData();
+      await reloadData();
       goToViewPerson(userId.toString());
     } else {
       snackbar.toastError();

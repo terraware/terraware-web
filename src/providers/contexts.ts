@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { ProvidedUserData, ProvidedOrganizationData } from './DataTypes';
-import { AllOrganizationRoles, ServerOrganization } from '../types/Organization';
+import { ServerOrganization } from '../types/Organization';
 
 export const UserContext = createContext<ProvidedUserData>({
   reloadUser: () => {

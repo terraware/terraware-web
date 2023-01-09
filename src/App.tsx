@@ -381,14 +381,6 @@ export default function App() {
     }
   }
 
-  const organizationWithoutSB = () => {
-    if (selectedOrganization) {
-      return {
-        ...selectedOrganization,
-      };
-    }
-  };
-
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 
   const selectedOrgHasFacilityType = (facilityType: FacilityType): boolean => {
@@ -498,163 +490,114 @@ export default function App() {
                   orgScopedPreferences={orgScopedPreferences}
                 />
               </Route>
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
-                  <Accession2Create />
-                </Route>
-              )}
-              {selectedOrganization && user && (
+              <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
+                <Accession2Create />
+              </Route>
+              {user && (
                 <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
                   <Accession2View />
                 </Route>
               )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.MONITORING}>
-                  <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
-                  <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.SPECIES}>
-                  {selectedOrgHasSpecies() ? (
-                    <SpeciesList reloadData={reloadSpecies} species={species} />
-                  ) : (
-                    <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />
-                  )}
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
-                  <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
-                </Route>
-              )}
-              <Route exact path={APP_PATHS.ORGANIZATION}>
-                <Organization organization={organizationWithoutSB()} />
+              <Route exact path={APP_PATHS.MONITORING}>
+                <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
               </Route>
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.PEOPLE_NEW}>
-                  <NewPerson organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.PEOPLE_EDIT}>
-                  <NewPerson organization={organizationWithoutSB()!} reloadOrganizationData={reloadData} />
-                </Route>
-              )}
+              <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
+                <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
+              </Route>
+              <Route exact path={APP_PATHS.SPECIES}>
+                {selectedOrgHasSpecies() ? (
+                  <SpeciesList reloadData={reloadSpecies} species={species} />
+                ) : (
+                  <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />
+                )}
+              </Route>
+              <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
+                <EditOrganization
+                  organization={selectedOrganization || defaultSelectedOrg}
+                  reloadOrganizationData={reloadData}
+                />
+              </Route>
+              <Route exact path={APP_PATHS.ORGANIZATION}>
+                <Organization />
+              </Route>
+              <Route exact path={APP_PATHS.PEOPLE_NEW}>
+                <NewPerson />
+              </Route>
+              <Route exact path={APP_PATHS.PEOPLE_EDIT}>
+                <NewPerson />
+              </Route>
               <Route path={APP_PATHS.PEOPLE_VIEW}>
-                <PersonDetails organization={organizationWithoutSB()} />
+                <PersonDetails />
               </Route>
               <Route exact path={APP_PATHS.PEOPLE}>
-                <People organization={selectedOrganization} reloadData={reloadData} />
+                <People reloadData={reloadData} />
               </Route>
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
-                  <NewSeedBank />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.SEED_BANKS_EDIT}>
-                  <NewSeedBank />
-                </Route>
-              )}
+              <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
+                <NewSeedBank />
+              </Route>
+              <Route exact path={APP_PATHS.SEED_BANKS_EDIT}>
+                <NewSeedBank />
+              </Route>
               <Route path={APP_PATHS.SEED_BANKS_VIEW}>
                 <SeedBankDetails />
               </Route>
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.SEED_BANKS}>
-                  {getSeedBanksView()}
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.NURSERIES_NEW}>
-                  <NewNursery />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.NURSERIES_EDIT}>
-                  <NewNursery />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
-                  <PlantsDashboard />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
-                  <PlantsDashboard />
-                </Route>
-              )}
+              <Route exact path={APP_PATHS.SEED_BANKS}>
+                {getSeedBanksView()}
+              </Route>
+              <Route exact path={APP_PATHS.NURSERIES_NEW}>
+                <NewNursery />
+              </Route>
+              <Route exact path={APP_PATHS.NURSERIES_EDIT}>
+                <NewNursery />
+              </Route>
+              <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
+                <PlantsDashboard />
+              </Route>
+              <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
+                <PlantsDashboard />
+              </Route>
               <Route path={APP_PATHS.NURSERIES_VIEW}>
                 <NurseryDetails />
               </Route>
               <Route exact path={APP_PATHS.NURSERIES}>
                 {getNurseriesView()}
               </Route>
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.INVENTORY}>
-                  <Inventory hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.INVENTORY_NEW}>
-                  <InventoryCreate />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
-                  <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route path={APP_PATHS.INVENTORY_ITEM}>
-                  <InventoryView species={species} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route path={APP_PATHS.BATCH_WITHDRAW}>
-                  <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.PLANTING_SITES_NEW}>
-                  <CreatePlantingSite reloadPlantingSites={reloadTracking} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
-                  <CreatePlantingSite reloadPlantingSites={reloadTracking} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.PLANTING_SITES}>
-                  <PlantingSitesList />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
-                  <PlantingSiteView />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
-                  <NurseryWithdrawals />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-                  <NurseryWithdrawalsDetails species={species} plotNames={plotNames} />
-                </Route>
-              )}
-              {selectedOrganization && (
-                <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
-                  <NurseryReassignment />
-                </Route>
-              )}
+              <Route exact path={APP_PATHS.INVENTORY}>
+                <Inventory hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
+              </Route>
+              <Route exact path={APP_PATHS.INVENTORY_NEW}>
+                <InventoryCreate />
+              </Route>
+              <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
+                <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
+              </Route>
+              <Route path={APP_PATHS.INVENTORY_ITEM}>
+                <InventoryView species={species} />
+              </Route>
+              <Route path={APP_PATHS.BATCH_WITHDRAW}>
+                <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
+              </Route>
+              <Route exact path={APP_PATHS.PLANTING_SITES_NEW}>
+                <CreatePlantingSite reloadPlantingSites={reloadTracking} />
+              </Route>
+              <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
+                <CreatePlantingSite reloadPlantingSites={reloadTracking} />
+              </Route>
+              <Route exact path={APP_PATHS.PLANTING_SITES}>
+                <PlantingSitesList />
+              </Route>
+              <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
+                <PlantingSiteView />
+              </Route>
+              <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
+                <NurseryWithdrawals />
+              </Route>
+              <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
+                <NurseryWithdrawalsDetails species={species} plotNames={plotNames} />
+              </Route>
+              <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
+                <NurseryReassignment />
+              </Route>
               <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />
               </Route>

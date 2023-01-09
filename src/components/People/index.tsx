@@ -30,6 +30,7 @@ import TextField from '../common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
 import { search, SearchNodePayload } from 'src/api/search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { useOrganization } from '../../providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -69,12 +70,12 @@ const columns: TableColumnType[] = [
 ];
 
 type PeopleListProps = {
-  organization?: ServerOrganization;
   reloadData?: () => void;
   user?: User;
 };
 
-export default function PeopleList({ organization, reloadData, user }: PeopleListProps): JSX.Element {
+export default function PeopleList({ reloadData, user }: PeopleListProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
@@ -114,7 +115,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
               operation: 'field',
               field: 'organization_id',
               type: 'Exact',
-              values: [organization?.id],
+              values: [selectedOrganization.id],
             },
           ],
         },
@@ -144,7 +145,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
       }
     };
     refreshSearch();
-  }, [debouncedSearchTerm, organization]);
+  }, [debouncedSearchTerm, selectedOrganization]);
 
   const goToNewPerson = () => {
     const newPersonLocation = {
@@ -159,13 +160,13 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   };
 
   const removeSelectedPeopleFromOrg = async () => {
-    if (organization) {
-      if (selectedPeopleRows.length === organization?.totalUsers) {
+    if (selectedOrganization) {
+      if (selectedPeopleRows.length === selectedOrganization.totalUsers) {
         setCannotRemovePeopleModalOpened(true);
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
         if (selectedOwners.length > 0) {
-          const organizationRoles = await listOrganizationRoles(organization.id);
+          const organizationRoles = await listOrganizationRoles(selectedOrganization.id);
           const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
             setOrgPeople(
@@ -194,48 +195,46 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   };
 
   const removePeopleHandler = async () => {
-    if (organization) {
-      let assignNewOwnerResponse;
-      if (newOwner) {
-        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, organization.id, 'Owner');
-      }
-      const promises: Promise<UpdateOrganizationResponse>[] = [];
-      if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
-        selectedPeopleRows.forEach((person) => {
-          promises.push(leaveOrganization(organization.id, person.id));
-        });
-      }
-      const leaveOrgResponses = await Promise.all(promises);
-      let allRemoved = true;
-
-      leaveOrgResponses.forEach((resp) => {
-        if (!resp.requestSucceeded) {
-          allRemoved = false;
-        }
-      });
-
-      if (allRemoved) {
-        setRemovePeopleModalOpened(false);
-        setSelectedPeopleRows([]);
-        if (reloadData) {
-          reloadData();
-        }
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
-      } else {
-        snackbar.toastError();
-      }
-      history.push(APP_PATHS.PEOPLE);
+    let assignNewOwnerResponse;
+    if (newOwner) {
+      assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, selectedOrganization.id, 'Owner');
     }
+    const promises: Promise<UpdateOrganizationResponse>[] = [];
+    if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
+      selectedPeopleRows.forEach((person) => {
+        promises.push(leaveOrganization(selectedOrganization.id, person.id));
+      });
+    }
+    const leaveOrgResponses = await Promise.all(promises);
+    let allRemoved = true;
+
+    leaveOrgResponses.forEach((resp) => {
+      if (!resp.requestSucceeded) {
+        allRemoved = false;
+      }
+    });
+
+    if (allRemoved) {
+      setRemovePeopleModalOpened(false);
+      setSelectedPeopleRows([]);
+      if (reloadData) {
+        reloadData();
+      }
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+    } else {
+      snackbar.toastError();
+    }
+    history.push(APP_PATHS.PEOPLE);
   };
 
   const deleteOrgHandler = async () => {
-    if (organization && user) {
+    if (user) {
       let allRemoved = true;
       const otherUsers = selectedPeopleRows.filter((person) => person.id !== user.id);
       if (otherUsers.length) {
         const promises: Promise<UpdateOrganizationResponse>[] = [];
         otherUsers.forEach((person) => {
-          promises.push(leaveOrganization(organization.id, person.id));
+          promises.push(leaveOrganization(selectedOrganization.id, person.id));
         });
         const leaveOrgResponses = await Promise.all(promises);
 
@@ -245,7 +244,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
           }
         });
       }
-      const deleteOrgResponse = await deleteOrganization(organization.id);
+      const deleteOrgResponse = await deleteOrganization(selectedOrganization.id);
       if (allRemoved && deleteOrgResponse.requestSucceeded) {
         if (reloadData) {
           reloadData();
@@ -293,7 +292,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
             open={deleteOrgModalOpened}
             onClose={() => setDeleteOrgModalOpened(false)}
             onSubmit={deleteOrgHandler}
-            orgName={organization?.name || ''}
+            orgName={selectedOrganization.name || ''}
           />
         </>
       )}
