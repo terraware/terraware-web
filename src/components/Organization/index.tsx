@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import TfMain from '../common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
 import { Country } from 'src/types/Country';

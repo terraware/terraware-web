@@ -7,7 +7,6 @@ import Button from 'src/components/common/button/Button';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { makeStyles } from '@mui/styles';
 import { getDateDisplayValue } from '@terraware/web-components/utils';

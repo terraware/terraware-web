@@ -3,7 +3,6 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';

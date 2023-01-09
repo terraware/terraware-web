@@ -11,7 +11,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
+import { AllOrganizationRoles } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
 import TfMain from '../common/TfMain';
 import TableCellRenderer from './TableCellRenderer';
