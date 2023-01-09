@@ -18,7 +18,6 @@ export default function UserProvider({ children, data }: UserProviderProps): JSX
   useEffect(() => {
     const populateTimeZone = async () => {
       if (data.user) {
-        console.log(data.user);
         if (!data.user.timeZone) {
           // Should validate bowser time zone with supported time-zones returned by backend
           const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
