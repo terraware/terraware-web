@@ -266,25 +266,23 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [query, location, history, setSearchCriteria, selectedOrganization, searchCriteria]);
 
   useEffect(() => {
-    if (selectedOrganization) {
-      const populateUnfilteredResults = async () => {
-        const apiResponse = await search({
-          prefix: 'facilities.accessions',
-          fields: ['id'],
-          search: convertToSearchNodePayload({}, selectedOrganization.id),
-          count: 1000,
-        });
+    const populateUnfilteredResults = async () => {
+      const apiResponse = await search({
+        prefix: 'facilities.accessions',
+        fields: ['id'],
+        search: convertToSearchNodePayload({}, selectedOrganization.id),
+        count: 1000,
+      });
 
-        setUnfilteredResults(apiResponse);
-      };
-      const populatePendingAccessions = async () => {
-        const data = await getPendingAccessions(selectedOrganization.id);
-        setPendingAccessions(data);
-      };
-      populateUnfilteredResults();
-      populatePendingAccessions();
-    }
-  }, [selectedOrganization]);
+      setUnfilteredResults(apiResponse);
+    };
+    const populatePendingAccessions = async () => {
+      const data = await getPendingAccessions(selectedOrganization.id);
+      setPendingAccessions(data);
+    };
+    populateUnfilteredResults();
+    populatePendingAccessions();
+  }, [selectedOrganization.id]);
 
   useEffect(() => {
     let activeRequests = true;
