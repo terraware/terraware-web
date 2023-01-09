@@ -40,7 +40,7 @@ export default function UserProvider({ children, data }: UserProviderProps): JSX
     if (timeZoneFeatureEnabled) {
       populateTimeZone();
     }
-  }, [data.user]);
+  }, [data, snackbar, timeZoneFeatureEnabled]);
 
   return <UserContext.Provider value={data}>{children}</UserContext.Provider>;
 }
