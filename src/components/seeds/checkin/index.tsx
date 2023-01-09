@@ -18,7 +18,7 @@ import PageHeader from '../PageHeader';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextField from '../../common/Textfield/Textfield';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization, useTimeZones } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {

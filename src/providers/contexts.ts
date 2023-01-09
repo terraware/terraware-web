@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { ProvidedUserData, ProvidedOrganizationData } from './DataTypes';
+import { ProvidedUserData, ProvidedOrganizationData, ProvidedTimeZones } from './DataTypes';
 import { ServerOrganization } from '../types/Organization';
 
 export const UserContext = createContext<ProvidedUserData>({
@@ -26,4 +26,8 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     return;
   },
   selectedOrganization: defaultSelectedOrg,
+});
+
+export const LocalizationContext = createContext<ProvidedTimeZones>({
+  supportedTimeZones: [],
 });

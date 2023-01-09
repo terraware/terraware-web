@@ -62,9 +62,9 @@ import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { listPlantingSites } from './api/tracking/tracking';
 import { PlantingSite } from './api/types/tracking';
-import { UserProvider } from './providers';
-import OrganizationProvider from './providers/OrganizationProvider';
+import { LocalizationProvider, OrganizationProvider, TimeZoneDescription, UserProvider } from './providers';
 import { defaultSelectedOrg } from './providers/contexts';
+import { getTimeZones } from './api/timezones/timezones';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -340,6 +340,20 @@ export default function App() {
     }
   }, [type]);
 
+  const [locale] = useState('en');
+  const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
+
+  useEffect(() => {
+    const fetchTimeZones = async () => {
+      const timeZoneResponse = await getTimeZones(locale);
+      if (!timeZoneResponse.error && timeZoneResponse.timeZones) {
+        setTimeZones(timeZoneResponse.timeZones);
+      }
+    };
+
+    fetchTimeZones();
+  }, [locale]);
+
   if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
     return (
       <StyledEngineProvider injectFirst>
@@ -362,11 +376,13 @@ export default function App() {
                 reloadData,
               }}
             >
-              <TopBar fullWidth={true}>
-                <TopBarContent setShowNavBar={setShowNavBar} />
-              </TopBar>
-              <ToastSnackbar />
-              <NoOrgLandingPage />
+              <LocalizationProvider data={{ supportedTimeZones: timeZones }}>
+                <TopBar fullWidth={true}>
+                  <TopBarContent setShowNavBar={setShowNavBar} />
+                </TopBar>
+                <ToastSnackbar />
+                <NoOrgLandingPage />
+              </LocalizationProvider>
             </OrganizationProvider>
           </UserProvider>
         </StyledEngineProvider>
@@ -657,7 +673,7 @@ export default function App() {
       <UserProvider data={{ user, reloadUser }}>
         {selectedOrganization && (
           <OrganizationProvider data={{ selectedOrganization, setSelectedOrganization, organizations, reloadData }}>
-            {getContent()}
+            <LocalizationProvider data={{ supportedTimeZones: timeZones }}>{getContent()}</LocalizationProvider>
           </OrganizationProvider>
         )}
       </UserProvider>

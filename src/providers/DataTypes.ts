@@ -13,3 +13,12 @@ export type ProvidedOrganizationData = {
   organizations?: ServerOrganization[];
   reloadData: () => void;
 };
+
+export type TimeZoneDescription = {
+  id: string;
+  longName: string;
+};
+
+export type ProvidedTimeZones = {
+  supportedTimeZones: TimeZoneDescription[];
+};
