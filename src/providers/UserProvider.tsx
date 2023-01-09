@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { updateUserProfile } from 'src/api/user/user';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import { UserContext } from './contexts';
@@ -14,6 +15,7 @@ export type UserProviderProps = {
 
 export default function UserProvider({ children, data }: UserProviderProps): JSX.Element {
   const snackbar = useSnackbar();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   useEffect(() => {
     const populateTimeZone = async () => {
@@ -35,7 +37,9 @@ export default function UserProvider({ children, data }: UserProviderProps): JSX
         }
       }
     };
-    populateTimeZone();
+    if (timeZoneFeatureEnabled) {
+      populateTimeZone();
+    }
   }, [data.user]);
 
   return <UserContext.Provider value={data}>{children}</UserContext.Provider>;
