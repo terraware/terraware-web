@@ -78,22 +78,7 @@ export default function Home({ organizations, selectedOrganization, setSelectedO
     const populateUser = async () => {
       const response = await getUser();
       if (response.requestSucceeded && !cancel) {
-        if (response.user) {
-          setUser(response.user);
-          if (!response.user.timeZone) {
-            const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const updateResponse = await updateUserProfile({ ...response.user, timeZone: browserTimeZone });
-            if (updateResponse.requestSucceeded) {
-              snackbar.pageSuccess(
-                strings.formatString(
-                  strings.UPDATED_TIMEZONE_MSG,
-                  <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-                ),
-                strings.formatString(strings.UPDATED_TIMEZONE_TITLE, browserTimeZone)
-              );
-            }
-          }
-        }
+        setUser(response.user ?? undefined);
       }
     };
     populateUser();
