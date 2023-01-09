@@ -64,6 +64,7 @@ import { listPlantingSites } from './api/tracking/tracking';
 import { PlantingSite } from './api/types/tracking';
 import { UserProvider } from './providers';
 import OrganizationProvider from './providers/OrganizationProvider';
+import { defaultSelectedOrg } from './providers/contexts';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -353,7 +354,14 @@ export default function App() {
       return (
         <StyledEngineProvider injectFirst>
           <UserProvider data={{ user, reloadUser }}>
-            <OrganizationProvider data={{ selectedOrganization, setSelectedOrganization, organizations, reloadData }}>
+            <OrganizationProvider
+              data={{
+                selectedOrganization: selectedOrganization || defaultSelectedOrg,
+                setSelectedOrganization,
+                organizations,
+                reloadData,
+              }}
+            >
               <TopBar fullWidth={true}>
                 <TopBarContent setShowNavBar={setShowNavBar} />
               </TopBar>
@@ -704,9 +712,11 @@ export default function App() {
     <StyledEngineProvider injectFirst>
       <CssBaseline />
       <UserProvider data={{ user, reloadUser }}>
-        <OrganizationProvider data={{ selectedOrganization, setSelectedOrganization, organizations, reloadData }}>
-          {getContent()}
-        </OrganizationProvider>
+        {selectedOrganization && (
+          <OrganizationProvider data={{ selectedOrganization, setSelectedOrganization, organizations, reloadData }}>
+            {getContent()}
+          </OrganizationProvider>
+        )}
       </UserProvider>
     </StyledEngineProvider>
   );

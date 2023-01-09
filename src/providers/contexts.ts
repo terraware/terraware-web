@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 import { ProvidedUserData, ProvidedOrganizationData } from './DataTypes';
+import { AllOrganizationRoles, ServerOrganization } from '../types/Organization';
 
 export const UserContext = createContext<ProvidedUserData>({
   reloadUser: () => {
@@ -7,6 +8,13 @@ export const UserContext = createContext<ProvidedUserData>({
     return;
   },
 });
+
+export const defaultSelectedOrg: ServerOrganization = {
+  id: -1,
+  name: '',
+  role: 'Contributor',
+  totalUsers: 0,
+};
 
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
   reloadData: () => {
@@ -17,10 +25,5 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     // no-op
     return;
   },
-  selectedOrganization: {
-    id: -1,
-    name: '',
-    role: 'Contributor',
-    totalUsers: 0,
-  },
+  selectedOrganization: defaultSelectedOrg,
 });
