@@ -376,7 +376,7 @@ export default function App() {
                   <MyAccount organizations={organizations} edit={false} />
                 </Route>
                 <Route exact path={APP_PATHS.WELCOME}>
-                  <NoOrgLandingPage reloadOrganizationData={reloadData} />
+                  <NoOrgLandingPage />
                 </Route>
                 <Route path='/'>
                   <Redirect to={APP_PATHS.WELCOME} />
