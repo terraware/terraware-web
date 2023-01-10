@@ -330,7 +330,11 @@ const MyAccountContent = ({
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <TimeZoneSelector onTimeZoneSelected={onTimeZoneChange} selectedTimeZone={record.timeZone} />
+              <TimeZoneSelector
+                onTimeZoneSelected={onTimeZoneChange}
+                selectedTimeZone={record.timeZone}
+                disabled={!edit}
+              />
             </Grid>
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>

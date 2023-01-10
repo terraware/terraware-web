@@ -11,10 +11,11 @@ export type TimeZoneDescription = {
 export type TimeZoneSelectorProps = {
   onTimeZoneSelected: (tzSelected: TimeZoneDescription) => void;
   selectedTimeZone?: string;
+  disabled?: boolean;
 };
 
 export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Element {
-  const { onTimeZoneSelected, selectedTimeZone } = props;
+  const { onTimeZoneSelected, selectedTimeZone, disabled } = props;
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
 
   useEffect(() => {
@@ -75,6 +76,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
       freeSolo={false}
       hideClearIcon={true}
       label={''}
+      disabled={disabled}
     />
   );
 }
