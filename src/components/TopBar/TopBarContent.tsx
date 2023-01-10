@@ -1,7 +1,8 @@
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { IconButton, Theme, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Svg } from '@terraware/web-components';
-import React from 'react';
 import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
@@ -9,6 +10,8 @@ import UserMenu from '../UserMenu';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 import { useOrganization } from 'src/providers/hooks';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {
@@ -42,6 +45,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'right',
     alignItems: 'center',
   },
+  clickableLogo: {
+    cursor: 'pointer',
+    height: '24px',
+  },
 }));
 
 type TopBarProps = {
@@ -49,6 +56,7 @@ type TopBarProps = {
 };
 
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
+  const history = useHistory();
   const classes = useStyles();
   const { selectedOrganization, organizations, reloadData } = useOrganization();
   const { setShowNavBar } = props;
@@ -62,7 +70,9 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     <>
       <div className={classes.left}>
         <div className='logo'>
-          <Svg.Logo className={classes.logo} />
+          <Link to={APP_PATHS.HOME}>
+            <Svg.Logo className={classes.logo} />
+          </Link>
         </div>
         {organizations && organizations.length > 0 && (
           <>
@@ -90,7 +100,12 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         )}
       </Grid>
 
-      <Grid item xs={6} className={`${classes.center} logo`} />
+      <Grid
+        item
+        xs={6}
+        className={`${classes.center} ${classes.clickableLogo} logo`}
+        onClick={() => history.push(APP_PATHS.HOME)}
+      />
 
       <Grid item xs={3} className={classes.right}>
         <NotificationsDropdown

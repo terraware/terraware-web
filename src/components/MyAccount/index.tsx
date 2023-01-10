@@ -27,6 +27,7 @@ import TitleDescription from '../common/TitleDescription';
 import { useUser } from 'src/providers';
 import TimeZoneSelector from '../TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
+import isEnabled from 'src/features';
 
 const columns: TableColumnType[] = [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
@@ -48,7 +49,7 @@ export default function MyAccount(props: MyAccountProps): JSX.Element | null {
     return null;
   }
 
-  return <MyAccountContent user={user} reloadUser={reloadUser} {...props} />;
+  return <MyAccountContent user={{ ...user }} reloadUser={reloadUser} {...props} />;
 }
 
 type MyAccountContentProps = {
@@ -81,6 +82,7 @@ const MyAccountContent = ({
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
+  const timeZonesEnabled = isEnabled('Timezones');
 
   useEffect(() => {
     if (organizations) {
@@ -267,6 +269,7 @@ const MyAccountContent = ({
             justifyContent='space-between'
             marginBottom={theme.spacing(4)}
             paddingLeft={theme.spacing(3)}
+            marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
           >
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
             <Button
@@ -325,18 +328,22 @@ const MyAccountContent = ({
               />
             </Grid>
             <Grid item xs={12} />
-            <Grid item xs={12}>
-              <Typography fontSize='20px' fontWeight={600}>
-                {strings.TIME_ZONE}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TimeZoneSelector
-                onTimeZoneSelected={onTimeZoneChange}
-                selectedTimeZone={record.timeZone}
-                disabled={!edit}
-              />
-            </Grid>
+            {timeZonesEnabled && (
+              <>
+                <Grid item xs={12}>
+                  <Typography fontSize='20px' fontWeight={600}>
+                    {strings.TIME_ZONE}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TimeZoneSelector
+                    onTimeZoneSelected={onTimeZoneChange}
+                    selectedTimeZone={record.timeZone}
+                    disabled={!edit}
+                  />
+                </Grid>
+              </>
+            )}
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
                 {strings.NOTIFICATIONS}
@@ -354,34 +361,42 @@ const MyAccountContent = ({
               />
             </Grid>
             <Grid item xs={12} />
-            <Grid item xs={12}>
-              <Typography fontSize='20px' fontWeight={600}>
-                {strings.ORGANIZATIONS}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <div>
-                <Grid container spacing={4}>
-                  <Grid item xs={12}>
-                    {organizations && (
-                      <Table
-                        id='organizations-table'
-                        columns={columns}
-                        rows={personOrganizations}
-                        orderBy='name'
-                        selectedRows={selectedRows}
-                        setSelectedRows={setSelectedRows}
-                        showCheckbox={edit}
-                        showTopBar={edit}
-                        topBarButtons={[
-                          { buttonType: 'destructive', buttonText: strings.REMOVE, onButtonClick: removeSelectedOrgs },
-                        ]}
-                      />
-                    )}
-                  </Grid>
+            {organizations && organizations.length > 0 ? (
+              <>
+                <Grid item xs={12}>
+                  <Typography fontSize='20px' fontWeight={600}>
+                    {strings.ORGANIZATIONS}
+                  </Typography>
                 </Grid>
-              </div>
-            </Grid>
+                <Grid item xs={12}>
+                  <div>
+                    <Grid container spacing={4}>
+                      <Grid item xs={12}>
+                        {organizations && (
+                          <Table
+                            id='organizations-table'
+                            columns={columns}
+                            rows={personOrganizations}
+                            orderBy='name'
+                            selectedRows={selectedRows}
+                            setSelectedRows={setSelectedRows}
+                            showCheckbox={edit}
+                            showTopBar={edit}
+                            topBarButtons={[
+                              {
+                                buttonType: 'destructive',
+                                buttonText: strings.REMOVE,
+                                onButtonClick: removeSelectedOrgs,
+                              },
+                            ]}
+                          />
+                        )}
+                      </Grid>
+                    </Grid>
+                  </div>
+                </Grid>
+              </>
+            ) : null}
           </Grid>
         </Box>
       </PageForm>

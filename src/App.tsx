@@ -139,6 +139,13 @@ enum APIRequestStatus {
   'SUCCEEDED',
 }
 
+const MINIMAL_USER_ROUTES: string[] = [
+  APP_PATHS.WELCOME,
+  APP_PATHS.MY_ACCOUNT,
+  APP_PATHS.MY_ACCOUNT_EDIT,
+  APP_PATHS.OPT_IN,
+];
+
 export default function App() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
@@ -321,7 +328,7 @@ export default function App() {
     if (
       orgAPIRequestStatus === APIRequestStatus.SUCCEEDED &&
       organizations?.length === 0 &&
-      location.pathname !== APP_PATHS.WELCOME
+      MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1
     ) {
       history.push(APP_PATHS.WELCOME);
     }
@@ -367,8 +374,28 @@ export default function App() {
                 <TopBar fullWidth={true}>
                   <TopBarContent setShowNavBar={setShowNavBar} />
                 </TopBar>
-                <ToastSnackbar />
-                <NoOrgLandingPage />
+                <div className={classes.container}>
+                  <ToastSnackbar />
+                  <Switch>
+                    <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
+                      <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
+                    </Route>
+                    <Route exact path={APP_PATHS.MY_ACCOUNT}>
+                      <MyAccount organizations={organizations} edit={false} />
+                    </Route>
+                    <Route exact path={APP_PATHS.WELCOME}>
+                      <NoOrgLandingPage />
+                    </Route>
+                    {!isProduction && (
+                      <Route exact path={APP_PATHS.OPT_IN}>
+                        <OptInFeatures refresh={reloadPreferences} />
+                      </Route>
+                    )}
+                    <Route path='/'>
+                      <Redirect to={APP_PATHS.WELCOME} />
+                    </Route>
+                  </Switch>
+                </div>
               </LocalizationProvider>
             </OrganizationProvider>
           </UserProvider>
@@ -604,16 +631,12 @@ export default function App() {
               <Route exact path={APP_PATHS.CONTACT_US}>
                 <ContactUs />
               </Route>
-              {user && (
-                <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-                  <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
-                </Route>
-              )}
-              {user && (
-                <Route exact path={APP_PATHS.MY_ACCOUNT}>
-                  <MyAccount organizations={organizations} edit={false} />
-                </Route>
-              )}
+              <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
+                <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
+              </Route>
+              <Route exact path={APP_PATHS.MY_ACCOUNT}>
+                <MyAccount organizations={organizations} edit={false} />
+              </Route>
 
               {!isProduction && (
                 <Route exact path={APP_PATHS.OPT_IN}>
