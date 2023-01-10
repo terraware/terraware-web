@@ -39,7 +39,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   });
   const [batches, setBatches] = useState<any[]>();
   const [withdrawInProgress, setWithdrawInProgress] = useState<boolean>(false);
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const history = useHistory();
 
   useEffect(() => {

@@ -28,7 +28,7 @@ export default function GenericMap({
   bannerMessage,
   entityOptions,
 }: GenericMapProps): JSX.Element | null {
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [token, setToken] = useState<string>();
   const [mapId, setMapId] = useState<string>();
   const [tokenPromise, setTokenPromise] = useState<Promise<void>>();

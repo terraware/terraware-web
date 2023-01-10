@@ -23,7 +23,7 @@ export default function PlantsDashboard(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<{ [key: string]: unknown }>();
   const contentRef = useRef(null);
 

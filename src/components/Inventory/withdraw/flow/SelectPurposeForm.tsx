@@ -73,7 +73,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const [zones, setZones] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<number>();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [noReadySeedlings, setNoReadySeedlings] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();

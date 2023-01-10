@@ -59,7 +59,7 @@ export default function NurseryWithdrawals(): JSX.Element {
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [filters, setFilters] = useForm<NurseryWithdrawalsFiltersType>({});
   const [species, setSpecies] = useState<Species[]>();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
     field: 'withdrawnDate',
     direction: 'Descending',
