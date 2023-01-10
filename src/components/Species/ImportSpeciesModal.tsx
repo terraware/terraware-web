@@ -6,13 +6,11 @@ import {
   uploadSpeciesFile,
 } from 'src/api/species/species';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import ImportModal from '../common/ImportModal';
 
 export type ImportSpeciesModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
-  organization: ServerOrganization;
   onError?: (snackbarMessage: string) => void;
   setCheckDataModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -28,11 +26,10 @@ export const downloadCsvTemplate = async () => {
 };
 
 export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
-  const { open, onClose, organization } = props;
+  const { open, onClose } = props;
 
   return (
     <ImportModal
-      organization={organization}
       onClose={onClose}
       open={open}
       title={strings.IMPORT_SPECIES}

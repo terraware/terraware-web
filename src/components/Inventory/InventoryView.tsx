@@ -2,7 +2,6 @@ import { useTheme, Grid, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
@@ -14,7 +13,6 @@ import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
 
 interface InventoryViewProps {
-  organization: ServerOrganization;
   species: Species[];
 }
 
@@ -23,7 +21,7 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
   const history = useHistory();
   const location = useStateLocation();
   const openBatchNumber = (query.get('batch') || '').toLowerCase();
-  const { species, organization } = props;
+  const { species } = props;
   const { speciesId } = useParams<{ speciesId: string }>();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [modified, setModified] = useState<number>(Date.now());
@@ -83,7 +81,6 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
             <InventorySummary speciesId={Number(speciesId)} modified={modified} />
             <InventorySeedlingsTable
               speciesId={Number(speciesId)}
-              organization={organization}
               modified={modified}
               setModified={setModified}
               openBatchNumber={openBatchNumber}

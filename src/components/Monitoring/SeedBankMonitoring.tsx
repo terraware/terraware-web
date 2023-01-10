@@ -1,6 +1,5 @@
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
-import { ServerOrganization } from 'src/types/Organization';
 import EmptyMessage from '../common/EmptyMessage';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
@@ -10,6 +9,7 @@ import { EMPTY_STATE_CONTENT_STYLES } from '../emptyStatePages/EmptyStatePage';
 import SensorKitSetup from './SensorKitSetup';
 import SeedBankDashboard from './dashboard/SeedBankDashboard';
 import { Grid, Theme } from '@mui/material';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   placeholder: {
@@ -38,15 +38,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type SeedBankMonitoringProps = {
   seedBank: Facility;
-  organization: ServerOrganization;
   reloadData: () => void;
   monitoringPreferences: { [key: string]: unknown };
   updatePreferences: (data: { [key: string]: unknown }) => void;
 };
 
 export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const classes = useStyles();
-  const { organization, seedBank, reloadData, monitoringPreferences, updatePreferences } = props;
+  const { seedBank, reloadData, monitoringPreferences, updatePreferences } = props;
   const [onboarding, setOnboarding] = useState<boolean>(false);
   const isConfigured = seedBank.connectionState === 'Configured';
 
@@ -63,7 +63,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
     <>
       {!isConfigured && !onboarding && (
         <>
-          {isAdmin(organization) ? (
+          {isAdmin(selectedOrganization) ? (
             <Grid item xs={12} marginTop='10%'>
               <div className={classes.notSetUpContent}>
                 <EmptyStateContent
@@ -96,14 +96,7 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
           </span>
         </div>
       )}
-      {onboarding && (
-        <SensorKitSetup
-          organization={organization}
-          seedBank={seedBank}
-          onFinish={onFinishOnboarding}
-          reloadData={reloadData}
-        />
-      )}
+      {onboarding && <SensorKitSetup seedBank={seedBank} onFinish={onFinishOnboarding} reloadData={reloadData} />}
     </>
   );
 }

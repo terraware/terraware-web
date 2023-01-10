@@ -314,9 +314,6 @@ const strings = new LocalizedStrings({
     GA3: 'GA3',
     GENERAL: 'General',
     GENERIC_ERROR: 'An error occurred',
-    GENERIC_MAP_MESSAGE_ADMIN: 'To see your plants on this map, please add a shapefile.',
-    GENERIC_MAP_MESSAGE_CONTRIBUTOR:
-      'To see your plants on this map, you need to add a shapefile. Please reach out to an administrator from your organization.',
     GEOLOCATIONS: 'Geolocations',
     GERMINATED: 'Germinated',
     GERMINATING_QUANTITY_REQUIRED: 'Germinating Quantity *',
@@ -940,6 +937,8 @@ const strings = new LocalizedStrings({
     UNSPECIFIED: 'Unspecified',
     UNSURE: 'Unsure',
     UPDATE_STATUS_WARNING: 'You‘re about to update the status',
+    UPDATED_TIMEZONE_MSG: 'You can edit this setting from {0}',
+    UPDATED_TIMEZONE_TITLE: 'Your time zone was updated to {0} zone.',
     UPLOAD_PHOTO_DESCRIPTION: 'Browse or drag and drop a file (JPG, PNG).',
     UPLOAD_PHOTO_MOBILE_DESCRIPTION: 'Browse files (JPG, PNG).',
     UPLOAD_PHOTO: 'Upload Photo...',

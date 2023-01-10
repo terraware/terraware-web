@@ -3,23 +3,19 @@ import strings from 'src/strings';
 import { NurseryWithdrawal } from 'src/api/types/batch';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { ServerOrganization } from 'src/types/Organization';
 import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';
+import { useOrganization } from 'src/providers/hooks';
 
 type WithdrawalOverviewProps = {
-  organization?: ServerOrganization;
   withdrawal?: NurseryWithdrawal;
   withdrawalSummary?: WithdrawalSummary;
 };
 
-export default function WithdrawalOverview({
-  organization,
-  withdrawal,
-  withdrawalSummary,
-}: WithdrawalOverviewProps): JSX.Element {
+export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: WithdrawalOverviewProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
 
-  const facilityName = organization?.facilities?.find((f) => f.id === withdrawal?.facilityId)?.name;
+  const facilityName = selectedOrganization.facilities?.find((f) => f.id === withdrawal?.facilityId)?.name;
   const overviewCardData = [
     {
       title: strings.DATE,

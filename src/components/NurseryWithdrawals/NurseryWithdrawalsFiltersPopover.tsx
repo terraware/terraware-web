@@ -3,7 +3,6 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import Button from '../common/button/Button';
 import { Checkbox, DatePicker } from '@terraware/web-components';
@@ -17,6 +16,7 @@ import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 import moment from 'moment';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
+import { useOrganization } from 'src/providers/hooks';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
@@ -77,16 +77,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 type NurseryWithdrawalsFiltersPopoverProps = {
   filters: NurseryWithdrawalsFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<NurseryWithdrawalsFiltersType>>;
-  organization: ServerOrganization;
   species?: Species[];
 };
 
 export default function NurseryWithdrawalsFiltersPopover({
   filters,
   setFilters,
-  organization,
   species,
 }: NurseryWithdrawalsFiltersPopoverProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
@@ -108,7 +107,7 @@ export default function NurseryWithdrawalsFiltersPopover({
 
   useEffect(() => {
     const populatePlantingSites = async () => {
-      const result = await listPlantingSites(organization.id);
+      const result = await listPlantingSites(selectedOrganization.id);
       if (result.requestSucceeded) {
         setPlantingSites(result.sites);
       } else {
@@ -116,7 +115,7 @@ export default function NurseryWithdrawalsFiltersPopover({
       }
     };
     populatePlantingSites();
-  }, [organization, snackbar]);
+  }, [selectedOrganization, snackbar]);
 
   const onReset = () => {
     setFilters({
@@ -229,7 +228,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                 <Typography fontSize='16px' color={theme.palette.TwClrBaseGray500}>
                   {strings.FROM_NURSERY}
                 </Typography>
-                {getAllNurseries(organization).map((n) => (
+                {getAllNurseries(selectedOrganization).map((n) => (
                   <Grid item xs={12} key={n.id}>
                     <Checkbox
                       id={n.id.toString()}

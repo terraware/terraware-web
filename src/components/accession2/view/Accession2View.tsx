@@ -8,7 +8,6 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
 import { checkIn } from 'src/api/seeds/accession';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import TfMain from 'src/components/common/TfMain';
 import DeleteAccessionModal from '../edit/DeleteAccessionModal';
 import DetailPanel from './DetailPanel';
@@ -36,6 +35,7 @@ import { APP_PATHS } from 'src/constants';
 import OverviewItemCard from '../../common/OverviewItemCard';
 import BackToLink from 'src/components/common/BackToLink';
 import { useUser } from 'src/providers';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -69,12 +69,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const TABS = ['detail', 'history', 'viabilityTesting'];
 
-interface Accession2ViewProps {
-  organization: ServerOrganization;
-}
-
-export default function Accession2View(props: Accession2ViewProps): JSX.Element {
+export default function Accession2View(): JSX.Element {
   const { user } = useUser();
+  const { selectedOrganization } = useOrganization();
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();
@@ -99,8 +96,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState({ value: '', unit: '' });
   const [snackbar] = useState(useSnackbar());
-  const { organization } = props;
-  const userCanEdit = !isContributor(organization);
+  const userCanEdit = !isContributor(selectedOrganization);
   const { isMobile, isTablet } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const themeObj = useTheme();
@@ -372,7 +368,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
                 setOpenNewViabilityTest(false);
                 setSelectedTest(undefined);
               }}
-              organization={organization}
               user={user}
               viabilityTest={selectedTest}
             />
@@ -388,7 +383,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               open={openEditLocationModal}
               onClose={() => setOpenEditLocationModal(false)}
               accession={accession}
-              organization={organization}
               reload={reloadData}
             />
           )}
@@ -398,7 +392,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               onClose={() => setOpenEditStateModal(false)}
               accession={accession}
               reload={reloadData}
-              organization={organization}
             />
           )}
           {openEndDryingReminderModal && (
@@ -422,7 +415,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               onClose={() => setOpenWithdrawModal(false)}
               accession={accession}
               reload={reloadData}
-              organization={organization}
               user={user}
             />
           )}
@@ -430,7 +422,6 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             open={openQuantityModal}
             onClose={() => setOpenQuantityModal(false)}
             accession={accession}
-            organization={organization}
             reload={reloadData}
             title={accession?.remainingQuantity?.quantity !== undefined ? strings.EDIT_QUANTITY : strings.ADD_QUANTITY}
           />
@@ -544,7 +535,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
               title={strings.LOCATION}
               contents={
                 <Box>
-                  {getSeedBank(organization, accession.facilityId)?.name}
+                  {getSeedBank(selectedOrganization, accession.facilityId)?.name}
                   {accession.storageLocation ? ` / ${accession.storageLocation}` : ''}
                 </Box>
               }
@@ -661,7 +652,7 @@ export default function Accession2View(props: Accession2ViewProps): JSX.Element 
             </TabList>
           </Box>
           <TabPanel value='detail' sx={tabPanelProps}>
-            <DetailPanel accession={accession} organization={organization} reload={reloadData} />
+            <DetailPanel accession={accession} reload={reloadData} />
           </TabPanel>
           <TabPanel value='history' sx={tabPanelProps}>
             {accession && <Accession2History accession={accession} />}

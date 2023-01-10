@@ -39,7 +39,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
     );
     return (
       <Link to={nurseryWithdrawalDetailLocation} className={classes.link}>
-        {iValue}
+        {iValue as React.ReactNode}
       </Link>
     );
   };

@@ -75,6 +75,9 @@ export interface paths {
   "/api/v1/facility/{facilityId}/devices": {
     get: operations["listFacilityDevices_1"];
   };
+  "/api/v1/i18n/timeZones": {
+    get: operations["listTimeZoneNames"];
+  };
   "/api/v1/login": {
     /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
     get: operations["login"];
@@ -418,6 +421,7 @@ export interface components {
     };
     /** Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
     AndNodePayload: components["schemas"]["SearchNodePayload"] & {
+      /** List of criteria all of which must be satisfied */
       children?: components["schemas"]["SearchNodePayload"][];
     } & {
       children: unknown;
@@ -571,6 +575,8 @@ export interface components {
       /** Which organization this facility belongs to. */
       organizationId: number;
       name: string;
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
     };
     CreateFacilityResponsePayload: {
@@ -621,6 +627,8 @@ export interface components {
       countrySubdivisionCode?: string;
       description?: string;
       name: string;
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
     };
     CreateOrganizationUserResponsePayload: {
       /** The ID of the newly-added user. */
@@ -631,6 +639,8 @@ export interface components {
       description?: string;
       name: string;
       organizationId: number;
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
     };
     CreatePlantingSiteResponsePayload: {
       id: number;
@@ -769,6 +779,8 @@ export interface components {
       id: number;
       name: string;
       organizationId: number;
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
     };
     FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1061,6 +1073,10 @@ export interface components {
       species: components["schemas"]["SpeciesResponseElement"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListTimeZoneNamesResponsePayload: {
+      timeZones: components["schemas"]["TimeZonePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListTimeseriesResponsePayload: {
       timeseries: components["schemas"]["TimeseriesPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -1112,7 +1128,12 @@ export interface components {
       id: number;
     };
     /** Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
-    OrNodePayload: components["schemas"]["SearchNodePayload"];
+    OrNodePayload: components["schemas"]["SearchNodePayload"] & {
+      /** List of criteria at least one of which must be satisfied */
+      children?: components["schemas"]["SearchNodePayload"][];
+    } & {
+      children: unknown;
+    };
     OrganizationPayload: {
       /** ISO 3166 alpha-2 code of organization's country. */
       countryCode?: string;
@@ -1126,6 +1147,8 @@ export interface components {
       name: string;
       /** The current user's role in the organization. */
       role: "Contributor" | "Manager" | "Admin" | "Owner";
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
       /** The total number of users in the organization, including the current user. */
       totalUsers: number;
     };
@@ -1161,6 +1184,8 @@ export interface components {
       id: number;
       name: string;
       plantingZones?: components["schemas"]["PlantingZonePayload"][];
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
     };
     PlantingZonePayload: {
       boundary: components["schemas"]["MultiPolygon"];
@@ -1373,6 +1398,12 @@ export interface components {
       seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    TimeZonePayload: {
+      /** Time zone name in IANA tz database format */
+      id: string;
+      /** Long name of time zone, possibly including a city name. This name is guaranteed to be unique across all zones. */
+      longName: string;
+    };
     TimeseriesIdPayload: {
       deviceId: number;
       timeseriesName: string;
@@ -1497,6 +1528,8 @@ export interface components {
     UpdateFacilityRequestPayload: {
       description?: string;
       name: string;
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
     };
     UpdateNotificationRequestPayload: {
       read: boolean;
@@ -1512,6 +1545,8 @@ export interface components {
       countrySubdivisionCode?: string;
       description?: string;
       name: string;
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
     };
     UpdateOrganizationUserRequestPayload: {
       role: "Contributor" | "Manager" | "Admin" | "Owner";
@@ -1519,6 +1554,8 @@ export interface components {
     UpdatePlantingSiteRequestPayload: {
       description?: string;
       name: string;
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
     };
     UpdateUserPreferencesRequestPayload: {
       /** If present, update the user's per-organization preferences for this organization. If not present, update the user's global preferences. */
@@ -1530,6 +1567,8 @@ export interface components {
       emailNotificationsEnabled?: boolean;
       firstName: string;
       lastName: string;
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
     };
     UpdateViabilityTestRequestPayload: {
       endDate?: string;
@@ -1599,6 +1638,8 @@ export interface components {
       emailNotificationsEnabled: boolean;
       firstName?: string;
       lastName?: string;
+      /** Time zone name in IANA tz database format */
+      timeZone?: string;
     };
     VersionsEntryPayload: {
       appName: string;
@@ -2132,6 +2173,22 @@ export interface operations {
       };
     };
   };
+  listTimeZoneNames: {
+    parameters: {
+      query: {
+        /** Language code and optional country code suffix. */
+        locale?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListTimeZoneNamesResponsePayload"];
+        };
+      };
+    };
+  };
   /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
   login: {
     parameters: {
@@ -2372,6 +2429,12 @@ export interface operations {
       };
     };
     responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchResponsePayload"];
+        };
+      };
       /** The requested resource was not found. */
       404: {
         content: {
@@ -2589,6 +2652,12 @@ export interface operations {
       };
     };
     responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
       /** The organization has other members and cannot be deleted. */
       409: {
         content: {
@@ -3324,7 +3393,7 @@ export interface operations {
       /** Cannot delete the species because it is currently in use. */
       409: {
         content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -3439,7 +3508,7 @@ export interface operations {
   };
   getMapboxToken: {
     responses: {
-      /** OK */
+      /** The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["GetMapboxTokenResponsePayload"];

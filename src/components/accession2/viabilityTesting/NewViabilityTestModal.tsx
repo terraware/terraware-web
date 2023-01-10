@@ -8,7 +8,6 @@ import useForm from 'src/utils/useForm';
 import { Dropdown } from '@terraware/web-components';
 import { SEED_TYPES, TEST_METHODS, TEST_TYPES, TREATMENTS } from 'src/types/Accession';
 import { OrganizationUser, User } from 'src/types/User';
-import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useState } from 'react';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { isContributor } from 'src/utils/organization';
@@ -29,6 +28,7 @@ import TooltipLearnMoreModal, {
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 import AddLink from 'src/components/common/AddLink';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles(() => ({
   checkbox: {
@@ -41,13 +41,13 @@ export interface NewViabilityTestModalProps {
   accession: Accession2;
   onClose: () => void;
   reload: () => void;
-  organization: ServerOrganization;
   user: User;
   viabilityTest: ViabilityTest | undefined;
 }
 
 export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
-  const { onClose, open, accession, organization, user, reload, viabilityTest } = props;
+  const { selectedOrganization } = useOrganization();
+  const { onClose, open, accession, user, reload, viabilityTest } = props;
   const classes = useStyles();
 
   const [record, setRecord, onChange] = useForm(viabilityTest);
@@ -56,7 +56,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const [totalSeedsTested, setTotalSeedsTested] = useState(0);
   const [openViabilityResultModal, setOpenViabilityResultModal] = useState(false);
   const [savedRecord, setSavedRecord] = useState<ViabilityTest>();
-  const contributor = isContributor(organization);
+  const contributor = isContributor(selectedOrganization);
   const snackbar = useSnackbar();
   const theme = useTheme();
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -79,13 +79,13 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   useEffect(() => {
     const getOrgUsers = async () => {
-      const response = await getOrganizationUsers(organization);
+      const response = await getOrganizationUsers(selectedOrganization);
       if (response.requestSucceeded) {
         setUsers(response.users);
       }
     };
     getOrgUsers();
-  }, [organization]);
+  }, [selectedOrganization]);
 
   useEffect(() => {
     const newViabilityTest: ViabilityTestPostRequest = {

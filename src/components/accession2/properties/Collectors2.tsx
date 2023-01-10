@@ -6,24 +6,25 @@ import Autocomplete from 'src/components/common/Autocomplete';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import AddLink from 'src/components/common/AddLink';
+import { useOrganization } from 'src/providers/hooks';
 
 interface Props {
-  organizationId: number;
   collectors?: string[];
   onChange: (id: string, value: string[]) => void;
 }
 
-export default function Collectors2({ organizationId, collectors = [''], onChange }: Props): JSX.Element {
+export default function Collectors2({ collectors = [''], onChange }: Props): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const [collectorsList, setCollectorsList] = useState<string[]>([...collectors]);
   const [collectorsOpt, setCollectorsOpt] = useState<string[]>();
   const theme = useTheme();
 
   useEffect(() => {
     const populateCollectors = async () => {
-      setCollectorsOpt(await getCollectors(organizationId));
+      setCollectorsOpt(await getCollectors(selectedOrganization.id));
     };
     populateCollectors();
-  }, [organizationId]);
+  }, [selectedOrganization]);
 
   const getNonEmptyCollectors = (updatedCollectors: string[]) => updatedCollectors.filter((collector) => !!collector);
 

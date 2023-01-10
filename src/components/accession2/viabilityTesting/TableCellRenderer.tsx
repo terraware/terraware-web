@@ -24,7 +24,7 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
   const defaultProps = { column, row, index };
   const { isMobile } = useDeviceInfo();
 
-  const getValue = (iValue: React.ReactNode | unknown[], style?: object) => {
+  const getValue = (iValue: React.ReactNode, style?: object) => {
     const styleProps = style || {};
     return <Typography sx={{ ...styleProps, cursor: 'pointer' }}>{iValue}</Typography>;
   };
