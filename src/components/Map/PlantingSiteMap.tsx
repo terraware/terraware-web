@@ -23,7 +23,7 @@ export type PlantingSiteMapProps = {
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
   const { plantingSite, style, contextRenderer, selectedPlotId, selectedZoneId } = props;
   const theme = useTheme();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
 
   const getRenderAttributes = useCallback(

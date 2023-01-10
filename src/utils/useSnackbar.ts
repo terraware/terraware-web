@@ -1,11 +1,9 @@
+import { useMemo } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { snackbarAtoms, Priority, Title, Message, OnCloseCallback } from 'src/state/snackbar';
 import strings from 'src/strings';
 
-export default function useSnackbar() {
-  const setToastSnackbar = useSetRecoilState(snackbarAtoms.toast);
-  const setPageSnackbar = useSetRecoilState(snackbarAtoms.page);
-
+function snackbarFns(setToastSnackbar: any, setPageSnackbar: any) {
   const toast = (msg: Message, title: Title, priority: Priority) => {
     setToastSnackbar({
       msg,
@@ -50,4 +48,10 @@ export default function useSnackbar() {
     pageSuccess,
     pageError,
   };
+}
+
+export default function useSnackbar() {
+  const toast = useSetRecoilState(snackbarAtoms.toast);
+  const page = useSetRecoilState(snackbarAtoms.page);
+  return useMemo(() => snackbarFns(toast, page), [toast, page]);
 }

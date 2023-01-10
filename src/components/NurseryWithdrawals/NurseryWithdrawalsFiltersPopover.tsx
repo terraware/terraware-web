@@ -92,7 +92,7 @@ export default function NurseryWithdrawalsFiltersPopover({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [temporalRecord, setTemporalRecord] = useForm<NurseryWithdrawalsFiltersType>({});
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
