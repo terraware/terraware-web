@@ -1,3 +1,4 @@
+77063ba SW-2670 Time zone selector - initial revision with alphabetical sort (#1013)
 1700772 SW-2660 Create Localization Provider Layer (#1012)
 d51bafc remove unused strings (#1011)
 24ab3d0 SW-2687 Temporary time zones hook to unblock selector component and other page views (#1008)
