@@ -1,3 +1,4 @@
+f1c012f Bump react-scripts from 4.0.3 to 5.0.1 (#1002)
 9115557 Make useSnackbar return a constant object so it doesn't trigger useEffects (#1015)
 0ff47ab SW-2684 / SW-2703 render my account page for orphaned users (#999)
 b86d62a Bump @types/jest from 26.0.24 to 29.2.5 (#1000)
