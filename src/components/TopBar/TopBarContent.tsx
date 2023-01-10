@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   clickableLogo: {
+    cursor: 'pointer',
     height: '24px',
   },
 }));
