@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     minHeight: 'calc(100vh - 88px)',
-    padding: (props: StyleProps) => (props.isMobile ? '88px 24px 24px' : '64px 24px 24px'),
+    padding: '115px 24px 24px',
     [theme.breakpoints.down('xl')]: {
       background:
         'url(/assets/home-bg-right-layer-z4.svg) no-repeat 753px 100%/auto 285px, ' +

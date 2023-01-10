@@ -175,7 +175,7 @@ export default function SmallDeviceUserMenu({
                   className={classes.menuList}
                 >
                   <Box sx={{ display: 'flex' }}>
-                    <Box sx={{ display: 'flex' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
                       <Typography sx={{ paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
                         {user?.firstName} {user?.lastName}
@@ -186,17 +186,15 @@ export default function SmallDeviceUserMenu({
                     </button>
                   </Box>
                   <Divider sx={{ margin: '16px 0' }} />
-                  {hasOrganizations ? (
-                    <MenuItem
-                      onClick={(e) => {
-                        navigate(APP_PATHS.MY_ACCOUNT);
-                        handleClose(e);
-                      }}
-                      className={classes.menuItem}
-                    >
-                      {strings.MY_ACCOUNT}
-                    </MenuItem>
-                  ) : null}
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate(APP_PATHS.MY_ACCOUNT);
+                      handleClose(e);
+                    }}
+                    className={classes.menuItem}
+                  >
+                    {strings.MY_ACCOUNT}
+                  </MenuItem>
                   <MenuItem
                     onClick={(e) => {
                       onLogout();

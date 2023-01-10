@@ -367,21 +367,23 @@ export default function App() {
               <TopBar fullWidth={true}>
                 <TopBarContent setShowNavBar={setShowNavBar} />
               </TopBar>
-              <ToastSnackbar />
-              <Switch>
-                <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-                  <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
-                </Route>
-                <Route exact path={APP_PATHS.MY_ACCOUNT}>
-                  <MyAccount organizations={organizations} edit={false} />
-                </Route>
-                <Route exact path={APP_PATHS.WELCOME}>
-                  <NoOrgLandingPage />
-                </Route>
-                <Route path='/'>
-                  <Redirect to={APP_PATHS.WELCOME} />
-                </Route>
-              </Switch>
+              <div className={classes.container}>
+                <ToastSnackbar />
+                <Switch>
+                  <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
+                    <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
+                  </Route>
+                  <Route exact path={APP_PATHS.MY_ACCOUNT}>
+                    <MyAccount organizations={organizations} edit={false} />
+                  </Route>
+                  <Route exact path={APP_PATHS.WELCOME}>
+                    <NoOrgLandingPage />
+                  </Route>
+                  <Route path='/'>
+                    <Redirect to={APP_PATHS.WELCOME} />
+                  </Route>
+                </Switch>
+              </div>
             </OrganizationProvider>
           </UserProvider>
         </StyledEngineProvider>
