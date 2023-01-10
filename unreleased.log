@@ -1,3 +1,4 @@
+9115557 Make useSnackbar return a constant object so it doesn't trigger useEffects (#1015)
 0ff47ab SW-2684 / SW-2703 render my account page for orphaned users (#999)
 b86d62a Bump @types/jest from 26.0.24 to 29.2.5 (#1000)
 bc72a72 Bump @testing-library/react from 11.2.7 to 12.1.5 (#1004)
