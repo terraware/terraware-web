@@ -1,6 +1,7 @@
+import React from 'react';
 import { User } from 'src/types/User';
 import { ServerOrganization } from '../types/Organization';
-import React from 'react';
+import { TimeZoneDescription } from '../types/TimeZones';
 
 export type ProvidedUserData = {
   user?: User;
@@ -14,11 +15,7 @@ export type ProvidedOrganizationData = {
   reloadData: () => void;
 };
 
-export type TimeZoneDescription = {
-  id: string;
-  longName: string;
-};
-
-export type ProvidedTimeZones = {
+export type ProvidedLocalizationData = {
   supportedTimeZones: TimeZoneDescription[];
+  strings: { [key: string]: string };
 };
