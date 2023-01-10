@@ -58,7 +58,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
   const { withdrawalId } = useParams<{ withdrawalId: string }>();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const { OUTPLANT } = NurseryWithdrawalPurposes;
 
   const query = useQuery();

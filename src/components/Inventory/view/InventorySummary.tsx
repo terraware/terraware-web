@@ -16,7 +16,7 @@ interface InventorySummaryProps {
 export default function InventorySummary(props: InventorySummaryProps): JSX.Element {
   const { speciesId, modified } = props;
   const [summary, setSummary] = useState<SpeciesInventorySummary>();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
 
   const reloadData = useCallback(() => {

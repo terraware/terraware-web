@@ -37,7 +37,7 @@ export default function NurseryReassignment(): JSX.Element {
   const history = useHistory();
   const { isMobile } = useDeviceInfo();
   const { deliveryId } = useParams<{ deliveryId: string }>();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [speciesMap, setSpeciesMap] = useState<{ [id: string]: string }>();
   const [delivery, setDelivery] = useState<Delivery>();
   const [plots, setPlots] = useState<PlotInfo[]>();

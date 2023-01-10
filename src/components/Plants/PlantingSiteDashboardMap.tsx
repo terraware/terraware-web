@@ -21,7 +21,7 @@ type PlantingSiteDashboardMapProps = {
 export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMapProps): JSX.Element {
   const { plots, selectedPlotId, selectedZoneId, siteId } = props;
   const { isMobile } = useDeviceInfo();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
 
   const plotsMap = useMemo(() => {

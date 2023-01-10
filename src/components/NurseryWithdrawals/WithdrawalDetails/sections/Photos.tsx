@@ -13,7 +13,7 @@ type PhotosSectionProps = {
 
 export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Element {
   const theme = useTheme();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [photosModalOpened, setPhotosModalOpened] = useState(false);
   const [selectedSlide, setSelectedSlide] = useState(0);
