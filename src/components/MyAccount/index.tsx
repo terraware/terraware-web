@@ -25,6 +25,7 @@ import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TitleDescription from '../common/TitleDescription';
 import { useUser } from 'src/providers';
+import TimeZoneSelector, { TimeZoneDescription } from '../TimeZoneSelector';
 
 const columns: TableColumnType[] = [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
@@ -210,6 +211,17 @@ const MyAccountContent = ({
     }
   };
 
+  const onTimeZoneChange = (value: TimeZoneDescription) => {
+    if (value?.id) {
+      setRecord((previousRecord: User): User => {
+        return {
+          ...previousRecord,
+          timeZone: value.id,
+        };
+      });
+    }
+  };
+
   return (
     <TfMain>
       <PageForm
@@ -312,6 +324,14 @@ const MyAccountContent = ({
               />
             </Grid>
             <Grid item xs={12} />
+            <Grid item xs={12}>
+              <Typography fontSize='20px' fontWeight={600}>
+                {strings.TIME_ZONE}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <TimeZoneSelector onTimeZoneSelected={onTimeZoneChange} />
+            </Grid>
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
                 {strings.NOTIFICATIONS}
