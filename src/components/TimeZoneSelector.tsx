@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Autocomplete } from '@terraware/web-components';
 import strings from 'src/strings';
-import { getTimeZones } from 'src/api/timezones/timezones';
+import { useTimeZones } from 'src/providers/hooks';
 
 export type TimeZoneDescription = {
   id: string;
@@ -16,28 +16,7 @@ export type TimeZoneSelectorProps = {
 
 export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Element {
   const { onTimeZoneSelected, selectedTimeZone, disabled } = props;
-  const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
-
-  useEffect(() => {
-    const fetchTimeZones = async () => {
-      const timeZoneResponse = await getTimeZones();
-      if (!timeZoneResponse.error && timeZoneResponse.timeZones) {
-        setTimeZones(
-          timeZoneResponse.timeZones.sort((a, b) => {
-            if (a.longName > b.longName) {
-              return 1;
-            }
-            if (b.longName > a.longName) {
-              return -1;
-            }
-            return 0;
-          })
-        );
-      }
-    };
-
-    fetchTimeZones();
-  }, []);
+  const timeZones = useTimeZones();
 
   const tzToDropdownItem = (tz?: TimeZoneDescription) =>
     tz ? { label: tz.longName, value: tz.id } : { label: '', value: '' };
@@ -58,11 +37,8 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
     }
   };
 
-  const isEqualAut = (optionA: any, optionB: any) => {
-    if (optionA?.value && optionB?.value) {
-      return optionA.value === optionB.value;
-    }
-    return false;
+  const isEqual = (optionA: any, optionB: any) => {
+    return optionA?.value === optionB?.value;
   };
 
   return (
@@ -72,7 +48,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
       selected={tzNameToDropdownItem(selectedTimeZone)}
       values={tzOptions}
       onChange={(value) => onChangeTimeZone(value)}
-      isEqual={isEqualAut}
+      isEqual={isEqual}
       freeSolo={false}
       hideClearIcon={true}
       label={''}
