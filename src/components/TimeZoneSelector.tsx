@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Autocomplete } from '@terraware/web-components';
 import strings from 'src/strings';
-import { useTimeZones } from 'src/providers/hooks';
+import { useTimeZones } from 'src/providers';
 
 export type TimeZoneDescription = {
   id: string;
