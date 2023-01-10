@@ -2,11 +2,7 @@ import React, { useMemo } from 'react';
 import { Autocomplete } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useTimeZones } from 'src/providers';
-
-export type TimeZoneDescription = {
-  id: string;
-  longName: string;
-};
+import { TimeZoneDescription } from 'src/types/TimeZones';
 
 export type TimeZoneSelectorProps = {
   onTimeZoneSelected: (tzSelected: TimeZoneDescription) => void;

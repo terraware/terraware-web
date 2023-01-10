@@ -25,7 +25,8 @@ import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TitleDescription from '../common/TitleDescription';
 import { useUser } from 'src/providers';
-import TimeZoneSelector, { TimeZoneDescription } from '../TimeZoneSelector';
+import TimeZoneSelector from '../TimeZoneSelector';
+import { TimeZoneDescription } from 'src/types/TimeZones';
 
 const columns: TableColumnType[] = [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
