@@ -1,6 +1,10 @@
 import LocalizedStrings from 'react-localization';
 
-const strings = new LocalizedStrings({
+interface ILocalizedStringsMap {
+  [index: string]: { [key: string]: string };
+}
+
+export const stringsMap: ILocalizedStringsMap = {
   en: {
     ACCEPT: 'Accept',
     ACCESSION_BY_STATUS: 'Accession by Status',
@@ -1000,6 +1004,8 @@ const strings = new LocalizedStrings({
     ZONE_REQUIRED: 'Zone *',
     ZONE: 'Zone',
   },
-});
+};
+
+const strings = new LocalizedStrings(stringsMap);
 
 export default strings;
