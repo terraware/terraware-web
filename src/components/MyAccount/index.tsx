@@ -27,6 +27,7 @@ import TitleDescription from '../common/TitleDescription';
 import { useUser } from 'src/providers';
 import TimeZoneSelector from '../TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
+import isEnabled from 'src/features';
 
 const columns: TableColumnType[] = [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
@@ -48,7 +49,7 @@ export default function MyAccount(props: MyAccountProps): JSX.Element | null {
     return null;
   }
 
-  return <MyAccountContent user={user} reloadUser={reloadUser} {...props} />;
+  return <MyAccountContent user={{ ...user }} reloadUser={reloadUser} {...props} />;
 }
 
 type MyAccountContentProps = {
@@ -81,6 +82,7 @@ const MyAccountContent = ({
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
+  const timeZonesEnabled = isEnabled('Timezones');
 
   useEffect(() => {
     if (organizations) {
@@ -326,18 +328,22 @@ const MyAccountContent = ({
               />
             </Grid>
             <Grid item xs={12} />
-            <Grid item xs={12}>
-              <Typography fontSize='20px' fontWeight={600}>
-                {strings.TIME_ZONE}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TimeZoneSelector
-                onTimeZoneSelected={onTimeZoneChange}
-                selectedTimeZone={record.timeZone}
-                disabled={!edit}
-              />
-            </Grid>
+            {timeZonesEnabled && (
+              <>
+                <Grid item xs={12}>
+                  <Typography fontSize='20px' fontWeight={600}>
+                    {strings.TIME_ZONE}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TimeZoneSelector
+                    onTimeZoneSelected={onTimeZoneChange}
+                    selectedTimeZone={record.timeZone}
+                    disabled={!edit}
+                  />
+                </Grid>
+              </>
+            )}
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
                 {strings.NOTIFICATIONS}

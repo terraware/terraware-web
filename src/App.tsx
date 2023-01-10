@@ -139,7 +139,12 @@ enum APIRequestStatus {
   'SUCCEEDED',
 }
 
-const MINIMAL_USER_ROUTES: string[] = [APP_PATHS.WELCOME, APP_PATHS.MY_ACCOUNT, APP_PATHS.MY_ACCOUNT_EDIT];
+const MINIMAL_USER_ROUTES: string[] = [
+  APP_PATHS.WELCOME,
+  APP_PATHS.MY_ACCOUNT,
+  APP_PATHS.MY_ACCOUNT_EDIT,
+  APP_PATHS.OPT_IN,
+];
 
 export default function App() {
   const { isDesktop, type } = useDeviceInfo();
@@ -381,6 +386,11 @@ export default function App() {
                     <Route exact path={APP_PATHS.WELCOME}>
                       <NoOrgLandingPage />
                     </Route>
+                    {!isProduction && (
+                      <Route exact path={APP_PATHS.OPT_IN}>
+                        <OptInFeatures refresh={reloadPreferences} />
+                      </Route>
+                    )}
                     <Route path='/'>
                       <Redirect to={APP_PATHS.WELCOME} />
                     </Route>

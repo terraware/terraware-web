@@ -79,7 +79,7 @@ export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Eleme
       { label: strings.LOG_OUT, value: 'logOut' },
     ];
 
-    if (!isProduction && hasOrganizations) {
+    if (!isProduction) {
       items.splice(1, 0, { label: strings.OPT_IN, value: APP_PATHS.OPT_IN });
     }
 

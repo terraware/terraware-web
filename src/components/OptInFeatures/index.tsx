@@ -107,6 +107,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
               color: theme.palette.TwClrTxt,
               fontWeight: 'bold',
               fontSize: '20px',
+              marginTop: '115px',
               marginBottom: '30px',
               justifyContent: 'center',
             }}
