@@ -10,11 +10,11 @@ export type TimeZoneDescription = {
 
 export type TimeZoneSelectorProps = {
   onTimeZoneSelected: (tzSelected: TimeZoneDescription) => void;
+  selectedTimeZone?: string;
 };
 
 export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Element {
-  const { onTimeZoneSelected } = props;
-  const [selectedTimeZone, setSelectedTimeZone] = useState<TimeZoneDescription>();
+  const { onTimeZoneSelected, selectedTimeZone } = props;
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
 
   useEffect(() => {
@@ -41,6 +41,11 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
   const tzToDropdownItem = (tz?: TimeZoneDescription) =>
     tz ? { label: tz.longName, value: tz.id } : { label: '', value: '' };
 
+  const tzNameToDropdownItem = (tz?: string) => {
+    const foundTimeZone = timeZones.find((iTtimeZone) => iTtimeZone.id.toString() === tz?.toString());
+    return foundTimeZone ? { label: foundTimeZone.longName, value: foundTimeZone.id } : { label: '', value: '' };
+  };
+
   const tzOptions: any[] = useMemo(() => {
     return timeZones.map((tz) => tzToDropdownItem(tz));
   }, [timeZones]);
@@ -48,7 +53,6 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
   const onChangeTimeZone = (timeZone: any) => {
     const foundTimeZone = timeZones.find((iTtimeZone) => iTtimeZone.id.toString() === timeZone.value?.toString());
     if (foundTimeZone) {
-      setSelectedTimeZone(foundTimeZone);
       onTimeZoneSelected(foundTimeZone);
     }
   };
@@ -64,7 +68,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
     <Autocomplete
       id='timezones2'
       placeholder={strings.SELECT}
-      selected={tzToDropdownItem(selectedTimeZone)}
+      selected={tzNameToDropdownItem(selectedTimeZone)}
       values={tzOptions}
       onChange={(value) => onChangeTimeZone(value)}
       isEqual={isEqualAut}
