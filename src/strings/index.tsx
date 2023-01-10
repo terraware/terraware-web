@@ -1,6 +1,10 @@
 import LocalizedStrings from 'react-localization';
 
-const strings = new LocalizedStrings({
+interface ILocalizedStringsMap {
+  [index: string]: { [key: string]: string };
+}
+
+export const stringsMap: ILocalizedStringsMap = {
   en: {
     ACCEPT: 'Accept',
     ACCESSION_BY_STATUS: 'Accession by Status',
@@ -314,9 +318,6 @@ const strings = new LocalizedStrings({
     GA3: 'GA3',
     GENERAL: 'General',
     GENERIC_ERROR: 'An error occurred',
-    GENERIC_MAP_MESSAGE_ADMIN: 'To see your plants on this map, please add a shapefile.',
-    GENERIC_MAP_MESSAGE_CONTRIBUTOR:
-      'To see your plants on this map, you need to add a shapefile. Please reach out to an administrator from your organization.',
     GEOLOCATIONS: 'Geolocations',
     GERMINATED: 'Germinated',
     GERMINATING_QUANTITY_REQUIRED: 'Germinating Quantity *',
@@ -1004,6 +1005,8 @@ const strings = new LocalizedStrings({
     ZONE_REQUIRED: 'Zone *',
     ZONE: 'Zone',
   },
-});
+};
+
+const strings = new LocalizedStrings(stringsMap);
 
 export default strings;

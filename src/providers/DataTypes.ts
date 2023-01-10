@@ -1,6 +1,7 @@
+import React from 'react';
 import { User } from 'src/types/User';
 import { ServerOrganization } from '../types/Organization';
-import React from 'react';
+import { TimeZoneDescription } from '../types/TimeZones';
 
 export type ProvidedUserData = {
   user?: User;
@@ -12,4 +13,9 @@ export type ProvidedOrganizationData = {
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
   organizations?: ServerOrganization[];
   reloadData: () => void;
+};
+
+export type ProvidedLocalizationData = {
+  supportedTimeZones: TimeZoneDescription[];
+  strings: { [key: string]: string };
 };

@@ -62,8 +62,7 @@ import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { listPlantingSites } from './api/tracking/tracking';
 import { PlantingSite } from './api/types/tracking';
-import { UserProvider } from './providers';
-import OrganizationProvider from './providers/OrganizationProvider';
+import { LocalizationProvider, OrganizationProvider, UserProvider } from './providers';
 import { defaultSelectedOrg } from './providers/contexts';
 
 interface StyleProps {
@@ -340,6 +339,8 @@ export default function App() {
     }
   }, [type]);
 
+  const [locale] = useState('en');
+
   if (orgAPIRequestStatus === APIRequestStatus.AWAITING || orgAPIRequestStatus === APIRequestStatus.FAILED_NO_AUTH) {
     return (
       <StyledEngineProvider injectFirst>
@@ -362,11 +363,13 @@ export default function App() {
                 reloadData,
               }}
             >
-              <TopBar fullWidth={true}>
-                <TopBarContent setShowNavBar={setShowNavBar} />
-              </TopBar>
-              <ToastSnackbar />
-              <NoOrgLandingPage />
+              <LocalizationProvider locale={locale}>
+                <TopBar fullWidth={true}>
+                  <TopBarContent setShowNavBar={setShowNavBar} />
+                </TopBar>
+                <ToastSnackbar />
+                <NoOrgLandingPage />
+              </LocalizationProvider>
             </OrganizationProvider>
           </UserProvider>
         </StyledEngineProvider>
@@ -657,7 +660,7 @@ export default function App() {
       <UserProvider data={{ user, reloadUser }}>
         {selectedOrganization && (
           <OrganizationProvider data={{ selectedOrganization, setSelectedOrganization, organizations, reloadData }}>
-            {getContent()}
+            <LocalizationProvider locale={locale}>{getContent()}</LocalizationProvider>
           </OrganizationProvider>
         )}
       </UserProvider>
