@@ -2,6 +2,10 @@ import { useOrganization, useTimeZones, useUser } from 'src/providers';
 
 import { TimeZoneDescription } from 'src/types/TimeZones';
 
+type Location = {
+  timeZone?: string;
+};
+
 const DEFAULT_UTC = { id: 'Etc/UTC', longName: 'Coordinated Universal Time' };
 
 const getTimeZone = (timeZones: TimeZoneDescription[], id?: string): TimeZoneDescription | undefined => {
@@ -21,14 +25,31 @@ export const getUTC = (timeZones: TimeZoneDescription[]): TimeZoneDescription =>
 /**
  * Get a fallback time zone (based on org, user, etc.)
  */
-export const useDefaultTimeZone = () => {
+export const useDefaultTimeZone = (forEdit?: boolean) => {
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const timeZones = useTimeZones();
 
-  return (
-    getTimeZone(timeZones, selectedOrganization.timeZone) ?? getTimeZone(timeZones, user?.timeZone) ?? getUTC(timeZones)
-  );
+  const orgTimeZone = getTimeZone(timeZones, selectedOrganization.timeZone);
+  if (orgTimeZone) {
+    return orgTimeZone;
+  }
+
+  const userTimeZone = forEdit ? getTimeZone(timeZones, user?.timeZone) : undefined;
+  if (userTimeZone) {
+    return userTimeZone;
+  }
+
+  return getUTC(timeZones);
+};
+
+/**
+ * Get a fallback time zone for a location (based on location org, user, etc.)
+ */
+export const useLocationTimeZone = (location: Location, forEdit?: boolean) => {
+  const timeZones = useTimeZones();
+
+  return getTimeZone(timeZones, location.timeZone) ?? useDefaultTimeZone(forEdit);
 };
 
 // TODO - add more utilities as we see fit
