@@ -169,7 +169,7 @@ export default function NurseryView(): JSX.Element {
                   disabled={orgTZChecked}
                 />
                 <Checkbox
-                  label={strings.FALLBACK_TO_ORG_TZ}
+                  label={strings.USE_ORG_TZ}
                   onChange={(value) => onOrgTimeZoneChecked(value)}
                   id='orgTZ'
                   name='orgTZ'
