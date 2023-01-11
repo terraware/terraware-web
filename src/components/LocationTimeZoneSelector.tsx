@@ -3,51 +3,50 @@ import { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import TimeZoneSelector from '../TimeZoneSelector';
+import TimeZoneSelector from './TimeZoneSelector';
 
-type UpdateTimeZone = {
+type TimeZoneEntity = {
   timeZone?: string;
 };
 
-interface TimeZoneSelectorWithCheckboxProps<T extends UpdateTimeZone> {
+type LocationTimeZoneSelectorProps = {
   onChangeTimeZone: (tzSelected: TimeZoneDescription) => void;
-  record: T;
-  setRecord: React.Dispatch<React.SetStateAction<T>>;
-}
+  location: TimeZoneEntity;
+};
 
-export default function TimeZoneSelectorWithCheckbox<T extends UpdateTimeZone>(
-  props: TimeZoneSelectorWithCheckboxProps<T>
-): JSX.Element {
+export default function LocationTimeZoneSelector(props: LocationTimeZoneSelectorProps): JSX.Element {
   const [orgTZChecked, setOrgTZChecked] = useState<boolean>(false);
-  const { onChangeTimeZone, record, setRecord } = props;
+  const { onChangeTimeZone, location } = props;
   const defaultTimeZone = useDefaultTimeZone();
+  const [timeZoneEntity, setTimeZoneEntity] = useState<TimeZoneEntity>();
 
   useEffect(() => {
-    if (!record?.timeZone) {
+    if (!location?.timeZone) {
       setOrgTZChecked(true);
     } else {
       setOrgTZChecked(false);
+      setTimeZoneEntity(location);
     }
-  }, [record]);
+  }, [location]);
 
   const onOrgTimeZoneChecked = (checked: boolean) => {
     if (checked) {
       setOrgTZChecked(true);
-      setRecord((previousRecord: T): T => {
-        return {
-          ...previousRecord,
-          timeZone: undefined,
-        };
+      setTimeZoneEntity({
+        timeZone: undefined,
       });
     } else {
       setOrgTZChecked(false);
+      setTimeZoneEntity({
+        timeZone: defaultTimeZone.id,
+      });
     }
   };
 
   return (
     <>
       <TimeZoneSelector
-        selectedTimeZone={record?.timeZone || defaultTimeZone.id}
+        selectedTimeZone={timeZoneEntity?.timeZone || defaultTimeZone.id}
         onTimeZoneSelected={onChangeTimeZone}
         label={strings.TIME_ZONE}
         disabled={orgTZChecked}

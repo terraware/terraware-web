@@ -16,7 +16,7 @@ import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import isEnabled from 'src/features';
-import TimeZoneSelectorWithCheckbox from '../common/TimeZoneSelectorWithCheckbox';
+import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
 export default function NurseryView(): JSX.Element {
   const { selectedOrganization, reloadData } = useOrganization();
@@ -138,11 +138,7 @@ export default function NurseryView(): JSX.Element {
             </Grid>
             {timeZoneFeatureEnabled && (
               <Grid item xs={gridSize()}>
-                <TimeZoneSelectorWithCheckbox
-                  record={record}
-                  setRecord={setRecord}
-                  onChangeTimeZone={onChangeTimeZone}
-                />
+                <LocationTimeZoneSelector location={record} onChangeTimeZone={onChangeTimeZone} />
               </Grid>
             )}
           </Grid>
