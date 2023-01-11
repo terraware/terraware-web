@@ -15,6 +15,7 @@ import TfMain from '../common/TfMain';
 import PageSnackbar from '../PageSnackbar';
 import NurseriesCellRenderer from './TableCellRenderer';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import isEnabled from 'src/features';
 
 type NurseriesListProps = {
   organization: ServerOrganization;
@@ -33,6 +34,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
   const contentRef = useRef(null);
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const goToNewNursery = () => {
     const newNurseryLocation = {
@@ -62,7 +64,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
         : null;
       const params: SearchNodePayload = {
         prefix: 'facilities',
-        fields: ['id', 'name', 'description', 'type', 'organization_id'],
+        fields: ['id', 'name', 'description', 'type', 'organization_id', 'timeZone'],
         search: {
           operation: 'and',
           children: [
@@ -92,6 +94,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           organizationId: parseInt(result.organization_id as string, 10),
           type: result.type as FacilityType,
           connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
+          timeZone: result.timeZone as string,
         });
       });
       if (getRequestId('searchNurseries') === requestId) {
@@ -156,7 +159,11 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           {results && (
             <Table
               id='nurseries-table'
-              columns={columns}
+              columns={
+                timeZoneFeatureEnabled
+                  ? [...columns, { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' }]
+                  : columns
+              }
               rows={results}
               orderBy='name'
               Renderer={NurseriesCellRenderer}

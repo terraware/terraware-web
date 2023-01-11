@@ -23,6 +23,7 @@ export async function createFacility(facility: Facility): Promise<CreateFacility
     description: facility.description,
     organizationId: facility.organizationId,
     type: facility.type,
+    timeZone: facility.timeZone,
   };
   try {
     const serverResponse: CreateFacilityResponsePayload = (await axios.post(FACILITIES, createFacilityRequestPayload))
@@ -54,6 +55,7 @@ export async function updateFacility(facility: Facility): Promise<SimpleResponse
   const updateFacilityRequestPayload: UpdateFacilityRequestPayload = {
     name: facility.name,
     description: facility.description,
+    timeZone: facility.timeZone,
   };
   try {
     await axios.put(FACILITY.replace('{facilityId}', facility.id.toString()), updateFacilityRequestPayload);

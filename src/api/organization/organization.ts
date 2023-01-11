@@ -18,6 +18,7 @@ const parseFacility = (facility: ServerFacility): Facility => {
     organizationId: facility.organizationId,
     description: facility.description,
     connectionState: facility.connectionState,
+    timeZone: facility.timeZone,
   };
   return parsedFacility;
 };

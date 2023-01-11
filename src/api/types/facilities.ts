@@ -13,6 +13,7 @@ export interface Facility {
   organizationId: number;
   type: FacilityType;
   connectionState: 'Not Connected' | 'Connected' | 'Configured';
+  timeZone?: string;
 }
 
 export interface StorageLocationDetails {

@@ -8,10 +8,11 @@ export type TimeZoneSelectorProps = {
   onTimeZoneSelected: (tzSelected: TimeZoneDescription) => void;
   selectedTimeZone?: string;
   disabled?: boolean;
+  label?: string;
 };
 
 export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Element {
-  const { onTimeZoneSelected, selectedTimeZone, disabled } = props;
+  const { onTimeZoneSelected, selectedTimeZone, disabled, label } = props;
   const timeZones = useTimeZones();
 
   const tzToDropdownItem = (tz?: TimeZoneDescription) =>
@@ -47,7 +48,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
       isEqual={isEqual}
       freeSolo={false}
       hideClearIcon={true}
-      label={''}
+      label={label || ''}
       disabled={disabled}
     />
   );

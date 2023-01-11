@@ -283,6 +283,7 @@ export const stringsMap: ILocalizedStringsMap = {
     EXPORT_RECORDS: 'Export Records',
     EXPORT: 'Export',
     FACILITY: 'Facility',
+    USE_ORG_TZ: "Use organization's time zone",
     FAMILY: 'Family',
     FERN: 'Fern',
     FIELD_NOTES_PLACEHOLDER: 'Important notes about seeds, fruits, or plants',
