@@ -48,8 +48,9 @@ export const useDefaultTimeZone = (forEdit?: boolean) => {
  */
 export const useLocationTimeZone = (location: Location, forEdit?: boolean) => {
   const timeZones = useTimeZones();
+  const defaultTimeZone = useDefaultTimeZone(forEdit);
 
-  return getTimeZone(timeZones, location.timeZone) ?? useDefaultTimeZone(forEdit);
+  return getTimeZone(timeZones, location.timeZone) ?? defaultTimeZone;
 };
 
 // TODO - add more utilities as we see fit
