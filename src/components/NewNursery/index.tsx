@@ -14,6 +14,10 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { getAllNurseries } from 'src/utils/organization';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
+import TimeZoneSelector from '../TimeZoneSelector';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import { Checkbox } from '@terraware/web-components';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export default function NurseryView(): JSX.Element {
   const { selectedOrganization, reloadData } = useOrganization();
@@ -21,6 +25,8 @@ export default function NurseryView(): JSX.Element {
   const [descriptionError, setDescriptionError] = useState('');
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const [orgTZChecked, setOrgTZChecked] = useState<boolean>(false);
+  const defaultTimeZone = useDefaultTimeZone();
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -53,7 +59,14 @@ export default function NurseryView(): JSX.Element {
       organizationId: selectedOrganization.id,
       type: 'Nursery',
       connectionState: 'Not Connected',
+      timeZone: selectedNursery?.timeZone,
     });
+
+    if (!selectedNursery?.timeZone) {
+      setOrgTZChecked(true);
+    } else {
+      setOrgTZChecked(false);
+    }
   }, [selectedNursery, setRecord, selectedOrganization]);
 
   const goToNurseries = () => {
@@ -82,6 +95,29 @@ export default function NurseryView(): JSX.Element {
       goToNurseries();
     } else {
       snackbar.toastError();
+    }
+  };
+
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription) => {
+    setRecord((previousRecord: Facility): Facility => {
+      return {
+        ...previousRecord,
+        timeZone: newTimeZone.id,
+      };
+    });
+  };
+
+  const onOrgTimeZoneChecked = (checked: boolean) => {
+    if (checked) {
+      setOrgTZChecked(true);
+      setRecord((previousRecord: Facility): Facility => {
+        return {
+          ...previousRecord,
+          timeZone: undefined,
+        };
+      });
+    } else {
+      setOrgTZChecked(false);
     }
   };
 
@@ -120,6 +156,21 @@ export default function NurseryView(): JSX.Element {
                 onChange={(value) => onChange('description', value)}
                 value={record.description}
                 errorText={record.description ? '' : descriptionError}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <TimeZoneSelector
+                selectedTimeZone={record?.timeZone || defaultTimeZone.id}
+                onTimeZoneSelected={onChangeTimeZone}
+                label={strings.TIME_ZONE}
+                disabled={orgTZChecked}
+              />
+              <Checkbox
+                label={strings.FALLBACK_TO_ORG_TZ}
+                onChange={(value) => onOrgTimeZoneChecked(value)}
+                id='orgTZ'
+                name='orgTZ'
+                value={orgTZChecked}
               />
             </Grid>
           </Grid>

@@ -13,6 +13,8 @@ import TfMain from '../common/TfMain';
 import PageSnackbar from '../PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
+import TimeZoneSelector from '../TimeZoneSelector';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -29,6 +31,7 @@ export default function NurseryDetails(): JSX.Element {
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
   const history = useHistory();
+  const defaultTimeZone = useDefaultTimeZone();
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -100,6 +103,14 @@ export default function NurseryDetails(): JSX.Element {
             type='text'
             value={nursery?.description}
             display={true}
+          />
+        </Grid>
+        <Grid item xs={gridSize()}>
+          <TimeZoneSelector
+            selectedTimeZone={nursery?.timeZone || defaultTimeZone.id}
+            onTimeZoneSelected={() => true}
+            disabled={true}
+            label={strings.TIME_ZONE}
           />
         </Grid>
       </Grid>

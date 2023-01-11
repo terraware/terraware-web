@@ -23,6 +23,7 @@ type NurseriesListProps = {
 const columns: TableColumnType[] = [
   { key: 'name', name: 'Name', type: 'string' },
   { key: 'description', name: 'Description', type: 'string' },
+  { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
 ];
 
 export default function NurseriesList({ organization }: NurseriesListProps): JSX.Element {
@@ -62,7 +63,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
         : null;
       const params: SearchNodePayload = {
         prefix: 'facilities',
-        fields: ['id', 'name', 'description', 'type', 'organization_id'],
+        fields: ['id', 'name', 'description', 'type', 'organization_id', 'timeZone'],
         search: {
           operation: 'and',
           children: [
@@ -92,6 +93,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           organizationId: parseInt(result.organization_id as string, 10),
           type: result.type as FacilityType,
           connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
+          timeZone: result.timeZone as string,
         });
       });
       if (getRequestId('searchNurseries') === requestId) {
