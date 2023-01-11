@@ -15,6 +15,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
 import TimeZoneSelector from '../TimeZoneSelector';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -32,6 +33,7 @@ export default function NurseryDetails(): JSX.Element {
   const [nursery, setNursery] = useState<Facility>();
   const history = useHistory();
   const defaultTimeZone = useDefaultTimeZone();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -105,14 +107,16 @@ export default function NurseryDetails(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()}>
-          <TimeZoneSelector
-            selectedTimeZone={nursery?.timeZone || defaultTimeZone.id}
-            onTimeZoneSelected={() => true}
-            disabled={true}
-            label={strings.TIME_ZONE}
-          />
-        </Grid>
+        {timeZoneFeatureEnabled && (
+          <Grid item xs={gridSize()}>
+            <TimeZoneSelector
+              selectedTimeZone={nursery?.timeZone || defaultTimeZone.id}
+              onTimeZoneSelected={() => true}
+              disabled={true}
+              label={strings.TIME_ZONE}
+            />
+          </Grid>
+        )}
       </Grid>
     </TfMain>
   );
