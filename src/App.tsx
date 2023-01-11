@@ -9,7 +9,6 @@ import useStateLocation, { getLocation } from './utils/useStateLocation';
 import { getOrganizations } from 'src/api/organization/organization';
 import { DEFAULT_SEED_SEARCH_FILTERS, DEFAULT_SEED_SEARCH_SORT_ORDER } from 'src/api/seeds/search';
 import { SearchSortOrder, SearchCriteria } from 'src/api/search';
-import { getUser } from 'src/api/user/user';
 import ContactUs from 'src/components/ContactUs';
 import EditOrganization from 'src/components/EditOrganization';
 import Home from 'src/components/Home';
@@ -178,7 +177,6 @@ export default function App() {
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   // get the selected values on database to pass it to new accession page
   const [organizations, setOrganizations] = useState<ServerOrganization[]>();
-  const [user, setUser] = useState<User>();
   const history = useHistory();
   const [species, setSpecies] = useState<Species[]>([]);
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
@@ -314,16 +312,6 @@ export default function App() {
     }
   }, [organizations, selectedOrganization, query, location, history, preferencesOrg]);
 
-  const reloadUser = useCallback(() => {
-    const populateUser = async () => {
-      const response = await getUser();
-      if (response.requestSucceeded) {
-        setUser(response.user ?? undefined);
-      }
-    };
-    populateUser();
-  }, []);
-
   useEffect(() => {
     if (
       orgAPIRequestStatus === APIRequestStatus.SUCCEEDED &&
@@ -333,10 +321,6 @@ export default function App() {
       history.push(APP_PATHS.WELCOME);
     }
   }, [orgAPIRequestStatus, organizations, location, history]);
-
-  useEffect(() => {
-    reloadUser();
-  }, [reloadUser]);
 
   useEffect(() => {
     if (type === 'mobile' || type === 'tablet') {
@@ -361,7 +345,7 @@ export default function App() {
     if (organizations?.length === 0) {
       return (
         <StyledEngineProvider injectFirst>
-          <UserProvider data={{ user, reloadUser }}>
+          <UserProvider>
             <OrganizationProvider
               data={{
                 selectedOrganization: defaultSelectedOrg,
@@ -523,11 +507,9 @@ export default function App() {
               <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
                 <Accession2Create />
               </Route>
-              {user && (
-                <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
-                  <Accession2View />
-                </Route>
-              )}
+              <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
+                <Accession2View />
+              </Route>
               <Route exact path={APP_PATHS.MONITORING}>
                 <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
               </Route>
@@ -680,7 +662,7 @@ export default function App() {
   return (
     <StyledEngineProvider injectFirst>
       <CssBaseline />
-      <UserProvider data={{ user, reloadUser }}>
+      <UserProvider>
         {selectedOrganization && (
           <OrganizationProvider data={{ selectedOrganization, setSelectedOrganization, organizations, reloadData }}>
             <LocalizationProvider locale={locale}>{getContent()}</LocalizationProvider>
