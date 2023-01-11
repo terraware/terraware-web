@@ -25,7 +25,7 @@ export const getUTC = (timeZones: TimeZoneDescription[]): TimeZoneDescription =>
 /**
  * Get a fallback time zone (based on org, user, etc.)
  */
-export const useDefaultTimeZone = () => {
+export const useDefaultTimeZone = (forEdit?: boolean) => {
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const timeZones = useTimeZones();
@@ -35,7 +35,7 @@ export const useDefaultTimeZone = () => {
     return orgTimeZone;
   }
 
-  const userTimeZone = getTimeZone(timeZones, user?.timeZone);
+  const userTimeZone = forEdit ? getTimeZone(timeZones, user?.timeZone) : undefined;
   if (userTimeZone) {
     return userTimeZone;
   }
@@ -46,10 +46,10 @@ export const useDefaultTimeZone = () => {
 /**
  * Get a fallback time zone for a location (based on location org, user, etc.)
  */
-export const useLocationTimeZone = (location: Location) => {
+export const useLocationTimeZone = (location: Location, forEdit?: boolean) => {
   const timeZones = useTimeZones();
 
-  return getTimeZone(timeZones, location.timeZone) ?? useDefaultTimeZone();
+  return getTimeZone(timeZones, location.timeZone) ?? useDefaultTimeZone(forEdit);
 };
 
 // TODO - add more utilities as we see fit
