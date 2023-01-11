@@ -15,32 +15,24 @@ type LocationTimeZoneSelectorProps = {
 };
 
 export default function LocationTimeZoneSelector(props: LocationTimeZoneSelectorProps): JSX.Element {
-  const [orgTZChecked, setOrgTZChecked] = useState<boolean>(false);
   const { onChangeTimeZone, location } = props;
+  const [orgTZChecked, setOrgTZChecked] = useState<boolean>(!!location.timeZone);
   const defaultTimeZone = useDefaultTimeZone();
-  const [timeZoneEntity, setTimeZoneEntity] = useState<TimeZoneEntity>();
 
   useEffect(() => {
     if (!location?.timeZone) {
       setOrgTZChecked(true);
     } else {
       setOrgTZChecked(false);
-      setTimeZoneEntity(location);
     }
   }, [location]);
 
   const onOrgTimeZoneChecked = (checked: boolean) => {
     if (checked) {
       setOrgTZChecked(true);
-      setTimeZoneEntity({
-        timeZone: undefined,
-      });
       onChangeTimeZone(undefined);
     } else {
       setOrgTZChecked(false);
-      setTimeZoneEntity({
-        timeZone: defaultTimeZone.id,
-      });
       onChangeTimeZone(defaultTimeZone);
     }
   };
@@ -48,7 +40,7 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
   return (
     <>
       <TimeZoneSelector
-        selectedTimeZone={timeZoneEntity?.timeZone || defaultTimeZone.id}
+        selectedTimeZone={location.timeZone || defaultTimeZone.id}
         onTimeZoneSelected={onChangeTimeZone}
         label={strings.TIME_ZONE}
         disabled={orgTZChecked}
