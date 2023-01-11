@@ -10,7 +10,7 @@ type TimeZoneEntity = {
 };
 
 type LocationTimeZoneSelectorProps = {
-  onChangeTimeZone: (tzSelected: TimeZoneDescription) => void;
+  onChangeTimeZone: (tzSelected: TimeZoneDescription | undefined) => void;
   location: TimeZoneEntity;
 };
 
@@ -35,11 +35,13 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
       setTimeZoneEntity({
         timeZone: undefined,
       });
+      onChangeTimeZone(undefined);
     } else {
       setOrgTZChecked(false);
       setTimeZoneEntity({
         timeZone: defaultTimeZone.id,
       });
+      onChangeTimeZone(defaultTimeZone);
     }
   };
 

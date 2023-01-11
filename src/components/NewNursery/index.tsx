@@ -90,11 +90,11 @@ export default function NurseryView(): JSX.Element {
     }
   };
 
-  const onChangeTimeZone = (newTimeZone: TimeZoneDescription) => {
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
     setRecord((previousRecord: Facility): Facility => {
       return {
         ...previousRecord,
-        timeZone: newTimeZone.id,
+        timeZone: newTimeZone ? newTimeZone.id : undefined,
       };
     });
   };
