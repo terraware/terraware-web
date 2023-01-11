@@ -1,3 +1,4 @@
+e673ac2 fix time zones utils to support edit option (#1018)
 4f7dbe9 SW-2683 Time zones utils (#1016)
 f1c012f Bump react-scripts from 4.0.3 to 5.0.1 (#1002)
 9115557 Make useSnackbar return a constant object so it doesn't trigger useEffects (#1015)
