@@ -7,7 +7,7 @@ import { useGetTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export default function SeedBanksCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index } = props;
-  const tz = useGetTimeZone(value as string);
+  const tz = useGetTimeZone();
 
   const createLinkToSeedBank = (iValue: React.ReactNode | unknown[]) => {
     const seedBankLocation = {
@@ -21,7 +21,7 @@ export default function SeedBanksCellRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'timeZone') {
-    return <CellRenderer index={index} column={column} value={tz.longName} row={row} />;
+    return <CellRenderer index={index} column={column} value={tz.get(value as string).longName} row={row} />;
   }
 
   return <CellRenderer {...props} />;

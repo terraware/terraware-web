@@ -31,7 +31,7 @@ export default function NurseryDetails(): JSX.Element {
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
   const history = useHistory();
-  const tz = useLocationTimeZone(nursery);
+  const tz = useLocationTimeZone().get(nursery);
   const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   useEffect(() => {

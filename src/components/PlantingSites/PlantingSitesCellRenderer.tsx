@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
 export default function PlantingSitesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const { column, row, value, index } = props;
-  const tz = useGetTimeZone(value as string);
+  const tz = useGetTimeZone();
 
   const createLinkToPlantingSiteView = (iValue: React.ReactNode | unknown[]) => {
     return (
@@ -41,7 +41,7 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
   }
 
   if (column.key === 'timeZone') {
-    return <CellRenderer index={index} column={column} value={tz.longName} row={row} />;
+    return <CellRenderer index={index} column={column} value={tz.get(value as string).longName} row={row} />;
   }
 
   return <CellRenderer {...props} className={classes.text} />;

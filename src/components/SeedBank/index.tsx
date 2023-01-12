@@ -32,7 +32,7 @@ export default function SeedBankDetails(): JSX.Element {
   const [seedBank, setSeedBank] = useState<Facility>();
   const history = useHistory();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
-  const tz = useLocationTimeZone(seedBank);
+  const tz = useLocationTimeZone().get(seedBank);
 
   useEffect(() => {
     if (selectedOrganization) {

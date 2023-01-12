@@ -15,25 +15,32 @@ type LocationTimeZoneSelectorProps = {
 };
 
 export default function LocationTimeZoneSelector(props: LocationTimeZoneSelectorProps): JSX.Element {
+  const timeZoneFetcher = useLocationTimeZone();
   const { onChangeTimeZone, location } = props;
+  const [lastSelected, setLastSelected] = useState<TimeZoneEntity>(location);
   const [orgTZChecked, setOrgTZChecked] = useState<boolean>(!!location.timeZone);
-  const timeZone = useLocationTimeZone(location);
+  const [timeZone, setTimeZone] = useState<TimeZoneDescription>(timeZoneFetcher.get(lastSelected));
 
   useEffect(() => {
     if (!location?.timeZone) {
-      setOrgTZChecked(true);
-    } else {
+      if (!orgTZChecked) {
+        setOrgTZChecked(true);
+      }
+    } else if (orgTZChecked) {
       setOrgTZChecked(false);
     }
-  }, [location?.timeZone]);
+  }, [location?.timeZone, orgTZChecked]);
 
   const onOrgTimeZoneChecked = (checked: boolean) => {
     if (checked) {
       setOrgTZChecked(true);
       onChangeTimeZone(undefined);
+      setTimeZone(timeZoneFetcher.get(undefined, false));
     } else {
       setOrgTZChecked(false);
-      onChangeTimeZone(timeZone);
+      const newTz = timeZoneFetcher.get(lastSelected, true);
+      setTimeZone(newTz);
+      onChangeTimeZone(newTz);
     }
   };
 
@@ -41,7 +48,11 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
     <>
       <TimeZoneSelector
         selectedTimeZone={timeZone.id}
-        onTimeZoneSelected={onChangeTimeZone}
+        onTimeZoneSelected={(value) => {
+          setTimeZone(value);
+          setLastSelected({ timeZone: value.id });
+          onChangeTimeZone(value);
+        }}
         label={strings.TIME_ZONE}
         disabled={orgTZChecked}
       />

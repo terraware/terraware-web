@@ -32,8 +32,8 @@ export default function PlantingSiteView(): JSX.Element {
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
   const history = useHistory();
-  const tz = useLocationTimeZone(plantingSite);
   const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const tz = useLocationTimeZone().get(plantingSite);
 
   useEffect(() => {
     const loadPlantingSite = async () => {
