@@ -1,5 +1,6 @@
 import moment from 'moment';
 import theme from 'src/theme';
+import { changeTimezone } from 'src/utils/useTimeZoneUtils';
 
 export const TIME_PERIODS = ['Last 12 hours', 'Last 24 hours', 'Last 7 days', 'Last 30 days'];
 
@@ -8,37 +9,37 @@ export type HumidityValues = {
   value: string;
 };
 
-export const getTimePeriodParams = (period: string) => {
+export const getTimePeriodParams = (period: string, timeZone: string) => {
   const end = moment();
 
   switch (period) {
     case 'Last 12 hours':
       return {
-        start: moment(Date.now()).subtract(12, 'h'),
+        start: moment(changeTimezone(moment(Date.now()).subtract(12, 'h').toDate(), timeZone)),
         end,
         numDataPoints: 50,
       };
     case 'Last 24 hours':
       return {
-        start: moment(Date.now()).subtract(24, 'h'),
+        start: moment(changeTimezone(moment(Date.now()).subtract(24, 'h').toDate(), timeZone)),
         end,
         numDataPoints: 50,
       };
     case 'Last 7 days':
       return {
-        start: moment(Date.now()).subtract(7, 'd'),
+        start: moment(changeTimezone(moment(Date.now()).subtract(7, 'd').toDate(), timeZone)),
         end,
         numDataPoints: 50,
       };
     case 'Last 30 days':
       return {
-        start: moment(Date.now()).subtract(30, 'd'),
+        start: moment(changeTimezone(moment(Date.now()).subtract(30, 'd').toDate(), timeZone)),
         end,
         numDataPoints: 50,
       };
     default:
       return {
-        start: moment(),
+        start: moment(changeTimezone(moment().toDate(), timeZone)),
         end,
         numDataPoints: 50,
       };
@@ -103,4 +104,8 @@ export const ChartPalette: ChartPaletteType = {
     backgroundColor: theme.palette.TwClrBaseBlue100 as string,
     fillColor: `${theme.palette.TwClrBaseBlue100 as string}80` /* 0x80: alpha channel = 0.5 */,
   },
+};
+
+export const convertEntryTimestamp = (timestamp: string, timeZone: string) => {
+  return changeTimezone(new Date(timestamp), timeZone).getTime();
 };
