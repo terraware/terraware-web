@@ -20,8 +20,9 @@ const getTimeZone = (timeZones: TimeZoneDescription[], id?: string): TimeZoneDes
  */
 export const useGetTimeZone = () => {
   const timeZones = useTimeZones();
+  const defaultTz = useDefaultTimeZone();
   return {
-    get: (id: string): TimeZoneDescription => getTimeZone(timeZones, id) ?? getUTC(timeZones),
+    get: (id: string): TimeZoneDescription => getTimeZone(timeZones, id) ?? defaultTz.get(),
   };
 };
 
