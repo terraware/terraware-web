@@ -20,6 +20,9 @@ import PageSnackbar from '../PageSnackbar';
 import { PlantingSite } from 'src/api/types/tracking';
 import BoundariesAndPlots from './BoundariesAndPlots';
 import { useOrganization } from 'src/providers/hooks';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import isEnabled from 'src/features';
+import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
 type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
@@ -36,6 +39,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const [nameError, setNameError] = useState('');
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [loaded, setLoaded] = useState(false);
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
@@ -66,6 +70,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       description: selectedPlantingSite?.description,
       boundary: selectedPlantingSite?.boundary,
       plantingZones: selectedPlantingSite?.plantingZones,
+      timeZone: selectedPlantingSite?.timeZone,
     });
   }, [selectedPlantingSite, setRecord]);
 
@@ -88,12 +93,14 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         name: record.name,
         description: record.description,
         organizationId: selectedOrganization.id,
+        timeZone: record.timeZone,
       };
       response = await postPlantingSite(newPlantingSite);
     } else {
       const updatedPlantingSite: PlantingSitePutRequestBody = {
         name: record.name,
         description: record.description,
+        timeZone: record.timeZone,
       };
       response = await updatePlantingSite(record.id, updatedPlantingSite);
     }
@@ -105,6 +112,15 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     } else {
       snackbar.toastError();
     }
+  };
+
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
+    setRecord((previousRecord: PlantingSite): PlantingSite => {
+      return {
+        ...previousRecord,
+        timeZone: newTimeZone ? newTimeZone.id : undefined,
+      };
+    });
   };
 
   const gridSize = () => {
@@ -176,6 +192,11 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                       />
                     </Grid>
                   </Grid>
+                  {timeZoneFeatureEnabled && (
+                    <Grid item xs={gridSize()} marginTop={3}>
+                      <LocationTimeZoneSelector location={record} onChangeTimeZone={onChangeTimeZone} />
+                    </Grid>
+                  )}
                 </Box>
               </Grid>
               {record?.boundary && <BoundariesAndPlots plantingSite={record} />}

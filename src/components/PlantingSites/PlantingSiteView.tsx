@@ -13,6 +13,8 @@ import { makeStyles } from '@mui/styles';
 import { PlantingSite } from 'src/api/types/tracking';
 import BoundariesAndPlots from './BoundariesAndPlots';
 import BackToLink from 'src/components/common/BackToLink';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -30,6 +32,8 @@ export default function PlantingSiteView(): JSX.Element {
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
   const history = useHistory();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const tz = useLocationTimeZone().get(plantingSite);
 
   useEffect(() => {
     const loadPlantingSite = async () => {
@@ -100,6 +104,18 @@ export default function PlantingSiteView(): JSX.Element {
             display={true}
           />
         </Grid>
+        {timeZoneFeatureEnabled && (
+          <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+            <TextField
+              label={strings.TIME_ZONE}
+              id='timezone'
+              type='text'
+              value={tz.longName}
+              tooltipTitle={plantingSite?.timeZone ? '' : strings.ORG_TZ_TOOLTIP_INFO}
+              display={true}
+            />
+          </Grid>
+        )}
       </Grid>
       {plantingSite?.boundary && <BoundariesAndPlots plantingSite={plantingSite} />}
     </TfMain>
