@@ -16,6 +16,17 @@ const getTimeZone = (timeZones: TimeZoneDescription[], id?: string): TimeZoneDes
 };
 
 /**
+ * util to get time zone or default to UTC
+ */
+export const useGetTimeZone = () => {
+  const timeZones = useTimeZones();
+  const defaultTz = useDefaultTimeZone();
+  return {
+    get: (id: string): TimeZoneDescription => getTimeZone(timeZones, id) ?? defaultTz.get(),
+  };
+};
+
+/**
  * Helper function to return UTC as per the supported time zones list
  */
 export const getUTC = (timeZones: TimeZoneDescription[]): TimeZoneDescription => {
@@ -25,22 +36,26 @@ export const getUTC = (timeZones: TimeZoneDescription[]): TimeZoneDescription =>
 /**
  * Get a fallback time zone (based on org, user, etc.)
  */
-export const useDefaultTimeZone = (forEdit?: boolean) => {
+export const useDefaultTimeZone = () => {
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const timeZones = useTimeZones();
 
-  const orgTimeZone = getTimeZone(timeZones, selectedOrganization.timeZone);
-  if (orgTimeZone) {
-    return orgTimeZone;
-  }
+  return {
+    get: (forEdit?: boolean) => {
+      const orgTimeZone = getTimeZone(timeZones, selectedOrganization.timeZone);
+      if (orgTimeZone) {
+        return orgTimeZone;
+      }
 
-  const userTimeZone = forEdit ? getTimeZone(timeZones, user?.timeZone) : undefined;
-  if (userTimeZone) {
-    return userTimeZone;
-  }
+      const userTimeZone = forEdit ? getTimeZone(timeZones, user?.timeZone) : undefined;
+      if (userTimeZone) {
+        return userTimeZone;
+      }
 
-  return getUTC(timeZones);
+      return getUTC(timeZones);
+    },
+  };
 };
 
 /**
@@ -55,11 +70,15 @@ export const useUserTimeZone = (): TimeZoneDescription | undefined => {
 /**
  * Get a fallback time zone for a location (based on location org, user, etc.)
  */
-export const useLocationTimeZone = (location: Location, forEdit?: boolean) => {
+export const useLocationTimeZone = () => {
   const timeZones = useTimeZones();
-  const defaultTimeZone = useDefaultTimeZone(forEdit);
+  const defaultTimeZone = useDefaultTimeZone();
 
-  return getTimeZone(timeZones, location.timeZone) ?? defaultTimeZone;
+  return {
+    get: (location?: Location, forEdit?: boolean) => {
+      return getTimeZone(timeZones, location?.timeZone) ?? defaultTimeZone.get(forEdit);
+    },
+  };
 };
 
 // TODO - add more utilities as we see fit

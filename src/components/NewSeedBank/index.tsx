@@ -14,6 +14,9 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import isEnabled from 'src/features';
+import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
 export default function SeedBankView(): JSX.Element {
   const { selectedOrganization, reloadData } = useOrganization();
@@ -21,6 +24,7 @@ export default function SeedBankView(): JSX.Element {
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const snackbar = useSnackbar();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -53,6 +57,7 @@ export default function SeedBankView(): JSX.Element {
       organizationId: selectedOrganization.id,
       type: 'Seed Bank',
       connectionState: 'Not Connected',
+      timeZone: selectedSeedBank?.timeZone,
     });
   }, [selectedSeedBank, setRecord, selectedOrganization]);
 
@@ -90,6 +95,15 @@ export default function SeedBankView(): JSX.Element {
       }
     }
     goToSeedBanks();
+  };
+
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
+    setRecord((previousRecord: Facility): Facility => {
+      return {
+        ...previousRecord,
+        timeZone: newTimeZone ? newTimeZone.id : undefined,
+      };
+    });
   };
 
   return (
@@ -134,6 +148,11 @@ export default function SeedBankView(): JSX.Element {
                 errorText={record.description ? '' : descriptionError}
               />
             </Grid>
+            {timeZoneFeatureEnabled && (
+              <Grid item xs={gridSize()}>
+                <LocationTimeZoneSelector location={record} onChangeTimeZone={onChangeTimeZone} />
+              </Grid>
+            )}
           </Grid>
         </Box>
       </PageForm>

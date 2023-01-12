@@ -3,6 +3,7 @@ import { Table, TableColumnType, Textfield } from '@terraware/web-components';
 import { SearchResponseElement } from 'src/api/search';
 import strings from 'src/strings';
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
+import isEnabled from 'src/features';
 
 const columns: TableColumnType[] = [
   {
@@ -28,6 +29,7 @@ interface PlantingSitesTableProps {
 export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.Element {
   const { results, setTemporalSearchValue, temporalSearchValue } = props;
   const theme = useTheme();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   return (
     <Box
@@ -58,7 +60,11 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             <Grid item xs={12}>
               <Table
                 id='planting-sites-table'
-                columns={columns}
+                columns={
+                  timeZoneFeatureEnabled
+                    ? [...columns, { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' }]
+                    : columns
+                }
                 rows={results}
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}

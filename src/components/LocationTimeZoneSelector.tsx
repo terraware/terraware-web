@@ -2,7 +2,7 @@ import { Checkbox } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import TimeZoneSelector from './TimeZoneSelector';
 
 type TimeZoneEntity = {
@@ -12,38 +12,51 @@ type TimeZoneEntity = {
 type LocationTimeZoneSelectorProps = {
   onChangeTimeZone: (tzSelected: TimeZoneDescription | undefined) => void;
   location: TimeZoneEntity;
+  tooltip?: string;
 };
 
 export default function LocationTimeZoneSelector(props: LocationTimeZoneSelectorProps): JSX.Element {
-  const { onChangeTimeZone, location } = props;
+  const timeZoneFetcher = useLocationTimeZone();
+  const { onChangeTimeZone, location, tooltip } = props;
+  const [lastSelected, setLastSelected] = useState<TimeZoneEntity>(location);
   const [orgTZChecked, setOrgTZChecked] = useState<boolean>(!!location.timeZone);
-  const defaultTimeZone = useDefaultTimeZone();
+  const [timeZone, setTimeZone] = useState<TimeZoneDescription>(timeZoneFetcher.get(lastSelected));
 
   useEffect(() => {
     if (!location?.timeZone) {
-      setOrgTZChecked(true);
-    } else {
+      if (!orgTZChecked) {
+        setOrgTZChecked(true);
+      }
+    } else if (orgTZChecked) {
       setOrgTZChecked(false);
     }
-  }, [location]);
+  }, [location?.timeZone, orgTZChecked]);
 
   const onOrgTimeZoneChecked = (checked: boolean) => {
     if (checked) {
       setOrgTZChecked(true);
       onChangeTimeZone(undefined);
+      setTimeZone(timeZoneFetcher.get(undefined, false));
     } else {
       setOrgTZChecked(false);
-      onChangeTimeZone(defaultTimeZone);
+      const newTz = timeZoneFetcher.get(lastSelected, true);
+      setTimeZone(newTz);
+      onChangeTimeZone(newTz);
     }
   };
 
   return (
     <>
       <TimeZoneSelector
-        selectedTimeZone={location.timeZone || defaultTimeZone.id}
-        onTimeZoneSelected={onChangeTimeZone}
+        selectedTimeZone={timeZone.id}
+        onTimeZoneSelected={(value) => {
+          setTimeZone(value);
+          setLastSelected({ timeZone: value.id });
+          onChangeTimeZone(value);
+        }}
         label={strings.TIME_ZONE}
         disabled={orgTZChecked}
+        tooltip={tooltip}
       />
       <Checkbox
         label={strings.USE_ORG_TZ}
