@@ -74,11 +74,11 @@ export const useLocationTimeZone = () => {
 
 // TODO - add more utilities as we see fit
 
-export const changeTimezone = (date: Date, ianatz: string) => {
+export const changeTimezone = (date: Date, timeZone: string) => {
   // suppose the date is 12:00 UTC
   const invdate = new Date(
     date.toLocaleString('en-US', {
-      timeZone: ianatz,
+      timeZone,
     })
   );
 
