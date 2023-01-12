@@ -16,6 +16,11 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
+import isEnabled from '../../features';
+import { getUTC, useUserTimeZone } from '../../utils/useTimeZoneUtils';
+import TimeZoneSelector from '../TimeZoneSelector';
+import { TimeZoneDescription } from '../../types/TimeZones';
+import { useTimeZones } from '../../providers';
 
 type OrganizationViewProps = {
   organization: ServerOrganization;
@@ -30,6 +35,10 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const [countries, setCountries] = useState<Country[]>();
   const history = useHistory();
   const snackbar = useSnackbar();
+  const timeZones = useTimeZones();
+  const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const [tzChangedFromDefault, setTzChangedFromDefault] = useState<boolean>(organizationRecord.timeZone !== undefined);
 
   useEffect(() => {
     const populateCountries = async () => {
@@ -86,6 +95,18 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     }
   };
 
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
+    if (newTimeZone) {
+      setTzChangedFromDefault(true);
+    }
+    setOrganizationRecord((previousRecord: ServerOrganization): ServerOrganization => {
+      return {
+        ...previousRecord,
+        timeZone: newTimeZone ? newTimeZone.id : undefined,
+      };
+    });
+  };
+
   const goToOrganization = () => {
     const organizationLocation = {
       pathname: APP_PATHS.ORGANIZATION,
@@ -97,9 +118,14 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     if (organizationRecord.name === '') {
       setNameError('Required field.');
     } else {
+      if (!tzChangedFromDefault) {
+        organizationRecord.timeZone = defaultTimeZone;
+      }
       const response = await updateOrganization(organizationRecord);
       if (response.requestSucceeded) {
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
+        snackbar.toastSuccess(
+          strings.CHANGES_SAVED + (tzChangedFromDefault ? '' : ' (' + strings.TIME_ZONE_SET_TO_USER + ')')
+        );
         reloadOrganizationData();
       } else {
         snackbar.toastError();
@@ -154,7 +180,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               value={organizationRecord.description}
             />
           </Grid>
-          <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
             <Select
               label={strings.COUNTRY}
               id='countyCode'
@@ -164,8 +190,8 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               fullWidth
             />
           </Grid>
-          {getSelectedCountry()?.subdivisions && (
-            <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)}>
+          {getSelectedCountry()?.subdivisions ? (
+            <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)} paddingBottom={theme.spacing(4)}>
               <Select
                 label={strings.STATE}
                 id='countySubdivisionCode'
@@ -173,6 +199,17 @@ export default function OrganizationView({ organization, reloadOrganizationData 
                 options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
                 selectedValue={getSelectedSubdivision()?.name}
                 fullWidth
+              />
+            </Grid>
+          ) : (
+            !isMobile && <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)} />
+          )}
+          {timeZoneFeatureEnabled && (
+            <Grid item xs={gridSize()}>
+              <TimeZoneSelector
+                selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
+                onTimeZoneSelected={onChangeTimeZone}
+                label={strings.TIME_ZONE}
               />
             </Grid>
           )}

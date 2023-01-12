@@ -841,6 +841,7 @@ export const stringsMap: ILocalizedStringsMap = {
     TESTING_STAFF: 'Testing Staff',
     TIME_PERIOD: 'Time Period',
     TIME_ZONE: 'Time Zone',
+    TIME_ZONE_SET_TO_USER: 'Time zone was set to the user time zone.',
     TITLE_REPORT_PROBLEM: 'Report a Problem',
     TITLE_REQUEST_FEATURE: 'Request a Feature',
     TITLE_TEST_APP: 'Test our Mobile App',
