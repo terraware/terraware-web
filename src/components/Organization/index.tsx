@@ -17,6 +17,7 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useOrganization, useTimeZones } from 'src/providers/hooks';
 import isEnabled from 'src/features';
+import { getUTC } from '../../utils/useTimeZoneUtils';
 
 export default function OrganizationView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -26,6 +27,7 @@ export default function OrganizationView(): JSX.Element {
   const [people, setPeople] = useState<OrganizationUser[]>();
   const { isMobile } = useDeviceInfo();
   const timeZones = useTimeZones();
+  const utcTimeZone = getUTC(timeZones);
   const timeZoneFeatureEnabled = isEnabled('Timezones');
   const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization.timeZone)?.longName;
 
@@ -153,9 +155,16 @@ export default function OrganizationView(): JSX.Element {
             display={true}
           />
         </Grid>
-        {timeZoneFeatureEnabled && currentTimeZone && (
+        {timeZoneFeatureEnabled && (
           <Grid item xs={gridSize()}>
-            <TextField label={strings.TIME_ZONE} id='timeZone' type='text' value={currentTimeZone} display={true} />
+            <TextField
+              label={strings.TIME_ZONE}
+              id='timeZone'
+              type='text'
+              value={currentTimeZone || utcTimeZone.longName}
+              display={true}
+              tooltipTitle={currentTimeZone ? undefined : strings.TIME_ZONE_DEFAULT_UTC}
+            />
           </Grid>
         )}
       </Grid>

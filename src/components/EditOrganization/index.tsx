@@ -16,11 +16,11 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
-import isEnabled from '../../features';
-import { getUTC, useUserTimeZone } from '../../utils/useTimeZoneUtils';
-import TimeZoneSelector from '../TimeZoneSelector';
-import { TimeZoneDescription } from '../../types/TimeZones';
-import { useTimeZones } from '../../providers';
+import isEnabled from 'src/features';
+import { getUTC, useUserTimeZone } from 'src/utils/useTimeZoneUtils';
+import TimeZoneSelector from 'src/components/TimeZoneSelector';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import { useTimeZones } from 'src/providers';
 
 type OrganizationViewProps = {
   organization: ServerOrganization;
@@ -118,14 +118,9 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     if (organizationRecord.name === '') {
       setNameError('Required field.');
     } else {
-      if (!tzChangedFromDefault) {
-        organizationRecord.timeZone = defaultTimeZone;
-      }
       const response = await updateOrganization(organizationRecord);
       if (response.requestSucceeded) {
-        snackbar.toastSuccess(
-          strings.CHANGES_SAVED + (tzChangedFromDefault ? '' : ' (' + strings.TIME_ZONE_SET_TO_USER + ')')
-        );
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
         reloadOrganizationData();
       } else {
         snackbar.toastError();
@@ -210,6 +205,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
                 selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
                 onTimeZoneSelected={onChangeTimeZone}
                 label={strings.TIME_ZONE}
+                tooltip={tzChangedFromDefault ? undefined : strings.TIME_ZONE_DEFAULT_USER}
               />
             </Grid>
           )}
