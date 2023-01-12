@@ -197,6 +197,7 @@ export const stringsMap: ILocalizedStringsMap = {
     DATE_OF_WITHDRAWAL: 'Date of Withdrawal',
     DATE: 'Date',
     DEAD: 'Dead',
+    DEFAULT_TIME_ZONE_TOOLTIP: 'Time zone default to UTC',
     DELETE_ACCESSION_MESSAGE: 'You’re about to delete accession {0}.',
     DELETE_ACCESSION: 'Delete Accession',
     DELETE_CONFIRMATION_MODAL_MAIN_TEXT:
@@ -444,6 +445,7 @@ export const stringsMap: ILocalizedStringsMap = {
     MY_ACCOUNT_DESC: 'Manage your account information.',
     MY_ACCOUNT_NOTIFICATIONS_DESC:
       'Notifications alert you when there are important updates about your organizations. You will receive them through email.',
+    MY_ACCOUNT_TIME_ZONE_TOOLTIP: 'Lorem ipsum dolor sit amet',
     MY_ACCOUNT: 'My Account',
     NAME_REQUIRED: 'Name *',
     NAME_UNKNOWN: '(name unknown)',

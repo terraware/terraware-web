@@ -25,8 +25,10 @@ import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TitleDescription from '../common/TitleDescription';
 import { useUser } from 'src/providers';
-import TimeZoneSelector from '../TimeZoneSelector';
+import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
+import { useTimeZones } from 'src/providers';
+import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
 
 const columns: TableColumnType[] = [
@@ -83,6 +85,8 @@ const MyAccountContent = ({
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
   const timeZonesEnabled = isEnabled('Timezones');
+  const timeZones = useTimeZones();
+  const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
 
   useEffect(() => {
     if (organizations) {
@@ -335,12 +339,24 @@ const MyAccountContent = ({
                     {strings.TIME_ZONE}
                   </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                  <TimeZoneSelector
-                    onTimeZoneSelected={onTimeZoneChange}
-                    selectedTimeZone={record.timeZone}
-                    disabled={!edit}
-                  />
+                <Grid xs={12} marginLeft={3}>
+                  {edit ? (
+                    <TimeZoneSelector
+                      onTimeZoneSelected={onTimeZoneChange}
+                      selectedTimeZone={record.timeZone}
+                      disabled={!edit}
+                      tooltip={strings.MY_ACCOUNT_TIME_ZONE_TOOLTIP}
+                    />
+                  ) : (
+                    <TextField
+                      label=''
+                      id='timezone'
+                      type='text'
+                      value={tz.longName}
+                      tooltipTitle={record.timeZone ? '' : strings.DEFAULT_TIME_ZONE_TOOLTIP}
+                      display={true}
+                    />
+                  )}
                 </Grid>
               </>
             )}
