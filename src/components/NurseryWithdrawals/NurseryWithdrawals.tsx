@@ -192,12 +192,7 @@ export default function NurseryWithdrawals(): JSX.Element {
     const searchChildren: FieldNodePayload[] = getSearchChildren();
     const requestId = Math.random().toString();
     setRequestId('searchWithdrawals', requestId);
-    const apiSearchResults = await listNurseryWithdrawals(
-      selectedOrganization.id,
-      searchChildren,
-      1000,
-      searchSortOrder
-    );
+    const apiSearchResults = await listNurseryWithdrawals(selectedOrganization.id, searchChildren, searchSortOrder);
     if (apiSearchResults) {
       if (getRequestId('searchWithdrawals') === requestId) {
         setSearchResults(apiSearchResults);
