@@ -25,7 +25,6 @@ const DELETED_SPECIES = [
 export async function listNurseryWithdrawals(
   organizationId: number,
   searchCriteria: SearchCriteria,
-  count = 1000,
   sortOrder?: SearchSortOrder
 ): Promise<SearchResponseElement[] | null> {
   const searchParams: SearchRequestPayload = {
@@ -44,7 +43,7 @@ export async function listNurseryWithdrawals(
     ],
     search: convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder] : [{ field: 'id', direction: 'Ascending' }],
-    count,
+    count: 1000,
   };
 
   const data = await search(searchParams);
@@ -69,7 +68,14 @@ export async function listNurseryWithdrawals(
  * Check if an org has nursery withdrawals
  */
 export async function hasNurseryWithdrawals(organizationId: number): Promise<boolean> {
-  const response = await listNurseryWithdrawals(organizationId, [], 1);
+  const searchParams: SearchRequestPayload = {
+    prefix: 'nurseryWithdrawals',
+    fields: ['id'],
+    search: convertToSearchNodePayload({}, organizationId),
+    count: 1,
+  };
+
+  const response = await search(searchParams);
   return response !== null && response !== undefined && response.length > 0;
 }
 
