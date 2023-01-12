@@ -13,8 +13,7 @@ import TfMain from '../common/TfMain';
 import PageSnackbar from '../PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
-import TimeZoneSelector from '../TimeZoneSelector';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -32,7 +31,7 @@ export default function NurseryDetails(): JSX.Element {
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
   const history = useHistory();
-  const defaultTimeZone = useDefaultTimeZone();
+  const tz = useLocationTimeZone(nursery);
   const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   useEffect(() => {
@@ -108,13 +107,8 @@ export default function NurseryDetails(): JSX.Element {
           />
         </Grid>
         {timeZoneFeatureEnabled && (
-          <Grid item xs={gridSize()}>
-            <TimeZoneSelector
-              selectedTimeZone={nursery?.timeZone || defaultTimeZone.id}
-              onTimeZoneSelected={() => true}
-              disabled={true}
-              label={strings.TIME_ZONE}
-            />
+          <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+            <TextField label={strings.TIME_ZONE} id='timezone' type='text' value={tz.longName} display={true} />
           </Grid>
         )}
       </Grid>

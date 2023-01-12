@@ -3,11 +3,11 @@ import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 import Link from '../common/Link';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useGetTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export default function NurseriesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index } = props;
-  const defaultTimeZone = useDefaultTimeZone();
+  const tz = useGetTimeZone(value as string);
 
   const createLinkToNursery = (iValue: React.ReactNode | unknown[]) => {
     return (
@@ -20,7 +20,7 @@ export default function NurseriesCellRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'timeZone') {
-    return <CellRenderer index={index} column={column} value={value || defaultTimeZone.longName} row={row} />;
+    return <CellRenderer index={index} column={column} value={tz.longName} row={row} />;
   }
 
   return <CellRenderer {...props} />;

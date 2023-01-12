@@ -16,6 +16,14 @@ const getTimeZone = (timeZones: TimeZoneDescription[], id?: string): TimeZoneDes
 };
 
 /**
+ * util to get time zone or default to UTC
+ */
+export const useGetTimeZone = (id: string): TimeZoneDescription => {
+  const timeZones = useTimeZones();
+  return getTimeZone(timeZones, id) ?? getUTC(timeZones);
+};
+
+/**
  * Helper function to return UTC as per the supported time zones list
  */
 export const getUTC = (timeZones: TimeZoneDescription[]): TimeZoneDescription => {
@@ -46,11 +54,11 @@ export const useDefaultTimeZone = (forEdit?: boolean) => {
 /**
  * Get a fallback time zone for a location (based on location org, user, etc.)
  */
-export const useLocationTimeZone = (location: Location, forEdit?: boolean) => {
+export const useLocationTimeZone = (location?: Location, forEdit?: boolean) => {
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone(forEdit);
 
-  return getTimeZone(timeZones, location.timeZone) ?? defaultTimeZone;
+  return getTimeZone(timeZones, location?.timeZone) ?? defaultTimeZone;
 };
 
 // TODO - add more utilities as we see fit

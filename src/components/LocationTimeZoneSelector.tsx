@@ -2,7 +2,7 @@ import { Checkbox } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import TimeZoneSelector from './TimeZoneSelector';
 
 type TimeZoneEntity = {
@@ -17,7 +17,7 @@ type LocationTimeZoneSelectorProps = {
 export default function LocationTimeZoneSelector(props: LocationTimeZoneSelectorProps): JSX.Element {
   const { onChangeTimeZone, location } = props;
   const [orgTZChecked, setOrgTZChecked] = useState<boolean>(!!location.timeZone);
-  const defaultTimeZone = useDefaultTimeZone();
+  const timeZone = useLocationTimeZone(location);
 
   useEffect(() => {
     if (!location?.timeZone) {
@@ -25,7 +25,7 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
     } else {
       setOrgTZChecked(false);
     }
-  }, [location]);
+  }, [location?.timeZone]);
 
   const onOrgTimeZoneChecked = (checked: boolean) => {
     if (checked) {
@@ -33,14 +33,14 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
       onChangeTimeZone(undefined);
     } else {
       setOrgTZChecked(false);
-      onChangeTimeZone(defaultTimeZone);
+      onChangeTimeZone(timeZone);
     }
   };
 
   return (
     <>
       <TimeZoneSelector
-        selectedTimeZone={location.timeZone || defaultTimeZone.id}
+        selectedTimeZone={timeZone.id}
         onTimeZoneSelected={onChangeTimeZone}
         label={strings.TIME_ZONE}
         disabled={orgTZChecked}
