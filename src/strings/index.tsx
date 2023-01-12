@@ -541,6 +541,7 @@ export const stringsMap: ILocalizedStringsMap = {
     OPT_IN: 'Opt-In Features',
     OR_SEED_WEIGHT: 'or Seed Weight',
     OR: 'OR',
+    ORG_TZ_TOOLTIP_INFO: "This time zone is inherited from your organization's time zone",
     ORGANIZATION_CREATE_FAILED: 'Unable to create organization.',
     ORGANIZATION_CREATED_MSG:
       'You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',

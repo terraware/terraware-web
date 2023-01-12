@@ -107,7 +107,14 @@ export default function SeedBankDetails(): JSX.Element {
         </Grid>
         {timeZoneFeatureEnabled && (
           <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
-            <TextField label={strings.TIME_ZONE} id='timezone' type='text' value={tz.longName} display={true} />
+            <TextField
+              label={strings.TIME_ZONE}
+              id='timezone'
+              type='text'
+              value={tz.longName}
+              tooltipTitle={seedBank?.timeZone ? '' : strings.ORG_TZ_TOOLTIP_INFO}
+              display={true}
+            />
           </Grid>
         )}
       </Grid>
