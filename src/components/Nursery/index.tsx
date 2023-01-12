@@ -114,6 +114,7 @@ export default function NurseryDetails(): JSX.Element {
               onTimeZoneSelected={() => true}
               disabled={true}
               label={strings.TIME_ZONE}
+              tooltip={nursery?.timeZone ? '' : strings.ORG_TZ_TOOLTIP_INFO}
             />
           </Grid>
         )}
