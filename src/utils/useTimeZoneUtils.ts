@@ -59,6 +59,15 @@ export const useDefaultTimeZone = () => {
 };
 
 /**
+ * Get user time zone (returns undefined if not found)
+ */
+export const useUserTimeZone = (): TimeZoneDescription | undefined => {
+  const { user } = useUser();
+  const timeZones = useTimeZones();
+  return getTimeZone(timeZones, user?.timeZone);
+};
+
+/**
  * Get a fallback time zone for a location (based on location org, user, etc.)
  */
 export const useLocationTimeZone = () => {
