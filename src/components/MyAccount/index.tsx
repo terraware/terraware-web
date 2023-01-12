@@ -339,7 +339,7 @@ const MyAccountContent = ({
                     {strings.TIME_ZONE}
                   </Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
                   {edit ? (
                     <TimeZoneSelector
                       onTimeZoneSelected={onTimeZoneChange}
