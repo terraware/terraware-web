@@ -339,7 +339,7 @@ const MyAccountContent = ({
                     {strings.TIME_ZONE}
                   </Typography>
                 </Grid>
-                <Grid xs={12} marginLeft={3}>
+                <Grid item xs={12} marginLeft={3}>
                   {edit ? (
                     <TimeZoneSelector
                       onTimeZoneSelected={onTimeZoneChange}
