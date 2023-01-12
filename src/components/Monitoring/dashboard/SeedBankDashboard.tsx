@@ -16,6 +16,10 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useQuery from '../../../utils/useQuery';
 import { TIME_PERIODS } from './Common';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import isEnabled from 'src/features';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import TimeZoneSelector from 'src/components/TimeZoneSelector';
 
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {
@@ -64,6 +68,15 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [defaultSensorTimePeriod, setDefaultSensorTimePeriod] = useState<string>();
   const [defaultPvTimePeriod, setDefaultPvTimePeriod] = useState<string>();
   const [defaultSensor, setDefaultSensor] = useState<Device>();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const tz = useLocationTimeZone().get(seedBank);
+
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
+    updatePreferences({
+      ...monitoringPreferences,
+      timeZone: newTimeZone?.id,
+    });
+  };
 
   const gridSize = () => {
     if (isMobile) {
@@ -206,6 +219,15 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
 
   return (
     <Grid container spacing={3} marginTop={0}>
+      <Grid item xs={12}>
+        {timeZoneFeatureEnabled && (
+          <TimeZoneSelector
+            selectedTimeZone={(monitoringPreferences.timeZone as string) || tz.id}
+            onTimeZoneSelected={onChangeTimeZone}
+            label={strings.TIME_ZONE}
+          />
+        )}
+      </Grid>
       <Grid item xs={gridSize()}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
