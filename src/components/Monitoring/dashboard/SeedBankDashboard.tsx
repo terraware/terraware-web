@@ -70,19 +70,17 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [defaultSensor, setDefaultSensor] = useState<Device>();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
   const tz = useLocationTimeZone().get(seedBank);
+  const [tzSelected, setTzSelected] = useState<string>();
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
-    updatePreferences({
-      ...monitoringPreferences,
-      timeZone: newTimeZone?.id,
-    });
+    setTzSelected(newTimeZone?.id);
   };
 
   const gridSize = () => {
     if (isMobile) {
       return 12;
     }
-    return 6;
+    return timeZoneFeatureEnabled ? 4 : 6;
   };
 
   useEffect(() => {
@@ -219,15 +217,16 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
 
   return (
     <Grid container spacing={3} marginTop={0}>
-      <Grid item xs={12}>
-        {timeZoneFeatureEnabled && (
-          <TimeZoneSelector
-            selectedTimeZone={(monitoringPreferences.timeZone as string) || tz.id}
-            onTimeZoneSelected={onChangeTimeZone}
-            label={strings.TIME_ZONE}
-          />
-        )}
-      </Grid>
+      {timeZoneFeatureEnabled && (
+        <Grid item xs={gridSize()}>
+          <div className={classes.graphContainer}>
+            <div className={classes.panelTitle}>
+              <p>{strings.TIME_ZONE}</p>
+            </div>
+            <TimeZoneSelector selectedTimeZone={tzSelected || tz.id} onTimeZoneSelected={onChangeTimeZone} />
+          </div>
+        </Grid>
+      )}
       <Grid item xs={gridSize()}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
@@ -255,6 +254,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           updateTimePeriodPreferences={(sensorTimePeriod) =>
             updatePreferences({ ...monitoringPreferences, sensorTimePeriod })
           }
+          timeZone={tzSelected || tz.id}
         />
       </Grid>
       <Grid item xs={12}>

@@ -78,6 +78,7 @@ type TemperatureHumidityChartProps = {
   defaultTimePeriod?: string;
   updateSensorPreferences: (sensorId: number) => void;
   updateTimePeriodPreferences: (timePeriod: string) => void;
+  timeZone: string;
 };
 
 export default function TemperatureHumidityChart(props: TemperatureHumidityChartProps): JSX.Element {
