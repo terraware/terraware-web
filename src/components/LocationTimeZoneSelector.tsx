@@ -12,11 +12,12 @@ type TimeZoneEntity = {
 type LocationTimeZoneSelectorProps = {
   onChangeTimeZone: (tzSelected: TimeZoneDescription | undefined) => void;
   location: TimeZoneEntity;
+  tooltip?: string;
 };
 
 export default function LocationTimeZoneSelector(props: LocationTimeZoneSelectorProps): JSX.Element {
   const timeZoneFetcher = useLocationTimeZone();
-  const { onChangeTimeZone, location } = props;
+  const { onChangeTimeZone, location, tooltip } = props;
   const [lastSelected, setLastSelected] = useState<TimeZoneEntity>(location);
   const [orgTZChecked, setOrgTZChecked] = useState<boolean>(!!location.timeZone);
   const [timeZone, setTimeZone] = useState<TimeZoneDescription>(timeZoneFetcher.get(lastSelected));
@@ -55,6 +56,7 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
         }}
         label={strings.TIME_ZONE}
         disabled={orgTZChecked}
+        tooltip={tooltip}
       />
       <Checkbox
         label={strings.USE_ORG_TZ}
