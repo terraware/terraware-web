@@ -112,7 +112,7 @@ export default function SeedBankDetails(): JSX.Element {
               id='timezone'
               type='text'
               value={tz.longName}
-              tooltipTitle={seedBank?.timeZone ? '' : strings.ORG_TZ_TOOLTIP_INFO}
+              tooltipTitle={seedBank?.timeZone ? undefined : strings.ORG_TZ_TOOLTIP_INFO}
               display={true}
             />
           </Grid>

@@ -111,7 +111,7 @@ export default function PlantingSiteView(): JSX.Element {
               id='timezone'
               type='text'
               value={tz.longName}
-              tooltipTitle={plantingSite?.timeZone ? '' : strings.ORG_TZ_TOOLTIP_INFO}
+              tooltipTitle={plantingSite?.timeZone ? undefined : strings.ORG_TZ_TOOLTIP_INFO}
               display={true}
             />
           </Grid>
