@@ -82,10 +82,13 @@ const useStyles = makeStyles((theme: Theme) => ({
       paddingRight: (props: StyleProps) => (props.isDesktop ? '8px' : undefined),
       paddingTop: (props: StyleProps) => (props.isDesktop ? '96px' : '8px'),
       overflowY: 'auto',
-      width: (props: StyleProps) => (props.isDesktop ? '180px' : undefined),
+      width: (props: StyleProps) => (props.isDesktop ? '210px' : undefined),
       zIndex: 1000,
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: theme.palette.TwClrBgGhostActive,
+      },
+      '&::-webkit-scrollbar': {
+        width: '4px',
       },
     },
   },
@@ -98,7 +101,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   contentWithNavBar: {
     '& > div, & > main': {
-      paddingLeft: '190px',
+      paddingLeft: '220px',
     },
   },
   navBarOpened: {
