@@ -70,10 +70,12 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [defaultSensor, setDefaultSensor] = useState<Device>();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
   const tz = useLocationTimeZone().get(seedBank);
-  const [tzSelected, setTzSelected] = useState<string>();
+  const [tzSelected, setTzSelected] = useState<string>(tz.id);
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
-    setTzSelected(newTimeZone?.id);
+    if (newTimeZone) {
+      setTzSelected(newTimeZone.id);
+    }
   };
 
   const gridSize = () => {
@@ -223,7 +225,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
             <div className={classes.panelTitle}>
               <p>{strings.TIME_ZONE}</p>
             </div>
-            <TimeZoneSelector selectedTimeZone={tzSelected || tz.id} onTimeZoneSelected={onChangeTimeZone} />
+            <TimeZoneSelector selectedTimeZone={tzSelected} onTimeZoneSelected={onChangeTimeZone} />
           </div>
         </Grid>
       )}
@@ -254,7 +256,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           updateTimePeriodPreferences={(sensorTimePeriod) =>
             updatePreferences({ ...monitoringPreferences, sensorTimePeriod })
           }
-          timeZone={tzSelected || tz.id}
+          timeZone={tzSelected}
         />
       </Grid>
       <Grid item xs={12}>
@@ -262,6 +264,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           BMU={BMU}
           defaultTimePeriod={defaultPvTimePeriod}
           updateTimePeriodPreferences={(pvTimePeriod) => updatePreferences({ ...monitoringPreferences, pvTimePeriod })}
+          timeZone={tzSelected}
         />
       </Grid>
     </Grid>
