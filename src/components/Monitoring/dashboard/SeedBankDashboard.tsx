@@ -219,16 +219,6 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
 
   return (
     <Grid container spacing={3} marginTop={0}>
-      {timeZoneFeatureEnabled && (
-        <Grid item xs={gridSize()}>
-          <div className={classes.graphContainer}>
-            <div className={classes.panelTitle}>
-              <p>{strings.TIME_ZONE}</p>
-            </div>
-            <TimeZoneSelector selectedTimeZone={tzSelected} onTimeZoneSelected={onChangeTimeZone} />
-          </div>
-        </Grid>
-      )}
       <Grid item xs={gridSize()}>
         <div className={classes.graphContainer}>
           <div className={classes.panelTitle}>
@@ -247,6 +237,16 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           <p className={classes.panelValue}>{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}</p>
         </div>
       </Grid>
+      {timeZoneFeatureEnabled && (
+        <Grid item xs={gridSize()}>
+          <div className={classes.graphContainer}>
+            <div className={classes.panelTitle}>
+              <p>{strings.TIME_ZONE}</p>
+            </div>
+            <TimeZoneSelector selectedTimeZone={tzSelected} onTimeZoneSelected={onChangeTimeZone} />
+          </div>
+        </Grid>
+      )}
       <Grid item xs={12}>
         <TemperatureHumidityChart
           availableLocations={availableLocations}
