@@ -7,6 +7,7 @@ export const UserContext = createContext<ProvidedUserData>({
     // default no-op implementation
     return;
   },
+  bootstrapped: false,
 });
 
 export const defaultSelectedOrg: ServerOrganization = {
@@ -17,7 +18,13 @@ export const defaultSelectedOrg: ServerOrganization = {
 };
 
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
+  organizations: [],
+  orgScopedPreferences: {},
   reloadData: () => {
+    // default no-op implementation
+    return;
+  },
+  reloadPreferences: () => {
     // default no-op implementation
     return;
   },
@@ -26,9 +33,11 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     return;
   },
   selectedOrganization: defaultSelectedOrg,
+  bootstrapped: false,
 });
 
 export const LocalizationContext = createContext<ProvidedLocalizationData>({
   supportedTimeZones: [],
   strings: {},
+  bootstrapped: false,
 });

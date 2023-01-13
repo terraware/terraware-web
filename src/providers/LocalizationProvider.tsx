@@ -69,6 +69,7 @@ export default function LocalizationProvider({ children, locale }: LocalizationP
       value={{
         supportedTimeZones: timeZones,
         strings: stringsMap[locale],
+        bootstrapped: !!stringsMap[locale],
       }}
     >
       {children}

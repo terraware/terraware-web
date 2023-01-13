@@ -1,10 +1,12 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CssBaseline, Slide, StyledEngineProvider, Theme } from '@mui/material';
+import { CircularProgress, CssBaseline, Slide, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import hexRgb from 'hex-rgb';
-import useStateLocation from './utils/useStateLocation';
+import useQuery from './utils/useQuery';
+import useStateLocation, { getLocation } from './utils/useStateLocation';
+import { getOrganizations } from 'src/api/organization/organization';
 import { DEFAULT_SEED_SEARCH_FILTERS, DEFAULT_SEED_SEARCH_SORT_ORDER } from 'src/api/seeds/search';
 import { SearchSortOrder, SearchCriteria } from 'src/api/search';
 import ContactUs from 'src/components/ContactUs';
@@ -27,6 +29,7 @@ import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
 import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
+import { ServerOrganization } from 'src/types/Organization';
 import { FacilityType } from 'src/api/types/facilities';
 import MyAccount from './components/MyAccount';
 import { getAllSpecies } from './api/species/species';
@@ -37,6 +40,7 @@ import NewSeedBank from './components/NewSeedBank';
 import SeedBankDetails from './components/SeedBank';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { getPreferences, updatePreferences } from './api/preferences/preferences';
 import useEnvironment from 'src/utils/useEnvironment';
 import { Accession2Create, Accession2View } from './components/accession2';
 import OptInFeatures from './components/OptInFeatures';
@@ -136,9 +140,9 @@ const MINIMAL_USER_ROUTES: string[] = [
 function AppBase() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
+  const query = useQuery();
   const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgScopedPreferences } =
-    useOrganization();
+  const { organizations, selectedOrganization, reloadData, reloadPreferences } = useOrganization;
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
 
@@ -212,11 +216,9 @@ function AppBase() {
   }, [plantingSites]);
 
   const setDefaults = useCallback(() => {
-    if (selectedOrganization.id) {
-      setAccessionsDisplayColumns(DefaultColumns.fields);
-      setWithdrawalCreated(false);
-    }
-  }, [selectedOrganization.id]);
+    setAccessionsDisplayColumns(DefaultColumns.fields);
+    setWithdrawalCreated(false);
+  }, [organization.id]);
 
   useEffect(() => {
     setDefaults();
@@ -386,7 +388,10 @@ function AppBase() {
               )}
             </Route>
             <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
-              <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
+              <EditOrganization
+                organization={selectedOrganization}
+                reloadOrganizationData={reloadData}
+              />
             </Route>
             <Route exact path={APP_PATHS.ORGANIZATION}>
               <Organization />
@@ -524,7 +529,9 @@ function AppBase() {
       <TopBar>
         <TopBarContent setShowNavBar={setShowNavBar} />
       </TopBar>
-      <div className={classes.container}>{organizations.length === 0 ? getOrphanedUserContent() : getContent()}</div>
+      <div className={classes.container}>
+        {organizations.length === 0 ? getOrphanedUserContent() : getContent()}
+      </div>
     </StyledEngineProvider>
   );
 }

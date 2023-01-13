@@ -1,31 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { CircularProgress, StyledEngineProvider, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { getUser } from 'src/api/user/user';
 import { UserContext } from './contexts';
 import { ProvidedUserData } from './DataTypes';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  spinner: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    margin: 'auto',
-    minHeight: '100vh',
-    '& .MuiCircularProgress-svg': {
-      color: theme.palette.TwClrIcnBrand,
-      height: '193px',
-    },
-  },
-}));
 
 export type UserProviderProps = {
   children?: React.ReactNode;
 };
 
 export default function UserProvider({ children }: UserProviderProps): JSX.Element {
-  const classes = useStyles();
   const reloadUser = useCallback(() => {
     const populateUser = async () => {
       const response = await getUser();
@@ -34,25 +16,21 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
           return {
             ...previous,
             user: response.user ?? undefined,
+            bootstrapped: true,
           };
         });
       }
     };
     populateUser();
   }, []);
-  const [userData, setUserData] = useState<ProvidedUserData>({ reloadUser });
+  const [userData, setUserData] = useState<ProvidedUserData>({ reloadUser, bootstrapped: false });
 
   useEffect(() => {
+    if (userData.user) {
+      return;
+    }
     reloadUser();
-  }, [reloadUser]);
-
-  if (!userData.user) {
-    return (
-      <StyledEngineProvider injectFirst>
-        <CircularProgress className={classes.spinner} size='193' />
-      </StyledEngineProvider>
-    );
-  }
+  }, [userData.user, reloadUser]);
 
   return <UserContext.Provider value={userData}>{children}</UserContext.Provider>;
 }
