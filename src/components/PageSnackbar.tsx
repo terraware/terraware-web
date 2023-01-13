@@ -25,9 +25,9 @@ export default function PageSnackbarMessage(): JSX.Element {
   const [newVersionDetected, setNewVersionDetected] = useState<boolean>(false);
   const [snackbar, setSnackbar] = useRecoilState(snackbarAtoms.page);
 
-  const clearSnackbar = () => {
+  const clearSnackbar = (eventType?: string) => {
     setSnackbar({ ...snackbar, msg: '', title: undefined });
-    if (snackbar?.onCloseCallback) {
+    if (snackbar?.onCloseCallback && eventType !== 'clickaway') {
       try {
         snackbar?.onCloseCallback();
       } catch (e) {
@@ -36,13 +36,9 @@ export default function PageSnackbarMessage(): JSX.Element {
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (event?: any, eventType?: string) => {
     if (snackbar) {
-      // this is needed to bypass closing of snackbar when user clicks out of a cancellable message
-      if (snackbar?.onCloseCallback) {
-        return;
-      }
-      clearSnackbar();
+      clearSnackbar(eventType);
     }
   };
 

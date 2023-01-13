@@ -2,13 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { LocalizationContext } from './contexts';
 import { getTimeZones } from 'src/api/timezones/timezones';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import strings, { stringsMap } from 'src/strings';
-import { useUser } from '.';
-import { updateUserProfile } from 'src/api/user/user';
-import isEnabled from 'src/features';
-import useSnackbar from 'src/utils/useSnackbar';
-import { Link } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
+import { stringsMap } from 'src/strings';
 
 export type LocalizationProviderProps = {
   children?: React.ReactNode;
@@ -17,9 +11,6 @@ export type LocalizationProviderProps = {
 
 export default function LocalizationProvider({ children, locale }: LocalizationProviderProps): JSX.Element {
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
-  const { user, reloadUser } = useUser();
-  const snackbar = useSnackbar();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   useEffect(() => {
     const fetchTimeZones = async () => {
@@ -31,38 +22,6 @@ export default function LocalizationProvider({ children, locale }: LocalizationP
 
     fetchTimeZones();
   }, [locale]);
-
-  useEffect(() => {
-    const populateTimeZone = async () => {
-      if (user && !user.timeZone) {
-        const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const foundTimeZone =
-          timeZones.find((timeZone) => timeZone.id === browserTimeZone) ||
-          timeZones.find((timeZone) => timeZone.id === 'Etc/Utc');
-        if (!foundTimeZone) {
-          return;
-        } // this should never happen
-
-        const updateResponse = await updateUserProfile({
-          ...user,
-          timeZone: foundTimeZone.id,
-        });
-        if (updateResponse.requestSucceeded) {
-          snackbar.pageSuccess(
-            strings.formatString(
-              strings.UPDATED_TIMEZONE_MSG,
-              <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-            ),
-            strings.formatString(strings.UPDATED_TIMEZONE_TITLE, foundTimeZone.longName)
-          );
-          reloadUser();
-        }
-      }
-    };
-    if (timeZoneFeatureEnabled) {
-      populateTimeZone();
-    }
-  }, [timeZones, user, snackbar, reloadUser, timeZoneFeatureEnabled]);
 
   return (
     <LocalizationContext.Provider

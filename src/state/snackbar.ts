@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 export type Priority = 'info' | 'critical' | 'warning' | 'success';
 export type Title = string | string[] | undefined;
 export type Message = string | (string | JSX.Element)[];
-export type OnCloseCallback = () => {} | undefined;
+export type OnCloseCallback = () => void;
 
 export interface Snackbar {
   title?: Title;

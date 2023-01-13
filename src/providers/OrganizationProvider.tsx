@@ -7,7 +7,7 @@ import { getOrganizations } from 'src/api/organization/organization';
 import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationContext } from './contexts';
-import { ProvidedOrganizationData } from './DataTypes';
+import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
 import { defaultSelectedOrg } from './contexts';
 
 export type OrganizationProviderProps = {
@@ -24,8 +24,8 @@ enum APIRequestStatus {
 export default function OrganizationProvider({ children }: OrganizationProviderProps): JSX.Element {
   const [bootstrapped, setBootstrapped] = useState<boolean>(false);
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
-  const [preferencesOrg, setPreferencesOrg] = useState<{ [key: string]: unknown }>();
-  const [orgScopedPreferences, setOrgScopedPreferences] = useState<{ [key: string]: unknown }>();
+  const [userPreferences, setUserPreferences] = useState<PreferencesType>({});
+  const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const [organizations, setOrganizations] = useState<ServerOrganization[]>([]);
   const history = useHistory();
@@ -45,7 +45,10 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
             updatePreferences('lastVisitedOrg', orgToSelect.id);
           }
         }
-        setBootstrapped(true);
+        if (response.organizations.length === 0) {
+          // if we don't need to retrieve org preferences (such as for orphaned users), mark as bootstrapped
+          setBootstrapped(true);
+        }
       } else if (response.error === 'NotAuthenticated') {
         setOrgAPIRequestStatus(APIRequestStatus.FAILED_NO_AUTH);
       } else {
@@ -58,18 +61,19 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const reloadPreferences = useCallback(() => {
     const getUserPreferences = async () => {
       const response = await getPreferences();
-      if (organizations && response.requestSucceeded) {
-        setPreferencesOrg(response.preferences);
+      if (organizations && response.requestSucceeded && response.preferences) {
+        setUserPreferences(response.preferences);
       }
     };
     getUserPreferences();
-  }, [organizations, setPreferencesOrg]);
+  }, [organizations, setUserPreferences]);
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
     selectedOrganization: selectedOrganization || defaultSelectedOrg,
     setSelectedOrganization,
     organizations,
-    orgScopedPreferences,
+    userPreferences,
+    orgPreferences,
     reloadData,
     reloadPreferences,
     bootstrapped,
@@ -84,18 +88,21 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       ...prev,
       selectedOrganization: selectedOrganization || defaultSelectedOrg,
       organizations,
-      orgScopedPreferences,
+      orgPreferences,
+      userPreferences,
       bootstrapped,
     }));
-  }, [selectedOrganization, organizations, orgScopedPreferences, bootstrapped]);
+  }, [selectedOrganization, organizations, orgPreferences, userPreferences, bootstrapped]);
 
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
       if (selectedOrganization) {
         const response = await getPreferences(selectedOrganization.id);
-        if (response.requestSucceeded) {
-          setOrgScopedPreferences(response.preferences);
+        if (response.requestSucceeded && response.preferences) {
+          setOrgPreferences(response.preferences);
         }
+        // once we retrieve the org and it's preferences, we are now bootstrapped for the organization provider
+        setBootstrapped(true);
       }
     };
     getOrgPreferences();
@@ -110,18 +117,18 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [reloadOrgPreferences, selectedOrganization]);
 
   useEffect(() => {
-    if (organizations && preferencesOrg) {
+    if (organizations && userPreferences) {
       const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
       setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
         let orgToUse = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
-        if (!orgToUse && preferencesOrg.lastVisitedOrg) {
-          orgToUse = organizations.find((org) => org.id === preferencesOrg.lastVisitedOrg);
+        if (!orgToUse && userPreferences.lastVisitedOrg) {
+          orgToUse = organizations.find((org) => org.id === userPreferences.lastVisitedOrg);
         }
         if (!orgToUse) {
           orgToUse = organizations[0];
         }
-        if (orgToUse && preferencesOrg?.lastVisitedOrg !== orgToUse.id) {
+        if (orgToUse && userPreferences?.lastVisitedOrg !== orgToUse.id) {
           updatePreferences('lastVisitedOrg', orgToUse.id);
         }
         return orgToUse;
@@ -132,7 +139,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
         history.push(getLocation(location.pathname, location, query.toString()));
       }
     }
-  }, [organizations, selectedOrganization, query, location, history, preferencesOrg]);
+  }, [organizations, selectedOrganization, query, location, history, userPreferences]);
 
   if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
     history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
