@@ -7,7 +7,14 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
-import { ChartPalette, TIME_PERIODS, getTimePeriodParams, HumidityValues, getUnit } from './Common';
+import {
+  ChartPalette,
+  TIME_PERIODS,
+  getTimePeriodParams,
+  HumidityValues,
+  getUnit,
+  convertEntryTimestamp,
+} from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -72,12 +79,13 @@ type PVBatteryChartProps = {
   BMU?: Device;
   defaultTimePeriod?: string;
   updateTimePeriodPreferences: (timePeriod: string) => void;
+  timeZone: string;
 };
 
 export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
-  const { BMU, defaultTimePeriod, updateTimePeriodPreferences } = props;
+  const { BMU, defaultTimePeriod, updateTimePeriodPreferences, timeZone } = props;
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
 
   useEffect(() => {
@@ -94,14 +102,14 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
     ) => {
       const ctx = chartReference?.current?.getContext('2d');
       if (ctx && selectedPVBatteryPeriod) {
-        const timePeriodParams = getTimePeriodParams(selectedPVBatteryPeriod);
+        const timePeriodParams = getTimePeriodParams(selectedPVBatteryPeriod, timeZone);
         window.pvBatteryChart = new Chart(ctx, {
           type: 'scatter',
           data: {
             datasets: [
               {
                 data: stateOfChargeValues?.map((entry) => {
-                  return { x: entry.timestamp, y: Number(entry.value) };
+                  return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
                 }),
                 label: 'State of Charge',
                 showLine: true,
@@ -111,7 +119,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
               },
               {
                 data: powerValues?.map((entry) => {
-                  return { x: entry.timestamp, y: Number(entry.value) };
+                  return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
                 }),
                 label: 'System Power',
                 showLine: true,
@@ -196,7 +204,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
 
     const getChartData = async () => {
       if (selectedPVBatteryPeriod) {
-        const timePeriodParams = getTimePeriodParams(selectedPVBatteryPeriod);
+        const timePeriodParams = getTimePeriodParams(selectedPVBatteryPeriod, timeZone);
         const startTime = timePeriodParams.start;
         const endTime = timePeriodParams.end;
         if (BMU) {
@@ -222,7 +230,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
     if (selectedPVBatteryPeriod) {
       getChartData();
     }
-  }, [BMU, selectedPVBatteryPeriod]);
+  }, [BMU, selectedPVBatteryPeriod, timeZone]);
 
   const onChangePVBatterySelectedPeriod = (newValue: string) => {
     setSelectedPVBatteryPeriod(newValue);

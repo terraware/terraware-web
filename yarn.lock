@@ -1387,7 +1387,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.8.0.tgz#f580f9beb67176fa57aae70b08ed510e1b18980f"
   integrity sha512-G/YwXTkv7Den9mXDO7AhLWkE3q+I92B+VqAE+dYG4NGPaHZGvt3G8Q0p9vmE+sq7rTGphUbAvmQ9YpbfMQGGlA==
 
-"@emotion/react@^11.9.3":
+"@emotion/react@^11.10.5", "@emotion/react@^11.9.3":
   version "11.10.5"
   resolved "https://registry.yarnpkg.com/@emotion/react/-/react-11.10.5.tgz#95fff612a5de1efa9c0d535384d3cfa115fe175d"
   integrity sha512-TZs6235tCJ/7iF6/rvTaOH4oxQg2gMAcdHemjwLKIjKz4rRuYe1HJ2TQJKnAcRAfOUDdU8XoDadCe1rl72iv8A==
@@ -2267,27 +2267,28 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.0.63":
-  version "2.0.63"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.0.63.tgz#6cb10eb8551656513cda8dead96825036826a4f4"
-  integrity sha512-eGkW2m0QtuzfXk+i4CA5TuVbNvpIdhWIiw9hG4fykgOjDcQBVBNEchwKHPd/4Pidh891kPmZFfSLOOT0V7rJIA==
+"@terraware/web-components@^2.0.66":
+  version "2.0.66"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.0.66.tgz#cad9b48ff4c081a4d57f139e8c5e810af7fc4a4b"
+  integrity sha512-9Y2VrjYyE5IZhDHirdwsYgkzHpywZbG3g0PrcOnkJBlN9U/AbDvmUgevw0/VKIfT1O0pS2YLPjDHnhWEnEogbg==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
     "@dnd-kit/core" "^6.0.5"
     "@dnd-kit/sortable" "^7.0.1"
-    "@emotion/react" "^11.9.3"
+    "@emotion/react" "^11.10.5"
     "@mui/icons-material" "^5.8.4"
     "@mui/material" "^5.8.7"
     "@mui/styles" "^5.11.2"
     "@mui/x-date-pickers" "^5.0.12"
     classnames "^2.3.2"
     date-fns "^2.29.3"
+    luxon "^3.2.1"
     moment "^2.29.4"
     moment-timezone "^0.5.37"
     react "^17.0.2"
     react-dom "^17.0.2"
-    react-responsive "^9.0.0-beta.6"
+    react-responsive "^9.0.2"
     react-sortable-hoc "^2.0.0"
     sass "^1.35.1"
     tinycolor2 "^1.4.2"
@@ -7960,6 +7961,11 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+luxon@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.2.1.tgz#14f1af209188ad61212578ea7e3d518d18cee45f"
+  integrity sha512-QrwPArQCNLAKGO/C+ZIilgIuDnEnKx5QYODdDtbFaxzsbZcc/a7WFq7MhsVYgRlwawLtvOUESTlfJ+hc/USqPg==
+
 lz-string@^1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/lz-string/-/lz-string-1.4.4.tgz#c0d8eaf36059f705796e1e344811cf4c498d3a26"
@@ -9683,7 +9689,7 @@ react-refresh@^0.11.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
   integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
 
-react-responsive@^9.0.0-beta.6:
+react-responsive@^9.0.0-beta.6, react-responsive@^9.0.2:
   version "9.0.2"
   resolved "https://registry.yarnpkg.com/react-responsive/-/react-responsive-9.0.2.tgz#34531ca77a61e7a8775714016d21241df7e4205c"
   integrity sha512-+4CCab7z8G8glgJoRjAwocsgsv6VA2w7JPxFWHRc7kvz8mec1/K5LutNC2MG28Mn8mu6+bu04XZxHv5gyfT7xQ==

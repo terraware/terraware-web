@@ -14,6 +14,9 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { getAllNurseries } from 'src/utils/organization';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import isEnabled from 'src/features';
+import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
 export default function NurseryView(): JSX.Element {
   const { selectedOrganization, reloadData } = useOrganization();
@@ -21,6 +24,7 @@ export default function NurseryView(): JSX.Element {
   const [descriptionError, setDescriptionError] = useState('');
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -53,6 +57,7 @@ export default function NurseryView(): JSX.Element {
       organizationId: selectedOrganization.id,
       type: 'Nursery',
       connectionState: 'Not Connected',
+      timeZone: selectedNursery?.timeZone,
     });
   }, [selectedNursery, setRecord, selectedOrganization]);
 
@@ -83,6 +88,15 @@ export default function NurseryView(): JSX.Element {
     } else {
       snackbar.toastError();
     }
+  };
+
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
+    setRecord((previousRecord: Facility): Facility => {
+      return {
+        ...previousRecord,
+        timeZone: newTimeZone ? newTimeZone.id : undefined,
+      };
+    });
   };
 
   return (
@@ -122,6 +136,15 @@ export default function NurseryView(): JSX.Element {
                 errorText={record.description ? '' : descriptionError}
               />
             </Grid>
+            {timeZoneFeatureEnabled && (
+              <Grid item xs={gridSize()}>
+                <LocationTimeZoneSelector
+                  location={record}
+                  onChangeTimeZone={onChangeTimeZone}
+                  tooltip='lorem ipsum dolor sit amet'
+                />
+              </Grid>
+            )}
           </Grid>
         </Box>
       </PageForm>

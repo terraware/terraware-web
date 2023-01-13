@@ -15,7 +15,9 @@ import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useOrganization } from '../../providers/hooks';
+import { useOrganization, useTimeZones } from 'src/providers/hooks';
+import isEnabled from 'src/features';
+import { getUTC } from '../../utils/useTimeZoneUtils';
 
 export default function OrganizationView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -24,6 +26,10 @@ export default function OrganizationView(): JSX.Element {
   const [countries, setCountries] = useState<Country[]>();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const { isMobile } = useDeviceInfo();
+  const timeZones = useTimeZones();
+  const utcTimeZone = getUTC(timeZones);
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization.timeZone)?.longName;
 
   useEffect(() => {
     const populateCountries = async () => {
@@ -136,11 +142,11 @@ export default function OrganizationView(): JSX.Element {
           />
         </Grid>
         {selectedOrganization.countrySubdivisionCode && (
-          <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
             <TextField label={strings.STATE} id='state' type='text' value={organizationState()} display={true} />
           </Grid>
         )}
-        <Grid item xs={gridSize()}>
+        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
           <TextField
             label={strings.NUMBER_OF_PEOPLE}
             id='numberOfPeople'
@@ -149,6 +155,18 @@ export default function OrganizationView(): JSX.Element {
             display={true}
           />
         </Grid>
+        {timeZoneFeatureEnabled && (
+          <Grid item xs={gridSize()}>
+            <TextField
+              label={strings.TIME_ZONE}
+              id='timeZone'
+              type='text'
+              value={currentTimeZone || utcTimeZone.longName}
+              display={true}
+              tooltipTitle={currentTimeZone ? undefined : strings.TIME_ZONE_DEFAULT_UTC}
+            />
+          </Grid>
+        )}
       </Grid>
     </TfMain>
   );

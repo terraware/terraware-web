@@ -7,7 +7,15 @@ import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
-import { ChartPalette, TIME_PERIODS, getFirstWord, getTimePeriodParams, HumidityValues, getUnit } from './Common';
+import {
+  ChartPalette,
+  TIME_PERIODS,
+  getFirstWord,
+  getTimePeriodParams,
+  HumidityValues,
+  getUnit,
+  convertEntryTimestamp,
+} from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
 import { Theme } from '@mui/material';
@@ -78,13 +86,20 @@ type TemperatureHumidityChartProps = {
   defaultTimePeriod?: string;
   updateSensorPreferences: (sensorId: number) => void;
   updateTimePeriodPreferences: (timePeriod: string) => void;
+  timeZone: string;
 };
 
 export default function TemperatureHumidityChart(props: TemperatureHumidityChartProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
-  const { availableLocations, defaultSensor, defaultTimePeriod, updateSensorPreferences, updateTimePeriodPreferences } =
-    props;
+  const {
+    availableLocations,
+    defaultSensor,
+    defaultTimePeriod,
+    updateSensorPreferences,
+    updateTimePeriodPreferences,
+    timeZone,
+  } = props;
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
 
@@ -123,7 +138,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
         const commonDatasets = [
           {
             data: temperatureValues?.map((entry) => {
-              return { x: entry.timestamp, y: Number(entry.value) };
+              return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
             }),
             label: 'Temperature', // Text to show in legend
             showLine: true, // If false, the line is not drawn for this dataset.
@@ -133,7 +148,10 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           },
           {
             data: temperatureValues?.map((entry) => {
-              return { x: entry.timestamp, y: getTemperatureMinValue(selectedLocation?.name) };
+              return {
+                x: convertEntryTimestamp(entry.timestamp, timeZone),
+                y: getTemperatureMinValue(selectedLocation?.name),
+              };
             }),
             label: 'Temperature Thresholds',
             showLine: false,
@@ -144,7 +162,10 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           },
           {
             data: temperatureValues?.map((entry) => {
-              return { x: entry.timestamp, y: getTemperatureMaxValue(selectedLocation?.name) };
+              return {
+                x: convertEntryTimestamp(entry.timestamp, timeZone),
+                y: getTemperatureMaxValue(selectedLocation?.name),
+              };
             }),
             showLine: false,
             borderColor: ChartPalette.TEMPERATURE_THRESHOLD.borderColor,
@@ -156,7 +177,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           },
           {
             data: humidityValues?.map((entry) => {
-              return { x: entry.timestamp, y: Number(entry.value) };
+              return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
             }),
             label: 'Humidity',
             showLine: true,
@@ -170,7 +191,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
         const allDatasets = [
           {
             data: temperatureValues?.map((entry) => {
-              return { x: entry.timestamp, y: Number(entry.value) };
+              return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
             }),
             label: 'Temperature',
             showLine: true,
@@ -180,7 +201,10 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           },
           {
             data: temperatureValues?.map((entry) => {
-              return { x: entry.timestamp, y: getTemperatureMinValue(selectedLocation?.name) };
+              return {
+                x: convertEntryTimestamp(entry.timestamp, timeZone),
+                y: getTemperatureMinValue(selectedLocation?.name),
+              };
             }),
             label: 'Temperature Thresholds',
             showLine: true,
@@ -192,7 +216,10 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           },
           {
             data: temperatureValues?.map((entry) => {
-              return { x: entry.timestamp, y: getTemperatureMaxValue(selectedLocation?.name) };
+              return {
+                x: convertEntryTimestamp(entry.timestamp, timeZone),
+                y: getTemperatureMaxValue(selectedLocation?.name),
+              };
             }),
             showLine: true,
             borderColor: ChartPalette.TEMPERATURE_THRESHOLD.borderColor,
@@ -206,7 +233,10 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
 
           {
             data: humidityValues?.map((entry) => {
-              return { x: entry.timestamp, y: getHumidityMinValue(selectedLocation?.name) };
+              return {
+                x: convertEntryTimestamp(entry.timestamp, timeZone),
+                y: getHumidityMinValue(selectedLocation?.name),
+              };
             }),
             label: 'Humidity Thresholds',
             showLine: true,
@@ -219,7 +249,10 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           },
           {
             data: humidityValues?.map((entry) => {
-              return { x: entry.timestamp, y: getHumidityMaxValue(selectedLocation?.name) };
+              return {
+                x: convertEntryTimestamp(entry.timestamp, timeZone),
+                y: getHumidityMaxValue(selectedLocation?.name),
+              };
             }),
             showLine: true,
             borderColor: ChartPalette.HUMIDITY_THRESHOLD.borderColor,
@@ -233,7 +266,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           },
           {
             data: humidityValues?.map((entry) => {
-              return { x: entry.timestamp, y: Number(entry.value) };
+              return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
             }),
             label: 'Humidity',
             showLine: true,
@@ -251,7 +284,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           datasetsToUse = commonDatasets;
         }
 
-        const timePeriodParams = getTimePeriodParams(selectedPeriod);
+        const timePeriodParams = getTimePeriodParams(selectedPeriod, timeZone);
         window.temperatureHumidityChart = new Chart(ctx, {
           type: 'scatter',
           data: {
@@ -332,7 +365,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
 
     const getChartData = async () => {
       if (selectedPeriod) {
-        const timePeriodParams = getTimePeriodParams(selectedPeriod);
+        const timePeriodParams = getTimePeriodParams(selectedPeriod, timeZone);
         const startTime = timePeriodParams.start;
         const endTime = timePeriodParams.end;
         if (selectedLocation) {
@@ -363,7 +396,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
     ) {
       getChartData();
     }
-  }, [availableLocations, selectedPeriod, selectedLocation]);
+  }, [availableLocations, selectedPeriod, selectedLocation, timeZone]);
 
   const onChangeLocation = (newValue: string) => {
     const location = availableLocations?.find((aL) => aL.name === newValue);

@@ -18,6 +18,7 @@ const parseFacility = (facility: ServerFacility): Facility => {
     organizationId: facility.organizationId,
     description: facility.description,
     connectionState: facility.connectionState,
+    timeZone: facility.timeZone,
   };
   return parsedFacility;
 };
@@ -46,6 +47,7 @@ export async function getOrganizations(): Promise<OrganizationsResponse> {
       countrySubdivisionCode: organization.countrySubdivisionCode,
       createdTime: organization.createdTime,
       totalUsers: organization.totalUsers,
+      timeZone: organization.timeZone,
     }));
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -122,6 +124,7 @@ export async function createOrganization(organization: ServerOrganization) {
         countryCode: serverResponse.organization.countryCode,
         countrySubdivisionCode: serverResponse.organization.countrySubdivisionCode,
         totalUsers: serverResponse.organization.totalUsers,
+        timeZone: serverResponse.organization.timeZone,
       };
     } else {
       response.requestSucceeded = false;
@@ -150,6 +153,7 @@ export async function updateOrganization(organization: ServerOrganization): Prom
       description: organization.description,
       countryCode: organization.countryCode,
       countrySubdivisionCode: organization.countrySubdivisionCode,
+      timeZone: organization.timeZone,
     };
     const serverResponse: SimpleSuccessResponsePayload = (
       await axios.put(UPDATE_ORGANIZATION.replace('{organizationId}', organization.id.toString()), updatedOrganization)

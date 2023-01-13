@@ -197,6 +197,7 @@ export const stringsMap: ILocalizedStringsMap = {
     DATE_OF_WITHDRAWAL: 'Date of Withdrawal',
     DATE: 'Date',
     DEAD: 'Dead',
+    DEFAULT_TIME_ZONE_TOOLTIP: 'Time zone default to UTC',
     DELETE_ACCESSION_MESSAGE: 'You’re about to delete accession {0}.',
     DELETE_ACCESSION: 'Delete Accession',
     DELETE_CONFIRMATION_MODAL_MAIN_TEXT:
@@ -283,6 +284,7 @@ export const stringsMap: ILocalizedStringsMap = {
     EXPORT_RECORDS: 'Export Records',
     EXPORT: 'Export',
     FACILITY: 'Facility',
+    USE_ORG_TZ: "Use organization's time zone",
     FAMILY: 'Family',
     FERN: 'Fern',
     FIELD_NOTES_PLACEHOLDER: 'Important notes about seeds, fruits, or plants',
@@ -443,6 +445,7 @@ export const stringsMap: ILocalizedStringsMap = {
     MY_ACCOUNT_DESC: 'Manage your account information.',
     MY_ACCOUNT_NOTIFICATIONS_DESC:
       'Notifications alert you when there are important updates about your organizations. You will receive them through email.',
+    MY_ACCOUNT_TIME_ZONE_TOOLTIP: 'Lorem ipsum dolor sit amet',
     MY_ACCOUNT: 'My Account',
     NAME_REQUIRED: 'Name *',
     NAME_UNKNOWN: '(name unknown)',
@@ -540,6 +543,7 @@ export const stringsMap: ILocalizedStringsMap = {
     OPT_IN: 'Opt-In Features',
     OR_SEED_WEIGHT: 'or Seed Weight',
     OR: 'OR',
+    ORG_TZ_TOOLTIP_INFO: "This time zone is inherited from your organization's time zone",
     ORGANIZATION_CREATE_FAILED: 'Unable to create organization.',
     ORGANIZATION_CREATED_MSG:
       'You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
@@ -840,6 +844,8 @@ export const stringsMap: ILocalizedStringsMap = {
     TESTING_STAFF: 'Testing Staff',
     TIME_PERIOD: 'Time Period',
     TIME_ZONE: 'Time Zone',
+    TIME_ZONE_DEFAULT_USER: 'Time zone defaulted to user time zone.',
+    TIME_ZONE_DEFAULT_UTC: 'Time zone defaulted to UTC.',
     TITLE_REPORT_PROBLEM: 'Report a Problem',
     TITLE_REQUEST_FEATURE: 'Request a Feature',
     TITLE_TEST_APP: 'Test our Mobile App',
