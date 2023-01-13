@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
@@ -22,6 +22,10 @@ import { ACCESSION_2_CREATE_STATES } from 'src/types/Accession';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useOrganization } from 'src/providers';
+import { getSeedBank } from 'src/utils/organization';
+import { Facility } from 'src/api/types/facilities';
 
 const SubTitleStyle = {
   fontSize: '20px',
@@ -45,6 +49,21 @@ export default function CreateAccession(): JSX.Element {
   const snackbar = useSnackbar();
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
+  const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
+  const tz = useLocationTimeZone().get(selectedSeedBank);
+  const [timeZone, setTimeZone] = useState<string>();
+  const { selectedOrganization } = useOrganization();
+
+  useEffect(() => {
+    if (record.facilityId) {
+      const accessionSeedBank = getSeedBank(selectedOrganization, record.facilityId);
+      setSelectedSeedBank(accessionSeedBank);
+    }
+  }, [record.facilityId, selectedOrganization]);
+
+  useEffect(() => {
+    setTimeZone(tz.id);
+  }, [tz]);
 
   const accessionsDatabase = {
     pathname: APP_PATHS.ACCESSIONS,
@@ -116,7 +135,13 @@ export default function CreateAccession(): JSX.Element {
             <Grid item xs={12} sx={marginTop}>
               <Species2Dropdown record={record} setRecord={setRecord} validate={validateFields} />
             </Grid>
-            <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
+            <CollectedReceivedDate2
+              record={record}
+              onChange={onChange}
+              type='collected'
+              validate={validateFields}
+              timeZone={timeZone}
+            />
             <Grid item xs={12} sx={marginTop}>
               <Collectors2 collectors={record.collectors} onChange={onChange} />
             </Grid>
@@ -152,7 +177,13 @@ export default function CreateAccession(): JSX.Element {
             <Accession2PlantSiteDetails record={record} onChange={onChange} />
           </Grid>
           <Grid container>
-            <CollectedReceivedDate2 record={record} onChange={onChange} type='received' validate={validateFields} />
+            <CollectedReceivedDate2
+              record={record}
+              onChange={onChange}
+              type='received'
+              validate={validateFields}
+              timeZone={timeZone}
+            />
             <Grid item xs={12} sx={marginTop}>
               <Select
                 id='state'

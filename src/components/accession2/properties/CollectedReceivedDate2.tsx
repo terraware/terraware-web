@@ -4,12 +4,14 @@ import { DatePicker } from '@terraware/web-components';
 import { Accession2, AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import { isInTheFuture } from '@terraware/web-components/utils';
 import strings from 'src/strings';
+import { changeTimezone } from 'src/utils/useTimeZoneUtils';
 
 interface Props {
   onChange: (id: string, value: string) => void;
   record: Accession2 | AccessionPostRequestBody;
   type: 'collected' | 'received';
   validate?: boolean;
+  timeZone?: string;
 }
 
 export type Dates = {
@@ -17,7 +19,7 @@ export type Dates = {
   receivedDate?: any;
 };
 
-export default function CollectedReceivedDate2({ onChange, record, type, validate }: Props): JSX.Element {
+export default function CollectedReceivedDate2({ onChange, record, type, validate, timeZone }: Props): JSX.Element {
   const theme = useTheme();
 
   const [dateErrors, setDateErrors] = useState<{ [key: string]: string | undefined }>({});
@@ -84,7 +86,8 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
           value={dates.collectedDate}
           onChange={(value) => changeDate('collectedDate', value)}
           errorText={dateErrors.collectedDate}
-          maxDate={Date.now()}
+          maxDate={timeZone ? changeTimezone(new Date(), timeZone) : new Date()}
+          defaultTimeZone={timeZone}
         />
       ) : (
         <DatePicker
@@ -94,6 +97,7 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
           value={dates.receivedDate}
           onChange={(value) => changeDate('receivedDate', value)}
           errorText={dateErrors.receivedDate}
+          defaultTimeZone={timeZone}
         />
       )}
     </Grid>
