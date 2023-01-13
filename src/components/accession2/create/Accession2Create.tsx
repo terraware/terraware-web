@@ -19,24 +19,18 @@ import Textfield from 'src/components/common/Textfield/Textfield';
 import PageForm from 'src/components/common/PageForm';
 import Select from 'src/components/common/Select/Select';
 import { ACCESSION_2_CREATE_STATES } from 'src/types/Accession';
-import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useOrganization } from 'src/providers';
 import { getSeedBank } from 'src/utils/organization';
 import { Facility } from 'src/api/types/facilities';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
 const SubTitleStyle = {
   fontSize: '20px',
   fontWeight: 600,
 };
-
-const defaultAccession = (): AccessionPostRequestBody =>
-  ({
-    state: 'Awaiting Check-In',
-    receivedDate: getTodaysDateFormatted(),
-  } as AccessionPostRequestBody);
 
 const MANDATORY_FIELDS = ['speciesId', 'collectedDate', 'receivedDate', 'state', 'facilityId'] as const;
 
@@ -48,11 +42,18 @@ export default function CreateAccession(): JSX.Element {
   const history = useHistory();
   const snackbar = useSnackbar();
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const [timeZone, setTimeZone] = useState<string>();
   const { selectedOrganization } = useOrganization();
+
+  const defaultAccession = (): AccessionPostRequestBody =>
+    ({
+      state: 'Awaiting Check-In',
+      receivedDate: getTodaysDateFormatted(timeZone),
+    } as AccessionPostRequestBody);
+
+  const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
 
   useEffect(() => {
     if (record.facilityId) {
