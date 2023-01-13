@@ -1,3 +1,4 @@
+a9b52ab Modify chart end date according to timezone (#1030)
 60af3f6 Update monitoring chart time zone picker location (#1028)
 3359411 Use textfield to show time zone in My Account details view (#1026)
 acad86e SW-2646 Time Zone display and Selection for Organization (#1024)
