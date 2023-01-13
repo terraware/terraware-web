@@ -7,4 +7,6 @@ export const useStrings = () => useContext(LocalizationContext).strings;
 
 export const useTimeZones = () => useContext(LocalizationContext).supportedTimeZones;
 
+export const useLocalization = () => useContext(LocalizationContext);
+
 export const useUser = () => useContext(UserContext);
