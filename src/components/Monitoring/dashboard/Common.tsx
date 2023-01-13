@@ -10,7 +10,7 @@ export type HumidityValues = {
 };
 
 export const getTimePeriodParams = (period: string, timeZone: string) => {
-  const end = moment();
+  const end = moment(changeTimezone(moment().toDate(), timeZone));
 
   switch (period) {
     case 'Last 12 hours':
