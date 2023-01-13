@@ -30,7 +30,6 @@ import TopBarContent from 'src/components/TopBar/TopBarContent';
 import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { ServerOrganization } from 'src/types/Organization';
-import { User } from 'src/types/User';
 import { FacilityType } from 'src/api/types/facilities';
 import MyAccount from './components/MyAccount';
 import { getAllSpecies } from './api/species/species';
@@ -145,7 +144,7 @@ const MINIMAL_USER_ROUTES: string[] = [
   APP_PATHS.OPT_IN,
 ];
 
-export default function App() {
+function AppBase() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const query = useQuery();
@@ -345,44 +344,42 @@ export default function App() {
     if (organizations?.length === 0) {
       return (
         <StyledEngineProvider injectFirst>
-          <UserProvider>
-            <OrganizationProvider
-              data={{
-                selectedOrganization: defaultSelectedOrg,
-                setSelectedOrganization,
-                organizations,
-                reloadData,
-              }}
-            >
-              <LocalizationProvider locale={locale}>
-                <TopBar fullWidth={true}>
-                  <TopBarContent setShowNavBar={setShowNavBar} />
-                </TopBar>
-                <div className={classes.container}>
-                  <ToastSnackbar />
-                  <Switch>
-                    <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-                      <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
+          <OrganizationProvider
+            data={{
+              selectedOrganization: defaultSelectedOrg,
+              setSelectedOrganization,
+              organizations,
+              reloadData,
+            }}
+          >
+            <LocalizationProvider locale={locale}>
+              <TopBar fullWidth={true}>
+                <TopBarContent setShowNavBar={setShowNavBar} />
+              </TopBar>
+              <div className={classes.container}>
+                <ToastSnackbar />
+                <Switch>
+                  <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
+                    <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
+                  </Route>
+                  <Route exact path={APP_PATHS.MY_ACCOUNT}>
+                    <MyAccount organizations={organizations} edit={false} />
+                  </Route>
+                  <Route exact path={APP_PATHS.WELCOME}>
+                    <NoOrgLandingPage />
+                  </Route>
+                  {!isProduction && (
+                    <Route exact path={APP_PATHS.OPT_IN}>
+                      <OptInFeatures refresh={reloadPreferences} />
                     </Route>
-                    <Route exact path={APP_PATHS.MY_ACCOUNT}>
-                      <MyAccount organizations={organizations} edit={false} />
-                    </Route>
-                    <Route exact path={APP_PATHS.WELCOME}>
-                      <NoOrgLandingPage />
-                    </Route>
-                    {!isProduction && (
-                      <Route exact path={APP_PATHS.OPT_IN}>
-                        <OptInFeatures refresh={reloadPreferences} />
-                      </Route>
-                    )}
-                    <Route path='/'>
-                      <Redirect to={APP_PATHS.WELCOME} />
-                    </Route>
-                  </Switch>
-                </div>
-              </LocalizationProvider>
-            </OrganizationProvider>
-          </UserProvider>
+                  )}
+                  <Route path='/'>
+                    <Redirect to={APP_PATHS.WELCOME} />
+                  </Route>
+                </Switch>
+              </div>
+            </LocalizationProvider>
+          </OrganizationProvider>
         </StyledEngineProvider>
       );
     } else if (!selectedOrganization) {
@@ -662,13 +659,19 @@ export default function App() {
   return (
     <StyledEngineProvider injectFirst>
       <CssBaseline />
-      <UserProvider>
-        {selectedOrganization && (
-          <OrganizationProvider data={{ selectedOrganization, setSelectedOrganization, organizations, reloadData }}>
-            <LocalizationProvider locale={locale}>{getContent()}</LocalizationProvider>
-          </OrganizationProvider>
-        )}
-      </UserProvider>
+      {selectedOrganization && (
+        <OrganizationProvider data={{ selectedOrganization, setSelectedOrganization, organizations, reloadData }}>
+          <LocalizationProvider locale={locale}>{getContent()}</LocalizationProvider>
+        </OrganizationProvider>
+      )}
     </StyledEngineProvider>
+  );
+}
+
+export default function App(): JSX.Element {
+  return (
+    <UserProvider>
+      <AppBase />
+    </UserProvider>
   );
 }
