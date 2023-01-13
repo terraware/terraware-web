@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { LocalizationContext } from './contexts';
 import { getTimeZones } from 'src/api/timezones/timezones';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import strings, { ILocalizedStrings, ILocalizedStringsMap } from 'src/strings';
+import strings, { ILocalizedStringsMap } from 'src/strings';
 import { ProvidedLocalizationData } from '.';
+import { supportedLocales } from '../strings/locales';
 
 export type LocalizationProviderProps = {
   children?: React.ReactNode;
@@ -35,19 +36,14 @@ export default function LocalizationProvider({
 
   useEffect(() => {
     const fetchStrings = async () => {
-      let stringsModule: Promise<{ strings: ILocalizedStrings }>;
-
-      // These dynamic imports will cause Webpack to generate a separate chunk file for each
-      // locale's strings.
-      //
-      // This is hardwired to English initially, but as we add locales, they'll be conditionally
-      // imported here.
-      stringsModule = import('../strings/strings-en');
-
-      const stringsTable = (await stringsModule).strings;
+      const language = locale.replace(/[-_].*/, '');  // 'en-US' => 'en'
+      const localeDetails =
+        supportedLocales.find((details) => details.id === locale) ||
+        supportedLocales.find((details) => details.id === language) ||
+        supportedLocales[0];
 
       const localeMap: ILocalizedStringsMap = {};
-      localeMap[locale] = stringsTable;
+      localeMap[locale] = (await localeDetails.loadModule()).strings;
       strings.setContent(localeMap);
       strings.setLanguage(locale);
 
