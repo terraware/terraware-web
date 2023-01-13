@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { LocalizationContext } from './contexts';
 import { getTimeZones } from 'src/api/timezones/timezones';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import strings, { stringsMap } from 'src/strings';
-import { useUser } from '.';
+import strings, { ILocalizedStrings, ILocalizedStringsMap } from 'src/strings';
+import { ProvidedLocalizationData, useUser } from '.';
 import { updateUserProfile } from 'src/api/user/user';
 import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -13,9 +13,18 @@ import { APP_PATHS } from 'src/constants';
 export type LocalizationProviderProps = {
   children?: React.ReactNode;
   locale: string;
+  setLocale: (locale: string) => void;
+  loadedStringsForLocale: string | null;
+  setLoadedStringsForLocale: (locale: string) => void;
 };
 
-export default function LocalizationProvider({ children, locale }: LocalizationProviderProps): JSX.Element {
+export default function LocalizationProvider({
+  children,
+  locale,
+  setLocale,
+  loadedStringsForLocale,
+  setLoadedStringsForLocale,
+}: LocalizationProviderProps): JSX.Element | null {
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
   const { user, reloadUser } = useUser();
   const snackbar = useSnackbar();
@@ -31,6 +40,32 @@ export default function LocalizationProvider({ children, locale }: LocalizationP
 
     fetchTimeZones();
   }, [locale]);
+
+  useEffect(() => {
+    const fetchStrings = async () => {
+      let stringsModule: Promise<{ strings: ILocalizedStrings }>;
+
+      // These dynamic imports will cause Webpack to generate a separate chunk file for each
+      // locale's strings.
+      if (locale.startsWith('gx')) {
+        stringsModule = import('../strings/strings-gx');
+      } else {
+        // Default to English
+        stringsModule = import('../strings/strings-en');
+      }
+
+      const stringsTable = (await stringsModule).strings;
+
+      const localeMap: ILocalizedStringsMap = {};
+      localeMap[locale] = stringsTable;
+      strings.setContent(localeMap);
+      strings.setLanguage(locale);
+
+      setLoadedStringsForLocale(locale);
+    };
+
+    fetchStrings();
+  }, [locale, setLoadedStringsForLocale]);
 
   useEffect(() => {
     const populateTimeZone = async () => {
@@ -62,17 +97,15 @@ export default function LocalizationProvider({ children, locale }: LocalizationP
     if (timeZoneFeatureEnabled) {
       populateTimeZone();
     }
-  }, [timeZones, user, snackbar, reloadUser, timeZoneFeatureEnabled]);
+  }, [timeZones, loadedStringsForLocale, user, snackbar, reloadUser, timeZoneFeatureEnabled]);
 
-  return (
-    <LocalizationContext.Provider
-      value={{
-        supportedTimeZones: timeZones,
-        strings: stringsMap[locale],
-        bootstrapped: !!stringsMap[locale],
-      }}
-    >
-      {children}
-    </LocalizationContext.Provider>
-  );
+  const context: ProvidedLocalizationData = {
+    bootstrapped: !!loadedStringsForLocale,
+    locale,
+    setLocale,
+    loadedStringsForLocale,
+    supportedTimeZones: timeZones,
+  };
+
+  return <LocalizationContext.Provider value={context}>{children}</LocalizationContext.Provider>;
 }

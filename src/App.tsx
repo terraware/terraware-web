@@ -56,7 +56,7 @@ import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { listPlantingSites } from './api/tracking/tracking';
 import { PlantingSite } from './api/types/tracking';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import AppBootstrap from './AppBootstrap';
 
 interface StyleProps {
@@ -519,6 +519,10 @@ function AppBase() {
       </div>
     </>
   );
+
+  // Localized strings are stored outside of React's state, but there's a state change when they're
+  // updated. Declare the dependency here so the app rerenders when the locale changes.
+  useLocalization();
 
   return (
     <StyledEngineProvider injectFirst>

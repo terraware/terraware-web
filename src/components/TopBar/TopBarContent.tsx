@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEventHandler } from 'react';
 import { useHistory } from 'react-router-dom';
 import { IconButton, Theme, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -12,6 +12,7 @@ import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 import { useOrganization } from 'src/providers/hooks';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { LocalizationContext } from '../../providers/contexts';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {
@@ -88,6 +89,18 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         />
         <div className={classes.separator} />
         <UserMenu hasOrganizations={organizations && organizations.length > 0} />
+        <LocalizationContext.Consumer>
+          {({ locale, setLocale }) => {
+            const onLocaleChanged: ChangeEventHandler<HTMLSelectElement> = (event) => setLocale(event.target.value);
+
+            return (
+              <select value={locale} onChange={onLocaleChanged}>
+                <option value='en'>English</option>
+                <option value='gx'>Gibberish</option>
+              </select>
+            );
+          }}
+        </LocalizationContext.Consumer>
       </div>
     </>
   ) : (

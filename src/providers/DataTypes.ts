@@ -20,7 +20,9 @@ export type ProvidedOrganizationData = {
 };
 
 export type ProvidedLocalizationData = {
+  locale: string;
   supportedTimeZones: TimeZoneDescription[];
-  strings: { [key: string]: string };
+  setLocale: (locale: string) => void;
+  loadedStringsForLocale: string | null;
   bootstrapped: boolean;
 };
