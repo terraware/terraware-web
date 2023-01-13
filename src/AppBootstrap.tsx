@@ -37,12 +37,7 @@ function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
   const { bootstrapped: localizationBootstrapped } = useLocalization();
 
   useEffect(() => {
-    if (!bootstrapped) {
-      const isBootstrapped = userBootstrapped && organizationBootstrapped && localizationBootstrapped;
-      if (isBootstrapped) {
-        setBootstrapped(isBootstrapped);
-      }
-    }
+    setBootstrapped(bootstrapped || (userBootstrapped && organizationBootstrapped && localizationBootstrapped));
   }, [bootstrapped, userBootstrapped, organizationBootstrapped, localizationBootstrapped]);
 
   if (!bootstrapped) {

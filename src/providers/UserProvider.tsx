@@ -15,7 +15,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
         setUserData((previous: ProvidedUserData) => {
           return {
             ...previous,
-            user: response.user ?? undefined,
+            user: response.user!,
             bootstrapped: true,
           };
         });
