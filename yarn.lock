@@ -2267,10 +2267,8 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.0.66":
-  version "2.0.66"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.0.66.tgz#cad9b48ff4c081a4d57f139e8c5e810af7fc4a4b"
-  integrity sha512-9Y2VrjYyE5IZhDHirdwsYgkzHpywZbG3g0PrcOnkJBlN9U/AbDvmUgevw0/VKIfT1O0pS2YLPjDHnhWEnEogbg==
+"@terraware/web-components@file:../web-components/dist":
+  version "2.0.67"
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
@@ -2542,6 +2540,11 @@
   version "4.14.191"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.191.tgz#09511e7f7cba275acd8b419ddac8da9a6a79e2fa"
   integrity sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==
+
+"@types/luxon@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-3.2.0.tgz#99901b4ab29a5fdffc88fff59b3b47fbfbe0557b"
+  integrity sha512-lGmaGFoaXHuOLXFvuju2bfvZRqxAqkHPx9Y9IQdQABrinJJshJwfNCKV+u7rR3kJbiqfTF/NhOkcxxAFrObyaA==
 
 "@types/mapbox-gl@^2.6.0":
   version "2.7.10"

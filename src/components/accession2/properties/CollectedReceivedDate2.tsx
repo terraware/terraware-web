@@ -4,6 +4,7 @@ import { DatePicker } from '@terraware/web-components';
 import { Accession2, AccessionPostRequestBody } from 'src/api/accessions2/accession';
 import { isInTheFuture } from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
+import { DateTime } from 'luxon';
 
 interface Props {
   onChange: (id: string, value: string) => void;
@@ -50,15 +51,15 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
 
   const validateDate = useCallback(
     (id: string, value?: any) => {
-      const date = new Date(value);
+      const date = DateTime.fromISO(value, { zone: timeZone });
 
       setDateError(id, '');
 
-      if (!value || isNaN(date.getTime())) {
+      if (!value || isNaN(date.toSeconds())) {
         const required = validate && !value;
         setDateError(id, required ? strings.REQUIRED_FIELD : strings.INVALID_DATE);
         return false;
-      } else if (isInTheFuture(date.getTime(), timeZone)) {
+      } else if (isInTheFuture(date.toSeconds(), timeZone)) {
         setDateError(id, strings.NO_FUTURE_DATES);
         return false;
       } else {
