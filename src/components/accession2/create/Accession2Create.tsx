@@ -44,7 +44,7 @@ export default function CreateAccession(): JSX.Element {
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
   const tz = useLocationTimeZone().get(selectedSeedBank);
-  const [timeZone, setTimeZone] = useState<string>();
+  const [timeZone, setTimeZone] = useState<string>(tz.id);
   const { selectedOrganization } = useOrganization();
 
   const defaultAccession = (): AccessionPostRequestBody =>
@@ -65,6 +65,15 @@ export default function CreateAccession(): JSX.Element {
   useEffect(() => {
     setTimeZone(tz.id);
   }, [tz]);
+
+  useEffect(() => {
+    setRecord((previousRecord: AccessionPostRequestBody): AccessionPostRequestBody => {
+      return {
+        ...previousRecord,
+        receivedDate: getTodaysDateFormatted(timeZone),
+      };
+    });
+  }, [timeZone, setRecord]);
 
   const accessionsDatabase = {
     pathname: APP_PATHS.ACCESSIONS,

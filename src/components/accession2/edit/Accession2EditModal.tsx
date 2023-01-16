@@ -13,6 +13,9 @@ import {
   Accession2PlantSiteDetails,
 } from '../properties';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { getSeedBank } from 'src/utils/organization';
+import { useOrganization } from 'src/providers';
 
 export interface Accession2EditModalProps {
   open: boolean;
@@ -30,6 +33,10 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const [record, setRecord, onChange] = useForm(accession);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const snackbar = useSnackbar();
+  const { selectedOrganization } = useOrganization();
+  const selectedSeedBank = getSeedBank(selectedOrganization, record.facilityId);
+  const tz = useLocationTimeZone().get(selectedSeedBank);
+  const timeZone = tz.id;
 
   const hasErrors = () => {
     const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record || !record[field]);
@@ -98,7 +105,13 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
           setRecord={setRecord}
           validate={validateFields}
         />
-        <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
+        <CollectedReceivedDate2
+          record={record}
+          onChange={onChange}
+          type='collected'
+          validate={validateFields}
+          timeZone={timeZone}
+        />
         <Grid item xs={12}>
           <Collectors2 onChange={onChange} collectors={record.collectors} />
         </Grid>

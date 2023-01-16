@@ -2,16 +2,15 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useTheme, Grid } from '@mui/material';
 import { DatePicker } from '@terraware/web-components';
 import { Accession2, AccessionPostRequestBody } from 'src/api/accessions2/accession';
-import { isInTheFuture } from '@terraware/web-components/utils';
+import { isInTheFuture } from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
-import { changeTimezone } from 'src/utils/useTimeZoneUtils';
 
 interface Props {
   onChange: (id: string, value: string) => void;
   record: Accession2 | AccessionPostRequestBody;
   type: 'collected' | 'received';
   validate?: boolean;
-  timeZone?: string;
+  timeZone: string;
 }
 
 export type Dates = {
@@ -27,6 +26,13 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
     collectedDate: record.collectedDate,
     receivedDate: record.receivedDate,
   });
+
+  useEffect(() => {
+    setDates({
+      collectedDate: record.collectedDate,
+      receivedDate: record.receivedDate,
+    });
+  }, [record]);
 
   const datePickerStyle = {
     '.MuiFormControl-root': {
@@ -52,14 +58,14 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
         const required = validate && !value;
         setDateError(id, required ? strings.REQUIRED_FIELD : strings.INVALID_DATE);
         return false;
-      } else if (isInTheFuture(date)) {
+      } else if (isInTheFuture(date.getTime(), timeZone)) {
         setDateError(id, strings.NO_FUTURE_DATES);
         return false;
       } else {
         return true;
       }
     },
-    [validate]
+    [validate, timeZone]
   );
 
   const changeDate = (id: string, value?: any) => {
@@ -86,7 +92,7 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
           value={dates.collectedDate}
           onChange={(value) => changeDate('collectedDate', value)}
           errorText={dateErrors.collectedDate}
-          maxDate={timeZone ? changeTimezone(new Date(), timeZone) : new Date()}
+          maxDate={new Date()}
           defaultTimeZone={timeZone}
         />
       ) : (
