@@ -10,13 +10,13 @@ import { SEED_TYPES, TEST_METHODS, TEST_TYPES, TREATMENTS } from 'src/types/Acce
 import { OrganizationUser, User } from 'src/types/User';
 import { useEffect, useState } from 'react';
 import { getOrganizationUsers } from 'src/api/organization/organization';
-import { isContributor } from 'src/utils/organization';
+import { getSeedBank, isContributor } from 'src/utils/organization';
 import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
 import { Close } from '@mui/icons-material';
 import { preventDefaultEvent, useDeviceInfo } from '@terraware/web-components/utils';
-import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
+import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { ViabilityTest } from 'src/api/types/accessions';
 import ViabilityResultModal from './ViabilityResultModal';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
@@ -29,6 +29,8 @@ import TooltipLearnMoreModal, {
 } from 'src/components/TooltipLearnMoreModal';
 import AddLink from 'src/components/common/AddLink';
 import { useOrganization } from 'src/providers/hooks';
+import { Facility } from 'src/api/types/facilities';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles(() => ({
   checkbox: {
@@ -61,6 +63,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const theme = useTheme();
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [viabilityFieldsErrors, setViabilityFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
+  const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
+  const tz = useLocationTimeZone().get(selectedSeedBank);
 
   const readOnly = !!viabilityTest?.endDate && !!(viabilityTest?.testResults && viabilityTest?.testResults?.length > 0);
   const { isMobile } = useDeviceInfo();
@@ -78,6 +82,13 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   useEffect(() => {
+    if (accession.facilityId) {
+      const accessionSeedBank = getSeedBank(selectedOrganization, accession.facilityId);
+      setSelectedSeedBank(accessionSeedBank);
+    }
+  }, [selectedOrganization, accession.facilityId]);
+
+  useEffect(() => {
     const getOrgUsers = async () => {
       const response = await getOrganizationUsers(selectedOrganization);
       if (response.requestSucceeded) {
@@ -93,7 +104,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       withdrawnByUserId: user.id,
       testType: 'Lab',
       seedsTested: 0,
-      startDate: getTodaysDateFormatted(),
+      startDate: getTodaysDateFormatted(tz.id),
     };
 
     const initViabilityTest = () => {
@@ -110,7 +121,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     };
 
     setRecord(initViabilityTest());
-  }, [viabilityTest, setRecord, accession, user]);
+  }, [viabilityTest, setRecord, accession, user, tz.id]);
 
   useEffect(() => {
     const newTestCompleted = viabilityTest?.endDate !== undefined;
@@ -197,12 +208,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       setIndividualError('startDate', strings.REQUIRED_FIELD);
       return false;
     } else {
-      const startDateMs = new Date(record.startDate).getTime();
+      const startDateMs = new Date(record.startDate).getTime(); // should use DateTime.fromISO().toSeconds() form luxon to validate correctly
       if (isNaN(startDateMs)) {
         setIndividualError('startDate', strings.INVALID_DATE);
         return false;
       } else {
-        if (isInTheFuture(startDateMs)) {
+        if (isInTheFuture(startDateMs, tz.id)) {
           setIndividualError('startDate', strings.NO_FUTURE_DATES);
           return false;
         } else {
@@ -228,12 +239,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           setIndividualError(`recordingDate${index}`, strings.REQUIRED_FIELD);
           errorFound = true;
         }
-        const dateMs = new Date(tr.recordingDate).getTime();
+        const dateMs = new Date(tr.recordingDate).getTime(); // should use DateTime.fromISO().toSeconds() form luxon to validate correctly
         if (isNaN(dateMs)) {
           setIndividualError(`recordingDate${index}`, strings.INVALID_DATE);
           errorFound = true;
         }
-        if (isInTheFuture(dateMs)) {
+        if (isInTheFuture(dateMs, tz.id)) {
           setIndividualError(`recordingDate${index}`, strings.NO_FUTURE_DATES);
           errorFound = true;
         }
@@ -289,7 +300,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         return;
       }
       if (testCompleted && !readOnly) {
-        record.endDate = getTodaysDateFormatted();
+        record.endDate = getTodaysDateFormatted(tz.id);
       }
       let response;
       if (record.id === -1) {
@@ -567,6 +578,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     onChange={(value) => onChange('startDate', value)}
                     disabled={readOnly}
                     errorText={viabilityFieldsErrors.startDate}
+                    defaultTimeZone={tz.id}
                   />
                 </Grid>
                 <Grid item xs={12} marginLeft={isMobile ? 0 : 1} marginBottom={isMobile ? 1 : 0}>
@@ -643,6 +655,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       onChange={(value) => onResultChange('recordingDate', value, index)}
                       disabled={readOnly}
                       errorText={viabilityFieldsErrors[`recordingDate${index}`]}
+                      defaultTimeZone={tz.id}
                     />
                   </Grid>
                   <Grid item xs={12} marginLeft={isMobile ? 0 : 1} display={isMobile ? 'block' : 'flex'}>
