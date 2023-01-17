@@ -653,6 +653,7 @@ export const strings = {
   REPORT: 'Report',
   REQUEST_FEATURE: 'Request Feature',
   REQUIRED_FIELD: 'Required field.',
+  RESET: 'Reset',
   REVIEW_ERRORS: 'Review Errors',
   ROLE_REQUIRED: 'Role *',
   ROLE: 'Role',
