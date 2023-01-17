@@ -204,6 +204,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const updateSearchColumns = useCallback(
     (columnNames?: string[]) => {
       if (columnNames) {
+        const columns = columnsIndexed();
         const searchSelectedColumns = columnNames.reduce((acum, value) => {
           acum.push(value);
           const additionalColumns = columns[value].additionalKeys;
@@ -218,7 +219,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         setDisplayColumnNames(columnNames);
       }
     },
-    [columns, setSearchColumns, setDisplayColumnNames]
+    [setSearchColumns, setDisplayColumnNames]
   );
 
   useEffect(() => {
