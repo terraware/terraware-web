@@ -2267,10 +2267,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.0.66":
-  version "2.0.66"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.0.66.tgz#cad9b48ff4c081a4d57f139e8c5e810af7fc4a4b"
-  integrity sha512-9Y2VrjYyE5IZhDHirdwsYgkzHpywZbG3g0PrcOnkJBlN9U/AbDvmUgevw0/VKIfT1O0pS2YLPjDHnhWEnEogbg==
+"@terraware/web-components@^2.0.67":
+  version "2.0.67"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.0.67.tgz#5eb477a65f7e98979782e4448c4e2647d40230ce"
+  integrity sha512-zLKnPhujPk7tLtHyaQsRzyy3rTub5uh5eH+61Qs77BfkuLKPwN9qfYonEud8YjVE/NvXnMp/4p23P6UXbLPNgQ==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
@@ -2285,13 +2285,13 @@
     date-fns "^2.29.3"
     luxon "^3.2.1"
     moment "^2.29.4"
-    moment-timezone "^0.5.37"
+    moment-timezone "^0.5.40"
     react "^17.0.2"
     react-dom "^17.0.2"
     react-responsive "^9.0.2"
     react-sortable-hoc "^2.0.0"
     sass "^1.35.1"
-    tinycolor2 "^1.4.2"
+    tinycolor2 "^1.5.2"
     web-vitals "^3.0.0"
 
 "@testing-library/dom@^8.0.0":
@@ -2542,6 +2542,11 @@
   version "4.14.191"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.191.tgz#09511e7f7cba275acd8b419ddac8da9a6a79e2fa"
   integrity sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==
+
+"@types/luxon@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-3.2.0.tgz#99901b4ab29a5fdffc88fff59b3b47fbfbe0557b"
+  integrity sha512-lGmaGFoaXHuOLXFvuju2bfvZRqxAqkHPx9Y9IQdQABrinJJshJwfNCKV+u7rR3kJbiqfTF/NhOkcxxAFrObyaA==
 
 "@types/mapbox-gl@^2.6.0":
   version "2.7.10"
@@ -8207,7 +8212,7 @@ mkdirp@^0.5.3, mkdirp@~0.5.1:
   dependencies:
     minimist "^1.2.6"
 
-moment-timezone@^0.5.37:
+moment-timezone@^0.5.40:
   version "0.5.40"
   resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.40.tgz#c148f5149fd91dd3e29bf481abc8830ecba16b89"
   integrity sha512-tWfmNkRYmBkPJz5mr9GVDn9vRlVZOTe6yqY92rFxiOdWXbjaR0+9LwQnZGGuNR63X456NqmEkbskte8tWL5ePg==
@@ -11057,7 +11062,7 @@ tiny-warning@^1.0.0, tiny-warning@^1.0.2:
   resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
   integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
 
-tinycolor2@^1.4.2:
+tinycolor2@^1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/tinycolor2/-/tinycolor2-1.5.2.tgz#7d30b4584d8b7d62b9a94dacc505614a6516a95f"
   integrity sha512-h80m9GPFGbcLzZByXlNSEhp1gf8Dy+VX/2JCGUZsWLo7lV1mnE/XlxGYgRBoMLJh1lIDXP0EMC4RPTjlRaV+Bg==
