@@ -2,6 +2,7 @@ import { AppBar, Theme } from '@mui/material';
 import React from 'react';
 import Button from './button/Button';
 import { makeStyles } from '@mui/styles';
+import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
@@ -66,7 +67,7 @@ export default function FormBottomBar({
       <Button
         id={cancelID || 'cancelBottomBar'}
         size='medium'
-        label={cancelButtonText || 'Cancel'}
+        label={cancelButtonText || strings.CANCEL}
         onClick={onCancel}
         priority='secondary'
         type='passive'
@@ -75,7 +76,7 @@ export default function FormBottomBar({
       <Button
         id={saveID || 'saveBottomBar'}
         size='medium'
-        label={saveButtonText || 'Save'}
+        label={saveButtonText || strings.SAVE}
         onClick={onSave}
         className={classes.button}
         disabled={saveDisabled}
