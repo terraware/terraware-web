@@ -10,13 +10,13 @@ import { SEED_TYPES, TEST_METHODS, TEST_TYPES, TREATMENTS } from 'src/types/Acce
 import { OrganizationUser, User } from 'src/types/User';
 import { useEffect, useState } from 'react';
 import { getOrganizationUsers } from 'src/api/organization/organization';
-import { isContributor } from 'src/utils/organization';
+import { getSeedBank, isContributor } from 'src/utils/organization';
 import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
 import { Close } from '@mui/icons-material';
 import { preventDefaultEvent, useDeviceInfo } from '@terraware/web-components/utils';
-import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
+import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { ViabilityTest } from 'src/api/types/accessions';
 import ViabilityResultModal from './ViabilityResultModal';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
@@ -29,6 +29,9 @@ import TooltipLearnMoreModal, {
 } from 'src/components/TooltipLearnMoreModal';
 import AddLink from 'src/components/common/AddLink';
 import { useOrganization } from 'src/providers/hooks';
+import { Facility } from 'src/api/types/facilities';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles(() => ({
   checkbox: {
@@ -61,6 +64,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const theme = useTheme();
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [viabilityFieldsErrors, setViabilityFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
+  const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedSeedBank : undefined);
 
   const readOnly = !!viabilityTest?.endDate && !!(viabilityTest?.testResults && viabilityTest?.testResults?.length > 0);
   const { isMobile } = useDeviceInfo();
@@ -78,6 +84,13 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   useEffect(() => {
+    if (accession.facilityId) {
+      const accessionSeedBank = getSeedBank(selectedOrganization, accession.facilityId);
+      setSelectedSeedBank(accessionSeedBank);
+    }
+  }, [selectedOrganization, accession.facilityId]);
+
+  useEffect(() => {
     const getOrgUsers = async () => {
       const response = await getOrganizationUsers(selectedOrganization);
       if (response.requestSucceeded) {
@@ -93,7 +106,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       withdrawnByUserId: user.id,
       testType: 'Lab',
       seedsTested: 0,
-      startDate: getTodaysDateFormatted(),
+      startDate: getTodaysDateFormatted(tz.id),
     };
 
     const initViabilityTest = () => {
@@ -110,7 +123,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     };
 
     setRecord(initViabilityTest());
-  }, [viabilityTest, setRecord, accession, user]);
+  }, [viabilityTest, setRecord, accession, user, tz.id]);
 
   useEffect(() => {
     const newTestCompleted = viabilityTest?.endDate !== undefined;
@@ -202,7 +215,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         setIndividualError('startDate', strings.INVALID_DATE);
         return false;
       } else {
-        if (isInTheFuture(startDateMs)) {
+        if (isInTheFuture(record.startDate, tz.id)) {
           setIndividualError('startDate', strings.NO_FUTURE_DATES);
           return false;
         } else {
@@ -233,7 +246,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           setIndividualError(`recordingDate${index}`, strings.INVALID_DATE);
           errorFound = true;
         }
-        if (isInTheFuture(dateMs)) {
+        if (isInTheFuture(tr.recordingDate, tz.id)) {
           setIndividualError(`recordingDate${index}`, strings.NO_FUTURE_DATES);
           errorFound = true;
         }
@@ -289,7 +302,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         return;
       }
       if (testCompleted && !readOnly) {
-        record.endDate = getTodaysDateFormatted();
+        record.endDate = getTodaysDateFormatted(tz.id);
       }
       let response;
       if (record.id === -1) {
@@ -352,16 +365,20 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const onAddResult = () => {
     if (record) {
       const updatedResults = [...(record.testResults || [])];
-      updatedResults.push({ recordingDate: getTodaysDateFormatted(), seedsGerminated: 0 });
+      updatedResults.push({ recordingDate: getTodaysDateFormatted(tz.id), seedsGerminated: 0 });
 
       onChange('testResults', updatedResults);
     }
   };
 
-  const onResultChange = (id: string, value: unknown, index: number) => {
+  const onResultChange = (id: string, value: any, index: number) => {
     if (record?.testResults) {
+      let valueToUse = value;
+      if (id === 'recordingDate') {
+        valueToUse = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
+      }
       const updatedResults = [...record.testResults];
-      updatedResults[index] = { ...updatedResults[index], [id]: value as string };
+      updatedResults[index] = { ...updatedResults[index], [id]: valueToUse as string };
       onChange('testResults', updatedResults);
     }
   };
@@ -411,6 +428,11 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const onChangeSeedsTested = (id: string, value: unknown) => {
     validateSeedsTested(Number(value));
     onChange('seedsTested', value);
+  };
+
+  const onChangeDate = (id: string, value: any) => {
+    const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
+    onChange(id, date);
   };
 
   return (
@@ -564,9 +586,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     label={record?.testType === 'Cut' ? strings.TEST_DATE_REQUIRED : strings.START_DATE_REQUIRED}
                     aria-label={strings.DATE}
                     value={record?.startDate}
-                    onChange={(value) => onChange('startDate', value)}
+                    onChange={(value) => onChangeDate('startDate', value)}
                     disabled={readOnly}
                     errorText={viabilityFieldsErrors.startDate}
+                    defaultTimeZone={tz.id}
                   />
                 </Grid>
                 <Grid item xs={12} marginLeft={isMobile ? 0 : 1} marginBottom={isMobile ? 1 : 0}>
@@ -643,6 +666,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       onChange={(value) => onResultChange('recordingDate', value, index)}
                       disabled={readOnly}
                       errorText={viabilityFieldsErrors[`recordingDate${index}`]}
+                      defaultTimeZone={tz.id}
                     />
                   </Grid>
                   <Grid item xs={12} marginLeft={isMobile ? 0 : 1} display={isMobile ? 'block' : 'flex'}>
