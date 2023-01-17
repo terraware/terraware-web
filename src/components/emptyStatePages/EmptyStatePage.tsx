@@ -66,36 +66,6 @@ type PageContent = {
   linkLocation?: string;
 };
 
-const NO_SEEDBANKS_CONTENT: PageContent = {
-  title1: strings.SEED_BANKS,
-  title2: strings.ADD_A_SEED_BANK,
-  subtitle: strings.ADD_SEED_BANK_SUBTITLE,
-  listItems: [
-    {
-      icon: 'blobbyIconSeedBank',
-      title: '',
-      description: '',
-    },
-  ],
-  buttonText: strings.ADD_SEED_BANK,
-  buttonIcon: 'plus',
-  linkLocation: APP_PATHS.SEED_BANKS_NEW,
-};
-
-const NO_NURSERIES_CONTENT: PageContent = {
-  title1: strings.NURSERIES,
-  title2: strings.ADD_A_NURSERY,
-  subtitle: strings.ADD_NURSERY_SUBTITLE,
-  listItems: [
-    {
-      icon: 'blobbyIconNursery',
-    },
-  ],
-  buttonText: strings.ADD_NURSERY,
-  buttonIcon: 'plus',
-  linkLocation: APP_PATHS.NURSERIES_NEW,
-};
-
 type EmptyStatePageProps = {
   backgroundImageVisible?: boolean;
   pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites';
@@ -214,6 +184,36 @@ export default function EmptyStatePage({
         },
       },
     ],
+  };
+
+  const NO_SEEDBANKS_CONTENT: PageContent = {
+    title1: strings.SEED_BANKS,
+    title2: strings.ADD_A_SEED_BANK,
+    subtitle: strings.ADD_SEED_BANK_SUBTITLE,
+    listItems: [
+      {
+        icon: 'blobbyIconSeedBank',
+        title: '',
+        description: '',
+      },
+    ],
+    buttonText: strings.ADD_SEED_BANK,
+    buttonIcon: 'plus',
+    linkLocation: APP_PATHS.SEED_BANKS_NEW,
+  };
+
+  const NO_NURSERIES_CONTENT: PageContent = {
+    title1: strings.NURSERIES,
+    title2: strings.ADD_A_NURSERY,
+    subtitle: strings.ADD_NURSERY_SUBTITLE,
+    listItems: [
+      {
+        icon: 'blobbyIconNursery',
+      },
+    ],
+    buttonText: strings.ADD_NURSERY,
+    buttonIcon: 'plus',
+    linkLocation: APP_PATHS.NURSERIES_NEW,
   };
 
   const pageContent = (): PageContent => {

@@ -5,21 +5,6 @@ import strings from 'src/strings';
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 import isEnabled from 'src/features';
 
-const columns: TableColumnType[] = [
-  {
-    key: 'name',
-    name: strings.NAME,
-    type: 'string',
-  },
-  {
-    key: 'description',
-    name: strings.DESCRIPTION,
-    type: 'string',
-  },
-  { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
-  { key: 'numPlots', name: strings.PLOTS, type: 'string' },
-];
-
 interface PlantingSitesTableProps {
   results: SearchResponseElement[];
   temporalSearchValue: string;
@@ -30,6 +15,20 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   const { results, setTemporalSearchValue, temporalSearchValue } = props;
   const theme = useTheme();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const columns: TableColumnType[] = [
+    {
+      key: 'name',
+      name: strings.NAME,
+      type: 'string',
+    },
+    {
+      key: 'description',
+      name: strings.DESCRIPTION,
+      type: 'string',
+    },
+    { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
+    { key: 'numPlots', name: strings.PLOTS, type: 'string' },
+  ];
 
   return (
     <Box

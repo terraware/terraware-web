@@ -21,16 +21,6 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BusySpinner from 'src/components/common/BusySpinner';
 import { useOrganization } from 'src/providers/hooks';
 
-const columns: TableColumnType[] = [
-  { key: 'species', name: strings.SPECIES, type: 'string' },
-  { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
-  { key: 'zoneName', name: strings.ZONE, type: 'string' },
-  { key: 'originalPlot', name: strings.ORIGINAL_PLOT, type: 'string' },
-  { key: 'newPlot', name: strings.NEW_PLOT, type: 'string' },
-  { key: 'reassign', name: strings.REASSIGN, type: 'string' },
-  { key: 'notes', name: strings.NOTES, type: 'string' },
-];
-
 export default function NurseryReassignment(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -47,6 +37,15 @@ export default function NurseryReassignment(): JSX.Element {
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
   const [reassigning, setReassigning] = useState<boolean>(false);
   const contentRef = useRef(null);
+  const columns: TableColumnType[] = [
+    { key: 'species', name: strings.SPECIES, type: 'string' },
+    { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
+    { key: 'zoneName', name: strings.ZONE, type: 'string' },
+    { key: 'originalPlot', name: strings.ORIGINAL_PLOT, type: 'string' },
+    { key: 'newPlot', name: strings.NEW_PLOT, type: 'string' },
+    { key: 'reassign', name: strings.REASSIGN, type: 'string' },
+    { key: 'notes', name: strings.NOTES, type: 'string' },
+  ];
 
   // populate map of species id to scientific name
   useEffect(() => {

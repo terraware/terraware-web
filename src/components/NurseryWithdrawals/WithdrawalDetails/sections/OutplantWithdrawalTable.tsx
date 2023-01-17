@@ -4,12 +4,6 @@ import strings from 'src/strings';
 import { Delivery } from 'src/api/types/tracking';
 import { Species } from 'src/types/Species';
 
-const columns: TableColumnType[] = [
-  { key: 'species', name: strings.SPECIES, type: 'string' },
-  { key: 'to_plot', name: strings.TO_PLOT, type: 'string' },
-  { key: 'quantity', name: strings.QUANTITY, type: 'string' },
-];
-
 type OutplantWithdrawalTableProps = {
   species: Species[];
   plotNames: Record<number, string>;
@@ -22,6 +16,11 @@ export default function OutplantWithdrawalTable({
   delivery,
 }: OutplantWithdrawalTableProps): JSX.Element {
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
+  const columns: TableColumnType[] = [
+    { key: 'species', name: strings.SPECIES, type: 'string' },
+    { key: 'to_plot', name: strings.TO_PLOT, type: 'string' },
+    { key: 'quantity', name: strings.QUANTITY, type: 'string' },
+  ];
 
   useEffect(() => {
     // get list of distinct species

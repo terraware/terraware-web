@@ -61,14 +61,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const columns: TableColumnType[] = [
-  { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
-  { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
-  { key: 'email', name: strings.EMAIL, type: 'string' },
-  { key: 'role', name: strings.ROLE, type: 'string' },
-  { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
-];
-
 type PeopleListProps = {
   reloadData?: () => void;
   user?: User;
@@ -92,6 +84,13 @@ export default function PeopleList({ reloadData, user }: PeopleListProps): JSX.E
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
+  const columns: TableColumnType[] = [
+    { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
+    { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
+    { key: 'email', name: strings.EMAIL, type: 'string' },
+    { key: 'role', name: strings.ROLE, type: 'string' },
+    { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
+  ];
 
   useEffect(() => {
     const refreshSearch = async () => {

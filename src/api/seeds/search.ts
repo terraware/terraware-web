@@ -1,6 +1,6 @@
 import axios from '..';
 import { paths } from 'src/api/types/generated-schema';
-import { COLUMNS_INDEXED } from 'src/components/seeds/database/columns';
+import { columnsIndexed } from 'src/components/seeds/database/columns';
 import {
   SearchCriteria,
   SearchRequestPayload,
@@ -46,8 +46,10 @@ export async function getPendingAccessions(organizationId: number): Promise<Sear
  *         single or multi select values (as opposed to date range values, for example).
  */
 export function filterSelectFields(fields: string[]): string[] {
+  const columns = columnsIndexed();
+
   return fields.reduce((acum: string[], value) => {
-    const dbColumn: DatabaseColumn = COLUMNS_INDEXED[value];
+    const dbColumn: DatabaseColumn = columns[value];
     if (['multiple_selection', 'single_selection'].includes(dbColumn.filter?.type ?? '')) {
       acum.push(dbColumn.key);
     }
