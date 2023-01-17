@@ -13,7 +13,7 @@ import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
 import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
-import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
+import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
@@ -243,29 +243,33 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   };
 
   const validateDate = (id: string, value?: any) => {
-    // this also needs new web-components version
-    if (!value && id === 'date') {
-      setIndividualError('date', strings.REQUIRED_FIELD);
-      return false;
-    } else if (isNaN(value.getTime())) {
-      setIndividualError(id, strings.INVALID_DATE);
-      return false;
-    } else if (isInTheFuture(value, timeZone) && id === 'date') {
-      setIndividualError('date', strings.NO_FUTURE_DATES);
-      return false;
+    if (!value) {
+      if (id === 'date') {
+        setIndividualError('date', strings.REQUIRED_FIELD);
+        return false;
+      }
     } else {
-      setIndividualError(id, '');
-      return true;
+      if (isNaN(new Date(value).getTime())) {
+        setIndividualError(id, strings.INVALID_DATE);
+        return false;
+      } else if (isInTheFuture(value, timeZone) && id === 'date') {
+        setIndividualError('date', strings.NO_FUTURE_DATES);
+        return false;
+      } else {
+        setIndividualError(id, '');
+        return true;
+      }
     }
   };
 
   const onChangeDate = (id: string, value?: any) => {
+    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
     const valid = validateDate(id, value);
     if (valid) {
       if (id === 'date') {
-        onChange(id, value);
+        onChange(id, date);
       }
-      onChangeNurseryTransfer(id, value);
+      onChangeNurseryTransfer(id, date);
     }
   };
 
