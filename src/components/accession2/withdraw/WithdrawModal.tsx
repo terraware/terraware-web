@@ -3,18 +3,18 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, useTheme } from '@mui/material';
-import { Checkbox, DatePicker, Select, SelectT, Textfield } from '@terraware/web-components';
+import { Checkbox, DatePicker, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
 import { NurseryTransfer } from 'src/api/types/batch';
 import useForm from 'src/utils/useForm';
 import { transferToNursery, postWithdrawal } from 'src/api/accessions2/withdrawals';
 import { postViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
-import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
+import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
 import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
-import { TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
+import { treatments, withdrawalTypes } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
 import { isContributor, getAllNurseries, getSeedBank } from 'src/utils/organization';
@@ -377,10 +377,10 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     >
       <Grid item xs={12} textAlign='left'>
         <Grid item xs={12} paddingBottom={2}>
-          <Select
+          <Dropdown
             label={strings.PURPOSE}
             placeholder={strings.SELECT}
-            options={WITHDRAWAL_PURPOSES}
+            options={withdrawalPurposes()}
             onChange={onChangePurpose}
             selectedValue={isNurseryTransfer ? 'Nursery' : record?.purpose}
             fullWidth={true}
@@ -407,17 +407,17 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         {record.purpose === 'Viability Testing' && !isNurseryTransfer ? (
           <>
             <Grid item xs={12} paddingBottom={2}>
-              <Select
+              <Dropdown
                 label={strings.TEST_TYPE}
                 placeholder={strings.SELECT}
-                options={WITHDRAWAL_TYPES}
+                options={withdrawalTypes()}
                 onChange={(value: string) => onChangeViabilityTesting('testType', value)}
                 selectedValue={viabilityTesting?.testType}
                 fullWidth={true}
               />
             </Grid>
             <Grid item xs={12} paddingBottom={2}>
-              <Select
+              <Dropdown
                 label={strings.SUBSTRATE}
                 placeholder={strings.SELECT}
                 options={getSubstratesAccordingToType(viabilityTesting?.testType)}
@@ -427,10 +427,10 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               />
             </Grid>
             <Grid item xs={12} paddingBottom={2}>
-              <Select
+              <Dropdown
                 label={strings.TREATMENT}
                 placeholder={strings.SELECT}
-                options={TREATMENTS}
+                options={treatments()}
                 onChange={(value: string) => onChangeViabilityTesting('treatment', value)}
                 selectedValue={viabilityTesting.treatment}
                 fullWidth={true}

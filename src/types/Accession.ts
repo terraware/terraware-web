@@ -1,4 +1,5 @@
 import strings from 'src/strings';
+import { Accession2 } from '../api/accessions2/accession';
 
 export const ACCESSION_STATES = [
   'Awaiting Check-In',
@@ -12,7 +13,9 @@ export const ACCESSION_STATES = [
   'Nursery',
 ];
 
-export const ACCESSION_2_STATES = [
+export type AccessionState = Accession2['state'];
+
+export const ACCESSION_2_STATES: AccessionState[] = [
   'Awaiting Check-In',
   'Awaiting Processing',
   'Processing',
@@ -21,42 +24,85 @@ export const ACCESSION_2_STATES = [
   'Used Up',
 ];
 
-export const ACCESSION_2_CREATE_STATES = [
-  'Awaiting Check-In',
-  'Awaiting Processing',
-  'Processing',
-  'Drying',
-  'In Storage',
-];
+export function stateName(state: AccessionState) {
+  switch (state) {
+    case 'Awaiting Check-In':
+      return strings.AWAITING_CHECK_IN;
+    case 'Awaiting Processing':
+      return strings.AWAITING_PROCESSING;
+    case 'Processing':
+      return strings.PROCESSING;
+    case 'Drying':
+      return strings.DRYING;
+    case 'In Storage':
+      return strings.IN_STORAGE;
+    case 'Used Up':
+      return strings.USED_UP;
+  }
+}
 
-export const ACCESSION_2_COLLECTION_SOURCES = ['Wild', 'Reintroduced', 'Cultivated', 'Other'];
+export function accessionCreateStates() {
+  return [
+    { label: strings.AWAITING_CHECK_IN, value: 'Awaiting Check-In' },
+    { label: strings.AWAITING_PROCESSING, value: 'Awaiting Processing' },
+    { label: strings.PROCESSING, value: 'Processing' },
+    { label: strings.DRYING, value: 'Drying' },
+    { label: strings.IN_STORAGE, value: 'In Storage' },
+  ];
+}
 
-export const SUBSTRATES = [
-  'Nursery Media',
-  'Agar',
-  'Paper',
-  'Other',
-  'Sand',
-  'Media Mix',
-  'Soil',
-  'Moss',
-  'Perlite/Vermiculite',
-];
+export function labSubstrates() {
+  return [
+    { label: strings.AGAR, value: 'Agar' },
+    { label: strings.PAPER, value: 'Paper' },
+    { label: strings.SAND, value: 'Sand' },
+    { label: strings.NURSERY_MEDIA, value: 'Nursery Media' },
+    { label: strings.OTHER, value: 'Other' },
+  ];
+}
 
-export const LAB_SUBSTRATES = ['Agar', 'Paper', 'Sand', 'Nursery Media', 'Other'];
+export function nurserySubstrates() {
+  return [
+    { label: strings.MEDIA_MIX, value: 'Media Mix' },
+    { label: strings.SOIL, value: 'Soil' },
+    { label: strings.SAND, value: 'Sand' },
+    { label: strings.MOSS, value: 'Moss' },
+    { label: strings.PERLITE_VERMICULITE, value: 'Perlite/Vermiculite' },
+    { label: strings.OTHER, value: 'Other' },
+  ];
+}
 
-export const NURSERY_SUBSTRATES = ['Media Mix', 'Soil', 'Sand', 'Moss', 'Perlite/Vermiculite', 'Other'];
+export function treatments() {
+  return [
+    { label: strings.SOAK, value: 'Soak' },
+    { label: strings.SCARIFY, value: 'Scarify' },
+    { label: strings.CHEMICAL, value: 'Chemical' },
+    { label: strings.STRATIFICATION, value: 'Stratification' },
+    { label: strings.LIGHT, value: 'Light' },
+    { label: strings.OTHER, value: 'Other' },
+  ];
+}
 
-export const TREATMENTS = ['Soak', 'Scarify', 'Chemical', 'Stratification', 'Light', 'Other'];
+export function withdrawalTypes() {
+  return [
+    { label: strings.LAB, value: 'Lab' },
+    { label: strings.NURSERY, value: 'Nursery' },
+  ];
+}
 
-export const WITHDRAWAL_TYPES = ['Lab', 'Nursery'];
+export function testMethods() {
+  return [
+    { label: strings.LAB_GERMINATION, value: 'Lab' },
+    { label: strings.NURSERY_GERMINATION, value: 'Nursery' },
+    { label: strings.CUT_TEST, value: 'Cut' },
+  ];
+}
 
-export const TEST_METHODS = [
-  { label: strings.LAB_GERMINATION, value: 'Lab' },
-  { label: strings.NURSERY_GERMINATION, value: 'Nursery' },
-  { label: strings.CUT_TEST, value: 'Cut' },
-];
-
-export const SEED_TYPES = ['Fresh', 'Stored'];
+export function seedTypes() {
+  return [
+    { label: strings.FRESH, value: 'Fresh' },
+    { label: strings.STORED, value: 'Stored' },
+  ];
+}
 
 export type TEST_TYPES = 'Lab' | 'Nursery' | 'Cut';

@@ -18,6 +18,7 @@ import AccessionByStatus from './AccessionByStatus';
 import { useHistory } from 'react-router-dom';
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
+import { AccessionState, stateName } from '../../../types/Accession';
 
 const useStyles = makeStyles((theme: Theme) => ({
   accessionsLink: {
@@ -116,6 +117,14 @@ export default function SeedSummary(): JSX.Element {
     }
     return 4;
   };
+
+  const cardStates: AccessionState[] = [
+    'Awaiting Check-In',
+    'Awaiting Processing',
+    'Processing',
+    'Drying',
+    'In Storage',
+  ];
 
   return (
     <TfMain>
@@ -231,41 +240,15 @@ export default function SeedSummary(): JSX.Element {
                       </Typography>
                     </Box>
                     <Grid container spacing={3} marginBottom={theme.spacing(3.5)}>
-                      <Grid item xs={cardGridSize()}>
-                        <AccessionByStatus
-                          label='Awaiting Check-in'
-                          status='Awaiting Check-In'
-                          quantity={summary.value?.accessionsByState['Awaiting Check-In']}
-                        />
-                      </Grid>
-                      <Grid item xs={cardGridSize()}>
-                        <AccessionByStatus
-                          label='Awaiting Processing'
-                          status='Awaiting Processing'
-                          quantity={summary.value?.accessionsByState['Awaiting Processing']}
-                        />
-                      </Grid>
-                      <Grid item xs={cardGridSize()}>
-                        <AccessionByStatus
-                          label='Processing'
-                          status='Processing'
-                          quantity={summary.value?.accessionsByState.Processing}
-                        />
-                      </Grid>
-                      <Grid item xs={cardGridSize()}>
-                        <AccessionByStatus
-                          label='Drying'
-                          status='Drying'
-                          quantity={summary.value?.accessionsByState.Drying}
-                        />
-                      </Grid>
-                      <Grid item xs={cardGridSize()}>
-                        <AccessionByStatus
-                          label='In Storage'
-                          status='In Storage'
-                          quantity={summary.value?.accessionsByState['In Storage']}
-                        />
-                      </Grid>
+                      {cardStates.map((state) => (
+                        <Grid item xs={cardGridSize()} key={state}>
+                          <AccessionByStatus
+                            label={stateName(state)}
+                            status={state}
+                            quantity={summary.value?.accessionsByState[state]}
+                          />
+                        </Grid>
+                      ))}
                     </Grid>
                     <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`} fontSize='16px'>
                       {strings.SEE_ALL_ACCESSIONS}
