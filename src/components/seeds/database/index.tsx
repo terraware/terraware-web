@@ -204,10 +204,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const updateSearchColumns = useCallback(
     (columnNames?: string[]) => {
       if (columnNames) {
-        const columns = columnsIndexed();
+        const columnInfo = columnsIndexed();
         const searchSelectedColumns = columnNames.reduce((acum, value) => {
           acum.push(value);
-          const additionalColumns = columns[value].additionalKeys;
+          const additionalColumns = columnInfo[value].additionalKeys;
           if (additionalColumns) {
             return acum.concat(additionalColumns);
           }
