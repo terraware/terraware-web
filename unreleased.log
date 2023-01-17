@@ -1,3 +1,4 @@
+8c55f86 Use strings table for Cancel and Save button labels (#1040)
 c0c1df2 Move English strings to a separate source file (#1039)
 c095449 SW-2701 Introduce a bootstrapping layer in FE, move data initialization into Provider layers (#1019)
 a9b52ab Modify chart end date according to timezone (#1030)
