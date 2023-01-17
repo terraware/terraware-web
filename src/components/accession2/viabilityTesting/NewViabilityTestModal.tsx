@@ -16,7 +16,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
 import { Close } from '@mui/icons-material';
 import { preventDefaultEvent, useDeviceInfo } from '@terraware/web-components/utils';
-import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
+import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { ViabilityTest } from 'src/api/types/accessions';
 import ViabilityResultModal from './ViabilityResultModal';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
@@ -31,6 +31,7 @@ import AddLink from 'src/components/common/AddLink';
 import { useOrganization } from 'src/providers/hooks';
 import { Facility } from 'src/api/types/facilities';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles(() => ({
   checkbox: {
@@ -64,7 +65,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [viabilityFieldsErrors, setViabilityFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
-  const tz = useLocationTimeZone().get(selectedSeedBank);
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedSeedBank : undefined);
 
   const readOnly = !!viabilityTest?.endDate && !!(viabilityTest?.testResults && viabilityTest?.testResults?.length > 0);
   const { isMobile } = useDeviceInfo();
@@ -208,12 +210,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       setIndividualError('startDate', strings.REQUIRED_FIELD);
       return false;
     } else {
-      const startDateMs = new Date(record.startDate).getTime(); // should use DateTime.fromISO().toSeconds() form luxon to validate correctly
+      const startDateMs = new Date(record.startDate).getTime();
       if (isNaN(startDateMs)) {
         setIndividualError('startDate', strings.INVALID_DATE);
         return false;
       } else {
-        if (isInTheFuture(startDateMs, tz.id)) {
+        if (isInTheFuture(record.startDate, tz.id)) {
           setIndividualError('startDate', strings.NO_FUTURE_DATES);
           return false;
         } else {
@@ -239,12 +241,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           setIndividualError(`recordingDate${index}`, strings.REQUIRED_FIELD);
           errorFound = true;
         }
-        const dateMs = new Date(tr.recordingDate).getTime(); // should use DateTime.fromISO().toSeconds() form luxon to validate correctly
+        const dateMs = new Date(tr.recordingDate).getTime();
         if (isNaN(dateMs)) {
           setIndividualError(`recordingDate${index}`, strings.INVALID_DATE);
           errorFound = true;
         }
-        if (isInTheFuture(dateMs, tz.id)) {
+        if (isInTheFuture(tr.recordingDate, tz.id)) {
           setIndividualError(`recordingDate${index}`, strings.NO_FUTURE_DATES);
           errorFound = true;
         }
@@ -363,16 +365,20 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const onAddResult = () => {
     if (record) {
       const updatedResults = [...(record.testResults || [])];
-      updatedResults.push({ recordingDate: getTodaysDateFormatted(), seedsGerminated: 0 });
+      updatedResults.push({ recordingDate: getTodaysDateFormatted(tz.id), seedsGerminated: 0 });
 
       onChange('testResults', updatedResults);
     }
   };
 
-  const onResultChange = (id: string, value: unknown, index: number) => {
+  const onResultChange = (id: string, value: any, index: number) => {
     if (record?.testResults) {
+      let valueToUse = value;
+      if (id === 'recordingDate') {
+        valueToUse = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
+      }
       const updatedResults = [...record.testResults];
-      updatedResults[index] = { ...updatedResults[index], [id]: value as string };
+      updatedResults[index] = { ...updatedResults[index], [id]: valueToUse as string };
       onChange('testResults', updatedResults);
     }
   };
@@ -422,6 +428,11 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const onChangeSeedsTested = (id: string, value: unknown) => {
     validateSeedsTested(Number(value));
     onChange('seedsTested', value);
+  };
+
+  const onChangeDate = (id: string, value: any) => {
+    const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
+    onChange(id, date);
   };
 
   return (
@@ -575,7 +586,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     label={record?.testType === 'Cut' ? strings.TEST_DATE_REQUIRED : strings.START_DATE_REQUIRED}
                     aria-label={strings.DATE}
                     value={record?.startDate}
-                    onChange={(value) => onChange('startDate', value)}
+                    onChange={(value) => onChangeDate('startDate', value)}
                     disabled={readOnly}
                     errorText={viabilityFieldsErrors.startDate}
                     defaultTimeZone={tz.id}
