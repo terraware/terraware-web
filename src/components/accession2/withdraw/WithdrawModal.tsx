@@ -13,15 +13,17 @@ import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
 import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
-import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
+import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
-import { isContributor, getAllNurseries } from 'src/utils/organization';
+import { isContributor, getAllNurseries, getSeedBank } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 import AddLink from 'src/components/common/AddLink';
 import { useOrganization } from 'src/providers/hooks';
+import { Facility } from 'src/api/types/facilities';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export interface WithdrawDialogProps {
   open: boolean;
@@ -35,32 +37,11 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const { selectedOrganization } = useOrganization();
   const { onClose, open, accession, reload, user } = props;
 
-  const newWithdrawal: Withdrawal2 = {
-    purpose: 'Nursery',
-    withdrawnByUserId: user.id,
-    date: getTodaysDateFormatted(),
-    withdrawnQuantity: undefined,
-    notes: '',
-  };
-
-  const nurseryTransferWithdrawal: NurseryTransfer = {
-    date: getTodaysDateFormatted(),
-    destinationFacilityId: -1,
-    germinatingQuantity: 0,
-    notes: '',
-    notReadyQuantity: 0,
-    readyByDate: undefined,
-    readyQuantity: 0,
-    withdrawnByUserId: user.id,
-  };
-
   const newViabilityTesting: ViabilityTestPostRequest = {
     testType: 'Lab',
     seedsTested: 0,
   };
 
-  const [record, setRecord, onChange] = useForm(newWithdrawal);
-  const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransferWithdrawal);
   const [isNurseryTransfer, setIsNurseryTransfer] = useState<boolean>(true);
   const [viabilityTesting, , onChangeViabilityTesting] = useForm(newViabilityTesting);
   const [users, setUsers] = useState<OrganizationUser[]>();
@@ -70,6 +51,53 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const theme = useTheme();
   const snackbar = useSnackbar();
   const contributor = isContributor(selectedOrganization);
+  const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
+  const tz = useLocationTimeZone().get(selectedSeedBank);
+  const [timeZone, setTimeZone] = useState(tz.id);
+
+  const newWithdrawal: Withdrawal2 = {
+    purpose: 'Nursery',
+    withdrawnByUserId: user.id,
+    date: getTodaysDateFormatted(timeZone),
+    withdrawnQuantity: undefined,
+    notes: '',
+  };
+
+  const nurseryTransferWithdrawal: NurseryTransfer = {
+    date: getTodaysDateFormatted(timeZone),
+    destinationFacilityId: -1,
+    germinatingQuantity: 0,
+    notes: '',
+    notReadyQuantity: 0,
+    readyByDate: undefined,
+    readyQuantity: 0,
+    withdrawnByUserId: user.id,
+  };
+
+  const [record, setRecord, onChange] = useForm(newWithdrawal);
+  const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransferWithdrawal);
+
+  useEffect(() => {
+    if (accession.facilityId) {
+      const accessionSeedBank = getSeedBank(selectedOrganization, accession.facilityId);
+      setSelectedSeedBank(accessionSeedBank);
+    }
+  }, [selectedOrganization, accession.facilityId]);
+
+  useEffect(() => {
+    if (timeZone !== tz.id) {
+      setTimeZone(tz.id);
+    }
+  }, [tz.id, timeZone]);
+
+  useEffect(() => {
+    setRecord((previousRecord: Withdrawal2): Withdrawal2 => {
+      return {
+        ...previousRecord,
+        date: getTodaysDateFormatted(timeZone),
+      };
+    });
+  }, [timeZone, setRecord]);
 
   useEffect(() => {
     const getOrgUsers = async () => {
@@ -215,13 +243,14 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   };
 
   const validateDate = (id: string, value?: any) => {
+    // this also needs new web-components version
     if (!value && id === 'date') {
       setIndividualError('date', strings.REQUIRED_FIELD);
       return false;
     } else if (isNaN(value.getTime())) {
       setIndividualError(id, strings.INVALID_DATE);
       return false;
-    } else if (isInTheFuture(value) && id === 'date') {
+    } else if (isInTheFuture(value, timeZone) && id === 'date') {
       setIndividualError('date', strings.NO_FUTURE_DATES);
       return false;
     } else {
@@ -473,6 +502,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 value={nurseryTransferRecord.readyByDate}
                 onChange={(value) => onChangeDate('readyByDate', value)}
                 errorText={fieldsErrors.readyByDate}
+                defaultTimeZone={timeZone}
               />
             </Grid>
           </>
@@ -485,6 +515,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             value={record.date}
             onChange={(value) => onChangeDate('date', value)}
             errorText={fieldsErrors.date}
+            defaultTimeZone={timeZone}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
