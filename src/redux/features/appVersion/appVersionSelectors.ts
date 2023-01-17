@@ -8,7 +8,7 @@ export const selectIsAppVersionStale = (state: RootState) =>
   !!state.appVersion.version && state.appVersion.version.toString().trim() !== currentAppVersion;
 
 // simple example of composable selectors
-export const selectIsAppVersionStale_EXAMPLE = createSelector(
+export const selectIsAppVersionStaleExample = createSelector(
   selectAppVersion,
   (appVersion) => appVersion && appVersion.toString().trim() !== currentAppVersion
 );

@@ -13,11 +13,12 @@ export const useAppVersion = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    // clear any existing intervals
+    clearInterval(checkInterval);
+
     // trigger initial request
     dispatch(requestAppVersion());
 
-    // clear any existing intervals
-    clearInterval(checkInterval);
 
     // setup a interval check for new versions
     checkInterval = setInterval(() => {
