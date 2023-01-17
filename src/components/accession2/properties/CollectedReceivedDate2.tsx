@@ -2,9 +2,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useTheme, Grid } from '@mui/material';
 import { DatePicker } from '@terraware/web-components';
 import { Accession2, AccessionPostRequestBody } from 'src/api/accessions2/accession';
-import { isInTheFuture } from '@terraware/web-components/utils/date';
+import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
-import { DateTime } from 'luxon';
 
 interface Props {
   onChange: (id: string, value: string) => void;
@@ -50,30 +49,28 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
   };
 
   const validateDate = useCallback(
-    (id: string, value?: any) => {
-      const date = DateTime.fromISO(value, { zone: timeZone });
-
+    (id: string, value?: string | undefined) => {
       setDateError(id, '');
-
-      if (!value || isNaN(date.toSeconds())) {
+      if (!value) {
         const required = validate && !value;
         setDateError(id, required ? strings.REQUIRED_FIELD : strings.INVALID_DATE);
         return false;
-      } else if (isInTheFuture(date.toSeconds(), timeZone)) {
+      } else if (isInTheFuture(value, timeZone)) {
         setDateError(id, strings.NO_FUTURE_DATES);
         return false;
       } else {
         return true;
       }
     },
-    [validate, timeZone]
+    [timeZone, validate]
   );
 
   const changeDate = (id: string, value?: any) => {
     setDates((curr) => ({ ...curr, [id]: value }));
 
+    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
     const valid = validateDate(id, value);
-    onChange(id, valid ? value : '');
+    onChange(id, valid ? date || '' : '');
   };
 
   useEffect(() => {
