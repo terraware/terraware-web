@@ -18,20 +18,6 @@ import { APP_PATHS } from 'src/constants';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { useOrganization } from 'src/providers/hooks';
 
-const columns: TableColumnType[] = [
-  { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
-  { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
-  { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
-  { key: 'readyQuantity', name: strings.READY, type: 'string' },
-  { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
-  { key: 'totalQuantityWithdrawn', name: strings.WITHDRAWN, type: 'string' },
-  { key: 'facility_name', name: strings.NURSERY, type: 'string' },
-  { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
-  { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
-  { key: 'quantitiesMenu', name: '', type: 'string' },
-  { key: 'withdraw', name: '', type: 'string' },
-];
-
 interface InventorySeedslingsTableProps {
   speciesId: number;
   modified: number;
@@ -55,6 +41,19 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const snackbar = useSnackbar();
   const history = useHistory();
+  const columns: TableColumnType[] = [
+    { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
+    { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
+    { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
+    { key: 'readyQuantity', name: strings.READY, type: 'string' },
+    { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
+    { key: 'totalQuantityWithdrawn', name: strings.WITHDRAWN, type: 'string' },
+    { key: 'facility_name', name: strings.NURSERY, type: 'string' },
+    { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
+    { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
+    { key: 'quantitiesMenu', name: '', type: 'string' },
+    { key: 'withdraw', name: '', type: 'string' },
+  ];
 
   useEffect(() => {
     let activeRequests = true;

@@ -49,11 +49,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const columns: TableColumnType[] = [
-  { key: 'name', name: 'Name', type: 'string' },
-  { key: 'description', name: 'Description', type: 'string' },
-];
-
 type SeedBanksListProps = {
   organization: ServerOrganization;
 };
@@ -69,6 +64,10 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const columns: TableColumnType[] = [
+    { key: 'name', name: strings.NAME, type: 'string' },
+    { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+  ];
 
   useEffect(() => {
     const getSeedBanks = () => {

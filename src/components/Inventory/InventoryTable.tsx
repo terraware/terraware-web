@@ -10,36 +10,6 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
 import Search from './Search';
 
-const columns: TableColumnType[] = [
-  {
-    key: 'species_scientificName',
-    name: strings.SPECIES,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
-  },
-  {
-    key: 'species_commonName',
-    name: strings.COMMON_NAME,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_COMMON_NAME,
-  },
-  { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
-  {
-    key: 'germinatingQuantity',
-    name: strings.GERMINATING,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-  },
-  {
-    key: 'notReadyQuantity',
-    name: strings.NOT_READY,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-  },
-  { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
-  { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
-];
-
 interface InventoryTableProps {
   results: SearchResponseElement[];
   temporalSearchValue: string;
@@ -53,6 +23,35 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
   const theme = useTheme();
+  const columns: TableColumnType[] = [
+    {
+      key: 'species_scientificName',
+      name: strings.SPECIES,
+      type: 'string',
+      tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
+    },
+    {
+      key: 'species_commonName',
+      name: strings.COMMON_NAME,
+      type: 'string',
+      tooltipTitle: strings.TOOLTIP_COMMON_NAME,
+    },
+    { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
+    {
+      key: 'germinatingQuantity',
+      name: strings.GERMINATING,
+      type: 'string',
+      tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+    },
+    {
+      key: 'notReadyQuantity',
+      name: strings.NOT_READY,
+      type: 'string',
+      tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+    },
+    { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
+    { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
+  ];
 
   const withdrawInventory = () => {
     const speciesIds = selectedRows.filter((row) => row.species_id).map((row) => `speciesId=${row.species_id}`);

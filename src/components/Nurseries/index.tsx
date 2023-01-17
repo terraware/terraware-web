@@ -21,11 +21,6 @@ type NurseriesListProps = {
   organization: ServerOrganization;
 };
 
-const columns: TableColumnType[] = [
-  { key: 'name', name: 'Name', type: 'string' },
-  { key: 'description', name: 'Description', type: 'string' },
-];
-
 export default function NurseriesList({ organization }: NurseriesListProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -35,6 +30,10 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
   const [results, setResults] = useState<Facility[]>();
   const contentRef = useRef(null);
   const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const columns: TableColumnType[] = [
+    { key: 'name', name: strings.NAME, type: 'string' },
+    { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+  ];
 
   const goToNewNursery = () => {
     const newNurseryLocation = {

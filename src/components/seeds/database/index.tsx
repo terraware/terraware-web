@@ -27,7 +27,7 @@ import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { getAllSeedBanks } from 'src/utils/organization';
 import PageHeader from '../PageHeader';
-import { COLUMNS_INDEXED, RIGHT_ALIGNED_COLUMNS } from './columns';
+import { columnsIndexed, RIGHT_ALIGNED_COLUMNS } from './columns';
 import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
@@ -166,8 +166,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
     reloadData,
     orgScopedPreferences,
   } = props;
+  const columns = columnsIndexed();
   const displayColumnDetails = displayColumnNames.map((name) => {
-    const detail = { ...COLUMNS_INDEXED[name] };
+    const detail = { ...columns[name] };
 
     // set the classname for right aligned columns
     if (RIGHT_ALIGNED_COLUMNS.indexOf(name) !== -1) {
@@ -205,7 +206,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       if (columnNames) {
         const searchSelectedColumns = columnNames.reduce((acum, value) => {
           acum.push(value);
-          const additionalColumns = COLUMNS_INDEXED[value].additionalKeys;
+          const additionalColumns = columns[value].additionalKeys;
           if (additionalColumns) {
             return acum.concat(additionalColumns);
           }

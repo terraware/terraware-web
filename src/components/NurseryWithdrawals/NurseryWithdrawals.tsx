@@ -37,17 +37,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const columns: TableColumnType[] = [
-  { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
-  { key: 'purpose', name: strings.PURPOSE, type: 'string' },
-  { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
-  { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
-  { key: 'plotNames', name: strings.TO_PLOT, type: 'string' },
-  { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
-  { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'string' },
-  { key: 'hasReassignments', name: '', type: 'string' },
-];
-
 export default function NurseryWithdrawals(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -64,6 +53,16 @@ export default function NurseryWithdrawals(): JSX.Element {
     field: 'withdrawnDate',
     direction: 'Descending',
   } as SearchSortOrder);
+  const columns: TableColumnType[] = [
+    { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
+    { key: 'purpose', name: strings.PURPOSE, type: 'string' },
+    { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
+    { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
+    { key: 'plotNames', name: strings.TO_PLOT, type: 'string' },
+    { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
+    { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'string' },
+    { key: 'hasReassignments', name: '', type: 'string' },
+  ];
 
   const onWithdrawalClicked = (withdrawal: any) => {
     history.push({
