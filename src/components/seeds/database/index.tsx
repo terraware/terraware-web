@@ -218,7 +218,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         setDisplayColumnNames(columnNames);
       }
     },
-    [setSearchColumns, setDisplayColumnNames]
+    [columns, setSearchColumns, setDisplayColumnNames]
   );
 
   useEffect(() => {
