@@ -1,3 +1,5 @@
+27020e3 Upgrade to Cypress 12.3.0 (#1043)
+94d117f SW-2721 Look up column labels at render time (#1042)
 b3047b4 Bump @mui/lab from 5.0.0-alpha.114 to 5.0.0-alpha.115 (#1035)
 7e0495a SW-2657 default date/time in seed bank time zone for withdraw accession (#1038)
 5ba62d8 Bump web-vitals from 1.1.2 to 3.1.1 (#1036)
