@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useTheme, Grid } from '@mui/material';
 import { DatePicker } from '@terraware/web-components';
 import { Accession2, AccessionPostRequestBody } from 'src/api/accessions2/accession';
-import { isInTheFuture } from '@terraware/web-components/utils';
+import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
   record: Accession2 | AccessionPostRequestBody;
   type: 'collected' | 'received';
   validate?: boolean;
+  timeZone: string;
 }
 
 export type Dates = {
@@ -17,7 +18,7 @@ export type Dates = {
   receivedDate?: any;
 };
 
-export default function CollectedReceivedDate2({ onChange, record, type, validate }: Props): JSX.Element {
+export default function CollectedReceivedDate2({ onChange, record, type, validate, timeZone }: Props): JSX.Element {
   const theme = useTheme();
 
   const [dateErrors, setDateErrors] = useState<{ [key: string]: string | undefined }>({});
@@ -25,6 +26,13 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
     collectedDate: record.collectedDate,
     receivedDate: record.receivedDate,
   });
+
+  useEffect(() => {
+    setDates({
+      collectedDate: record.collectedDate,
+      receivedDate: record.receivedDate,
+    });
+  }, [record]);
 
   const datePickerStyle = {
     '.MuiFormControl-root': {
@@ -41,30 +49,28 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
   };
 
   const validateDate = useCallback(
-    (id: string, value?: any) => {
-      const date = new Date(value);
-
+    (id: string, value?: string | undefined) => {
       setDateError(id, '');
-
-      if (!value || isNaN(date.getTime())) {
+      if (!value) {
         const required = validate && !value;
         setDateError(id, required ? strings.REQUIRED_FIELD : strings.INVALID_DATE);
         return false;
-      } else if (isInTheFuture(date)) {
+      } else if (isInTheFuture(value, timeZone)) {
         setDateError(id, strings.NO_FUTURE_DATES);
         return false;
       } else {
         return true;
       }
     },
-    [validate]
+    [timeZone, validate]
   );
 
   const changeDate = (id: string, value?: any) => {
     setDates((curr) => ({ ...curr, [id]: value }));
 
+    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
     const valid = validateDate(id, value);
-    onChange(id, valid ? value : '');
+    onChange(id, valid ? date || '' : '');
   };
 
   useEffect(() => {
@@ -84,7 +90,8 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
           value={dates.collectedDate}
           onChange={(value) => changeDate('collectedDate', value)}
           errorText={dateErrors.collectedDate}
-          maxDate={Date.now()}
+          maxDate={new Date()}
+          defaultTimeZone={timeZone}
         />
       ) : (
         <DatePicker
@@ -94,6 +101,7 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
           value={dates.receivedDate}
           onChange={(value) => changeDate('receivedDate', value)}
           errorText={dateErrors.receivedDate}
+          defaultTimeZone={timeZone}
         />
       )}
     </Grid>

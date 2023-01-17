@@ -171,8 +171,8 @@ export default function InventoryFiltersPopover({ filters, setFilters }: Invento
             </Grid>
           </Box>
           <div className={classes.footer}>
-            <Button label='Reset' onClick={onReset} size='medium' priority='secondary' type='passive' />
-            <Button label='Done' onClick={onDone} size='medium' />
+            <Button label={strings.RESET} onClick={onReset} size='medium' priority='secondary' type='passive' />
+            <Button label={strings.DONE} onClick={onDone} size='medium' />
           </div>
         </div>
       </Popover>
