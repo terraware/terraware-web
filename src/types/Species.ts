@@ -1,3 +1,5 @@
+import strings from 'src/strings';
+
 export type Species = {
   id: number;
   commonName?: string;
@@ -18,9 +20,31 @@ export type SpeciesProblemElement = {
   suggestedValue?: string;
 };
 
-export const GrowthForms = ['Tree', 'Shrub', 'Forb', 'Graminoid', 'Fern'];
+export function growthForms() {
+  return [
+    { label: strings.TREE, value: 'Tree' },
+    { label: strings.SHRUB, value: 'Shrub' },
+    { label: strings.FORB, value: 'Forb' },
+    { label: strings.GRAMINOID, value: 'Graminoid' },
+    { label: strings.FERN, value: 'Fern' },
+  ];
+}
 
-export const StorageBehaviors = ['Orthodox', 'Recalcitrant', 'Intermediate', 'Unknown'];
+export function storageBehaviors() {
+  return [
+    { label: strings.ORTHODOX, value: 'Orthodox' },
+    { label: strings.RECALCITRANT, value: 'Recalcitrant' },
+    { label: strings.INTERMEDIATE, value: 'Intermediate' },
+    { label: strings.UNKNOWN, value: 'Unknown' },
+  ];
+}
+
+export function conservationStatuses() {
+  return [
+    { label: strings.RARE, value: 'Rare' },
+    { label: strings.ENDANGERED, value: 'Endangered' },
+  ];
+}
 
 export type SpeciesWithScientificName = Species & {
   scientificName?: string;

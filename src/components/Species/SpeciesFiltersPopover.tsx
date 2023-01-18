@@ -3,11 +3,11 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-import { GrowthForms, StorageBehaviors } from 'src/types/Species';
+import { conservationStatuses, growthForms, storageBehaviors } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 import { SpeciesFiltersType } from '.';
 import Button from '../common/button/Button';
-import Select from '../common/Select/Select';
+import { Dropdown } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconContainer: {
@@ -131,11 +131,11 @@ export default function SpeciesFiltersPopover({ filters, setFilters }: SpeciesFi
           <div className={classes.title}>{strings.FILTERS}</div>
           <Grid container spacing={2} className={classes.container}>
             <Grid item xs={12}>
-              <Select
+              <Dropdown
                 id='growthForm'
                 selectedValue={temporalRecord.growthForm}
                 onChange={(value) => onChange('growthForm', value)}
-                options={GrowthForms}
+                options={growthForms()}
                 label={strings.GROWTH_FORM}
                 aria-label={strings.GROWTH_FORM}
                 placeholder={strings.SELECT}
@@ -143,11 +143,11 @@ export default function SpeciesFiltersPopover({ filters, setFilters }: SpeciesFi
               />
             </Grid>
             <Grid item xs={12}>
-              <Select
+              <Dropdown
                 id='conservationStatus'
                 selectedValue={getSelectedConservationStatusValue()}
                 onChange={(value) => onChangeConservationStatus(value)}
-                options={['Rare', 'Endangered']}
+                options={conservationStatuses()}
                 label={strings.CONSERVATION_STATUS}
                 aria-label={strings.SEED_STORAGE_BEHAVIOR}
                 placeholder={strings.SELECT}
@@ -155,11 +155,11 @@ export default function SpeciesFiltersPopover({ filters, setFilters }: SpeciesFi
               />
             </Grid>
             <Grid item xs={12}>
-              <Select
+              <Dropdown
                 id='seedStorageBehavior'
                 selectedValue={temporalRecord.seedStorageBehavior}
                 onChange={(value) => onChange('seedStorageBehavior', value)}
-                options={StorageBehaviors}
+                options={storageBehaviors()}
                 label={strings.SEED_STORAGE_BEHAVIOR}
                 aria-label={strings.SEED_STORAGE_BEHAVIOR}
                 placeholder={strings.SELECT}
