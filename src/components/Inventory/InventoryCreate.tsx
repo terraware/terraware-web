@@ -170,11 +170,11 @@ export default function CreateInventory(): JSX.Element {
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
                 <DatePicker
-                  id='dateAdded'
+                  id='addedDate'
                   label={strings.DATE_ADDED_REQUIRED}
                   aria-label={strings.DATE_ADDED_REQUIRED}
                   value={record.addedDate}
-                  onChange={(value) => changeDate('dateAdded', value)}
+                  onChange={(value) => changeDate('addedDate', value)}
                   errorText={validateFields && !record.addedDate ? strings.REQUIRED_FIELD : ''}
                   defaultTimeZone={timeZone}
                 />
