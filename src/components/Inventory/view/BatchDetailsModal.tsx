@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { useEffect, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
-import { getTodaysDateFormatted, useDeviceInfo } from '@terraware/web-components/utils';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 import NurseryDropdown from '../NurseryDropdown';
 import { Batch, CreateBatchRequestPayload } from 'src/api/types/batch';
 import { createBatch, updateBatch, updateBatchQuantities } from 'src/api/batch/batch';
@@ -13,6 +13,11 @@ import { Species } from 'src/types/Species';
 import { APP_PATHS } from 'src/constants';
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
+import isEnabled from 'src/features';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { Facility } from 'src/api/types/facilities';
+import { getNurseryById } from 'src/utils/organization';
+import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
 export interface BatchDetailsModalProps {
   open: boolean;
@@ -34,7 +39,11 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [speciesSelected, setSpeciesSelected] = useState<Species>();
-  const [facilityName, setFacilityName] = useState<string>();
+  const [facility, setFacility] = useState<Facility>();
+
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? facility : undefined);
+  const [timeZone, setTimeZone] = useState(tz.id);
 
   useEffect(() => {
     if (record) {
@@ -53,6 +62,30 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       populateSpecies();
     }
   }, [record, selectedOrganization, speciesId]);
+
+  useEffect(() => {
+    if (record?.facilityId) {
+      const newFacility = getNurseryById(selectedOrganization, record.facilityId);
+      if (newFacility.id.toString() !== facility?.id.toString()) {
+        setFacility(newFacility);
+      }
+    }
+  }, [record?.facilityId, selectedOrganization, facility?.id]);
+
+  useEffect(() => {
+    if (timeZone !== tz.id) {
+      setTimeZone(tz.id);
+    }
+  }, [tz.id, timeZone]);
+
+  useEffect(() => {
+    setRecord((previousRecord: CreateBatchRequestPayload): CreateBatchRequestPayload => {
+      return {
+        ...previousRecord,
+        addedDate: getTodaysDateFormatted(timeZone),
+      };
+    });
+  }, [timeZone, setRecord]);
 
   useEffect(() => {
     const newBatch: CreateBatchRequestPayload = {
@@ -83,7 +116,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       (f) => f.id.toString() === selectedBatch?.facilityId.toString()
     );
     if (foundFacility) {
-      setFacilityName(foundFacility.name);
+      setFacility(foundFacility);
     }
   }, [selectedBatch, speciesId, setRecord, selectedOrganization, open]);
 
@@ -140,7 +173,8 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
 
   const changeDate = (id: string, value?: any) => {
-    onChange(id, value);
+    const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
+    onChange(id, date);
   };
 
   const marginTop = {
@@ -211,7 +245,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 )}
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                <Textfield id='nursery' value={facilityName} type='text' label={strings.NURSERY} display={true} />
+                <Textfield id='nursery' value={facility?.name} type='text' label={strings.NURSERY} display={true} />
               </Grid>
             </Grid>
           )}
@@ -268,6 +302,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 aria-label={strings.ESTIMATED_READY_DATE}
                 value={record.readyByDate}
                 onChange={(value) => changeDate('readyByDate', value)}
+                defaultTimeZone={timeZone}
               />
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
@@ -296,11 +331,12 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
             <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
               <DatePicker
-                id='dateAdded'
+                id='addedDate'
                 label={strings.DATE_ADDED_REQUIRED}
                 aria-label={strings.DATE_ADDED}
                 value={record.addedDate}
-                onChange={(value) => changeDate('dateAdded', value)}
+                onChange={(value) => changeDate('addedDate', value)}
+                defaultTimeZone={timeZone}
               />
             </Grid>
             <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>

@@ -32,6 +32,6 @@ export const getAllNurseries = (organization: ServerOrganization): Facility[] =>
 
 export const getNurseryById = (organization: ServerOrganization, id: number): Facility => {
   const allNurseries = getAllNurseries(organization);
-  const found = allNurseries.filter((nurs) => nurs.id === id);
+  const found = allNurseries.filter((nurs) => nurs.id.toString() === id.toString());
   return found[0];
 };
