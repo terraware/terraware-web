@@ -1,3 +1,4 @@
+993b342 SW-2721 Look up accession quantity strings at render time (#1049)
 3a3388c SW-2659 Default date/time in nursery time zone for inventory withdraw (#1048)
 c87a4f2 SW-2721 Look up accession enum values at render time (#1046)
 4e5922c SW-2504 left nav width/padding/scroll-width updates (#1027)
