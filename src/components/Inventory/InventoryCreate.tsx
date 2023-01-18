@@ -43,6 +43,7 @@ export default function CreateInventory(): JSX.Element {
   const [selectedNursery, setSelectedNursery] = useState<Facility>();
   const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedNursery : undefined);
   const [timeZone, setTimeZone] = useState(tz.id);
+  const [addedDateChanged, setAddedDateChanged] = useState(false);
 
   const defaultBatch = (): CreateBatchRequestPayload =>
     ({
@@ -73,10 +74,10 @@ export default function CreateInventory(): JSX.Element {
     setRecord((previousRecord: CreateBatchRequestPayload): CreateBatchRequestPayload => {
       return {
         ...previousRecord,
-        addedDate: getTodaysDateFormatted(timeZone),
+        addedDate: addedDateChanged ? previousRecord.addedDate : getTodaysDateFormatted(timeZone),
       };
     });
-  }, [timeZone, setRecord]);
+  }, [timeZone, setRecord, addedDateChanged]);
 
   useEffect(() => {
     setTotalQuantity(
@@ -123,6 +124,7 @@ export default function CreateInventory(): JSX.Element {
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
 
   const changeDate = (id: string, value?: any) => {
+    setAddedDateChanged(true);
     const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
     onChange(id, date);
   };
