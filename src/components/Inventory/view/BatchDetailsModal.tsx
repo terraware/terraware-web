@@ -45,6 +45,8 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? facility : undefined);
   const [timeZone, setTimeZone] = useState(tz.id);
 
+  const [addedDateChanged, setAddedDateChanged] = useState(false);
+
   useEffect(() => {
     if (record) {
       const populateSpecies = async () => {
@@ -82,10 +84,10 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     setRecord((previousRecord: CreateBatchRequestPayload): CreateBatchRequestPayload => {
       return {
         ...previousRecord,
-        addedDate: getTodaysDateFormatted(timeZone),
+        addedDate: addedDateChanged ? previousRecord.addedDate : getTodaysDateFormatted(timeZone),
       };
     });
-  }, [timeZone, setRecord]);
+  }, [timeZone, setRecord, addedDateChanged]);
 
   useEffect(() => {
     const newBatch: CreateBatchRequestPayload = {
@@ -173,6 +175,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
 
   const changeDate = (id: string, value?: any) => {
+    setAddedDateChanged(true);
     const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
     onChange(id, date);
   };
