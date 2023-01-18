@@ -360,6 +360,7 @@ export const strings = {
   IMPORTING_ACCESSIONS: 'Importing accessions... this may take a few minutes.',
   IMPORTING_INVENTORY: 'Importing inventory...this may take a few minutes.',
   IMPORTING_SPECIES: 'Importing species...this may take a few minutes.',
+  INCLUDE_EMPTY_FIELDS: 'Include empty fields',
   INCORRECT_EMAIL_FORMAT: 'Incorrect email format.',
   IN_STORAGE: 'In Storage',
   INITIAL_SEEDS: 'Initial Seeds',
@@ -422,11 +423,13 @@ export const strings = {
   MARK_AS_COMPLETE: 'Mark as Complete',
   MARK_AS_READ: 'Mark As Read',
   MARK_AS_UNREAD: 'Mark As Unread',
+  MAX: 'Max',
   MEDIA_MIX: 'Media Mix',
   MG_MILLIGRAMS: 'mg (milligrams)',
   MG: 'mg',
   MIDDLE_OF_SEED_BANK: 'Middle of Seed Bank',
   MILLIGRAMS: 'Milligrams',
+  MIN: 'Min',
   MISSING_SUBSET_WEIGHT_ERROR_NURSERY:
     'You must enter in a subset weight in order to withdraw to a nursery. This can be done by editing the quantity of this accession.',
   MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST:
