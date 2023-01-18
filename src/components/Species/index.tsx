@@ -37,7 +37,7 @@ import TooltipLearnMoreModal, {
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PopoverMenu from '../common/PopoverMenu';
 import { DropdownItem } from '@terraware/web-components';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import PillList, { PillListItem } from '../common/PillList';
 
 type SpeciesListProps = {
@@ -128,6 +128,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const [results, setResults] = useState<Species[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
   const contentRef = useRef(null);
+  const loadedStringsForLocale = useLocalization().loadedStringsForLocale;
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
   const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
@@ -152,8 +153,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       return '';
     }
   };
-  const columns: TableColumnType[] = React.useMemo(
-    () => [
+  const columns: TableColumnType[] = React.useMemo(() => {
+    // No-op to make lint happy so it doesn't think the dependency is unused.
+    if (!loadedStringsForLocale) {
+      return [];
+    }
+
+    return [
       {
         key: 'scientificName',
         name: strings.SCIENTIFIC_NAME,
@@ -166,7 +172,12 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         type: 'string',
         tooltipTitle: strings.TOOLTIP_COMMON_NAME,
       },
-      { key: 'familyName', name: strings.FAMILY, type: 'string', tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY },
+      {
+        key: 'familyName',
+        name: strings.FAMILY,
+        type: 'string',
+        tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY,
+      },
       {
         key: 'growthForm',
         name: strings.GROWTH_FORM,
@@ -221,9 +232,8 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
           </>
         ),
       },
-    ],
-    []
-  );
+    ];
+  }, [loadedStringsForLocale]);
 
   const [selectedColumns, setSelectedColumns] = useForm(columns);
   const [handleProblemsColumn, setHandleProblemsColumn] = useState<boolean>(false);
@@ -374,6 +384,14 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     },
     [getParams, species]
   );
+
+  // When the user switches locales, we need to update the state value that contains the list of
+  // column definitions.
+  useEffect(() => {
+    if (loadedStringsForLocale) {
+      setSelectedColumns(columns);
+    }
+  }, [columns, setSelectedColumns, loadedStringsForLocale]);
 
   useEffect(() => {
     if (speciesState?.checkData) {

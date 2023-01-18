@@ -24,7 +24,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TitleDescription from '../common/TitleDescription';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
@@ -94,6 +94,7 @@ const MyAccountContent = ({
   const timeZonesEnabled = isEnabled('Timezones');
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
+  const loadedStringsForLocale = useLocalization().loadedStringsForLocale;
   const columns: TableColumnType[] = [
     { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
     { key: 'description', name: strings.DESCRIPTION, type: 'string' },
@@ -102,10 +103,10 @@ const MyAccountContent = ({
   ];
 
   useEffect(() => {
-    if (organizations) {
+    if (organizations && loadedStringsForLocale) {
       setPersonOrganizations(addRoleNames(organizations));
     }
-  }, [organizations]);
+  }, [organizations, loadedStringsForLocale]);
 
   useEffect(() => {
     setRecord(user);
