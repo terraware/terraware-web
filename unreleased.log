@@ -1,3 +1,4 @@
+c87a4f2 SW-2721 Look up accession enum values at render time (#1046)
 4e5922c SW-2504 left nav width/padding/scroll-width updates (#1027)
 0a671ff Revert "bump web-components and remove date-io" (#1044)
 fd3b4d8 bump web-components and remove date-io
