@@ -36,6 +36,7 @@ import OverviewItemCard from '../../common/OverviewItemCard';
 import BackToLink from 'src/components/common/BackToLink';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
+import { stateName } from '../../../types/Accession';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -516,7 +517,7 @@ export default function Accession2View(): JSX.Element {
                     marginTop: isMobile ? -0.5 : 0,
                   }}
                 >
-                  {accession.state}
+                  {stateName(accession.state)}
                 </Typography>
               }
             />

@@ -17,10 +17,10 @@ import {
 } from '../properties';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import PageForm from 'src/components/common/PageForm';
-import Select from 'src/components/common/Select/Select';
-import { ACCESSION_2_CREATE_STATES } from 'src/types/Accession';
+import { accessionCreateStates } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
+import { Dropdown } from '@terraware/web-components';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useOrganization } from 'src/providers';
 import { getSeedBank } from 'src/utils/organization';
@@ -197,12 +197,12 @@ export default function CreateAccession(): JSX.Element {
               timeZone={timeZone}
             />
             <Grid item xs={12} sx={marginTop}>
-              <Select
+              <Dropdown
                 id='state'
                 selectedValue={record.state}
                 onChange={(value: string) => onChange('state', value)}
                 label={strings.PROCESSING_STATUS_REQUIRED}
-                options={ACCESSION_2_CREATE_STATES}
+                options={accessionCreateStates()}
                 fullWidth={true}
               />
             </Grid>

@@ -1,9 +1,9 @@
 import React from 'react';
 import strings from 'src/strings';
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { Icon, Select } from '@terraware/web-components';
+import { Dropdown, Icon } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
-import { ACCESSION_2_STATES } from 'src/types/Accession';
+import { ACCESSION_2_STATES, AccessionState, stateName } from 'src/types/Accession';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -24,7 +24,7 @@ export default function EditState(props: EditStateProps): JSX.Element {
   const theme = useTheme();
   const { accession, record, onChange, error } = props;
 
-  const getStatesForCurrentState = () => {
+  const getStatesForCurrentState = (): AccessionState[] => {
     switch (accession.state) {
       case 'Awaiting Check-In': {
         return ['Awaiting Processing', 'Processing', 'Drying', 'In Storage', 'Used Up'];
@@ -41,15 +41,19 @@ export default function EditState(props: EditStateProps): JSX.Element {
   };
 
   const stateChanged = accession.state !== record.state;
+  const options = getStatesForCurrentState().map((state) => ({
+    label: stateName(state),
+    value: state,
+  }));
 
   return (
     <>
       <Grid item xs={12} textAlign='left'>
         <Grid item xs={12}>
-          <Select
+          <Dropdown
             label={strings.STATUS}
             placeholder={strings.SELECT}
-            options={getStatesForCurrentState()}
+            options={options}
             onChange={(value: string) => onChange('state', value)}
             selectedValue={record?.state}
             fullWidth={true}

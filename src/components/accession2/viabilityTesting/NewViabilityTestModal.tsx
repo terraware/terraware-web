@@ -1,12 +1,12 @@
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Checkbox, DatePicker, DialogBox, Select, SelectT, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, DatePicker, DialogBox, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2 } from 'src/api/accessions2/accession';
 import { putViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { Dropdown } from '@terraware/web-components';
-import { SEED_TYPES, TEST_METHODS, TEST_TYPES, TREATMENTS } from 'src/types/Accession';
+import { seedTypes, testMethods, TEST_TYPES, treatments } from 'src/types/Accession';
 import { OrganizationUser, User } from 'src/types/User';
 import { useEffect, useState } from 'react';
 import { getOrganizationUsers } from 'src/api/organization/organization';
@@ -475,7 +475,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         <Grid container item xs={12} spacing={2} textAlign='left'>
           <Grid xs={12} padding={theme.spacing(1, 3, 1, 5)}>
             <Dropdown
-              options={TEST_METHODS}
+              options={testMethods()}
               placeholder={strings.SELECT}
               onChange={(value) => onChangeTestType(value as TEST_TYPES)}
               selectedValue={record?.testType}
@@ -486,10 +486,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             />
           </Grid>
           <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-            <Select
+            <Dropdown
               label={strings.SEED_TYPE}
               placeholder={strings.SELECT}
-              options={SEED_TYPES}
+              options={seedTypes()}
               onChange={(value: string) => onChange('seedType', value)}
               selectedValue={record?.seedType}
               fullWidth={true}
@@ -512,7 +512,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           {record?.testType !== 'Cut' && (
             <>
               <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-                <Select
+                <Dropdown
                   label={strings.SUBSTRATE}
                   placeholder={strings.SELECT}
                   options={getSubstratesAccordingToType(record?.testType)}
@@ -536,10 +536,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                 />
               </Grid>
               <Grid padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-                <Select
+                <Dropdown
                   label={strings.TREATMENT}
                   placeholder={strings.SELECT}
-                  options={TREATMENTS}
+                  options={treatments()}
                   onChange={(value: string) => onChange('treatment', value)}
                   selectedValue={record?.treatment}
                   fullWidth={true}
