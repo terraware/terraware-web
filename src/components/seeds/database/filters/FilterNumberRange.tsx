@@ -4,6 +4,7 @@ import React from 'react';
 import TextField from '../../../common/TextField';
 import { FieldNodePayload } from '../../../../api/search';
 import { ArrowForward } from '@mui/icons-material';
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -71,7 +72,7 @@ export default function NumberRange(props: Props): JSX.Element {
             id='minValue'
             value={minValue}
             onChange={onChange}
-            label='Min'
+            label={strings.MIN}
             onKeyPress={(e) => onEnter(e)}
           />
         </Grid>
@@ -79,7 +80,13 @@ export default function NumberRange(props: Props): JSX.Element {
           <ArrowForward />
         </Grid>
         <Grid item xs={5}>
-          <TextField id='maxValue' value={maxValue} onChange={onChange} label='Max' onKeyPress={(e) => onEnter(e)} />
+          <TextField
+            id='maxValue'
+            value={maxValue}
+            onChange={onChange}
+            label={strings.MAX}
+            onKeyPress={(e) => onEnter(e)}
+          />
         </Grid>
       </Grid>
     </div>
