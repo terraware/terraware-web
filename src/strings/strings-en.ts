@@ -936,6 +936,7 @@ export const strings = {
   UNDO_SEND_TO_NURSERY: 'Undo Send to Nursery',
   UNEXPECTED_ERROR: 'An unexpected error occurred.',
   UNITS: 'Units',
+  UNKNOWN: 'Unknown',
   UNSPECIFIED: 'Unspecified',
   UNSURE: 'Unsure',
   UPDATE_STATUS_WARNING: 'You‘re about to update the status',
