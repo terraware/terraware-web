@@ -25,31 +25,30 @@ type ListItemContent = {
   buttonText: string;
   link: string;
 };
-
-/*TODO USE CORRECT LINKS HERE */
-const listItemContent: ListItemContent[] = [
-  {
-    icon: 'bug',
-    title: strings.TITLE_REPORT_PROBLEM,
-    description: strings.formatString(
-      strings.DESCRIPTION_REPORT_PROBLEM,
-      <i>"{process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || 'n/a'}"</i>
-    ) as string,
-    buttonText: strings.REPORT_PROBLEM,
-    link: TERRAWARE_SUPPORT_LINK,
-  },
-  {
-    icon: 'sparkles',
-    title: strings.TITLE_REQUEST_FEATURE,
-    description: strings.DESCRIPTION_REQUEST_FEATURE,
-    buttonText: strings.REQUEST_FEATURE,
-    link: TERRAWARE_SUPPORT_LINK,
-  },
-];
-
 export default function ContactUs(): JSX.Element {
   const classes = useStyles();
   const { isMobile } = useDeviceInfo();
+
+  /*TODO USE CORRECT LINKS HERE */
+  const listItemContent: ListItemContent[] = [
+    {
+      icon: 'bug',
+      title: strings.TITLE_REPORT_PROBLEM,
+      description: strings.formatString(
+        strings.DESCRIPTION_REPORT_PROBLEM,
+        <i>"{process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || 'n/a'}"</i>
+      ) as string,
+      buttonText: strings.REPORT_PROBLEM,
+      link: TERRAWARE_SUPPORT_LINK,
+    },
+    {
+      icon: 'sparkles',
+      title: strings.TITLE_REQUEST_FEATURE,
+      description: strings.DESCRIPTION_REQUEST_FEATURE,
+      buttonText: strings.REQUEST_FEATURE,
+      link: TERRAWARE_SUPPORT_LINK,
+    },
+  ];
 
   return (
     <TfMain>
