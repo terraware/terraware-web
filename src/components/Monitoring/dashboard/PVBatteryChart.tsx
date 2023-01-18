@@ -111,7 +111,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 data: stateOfChargeValues?.map((entry) => {
                   return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
                 }),
-                label: 'State of Charge',
+                label: strings.MONITORING_LABEL_STATE_OF_CHARGE,
                 showLine: true,
                 fill: false,
                 borderColor: ChartPalette.STATE_OF_CHARGE.borderColor,
@@ -121,7 +121,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 data: powerValues?.map((entry) => {
                   return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
                 }),
-                label: 'System Power',
+                label: strings.MONITORING_LABEL_SYSTEM_POWER,
                 showLine: true,
                 fill: false,
                 borderColor: ChartPalette.SYSTEM_POWER.borderColor,

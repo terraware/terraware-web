@@ -437,6 +437,12 @@ export const strings = {
   MONITORING_CARD_DESCRIPTION:
     'Add seed banks to your organization and then monitor things like temperature and humidity through their sensor kits.',
   MONITORING: 'Monitoring',
+  MONITORING_LABEL_HUMIDITY: 'Humidity',
+  MONITORING_LABEL_HUMIDITY_THRESHOLDS: 'Humidity Thresholds',
+  MONITORING_LABEL_STATE_OF_CHARGE: 'State of Charge',
+  MONITORING_LABEL_SYSTEM_POWER: 'System Power',
+  MONITORING_LABEL_TEMPERATURE: 'Temperature',
+  MONITORING_LABEL_TEMPERATURE_THRESHOLDS: 'Temperature Thresholds',
   MONTH: 'Month',
   MONTHS: 'Months',
   MOSS: 'Moss',

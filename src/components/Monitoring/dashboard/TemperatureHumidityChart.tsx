@@ -140,7 +140,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             data: temperatureValues?.map((entry) => {
               return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
             }),
-            label: 'Temperature', // Text to show in legend
+            label: strings.MONITORING_LABEL_TEMPERATURE, // Text to show in legend
             showLine: true, // If false, the line is not drawn for this dataset.
             borderColor: ChartPalette.TEMPERATURE.borderColor,
             backgroundColor: ChartPalette.TEMPERATURE.backgroundColor,
@@ -153,7 +153,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                 y: getTemperatureMinValue(selectedLocation?.name),
               };
             }),
-            label: 'Temperature Thresholds',
+            label: strings.MONITORING_LABEL_TEMPERATURE_THRESHOLDS,
             showLine: false,
             borderColor: ChartPalette.TEMPERATURE_THRESHOLD.borderColor,
             backgroundColor: ChartPalette.TEMPERATURE_THRESHOLD.backgroundColor,
@@ -179,7 +179,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             data: humidityValues?.map((entry) => {
               return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
             }),
-            label: 'Humidity',
+            label: strings.MONITORING_LABEL_HUMIDITY,
             showLine: true,
             borderColor: ChartPalette.HUMIDITY.borderColor,
             backgroundColor: ChartPalette.HUMIDITY.backgroundColor,
@@ -193,7 +193,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             data: temperatureValues?.map((entry) => {
               return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
             }),
-            label: 'Temperature',
+            label: strings.MONITORING_LABEL_TEMPERATURE,
             showLine: true,
             borderColor: ChartPalette.TEMPERATURE.borderColor,
             backgroundColor: ChartPalette.TEMPERATURE.backgroundColor,
@@ -206,7 +206,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                 y: getTemperatureMinValue(selectedLocation?.name),
               };
             }),
-            label: 'Temperature Thresholds',
+            label: strings.MONITORING_LABEL_TEMPERATURE_THRESHOLDS,
             showLine: true,
             borderColor: ChartPalette.TEMPERATURE_THRESHOLD.borderColor,
             backgroundColor: ChartPalette.TEMPERATURE_THRESHOLD.backgroundColor,
@@ -238,7 +238,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                 y: getHumidityMinValue(selectedLocation?.name),
               };
             }),
-            label: 'Humidity Thresholds',
+            label: strings.MONITORING_LABEL_HUMIDITY_THRESHOLDS,
             showLine: true,
             borderColor: ChartPalette.HUMIDITY_THRESHOLD.borderColor,
             backgroundColor: ChartPalette.HUMIDITY_THRESHOLD.backgroundColor,
@@ -268,7 +268,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             data: humidityValues?.map((entry) => {
               return { x: convertEntryTimestamp(entry.timestamp, timeZone), y: Number(entry.value) };
             }),
-            label: 'Humidity',
+            label: strings.MONITORING_LABEL_HUMIDITY,
             showLine: true,
             borderColor: ChartPalette.HUMIDITY.borderColor,
             backgroundColor: ChartPalette.HUMIDITY.backgroundColor,
