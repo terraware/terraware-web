@@ -58,13 +58,13 @@
     "worker-loader": "^3.0.8"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start:dev": "react-scripts -r @cypress/instrument-cra start",
-    "build": "react-scripts build",
-    "build-with-version": "export REACT_APP_TERRAWARE_FE_BUILD_VERSION=$(git rev-parse --short HEAD) && react-scripts build",
+    "start": "craco start",
+    "start:dev": "craco -r @cypress/instrument-cra start",
+    "build": "craco build",
+    "build-with-version": "export REACT_APP_TERRAWARE_FE_BUILD_VERSION=$(git rev-parse --short HEAD) && craco build",
     "build-version-file": "echo $(git rev-parse --short HEAD) > public/build-version.txt",
-    "test": "TZ=America/Los_Angeles react-scripts test",
-    "eject": "react-scripts eject",
+    "test": "TZ=America/Los_Angeles craco test",
+    "eject": "craco eject",
     "generate-types": "node -r esm scripts/openapi-typescript-formatter.js",
     "cy:run": "TZ=UTC cypress run",
     "cy": "TZ=UTC cypress open",
@@ -99,6 +99,7 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.0.0",
     "@cypress/code-coverage": "^3.10.0",
     "@cypress/instrument-cra": "^1.4.0",
     "cypress": "^12.3.0",
