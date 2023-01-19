@@ -7,23 +7,18 @@ import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import PageForm from 'src/components/common/PageForm';
-import { getTodaysDateFormatted } from '@terraware/web-components/utils';
+import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import useSnackbar from 'src/utils/useSnackbar';
 import { DatePicker } from '@terraware/web-components';
 import { Species2Dropdown } from '../accession2/properties';
 import { createBatch, CreateBatchRequestPayload } from 'src/api/batch/batch';
 import NurseryDropdown from './NurseryDropdown';
 import TfMain from 'src/components/common/TfMain';
-
-const defaultBatch = (): CreateBatchRequestPayload =>
-  ({
-    addedDate: getTodaysDateFormatted(),
-    facilityId: undefined,
-    speciesId: undefined,
-    germinatingQuantity: undefined,
-    notReadyQuantity: undefined,
-    readyQuantity: undefined,
-  } as unknown as CreateBatchRequestPayload);
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { Facility } from 'src/api/types/facilities';
+import { getNurseryById } from 'src/utils/organization';
+import { useOrganization } from 'src/providers';
+import isEnabled from 'src/features';
 
 const MANDATORY_FIELDS = [
   'speciesId',
@@ -42,8 +37,47 @@ export default function CreateInventory(): JSX.Element {
   const history = useHistory();
   const snackbar = useSnackbar();
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const [record, setRecord, onChange] = useForm<CreateBatchRequestPayload>(defaultBatch());
   const [totalQuantity, setTotalQuantity] = useState(0);
+  const { selectedOrganization } = useOrganization();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const [selectedNursery, setSelectedNursery] = useState<Facility>();
+  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedNursery : undefined);
+  const [timeZone, setTimeZone] = useState(tz.id);
+  const [addedDateChanged, setAddedDateChanged] = useState(false);
+
+  const defaultBatch = (): CreateBatchRequestPayload =>
+    ({
+      addedDate: getTodaysDateFormatted(timeZone),
+      facilityId: undefined,
+      speciesId: undefined,
+      germinatingQuantity: undefined,
+      notReadyQuantity: undefined,
+      readyQuantity: undefined,
+    } as unknown as CreateBatchRequestPayload);
+
+  const [record, setRecord, onChange] = useForm<CreateBatchRequestPayload>(defaultBatch());
+
+  useEffect(() => {
+    if (record.facilityId) {
+      const batchNursery = getNurseryById(selectedOrganization, record.facilityId);
+      setSelectedNursery(batchNursery);
+    }
+  }, [record.facilityId, selectedOrganization]);
+
+  useEffect(() => {
+    if (timeZone !== tz.id) {
+      setTimeZone(tz.id);
+    }
+  }, [tz.id, timeZone]);
+
+  useEffect(() => {
+    setRecord((previousRecord: CreateBatchRequestPayload): CreateBatchRequestPayload => {
+      return {
+        ...previousRecord,
+        addedDate: addedDateChanged ? previousRecord.addedDate : getTodaysDateFormatted(timeZone),
+      };
+    });
+  }, [timeZone, setRecord, addedDateChanged]);
 
   useEffect(() => {
     setTotalQuantity(
@@ -90,7 +124,9 @@ export default function CreateInventory(): JSX.Element {
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
 
   const changeDate = (id: string, value?: any) => {
-    onChange(id, value);
+    setAddedDateChanged(id === 'addedDate');
+    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
+    onChange(id, date);
   };
 
   return (
@@ -136,12 +172,13 @@ export default function CreateInventory(): JSX.Element {
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
                 <DatePicker
-                  id='dateAdded'
+                  id='addedDate'
                   label={strings.DATE_ADDED_REQUIRED}
                   aria-label={strings.DATE_ADDED_REQUIRED}
                   value={record.addedDate}
-                  onChange={(value) => changeDate('dateAdded', value)}
+                  onChange={(value) => changeDate('addedDate', value)}
                   errorText={validateFields && !record.addedDate ? strings.REQUIRED_FIELD : ''}
+                  defaultTimeZone={timeZone}
                 />
               </Grid>
 
