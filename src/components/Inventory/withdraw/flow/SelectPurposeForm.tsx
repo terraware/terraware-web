@@ -25,7 +25,6 @@ import { getAllSpecies } from 'src/api/species/species';
 import { PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageForm from 'src/components/common/PageForm';
-import ErrorMessage from 'src/components/common/ErrorMessage';
 import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';
 import { useOrganization } from 'src/providers/hooks';
 import isEnabled from 'src/features';
@@ -469,7 +468,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       onCancel={onCancel}
       onSave={onNextHandler}
       saveButtonText={saveText}
-      saveDisabled={noReadySeedlings}
     >
       <Container
         maxWidth={false}
