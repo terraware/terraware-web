@@ -270,23 +270,23 @@ function AppContent() {
       let message: string | string[] = '';
 
       if (notifyUser && notifyOrg) {
-        message = strings.formatString(
+        message = strings.formatString<any>(
           strings.TIME_ZONE_INITIALIZED_USER_ORG_MESSAGE,
           getTimeZone(timeZones, userTz.timeZone)?.longName,
-          (<Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>) as any,
+          <Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>,
           <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
         );
       } else if (notifyUser) {
-        message = strings.formatString(
+        message = strings.formatString<any>(
           strings.TIME_ZONE_INITIALIZED_USER_MESSAGE,
           getTimeZone(timeZones, userTz.timeZone)?.longName,
-          (<Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>) as any
+          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
         );
       } else if (notifyOrg) {
-        message = strings.formatString(
+        message = strings.formatString<any>(
           strings.TIME_ZONE_INITIALIZED_ORG_MESSAGE,
           getTimeZone(timeZones, orgTz.timeZone)?.longName,
-          (<Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>) as any
+          <Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>
         );
       }
 

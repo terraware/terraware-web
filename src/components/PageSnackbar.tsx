@@ -25,9 +25,9 @@ export default function PageSnackbarMessage(): JSX.Element {
   const [newVersionDetected, setNewVersionDetected] = useState<boolean>(false);
   const [snackbar, setSnackbar] = useRecoilState(snackbarAtoms.page);
 
-  const clearSnackbar = (eventType?: string) => {
+  const clearSnackbar = () => {
     setSnackbar({ ...snackbar, msg: '', title: undefined });
-    if (snackbar?.onCloseCallback && eventType !== 'clickaway') {
+    if (snackbar?.onCloseCallback) {
       try {
         snackbar?.onCloseCallback();
       } catch (e) {
@@ -38,7 +38,9 @@ export default function PageSnackbarMessage(): JSX.Element {
 
   const handleClose = (event?: any, eventType?: string) => {
     if (snackbar) {
-      clearSnackbar(eventType);
+      if (!snackbar.onCloseCallback || eventType !== 'clickaway') {
+        clearSnackbar();
+      }
     }
   };
 
