@@ -154,6 +154,7 @@ function AppContent() {
   const location = useStateLocation();
   const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences } = useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
+  const [timeZoneInitializedForOrg, setTimeZoneInitializedForOrg] = useState<number>(defaultSelectedOrg.id);
   const { isProduction } = useEnvironment();
   const { user, reloadUser } = useUser();
   const snackbar = useSnackbar();
@@ -328,10 +329,24 @@ function AppContent() {
       }
     };
 
-    if (timeZoneFeatureEnabled) {
+    if (
+      timeZoneFeatureEnabled &&
+      !isPlaceholderOrg(selectedOrganization.id) &&
+      timeZoneInitializedForOrg !== selectedOrganization.id
+    ) {
+      setTimeZoneInitializedForOrg(selectedOrganization.id);
       initializeTimeZones();
     }
-  }, [timeZones, user, selectedOrganization, snackbar, reloadUser, reloadData, timeZoneFeatureEnabled]);
+  }, [
+    reloadData,
+    reloadUser,
+    selectedOrganization,
+    snackbar,
+    timeZoneFeatureEnabled,
+    timeZoneInitializedForOrg,
+    timeZones,
+    user,
+  ]);
 
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 
