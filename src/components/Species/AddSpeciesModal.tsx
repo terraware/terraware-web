@@ -1,11 +1,11 @@
 import { Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { IconTooltip } from '@terraware/web-components';
+import { Dropdown, IconTooltip } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
-import { GrowthForms, Species, SpeciesRequestError, StorageBehaviors } from 'src/types/Species';
+import { growthForms, Species, SpeciesRequestError, storageBehaviors } from 'src/types/Species';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
@@ -288,11 +288,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           />
         </Grid>
         <Grid item xs={12}>
-          <Select
+          <Dropdown
             id='growthForm'
             selectedValue={record.growthForm}
             onChange={(value) => onChange('growthForm', value)}
-            options={GrowthForms}
+            options={growthForms()}
             label={strings.GROWTH_FORM}
             aria-label={strings.GROWTH_FORM}
             placeholder={strings.SELECT}
@@ -314,11 +314,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           />
         </Grid>
         <Grid item xs={12}>
-          <Select
+          <Dropdown
             id='seedStorageBehavior'
             selectedValue={record.seedStorageBehavior}
             onChange={(value) => onChange('seedStorageBehavior', value)}
-            options={StorageBehaviors}
+            options={storageBehaviors()}
             label={strings.SEED_STORAGE_BEHAVIOR}
             aria-label={strings.SEED_STORAGE_BEHAVIOR}
             placeholder={strings.SELECT}
