@@ -175,7 +175,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
 
   const changeDate = (id: string, value?: any) => {
-    setAddedDateChanged(true);
+    setAddedDateChanged(id === 'addedDate');
     const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
     onChange(id, date);
   };

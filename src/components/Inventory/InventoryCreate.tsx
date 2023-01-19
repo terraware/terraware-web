@@ -124,7 +124,7 @@ export default function CreateInventory(): JSX.Element {
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
 
   const changeDate = (id: string, value?: any) => {
-    setAddedDateChanged(true);
+    setAddedDateChanged(id === 'addedDate');
     const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
     onChange(id, date);
   };
