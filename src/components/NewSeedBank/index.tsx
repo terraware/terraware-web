@@ -53,7 +53,7 @@ export default function SeedBankView(): JSX.Element {
     setRecord({
       name: selectedSeedBank?.name || '',
       description: selectedSeedBank?.description,
-      id: -1,
+      id: selectedSeedBank?.id ?? -1,
       organizationId: selectedOrganization.id,
       type: 'Seed Bank',
       connectionState: 'Not Connected',

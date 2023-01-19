@@ -53,7 +53,7 @@ export default function NurseryView(): JSX.Element {
     setRecord({
       name: selectedNursery?.name || '',
       description: selectedNursery?.description,
-      id: -1,
+      id: selectedNursery?.id ?? -1,
       organizationId: selectedOrganization.id,
       type: 'Nursery',
       connectionState: 'Not Connected',
