@@ -53,7 +53,7 @@ export default function NurseryView(): JSX.Element {
     setRecord({
       name: selectedNursery?.name || '',
       description: selectedNursery?.description,
-      id: -1,
+      id: selectedNursery?.id ?? -1,
       organizationId: selectedOrganization.id,
       type: 'Nursery',
       connectionState: 'Not Connected',
@@ -77,9 +77,7 @@ export default function NurseryView(): JSX.Element {
       setDescriptionError(strings.REQUIRED_FIELD);
       return;
     }
-    const response = selectedNursery
-      ? await updateFacility({ ...record, id: selectedNursery.id } as Facility)
-      : await createFacility(record);
+    const response = selectedNursery ? await updateFacility({ ...record } as Facility) : await createFacility(record);
 
     if (response.requestSucceeded) {
       reloadData();

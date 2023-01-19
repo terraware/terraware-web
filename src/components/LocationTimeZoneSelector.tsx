@@ -6,6 +6,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import TimeZoneSelector from './TimeZoneSelector';
 
 type TimeZoneEntity = {
+  id?: number;
   timeZone?: string;
 };
 
@@ -21,6 +22,13 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
   const [lastSelected, setLastSelected] = useState<TimeZoneEntity>(location);
   const [orgTZChecked, setOrgTZChecked] = useState<boolean>(!!location.timeZone);
   const [timeZone, setTimeZone] = useState<TimeZoneDescription>(timeZoneFetcher.get(lastSelected));
+
+  useEffect(() => {
+    if (location?.id && location?.id !== -1) {
+      setLastSelected(location);
+      setTimeZone(timeZoneFetcher.get(location));
+    }
+  }, [location, timeZoneFetcher]);
 
   useEffect(() => {
     if (!location?.timeZone) {
