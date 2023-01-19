@@ -2,10 +2,10 @@ import React from 'react';
 import { Grid, Box } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
-import Pill from 'src/components/Pill';
 import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopover';
 import { getNurseryName, removeFilter } from './FilterUtils';
 import { useOrganization } from 'src/providers/hooks';
+import PillList from 'src/components/common/PillList';
 
 interface SearchProps {
   searchValue: string;
@@ -17,6 +17,15 @@ interface SearchProps {
 export default function Search(props: SearchProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { searchValue, onSearch, filters, setFilters } = props;
+
+  const filterPillData =
+    filters.facilityIds?.map((id) => {
+      return {
+        pillId: id,
+        label: strings.NURSERY,
+        value: getNurseryName(id, selectedOrganization),
+      };
+    }) || [];
 
   return (
     <>
@@ -37,14 +46,10 @@ export default function Search(props: SearchProps): JSX.Element {
         <InventoryFilters filters={filters} setFilters={setFilters} />
       </Box>
       <Grid xs={12} display='flex'>
-        {filters.facilityIds?.map((id) => (
-          <Pill
-            key={id}
-            filter={strings.NURSERY}
-            value={getNurseryName(id, selectedOrganization)}
-            onRemoveFilter={() => removeFilter(id, setFilters)}
-          />
-        ))}
+        <PillList
+          pillData={filterPillData}
+          onRemovePillFromList={(pillId: number) => removeFilter(pillId, setFilters)}
+        />
       </Grid>
     </>
   );

@@ -16,12 +16,13 @@ import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import NurseryWithdrawalsFiltersPopover from './NurseryWithdrawalsFiltersPopover';
-import Pill from '../Pill';
 import { getAllNurseries } from 'src/utils/organization';
 import { getAllSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
+import PillList from 'src/components/common/PillList';
+import Pill from 'src/components/common/Pill';
 
 export type NurseryWithdrawalsFiltersType = {
   fromNurseryIds?: string[];
@@ -263,6 +264,21 @@ export default function NurseryWithdrawals(): JSX.Element {
     }
   };
 
+  const filterPillData = (Object.keys(filters) as (keyof typeof filters)[]).flatMap(
+    (filter: keyof NurseryWithdrawalsFiltersType) => {
+      return (
+        filters[filter]?.map((value) => {
+          return {
+            pillId: value,
+            label: getFilterName(filter),
+            value: getValueForPill(filter, value),
+            onRemovePill: () => removeFilter(filter, value),
+          };
+        }) || []
+      );
+    }
+  );
+
   const onSortChange = (order: SortOrder, orderBy: string) => {
     setSearchSortOrder({
       field: orderBy as string,
@@ -311,18 +327,7 @@ export default function NurseryWithdrawals(): JSX.Element {
               <NurseryWithdrawalsFiltersPopover filters={filters} setFilters={setFilters} species={species} />
             </Grid>
             <Grid xs={12} display='flex' sx={{ marginBottom: 2 }}>
-              {(Object.keys(filters) as (keyof typeof filters)[]).map((filter: keyof NurseryWithdrawalsFiltersType) => {
-                return filters[filter]?.map((value) => {
-                  return (
-                    <Pill
-                      key={value}
-                      filter={getFilterName(filter)}
-                      value={getValueForPill(filter, value)}
-                      onRemoveFilter={() => removeFilter(filter, value)}
-                    />
-                  );
-                });
-              })}
+              <PillList pillData={filterPillData} />
             </Grid>
 
             <Grid item xs={12}>
