@@ -26,12 +26,9 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
   useEffect(() => {
     if (location?.id && location?.id !== -1) {
       setLastSelected(location);
+      setTimeZone(timeZoneFetcher.get(location));
     }
-  }, [location]);
-
-  useEffect(() => {
-    setTimeZone(timeZoneFetcher.get(lastSelected));
-  }, [lastSelected, timeZoneFetcher]);
+  }, [location, timeZoneFetcher]);
 
   useEffect(() => {
     if (!location?.timeZone) {
