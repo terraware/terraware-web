@@ -15,6 +15,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import TfMain from '../common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from '../../providers/hooks';
+import { roleName } from '../../types/Organization';
 
 const useStyles = makeStyles((theme: Theme) => ({
   back: {
@@ -137,7 +138,13 @@ export default function PersonDetails(): JSX.Element {
           <TextField label={strings.LAST_NAME} id='lastName' type='text' value={person?.lastName} display={true} />
         </Grid>
         <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(2) : 0}>
-          <TextField label={strings.ROLE} id='role' type='text' value={person?.role} display={true} />
+          <TextField
+            label={strings.ROLE}
+            id='role'
+            type='text'
+            value={person ? roleName(person.role) : ''}
+            display={true}
+          />
         </Grid>
         <Grid item xs={gridSize()}>
           <TextField label={strings.DATE_ADDED} id='addedTime' type='text' value={getDateAdded()} display={true} />

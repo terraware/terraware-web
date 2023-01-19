@@ -6,7 +6,6 @@ import strings from 'src/strings';
 import { OrganizationUser } from 'src/types/User';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
-import Select from '../common/Select/Select';
 import { addOrganizationUser, updateOrganizationUser } from 'src/api/user/user';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
 import { getOrganizationUsers } from 'src/api/organization/organization';
@@ -17,6 +16,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from '../../providers/hooks';
+import { Dropdown } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleSubtitle: {
@@ -175,6 +175,15 @@ export default function PersonView(): JSX.Element {
     return '33%';
   };
 
+  const roleOptions = [
+    { label: strings.CONTRIBUTOR, value: 'Contributor' },
+    { label: strings.ADMIN, value: 'Admin' },
+    { label: strings.MANAGER, value: 'Manager' },
+  ];
+  if (newPerson.role === 'Owner') {
+    roleOptions.push({ label: strings.OWNER, value: 'Owner' });
+  }
+
   // TODO: Handle the case where we cannot find the requested person to edit in the list of people.
   return (
     <TfMain>
@@ -247,11 +256,11 @@ export default function PersonView(): JSX.Element {
               </ul>
             </Box>
             <Box width={roleSelectSize()} marginTop={theme.spacing(4)}>
-              <Select
+              <Dropdown
                 id='role'
                 label={strings.ROLE_REQUIRED}
                 onChange={onChangeRole}
-                options={['Contributor', 'Admin', 'Manager']}
+                options={roleOptions}
                 disabled={newPerson.role === 'Owner'}
                 selectedValue={newPerson.role}
                 fullWidth
