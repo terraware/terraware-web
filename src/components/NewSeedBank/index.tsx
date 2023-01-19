@@ -78,7 +78,7 @@ export default function SeedBankView(): JSX.Element {
       return;
     }
     if (selectedSeedBank) {
-      const response = await updateFacility({ ...record, id: selectedSeedBank.id } as Facility);
+      const response = await updateFacility({ ...record } as Facility);
       if (response.requestSucceeded) {
         reloadData();
         snackbar.toastSuccess(strings.CHANGES_SAVED);
