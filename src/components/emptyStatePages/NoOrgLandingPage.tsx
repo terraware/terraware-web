@@ -57,16 +57,16 @@ const EMPTY_STATE_CONTENT_STYLES = {
   listContainerVerticalMargin: '48px',
 };
 
-const LIST_ITEM_CONTENT: ListItemContent[] = [
-  { icon: 'organization', title: strings.ORGANIZATION, description: strings.DESCRIPTION_ORGANIZATION },
-  { icon: 'people', title: strings.PEOPLE, description: strings.DESCRIPTION_PEOPLE },
-  { icon: 'species2', title: strings.SPECIES, description: strings.DESCRIPTION_SPECIES },
-];
-
 export default function NoOrgLandingPage(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
+
+  const listItemContents: ListItemContent[] = [
+    { icon: 'organization', title: strings.ORGANIZATION, description: strings.DESCRIPTION_ORGANIZATION },
+    { icon: 'people', title: strings.PEOPLE, description: strings.DESCRIPTION_PEOPLE },
+    { icon: 'species2', title: strings.SPECIES, description: strings.DESCRIPTION_SPECIES },
+  ];
 
   return (
     <main className={classes.main}>
@@ -76,7 +76,7 @@ export default function NoOrgLandingPage(): JSX.Element {
         <EmptyStateContent
           title={strings.TITLE_WELCOME}
           subtitle={strings.SUBTITLE_GET_STARTED}
-          listItems={LIST_ITEM_CONTENT}
+          listItems={listItemContents}
           buttonText={strings.CREATE_ORGANIZATION}
           onClickButton={() => setIsOrgModalOpen(true)}
           footnote={[strings.FOOTNOTE_WAIT_FOR_INVITATION_1, strings.FOOTNOTE_WAIT_FOR_INVITATION_2]}
