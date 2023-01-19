@@ -18,7 +18,7 @@ import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/api/typ
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { APP_PATHS } from 'src/constants';
 import Divisor from 'src/components/common/Divisor';
-import { DatePicker, Dropdown, Textfield, DropdownItem } from '@terraware/web-components';
+import { DatePicker, Dropdown, Textfield, DropdownItem, IconTooltip } from '@terraware/web-components';
 import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { getAllSpecies } from 'src/api/species/species';
@@ -413,15 +413,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       if (!hasReadyQuantities) {
         if (!noReadySeedlings) {
           setNoReadySeedlings(true);
-          snackbar.toastError(
-            strings.NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_DESCRIPTION,
-            strings.NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_TITLE
-          );
+          updateField('purpose', NurseryWithdrawalPurposes.NURSERY_TRANSFER);
+          setIsNurseryTransfer(true);
         }
         return;
       }
     }
-    setNoReadySeedlings(false);
   }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, OUTPLANT, batches]);
 
   useEffect(() => {
@@ -455,6 +452,15 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const totalReadyQuantity = useMemo(() => {
     return batchesFromNursery.reduce((acc, batch) => acc + (+batch.readyQuantity || 0), 0);
   }, [batchesFromNursery]);
+
+  const getOutplantLabel = () => {
+    return (
+      <>
+        {OUTPLANT}
+        {noReadySeedlings && <IconTooltip placement='top' title={strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS} />}
+      </>
+    );
+  };
 
   return (
     <PageForm
@@ -512,12 +518,18 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   {strings.PURPOSE_REQUIRED}
                 </FormLabel>
                 <RadioGroup name='radio-buttons-purpose' value={localRecord.purpose} onChange={onChangePurpose}>
-                  {!contributor && <FormControlLabel value={OUTPLANT} control={<Radio />} label={strings.OUTPLANT} />}
+                  {!contributor && (
+                    <FormControlLabel
+                      value={OUTPLANT}
+                      control={<Radio />}
+                      label={getOutplantLabel()}
+                      disabled={noReadySeedlings}
+                    />
+                  )}
                   <FormControlLabel value={NURSERY_TRANSFER} control={<Radio />} label={strings.NURSERY_TRANSFER} />
                   <FormControlLabel value={DEAD} control={<Radio />} label={strings.DEAD} />
                   <FormControlLabel value={OTHER} control={<Radio />} label={strings.OTHER} />
                 </RadioGroup>
-                {noReadySeedlings && <ErrorMessage message={strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS} />}
               </FormControl>
             </Grid>
             <Grid display='flex'>
