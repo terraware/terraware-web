@@ -121,19 +121,26 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
   }, [selectedOrganization, plantingSites, snackbar]);
 
+  const updatePurpose = useCallback(
+    (value: string) => {
+      updateField('purpose', value);
+      if (value === NURSERY_TRANSFER) {
+        setIsNurseryTransfer(true);
+      } else {
+        setIsNurseryTransfer(false);
+      }
+      const outplant = value === OUTPLANT;
+      setIsOutplant(outplant);
+      if (outplant) {
+        fetchPlantingSites();
+      }
+    },
+    [NURSERY_TRANSFER, OUTPLANT, fetchPlantingSites]
+  );
+
   const onChangePurpose = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = (event.target as HTMLInputElement).value;
-    updateField('purpose', value);
-    if (value === NURSERY_TRANSFER) {
-      setIsNurseryTransfer(true);
-    } else {
-      setIsNurseryTransfer(false);
-    }
-    const outplant = value === OUTPLANT;
-    setIsOutplant(outplant);
-    if (outplant) {
-      fetchPlantingSites();
-    }
+    updatePurpose(value);
   };
 
   const onChangePlantingSite = (value: string) => {
@@ -412,13 +419,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       if (!hasReadyQuantities) {
         if (!noReadySeedlings) {
           setNoReadySeedlings(true);
-          updateField('purpose', NurseryWithdrawalPurposes.NURSERY_TRANSFER);
-          setIsNurseryTransfer(true);
+          updatePurpose(NurseryWithdrawalPurposes.NURSERY_TRANSFER);
         }
         return;
       }
     }
-  }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, OUTPLANT, batches]);
+  }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, OUTPLANT, batches, updatePurpose]);
 
   useEffect(() => {
     const fetchSpecies = async () => {
