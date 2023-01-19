@@ -498,7 +498,7 @@ function AppContent() {
               <PersonDetails />
             </Route>
             <Route exact path={APP_PATHS.PEOPLE}>
-              <People reloadData={reloadData} />
+              <People />
             </Route>
             <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
               <NewSeedBank />

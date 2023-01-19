@@ -12,7 +12,7 @@ import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { AllOrganizationRoles } from 'src/types/Organization';
-import { OrganizationUser, User } from 'src/types/User';
+import { OrganizationUser } from 'src/types/User';
 import TfMain from '../common/TfMain';
 import TableCellRenderer from './TableCellRenderer';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -30,7 +30,7 @@ import TextField from '../common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
 import { search, SearchNodePayload } from 'src/api/search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { useOrganization } from '../../providers/hooks';
+import { useUser, useOrganization } from '../../providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -61,13 +61,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type PeopleListProps = {
-  reloadData?: () => void;
-  user?: User;
-};
-
-export default function PeopleList({ reloadData, user }: PeopleListProps): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+export default function PeopleList(): JSX.Element {
+  const { selectedOrganization, reloadData } = useOrganization();
+  const { user } = useUser();
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();

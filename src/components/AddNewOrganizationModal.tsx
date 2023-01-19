@@ -86,7 +86,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         strings.ORGANIZATION_CREATED_MSG,
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
       );
-      reloadData();
+      reloadData(response.organization.id);
       history.push({ pathname: APP_PATHS.HOME });
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);

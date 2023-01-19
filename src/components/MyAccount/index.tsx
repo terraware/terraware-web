@@ -6,7 +6,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { roleName, ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
@@ -30,13 +30,6 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
-
-const columns: TableColumnType[] = [
-  { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
-  { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-  { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
-  { key: 'role', name: strings.ROLE, type: 'string' },
-];
 
 type MyAccountProps = {
   organizations?: ServerOrganization[];
@@ -62,6 +55,20 @@ type MyAccountContentProps = {
   reloadData?: () => void;
 };
 
+/**
+ * Details of membership in an organization, with an additional property for the localized name
+ * of the user's role.
+ */
+type PersonOrganization = ServerOrganization & { roleName: string };
+
+function addRoleName(organization: ServerOrganization): PersonOrganization {
+  return { ...organization, roleName: roleName(organization.role) };
+}
+
+function addRoleNames(organizations: ServerOrganization[]): PersonOrganization[] {
+  return organizations.map(addRoleName);
+}
+
 const MyAccountContent = ({
   user,
   organizations,
@@ -71,8 +78,8 @@ const MyAccountContent = ({
 }: MyAccountContentProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const [selectedRows, setSelectedRows] = useState<ServerOrganization[]>([]);
-  const [personOrganizations, setPersonOrganizations] = useState<ServerOrganization[]>([]);
+  const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
+  const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
   const history = useHistory();
   const [record, setRecord, onChange] = useForm<User>(user);
   const [removedOrg, setRemovedOrg] = useState<ServerOrganization>();
@@ -87,10 +94,16 @@ const MyAccountContent = ({
   const timeZonesEnabled = isEnabled('Timezones');
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
+  const columns: TableColumnType[] = [
+    { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
+    { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+    { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
+    { key: 'roleName', name: strings.ROLE, type: 'string' },
+  ];
 
   useEffect(() => {
     if (organizations) {
-      setPersonOrganizations(organizations);
+      setPersonOrganizations(addRoleNames(organizations));
     }
   }, [organizations]);
 
@@ -127,7 +140,7 @@ const MyAccountContent = ({
 
   const onCancel = () => {
     if (organizations) {
-      setPersonOrganizations(organizations);
+      setPersonOrganizations(addRoleNames(organizations));
     }
     setRemovedOrg(undefined);
     setSelectedRows([]);

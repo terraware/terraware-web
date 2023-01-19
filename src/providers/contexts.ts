@@ -21,7 +21,7 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
   organizations: [],
   userPreferences: {},
   orgPreferences: {},
-  reloadData: () => {
+  reloadData: (selectedOrgId?: number) => {
     // default no-op implementation
     return;
   },

@@ -17,7 +17,7 @@ export type ProvidedOrganizationData = {
   organizations: ServerOrganization[];
   userPreferences: PreferencesType;
   orgPreferences: PreferencesType;
-  reloadData: () => void;
+  reloadData: (selectedOrgId?: number) => void;
   reloadPreferences: () => void;
   bootstrapped: boolean;
 };
