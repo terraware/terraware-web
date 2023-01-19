@@ -1,3 +1,4 @@
+6be960c SW-2738 Show correct time zone when editing a seed bank or nursery (#1056)
 8ea6057 SW-2741 Fix web-app url based org navigation (#1057)
 9e2b58b SW-2721 Look up species dropdown values at render time (#1047)
 5536fee SW-2658 Default date/time in nursery time zone for inventory add batch (#1045)
