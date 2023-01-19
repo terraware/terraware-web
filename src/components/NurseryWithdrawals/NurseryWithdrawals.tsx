@@ -22,7 +22,6 @@ import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
 import PillList from 'src/components/common/PillList';
-import Pill from 'src/components/common/Pill';
 
 export type NurseryWithdrawalsFiltersType = {
   fromNurseryIds?: string[];

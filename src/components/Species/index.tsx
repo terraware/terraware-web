@@ -19,7 +19,6 @@ import { FieldNodePayload, search, searchCsv, SearchNodePayload } from 'src/api/
 import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
-import Pill from 'src/components/common/Pill';
 import ImportSpeciesModal from './ImportSpeciesModal';
 import CheckDataModal from './CheckDataModal';
 import SpeciesCellRenderer from './TableCellRenderer';
