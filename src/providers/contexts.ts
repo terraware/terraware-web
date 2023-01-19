@@ -20,7 +20,7 @@ export const defaultSelectedOrg: ServerOrganization = {
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
   organizations: [],
   orgScopedPreferences: {},
-  reloadData: () => {
+  reloadData: (selectedOrgId?: number) => {
     // default no-op implementation
     return;
   },
