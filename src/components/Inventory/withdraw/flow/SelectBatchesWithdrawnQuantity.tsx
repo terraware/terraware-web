@@ -4,11 +4,12 @@ import PageForm from 'src/components/common/PageForm';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import strings from 'src/strings';
 import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/api/types/batch';
-import { ErrorBox, Table, TableColumnType } from '@terraware/web-components';
+import { ErrorBox, TableColumnType } from '@terraware/web-components';
 import WithdrawalBatchesCellRenderer from './WithdrawalBatchesCellRenderer';
 import useForm from 'src/utils/useForm';
 import { makeStyles } from '@mui/styles';
 import { useOrganization } from 'src/providers/hooks';
+import Table from 'src/components/common/table';
 
 type SelectBatchesWithdrawnQuantityProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
