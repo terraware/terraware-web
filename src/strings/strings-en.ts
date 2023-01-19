@@ -856,6 +856,12 @@ export const strings = {
   TIME_PERIOD: 'Time Period',
   TIME_ZONE_DEFAULT_USER: 'Time zone defaulted to user time zone.',
   TIME_ZONE_DEFAULT_UTC: 'Time zone defaulted to UTC.',
+  TIME_ZONE_INITIALIZED_TITLE: 'Time Zone Set',
+  TIME_ZONE_INITIALIZED_ORG_MESSAGE:
+    "Your organization's time zone was updated to {0} zone. You can edit this setting from Settings > {1}.",
+  TIME_ZONE_INITIALIZED_USER_MESSAGE: 'Your time zone was updated to {0} zone. You can edit this setting from {1}.',
+  TIME_ZONE_INITIALIZED_USER_ORG_MESSAGE:
+    "Your organization's and your time zone was updated to {0} zone. You can edit this setting from Settings > {1} and {2} respectively.",
   TIME_ZONE: 'Time Zone',
   TITLE_REPORT_PROBLEM: 'Report a Problem',
   TITLE_REQUEST_FEATURE: 'Request a Feature',
@@ -959,8 +965,6 @@ export const strings = {
   UNSPECIFIED: 'Unspecified',
   UNSURE: 'Unsure',
   UPDATE_STATUS_WARNING: 'You‘re about to update the status',
-  UPDATED_TIMEZONE_MSG: 'You can edit this setting from {0}',
-  UPDATED_TIMEZONE_TITLE: 'Your time zone was updated to {0} zone.',
   UPLOAD_PHOTO_DESCRIPTION: 'Browse or drag and drop a file (JPG, PNG).',
   UPLOAD_PHOTO_MOBILE_DESCRIPTION: 'Browse files (JPG, PNG).',
   UPLOAD_PHOTO: 'Upload Photo...',

@@ -8,7 +8,7 @@ type Location = {
 
 const DEFAULT_UTC = { id: 'Etc/UTC', longName: 'Coordinated Universal Time' };
 
-const getTimeZone = (timeZones: TimeZoneDescription[], id?: string): TimeZoneDescription | undefined => {
+export const getTimeZone = (timeZones: TimeZoneDescription[], id?: string): TimeZoneDescription | undefined => {
   if (!id) {
     return undefined;
   }

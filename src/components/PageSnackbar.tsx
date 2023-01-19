@@ -36,13 +36,11 @@ export default function PageSnackbarMessage(): JSX.Element {
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (event?: any, eventType?: string) => {
     if (snackbar) {
-      // this is needed to bypass closing of snackbar when user clicks out of a cancellable message
-      if (snackbar?.onCloseCallback) {
-        return;
+      if (!snackbar.onCloseCallback || eventType !== 'clickaway') {
+        clearSnackbar();
       }
-      clearSnackbar();
     }
   };
 

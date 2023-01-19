@@ -56,7 +56,17 @@ import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { listPlantingSites } from './api/tracking/tracking';
 import { PlantingSite } from './api/types/tracking';
-import { useOrganization } from 'src/providers';
+import isEnabled from 'src/features';
+import useSnackbar from 'src/utils/useSnackbar';
+import { TimeZoneDescription, InitializedTimeZone } from 'src/types/TimeZones';
+import { useOrganization, useTimeZones, useUser } from 'src/providers';
+import { updatePreferences } from 'src/api/preferences/preferences';
+import { initializeUserTimeZone } from 'src/api/user/user';
+import { initializeOrganizationTimeZone } from 'src/api/organization/organization';
+import { Link } from 'react-router-dom';
+import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
+import { defaultSelectedOrg } from 'src/providers/contexts';
+import strings from 'src/strings';
 import AppBootstrap from './AppBootstrap';
 
 interface StyleProps {
@@ -134,14 +144,20 @@ const MINIMAL_USER_ROUTES: string[] = [
   APP_PATHS.OPT_IN,
 ];
 
-function AppBase() {
+const isPlaceholderOrg = (id: number) => id === defaultSelectedOrg.id;
+
+function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgScopedPreferences } =
-    useOrganization();
+  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences } = useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
+  const [timeZoneInitializedForOrg, setTimeZoneInitializedForOrg] = useState<number>(defaultSelectedOrg.id);
   const { isProduction } = useEnvironment();
+  const { user, reloadUser } = useUser();
+  const snackbar = useSnackbar();
+  const timeZones = useTimeZones();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -169,7 +185,7 @@ function AppBase() {
 
   const reloadSpecies = useCallback(() => {
     const populateSpecies = async () => {
-      if (selectedOrganization) {
+      if (!isPlaceholderOrg(selectedOrganization.id)) {
         const response = await getAllSpecies(selectedOrganization.id);
         if (response.requestSucceeded) {
           setSpecies(response.species);
@@ -185,7 +201,7 @@ function AppBase() {
 
   const reloadTracking = useCallback(() => {
     const populatePlantingSites = async () => {
-      if (selectedOrganization) {
+      if (!isPlaceholderOrg(selectedOrganization.id)) {
         const response = await listPlantingSites(selectedOrganization.id, true);
         if (response.requestSucceeded) {
           setPlantingSites(response.sites || []);
@@ -213,7 +229,7 @@ function AppBase() {
   }, [plantingSites]);
 
   const setDefaults = useCallback(() => {
-    if (selectedOrganization.id) {
+    if (!isPlaceholderOrg(selectedOrganization.id)) {
       setAccessionsDisplayColumns(DefaultColumns.fields);
       setWithdrawalCreated(false);
     }
@@ -237,10 +253,103 @@ function AppBase() {
     }
   }, [type]);
 
+  useEffect(() => {
+    const getDefaultTimeZone = (): TimeZoneDescription => {
+      const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      return getTimeZone(timeZones, browserTimeZone) || getUTC(timeZones);
+    };
+
+    const notifyTimeZoneUpdates = async (userTz: InitializedTimeZone, orgTz: InitializedTimeZone) => {
+      const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
+      const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
+      if (!notifyUser && !notifyOrg) {
+        return;
+      }
+
+      let message: string | string[] = '';
+
+      if (notifyUser && notifyOrg) {
+        message = strings.formatString<any>(
+          strings.TIME_ZONE_INITIALIZED_USER_ORG_MESSAGE,
+          getTimeZone(timeZones, userTz.timeZone)?.longName,
+          <Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>,
+          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
+        );
+      } else if (notifyUser) {
+        message = strings.formatString<any>(
+          strings.TIME_ZONE_INITIALIZED_USER_MESSAGE,
+          getTimeZone(timeZones, userTz.timeZone)?.longName,
+          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
+        );
+      } else if (notifyOrg) {
+        message = strings.formatString<any>(
+          strings.TIME_ZONE_INITIALIZED_ORG_MESSAGE,
+          getTimeZone(timeZones, orgTz.timeZone)?.longName,
+          <Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>
+        );
+      }
+
+      snackbar.pageInfo(message, strings.TIME_ZONE_INITIALIZED_TITLE, () => {
+        if (notifyUser) {
+          updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
+        }
+        if (notifyOrg) {
+          updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
+        }
+      });
+    };
+
+    const initializeTimeZones = async () => {
+      if (!user) {
+        return;
+      }
+
+      const userTz: InitializedTimeZone = await initializeUserTimeZone(user, getDefaultTimeZone().id);
+      if (!userTz.timeZone) {
+        return;
+      }
+
+      let orgTz: InitializedTimeZone = {};
+      if (!isPlaceholderOrg(selectedOrganization.id)) {
+        orgTz = await initializeOrganizationTimeZone(selectedOrganization, userTz.timeZone);
+      }
+
+      if (userTz.updated) {
+        reloadUser();
+      }
+
+      if (orgTz.updated) {
+        reloadData();
+      }
+
+      if (!userTz.updated && !orgTz.updated) {
+        notifyTimeZoneUpdates(userTz, orgTz);
+      }
+    };
+
+    if (
+      timeZoneFeatureEnabled &&
+      !isPlaceholderOrg(selectedOrganization.id) &&
+      timeZoneInitializedForOrg !== selectedOrganization.id
+    ) {
+      setTimeZoneInitializedForOrg(selectedOrganization.id);
+      initializeTimeZones();
+    }
+  }, [
+    reloadData,
+    reloadUser,
+    selectedOrganization,
+    snackbar,
+    timeZoneFeatureEnabled,
+    timeZoneInitializedForOrg,
+    timeZones,
+    user,
+  ]);
+
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 
   const selectedOrgHasFacilityType = (facilityType: FacilityType): boolean => {
-    if (selectedOrganization && selectedOrganization.facilities) {
+    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrganization.facilities) {
       return selectedOrganization.facilities.some((facility: any) => {
         return facility.type === facilityType;
       });
@@ -256,14 +365,14 @@ function AppBase() {
   const selectedOrgHasPlantingSites = (): boolean => plantingSites.length > 0;
 
   const getSeedBanksView = (): JSX.Element => {
-    if (selectedOrganization && selectedOrgHasSeedBanks()) {
+    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasSeedBanks()) {
       return <SeedBanks organization={selectedOrganization} />;
     }
     return <EmptyStatePage pageName={'SeedBanks'} />;
   };
 
   const getNurseriesView = (): JSX.Element => {
-    if (selectedOrganization && selectedOrgHasNurseries()) {
+    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasNurseries()) {
       return <Nurseries organization={selectedOrganization} />;
     }
     return <EmptyStatePage pageName={'Nurseries'} />;
@@ -364,7 +473,7 @@ function AppBase() {
                 hasSeedBanks={selectedOrgHasSeedBanks()}
                 hasSpecies={selectedOrgHasSpecies()}
                 reloadData={reloadData}
-                orgScopedPreferences={orgScopedPreferences}
+                orgScopedPreferences={orgPreferences}
               />
             </Route>
             <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
@@ -533,7 +642,7 @@ function AppBase() {
 export default function App(): JSX.Element {
   return (
     <AppBootstrap>
-      <AppBase />
+      <AppContent />
     </AppBootstrap>
   );
 }

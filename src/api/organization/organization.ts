@@ -3,6 +3,9 @@ import { ServerOrganization } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
 import { Facility } from '../types/facilities';
 import { OrganizationUser } from 'src/types/User';
+import { InitializedTimeZone } from 'src/types/TimeZones';
+import { getCurrentUserPreferences, updatePreferences } from 'src/api/preferences/preferences';
+import { isAdmin } from 'src/utils/organization';
 
 const ORGANIZATIONS = '/api/v1/organizations';
 type ListOrganizationsResponsePayload =
@@ -143,7 +146,10 @@ export type UpdateOrganizationResponse = {
 type SimpleSuccessResponsePayload =
   paths[typeof UPDATE_ORGANIZATION]['put']['responses'][200]['content']['application/json'];
 
-export async function updateOrganization(organization: ServerOrganization): Promise<UpdateOrganizationResponse> {
+export async function updateOrganization(
+  organization: ServerOrganization,
+  skipAcknowledgeTimeZone?: boolean
+): Promise<UpdateOrganizationResponse> {
   const response: UpdateOrganizationResponse = {
     requestSucceeded: true,
   };
@@ -161,6 +167,8 @@ export async function updateOrganization(organization: ServerOrganization): Prom
 
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
+    } else if (organization.timeZone && !skipAcknowledgeTimeZone) {
+      await updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), organization.id);
     }
   } catch {
     response.requestSucceeded = false;
@@ -250,3 +258,31 @@ export async function deleteOrganization(organizationId: number): Promise<Update
   }
   return response;
 }
+
+// initialize time zone (if not already set)
+export const initializeOrganizationTimeZone = async (
+  organization: ServerOrganization,
+  timeZone: string
+): Promise<InitializedTimeZone> => {
+  const { timeZoneAcknowledgedOnMs } = getCurrentUserPreferences(organization.id);
+
+  const initializedTimeZone: InitializedTimeZone = {
+    timeZoneAcknowledgedOnMs,
+  };
+
+  if (!isAdmin(organization)) {
+    return initializedTimeZone;
+  }
+
+  if (!organization.timeZone) {
+    const response = await updateOrganization({ ...organization, timeZone }, true);
+    if (response.requestSucceeded) {
+      initializedTimeZone.updated = true;
+      initializedTimeZone.timeZone = timeZone;
+    }
+  } else {
+    initializedTimeZone.timeZone = organization.timeZone;
+  }
+
+  return initializedTimeZone;
+};
