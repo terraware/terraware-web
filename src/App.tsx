@@ -87,9 +87,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: theme.palette.TwClrBgGhostActive,
       },
-      '&::-webkit-scrollbar': {
-        width: '4px',
-      },
+    },
+    '*::-webkit-scrollbar': {
+      width: '4px !important',
     },
   },
   content: {
