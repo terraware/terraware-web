@@ -1,3 +1,4 @@
+ec0387a SW-2751 Use 4px width on all scrollbars in web-app (#1059)
 7eda846 SW-2613 Disable outplant option on withdraw when no seeds are ready (#1058)
 6be960c SW-2738 Show correct time zone when editing a seed bank or nursery (#1056)
 8ea6057 SW-2741 Fix web-app url based org navigation (#1057)
