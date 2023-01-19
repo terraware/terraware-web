@@ -55,7 +55,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
       <CellRenderer
         index={index}
         column={column}
-        value={row.species_id ? createLinkToInventoryDetail(value) : `<${strings.DELETED_SPECIES}>`}
+        value={row.species_id ? createLinkToInventoryDetail(value) : strings.DELETED_SPECIES}
         row={row}
         className={classes.text}
       />

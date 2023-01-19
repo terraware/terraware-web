@@ -205,7 +205,7 @@ export const strings = {
   DELETE_VIABILITY_TEST_MESSAGE: 'You’re about to delete viability test {0}.',
   DELETE_VIABILITY_TEST: 'Delete Viability Test',
   DELETE: 'Delete',
-  DELETED_SPECIES: 'deleted species',
+  DELETED_SPECIES: '<deleted species>',
   DESCRIPTION_NOTES: 'Description/Notes',
   DESCRIPTION_ORGANIZATION: 'Your organization may include people, and species.',
   DESCRIPTION_PEOPLE: 'Invite those who contribute to the organization’s success.',
