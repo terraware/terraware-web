@@ -58,12 +58,12 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const reloadPreferences = useCallback(() => {
     const getUserPreferences = async () => {
       const response = await getPreferences();
-      if (organizations && response.requestSucceeded) {
+      if (response.requestSucceeded) {
         setPreferencesOrg(response.preferences);
       }
     };
     getUserPreferences();
-  }, [organizations, setPreferencesOrg]);
+  }, [setPreferencesOrg]);
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
     selectedOrganization: selectedOrganization || defaultSelectedOrg,
@@ -110,7 +110,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [reloadOrgPreferences, selectedOrganization]);
 
   useEffect(() => {
-    if (organizations && preferencesOrg) {
+    if (organizations?.length && preferencesOrg) {
       const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
       setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {

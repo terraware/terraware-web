@@ -14,7 +14,7 @@ export type ProvidedOrganizationData = {
   setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
   organizations: ServerOrganization[];
   orgScopedPreferences: { [key: string]: unknown } | undefined;
-  reloadData: () => void;
+  reloadData: (selectedOrgId?: number) => void;
   reloadPreferences: () => void;
   bootstrapped: boolean;
 };
