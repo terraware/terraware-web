@@ -152,7 +152,6 @@ function AppContent() {
   const location = useStateLocation();
   const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences } = useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
-  const [timeZoneInitializedForOrg, setTimeZoneInitializedForOrg] = useState<number>(defaultSelectedOrg.id);
   const { isProduction } = useEnvironment();
   const { user, reloadUser } = useUser();
   const snackbar = useSnackbar();
@@ -289,13 +288,16 @@ function AppContent() {
         );
       }
 
-      snackbar.pageInfo(message, strings.TIME_ZONE_INITIALIZED_TITLE, () => {
-        if (notifyUser) {
-          updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
-        }
-        if (notifyOrg) {
-          updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
-        }
+      snackbar.pageInfo(message, strings.TIME_ZONE_INITIALIZED_TITLE, {
+        label: strings.GOT_IT,
+        apply: () => {
+          if (notifyUser) {
+            updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
+          }
+          if (notifyOrg) {
+            updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
+          }
+        },
       });
     };
 
@@ -327,12 +329,7 @@ function AppContent() {
       }
     };
 
-    if (
-      timeZoneFeatureEnabled &&
-      !isPlaceholderOrg(selectedOrganization.id) &&
-      timeZoneInitializedForOrg !== selectedOrganization.id
-    ) {
-      setTimeZoneInitializedForOrg(selectedOrganization.id);
+    if (timeZoneFeatureEnabled && !isPlaceholderOrg(selectedOrganization.id)) {
       initializeTimeZones();
     }
   }, [
@@ -341,7 +338,6 @@ function AppContent() {
     selectedOrganization,
     snackbar,
     timeZoneFeatureEnabled,
-    timeZoneInitializedForOrg,
     timeZones,
     user,
   ]);
