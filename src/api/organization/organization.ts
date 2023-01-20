@@ -114,6 +114,7 @@ export async function createOrganization(organization: ServerOrganization) {
       description: organization.description,
       countryCode: organization.countryCode,
       countrySubdivisionCode: organization.countrySubdivisionCode,
+      timeZone: organization.timeZone,
     };
     const serverResponse: UpdateOrganizationResponsePayload = (await axios.post(ORGANIZATIONS, newOrganization)).data;
 

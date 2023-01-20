@@ -10,10 +10,11 @@ export type TimeZoneSelectorProps = {
   disabled?: boolean;
   label?: string;
   tooltip?: string;
+  errorText?: string;
 };
 
 export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Element {
-  const { onTimeZoneSelected, selectedTimeZone, disabled, label, tooltip } = props;
+  const { onTimeZoneSelected, selectedTimeZone, disabled, label, tooltip, errorText } = props;
   const timeZones = useTimeZones();
 
   const tzToDropdownItem = (tz?: TimeZoneDescription) =>
@@ -52,6 +53,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
       label={label || ''}
       disabled={disabled}
       tooltipTitle={tooltip}
+      errorText={errorText}
     />
   );
 }

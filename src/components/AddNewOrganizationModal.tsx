@@ -11,10 +11,13 @@ import { Country } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { APP_PATHS } from '../constants';
 import DialogBox from './common/DialogBox/DialogBox';
-import { Grid } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import isEnabled from 'src/features';
+import TimeZoneSelector from 'src/components/TimeZoneSelector';
 
 export type AddNewOrganizationModalProps = {
   open: boolean;
@@ -27,6 +30,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const { onCancel, open } = props;
   const snackbar = useSnackbar();
   const [nameError, setNameError] = useState('');
+  const [timeZoneError, setTimeZoneError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
     id: -1,
@@ -34,6 +38,8 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     role: 'Owner',
     totalUsers: 0,
   });
+  const timeZonesEnabled = isEnabled('Timezones');
+  const theme = useTheme();
 
   useEffect(() => {
     let cancel = false;
@@ -75,11 +81,30 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     }
   };
 
+  const onTimeZoneChange = (value: TimeZoneDescription) => {
+    if (value?.id) {
+      onChange('timeZone', value.id);
+      setTimeZoneError('');
+    }
+  };
+
   const saveOrganization = async () => {
+    let hasErrors = false;
+
     if (newOrganization.name === '') {
       setNameError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    }
+
+    if (timeZonesEnabled && !newOrganization.timeZone) {
+      setTimeZoneError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
       return;
     }
+
     const response = await createOrganization(newOrganization);
     if (response.requestSucceeded && response.organization) {
       snackbar.pageSuccess(
@@ -159,6 +184,23 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             value={newOrganization.description}
           />
         </Grid>
+        {timeZonesEnabled && (
+          <>
+            <Grid item xs={12}>
+              <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtInfo} marginBottom={0.5}>
+                {strings.TIME_ZONE_REQUIRED}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
+              <TimeZoneSelector
+                onTimeZoneSelected={onTimeZoneChange}
+                selectedTimeZone={newOrganization.timeZone}
+                tooltip={strings.ORGANIZATION_TIME_ZONE_TOOLTIP}
+                errorText={newOrganization.timeZone ? '' : timeZoneError}
+              />
+            </Grid>
+          </>
+        )}
         <Grid item xs={12}>
           <Select
             label={strings.COUNTRY}
