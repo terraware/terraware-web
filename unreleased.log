@@ -1,3 +1,4 @@
+55d3661 Ignore Yalc files (#1066)
 ff168db Use Craco to override Webpack caching config (#1062)
 1eb9358 SW-2761 deafult all time zone tooltips to lorem ipusum, in preparation for design copy (#1065)
 db6eff0 SW-2732 Fix textfield for seeds remaning filter doesn't allow input (#1064)
