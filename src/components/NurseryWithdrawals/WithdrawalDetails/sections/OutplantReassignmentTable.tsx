@@ -1,8 +1,9 @@
 import { Species } from 'src/types/Species';
 import { Delivery } from 'src/api/types/tracking';
-import { Table, TableColumnType } from '@terraware/web-components';
+import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useEffect, useState } from 'react';
+import Table from 'src/components/common/table';
 
 type OutplantReassignmentTableProps = {
   species: Species[];
