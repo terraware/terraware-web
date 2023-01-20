@@ -332,15 +332,7 @@ function AppContent() {
     if (timeZoneFeatureEnabled && !isPlaceholderOrg(selectedOrganization.id)) {
       initializeTimeZones();
     }
-  }, [
-    reloadData,
-    reloadUser,
-    selectedOrganization,
-    snackbar,
-    timeZoneFeatureEnabled,
-    timeZones,
-    user,
-  ]);
+  }, [reloadData, reloadUser, selectedOrganization, snackbar, timeZoneFeatureEnabled, timeZones, user]);
 
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 

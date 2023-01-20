@@ -19,7 +19,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-
 export default function PageSnackbarMessage(): JSX.Element {
   const classes = useStyles();
 
@@ -75,17 +74,17 @@ export default function PageSnackbarMessage(): JSX.Element {
             onClose={handleClose}
             pageButtons={
               snackbar?.onCloseCallback?.label
-              ? [
-                <Button
-                  label={snackbar.onCloseCallback.label}
-                  onClick={handleClose}
-                  size='small'
-                  key={'1'}
-                  priority='secondary'
-                  type='passive'
-                />
-              ]
-              : []
+                ? [
+                    <Button
+                      label={snackbar.onCloseCallback.label}
+                      onClick={handleClose}
+                      size='small'
+                      key={'1'}
+                      priority='secondary'
+                      type='passive'
+                    />,
+                  ]
+                : []
             }
           />
         </div>
