@@ -44,12 +44,12 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is WIP.'],
   },
   {
-    name: 'Weight system',
-    preferenceName: 'enableWeightSystem',
+    name: 'Weight units',
+    preferenceName: 'enablePreferredWeightUnits',
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['Allow choosing preferred weight system'],
+    description: ['Allow choosing preferred weight units'],
     disclosure: ['This is WIP.'],
   },
 ];
