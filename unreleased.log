@@ -1,3 +1,4 @@
+8509da8 SW-2535 Pass user_id and internal_user semantics to google tag manager configuration (#989)
 b3aa577 SW-2733 Pass localization parameters to components (#1068)
 73506f3 Fix eslint warning (#1070)
 9f7bdf9 Merge tag 'v20230119.2'
