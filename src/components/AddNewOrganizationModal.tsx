@@ -169,8 +169,11 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             label={strings.ORGANIZATION_NAME_REQUIRED}
             type='text'
             id='name'
-            onChange={(value) => onChange('name', value)}
-            errorText={newOrganization.name ? '' : nameError}
+            onChange={(value) => {
+              onChange('name', value);
+              setNameError('');
+            }}
+            errorText={nameError}
             value={newOrganization.name}
           />
         </Grid>
@@ -190,7 +193,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               onTimeZoneSelected={onTimeZoneChange}
               selectedTimeZone={newOrganization.timeZone}
               tooltip={strings.ORGANIZATION_TIME_ZONE_TOOLTIP}
-              errorText={newOrganization.timeZone ? '' : timeZoneError}
+              errorText={timeZoneError}
             />
           </Grid>
         )}
