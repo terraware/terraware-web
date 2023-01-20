@@ -21,7 +21,7 @@ export default function Search(props: SearchProps): JSX.Element {
   const filterPillData =
     filters.facilityIds?.map((id) => {
       return {
-        id: id,
+        id,
         label: strings.NURSERY,
         value: getNurseryName(id, selectedOrganization),
       };
