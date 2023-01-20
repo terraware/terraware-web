@@ -21,7 +21,7 @@ export default function Search(props: SearchProps): JSX.Element {
   const filterPillData =
     filters.facilityIds?.map((id) => {
       return {
-        pillId: id,
+        id: id,
         label: strings.NURSERY,
         value: getNurseryName(id, selectedOrganization),
       };
@@ -46,10 +46,7 @@ export default function Search(props: SearchProps): JSX.Element {
         <InventoryFilters filters={filters} setFilters={setFilters} />
       </Box>
       <Grid xs={12} display='flex'>
-        <PillList
-          pillData={filterPillData}
-          onRemovePillFromList={(pillId: number) => removeFilter(pillId, setFilters)}
-        />
+        <PillList data={filterPillData} onRemove={(id: number) => removeFilter(id, setFilters)} />
       </Grid>
     </>
   );

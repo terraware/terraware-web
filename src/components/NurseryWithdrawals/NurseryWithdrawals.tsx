@@ -268,10 +268,10 @@ export default function NurseryWithdrawals(): JSX.Element {
       return (
         filters[filter]?.map((value) => {
           return {
-            pillId: value,
+            id: value,
             label: getFilterName(filter),
             value: getValueForPill(filter, value),
-            onRemovePill: () => removeFilter(filter, value),
+            onRemove: () => removeFilter(filter, value),
           };
         }) || []
       );
@@ -326,7 +326,7 @@ export default function NurseryWithdrawals(): JSX.Element {
               <NurseryWithdrawalsFiltersPopover filters={filters} setFilters={setFilters} species={species} />
             </Grid>
             <Grid xs={12} display='flex' sx={{ marginBottom: 2 }}>
-              <PillList pillData={filterPillData} />
+              <PillList data={filterPillData} />
             </Grid>
 
             <Grid item xs={12}>

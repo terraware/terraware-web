@@ -45,17 +45,17 @@ type PillProps<IdType> = {
   id: IdType;
   label: string;
   value: string;
-  onRemovePill?: (pillId: IdType) => void;
+  onRemove?: (id: IdType) => void;
 };
 
-export default function Pill<IdType>({ id, label, value, onRemovePill }: PillProps<IdType>): JSX.Element {
+export default function Pill<IdType>({ id, label, value, onRemove }: PillProps<IdType>): JSX.Element {
   const classes = useStyles();
   return (
     <div className={classes.pill}>
       <p className={classes.filter}>{label}:</p>
       <p className={classes.value}>{value}</p>
-      {onRemovePill ? (
-        <IconButton onClick={() => onRemovePill(id)} className={classes.iconContainer}>
+      {onRemove ? (
+        <IconButton onClick={() => onRemove(id)} className={classes.iconContainer}>
           <Icon name='close' className={classes.icon} />
         </IconButton>
       ) : (

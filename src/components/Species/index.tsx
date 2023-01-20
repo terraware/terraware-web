@@ -560,26 +560,26 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     const result = [];
     if (record.growthForm) {
       result.push({
-        pillId: 'growthForm',
+        id: 'growthForm',
         label: strings.GROWTH_FORM,
         value: record.growthForm,
-        onRemovePill: onRemoveFilterHandler('growthForm'),
+        onRemove: onRemoveFilterHandler('growthForm'),
       });
     }
     if (record.rare || record.endangered) {
       result.push({
-        pillId: 'rare',
+        id: 'rare',
         label: strings.CONSERVATION_STATUS,
         value: record.rare ? strings.RARE : strings.ENDANGERED,
-        onRemovePill: record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered'),
+        onRemove: record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered'),
       });
     }
     if (record.seedStorageBehavior) {
       result.push({
-        pillId: 'seedStorageBehavior',
+        id: 'seedStorageBehavior',
         label: strings.SEED_STORAGE_BEHAVIOR,
         value: record.seedStorageBehavior,
-        onRemovePill: onRemoveFilterHandler('seedStorageBehavior'),
+        onRemove: onRemoveFilterHandler('seedStorageBehavior'),
       });
     }
 
@@ -676,7 +676,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
             </IconButton>
           </Grid>
           <Grid item xs={12} className={noFilters ? '' : classes.searchBar}>
-            <PillList pillData={getFilterPillData()} />
+            <PillList data={getFilterPillData()} />
           </Grid>
           {species && species.length ? (
             <Grid item xs={12}>
