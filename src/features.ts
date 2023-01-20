@@ -43,6 +43,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     description: ['Allow choosing time zone'],
     disclosure: ['This is WIP.'],
   },
+  {
+    name: 'Weight system',
+    preferenceName: 'enableWeightSystem',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Allow choosing preferred weight system'],
+    disclosure: ['This is WIP.'],
+  },
 ];
 
 type FeatureMap = { [key: string]: Feature };
