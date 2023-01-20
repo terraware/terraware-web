@@ -347,21 +347,17 @@ const MyAccountContent = ({
             <Grid item xs={12} />
             {timeZonesEnabled && (
               <>
-                <Grid item xs={12}>
-                  <Typography fontSize='20px' fontWeight={600}>
-                    {strings.TIME_ZONE}
-                  </Typography>
-                </Grid>
                 <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
                   {edit ? (
                     <TimeZoneSelector
                       onTimeZoneSelected={onTimeZoneChange}
                       selectedTimeZone={record.timeZone}
                       tooltip={strings.MY_ACCOUNT_TIME_ZONE_TOOLTIP}
+                      label={strings.TIME_ZONE}
                     />
                   ) : (
                     <TextField
-                      label=''
+                      label={strings.TIME_ZONE}
                       id='timezone'
                       type='text'
                       value={tz.longName}
