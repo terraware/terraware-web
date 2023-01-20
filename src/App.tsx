@@ -90,12 +90,16 @@ const useStyles = makeStyles((theme: Theme) => ({
         `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`,
       backgroundAttachment: 'fixed',
       paddingRight: (props: StyleProps) => (props.isDesktop ? '8px' : undefined),
-      paddingTop: (props: StyleProps) => (props.isDesktop ? '96px' : '8px'),
+      marginTop: (props: StyleProps) => (props.isDesktop ? '96px' : '8px'),
+      paddingTop: 0,
       overflowY: 'auto',
       width: (props: StyleProps) => (props.isDesktop ? '210px' : undefined),
       zIndex: 1000,
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: theme.palette.TwClrBgGhostActive,
+      },
+      '& .nav-footer': {
+        marginBottom: (props: StyleProps) => (props.isDesktop ? '128px' : '32px'),
       },
     },
   },
