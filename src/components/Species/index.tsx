@@ -19,7 +19,6 @@ import { FieldNodePayload, search, searchCsv, SearchNodePayload } from 'src/api/
 import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
-import Pill from 'src/components/Pill';
 import ImportSpeciesModal from './ImportSpeciesModal';
 import CheckDataModal from './CheckDataModal';
 import SpeciesCellRenderer from './TableCellRenderer';
@@ -39,6 +38,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PopoverMenu from '../common/PopoverMenu';
 import { DropdownItem } from '@terraware/web-components';
 import { useOrganization } from 'src/providers/hooks';
+import PillList, { PillListItem } from '../common/PillList';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -556,6 +556,36 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     }
   };
 
+  const getFilterPillData = (): PillListItem<string>[] => {
+    const result = [];
+    if (record.growthForm) {
+      result.push({
+        id: 'growthForm',
+        label: strings.GROWTH_FORM,
+        value: record.growthForm,
+        onRemove: onRemoveFilterHandler('growthForm'),
+      });
+    }
+    if (record.rare || record.endangered) {
+      result.push({
+        id: 'rare',
+        label: strings.CONSERVATION_STATUS,
+        value: record.rare ? strings.RARE : strings.ENDANGERED,
+        onRemove: record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered'),
+      });
+    }
+    if (record.seedStorageBehavior) {
+      result.push({
+        id: 'seedStorageBehavior',
+        label: strings.SEED_STORAGE_BEHAVIOR,
+        value: record.seedStorageBehavior,
+        onRemove: onRemoveFilterHandler('seedStorageBehavior'),
+      });
+    }
+
+    return result;
+  };
+
   const getHeaderButtons = () => (
     <>
       <Box marginLeft={1} display='inline'>
@@ -646,27 +676,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
             </IconButton>
           </Grid>
           <Grid item xs={12} className={noFilters ? '' : classes.searchBar}>
-            {record.growthForm && (
-              <Pill
-                filter={strings.GROWTH_FORM}
-                value={record.growthForm}
-                onRemoveFilter={onRemoveFilterHandler('growthForm')}
-              />
-            )}
-            {(record.rare || record.endangered) && (
-              <Pill
-                filter={strings.CONSERVATION_STATUS}
-                value={record.rare ? strings.RARE : strings.ENDANGERED}
-                onRemoveFilter={record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered')}
-              />
-            )}
-            {record.seedStorageBehavior && (
-              <Pill
-                filter={strings.SEED_STORAGE_BEHAVIOR}
-                value={record.seedStorageBehavior}
-                onRemoveFilter={onRemoveFilterHandler('seedStorageBehavior')}
-              />
-            )}
+            <PillList data={getFilterPillData()} />
           </Grid>
           {species && species.length ? (
             <Grid item xs={12}>
