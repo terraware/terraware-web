@@ -352,7 +352,7 @@ const MyAccountContent = ({
                     <TimeZoneSelector
                       onTimeZoneSelected={onTimeZoneChange}
                       selectedTimeZone={record.timeZone}
-                      tooltip={strings.MY_ACCOUNT_TIME_ZONE_TOOLTIP}
+                      tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
                       label={strings.TIME_ZONE}
                     />
                   ) : (
@@ -361,7 +361,7 @@ const MyAccountContent = ({
                       id='timezone'
                       type='text'
                       value={tz.longName}
-                      tooltipTitle={record.timeZone ? undefined : strings.DEFAULT_TIME_ZONE_TOOLTIP}
+                      tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
                       display={true}
                     />
                   )}

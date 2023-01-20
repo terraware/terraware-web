@@ -163,7 +163,7 @@ export default function OrganizationView(): JSX.Element {
               type='text'
               value={currentTimeZone || utcTimeZone.longName}
               display={true}
-              tooltipTitle={currentTimeZone ? undefined : strings.TIME_ZONE_DEFAULT_UTC}
+              tooltipTitle={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
             />
           </Grid>
         )}
