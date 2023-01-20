@@ -177,32 +177,16 @@ export default function FilterCountWeight(props: Props): JSX.Element {
           />
         </Grid>
         <Grid item xs={5}>
-          <TextField
-            id='countMinValue'
-            value={countMinValue}
-            onChange={(value) => onChange('countMinValue', value)}
-            label={strings.MIN}
-          />
+          <TextField id='countMinValue' value={countMinValue} onChange={onChange} label={strings.MIN} />
         </Grid>
         <Grid item xs={1} className={classes.flexContainer}>
           <ArrowForward />
         </Grid>
         <Grid item xs={5}>
-          <TextField
-            id='countMaxValue'
-            value={countMaxValue}
-            onChange={(value) => onChange('countMaxValue', value)}
-            label={strings.MAX}
-          />
+          <TextField id='countMaxValue' value={countMaxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
         <Grid item xs={5}>
-          <TextField
-            id='seeds'
-            disabled={true}
-            value={strings.SEEDS}
-            onChange={(value) => onChange('seeds', value)}
-            label={strings.UNITS}
-          />
+          <TextField id='seeds' disabled={true} value={strings.SEEDS} onChange={onChange} label={strings.UNITS} />
         </Grid>
         <Grid item xs={12}>
           <Divisor mt={0} />
@@ -217,23 +201,13 @@ export default function FilterCountWeight(props: Props): JSX.Element {
           />
         </Grid>
         <Grid item xs={5}>
-          <TextField
-            id='weightMinValue'
-            value={weightMinValue}
-            onChange={(value) => onChange('weightMinValue', value)}
-            label={strings.MIN}
-          />
+          <TextField id='weightMinValue' value={weightMinValue} onChange={onChange} label={strings.MIN} />
         </Grid>
         <Grid item xs={1} className={classes.flexContainer}>
           <ArrowForward />
         </Grid>
         <Grid item xs={5}>
-          <TextField
-            id='weightMaxValue'
-            value={weightMaxValue}
-            onChange={(value) => onChange('weightMaxValue', value)}
-            label={strings.MAX}
-          />
+          <TextField id='weightMaxValue' value={weightMaxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
         <Grid item xs={5}>
           <Dropdown
