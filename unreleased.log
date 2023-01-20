@@ -1,3 +1,6 @@
+b3aa577 SW-2733 Pass localization parameters to components (#1068)
+73506f3 Fix eslint warning (#1070)
+9f7bdf9 Merge tag 'v20230119.2'
 2404046 SW-2743 Add opt-in flag for weight system (#1069)
 55d3661 Ignore Yalc files (#1066)
 ff168db Use Craco to override Webpack caching config (#1062)
