@@ -11,7 +11,7 @@ import { Country } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { APP_PATHS } from '../constants';
 import DialogBox from './common/DialogBox/DialogBox';
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
@@ -39,7 +39,6 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     totalUsers: 0,
   });
   const timeZonesEnabled = isEnabled('Timezones');
-  const theme = useTheme();
 
   useEffect(() => {
     let cancel = false;
@@ -185,21 +184,15 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           />
         </Grid>
         {timeZonesEnabled && (
-          <>
-            <Grid item xs={12}>
-              <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtInfo} marginBottom={0.5}>
-                {strings.TIME_ZONE_REQUIRED}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
-              <TimeZoneSelector
-                onTimeZoneSelected={onTimeZoneChange}
-                selectedTimeZone={newOrganization.timeZone}
-                tooltip={strings.ORGANIZATION_TIME_ZONE_TOOLTIP}
-                errorText={newOrganization.timeZone ? '' : timeZoneError}
-              />
-            </Grid>
-          </>
+          <Grid item xs={12}>
+            <TimeZoneSelector
+              label={strings.TIME_ZONE_REQUIRED}
+              onTimeZoneSelected={onTimeZoneChange}
+              selectedTimeZone={newOrganization.timeZone}
+              tooltip={strings.ORGANIZATION_TIME_ZONE_TOOLTIP}
+              errorText={newOrganization.timeZone ? '' : timeZoneError}
+            />
+          </Grid>
         )}
         <Grid item xs={12}>
           <Select
