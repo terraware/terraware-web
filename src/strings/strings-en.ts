@@ -560,6 +560,7 @@ export const strings = {
   ORGANIZATION_DESC: 'Manage your organization.',
   ORGANIZATION_NAME_REQUIRED: 'Organization Name *',
   ORGANIZATION_NAME: 'Organization Name',
+  ORGANIZATION_TIME_ZONE_TOOLTIP: 'Lorem ipsum dolor sit amet',
   ORGANIZATION: 'Organization',
   ORGANIZATIONS: 'Organizations',
   ORIGINAL_PLOT: 'Original Plot',
@@ -863,6 +864,7 @@ export const strings = {
   TIME_ZONE_INITIALIZED_USER_ORG_MESSAGE:
     "Your organization's and your time zone was updated to {0} zone. You can edit this setting from Settings > {1} and {2} respectively.",
   TIME_ZONE: 'Time Zone',
+  TIME_ZONE_REQUIRED: 'Time Zone *',
   TITLE_REPORT_PROBLEM: 'Report a Problem',
   TITLE_REQUEST_FEATURE: 'Request a Feature',
   TITLE_TEST_APP: 'Test our Mobile App',
