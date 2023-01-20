@@ -1,3 +1,6 @@
+7c99901 Update My Account and species list on locale change (#1073)
+7a7bce0 SW-2737 Add locale selector and gibberish locale (#1072)
+4cf85fd Redo left-nav fix for rounded scrollbar (#1071)
 f048398 SW-2721 Load strings dynamically (#1067)
 8509da8 SW-2535 Pass user_id and internal_user semantics to google tag manager configuration (#989)
 b3aa577 SW-2733 Pass localization parameters to components (#1068)
