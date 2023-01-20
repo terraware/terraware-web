@@ -49,4 +49,6 @@ axios.interceptors.response.use((x) => {
   return x;
 });
 
-export default new Proxy(axios, handler);
+const proxy = new Proxy(axios, handler);
+
+export default proxy;
