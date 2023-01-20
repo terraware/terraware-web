@@ -38,7 +38,6 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
   const timeZoneFeatureEnabled = isEnabled('Timezones');
-  const [tzChangedFromDefault, setTzChangedFromDefault] = useState<boolean>(organizationRecord.timeZone !== undefined);
 
   useEffect(() => {
     const populateCountries = async () => {
@@ -96,9 +95,6 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   };
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
-    if (newTimeZone) {
-      setTzChangedFromDefault(true);
-    }
     setOrganizationRecord((previousRecord: ServerOrganization): ServerOrganization => {
       return {
         ...previousRecord,
@@ -205,7 +201,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
                 selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
                 onTimeZoneSelected={onChangeTimeZone}
                 label={strings.TIME_ZONE}
-                tooltip={tzChangedFromDefault ? undefined : strings.TIME_ZONE_DEFAULT_USER}
+                tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
               />
             </Grid>
           )}

@@ -67,7 +67,7 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
         tooltip={tooltip}
       />
       <Checkbox
-        label={strings.USE_ORG_TZ}
+        label={strings.USE_ORGANIZATION_TIME_ZONE}
         onChange={(value) => onOrgTimeZoneChecked(value)}
         id='orgTZ'
         name='orgTZ'

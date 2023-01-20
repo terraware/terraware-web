@@ -113,7 +113,7 @@ export default function NurseryDetails(): JSX.Element {
               id='timezone'
               type='text'
               value={tz.longName}
-              tooltipTitle={nursery?.timeZone ? undefined : strings.ORG_TZ_TOOLTIP_INFO}
+              tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
               display={true}
             />
           </Grid>

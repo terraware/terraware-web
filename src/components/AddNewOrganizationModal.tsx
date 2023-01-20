@@ -192,7 +192,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               label={strings.TIME_ZONE_REQUIRED}
               onTimeZoneSelected={onTimeZoneChange}
               selectedTimeZone={newOrganization.timeZone}
-              tooltip={strings.ORGANIZATION_TIME_ZONE_TOOLTIP}
+              tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
               errorText={timeZoneError}
             />
           </Grid>

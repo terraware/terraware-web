@@ -193,7 +193,6 @@ export const strings = {
   DATE_OF_WITHDRAWAL: 'Date of Withdrawal',
   DATE: 'Date',
   DEAD: 'Dead',
-  DEFAULT_TIME_ZONE_TOOLTIP: 'Time zone default to UTC',
   DELETE_ACCESSION_MESSAGE: 'You’re about to delete accession {0}.',
   DELETE_ACCESSION: 'Delete Accession',
   DELETE_CONFIRMATION_MODAL_MAIN_TEXT:
@@ -281,7 +280,7 @@ export const strings = {
   EXPORT_RECORDS: 'Export Records',
   EXPORT: 'Export',
   FACILITY: 'Facility',
-  USE_ORG_TZ: "Use organization's time zone",
+  USE_ORGANIZATION_TIME_ZONE: "Use organization's time zone",
   FAMILY: 'Family',
   FERN: 'Fern',
   FIELD_NOTES_PLACEHOLDER: 'Important notes about seeds, fruits, or plants',
@@ -453,7 +452,6 @@ export const strings = {
   MY_ACCOUNT_DESC: 'Manage your account information.',
   MY_ACCOUNT_NOTIFICATIONS_DESC:
     'Notifications alert you when there are important updates about your organizations. You will receive them through email.',
-  MY_ACCOUNT_TIME_ZONE_TOOLTIP: 'Lorem ipsum dolor sit amet',
   MY_ACCOUNT: 'My Account',
   NAME_REQUIRED: 'Name *',
   NAME_UNKNOWN: '(name unknown)',
@@ -551,7 +549,6 @@ export const strings = {
   OPT_IN: 'Opt-In Features',
   OR_SEED_WEIGHT: 'or Seed Weight',
   OR: 'OR',
-  ORG_TZ_TOOLTIP_INFO: "This time zone is inherited from your organization's time zone",
   ORGANIZATION_CREATE_FAILED: 'Unable to create organization.',
   ORGANIZATION_CREATED_MSG:
     'You can access the organizations you’re in by clicking the arrow in the top right corner next to your profile.',
@@ -560,7 +557,6 @@ export const strings = {
   ORGANIZATION_DESC: 'Manage your organization.',
   ORGANIZATION_NAME_REQUIRED: 'Organization Name *',
   ORGANIZATION_NAME: 'Organization Name',
-  ORGANIZATION_TIME_ZONE_TOOLTIP: 'Lorem ipsum dolor sit amet',
   ORGANIZATION: 'Organization',
   ORGANIZATIONS: 'Organizations',
   ORIGINAL_PLOT: 'Original Plot',
@@ -855,16 +851,14 @@ export const strings = {
   TEST: 'Test',
   TESTING_STAFF: 'Testing Staff',
   TIME_PERIOD: 'Time Period',
-  TIME_ZONE_DEFAULT_USER: 'Time zone defaulted to user time zone.',
-  TIME_ZONE_DEFAULT_UTC: 'Time zone defaulted to UTC.',
   TIME_ZONE_INITIALIZED_TITLE: 'Time Zone Set',
   TIME_ZONE_INITIALIZED_ORG_MESSAGE:
     "Your organization's time zone was updated to {0} zone. You can edit this setting from Settings > {1}.",
   TIME_ZONE_INITIALIZED_USER_MESSAGE: 'Your time zone was updated to {0} zone. You can edit this setting from {1}.',
   TIME_ZONE_INITIALIZED_USER_ORG_MESSAGE:
     "Your organization's and your time zone was updated to {0} zone. You can edit this setting from Settings > {1} and {2} respectively.",
-  TIME_ZONE: 'Time Zone',
   TIME_ZONE_REQUIRED: 'Time Zone *',
+  TIME_ZONE: 'Time Zone',
   TITLE_REPORT_PROBLEM: 'Report a Problem',
   TITLE_REQUEST_FEATURE: 'Request a Feature',
   TITLE_TEST_APP: 'Test our Mobile App',
@@ -899,6 +893,11 @@ export const strings = {
     'A structural category consisting of individuals or species of the same general habit of growth but not necessarily related.',
   TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR:
     'The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage.',
+  TOOLTIP_TIME_ZONE_MY_ACCOUNT: 'Lorem ipsum...',
+  TOOLTIP_TIME_ZONE_NURSERY: 'Lorem ipsum...',
+  TOOLTIP_TIME_ZONE_ORGANIZATION: 'Lorem ipsum...',
+  TOOLTIP_TIME_ZONE_PLANTING_SITE: 'Lorem ipsum...',
+  TOOLTIP_TIME_ZONE_SEEDBANK: 'Lorem ipsum...',
   TOOLTIP_TOTAL_QUANTITY: 'Total quantity is the sum of the not ready and ready quantities.',
   TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH: 'A dish that contains a growth medium of solidified agar.',
   TOOLTIP_VIABILITY_TEST_CHEMICAL:
