@@ -4,7 +4,6 @@ import { Button, Icon } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import { Accession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { searchCountries } from 'src/api/country/country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { Country } from 'src/types/Country';
@@ -12,15 +11,16 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Accession2EditModal from '../edit/Accession2EditModal';
 import ViewPhotosModal from 'src/components/common/ViewPhotosModal';
 import { isContributor } from 'src/utils/organization';
+import { useOrganization } from 'src/providers/hooks';
 
 type DetailPanelProps = {
   accession?: Accession2;
-  organization: ServerOrganization;
   reload: () => void;
 };
 export default function DetailPanel(props: DetailPanelProps): JSX.Element {
-  const { accession, organization, reload } = props;
-  const userCanEdit = !isContributor(organization);
+  const { selectedOrganization } = useOrganization();
+  const { accession, reload } = props;
+  const userCanEdit = !isContributor(selectedOrganization);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
@@ -115,7 +115,6 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         accession={accession}
         open={openEditAccessionModal}
         onClose={() => setOpenEditAccessionModal(false)}
-        organization={organization}
         reload={reload}
       />
       <ViewPhotosModal

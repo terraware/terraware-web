@@ -6,8 +6,7 @@ import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
-import { ServerOrganization } from 'src/types/Organization';
-import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
+import { Unit, weightUnitsV2 } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import CalculatorModal from './CalculatorModal';
 import { Dropdown } from '@terraware/web-components';
@@ -27,13 +26,12 @@ export interface QuantityModalProps {
   accession: Accession2;
   onClose: () => void;
   reload: () => void;
-  organization: ServerOrganization;
   statusEdit?: boolean;
   title: string;
 }
 
 export default function QuantityModal(props: QuantityModalProps): JSX.Element {
-  const { onClose, open, accession, reload, organization, statusEdit } = props;
+  const { onClose, open, accession, reload, statusEdit } = props;
 
   const classes = useStyles();
   const [record, setRecord, onChange] = useForm(accession);
@@ -129,7 +127,6 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
         record={record}
         setRecord={setRecord}
         onChange={onChange}
-        organization={organization}
         reload={reload}
         onPrevious={() => setIsCalculatorOpened(false)}
       />
@@ -166,7 +163,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
             <Textfield
               label={strings.SEED_COUNT}
               id='seedsQuantity'
-              onChange={(id, value) => onChangeRemainingQuantity(id, value as number)}
+              onChange={(value) => onChangeRemainingQuantity('seedsQuantity', Number(value))}
               type='text'
               value={
                 record.remainingQuantity?.units === 'Seeds' ? record.remainingQuantity?.quantity : record.estimatedCount
@@ -185,12 +182,12 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
               <Textfield
                 label={strings.OR_SEED_WEIGHT}
                 id='quantity'
-                onChange={(id, value) => onChangeRemainingQuantity(id, value as number)}
+                onChange={(value) => onChangeRemainingQuantity('quantity', Number(value))}
                 type='text'
                 value={record.remainingQuantity?.units !== 'Seeds' ? record.remainingQuantity?.quantity : ''}
               />
               <Dropdown
-                options={WEIGHT_UNITS_V2}
+                options={weightUnitsV2()}
                 placeholder={strings.SELECT}
                 onChange={onChangeUnit}
                 selectedValue={record.remainingQuantity?.units}

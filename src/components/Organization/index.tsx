@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom';
 import TfMain from '../common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
 import { Country } from 'src/types/Country';
@@ -16,16 +15,21 @@ import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useOrganization, useTimeZones } from 'src/providers/hooks';
+import isEnabled from 'src/features';
+import { getUTC } from '../../utils/useTimeZoneUtils';
 
-type OrganizationViewProps = {
-  organization?: ServerOrganization;
-};
-export default function OrganizationView({ organization }: OrganizationViewProps): JSX.Element {
+export default function OrganizationView(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const history = useHistory();
   const [countries, setCountries] = useState<Country[]>();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const { isMobile } = useDeviceInfo();
+  const timeZones = useTimeZones();
+  const utcTimeZone = getUTC(timeZones);
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization.timeZone)?.longName;
 
   useEffect(() => {
     const populateCountries = async () => {
@@ -35,16 +39,14 @@ export default function OrganizationView({ organization }: OrganizationViewProps
       }
     };
     const populatePeople = async () => {
-      if (organization) {
-        const response = await getOrganizationUsers(organization);
-        if (response.requestSucceeded) {
-          setPeople(response.users);
-        }
+      const response = await getOrganizationUsers(selectedOrganization);
+      if (response.requestSucceeded) {
+        setPeople(response.users);
       }
     };
     populateCountries();
     populatePeople();
-  }, [organization]);
+  }, [selectedOrganization]);
 
   const goToEditOrganization = () => {
     const editOrganizationLocation = {
@@ -54,14 +56,18 @@ export default function OrganizationView({ organization }: OrganizationViewProps
   };
 
   const organizationState = () => {
-    if (countries && organization?.countryCode && organization?.countrySubdivisionCode) {
-      return getSubdivisionByCode(countries, organization.countryCode, organization.countrySubdivisionCode)?.name;
+    if (countries && selectedOrganization.countryCode && selectedOrganization.countrySubdivisionCode) {
+      return getSubdivisionByCode(
+        countries,
+        selectedOrganization.countryCode,
+        selectedOrganization.countrySubdivisionCode
+      )?.name;
     }
   };
 
   const getDateAdded = () => {
-    if (organization?.createdTime) {
-      return getDateDisplayValue(organization.createdTime);
+    if (selectedOrganization.createdTime) {
+      return getDateDisplayValue(selectedOrganization.createdTime);
     }
   };
 
@@ -106,7 +112,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
             label={strings.ORGANIZATION_NAME}
             id='name'
             type='text'
-            value={organization?.name}
+            value={selectedOrganization.name}
             display={true}
           />
         </Grid>
@@ -115,7 +121,7 @@ export default function OrganizationView({ organization }: OrganizationViewProps
             label={strings.DESCRIPTION}
             id='description'
             type='text'
-            value={organization?.description}
+            value={selectedOrganization.description}
             display={true}
           />
         </Grid>
@@ -128,17 +134,19 @@ export default function OrganizationView({ organization }: OrganizationViewProps
             id='country'
             type='text'
             value={
-              countries && organization?.countryCode ? getCountryByCode(countries, organization.countryCode)?.name : ''
+              countries && selectedOrganization.countryCode
+                ? getCountryByCode(countries, selectedOrganization.countryCode)?.name
+                : ''
             }
             display={true}
           />
         </Grid>
-        {organization?.countrySubdivisionCode && (
-          <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+        {selectedOrganization.countrySubdivisionCode && (
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
             <TextField label={strings.STATE} id='state' type='text' value={organizationState()} display={true} />
           </Grid>
         )}
-        <Grid item xs={gridSize()}>
+        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
           <TextField
             label={strings.NUMBER_OF_PEOPLE}
             id='numberOfPeople'
@@ -147,6 +155,18 @@ export default function OrganizationView({ organization }: OrganizationViewProps
             display={true}
           />
         </Grid>
+        {timeZoneFeatureEnabled && (
+          <Grid item xs={gridSize()}>
+            <TextField
+              label={strings.TIME_ZONE}
+              id='timeZone'
+              type='text'
+              value={currentTimeZone || utcTimeZone.longName}
+              display={true}
+              tooltipTitle={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
+            />
+          </Grid>
+        )}
       </Grid>
     </TfMain>
   );

@@ -2,26 +2,10 @@ import { Box, Grid, useTheme } from '@mui/material';
 import { Table, TableColumnType, Textfield } from '@terraware/web-components';
 import { SearchResponseElement } from 'src/api/search';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
-
-const columns: TableColumnType[] = [
-  {
-    key: 'name',
-    name: strings.NAME,
-    type: 'string',
-  },
-  {
-    key: 'description',
-    name: strings.DESCRIPTION,
-    type: 'string',
-  },
-  { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
-  { key: 'numPlots', name: strings.PLOTS, type: 'string' },
-];
+import isEnabled from 'src/features';
 
 interface PlantingSitesTableProps {
-  organization: ServerOrganization;
   results: SearchResponseElement[];
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
@@ -30,6 +14,21 @@ interface PlantingSitesTableProps {
 export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.Element {
   const { results, setTemporalSearchValue, temporalSearchValue } = props;
   const theme = useTheme();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const columns: TableColumnType[] = [
+    {
+      key: 'name',
+      name: strings.NAME,
+      type: 'string',
+    },
+    {
+      key: 'description',
+      name: strings.DESCRIPTION,
+      type: 'string',
+    },
+    { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
+    { key: 'numPlots', name: strings.PLOTS, type: 'string' },
+  ];
 
   return (
     <Box
@@ -47,7 +46,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             label=''
             id='search'
             type='text'
-            onChange={(id, value) => setTemporalSearchValue(value as string)}
+            onChange={(value) => setTemporalSearchValue(value as string)}
             value={temporalSearchValue}
             iconRight='cancel'
             onClickRightIcon={() => setTemporalSearchValue('')}
@@ -60,7 +59,11 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             <Grid item xs={12}>
               <Table
                 id='planting-sites-table'
-                columns={columns}
+                columns={
+                  timeZoneFeatureEnabled
+                    ? [...columns, { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' }]
+                    : columns
+                }
                 rows={results}
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}

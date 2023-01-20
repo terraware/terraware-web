@@ -15,15 +15,11 @@ import TfMain from '../common/TfMain';
 import PageSnackbar from '../PageSnackbar';
 import NurseriesCellRenderer from './TableCellRenderer';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import isEnabled from 'src/features';
 
 type NurseriesListProps = {
   organization: ServerOrganization;
 };
-
-const columns: TableColumnType[] = [
-  { key: 'name', name: 'Name', type: 'string' },
-  { key: 'description', name: 'Description', type: 'string' },
-];
 
 export default function NurseriesList({ organization }: NurseriesListProps): JSX.Element {
   const theme = useTheme();
@@ -33,6 +29,11 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
   const contentRef = useRef(null);
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const columns: TableColumnType[] = [
+    { key: 'name', name: strings.NAME, type: 'string' },
+    { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+  ];
 
   const goToNewNursery = () => {
     const newNurseryLocation = {
@@ -62,7 +63,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
         : null;
       const params: SearchNodePayload = {
         prefix: 'facilities',
-        fields: ['id', 'name', 'description', 'type', 'organization_id'],
+        fields: ['id', 'name', 'description', 'type', 'organization_id', 'timeZone'],
         search: {
           operation: 'and',
           children: [
@@ -92,6 +93,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           organizationId: parseInt(result.organization_id as string, 10),
           type: result.type as FacilityType,
           connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
+          timeZone: result.timeZone as string,
         });
       });
       if (getRequestId('searchNurseries') === requestId) {
@@ -145,7 +147,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
               label=''
               id='search'
               type='text'
-              onChange={onChangeSearch}
+              onChange={(value) => onChangeSearch('search', value)}
               value={temporalSearchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}
@@ -156,7 +158,11 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           {results && (
             <Table
               id='nurseries-table'
-              columns={columns}
+              columns={
+                timeZoneFeatureEnabled
+                  ? [...columns, { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' }]
+                  : columns
+              }
               rows={results}
               orderBy='name'
               Renderer={NurseriesCellRenderer}

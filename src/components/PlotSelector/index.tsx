@@ -68,7 +68,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
     <Typography
       fontSize='16px'
       fontWeight={500}
-      color={theme.palette.ClrTextFill}
+      color={theme.palette.TwClrTxt}
       marginRight={theme.spacing(1)}
       minWidth='40px'
       textAlign='right'
@@ -118,7 +118,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
           label={horizontalLayout ? '' : strings.ZONE_REQUIRED}
           selected={zoneToDropdownItem(selectedZone)}
           values={zoneOptions}
-          onChange={(id, value) => onChangeZone(value)}
+          onChange={(value) => onChangeZone(value)}
           errorText={zoneError}
           disabled={!zones.length}
           isEqual={isEqual}
@@ -134,7 +134,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
           label={horizontalLayout ? '' : strings.PLOT_REQUIRED}
           selected={plotToDropdownItem(selectedPlot)}
           values={plotOptions}
-          onChange={(id, value) => onChangePlot(value)}
+          onChange={(value) => onChangePlot(value)}
           errorText={plotError}
           disabled={!selectedZone?.plots?.length}
           isEqual={isEqual}

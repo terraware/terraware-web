@@ -6,25 +6,25 @@ import Autocomplete from 'src/components/common/Autocomplete';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import AddLink from 'src/components/common/AddLink';
+import { useOrganization } from 'src/providers/hooks';
 
 interface Props {
-  organizationId: number;
-  id: string;
   collectors?: string[];
   onChange: (id: string, value: string[]) => void;
 }
 
-export default function Collectors2({ organizationId, id, collectors = [''], onChange }: Props): JSX.Element {
+export default function Collectors2({ collectors = [''], onChange }: Props): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const [collectorsList, setCollectorsList] = useState<string[]>([...collectors]);
   const [collectorsOpt, setCollectorsOpt] = useState<string[]>();
   const theme = useTheme();
 
   useEffect(() => {
     const populateCollectors = async () => {
-      setCollectorsOpt(await getCollectors(organizationId));
+      setCollectorsOpt(await getCollectors(selectedOrganization.id));
     };
     populateCollectors();
-  }, [organizationId]);
+  }, [selectedOrganization]);
 
   const getNonEmptyCollectors = (updatedCollectors: string[]) => updatedCollectors.filter((collector) => !!collector);
 
@@ -38,7 +38,7 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
     setCollectorsList((prev) => {
       const updatedCollectors = [...prev];
       updatedCollectors[index] = value as string;
-      onChange(id, getNonEmptyCollectors(updatedCollectors));
+      onChange('collectors', getNonEmptyCollectors(updatedCollectors));
       return updatedCollectors;
     });
   };
@@ -47,7 +47,7 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
     setCollectorsList((prev) => {
       const updatedCollectors = [...prev];
       updatedCollectors.splice(index, 1);
-      onChange(id, getNonEmptyCollectors(updatedCollectors));
+      onChange('collectors', getNonEmptyCollectors(updatedCollectors));
       return updatedCollectors;
     });
   };
@@ -59,7 +59,7 @@ export default function Collectors2({ organizationId, id, collectors = [''], onC
           <Autocomplete
             id={`collector${index}`}
             selected={collector}
-            onChange={(unused, value) => onCollectorChange(value, index)}
+            onChange={(value) => onCollectorChange(value, index)}
             label={index === 0 ? strings.COLLECTORS : ''}
             placeholder={strings.COLLECTORS}
             values={collectorsOpt || []}

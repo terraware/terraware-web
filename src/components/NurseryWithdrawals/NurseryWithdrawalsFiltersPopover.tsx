@@ -3,7 +3,6 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import Button from '../common/button/Button';
 import { Checkbox, DatePicker } from '@terraware/web-components';
@@ -17,6 +16,7 @@ import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 import moment from 'moment';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
+import { useOrganization } from 'src/providers/hooks';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
@@ -77,23 +77,22 @@ const useStyles = makeStyles((theme: Theme) => ({
 type NurseryWithdrawalsFiltersPopoverProps = {
   filters: NurseryWithdrawalsFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<NurseryWithdrawalsFiltersType>>;
-  organization: ServerOrganization;
   species?: Species[];
 };
 
 export default function NurseryWithdrawalsFiltersPopover({
   filters,
   setFilters,
-  organization,
   species,
 }: NurseryWithdrawalsFiltersPopoverProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [temporalRecord, setTemporalRecord] = useForm<NurseryWithdrawalsFiltersType>({});
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -108,7 +107,7 @@ export default function NurseryWithdrawalsFiltersPopover({
 
   useEffect(() => {
     const populatePlantingSites = async () => {
-      const result = await listPlantingSites(organization.id);
+      const result = await listPlantingSites(selectedOrganization.id);
       if (result.requestSucceeded) {
         setPlantingSites(result.sites);
       } else {
@@ -116,7 +115,7 @@ export default function NurseryWithdrawalsFiltersPopover({
       }
     };
     populatePlantingSites();
-  }, [organization, snackbar]);
+  }, [selectedOrganization, snackbar]);
 
   const onReset = () => {
     setFilters({
@@ -229,14 +228,14 @@ export default function NurseryWithdrawalsFiltersPopover({
                 <Typography fontSize='16px' color={theme.palette.TwClrBaseGray500}>
                   {strings.FROM_NURSERY}
                 </Typography>
-                {getAllNurseries(organization).map((n) => (
+                {getAllNurseries(selectedOrganization).map((n) => (
                   <Grid item xs={12} key={n.id}>
                     <Checkbox
                       id={n.id.toString()}
                       name={n.name}
                       label={n.name}
                       value={hasFilter('fromNurseryIds', n.id)}
-                      onChange={(id, value) => onChangeHandler(id, value, 'fromNurseryIds')}
+                      onChange={(value) => onChangeHandler(n.id.toString(), value, 'fromNurseryIds')}
                     />
                   </Grid>
                 ))}
@@ -252,7 +251,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                       name={purpose}
                       label={purpose}
                       value={hasFilter('purposes', purpose)}
-                      onChange={(id, value) => onChangeHandler(id, value, 'purposes')}
+                      onChange={(value) => onChangeHandler(purpose, value, 'purposes')}
                     />
                   </Grid>
                 ))}
@@ -266,14 +265,14 @@ export default function NurseryWithdrawalsFiltersPopover({
                   label={strings.START}
                   aria-label={strings.DATE}
                   value={temporalRecord.withdrawnDates ? temporalRecord.withdrawnDates[0] : ''}
-                  onChange={onChangeDate}
+                  onChange={(value) => onChangeDate('startDate', value)}
                 />
                 <DatePicker
                   id='endDate'
                   label={strings.END}
                   aria-label={strings.DATE}
                   value={temporalRecord.withdrawnDates ? temporalRecord.withdrawnDates[1] : ''}
-                  onChange={onChangeDate}
+                  onChange={(value) => onChangeDate('endDate', value)}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -287,7 +286,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                       name={plantingSite.name}
                       label={plantingSite.name}
                       value={hasFilter('destinationNames', plantingSite.name)}
-                      onChange={(id, value) => onChangeHandler(id, value, 'destinationNames')}
+                      onChange={(value) => onChangeHandler(plantingSite.name.toString(), value, 'destinationNames')}
                     />
                   </Grid>
                 ))}
@@ -303,7 +302,7 @@ export default function NurseryWithdrawalsFiltersPopover({
                       name={iSpecies.scientificName}
                       label={iSpecies.scientificName}
                       value={hasFilter('speciesId', iSpecies.id)}
-                      onChange={(id, value) => onChangeHandler(id, value, 'speciesId')}
+                      onChange={(value) => onChangeHandler(iSpecies.id.toString(), value, 'speciesId')}
                     />
                   </Grid>
                 ))}
@@ -311,8 +310,8 @@ export default function NurseryWithdrawalsFiltersPopover({
             </Grid>
           </Box>
           <div className={classes.footer}>
-            <Button label='Reset' onClick={onReset} size='medium' priority='secondary' type='passive' />
-            <Button label='Done' onClick={onDone} size='medium' />
+            <Button label={strings.RESET} onClick={onReset} size='medium' priority='secondary' type='passive' />
+            <Button label={strings.DONE} onClick={onDone} size='medium' />
           </div>
         </div>
       </Popover>

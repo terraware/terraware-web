@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { search } from 'src/api/search';
-import { ServerOrganization } from 'src/types/Organization';
 import useQuery from 'src/utils/useQuery';
 import BatchWithdrawFlow from './BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
 
 type SpeciesBulkWithdrawWrapperComponentProps = {
-  organization: ServerOrganization;
   withdrawalCreatedCallback?: () => void;
 };
 export default function SpeciesBulkWithdrawWrapperComponent(
   props: SpeciesBulkWithdrawWrapperComponentProps
 ): JSX.Element | null {
-  const { organization, withdrawalCreatedCallback } = props;
+  const { withdrawalCreatedCallback } = props;
   const [speciesIds, setSpeciesIds] = useState<string[]>();
   const [batchIds, setBatchIds] = useState<string[]>();
   const [source, setSource] = useState<string | null>();
@@ -64,7 +62,6 @@ export default function SpeciesBulkWithdrawWrapperComponent(
   return batchIds ? (
     <BatchWithdrawFlow
       batchIds={batchIds}
-      organization={organization}
       sourcePage={source || undefined}
       withdrawalCreatedCallback={withdrawalCreatedCallback}
     />

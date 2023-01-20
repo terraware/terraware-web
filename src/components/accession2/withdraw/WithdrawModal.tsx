@@ -3,48 +3,68 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, useTheme } from '@mui/material';
-import { Checkbox, DatePicker, Select, SelectT, Textfield } from '@terraware/web-components';
+import { Checkbox, DatePicker, SelectT, Textfield } from '@terraware/web-components';
 import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
 import { NurseryTransfer } from 'src/api/types/batch';
 import useForm from 'src/utils/useForm';
 import { transferToNursery, postWithdrawal } from 'src/api/accessions2/withdrawals';
 import { postViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
-import { WITHDRAWAL_PURPOSES } from 'src/utils/withdrawalPurposes';
+import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
-import { ServerOrganization } from 'src/types/Organization';
-import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
-import { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils';
-import { TREATMENTS, WITHDRAWAL_TYPES } from 'src/types/Accession';
+import { Unit, weightUnitsV2 } from 'src/units';
+import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
+import { treatments, withdrawalTypes } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
-import { isContributor, getAllNurseries } from 'src/utils/organization';
+import { isContributor, getAllNurseries, getSeedBank } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 import AddLink from 'src/components/common/AddLink';
+import { useOrganization } from 'src/providers/hooks';
+import { Facility } from 'src/api/types/facilities';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export interface WithdrawDialogProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
   reload: () => void;
-  organization: ServerOrganization;
   user: User;
 }
 
 export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element {
-  const { onClose, open, accession, reload, organization, user } = props;
+  const { selectedOrganization } = useOrganization();
+  const { onClose, open, accession, reload, user } = props;
+
+  const newViabilityTesting: ViabilityTestPostRequest = {
+    testType: 'Lab',
+    seedsTested: 0,
+  };
+
+  const [isNurseryTransfer, setIsNurseryTransfer] = useState<boolean>(true);
+  const [viabilityTesting, , onChangeViabilityTesting] = useForm(newViabilityTesting);
+  const [users, setUsers] = useState<OrganizationUser[]>();
+  const [withdrawAllSelected, setWithdrawAllSelected] = useState(false);
+  const [isNotesOpened, setIsNotesOpened] = useState(false);
+  const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
+  const theme = useTheme();
+  const snackbar = useSnackbar();
+  const contributor = isContributor(selectedOrganization);
+  const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
+  const tz = useLocationTimeZone().get(selectedSeedBank);
+  const [timeZone, setTimeZone] = useState(tz.id);
 
   const newWithdrawal: Withdrawal2 = {
     purpose: 'Nursery',
     withdrawnByUserId: user.id,
-    date: getTodaysDateFormatted(),
+    date: getTodaysDateFormatted(timeZone),
     withdrawnQuantity: undefined,
     notes: '',
   };
 
   const nurseryTransferWithdrawal: NurseryTransfer = {
-    date: getTodaysDateFormatted(),
+    date: getTodaysDateFormatted(timeZone),
     destinationFacilityId: -1,
     germinatingQuantity: 0,
     notes: '',
@@ -54,32 +74,40 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     withdrawnByUserId: user.id,
   };
 
-  const newViabilityTesting: ViabilityTestPostRequest = {
-    testType: 'Lab',
-    seedsTested: 0,
-  };
-
   const [record, setRecord, onChange] = useForm(newWithdrawal);
   const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransferWithdrawal);
-  const [isNurseryTransfer, setIsNurseryTransfer] = useState<boolean>(true);
-  const [viabilityTesting, , onChangeViabilityTesting] = useForm(newViabilityTesting);
-  const [users, setUsers] = useState<OrganizationUser[]>();
-  const [withdrawAllSelected, setWithdrawAllSelected] = useState(false);
-  const [isNotesOpened, setIsNotesOpened] = useState(false);
-  const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
-  const theme = useTheme();
-  const snackbar = useSnackbar();
-  const contributor = isContributor(organization);
+
+  useEffect(() => {
+    if (accession.facilityId) {
+      const accessionSeedBank = getSeedBank(selectedOrganization, accession.facilityId);
+      setSelectedSeedBank(accessionSeedBank);
+    }
+  }, [selectedOrganization, accession.facilityId]);
+
+  useEffect(() => {
+    if (timeZone !== tz.id) {
+      setTimeZone(tz.id);
+    }
+  }, [tz.id, timeZone]);
+
+  useEffect(() => {
+    setRecord((previousRecord: Withdrawal2): Withdrawal2 => {
+      return {
+        ...previousRecord,
+        date: getTodaysDateFormatted(timeZone),
+      };
+    });
+  }, [timeZone, setRecord]);
 
   useEffect(() => {
     const getOrgUsers = async () => {
-      const response = await getOrganizationUsers(organization);
+      const response = await getOrganizationUsers(selectedOrganization);
       if (response.requestSucceeded) {
         setUsers(response.users);
       }
     };
     getOrgUsers();
-  }, [organization]);
+  }, [selectedOrganization]);
 
   const saveWithdrawal = async () => {
     let response;
@@ -215,28 +243,33 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   };
 
   const validateDate = (id: string, value?: any) => {
-    if (!value && id === 'date') {
-      setIndividualError('date', strings.REQUIRED_FIELD);
-      return false;
-    } else if (isNaN(value.getTime())) {
-      setIndividualError(id, strings.INVALID_DATE);
-      return false;
-    } else if (isInTheFuture(value) && id === 'date') {
-      setIndividualError('date', strings.NO_FUTURE_DATES);
-      return false;
+    if (!value) {
+      if (id === 'date') {
+        setIndividualError('date', strings.REQUIRED_FIELD);
+        return false;
+      }
     } else {
-      setIndividualError(id, '');
-      return true;
+      if (isNaN(new Date(value).getTime())) {
+        setIndividualError(id, strings.INVALID_DATE);
+        return false;
+      } else if (isInTheFuture(value, timeZone) && id === 'date') {
+        setIndividualError('date', strings.NO_FUTURE_DATES);
+        return false;
+      } else {
+        setIndividualError(id, '');
+        return true;
+      }
     }
   };
 
   const onChangeDate = (id: string, value?: any) => {
+    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
     const valid = validateDate(id, value);
     if (valid) {
       if (id === 'date') {
-        onChange(id, value);
+        onChange(id, date);
       }
-      onChangeNurseryTransfer(id, value);
+      onChangeNurseryTransfer(id, date);
     }
   };
 
@@ -344,10 +377,10 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     >
       <Grid item xs={12} textAlign='left'>
         <Grid item xs={12} paddingBottom={2}>
-          <Select
+          <Dropdown
             label={strings.PURPOSE}
             placeholder={strings.SELECT}
-            options={WITHDRAWAL_PURPOSES}
+            options={withdrawalPurposes()}
             onChange={onChangePurpose}
             selectedValue={isNurseryTransfer ? 'Nursery' : record?.purpose}
             fullWidth={true}
@@ -360,7 +393,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 id='destinationFacilityId'
                 label={strings.DESTINATION_REQUIRED}
                 selectedValue={nurseryTransferRecord.destinationFacilityId.toString()}
-                options={getAllNurseries(organization).map((nursery) => ({
+                options={getAllNurseries(selectedOrganization).map((nursery) => ({
                   label: nursery.name,
                   value: nursery.id.toString(),
                 }))}
@@ -374,17 +407,17 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         {record.purpose === 'Viability Testing' && !isNurseryTransfer ? (
           <>
             <Grid item xs={12} paddingBottom={2}>
-              <Select
+              <Dropdown
                 label={strings.TEST_TYPE}
                 placeholder={strings.SELECT}
-                options={WITHDRAWAL_TYPES}
+                options={withdrawalTypes()}
                 onChange={(value: string) => onChangeViabilityTesting('testType', value)}
                 selectedValue={viabilityTesting?.testType}
                 fullWidth={true}
               />
             </Grid>
             <Grid item xs={12} paddingBottom={2}>
-              <Select
+              <Dropdown
                 label={strings.SUBSTRATE}
                 placeholder={strings.SELECT}
                 options={getSubstratesAccordingToType(viabilityTesting?.testType)}
@@ -394,10 +427,10 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               />
             </Grid>
             <Grid item xs={12} paddingBottom={2}>
-              <Select
+              <Dropdown
                 label={strings.TREATMENT}
                 placeholder={strings.SELECT}
-                options={TREATMENTS}
+                options={treatments()}
                 onChange={(value: string) => onChangeViabilityTesting('treatment', value)}
                 selectedValue={viabilityTesting.treatment}
                 fullWidth={true}
@@ -415,7 +448,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 )
                 .toString()}
               id='withdrawnQuantity'
-              onChange={(id, value) => onChangeWithdrawnQuantity(value as number)}
+              onChange={(value) => onChangeWithdrawnQuantity(Number(value))}
               type='text'
               value={
                 isNurseryTransfer
@@ -431,7 +464,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 <Box>{strings.CT}</Box>
               ) : (
                 <Dropdown
-                  options={WEIGHT_UNITS_V2}
+                  options={weightUnitsV2()}
                   placeholder={strings.SELECT}
                   onChange={onChangeUnit}
                   selectedValue={record.withdrawnQuantity?.units}
@@ -444,7 +477,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             id='withdrawAll'
             name=''
             label={strings.WITHDRAW_ALL}
-            onChange={onSelectAll}
+            onChange={(value) => onSelectAll('withdrawAll', value)}
             value={withdrawAllSelected}
           />
         </Grid>
@@ -471,8 +504,9 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 label={strings.ESTIMATED_READY_DATE}
                 aria-label={strings.ESTIMATED_READY_DATE}
                 value={nurseryTransferRecord.readyByDate}
-                onChange={onChangeDate}
+                onChange={(value) => onChangeDate('readyByDate', value)}
                 errorText={fieldsErrors.readyByDate}
+                defaultTimeZone={timeZone}
               />
             </Grid>
           </>
@@ -483,13 +517,20 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             label={strings.DATE}
             aria-label={strings.DATE}
             value={record.date}
-            onChange={onChangeDate}
+            onChange={(value) => onChangeDate('date', value)}
             errorText={fieldsErrors.date}
+            defaultTimeZone={timeZone}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
           {isNotesOpened ? (
-            <Textfield id='notes' value={record.notes} onChange={onChangeNotes} type='textarea' label={strings.NOTES} />
+            <Textfield
+              id='notes'
+              value={record.notes}
+              onChange={(value) => onChangeNotes('notes', value)}
+              type='textarea'
+              label={strings.NOTES}
+            />
           ) : (
             <Box display='flex' justifyContent='flex-start'>
               <AddLink id='addNotes' onClick={() => setIsNotesOpened(true)} text={strings.ADD_NOTES} large={true} />

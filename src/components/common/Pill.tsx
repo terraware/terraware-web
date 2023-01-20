@@ -6,11 +6,12 @@ import Icon from 'src/components/common/icon/Icon';
 const useStyles = makeStyles((theme: Theme) => ({
   pill: {
     background: theme.palette.TwClrBgTertiary,
-    padding: '4px 4px 4px 12px',
+    padding: theme.spacing(0.5, 0.5, 0.5, 1.5),
     display: 'flex',
     borderRadius: '13px',
     alignItems: 'center',
-    marginRight: '8px',
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   filter: {
     fontSize: '12px',
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: 0,
   },
   value: {
-    paddingLeft: '4px',
+    paddingLeft: theme.spacing(0.5),
     fontSize: '12px',
     color: theme.palette.TwClrTxt,
     fontWeight: 600,
@@ -27,30 +28,39 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   icon: {
     fill: theme.palette.TwClrIcn,
-    width: '9px',
-    height: '9px',
-    margin: '0 6px',
+    width: theme.spacing(1.5),
+    height: theme.spacing(1.5),
+    margin: theme.spacing(0, 0.5),
   },
   iconContainer: {
     padding: 0,
   },
+  spacer: {
+    width: theme.spacing(1),
+    height: theme.spacing(1.5),
+  },
 }));
 
-type PillProps = {
-  filter: string;
+type PillProps<IdType> = {
+  id: IdType;
+  label: string;
   value: string;
-  onRemoveFilter: () => void;
+  onRemove?: (id: IdType) => void;
 };
 
-export default function Pill({ filter, value, onRemoveFilter }: PillProps): JSX.Element {
+export default function Pill<IdType>({ id, label, value, onRemove }: PillProps<IdType>): JSX.Element {
   const classes = useStyles();
   return (
     <div className={classes.pill}>
-      <p className={classes.filter}>{filter}:</p>
+      <p className={classes.filter}>{label}:</p>
       <p className={classes.value}>{value}</p>
-      <IconButton onClick={onRemoveFilter} className={classes.iconContainer}>
-        <Icon name='close' className={classes.icon} />
-      </IconButton>
+      {onRemove ? (
+        <IconButton onClick={() => onRemove(id)} className={classes.iconContainer}>
+          <Icon name='close' className={classes.icon} />
+        </IconButton>
+      ) : (
+        <div className={classes.spacer} />
+      )}
     </div>
   );
 }

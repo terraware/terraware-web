@@ -1,23 +1,23 @@
 import React from 'react';
 import { convertToSearchNodePayload, searchCsv, SearchCriteria, SearchSortOrder } from 'src/api/search';
-import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { Grid } from '@mui/material';
 import TextField from 'src/components/common/Textfield/Textfield';
+import { useOrganization } from 'src/providers/hooks';
 
 interface DownloadReportModalProps {
   searchCriteria: SearchCriteria;
   searchSortOrder: SearchSortOrder;
   searchColumns: string[];
-  organization: ServerOrganization;
   open: boolean;
   onClose: () => void;
 }
 
 export default function DownloadReportModal(props: DownloadReportModalProps): JSX.Element {
-  const { searchCriteria, searchSortOrder, searchColumns, organization, open, onClose } = props;
+  const { selectedOrganization } = useOrganization();
+  const { searchCriteria, searchSortOrder, searchColumns, open, onClose } = props;
   const [name, setName] = React.useState('');
 
   const handleCancel = () => {
@@ -30,7 +30,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
       prefix: 'facilities.accessions',
       fields: searchColumns.includes('active') ? [...searchColumns] : [...searchColumns, 'active'],
       sortOrder: [searchSortOrder],
-      search: convertToSearchNodePayload(searchCriteria, organization.id),
+      search: convertToSearchNodePayload(searchCriteria, selectedOrganization.id),
       count: 1000,
     });
 
@@ -71,7 +71,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
             type='text'
             id='reportName'
             value={name}
-            onChange={(id, value) => {
+            onChange={(value) => {
               setName(value as string);
             }}
             label={strings.REPORT_NAME}

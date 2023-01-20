@@ -86,13 +86,15 @@ describe('Database', () => {
     });
 
     context('Presets', () => {
-      it('General Inventory', () => {
+      beforeEach(() => {
         cy.intercept('POST', '/api/v1/search').as('search');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values');
         cy.visit('/accessions');
         cy.wait('@search');
         cy.wait('@values');
+      });
 
+      it('General Inventory', () => {
         cy.intercept('POST', '/api/v1/search').as('search2');
         cy.intercept('POST', '/api/v1/seedbank/values').as('values2');
 
@@ -120,9 +122,6 @@ describe('Database', () => {
       });
 
       it('Default', () => {
-        cy.intercept('POST', '/api/v1/search').as('search');
-        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
-
         cy.get('#more-options').click();
         cy.get('.MuiList-root > :nth-child(3)').click();
 
@@ -142,9 +141,6 @@ describe('Database', () => {
       });
 
       it('Seed Storage Status', () => {
-        cy.intercept('POST', '/api/v1/search').as('search');
-        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
-
         cy.get('#more-options').click();
         cy.get('.MuiList-root > :nth-child(3)').click();
 
@@ -167,9 +163,6 @@ describe('Database', () => {
       });
 
       it('Viability Summary', () => {
-        cy.intercept('POST', '/api/v1/search').as('search');
-        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
-
         cy.get('#more-options').click();
         cy.get('.MuiList-root > :nth-child(3)').click();
 
@@ -200,9 +193,6 @@ describe('Database', () => {
       });
 
       it('Viability Testing To Do', () => {
-        cy.intercept('POST', '/api/v1/search').as('search');
-        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
-
         cy.get('#more-options').click();
         cy.get('.MuiList-root > :nth-child(3)').click();
 
@@ -225,9 +215,6 @@ describe('Database', () => {
       });
 
       it('Custom columns', () => {
-        cy.intercept('POST', '/api/v1/search').as('search');
-        cy.intercept('POST', '/api/v1/seedbank/values').as('values');
-
         cy.get('#more-options').click();
         cy.get('.MuiList-root > :nth-child(3)').click();
 

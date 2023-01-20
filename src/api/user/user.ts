@@ -2,6 +2,8 @@ import axios from 'axios';
 import { paths } from 'src/api/types/generated-schema';
 import { OrganizationUser, User } from 'src/types/User';
 import { AllOrganizationRoles } from 'src/types/Organization';
+import { InitializedTimeZone } from 'src/types/TimeZones';
+import { getCurrentUserPreferences, updatePreferences } from 'src/api/preferences/preferences';
 
 const CURRENT_USER_ENDPOINT = '/api/v1/users/me';
 
@@ -36,6 +38,7 @@ export async function getUser(): Promise<GetUserResponse> {
       firstName: serverResponse.user.firstName,
       lastName: serverResponse.user.lastName,
       emailNotificationsEnabled: serverResponse.user.emailNotificationsEnabled,
+      timeZone: serverResponse.user.timeZone,
     };
     setCurrentUser(response.user);
   } catch {
@@ -50,12 +53,13 @@ type UPDATE_USER_REQUEST_PAYLOAD =
 type UPDATE_USER_RESPONSE_PAYLOAD =
   paths[typeof CURRENT_USER_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
-export async function updateUserProfile(user: User): Promise<UpdateUserResponse> {
+export async function updateUserProfile(user: User, skipAcknowledgeTimeZone?: boolean): Promise<UpdateUserResponse> {
   const response: UpdateUserResponse = { requestSucceeded: true };
   try {
     const serverRequest: UPDATE_USER_REQUEST_PAYLOAD = {
       firstName: user.firstName || '',
       lastName: user.lastName || '',
+      timeZone: user.timeZone,
     };
     if (user.emailNotificationsEnabled !== undefined) {
       serverRequest.emailNotificationsEnabled = user.emailNotificationsEnabled;
@@ -65,6 +69,9 @@ export async function updateUserProfile(user: User): Promise<UpdateUserResponse>
       response.requestSucceeded = false;
     } else {
       getUser(); // async user retrieval to set current user in memory
+      if (user.timeZone && !skipAcknowledgeTimeZone) {
+        await updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
+      }
     }
   } catch {
     response.requestSucceeded = false;
@@ -160,3 +167,24 @@ export async function updateOrganizationUser(
 
 // get current user from service
 export const getCurrentUser = () => ({ ...currentUser });
+
+// initialize time zone (if not already set)
+export const initializeUserTimeZone = async (user: User, timeZone: string): Promise<InitializedTimeZone> => {
+  const { timeZoneAcknowledgedOnMs } = getCurrentUserPreferences();
+
+  const initializedTimeZone: InitializedTimeZone = {
+    timeZoneAcknowledgedOnMs,
+  };
+
+  if (!user.timeZone) {
+    const response = await updateUserProfile({ ...user, timeZone }, true);
+    if (response.requestSucceeded) {
+      initializedTimeZone.updated = true;
+      initializedTimeZone.timeZone = timeZone;
+    }
+  } else {
+    initializedTimeZone.timeZone = user.timeZone;
+  }
+
+  return initializedTimeZone;
+};

@@ -20,10 +20,11 @@ import hexRgb from 'hex-rgb';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
-import { User } from 'src/types/User';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import Icon from './common/icon/Icon';
 import useEnvironment from 'src/utils/useEnvironment';
+import { useUser } from 'src/providers';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -92,23 +93,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type SmallDeviceUserMenuProps = {
-  organizations?: ServerOrganization[];
-  selectedOrganization?: ServerOrganization;
-  setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
-  reloadOrganizationData: (selectedOrgId?: number) => void;
   onLogout: () => void;
-  user?: User;
   hasOrganizations?: boolean;
 };
 export default function SmallDeviceUserMenu({
-  organizations,
-  selectedOrganization,
-  setSelectedOrganization,
-  reloadOrganizationData,
   onLogout,
-  user,
   hasOrganizations,
 }: SmallDeviceUserMenuProps): JSX.Element | null {
+  const { selectedOrganization, setSelectedOrganization, organizations } = useOrganization();
+  const { user } = useUser();
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
@@ -159,11 +152,7 @@ export default function SmallDeviceUserMenu({
 
   return (
     <div className={open ? classes.userMenuOpened : ''}>
-      <AddNewOrganizationModal
-        open={newOrganizationModalOpened}
-        onCancel={onCloseCreateOrganizationModal}
-        reloadOrganizationData={reloadOrganizationData}
-      />
+      <AddNewOrganizationModal open={newOrganizationModalOpened} onCancel={onCloseCreateOrganizationModal} />
       <Button ref={anchorRef} id='composition-button' onClick={handleToggle} className={classes.avatarButton}>
         <div className={classes.icon}>{iconLetter}</div>
       </Button>
@@ -186,7 +175,7 @@ export default function SmallDeviceUserMenu({
                   className={classes.menuList}
                 >
                   <Box sx={{ display: 'flex' }}>
-                    <Box sx={{ display: 'flex' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
                       <Typography sx={{ paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
                         {user?.firstName} {user?.lastName}
@@ -197,17 +186,15 @@ export default function SmallDeviceUserMenu({
                     </button>
                   </Box>
                   <Divider sx={{ margin: '16px 0' }} />
-                  {hasOrganizations ? (
-                    <MenuItem
-                      onClick={(e) => {
-                        navigate(APP_PATHS.MY_ACCOUNT);
-                        handleClose(e);
-                      }}
-                      className={classes.menuItem}
-                    >
-                      {strings.MY_ACCOUNT}
-                    </MenuItem>
-                  ) : null}
+                  <MenuItem
+                    onClick={(e) => {
+                      navigate(APP_PATHS.MY_ACCOUNT);
+                      handleClose(e);
+                    }}
+                    className={classes.menuItem}
+                  >
+                    {strings.MY_ACCOUNT}
+                  </MenuItem>
                   <MenuItem
                     onClick={(e) => {
                       onLogout();
@@ -231,11 +218,11 @@ export default function SmallDeviceUserMenu({
                             key={`item-${index}`}
                           >
                             <Typography
-                              sx={{ fontSize: '14px', fontWeight: selectedOrganization?.id === org.id ? 600 : 400 }}
+                              sx={{ fontSize: '14px', fontWeight: selectedOrganization.id === org.id ? 600 : 400 }}
                             >
                               {org.name}
                             </Typography>
-                            {selectedOrganization?.id === org.id ? (
+                            {selectedOrganization.id === org.id ? (
                               <Box className={classes.checkmarkIcon}>
                                 <Icon name='checkmark' />
                               </Box>

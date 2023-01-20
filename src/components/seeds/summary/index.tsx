@@ -9,7 +9,6 @@ import MainPaper from 'src/components/MainPaper';
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import PageHeader from '../PageHeader';
 import SummaryPaper from './SummaryPaper';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -18,6 +17,8 @@ import Icon from 'src/components/common/icon/Icon';
 import AccessionByStatus from './AccessionByStatus';
 import { useHistory } from 'react-router-dom';
 import Link from 'src/components/common/Link';
+import { useOrganization } from 'src/providers/hooks';
+import { AccessionState, stateName } from '../../../types/Accession';
 
 const useStyles = makeStyles((theme: Theme) => ({
   accessionsLink: {
@@ -54,13 +55,9 @@ Cookies.defaults = {
   secure: true,
 };
 
-type SeedSummaryProps = {
-  organization?: ServerOrganization;
-};
-
-export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
+export default function SeedSummary(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const classes = useStyles();
-  const { organization } = props;
   const history = useHistory();
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
@@ -72,12 +69,12 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
   const theme = useTheme();
 
   useEffect(() => {
-    if (organization) {
+    if (selectedOrganization) {
       const seedbankFacility =
-        organization && organization.facilities?.find((facility) => facility.name === 'Seed Bank');
+        selectedOrganization && selectedOrganization.facilities?.find((facility) => facility.name === 'Seed Bank');
 
       const populateSummary = async () => {
-        const response = await getSummary(organization.id);
+        const response = await getSummary(selectedOrganization.id);
         if (!response.value?.activeAccessions) {
           setIsEmptyState(true);
         }
@@ -112,7 +109,7 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
         return undefined;
       });
     };
-  }, [organization, setSelectedOrgInfo]);
+  }, [selectedOrganization, setSelectedOrgInfo]);
 
   const cardGridSize = () => {
     if (isMobile) {
@@ -121,11 +118,19 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
     return 4;
   };
 
+  const cardStates: AccessionState[] = [
+    'Awaiting Check-In',
+    'Awaiting Processing',
+    'Processing',
+    'Drying',
+    'In Storage',
+  ];
+
   return (
     <TfMain>
       <PageHeader subtitle={strings.WELCOME_MSG} page={strings.SEED_DASHBOARD} parentPage={strings.SEEDS} />
       <Container maxWidth={false} className={classes.mainContainer}>
-        {organization && summary ? (
+        {selectedOrganization && summary ? (
           <Grid container spacing={3}>
             {isEmptyState === true && (
               <Grid item xs={12} paddingBottom={theme.spacing(1)}>
@@ -235,41 +240,15 @@ export default function SeedSummary(props: SeedSummaryProps): JSX.Element {
                       </Typography>
                     </Box>
                     <Grid container spacing={3} marginBottom={theme.spacing(3.5)}>
-                      <Grid item xs={cardGridSize()}>
-                        <AccessionByStatus
-                          label='Awaiting Check-in'
-                          status='Awaiting Check-In'
-                          quantity={summary.value?.accessionsByState['Awaiting Check-In']}
-                        />
-                      </Grid>
-                      <Grid item xs={cardGridSize()}>
-                        <AccessionByStatus
-                          label='Awaiting Processing'
-                          status='Awaiting Processing'
-                          quantity={summary.value?.accessionsByState['Awaiting Processing']}
-                        />
-                      </Grid>
-                      <Grid item xs={cardGridSize()}>
-                        <AccessionByStatus
-                          label='Processing'
-                          status='Processing'
-                          quantity={summary.value?.accessionsByState.Processing}
-                        />
-                      </Grid>
-                      <Grid item xs={cardGridSize()}>
-                        <AccessionByStatus
-                          label='Drying'
-                          status='Drying'
-                          quantity={summary.value?.accessionsByState.Drying}
-                        />
-                      </Grid>
-                      <Grid item xs={cardGridSize()}>
-                        <AccessionByStatus
-                          label='In Storage'
-                          status='In Storage'
-                          quantity={summary.value?.accessionsByState['In Storage']}
-                        />
-                      </Grid>
+                      {cardStates.map((state) => (
+                        <Grid item xs={cardGridSize()} key={state}>
+                          <AccessionByStatus
+                            label={stateName(state)}
+                            status={state}
+                            quantity={summary.value?.accessionsByState[state]}
+                          />
+                        </Grid>
+                      ))}
                     </Grid>
                     <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`} fontSize='16px'>
                       {strings.SEE_ALL_ACCESSIONS}

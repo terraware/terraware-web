@@ -2,7 +2,6 @@ import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
@@ -17,11 +16,12 @@ import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import NurseryWithdrawalsFiltersPopover from './NurseryWithdrawalsFiltersPopover';
-import Pill from '../Pill';
 import { getAllNurseries } from 'src/utils/organization';
 import { getAllSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useOrganization } from 'src/providers/hooks';
+import PillList from 'src/components/common/PillList';
 
 export type NurseryWithdrawalsFiltersType = {
   fromNurseryIds?: string[];
@@ -31,29 +31,14 @@ export type NurseryWithdrawalsFiltersType = {
   withdrawnDates?: string[];
 };
 
-type NurseryWithdrawalsProps = {
-  organization: ServerOrganization;
-};
-
 const useStyles = makeStyles((theme: Theme) => ({
   searchField: {
     width: '300px',
   },
 }));
 
-const columns: TableColumnType[] = [
-  { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
-  { key: 'purpose', name: strings.PURPOSE, type: 'string' },
-  { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
-  { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
-  { key: 'plotNames', name: strings.TO_PLOT, type: 'string' },
-  { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
-  { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'string' },
-  { key: 'hasReassignments', name: '', type: 'string' },
-];
-
-export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.Element {
-  const { organization } = props;
+export default function NurseryWithdrawals(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const contentRef = useRef(null);
   const classes = useStyles();
@@ -63,11 +48,21 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [filters, setFilters] = useForm<NurseryWithdrawalsFiltersType>({});
   const [species, setSpecies] = useState<Species[]>();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
     field: 'withdrawnDate',
     direction: 'Descending',
   } as SearchSortOrder);
+  const columns: TableColumnType[] = [
+    { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
+    { key: 'purpose', name: strings.PURPOSE, type: 'string' },
+    { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
+    { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
+    { key: 'plotNames', name: strings.TO_PLOT, type: 'string' },
+    { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
+    { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'string' },
+    { key: 'hasReassignments', name: '', type: 'string' },
+  ];
 
   const onWithdrawalClicked = (withdrawal: any) => {
     history.push({
@@ -77,7 +72,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
 
   useEffect(() => {
     const populateSpecies = async () => {
-      const result = await getAllSpecies(organization.id);
+      const result = await getAllSpecies(selectedOrganization.id);
       if (result.requestSucceeded) {
         setSpecies(result.species);
       } else {
@@ -85,7 +80,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
       }
     };
     populateSpecies();
-  }, [organization, snackbar]);
+  }, [selectedOrganization, snackbar]);
 
   const getSearchChildren = useCallback(() => {
     const finalSearchValueChildren: FieldNodePayload[] = [];
@@ -196,13 +191,13 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
     const searchChildren: FieldNodePayload[] = getSearchChildren();
     const requestId = Math.random().toString();
     setRequestId('searchWithdrawals', requestId);
-    const apiSearchResults = await listNurseryWithdrawals(organization.id, searchChildren, 1000, searchSortOrder);
+    const apiSearchResults = await listNurseryWithdrawals(selectedOrganization.id, searchChildren, searchSortOrder);
     if (apiSearchResults) {
       if (getRequestId('searchWithdrawals') === requestId) {
         setSearchResults(apiSearchResults);
       }
     }
-  }, [getSearchChildren, organization.id, searchSortOrder]);
+  }, [getSearchChildren, selectedOrganization, searchSortOrder]);
 
   useEffect(() => {
     onApplyFilters();
@@ -219,7 +214,7 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
   };
 
   const getNurseryName = (facilityId: string) => {
-    const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
+    const found = getAllNurseries(selectedOrganization).find((n) => n.id.toString() === facilityId.toString());
     if (found) {
       return found.name;
     }
@@ -268,6 +263,21 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
     }
   };
 
+  const filterPillData = (Object.keys(filters) as (keyof typeof filters)[]).flatMap(
+    (filter: keyof NurseryWithdrawalsFiltersType) => {
+      return (
+        filters[filter]?.map((value) => {
+          return {
+            id: value,
+            label: getFilterName(filter),
+            value: getValueForPill(filter, value),
+            onRemove: () => removeFilter(filter, value),
+          };
+        }) || []
+      );
+    }
+  );
+
   const onSortChange = (order: SortOrder, orderBy: string) => {
     setSearchSortOrder({
       field: orderBy as string,
@@ -311,28 +321,12 @@ export default function NurseryWithdrawals(props: NurseryWithdrawalsProps): JSX.
                 className={classes.searchField}
                 iconRight='cancel'
                 value={searchValue}
-                onChange={(_id, value) => setSearchValue(value as string)}
+                onChange={(value) => setSearchValue(value as string)}
               />
-              <NurseryWithdrawalsFiltersPopover
-                filters={filters}
-                setFilters={setFilters}
-                organization={organization}
-                species={species}
-              />
+              <NurseryWithdrawalsFiltersPopover filters={filters} setFilters={setFilters} species={species} />
             </Grid>
             <Grid xs={12} display='flex' sx={{ marginBottom: 2 }}>
-              {(Object.keys(filters) as (keyof typeof filters)[]).map((filter: keyof NurseryWithdrawalsFiltersType) => {
-                return filters[filter]?.map((value) => {
-                  return (
-                    <Pill
-                      key={value}
-                      filter={getFilterName(filter)}
-                      value={getValueForPill(filter, value)}
-                      onRemoveFilter={() => removeFilter(filter, value)}
-                    />
-                  );
-                });
-              })}
+              <PillList data={filterPillData} />
             </Grid>
 
             <Grid item xs={12}>

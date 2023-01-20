@@ -6,7 +6,6 @@ import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { search } from 'src/api/search';
 import { NurseryWithdrawalRequest, NurseryWithdrawal, NurseryWithdrawalPurposes } from 'src/api/types/batch';
-import { ServerOrganization } from 'src/types/Organization';
 import { isContributor } from 'src/utils/organization';
 import { createBatchWithdrawal, uploadWithdrawalPhoto } from 'src/api/batch/batch';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
@@ -17,29 +16,30 @@ import SelectBatchesWithdrawnQuantity from './flow/SelectBatchesWithdrawnQuantit
 import SelectPurposeForm from './flow/SelectPurposeForm';
 import TfMain from 'src/components/common/TfMain';
 import BusySpinner from 'src/components/common/BusySpinner';
+import { useOrganization } from 'src/providers/hooks';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
 type BatchWithdrawFlowProps = {
-  organization: ServerOrganization;
   batchIds: string[];
   sourcePage?: string;
   withdrawalCreatedCallback?: () => void;
 };
 
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
-  const { organization, batchIds, sourcePage, withdrawalCreatedCallback } = props;
+  const { selectedOrganization } = useOrganization();
+  const { batchIds, sourcePage, withdrawalCreatedCallback } = props;
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
   const [record, setRecord] = useForm<NurseryWithdrawalRequest>({
     batchWithdrawals: [],
     facilityId: -1,
-    purpose: isContributor(organization) ? NURSERY_TRANSFER : OUTPLANT,
+    purpose: isContributor(selectedOrganization) ? NURSERY_TRANSFER : OUTPLANT,
     withdrawnDate: getTodaysDateFormatted(),
   });
   const [batches, setBatches] = useState<any[]>();
   const [withdrawInProgress, setWithdrawInProgress] = useState<boolean>(false);
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const history = useHistory();
 
   useEffect(() => {
@@ -202,7 +202,6 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       {flowState === 'purpose' && (
         <SelectPurposeForm
           onNext={onWithdrawalConfigured}
-          organization={organization}
           batches={batches}
           nurseryWithdrawal={record}
           onCancel={goToInventory}
@@ -212,7 +211,6 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       {flowState === 'select batches' && (
         <SelectBatchesWithdrawnQuantity
           onNext={onBatchesSelected}
-          organization={organization}
           onCancel={goToInventory}
           saveText={strings.NEXT}
           batches={batches}

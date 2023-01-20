@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme } from '@mui/material';
 import { Button, Table, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import useDebounce from 'src/utils/useDebounce';
 import { search } from 'src/api/search';
 import BatchesCellRenderer from './BatchesCellRenderer';
@@ -14,29 +13,13 @@ import DeleteBatchesModal from './DeleteBatchesModal';
 import { deleteBatch } from 'src/api/batch/batch';
 import useSnackbar from 'src/utils/useSnackbar';
 import BatchDetailsModal from './BatchDetailsModal';
-import WithdrawalModal from './WithdrawalModal';
 import Search from '../Search';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { TopBarButton } from '@terraware/web-components/components/table';
-
-const columns: TableColumnType[] = [
-  { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
-  { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
-  { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
-  { key: 'readyQuantity', name: strings.READY, type: 'string' },
-  { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
-  { key: 'totalQuantityWithdrawn', name: strings.WITHDRAWN, type: 'string' },
-  { key: 'facility_name', name: strings.NURSERY, type: 'string' },
-  { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
-  { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
-  { key: 'quantitiesMenu', name: '', type: 'string' },
-  { key: 'withdraw', name: '', type: 'string' },
-];
+import { useOrganization } from 'src/providers/hooks';
 
 interface InventorySeedslingsTableProps {
   speciesId: number;
-  organization: ServerOrganization;
   modified: number;
   setModified: (val: number) => void;
   openBatchNumber: string | null;
@@ -44,7 +27,8 @@ interface InventorySeedslingsTableProps {
 }
 
 export default function InventorySeedslingsTable(props: InventorySeedslingsTableProps): JSX.Element {
-  const { speciesId, organization, modified, setModified, openBatchNumber, onUpdateOpenBatch } = props;
+  const { selectedOrganization } = useOrganization();
+  const { speciesId, modified, setModified, openBatchNumber, onUpdateOpenBatch } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
@@ -53,12 +37,23 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
-  const [openWithdrawalModal, setOpenWithdrawalModal] = useState<boolean>(false);
   const [selectedBatch, setSelectedBatch] = useState<any>();
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const snackbar = useSnackbar();
   const history = useHistory();
-  const trackingEnabled = isEnabled('Tracking V1');
+  const columns: TableColumnType[] = [
+    { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
+    { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
+    { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
+    { key: 'readyQuantity', name: strings.READY, type: 'string' },
+    { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
+    { key: 'totalQuantityWithdrawn', name: strings.WITHDRAWN, type: 'string' },
+    { key: 'facility_name', name: strings.NURSERY, type: 'string' },
+    { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
+    { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
+    { key: 'quantitiesMenu', name: '', type: 'string' },
+    { key: 'withdraw', name: '', type: 'string' },
+  ];
 
   useEffect(() => {
     let activeRequests = true;
@@ -103,7 +98,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             {
               operation: 'field',
               field: 'species_organization_id',
-              values: [organization.id.toString()],
+              values: [selectedOrganization.id.toString()],
               type: 'Exact',
             },
           ],
@@ -158,7 +153,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return () => {
       activeRequests = false;
     };
-  }, [debouncedSearchTerm, organization.id, speciesId, filters.facilityIds, modified]);
+  }, [debouncedSearchTerm, selectedOrganization, speciesId, filters.facilityIds, modified]);
 
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
@@ -194,14 +189,10 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
-      if (trackingEnabled) {
-        history.push({
-          pathname: APP_PATHS.BATCH_WITHDRAW,
-          search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
-        });
-      } else {
-        setOpenWithdrawalModal(true);
-      }
+      history.push({
+        pathname: APP_PATHS.BATCH_WITHDRAW,
+        search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
+      });
     } else if (fromColumn === 'quantitiesMenu') {
       reloadData();
     } else {
@@ -273,22 +264,9 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           onUpdateOpenBatch(null);
           setOpenNewBatchModal(false);
         }}
-        organization={organization}
         speciesId={speciesId}
         selectedBatch={selectedBatch}
       />
-      {selectedBatch && (
-        <WithdrawalModal
-          open={openWithdrawalModal}
-          reload={reloadData}
-          onClose={() => {
-            setOpenWithdrawalModal(false);
-          }}
-          organization={organization}
-          speciesId={speciesId}
-          selectedBatch={selectedBatch}
-        />
-      )}
       <DeleteBatchesModal
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
@@ -320,7 +298,6 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           />
         </Box>
         <Search
-          organization={organization}
           searchValue={temporalSearchValue}
           onSearch={(val) => setTemporalSearchValue(val)}
           filters={filters}

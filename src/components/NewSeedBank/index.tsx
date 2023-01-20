@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
@@ -14,23 +13,24 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
+import { useOrganization } from 'src/providers/hooks';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import isEnabled from 'src/features';
+import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
-type SiteViewProps = {
-  organization: ServerOrganization;
-  reloadOrganizationData: () => void;
-};
-
-export default function SeedBankView({ organization, reloadOrganizationData }: SiteViewProps): JSX.Element {
+export default function SeedBankView(): JSX.Element {
+  const { selectedOrganization, reloadData } = useOrganization();
   const theme = useTheme();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const snackbar = useSnackbar();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
     id: -1,
     type: 'Seed Bank',
-    organizationId: organization.id,
+    organizationId: selectedOrganization.id,
     connectionState: 'Not Connected',
   });
   const { seedBankId } = useParams<{ seedBankId: string }>();
@@ -45,20 +45,21 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
   };
 
   useEffect(() => {
-    const seedBanks = getAllSeedBanks(organization);
+    const seedBanks = getAllSeedBanks(selectedOrganization);
     setSelectedSeedBank(seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10)));
-  }, [seedBankId, organization]);
+  }, [seedBankId, selectedOrganization]);
 
   useEffect(() => {
     setRecord({
       name: selectedSeedBank?.name || '',
       description: selectedSeedBank?.description,
-      id: -1,
-      organizationId: organization.id,
+      id: selectedSeedBank?.id ?? -1,
+      organizationId: selectedOrganization.id,
       type: 'Seed Bank',
       connectionState: 'Not Connected',
+      timeZone: selectedSeedBank?.timeZone,
     });
-  }, [selectedSeedBank, setRecord, organization.id]);
+  }, [selectedSeedBank, setRecord, selectedOrganization]);
 
   const goToSeedBanks = () => {
     const sitesLocation = {
@@ -77,9 +78,9 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
       return;
     }
     if (selectedSeedBank) {
-      const response = await updateFacility({ ...record, id: selectedSeedBank.id } as Facility);
+      const response = await updateFacility({ ...record } as Facility);
       if (response.requestSucceeded) {
-        reloadOrganizationData();
+        reloadData();
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
@@ -87,13 +88,22 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
     } else {
       const response = await createFacility(record);
       if (response.requestSucceeded) {
-        reloadOrganizationData();
+        reloadData();
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
       } else {
         snackbar.toastError();
       }
     }
     goToSeedBanks();
+  };
+
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
+    setRecord((previousRecord: Facility): Facility => {
+      return {
+        ...previousRecord,
+        timeZone: newTimeZone ? newTimeZone.id : undefined,
+      };
+    });
   };
 
   return (
@@ -123,7 +133,7 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
                 id='name'
                 label={strings.NAME_REQUIRED}
                 type='text'
-                onChange={onChange}
+                onChange={(value) => onChange('name', value)}
                 value={record.name}
                 errorText={record.name ? '' : nameError}
               />
@@ -133,11 +143,16 @@ export default function SeedBankView({ organization, reloadOrganizationData }: S
                 id='description'
                 label={strings.DESCRIPTION_REQUIRED}
                 type='textarea'
-                onChange={onChange}
+                onChange={(value) => onChange('description', value)}
                 value={record.description}
                 errorText={record.description ? '' : descriptionError}
               />
             </Grid>
+            {timeZoneFeatureEnabled && (
+              <Grid item xs={gridSize()}>
+                <LocationTimeZoneSelector location={record} onChangeTimeZone={onChangeTimeZone} />
+              </Grid>
+            )}
           </Grid>
         </Box>
       </PageForm>

@@ -4,15 +4,6 @@ import { Table, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useEffect, useState } from 'react';
 
-const columns: TableColumnType[] = [
-  { key: 'species', name: strings.SPECIES, type: 'string' },
-  { key: 'from_plot', name: strings.FROM_PLOT, type: 'string' },
-  { key: 'to_plot', name: strings.TO_PLOT, type: 'string' },
-  { key: 'original_qty', name: strings.ORIGINAL_QTY, type: 'string' },
-  { key: 'final_qty', name: strings.FINAL_QTY, type: 'string' },
-  { key: 'notes', name: strings.NOTES, type: 'string' },
-];
-
 type OutplantReassignmentTableProps = {
   species: Species[];
   plotNames: Record<number, string>;
@@ -27,6 +18,14 @@ export default function OutplantReassignmentTable({
   withdrawalNotes,
 }: OutplantReassignmentTableProps): JSX.Element {
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
+  const columns: TableColumnType[] = [
+    { key: 'species', name: strings.SPECIES, type: 'string' },
+    { key: 'from_plot', name: strings.FROM_PLOT, type: 'string' },
+    { key: 'to_plot', name: strings.TO_PLOT, type: 'string' },
+    { key: 'original_qty', name: strings.ORIGINAL_QTY, type: 'string' },
+    { key: 'final_qty', name: strings.FINAL_QTY, type: 'string' },
+    { key: 'notes', name: strings.NOTES, type: 'string' },
+  ];
 
   useEffect(() => {
     // get list of distinct species

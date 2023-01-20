@@ -6,7 +6,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { roleName, ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
@@ -24,15 +24,30 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TitleDescription from '../common/TitleDescription';
-
-const columns: TableColumnType[] = [
-  { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
-  { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-  { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
-  { key: 'role', name: strings.ROLE, type: 'string' },
-];
+import { useUser } from 'src/providers';
+import TimeZoneSelector from 'src/components/TimeZoneSelector';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import { useTimeZones } from 'src/providers';
+import { getUTC } from 'src/utils/useTimeZoneUtils';
+import isEnabled from 'src/features';
 
 type MyAccountProps = {
+  organizations?: ServerOrganization[];
+  edit: boolean;
+  reloadData?: () => void;
+};
+
+export default function MyAccount(props: MyAccountProps): JSX.Element | null {
+  const { user, reloadUser } = useUser();
+
+  if (!user) {
+    return null;
+  }
+
+  return <MyAccountContent user={{ ...user }} reloadUser={reloadUser} {...props} />;
+}
+
+type MyAccountContentProps = {
   user: User;
   organizations?: ServerOrganization[];
   edit: boolean;
@@ -40,11 +55,31 @@ type MyAccountProps = {
   reloadData?: () => void;
 };
 
-export default function MyAccount({ user, organizations, edit, reloadUser, reloadData }: MyAccountProps): JSX.Element {
+/**
+ * Details of membership in an organization, with an additional property for the localized name
+ * of the user's role.
+ */
+type PersonOrganization = ServerOrganization & { roleName: string };
+
+function addRoleName(organization: ServerOrganization): PersonOrganization {
+  return { ...organization, roleName: roleName(organization.role) };
+}
+
+function addRoleNames(organizations: ServerOrganization[]): PersonOrganization[] {
+  return organizations.map(addRoleName);
+}
+
+const MyAccountContent = ({
+  user,
+  organizations,
+  edit,
+  reloadUser,
+  reloadData,
+}: MyAccountContentProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const [selectedRows, setSelectedRows] = useState<ServerOrganization[]>([]);
-  const [personOrganizations, setPersonOrganizations] = useState<ServerOrganization[]>([]);
+  const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
+  const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
   const history = useHistory();
   const [record, setRecord, onChange] = useForm<User>(user);
   const [removedOrg, setRemovedOrg] = useState<ServerOrganization>();
@@ -56,10 +91,19 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
+  const timeZonesEnabled = isEnabled('Timezones');
+  const timeZones = useTimeZones();
+  const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
+  const columns: TableColumnType[] = [
+    { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
+    { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+    { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
+    { key: 'roleName', name: strings.ROLE, type: 'string' },
+  ];
 
   useEffect(() => {
     if (organizations) {
-      setPersonOrganizations(organizations);
+      setPersonOrganizations(addRoleNames(organizations));
     }
   }, [organizations]);
 
@@ -96,7 +140,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
 
   const onCancel = () => {
     if (organizations) {
-      setPersonOrganizations(organizations);
+      setPersonOrganizations(addRoleNames(organizations));
     }
     setRemovedOrg(undefined);
     setSelectedRows([]);
@@ -187,6 +231,17 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
     }
   };
 
+  const onTimeZoneChange = (value: TimeZoneDescription) => {
+    if (value?.id) {
+      setRecord((previousRecord: User): User => {
+        return {
+          ...previousRecord,
+          timeZone: value.id,
+        };
+      });
+    }
+  };
+
   return (
     <TfMain>
       <PageForm
@@ -231,6 +286,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
             justifyContent='space-between'
             marginBottom={theme.spacing(4)}
             paddingLeft={theme.spacing(3)}
+            marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
           >
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
             <Button
@@ -265,7 +321,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
                 type='text'
                 value={record.firstName}
                 display={!edit}
-                onChange={onChange}
+                onChange={(value) => onChange('firstName', value)}
               />
             </Grid>
             <Grid item xs={isMobile ? 12 : 4}>
@@ -275,7 +331,7 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
                 type='text'
                 value={record.lastName}
                 display={!edit}
-                onChange={onChange}
+                onChange={(value) => onChange('lastName', value)}
               />
             </Grid>
             <Grid item xs={isMobile ? 12 : 4}>
@@ -289,6 +345,29 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
               />
             </Grid>
             <Grid item xs={12} />
+            {timeZonesEnabled && (
+              <>
+                <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+                  {edit ? (
+                    <TimeZoneSelector
+                      onTimeZoneSelected={onTimeZoneChange}
+                      selectedTimeZone={record.timeZone}
+                      tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                      label={strings.TIME_ZONE}
+                    />
+                  ) : (
+                    <TextField
+                      label={strings.TIME_ZONE}
+                      id='timezone'
+                      type='text'
+                      value={tz.longName}
+                      tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                      display={true}
+                    />
+                  )}
+                </Grid>
+              </>
+            )}
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
                 {strings.NOTIFICATIONS}
@@ -302,41 +381,49 @@ export default function MyAccount({ user, organizations, edit, reloadUser, reloa
                 name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
                 label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
                 value={record.emailNotificationsEnabled}
-                onChange={onChange}
+                onChange={(value) => onChange('emailNotificationsEnabled', value)}
               />
             </Grid>
             <Grid item xs={12} />
-            <Grid item xs={12}>
-              <Typography fontSize='20px' fontWeight={600}>
-                {strings.ORGANIZATIONS}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <div>
-                <Grid container spacing={4}>
-                  <Grid item xs={12}>
-                    {organizations && (
-                      <Table
-                        id='organizations-table'
-                        columns={columns}
-                        rows={personOrganizations}
-                        orderBy='name'
-                        selectedRows={selectedRows}
-                        setSelectedRows={setSelectedRows}
-                        showCheckbox={edit}
-                        showTopBar={edit}
-                        topBarButtons={[
-                          { buttonType: 'destructive', buttonText: strings.REMOVE, onButtonClick: removeSelectedOrgs },
-                        ]}
-                      />
-                    )}
-                  </Grid>
+            {organizations && organizations.length > 0 ? (
+              <>
+                <Grid item xs={12}>
+                  <Typography fontSize='20px' fontWeight={600}>
+                    {strings.ORGANIZATIONS}
+                  </Typography>
                 </Grid>
-              </div>
-            </Grid>
+                <Grid item xs={12}>
+                  <div>
+                    <Grid container spacing={4}>
+                      <Grid item xs={12}>
+                        {organizations && (
+                          <Table
+                            id='organizations-table'
+                            columns={columns}
+                            rows={personOrganizations}
+                            orderBy='name'
+                            selectedRows={selectedRows}
+                            setSelectedRows={setSelectedRows}
+                            showCheckbox={edit}
+                            showTopBar={edit}
+                            topBarButtons={[
+                              {
+                                buttonType: 'destructive',
+                                buttonText: strings.REMOVE,
+                                onButtonClick: removeSelectedOrgs,
+                              },
+                            ]}
+                          />
+                        )}
+                      </Grid>
+                    </Grid>
+                  </div>
+                </Grid>
+              </>
+            ) : null}
           </Grid>
         </Box>
       </PageForm>
     </TfMain>
   );
-}
+};

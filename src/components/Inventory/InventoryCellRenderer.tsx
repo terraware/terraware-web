@@ -37,7 +37,11 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
   };
 
   const createLinkToInventoryDetail = (iValue: React.ReactNode | unknown[]) => {
-    return <Link to={APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.species_id.toString())}>{iValue}</Link>;
+    return (
+      <Link to={APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.species_id.toString())}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
   };
 
   if (column.key === 'facilityInventories' && typeof value === 'string') {
@@ -51,7 +55,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
       <CellRenderer
         index={index}
         column={column}
-        value={row.species_id ? createLinkToInventoryDetail(value) : `<${strings.DELETED_SPECIES}>`}
+        value={row.species_id ? createLinkToInventoryDetail(value) : strings.DELETED_SPECIES}
         row={row}
         className={classes.text}
       />

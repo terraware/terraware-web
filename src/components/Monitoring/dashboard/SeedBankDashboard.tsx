@@ -16,6 +16,10 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useQuery from '../../../utils/useQuery';
 import { TIME_PERIODS } from './Common';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import isEnabled from 'src/features';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import TimeZoneSelector from 'src/components/TimeZoneSelector';
 
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {
@@ -64,12 +68,21 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [defaultSensorTimePeriod, setDefaultSensorTimePeriod] = useState<string>();
   const [defaultPvTimePeriod, setDefaultPvTimePeriod] = useState<string>();
   const [defaultSensor, setDefaultSensor] = useState<Device>();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const tz = useLocationTimeZone().get(seedBank);
+  const [tzSelected, setTzSelected] = useState<string>(tz.id);
+
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
+    if (newTimeZone) {
+      setTzSelected(newTimeZone.id);
+    }
+  };
 
   const gridSize = () => {
     if (isMobile) {
       return 12;
     }
-    return 6;
+    return timeZoneFeatureEnabled ? 4 : 6;
   };
 
   useEffect(() => {
@@ -224,6 +237,16 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           <p className={classes.panelValue}>{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}</p>
         </div>
       </Grid>
+      {timeZoneFeatureEnabled && (
+        <Grid item xs={gridSize()}>
+          <div className={classes.graphContainer}>
+            <div className={classes.panelTitle}>
+              <p>{strings.TIME_ZONE}</p>
+            </div>
+            <TimeZoneSelector selectedTimeZone={tzSelected} onTimeZoneSelected={onChangeTimeZone} />
+          </div>
+        </Grid>
+      )}
       <Grid item xs={12}>
         <TemperatureHumidityChart
           availableLocations={availableLocations}
@@ -233,6 +256,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           updateTimePeriodPreferences={(sensorTimePeriod) =>
             updatePreferences({ ...monitoringPreferences, sensorTimePeriod })
           }
+          timeZone={tzSelected}
         />
       </Grid>
       <Grid item xs={12}>
@@ -240,6 +264,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           BMU={BMU}
           defaultTimePeriod={defaultPvTimePeriod}
           updateTimePeriodPreferences={(pvTimePeriod) => updatePreferences({ ...monitoringPreferences, pvTimePeriod })}
+          timeZone={tzSelected}
         />
       </Grid>
     </Grid>

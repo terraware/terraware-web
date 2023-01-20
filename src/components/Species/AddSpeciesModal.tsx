@@ -1,12 +1,11 @@
 import { Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { IconTooltip } from '@terraware/web-components';
+import { Dropdown, IconTooltip } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
-import { GrowthForms, Species, SpeciesRequestError, StorageBehaviors } from 'src/types/Species';
+import { growthForms, Species, SpeciesRequestError, storageBehaviors } from 'src/types/Species';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
@@ -22,6 +21,7 @@ import TooltipLearnMoreModal, {
   LearnMoreLink,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
+import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spacing: {
@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 export type AddSpeciesModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
-  organization: ServerOrganization;
   onError?: (snackbarMessage: string) => void;
   initialSpecies?: Species;
 };
@@ -53,8 +52,10 @@ function initSpecies(species?: Species): Species {
 }
 
 export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
+  const organizationId = selectedOrganization.id;
   const classes = useStyles();
-  const { open, onClose, organization, initialSpecies } = props;
+  const { open, onClose, initialSpecies } = props;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [optionsForName, setOptionsForName] = useState<string[]>();
@@ -143,7 +144,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
-      const response = await createSpecies(record, organization.id);
+      const response = await createSpecies(record, organizationId);
       if (response.id !== -1) {
         onClose(true);
       } else {
@@ -158,7 +159,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
-      const response = await updateSpecies(record, organization.id);
+      const response = await updateSpecies(record, organizationId);
       if (response.requestSucceeded) {
         onClose(true);
       }
@@ -243,7 +244,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           <TextField
             id='familyName'
             value={record.familyName}
-            onChange={onChange}
+            onChange={(value) => onChange('familyName', value)}
             label={strings.FAMILY}
             aria-label={strings.FAMILY}
             type={'text'}
@@ -287,11 +288,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           />
         </Grid>
         <Grid item xs={12}>
-          <Select
+          <Dropdown
             id='growthForm'
             selectedValue={record.growthForm}
             onChange={(value) => onChange('growthForm', value)}
-            options={GrowthForms}
+            options={growthForms()}
             label={strings.GROWTH_FORM}
             aria-label={strings.GROWTH_FORM}
             placeholder={strings.SELECT}
@@ -313,11 +314,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           />
         </Grid>
         <Grid item xs={12}>
-          <Select
+          <Dropdown
             id='seedStorageBehavior'
             selectedValue={record.seedStorageBehavior}
             onChange={(value) => onChange('seedStorageBehavior', value)}
-            options={StorageBehaviors}
+            options={storageBehaviors()}
             label={strings.SEED_STORAGE_BEHAVIOR}
             aria-label={strings.SEED_STORAGE_BEHAVIOR}
             placeholder={strings.SELECT}

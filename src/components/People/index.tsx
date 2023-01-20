@@ -11,8 +11,8 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { AllOrganizationRoles, ServerOrganization } from 'src/types/Organization';
-import { OrganizationUser, User } from 'src/types/User';
+import { AllOrganizationRoles } from 'src/types/Organization';
+import { OrganizationUser } from 'src/types/User';
 import TfMain from '../common/TfMain';
 import TableCellRenderer from './TableCellRenderer';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -30,6 +30,7 @@ import TextField from '../common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
 import { search, SearchNodePayload } from 'src/api/search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { useUser, useOrganization } from '../../providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -60,21 +61,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const columns: TableColumnType[] = [
-  { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
-  { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
-  { key: 'email', name: strings.EMAIL, type: 'string' },
-  { key: 'role', name: strings.ROLE, type: 'string' },
-  { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
-];
-
-type PeopleListProps = {
-  organization?: ServerOrganization;
-  reloadData?: () => void;
-  user?: User;
-};
-
-export default function PeopleList({ organization, reloadData, user }: PeopleListProps): JSX.Element {
+export default function PeopleList(): JSX.Element {
+  const { selectedOrganization, reloadData } = useOrganization();
+  const { user } = useUser();
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
@@ -91,6 +80,13 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
+  const columns: TableColumnType[] = [
+    { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
+    { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
+    { key: 'email', name: strings.EMAIL, type: 'string' },
+    { key: 'role', name: strings.ROLE, type: 'string' },
+    { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
+  ];
 
   useEffect(() => {
     const refreshSearch = async () => {
@@ -114,7 +110,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
               operation: 'field',
               field: 'organization_id',
               type: 'Exact',
-              values: [organization?.id],
+              values: [selectedOrganization.id],
             },
           ],
         },
@@ -144,7 +140,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
       }
     };
     refreshSearch();
-  }, [debouncedSearchTerm, organization]);
+  }, [debouncedSearchTerm, selectedOrganization]);
 
   const goToNewPerson = () => {
     const newPersonLocation = {
@@ -159,13 +155,13 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   };
 
   const removeSelectedPeopleFromOrg = async () => {
-    if (organization) {
-      if (selectedPeopleRows.length === organization?.totalUsers) {
+    if (selectedOrganization) {
+      if (selectedPeopleRows.length === selectedOrganization.totalUsers) {
         setCannotRemovePeopleModalOpened(true);
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
         if (selectedOwners.length > 0) {
-          const organizationRoles = await listOrganizationRoles(organization.id);
+          const organizationRoles = await listOrganizationRoles(selectedOrganization.id);
           const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
             setOrgPeople(
@@ -194,48 +190,46 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
   };
 
   const removePeopleHandler = async () => {
-    if (organization) {
-      let assignNewOwnerResponse;
-      if (newOwner) {
-        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, organization.id, 'Owner');
-      }
-      const promises: Promise<UpdateOrganizationResponse>[] = [];
-      if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
-        selectedPeopleRows.forEach((person) => {
-          promises.push(leaveOrganization(organization.id, person.id));
-        });
-      }
-      const leaveOrgResponses = await Promise.all(promises);
-      let allRemoved = true;
-
-      leaveOrgResponses.forEach((resp) => {
-        if (!resp.requestSucceeded) {
-          allRemoved = false;
-        }
-      });
-
-      if (allRemoved) {
-        setRemovePeopleModalOpened(false);
-        setSelectedPeopleRows([]);
-        if (reloadData) {
-          reloadData();
-        }
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
-      } else {
-        snackbar.toastError();
-      }
-      history.push(APP_PATHS.PEOPLE);
+    let assignNewOwnerResponse;
+    if (newOwner) {
+      assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, selectedOrganization.id, 'Owner');
     }
+    const promises: Promise<UpdateOrganizationResponse>[] = [];
+    if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
+      selectedPeopleRows.forEach((person) => {
+        promises.push(leaveOrganization(selectedOrganization.id, person.id));
+      });
+    }
+    const leaveOrgResponses = await Promise.all(promises);
+    let allRemoved = true;
+
+    leaveOrgResponses.forEach((resp) => {
+      if (!resp.requestSucceeded) {
+        allRemoved = false;
+      }
+    });
+
+    if (allRemoved) {
+      setRemovePeopleModalOpened(false);
+      setSelectedPeopleRows([]);
+      if (reloadData) {
+        reloadData();
+      }
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+    } else {
+      snackbar.toastError();
+    }
+    history.push(APP_PATHS.PEOPLE);
   };
 
   const deleteOrgHandler = async () => {
-    if (organization && user) {
+    if (user) {
       let allRemoved = true;
       const otherUsers = selectedPeopleRows.filter((person) => person.id !== user.id);
       if (otherUsers.length) {
         const promises: Promise<UpdateOrganizationResponse>[] = [];
         otherUsers.forEach((person) => {
-          promises.push(leaveOrganization(organization.id, person.id));
+          promises.push(leaveOrganization(selectedOrganization.id, person.id));
         });
         const leaveOrgResponses = await Promise.all(promises);
 
@@ -245,7 +239,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
           }
         });
       }
-      const deleteOrgResponse = await deleteOrganization(organization.id);
+      const deleteOrgResponse = await deleteOrganization(selectedOrganization.id);
       if (allRemoved && deleteOrgResponse.requestSucceeded) {
         if (reloadData) {
           reloadData();
@@ -293,7 +287,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
             open={deleteOrgModalOpened}
             onClose={() => setDeleteOrgModalOpened(false)}
             onSubmit={deleteOrgHandler}
-            orgName={organization?.name || ''}
+            orgName={selectedOrganization.name || ''}
           />
         </>
       )}
@@ -321,7 +315,7 @@ export default function PeopleList({ organization, reloadData, user }: PeopleLis
             id='search'
             type='text'
             className={classes.searchField}
-            onChange={onChangeSearch}
+            onChange={(value) => onChangeSearch('search', value)}
             value={temporalSearchValue}
             iconRight='cancel'
             onClickRightIcon={clearSearch}

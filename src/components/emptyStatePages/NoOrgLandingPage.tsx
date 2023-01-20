@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     minHeight: 'calc(100vh - 88px)',
-    padding: (props: StyleProps) => (props.isMobile ? '88px 24px 24px' : '64px 24px 24px'),
+    padding: '115px 24px 24px',
     [theme.breakpoints.down('xl')]: {
       background:
         'url(/assets/home-bg-right-layer-z4.svg) no-repeat 753px 100%/auto 285px, ' +
@@ -57,34 +57,26 @@ const EMPTY_STATE_CONTENT_STYLES = {
   listContainerVerticalMargin: '48px',
 };
 
-const LIST_ITEM_CONTENT: ListItemContent[] = [
-  { icon: 'organization', title: strings.ORGANIZATION, description: strings.DESCRIPTION_ORGANIZATION },
-  { icon: 'people', title: strings.PEOPLE, description: strings.DESCRIPTION_PEOPLE },
-  { icon: 'species2', title: strings.SPECIES, description: strings.DESCRIPTION_SPECIES },
-];
-
-type LandingPageProps = {
-  reloadOrganizationData: (selectedOrgId?: number) => void;
-};
-
-export default function NoOrgLandingPage(props: LandingPageProps): JSX.Element {
+export default function NoOrgLandingPage(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
+
+  const listItemContents: ListItemContent[] = [
+    { icon: 'organization', title: strings.ORGANIZATION, description: strings.DESCRIPTION_ORGANIZATION },
+    { icon: 'people', title: strings.PEOPLE, description: strings.DESCRIPTION_PEOPLE },
+    { icon: 'species2', title: strings.SPECIES, description: strings.DESCRIPTION_SPECIES },
+  ];
 
   return (
     <main className={classes.main}>
       <Container className={classes.mainContainer}>
         <PageSnackbar />
-        <AddNewOrganizationModal
-          open={isOrgModalOpen}
-          onCancel={() => setIsOrgModalOpen(false)}
-          reloadOrganizationData={props.reloadOrganizationData}
-        />
+        <AddNewOrganizationModal open={isOrgModalOpen} onCancel={() => setIsOrgModalOpen(false)} />
         <EmptyStateContent
           title={strings.TITLE_WELCOME}
           subtitle={strings.SUBTITLE_GET_STARTED}
-          listItems={LIST_ITEM_CONTENT}
+          listItems={listItemContents}
           buttonText={strings.CREATE_ORGANIZATION}
           onClickButton={() => setIsOrgModalOpen(true)}
           footnote={[strings.FOOTNOTE_WAIT_FOR_INVITATION_1, strings.FOOTNOTE_WAIT_FOR_INVITATION_2]}

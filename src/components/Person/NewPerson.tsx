@@ -3,11 +3,9 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
-import Select from '../common/Select/Select';
 import { addOrganizationUser, updateOrganizationUser } from 'src/api/user/user';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
 import { getOrganizationUsers } from 'src/api/organization/organization';
@@ -17,6 +15,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
+import { useOrganization } from '../../providers/hooks';
+import { Dropdown } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleSubtitle: {
@@ -34,12 +34,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type PersonViewProps = {
-  organization: ServerOrganization;
-  reloadOrganizationData: () => void;
-};
-
-export default function PersonView({ organization, reloadOrganizationData }: PersonViewProps): JSX.Element {
+export default function PersonView(): JSX.Element {
+  const { selectedOrganization, reloadData } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
@@ -70,22 +66,18 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
         lastName: personSelectedToEdit.lastName,
       });
     }
-  }, [organization, personSelectedToEdit, setNewPerson]);
+  }, [selectedOrganization, personSelectedToEdit, setNewPerson]);
 
   useEffect(() => {
     const populatePeople = async () => {
-      if (organization) {
-        const response = await getOrganizationUsers(organization);
-        if (response.requestSucceeded) {
-          setPeople(response.users);
-          setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
-        }
+      const response = await getOrganizationUsers(selectedOrganization);
+      if (response.requestSucceeded) {
+        setPeople(response.users);
+        setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
       }
     };
-    if (organization) {
-      populatePeople();
-    }
-  }, [organization, personId]);
+    populatePeople();
+  }, [selectedOrganization, personId]);
 
   const onChangeRole = (newRole: string) => {
     onChange('role', newRole);
@@ -121,11 +113,11 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     let userId: number = -1;
 
     if (!!personSelectedToEdit) {
-      const response = await updateOrganizationUser(newPerson.id, organization.id, newPerson.role);
+      const response = await updateOrganizationUser(newPerson.id, selectedOrganization.id, newPerson.role);
       successMessage = response.requestSucceeded ? strings.CHANGES_SAVED : null;
       userId = newPerson.id;
     } else {
-      const response = await addOrganizationUser({ ...newPerson }, organization.id);
+      const response = await addOrganizationUser({ ...newPerson }, selectedOrganization.id);
       if (!response.requestSucceeded) {
         if (response.errorDetails === 'PRE_EXISTING_USER') {
           setRepeatedEmail(newPerson.email);
@@ -146,7 +138,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
 
     if (successMessage) {
       snackbar.toastSuccess(successMessage);
-      await reloadOrganizationData();
+      await reloadData();
       goToViewPerson(userId.toString());
     } else {
       snackbar.toastError();
@@ -183,6 +175,15 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
     return '33%';
   };
 
+  const roleOptions = [
+    { label: strings.CONTRIBUTOR, value: 'Contributor' },
+    { label: strings.ADMIN, value: 'Admin' },
+    { label: strings.MANAGER, value: 'Manager' },
+  ];
+  if (newPerson.role === 'Owner') {
+    roleOptions.push({ label: strings.OWNER, value: 'Owner' });
+  }
+
   // TODO: Handle the case where we cannot find the requested person to edit in the list of people.
   return (
     <TfMain>
@@ -218,7 +219,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
                 id='email'
                 label={strings.EMAIL_REQUIRED}
                 type='text'
-                onChange={onChange}
+                onChange={(value) => onChange('email', value)}
                 value={newPerson.email}
                 disabled={!!personSelectedToEdit}
                 errorText={emailError}
@@ -229,7 +230,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
                 id='firstName'
                 label={strings.FIRST_NAME}
                 type='text'
-                onChange={onChange}
+                onChange={(value) => onChange('firstName', value)}
                 disabled={true}
                 value={newPerson.firstName}
               />
@@ -239,7 +240,7 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
                 id='lastName'
                 label={strings.LAST_NAME}
                 type='text'
-                onChange={onChange}
+                onChange={(value) => onChange('lastName', value)}
                 disabled={true}
                 value={newPerson.lastName}
               />
@@ -255,11 +256,11 @@ export default function PersonView({ organization, reloadOrganizationData }: Per
               </ul>
             </Box>
             <Box width={roleSelectSize()} marginTop={theme.spacing(4)}>
-              <Select
+              <Dropdown
                 id='role'
                 label={strings.ROLE_REQUIRED}
                 onChange={onChangeRole}
-                options={['Contributor', 'Admin', 'Manager']}
+                options={roleOptions}
                 disabled={newPerson.role === 'Owner'}
                 selectedValue={newPerson.role}
                 fullWidth

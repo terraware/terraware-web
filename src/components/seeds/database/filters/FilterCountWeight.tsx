@@ -9,7 +9,7 @@ import Divisor from 'src/components/common/Divisor';
 import Dropdown from 'src/components/common/Dropdown';
 import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import { WEIGHT_UNITS } from 'src/units';
+import { weightUnits } from 'src/units';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -40,6 +40,7 @@ type Unit = 'Grams' | 'Milligrams' | 'Kilograms' | 'Pounds';
 
 export default function FilterCountWeight(props: Props): JSX.Element {
   const fields = COUNT_WEIGHT_VALID_FIELDS[props.field as WEIGHT_QUANTITY_FIELDS];
+  const defaultWeightUnit = 'Grams' as Unit;
 
   const classes = useStyles();
   const filter = React.useRef<OrNodePayload>();
@@ -50,7 +51,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
   const [seedCount, setSeedCount] = React.useState(false);
   const [seedWeight, setSeedWeight] = React.useState(false);
   const [emptyFields, setEmptyFields] = React.useState(false);
-  const [weightUnit, setWeightUnit] = React.useState(WEIGHT_UNITS[0].value as Unit);
+  const [weightUnit, setWeightUnit] = React.useState(defaultWeightUnit);
 
   React.useEffect(() => {
     const quantity = props.payloads.find((p) => p.operation === 'and')?.children[1].values;
@@ -66,7 +67,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
       setSeedWeight(true);
       setWeightMinValue(grams[0]?.split(' ')[0]);
       setWeightMaxValue(grams[1]?.split(' ')[0]);
-      setWeightUnit(grams[0]?.split(' ')[1] ?? WEIGHT_UNITS[0].value);
+      setWeightUnit(grams[0]?.split(' ')[1] ?? defaultWeightUnit);
     }
     if (newEmptyFields) {
       setEmptyFields(true);
@@ -167,42 +168,54 @@ export default function FilterCountWeight(props: Props): JSX.Element {
     <div className={classes.box}>
       <Grid container spacing={4}>
         <Grid item xs={12}>
-          <Checkbox id='seedCount' name='Seed Count' label='Seed Count' value={seedCount} onChange={onChange} />
+          <Checkbox
+            id='seedCount'
+            name='Seed Count'
+            label={strings.SEED_COUNT}
+            value={seedCount}
+            onChange={(value) => onChange('seedCount', value)}
+          />
         </Grid>
         <Grid item xs={5}>
-          <TextField id='countMinValue' value={countMinValue} onChange={onChange} label='Min' />
+          <TextField id='countMinValue' value={countMinValue} onChange={onChange} label={strings.MIN} />
         </Grid>
         <Grid item xs={1} className={classes.flexContainer}>
           <ArrowForward />
         </Grid>
         <Grid item xs={5}>
-          <TextField id='countMaxValue' value={countMaxValue} onChange={onChange} label='Max' />
+          <TextField id='countMaxValue' value={countMaxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
         <Grid item xs={5}>
-          <TextField id='seeds' disabled={true} value='seeds' onChange={onChange} label='Units' />
+          <TextField id='seeds' disabled={true} value={strings.SEEDS} onChange={onChange} label={strings.UNITS} />
         </Grid>
         <Grid item xs={12}>
           <Divisor mt={0} />
         </Grid>
         <Grid item xs={12}>
-          <Checkbox id='seedWeight' name='Seed Weight' label='Seed Weight' value={seedWeight} onChange={onChange} />
+          <Checkbox
+            id='seedWeight'
+            name='Seed Weight'
+            label={strings.SEED_WEIGHT}
+            value={seedWeight}
+            onChange={(value) => onChange('seedWeight', value)}
+          />
         </Grid>
         <Grid item xs={5}>
-          <TextField id='weightMinValue' value={weightMinValue} onChange={onChange} label='Min' />
+          <TextField id='weightMinValue' value={weightMinValue} onChange={onChange} label={strings.MIN} />
         </Grid>
         <Grid item xs={1} className={classes.flexContainer}>
           <ArrowForward />
         </Grid>
         <Grid item xs={5}>
-          <TextField id='weightMaxValue' value={weightMaxValue} onChange={onChange} label='Max' />
+          <TextField id='weightMaxValue' value={weightMaxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
         <Grid item xs={5}>
           <Dropdown
             id='processingUnit'
             label={strings.UNITS}
             selected={weightUnit}
-            values={WEIGHT_UNITS}
-            onChange={onChange}
+            values={weightUnits()}
+            onChange={(value) => onChange('processingUnit', value)}
           />
         </Grid>
         <Grid item xs={12}>
@@ -212,9 +225,9 @@ export default function FilterCountWeight(props: Props): JSX.Element {
           <Checkbox
             id='emptyFields'
             name='Empty Fields'
-            label='Include empty fields'
+            label={strings.INCLUDE_EMPTY_FIELDS}
             value={emptyFields}
-            onChange={onChange}
+            onChange={(value) => onChange('emptyFields', value)}
           />
         </Grid>
       </Grid>

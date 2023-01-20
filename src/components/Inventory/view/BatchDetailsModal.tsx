@@ -2,10 +2,9 @@ import { Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DatePicker, DialogBox, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import { ServerOrganization } from 'src/types/Organization';
 import { useEffect, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
-import { getTodaysDateFormatted, useDeviceInfo } from '@terraware/web-components/utils';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 import NurseryDropdown from '../NurseryDropdown';
 import { Batch, CreateBatchRequestPayload } from 'src/api/types/batch';
 import { createBatch, updateBatch, updateBatchQuantities } from 'src/api/batch/batch';
@@ -13,18 +12,24 @@ import { getSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
 import { APP_PATHS } from 'src/constants';
 import Link from 'src/components/common/Link';
+import { useOrganization } from 'src/providers/hooks';
+import isEnabled from 'src/features';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { Facility } from 'src/api/types/facilities';
+import { getNurseryById } from 'src/utils/organization';
+import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
 export interface BatchDetailsModalProps {
   open: boolean;
   onClose: () => void;
   reload: () => void;
-  organization: ServerOrganization;
   selectedBatch: any;
   speciesId: number;
 }
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
-  const { onClose, open, organization, reload, selectedBatch, speciesId } = props;
+  const { selectedOrganization } = useOrganization();
+  const { onClose, open, reload, selectedBatch, speciesId } = props;
 
   const [record, setRecord, onChange] = useForm(selectedBatch);
   const snackbar = useSnackbar();
@@ -34,12 +39,18 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [speciesSelected, setSpeciesSelected] = useState<Species>();
-  const [facilityName, setFacilityName] = useState<string>();
+  const [facility, setFacility] = useState<Facility>();
+
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? facility : undefined);
+  const [timeZone, setTimeZone] = useState(tz.id);
+
+  const [addedDateChanged, setAddedDateChanged] = useState(false);
 
   useEffect(() => {
     if (record) {
       const populateSpecies = async () => {
-        const speciesResponse = await getSpecies(speciesId, organization.id.toString());
+        const speciesResponse = await getSpecies(speciesId, selectedOrganization.id.toString());
         if (speciesResponse.requestSucceeded) {
           setSpeciesSelected(speciesResponse.species);
         }
@@ -52,7 +63,31 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
       populateSpecies();
     }
-  }, [record, organization, speciesId]);
+  }, [record, selectedOrganization, speciesId]);
+
+  useEffect(() => {
+    if (record?.facilityId) {
+      const newFacility = getNurseryById(selectedOrganization, record.facilityId);
+      if (newFacility.id.toString() !== facility?.id.toString()) {
+        setFacility(newFacility);
+      }
+    }
+  }, [record?.facilityId, selectedOrganization, facility?.id]);
+
+  useEffect(() => {
+    if (timeZone !== tz.id) {
+      setTimeZone(tz.id);
+    }
+  }, [tz.id, timeZone]);
+
+  useEffect(() => {
+    setRecord((previousRecord: CreateBatchRequestPayload): CreateBatchRequestPayload => {
+      return {
+        ...previousRecord,
+        addedDate: addedDateChanged ? previousRecord.addedDate : getTodaysDateFormatted(timeZone),
+      };
+    });
+  }, [timeZone, setRecord, addedDateChanged]);
 
   useEffect(() => {
     const newBatch: CreateBatchRequestPayload = {
@@ -79,13 +114,13 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
     setRecord(initBatch());
 
-    const foundFacility = organization?.facilities?.find(
+    const foundFacility = selectedOrganization.facilities?.find(
       (f) => f.id.toString() === selectedBatch?.facilityId.toString()
     );
     if (foundFacility) {
-      setFacilityName(foundFacility.name);
+      setFacility(foundFacility);
     }
-  }, [selectedBatch, speciesId, setRecord, organization, open]);
+  }, [selectedBatch, speciesId, setRecord, selectedOrganization, open]);
 
   const MANDATORY_FIELDS = [
     'facilityId',
@@ -140,7 +175,9 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
 
   const changeDate = (id: string, value?: any) => {
-    onChange(id, value);
+    setAddedDateChanged(id === 'addedDate');
+    const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
+    onChange(id, date);
   };
 
   const marginTop = {
@@ -174,7 +211,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 <Textfield
                   id='scientificName'
                   value={speciesSelected?.scientificName}
-                  onChange={onChange}
                   type='text'
                   label={strings.SPECIES}
                   display={true}
@@ -184,7 +220,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 <Textfield
                   id='commonName'
                   value={speciesSelected?.commonName}
-                  onChange={onChange}
                   type='text'
                   label={strings.COMMON_NAME}
                   display={true}
@@ -192,9 +227,8 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
-                  id='seedilingBatch'
+                  id='seedlingsBatch'
                   value={record.batchNumber}
-                  onChange={onChange}
                   type='text'
                   label={strings.SEEDLING_BATCH}
                   display={true}
@@ -214,14 +248,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 )}
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                <Textfield
-                  id='nursery'
-                  value={facilityName}
-                  onChange={onChange}
-                  type='text'
-                  label={strings.NURSERY}
-                  display={true}
-                />
+                <Textfield id='nursery' value={facility?.name} type='text' label={strings.NURSERY} display={true} />
               </Grid>
             </Grid>
           )}
@@ -233,7 +260,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                   label={strings.NURSERY_REQUIRED}
                   record={record}
                   setRecord={setRecord as unknown as React.Dispatch<React.SetStateAction<Batch>>}
-                  organization={organization}
                   validate={validateFields}
                   isSelectionValid={(r) => !!r?.facilityId}
                 />
@@ -251,7 +277,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               <Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
-                onChange={onChange}
+                onChange={(value) => onChange('germinatingQuantity', value)}
                 type='text'
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
@@ -265,7 +291,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               <Textfield
                 id='notReadyQuantity'
                 value={record.notReadyQuantity}
-                onChange={onChange}
+                onChange={(value) => onChange('notReadyQuantity', value)}
                 type='text'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
@@ -278,14 +304,15 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 label={strings.ESTIMATED_READY_DATE}
                 aria-label={strings.ESTIMATED_READY_DATE}
                 value={record.readyByDate}
-                onChange={changeDate}
+                onChange={(value) => changeDate('readyByDate', value)}
+                defaultTimeZone={timeZone}
               />
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='readyQuantity'
                 value={record.readyQuantity}
-                onChange={onChange}
+                onChange={(value) => onChange('readyQuantity', value)}
                 type='text'
                 label={strings.READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
@@ -298,7 +325,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
               <Textfield
                 id='totalQuantity'
                 value={totalQuantity}
-                onChange={onChange}
                 type='text'
                 label={strings.TOTAL_QUANTITY}
                 display={true}
@@ -308,15 +334,22 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
             <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
               <DatePicker
-                id='dateAdded'
+                id='addedDate'
                 label={strings.DATE_ADDED_REQUIRED}
                 aria-label={strings.DATE_ADDED}
                 value={record.addedDate}
-                onChange={changeDate}
+                onChange={(value) => changeDate('addedDate', value)}
+                defaultTimeZone={timeZone}
               />
             </Grid>
             <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
-              <Textfield id='notes' value={record?.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+              <Textfield
+                id='notes'
+                value={record?.notes}
+                onChange={(value) => onChange('notes', value)}
+                type='textarea'
+                label={strings.NOTES}
+              />
             </Grid>
           </Grid>
         </DialogBox>

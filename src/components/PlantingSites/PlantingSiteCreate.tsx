@@ -1,4 +1,3 @@
-import { ServerOrganization } from 'src/types/Organization';
 import TfMain from 'src/components/common/TfMain';
 import { Typography, Box, Container, Grid, useTheme } from '@mui/material';
 import strings from 'src/strings';
@@ -20,22 +19,27 @@ import { useEffect, useState } from 'react';
 import PageSnackbar from '../PageSnackbar';
 import { PlantingSite } from 'src/api/types/tracking';
 import BoundariesAndPlots from './BoundariesAndPlots';
+import { useOrganization } from 'src/providers/hooks';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import isEnabled from 'src/features';
+import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
 type CreatePlantingSiteProps = {
-  organization: ServerOrganization;
   reloadPlantingSites: () => void;
 };
 
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { organization, reloadPlantingSites } = props;
+  const { reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const snackbar = useSnackbar();
   const [nameError, setNameError] = useState('');
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [loaded, setLoaded] = useState(false);
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
@@ -56,7 +60,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     };
 
     fetchPlantingSite();
-  }, [plantingSiteId, organization]);
+  }, [plantingSiteId, selectedOrganization]);
   const [record, setRecord, onChange] = useForm<PlantingSite>(defaultPlantingSite());
 
   useEffect(() => {
@@ -66,6 +70,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       description: selectedPlantingSite?.description,
       boundary: selectedPlantingSite?.boundary,
       plantingZones: selectedPlantingSite?.plantingZones,
+      timeZone: selectedPlantingSite?.timeZone,
     });
   }, [selectedPlantingSite, setRecord]);
 
@@ -87,13 +92,15 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       const newPlantingSite: PlantingSitePostRequestBody = {
         name: record.name,
         description: record.description,
-        organizationId: organization.id,
+        organizationId: selectedOrganization.id,
+        timeZone: record.timeZone,
       };
       response = await postPlantingSite(newPlantingSite);
     } else {
       const updatedPlantingSite: PlantingSitePutRequestBody = {
         name: record.name,
         description: record.description,
+        timeZone: record.timeZone,
       };
       response = await updatePlantingSite(record.id, updatedPlantingSite);
     }
@@ -105,6 +112,15 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     } else {
       snackbar.toastError();
     }
+  };
+
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
+    setRecord((previousRecord: PlantingSite): PlantingSite => {
+      return {
+        ...previousRecord,
+        timeZone: newTimeZone ? newTimeZone.id : undefined,
+      };
+    });
   };
 
   const gridSize = () => {
@@ -161,7 +177,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                         id='name'
                         label={strings.NAME_REQUIRED}
                         type='text'
-                        onChange={onChange}
+                        onChange={(value) => onChange('name', value)}
                         value={record.name}
                         errorText={record.name ? '' : nameError}
                       />
@@ -171,11 +187,16 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                         id='description'
                         label={strings.DESCRIPTION}
                         type='textarea'
-                        onChange={onChange}
+                        onChange={(value) => onChange('description', value)}
                         value={record.description}
                       />
                     </Grid>
                   </Grid>
+                  {timeZoneFeatureEnabled && (
+                    <Grid item xs={gridSize()} marginTop={3}>
+                      <LocationTimeZoneSelector location={record} onChangeTimeZone={onChangeTimeZone} />
+                    </Grid>
+                  )}
                 </Box>
               </Grid>
               {record?.boundary && <BoundariesAndPlots plantingSite={record} />}

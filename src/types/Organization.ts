@@ -1,4 +1,5 @@
 import { Facility } from 'src/api/types/facilities';
+import strings from 'src/strings';
 
 export type ServerOrganization = {
   id: number;
@@ -10,6 +11,7 @@ export type ServerOrganization = {
   description?: string;
   createdTime?: string;
   totalUsers: number;
+  timeZone?: string;
 };
 
 export type HighOrganizationRoles = 'Admin' | 'Owner';
@@ -22,4 +24,17 @@ export type AllOrganizationRoles = HighOrganizationRoles | 'Contributor' | 'Mana
 
 export interface SelectedOrgInfo {
   selectedFacility?: Facility;
+}
+
+export function roleName(role: AllOrganizationRoles) {
+  switch (role) {
+    case 'Admin':
+      return strings.ADMIN;
+    case 'Owner':
+      return strings.OWNER;
+    case 'Contributor':
+      return strings.CONTRIBUTOR;
+    case 'Manager':
+      return strings.MANAGER;
+  }
 }

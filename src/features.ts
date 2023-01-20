@@ -21,15 +21,6 @@ export type Feature = {
 // list of feature names and associated properties
 export const OPT_IN_FEATURES: Feature[] = [
   {
-    name: 'Tracking V1',
-    preferenceName: 'enableTrackingV1',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Shows new tracking v1 workflows'],
-    disclosure: ['This is WIP.'],
-  },
-  {
     name: 'Show Production View',
     preferenceName: 'showProductionUIView',
     active: true,
@@ -42,6 +33,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
+  },
+  {
+    name: 'Timezones',
+    preferenceName: 'enableTimezones',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Allow choosing time zone'],
+    disclosure: ['This is WIP.'],
   },
 ];
 

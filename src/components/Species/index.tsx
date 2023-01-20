@@ -9,7 +9,6 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import speciesAtom from 'src/state/species';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { Species, SpeciesProblemElement } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -20,7 +19,6 @@ import { FieldNodePayload, search, searchCsv, SearchNodePayload } from 'src/api/
 import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
-import Pill from 'src/components/Pill';
 import ImportSpeciesModal from './ImportSpeciesModal';
 import CheckDataModal from './CheckDataModal';
 import SpeciesCellRenderer from './TableCellRenderer';
@@ -39,9 +37,10 @@ import TooltipLearnMoreModal, {
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PopoverMenu from '../common/PopoverMenu';
 import { DropdownItem } from '@terraware/web-components';
+import { useOrganization } from 'src/providers/hooks';
+import PillList, { PillListItem } from '../common/PillList';
 
 type SpeciesListProps = {
-  organization: ServerOrganization;
   reloadData: () => void;
   species: Species[];
 };
@@ -113,7 +112,8 @@ export type SpeciesFiltersType = {
 
 type SpeciesCS = Species & { conservationStatus?: string };
 
-export default function SpeciesList({ organization, reloadData, species }: SpeciesListProps): JSX.Element {
+export default function SpeciesList({ reloadData, species }: SpeciesListProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
   const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
@@ -237,7 +237,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     ),
     type: 'string',
   });
-  const userCanEdit = !isContributor(organization);
+  const userCanEdit = !isContributor(selectedOrganization);
   const { isMobile } = useDeviceInfo();
 
   const getParams = useCallback(() => {
@@ -261,7 +261,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
             operation: 'field',
             field: 'organization_id',
             type: 'Exact',
-            values: [organization.id],
+            values: [selectedOrganization.id],
           },
         ],
       },
@@ -332,7 +332,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     }
 
     return params;
-  }, [record, debouncedSearchTerm, organization.id]);
+  }, [record, debouncedSearchTerm, selectedOrganization]);
 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
@@ -430,7 +430,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     if (selectedSpeciesRows.length > 0) {
       await Promise.all(
         selectedSpeciesRows.map(async (iSelectedSpecies) => {
-          await deleteSpecies(iSelectedSpecies.id, organization.id);
+          await deleteSpecies(iSelectedSpecies.id, selectedOrganization.id);
         })
       );
       setDeleteSpeciesModalOpen(false);
@@ -556,6 +556,36 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
     }
   };
 
+  const getFilterPillData = (): PillListItem<string>[] => {
+    const result = [];
+    if (record.growthForm) {
+      result.push({
+        id: 'growthForm',
+        label: strings.GROWTH_FORM,
+        value: record.growthForm,
+        onRemove: onRemoveFilterHandler('growthForm'),
+      });
+    }
+    if (record.rare || record.endangered) {
+      result.push({
+        id: 'rare',
+        label: strings.CONSERVATION_STATUS,
+        value: record.rare ? strings.RARE : strings.ENDANGERED,
+        onRemove: record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered'),
+      });
+    }
+    if (record.seedStorageBehavior) {
+      result.push({
+        id: 'seedStorageBehavior',
+        label: strings.SEED_STORAGE_BEHAVIOR,
+        value: record.seedStorageBehavior,
+        onRemove: onRemoveFilterHandler('seedStorageBehavior'),
+      });
+    }
+
+    return result;
+  };
+
   const getHeaderButtons = () => (
     <>
       <Box marginLeft={1} display='inline'>
@@ -599,13 +629,11 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
         open={editSpeciesModalOpen}
         onClose={onCloseEditSpeciesModal}
         initialSpecies={selectedSpecies}
-        organization={organization}
         onError={setErrorSnackbar}
       />
       <ImportSpeciesModal
         open={importSpeciesModalOpen}
         onClose={onCloseImportSpeciesModal}
-        organization={organization}
         setCheckDataModalOpen={setCheckDataModalOpen}
       />
       <TooltipLearnMoreModal
@@ -637,7 +665,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
               id='search'
               type='text'
               className={classes.searchField}
-              onChange={onChangeSearch}
+              onChange={(value) => onChangeSearch('search', value)}
               value={searchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}
@@ -648,27 +676,7 @@ export default function SpeciesList({ organization, reloadData, species }: Speci
             </IconButton>
           </Grid>
           <Grid item xs={12} className={noFilters ? '' : classes.searchBar}>
-            {record.growthForm && (
-              <Pill
-                filter={strings.GROWTH_FORM}
-                value={record.growthForm}
-                onRemoveFilter={onRemoveFilterHandler('growthForm')}
-              />
-            )}
-            {(record.rare || record.endangered) && (
-              <Pill
-                filter={strings.CONSERVATION_STATUS}
-                value={record.rare ? strings.RARE : strings.ENDANGERED}
-                onRemoveFilter={record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered')}
-              />
-            )}
-            {record.seedStorageBehavior && (
-              <Pill
-                filter={strings.SEED_STORAGE_BEHAVIOR}
-                value={record.seedStorageBehavior}
-                onRemoveFilter={onRemoveFilterHandler('seedStorageBehavior')}
-              />
-            )}
+            <PillList data={getFilterPillData()} />
           </Grid>
           {species && species.length ? (
             <Grid item xs={12}>

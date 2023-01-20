@@ -5,8 +5,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, Theme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
-import { ServerOrganization } from 'src/types/Organization';
-import { Unit, WEIGHT_UNITS_V2 } from 'src/units';
+import { Unit, weightUnitsV2 } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
@@ -23,7 +22,6 @@ export interface CalculatorModalProps {
   setRecord: React.Dispatch<React.SetStateAction<Accession2>>;
   onClose: () => void;
   reload: () => void;
-  organization: ServerOrganization;
   onChange: (id: string, value: unknown) => void;
   onPrevious: () => void;
 }
@@ -125,7 +123,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
                 <Textfield
                   label={strings.SUBSET_WEIGHT}
                   id='subsetWeight'
-                  onChange={(id, value) => onChangeSubsetWeight(value as number)}
+                  onChange={(value) => onChangeSubsetWeight(Number(value))}
                   type='text'
                   value={record.subsetWeight?.quantity}
                   errorText={subsetError}
@@ -133,7 +131,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
               </Box>
               <Box height={subsetError ? '85px' : 'auto'}>
                 <Dropdown
-                  options={WEIGHT_UNITS_V2}
+                  options={weightUnitsV2()}
                   placeholder={strings.SELECT}
                   onChange={onChangeSubsetUnit}
                   selectedValue={record.subsetWeight?.units}
@@ -147,7 +145,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
             <Textfield
               label={strings.SUBSET_COUNT}
               id='subsetCount'
-              onChange={onChange}
+              onChange={(value) => onChange('subsetCount', value)}
               type='text'
               value={record.subsetCount}
             />
@@ -157,12 +155,12 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
               <Textfield
                 label={strings.TOTAL_WEIGHT}
                 id='remainingQuantity'
-                onChange={(id, value) => onChangeRemainingQuantity(value as number)}
+                onChange={(value) => onChangeRemainingQuantity(Number(value))}
                 type='text'
                 value={record.remainingQuantity?.quantity}
               />
               <Dropdown
-                options={WEIGHT_UNITS_V2}
+                options={weightUnitsV2()}
                 placeholder={strings.SELECT}
                 onChange={onChangeRemainingQuantityUnit}
                 selectedValue={record.remainingQuantity?.units}

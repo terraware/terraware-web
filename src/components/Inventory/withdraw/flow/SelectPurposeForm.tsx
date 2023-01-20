@@ -15,19 +15,21 @@ import {
 } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/api/types/batch';
-import { isInTheFuture } from '@terraware/web-components/utils';
-import { ServerOrganization } from 'src/types/Organization';
+import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { APP_PATHS } from 'src/constants';
 import Divisor from 'src/components/common/Divisor';
-import { DatePicker, Dropdown, Textfield, DropdownItem } from '@terraware/web-components';
-import { getAllNurseries, isContributor } from 'src/utils/organization';
+import { DatePicker, Dropdown, Textfield, DropdownItem, IconTooltip } from '@terraware/web-components';
+import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { getAllSpecies } from 'src/api/species/species';
 import { PlantingSite } from 'src/api/types/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageForm from 'src/components/common/PageForm';
-import ErrorMessage from 'src/components/common/ErrorMessage';
 import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';
+import { useOrganization } from 'src/providers/hooks';
+import isEnabled from 'src/features';
+import { Facility } from 'src/api/types/facilities';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
@@ -48,7 +50,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type SelectPurposeFormProps = {
-  organization: ServerOrganization;
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
   batches: any[];
   nurseryWithdrawal: NurseryWithdrawalRequest;
@@ -57,14 +58,15 @@ type SelectPurposeFormProps = {
 };
 
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
-  const { organization, nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
+  const { selectedOrganization } = useOrganization();
+  const { nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
   const { OUTPLANT, NURSERY_TRANSFER, DEAD, OTHER } = NurseryWithdrawalPurposes;
-  const contributor = isContributor(organization);
+  const contributor = isContributor(selectedOrganization);
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
   const [isOutplant, setIsOutplant] = useState(nurseryWithdrawal.purpose === OUTPLANT);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const [localRecord, setLocalRecord] = useState<NurseryWithdrawalRequest>(nurseryWithdrawal);
-  const [selectedNursery, setSelectedNursery] = useState<string>();
+  const [selectedNursery, setSelectedNursery] = useState<Facility>();
   const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
   const [isSingleBatch] = useState<boolean>(batches.length === 1);
   const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>();
@@ -73,7 +75,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const [zones, setZones] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<number>();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [noReadySeedlings, setNoReadySeedlings] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -81,6 +83,24 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [selectedPlot, setSelectedPlot] = useState<PlotInfo>();
   const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
   const [speciesMap, setSpeciesMap] = useState<{ [key: string]: string }>({});
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedNursery : undefined);
+  const [timeZone, setTimeZone] = useState(tz.id);
+
+  useEffect(() => {
+    if (timeZone !== tz.id) {
+      setTimeZone(tz.id);
+    }
+  }, [tz.id, timeZone]);
+
+  useEffect(() => {
+    setLocalRecord((previousRecord: NurseryWithdrawalRequest): NurseryWithdrawalRequest => {
+      return {
+        ...previousRecord,
+        withdrawnDate: getTodaysDateFormatted(timeZone),
+      };
+    });
+  }, [timeZone, setLocalRecord]);
 
   const updateField = (field: keyof NurseryWithdrawalRequest, value: any) => {
     setLocalRecord((prev) => ({
@@ -93,27 +113,34 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (plantingSites) {
       return;
     }
-    const response = await listPlantingSites(organization.id, true);
+    const response = await listPlantingSites(selectedOrganization.id, true);
     if (response.requestSucceeded && response.sites) {
       setPlantingSites(response.sites);
     } else {
       snackbar.toastError(response.error);
     }
-  }, [organization.id, plantingSites, snackbar]);
+  }, [selectedOrganization, plantingSites, snackbar]);
+
+  const updatePurpose = useCallback(
+    (value: string) => {
+      updateField('purpose', value);
+      if (value === NURSERY_TRANSFER) {
+        setIsNurseryTransfer(true);
+      } else {
+        setIsNurseryTransfer(false);
+      }
+      const outplant = value === OUTPLANT;
+      setIsOutplant(outplant);
+      if (outplant) {
+        fetchPlantingSites();
+      }
+    },
+    [NURSERY_TRANSFER, OUTPLANT, fetchPlantingSites]
+  );
 
   const onChangePurpose = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = (event.target as HTMLInputElement).value;
-    updateField('purpose', value);
-    if (value === NURSERY_TRANSFER) {
-      setIsNurseryTransfer(true);
-    } else {
-      setIsNurseryTransfer(false);
-    }
-    const outplant = value === OUTPLANT;
-    setIsOutplant(outplant);
-    if (outplant) {
-      fetchPlantingSites();
-    }
+    updatePurpose(value);
   };
 
   const onChangePlantingSite = (value: string) => {
@@ -146,14 +173,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const validateDate = (id: string, value?: any) => {
-    if (!value && id === 'date') {
-      setIndividualError('date', strings.REQUIRED_FIELD);
+    if (!value) {
+      setIndividualError(id, strings.REQUIRED_FIELD);
       return false;
     } else if (isNaN(value.getTime())) {
       setIndividualError(id, strings.INVALID_DATE);
       return false;
-    } else if (isInTheFuture(value) && id === 'date') {
-      setIndividualError('date', strings.NO_FUTURE_DATES);
+    } else if (isInTheFuture(value.getTime())) {
+      setIndividualError(id, strings.NO_FUTURE_DATES);
       return false;
     } else {
       setIndividualError(id, '');
@@ -161,10 +188,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
   };
 
-  const onChangeDate = (id: string, value?: any) => {
+  const onChangeDate = (id: 'readyByDate' | 'withdrawnDate', value?: any) => {
+    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
     const valid = validateDate(id, value);
     if (valid) {
-      updateField('withdrawnDate', value);
+      updateField(id, date);
     }
   };
 
@@ -283,7 +311,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const plantingSitePlotInvalid = !validatePlantingSitePlot();
     const readyAndNotReadyInvalid = !validateReadyAndNotReadyQuantities();
     if (
-      fieldsErrors.withdrawDate ||
+      fieldsErrors.withdrawnDate ||
       nurseryTransferInvalid ||
       selectedNurseryInvalid ||
       withdrawnQuantityInvalid ||
@@ -300,10 +328,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       destinationFacilityId: isNurseryTransfer ? localRecord.destinationFacilityId : undefined,
       plantingSiteId: isOutplant ? localRecord.plantingSiteId : undefined,
       plotId: isOutplant ? localRecord.plotId : undefined,
-      facilityId: Number(selectedNursery as string),
+      facilityId: Number(selectedNursery?.id || -1),
       batchWithdrawals: batches
         .filter((batch) => {
-          return batch.facility_id.toString() === selectedNursery && (!isOutplant || +batch.readyQuantity > 0);
+          return (
+            batch.facility_id.toString() === selectedNursery?.id.toString() && (!isOutplant || +batch.readyQuantity > 0)
+          );
         })
         .map((batch) => ({
           batchId: batch.id,
@@ -318,7 +348,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const onChangeFromNursery = (facilityIdSelected: string) => {
-    setSelectedNursery(facilityIdSelected);
+    const foundNursery = getNurseryById(selectedOrganization, Number(facilityIdSelected));
+    setSelectedNursery(foundNursery);
   };
 
   const getNurseriesOptions = () => {
@@ -339,7 +370,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const options: DropdownItem[] = Object.values(nurseries);
 
     if (options.length === 1 && !selectedNursery) {
-      setSelectedNursery(options[0].value);
+      setSelectedNursery(getNurseryById(selectedOrganization, Number(options[0].value)));
     }
     return options;
   };
@@ -357,15 +388,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const gridSize = () => (isMobile ? 12 : 6);
 
   useEffect(() => {
-    const allNurseries = getAllNurseries(organization);
-    const destinationNurseries = allNurseries.filter((nursery) => nursery.id.toString() !== selectedNursery);
+    const allNurseries = getAllNurseries(selectedOrganization);
+    const destinationNurseries = allNurseries.filter(
+      (nursery) => nursery.id.toString() !== selectedNursery?.id.toString()
+    );
     setDestinationNurseriesOptions(
       destinationNurseries.map((nursery) => ({ label: nursery.name, value: nursery.id.toString() }))
     );
     if (isOutplant) {
       fetchPlantingSites();
     }
-  }, [selectedNursery, organization, fetchPlantingSites, isOutplant]);
+  }, [selectedNursery, selectedOrganization, fetchPlantingSites, isOutplant]);
 
   useEffect(() => {
     setWithdrawnQuantity(
@@ -377,7 +410,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
       const hasReadyQuantities = batches.some((batch) => {
-        if (selectedNursery && batch.facility_id.toString() !== selectedNursery) {
+        if (selectedNursery && batch.facility_id.toString() !== selectedNursery.id.toString()) {
           return false;
         }
         return Number(batch.readyQuantity) > 0;
@@ -386,20 +419,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       if (!hasReadyQuantities) {
         if (!noReadySeedlings) {
           setNoReadySeedlings(true);
-          snackbar.toastError(
-            strings.NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_DESCRIPTION,
-            strings.NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_TITLE
-          );
+          updatePurpose(NurseryWithdrawalPurposes.NURSERY_TRANSFER);
         }
         return;
       }
     }
-    setNoReadySeedlings(false);
-  }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, OUTPLANT, batches]);
+  }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, OUTPLANT, batches, updatePurpose]);
 
   useEffect(() => {
     const fetchSpecies = async () => {
-      const result = await getAllSpecies(organization.id);
+      const result = await getAllSpecies(selectedOrganization.id);
       const speciesNamesMap = (result.species || []).reduce((acc, sp) => {
         const { scientificName, commonName } = sp;
         return {
@@ -411,10 +440,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     };
 
     fetchSpecies();
-  }, [organization.id]);
+  }, [selectedOrganization]);
 
   const batchesFromNursery = useMemo(() => {
-    return batches.filter((batch) => !selectedNursery || batch.facility_id.toString() === selectedNursery);
+    return batches.filter(
+      (batch) => !selectedNursery || batch.facility_id.toString() === selectedNursery.id.toString()
+    );
   }, [batches, selectedNursery]);
 
   const batchSpeciesNames = useMemo(() => {
@@ -427,6 +458,15 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return batchesFromNursery.reduce((acc, batch) => acc + (+batch.readyQuantity || 0), 0);
   }, [batchesFromNursery]);
 
+  const getOutplantLabel = () => {
+    return (
+      <>
+        {OUTPLANT}
+        {noReadySeedlings && <IconTooltip placement='top' title={strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS} />}
+      </>
+    );
+  };
+
   return (
     <PageForm
       cancelID='cancelInventoryWithdraw'
@@ -434,7 +474,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       onCancel={onCancel}
       onSave={onNextHandler}
       saveButtonText={saveText}
-      saveDisabled={noReadySeedlings}
     >
       <Container
         maxWidth={false}
@@ -483,12 +522,18 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   {strings.PURPOSE_REQUIRED}
                 </FormLabel>
                 <RadioGroup name='radio-buttons-purpose' value={localRecord.purpose} onChange={onChangePurpose}>
-                  {!contributor && <FormControlLabel value={OUTPLANT} control={<Radio />} label={strings.OUTPLANT} />}
+                  {!contributor && (
+                    <FormControlLabel
+                      value={OUTPLANT}
+                      control={<Radio />}
+                      label={getOutplantLabel()}
+                      disabled={noReadySeedlings}
+                    />
+                  )}
                   <FormControlLabel value={NURSERY_TRANSFER} control={<Radio />} label={strings.NURSERY_TRANSFER} />
                   <FormControlLabel value={DEAD} control={<Radio />} label={strings.DEAD} />
                   <FormControlLabel value={OTHER} control={<Radio />} label={strings.OTHER} />
                 </RadioGroup>
-                {noReadySeedlings && <ErrorMessage message={strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS} />}
               </FormControl>
             </Grid>
             <Grid display='flex'>
@@ -502,7 +547,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   id='fromFacilityId'
                   placeholder={strings.SELECT}
                   label={strings.FROM_NURSERY_REQUIRED}
-                  selectedValue={selectedNursery}
+                  selectedValue={selectedNursery?.id.toString() || ''}
                   options={getNurseriesOptions()}
                   onChange={(newValue) => onChangeFromNursery(newValue)}
                   fullWidth={true}
@@ -563,7 +608,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Textfield
                       label={strings.WITHDRAW_QUANTITY_REQUIRED}
                       id='withdrawnQuantity'
-                      onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
+                      onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
                       type='text'
                       value={withdrawnQuantity}
                       errorText={fieldsErrors.withdrawnQuantity}
@@ -590,7 +635,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       <Textfield
                         label={strings.NOT_READY_QUANTITY_REQUIRED}
                         id='notReadyQuantityWithdrawn'
-                        onChange={(id: string, value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
+                        onChange={(value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
                         type='text'
                         value={notReadyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
@@ -600,11 +645,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     </Grid>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
                       <DatePicker
-                        id='withdrawnDate'
+                        id='readyByDate'
                         label={strings.ESTIMATED_READY_DATE}
                         aria-label={strings.ESTIMATED_READY_DATE}
                         value={localRecord.readyByDate}
-                        onChange={onChangeDate}
+                        onChange={(value) => onChangeDate('readyByDate', value)}
+                        defaultTimeZone={timeZone}
                       />
                     </Grid>
                   </Grid>
@@ -613,7 +659,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       <Textfield
                         label={strings.READY_QUANTITY_REQUIRED}
                         id='readyQuantityWithdrawn'
-                        onChange={(id: string, value: unknown) => setReadyQuantityWithdrawn(value as number)}
+                        onChange={(value: unknown) => setReadyQuantityWithdrawn(value as number)}
                         type='text'
                         value={readyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
@@ -625,7 +671,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       <Textfield
                         label={strings.WITHDRAW_QUANTITY}
                         id='withdrawQuantity'
-                        onChange={(id: string, value: unknown) => setWithdrawnQuantity(value as number)}
+                        onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
                         type='text'
                         value={withdrawnQuantity}
                         display={true}
@@ -640,8 +686,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   label={strings.WITHDRAW_DATE_REQUIRED}
                   aria-label={strings.WITHDRAW_DATE_REQUIRED}
                   value={localRecord.withdrawnDate}
-                  onChange={onChangeDate}
+                  onChange={(value) => onChangeDate('withdrawnDate', value)}
                   errorText={fieldsErrors.withdrawnDate}
+                  defaultTimeZone={timeZone}
                 />
               </Grid>
             </>
@@ -649,7 +696,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               <Textfield
                 id='notes'
                 value={localRecord.notes}
-                onChange={(id, value) => updateField('notes', value)}
+                onChange={(value) => updateField('notes', value)}
                 type='textarea'
                 label={strings.NOTES}
               />

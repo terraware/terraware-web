@@ -13,19 +13,12 @@ import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
 import { Delivery } from 'src/api/types/tracking';
 import strings from 'src/strings';
 
-const DELETED_SPECIES = [
-  {
-    batch_species_scientificName: `<${strings.DELETED_SPECIES}>`,
-  },
-];
-
 /**
  * List nursery withdrawals
  */
 export async function listNurseryWithdrawals(
   organizationId: number,
   searchCriteria: SearchCriteria,
-  count = 1000,
   sortOrder?: SearchSortOrder
 ): Promise<SearchResponseElement[] | null> {
   const searchParams: SearchRequestPayload = {
@@ -44,14 +37,15 @@ export async function listNurseryWithdrawals(
     ],
     search: convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder] : [{ field: 'id', direction: 'Ascending' }],
-    count,
+    count: 1000,
   };
+  const deletedSpecies = [{ batch_species_scientificName: strings.DELETED_SPECIES }];
 
   const data = await search(searchParams);
   if (data) {
     return data.map((datum) => {
       const { batchWithdrawals, ...remaining } = datum;
-      const speciesScientificNames = ((batchWithdrawals || DELETED_SPECIES) as any[]).map(
+      const speciesScientificNames = ((batchWithdrawals || deletedSpecies) as any[]).map(
         (batchWithdrawal) => batchWithdrawal.batch_species_scientificName
       );
       // replace batchWithdrawals with species_scientificNames, which is an array of species names
@@ -69,7 +63,14 @@ export async function listNurseryWithdrawals(
  * Check if an org has nursery withdrawals
  */
 export async function hasNurseryWithdrawals(organizationId: number): Promise<boolean> {
-  const response = await listNurseryWithdrawals(organizationId, [], 1);
+  const searchParams: SearchRequestPayload = {
+    prefix: 'nurseryWithdrawals',
+    fields: ['id'],
+    search: convertToSearchNodePayload({}, organizationId),
+    count: 1,
+  };
+
+  const response = await search(searchParams);
   return response !== null && response !== undefined && response.length > 0;
 }
 

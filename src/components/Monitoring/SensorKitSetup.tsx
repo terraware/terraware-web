@@ -2,7 +2,6 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 import { Container, Grid } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ServerOrganization } from 'src/types/Organization';
 import strings from 'src/strings';
 import { Facility } from 'src/api/types/facilities';
 import { DeviceManager } from 'src/types/DeviceManager';
@@ -55,7 +54,6 @@ type SetupFlowState = 'PVSystem' | 'SensorKitID' | 'DeviceManager' | 'DetectSens
 
 type SensorKitSetupProps = {
   seedBank: Facility;
-  organization: ServerOrganization;
   onFinish: () => void;
   reloadData: () => void;
 };

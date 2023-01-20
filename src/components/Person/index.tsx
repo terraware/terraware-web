@@ -7,7 +7,6 @@ import Button from 'src/components/common/button/Button';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { makeStyles } from '@mui/styles';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -15,6 +14,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import TfMain from '../common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
+import { useOrganization } from '../../providers/hooks';
+import { roleName } from '../../types/Organization';
 
 const useStyles = makeStyles((theme: Theme) => ({
   back: {
@@ -31,11 +32,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type PersonDetailsProps = {
-  organization?: ServerOrganization;
-};
-
-export default function PersonDetails({ organization }: PersonDetailsProps): JSX.Element {
+export default function PersonDetails(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
@@ -45,7 +43,7 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
 
   useEffect(() => {
     const populatePersonData = async () => {
-      const response = await getOrganizationUsers(organization!);
+      const response = await getOrganizationUsers(selectedOrganization);
       if (response.requestSucceeded) {
         const selectedUser = response.users.find((user) => user.id.toString() === personId);
         if (selectedUser) {
@@ -55,10 +53,8 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
         }
       }
     };
-    if (organization) {
-      populatePersonData();
-    }
-  }, [personId, organization, history]);
+    populatePersonData();
+  }, [personId, selectedOrganization, history]);
 
   const getDateAdded = () => {
     if (person?.addedTime) {
@@ -142,7 +138,13 @@ export default function PersonDetails({ organization }: PersonDetailsProps): JSX
           <TextField label={strings.LAST_NAME} id='lastName' type='text' value={person?.lastName} display={true} />
         </Grid>
         <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(2) : 0}>
-          <TextField label={strings.ROLE} id='role' type='text' value={person?.role} display={true} />
+          <TextField
+            label={strings.ROLE}
+            id='role'
+            type='text'
+            value={person ? roleName(person.role) : ''}
+            display={true}
+          />
         </Grid>
         <Grid item xs={gridSize()}>
           <TextField label={strings.DATE_ADDED} id='addedTime' type='text' value={getDateAdded()} display={true} />

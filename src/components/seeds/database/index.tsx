@@ -27,12 +27,11 @@ import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { getAllSeedBanks } from 'src/utils/organization';
 import PageHeader from '../PageHeader';
-import { COLUMNS_INDEXED, RIGHT_ALIGNED_COLUMNS } from './columns';
+import { columnsIndexed, RIGHT_ALIGNED_COLUMNS } from './columns';
 import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
-import { ServerOrganization } from 'src/types/Organization';
 import { Facility } from 'src/api/types/facilities';
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
@@ -53,6 +52,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { updatePreferences } from 'src/api/preferences/preferences';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
+import { useOrganization } from 'src/providers/hooks';
 
 interface StyleProps {
   isMobile: boolean;
@@ -130,7 +130,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type DatabaseProps = {
-  organization?: ServerOrganization;
   searchCriteria: SearchCriteria;
   setSearchCriteria: (criteria: SearchCriteria) => void;
   searchSortOrder: SearchSortOrder;
@@ -146,6 +145,7 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const theme = useTheme();
@@ -161,14 +161,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setSearchColumns,
     displayColumnNames,
     setDisplayColumnNames,
-    organization,
     hasSeedBanks,
     hasSpecies,
     reloadData,
     orgScopedPreferences,
   } = props;
+  const columns = columnsIndexed();
   const displayColumnDetails = displayColumnNames.map((name) => {
-    const detail = { ...COLUMNS_INDEXED[name] };
+    const detail = { ...columns[name] };
 
     // set the classname for right aligned columns
     if (RIGHT_ALIGNED_COLUMNS.indexOf(name) !== -1) {
@@ -204,9 +204,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const updateSearchColumns = useCallback(
     (columnNames?: string[]) => {
       if (columnNames) {
+        const columnInfo = columnsIndexed();
         const searchSelectedColumns = columnNames.reduce((acum, value) => {
           acum.push(value);
-          const additionalColumns = COLUMNS_INDEXED[value].additionalKeys;
+          const additionalColumns = columnInfo[value].additionalKeys;
           if (additionalColumns) {
             return acum.concat(additionalColumns);
           }
@@ -241,8 +242,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
       }
       query.delete('stage');
     }
-    if ((facilityId || query.has('facilityId')) && organization) {
-      const seedBanks = getAllSeedBanks(organization);
+    if ((facilityId || query.has('facilityId')) && selectedOrganization) {
+      const seedBanks = getAllSeedBanks(selectedOrganization);
       delete newSearchCriteria.facility_name;
       if (seedBanks && facilityId) {
         const facility = seedBanks.find((seedBank) => seedBank?.id === parseInt(facilityId, 10));
@@ -260,11 +261,30 @@ export default function Database(props: DatabaseProps): JSX.Element {
       }
       query.delete('facilityId');
     }
-    if (stage || (facilityId && organization)) {
+    if (stage || (facilityId && selectedOrganization)) {
       history.replace(getLocation(location.pathname, location, query.toString()));
       setSearchCriteria(newSearchCriteria);
     }
-  }, [query, location, history, setSearchCriteria, organization, searchCriteria]);
+  }, [query, location, history, setSearchCriteria, selectedOrganization, searchCriteria]);
+
+  useEffect(() => {
+    const populateUnfilteredResults = async () => {
+      const apiResponse = await search({
+        prefix: 'facilities.accessions',
+        fields: ['id'],
+        search: convertToSearchNodePayload({}, selectedOrganization.id),
+        count: 1000,
+      });
+
+      setUnfilteredResults(apiResponse);
+    };
+    const populatePendingAccessions = async () => {
+      const data = await getPendingAccessions(selectedOrganization.id);
+      setPendingAccessions(data);
+    };
+    populateUnfilteredResults();
+    populatePendingAccessions();
+  }, [selectedOrganization.id]);
 
   useEffect(() => {
     let activeRequests = true;
@@ -279,27 +299,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
       return columnsNamesToSearch;
     };
 
-    if (organization) {
-      const populateUnfilteredResults = async () => {
-        const apiResponse = await search({
-          prefix: 'facilities.accessions',
-          fields: getFieldsFromSearchColumns(),
-          sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload({}, organization.id),
-          count: 1000,
-        });
-
-        if (activeRequests) {
-          setUnfilteredResults(apiResponse);
-        }
-      };
-
+    if (selectedOrganization) {
       const populateSearchResults = async () => {
         const apiResponse = await search({
           prefix: 'facilities.accessions',
           fields: getFieldsFromSearchColumns(),
           sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload(searchCriteria, organization.id),
+          search: convertToSearchNodePayload(searchCriteria, selectedOrganization.id),
           count: 1000,
         });
 
@@ -310,42 +316,33 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateAvailableFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        const data = await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, organization.id);
+        const data = await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, selectedOrganization.id);
 
         if (activeRequests) {
           setAvailableFieldOptions(data);
         }
       };
 
-      const populatePendingAccessions = async () => {
-        if (organization) {
-          const data = await getPendingAccessions(organization.id);
-
-          if (activeRequests) {
-            setPendingAccessions(data);
-          }
-        }
-      };
-
       const populateFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        const allValues = await getAllFieldValues(singleAndMultiChoiceFields, organization.id);
+        const allValues = await getAllFieldValues(singleAndMultiChoiceFields, selectedOrganization.id);
 
         if (activeRequests) {
           setFieldOptions(allValues);
         }
       };
-      populateUnfilteredResults();
-      populateSearchResults();
+      if (searchCriteria) {
+        populateSearchResults();
+      }
       populateAvailableFieldOptions();
-      populatePendingAccessions();
+
       populateFieldOptions();
     }
 
     return () => {
       activeRequests = false;
     };
-  }, [searchCriteria, searchSortOrder, searchColumns, organization]);
+  }, [searchCriteria, searchSortOrder, searchColumns, selectedOrganization]);
 
   useEffect(() => {
     if (orgScopedPreferences?.accessionsColumns) {
@@ -388,9 +385,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const onCloseEditColumnsModal = (columnNames?: string[]) => {
     if (columnNames) {
       updateSearchColumns(columnNames);
-      if (organization?.id) {
-        updatePreferences('accessionsColumns', columnNames, organization.id);
-      }
+      updatePreferences('accessionsColumns', columnNames, selectedOrganization.id);
     }
     setEditColumnsModalOpen(false);
   };
@@ -542,23 +537,18 @@ export default function Database(props: DatabaseProps): JSX.Element {
           reloadData={reloadData}
         />
       )}
-      {organization && (
+      {selectedOrganization && (
         <>
-          <SelectSeedBankModal
-            organization={organization}
-            open={selectSeedBankForImportModalOpen}
-            onClose={onSeedBankForImportSelected}
-          />
+          <SelectSeedBankModal open={selectSeedBankForImportModalOpen} onClose={onSeedBankForImportSelected} />
         </>
       )}
       <TfMain backgroundImageVisible={!isOnboarded}>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
-        {organization && (
+        {selectedOrganization && (
           <DownloadReportModal
             searchCriteria={searchCriteria}
             searchSortOrder={searchSortOrder}
             searchColumns={searchColumns}
-            organization={organization}
             open={reportModalOpen}
             onClose={onCloseDownloadReportModal}
           />
@@ -573,7 +563,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
             rightComponent={
               isOnboarded ? (
                 <>
-                  {organization &&
+                  {selectedOrganization &&
                     (isMobile ? (
                       <Button icon='plus' onClick={goToNewAccession} size='medium' id='newAccession' />
                     ) : (
@@ -614,7 +604,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           </PageHeader>
         </PageHeaderWrapper>
         <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
-          {organization && unfilteredResults ? (
+          {selectedOrganization && unfilteredResults ? (
             <Grid container>
               {isOnboarded ? (
                 <>
@@ -654,7 +644,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     </Box>
                   </Grid>
                 </>
-              ) : isAdmin(organization) ? (
+              ) : isAdmin(selectedOrganization) ? (
                 <>
                   {!isMobile && emptyStateSpacer()}
                   <EmptyMessage

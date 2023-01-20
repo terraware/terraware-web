@@ -2,33 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import PageForm from 'src/components/common/PageForm';
-import { getTodaysDateFormatted } from '@terraware/web-components/utils';
+import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import useSnackbar from 'src/utils/useSnackbar';
 import { DatePicker } from '@terraware/web-components';
 import { Species2Dropdown } from '../accession2/properties';
 import { createBatch, CreateBatchRequestPayload } from 'src/api/batch/batch';
 import NurseryDropdown from './NurseryDropdown';
 import TfMain from 'src/components/common/TfMain';
-
-type CreateInventoryProps = {
-  organization: ServerOrganization;
-};
-
-const defaultBatch = (): CreateBatchRequestPayload =>
-  ({
-    addedDate: getTodaysDateFormatted(),
-    facilityId: undefined,
-    speciesId: undefined,
-    germinatingQuantity: undefined,
-    notReadyQuantity: undefined,
-    readyQuantity: undefined,
-  } as unknown as CreateBatchRequestPayload);
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { Facility } from 'src/api/types/facilities';
+import { getNurseryById } from 'src/utils/organization';
+import { useOrganization } from 'src/providers';
+import isEnabled from 'src/features';
 
 const MANDATORY_FIELDS = [
   'speciesId',
@@ -41,15 +31,53 @@ const MANDATORY_FIELDS = [
 
 type MandatoryField = typeof MANDATORY_FIELDS[number];
 
-export default function CreateInventory(props: CreateInventoryProps): JSX.Element {
-  const { organization } = props;
+export default function CreateInventory(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const history = useHistory();
   const snackbar = useSnackbar();
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const [record, setRecord, onChange] = useForm<CreateBatchRequestPayload>(defaultBatch());
   const [totalQuantity, setTotalQuantity] = useState(0);
+  const { selectedOrganization } = useOrganization();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const [selectedNursery, setSelectedNursery] = useState<Facility>();
+  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedNursery : undefined);
+  const [timeZone, setTimeZone] = useState(tz.id);
+  const [addedDateChanged, setAddedDateChanged] = useState(false);
+
+  const defaultBatch = (): CreateBatchRequestPayload =>
+    ({
+      addedDate: getTodaysDateFormatted(timeZone),
+      facilityId: undefined,
+      speciesId: undefined,
+      germinatingQuantity: undefined,
+      notReadyQuantity: undefined,
+      readyQuantity: undefined,
+    } as unknown as CreateBatchRequestPayload);
+
+  const [record, setRecord, onChange] = useForm<CreateBatchRequestPayload>(defaultBatch());
+
+  useEffect(() => {
+    if (record.facilityId) {
+      const batchNursery = getNurseryById(selectedOrganization, record.facilityId);
+      setSelectedNursery(batchNursery);
+    }
+  }, [record.facilityId, selectedOrganization]);
+
+  useEffect(() => {
+    if (timeZone !== tz.id) {
+      setTimeZone(tz.id);
+    }
+  }, [tz.id, timeZone]);
+
+  useEffect(() => {
+    setRecord((previousRecord: CreateBatchRequestPayload): CreateBatchRequestPayload => {
+      return {
+        ...previousRecord,
+        addedDate: addedDateChanged ? previousRecord.addedDate : getTodaysDateFormatted(timeZone),
+      };
+    });
+  }, [timeZone, setRecord, addedDateChanged]);
 
   useEffect(() => {
     setTotalQuantity(
@@ -96,7 +124,9 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
 
   const changeDate = (id: string, value?: any) => {
-    onChange(id, value);
+    setAddedDateChanged(id === 'addedDate');
+    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
+    onChange(id, date);
   };
 
   return (
@@ -129,16 +159,10 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
           <Box marginTop={theme.spacing(3)}>
             <Grid container padding={0}>
               <Grid item xs={12} sx={marginTop}>
-                <Species2Dropdown
-                  record={record}
-                  organization={organization}
-                  setRecord={setRecord}
-                  validate={validateFields}
-                />
+                <Species2Dropdown record={record} setRecord={setRecord} validate={validateFields} />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
                 <NurseryDropdown
-                  organization={organization}
                   record={record}
                   setRecord={setRecord}
                   validate={validateFields}
@@ -148,12 +172,13 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
                 <DatePicker
-                  id='dateAdded'
+                  id='addedDate'
                   label={strings.DATE_ADDED_REQUIRED}
                   aria-label={strings.DATE_ADDED_REQUIRED}
                   value={record.addedDate}
-                  onChange={changeDate}
+                  onChange={(value) => changeDate('addedDate', value)}
                   errorText={validateFields && !record.addedDate ? strings.REQUIRED_FIELD : ''}
+                  defaultTimeZone={timeZone}
                 />
               </Grid>
 
@@ -170,7 +195,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 <Textfield
                   id='germinatingQuantity'
                   value={record.germinatingQuantity}
-                  onChange={onChange}
+                  onChange={(value) => onChange('germinatingQuantity', value)}
                   type='text'
                   label={strings.GERMINATING_QUANTITY_REQUIRED}
                   tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
@@ -184,7 +209,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 <Textfield
                   id='notReadyQuantity'
                   value={record.notReadyQuantity}
-                  onChange={onChange}
+                  onChange={(value) => onChange('notReadyQuantity', value)}
                   type='text'
                   label={strings.NOT_READY_QUANTITY_REQUIRED}
                   tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
@@ -197,14 +222,14 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                   label={strings.ESTIMATED_READY_DATE}
                   aria-label={strings.ESTIMATED_READY_DATE}
                   value={record.readyByDate}
-                  onChange={changeDate}
+                  onChange={(value) => changeDate('readyByDate', value)}
                 />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
                   id='readyQuantity'
                   value={record.readyQuantity}
-                  onChange={onChange}
+                  onChange={(value) => onChange('readyQuantity', value)}
                   type='text'
                   label={strings.READY_QUANTITY_REQUIRED}
                   tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
@@ -215,7 +240,7 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 <Textfield
                   id='totalQuantity'
                   value={totalQuantity}
-                  onChange={onChange}
+                  onChange={(value) => onChange('totalQuantity', value)}
                   type='text'
                   label={strings.TOTAL_QUANTITY}
                   display={true}
@@ -223,7 +248,13 @@ export default function CreateInventory(props: CreateInventoryProps): JSX.Elemen
                 />
               </Grid>
               <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
-                <Textfield id='notes' value={record.notes} onChange={onChange} type='textarea' label={strings.NOTES} />
+                <Textfield
+                  id='notes'
+                  value={record.notes}
+                  onChange={(value) => onChange('notes', value)}
+                  type='textarea'
+                  label={strings.NOTES}
+                />
               </Grid>
             </Grid>
           </Box>

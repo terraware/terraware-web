@@ -3,7 +3,6 @@ import { Grid, Typography } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import {
   Accession2Address,
@@ -14,12 +13,15 @@ import {
   Accession2PlantSiteDetails,
 } from '../properties';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { getSeedBank } from 'src/utils/organization';
+import { useOrganization } from 'src/providers';
+import isEnabled from 'src/features';
 
 export interface Accession2EditModalProps {
   open: boolean;
   accession: Accession2;
   onClose: () => void;
-  organization: ServerOrganization;
   reload: () => void;
 }
 
@@ -28,10 +30,15 @@ const MANDATORY_FIELDS = ['speciesId', 'collectedDate'] as const;
 type MandatoryField = typeof MANDATORY_FIELDS[number];
 
 export default function Accession2EditModal(props: Accession2EditModalProps): JSX.Element {
-  const { onClose, open, accession, organization, reload } = props;
+  const { onClose, open, accession, reload } = props;
   const [record, setRecord, onChange] = useForm(accession);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const snackbar = useSnackbar();
+  const { selectedOrganization } = useOrganization();
+  const selectedSeedBank = getSeedBank(selectedOrganization, record.facilityId);
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedSeedBank : undefined);
+  const timeZone = tz.id;
 
   const hasErrors = () => {
     const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record || !record[field]);
@@ -89,7 +96,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             type='text'
             label={strings.ID}
             value={record?.accessionNumber}
-            onChange={onChange}
+            onChange={(value) => onChange('accessionNumber', value)}
             readonly={true}
             tooltipTitle={strings.TOOLTIP_ACCESSIONS_ID}
           />
@@ -97,18 +104,18 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
         <Species2Dropdown
           speciesId={record.speciesId}
           record={record}
-          organization={organization}
           setRecord={setRecord}
           validate={validateFields}
         />
-        <CollectedReceivedDate2 record={record} onChange={onChange} type='collected' validate={validateFields} />
+        <CollectedReceivedDate2
+          record={record}
+          onChange={onChange}
+          type='collected'
+          validate={validateFields}
+          timeZone={timeZone}
+        />
         <Grid item xs={12}>
-          <Collectors2
-            organizationId={organization.id}
-            id='collectors'
-            onChange={onChange}
-            collectors={record.collectors}
-          />
+          <Collectors2 onChange={onChange} collectors={record.collectors} />
         </Grid>
         <Grid item xs={12}>
           <Typography>{strings.SITE_DETAIL} </Typography>
@@ -119,7 +126,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             type='text'
             label={strings.COLLECTING_SITE}
             value={record?.collectionSiteName}
-            onChange={onChange}
+            onChange={(value) => onChange('collectionSiteName', value)}
             tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
           />
         </Grid>
@@ -130,7 +137,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             type='text'
             label={strings.LANDOWNER}
             value={record?.collectionSiteLandowner}
-            onChange={onChange}
+            onChange={(value) => onChange('collectionSiteLandowner', value)}
           />
         </Grid>
         <Accession2Address record={record} onChange={onChange} opened={true} />

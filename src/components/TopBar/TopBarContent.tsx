@@ -1,16 +1,17 @@
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { IconButton, Theme, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Svg } from '@terraware/web-components';
-import React from 'react';
-
-import { ServerOrganization } from 'src/types/Organization';
-import { User } from 'src/types/User';
 import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
+import { useOrganization } from 'src/providers/hooks';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {
@@ -44,29 +45,21 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'right',
     alignItems: 'center',
   },
+  clickableLogo: {
+    cursor: 'pointer',
+    height: '24px',
+  },
 }));
 
 type TopBarProps = {
-  organizations?: ServerOrganization[];
-  setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
-  selectedOrganization?: ServerOrganization;
-  reloadOrganizationData: (selectedOrgId?: number) => void;
-  user?: User;
-  reloadUser: () => void;
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
+  const history = useHistory();
   const classes = useStyles();
-  const {
-    setSelectedOrganization,
-    selectedOrganization,
-    organizations,
-    reloadOrganizationData,
-    user,
-    reloadUser,
-    setShowNavBar,
-  } = props;
+  const { selectedOrganization, organizations, reloadData } = useOrganization();
+  const { setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
 
   const onHandleLogout = () => {
@@ -77,55 +70,49 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     <>
       <div className={classes.left}>
         <div className='logo'>
-          <Svg.Logo className={classes.logo} />
+          <Link to={APP_PATHS.HOME}>
+            <Svg.Logo className={classes.logo} />
+          </Link>
         </div>
         {organizations && organizations.length > 0 && (
           <>
             <div className={classes.separator} />
-            <OrganizationsDropdown
-              organizations={organizations}
-              selectedOrganization={selectedOrganization}
-              setSelectedOrganization={setSelectedOrganization}
-              reloadOrganizationData={reloadOrganizationData}
-            />
+            <OrganizationsDropdown />
           </>
         )}
       </div>
       <div className={classes.right}>
         <NotificationsDropdown
-          organizationId={selectedOrganization?.id}
-          reloadOrganizationData={reloadOrganizationData}
+          organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
+          reloadOrganizationData={reloadData}
         />
         <div className={classes.separator} />
-        <UserMenu user={user} reloadUser={reloadUser} hasOrganizations={organizations && organizations.length > 0} />
+        <UserMenu hasOrganizations={organizations && organizations.length > 0} />
       </div>
     </>
   ) : (
     <Grid container className={`${classes.flex}  ${classes.backgroundLogo}`}>
       <Grid item xs={3} className={classes.left}>
-        {selectedOrganization && (
+        {selectedOrganization.id !== -1 && (
           <IconButton onClick={() => setShowNavBar(true)} size='small'>
             <Icon name='iconMenu' />
           </IconButton>
         )}
       </Grid>
 
-      <Grid item xs={6} className={`${classes.center} logo`} />
+      <Grid
+        item
+        xs={6}
+        className={`${classes.center} ${classes.clickableLogo} logo`}
+        onClick={() => history.push(APP_PATHS.HOME)}
+      />
 
       <Grid item xs={3} className={classes.right}>
         <NotificationsDropdown
-          organizationId={selectedOrganization?.id}
-          reloadOrganizationData={reloadOrganizationData}
+          organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
+          reloadOrganizationData={reloadData}
         />
-        <SmallDeviceUserMenu
-          onLogout={onHandleLogout}
-          user={user}
-          organizations={organizations}
-          selectedOrganization={selectedOrganization}
-          setSelectedOrganization={setSelectedOrganization}
-          reloadOrganizationData={reloadOrganizationData}
-          hasOrganizations={organizations && organizations.length > 0}
-        />
+        <SmallDeviceUserMenu onLogout={onHandleLogout} hasOrganizations={organizations && organizations.length > 0} />
       </Grid>
     </Grid>
   );

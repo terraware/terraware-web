@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
 import { ErrorBox, Table, TableColumnType } from '@terraware/web-components';
-import { ServerOrganization } from 'src/types/Organization';
 import { Delivery } from 'src/api/types/tracking';
 import { getDelivery } from 'src/api/tracking/deliveries';
 import { getPlantingSite } from 'src/api/tracking/tracking';
@@ -20,28 +19,15 @@ import ReassignmentRenderer, { Reassignment, PlotInfo } from './ReassignmentRend
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BusySpinner from 'src/components/common/BusySpinner';
+import { useOrganization } from 'src/providers/hooks';
 
-const columns: TableColumnType[] = [
-  { key: 'species', name: strings.SPECIES, type: 'string' },
-  { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
-  { key: 'zoneName', name: strings.ZONE, type: 'string' },
-  { key: 'originalPlot', name: strings.ORIGINAL_PLOT, type: 'string' },
-  { key: 'newPlot', name: strings.NEW_PLOT, type: 'string' },
-  { key: 'reassign', name: strings.REASSIGN, type: 'string' },
-  { key: 'notes', name: strings.NOTES, type: 'string' },
-];
-
-type NurseryReassignmentProps = {
-  organization: ServerOrganization;
-};
-
-export default function NurseryReassignment(props: NurseryReassignmentProps): JSX.Element {
-  const { organization } = props;
+export default function NurseryReassignment(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const history = useHistory();
   const { isMobile } = useDeviceInfo();
   const { deliveryId } = useParams<{ deliveryId: string }>();
-  const [snackbar] = useState(useSnackbar());
+  const snackbar = useSnackbar();
   const [speciesMap, setSpeciesMap] = useState<{ [id: string]: string }>();
   const [delivery, setDelivery] = useState<Delivery>();
   const [plots, setPlots] = useState<PlotInfo[]>();
@@ -51,11 +37,20 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
   const [reassigning, setReassigning] = useState<boolean>(false);
   const contentRef = useRef(null);
+  const columns: TableColumnType[] = [
+    { key: 'species', name: strings.SPECIES, type: 'string' },
+    { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
+    { key: 'zoneName', name: strings.ZONE, type: 'string' },
+    { key: 'originalPlot', name: strings.ORIGINAL_PLOT, type: 'string' },
+    { key: 'newPlot', name: strings.NEW_PLOT, type: 'string' },
+    { key: 'reassign', name: strings.REASSIGN, type: 'string' },
+    { key: 'notes', name: strings.NOTES, type: 'string' },
+  ];
 
   // populate map of species id to scientific name
   useEffect(() => {
     const populateSpecies = async () => {
-      const speciesResponse = await getAllSpecies(organization.id);
+      const speciesResponse = await getAllSpecies(selectedOrganization.id);
       if (speciesResponse.requestSucceeded) {
         setSpeciesMap(
           speciesResponse.species.reduce((acc: any, current: any) => {
@@ -69,7 +64,7 @@ export default function NurseryReassignment(props: NurseryReassignmentProps): JS
     };
 
     populateSpecies();
-  }, [organization.id, snackbar]);
+  }, [selectedOrganization, snackbar]);
 
   // populate delivery
   useEffect(() => {

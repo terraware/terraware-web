@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
@@ -14,23 +13,24 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getAllNurseries } from 'src/utils/organization';
 import TfMain from 'src/components/common/TfMain';
+import { useOrganization } from 'src/providers/hooks';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import isEnabled from 'src/features';
+import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
-type SiteViewProps = {
-  organization: ServerOrganization;
-  reloadOrganizationData: () => void;
-};
-
-export default function NurseryView({ organization, reloadOrganizationData }: SiteViewProps): JSX.Element {
+export default function NurseryView(): JSX.Element {
+  const { selectedOrganization, reloadData } = useOrganization();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
     id: -1,
     type: 'Nursery',
-    organizationId: organization.id,
+    organizationId: selectedOrganization.id,
     connectionState: 'Not Connected',
   });
   const { nurseryId } = useParams<{ nurseryId: string }>();
@@ -45,20 +45,21 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
   };
 
   useEffect(() => {
-    const seedBanks = getAllNurseries(organization);
+    const seedBanks = getAllNurseries(selectedOrganization);
     setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
-  }, [nurseryId, organization]);
+  }, [nurseryId, selectedOrganization]);
 
   useEffect(() => {
     setRecord({
       name: selectedNursery?.name || '',
       description: selectedNursery?.description,
-      id: -1,
-      organizationId: organization.id,
+      id: selectedNursery?.id ?? -1,
+      organizationId: selectedOrganization.id,
       type: 'Nursery',
       connectionState: 'Not Connected',
+      timeZone: selectedNursery?.timeZone,
     });
-  }, [selectedNursery, setRecord, organization.id]);
+  }, [selectedNursery, setRecord, selectedOrganization]);
 
   const goToNurseries = () => {
     const nurseriesLocation = {
@@ -76,17 +77,24 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
       setDescriptionError(strings.REQUIRED_FIELD);
       return;
     }
-    const response = selectedNursery
-      ? await updateFacility({ ...record, id: selectedNursery.id } as Facility)
-      : await createFacility(record);
+    const response = selectedNursery ? await updateFacility({ ...record } as Facility) : await createFacility(record);
 
     if (response.requestSucceeded) {
-      reloadOrganizationData();
+      reloadData();
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
       goToNurseries();
     } else {
       snackbar.toastError();
     }
+  };
+
+  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
+    setRecord((previousRecord: Facility): Facility => {
+      return {
+        ...previousRecord,
+        timeZone: newTimeZone ? newTimeZone.id : undefined,
+      };
+    });
   };
 
   return (
@@ -111,7 +119,7 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
                 id='name'
                 label={strings.NAME_REQUIRED}
                 type='text'
-                onChange={onChange}
+                onChange={(value) => onChange('name', value)}
                 value={record.name}
                 errorText={record.name ? '' : nameError}
               />
@@ -121,11 +129,20 @@ export default function NurseryView({ organization, reloadOrganizationData }: Si
                 id='description'
                 label={strings.DESCRIPTION_REQUIRED}
                 type='textarea'
-                onChange={onChange}
+                onChange={(value) => onChange('description', value)}
                 value={record.description}
                 errorText={record.description ? '' : descriptionError}
               />
             </Grid>
+            {timeZoneFeatureEnabled && (
+              <Grid item xs={gridSize()}>
+                <LocationTimeZoneSelector
+                  location={record}
+                  onChangeTimeZone={onChangeTimeZone}
+                  tooltip='lorem ipsum dolor sit amet'
+                />
+              </Grid>
+            )}
           </Grid>
         </Box>
       </PageForm>

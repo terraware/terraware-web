@@ -4,13 +4,6 @@ import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
 import { Species } from 'src/types/Species';
 
-const columns: TableColumnType[] = [
-  { key: 'name', name: strings.SPECIES, type: 'string' },
-  { key: 'notReady', name: strings.NOT_READY, type: 'number' },
-  { key: 'ready', name: strings.READY, type: 'number' },
-  { key: 'total', name: strings.TOTAL, type: 'number' },
-];
-
 type SpeciesWithdrawal = {
   name?: string;
   notReady: number;
@@ -32,6 +25,12 @@ export default function NonOutplantWithdrawalTable({
   batches,
 }: NonOutplantWithdrawalTableProps): JSX.Element {
   const [rowData, setRowData] = useState<SpeciesWithdrawal[]>([]);
+  const columns: TableColumnType[] = [
+    { key: 'name', name: strings.SPECIES, type: 'string' },
+    { key: 'notReady', name: strings.NOT_READY, type: 'number' },
+    { key: 'ready', name: strings.READY, type: 'number' },
+    { key: 'total', name: strings.TOTAL, type: 'number' },
+  ];
 
   useEffect(() => {
     // get map of batch id to species id - for correlation

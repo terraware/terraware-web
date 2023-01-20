@@ -43,14 +43,14 @@
         };
       } else {
         // Uncomment this function to track non-staging/prod environments
-        //window.INIT_GTAG = function (userId, internalUser) {
-        //  gtmConfig(
-        //    userId,
-        //    internalUser,
-        //    'GTM-TNX8NWM',
-        //    '&gtm_auth=1591mjZEVL_pulZkOX4gWg&gtm_preview=env-11&gtm_cookies_win=x'
-        //  );
-        //};
+        window.INIT_GTAG = function (userId, internalUser) {
+          gtmConfig(
+            userId,
+            internalUser,
+            'GTM-TNX8NWM',
+            '&gtm_auth=1591mjZEVL_pulZkOX4gWg&gtm_preview=env-11&gtm_cookies_win=x'
+          );
+        };
       }
     </script>
     <!-- End Google Tag Manager -->

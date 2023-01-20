@@ -21,7 +21,7 @@ export function convertToSearchNodePayload(
   criteria: SearchCriteria,
   organizationId?: number
 ): SearchNodePayload | undefined {
-  if (Object.keys(criteria).length === 0) {
+  if (Object.keys(criteria).length === 0 && !organizationId) {
     return undefined;
   }
   let newCriteria = criteria;

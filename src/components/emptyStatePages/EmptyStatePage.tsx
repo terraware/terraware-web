@@ -6,7 +6,6 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import AddSpeciesModal from '../Species/AddSpeciesModal';
 import { useSetRecoilState } from 'recoil';
-import { ServerOrganization } from 'src/types/Organization';
 import ImportSpeciesModal, { downloadCsvTemplate } from '../Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
 import speciesAtom from 'src/state/species';
@@ -19,6 +18,7 @@ import EmptyMessage from 'src/components/common/EmptyMessage';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportInventoryModal, { downloadInventoryCsvTemplate } from '../Inventory/ImportInventoryModal';
 import PlantingSiteTypeSelect from '../PlantingSites/PlantingSiteTypeSelect';
+import { useOrganization } from 'src/providers/hooks';
 
 interface StyleProps {
   isMobile: boolean;
@@ -66,49 +66,18 @@ type PageContent = {
   linkLocation?: string;
 };
 
-const NO_SEEDBANKS_CONTENT: PageContent = {
-  title1: strings.SEED_BANKS,
-  title2: strings.ADD_A_SEED_BANK,
-  subtitle: strings.ADD_SEED_BANK_SUBTITLE,
-  listItems: [
-    {
-      icon: 'blobbyIconSeedBank',
-      title: '',
-      description: '',
-    },
-  ],
-  buttonText: strings.ADD_SEED_BANK,
-  buttonIcon: 'plus',
-  linkLocation: APP_PATHS.SEED_BANKS_NEW,
-};
-
-const NO_NURSERIES_CONTENT: PageContent = {
-  title1: strings.NURSERIES,
-  title2: strings.ADD_A_NURSERY,
-  subtitle: strings.ADD_NURSERY_SUBTITLE,
-  listItems: [
-    {
-      icon: 'blobbyIconNursery',
-    },
-  ],
-  buttonText: strings.ADD_NURSERY,
-  buttonIcon: 'plus',
-  linkLocation: APP_PATHS.NURSERIES_NEW,
-};
-
 type EmptyStatePageProps = {
   backgroundImageVisible?: boolean;
   pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites';
-  organization?: ServerOrganization;
   reloadData?: () => void;
 };
 
 export default function EmptyStatePage({
   backgroundImageVisible = true,
   pageName,
-  organization,
   reloadData,
 }: EmptyStatePageProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const history = useHistory();
@@ -217,8 +186,38 @@ export default function EmptyStatePage({
     ],
   };
 
+  const NO_SEEDBANKS_CONTENT: PageContent = {
+    title1: strings.SEED_BANKS,
+    title2: strings.ADD_A_SEED_BANK,
+    subtitle: strings.ADD_SEED_BANK_SUBTITLE,
+    listItems: [
+      {
+        icon: 'blobbyIconSeedBank',
+        title: '',
+        description: '',
+      },
+    ],
+    buttonText: strings.ADD_SEED_BANK,
+    buttonIcon: 'plus',
+    linkLocation: APP_PATHS.SEED_BANKS_NEW,
+  };
+
+  const NO_NURSERIES_CONTENT: PageContent = {
+    title1: strings.NURSERIES,
+    title2: strings.ADD_A_NURSERY,
+    subtitle: strings.ADD_NURSERY_SUBTITLE,
+    listItems: [
+      {
+        icon: 'blobbyIconNursery',
+      },
+    ],
+    buttonText: strings.ADD_NURSERY,
+    buttonIcon: 'plus',
+    linkLocation: APP_PATHS.NURSERIES_NEW,
+  };
+
   const pageContent = (): PageContent => {
-    const contributor = organization && isContributor(organization);
+    const contributor = selectedOrganization && isContributor(selectedOrganization);
 
     switch (pageName) {
       case 'Species':
@@ -285,19 +284,11 @@ export default function EmptyStatePage({
 
   return (
     <TfMain backgroundImageVisible={backgroundImageVisible}>
-      {organization && (
+      {selectedOrganization && (
         <>
-          <AddSpeciesModal open={addSpeciesModalOpened} onClose={onCloseEditSpeciesModal} organization={organization} />
-          <ImportSpeciesModal
-            open={importSpeciesModalOpened}
-            onClose={onCloseImportSpeciesModal}
-            organization={organization}
-          />
-          <ImportInventoryModal
-            open={importInventoryModalOpened}
-            onClose={onCloseImportInventoryModal}
-            organization={organization}
-          />
+          <AddSpeciesModal open={addSpeciesModalOpened} onClose={onCloseEditSpeciesModal} />
+          <ImportSpeciesModal open={importSpeciesModalOpened} onClose={onCloseImportSpeciesModal} />
+          <ImportInventoryModal open={importInventoryModalOpened} onClose={onCloseImportInventoryModal} />
         </>
       )}
       <PlantingSiteTypeSelect open={plantingSiteTypeSelectOpen} onClose={() => setPlantingSiteTypeSelectOpen(false)} />

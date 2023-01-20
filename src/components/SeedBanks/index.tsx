@@ -19,6 +19,7 @@ import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -48,11 +49,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const columns: TableColumnType[] = [
-  { key: 'name', name: 'Name', type: 'string' },
-  { key: 'description', name: 'Description', type: 'string' },
-];
-
 type SeedBanksListProps = {
   organization: ServerOrganization;
 };
@@ -67,6 +63,11 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   const [results, setResults] = useState<Facility[]>();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
+  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const columns: TableColumnType[] = [
+    { key: 'name', name: strings.NAME, type: 'string' },
+    { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+  ];
 
   useEffect(() => {
     const getSeedBanks = () => {
@@ -100,7 +101,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
       if (debouncedSearchTerm) {
         const params: SearchNodePayload = {
           prefix: 'facilities',
-          fields: ['id', 'name', 'description', 'type', 'organization_id'],
+          fields: ['id', 'name', 'description', 'type', 'organization_id', 'timeZone'],
           search: {
             operation: 'and',
             children: [
@@ -134,6 +135,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
             organizationId: parseInt(result.organization_id as string, 10),
             type: result.type as FacilityType,
             connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
+            timeZone: result.timeZone as string,
           });
         });
         if (getRequestId('searchSeedbanks') === requestId) {
@@ -181,7 +183,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
                 id='search'
                 type='text'
                 className={classes.searchField}
-                onChange={onChangeSearch}
+                onChange={(value) => onChangeSearch('search', value)}
                 value={temporalSearchValue}
                 iconRight='cancel'
                 onClickRightIcon={clearSearch}
@@ -194,7 +196,11 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
                     {seedBanks && (
                       <Table
                         id='seed-banks-table'
-                        columns={columns}
+                        columns={
+                          timeZoneFeatureEnabled
+                            ? [...columns, { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' }]
+                            : columns
+                        }
                         rows={results || seedBanks}
                         orderBy='name'
                         Renderer={SeedBanksCellRenderer}
