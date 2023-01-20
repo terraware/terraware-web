@@ -36,7 +36,7 @@ export default function LocalizationProvider({
 
   useEffect(() => {
     const fetchStrings = async () => {
-      const language = locale.replace(/[-_].*/, '');  // 'en-US' => 'en'
+      const language = locale.replace(/[-_].*/, ''); // 'en-US' => 'en'
       const localeDetails =
         supportedLocales.find((details) => details.id === locale) ||
         supportedLocales.find((details) => details.id === language) ||

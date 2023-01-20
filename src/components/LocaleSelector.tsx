@@ -13,13 +13,7 @@ export default function LocaleSelector(): JSX.Element {
     <LocalizationContext.Consumer>
       {({ locale, setLocale }) => {
         return (
-          <Dropdown
-            id={'localeSelector'}
-            label={''}
-            onChange={setLocale}
-            selected={locale}
-            values={localeItems}
-          />
+          <Dropdown id={'localeSelector'} label={''} onChange={setLocale} selected={locale} values={localeItems} />
         );
       }}
     </LocalizationContext.Consumer>
