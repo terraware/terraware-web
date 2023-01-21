@@ -290,14 +290,16 @@ const MyAccountContent = ({
             marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
           >
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
-            <Button
-              id='edit-account'
-              icon='iconEdit'
-              label={isMobile ? '' : strings.EDIT_ACCOUNT}
-              onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
-              size='medium'
-              priority='primary'
-            />
+            {!edit && (
+              <Button
+                id='edit-account'
+                icon='iconEdit'
+                label={isMobile ? '' : strings.EDIT_ACCOUNT}
+                onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
+                size='medium'
+                priority='primary'
+              />
+            )}
           </Box>
         </PageHeaderWrapper>
         <Box
