@@ -43,6 +43,28 @@ export const OPT_IN_FEATURES: Feature[] = [
     description: ['Allow choosing time zone'],
     disclosure: ['This is WIP.'],
   },
+  {
+    name: 'Weight units',
+    preferenceName: 'enablePreferredWeightUnits',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Allow choosing preferred weight units'],
+    disclosure: ['This is WIP.'],
+  },
+  {
+    name: 'Locale selection',
+    preferenceName: 'enableLocales',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Allow switching to different locales (languages)'],
+    disclosure: [
+      'This is WIP.',
+      'Locale selection is not saved, so will reset when you reload the page.',
+      'Some values such as accession statuses are currently still in English.',
+    ],
+  },
 ];
 
 type FeatureMap = { [key: string]: Feature };

@@ -6,7 +6,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { makeStyles } from '@mui/styles';
-import { SortOrder, Table, TableColumnType } from '@terraware/web-components';
+import { SortOrder, TableColumnType } from '@terraware/web-components';
 import { listNurseryWithdrawals } from 'src/api/tracking/withdrawals';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/api/search';
 import WithdrawalLogRenderer from './WithdrawalLogRenderer';
@@ -22,6 +22,7 @@ import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
 import PillList from 'src/components/common/PillList';
+import Table from 'src/components/common/table';
 
 export type NurseryWithdrawalsFiltersType = {
   fromNurseryIds?: string[];

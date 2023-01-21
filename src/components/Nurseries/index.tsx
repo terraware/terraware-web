@@ -1,5 +1,5 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Table, TableColumnType } from '@terraware/web-components';
+import { Button, TableColumnType } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useEffect, useRef, useState } from 'react';
@@ -16,6 +16,7 @@ import PageSnackbar from '../PageSnackbar';
 import NurseriesCellRenderer from './TableCellRenderer';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import isEnabled from 'src/features';
+import Table from 'src/components/common/table';
 
 type NurseriesListProps = {
   organization: ServerOrganization;

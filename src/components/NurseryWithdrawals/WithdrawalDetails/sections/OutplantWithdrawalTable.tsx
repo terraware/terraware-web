@@ -1,8 +1,9 @@
-import { Table, TableColumnType } from '@terraware/web-components';
+import { TableColumnType } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Delivery } from 'src/api/types/tracking';
 import { Species } from 'src/types/Species';
+import Table from 'src/components/common/table';
 
 type OutplantWithdrawalTableProps = {
   species: Species[];

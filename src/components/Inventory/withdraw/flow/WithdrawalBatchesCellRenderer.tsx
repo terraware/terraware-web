@@ -2,9 +2,10 @@ import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { Box, Typography } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
-import { CellRenderer, RendererProps, TableRowType } from '@terraware/web-components';
+import { RendererProps, TableRowType } from '@terraware/web-components';
 import { Textfield } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
+import CellRenderer from 'src/components/common/table/TableCellRenderer';
 
 const useStyles = makeStyles(() => ({
   text: {

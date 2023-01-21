@@ -59,7 +59,7 @@ import { PlantingSite } from './api/types/tracking';
 import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { TimeZoneDescription, InitializedTimeZone } from 'src/types/TimeZones';
-import { useOrganization, useTimeZones, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useTimeZones, useUser } from 'src/providers';
 import { updatePreferences } from 'src/api/preferences/preferences';
 import { initializeUserTimeZone } from 'src/api/user/user';
 import { initializeOrganizationTimeZone } from 'src/api/organization/organization';
@@ -97,6 +97,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       zIndex: 1000,
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: theme.palette.TwClrBgGhostActive,
+      },
+      '& .nav-footer': {
+        marginBottom: (props: StyleProps) => (props.isDesktop ? '128px' : '32px'),
       },
     },
   },
@@ -614,6 +617,10 @@ function AppContent() {
       </div>
     </>
   );
+
+  // Localized strings are stored outside of React's state, but there's a state change when they're
+  // updated. Declare the dependency here so the app rerenders when the locale changes.
+  useLocalization();
 
   return (
     <StyledEngineProvider injectFirst>

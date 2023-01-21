@@ -32,6 +32,9 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
         maxLengthPx={COLUMN_WIDTH}
         textStyle={{ fontSize: 14 }}
         showAllStyle={{ padding: theme.spacing(2), fontSize: 14 }}
+        listSeparator={strings.LIST_SEPARATOR}
+        moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
+        moreText={strings.TRUNCATED_TEXT_MORE_LINK}
       />
     );
   };

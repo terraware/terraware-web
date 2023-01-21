@@ -3,8 +3,6 @@ import { LocalizationContext, OrganizationContext, UserContext } from './context
 
 export const useOrganization = () => useContext(OrganizationContext);
 
-export const useStrings = () => useContext(LocalizationContext).strings;
-
 export const useTimeZones = () => useContext(LocalizationContext).supportedTimeZones;
 
 export const useLocalization = () => useContext(LocalizationContext);
