@@ -2028,25 +2028,7 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/x-date-pickers@^5.0.0-alpha.7":
-  version "5.0.13"
-  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-5.0.13.tgz#0188f17483984ffe3f615444bff225256f7b4a0c"
-  integrity sha512-nUc35Zvah/l4bEWcPNRtSvWBL+7uAlokd6G6PzQfLe2TQo4GNlK1JVRfoVpBY5FsdM09uWLrpvfWLbka87k7GA==
-  dependencies:
-    "@babel/runtime" "^7.18.9"
-    "@date-io/core" "^2.15.0"
-    "@date-io/date-fns" "^2.15.0"
-    "@date-io/dayjs" "^2.15.0"
-    "@date-io/luxon" "^2.15.0"
-    "@date-io/moment" "^2.15.0"
-    "@mui/utils" "^5.10.3"
-    "@types/react-transition-group" "^4.4.5"
-    clsx "^1.2.1"
-    prop-types "^15.7.2"
-    react-transition-group "^4.4.5"
-    rifm "^0.12.1"
-
-"@mui/x-date-pickers@^5.0.13":
+"@mui/x-date-pickers@^5.0.0-alpha.7", "@mui/x-date-pickers@^5.0.13":
   version "5.0.14"
   resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-5.0.14.tgz#acfc3ef9be914e2f0127484442063f7300deeebf"
   integrity sha512-+k+YOL++wEwuF6XRhF3uMLOXlHkUjMHmbXOXWWZ9wJppaGFolj9fNmUvydCp3Z0E9dPRt8J5Vv0z+upZ9KyQZg==
@@ -2315,10 +2297,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.1.0.tgz#2b79809ec2e8777291dc56726011977f0ca63360"
-  integrity sha512-rlIFIw5+vg8AxRwEWfP2ljELRqcE1kWrJtrUXubZ+vbaxKZQZGIWxKtSfgVmPXJoHRv5C/mgz0Z/hDTtU5m1Mg==
+"@terraware/web-components@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.1.1.tgz#357b2491b57f7aaf1a70bcd04d2491b01c387380"
+  integrity sha512-HUPBOZe1GbmfrbOjgoU1VcSd5HLAn9WW7vHAx/bMJhjJKZp2bd7jobY0HDyaoNPij2HYtgAH4S1rss5wKRCu2g==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
