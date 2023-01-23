@@ -81,9 +81,9 @@ export default function PeopleList(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const columns: TableColumnType[] = [
+    { key: 'email', name: strings.EMAIL, type: 'string' },
     { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
     { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
-    { key: 'email', name: strings.EMAIL, type: 'string' },
     { key: 'role', name: strings.ROLE, type: 'string' },
     { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
   ];
@@ -114,6 +114,11 @@ export default function PeopleList(): JSX.Element {
             },
           ],
         },
+        sortOrder: [
+          {
+            field: 'user_email',
+          },
+        ],
         count: 0,
       };
 

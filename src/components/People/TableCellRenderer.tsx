@@ -14,7 +14,7 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
     return <Link to={personLocation.pathname}>{iValue as React.ReactNode}</Link>;
   };
 
-  if (column.key === 'firstName' || column.key === 'lastName') {
+  if (column.key === 'email') {
     return <CellRenderer index={index} column={column} value={createLinkToPerson(value)} row={row} />;
   }
 
