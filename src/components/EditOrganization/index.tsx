@@ -6,7 +6,6 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
-import Select from '../common/Select/Select';
 import PageForm from '../common/PageForm';
 import { Country, Subdivision } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
@@ -133,25 +132,20 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     return 6;
   };
 
-  const countryToDropdownItem = (country: Country) => {
-    return { label: country.name, value: country.code };
-  };
+  const toDropdownItem = (entity: Country | Subdivision) => ({ label: entity.name, value: entity.code });
 
   const countriesOptions = () => {
     if (countries) {
-      return countries.map((country) => countryToDropdownItem(country));
+      return countries.map((country) => toDropdownItem(country));
     }
+    return [];
   };
-
-  const stateToDropdownItem = (subdivision: Subdivision) => {
-    return { label: subdivision.name, value: subdivision.code };
-  };
-
   const subdivisionOptions = () => {
     const country = getSelectedCountry();
     if (country) {
-      return country.subdivisions.map((subd) => stateToDropdownItem(subd));
+      return country.subdivisions.map((subd) => toDropdownItem(subd));
     }
+    return [];
   };
 
   return (
@@ -197,8 +191,8 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             <Autocomplete
               id='countyCode'
               placeholder={strings.SELECT}
-              selected={getSelectedCountry() ? countryToDropdownItem(getSelectedCountry()!) : ''}
-              values={countriesOptions() || []}
+              selected={getSelectedCountry() ? toDropdownItem(getSelectedCountry()!) : ''}
+              values={countriesOptions()}
               onChange={(value: any) => onChangeCountry(value.label)}
               isEqual={(optionA: any, optionB: any) => {
                 return optionA?.value === optionB?.value;
@@ -213,8 +207,8 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               <Autocomplete
                 id='countySubdivisionCode'
                 placeholder={strings.SELECT}
-                selected={getSelectedSubdivision() ? stateToDropdownItem(getSelectedSubdivision()!) : ''}
-                values={subdivisionOptions() || []}
+                selected={getSelectedSubdivision() ? toDropdownItem(getSelectedSubdivision()!) : ''}
+                values={subdivisionOptions()}
                 onChange={(value: any) => onChangeSubdivision(value.label)}
                 isEqual={(optionA: any, optionB: any) => {
                   return optionA?.value === optionB?.value;
