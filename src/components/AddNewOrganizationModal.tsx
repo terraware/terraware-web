@@ -31,6 +31,8 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const snackbar = useSnackbar();
   const [nameError, setNameError] = useState('');
   const [timeZoneError, setTimeZoneError] = useState('');
+  const [countryError, setCountryError] = useState('');
+  const [stateError, setStateError] = useState('');
   const [countries, setCountries] = useState<Country[]>();
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
     id: -1,
@@ -69,6 +71,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       setNewOrganization((previousNewOrganization: ServerOrganization): ServerOrganization => {
         return { ...previousNewOrganization, countryCode: found.code.toString(), countrySubdivisionCode: undefined };
       });
+      setCountryError('');
     }
   };
 
@@ -77,6 +80,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     const found = selectedCountry?.subdivisions?.find((subdivision) => subdivision.name === newValue);
     if (found) {
       onChange('countrySubdivisionCode', found.code);
+      setStateError('');
     }
   };
 
@@ -97,6 +101,16 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
 
     if (timeZonesEnabled && !newOrganization.timeZone) {
       setTimeZoneError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    }
+
+    if (!newOrganization.countryCode) {
+      setCountryError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    }
+
+    if (getSelectedCountry()?.subdivisions && !newOrganization.countrySubdivisionCode) {
+      setStateError(strings.REQUIRED_FIELD);
       hasErrors = true;
     }
 
@@ -186,6 +200,30 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             value={newOrganization.description}
           />
         </Grid>
+        <Grid item xs={12}>
+          <Select
+            label={strings.COUNTRY_REQUIRED}
+            id='countyCode'
+            onChange={onChangeCountry}
+            options={countries?.map((country) => country.name)}
+            selectedValue={getSelectedCountry()?.name}
+            errorText={countryError}
+            fullWidth
+          />
+        </Grid>
+        {getSelectedCountry()?.subdivisions && (
+          <Grid item xs={12}>
+            <Select
+              label={strings.STATE_REQUIRED}
+              id='countySubdivisionCode'
+              onChange={onChangeSubdivision}
+              options={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name)}
+              selectedValue={getSelectedSubdivision()?.name}
+              errorText={stateError}
+              fullWidth
+            />
+          </Grid>
+        )}
         {timeZonesEnabled && (
           <Grid item xs={12}>
             <TimeZoneSelector
@@ -194,28 +232,6 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               selectedTimeZone={newOrganization.timeZone}
               tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
               errorText={timeZoneError}
-            />
-          </Grid>
-        )}
-        <Grid item xs={12}>
-          <Select
-            label={strings.COUNTRY}
-            id='countyCode'
-            onChange={onChangeCountry}
-            options={countries?.map((country) => country.name)}
-            selectedValue={getSelectedCountry()?.name}
-            fullWidth
-          />
-        </Grid>
-        {getSelectedCountry()?.subdivisions && (
-          <Grid item xs={12}>
-            <Select
-              label={strings.STATE}
-              id='countySubdivisionCode'
-              onChange={onChangeSubdivision}
-              options={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name)}
-              selectedValue={getSelectedSubdivision()?.name}
-              fullWidth
             />
           </Grid>
         )}
