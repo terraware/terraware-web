@@ -1,3 +1,4 @@
+05f0a3e SW-2768 Hide MyAccount edit button when in edit mode (#1075)
 7c99901 Update My Account and species list on locale change (#1073)
 7a7bce0 SW-2737 Add locale selector and gibberish locale (#1072)
 4cf85fd Redo left-nav fix for rounded scrollbar (#1071)
