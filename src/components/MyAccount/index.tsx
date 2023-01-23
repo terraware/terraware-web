@@ -374,7 +374,11 @@ const MyAccountContent = ({
               </>
             )}
             {weightUnitsEnabled && (
-              <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(3) } }}>
+              <Grid
+                item
+                xs={isMobile ? 12 : 4}
+                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+              >
                 {edit ? (
                   <WeightSystemSelector
                     onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
