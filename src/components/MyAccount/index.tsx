@@ -31,7 +31,7 @@ import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
 import { weightSystems } from 'src/units';
-import WeightSystemSelector from './WeightSystemSelector';
+import WeightSystemSelector from '../WeightSystemSelector';
 
 type MyAccountProps = {
   organizations?: ServerOrganization[];
