@@ -30,9 +30,9 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
-import { Dropdown } from '@terraware/web-components';
-import { weightSystems } from 'src/units';
 import { updatePreferences } from 'src/api/preferences/preferences';
+import { weightSystems } from 'src/units';
+import WeightSystemSelector from 'src/components/WeightSystemSelector';
 
 type MyAccountProps = {
   organizations?: ServerOrganization[];
@@ -308,14 +308,16 @@ const MyAccountContent = ({
             marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
           >
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
-            <Button
-              id='edit-account'
-              icon='iconEdit'
-              label={isMobile ? '' : strings.EDIT_ACCOUNT}
-              onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
-              size='medium'
-              priority='primary'
-            />
+            {!edit && (
+              <Button
+                id='edit-account'
+                icon='iconEdit'
+                label={isMobile ? '' : strings.EDIT_ACCOUNT}
+                onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
+                size='medium'
+                priority='primary'
+              />
+            )}
           </Box>
         </PageHeaderWrapper>
         <Box
@@ -388,13 +390,15 @@ const MyAccountContent = ({
               </>
             )}
             {weightUnitsEnabled && (
-              <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+              <Grid
+                item
+                xs={isMobile ? 12 : 4}
+                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+              >
                 {edit ? (
-                  <Dropdown
+                  <WeightSystemSelector
                     onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
-                    label={strings.PREFERRED_WEIGHT_SYSTEM}
-                    options={weightSystems()}
-                    selectedValue={preferredWeightSystemSelected}
+                    selectedWeightSystem={preferredWeightSystemSelected}
                   />
                 ) : (
                   <TextField
