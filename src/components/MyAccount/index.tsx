@@ -30,6 +30,8 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
+import { Dropdown } from '@terraware/web-components';
+import { WEIGHT_SYSTEMS } from 'src/units';
 
 type MyAccountProps = {
   organizations?: ServerOrganization[];
@@ -92,8 +94,10 @@ const MyAccountContent = ({
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
   const timeZonesEnabled = isEnabled('Timezones');
+  const weightUnitsEnabled = isEnabled('Weight units');
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
+  const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState('metric');
   const columns: TableColumnType[] = [
     { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
     { key: 'description', name: strings.DESCRIPTION, type: 'string' },
@@ -347,7 +351,7 @@ const MyAccountContent = ({
             <Grid item xs={12} />
             {timeZonesEnabled && (
               <>
-                <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+                <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
                   {edit ? (
                     <TimeZoneSelector
                       onTimeZoneSelected={onTimeZoneChange}
@@ -367,6 +371,26 @@ const MyAccountContent = ({
                   )}
                 </Grid>
               </>
+            )}
+            {weightUnitsEnabled && (
+              <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+                {edit ? (
+                  <Dropdown
+                    onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
+                    label={strings.PREFERRED_WEIGHT_SYSTEM}
+                    options={WEIGHT_SYSTEMS}
+                    selectedValue={preferredWeightSystemSelected}
+                  />
+                ) : (
+                  <TextField
+                    label={strings.PREFERRED_WEIGHT_SYSTEM}
+                    id='preferredWeightSystem'
+                    type='text'
+                    value={WEIGHT_SYSTEMS.find((ws) => ws.value === preferredWeightSystemSelected)?.label}
+                    display={true}
+                  />
+                )}
+              </Grid>
             )}
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
