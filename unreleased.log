@@ -1,3 +1,4 @@
+5ae7bf1 SW-2780 Replace autocomplete of TimeSelector with textfield when it's state is disabled (#1085)
 e87ba04 SW-2749 Save weight system preference into users preferences (#1082)
 14a28fa SW-2744 Create weight system selector (#1081)
 f1bfbfd SW-2779 Edit org improvements (#1083)
