@@ -165,6 +165,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               label={strings.TIME_ZONE_REQUIRED}
               onTimeZoneSelected={onTimeZoneChange}
               selectedTimeZone={newOrganization.timeZone}
+              countryCode={newOrganization.countryCode}
               tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
               errorText={timeZoneError}
             />
