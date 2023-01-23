@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Autocomplete } from '@terraware/web-components';
+import { Autocomplete, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useTimeZones } from 'src/providers';
 import { TimeZoneDescription } from 'src/types/TimeZones';
@@ -40,9 +40,18 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
     return optionA?.value === optionB?.value;
   };
 
-  return (
+  return disabled ? (
+    <Textfield
+      id='time-zone-selector-disabled'
+      value={tzNameToDropdownItem(selectedTimeZone).label}
+      type='text'
+      label={label || ''}
+      display={true}
+      tooltipTitle={tooltip}
+    />
+  ) : (
     <Autocomplete
-      id='timezones2'
+      id='time-zone-selector'
       placeholder={strings.SELECT}
       selected={tzNameToDropdownItem(selectedTimeZone)}
       values={tzOptions}
@@ -51,7 +60,6 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
       freeSolo={false}
       hideClearIcon={true}
       label={label || ''}
-      disabled={disabled}
       tooltipTitle={tooltip}
       errorText={errorText}
     />
