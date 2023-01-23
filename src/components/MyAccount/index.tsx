@@ -30,8 +30,8 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
-import { Dropdown } from '@terraware/web-components';
 import { weightSystems } from 'src/units';
+import WeightSystemSelector from './WeightSystemSelector';
 
 type MyAccountProps = {
   organizations?: ServerOrganization[];
@@ -374,13 +374,11 @@ const MyAccountContent = ({
               </>
             )}
             {weightUnitsEnabled && (
-              <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+              <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(3) } }}>
                 {edit ? (
-                  <Dropdown
+                  <WeightSystemSelector
                     onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
-                    label={strings.PREFERRED_WEIGHT_SYSTEM}
-                    options={weightSystems()}
-                    selectedValue={preferredWeightSystemSelected}
+                    selectedWeightSystem={preferredWeightSystemSelected}
                   />
                 ) : (
                   <TextField
