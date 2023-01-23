@@ -38,7 +38,9 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
 });
 
 export const LocalizationContext = createContext<ProvidedLocalizationData>({
+  loadedStringsForLocale: null,
+  locale: 'en',
+  setLocale: () => undefined,
   supportedTimeZones: [],
-  strings: {},
   bootstrapped: false,
 });

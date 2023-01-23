@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme } from '@mui/material';
-import { Button, Table, TableColumnType } from '@terraware/web-components';
+import { Button, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import { search } from 'src/api/search';
@@ -17,6 +17,7 @@ import Search from '../Search';
 import { APP_PATHS } from 'src/constants';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { useOrganization } from 'src/providers/hooks';
+import Table from 'src/components/common/table';
 
 interface InventorySeedslingsTableProps {
   speciesId: number;

@@ -11,6 +11,8 @@ import { hasNurseryWithdrawals } from 'src/api/tracking/withdrawals';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import NavFooter from './common/Navbar/NavFooter';
 import { useOrganization } from 'src/providers/hooks';
+import LocaleSelector from './LocaleSelector';
+import isEnabled from '../features';
 
 type NavBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -237,6 +239,8 @@ export default function NavBar({
           }}
           id='contactus'
         />
+
+        {isEnabled('Locale selection') && <LocaleSelector />}
       </NavFooter>
     </Navbar>
   );

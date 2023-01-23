@@ -24,14 +24,14 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TitleDescription from '../common/TitleDescription';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
 import { Dropdown } from '@terraware/web-components';
-import { WEIGHT_SYSTEMS } from 'src/units';
+import { weightSystems } from 'src/units';
 
 type MyAccountProps = {
   organizations?: ServerOrganization[];
@@ -98,6 +98,7 @@ const MyAccountContent = ({
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
   const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState('metric');
+  const loadedStringsForLocale = useLocalization().loadedStringsForLocale;
   const columns: TableColumnType[] = [
     { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
     { key: 'description', name: strings.DESCRIPTION, type: 'string' },
@@ -106,10 +107,10 @@ const MyAccountContent = ({
   ];
 
   useEffect(() => {
-    if (organizations) {
+    if (organizations && loadedStringsForLocale) {
       setPersonOrganizations(addRoleNames(organizations));
     }
-  }, [organizations]);
+  }, [organizations, loadedStringsForLocale]);
 
   useEffect(() => {
     setRecord(user);
@@ -378,7 +379,7 @@ const MyAccountContent = ({
                   <Dropdown
                     onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
                     label={strings.PREFERRED_WEIGHT_SYSTEM}
-                    options={WEIGHT_SYSTEMS}
+                    options={weightSystems()}
                     selectedValue={preferredWeightSystemSelected}
                   />
                 ) : (
@@ -386,7 +387,7 @@ const MyAccountContent = ({
                     label={strings.PREFERRED_WEIGHT_SYSTEM}
                     id='preferredWeightSystem'
                     type='text'
-                    value={WEIGHT_SYSTEMS.find((ws) => ws.value === preferredWeightSystemSelected)?.label}
+                    value={weightSystems().find((ws) => ws.value === preferredWeightSystemSelected)?.label}
                     display={true}
                   />
                 )}

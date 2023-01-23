@@ -1,9 +1,10 @@
 import { Box, Grid, useTheme } from '@mui/material';
-import { Table, TableColumnType, Textfield } from '@terraware/web-components';
+import { TableColumnType, Textfield } from '@terraware/web-components';
 import { SearchResponseElement } from 'src/api/search';
 import strings from 'src/strings';
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 import isEnabled from 'src/features';
+import Table from 'src/components/common/table';
 
 interface PlantingSitesTableProps {
   results: SearchResponseElement[];

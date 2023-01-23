@@ -2,14 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { LocalizationContext } from './contexts';
 import { getTimeZones } from 'src/api/timezones/timezones';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import { stringsMap } from 'src/strings';
+import strings, { ILocalizedStringsMap } from 'src/strings';
+import { ProvidedLocalizationData } from '.';
+import { supportedLocales } from '../strings/locales';
 
 export type LocalizationProviderProps = {
   children?: React.ReactNode;
   locale: string;
+  setLocale: (locale: string) => void;
+  loadedStringsForLocale: string | null;
+  setLoadedStringsForLocale: (locale: string) => void;
 };
 
-export default function LocalizationProvider({ children, locale }: LocalizationProviderProps): JSX.Element {
+export default function LocalizationProvider({
+  children,
+  locale,
+  setLocale,
+  loadedStringsForLocale,
+  setLoadedStringsForLocale,
+}: LocalizationProviderProps): JSX.Element | null {
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
 
   useEffect(() => {
@@ -23,15 +34,32 @@ export default function LocalizationProvider({ children, locale }: LocalizationP
     fetchTimeZones();
   }, [locale]);
 
-  return (
-    <LocalizationContext.Provider
-      value={{
-        supportedTimeZones: timeZones,
-        strings: stringsMap[locale],
-        bootstrapped: !!stringsMap[locale],
-      }}
-    >
-      {children}
-    </LocalizationContext.Provider>
-  );
+  useEffect(() => {
+    const fetchStrings = async () => {
+      const language = locale.replace(/[-_].*/, ''); // 'en-US' => 'en'
+      const localeDetails =
+        supportedLocales.find((details) => details.id === locale) ||
+        supportedLocales.find((details) => details.id === language) ||
+        supportedLocales[0];
+
+      const localeMap: ILocalizedStringsMap = {};
+      localeMap[locale] = (await localeDetails.loadModule()).strings;
+      strings.setContent(localeMap);
+      strings.setLanguage(locale);
+
+      setLoadedStringsForLocale(locale);
+    };
+
+    fetchStrings();
+  }, [locale, setLoadedStringsForLocale]);
+
+  const context: ProvidedLocalizationData = {
+    bootstrapped: !!loadedStringsForLocale,
+    locale,
+    setLocale,
+    loadedStringsForLocale,
+    supportedTimeZones: timeZones,
+  };
+
+  return <LocalizationContext.Provider value={context}>{children}</LocalizationContext.Provider>;
 }

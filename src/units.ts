@@ -25,7 +25,9 @@ export function weightUnitsV2() {
   ];
 }
 
-export const WEIGHT_SYSTEMS = [
-  { label: strings.IMPERIAL_OZ_LB, value: 'imperial' },
-  { label: strings.METRIC_G_KG_MG, value: 'metric' },
-];
+export function weightSystems() {
+  return [
+    { label: strings.IMPERIAL_OZ_LB, value: 'imperial' },
+    { label: strings.METRIC_G_KG_MG, value: 'metric' },
+  ];
+}

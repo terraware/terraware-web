@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
-import { ErrorBox, Table, TableColumnType } from '@terraware/web-components';
+import { ErrorBox, TableColumnType } from '@terraware/web-components';
 import { Delivery } from 'src/api/types/tracking';
 import { getDelivery } from 'src/api/tracking/deliveries';
 import { getPlantingSite } from 'src/api/tracking/tracking';
@@ -20,6 +20,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BusySpinner from 'src/components/common/BusySpinner';
 import { useOrganization } from 'src/providers/hooks';
+import Table from 'src/components/common/table';
 
 export default function NurseryReassignment(): JSX.Element {
   const { selectedOrganization } = useOrganization();
