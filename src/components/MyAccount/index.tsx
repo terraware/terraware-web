@@ -24,7 +24,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TitleDescription from '../common/TitleDescription';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
@@ -32,6 +32,7 @@ import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
 import { Dropdown } from '@terraware/web-components';
 import { weightSystems } from 'src/units';
+import { updatePreferences } from 'src/api/preferences/preferences';
 
 type MyAccountProps = {
   organizations?: ServerOrganization[];
@@ -91,13 +92,16 @@ const MyAccountContent = ({
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
+  const { userPreferences, reloadPreferences } = useOrganization();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
   const timeZonesEnabled = isEnabled('Timezones');
   const weightUnitsEnabled = isEnabled('Weight units');
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
-  const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState('metric');
+  const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState(
+    (userPreferences?.preferredWeightSystem as string) || 'metric'
+  );
   const loadedStringsForLocale = useLocalization().loadedStringsForLocale;
   const columns: TableColumnType[] = [
     { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
@@ -111,6 +115,12 @@ const MyAccountContent = ({
       setPersonOrganizations(addRoleNames(organizations));
     }
   }, [organizations, loadedStringsForLocale]);
+
+  useEffect(() => {
+    if (userPreferences?.preferredWeightSystem) {
+      setPreferredWeightSystemSelected(userPreferences.preferredWeightSystem as string);
+    }
+  }, [userPreferences]);
 
   useEffect(() => {
     setRecord(user);
@@ -171,6 +181,10 @@ const MyAccountContent = ({
         setCannotRemoveOrgModalOpened(true);
       }
     } else {
+      if (weightUnitsEnabled) {
+        await updatePreferences('preferredWeightSystem', preferredWeightSystemSelected);
+        reloadPreferences();
+      }
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded) {
         reloadUser();
