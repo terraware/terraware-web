@@ -167,6 +167,7 @@ export const strings = {
   COUNT: 'Count',
   COUNTRY_REQUIRED: 'Country *',
   COUNTRY: 'Country',
+  COUNTRY_REQUIRED: 'Country *',
   CREATE_ACCESSION: 'Create Accession',
   CREATE_ENTRY: 'Create Entry',
   CREATE_NEW_ORGANIZATION: 'Create New Organization',

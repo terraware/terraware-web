@@ -6,7 +6,6 @@ import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
-import Select from '../common/Select/Select';
 import PageForm from '../common/PageForm';
 import { Country, Subdivision } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
@@ -21,6 +20,7 @@ import { getUTC, useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
+import { Autocomplete } from '@terraware/web-components';
 
 type OrganizationViewProps = {
   organization: ServerOrganization;
@@ -132,6 +132,22 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     return 6;
   };
 
+  const toDropdownItem = (entity: Country | Subdivision) => ({ label: entity.name, value: entity.code });
+
+  const countriesOptions = () => {
+    if (countries) {
+      return countries.map((country) => toDropdownItem(country));
+    }
+    return [];
+  };
+  const subdivisionOptions = () => {
+    const country = getSelectedCountry();
+    if (country) {
+      return country.subdivisions.map((subd) => toDropdownItem(subd));
+    }
+    return [];
+  };
+
   return (
     <TfMain>
       <PageForm cancelID='cancelEditOrg' saveID='saveEditOrg' onCancel={goToOrganization} onSave={saveOrganization}>
@@ -172,24 +188,34 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             />
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
-            <Select
-              label={strings.COUNTRY}
+            <Autocomplete
               id='countyCode'
-              onChange={onChangeCountry}
-              options={countries?.map((country) => country.name)}
-              selectedValue={getSelectedCountry()?.name}
-              fullWidth
+              placeholder={strings.SELECT}
+              selected={getSelectedCountry() ? toDropdownItem(getSelectedCountry()!) : ''}
+              values={countriesOptions()}
+              onChange={(value: any) => onChangeCountry(value.label)}
+              isEqual={(optionA: any, optionB: any) => {
+                return optionA?.value === optionB?.value;
+              }}
+              freeSolo={false}
+              hideClearIcon={true}
+              label={strings.COUNTRY_REQUIRED}
             />
           </Grid>
           {getSelectedCountry()?.subdivisions ? (
             <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)} paddingBottom={theme.spacing(4)}>
-              <Select
-                label={strings.STATE}
+              <Autocomplete
                 id='countySubdivisionCode'
-                onChange={onChangeSubdivision}
-                options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
-                selectedValue={getSelectedSubdivision()?.name}
-                fullWidth
+                placeholder={strings.SELECT}
+                selected={getSelectedSubdivision() ? toDropdownItem(getSelectedSubdivision()!) : ''}
+                values={subdivisionOptions()}
+                onChange={(value: any) => onChangeSubdivision(value.label)}
+                isEqual={(optionA: any, optionB: any) => {
+                  return optionA?.value === optionB?.value;
+                }}
+                freeSolo={false}
+                hideClearIcon={true}
+                label={strings.STATE_REQUIRED}
               />
             </Grid>
           ) : (
@@ -200,7 +226,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               <TimeZoneSelector
                 selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
                 onTimeZoneSelected={onChangeTimeZone}
-                label={strings.TIME_ZONE}
+                label={strings.TIME_ZONE_REQUIRED}
                 tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
               />
             </Grid>
