@@ -42,7 +42,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
 
   return disabled ? (
     <Textfield
-      id='timezones2'
+      id='time-zone-selector-disabled'
       value={tzNameToDropdownItem(selectedTimeZone).label}
       type='text'
       label={label || ''}
@@ -51,7 +51,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
     />
   ) : (
     <Autocomplete
-      id='timezones2'
+      id='time-zone-selector'
       placeholder={strings.SELECT}
       selected={tzNameToDropdownItem(selectedTimeZone)}
       values={tzOptions}
