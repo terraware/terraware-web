@@ -1,3 +1,4 @@
+9706d09 Fix flapping when non-English locale is selected (#1096)
 8392d77 Use PillList and Pill components from web-components (#1094)
 68a8dc0 SW-2783 Refactor page message component to support types of page messages (#1095)
 fe12614 SW-2776 Load and save user locale selection (#1092)
