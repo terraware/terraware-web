@@ -20,6 +20,7 @@ export type ProvidedOrganizationData = {
   reloadData: (selectedOrgId?: number) => void;
   reloadPreferences: () => void;
   bootstrapped: boolean;
+  orgPreferenceForId: number;
 };
 
 export type ProvidedLocalizationData = {

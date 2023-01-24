@@ -153,7 +153,8 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences } = useOrganization();
+  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences, orgPreferenceForId } =
+    useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
   const { user, reloadUser } = useUser();
@@ -265,6 +266,7 @@ function AppContent() {
       const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
       const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
       if (!notifyUser && !notifyOrg) {
+        snackbar.pageInfo('', undefined, undefined, 'org');
         return;
       }
 
@@ -291,17 +293,22 @@ function AppContent() {
         );
       }
 
-      snackbar.pageInfo(message, strings.TIME_ZONE_INITIALIZED_TITLE, {
-        label: strings.GOT_IT,
-        apply: () => {
-          if (notifyUser) {
-            updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
-          }
-          if (notifyOrg) {
-            updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
-          }
+      snackbar.pageInfo(
+        message,
+        strings.TIME_ZONE_INITIALIZED_TITLE,
+        {
+          label: strings.GOT_IT,
+          apply: () => {
+            if (notifyUser) {
+              updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
+            }
+            if (notifyOrg) {
+              updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
+            }
+          },
         },
-      });
+        'org'
+      );
     };
 
     const initializeTimeZones = async () => {
@@ -315,7 +322,7 @@ function AppContent() {
       }
 
       let orgTz: InitializedTimeZone = {};
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
+      if (!isPlaceholderOrg(selectedOrganization.id) && orgPreferenceForId === selectedOrganization.id) {
         orgTz = await initializeOrganizationTimeZone(selectedOrganization, userTz.timeZone);
       }
 
@@ -335,7 +342,16 @@ function AppContent() {
     if (timeZoneFeatureEnabled && !isPlaceholderOrg(selectedOrganization.id)) {
       initializeTimeZones();
     }
-  }, [reloadData, reloadUser, selectedOrganization, snackbar, timeZoneFeatureEnabled, timeZones, user]);
+  }, [
+    reloadData,
+    reloadUser,
+    selectedOrganization,
+    snackbar,
+    timeZoneFeatureEnabled,
+    timeZones,
+    user,
+    orgPreferenceForId,
+  ]);
 
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Snackbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useRecoilState } from 'recoil';
-import { snackbarAtoms } from 'src/state/snackbar';
+import { snackbarAtoms, PageSnackbar as PageSnackbarType } from 'src/state/snackbar';
 import { Message, Button } from '@terraware/web-components';
 import DetectAppVersion from 'src/components/common/DetectAppVersion';
 
@@ -19,14 +20,19 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const clearedData = { msg: '', title: undefined, onCloseCallback: undefined };
+
 export default function PageSnackbarMessage(): JSX.Element {
-  const classes = useStyles();
+  const { pathname } = useLocation();
+  const [routeChanged, setRouteChanged] = useState<boolean>(false);
+  const [pageSnackbar, setPageSnackbar] = useRecoilState(snackbarAtoms.page);
+  const [orgSnackbar, setOrgSnackbar] = useRecoilState(snackbarAtoms.org);
+  const [userSnackbar, setUserSnackbar] = useRecoilState(snackbarAtoms.user);
 
-  const [newVersionDetected, setNewVersionDetected] = useState<boolean>(false);
-  const [snackbar, setSnackbar] = useRecoilState(snackbarAtoms.page);
-
-  const clearSnackbar = () => {
-    setSnackbar({ ...snackbar, msg: '', title: undefined });
+  const clearSnackbar = (snackbar: PageSnackbarType, clearMessage?: () => void) => {
+    if (clearMessage) {
+      clearMessage();
+    }
     if (snackbar?.onCloseCallback) {
       try {
         snackbar?.onCloseCallback.apply();
@@ -36,59 +42,112 @@ export default function PageSnackbarMessage(): JSX.Element {
     }
   };
 
-  const handleClose = (event?: any, eventType?: string) => {
+  const handleClose = (snackbar: PageSnackbarType, event?: any, eventType?: string, clearMessage?: () => void) => {
     if (snackbar) {
       if (!snackbar.onCloseCallback || eventType !== 'clickaway') {
-        clearSnackbar();
+        clearSnackbar(snackbar, clearMessage);
       }
     }
   };
 
-  useEffect(() => {
-    // clear the message after component is unloaded
-    if (snackbar?.msg) {
-      return () => {
-        setSnackbar({ ...snackbar, msg: '', title: undefined, onCloseCallback: undefined });
-      };
+  const clearPageMessage = useCallback(() => {
+    if (!pageSnackbar.msg) {
+      return;
     }
-  }, [setSnackbar, snackbar]);
+    setPageSnackbar({ ...pageSnackbar, ...clearedData });
+  }, [setPageSnackbar, pageSnackbar]);
+
+  const clearUserMessage = useCallback(() => {
+    if (!userSnackbar.msg) {
+      return;
+    }
+    setUserSnackbar({ ...userSnackbar, ...clearedData });
+  }, [setUserSnackbar, userSnackbar]);
+
+  const clearOrgMessage = useCallback(() => {
+    if (!orgSnackbar.msg) {
+      return;
+    }
+    setOrgSnackbar({ ...orgSnackbar, ...clearedData });
+  }, [setOrgSnackbar, orgSnackbar]);
+
+  useEffect(() => {
+    if (routeChanged) {
+      setRouteChanged(false);
+      clearPageMessage();
+      clearUserMessage();
+      clearOrgMessage();
+    }
+  }, [routeChanged, clearPageMessage, clearUserMessage, clearOrgMessage]);
+
+  useEffect(() => {
+    setRouteChanged(!!pathname);
+  }, [pathname]);
 
   return (
     <>
-      {(!snackbar.msg || newVersionDetected) && <DetectAppVersion onNewVersion={() => setNewVersionDetected(true)} />}
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={!newVersionDetected && Boolean(snackbar.msg)}
-        onClose={handleClose}
-        autoHideDuration={null}
-        id='snackbar_page'
-        className={classes.mainSnackbar}
-      >
-        <div>
-          <Message
-            type='page'
-            title={snackbar.title}
-            body={snackbar.msg}
-            priority={snackbar.priority}
-            showCloseButton={true}
-            onClose={handleClose}
-            pageButtons={
-              snackbar?.onCloseCallback?.label
-                ? [
-                    <Button
-                      label={snackbar.onCloseCallback.label}
-                      onClick={handleClose}
-                      size='small'
-                      key={'1'}
-                      priority='secondary'
-                      type='passive'
-                    />,
-                  ]
-                : []
-            }
-          />
-        </div>
-      </Snackbar>
+      <DetectAppVersion />
+      <SnackbarMessage
+        id='user-page-snackbar'
+        snack={userSnackbar}
+        onClose={(event?: any, eventType?: string) => handleClose(userSnackbar, event, eventType, clearUserMessage)}
+      />
+      <SnackbarMessage
+        id='org-page-snackbar'
+        snack={orgSnackbar}
+        onClose={(event?: any, eventType?: string) => handleClose(orgSnackbar, event, eventType, clearOrgMessage)}
+      />
+      <SnackbarMessage
+        id='page-snackbar'
+        snack={pageSnackbar}
+        onClose={(event?: any, eventType?: string) => handleClose(pageSnackbar, event, eventType, clearPageMessage)}
+      />
     </>
+  );
+}
+
+type SnackbarMessageProps = {
+  id: string;
+  snack: PageSnackbarType;
+  onClose: (event?: any, eventType?: string) => void;
+};
+
+function SnackbarMessage({ id, snack, onClose }: SnackbarMessageProps): JSX.Element {
+  const classes = useStyles();
+
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      open={Boolean(snack.msg)}
+      onClose={onClose}
+      autoHideDuration={null}
+      id={id}
+      className={classes.mainSnackbar}
+    >
+      <div>
+        <Message
+          type='page'
+          title={snack.title}
+          body={snack.msg}
+          priority={snack.priority}
+          showCloseButton={true}
+          onClose={onClose}
+          pageButtons={
+            snack?.onCloseCallback?.label
+              ? [
+                  <Button
+                    label={snack.onCloseCallback.label}
+                    onClick={onClose}
+                    size='small'
+                    key={'1'}
+                    priority='secondary'
+                    type='passive'
+                  />,
+                ]
+              : []
+          }
+        />
+      </div>
+    </Snackbar>
   );
 }
