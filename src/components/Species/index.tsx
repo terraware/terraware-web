@@ -38,7 +38,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PopoverMenu from '../common/PopoverMenu';
 import { DropdownItem } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import PillList, { PillListItem } from '../common/PillList';
+import { PillList, PillListItem } from '@terraware/web-components';
 
 type SpeciesListProps = {
   reloadData: () => void;

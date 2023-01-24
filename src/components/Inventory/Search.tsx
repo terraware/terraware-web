@@ -5,7 +5,7 @@ import strings from 'src/strings';
 import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopover';
 import { getNurseryName, removeFilter } from './FilterUtils';
 import { useOrganization } from 'src/providers/hooks';
-import PillList from 'src/components/common/PillList';
+import { PillList } from '@terraware/web-components';
 
 interface SearchProps {
   searchValue: string;

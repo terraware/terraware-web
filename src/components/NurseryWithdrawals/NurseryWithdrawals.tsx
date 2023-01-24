@@ -21,7 +21,7 @@ import { getAllSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
-import PillList from 'src/components/common/PillList';
+import { PillList } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 
 export type NurseryWithdrawalsFiltersType = {
