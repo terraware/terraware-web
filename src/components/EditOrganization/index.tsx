@@ -133,6 +133,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             <Grid item xs={gridSize()}>
               <TimeZoneSelector
                 selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
+                countryCode={organizationRecord.countryCode}
                 onTimeZoneSelected={onChangeTimeZone}
                 label={strings.TIME_ZONE_REQUIRED}
                 tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
