@@ -1,9 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Snackbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useRecoilState } from 'recoil';
 import { snackbarAtoms } from 'src/state/snackbar';
-import { useEffect, useState } from 'react';
-import { Message } from '@terraware/web-components';
+import { Message, Button } from '@terraware/web-components';
 import DetectAppVersion from 'src/components/common/DetectAppVersion';
 
 const useStyles = makeStyles(() => ({
@@ -29,7 +29,7 @@ export default function PageSnackbarMessage(): JSX.Element {
     setSnackbar({ ...snackbar, msg: '', title: undefined });
     if (snackbar?.onCloseCallback) {
       try {
-        snackbar?.onCloseCallback();
+        snackbar?.onCloseCallback.apply();
       } catch (e) {
         // swallow exception for now, expect client code to handle issues with callbacks
       }
@@ -72,6 +72,20 @@ export default function PageSnackbarMessage(): JSX.Element {
             priority={snackbar.priority}
             showCloseButton={true}
             onClose={handleClose}
+            pageButtons={
+              snackbar?.onCloseCallback?.label
+                ? [
+                    <Button
+                      label={snackbar.onCloseCallback.label}
+                      onClick={handleClose}
+                      size='small'
+                      key={'1'}
+                      priority='secondary'
+                      type='passive'
+                    />,
+                  ]
+                : []
+            }
           />
         </div>
       </Snackbar>
