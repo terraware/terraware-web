@@ -1,3 +1,4 @@
+2161a42 Set Accept-Language header to current locale (#1091)
 049d7d7 Update generated types (#1090)
 882dc6d Use refactored dropdown props in terraware-web (#1088)
 110d64c SW-2785 Make country and state required if available in org edit (#1089)
