@@ -97,6 +97,7 @@ const MyAccountContent = ({
   const contentRef = useRef(null);
   const timeZonesEnabled = isEnabled('Timezones');
   const weightUnitsEnabled = isEnabled('Weight units');
+  const locale = useLocalization().locale;
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
   const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState(
@@ -197,7 +198,9 @@ const MyAccountContent = ({
   };
 
   const saveProfileChanges = async () => {
-    const updateUserResponse = await updateUserProfile(record);
+    // Save the currently-selected locale, even if it differs from the locale in the profile data we
+    // fetched from the server.
+    const updateUserResponse = await updateUserProfile({ ...record, locale });
     return updateUserResponse;
   };
 

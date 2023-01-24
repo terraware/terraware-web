@@ -2046,6 +2046,11 @@ export interface components {
       firstName: string;
       lastName: string;
       /**
+       * @description IETF locale code containing user's preferred language.
+       * @example en
+       */
+      locale?: string;
+      /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
        */
@@ -2141,6 +2146,11 @@ export interface components {
       emailNotificationsEnabled: boolean;
       firstName?: string;
       lastName?: string;
+      /**
+       * @description IETF locale code containing user's preferred language.
+       * @example en
+       */
+      locale?: string;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -2684,7 +2694,7 @@ export interface operations {
   listTimeZoneNames: {
     parameters: {
       query: {
-        /** Language code and optional country code suffix. */
+        /** Language code and optional country code suffix. If not specified, the preferred locale from the Accept-Language header is used if supported; otherwise US English is the default. */
         locale?: string;
       };
     };
