@@ -19,7 +19,6 @@ export const useAppVersion = () => {
     // trigger initial request
     dispatch(requestAppVersion());
 
-
     // setup a interval check for new versions
     checkInterval = setInterval(() => {
       dispatch(requestAppVersion());
