@@ -16,17 +16,17 @@ type GetTimeZonesResponse = {
   error?: string;
 };
 
-type GetTimeZonesQuery = paths[typeof TIMEZONES_ENDPOINT]['get']['parameters']['query'];
-
-export const getTimeZones = async (locale?: string): Promise<GetTimeZonesResponse> => {
+/**
+ * Gets the time zone definitions for the current locale. This assumes that Axios has already
+ * been configured to send the currently-selected locale in the Accept-Language header.
+ */
+export const getTimeZones = async (): Promise<GetTimeZonesResponse> => {
   const response: GetTimeZonesResponse = {
     requestSucceeded: true,
     timeZones: undefined,
   };
   try {
-    const queryParams: GetTimeZonesQuery = { locale };
-    const endpoint = addQueryParams(TIMEZONES_ENDPOINT, queryParams);
-    const serverResponse: ListTimeZoneNamesResponsePayload = (await axios.get(endpoint)).data;
+    const serverResponse: ListTimeZoneNamesResponsePayload = (await axios.get(TIMEZONES_ENDPOINT)).data;
     response.timeZones = serverResponse.timeZones;
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
