@@ -1,3 +1,4 @@
+68a8dc0 SW-2783 Refactor page message component to support types of page messages (#1095)
 fe12614 SW-2776 Load and save user locale selection (#1092)
 54bcf69 SW-2763 Add 'got it' button to time zone initialization notification (#1074)
 2161a42 Set Accept-Language header to current locale (#1091)
