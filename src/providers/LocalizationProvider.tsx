@@ -3,9 +3,10 @@ import { LocalizationContext } from './contexts';
 import { getTimeZones } from 'src/api/timezones/timezones';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import strings, { ILocalizedStringsMap } from 'src/strings';
-import { ProvidedLocalizationData } from '.';
+import { ProvidedLocalizationData, useUser } from '.';
 import { supportedLocales } from '../strings/locales';
 import axios from 'axios';
+import { updateUserProfile } from 'src/api/user/user';
 
 export type LocalizationProviderProps = {
   children?: React.ReactNode;
@@ -23,6 +24,13 @@ export default function LocalizationProvider({
   setLoadedStringsForLocale,
 }: LocalizationProviderProps): JSX.Element | null {
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
+  const { user, reloadUser } = useUser();
+
+  useEffect(() => {
+    if (user?.locale) {
+      setLocale(user.locale);
+    }
+  }, [user?.locale, setLocale]);
 
   useEffect(() => {
     axios.defaults.headers = { ...axios.defaults.headers, 'Accept-Language': locale };
@@ -58,6 +66,17 @@ export default function LocalizationProvider({
 
     fetchStrings();
   }, [locale, setLoadedStringsForLocale]);
+
+  useEffect(() => {
+    const updateUserLocale = async () => {
+      if (user && user.locale !== locale) {
+        await updateUserProfile({ ...user, locale }, true);
+        reloadUser();
+      }
+    };
+
+    updateUserLocale();
+  }, [locale, user, reloadUser]);
 
   const context: ProvidedLocalizationData = {
     bootstrapped: !!loadedStringsForLocale,
