@@ -78,7 +78,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
       id='time-zone-selector'
       placeholder={strings.SELECT}
       selected={tzNameToDropdownItem(selectedTimeZone)}
-      values={tzOptions}
+      options={tzOptions}
       onChange={(value) => onChangeTimeZone(value)}
       isEqual={isEqual}
       freeSolo={false}
