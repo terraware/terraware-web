@@ -32,6 +32,8 @@ export interface PageSnackbar extends Snackbar {
 export const snackbarAtoms = {
   toast: atom<ToastSnackbar>({ key: 'toast', default: { msg: '', priority: 'success', type: 'toast' } }),
   page: atom<PageSnackbar>({ key: 'page', default: { msg: '', priority: 'success' } }),
+  user: atom<PageSnackbar>({ key: 'user', default: { msg: '', priority: 'success' } }),
+  org: atom<PageSnackbar>({ key: 'org', default: { msg: '', priority: 'success' } }),
 };
 
 // for backwards compatibility

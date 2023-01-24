@@ -265,6 +265,7 @@ function AppContent() {
       const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
       const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
       if (!notifyUser && !notifyOrg) {
+        snackbar.pageInfo('', undefined, undefined, 'org');
         return;
       }
 
@@ -291,17 +292,22 @@ function AppContent() {
         );
       }
 
-      snackbar.pageInfo(message, strings.TIME_ZONE_INITIALIZED_TITLE, {
-        label: strings.GOT_IT,
-        apply: () => {
-          if (notifyUser) {
-            updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
-          }
-          if (notifyOrg) {
-            updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
-          }
+      snackbar.pageInfo(
+        message,
+        strings.TIME_ZONE_INITIALIZED_TITLE,
+        {
+          label: strings.GOT_IT,
+          apply: () => {
+            if (notifyUser) {
+              updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
+            }
+            if (notifyOrg) {
+              updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
+            }
+          },
         },
-      });
+        'org'
+      );
     };
 
     const initializeTimeZones = async () => {
