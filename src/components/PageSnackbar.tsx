@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Snackbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useRecoilState } from 'recoil';
@@ -19,10 +20,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const clearedData = { msg: '', title: undefined, onCloseCallback: undefined };
+
 export default function PageSnackbarMessage(): JSX.Element {
+  const { pathname } = useLocation();
+  const [routeChanged, setRouteChanged] = useState<boolean>(false);
   const [pageSnackbar, setPageSnackbar] = useRecoilState(snackbarAtoms.page);
-  const [orgSnackbar] = useRecoilState(snackbarAtoms.org);
-  const [userSnackbar] = useRecoilState(snackbarAtoms.user);
+  const [orgSnackbar, setOrgSnackbar] = useRecoilState(snackbarAtoms.org);
+  const [userSnackbar, setUserSnackbar] = useRecoilState(snackbarAtoms.user);
 
   const clearSnackbar = (snackbar: PageSnackbarType, clearMessage?: () => void) => {
     if (clearMessage) {
@@ -45,14 +50,39 @@ export default function PageSnackbarMessage(): JSX.Element {
     }
   };
 
-  useEffect(() => {
-    // clear the message after component is unloaded
-    if (pageSnackbar?.msg) {
-      return () => {
-        setPageSnackbar({ ...pageSnackbar, msg: '', title: undefined, onCloseCallback: undefined });
-      };
+  const clearPageMessage = useCallback(() => {
+    if (!pageSnackbar.msg) {
+      return;
     }
+    setPageSnackbar({ ...pageSnackbar, ...clearedData });
   }, [setPageSnackbar, pageSnackbar]);
+
+  const clearUserMessage = useCallback(() => {
+    if (!userSnackbar.msg) {
+      return;
+    }
+    setUserSnackbar({ ...userSnackbar, ...clearedData });
+  }, [setUserSnackbar, userSnackbar]);
+
+  const clearOrgMessage = useCallback(() => {
+    if (!orgSnackbar.msg) {
+      return;
+    }
+    setOrgSnackbar({ ...orgSnackbar, ...clearedData });
+  }, [setOrgSnackbar, orgSnackbar]);
+
+  useEffect(() => {
+    if (routeChanged) {
+      setRouteChanged(false);
+      clearPageMessage();
+      clearUserMessage();
+      clearOrgMessage();
+    }
+  }, [routeChanged, clearPageMessage, clearUserMessage, clearOrgMessage]);
+
+  useEffect(() => {
+    setRouteChanged(!!pathname);
+  }, [pathname]);
 
   return (
     <>
@@ -60,21 +90,17 @@ export default function PageSnackbarMessage(): JSX.Element {
       <SnackbarMessage
         id='user-page-snackbar'
         snack={userSnackbar}
-        onClose={(event?: any, eventType?: string) => handleClose(userSnackbar, event, eventType)}
+        onClose={(event?: any, eventType?: string) => handleClose(userSnackbar, event, eventType, clearUserMessage)}
       />
       <SnackbarMessage
         id='org-page-snackbar'
         snack={orgSnackbar}
-        onClose={(event?: any, eventType?: string) => handleClose(orgSnackbar, event, eventType)}
+        onClose={(event?: any, eventType?: string) => handleClose(orgSnackbar, event, eventType, clearOrgMessage)}
       />
       <SnackbarMessage
         id='page-snackbar'
         snack={pageSnackbar}
-        onClose={(event?: any, eventType?: string) => {
-          handleClose(pageSnackbar, event, eventType, () => {
-            setPageSnackbar({ ...pageSnackbar, msg: '', title: undefined });
-          });
-        }}
+        onClose={(event?: any, eventType?: string) => handleClose(pageSnackbar, event, eventType, clearPageMessage)}
       />
     </>
   );
