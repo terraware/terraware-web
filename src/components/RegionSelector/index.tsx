@@ -124,7 +124,7 @@ export default function RegionSelector({
           <Dropdown
             id='countySubdivisionCode'
             placeholder={strings.SELECT}
-            selectedValue={getSelectedCountrySubdivision()?.code?.toString ?? ''}
+            selectedValue={getSelectedCountrySubdivision()?.code?.toString() ?? ''}
             options={subdivisionOptions()}
             onChange={(value: any) => onChangeCountrySubdivision(value)}
             hideClearIcon={true}
