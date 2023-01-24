@@ -117,7 +117,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.ZONE_REQUIRED}
           selected={zoneToDropdownItem(selectedZone)}
-          values={zoneOptions}
+          options={zoneOptions}
           onChange={(value) => onChangeZone(value)}
           errorText={zoneError}
           disabled={!zones.length}
@@ -133,7 +133,7 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
           placeholder={strings.SELECT}
           label={horizontalLayout ? '' : strings.PLOT_REQUIRED}
           selected={plotToDropdownItem(selectedPlot)}
-          values={plotOptions}
+          options={plotOptions}
           onChange={(value) => onChangePlot(value)}
           errorText={plotError}
           disabled={!selectedZone?.plots?.length}

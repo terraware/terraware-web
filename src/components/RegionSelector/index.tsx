@@ -5,7 +5,7 @@ import { Country, Subdivision } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { Autocomplete } from '@terraware/web-components';
+import { Dropdown } from '@terraware/web-components';
 
 type RegionSelectorProps = {
   selectedCountryCode?: string;
@@ -41,7 +41,7 @@ export default function RegionSelector({
   }, []);
 
   const onChangeCountry = (newValue: string) => {
-    const found = countries?.find((country) => country.name === newValue);
+    const found = countries?.find((country) => country.code.toString() === newValue);
     if (countries && found) {
       const code = found.code.toString();
       onChangeCountryCode(code, !!getCountryByCode(countries, code)?.subdivisions);
@@ -51,7 +51,7 @@ export default function RegionSelector({
   const onChangeCountrySubdivision = (newValue: string) => {
     if (countries && selectedCountryCode) {
       const selectedCountry = getCountryByCode(countries, selectedCountryCode);
-      const found = selectedCountry?.subdivisions.find((subdivision: Subdivision) => subdivision.name === newValue);
+      const found = selectedCountry?.subdivisions.find((subdivision: Subdivision) => subdivision.code.toString() === newValue);
       if (found) {
         onChangeCountrySubdivisionCode(found.code.toString());
       }
@@ -80,7 +80,7 @@ export default function RegionSelector({
     return 6;
   };
 
-  const toDropdownItem = (entity: Country | Subdivision) => ({ label: entity.name, value: entity.code });
+  const toDropdownItem = (entity: Country | Subdivision) => ({ label: entity.name, value: entity.code.toString() });
 
   const countriesOptions = () => {
     return countries?.map((country) => toDropdownItem(country)) ?? [];
@@ -96,22 +96,21 @@ export default function RegionSelector({
 
   return (
     <>
-      <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
-        <Autocomplete
-          id='countryCode'
-          placeholder={strings.SELECT}
-          selected={getSelectedCountry() ? toDropdownItem(getSelectedCountry()!) : ''}
-          values={countriesOptions()}
-          onChange={(value: any) => onChangeCountry(value.label)}
-          isEqual={(optionA: any, optionB: any) => {
-            return optionA?.value === optionB?.value;
-          }}
-          freeSolo={false}
-          hideClearIcon={true}
-          label={strings.COUNTRY_REQUIRED}
-          errorText={countryError}
-        />
-      </Grid>
+      {countries && (
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+          <Dropdown
+            id='countryCode'
+            placeholder={strings.SELECT}
+            selectedValue={getSelectedCountry()?.code?.toString() ?? ''}
+            options={countriesOptions()}
+            onChange={(value: any) => onChangeCountry(value)}
+            hideClearIcon={true}
+           label={strings.COUNTRY_REQUIRED}
+            errorText={countryError}
+            autocomplete={true}
+          />
+        </Grid>
+      )}
       {getSelectedCountry()?.subdivisions ? (
         <Grid
           item
@@ -120,19 +119,16 @@ export default function RegionSelector({
           paddingBottom={theme.spacing(4)}
           sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}
         >
-          <Autocomplete
+          <Dropdown
             id='countySubdivisionCode'
             placeholder={strings.SELECT}
-            selected={getSelectedCountrySubdivision() ? toDropdownItem(getSelectedCountrySubdivision()!) : ''}
-            values={subdivisionOptions()}
-            onChange={(value: any) => onChangeCountrySubdivision(value.label)}
-            isEqual={(optionA: any, optionB: any) => {
-              return optionA?.value === optionB?.value;
-            }}
-            freeSolo={false}
+            selectedValue={getSelectedCountrySubdivision()?.code?.toString ?? ''}
+            options={subdivisionOptions()}
+            onChange={(value: any) => onChangeCountrySubdivision(value)}
             hideClearIcon={true}
             label={strings.STATE_REQUIRED}
             errorText={countrySubdivisionError}
+            autocomplete={true}
           />
         </Grid>
       ) : (
