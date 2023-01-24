@@ -153,7 +153,8 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences } = useOrganization();
+  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences, userPreferences } =
+    useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const [timeZoneInitializedForOrg, setTimeZoneInitializedForOrg] = useState<number>(defaultSelectedOrg.id);
   const { isProduction } = useEnvironment();
@@ -161,6 +162,7 @@ function AppContent() {
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const weightUnitsEnabled = isEnabled('Weight units');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -255,6 +257,27 @@ function AppContent() {
       setShowNavBar(true);
     }
   }, [type]);
+
+  useEffect(() => {
+    if (weightUnitsEnabled) {
+      if (!userPreferences.preferredWeightSystem || !userPreferences.unitsAcknowledgedOnMs) {
+        if (!userPreferences.preferredWeightSystem) {
+          updatePreferences('preferredWeightSystem', 'metric');
+        }
+        snackbar.pageInfo(
+          strings.formatString<any>(
+            strings.UNITS_INITIALIZED_MESSAGE,
+            userPreferences.preferredWeightSystem ?? 'metric',
+            <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
+          ),
+          strings.UNITS_INITIALIZED_TITLE,
+          () => {
+            updatePreferences('unitsAcknowledgedOnMs', Date.now());
+          }
+        );
+      }
+    }
+  }, [userPreferences, snackbar, weightUnitsEnabled]);
 
   useEffect(() => {
     const getDefaultTimeZone = (): TimeZoneDescription => {

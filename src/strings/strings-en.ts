@@ -974,6 +974,8 @@ export const strings = {
   UNDO_SEND_TO_NURSERY: 'Undo Send to Nursery',
   UNEXPECTED_ERROR: 'An unexpected error occurred.',
   UNITS: 'Units',
+  UNITS_INITIALIZED_MESSAGE: 'Your Weight System was updated to {0}. You can edit this setting from {1}.',
+  UNITS_INITIALIZED_TITLE: 'Preferred Weight System set',
   UNKNOWN: 'Unknown',
   UNSPECIFIED: 'Unspecified',
   UNSURE: 'Unsure',
