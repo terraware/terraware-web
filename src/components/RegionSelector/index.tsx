@@ -51,7 +51,9 @@ export default function RegionSelector({
   const onChangeCountrySubdivision = (newValue: string) => {
     if (countries && selectedCountryCode) {
       const selectedCountry = getCountryByCode(countries, selectedCountryCode);
-      const found = selectedCountry?.subdivisions.find((subdivision: Subdivision) => subdivision.code.toString() === newValue);
+      const found = selectedCountry?.subdivisions.find(
+        (subdivision: Subdivision) => subdivision.code.toString() === newValue
+      );
       if (found) {
         onChangeCountrySubdivisionCode(found.code.toString());
       }
@@ -105,7 +107,7 @@ export default function RegionSelector({
             options={countriesOptions()}
             onChange={(value: any) => onChangeCountry(value)}
             hideClearIcon={true}
-           label={strings.COUNTRY_REQUIRED}
+            label={strings.COUNTRY_REQUIRED}
             errorText={countryError}
             autocomplete={true}
           />
