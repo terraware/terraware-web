@@ -1,5 +1,4 @@
 import axios from 'axios';
-import addQueryParams from '../helpers/addQueryParams';
 import { paths } from '../types/generated-schema';
 import { addError } from '../utils';
 
