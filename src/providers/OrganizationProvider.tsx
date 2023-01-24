@@ -26,6 +26,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
   const [userPreferences, setUserPreferences] = useState<PreferencesType>({});
   const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
+  const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(defaultSelectedOrg.id);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const [organizations, setOrganizations] = useState<ServerOrganization[]>([]);
   const history = useHistory();
@@ -77,6 +78,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     reloadData,
     reloadPreferences,
     bootstrapped,
+    orgPreferenceForId,
   });
 
   useEffect(() => {
@@ -91,8 +93,9 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       orgPreferences,
       userPreferences,
       bootstrapped,
+      orgPreferenceForId,
     }));
-  }, [selectedOrganization, organizations, orgPreferences, userPreferences, bootstrapped]);
+  }, [selectedOrganization, organizations, orgPreferences, userPreferences, bootstrapped, orgPreferenceForId]);
 
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
@@ -100,6 +103,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
         const response = await getPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences) {
           setOrgPreferences(response.preferences);
+          setOrgPreferenceForId(selectedOrganization.id);
         }
         // once we retrieve the org and it's preferences, we are now bootstrapped for the organization provider
         setBootstrapped(true);

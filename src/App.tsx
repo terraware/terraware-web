@@ -153,7 +153,8 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences } = useOrganization();
+  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences, orgPreferenceForId } =
+    useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
   const { user, reloadUser } = useUser();
@@ -321,7 +322,7 @@ function AppContent() {
       }
 
       let orgTz: InitializedTimeZone = {};
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
+      if (!isPlaceholderOrg(selectedOrganization.id) && orgPreferenceForId === selectedOrganization.id) {
         orgTz = await initializeOrganizationTimeZone(selectedOrganization, userTz.timeZone);
       }
 
@@ -341,7 +342,16 @@ function AppContent() {
     if (timeZoneFeatureEnabled && !isPlaceholderOrg(selectedOrganization.id)) {
       initializeTimeZones();
     }
-  }, [reloadData, reloadUser, selectedOrganization, snackbar, timeZoneFeatureEnabled, timeZones, user]);
+  }, [
+    reloadData,
+    reloadUser,
+    selectedOrganization,
+    snackbar,
+    timeZoneFeatureEnabled,
+    timeZones,
+    user,
+    orgPreferenceForId,
+  ]);
 
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 

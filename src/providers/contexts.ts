@@ -35,6 +35,7 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
   },
   selectedOrganization: defaultSelectedOrg,
   bootstrapped: false,
+  orgPreferenceForId: -1,
 });
 
 export const LocalizationContext = createContext<ProvidedLocalizationData>({
