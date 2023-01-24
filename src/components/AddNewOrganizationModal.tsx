@@ -4,11 +4,7 @@ import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
-import Select from './common/Select/Select';
 import TextField from './common/Textfield/Textfield';
-import { searchCountries } from 'src/api/country/country';
-import { Country } from 'src/types/Country';
-import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { APP_PATHS } from '../constants';
 import DialogBox from './common/DialogBox/DialogBox';
 import { Grid } from '@mui/material';
@@ -18,6 +14,7 @@ import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import isEnabled from 'src/features';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
+import RegionSelector from 'src/components/RegionSelector';
 
 export type AddNewOrganizationModalProps = {
   open: boolean;
@@ -31,7 +28,9 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const snackbar = useSnackbar();
   const [nameError, setNameError] = useState('');
   const [timeZoneError, setTimeZoneError] = useState('');
-  const [countries, setCountries] = useState<Country[]>();
+  const [countryError, setCountryError] = useState('');
+  const [stateError, setStateError] = useState('');
+  const [hasStates, setHasStates] = useState<boolean>(false);
   const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
     id: -1,
     name: '',
@@ -41,20 +40,6 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const timeZonesEnabled = isEnabled('Timezones');
 
   useEffect(() => {
-    let cancel = false;
-    const populateCountries = async () => {
-      const response = await searchCountries();
-      if (response && !cancel) {
-        setCountries(response);
-      }
-    };
-    populateCountries();
-    return () => {
-      cancel = true;
-    };
-  }, []);
-
-  useEffect(() => {
     setNewOrganization({
       id: -1,
       name: '',
@@ -62,23 +47,6 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       totalUsers: 0,
     });
   }, [open, setNewOrganization]);
-
-  const onChangeCountry = (newValue: string) => {
-    const found = countries?.find((country) => country.name === newValue);
-    if (found) {
-      setNewOrganization((previousNewOrganization: ServerOrganization): ServerOrganization => {
-        return { ...previousNewOrganization, countryCode: found.code.toString(), countrySubdivisionCode: undefined };
-      });
-    }
-  };
-
-  const onChangeSubdivision = (newValue: string) => {
-    const selectedCountry = getSelectedCountry();
-    const found = selectedCountry?.subdivisions?.find((subdivision) => subdivision.name === newValue);
-    if (found) {
-      onChange('countrySubdivisionCode', found.code);
-    }
-  };
 
   const onTimeZoneChange = (value: TimeZoneDescription) => {
     if (value?.id) {
@@ -100,6 +68,16 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       hasErrors = true;
     }
 
+    if (!newOrganization.countryCode) {
+      setCountryError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    }
+
+    if (hasStates && !newOrganization.countrySubdivisionCode) {
+      setStateError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    }
+
     if (hasErrors) {
       return;
     }
@@ -116,28 +94,6 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);
     }
     onCancel();
-  };
-
-  const getSelectedCountry = () => {
-    if (countries && newOrganization.countryCode) {
-      const selectedCountry = getCountryByCode(countries, newOrganization.countryCode);
-      if (selectedCountry) {
-        return selectedCountry;
-      }
-    }
-  };
-
-  const getSelectedSubdivision = () => {
-    if (countries && newOrganization.countryCode && newOrganization.countrySubdivisionCode) {
-      const selectedSubdivision = getSubdivisionByCode(
-        countries,
-        newOrganization.countryCode,
-        newOrganization.countrySubdivisionCode
-      );
-      if (selectedSubdivision) {
-        return selectedSubdivision;
-      }
-    }
   };
 
   const onCancelWrapper = () => {
@@ -186,36 +142,32 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             value={newOrganization.description}
           />
         </Grid>
+        <RegionSelector
+          selectedCountryCode={newOrganization.countryCode}
+          selectedCountrySubdivisionCode={newOrganization.countrySubdivisionCode}
+          onChangeCountryCode={(countryCode: string, hasSubdivisions: boolean) => {
+            setNewOrganization((previousNewOrganization: ServerOrganization): ServerOrganization => {
+              return { ...previousNewOrganization, countryCode, countrySubdivisionCode: undefined };
+            });
+            setCountryError('');
+            setHasStates(hasSubdivisions);
+          }}
+          onChangeCountrySubdivisionCode={(countrySubdivisionCode: string) => {
+            onChange('countrySubdivisionCode', countrySubdivisionCode);
+            setStateError('');
+          }}
+          countryError={countryError}
+          countrySubdivisionError={stateError}
+        />
         {timeZonesEnabled && (
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
             <TimeZoneSelector
               label={strings.TIME_ZONE_REQUIRED}
               onTimeZoneSelected={onTimeZoneChange}
               selectedTimeZone={newOrganization.timeZone}
+              countryCode={newOrganization.countryCode}
               tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
               errorText={timeZoneError}
-            />
-          </Grid>
-        )}
-        <Grid item xs={12}>
-          <Select
-            label={strings.COUNTRY}
-            id='countyCode'
-            onChange={onChangeCountry}
-            options={countries?.map((country) => country.name)}
-            selectedValue={getSelectedCountry()?.name}
-            fullWidth
-          />
-        </Grid>
-        {getSelectedCountry()?.subdivisions && (
-          <Grid item xs={12}>
-            <Select
-              label={strings.STATE}
-              id='countySubdivisionCode'
-              onChange={onChangeSubdivision}
-              options={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name)}
-              selectedValue={getSelectedSubdivision()?.name}
-              fullWidth
             />
           </Grid>
         )}

@@ -1,17 +1,13 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ServerOrganization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
-import Select from '../common/Select/Select';
 import PageForm from '../common/PageForm';
-import { Country, Subdivision } from 'src/types/Country';
-import { searchCountries } from 'src/api/country/country';
 import { updateOrganization } from 'src/api/organization/organization';
-import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -21,6 +17,7 @@ import { getUTC, useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
+import RegionSelector from 'src/components/RegionSelector';
 
 type OrganizationViewProps = {
   organization: ServerOrganization;
@@ -32,67 +29,11 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const { isMobile } = useDeviceInfo();
   const [organizationRecord, setOrganizationRecord, onChange] = useForm<ServerOrganization>(organization);
   const [nameError, setNameError] = useState('');
-  const [countries, setCountries] = useState<Country[]>();
   const history = useHistory();
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
   const timeZoneFeatureEnabled = isEnabled('Timezones');
-
-  useEffect(() => {
-    const populateCountries = async () => {
-      const response = await searchCountries();
-      if (response) {
-        setCountries(response);
-      }
-    };
-    populateCountries();
-  }, []);
-
-  const onChangeCountry = (newValue: string) => {
-    const found = countries?.find((country) => country.name === newValue);
-    if (found) {
-      setOrganizationRecord((previousOrganizationRecord: ServerOrganization): ServerOrganization => {
-        return {
-          ...previousOrganizationRecord,
-          countryCode: found.code.toString(),
-          countrySubdivisionCode: undefined,
-        };
-      });
-    }
-  };
-
-  const onChangeSubdivision = (newValue: string) => {
-    if (countries && organizationRecord.countryCode) {
-      const selectedCountry = getCountryByCode(countries, organizationRecord.countryCode);
-      const found = selectedCountry?.subdivisions.find((subdivision: Subdivision) => subdivision.name === newValue);
-      if (found) {
-        onChange('countrySubdivisionCode', found.code);
-      }
-    }
-  };
-
-  const getSelectedCountry = () => {
-    if (countries && organizationRecord.countryCode) {
-      const selectedCountry = getCountryByCode(countries, organizationRecord.countryCode);
-      if (selectedCountry) {
-        return selectedCountry;
-      }
-    }
-  };
-
-  const getSelectedSubdivision = () => {
-    if (countries && organizationRecord.countryCode && organizationRecord.countrySubdivisionCode) {
-      const selectedSubdivision = getSubdivisionByCode(
-        countries,
-        organizationRecord.countryCode,
-        organizationRecord.countrySubdivisionCode
-      );
-      if (selectedSubdivision) {
-        return selectedSubdivision;
-      }
-    }
-  };
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
     setOrganizationRecord((previousRecord: ServerOrganization): ServerOrganization => {
@@ -171,36 +112,30 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               value={organizationRecord.description}
             />
           </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
-            <Select
-              label={strings.COUNTRY}
-              id='countyCode'
-              onChange={onChangeCountry}
-              options={countries?.map((country) => country.name)}
-              selectedValue={getSelectedCountry()?.name}
-              fullWidth
-            />
-          </Grid>
-          {getSelectedCountry()?.subdivisions ? (
-            <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)} paddingBottom={theme.spacing(4)}>
-              <Select
-                label={strings.STATE}
-                id='countySubdivisionCode'
-                onChange={onChangeSubdivision}
-                options={getSelectedCountry()?.subdivisions.map((subdivision) => subdivision.name)}
-                selectedValue={getSelectedSubdivision()?.name}
-                fullWidth
-              />
-            </Grid>
-          ) : (
-            !isMobile && <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)} />
-          )}
+          <RegionSelector
+            selectedCountryCode={organizationRecord.countryCode}
+            selectedCountrySubdivisionCode={organizationRecord.countrySubdivisionCode}
+            onChangeCountryCode={(countryCode: string) =>
+              setOrganizationRecord(
+                (previousOrganizationRecord: ServerOrganization): ServerOrganization => ({
+                  ...previousOrganizationRecord,
+                  countryCode,
+                  countrySubdivisionCode: undefined,
+                })
+              )
+            }
+            onChangeCountrySubdivisionCode={(countrySubdivisionCode: string) =>
+              onChange('countrySubdivisionCode', countrySubdivisionCode)
+            }
+            horizontalLayout
+          />
           {timeZoneFeatureEnabled && (
             <Grid item xs={gridSize()}>
               <TimeZoneSelector
                 selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
+                countryCode={organizationRecord.countryCode}
                 onTimeZoneSelected={onChangeTimeZone}
-                label={strings.TIME_ZONE}
+                label={strings.TIME_ZONE_REQUIRED}
                 tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
               />
             </Grid>
