@@ -1,3 +1,4 @@
+54bcf69 SW-2763 Add 'got it' button to time zone initialization notification (#1074)
 2161a42 Set Accept-Language header to current locale (#1091)
 049d7d7 Update generated types (#1090)
 882dc6d Use refactored dropdown props in terraware-web (#1088)
