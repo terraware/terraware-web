@@ -55,18 +55,23 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   };
 
   const saveOrganization = async () => {
+    let hasErrors = false;
     if (organizationRecord.name === '') {
       setNameError(strings.REQUIRED_FIELD);
-      return;
+      hasErrors = true;
     }
 
     if (!organizationRecord.countryCode) {
       setCountryError(strings.REQUIRED_FIELD);
-      return;
+      hasErrors = true;
     }
 
     if (requireSubdivision && !organizationRecord.countrySubdivisionCode) {
       setSubdivisionError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
       return;
     }
 
