@@ -29,6 +29,9 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const { isMobile } = useDeviceInfo();
   const [organizationRecord, setOrganizationRecord, onChange] = useForm<ServerOrganization>(organization);
   const [nameError, setNameError] = useState('');
+  const [countryError, setCountryError] = useState('');
+  const [subdivisionError, setSubdivisionError] = useState('');
+  const [requireSubdivision, setRequireSubdivisions] = useState(!!organization.countrySubdivisionCode);
   const history = useHistory();
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
@@ -53,17 +56,28 @@ export default function OrganizationView({ organization, reloadOrganizationData 
 
   const saveOrganization = async () => {
     if (organizationRecord.name === '') {
-      setNameError('Required field.');
-    } else {
-      const response = await updateOrganization(organizationRecord);
-      if (response.requestSucceeded) {
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
-        reloadOrganizationData();
-      } else {
-        snackbar.toastError();
-      }
-      goToOrganization();
+      setNameError(strings.REQUIRED_FIELD);
+      return;
     }
+
+    if (!organizationRecord.countryCode) {
+      setCountryError(strings.REQUIRED_FIELD);
+      return;
+    }
+
+    if (requireSubdivision && !organizationRecord.countrySubdivisionCode) {
+      setSubdivisionError(strings.REQUIRED_FIELD);
+      return;
+    }
+
+    const response = await updateOrganization(organizationRecord);
+    if (response.requestSucceeded) {
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+      reloadOrganizationData();
+    } else {
+      snackbar.toastError();
+    }
+    goToOrganization();
   };
 
   const gridSize = () => {
@@ -115,19 +129,22 @@ export default function OrganizationView({ organization, reloadOrganizationData 
           <RegionSelector
             selectedCountryCode={organizationRecord.countryCode}
             selectedCountrySubdivisionCode={organizationRecord.countrySubdivisionCode}
-            onChangeCountryCode={(countryCode: string) =>
+            onChangeCountryCode={(countryCode: string, hasSubdivisions: boolean) => {
+              setRequireSubdivisions(hasSubdivisions);
               setOrganizationRecord(
                 (previousOrganizationRecord: ServerOrganization): ServerOrganization => ({
                   ...previousOrganizationRecord,
                   countryCode,
                   countrySubdivisionCode: undefined,
                 })
-              )
-            }
+              );
+            }}
             onChangeCountrySubdivisionCode={(countrySubdivisionCode: string) =>
               onChange('countrySubdivisionCode', countrySubdivisionCode)
             }
             horizontalLayout
+            countryError={countryError}
+            countrySubdivisionError={subdivisionError}
           />
           {timeZoneFeatureEnabled && (
             <Grid item xs={gridSize()}>
