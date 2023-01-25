@@ -4,6 +4,7 @@ import CachedUserService from './CachedUserService';
 import PreferencesService from './PreferencesService';
 import { User } from 'src/types/User';
 import { InitializedTimeZone } from 'src/types/TimeZones';
+import { InitializedUnits } from 'src/units';
 
 /**
  * Service for user related functionality
@@ -98,6 +99,30 @@ const initializeTimeZone = async (user: User, timeZone: string): Promise<Initial
 };
 
 /**
+ * initialize preferred units (if not already set)
+ */
+const initializeUnits = async (units: string): Promise<InitializedUnits> => {
+  const { unitsAcknowledgedOnMs, preferredWeightSystem } = CachedUserService.getUserPreferences();
+
+  const initializedUnits: InitializedUnits = {
+    unitsAcknowledgedOnMs,
+  };
+
+  if (!preferredWeightSystem) {
+    const response = await updatePreferences({ preferredWeightSystem: units });
+    if (response.requestSucceeded) {
+      initializedUnits.updated = true;
+      initializedUnits.units = units;
+    }
+  } else {
+    initializedUnits.units = preferredWeightSystem;
+  }
+
+  return initializedUnits;
+};
+
+
+/**
  * preferences for user
  */
 const getPreferences = PreferencesService.getUserPreferences;
@@ -113,6 +138,7 @@ const UserService = {
   getPreferences,
   getUser,
   initializeTimeZone,
+  initializeUnits,
   updateOrgPreferences,
   updatePreferences,
   updateUser,

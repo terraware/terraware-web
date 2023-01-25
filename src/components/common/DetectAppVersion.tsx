@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Button, Message } from '@terraware/web-components';
+import { useEffect } from 'react';
+import { selectIsAppVersionStale } from 'src/redux/features/appVersion/appVersionSelectors';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { getLatestAppVersion } from 'src/api/appVersion';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { Message, Button } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -15,8 +16,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const ONE_MINUTE_INTERVAL_MS = 60 * 1000;
-
 type DetectAppVersionProps = {
   onNewVersion?: () => void;
 };
@@ -24,44 +23,15 @@ type DetectAppVersionProps = {
 export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps): JSX.Element | null {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
-  const [lastCheck, setLastCheck] = useState<number>(0);
-  const [needsRefresh, setNeedsRefresh] = useState<boolean>(false);
-  const currentAppVersion = process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION;
+  const isStale = useAppSelector(selectIsAppVersionStale);
 
   useEffect(() => {
-    let active = true;
-    const checkVersion = async () => {
-      const response = await getLatestAppVersion();
-      if (!active) {
-        return;
-      }
-      const isStale = !!response.version && response.version.toString().trim() !== currentAppVersion;
-      setNeedsRefresh(isStale);
-      if (isStale && onNewVersion) {
-        onNewVersion();
-      }
-      // this is needed to trigger the next useEffect, so we keep checking for app version
-      // (unless we have already decided app needs refresh)
-      setLastCheck(Date.now());
-    };
-
-    let timeoutVar: any = null;
-    if (lastCheck === 0) {
-      checkVersion();
-      return;
+    if (isStale && onNewVersion) {
+      onNewVersion();
     }
-    if (!needsRefresh) {
-      timeoutVar = setTimeout(async () => {
-        await checkVersion();
-      }, ONE_MINUTE_INTERVAL_MS);
-    }
-    return () => {
-      active = false;
-      clearTimeout(timeoutVar);
-    };
-  }, [lastCheck, needsRefresh, currentAppVersion, onNewVersion]);
+  }, [isStale, onNewVersion]);
 
-  if (!needsRefresh) {
+  if (!isStale) {
     return null;
   }
 
