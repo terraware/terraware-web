@@ -4,7 +4,7 @@ import { OrganizationUser, User } from 'src/types/User';
 import { AllOrganizationRoles } from 'src/types/Organization';
 import { InitializedTimeZone } from 'src/types/TimeZones';
 import { getCurrentUserPreferences, updatePreferences } from 'src/api/preferences/preferences';
-import { InitializedUnits } from 'src/types/Units';
+import { InitializedUnits } from 'src/units';
 
 const CURRENT_USER_ENDPOINT = '/api/v1/users/me';
 

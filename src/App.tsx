@@ -71,8 +71,7 @@ import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
-import { weightSystemsNames } from './units';
-import { InitializedUnits } from './types/Units';
+import { InitializedUnits, weightSystemsNames } from 'src/units';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -295,7 +294,7 @@ function AppContent() {
   }, [showUnitSnackbar, snackbar, userPreferences.preferredWeightSystem]);
 
   useEffect(() => {
-    const initializeUnit = async () => {
+    const initializeWeightUnits = async () => {
       if (!user || !userPreferences) {
         return;
       }
@@ -315,7 +314,7 @@ function AppContent() {
     };
 
     if (weightUnitsEnabled) {
-      initializeUnit();
+      initializeWeightUnits();
     }
   }, [user, userPreferences, snackbar, weightUnitsEnabled, reloadPreferences]);
 

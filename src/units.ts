@@ -38,3 +38,9 @@ export function weightSystemsNames() {
     { label: strings.METRIC, value: 'metric' },
   ];
 }
+
+export type InitializedUnits = {
+  units?: string;
+  unitsAcknowledgedOnMs?: number;
+  updated?: boolean;
+};
