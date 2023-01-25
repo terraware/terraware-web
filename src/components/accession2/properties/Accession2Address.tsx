@@ -110,7 +110,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
               onChange={(value: any) => onChangeCountry(value)}
               label={strings.COUNTRY}
               placeholder={strings.COUNTRY}
-              values={countries?.map((country) => country.name) || []}
+              options={countries?.map((country) => country.name) || []}
               freeSolo={true}
             />
           </Grid>
@@ -121,7 +121,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
               onChange={(value: any) => onChangeSubdivision(value)}
               label={strings.STATE_PROVINCE_REGION}
               placeholder={strings.STATE_PROVINCE_REGION}
-              values={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name) || []}
+              options={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name) || []}
               freeSolo={true}
             />
           </Grid>

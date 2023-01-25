@@ -7,6 +7,7 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 export type TimeZoneSelectorProps = {
   onTimeZoneSelected: (tzSelected: TimeZoneDescription) => void;
   selectedTimeZone?: string;
+  countryCode?: string;
   disabled?: boolean;
   label?: string;
   tooltip?: string;
@@ -14,7 +15,7 @@ export type TimeZoneSelectorProps = {
 };
 
 export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Element {
-  const { onTimeZoneSelected, selectedTimeZone, disabled, label, tooltip, errorText } = props;
+  const { onTimeZoneSelected, selectedTimeZone, countryCode, disabled, label, tooltip, errorText } = props;
   const timeZones = useTimeZones();
 
   const tzToDropdownItem = (tz?: TimeZoneDescription) =>
@@ -26,8 +27,31 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
   };
 
   const tzOptions: any[] = useMemo(() => {
+    if (countryCode) {
+      try {
+        // get region info
+        const regionInfo = new Intl.Locale('en-US', { region: countryCode }); // use en-US to get english time zone ids
+        // get time zones for region
+        const regionTimeZones = (regionInfo as any).timeZones;
+        if (regionTimeZones) {
+          // get list of time zones from the BE supported list, that are in the region's time zones list
+          const supportedRegionTimeZones = timeZones.filter((tz) =>
+            regionTimeZones.find((rtz: string) => rtz === tz.id)
+          );
+          if (supportedRegionTimeZones.length) {
+            // return [region time zone, rest of the time zones] in that order
+            const remainingTimeZones = timeZones.filter(
+              (tz) => !supportedRegionTimeZones.find((rtz) => rtz.id === tz.id)
+            );
+            return [...supportedRegionTimeZones, ...remainingTimeZones].map((tz) => tzToDropdownItem(tz));
+          }
+        }
+      } catch (e) {
+        // invalid country code
+      }
+    }
     return timeZones.map((tz) => tzToDropdownItem(tz));
-  }, [timeZones]);
+  }, [countryCode, timeZones]);
 
   const onChangeTimeZone = (timeZone: any) => {
     const foundTimeZone = timeZones.find((iTtimeZone) => iTtimeZone.id.toString() === timeZone.value?.toString());
@@ -54,7 +78,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
       id='time-zone-selector'
       placeholder={strings.SELECT}
       selected={tzNameToDropdownItem(selectedTimeZone)}
-      values={tzOptions}
+      options={tzOptions}
       onChange={(value) => onChangeTimeZone(value)}
       isEqual={isEqual}
       freeSolo={false}

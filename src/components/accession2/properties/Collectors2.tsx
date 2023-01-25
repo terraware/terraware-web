@@ -62,7 +62,7 @@ export default function Collectors2({ collectors = [''], onChange }: Props): JSX
             onChange={(value) => onCollectorChange(value, index)}
             label={index === 0 ? strings.COLLECTORS : ''}
             placeholder={strings.COLLECTORS}
-            values={collectorsOpt || []}
+            options={collectorsOpt || []}
             freeSolo={true}
           />
           {index !== 0 && (

@@ -88,7 +88,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         strings.ORGANIZATION_CREATED_MSG,
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
       );
-      reloadData(response.organization.id);
+      reloadData();
       history.push({ pathname: APP_PATHS.HOME });
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);
@@ -165,6 +165,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               label={strings.TIME_ZONE_REQUIRED}
               onTimeZoneSelected={onTimeZoneChange}
               selectedTimeZone={newOrganization.timeZone}
+              countryCode={newOrganization.countryCode}
               tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
               errorText={timeZoneError}
             />

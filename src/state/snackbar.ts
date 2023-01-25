@@ -3,7 +3,10 @@ import { atom } from 'recoil';
 export type Priority = 'info' | 'critical' | 'warning' | 'success';
 export type Title = string | string[] | undefined;
 export type Message = string | (string | JSX.Element)[];
-export type OnCloseCallback = () => void;
+export type OnCloseCallback = {
+  label?: string;
+  apply: () => void;
+};
 
 export interface Snackbar {
   title?: Title;
@@ -28,7 +31,9 @@ export interface PageSnackbar extends Snackbar {
 
 export const snackbarAtoms = {
   toast: atom<ToastSnackbar>({ key: 'toast', default: { msg: '', priority: 'success', type: 'toast' } }),
-  page: atom<PageSnackbar>({ key: 'page', default: { msg: '', priority: 'success' } }),
+  page: atom<PageSnackbar>({ key: 'pageNotification', default: { msg: '', priority: 'success' } }),
+  user: atom<PageSnackbar>({ key: 'userNotification', default: { msg: '', priority: 'success' } }),
+  org: atom<PageSnackbar>({ key: 'orgNotification', default: { msg: '', priority: 'success' } }),
 };
 
 // for backwards compatibility

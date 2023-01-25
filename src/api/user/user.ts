@@ -39,6 +39,7 @@ export async function getUser(): Promise<GetUserResponse> {
       lastName: serverResponse.user.lastName,
       emailNotificationsEnabled: serverResponse.user.emailNotificationsEnabled,
       timeZone: serverResponse.user.timeZone,
+      locale: serverResponse.user.locale,
     };
     setCurrentUser(response.user);
   } catch {
@@ -60,6 +61,7 @@ export async function updateUserProfile(user: User, skipAcknowledgeTimeZone?: bo
       firstName: user.firstName || '',
       lastName: user.lastName || '',
       timeZone: user.timeZone,
+      locale: user.locale,
     };
     if (user.emailNotificationsEnabled !== undefined) {
       serverRequest.emailNotificationsEnabled = user.emailNotificationsEnabled;

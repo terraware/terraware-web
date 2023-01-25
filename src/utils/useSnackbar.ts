@@ -3,7 +3,9 @@ import { useSetRecoilState } from 'recoil';
 import { snackbarAtoms, Priority, Title, Message, OnCloseCallback } from 'src/state/snackbar';
 import strings from 'src/strings';
 
-function snackbarFns(setToastSnackbar: any, setPageSnackbar: any) {
+type PageMessageType = 'page' | 'user' | 'org';
+
+function snackbarFns(setToastSnackbar: any, setPageSnackbar: any, setUserSnackbar: any, setOrgSnackbar: any) {
   const toast = (msg: Message, title: Title, priority: Priority) => {
     setToastSnackbar({
       msg,
@@ -13,8 +15,24 @@ function snackbarFns(setToastSnackbar: any, setPageSnackbar: any) {
     });
   };
 
-  const page = (msg: Message, title: Title, priority: Priority, onCloseCallback?: OnCloseCallback) => {
-    setPageSnackbar({
+  const page = (
+    msg: Message,
+    title: Title,
+    priority: Priority,
+    onCloseCallback?: OnCloseCallback,
+    type?: PageMessageType
+  ) => {
+    const fn = () => {
+      if (type === 'user') {
+        return setUserSnackbar;
+      }
+      if (type === 'org') {
+        return setOrgSnackbar;
+      }
+      return setPageSnackbar;
+    };
+
+    fn()({
       msg,
       title,
       onCloseCallback,
@@ -29,14 +47,14 @@ function snackbarFns(setToastSnackbar: any, setPageSnackbar: any) {
   const toastError = (msg?: Message, title?: Title) => toast(msg || strings.GENERIC_ERROR, title, 'critical');
 
   // page helpers
-  const pageInfo = (msg: Message, title?: Title, closeCallback?: OnCloseCallback) =>
-    page(msg, title, 'info', closeCallback);
-  const pageWarning = (msg: Message, title?: Title, closeCallback?: OnCloseCallback) =>
-    page(msg, title, 'warning', closeCallback);
-  const pageSuccess = (msg: Message, title?: Title, closeCallback?: OnCloseCallback) =>
-    page(msg, title, 'success', closeCallback);
-  const pageError = (msg: Message, title?: Title, closeCallback?: OnCloseCallback) =>
-    page(msg, title, 'critical', closeCallback);
+  const pageInfo = (msg: Message, title?: Title, closeCallback?: OnCloseCallback, type?: PageMessageType) =>
+    page(msg, title, 'info', closeCallback, type);
+  const pageWarning = (msg: Message, title?: Title, closeCallback?: OnCloseCallback, type?: PageMessageType) =>
+    page(msg, title, 'warning', closeCallback, type);
+  const pageSuccess = (msg: Message, title?: Title, closeCallback?: OnCloseCallback, type?: PageMessageType) =>
+    page(msg, title, 'success', closeCallback, type);
+  const pageError = (msg: Message, title?: Title, closeCallback?: OnCloseCallback, type?: PageMessageType) =>
+    page(msg, title, 'critical', closeCallback, type);
 
   return {
     toastInfo,
@@ -53,5 +71,7 @@ function snackbarFns(setToastSnackbar: any, setPageSnackbar: any) {
 export default function useSnackbar() {
   const toast = useSetRecoilState(snackbarAtoms.toast);
   const page = useSetRecoilState(snackbarAtoms.page);
-  return useMemo(() => snackbarFns(toast, page), [toast, page]);
+  const user = useSetRecoilState(snackbarAtoms.user);
+  const org = useSetRecoilState(snackbarAtoms.org);
+  return useMemo(() => snackbarFns(toast, page, user, org), [toast, page, user, org]);
 }
