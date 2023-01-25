@@ -1,3 +1,4 @@
+4216389 SW-2745 Initialize weight system preference upon login (#1093)
 4aed336 DetectAppVersion Returns null if App Version is Stale (#1097)
 7662ced App Version Checker via Redux (#935)
 41129b3 Bump chart.js from 3.9.1 to 4.2.0 (#1078)
