@@ -1,7 +1,7 @@
 import { Container, Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { getUser } from 'src/api/user/user';
+import { UserService } from 'src/services';
 import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
@@ -68,7 +68,7 @@ export default function Home(): JSX.Element {
   useEffect(() => {
     let cancel = false;
     const populateUser = async () => {
-      const response = await getUser();
+      const response = await UserService.getUser();
       if (response.requestSucceeded && !cancel) {
         setUser(response.user ?? undefined);
       }
