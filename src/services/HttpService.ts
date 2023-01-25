@@ -100,7 +100,7 @@ function RequestsHandler(url: string = '') {
   const post = async (request: PostRequest = {}): Promise<Response> => {
     const { entity, params, headers } = request;
 
-    return await handleRequest(axios.put(replace(url, request), entity, { params, headers }));
+    return await handleRequest(axios.post(replace(url, request), entity, { params, headers }));
   };
 
   const put = async (request: PutRequest = {}): Promise<Response> => post(request);
