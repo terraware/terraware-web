@@ -31,3 +31,10 @@ export function weightSystems() {
     { label: strings.METRIC_G_KG_MG, value: 'metric' },
   ];
 }
+
+export function weightSystemsNames() {
+  return [
+    { label: strings.IMPERIAL, value: 'imperial' },
+    { label: strings.METRIC, value: 'metric' },
+  ];
+}

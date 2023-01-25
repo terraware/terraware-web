@@ -4,6 +4,7 @@ import { OrganizationUser, User } from 'src/types/User';
 import { AllOrganizationRoles } from 'src/types/Organization';
 import { InitializedTimeZone } from 'src/types/TimeZones';
 import { getCurrentUserPreferences, updatePreferences } from 'src/api/preferences/preferences';
+import { InitializedUnits } from 'src/types/Units';
 
 const CURRENT_USER_ENDPOINT = '/api/v1/users/me';
 
@@ -189,4 +190,25 @@ export const initializeUserTimeZone = async (user: User, timeZone: string): Prom
   }
 
   return initializedTimeZone;
+};
+
+// initialize preferred units (if not already set)
+export const initializeUserUnits = async (units: string): Promise<InitializedUnits> => {
+  const { unitsAcknowledgedOnMs, preferredWeightSystem } = getCurrentUserPreferences();
+
+  const initializedUnits: InitializedUnits = {
+    unitsAcknowledgedOnMs,
+  };
+
+  if (!preferredWeightSystem) {
+    const response = await updatePreferences('preferredWeightSystem', units);
+    if (response.requestSucceeded) {
+      initializedUnits.updated = true;
+      initializedUnits.units = units;
+    }
+  } else {
+    initializedUnits.units = preferredWeightSystem;
+  }
+
+  return initializedUnits;
 };

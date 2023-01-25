@@ -1,7 +1,7 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 import { CssBaseline, Slide, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import hexRgb from 'hex-rgb';
 import useStateLocation from './utils/useStateLocation';
@@ -61,7 +61,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { TimeZoneDescription, InitializedTimeZone } from 'src/types/TimeZones';
 import { useLocalization, useOrganization, useTimeZones, useUser } from 'src/providers';
 import { updatePreferences } from 'src/api/preferences/preferences';
-import { initializeUserTimeZone } from 'src/api/user/user';
+import { initializeUserTimeZone, initializeUserUnits } from 'src/api/user/user';
 import { initializeOrganizationTimeZone } from 'src/api/organization/organization';
 import { Link } from 'react-router-dom';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
@@ -71,6 +71,8 @@ import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
+import { weightSystemsNames } from './units';
+import { InitializedUnits } from './types/Units';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -199,7 +201,6 @@ function AppContent() {
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const [plotNames, setPlotNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
-  const { pathname } = useLocation();
   const [showUnitSnackbar, setShowUnitSnackbar] = useState(false);
 
   const reloadSpecies = useCallback(() => {
@@ -277,7 +278,7 @@ function AppContent() {
       snackbar.pageInfo(
         strings.formatString<any>(
           strings.UNITS_INITIALIZED_MESSAGE,
-          userPreferences.preferredWeightSystem ?? 'metric',
+          weightSystemsNames().find((ws) => ws.value === userPreferences.preferredWeightSystem ?? 'metric')?.label,
           <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
         ),
         strings.UNITS_INITIALIZED_TITLE,
@@ -294,27 +295,29 @@ function AppContent() {
   }, [showUnitSnackbar, snackbar, userPreferences.preferredWeightSystem]);
 
   useEffect(() => {
-    const initializaUnit = async () => {
-      if (!user || !userPreferences || !pathname) {
+    const initializeUnit = async () => {
+      if (!user || !userPreferences) {
         return;
       }
 
-      if (!userPreferences.preferredWeightSystem) {
-        const response = await updatePreferences('preferredWeightSystem', 'metric');
-        if (response.requestSucceeded) {
-          setShowUnitSnackbar(true);
-        }
+      const userUnit: InitializedUnits = await initializeUserUnits('metric');
+      if (!userUnit.units) {
+        return;
       }
 
-      if (!userPreferences.unitsAcknowledgedOnMs) {
+      if (userUnit.updated) {
+        reloadPreferences();
+      }
+
+      if (!userUnit.unitsAcknowledgedOnMs) {
         setShowUnitSnackbar(true);
       }
     };
 
     if (weightUnitsEnabled) {
-      initializaUnit();
+      initializeUnit();
     }
-  }, [user, userPreferences, snackbar, weightUnitsEnabled, pathname]);
+  }, [user, userPreferences, snackbar, weightUnitsEnabled, reloadPreferences]);
 
   useEffect(() => {
     const getDefaultTimeZone = (): TimeZoneDescription => {
