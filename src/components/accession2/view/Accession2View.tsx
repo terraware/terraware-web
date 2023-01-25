@@ -204,7 +204,6 @@ export default function Accession2View(): JSX.Element {
   };
 
   const showValueAndConversion = (quantity: number, unit: string, isEstimated?: boolean) => {
-    console.log(quantity, unit);
     if (!isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
       return (
         <>
