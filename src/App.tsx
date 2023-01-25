@@ -61,7 +61,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { TimeZoneDescription, InitializedTimeZone } from 'src/types/TimeZones';
 import { useLocalization, useOrganization, useTimeZones, useUser } from 'src/providers';
 import { updatePreferences } from 'src/api/preferences/preferences';
-import { initializeUserTimeZone } from 'src/api/user/user';
+import { initializeUserTimeZone, initializeUserUnits } from 'src/api/user/user';
 import { initializeOrganizationTimeZone } from 'src/api/organization/organization';
 import { Link } from 'react-router-dom';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
@@ -71,6 +71,7 @@ import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
+import { InitializedUnits, weightSystemsNames } from 'src/units';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -159,14 +160,22 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences, orgPreferenceForId } =
-    useOrganization();
+  const {
+    organizations,
+    selectedOrganization,
+    reloadData,
+    reloadPreferences,
+    orgPreferences,
+    orgPreferenceForId,
+    userPreferences,
+  } = useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
   const { user, reloadUser } = useUser();
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const weightUnitsEnabled = isEnabled('Weight units');
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -191,6 +200,7 @@ function AppContent() {
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const [plotNames, setPlotNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
+  const [showUnitSnackbar, setShowUnitSnackbar] = useState(false);
 
   const reloadSpecies = useCallback(() => {
     const populateSpecies = async () => {
@@ -261,6 +271,52 @@ function AppContent() {
       setShowNavBar(true);
     }
   }, [type]);
+
+  useEffect(() => {
+    if (showUnitSnackbar) {
+      snackbar.pageInfo(
+        strings.formatString<any>(
+          strings.UNITS_INITIALIZED_MESSAGE,
+          weightSystemsNames().find((ws) => ws.value === userPreferences.preferredWeightSystem ?? 'metric')?.label,
+          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
+        ),
+        strings.UNITS_INITIALIZED_TITLE,
+
+        {
+          label: strings.GOT_IT,
+          apply: () => {
+            updatePreferences('unitsAcknowledgedOnMs', Date.now());
+          },
+        },
+        'user'
+      );
+    }
+  }, [showUnitSnackbar, snackbar, userPreferences.preferredWeightSystem]);
+
+  useEffect(() => {
+    const initializeWeightUnits = async () => {
+      if (!user || !userPreferences) {
+        return;
+      }
+
+      const userUnit: InitializedUnits = await initializeUserUnits('metric');
+      if (!userUnit.units) {
+        return;
+      }
+
+      if (userUnit.updated) {
+        reloadPreferences();
+      }
+
+      if (!userUnit.unitsAcknowledgedOnMs) {
+        setShowUnitSnackbar(true);
+      }
+    };
+
+    if (weightUnitsEnabled) {
+      initializeWeightUnits();
+    }
+  }, [user, userPreferences, snackbar, weightUnitsEnabled, reloadPreferences]);
 
   useEffect(() => {
     const getDefaultTimeZone = (): TimeZoneDescription => {
