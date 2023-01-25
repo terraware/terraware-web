@@ -1,3 +1,4 @@
+4aed336 DetectAppVersion Returns null if App Version is Stale (#1097)
 7662ced App Version Checker via Redux (#935)
 41129b3 Bump chart.js from 3.9.1 to 4.2.0 (#1078)
 9706d09 Fix flapping when non-English locale is selected (#1096)
