@@ -121,7 +121,6 @@ const initializeUnits = async (units: string): Promise<InitializedUnits> => {
   return initializedUnits;
 };
 
-
 /**
  * preferences for user
  */

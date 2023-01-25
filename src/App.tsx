@@ -284,7 +284,7 @@ function AppContent() {
         {
           label: strings.GOT_IT,
           apply: () => {
-            updatePreferences('unitsAcknowledgedOnMs', Date.now());
+            UserService.updatePreferences({ unitsAcknowledgedOnMs: Date.now() });
           },
         },
         'user'
