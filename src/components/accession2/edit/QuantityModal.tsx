@@ -14,6 +14,7 @@ import Link from 'src/components/common/Link';
 import EditState from './EditState';
 import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
+import { useOrganization } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   units: {
@@ -39,6 +40,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const [quantityError, setQuantityError] = useState(false);
   const theme = useTheme();
   const snackbar = useSnackbar();
+  const { userPreferences } = useOrganization();
 
   const validate = () => {
     const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);
@@ -187,7 +189,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 value={record.remainingQuantity?.units !== 'Seeds' ? record.remainingQuantity?.quantity : ''}
               />
               <Dropdown
-                options={weightUnitsV2()}
+                options={weightUnitsV2(userPreferences.preferredWeightSystem as string)}
                 placeholder={strings.SELECT}
                 onChange={onChangeUnit}
                 selectedValue={record.remainingQuantity?.units}

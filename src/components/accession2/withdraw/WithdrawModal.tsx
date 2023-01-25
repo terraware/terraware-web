@@ -34,7 +34,7 @@ export interface WithdrawDialogProps {
 }
 
 export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, userPreferences } = useOrganization();
   const { onClose, open, accession, reload, user } = props;
 
   const newViabilityTesting: ViabilityTestPostRequest = {
@@ -464,7 +464,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 <Box>{strings.CT}</Box>
               ) : (
                 <Dropdown
-                  options={weightUnitsV2()}
+                  options={weightUnitsV2(userPreferences.preferredWeightSystem as string)}
                   placeholder={strings.SELECT}
                   onChange={onChangeUnit}
                   selectedValue={record.withdrawnQuantity?.units}

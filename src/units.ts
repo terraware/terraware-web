@@ -15,13 +15,22 @@ export function weightUnits() {
   ];
 }
 
-export function weightUnitsV2() {
+export function weightUnitsV2(unit?: string) {
+  if (unit === 'imperial') {
+    return [
+      { label: strings.OZ, value: 'Ounces' },
+      { label: strings.LB, value: 'Pounds' },
+      { label: strings.G, value: 'Grams' },
+      { label: strings.MG, value: 'Milligrams' },
+      { label: strings.KG, value: 'Kilograms' },
+    ];
+  }
   return [
     { label: strings.G, value: 'Grams' },
     { label: strings.MG, value: 'Milligrams' },
     { label: strings.KG, value: 'Kilograms' },
-    { label: strings.LB, value: 'Pounds' },
     { label: strings.OZ, value: 'Ounces' },
+    { label: strings.LB, value: 'Pounds' },
   ];
 }
 
