@@ -1,7 +1,7 @@
 /* eslint-disable import/no-webpack-loader-syntax */
 import { CssBaseline, Slide, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import hexRgb from 'hex-rgb';
 import useStateLocation from './utils/useStateLocation';
@@ -199,6 +199,8 @@ function AppContent() {
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const [plotNames, setPlotNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
+  const { pathname } = useLocation();
+  const [showUnitSnackbar, setShowUnitSnackbar] = useState(false);
 
   const reloadSpecies = useCallback(() => {
     const populateSpecies = async () => {
@@ -271,30 +273,48 @@ function AppContent() {
   }, [type]);
 
   useEffect(() => {
-    if (weightUnitsEnabled) {
-      if (!userPreferences.preferredWeightSystem || !userPreferences.unitsAcknowledgedOnMs) {
-        if (!userPreferences.preferredWeightSystem) {
-          updatePreferences('preferredWeightSystem', 'metric');
-        }
-        snackbar.pageInfo(
-          strings.formatString<any>(
-            strings.UNITS_INITIALIZED_MESSAGE,
-            userPreferences.preferredWeightSystem ?? 'metric',
-            <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-          ),
-          strings.UNITS_INITIALIZED_TITLE,
+    if (showUnitSnackbar) {
+      snackbar.pageInfo(
+        strings.formatString<any>(
+          strings.UNITS_INITIALIZED_MESSAGE,
+          userPreferences.preferredWeightSystem ?? 'metric',
+          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
+        ),
+        strings.UNITS_INITIALIZED_TITLE,
 
-          {
-            label: strings.GOT_IT,
-            apply: () => {
-              updatePreferences('unitsAcknowledgedOnMs', Date.now());
-            },
+        {
+          label: strings.GOT_IT,
+          apply: () => {
+            updatePreferences('unitsAcknowledgedOnMs', Date.now());
           },
-          'user'
-        );
-      }
+        },
+        'user'
+      );
     }
-  }, [userPreferences, snackbar, weightUnitsEnabled]);
+  }, [showUnitSnackbar, snackbar, userPreferences.preferredWeightSystem]);
+
+  useEffect(() => {
+    const initializaUnit = async () => {
+      if (!user || !userPreferences || !pathname) {
+        return;
+      }
+
+      if (!userPreferences.preferredWeightSystem) {
+        const response = await updatePreferences('preferredWeightSystem', 'metric');
+        if (response.requestSucceeded) {
+          setShowUnitSnackbar(true);
+        }
+      }
+
+      if (!userPreferences.unitsAcknowledgedOnMs) {
+        setShowUnitSnackbar(true);
+      }
+    };
+
+    if (weightUnitsEnabled) {
+      initializaUnit();
+    }
+  }, [user, userPreferences, snackbar, weightUnitsEnabled, pathname]);
 
   useEffect(() => {
     const getDefaultTimeZone = (): TimeZoneDescription => {
