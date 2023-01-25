@@ -68,6 +68,9 @@ import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { defaultSelectedOrg } from 'src/providers/contexts';
 import strings from 'src/strings';
 import AppBootstrap from './AppBootstrap';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import { useAppVersion } from './hooks/useAppVersion';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -150,6 +153,9 @@ const MINIMAL_USER_ROUTES: string[] = [
 const isPlaceholderOrg = (id: number) => id === defaultSelectedOrg.id;
 
 function AppContent() {
+  // manager hooks
+  useAppVersion();
+
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
@@ -653,7 +659,9 @@ function AppContent() {
 export default function App(): JSX.Element {
   return (
     <AppBootstrap>
-      <AppContent />
+      <Provider store={store}>
+        <AppContent />
+      </Provider>
     </AppBootstrap>
   );
 }
