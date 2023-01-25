@@ -2,7 +2,7 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Message } from '@terraware/web-components';
 import { useEffect } from 'react';
-import { selectAppVersion, selectIsAppVersionStale } from 'src/redux/features/appVersion/appVersionSelectors';
+import { selectIsAppVersionStale } from 'src/redux/features/appVersion/appVersionSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -24,7 +24,6 @@ export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const isStale = useAppSelector(selectIsAppVersionStale);
-  const appVersion = useAppSelector(selectAppVersion);
 
   useEffect(() => {
     if (isStale && onNewVersion) {
@@ -32,7 +31,7 @@ export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps
     }
   }, [isStale, onNewVersion]);
 
-  if (!appVersion) {
+  if (!isStale) {
     return null;
   }
 
