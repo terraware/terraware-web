@@ -3,8 +3,9 @@ import { LocalizationContext } from './contexts';
 import { getTimeZones } from 'src/api/timezones/timezones';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import strings, { ILocalizedStringsMap } from 'src/strings';
-import { ProvidedLocalizationData } from '.';
+import { ProvidedLocalizationData, useUser } from '.';
 import { supportedLocales } from '../strings/locales';
+import axios from 'axios';
 
 export type LocalizationProviderProps = {
   children?: React.ReactNode;
@@ -22,10 +23,22 @@ export default function LocalizationProvider({
   setLoadedStringsForLocale,
 }: LocalizationProviderProps): JSX.Element | null {
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
+  const { user } = useUser();
 
   useEffect(() => {
+    if (user?.locale) {
+      setLocale(user.locale);
+    }
+  }, [user?.locale, setLocale]);
+
+  useEffect(() => {
+    axios.defaults.headers = { ...axios.defaults.headers, 'Accept-Language': locale };
+  }, [locale]);
+
+  // This must come after the effect that configures the Accept-Language header.
+  useEffect(() => {
     const fetchTimeZones = async () => {
-      const timeZoneResponse = await getTimeZones(locale);
+      const timeZoneResponse = await getTimeZones();
       if (!timeZoneResponse.error && timeZoneResponse.timeZones) {
         setTimeZones(timeZoneResponse.timeZones.sort((a, b) => a.longName.localeCompare(b.longName, locale)));
       }

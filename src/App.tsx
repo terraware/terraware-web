@@ -68,6 +68,9 @@ import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { defaultSelectedOrg } from 'src/providers/contexts';
 import strings from 'src/strings';
 import AppBootstrap from './AppBootstrap';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import { useAppVersion } from './hooks/useAppVersion';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -150,13 +153,22 @@ const MINIMAL_USER_ROUTES: string[] = [
 const isPlaceholderOrg = (id: number) => id === defaultSelectedOrg.id;
 
 function AppContent() {
+  // manager hooks
+  useAppVersion();
+
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadData, reloadPreferences, orgPreferences, userPreferences } =
-    useOrganization();
+  const {
+    organizations,
+    selectedOrganization,
+    reloadData,
+    reloadPreferences,
+    orgPreferences,
+    orgPreferenceForId,
+    userPreferences,
+  } = useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
-  const [timeZoneInitializedForOrg, setTimeZoneInitializedForOrg] = useState<number>(defaultSelectedOrg.id);
   const { isProduction } = useEnvironment();
   const { user, reloadUser } = useUser();
   const snackbar = useSnackbar();
@@ -271,9 +283,14 @@ function AppContent() {
             <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
           ),
           strings.UNITS_INITIALIZED_TITLE,
-          () => {
-            updatePreferences('unitsAcknowledgedOnMs', Date.now());
-          }
+
+          {
+            label: strings.GOT_IT,
+            apply: () => {
+              updatePreferences('unitsAcknowledgedOnMs', Date.now());
+            },
+          },
+          'user'
         );
       }
     }
@@ -289,6 +306,7 @@ function AppContent() {
       const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
       const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
       if (!notifyUser && !notifyOrg) {
+        snackbar.pageInfo('', undefined, undefined, 'org');
         return;
       }
 
@@ -315,14 +333,22 @@ function AppContent() {
         );
       }
 
-      snackbar.pageInfo(message, strings.TIME_ZONE_INITIALIZED_TITLE, () => {
-        if (notifyUser) {
-          updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
-        }
-        if (notifyOrg) {
-          updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
-        }
-      });
+      snackbar.pageInfo(
+        message,
+        strings.TIME_ZONE_INITIALIZED_TITLE,
+        {
+          label: strings.GOT_IT,
+          apply: () => {
+            if (notifyUser) {
+              updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
+            }
+            if (notifyOrg) {
+              updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
+            }
+          },
+        },
+        'org'
+      );
     };
 
     const initializeTimeZones = async () => {
@@ -336,7 +362,7 @@ function AppContent() {
       }
 
       let orgTz: InitializedTimeZone = {};
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
+      if (!isPlaceholderOrg(selectedOrganization.id) && orgPreferenceForId === selectedOrganization.id) {
         orgTz = await initializeOrganizationTimeZone(selectedOrganization, userTz.timeZone);
       }
 
@@ -353,12 +379,7 @@ function AppContent() {
       }
     };
 
-    if (
-      timeZoneFeatureEnabled &&
-      !isPlaceholderOrg(selectedOrganization.id) &&
-      timeZoneInitializedForOrg !== selectedOrganization.id
-    ) {
-      setTimeZoneInitializedForOrg(selectedOrganization.id);
+    if (timeZoneFeatureEnabled && !isPlaceholderOrg(selectedOrganization.id)) {
       initializeTimeZones();
     }
   }, [
@@ -367,9 +388,9 @@ function AppContent() {
     selectedOrganization,
     snackbar,
     timeZoneFeatureEnabled,
-    timeZoneInitializedForOrg,
     timeZones,
     user,
+    orgPreferenceForId,
   ]);
 
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
@@ -672,7 +693,9 @@ function AppContent() {
 export default function App(): JSX.Element {
   return (
     <AppBootstrap>
-      <AppContent />
+      <Provider store={store}>
+        <AppContent />
+      </Provider>
     </AppBootstrap>
   );
 }
