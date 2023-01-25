@@ -53,3 +53,46 @@ export type InitializedUnits = {
   unitsAcknowledgedOnMs?: number;
   updated?: boolean;
 };
+
+export function getUnitsForSystem(system: string) {
+  if (system === 'imperial') {
+    return [
+      { label: strings.LB_POUNDS, value: 'Pounds' },
+      { label: strings.OZ_OUNCES, value: 'Ounces' },
+    ];
+  }
+  return [
+    { label: strings.G_GRAMS, value: 'Grams' },
+    { label: strings.MG_MILLIGRAMS, value: 'Milligrams' },
+    { label: strings.KG_KILOGRAMS, value: 'Kilograms' },
+  ];
+}
+
+export function convertValue(value: number, unit: string) {
+  switch (unit) {
+    case 'Grams': {
+      return `${(value * 0.035274).toPrecision(2)} Ounces`;
+    }
+    case 'Kilograms': {
+      return `${(value * 2.20462).toPrecision(2)} Pounds`;
+    }
+    case 'Milligrams': {
+      return `${(value * 0.000035274).toPrecision(2)} Ounces`;
+    }
+    case 'Pounds': {
+      return `${(value * 0.453592).toPrecision(2)} Kilograms`;
+    }
+    case 'Ounces': {
+      return `${(value * 28.3495).toPrecision(2)} Grams`;
+    }
+    default: {
+      return `${value} ${unit}`;
+    }
+  }
+}
+
+export function isUnitInPreferredSystem(unit: string, system: string) {
+  const units = getUnitsForSystem(system);
+  const found = units.find((iUnit) => iUnit.value === unit);
+  return !!found;
+}
