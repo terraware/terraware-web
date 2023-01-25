@@ -8,7 +8,7 @@ import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
 import Select from '../common/Select/Select';
 import { Facility } from 'src/api/types/facilities';
-import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
+import { UserService } from 'src/services';
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
@@ -112,7 +112,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
     const initializeSeedBank = async () => {
       if (seedBanks.length) {
         let lastMonitoringSeedBank: any = {};
-        const response = await getPreferences(organizationId);
+        const response = await UserService.getOrgPreferences(organizationId);
         if (response.requestSucceeded && response.preferences?.lastMonitoringSeedBank) {
           lastMonitoringSeedBank = response.preferences.lastMonitoringSeedBank;
         }
@@ -122,7 +122,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
         if (seedBankToUse.id !== lastMonitoringSeedBank.facilityId) {
           lastMonitoringSeedBank = { facilityId: seedBankToUse.id };
           if (seedBankToUse.connectionState !== 'Configured') {
-            updatePreferences('lastMonitoringSeedBank', lastMonitoringSeedBank, organizationId); // no need to wait for response
+            UserService.updateOrgPreferences(organizationId, { lastMonitoringSeedBank });
           }
         }
         setMonitoringPreferences(lastMonitoringSeedBank);
@@ -138,7 +138,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
 
   const updateMonitoringPreferences = (data: { [key: string]: unknown }) => {
     setMonitoringPreferences(data);
-    updatePreferences('lastMonitoringSeedBank', data, organizationId); // no need to wait for response
+    UserService.updateOrgPreferences(organizationId, { lastMonitoringSeedBank: data }); // no need to wait for response
   };
 
   const getPageHeading = () => (

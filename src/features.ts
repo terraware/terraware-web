@@ -1,6 +1,5 @@
 import env from 'src/utils/useEnvironment';
-import { getCurrentUser } from 'src/api/user/user';
-import { getCurrentUserPreferences } from 'src/api/preferences/preferences';
+import { CachedUserService } from 'src/services';
 
 export type Feature = {
   name: string;
@@ -96,13 +95,16 @@ export default function isEnabled(name: string, organizationId?: number) {
   }
 
   if (!isProduction) {
-    const preferences = getCurrentUserPreferences(organizationId);
+    const preferences =
+      organizationId !== undefined
+        ? CachedUserService.getUserOrgPreferences(organizationId)
+        : CachedUserService.getUserPreferences();
     const preferenceName = feature.preferenceName;
 
     return preferences && preferences[preferenceName] === true;
   }
 
-  return feature.allowInternalProduction && getCurrentUser().isTerraformation;
+  return feature.allowInternalProduction && CachedUserService.getUser().isTerraformation;
 }
 
 export function isRouteEnabled(name: string) {
@@ -117,5 +119,5 @@ export function isRouteEnabled(name: string) {
     return feature.enabled;
   }
 
-  return !isProduction || (feature.allowInternalProduction && getCurrentUser().isTerraformation);
+  return !isProduction || (feature.allowInternalProduction && CachedUserService.getUser().isTerraformation);
 }

@@ -10,7 +10,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { APP_PATHS } from 'src/constants';
 import PlantingSiteDetails from './PlantingSiteDetails';
-import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
+import { UserService } from 'src/services';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { useOrganization } from 'src/providers/hooks';
@@ -29,7 +29,9 @@ export default function PlantsDashboard(): JSX.Element {
 
   useEffect(() => {
     if (plantsDashboardPreferences) {
-      updatePreferences('lastDashboardPlantingSite', plantsDashboardPreferences, selectedOrganization.id);
+      UserService.updateOrgPreferences(selectedOrganization.id, {
+        lastDashboardPlantingSite: plantsDashboardPreferences,
+      });
     }
   }, [plantsDashboardPreferences, selectedOrganization]);
 
@@ -58,7 +60,7 @@ export default function PlantsDashboard(): JSX.Element {
     const initializePlantingSite = async () => {
       if (plantingSites && plantingSites.length) {
         let lastDashboardPlantingSite: any = {};
-        const response = await getPreferences(selectedOrganization.id);
+        const response = await UserService.getOrgPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences?.lastDashboardPlantingSite) {
           lastDashboardPlantingSite = response.preferences.lastDashboardPlantingSite;
         }
@@ -70,7 +72,7 @@ export default function PlantsDashboard(): JSX.Element {
 
         if (plantingSiteToUse.id !== lastDashboardPlantingSite.plantingSiteId) {
           lastDashboardPlantingSite = { plantingSiteId: plantingSiteToUse.id };
-          updatePreferences('lastDashboardPlantingSite', lastDashboardPlantingSite, selectedOrganization.id);
+          UserService.updateOrgPreferences(selectedOrganization.id, { lastDashboardPlantingSite });
         }
         setPlantsDashboardPreferences(lastDashboardPlantingSite);
         if (plantingSiteToUse.id.toString() === plantingSiteId) {

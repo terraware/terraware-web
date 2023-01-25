@@ -1,4 +1,5 @@
+import CachedUserService from './CachedUserService';
 import HttpService from './HttpService';
 import UserService from './UserService';
 
-export { HttpService, UserService };
+export { CachedUserService, HttpService, UserService };

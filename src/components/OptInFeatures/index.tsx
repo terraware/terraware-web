@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, LinearProgress, Switch, Stack, Grid, useTheme } from '@mui/material';
 import hexRgb from 'hex-rgb';
-import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
+import { UserService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -20,7 +20,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
 
   useEffect(() => {
     const loadPreferences = async () => {
-      const response = await getPreferences();
+      const response = await UserService.getPreferences();
       const data: any = {};
       // collect preferences related to our opt-in feature set
       if (response.requestSucceeded && response.preferences) {
@@ -55,7 +55,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
     if (feature.set) {
       feature.set(value);
     } else {
-      response = await updatePreferences(feature.preferenceName, value);
+      response = await UserService.updatePreferences({ [feature.preferenceName]: value });
     }
 
     if (response.requestSucceeded) {

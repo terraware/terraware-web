@@ -49,10 +49,10 @@ import { Message } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { updatePreferences } from 'src/api/preferences/preferences';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
 import { useOrganization } from 'src/providers/hooks';
+import { UserService } from 'src/services';
 
 interface StyleProps {
   isMobile: boolean;
@@ -385,7 +385,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const onCloseEditColumnsModal = (columnNames?: string[]) => {
     if (columnNames) {
       updateSearchColumns(columnNames);
-      updatePreferences('accessionsColumns', columnNames, selectedOrganization.id);
+      UserService.updateOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
     }
     setEditColumnsModalOpen(false);
   };

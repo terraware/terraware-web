@@ -60,8 +60,7 @@ import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { TimeZoneDescription, InitializedTimeZone } from 'src/types/TimeZones';
 import { useLocalization, useOrganization, useTimeZones, useUser } from 'src/providers';
-import { updatePreferences } from 'src/api/preferences/preferences';
-import { initializeUserTimeZone } from 'src/api/user/user';
+import { UserService } from 'src/services';
 import { initializeOrganizationTimeZone } from 'src/api/organization/organization';
 import { Link } from 'react-router-dom';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
@@ -300,10 +299,10 @@ function AppContent() {
           label: strings.GOT_IT,
           apply: () => {
             if (notifyUser) {
-              updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
+              UserService.updatePreferences({ timeZoneAcknowledgedOnMs: Date.now() });
             }
             if (notifyOrg) {
-              updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
+              UserService.updateOrgPreferences(selectedOrganization.id, { timeZoneAcknowledgedOnMs: Date.now() });
             }
           },
         },
@@ -316,7 +315,7 @@ function AppContent() {
         return;
       }
 
-      const userTz: InitializedTimeZone = await initializeUserTimeZone(user, getDefaultTimeZone().id);
+      const userTz: InitializedTimeZone = await UserService.initializeTimeZone(user, getDefaultTimeZone().id);
       if (!userTz.timeZone) {
         return;
       }

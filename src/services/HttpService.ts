@@ -103,9 +103,17 @@ function RequestsHandler(url: string = '') {
     return await handleRequest(axios.post(replace(url, request), entity, { params, headers }));
   };
 
-  const put = async (request: PutRequest = {}): Promise<Response> => post(request);
+  const put = async (request: PutRequest = {}): Promise<Response> => {
+    const { entity, params, headers } = request;
 
-  const patch = async (request: PatchRequest = {}): Promise<Response> => post(request);
+    return await handleRequest(axios.put(replace(url, request), entity, { params, headers }));
+  };
+
+  const patch = async (request: PatchRequest = {}): Promise<Response> => {
+    const { entity, params, headers } = request;
+
+    return await handleRequest(axios.patch(replace(url, request), entity, { params, headers }));
+  };
 
   const _delete = async (request: DeleteRequest = {}): Promise<Response> => {
     const { entity, params, headers } = request;

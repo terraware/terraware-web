@@ -4,8 +4,8 @@ import { paths } from 'src/api/types/generated-schema';
 import { Facility } from '../types/facilities';
 import { OrganizationUser } from 'src/types/User';
 import { InitializedTimeZone } from 'src/types/TimeZones';
-import { getCurrentUserPreferences, updatePreferences } from 'src/api/preferences/preferences';
 import { isAdmin } from 'src/utils/organization';
+import { UserService, CachedUserService } from 'src/services';
 
 const ORGANIZATIONS = '/api/v1/organizations';
 type ListOrganizationsResponsePayload =
@@ -169,7 +169,7 @@ export async function updateOrganization(
     if (serverResponse.status === 'error') {
       response.requestSucceeded = false;
     } else if (organization.timeZone && !skipAcknowledgeTimeZone) {
-      await updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), organization.id);
+      await UserService.updateOrgPreferences(organization.id, { timeZoneAcknowledgedOnMs: Date.now() });
     }
   } catch {
     response.requestSucceeded = false;
@@ -265,7 +265,7 @@ export const initializeOrganizationTimeZone = async (
   organization: ServerOrganization,
   timeZone: string
 ): Promise<InitializedTimeZone> => {
-  const { timeZoneAcknowledgedOnMs } = getCurrentUserPreferences(organization.id);
+  const { timeZoneAcknowledgedOnMs } = CachedUserService.getUserOrgPreferences(organization.id);
 
   const initializedTimeZone: InitializedTimeZone = {
     timeZoneAcknowledgedOnMs,
