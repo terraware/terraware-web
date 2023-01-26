@@ -12,7 +12,7 @@ import { postViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2
 import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
-import { Unit, weightUnitsOrderedByPreference } from 'src/units';
+import { Unit, usePreferredWeightUnits } from 'src/units';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { treatments, withdrawalTypes } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -34,7 +34,7 @@ export interface WithdrawDialogProps {
 }
 
 export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element {
-  const { selectedOrganization, userPreferences } = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const { onClose, open, accession, reload, user } = props;
 
   const newViabilityTesting: ViabilityTestPostRequest = {
@@ -76,6 +76,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
   const [record, setRecord, onChange] = useForm(newWithdrawal);
   const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransferWithdrawal);
+  const preferredUnits = usePreferredWeightUnits();
 
   useEffect(() => {
     if (accession.facilityId) {
@@ -464,7 +465,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 <Box>{strings.CT}</Box>
               ) : (
                 <Dropdown
-                  options={weightUnitsOrderedByPreference(userPreferences)}
+                  options={preferredUnits}
                   placeholder={strings.SELECT}
                   onChange={onChangeUnit}
                   selectedValue={record.withdrawnQuantity?.units}
