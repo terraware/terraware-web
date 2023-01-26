@@ -52,7 +52,7 @@ export default function Search(props: SearchProps): JSX.Element {
         <InventoryFilters filters={filters} setFilters={setFilters} />
       </Box>
       <Grid xs={12} display='flex'>
-        <PillList data={filterPillData ?? []} onRemove={(_) => setFilters({})} />
+        <PillList data={filterPillData ?? []} onRemove={() => setFilters({})} />
       </Grid>
     </>
   );

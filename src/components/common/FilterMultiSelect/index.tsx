@@ -20,16 +20,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type FilterMultiSelectProps<T> = {
-  filterLabel: string;
+  label: string;
   initialSelection: T[];
-  onCancel: (finalSelection: T[]) => void;
+  onCancel: () => void;
   onConfirm: (finalSelection: T[]) => void;
   options: T[];
   renderOption: (item: T) => string;
 };
 
 export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): JSX.Element {
-  const { filterLabel, initialSelection, onCancel, onConfirm, options, renderOption } = props;
+  const { label, initialSelection, onCancel, onConfirm, options, renderOption } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles({ isMobile });
@@ -82,7 +82,7 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
           }}
         >
           <Typography fontSize='20px' fontWeight={600}>
-            {filterLabel}
+            {label}
           </Typography>
         </Box>
       )}
@@ -118,7 +118,7 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
       >
         <Button
           className={classes.button}
-          onClick={() => onCancel(selection)}
+          onClick={() => onCancel()}
           type='passive'
           priority='secondary'
           label={strings.CANCEL}

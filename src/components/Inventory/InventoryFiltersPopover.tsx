@@ -79,15 +79,15 @@ export default function InventoryFiltersPopover({ filters, setFilters }: Invento
   const renderFilterMultiSelect = () => {
     return (
       <FilterMultiSelect
-        filterLabel={strings.NURSERIES}
+        label={strings.NURSERIES}
         initialSelection={filters.facilityIds ?? []}
         onCancel={handleClose}
-        onConfirm={(selectedIds) => {
+        onConfirm={(selectedIds: number[]) => {
           handleClose();
           setFilters({ facilityIds: selectedIds });
         }}
         options={options}
-        renderOption={(id) => nurseries.find((n) => n.id === id)?.name ?? ''}
+        renderOption={(id: number) => nurseries.find((n) => n.id === id)?.name ?? ''}
       />
     );
   };
