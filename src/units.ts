@@ -77,19 +77,19 @@ export function getUnitsForSystem(system: string) {
 export function convertValue(value: number, unit: string) {
   switch (unit) {
     case 'Grams': {
-      return `${(value * 0.035274).toPrecision(2)} ${getUnitName('Ounces')}`;
+      return `${(value * 0.035274).toFixed(2)} ${getUnitName('Ounces')}`;
     }
     case 'Kilograms': {
-      return `${(value * 2.20462).toPrecision(2)} ${getUnitName('Pounds')}`;
+      return `${(value * 2.20462).toFixed(2)} ${getUnitName('Pounds')}`;
     }
     case 'Milligrams': {
-      return `${(value * 0.000035274).toPrecision(2)} ${getUnitName('Ounces')}`;
+      return `${(value * 0.000035274).toFixed(2)} ${getUnitName('Ounces')}`;
     }
     case 'Pounds': {
-      return `${(value * 0.453592).toPrecision(2)} ${getUnitName('Kilograms')}`;
+      return `${(value * 0.453592).toFixed(2)} ${getUnitName('Kilograms')}`;
     }
     case 'Ounces': {
-      return `${(value * 28.3495).toPrecision(2)} ${getUnitName('Grams')}`;
+      return `${(value * 28.3495).toFixed(2)} ${getUnitName('Grams')}`;
     }
     default: {
       return `${value} ${getUnitName(unit)}`;
