@@ -1,2 +1,3 @@
+964c856 rename ServerOrganization type to just Organization (#1104)
 0f29561 SW-2695 Generic Pre-Exposed Filter (#1102)
 a3e533a SW-2792 Initial round of basic services in FE (with example usage) (#1099)
