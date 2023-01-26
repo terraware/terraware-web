@@ -1,4 +1,5 @@
 import strings from 'src/strings';
+import { useOrganization } from './providers';
 
 export interface Unit {
   label: string;
@@ -32,6 +33,11 @@ export function weightUnitsV2(unit?: string) {
     { label: strings.OZ, value: 'Ounces' },
     { label: strings.LB, value: 'Pounds' },
   ];
+}
+
+export function usePreferredWeightUnits() {
+  const { userPreferences } = useOrganization();
+  return weightUnitsV2(userPreferences.preferredWeightSystem as string);
 }
 
 export function weightSystems() {
