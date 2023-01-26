@@ -1,3 +1,4 @@
+952ca21 SW-2750 Add converted value to quantity box on accession page (#1100)
 4cf5ce8 SW-2746 Order weight units according to preference (#1098)
 4216389 SW-2745 Initialize weight system preference upon login (#1093)
 4aed336 DetectAppVersion Returns null if App Version is Stale (#1097)
