@@ -8,6 +8,7 @@ import { columnsIndexed, Preset, searchPresets } from './columns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import isEnabled from 'src/features';
 
 export interface Props {
   open: boolean;
@@ -143,10 +144,11 @@ interface Section {
 
 function sections(): Section[] {
   const columns = columnsIndexed();
+  const weightUnitsEnabled = isEnabled('Weight units');
 
   return [
     {
-      name: 'General',
+      name: strings.GENERAL,
       options: [
         [{ ...columns.accessionNumber, disabled: true }],
         [columns.active],
@@ -155,7 +157,7 @@ function sections(): Section[] {
       ],
     },
     {
-      name: 'Seed Collection',
+      name: strings.SEED_COLLECTION,
       options: [
         [
           columns.speciesName,
@@ -163,35 +165,51 @@ function sections(): Section[] {
           columns.species_familyName,
           columns.receivedDate,
           columns.collectedDate,
-          columns.collectionSiteName,
-        ],
-        [
-          columns.species_endangered,
-          columns.species_rare,
-          columns.collectionSource,
-          columns.ageYears,
-          columns.ageMonths,
           columns.estimatedCount,
         ],
+        weightUnitsEnabled
+          ? [
+              columns.species_endangered,
+              columns.species_rare,
+              columns.collectionSource,
+              columns.ageYears,
+              columns.ageMonths,
+            ]
+          : [
+              columns.species_endangered,
+              columns.species_rare,
+              columns.collectionSource,
+              columns.ageYears,
+              columns.ageMonths,
+              columns.estimatedWeightGrams,
+            ],
         [
           columns.plantsCollectedFrom,
           columns.bagNumber,
           columns.collectionSiteLandowner,
           columns.collectionSiteNotes,
-          columns.estimatedWeightGrams,
+          columns.collectionSiteName,
         ],
       ],
     },
+    weightUnitsEnabled && {
+      name: strings.WEIGHT_UNITS,
+      options: [
+        [columns.estimatedWeightGrams, columns.estimatedWeightOunces],
+        [columns.estimatedWeightMilligrams, columns.estimatedWeightPounds],
+        [columns.estimatedWeightKilograms],
+      ],
+    },
     {
-      name: 'Processing and Drying',
+      name: strings.PROCESSING_AND_DRYING,
       options: [[columns.dryingEndDate], [columns.remainingQuantity]],
     },
     {
-      name: 'Storing',
+      name: strings.STORING,
       options: [[columns.storageCondition], [columns.storageLocationName]],
     },
     {
-      name: 'Withdrawal',
+      name: strings.WITHDRAWAL,
       options: [
         [columns.withdrawalDate, columns.withdrawalQuantity],
         [columns.withdrawalPurpose],
@@ -199,7 +217,7 @@ function sections(): Section[] {
       ],
     },
     {
-      name: 'Viability Testing',
+      name: strings.VIABILITY_TESTING,
       options: [
         [
           columns.viabilityTests_type,
