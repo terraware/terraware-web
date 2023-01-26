@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
@@ -20,14 +20,14 @@ import { useTimeZones } from 'src/providers';
 import RegionSelector from 'src/components/RegionSelector';
 
 type OrganizationViewProps = {
-  organization: ServerOrganization;
+  organization: Organization;
   reloadOrganizationData: () => void;
 };
 
 export default function OrganizationView({ organization, reloadOrganizationData }: OrganizationViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const [organizationRecord, setOrganizationRecord, onChange] = useForm<ServerOrganization>(organization);
+  const [organizationRecord, setOrganizationRecord, onChange] = useForm<Organization>(organization);
   const [nameError, setNameError] = useState('');
   const [countryError, setCountryError] = useState('');
   const [subdivisionError, setSubdivisionError] = useState('');
@@ -39,7 +39,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
-    setOrganizationRecord((previousRecord: ServerOrganization): ServerOrganization => {
+    setOrganizationRecord((previousRecord: Organization): Organization => {
       return {
         ...previousRecord,
         timeZone: newTimeZone ? newTimeZone.id : undefined,
@@ -137,7 +137,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             onChangeCountryCode={(countryCode: string, hasSubdivisions: boolean) => {
               setRequireSubdivisions(hasSubdivisions);
               setOrganizationRecord(
-                (previousOrganizationRecord: ServerOrganization): ServerOrganization => ({
+                (previousOrganizationRecord: Organization): Organization => ({
                   ...previousOrganizationRecord,
                   countryCode,
                   countrySubdivisionCode: undefined,

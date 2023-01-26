@@ -5,7 +5,7 @@ import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { getOrganizations } from 'src/api/organization/organization';
 import { PreferencesService } from 'src/services';
-import { ServerOrganization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import { OrganizationContext } from './contexts';
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
 import { defaultSelectedOrg } from './contexts';
@@ -23,12 +23,12 @@ enum APIRequestStatus {
 
 export default function OrganizationProvider({ children }: OrganizationProviderProps): JSX.Element {
   const [bootstrapped, setBootstrapped] = useState<boolean>(false);
-  const [selectedOrganization, setSelectedOrganization] = useState<ServerOrganization>();
+  const [selectedOrganization, setSelectedOrganization] = useState<Organization>();
   const [userPreferences, setUserPreferences] = useState<PreferencesType>({});
   const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
   const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(defaultSelectedOrg.id);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
-  const [organizations, setOrganizations] = useState<ServerOrganization[]>([]);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
   const history = useHistory();
   const query = useQuery();
   const location = useStateLocation();
@@ -124,7 +124,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     if (organizations.length && userPreferences) {
       const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
-      setSelectedOrganization((previouslySelectedOrg: ServerOrganization | undefined) => {
+      setSelectedOrganization((previouslySelectedOrg: Organization | undefined) => {
         let orgToUse = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
         if (!orgToUse && userPreferences.lastVisitedOrg) {
           orgToUse = organizations.find((org) => org.id === userPreferences.lastVisitedOrg);

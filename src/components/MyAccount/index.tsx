@@ -7,7 +7,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { roleName, ServerOrganization } from 'src/types/Organization';
+import { roleName, Organization } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
@@ -35,7 +35,7 @@ import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 
 type MyAccountProps = {
-  organizations?: ServerOrganization[];
+  organizations?: Organization[];
   edit: boolean;
   reloadData?: () => void;
 };
@@ -52,7 +52,7 @@ export default function MyAccount(props: MyAccountProps): JSX.Element | null {
 
 type MyAccountContentProps = {
   user: User;
-  organizations?: ServerOrganization[];
+  organizations?: Organization[];
   edit: boolean;
   reloadUser: () => void;
   reloadData?: () => void;
@@ -62,13 +62,13 @@ type MyAccountContentProps = {
  * Details of membership in an organization, with an additional property for the localized name
  * of the user's role.
  */
-type PersonOrganization = ServerOrganization & { roleName: string };
+type PersonOrganization = Organization & { roleName: string };
 
-function addRoleName(organization: ServerOrganization): PersonOrganization {
+function addRoleName(organization: Organization): PersonOrganization {
   return { ...organization, roleName: roleName(organization.role) };
 }
 
-function addRoleNames(organizations: ServerOrganization[]): PersonOrganization[] {
+function addRoleNames(organizations: Organization[]): PersonOrganization[] {
   return organizations.map(addRoleName);
 }
 
@@ -85,7 +85,7 @@ const MyAccountContent = ({
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
   const history = useHistory();
   const [record, setRecord, onChange] = useForm<User>(user);
-  const [removedOrg, setRemovedOrg] = useState<ServerOrganization>();
+  const [removedOrg, setRemovedOrg] = useState<Organization>();
   const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
   const [assignNewOwnerModalOpened, setAssignNewOwnerModalOpened] = useState(false);
   const [cannotRemoveOrgModalOpened, setCannotRemoveOrgModalOpened] = useState(false);
