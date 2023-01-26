@@ -6,7 +6,7 @@ import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
-import { Unit, weightUnitsV2 } from 'src/units';
+import { Unit, weightUnitsOrderedByPreference } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import CalculatorModal from './CalculatorModal';
 import { Dropdown } from '@terraware/web-components';
@@ -189,7 +189,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 value={record.remainingQuantity?.units !== 'Seeds' ? record.remainingQuantity?.quantity : ''}
               />
               <Dropdown
-                options={weightUnitsV2(userPreferences.preferredWeightSystem as string)}
+                options={weightUnitsOrderedByPreference(userPreferences)}
                 placeholder={strings.SELECT}
                 onChange={onChangeUnit}
                 selectedValue={record.remainingQuantity?.units}

@@ -12,7 +12,7 @@ import { postViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2
 import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
 import { getOrganizationUsers } from 'src/api/organization/organization';
 import { OrganizationUser, User } from 'src/types/User';
-import { Unit, weightUnitsV2 } from 'src/units';
+import { Unit, weightUnitsOrderedByPreference } from 'src/units';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { treatments, withdrawalTypes } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -464,7 +464,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
                 <Box>{strings.CT}</Box>
               ) : (
                 <Dropdown
-                  options={weightUnitsV2(userPreferences.preferredWeightSystem as string)}
+                  options={weightUnitsOrderedByPreference(userPreferences)}
                   placeholder={strings.SELECT}
                   onChange={onChangeUnit}
                   selectedValue={record.withdrawnQuantity?.units}
