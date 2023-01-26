@@ -146,7 +146,7 @@ function sections(): Section[] {
   const columns = columnsIndexed();
   const weightUnitsEnabled = isEnabled('Weight units');
 
-  const sections = [
+  const columnsSections = [
     {
       name: strings.GENERAL,
       options: [
@@ -228,22 +228,19 @@ function sections(): Section[] {
     },
   ];
 
+  // TODO: When undoing the feature check move this code to the original sections
   if (weightUnitsEnabled) {
-    sections
-      .splice(
-        2,
-        0,
-        weightUnitsEnabled && {
-          name: strings.WEIGHT_UNITS,
-          options: [
-            [columns.estimatedWeightGrams, columns.estimatedWeightOunces],
-            [columns.estimatedWeightMilligrams, columns.estimatedWeightPounds],
-            [columns.estimatedWeightKilograms],
-          ],
-        }
-      )
+    columnsSections
+      .splice(2, 0, {
+        name: strings.WEIGHT_UNITS,
+        options: [
+          [columns.estimatedWeightGrams, columns.estimatedWeightOunces],
+          [columns.estimatedWeightMilligrams, columns.estimatedWeightPounds],
+          [columns.estimatedWeightKilograms],
+        ],
+      })
       .join();
   }
 
-  return sections;
+  return columnsSections;
 }
