@@ -1,5 +1,6 @@
 import strings from 'src/strings';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
+import isEnabled from 'src/features';
 
 function columns(): DatabaseColumn[] {
   return [
@@ -319,6 +320,20 @@ export const defaultPreset: Preset = {
   ],
 };
 
+export const defaultImperialPreset: Preset = {
+  name: 'Default',
+  fields: [
+    'accessionNumber',
+    'speciesName',
+    'state',
+    'collectionSiteName',
+    'collectedDate',
+    'ageMonths',
+    'estimatedWeightOunces',
+    'estimatedCount',
+  ],
+};
+
 const generalInventoryPreset: Preset = {
   name: 'General Inventory',
   fields: [
@@ -389,12 +404,19 @@ const germinationTestingPreset: Preset = {
   ],
 };
 
-export const searchPresets = [
-  defaultPreset,
-  generalInventoryPreset,
-  seedStoragePreset,
-  viabilitySummaryPreset,
-  germinationTestingPreset,
-];
+export const searchPresets = (preferredWeightSystem: string) => {
+  const weightUnitsEnabled = isEnabled('Weight units');
+
+  if (weightUnitsEnabled && preferredWeightSystem === 'imperial') {
+    return [
+      defaultImperialPreset,
+      generalInventoryPreset,
+      seedStoragePreset,
+      viabilitySummaryPreset,
+      germinationTestingPreset,
+    ];
+  }
+  return [defaultPreset, generalInventoryPreset, seedStoragePreset, viabilitySummaryPreset, germinationTestingPreset];
+};
 
 export const RIGHT_ALIGNED_COLUMNS = ['ageMonths', 'ageYears', 'estimatedWeightGrams', 'estimatedCount'];
