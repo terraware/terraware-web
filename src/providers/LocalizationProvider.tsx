@@ -5,7 +5,7 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import strings, { ILocalizedStringsMap } from 'src/strings';
 import { ProvidedLocalizationData, useUser } from '.';
 import { supportedLocales } from '../strings/locales';
-import axios from 'axios';
+import { HttpService } from 'src/services';
 
 export type LocalizationProviderProps = {
   children?: React.ReactNode;
@@ -32,7 +32,7 @@ export default function LocalizationProvider({
   }, [user?.locale, setLocale]);
 
   useEffect(() => {
-    axios.defaults.headers = { ...axios.defaults.headers, 'Accept-Language': locale };
+    HttpService.setDefaultHeaders({ 'Accept-Language': locale });
   }, [locale]);
 
   // This must come after the effect that configures the Accept-Language header.
