@@ -88,6 +88,7 @@ export const strings = {
   APPLY_FILTERS: 'Apply Filters',
   APPLY_RESULT_QUESTION: 'Do you want to apply this result to the accession?',
   APPLY_RESULT: 'Apply Result',
+  APPLY: 'Apply',
   ARE_YOU_SURE: 'Are you sure?',
   AS_OF: 'As of',
   ASSIGN_NEW_OWNER_DESC: 'In order to remove the current owner, you must assign a new owner.',

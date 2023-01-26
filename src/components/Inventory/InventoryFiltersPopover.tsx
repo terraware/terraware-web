@@ -1,68 +1,51 @@
-import { Box, Grid, IconButton, Popover, Theme, Typography, useTheme } from '@mui/material';
+import { Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-import useForm from 'src/utils/useForm';
-import Button from '../common/button/Button';
-import { Checkbox } from '@terraware/web-components';
 import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useOrganization } from 'src/providers/hooks';
+import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
+import { Facility } from 'src/api/types/facilities';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
 };
 
-interface StyleProps {
-  isMobile: boolean;
-}
-
 const useStyles = makeStyles((theme: Theme) => ({
-  iconContainer: {
-    borderRadius: 0,
-    fontSize: '16px',
-    marginLeft: '8px',
-    padding: 0,
+  dropdown: {
+    cursor: 'pointer',
+    border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
+    borderRadius: '4px',
+    width: '176px',
+    height: '40px',
+    padding: theme.spacing(1, 2, 1, 1),
+    margin: theme.spacing(0.5, 0, 0, 1),
+    display: 'flex',
+    justifyContent: 'space-between',
   },
-  icon: {
-    fill: theme.palette.TwClrIcnSecondary,
+  dropdownIconRight: {
+    height: '24px',
+    width: '24px',
   },
   popoverContainer: {
     '& .MuiPaper-root': {
-      border: '1px solid #A9B7B8',
       borderRadius: '8px',
       overflow: 'visible',
+      width: '320px',
     },
   },
-  popover: {
-    width: (props: StyleProps) => (props.isMobile ? '350px' : '478px'),
-    paddingTop: 0,
+  mobileContainer: {
     borderRadius: '8px',
-  },
-  title: {
-    padding: '16px 24px',
-    background: '#F2F4F5',
-    borderRadius: '8px',
-    fontSize: '20px',
-    fontWeight: 600,
-  },
-  container: {
-    padding: '24px',
-    maxHeight: 'calc(100vh - 150px)',
-    overflow: 'auto',
-  },
-  footer: {
-    background: '#F2F4F5',
-    padding: '16px 24px',
-    display: 'flex',
-    justifyContent: 'end',
-    flexDirection: (props: StyleProps) => (props.isMobile ? 'column-reverse' : 'row'),
-
-    '& button+button': {
-      marginLeft: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(1)),
-      marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
-    },
+    overflow: 'visible',
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    maxHeight: '90%',
+    width: '90%',
+    zIndex: 1300,
   },
 }));
 
@@ -73,11 +56,11 @@ type InventoryFiltersPopoverProps = {
 
 export default function InventoryFiltersPopover({ filters, setFilters }: InventoryFiltersPopoverProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
+  const [nurseries, setNurseries] = useState<Facility[]>([]);
+  const [options, setOptions] = useState<number[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [temporalRecord, setTemporalRecord] = useForm<InventoryFiltersType>({});
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -86,96 +69,56 @@ export default function InventoryFiltersPopover({ filters, setFilters }: Invento
   };
 
   useEffect(() => {
-    setTemporalRecord(filters);
-  }, [filters, setTemporalRecord]);
+    setNurseries(getAllNurseries(selectedOrganization));
+  }, [selectedOrganization]);
 
-  const onReset = () => {
-    setFilters({
-      facilityIds: undefined,
-    });
-    handleClose();
-  };
+  useEffect(() => {
+    setOptions(nurseries.map((n) => n.id));
+  }, [nurseries]);
 
-  const onDone = () => {
-    setFilters(temporalRecord);
-    handleClose();
-  };
-
-  const addFacility = (id: number) => {
-    setTemporalRecord((prev) => {
-      return {
-        facilityIds: [...(prev.facilityIds || []), id],
-      };
-    });
-  };
-
-  const removeFacility = (id: number) => {
-    setTemporalRecord((prev) => {
-      const { facilityIds } = prev;
-      return {
-        facilityIds: facilityIds?.filter((val) => val.toString() !== id.toString()) || [],
-      };
-    });
-  };
-
-  const onChange = (id: string, value: any) => {
-    if (value) {
-      addFacility(Number(id));
-    } else {
-      removeFacility(Number(id));
-    }
-  };
-
-  const hasFilter = (id: number) => {
-    return temporalRecord.facilityIds?.some((n) => n.toString() === id.toString()) === true;
+  const renderFilterMultiSelect = () => {
+    return (
+      <FilterMultiSelect
+        label={strings.NURSERIES}
+        initialSelection={filters.facilityIds ?? []}
+        onCancel={handleClose}
+        onConfirm={(selectedIds: number[]) => {
+          handleClose();
+          setFilters({ facilityIds: selectedIds });
+        }}
+        options={options}
+        renderOption={(id: number) => nurseries.find((n) => n.id === id)?.name ?? ''}
+      />
+    );
   };
 
   return (
     <div>
-      <IconButton onClick={handleClick} size='medium' className={classes.iconContainer}>
-        <Icon name='filter' className={classes.icon} size='medium' />
-      </IconButton>
-      <Popover
-        id='simple-popover'
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        className={classes.popoverContainer}
-      >
-        <div className={classes.popover}>
-          <div className={classes.title}>{strings.FILTERS}</div>
-          <Box className={classes.container}>
-            <Grid container spacing={2}>
-              <Typography fontSize='16px' paddingLeft={theme.spacing(2)} color='#708284'>
-                {strings.NURSERIES}
-              </Typography>
-              {getAllNurseries(selectedOrganization).map((n) => (
-                <Grid item xs={12} key={n.id}>
-                  <Checkbox
-                    id={n.id.toString()}
-                    name={n.name}
-                    label={n.name}
-                    value={hasFilter(n.id)}
-                    onChange={(value) => onChange(n.id.toString(), value)}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-          <div className={classes.footer}>
-            <Button label={strings.RESET} onClick={onReset} size='medium' priority='secondary' type='passive' />
-            <Button label={strings.DONE} onClick={onDone} size='medium' />
-          </div>
-        </div>
-      </Popover>
+      <div className={classes.dropdown} onClick={handleClick}>
+        <Typography>{strings.NURSERIES}</Typography>
+        <Icon name={Boolean(anchorEl) ? 'chevronUp' : 'chevronDown'} className={classes.dropdownIconRight} />
+      </div>
+      {isMobile && Boolean(anchorEl) ? (
+        <div className={classes.mobileContainer}>{renderFilterMultiSelect()}</div>
+      ) : (
+        <Popover
+          id='pre-exposed-filter-popover'
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          className={classes.popoverContainer}
+        >
+          {renderFilterMultiSelect()}
+        </Popover>
+      )}
     </div>
   );
 }
