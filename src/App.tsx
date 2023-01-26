@@ -364,7 +364,9 @@ function AppContent() {
               PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });
             }
             if (notifyOrg) {
-              PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { timeZoneAcknowledgedOnMs: Date.now() });
+              PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+                timeZoneAcknowledgedOnMs: Date.now(),
+              });
             }
           },
         },
