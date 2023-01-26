@@ -77,22 +77,22 @@ export function getUnitsForSystem(system: string) {
 export function convertValue(value: number, unit: string) {
   switch (unit) {
     case 'Grams': {
-      return `${(value * 0.035274).toPrecision(2)} Ounces`;
+      return `${(value * 0.035274).toPrecision(2)} ${getUnitName('Ounces')}`;
     }
     case 'Kilograms': {
-      return `${(value * 2.20462).toPrecision(2)} Pounds`;
+      return `${(value * 2.20462).toPrecision(2)} ${getUnitName('Pounds')}`;
     }
     case 'Milligrams': {
-      return `${(value * 0.000035274).toPrecision(2)} Ounces`;
+      return `${(value * 0.000035274).toPrecision(2)} ${getUnitName('Ounces')}`;
     }
     case 'Pounds': {
-      return `${(value * 0.453592).toPrecision(2)} Kilograms`;
+      return `${(value * 0.453592).toPrecision(2)} ${getUnitName('Kilograms')}`;
     }
     case 'Ounces': {
-      return `${(value * 28.3495).toPrecision(2)} Grams`;
+      return `${(value * 28.3495).toPrecision(2)} ${getUnitName('Grams')}`;
     }
     default: {
-      return `${value} ${unit}`;
+      return `${value} ${getUnitName(unit)}`;
     }
   }
 }
@@ -101,4 +101,27 @@ export function isUnitInPreferredSystem(unit: string, system: string) {
   const units = getUnitsForSystem(system);
   const found = units.find((iUnit) => iUnit.value === unit);
   return !!found;
+}
+
+export function getUnitName(unit: string) {
+  switch (unit) {
+    case 'Grams': {
+      return strings.GRAMS;
+    }
+    case 'Kilograms': {
+      return strings.KILOGRAMS;
+    }
+    case 'Milligrams': {
+      return strings.MILLIGRAMS;
+    }
+    case 'Pounds': {
+      return strings.POUNDS;
+    }
+    case 'Ounces': {
+      return strings.OUNCES;
+    }
+    default: {
+      return '';
+    }
+  }
 }

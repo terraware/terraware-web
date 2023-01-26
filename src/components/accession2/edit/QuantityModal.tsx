@@ -14,7 +14,6 @@ import Link from 'src/components/common/Link';
 import EditState from './EditState';
 import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
-import { useOrganization } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   units: {

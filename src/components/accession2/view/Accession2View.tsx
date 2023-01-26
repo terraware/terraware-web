@@ -37,7 +37,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { stateName } from '../../../types/Accession';
-import { convertValue, isUnitInPreferredSystem } from 'src/units';
+import { convertValue, getUnitName, isUnitInPreferredSystem } from 'src/units';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -207,7 +207,7 @@ export default function Accession2View(): JSX.Element {
     if (!isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
       return (
         <>
-          {isEstimated && '~'} {quantity} {unit}
+          {isEstimated && '~'} {quantity} {getUnitName(unit)}
           <Box display='flex'>
             <Typography>
               {isEstimated && '~'} {convertValue(quantity, unit)}
@@ -217,7 +217,7 @@ export default function Accession2View(): JSX.Element {
         </>
       );
     } else {
-      return `${quantity} ${unit}`;
+      return `${quantity} ${getUnitName(unit)}`;
     }
   };
 

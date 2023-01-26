@@ -9,7 +9,6 @@ import { Unit, usePreferredWeightUnits } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
-import { useOrganization } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   units: {
@@ -33,7 +32,6 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
   const classes = useStyles();
   const snackbar = useSnackbar();
   const [subsetError, setSubsetError] = useState('');
-  const { userPreferences } = useOrganization();
   const preferredUnits = usePreferredWeightUnits();
 
   const validateFields = () => {
