@@ -6,7 +6,7 @@ import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
 import useForm from 'src/utils/useForm';
-import { Unit, usePreferredWeightUnits } from 'src/units';
+import { isUnitInPreferredSystem, Unit, usePreferredWeightUnits } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import CalculatorModal from './CalculatorModal';
 import { Dropdown } from '@terraware/web-components';
@@ -14,6 +14,9 @@ import Link from 'src/components/common/Link';
 import EditState from './EditState';
 import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
+import isEnabled from 'src/features';
+import { useOrganization } from 'src/providers';
+import ConvertedValue from 'src/components/ConvertedValue';
 
 const useStyles = makeStyles((theme: Theme) => ({
   units: {
@@ -40,6 +43,8 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const preferredUnits = usePreferredWeightUnits();
+  const weightUnitsEnabled = isEnabled('Weight units');
+  const { userPreferences } = useOrganization();
 
   const validate = () => {
     const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);
@@ -196,6 +201,14 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 className={classes.units}
               />
             </Box>
+            {weightUnitsEnabled &&
+              record.remainingQuantity?.units &&
+              !isUnitInPreferredSystem(
+                record.remainingQuantity.units,
+                userPreferences.preferredWeightSystem as string
+              ) && (
+                <ConvertedValue quantity={record.remainingQuantity.quantity} unit={record.remainingQuantity.units} />
+              )}
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             {!isCalculatorOpened ? (

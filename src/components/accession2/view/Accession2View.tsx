@@ -1,7 +1,7 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme, Box, Link as LinkMUI, Menu, Tab, Theme, Typography, Grid, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Icon, IconTooltip } from '@terraware/web-components';
+import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -37,7 +37,9 @@ import BackToLink from 'src/components/common/BackToLink';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { stateName } from '../../../types/Accession';
-import { convertValue, getUnitName, isUnitInPreferredSystem } from 'src/units';
+import { getUnitName, isUnitInPreferredSystem } from 'src/units';
+import isEnabled from 'src/features';
+import ConvertedValue from 'src/components/ConvertedValue';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -103,6 +105,7 @@ export default function Accession2View(): JSX.Element {
   const classes = useStyles({ isMobile });
   const themeObj = useTheme();
   const contentRef = useRef(null);
+  const weightUnitsEnabled = isEnabled('Weight units');
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
@@ -204,16 +207,11 @@ export default function Accession2View(): JSX.Element {
   };
 
   const showValueAndConversion = (quantity: number, unit: string, isEstimated?: boolean) => {
-    if (!isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
+    if (weightUnitsEnabled && !isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
       return (
         <>
           {isEstimated && '~'} {quantity} {getUnitName(unit)}
-          <Box display='flex'>
-            <Typography>
-              {isEstimated && '~'} {convertValue(quantity, unit)}
-            </Typography>
-            <IconTooltip title={strings.CONVERTED_VALUE_INFO} />
-          </Box>
+          <ConvertedValue quantity={quantity} unit={unit} isEstimated={isEstimated} />
         </>
       );
     } else {
