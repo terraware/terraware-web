@@ -70,7 +70,7 @@ const updateUser = async (user: User, options: UpdateOptions = {}): Promise<Resp
   const response: Response = await httpCurrentUser.put({ entity });
   getUser();
   if (user.timeZone && !options.skipAcknowledgeTimeZone) {
-    await updatePreferences({ timeZoneAcknowledgedOnMs: Date.now() });
+    await PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });
   }
   return response;
 };
@@ -109,7 +109,7 @@ const initializeUnits = async (units: string): Promise<InitializedUnits> => {
   };
 
   if (!preferredWeightSystem) {
-    const response = await updatePreferences({ preferredWeightSystem: units });
+    const response = await PreferencesService.updateUserPreferences({ preferredWeightSystem: units });
     if (response.requestSucceeded) {
       initializedUnits.updated = true;
       initializedUnits.units = units;
@@ -122,24 +122,12 @@ const initializeUnits = async (units: string): Promise<InitializedUnits> => {
 };
 
 /**
- * preferences for user
- */
-const getPreferences = PreferencesService.getUserPreferences;
-const getOrgPreferences = PreferencesService.getUserOrgPreferences;
-const updatePreferences = PreferencesService.updateUserPreferences;
-const updateOrgPreferences = PreferencesService.updateUserOrgPreferences;
-
-/**
  * Exported functions
  */
 const UserService = {
-  getOrgPreferences,
-  getPreferences,
   getUser,
   initializeTimeZone,
   initializeUnits,
-  updateOrgPreferences,
-  updatePreferences,
   updateUser,
 };
 

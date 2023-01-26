@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { updateOrganizationUser } from 'src/api/user/user';
-import { UserService } from 'src/services';
+import { PreferencesService, UserService } from 'src/services';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
@@ -183,7 +183,7 @@ const MyAccountContent = ({
       }
     } else {
       if (weightUnitsEnabled) {
-        await UserService.updatePreferences({ preferredWeightSystem: preferredWeightSystemSelected });
+        await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
         reloadPreferences();
       }
       const updateUserResponse = await saveProfileChanges();

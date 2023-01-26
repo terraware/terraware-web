@@ -60,7 +60,7 @@ import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { TimeZoneDescription, InitializedTimeZone } from 'src/types/TimeZones';
 import { useLocalization, useOrganization, useTimeZones, useUser } from 'src/providers';
-import { UserService } from 'src/services';
+import { PreferencesService, UserService } from 'src/services';
 import { initializeOrganizationTimeZone } from 'src/api/organization/organization';
 import { Link } from 'react-router-dom';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
@@ -284,7 +284,7 @@ function AppContent() {
         {
           label: strings.GOT_IT,
           apply: () => {
-            UserService.updatePreferences({ unitsAcknowledgedOnMs: Date.now() });
+            PreferencesService.updateUserPreferences({ unitsAcknowledgedOnMs: Date.now() });
           },
         },
         'user'
@@ -361,10 +361,10 @@ function AppContent() {
           label: strings.GOT_IT,
           apply: () => {
             if (notifyUser) {
-              UserService.updatePreferences({ timeZoneAcknowledgedOnMs: Date.now() });
+              PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });
             }
             if (notifyOrg) {
-              UserService.updateOrgPreferences(selectedOrganization.id, { timeZoneAcknowledgedOnMs: Date.now() });
+              PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { timeZoneAcknowledgedOnMs: Date.now() });
             }
           },
         },

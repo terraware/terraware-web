@@ -52,7 +52,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
 import { useOrganization } from 'src/providers/hooks';
-import { UserService } from 'src/services';
+import { PreferencesService } from 'src/services';
 
 interface StyleProps {
   isMobile: boolean;
@@ -385,7 +385,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const onCloseEditColumnsModal = (columnNames?: string[]) => {
     if (columnNames) {
       updateSearchColumns(columnNames);
-      UserService.updateOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
+      PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
     }
     setEditColumnsModalOpen(false);
   };

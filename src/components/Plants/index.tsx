@@ -10,7 +10,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { APP_PATHS } from 'src/constants';
 import PlantingSiteDetails from './PlantingSiteDetails';
-import { UserService } from 'src/services';
+import { PreferencesService } from 'src/services';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { useOrganization } from 'src/providers/hooks';
@@ -29,7 +29,7 @@ export default function PlantsDashboard(): JSX.Element {
 
   useEffect(() => {
     if (plantsDashboardPreferences) {
-      UserService.updateOrgPreferences(selectedOrganization.id, {
+      PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
         lastDashboardPlantingSite: plantsDashboardPreferences,
       });
     }
@@ -60,7 +60,7 @@ export default function PlantsDashboard(): JSX.Element {
     const initializePlantingSite = async () => {
       if (plantingSites && plantingSites.length) {
         let lastDashboardPlantingSite: any = {};
-        const response = await UserService.getOrgPreferences(selectedOrganization.id);
+        const response = await PreferencesService.getUserOrgPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences?.lastDashboardPlantingSite) {
           lastDashboardPlantingSite = response.preferences.lastDashboardPlantingSite;
         }
@@ -72,7 +72,7 @@ export default function PlantsDashboard(): JSX.Element {
 
         if (plantingSiteToUse.id !== lastDashboardPlantingSite.plantingSiteId) {
           lastDashboardPlantingSite = { plantingSiteId: plantingSiteToUse.id };
-          UserService.updateOrgPreferences(selectedOrganization.id, { lastDashboardPlantingSite });
+          PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { lastDashboardPlantingSite });
         }
         setPlantsDashboardPreferences(lastDashboardPlantingSite);
         if (plantingSiteToUse.id.toString() === plantingSiteId) {
