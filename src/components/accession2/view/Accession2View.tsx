@@ -1,7 +1,7 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme, Box, Link as LinkMUI, Menu, Tab, Theme, Typography, Grid, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Icon } from '@terraware/web-components';
+import { Button, Icon, IconTooltip } from '@terraware/web-components';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -37,6 +37,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { stateName } from '../../../types/Accession';
+import { convertValue, getUnitName, isUnitInPreferredSystem } from 'src/units';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -72,7 +73,7 @@ const TABS = ['detail', 'history', 'viabilityTesting'];
 
 export default function Accession2View(): JSX.Element {
   const { user } = useUser();
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, userPreferences } = useOrganization();
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();
@@ -202,12 +203,30 @@ export default function Accession2View(): JSX.Element {
     }
   };
 
+  const showValueAndConversion = (quantity: number, unit: string, isEstimated?: boolean) => {
+    if (!isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
+      return (
+        <>
+          {isEstimated && '~'} {quantity} {getUnitName(unit)}
+          <Box display='flex'>
+            <Typography>
+              {isEstimated && '~'} {convertValue(quantity, unit)}
+            </Typography>
+            <IconTooltip title={strings.CONVERTED_VALUE_INFO} />
+          </Box>
+        </>
+      );
+    } else {
+      return `${quantity} ${getUnitName(unit)}`;
+    }
+  };
+
   const getAbsoluteQuantity = () => {
     if (accession && accession.remainingQuantity) {
       if (accession.remainingQuantity.units === 'Seeds') {
         return `${accession.remainingQuantity.quantity} ${strings.CT}`;
       } else {
-        return `${accession.remainingQuantity.grams} ${strings.GRAMS}`;
+        return showValueAndConversion(accession.remainingQuantity.quantity, accession.remainingQuantity.units);
       }
     }
   };
@@ -259,7 +278,7 @@ export default function Accession2View(): JSX.Element {
   const getEstimatedQuantity = () => {
     if (accession?.remainingQuantity?.units === 'Seeds') {
       if (accession.estimatedWeight?.grams) {
-        return `~${accession.estimatedWeight?.grams} ${strings.GRAMS}`;
+        return showValueAndConversion(accession.estimatedWeight.quantity, accession.estimatedWeight.units, true);
       }
     } else {
       if (accession?.estimatedCount) {

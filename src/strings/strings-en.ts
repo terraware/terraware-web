@@ -164,6 +164,7 @@ export const strings = {
   CONTRIBUTOR_INFO: 'A contributor can only add data entries for seeds.',
   CONTRIBUTOR: 'Contributor',
   CONTRIBUTORS: 'Contributors',
+  CONVERTED_VALUE_INFO: 'This value is auto-calculated for informational purposes.',
   COUNT: 'Count',
   COUNTRY_REQUIRED: 'Country *',
   COUNTRY: 'Country',
