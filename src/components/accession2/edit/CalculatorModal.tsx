@@ -5,7 +5,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, Theme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
-import { Unit, weightUnitsV2 } from 'src/units';
+import { Unit, usePreferredWeightUnits } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
@@ -32,6 +32,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
   const classes = useStyles();
   const snackbar = useSnackbar();
   const [subsetError, setSubsetError] = useState('');
+  const preferredUnits = usePreferredWeightUnits();
 
   const validateFields = () => {
     if (record.subsetWeight?.units === record.remainingQuantity?.units) {
@@ -131,7 +132,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
               </Box>
               <Box height={subsetError ? '85px' : 'auto'}>
                 <Dropdown
-                  options={weightUnitsV2()}
+                  options={preferredUnits}
                   placeholder={strings.SELECT}
                   onChange={onChangeSubsetUnit}
                   selectedValue={record.subsetWeight?.units}
@@ -160,7 +161,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
                 value={record.remainingQuantity?.quantity}
               />
               <Dropdown
-                options={weightUnitsV2()}
+                options={preferredUnits}
                 placeholder={strings.SELECT}
                 onChange={onChangeRemainingQuantityUnit}
                 selectedValue={record.remainingQuantity?.units}
