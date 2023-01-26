@@ -100,7 +100,7 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
           onAdd={onAdd}
           onRemove={onRemove}
           options={multiSelectOptions}
-          placeHolder={`${strings.SELECT}...`}
+          placeHolder={strings.SELECT}
           valueRenderer={(v) => v}
           selectedOptions={selection}
         />
