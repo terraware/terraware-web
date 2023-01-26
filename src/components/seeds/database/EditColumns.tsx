@@ -146,7 +146,7 @@ function sections(): Section[] {
   const columns = columnsIndexed();
   const weightUnitsEnabled = isEnabled('Weight units');
 
-  return [
+  const sections = [
     {
       name: strings.GENERAL,
       options: [
@@ -192,14 +192,6 @@ function sections(): Section[] {
         ],
       ],
     },
-    weightUnitsEnabled && {
-      name: strings.WEIGHT_UNITS,
-      options: [
-        [columns.estimatedWeightGrams, columns.estimatedWeightOunces],
-        [columns.estimatedWeightMilligrams, columns.estimatedWeightPounds],
-        [columns.estimatedWeightKilograms],
-      ],
-    },
     {
       name: strings.PROCESSING_AND_DRYING,
       options: [[columns.dryingEndDate], [columns.remainingQuantity]],
@@ -235,4 +227,23 @@ function sections(): Section[] {
       ],
     },
   ];
+
+  if (weightUnitsEnabled) {
+    sections
+      .splice(
+        2,
+        0,
+        weightUnitsEnabled && {
+          name: strings.WEIGHT_UNITS,
+          options: [
+            [columns.estimatedWeightGrams, columns.estimatedWeightOunces],
+            [columns.estimatedWeightMilligrams, columns.estimatedWeightPounds],
+            [columns.estimatedWeightKilograms],
+          ],
+        }
+      )
+      .join();
+  }
+
+  return sections;
 }
