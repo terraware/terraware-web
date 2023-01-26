@@ -1,16 +1,14 @@
 import { Container, Grid } from '@mui/material';
 import { Theme } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { getUser } from 'src/api/user/user';
+import React from 'react';
 import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { User } from 'src/types/User';
 import { isAdmin } from 'src/utils/organization';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useOrganization } from 'src/providers/hooks';
+import { useUser, useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -44,9 +42,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Home(): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { user } = useUser();
   const { isTablet, isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
-  const [user, setUser] = useState<User>();
 
   const primaryGridSize = () => {
     if (isMobile) {
@@ -64,20 +62,6 @@ export default function Home(): JSX.Element {
     }
     return 4;
   };
-
-  useEffect(() => {
-    let cancel = false;
-    const populateUser = async () => {
-      const response = await getUser();
-      if (response.requestSucceeded && !cancel) {
-        setUser(response.user ?? undefined);
-      }
-    };
-    populateUser();
-    return () => {
-      cancel = true;
-    };
-  }, []);
 
   return (
     <main className={classes.main}>

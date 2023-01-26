@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { getUser } from 'src/api/user/user';
+import { UserService } from 'src/services';
 import { UserContext } from './contexts';
 import { ProvidedUserData } from './DataTypes';
 import { useRecoilState } from 'recoil';
@@ -14,7 +14,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
 
   const reloadUser = useCallback(() => {
     const populateUser = async () => {
-      const response = await getUser();
+      const response = await UserService.getUser();
       if (response.requestSucceeded) {
         setUserData((previous: ProvidedUserData) => {
           return {

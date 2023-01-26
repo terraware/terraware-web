@@ -4,7 +4,7 @@ import { APP_PATHS } from 'src/constants';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { getOrganizations } from 'src/api/organization/organization';
-import { getPreferences, updatePreferences } from 'src/api/preferences/preferences';
+import { PreferencesService } from 'src/services';
 import { ServerOrganization } from 'src/types/Organization';
 import { OrganizationContext } from './contexts';
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
@@ -43,7 +43,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           const orgToSelect = response.organizations.find((org) => org.id === selectedOrgId);
           if (orgToSelect) {
             setSelectedOrganization(orgToSelect);
-            updatePreferences('lastVisitedOrg', orgToSelect.id);
+            PreferencesService.updateUserPreferences({ lastVisitedOrg: orgToSelect.id });
           }
         }
         if (response.organizations.length === 0) {
@@ -61,7 +61,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
 
   const reloadPreferences = useCallback(() => {
     const getUserPreferences = async () => {
-      const response = await getPreferences();
+      const response = await PreferencesService.getUserPreferences();
       if (response.requestSucceeded && response.preferences) {
         setUserPreferences(response.preferences);
       }
@@ -100,7 +100,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
       if (selectedOrganization) {
-        const response = await getPreferences(selectedOrganization.id);
+        const response = await PreferencesService.getUserOrgPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences) {
           setOrgPreferences(response.preferences);
           setOrgPreferenceForId(selectedOrganization.id);
@@ -133,7 +133,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           orgToUse = organizations[0];
         }
         if (orgToUse && userPreferences?.lastVisitedOrg !== orgToUse.id) {
-          updatePreferences('lastVisitedOrg', orgToUse.id);
+          PreferencesService.updateUserPreferences({ lastVisitedOrg: orgToUse.id });
         }
         return orgToUse;
       });

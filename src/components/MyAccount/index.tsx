@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { updateOrganizationUser, updateUserProfile } from 'src/api/user/user';
+import { updateOrganizationUser } from 'src/api/user/user';
+import { PreferencesService, UserService } from 'src/services';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
@@ -30,7 +31,6 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
-import { updatePreferences } from 'src/api/preferences/preferences';
 import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 
@@ -183,7 +183,7 @@ const MyAccountContent = ({
       }
     } else {
       if (weightUnitsEnabled) {
-        await updatePreferences('preferredWeightSystem', preferredWeightSystemSelected);
+        await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
         reloadPreferences();
       }
       const updateUserResponse = await saveProfileChanges();
@@ -200,7 +200,7 @@ const MyAccountContent = ({
   const saveProfileChanges = async () => {
     // Save the currently-selected locale, even if it differs from the locale in the profile data we
     // fetched from the server.
-    const updateUserResponse = await updateUserProfile({ ...record, locale });
+    const updateUserResponse = await UserService.updateUser({ ...record, locale });
     return updateUserResponse;
   };
 

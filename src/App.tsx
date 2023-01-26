@@ -60,8 +60,7 @@ import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { TimeZoneDescription, InitializedTimeZone } from 'src/types/TimeZones';
 import { useLocalization, useOrganization, useTimeZones, useUser } from 'src/providers';
-import { updatePreferences } from 'src/api/preferences/preferences';
-import { initializeUserTimeZone, initializeUserUnits } from 'src/api/user/user';
+import { PreferencesService, UserService } from 'src/services';
 import { initializeOrganizationTimeZone } from 'src/api/organization/organization';
 import { Link } from 'react-router-dom';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
@@ -285,7 +284,7 @@ function AppContent() {
         {
           label: strings.GOT_IT,
           apply: () => {
-            updatePreferences('unitsAcknowledgedOnMs', Date.now());
+            PreferencesService.updateUserPreferences({ unitsAcknowledgedOnMs: Date.now() });
           },
         },
         'user'
@@ -299,7 +298,7 @@ function AppContent() {
         return;
       }
 
-      const userUnit: InitializedUnits = await initializeUserUnits('metric');
+      const userUnit: InitializedUnits = await UserService.initializeUnits('metric');
       if (!userUnit.units) {
         return;
       }
@@ -362,10 +361,12 @@ function AppContent() {
           label: strings.GOT_IT,
           apply: () => {
             if (notifyUser) {
-              updatePreferences('timeZoneAcknowledgedOnMs', Date.now());
+              PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });
             }
             if (notifyOrg) {
-              updatePreferences('timeZoneAcknowledgedOnMs', Date.now(), selectedOrganization?.id);
+              PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+                timeZoneAcknowledgedOnMs: Date.now(),
+              });
             }
           },
         },
@@ -378,7 +379,7 @@ function AppContent() {
         return;
       }
 
-      const userTz: InitializedTimeZone = await initializeUserTimeZone(user, getDefaultTimeZone().id);
+      const userTz: InitializedTimeZone = await UserService.initializeTimeZone(user, getDefaultTimeZone().id);
       if (!userTz.timeZone) {
         return;
       }

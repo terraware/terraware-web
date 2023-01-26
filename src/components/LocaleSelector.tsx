@@ -2,7 +2,7 @@ import { DropdownItem } from '@terraware/web-components';
 import { supportedLocales } from '../strings/locales';
 import { LocalizationContext } from '../providers/contexts';
 import Dropdown from './common/Dropdown';
-import { updateUserProfile } from '../api/user/user';
+import { UserService } from 'src/services';
 import { useUser } from '../providers';
 
 export default function LocaleSelector(): JSX.Element {
@@ -22,7 +22,7 @@ export default function LocaleSelector(): JSX.Element {
 
           if (user && user.locale !== newValue) {
             const updateUserLocale = async () => {
-              await updateUserProfile({ ...user, locale: newValue }, true);
+              await UserService.updateUser({ ...user, locale: newValue });
               reloadUser();
             };
 
