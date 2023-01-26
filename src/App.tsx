@@ -60,8 +60,7 @@ import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { TimeZoneDescription, InitializedTimeZone } from 'src/types/TimeZones';
 import { useLocalization, useOrganization, useTimeZones, useUser } from 'src/providers';
-import { PreferencesService, UserService } from 'src/services';
-import { initializeOrganizationTimeZone } from 'src/api/organization/organization';
+import { OrganizationService, PreferencesService, UserService } from 'src/services';
 import { Link } from 'react-router-dom';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { defaultSelectedOrg } from 'src/providers/contexts';
@@ -386,7 +385,7 @@ function AppContent() {
 
       let orgTz: InitializedTimeZone = {};
       if (!isPlaceholderOrg(selectedOrganization.id) && orgPreferenceForId === selectedOrganization.id) {
-        orgTz = await initializeOrganizationTimeZone(selectedOrganization, userTz.timeZone);
+        orgTz = await OrganizationService.initializeTimeZone(selectedOrganization, userTz.timeZone);
       }
 
       if (userTz.updated) {

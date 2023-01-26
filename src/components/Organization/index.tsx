@@ -9,7 +9,7 @@ import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
 import { Country } from 'src/types/Country';
 import { searchCountries } from 'src/api/country/country';
-import { getOrganizationUsers } from 'src/api/organization/organization';
+import { OrganizationUserService } from 'src/services';
 import { OrganizationUser } from 'src/types/User';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -39,7 +39,7 @@ export default function OrganizationView(): JSX.Element {
       }
     };
     const populatePeople = async () => {
-      const response = await getOrganizationUsers(selectedOrganization);
+      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
       if (response.requestSucceeded) {
         setPeople(response.users);
       }

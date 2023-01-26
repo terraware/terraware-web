@@ -1,17 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  deleteOrganization,
-  leaveOrganization,
-  listOrganizationRoles,
-  UpdateOrganizationResponse,
-} from 'src/api/organization/organization';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { AllOrganizationRoles } from 'src/types/Organization';
+import { OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import TfMain from '../common/TfMain';
 import TableCellRenderer from './TableCellRenderer';
@@ -20,7 +14,7 @@ import RemovePeopleDialog from './RemovePeopleModal';
 import AssignNewOwnerDialog from '../MyAccount/AssignNewOwnerModal';
 import DeleteOrgDialog from '../MyAccount/DeleteOrgModal';
 import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
-import { updateOrganizationUser } from 'src/api/user/user';
+import { OrganizationService, OrganizationUserService, Response } from 'src/services';
 import { Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -136,7 +130,7 @@ export default function PeopleList(): JSX.Element {
           lastName: result.user_lastName as string,
           email: result.user_email as string,
           id: result.user_id as number,
-          role: result.roleName as AllOrganizationRoles,
+          role: result.roleName as OrganizationRole,
           addedTime: result.createdTime as string,
         });
       });
@@ -166,7 +160,7 @@ export default function PeopleList(): JSX.Element {
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
         if (selectedOwners.length > 0) {
-          const organizationRoles = await listOrganizationRoles(selectedOrganization.id);
+          const organizationRoles = await OrganizationService.getOrganizationRoles(selectedOrganization.id);
           const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
             setOrgPeople(
@@ -197,12 +191,16 @@ export default function PeopleList(): JSX.Element {
   const removePeopleHandler = async () => {
     let assignNewOwnerResponse;
     if (newOwner) {
-      assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, selectedOrganization.id, 'Owner');
+      assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(
+        selectedOrganization.id,
+        newOwner.id,
+        'Owner'
+      );
     }
-    const promises: Promise<UpdateOrganizationResponse>[] = [];
+    const promises: Promise<Response>[] = [];
     if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
       selectedPeopleRows.forEach((person) => {
-        promises.push(leaveOrganization(selectedOrganization.id, person.id));
+        promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization.id, person.id));
       });
     }
     const leaveOrgResponses = await Promise.all(promises);
@@ -232,9 +230,9 @@ export default function PeopleList(): JSX.Element {
       let allRemoved = true;
       const otherUsers = selectedPeopleRows.filter((person) => person.id !== user.id);
       if (otherUsers.length) {
-        const promises: Promise<UpdateOrganizationResponse>[] = [];
+        const promises: Promise<Response>[] = [];
         otherUsers.forEach((person) => {
-          promises.push(leaveOrganization(selectedOrganization.id, person.id));
+          promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization.id, person.id));
         });
         const leaveOrgResponses = await Promise.all(promises);
 
@@ -244,7 +242,7 @@ export default function PeopleList(): JSX.Element {
           }
         });
       }
-      const deleteOrgResponse = await deleteOrganization(selectedOrganization.id);
+      const deleteOrgResponse = await OrganizationService.deleteOrganization(selectedOrganization.id);
       if (allRemoved && deleteOrgResponse.requestSucceeded) {
         if (reloadData) {
           reloadData();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { createOrganization } from 'src/api/organization/organization';
+import { OrganizationService } from 'src/services';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
@@ -82,7 +82,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       return;
     }
 
-    const response = await createOrganization(newOrganization);
+    const response = await OrganizationService.createOrganization(newOrganization);
     if (response.requestSucceeded && response.organization) {
       snackbar.pageSuccess(
         strings.ORGANIZATION_CREATED_MSG,

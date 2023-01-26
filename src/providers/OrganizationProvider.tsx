@@ -3,8 +3,7 @@ import { useHistory } from 'react-router';
 import { APP_PATHS } from 'src/constants';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { getOrganizations } from 'src/api/organization/organization';
-import { PreferencesService } from 'src/services';
+import { OrganizationService, PreferencesService } from 'src/services';
 import { Organization } from 'src/types/Organization';
 import { OrganizationContext } from './contexts';
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
@@ -35,7 +34,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
 
   const reloadData = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
-      const response = await getOrganizations();
+      const response = await OrganizationService.getOrganizations();
       if (!response.error) {
         setOrgAPIRequestStatus(APIRequestStatus.SUCCEEDED);
         setOrganizations(response.organizations);
