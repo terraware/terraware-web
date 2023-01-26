@@ -24,6 +24,7 @@ export type UpdateOptions = {
 // endpoint
 const CURRENT_USER_ENDPOINT = '/api/v1/users/me';
 
+type UserServerResponse = paths[typeof CURRENT_USER_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateUserPayloadType = paths[typeof CURRENT_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
 const httpCurrentUser = HttpService.root(CURRENT_USER_ENDPOINT);
@@ -35,7 +36,7 @@ const getUser = async (): Promise<UserResponse> => {
   const response: UserResponse = await httpCurrentUser.get();
 
   if (response.requestSucceeded) {
-    const { data } = response;
+    const data: UserServerResponse = response.data;
     if (data?.user) {
       response.user = {
         id: data.user.id,

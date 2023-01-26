@@ -1,3 +1,4 @@
+import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import CachedUserService from './CachedUserService';
 
@@ -27,6 +28,11 @@ export type UpdateResponse = Response & {
 // end point
 const PREFERENCES_ENDPOINT = '/api/v1/users/me/preferences';
 
+type PreferencesServerResponse =
+  paths[typeof PREFERENCES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type UpdatePreferencesPayloadType =
+  paths[typeof PREFERENCES_ENDPOINT]['put']['requestBody']['content']['application/json'];
+
 // http service
 const httpPreferences = HttpService.root(PREFERENCES_ENDPOINT);
 
@@ -38,7 +44,7 @@ const getPreferences = async (organizationId: string = ''): Promise<UserPreferen
   const response: UserPreferencesResponse = { ...preferencesResponse, preferences: {} };
 
   if (response.requestSucceeded) {
-    const { data } = response;
+    const data: PreferencesServerResponse = response.data;
     if (data?.preferences) {
       response.preferences = data.preferences;
     }
@@ -53,7 +59,7 @@ const updatePreferences = async (toUpdate: Preferences, organizationId?: number)
 
   if (response.requestSucceeded) {
     const preferences = { ...response.preferences, ...toUpdate };
-    const entity = { organizationId, preferences };
+    const entity: UpdatePreferencesPayloadType = { organizationId, preferences };
     const updateResponse: Response = await httpPreferences.put({ entity });
 
     return { ...updateResponse, preferences };
