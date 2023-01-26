@@ -1,5 +1,5 @@
 import axios from 'src/api/index';
-import { ServerOrganization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import { paths } from 'src/api/types/generated-schema';
 import { Facility } from '../types/facilities';
 import { OrganizationUser } from 'src/types/User';
@@ -11,7 +11,7 @@ const ORGANIZATIONS = '/api/v1/organizations';
 type ListOrganizationsResponsePayload =
   paths[typeof ORGANIZATIONS]['get']['responses'][200]['content']['application/json'];
 
-type ServerFacility = Required<ServerOrganization>['facilities'][0];
+type ServerFacility = Required<Organization>['facilities'][0];
 
 const parseFacility = (facility: ServerFacility): Facility => {
   const parsedFacility: Facility = {
@@ -27,7 +27,7 @@ const parseFacility = (facility: ServerFacility): Facility => {
 };
 
 type OrganizationsResponse = {
-  organizations: ServerOrganization[];
+  organizations: Organization[];
   error: null | 'NotAuthenticated' | 'GenericError';
 };
 
@@ -71,7 +71,7 @@ type OrganizationUsersResponse = {
   users: OrganizationUser[];
   requestSucceeded: boolean;
 };
-export async function getOrganizationUsers(organization: ServerOrganization): Promise<OrganizationUsersResponse> {
+export async function getOrganizationUsers(organization: Organization): Promise<OrganizationUsersResponse> {
   const response: OrganizationUsersResponse = {
     users: [],
     requestSucceeded: true,
@@ -100,10 +100,10 @@ type UpdateOrganizationRequestPayload =
   paths[typeof ORGANIZATIONS]['post']['requestBody']['content']['application/json'];
 
 type CreateOrganizationResponse = {
-  organization: ServerOrganization | null;
+  organization: Organization | null;
   requestSucceeded: boolean;
 };
-export async function createOrganization(organization: ServerOrganization) {
+export async function createOrganization(organization: Organization) {
   const response: CreateOrganizationResponse = {
     organization: null,
     requestSucceeded: true,
@@ -148,7 +148,7 @@ type SimpleSuccessResponsePayload =
   paths[typeof UPDATE_ORGANIZATION]['put']['responses'][200]['content']['application/json'];
 
 export async function updateOrganization(
-  organization: ServerOrganization,
+  organization: Organization,
   skipAcknowledgeTimeZone?: boolean
 ): Promise<UpdateOrganizationResponse> {
   const response: UpdateOrganizationResponse = {
@@ -262,7 +262,7 @@ export async function deleteOrganization(organizationId: number): Promise<Update
 
 // initialize time zone (if not already set)
 export const initializeOrganizationTimeZone = async (
-  organization: ServerOrganization,
+  organization: Organization,
   timeZone: string
 ): Promise<InitializedTimeZone> => {
   const { timeZoneAcknowledgedOnMs } = CachedUserService.getUserOrgPreferences(organization.id);

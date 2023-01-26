@@ -8,7 +8,7 @@ import { search, SearchNodePayload } from 'src/api/search';
 import { Facility, FacilityType } from 'src/api/types/facilities';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import TfMain from '../common/TfMain';
@@ -19,7 +19,7 @@ import isEnabled from 'src/features';
 import Table from 'src/components/common/table';
 
 type NurseriesListProps = {
-  organization: ServerOrganization;
+  organization: Organization;
 };
 
 export default function NurseriesList({ organization }: NurseriesListProps): JSX.Element {

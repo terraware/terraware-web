@@ -1,7 +1,7 @@
 import { Facility } from 'src/api/types/facilities';
 import strings from 'src/strings';
 
-export type ServerOrganization = {
+export type Organization = {
   id: number;
   name: string;
   role: AllOrganizationRoles;

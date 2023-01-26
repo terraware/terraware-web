@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createOrganization } from 'src/api/organization/organization';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import useForm from 'src/utils/useForm';
 import TextField from './common/Textfield/Textfield';
 import { APP_PATHS } from '../constants';
@@ -31,7 +31,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const [countryError, setCountryError] = useState('');
   const [stateError, setStateError] = useState('');
   const [hasStates, setHasStates] = useState<boolean>(false);
-  const [newOrganization, setNewOrganization, onChange] = useForm<ServerOrganization>({
+  const [newOrganization, setNewOrganization, onChange] = useForm<Organization>({
     id: -1,
     name: '',
     role: 'Owner',
@@ -146,7 +146,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           selectedCountryCode={newOrganization.countryCode}
           selectedCountrySubdivisionCode={newOrganization.countrySubdivisionCode}
           onChangeCountryCode={(countryCode: string, hasSubdivisions: boolean) => {
-            setNewOrganization((previousNewOrganization: ServerOrganization): ServerOrganization => {
+            setNewOrganization((previousNewOrganization: Organization): Organization => {
               return { ...previousNewOrganization, countryCode, countrySubdivisionCode: undefined };
             });
             setCountryError('');
