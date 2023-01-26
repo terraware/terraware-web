@@ -203,6 +203,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
             </Box>
             {weightUnitsEnabled &&
               record.remainingQuantity?.units &&
+              record.remainingQuantity?.units !== 'Seeds' &&
               !isUnitInPreferredSystem(
                 record.remainingQuantity.units,
                 userPreferences.preferredWeightSystem as string
