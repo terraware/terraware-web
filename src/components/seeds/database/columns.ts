@@ -260,6 +260,30 @@ function columns(): DatabaseColumn[] {
       filter: { type: 'number_range' },
     },
     {
+      key: 'estimatedWeightKilograms',
+      name: strings.WEIGHT_KILOGRAMS,
+      type: 'string',
+      filter: { type: 'number_range' },
+    },
+    {
+      key: 'estimatedWeightMilligrams',
+      name: strings.WEIGHT_MILLIGRAMS,
+      type: 'string',
+      filter: { type: 'number_range' },
+    },
+    {
+      key: 'estimatedWeightOunces',
+      name: strings.WEIGHT_OUNCES,
+      type: 'string',
+      filter: { type: 'number_range' },
+    },
+    {
+      key: 'estimatedWeightPounds',
+      name: strings.WEIGHT_POUNDS,
+      type: 'string',
+      filter: { type: 'number_range' },
+    },
+    {
       key: 'estimatedCount',
       name: strings.COUNT,
       type: 'string',
