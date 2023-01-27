@@ -109,6 +109,7 @@ export const strings = {
     'You have withdrawn seeds by both count and weight. As a result, the app has calculated the amount of seeds withdrawn for you by weight.',
   BOUNDARIES_AND_PLOTS: 'Boundaries and Plots',
   CANCEL_DATA_CHECK: 'Cancel Data Check',
+  CHANGE_DEFAULT_WEIGHT_SYSTEM: 'You can change your default weight system from {0}',
   CANCEL_IMPORT: 'Cancel Import',
   CANCEL: 'Cancel',
   CANNOT_REMOVE_DELETE_MSG:
