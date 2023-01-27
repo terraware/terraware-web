@@ -147,7 +147,7 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, reloadPreferences } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const theme = useTheme();
@@ -228,7 +228,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     if (showDefaultSystemSnackbar) {
       showSnackbar();
     }
-  }, [showDefaultSystemSnackbar, snackbar, userPreferences.preferredWeightSystem]);
+  }, [showDefaultSystemSnackbar, snackbar, userPreferences.preferredWeightSystem, reloadPreferences]);
 
   const updateSearchColumns = useCallback(
     (columnNames?: string[]) => {
@@ -716,7 +716,4 @@ export default function Database(props: DatabaseProps): JSX.Element {
       </TfMain>
     </LocalizationProvider>
   );
-}
-function reloadPreferences() {
-  throw new Error('Function not implemented.');
 }
