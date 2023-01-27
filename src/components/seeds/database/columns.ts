@@ -1,5 +1,6 @@
 import strings from 'src/strings';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
+import isEnabled from 'src/features';
 
 function columns(): DatabaseColumn[] {
   return [
@@ -305,18 +306,20 @@ export interface Preset {
   fields: string[];
 }
 
-export const defaultPreset: Preset = {
-  name: 'Default',
-  fields: [
-    'accessionNumber',
-    'speciesName',
-    'state',
-    'collectionSiteName',
-    'collectedDate',
-    'ageMonths',
-    'estimatedWeightGrams',
-    'estimatedCount',
-  ],
+export const defaultPreset = (system?: string): Preset => {
+  return {
+    name: 'Default',
+    fields: [
+      'accessionNumber',
+      'speciesName',
+      'state',
+      'collectionSiteName',
+      'collectedDate',
+      'ageMonths',
+      system === 'imperial' ? 'estimatedWeightOunces' : 'estimatedWeightGrams',
+      'estimatedCount',
+    ],
+  };
 };
 
 const generalInventoryPreset: Preset = {
@@ -389,12 +392,15 @@ const germinationTestingPreset: Preset = {
   ],
 };
 
-export const searchPresets = [
-  defaultPreset,
-  generalInventoryPreset,
-  seedStoragePreset,
-  viabilitySummaryPreset,
-  germinationTestingPreset,
-];
+export const searchPresets = (preferredWeightSystem: string) => {
+  const weightUnitsEnabled = isEnabled('Weight units');
+  return [
+    defaultPreset(weightUnitsEnabled ? preferredWeightSystem : ''),
+    generalInventoryPreset,
+    seedStoragePreset,
+    viabilitySummaryPreset,
+    germinationTestingPreset,
+  ];
+};
 
 export const RIGHT_ALIGNED_COLUMNS = ['ageMonths', 'ageYears', 'estimatedWeightGrams', 'estimatedCount'];

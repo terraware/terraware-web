@@ -9,6 +9,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import isEnabled from 'src/features';
+import { useOrganization } from 'src/providers';
 
 export interface Props {
   open: boolean;
@@ -20,6 +21,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const { onClose, open } = props;
   const [preset, setPreset] = React.useState<Preset>();
   const { isMobile } = useDeviceInfo();
+  const { userPreferences } = useOrganization();
 
   const [value, setValue] = React.useState(props.value ?? []);
 
@@ -85,7 +87,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
         <Grid container>
           <Grid item xs={gridSize()}>
             <Grid container>
-              {searchPresets.map((p) => (
+              {searchPresets(userPreferences.preferredWeightSystem as string).map((p) => (
                 <Grid key={p.name} item xs={12}>
                   <RadioButton
                     id={p.name}
@@ -100,7 +102,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
           </Grid>
         </Grid>
 
-        {sections().map(({ name, options }) => (
+        {sections(userPreferences.preferredWeightSystem as string).map(({ name, options }) => (
           <React.Fragment key={name}>
             <Divisor />
             <Typography component='p'>{name}</Typography>
@@ -142,7 +144,7 @@ interface Section {
   options: Option[][];
 }
 
-function sections(): Section[] {
+function sections(system?: string): Section[] {
   const columns = columnsIndexed();
   const weightUnitsEnabled = isEnabled('Weight units');
 
@@ -233,11 +235,18 @@ function sections(): Section[] {
     columnsSections
       .splice(2, 0, {
         name: strings.WEIGHT_UNITS,
-        options: [
-          [columns.estimatedWeightGrams, columns.estimatedWeightOunces],
-          [columns.estimatedWeightMilligrams, columns.estimatedWeightPounds],
-          [columns.estimatedWeightKilograms],
-        ],
+        options:
+          system === 'imperial'
+            ? [
+                [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
+                [columns.estimatedWeightGrams, columns.estimatedWeightMilligrams],
+                [columns.estimatedWeightKilograms],
+              ]
+            : [
+                [columns.estimatedWeightGrams, columns.estimatedWeightMilligrams],
+                [columns.estimatedWeightKilograms],
+                [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
+              ],
       })
       .join();
   }

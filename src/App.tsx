@@ -175,6 +175,7 @@ function AppContent() {
   const timeZones = useTimeZones();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
   const weightUnitsEnabled = isEnabled('Weight units');
+  const preferredWeightSystem = weightUnitsEnabled ? (userPreferences.preferredWeightSystem as string) : '';
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -183,7 +184,7 @@ function AppContent() {
   const [seedSearchSort, setSeedSearchSort] = useState<SearchSortOrder>(DEFAULT_SEED_SEARCH_SORT_ORDER);
 
   // seedSearchColumns describes which accession columns to request when searching accession data.
-  const [seedSearchColumns, setSeedSearchColumns] = useState<string[]>(DefaultColumns.fields);
+  const [seedSearchColumns, setSeedSearchColumns] = useState<string[]>(DefaultColumns(preferredWeightSystem).fields);
 
   /*
    * accessionsDisplayColumns describes which columns are displayed in the accessions list, and in which order.
@@ -192,7 +193,9 @@ function AppContent() {
    * then seedSearchSelectedColumns will contain withdrawalQuantity and withdrawalUnits but this list will only
    * contain withdrawalQuantity.
    */
-  const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<string[]>(DefaultColumns.fields);
+  const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<string[]>(
+    DefaultColumns(preferredWeightSystem).fields
+  );
 
   const history = useHistory();
   const [species, setSpecies] = useState<Species[]>([]);
@@ -248,10 +251,10 @@ function AppContent() {
 
   const setDefaults = useCallback(() => {
     if (!isPlaceholderOrg(selectedOrganization.id)) {
-      setAccessionsDisplayColumns(DefaultColumns.fields);
+      setAccessionsDisplayColumns(DefaultColumns(preferredWeightSystem).fields);
       setWithdrawalCreated(false);
     }
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization.id, preferredWeightSystem]);
 
   useEffect(() => {
     setDefaults();
