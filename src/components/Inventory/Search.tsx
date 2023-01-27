@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Box } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { PillListItem, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopover';
-import { getNurseryName, removeFilter } from './FilterUtils';
+import { getNurseryName } from './FilterUtils';
 import { useOrganization } from 'src/providers/hooks';
 import { PillList } from '@terraware/web-components';
 
@@ -17,15 +17,21 @@ interface SearchProps {
 export default function Search(props: SearchProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { searchValue, onSearch, filters, setFilters } = props;
+  const [filterPillData, setFilterPillData] = useState<PillListItem<string>[]>();
 
-  const filterPillData =
-    filters.facilityIds?.map((id) => {
-      return {
-        id,
-        label: strings.NURSERY,
-        value: getNurseryName(id, selectedOrganization),
-      };
-    }) || [];
+  useEffect(() => {
+    let data: PillListItem<string>[] = [];
+    if ((filters.facilityIds?.length ?? 0) > 0) {
+      data = [
+        {
+          id: 'filterPillData',
+          label: strings.NURSERY,
+          value: filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization))?.join(', ') ?? '',
+        },
+      ];
+    }
+    setFilterPillData(data);
+  }, [selectedOrganization, filters.facilityIds]);
 
   return (
     <>
@@ -46,7 +52,7 @@ export default function Search(props: SearchProps): JSX.Element {
         <InventoryFilters filters={filters} setFilters={setFilters} />
       </Box>
       <Grid xs={12} display='flex'>
-        <PillList data={filterPillData} onRemove={(id: number) => removeFilter(id, setFilters)} />
+        <PillList data={filterPillData ?? []} onRemove={() => setFilters({})} />
       </Grid>
     </>
   );

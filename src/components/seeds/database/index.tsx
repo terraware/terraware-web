@@ -49,12 +49,12 @@ import { Message } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { updatePreferences } from 'src/api/preferences/preferences';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
 import { useOrganization } from 'src/providers/hooks';
 import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
+import { PreferencesService } from 'src/services';
 
 interface StyleProps {
   isMobile: boolean;
@@ -218,7 +218,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         {
           label: strings.GOT_IT,
           apply: async () => {
-            await updatePreferences('defaultWeightSystemAcknowledgedOnMs', Date.now());
+            await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });
             reloadPreferences();
           },
         },
@@ -428,7 +428,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const onCloseEditColumnsModal = (columnNames?: string[]) => {
     if (columnNames) {
       updateSearchColumns(columnNames);
-      updatePreferences('accessionsColumns', columnNames, selectedOrganization.id);
+      PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
     }
     setEditColumnsModalOpen(false);
   };

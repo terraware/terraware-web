@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { updateOrganizationUser, updateUserProfile } from 'src/api/user/user';
+import { updateOrganizationUser } from 'src/api/user/user';
+import { PreferencesService, UserService } from 'src/services';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { roleName, ServerOrganization } from 'src/types/Organization';
+import { roleName, Organization } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
@@ -30,12 +31,11 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
-import { updatePreferences } from 'src/api/preferences/preferences';
 import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 
 type MyAccountProps = {
-  organizations?: ServerOrganization[];
+  organizations?: Organization[];
   edit: boolean;
   reloadData?: () => void;
 };
@@ -52,7 +52,7 @@ export default function MyAccount(props: MyAccountProps): JSX.Element | null {
 
 type MyAccountContentProps = {
   user: User;
-  organizations?: ServerOrganization[];
+  organizations?: Organization[];
   edit: boolean;
   reloadUser: () => void;
   reloadData?: () => void;
@@ -62,13 +62,13 @@ type MyAccountContentProps = {
  * Details of membership in an organization, with an additional property for the localized name
  * of the user's role.
  */
-type PersonOrganization = ServerOrganization & { roleName: string };
+type PersonOrganization = Organization & { roleName: string };
 
-function addRoleName(organization: ServerOrganization): PersonOrganization {
+function addRoleName(organization: Organization): PersonOrganization {
   return { ...organization, roleName: roleName(organization.role) };
 }
 
-function addRoleNames(organizations: ServerOrganization[]): PersonOrganization[] {
+function addRoleNames(organizations: Organization[]): PersonOrganization[] {
   return organizations.map(addRoleName);
 }
 
@@ -85,7 +85,7 @@ const MyAccountContent = ({
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
   const history = useHistory();
   const [record, setRecord, onChange] = useForm<User>(user);
-  const [removedOrg, setRemovedOrg] = useState<ServerOrganization>();
+  const [removedOrg, setRemovedOrg] = useState<Organization>();
   const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
   const [assignNewOwnerModalOpened, setAssignNewOwnerModalOpened] = useState(false);
   const [cannotRemoveOrgModalOpened, setCannotRemoveOrgModalOpened] = useState(false);
@@ -183,7 +183,7 @@ const MyAccountContent = ({
       }
     } else {
       if (weightUnitsEnabled) {
-        await updatePreferences('preferredWeightSystem', preferredWeightSystemSelected);
+        await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
         reloadPreferences();
       }
       const updateUserResponse = await saveProfileChanges();
@@ -200,7 +200,7 @@ const MyAccountContent = ({
   const saveProfileChanges = async () => {
     // Save the currently-selected locale, even if it differs from the locale in the profile data we
     // fetched from the server.
-    const updateUserResponse = await updateUserProfile({ ...record, locale });
+    const updateUserResponse = await UserService.updateUser({ ...record, locale });
     return updateUserResponse;
   };
 
