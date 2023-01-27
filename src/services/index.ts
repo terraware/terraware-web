@@ -10,8 +10,8 @@ export type { Response } from './HttpService';
 export {
   CachedUserService,
   HttpService,
-  OrganizationUserService,
   OrganizationService,
+  OrganizationUserService,
   PreferencesService,
   UserService,
 };
