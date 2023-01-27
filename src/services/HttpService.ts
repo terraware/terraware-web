@@ -72,6 +72,7 @@ const handleRequest = async (httpPromise: Promise<object>): Promise<Response> =>
   } catch (e: any) {
     response.e = e;
     addError(e?.response?.data || {}, response);
+    response.statusCode = e?.response?.status;
   }
 
   return response;

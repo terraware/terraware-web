@@ -6,9 +6,8 @@ import strings from 'src/strings';
 import { OrganizationUser } from 'src/types/User';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
-import { addOrganizationUser, updateOrganizationUser } from 'src/api/user/user';
+import { OrganizationUserService } from 'src/services';
 import ErrorBox from '../common/ErrorBox/ErrorBox';
-import { getOrganizationUsers } from 'src/api/organization/organization';
 import { APP_PATHS } from 'src/constants';
 import PageForm from '../common/PageForm';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -70,7 +69,7 @@ export default function PersonView(): JSX.Element {
 
   useEffect(() => {
     const populatePeople = async () => {
-      const response = await getOrganizationUsers(selectedOrganization);
+      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
       if (response.requestSucceeded) {
         setPeople(response.users);
         setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
@@ -113,11 +112,15 @@ export default function PersonView(): JSX.Element {
     let userId: number = -1;
 
     if (!!personSelectedToEdit) {
-      const response = await updateOrganizationUser(newPerson.id, selectedOrganization.id, newPerson.role);
+      const response = await OrganizationUserService.updateOrganizationUser(
+        selectedOrganization.id,
+        newPerson.id,
+        newPerson.role
+      );
       successMessage = response.requestSucceeded ? strings.CHANGES_SAVED : null;
       userId = newPerson.id;
     } else {
-      const response = await addOrganizationUser({ ...newPerson }, selectedOrganization.id);
+      const response = await OrganizationUserService.createOrganizationUser(selectedOrganization.id, { ...newPerson });
       if (!response.requestSucceeded) {
         if (response.errorDetails === 'PRE_EXISTING_USER') {
           setRepeatedEmail(newPerson.email);
@@ -131,7 +134,7 @@ export default function PersonView(): JSX.Element {
         }
       }
       if (response.requestSucceeded) {
-        userId = response.newUserId;
+        userId = response.userId;
       }
       successMessage = response.requestSucceeded ? strings.PERSON_ADDED : null;
     }

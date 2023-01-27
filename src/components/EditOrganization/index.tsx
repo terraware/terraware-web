@@ -7,7 +7,7 @@ import { Organization } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
-import { updateOrganization } from 'src/api/organization/organization';
+import { OrganizationService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -75,7 +75,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
       return;
     }
 
-    const response = await updateOrganization(organizationRecord);
+    const response = await OrganizationService.updateOrganization(organizationRecord);
     if (response.requestSucceeded) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reloadOrganizationData();

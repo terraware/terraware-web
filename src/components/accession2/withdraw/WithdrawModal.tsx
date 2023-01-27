@@ -10,7 +10,7 @@ import useForm from 'src/utils/useForm';
 import { transferToNursery, postWithdrawal } from 'src/api/accessions2/withdrawals';
 import { postViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
-import { getOrganizationUsers } from 'src/api/organization/organization';
+import { OrganizationUserService } from 'src/services';
 import { OrganizationUser, User } from 'src/types/User';
 import { Unit, usePreferredWeightUnits } from 'src/units';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
@@ -102,7 +102,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
   useEffect(() => {
     const getOrgUsers = async () => {
-      const response = await getOrganizationUsers(selectedOrganization);
+      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
       if (response.requestSucceeded) {
         setUsers(response.users);
       }
