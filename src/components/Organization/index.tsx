@@ -15,7 +15,7 @@ import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useOrganization, useTimeZones } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useTimeZones } from 'src/providers/hooks';
 import isEnabled from 'src/features';
 import { getUTC } from '../../utils/useTimeZoneUtils';
 
@@ -26,25 +26,32 @@ export default function OrganizationView(): JSX.Element {
   const [countries, setCountries] = useState<Country[]>();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const { isMobile } = useDeviceInfo();
+  const { loadedStringsForLocale } = useLocalization();
   const timeZones = useTimeZones();
   const utcTimeZone = getUTC(timeZones);
   const timeZoneFeatureEnabled = isEnabled('Timezones');
   const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization.timeZone)?.longName;
 
   useEffect(() => {
-    const populateCountries = async () => {
-      const response = await searchCountries();
-      if (response) {
-        setCountries(response);
-      }
-    };
+    if (loadedStringsForLocale) {
+      const populateCountries = async () => {
+        const response = await searchCountries();
+        if (response) {
+          setCountries(response);
+        }
+      };
+
+      populateCountries();
+    }
+  }, [loadedStringsForLocale]);
+
+  useEffect(() => {
     const populatePeople = async () => {
       const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
       if (response.requestSucceeded) {
         setPeople(response.users);
       }
     };
-    populateCountries();
     populatePeople();
   }, [selectedOrganization]);
 

@@ -11,7 +11,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Accession2EditModal from '../edit/Accession2EditModal';
 import ViewPhotosModal from 'src/components/common/ViewPhotosModal';
 import { isContributor } from 'src/utils/organization';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 
 type DetailPanelProps = {
   accession?: Accession2;
@@ -19,6 +19,7 @@ type DetailPanelProps = {
 };
 export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { loadedStringsForLocale } = useLocalization();
   const { accession, reload } = props;
   const userCanEdit = !isContributor(selectedOrganization);
   const theme = useTheme();
@@ -63,14 +64,16 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const classes = useStyles();
 
   useEffect(() => {
-    const populateCountries = async () => {
-      const response = await searchCountries();
-      if (response) {
-        setCountries(response);
-      }
-    };
-    populateCountries();
-  }, []);
+    if (loadedStringsForLocale) {
+      const populateCountries = async () => {
+        const response = await searchCountries();
+        if (response) {
+          setCountries(response);
+        }
+      };
+      populateCountries();
+    }
+  }, [loadedStringsForLocale]);
 
   const getCollectionSource = () => {
     const source = accession?.collectionSource;
