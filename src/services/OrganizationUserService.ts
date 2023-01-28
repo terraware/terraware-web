@@ -10,9 +10,11 @@ import { OrganizationUser } from 'src/types/User';
 /**
  * Types exported from service
  */
-export type OrganizationUsersResponse = Response & {
+export type OrganizationUsers = {
   users: OrganizationUser[];
 };
+
+export type OrganizationUsersResponse = Response & OrganizationUsers;
 
 export type CreateOrganizationUserError = 'PRE_EXISTING_USER' | 'INVALID_EMAIL';
 
@@ -41,21 +43,17 @@ const httpOrganizationUser = HttpService.root(ORGANIZATION_USER_ENDPOINT);
  * get organization useres
  */
 const getOrganizationUsers = async (organizationId: number): Promise<OrganizationUsersResponse> => {
-  const serverResponse: Response = await httpOrganizationUsers.get({
-    urlReplacements: {
-      '{organizationId}': organizationId.toString(),
+  const response: OrganizationUsersResponse = await httpOrganizationUsers.get<
+    OrganizationUsersServerResponse,
+    OrganizationUsers
+  >(
+    {
+      urlReplacements: {
+        '{organizationId}': organizationId.toString(),
+      },
     },
-  });
-  const response: OrganizationUsersResponse = {
-    ...serverResponse,
-    users: [],
-  };
-
-  if (response.requestSucceeded) {
-    const data: OrganizationUsersServerResponse = response.data;
-
-    response.users = data?.users ?? [];
-  }
+    (data) => ({ users: data?.users ?? [] })
+  );
 
   return response;
 };
