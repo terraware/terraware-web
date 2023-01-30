@@ -135,7 +135,7 @@ export default function SpeciesFiltersPopover({ filters, setFilters }: SpeciesFi
                 id='growthForm'
                 selectedValue={temporalRecord.growthForm}
                 onChange={(value) => onChange('growthForm', value)}
-                options={growthForms()}
+                options={growthForms(true)}
                 label={strings.GROWTH_FORM}
                 aria-label={strings.GROWTH_FORM}
                 placeholder={strings.SELECT}
@@ -159,7 +159,7 @@ export default function SpeciesFiltersPopover({ filters, setFilters }: SpeciesFi
                 id='seedStorageBehavior'
                 selectedValue={temporalRecord.seedStorageBehavior}
                 onChange={(value) => onChange('seedStorageBehavior', value)}
-                options={storageBehaviors()}
+                options={storageBehaviors(true)}
                 label={strings.SEED_STORAGE_BEHAVIOR}
                 aria-label={strings.SEED_STORAGE_BEHAVIOR}
                 placeholder={strings.SELECT}
