@@ -2,7 +2,7 @@ import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material'
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
 import {
   AllFieldValuesMap,
@@ -52,6 +52,8 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
 import { useOrganization } from 'src/providers/hooks';
+import isEnabled from 'src/features';
+import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
 
 interface StyleProps {
@@ -145,7 +147,7 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, reloadPreferences } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const theme = useTheme();
@@ -200,10 +202,45 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
   const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState<boolean>(false);
   const [openImportModal, setOpenImportModal] = useState<boolean>(false);
+  const [showDefaultSystemSnackbar, setShowDefaultSystemSnackbar] = useState(false);
+  const { userPreferences } = useOrganization();
+  const weightUnitsEnabled = isEnabled('Weight units');
+  const snackbar = useSnackbar();
+
+  useEffect(() => {
+    const showSnackbar = () => {
+      snackbar.pageInfo(
+        strings.formatString<any>(
+          strings.CHANGE_DEFAULT_WEIGHT_SYSTEM,
+          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
+        ),
+        '',
+        {
+          label: strings.GOT_IT,
+          apply: async () => {
+            await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });
+            reloadPreferences();
+          },
+        },
+        'user'
+      );
+    };
+    if (showDefaultSystemSnackbar) {
+      showSnackbar();
+    }
+  }, [showDefaultSystemSnackbar, snackbar, userPreferences.preferredWeightSystem, reloadPreferences]);
 
   const updateSearchColumns = useCallback(
     (columnNames?: string[]) => {
       if (columnNames) {
+        if (
+          weightUnitsEnabled &&
+          !userPreferences.defaultWeightSystemAcknowledgedOnMs &&
+          userPreferences.preferredWeightSystem !== 'imperial' &&
+          columnNames.find((cn) => cn === 'estimatedWeightOunces' || cn === 'estimatedWeightPounds')
+        ) {
+          setShowDefaultSystemSnackbar(true);
+        }
         const columnInfo = columnsIndexed();
         const searchSelectedColumns = columnNames.reduce((acum, value) => {
           acum.push(value);
@@ -219,7 +256,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
         setDisplayColumnNames(columnNames);
       }
     },
-    [setSearchColumns, setDisplayColumnNames]
+    [
+      setSearchColumns,
+      setDisplayColumnNames,
+      weightUnitsEnabled,
+      userPreferences.preferredWeightSystem,
+      userPreferences.defaultWeightSystemAcknowledgedOnMs,
+    ]
   );
 
   useEffect(() => {
