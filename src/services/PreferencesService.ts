@@ -9,15 +9,18 @@ import CachedUserService from './CachedUserService';
 /**
  * Types exported from the service
  */
-export type UserPreferencesResponse = Response & {
-  preferences: Record<string, any>;
+
+export type Preferences = Record<string, any>;
+
+export type PreferencesData = {
+  preferences: Preferences;
 };
+
+export type UserPreferencesResponse = Response & PreferencesData;
 
 export type UserOrgPreferencesResponse = UserPreferencesResponse & {
   organizationId: number;
 };
-
-export type Preferences = Record<string, any>;
 
 export type PreferencesResponse = UserPreferencesResponse | UserOrgPreferencesResponse;
 
@@ -38,17 +41,12 @@ const httpPreferences = HttpService.root(PREFERENCES_ENDPOINT);
 
 // primary get preferences code with optional org
 const getPreferences = async (organizationId: string = ''): Promise<UserPreferencesResponse> => {
-  const preferencesResponse: Response = await httpPreferences.get({
-    params: organizationId ? { organizationId } : {},
-  });
-  const response: UserPreferencesResponse = { ...preferencesResponse, preferences: {} };
-
-  if (response.requestSucceeded) {
-    const data: PreferencesServerResponse = response.data;
-    if (data?.preferences) {
-      response.preferences = data.preferences;
-    }
-  }
+  const response: UserPreferencesResponse = await httpPreferences.get<PreferencesServerResponse, PreferencesData>(
+    {
+      params: organizationId ? { organizationId } : {},
+    },
+    (data) => ({ preferences: data?.preferences ?? {} })
+  );
 
   return response;
 };

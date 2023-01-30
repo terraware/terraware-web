@@ -51,4 +51,5 @@ axios.interceptors.response.use((x) => {
 
 const proxy = new Proxy(axios, handler);
 
+export type { AxiosResponse } from 'axios';
 export default proxy;

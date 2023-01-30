@@ -13,17 +13,22 @@ import { isAdmin } from 'src/utils/organization';
 /**
  * Types exported from service
  */
-export type OrganizationsResponse = Response & {
+export type OrganizationsData = {
   organizations: Organization[];
 };
 
-export type OrganizationRolesResponse = Response & {
+export type OrganizationsResponse = Response & OrganizationsData;
+
+export type OrganizationRoles = {
   roles: OrganizationRoleInfo[];
 };
+export type OrganizationRolesResponse = Response & OrganizationRoles;
 
-export type OrganizationResponse = Response & {
+export type OrganizationData = {
   organization?: Organization;
 };
+
+export type OrganizationResponse = Response & OrganizationData;
 
 export type UpdateOptions = {
   skipAcknowledgeTimeZone?: boolean;
@@ -45,7 +50,7 @@ type CreateOrganizationRequestPayload =
 type UpdateOrganizationRequestPayload =
   paths[typeof ORGANIZATION_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
-type ListOrganizationRolesResponsePayload =
+type OrganizationRolesServerResponse =
   paths[typeof ORGANIZATION_ROLES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 const httpOrganizations = HttpService.root(ORGANIZATIONS_ENDPOINT);
@@ -56,21 +61,16 @@ const httpOrganizationRoles = HttpService.root(ORGANIZATION_ROLES_ENDPOINT);
  * get organizations
  */
 const getOrganizations = async (): Promise<OrganizationsResponse> => {
-  const serverResponse: Response = await httpOrganizations.get({
-    params: {
-      depth: 'Facility',
+  const response: OrganizationsResponse = await httpOrganizations.get<OrganizationsServerResponse, OrganizationsData>(
+    {
+      params: {
+        depth: 'Facility',
+      },
     },
-  });
-  const response: OrganizationsResponse = {
-    ...serverResponse,
-    organizations: [],
-  };
+    (data) => ({ organizations: data?.organizations ?? [] })
+  );
 
-  if (response.requestSucceeded) {
-    const data: OrganizationsServerResponse = response.data;
-
-    response.organizations = data?.organizations ?? [];
-  } else {
+  if (!response.requestSucceeded) {
     if (response.statusCode === 401) {
       response.error = 'NotAuthenticated';
     } else {
@@ -85,21 +85,17 @@ const getOrganizations = async (): Promise<OrganizationsResponse> => {
  * get organization roles
  */
 const getOrganizationRoles = async (organizationId: number): Promise<OrganizationRolesResponse> => {
-  const serverResponse: Response = await httpOrganizationRoles.get({
-    urlReplacements: {
-      '{organizationId}': organizationId.toString(),
+  const response: OrganizationRolesResponse = await httpOrganizationRoles.get<
+    OrganizationRolesServerResponse,
+    OrganizationRoles
+  >(
+    {
+      urlReplacements: {
+        '{organizationId}': organizationId.toString(),
+      },
     },
-  });
-  const response: OrganizationRolesResponse = {
-    ...serverResponse,
-    roles: [],
-  };
-
-  if (response.requestSucceeded) {
-    const data: ListOrganizationRolesResponsePayload = response.data;
-
-    response.roles = data.roles ?? [];
-  }
+    (data) => ({ roles: data?.roles ?? [] })
+  );
 
   return response;
 };
