@@ -253,7 +253,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
       <DivotPopover
         anchorEl={anchorEl}
         onClose={onPopoverClose}
-        title={'Notifications'}
+        title={strings.NOTIFICATIONS}
         headerMenuItems={getHeaderMenuItems()}
         size='large'
       >
