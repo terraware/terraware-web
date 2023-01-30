@@ -97,11 +97,24 @@ export default function ProblemTooltip({
     setOpenedTooltip(false);
   };
 
+  let problemType;
+  switch (problems[0].type) {
+    case 'Name Is Synonym':
+      problemType = strings.SPECIES_PROBLEM_NAME_IS_SYNONYM;
+      break;
+    case 'Name Misspelled':
+      problemType = strings.SPECIES_PROBLEM_NAME_MISSPELLED;
+      break;
+    case 'Name Not Found':
+      problemType = strings.SPECIES_PROBLEM_NAME_NOT_FOUND;
+      break;
+  }
+
   return (
     <div>
       <div className={classes.tooltipContainer}>
         <p className={classes.noBold}>{strings.ISSUE}</p>
-        <p className={classes.value}>{problems[0].type}</p>
+        <p className={classes.value}>{problemType}</p>
         {problems[0].suggestedValue ? (
           <div className={classes.verticalSpacing}>
             <p className={classes.noBold}>{strings.SUGGESTION}</p>
