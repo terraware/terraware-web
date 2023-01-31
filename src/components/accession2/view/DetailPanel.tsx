@@ -103,7 +103,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
       countries && country ? getCountryByCode(countries, country)?.name : '',
     ];
 
-    return data.filter((str) => str).join(', ');
+    return data ? <Box>{data.filter((str) => str).join(', ')}</Box> : null;
   };
 
   const collectionSource = getCollectionSource();
