@@ -8,11 +8,10 @@ import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import TfMain from '../common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
-import { Facility, FacilityType } from 'src/api/types/facilities';
-import { getAllSeedBanks } from 'src/utils/organization';
+import { Facility } from 'src/api/types/facilities';
 import SeedBanksCellRenderer from './TableCellRenderer';
 import TextField from '../common/Textfield/Textfield';
-import { search, SearchNodePayload } from 'src/api/search';
+import { FacilityService } from 'src/services';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { Box, Grid, Theme, useTheme } from '@mui/material';
@@ -57,10 +56,9 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
-  const [seedBanks, setSeedBanks] = useState<Facility[]>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
-  const [results, setResults] = useState<Facility[]>();
+  const [results, setResults] = useState<Facility[]>([]);
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const timeZoneFeatureEnabled = isEnabled('Timezones');
@@ -68,18 +66,6 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
     { key: 'name', name: strings.NAME, type: 'string' },
     { key: 'description', name: strings.DESCRIPTION, type: 'string' },
   ];
-
-  useEffect(() => {
-    const getSeedBanks = () => {
-      if (organization) {
-        const orgSeedBanks = getAllSeedBanks(organization).filter((sb) => sb !== undefined) as Facility[];
-        setSeedBanks(orgSeedBanks);
-        setResults(orgSeedBanks);
-      }
-    };
-
-    getSeedBanks();
-  }, [organization]);
 
   const goToNewSeedBank = () => {
     const newSeedBankLocation = {
@@ -98,55 +84,22 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
 
   useEffect(() => {
     const refreshSearch = async () => {
-      if (debouncedSearchTerm) {
-        const params: SearchNodePayload = {
-          prefix: 'facilities',
-          fields: ['id', 'name', 'description', 'type', 'organization_id', 'timeZone'],
-          search: {
-            operation: 'and',
-            children: [
-              {
-                operation: 'or',
-                children: [
-                  { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
-                  { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
-                ],
-              },
-              { operation: 'field', field: 'type', type: 'Exact', values: ['Seed Bank'] },
-              {
-                operation: 'field',
-                field: 'organization_id',
-                type: 'Exact',
-                values: [organization.id],
-              },
-            ],
-          },
-          count: 0,
-        };
-        const requestId = Math.random().toString();
-        setRequestId('searchSeedbanks', requestId);
-        const searchResults = await search(params);
-        const seedBanksResults: Facility[] = [];
-        searchResults?.forEach((result) => {
-          seedBanksResults.push({
-            id: result.id as number,
-            name: result.name as string,
-            description: result.description as string,
-            organizationId: parseInt(result.organization_id as string, 10),
-            type: result.type as FacilityType,
-            connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
-            timeZone: result.timeZone as string,
-          });
-        });
-        if (getRequestId('searchSeedbanks') === requestId) {
-          setResults(seedBanksResults);
-        }
-      } else {
-        setResults(seedBanks);
+      const requestId = Math.random().toString();
+      setRequestId('searchSeedbanks', requestId);
+
+      const seedBanksResults = await FacilityService.getFacilities({
+        query: debouncedSearchTerm,
+        organizationId: organization.id,
+        type: 'Seed Bank',
+      });
+
+      if (getRequestId('searchSeedbanks') === requestId) {
+        setResults(seedBanksResults);
       }
     };
+
     refreshSearch();
-  }, [debouncedSearchTerm, seedBanks, organization]);
+  }, [debouncedSearchTerm, organization]);
 
   return (
     <TfMain>
@@ -193,19 +146,17 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
               <div>
                 <Grid container spacing={4}>
                   <Grid item xs={12}>
-                    {seedBanks && (
-                      <Table
-                        id='seed-banks-table'
-                        columns={
-                          timeZoneFeatureEnabled
-                            ? [...columns, { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' }]
-                            : columns
-                        }
-                        rows={results || seedBanks}
-                        orderBy='name'
-                        Renderer={SeedBanksCellRenderer}
-                      />
-                    )}
+                    <Table
+                      id='seed-banks-table'
+                      columns={
+                        timeZoneFeatureEnabled
+                          ? [...columns, { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' }]
+                          : columns
+                      }
+                      rows={results}
+                      orderBy='name'
+                      Renderer={SeedBanksCellRenderer}
+                    />
                   </Grid>
                 </Grid>
               </div>

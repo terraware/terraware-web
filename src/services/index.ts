@@ -1,4 +1,5 @@
 import CachedUserService from './CachedUserService';
+import FacilityService from './FacilityService';
 import HttpService from './HttpService';
 import OrganizationUserService from './OrganizationUserService';
 import OrganizationService from './OrganizationService';
@@ -11,6 +12,7 @@ export type { Response } from './HttpService';
 
 export {
   CachedUserService,
+  FacilityService,
   HttpService,
   OrganizationService,
   OrganizationUserService,

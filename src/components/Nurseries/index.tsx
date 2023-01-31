@@ -4,8 +4,8 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { search, SearchNodePayload } from 'src/api/search';
-import { Facility, FacilityType } from 'src/api/types/facilities';
+import { FacilityService } from 'src/services';
+import { Facility } from 'src/api/types/facilities';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
@@ -53,50 +53,15 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
 
   useEffect(() => {
     const refreshSearch = async () => {
-      const searchField = debouncedSearchTerm
-        ? {
-            operation: 'or',
-            children: [
-              { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
-              { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
-            ],
-          }
-        : null;
-      const params: SearchNodePayload = {
-        prefix: 'facilities',
-        fields: ['id', 'name', 'description', 'type', 'organization_id', 'timeZone'],
-        search: {
-          operation: 'and',
-          children: [
-            { operation: 'field', field: 'type', type: 'Exact', values: ['Nursery'] },
-            {
-              operation: 'field',
-              field: 'organization_id',
-              type: 'Exact',
-              values: [organization.id],
-            },
-          ],
-        },
-        count: 0,
-      };
-      if (searchField) {
-        params.search.children.push(searchField);
-      }
       const requestId = Math.random().toString();
       setRequestId('searchNurseries', requestId);
-      const searchResults = await search(params);
-      const nurseriesResults: Facility[] = [];
-      searchResults?.forEach((result) => {
-        nurseriesResults.push({
-          id: result.id as number,
-          name: result.name as string,
-          description: result.description as string,
-          organizationId: parseInt(result.organization_id as string, 10),
-          type: result.type as FacilityType,
-          connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
-          timeZone: result.timeZone as string,
-        });
+
+      const nurseriesResults = await FacilityService.getFacilities({
+        query: debouncedSearchTerm,
+        organizationId: organization.id,
+        type: 'Nursery',
       });
+
       if (getRequestId('searchNurseries') === requestId) {
         setResults(nurseriesResults);
       }
