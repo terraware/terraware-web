@@ -30,8 +30,8 @@ export const getTimeZones = async (): Promise<TimeZonesResponse> => {
 /**
  * Exported functions
  */
-const InternationalizationService = {
+const I18nService = {
   getTimeZones,
 };
 
-export default InternationalizationService;
+export default I18nService;
