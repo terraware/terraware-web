@@ -1,5 +1,9 @@
+import { paths } from 'src/api/types/generated-schema';
+import { Organization } from 'src/types/Organization';
 import { Facility, FacilityType } from 'src/api/types/facilities';
 import SearchService, { SearchNodePayload } from './SearchService';
+import HttpService, { Response } from './HttpService';
+import { getAllSeedBanks, getAllNurseries } from 'src/utils/organization';
 
 /**
  * Service for facility related functionality
@@ -14,6 +18,78 @@ export type FacilitySearchParams = {
   type: FacilityType;
   organizationId: number | string;
   query?: string;
+};
+
+export type GetFacilityRequest = {
+  organization: Organization;
+  facilityId: number | string;
+  type: FacilityType;
+};
+
+export type CreateFacilityResponse = Response & {
+  facilityId: number | null;
+};
+
+const FACILITIES_ENDPOINT = '/api/v1/facilities';
+const FACILITY_ENDPOINT = '/api/v1/facilities/{facilityId}';
+
+type CreateFacilityRequestPayload =
+  paths[typeof FACILITIES_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type UpdateFacilityRequestPayload =
+  paths[typeof FACILITY_ENDPOINT]['put']['requestBody']['content']['application/json'];
+
+const httpFacilities = HttpService.root(FACILITIES_ENDPOINT);
+const httpFacility = HttpService.root(FACILITY_ENDPOINT);
+
+/**
+ * create a facility
+ */
+const createFacility = async (facility: Omit<Facility, 'id'>): Promise<CreateFacilityResponse> => {
+  const entity: CreateFacilityRequestPayload = {
+    name: facility.name,
+    description: facility.description,
+    organizationId: facility.organizationId,
+    type: facility.type,
+    timeZone: facility.timeZone,
+  };
+
+  const serverResponse: Response = await httpFacilities.post({ entity });
+
+  const response: CreateFacilityResponse = {
+    ...serverResponse,
+    facilityId: serverResponse.data?.id ?? null,
+  };
+
+  return response;
+};
+
+/**
+ * get facility
+ */
+const getFacility = ({ organization, facilityId, type }: GetFacilityRequest): Facility | undefined => {
+  if (type === 'Nursery') {
+    return getAllNurseries(organization).find((n) => n?.id.toString() === facilityId.toString());
+  } else if (type === 'Seed Bank') {
+    return getAllSeedBanks(organization).find((n) => n?.id.toString() === facilityId.toString());
+  }
+};
+
+/**
+ * Update a facility
+ */
+const updateFacility = async (facility: Facility): Promise<Response> => {
+  const entity: UpdateFacilityRequestPayload = {
+    name: facility.name,
+    description: facility.description,
+    timeZone: facility.timeZone,
+  };
+
+  return await httpFacility.put({
+    entity,
+    urlReplacements: {
+      '{facilityId}': facility.id.toString(),
+    },
+  });
 };
 
 /**
@@ -74,6 +150,9 @@ const getFacilities = async ({ type, organizationId, query }: FacilitySearchPara
  */
 const FacilityService = {
   getFacilities,
+  getFacility,
+  createFacility,
+  updateFacility,
 };
 
 export default FacilityService;

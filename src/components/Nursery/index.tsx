@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { getAllNurseries } from 'src/utils/organization';
+import { FacilityService } from 'src/services';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
 import { Facility } from 'src/api/types/facilities';
@@ -36,11 +36,15 @@ export default function NurseryDetails(): JSX.Element {
 
   useEffect(() => {
     if (selectedOrganization) {
-      const selectedNursery = getAllNurseries(selectedOrganization).find((n) => n?.id.toString() === nurseryId);
+      const selectedNursery = FacilityService.getFacility({
+        organization: selectedOrganization,
+        facilityId: nurseryId,
+        type: 'Nursery',
+      });
       if (selectedNursery) {
         setNursery(selectedNursery);
       } else {
-        history.push(APP_PATHS.SEED_BANKS);
+        history.push(APP_PATHS.NURSERIES);
       }
     }
   }, [nurseryId, selectedOrganization, history]);
