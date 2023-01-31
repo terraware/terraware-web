@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Close } from '@mui/icons-material';
 import { Grid, Box, IconButton, useTheme } from '@mui/material';
-import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
+import { AccessionPostRequestBody } from 'src/services/AccessionsService';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import { Geolocation } from 'src/api/types/accessions';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';

@@ -4,7 +4,8 @@ import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
-import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
+import AccessionsService from 'src/services/AccessionsService';
 import useForm from 'src/utils/useForm';
 import { isUnitInPreferredSystem, Unit, usePreferredWeightUnits } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface QuantityModalProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   onClose: () => void;
   reload: () => void;
   statusEdit?: boolean;
@@ -59,7 +60,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     if (!validate()) {
       return;
     }
-    const response = await updateAccession2(record);
+    const response = await AccessionsService.updateAccession(record);
     if (response.requestSucceeded) {
       reload();
       onCloseHandler();

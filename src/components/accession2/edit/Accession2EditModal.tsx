@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
-import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
+import AccessionsService from 'src/services/AccessionsService';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import {
@@ -20,7 +21,7 @@ import isEnabled from 'src/features';
 
 export interface Accession2EditModalProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   onClose: () => void;
   reload: () => void;
 }
@@ -55,7 +56,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
         setValidateFields(true);
         return;
       }
-      const response = await updateAccession2(record);
+      const response = await AccessionsService.updateAccession(record);
       if (response.requestSucceeded && accession) {
         reload();
         onCloseHandler();

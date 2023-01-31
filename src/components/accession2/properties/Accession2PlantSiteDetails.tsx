@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import strings from 'src/strings';
 import { Grid, Box, useTheme } from '@mui/material';
-import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
+import { AccessionPostRequestBody } from 'src/services/AccessionsService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import { CollectionSource } from './';

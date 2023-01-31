@@ -4,7 +4,8 @@ import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, Theme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
-import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
+import AccessionsService from 'src/services/AccessionsService';
 import { Unit, usePreferredWeightUnits } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown } from '@terraware/web-components';
@@ -18,8 +19,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface CalculatorModalProps {
   open: boolean;
-  record: Accession2;
-  setRecord: React.Dispatch<React.SetStateAction<Accession2>>;
+  record: Accession;
+  setRecord: React.Dispatch<React.SetStateAction<Accession>>;
   onClose: () => void;
   reload: () => void;
   onChange: (id: string, value: unknown) => void;
@@ -47,7 +48,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
 
   const getTotalCount = async () => {
     if (validateFields()) {
-      const response = await updateAccession2(record, true);
+      const response = await AccessionsService.updateAccession(record, true);
       if (response.requestSucceeded && response.accession) {
         if (
           response.accession.subsetWeight?.grams &&

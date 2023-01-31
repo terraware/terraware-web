@@ -1,13 +1,14 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useTheme, Grid } from '@mui/material';
 import { DatePicker } from '@terraware/web-components';
-import { Accession2, AccessionPostRequestBody } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
+import { AccessionPostRequestBody } from 'src/services/AccessionsService';
 import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
 
 interface Props {
   onChange: (id: string, value: string) => void;
-  record: Accession2 | AccessionPostRequestBody;
+  record: Accession | AccessionPostRequestBody;
   type: 'collected' | 'received';
   validate?: boolean;
   timeZone: string;

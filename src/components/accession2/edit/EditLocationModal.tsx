@@ -6,17 +6,17 @@ import { Grid } from '@mui/material';
 import { Facility, StorageLocationDetails } from 'src/api/types/facilities';
 import theme from 'src/theme';
 import { getAllSeedBanks } from 'src/utils/organization';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
+import AccessionsService from 'src/services/AccessionsService';
 import useForm from 'src/utils/useForm';
 import { getLocations } from 'src/api/seeds/locations';
-import { updateAccession2 } from 'src/api/accessions2/accession';
 import { StorageLocationSelector, StorageSubLocationSelector } from '../properties';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
 
 export interface EditLocationModalProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   onClose: () => void;
   reload: () => void;
 }
@@ -54,7 +54,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   }, [record.facilityId]);
 
   const saveLocation = async () => {
-    const response = await updateAccession2({
+    const response = await AccessionsService.updateAccession({
       ...accession,
       ...record,
     });

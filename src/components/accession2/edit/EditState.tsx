@@ -2,7 +2,7 @@ import React from 'react';
 import strings from 'src/strings';
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Dropdown, Icon } from '@terraware/web-components';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
 import { ACCESSION_2_STATES, AccessionState, stateName } from 'src/types/Accession';
 import { makeStyles } from '@mui/styles';
 
@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export interface EditStateProps {
-  accession: Accession2;
-  record: Accession2;
+  accession: Accession;
+  record: Accession;
   onChange: (id: string, value: unknown) => void;
   error?: string;
 }

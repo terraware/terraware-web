@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, IconTooltip } from '@terraware/web-components';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
 import strings from 'src/strings';
 import { ViabilityTest } from 'src/api/types/accessions';
 import { getFullTestType } from 'src/utils/viabilityTest';
@@ -18,7 +18,7 @@ import TooltipLearnMoreModal, {
 
 export interface ViewViabilityTestModalProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   isEditable: boolean;
   onClose: () => void;
   viabilityTest: ViabilityTest;

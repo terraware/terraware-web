@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
+import AccessionsService from 'src/services/AccessionsService';
 import useForm from 'src/utils/useForm';
-import { updateAccession2 } from 'src/api/accessions2/accession';
 import EditState from './EditState';
 import QuantityModal from './QuantityModal';
 
 export interface EditStateModalProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   onClose: () => void;
   reload: () => void;
 }
@@ -26,7 +26,7 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
 
   const saveState = async () => {
     if (record) {
-      const response = await updateAccession2(record);
+      const response = await AccessionsService.updateAccession(record);
       if (response.requestSucceeded) {
         reload();
       }

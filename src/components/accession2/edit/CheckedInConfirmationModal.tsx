@@ -2,12 +2,12 @@ import React from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
 
 export interface CheckedInConfirmationModalProps {
   open: boolean;
   onClose: () => void;
-  accession: Accession2;
+  accession: Accession;
 }
 
 export default function CheckedInConfirmationModal(props: CheckedInConfirmationModalProps): JSX.Element {

@@ -1,5 +1,9 @@
 import strings from 'src/strings';
-import { Accession2 } from '../api/accessions2/accession';
+import { components } from 'src/api/types/generated-schema';
+
+export type Accession = components['schemas']['AccessionPayloadV2'];
+
+export type Withdrawal = Required<Accession>['withdrawals'][0];
 
 export const ACCESSION_STATES = [
   'Awaiting Check-In',
@@ -13,7 +17,7 @@ export const ACCESSION_STATES = [
   'Nursery',
 ];
 
-export type AccessionState = Accession2['state'];
+export type AccessionState = Accession['state'];
 
 export const ACCESSION_2_STATES: AccessionState[] = [
   'Awaiting Check-In',

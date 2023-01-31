@@ -2,14 +2,14 @@ import { useTheme, Box, Typography } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
 import strings from 'src/strings';
 import TableCellRenderer from './TableCellRenderer';
 import { ViabilityTest } from 'src/api/types/accessions';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface ViabilityTestingDatabaseProps {
-  accession: Accession2;
+  accession: Accession;
   canAddTest: boolean;
   onNewViabilityTest: () => void;
   onSelectViabilityTest: (test: ViabilityTest) => void;

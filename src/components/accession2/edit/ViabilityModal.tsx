@@ -4,7 +4,8 @@ import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, Typography } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
-import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
+import AccessionsService from 'src/services/AccessionsService';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 import { preventDefaultEvent } from '@terraware/web-components/utils';
@@ -12,7 +13,7 @@ import AddLink from 'src/components/common/AddLink';
 
 export interface ViabilityDialogProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   onClose: () => void;
   reload: () => void;
   setNewViabilityTestOpened: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,7 +39,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
       return;
     }
     setError('');
-    const response = await updateAccession2(record);
+    const response = await AccessionsService.updateAccession(record);
     if (response.requestSucceeded) {
       reload();
       onCloseHandler();
