@@ -14,6 +14,7 @@ import SearchService, {
 
 const ACCESSIONS_ENDPOINT = '/api/v2/seedbank/accessions';
 const ACCESSION_ENDPOINT = '/api/v2/seedbank/accessions/{id}';
+const ACCESSION_DELETE_ENDPOINT = '/api/v1/seedbank/accessions/{id}';
 const ACCESSION_HISTORY_ENDPOINT = '/api/v1/seedbank/accessions/{id}/history';
 const ACCESSION_CHECKIN_ENDPOINT = '/api/v1/seedbank/accessions/{id}/checkIn';
 
@@ -114,7 +115,7 @@ const checkInAccession = async (accessionId: number): Promise<Response> => {
  * Delete an accession
  */
 const deleteAccession = async (accessionId: number): Promise<Response> => {
-  return await httpAccession.delete({
+  return await HttpService.root(ACCESSION_DELETE_ENDPOINT).delete({
     urlReplacements: { '{id}': accessionId.toString() },
   });
 };
