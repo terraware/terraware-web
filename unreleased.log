@@ -1,3 +1,4 @@
+33b2701 SW-2821 Show localized enums on species list (#1117)
 f713e35 SW-2808 move app/server specific calls into a system service (#1109)
 212d3bc SW-2757 Show message first time user select imperial unit column (#1107)
 f997c69 SW-2820 Look up title of Notifications dropdown (#1116)
