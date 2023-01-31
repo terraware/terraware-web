@@ -9,7 +9,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import speciesAtom from 'src/state/species';
 import strings from 'src/strings';
-import { Species, SpeciesProblemElement } from 'src/types/Species';
+import { EcosystemType, Species, SpeciesProblemElement } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
@@ -106,6 +106,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export type SpeciesFiltersType = {
   growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern';
   seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
+  ecosystemType?: EcosystemType;
   rare?: boolean;
   endangered?: boolean;
 };
@@ -232,6 +233,23 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
           </>
         ),
       },
+      {
+        key: 'ecosystemTypes',
+        name: strings.ECOSYSTEM_TYPE,
+        type: 'string',
+        tooltipTitle: (
+          <>
+            {`${strings.TOOLTIP_ECOSYSTEM_TYPE} `}
+            <a
+              target='_blank'
+              rel='noopener noreferrer'
+              href='https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world'
+            >
+              {strings.LEARN_MORE}
+            </a>
+          </>
+        ),
+      },
     ];
   }, [loadedStringsForLocale]);
 
@@ -262,6 +280,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         'rare',
         'growthForm',
         'seedStorageBehavior',
+        'ecosystemTypes.ecosystemType',
         'organization_id',
       ],
       search: {
@@ -341,6 +360,16 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       params.search.children.push(newNode);
     }
 
+    if (record.ecosystemType !== undefined) {
+      const newNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'ecosystemTypes.ecosystemType',
+        type: 'Exact',
+        values: [record.ecosystemType],
+      };
+      params.search.children.push(newNode);
+    }
+
     return params;
   }, [record, debouncedSearchTerm, selectedOrganization]);
 
@@ -371,6 +400,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               familyName: result.familyName as string,
               growthForm: result.growthForm as any,
               seedStorageBehavior: result.seedStorageBehavior as any,
+              ecosystemTypes: (result.ecosystemTypes as Record<string, EcosystemType>[])?.map((r) => r.ecosystemType),
               rare: result.rare as boolean,
               endangered: result.endangered as boolean,
               conservationStatus: getConservationStatusString(result),
@@ -598,6 +628,14 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         label: strings.SEED_STORAGE_BEHAVIOR,
         value: record.seedStorageBehavior,
         onRemove: onRemoveFilterHandler('seedStorageBehavior'),
+      });
+    }
+    if (record.ecosystemType) {
+      result.push({
+        id: 'ecosystemType',
+        label: strings.ECOSYSTEM_TYPE,
+        value: record.ecosystemType,
+        onRemove: onRemoveFilterHandler('ecosystemType'),
       });
     }
 

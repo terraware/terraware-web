@@ -2,11 +2,13 @@ import { ClickAwayListener, IconButton, Theme, Tooltip } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import hexRgb from 'hex-rgb';
-import { SpeciesProblemElement } from 'src/types/Species';
+import { EcosystemType, ecosystemTypes, SpeciesProblemElement } from 'src/types/Species';
 import Icon from '../common/icon/Icon';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 import ProblemTooltip from './ProblemTooltip';
+import { TextTruncated } from '@terraware/web-components';
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -83,6 +85,26 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
           ) : null
         }
         row={row}
+      />
+    );
+  } else if (column.key === 'ecosystemTypes') {
+    return (
+      <CellRenderer
+        index={index}
+        row={row}
+        column={column}
+        value={
+          <TextTruncated
+            stringList={((value ?? []) as EcosystemType[]).map(
+              (es) => ecosystemTypes().find((type) => type.value === es)?.label ?? ''
+            )}
+            maxLengthPx={100}
+            listSeparator={strings.LIST_SEPARATOR_SECONDARY}
+            moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
+            moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+            textStyle={{ fontSize: '14px' }}
+          />
+        }
       />
     );
   }

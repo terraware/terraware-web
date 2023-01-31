@@ -1680,6 +1680,22 @@ export interface components {
       suggestedValue?: string;
     };
     SpeciesRequestPayload: {
+      ecosystemTypes?: (
+        | "Boreal forests/Taiga"
+        | "Deserts and xeric shrublands"
+        | "Flooded grasslands and savannas"
+        | "Mangroves"
+        | "Mediterranean forests, woodlands and scrubs"
+        | "Montane grasslands and shrublands"
+        | "Temperate broad leaf and mixed forests"
+        | "Temperate coniferous forest"
+        | "Temperate grasslands, savannas and shrublands"
+        | "Tropical and subtropical coniferous forests"
+        | "Tropical and subtropical dry broad leaf forests"
+        | "Tropical and subtropical grasslands, savannas and shrublands"
+        | "Tropical and subtropical moist broad leaf forests"
+        | "Tundra"
+      )[];
       commonName?: string;
       endangered?: boolean;
       familyName?: string;
@@ -1698,6 +1714,22 @@ export interface components {
         | "Unknown";
     };
     SpeciesResponseElement: {
+      ecosystemTypes?: (
+        | "Boreal forests/Taiga"
+        | "Deserts and xeric shrublands"
+        | "Flooded grasslands and savannas"
+        | "Mangroves"
+        | "Mediterranean forests, woodlands and scrubs"
+        | "Montane grasslands and shrublands"
+        | "Temperate broad leaf and mixed forests"
+        | "Temperate coniferous forest"
+        | "Temperate grasslands, savannas and shrublands"
+        | "Tropical and subtropical coniferous forests"
+        | "Tropical and subtropical dry broad leaf forests"
+        | "Tropical and subtropical grasslands, savannas and shrublands"
+        | "Tropical and subtropical moist broad leaf forests"
+        | "Tundra"
+      )[];
       commonName?: string;
       endangered?: boolean;
       familyName?: string;

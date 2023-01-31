@@ -15,7 +15,7 @@
     "@mui/styles": "^5.11.2",
     "@mui/x-date-pickers": "^5.0.0-alpha.7",
     "@reduxjs/toolkit": "^1.9.1",
-    "@terraware/web-components": "^2.1.5",
+    "@terraware/web-components": "^2.1.7",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^12.1.10",
