@@ -15,7 +15,7 @@ import EditState from './EditState';
 import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
 import isEnabled from 'src/features';
-import { useOrganization } from 'src/providers';
+import { useUser } from 'src/providers';
 import ConvertedValue from 'src/components/ConvertedValue';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -44,7 +44,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const snackbar = useSnackbar();
   const preferredUnits = usePreferredWeightUnits();
   const weightUnitsEnabled = isEnabled('Weight units');
-  const { userPreferences } = useOrganization();
+  const { userPreferences } = useUser();
 
   const validate = () => {
     const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);

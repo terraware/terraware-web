@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { UserService } from 'src/services';
+import { PreferencesService, UserService } from 'src/services';
 import { UserContext } from './contexts';
-import { ProvidedUserData } from './DataTypes';
+import { PreferencesType, ProvidedUserData } from './DataTypes';
 import { useRecoilState } from 'recoil';
 import userAtom from 'src/state/user';
 
@@ -11,6 +11,25 @@ export type UserProviderProps = {
 
 export default function UserProvider({ children }: UserProviderProps): JSX.Element {
   const [userState, setUserState] = useRecoilState(userAtom);
+  const [userPreferences, setUserPreferences] = useState<PreferencesType>({});
+
+  const reloadPreferences = useCallback(() => {
+    const getUserPreferences = async () => {
+      const response = await PreferencesService.getUserPreferences();
+      if (response.requestSucceeded && response.preferences) {
+        setUserPreferences(response.preferences);
+      }
+    };
+    getUserPreferences();
+  }, [setUserPreferences]);
+
+  useEffect(() => {
+    setUserData((prev) => ({
+      ...prev,
+      userPreferences,
+      reloadPreferences,
+    }));
+  }, [userPreferences, reloadPreferences]);
 
   const reloadUser = useCallback(() => {
     const populateUser = async () => {
@@ -35,7 +54,16 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     populateUser();
   }, [userState, setUserState]);
 
-  const [userData, setUserData] = useState<ProvidedUserData>({ reloadUser, bootstrapped: false });
+  useEffect(() => {
+    reloadPreferences();
+  }, [reloadPreferences]);
+
+  const [userData, setUserData] = useState<ProvidedUserData>({
+    reloadUser,
+    bootstrapped: false,
+    userPreferences,
+    reloadPreferences,
+  });
 
   useEffect(() => {
     if (userData.user) {

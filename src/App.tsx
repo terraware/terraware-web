@@ -158,18 +158,10 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const {
-    organizations,
-    selectedOrganization,
-    reloadData,
-    reloadPreferences,
-    orgPreferences,
-    orgPreferenceForId,
-    userPreferences,
-  } = useOrganization();
+  const { organizations, selectedOrganization, reloadData, orgPreferences, orgPreferenceForId } = useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
-  const { user, reloadUser } = useUser();
+  const { user, reloadUser, userPreferences, reloadPreferences } = useUser();
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const timeZoneFeatureEnabled = isEnabled('Timezones');

@@ -22,7 +22,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TitleDescription from '../common/TitleDescription';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
@@ -89,7 +89,7 @@ const MyAccountContent = ({
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
-  const { userPreferences, reloadPreferences } = useOrganization();
+  const { userPreferences, reloadPreferences } = useUser();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
   const timeZonesEnabled = isEnabled('Timezones');

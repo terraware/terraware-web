@@ -75,7 +75,8 @@ const TABS = ['detail', 'history', 'viabilityTesting'];
 
 export default function Accession2View(): JSX.Element {
   const { user } = useUser();
-  const { selectedOrganization, userPreferences } = useOrganization();
+  const { selectedOrganization } = useOrganization();
+  const { userPreferences } = useUser();
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();
