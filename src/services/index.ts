@@ -1,6 +1,7 @@
 import CachedUserService from './CachedUserService';
 import FacilityService from './FacilityService';
 import HttpService from './HttpService';
+import InternationalizationService from './InternationalizationService';
 import OrganizationUserService from './OrganizationUserService';
 import OrganizationService from './OrganizationService';
 import PreferencesService from './PreferencesService';
@@ -14,6 +15,7 @@ export {
   CachedUserService,
   FacilityService,
   HttpService,
+  InternationalizationService,
   OrganizationService,
   OrganizationUserService,
   PreferencesService,
