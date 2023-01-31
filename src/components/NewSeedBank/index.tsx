@@ -19,7 +19,7 @@ import isEnabled from 'src/features';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
 export default function SeedBankView(): JSX.Element {
-  const { selectedOrganization, reloadData } = useOrganization();
+  const { selectedOrganization, reloadOrganizations } = useOrganization();
   const theme = useTheme();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
@@ -80,7 +80,7 @@ export default function SeedBankView(): JSX.Element {
     if (selectedSeedBank) {
       const response = await updateFacility({ ...record } as Facility);
       if (response.requestSucceeded) {
-        reloadData();
+        reloadOrganizations();
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
@@ -88,7 +88,7 @@ export default function SeedBankView(): JSX.Element {
     } else {
       const response = await createFacility(record);
       if (response.requestSucceeded) {
-        reloadData();
+        reloadOrganizations();
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
       } else {
         snackbar.toastError();

@@ -148,7 +148,7 @@ type DatabaseProps = {
 
 export default function Database(props: DatabaseProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { reloadPreferences } = useUser();
+  const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const theme = useTheme();
@@ -220,7 +220,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           label: strings.GOT_IT,
           apply: async () => {
             await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });
-            reloadPreferences();
+            reloadUserPreferences();
           },
         },
         'user'
@@ -229,7 +229,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     if (showDefaultSystemSnackbar) {
       showSnackbar();
     }
-  }, [showDefaultSystemSnackbar, snackbar, userPreferences.preferredWeightSystem, reloadPreferences]);
+  }, [showDefaultSystemSnackbar, snackbar, userPreferences.preferredWeightSystem, reloadUserPreferences]);
 
   const updateSearchColumns = useCallback(
     (columnNames?: string[]) => {

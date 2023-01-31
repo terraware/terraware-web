@@ -10,7 +10,7 @@ export type ProvidedUserData = {
   reloadUser: () => void;
   bootstrapped: boolean;
   userPreferences: PreferencesType;
-  reloadPreferences: () => void;
+  reloadUserPreferences: () => void;
 };
 
 export type ProvidedOrganizationData = {
@@ -18,7 +18,7 @@ export type ProvidedOrganizationData = {
   setSelectedOrganization: React.Dispatch<React.SetStateAction<Organization | undefined>>;
   organizations: Organization[];
   orgPreferences: PreferencesType;
-  reloadData: (selectedOrgId?: number) => void;
+  reloadOrganizations: (selectedOrgId?: number) => void;
   bootstrapped: boolean;
   orgPreferenceForId: number;
 };

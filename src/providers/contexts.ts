@@ -7,7 +7,7 @@ export const UserContext = createContext<ProvidedUserData>({
     // default no-op implementation
     return;
   },
-  reloadPreferences: () => {
+  reloadUserPreferences: () => {
     // default no-op implementation
     return;
   },
@@ -25,7 +25,7 @@ export const defaultSelectedOrg: Organization = {
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
   organizations: [],
   orgPreferences: {},
-  reloadData: (selectedOrgId?: number) => {
+  reloadOrganizations: (selectedOrgId?: number) => {
     // default no-op implementation
     return;
   },

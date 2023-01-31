@@ -33,7 +33,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const location = useStateLocation();
   const { userPreferences } = useUser();
 
-  const reloadData = useCallback(async (selectedOrgId?: number) => {
+  const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
       const response = await OrganizationService.getOrganizations();
       if (!response.error) {
@@ -64,14 +64,14 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     setSelectedOrganization,
     organizations,
     orgPreferences,
-    reloadData,
+    reloadOrganizations,
     bootstrapped,
     orgPreferenceForId,
   });
 
   useEffect(() => {
-    reloadData();
-  }, [reloadData]);
+    reloadOrganizations();
+  }, [reloadOrganizations]);
 
   useEffect(() => {
     setOrganizationData((prev) => ({

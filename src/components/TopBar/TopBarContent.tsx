@@ -58,7 +58,7 @@ type TopBarProps = {
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const history = useHistory();
   const classes = useStyles();
-  const { selectedOrganization, organizations, reloadData } = useOrganization();
+  const { selectedOrganization, organizations, reloadOrganizations } = useOrganization();
   const { setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
 
@@ -84,7 +84,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <div className={classes.right}>
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
-          reloadOrganizationData={reloadData}
+          reloadOrganizationData={reloadOrganizations}
         />
         <div className={classes.separator} />
         <UserMenu hasOrganizations={organizations && organizations.length > 0} />
@@ -110,7 +110,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <Grid item xs={3} className={classes.right}>
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
-          reloadOrganizationData={reloadData}
+          reloadOrganizationData={reloadOrganizations}
         />
         <SmallDeviceUserMenu onLogout={onHandleLogout} hasOrganizations={organizations && organizations.length > 0} />
       </Grid>

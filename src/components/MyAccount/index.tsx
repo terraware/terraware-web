@@ -89,7 +89,7 @@ const MyAccountContent = ({
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
-  const { userPreferences, reloadPreferences } = useUser();
+  const { userPreferences, reloadUserPreferences } = useUser();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
   const timeZonesEnabled = isEnabled('Timezones');
@@ -181,7 +181,7 @@ const MyAccountContent = ({
     } else {
       if (weightUnitsEnabled) {
         await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
-        reloadPreferences();
+        reloadUserPreferences();
       }
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded) {
