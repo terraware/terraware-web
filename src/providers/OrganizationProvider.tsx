@@ -8,6 +8,7 @@ import { Organization } from 'src/types/Organization';
 import { OrganizationContext } from './contexts';
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
 import { defaultSelectedOrg } from './contexts';
+import { useUser } from './hooks';
 
 export type OrganizationProviderProps = {
   children?: React.ReactNode;
@@ -23,7 +24,6 @@ enum APIRequestStatus {
 export default function OrganizationProvider({ children }: OrganizationProviderProps): JSX.Element {
   const [bootstrapped, setBootstrapped] = useState<boolean>(false);
   const [selectedOrganization, setSelectedOrganization] = useState<Organization>();
-  const [userPreferences, setUserPreferences] = useState<PreferencesType>({});
   const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
   const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(defaultSelectedOrg.id);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
@@ -31,8 +31,9 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const history = useHistory();
   const query = useQuery();
   const location = useStateLocation();
+  const { userPreferences } = useUser();
 
-  const reloadData = useCallback(async (selectedOrgId?: number) => {
+  const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
       const response = await OrganizationService.getOrganizations();
       if (!response.error) {
@@ -58,31 +59,19 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     await populateOrganizations();
   }, []);
 
-  const reloadPreferences = useCallback(() => {
-    const getUserPreferences = async () => {
-      const response = await PreferencesService.getUserPreferences();
-      if (response.requestSucceeded && response.preferences) {
-        setUserPreferences(response.preferences);
-      }
-    };
-    getUserPreferences();
-  }, [setUserPreferences]);
-
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
     selectedOrganization: selectedOrganization || defaultSelectedOrg,
     setSelectedOrganization,
     organizations,
-    userPreferences,
     orgPreferences,
-    reloadData,
-    reloadPreferences,
+    reloadOrganizations,
     bootstrapped,
     orgPreferenceForId,
   });
 
   useEffect(() => {
-    reloadData();
-  }, [reloadData]);
+    reloadOrganizations();
+  }, [reloadOrganizations]);
 
   useEffect(() => {
     setOrganizationData((prev) => ({
@@ -90,11 +79,10 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       selectedOrganization: selectedOrganization || defaultSelectedOrg,
       organizations,
       orgPreferences,
-      userPreferences,
       bootstrapped,
       orgPreferenceForId,
     }));
-  }, [selectedOrganization, organizations, orgPreferences, userPreferences, bootstrapped, orgPreferenceForId]);
+  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, orgPreferenceForId]);
 
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
@@ -110,10 +98,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     };
     getOrgPreferences();
   }, [selectedOrganization]);
-
-  useEffect(() => {
-    reloadPreferences();
-  }, [reloadPreferences]);
 
   useEffect(() => {
     reloadOrgPreferences();

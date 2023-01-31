@@ -51,7 +51,7 @@ import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization, useUser } from 'src/providers/hooks';
 import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
@@ -147,7 +147,8 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { selectedOrganization, reloadPreferences } = useOrganization();
+  const { selectedOrganization } = useOrganization();
+  const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const theme = useTheme();
@@ -203,7 +204,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState<boolean>(false);
   const [openImportModal, setOpenImportModal] = useState<boolean>(false);
   const [showDefaultSystemSnackbar, setShowDefaultSystemSnackbar] = useState(false);
-  const { userPreferences } = useOrganization();
+  const { userPreferences } = useUser();
   const weightUnitsEnabled = isEnabled('Weight units');
   const snackbar = useSnackbar();
 
@@ -219,7 +220,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           label: strings.GOT_IT,
           apply: async () => {
             await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });
-            reloadPreferences();
+            reloadUserPreferences();
           },
         },
         'user'
@@ -228,7 +229,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     if (showDefaultSystemSnackbar) {
       showSnackbar();
     }
-  }, [showDefaultSystemSnackbar, snackbar, userPreferences.preferredWeightSystem, reloadPreferences]);
+  }, [showDefaultSystemSnackbar, snackbar, userPreferences.preferredWeightSystem, reloadUserPreferences]);
 
   const updateSearchColumns = useCallback(
     (columnNames?: string[]) => {

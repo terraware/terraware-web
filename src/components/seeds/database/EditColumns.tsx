@@ -9,7 +9,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import isEnabled from 'src/features';
-import { useOrganization } from 'src/providers';
+import { useUser } from 'src/providers';
 
 export interface Props {
   open: boolean;
@@ -21,7 +21,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const { onClose, open } = props;
   const [preset, setPreset] = React.useState<Preset>();
   const { isMobile } = useDeviceInfo();
-  const { userPreferences } = useOrganization();
+  const { userPreferences } = useUser();
 
   const [value, setValue] = React.useState(props.value ?? []);
 

@@ -158,18 +158,11 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const {
-    organizations,
-    selectedOrganization,
-    reloadData,
-    reloadPreferences,
-    orgPreferences,
-    orgPreferenceForId,
-    userPreferences,
-  } = useOrganization();
+  const { organizations, selectedOrganization, reloadOrganizations, orgPreferences, orgPreferenceForId } =
+    useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
-  const { user, reloadUser } = useUser();
+  const { user, reloadUser, userPreferences, reloadUserPreferences: reloadPreferences } = useUser();
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
@@ -396,7 +389,7 @@ function AppContent() {
       }
 
       if (orgTz.updated) {
-        reloadData();
+        reloadOrganizations();
       }
 
       if (!userTz.updated && !orgTz.updated) {
@@ -408,7 +401,7 @@ function AppContent() {
       initializeTimeZones();
     }
   }, [
-    reloadData,
+    reloadOrganizations,
     reloadUser,
     selectedOrganization,
     snackbar,
@@ -473,7 +466,7 @@ function AppContent() {
       <>
         <Switch>
           <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-            <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
+            <MyAccount organizations={organizations} edit={true} reloadData={reloadOrganizations} />
           </Route>
           <Route exact path={APP_PATHS.MY_ACCOUNT}>
             <MyAccount organizations={organizations} edit={false} />
@@ -544,7 +537,7 @@ function AppContent() {
                 setDisplayColumnNames={setAccessionsDisplayColumns}
                 hasSeedBanks={selectedOrgHasSeedBanks()}
                 hasSpecies={selectedOrgHasSpecies()}
-                reloadData={reloadData}
+                reloadData={reloadOrganizations}
                 orgScopedPreferences={orgPreferences}
               />
             </Route>
@@ -555,10 +548,10 @@ function AppContent() {
               <Accession2View />
             </Route>
             <Route exact path={APP_PATHS.MONITORING}>
-              <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
+              <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadOrganizations} />
             </Route>
             <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
-              <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadData} />
+              <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadOrganizations} />
             </Route>
             <Route exact path={APP_PATHS.SPECIES}>
               {selectedOrgHasSpecies() ? (
@@ -568,7 +561,7 @@ function AppContent() {
               )}
             </Route>
             <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
-              <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadData} />
+              <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadOrganizations} />
             </Route>
             <Route exact path={APP_PATHS.ORGANIZATION}>
               <Organization />
@@ -655,7 +648,7 @@ function AppContent() {
               <ContactUs />
             </Route>
             <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-              <MyAccount organizations={organizations} edit={true} reloadData={reloadData} />
+              <MyAccount organizations={organizations} edit={true} reloadData={reloadOrganizations} />
             </Route>
             <Route exact path={APP_PATHS.MY_ACCOUNT}>
               <MyAccount organizations={organizations} edit={false} />

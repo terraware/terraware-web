@@ -1,5 +1,5 @@
 import strings from 'src/strings';
-import { useOrganization } from './providers';
+import { useUser } from './providers';
 
 export interface Unit {
   label: string;
@@ -36,7 +36,7 @@ export function weightUnitsV2(unit?: string) {
 }
 
 export function usePreferredWeightUnits() {
-  const { userPreferences } = useOrganization();
+  const { userPreferences } = useUser();
   return weightUnitsV2(userPreferences.preferredWeightSystem as string);
 }
 

@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function PeopleList(): JSX.Element {
-  const { selectedOrganization, reloadData } = useOrganization();
+  const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { user } = useUser();
   const classes = useStyles();
   const theme = useTheme();
@@ -215,8 +215,8 @@ export default function PeopleList(): JSX.Element {
     if (allRemoved) {
       setRemovePeopleModalOpened(false);
       setSelectedPeopleRows([]);
-      if (reloadData) {
-        reloadData();
+      if (reloadOrganizations) {
+        reloadOrganizations();
       }
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     } else {
@@ -244,8 +244,8 @@ export default function PeopleList(): JSX.Element {
       }
       const deleteOrgResponse = await OrganizationService.deleteOrganization(selectedOrganization.id);
       if (allRemoved && deleteOrgResponse.requestSucceeded) {
-        if (reloadData) {
-          reloadData();
+        if (reloadOrganizations) {
+          reloadOrganizations();
         }
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {

@@ -19,7 +19,7 @@ import isEnabled from 'src/features';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
 export default function NurseryView(): JSX.Element {
-  const { selectedOrganization, reloadData } = useOrganization();
+  const { selectedOrganization, reloadOrganizations } = useOrganization();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const snackbar = useSnackbar();
@@ -82,7 +82,7 @@ export default function NurseryView(): JSX.Element {
       : await FacilityService.createFacility(record);
 
     if (response.requestSucceeded) {
-      reloadData();
+      reloadOrganizations();
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
       goToNurseries();
     } else {

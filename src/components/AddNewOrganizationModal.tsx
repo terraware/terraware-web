@@ -22,7 +22,7 @@ export type AddNewOrganizationModalProps = {
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
-  const { reloadData } = useOrganization();
+  const { reloadOrganizations } = useOrganization();
   const history = useHistory();
   const { onCancel, open } = props;
   const snackbar = useSnackbar();
@@ -88,7 +88,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         strings.ORGANIZATION_CREATED_MSG,
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
       );
-      reloadData();
+      reloadOrganizations();
       history.push({ pathname: APP_PATHS.HOME });
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);

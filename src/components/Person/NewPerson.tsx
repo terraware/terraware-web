@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function PersonView(): JSX.Element {
-  const { selectedOrganization, reloadData } = useOrganization();
+  const { selectedOrganization, reloadOrganizations } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
@@ -141,7 +141,7 @@ export default function PersonView(): JSX.Element {
 
     if (successMessage) {
       snackbar.toastSuccess(successMessage);
-      await reloadData();
+      await reloadOrganizations();
       goToViewPerson(userId.toString());
     } else {
       snackbar.toastError();
