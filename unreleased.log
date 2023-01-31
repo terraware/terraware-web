@@ -1,3 +1,4 @@
+3735af1 SW-2747 Move user preferences into user provider (#1119)
 d9ed2a9 SW-2814 Facilty service to search/get/create/update facilities - reused in Nursery and Seedbank views (#1118)
 33b2701 SW-2821 Show localized enums on species list (#1117)
 f713e35 SW-2808 move app/server specific calls into a system service (#1109)
