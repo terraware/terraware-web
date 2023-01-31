@@ -7,7 +7,7 @@ import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
 import { Facility } from 'src/api/types/facilities';
-import { createFacility, updateFacility } from 'src/api/facility/facility';
+import { FacilityService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -77,7 +77,9 @@ export default function NurseryView(): JSX.Element {
       setDescriptionError(strings.REQUIRED_FIELD);
       return;
     }
-    const response = selectedNursery ? await updateFacility({ ...record } as Facility) : await createFacility(record);
+    const response = selectedNursery
+      ? await FacilityService.updateFacility({ ...record } as Facility)
+      : await FacilityService.createFacility(record);
 
     if (response.requestSucceeded) {
       reloadData();

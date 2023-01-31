@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { getAllSeedBanks } from 'src/utils/organization';
+import { FacilityService } from 'src/services';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
 import { Facility } from 'src/api/types/facilities';
@@ -36,7 +36,11 @@ export default function SeedBankDetails(): JSX.Element {
 
   useEffect(() => {
     if (selectedOrganization) {
-      const selectedSeedBank = getAllSeedBanks(selectedOrganization).find((sb) => sb?.id.toString() === seedBankId);
+      const selectedSeedBank = FacilityService.getFacility({
+        organization: selectedOrganization,
+        facilityId: seedBankId,
+        type: 'Seed Bank',
+      });
       if (selectedSeedBank) {
         setSeedBank(selectedSeedBank);
       } else {

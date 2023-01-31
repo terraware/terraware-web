@@ -8,7 +8,7 @@ import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/api/types/facilities';
-import { createFacility, updateFacility } from 'src/api/facility/facility';
+import { FacilityService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -78,7 +78,7 @@ export default function SeedBankView(): JSX.Element {
       return;
     }
     if (selectedSeedBank) {
-      const response = await updateFacility({ ...record } as Facility);
+      const response = await FacilityService.updateFacility({ ...record } as Facility);
       if (response.requestSucceeded) {
         reloadData();
         snackbar.toastSuccess(strings.CHANGES_SAVED);
@@ -86,7 +86,7 @@ export default function SeedBankView(): JSX.Element {
         snackbar.toastError();
       }
     } else {
-      const response = await createFacility(record);
+      const response = await FacilityService.createFacility(record);
       if (response.requestSucceeded) {
         reloadData();
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
