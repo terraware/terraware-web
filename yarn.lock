@@ -1332,7 +1332,7 @@
   dependencies:
     tslib "^2.0.0"
 
-"@dnd-kit/core@^6.0.5":
+"@dnd-kit/core@^6.0.5", "@dnd-kit/core@^6.0.7":
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/@dnd-kit/core/-/core-6.0.7.tgz#eb9bcb2ab5cfba3c5e8d5dc64b61e5e9cc5567dc"
   integrity sha512-qcLBTVTjmLuLqC0RHQ+dFKN5neWmAI56H9xZ+he9WEJEkAvR76YAcz7DSWDJfjErepfG2H3Fkb9lYiX7cPR62g==
@@ -2337,14 +2337,14 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.1.5":
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.1.5.tgz#dd20ea12d942986612e2fdcdd1121190405f62a4"
-  integrity sha512-Fv3WecMpgJeIM2Zr8VmicJNLR4Bgr18hdo7Fooxws+8l10OlICP29lgLq9wOwnx6DIdlTMoiPV7ZZVc3cCHx5A==
+"@terraware/web-components@^2.1.7":
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.1.7.tgz#82a2deec39eea629213db74506dab59da73a56c1"
+  integrity sha512-vhCH6PeYCbogYe0PDNjK0HgzC33IVFcoADsLr8+Bd1Lp29TmWa4ICBryol46jZ3fsdUhwfu5DDk+KB5x2ZgHFg==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
-    "@dnd-kit/core" "^6.0.5"
+    "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^7.0.1"
     "@emotion/react" "^11.10.5"
     "@mui/icons-material" "^5.8.4"
@@ -2360,7 +2360,7 @@
     react-dom "^17.0.2"
     react-responsive "^9.0.2"
     react-sortable-hoc "^2.0.0"
-    sass "^1.35.1"
+    sass "^1.57.1"
     tinycolor2 "^1.5.2"
     web-vitals "^3.0.0"
 
@@ -10379,7 +10379,7 @@ sass-loader@^12.3.0:
     klona "^2.0.4"
     neo-async "^2.6.2"
 
-sass@^1.35.1, sass@^1.38.0:
+sass@^1.38.0, sass@^1.57.1:
   version "1.57.1"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.57.1.tgz#dfafd46eb3ab94817145e8825208ecf7281119b5"
   integrity sha512-O2+LwLS79op7GI0xZ8fqzF7X2m/m8WFfI02dHOdsK5R2ECeS5F62zrwg/relM1rjSLy7Vd/DiMNIvPrQGsA0jw==
