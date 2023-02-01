@@ -346,7 +346,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       return columnsNamesToSearch;
     };
 
-    if (selectedOrganization && loadedStringsForLocale) {
+    if (selectedOrganization) {
       const populateSearchResults = async () => {
         const apiResponse = await search({
           prefix: 'facilities.accessions',
@@ -378,39 +378,35 @@ export default function Database(props: DatabaseProps): JSX.Element {
           setFieldOptions(allValues);
         }
       };
-
-      // If we are loading search results because the locale changed, we need to reset the search
-      // criteria since they might contain localized values from the old locale. In that case, we
-      // need to skip populating the search results based on the old criteria, but we'll be called
-      // again as an effect of the setSearchCriteria() call.
-      if (!searchedLocaleRef.current) {
-        // First rendering pass was before strings were loaded, so no need to reset criteria.
-        searchedLocaleRef.current = loadedStringsForLocale;
+      if (searchCriteria) {
+        populateSearchResults();
       }
+      populateAvailableFieldOptions();
 
-      if (searchedLocaleRef.current === loadedStringsForLocale) {
-        if (searchCriteria) {
-          populateSearchResults();
-        }
-        populateAvailableFieldOptions();
-
-        populateFieldOptions();
-      } else {
-        searchedLocaleRef.current = null;
-        setSearchCriteria({ ...DEFAULT_SEED_SEARCH_FILTERS });
-      }
+      populateFieldOptions();
     }
 
     return () => {
       activeRequests = false;
     };
-  }, [searchCriteria, setSearchCriteria, searchSortOrder, searchColumns, selectedOrganization, loadedStringsForLocale]);
+  }, [searchCriteria, searchSortOrder, searchColumns, selectedOrganization]);
 
   useEffect(() => {
     if (orgScopedPreferences?.accessionsColumns) {
       updateSearchColumns(orgScopedPreferences.accessionsColumns as string[]);
     }
   }, [orgScopedPreferences, updateSearchColumns]);
+
+  useEffect(() => {
+    if (searchedLocaleRef.current && loadedStringsForLocale && searchedLocaleRef.current !== loadedStringsForLocale) {
+      // If we've already done a search with a different locale, throw away search criteria since
+      // they might contain localized values. Copy the default filters so React sees this as a
+      // modification even if the existing search was also using the default.
+      setSearchCriteria({ ...DEFAULT_SEED_SEARCH_FILTERS });
+    }
+
+    searchedLocaleRef.current = loadedStringsForLocale;
+  }, [loadedStringsForLocale, setSearchCriteria]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {
