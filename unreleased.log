@@ -1,3 +1,4 @@
+fe31f07 SW-2851 Allow setting accession QTY to 0 manually (#1124)
 f49f761 SW-2809 Create i18n service to get timezones (#1123)
 2dfe8c5 SW-2819 Fix accession collecting site name spacing (#1121)
 3735af1 SW-2747 Move user preferences into user provider (#1119)
