@@ -2,23 +2,24 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import Select from '../../common/Select/Select';
 import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
 import {
   ChartPalette,
-  TIME_PERIODS,
   getTimePeriodParams,
   HumidityValues,
   getUnit,
   convertEntryTimestamp,
+  timePeriods,
 } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Icon from '../../common/icon/Icon';
+import { Dropdown } from '@terraware/web-components';
+import { useLocalization } from 'src/providers';
 
 declare global {
   interface Window {
@@ -87,6 +88,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   const classes = useStyles({ isMobile, isDesktop });
   const { BMU, defaultTimePeriod, updateTimePeriodPreferences, timeZone } = props;
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
+  const { loadedStringsForLocale } = useLocalization();
 
   useEffect(() => {
     if (defaultTimePeriod) {
@@ -230,7 +232,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
     if (selectedPVBatteryPeriod) {
       getChartData();
     }
-  }, [BMU, selectedPVBatteryPeriod, timeZone]);
+  }, [BMU, loadedStringsForLocale, selectedPVBatteryPeriod, timeZone]);
 
   const onChangePVBatterySelectedPeriod = (newValue: string) => {
     setSelectedPVBatteryPeriod(newValue);
@@ -246,8 +248,8 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
         <p className={classes.graphTitle}>{strings.PV_BATTERY}</p>
       </div>
       <div className={classes.dropDownsContainer}>
-        <Select
-          options={TIME_PERIODS}
+        <Dropdown
+          options={timePeriods()}
           onChange={onChangePVBatterySelectedPeriod}
           selectedValue={selectedPVBatteryPeriod}
           label={strings.TIME_PERIOD}
