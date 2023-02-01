@@ -6,6 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
 import {
   AllFieldValuesMap,
+  DEFAULT_SEED_SEARCH_FILTERS,
   FieldValuesMap,
   filterSelectFields,
   getAllFieldValues,
@@ -51,7 +52,7 @@ import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
-import { useOrganization, useUser } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
@@ -148,6 +149,7 @@ type DatabaseProps = {
 
 export default function Database(props: DatabaseProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { loadedStringsForLocale } = useLocalization();
   const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
@@ -185,6 +187,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsDatabaseSelectedOrgInfo);
   const contentRef = useRef(null);
+  const searchedLocaleRef = useRef<string | null>(loadedStringsForLocale);
 
   /*
    * fieldOptions is a list of records
@@ -343,7 +346,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       return columnsNamesToSearch;
     };
 
-    if (selectedOrganization) {
+    if (selectedOrganization && loadedStringsForLocale) {
       const populateSearchResults = async () => {
         const apiResponse = await search({
           prefix: 'facilities.accessions',
@@ -375,18 +378,33 @@ export default function Database(props: DatabaseProps): JSX.Element {
           setFieldOptions(allValues);
         }
       };
-      if (searchCriteria) {
-        populateSearchResults();
-      }
-      populateAvailableFieldOptions();
 
-      populateFieldOptions();
+      // If we are loading search results because the locale changed, we need to reset the search
+      // criteria since they might contain localized values from the old locale. In that case, we
+      // need to skip populating the search results based on the old criteria, but we'll be called
+      // again as an effect of the setCriteria() call.
+      if (!searchedLocaleRef.current) {
+        // First rendering pass was before strings were loaded, so no need to reset criteria.
+        searchedLocaleRef.current = loadedStringsForLocale;
+      }
+
+      if (searchedLocaleRef.current === loadedStringsForLocale) {
+        if (searchCriteria) {
+          populateSearchResults();
+        }
+        populateAvailableFieldOptions();
+
+        populateFieldOptions();
+      } else {
+        searchedLocaleRef.current = null;
+        setSearchCriteria({ ...DEFAULT_SEED_SEARCH_FILTERS });
+      }
     }
 
     return () => {
       activeRequests = false;
     };
-  }, [searchCriteria, searchSortOrder, searchColumns, selectedOrganization]);
+  }, [searchCriteria, setSearchCriteria, searchSortOrder, searchColumns, selectedOrganization, loadedStringsForLocale]);
 
   useEffect(() => {
     if (orgScopedPreferences?.accessionsColumns) {
