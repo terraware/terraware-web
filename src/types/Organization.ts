@@ -1,10 +1,10 @@
 import { Facility } from 'src/api/types/facilities';
 import strings from 'src/strings';
 
-export type ServerOrganization = {
+export type Organization = {
   id: number;
   name: string;
-  role: AllOrganizationRoles;
+  role: OrganizationRole;
   facilities?: Facility[];
   countryCode?: string;
   countrySubdivisionCode?: string;
@@ -20,13 +20,13 @@ export const HighOrganizationRolesValues = ['Admin', 'Owner'];
 
 // Manager role included here so we don't get type issues with the server response,
 // which could contain a user with a manger role.
-export type AllOrganizationRoles = HighOrganizationRoles | 'Contributor' | 'Manager';
+export type OrganizationRole = HighOrganizationRoles | 'Contributor' | 'Manager';
 
 export interface SelectedOrgInfo {
   selectedFacility?: Facility;
 }
 
-export function roleName(role: AllOrganizationRoles) {
+export function roleName(role: OrganizationRole) {
   switch (role) {
     case 'Admin':
       return strings.ADMIN;
@@ -38,3 +38,8 @@ export function roleName(role: AllOrganizationRoles) {
       return strings.MANAGER;
   }
 }
+
+export type OrganizationRoleInfo = {
+  role: OrganizationRole;
+  totalUsers: number;
+};

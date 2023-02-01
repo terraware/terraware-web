@@ -2,11 +2,11 @@ import { Grid, Typography, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { getOrganizationUsers } from 'src/api/organization/organization';
 import Button from 'src/components/common/button/Button';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
+import { OrganizationUserService } from 'src/services';
 import { OrganizationUser } from 'src/types/User';
 import { makeStyles } from '@mui/styles';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -43,7 +43,7 @@ export default function PersonDetails(): JSX.Element {
 
   useEffect(() => {
     const populatePersonData = async () => {
-      const response = await getOrganizationUsers(selectedOrganization);
+      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
       if (response.requestSucceeded) {
         const selectedUser = response.users.find((user) => user.id.toString() === personId);
         if (selectedUser) {

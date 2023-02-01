@@ -37,22 +37,22 @@ export type SpeciesProblemElement = {
   suggestedValue?: string;
 };
 
-export function growthForms() {
+export function growthForms(useLocalizedValues = false) {
   return [
-    { label: strings.TREE, value: 'Tree' },
-    { label: strings.SHRUB, value: 'Shrub' },
-    { label: strings.FORB, value: 'Forb' },
-    { label: strings.GRAMINOID, value: 'Graminoid' },
-    { label: strings.FERN, value: 'Fern' },
+    { label: strings.TREE, value: useLocalizedValues ? strings.TREE : 'Tree' },
+    { label: strings.SHRUB, value: useLocalizedValues ? strings.SHRUB : 'Shrub' },
+    { label: strings.FORB, value: useLocalizedValues ? strings.FORB : 'Forb' },
+    { label: strings.GRAMINOID, value: useLocalizedValues ? strings.GRAMINOID : 'Graminoid' },
+    { label: strings.FERN, value: useLocalizedValues ? strings.FERN : 'Fern' },
   ];
 }
 
-export function storageBehaviors() {
+export function storageBehaviors(useLocalizedValues = false) {
   return [
-    { label: strings.ORTHODOX, value: 'Orthodox' },
-    { label: strings.RECALCITRANT, value: 'Recalcitrant' },
-    { label: strings.INTERMEDIATE, value: 'Intermediate' },
-    { label: strings.UNKNOWN, value: 'Unknown' },
+    { label: strings.ORTHODOX, value: useLocalizedValues ? strings.ORTHODOX : 'Orthodox' },
+    { label: strings.RECALCITRANT, value: useLocalizedValues ? strings.RECALCITRANT : 'Recalcitrant' },
+    { label: strings.INTERMEDIATE, value: useLocalizedValues ? strings.INTERMEDIATE : 'Intermediate' },
+    { label: strings.UNKNOWN, value: useLocalizedValues ? strings.UNKNOWN : 'Unknown' },
   ];
 }
 
@@ -93,6 +93,49 @@ export function ecosystemTypes() {
     { label: strings.ECOSYSTEM_TUNDRA, value: 'Tundra' },
   ];
 }
+
+export function getGrowthFormString(species: Species) {
+  if (species.growthForm) {
+    switch (species.growthForm) {
+      case 'Fern':
+        return strings.FERN;
+      case 'Forb':
+        return strings.FORB;
+      case 'Graminoid':
+        return strings.GRAMINOID;
+      case 'Shrub':
+        return strings.SHRUB;
+      case 'Tree':
+        return strings.TREE;
+    }
+  } else {
+    return undefined;
+  }
+}
+
+export function getSeedStorageBehaviorString(species: Species) {
+  if (species.seedStorageBehavior) {
+    switch (species.seedStorageBehavior) {
+      case 'Intermediate':
+        return strings.INTERMEDIATE;
+      case 'Orthodox':
+        return strings.ORTHODOX;
+      case 'Recalcitrant':
+        return strings.RECALCITRANT;
+      case 'Unknown':
+        return strings.UNKNOWN;
+    }
+  } else {
+    return undefined;
+  }
+}
+
+export const getEcosystemTypesString = (species: Species) => {
+  const result =
+    species.ecosystemTypes?.map((et) => ecosystemTypes().find((obj) => obj.label === et)?.value ?? '') ?? [];
+
+  return result.filter((str) => str !== '');
+};
 
 export type SpeciesWithScientificName = Species & {
   scientificName?: string;

@@ -6,7 +6,7 @@ import { useHistory } from 'react-router';
 import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import PopoverMenu from './common/PopoverMenu';
 import { useOrganization } from 'src/providers/hooks';
@@ -35,8 +35,8 @@ export default function OrganizationsDropdown(): JSX.Element {
     setAnchorEl(event.currentTarget);
   };
 
-  const selectOrganization = (newlySelectedOrg: ServerOrganization) => {
-    setSelectedOrganization((currentlySelectedOrg: ServerOrganization | undefined) => {
+  const selectOrganization = (newlySelectedOrg: Organization) => {
+    setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
       if (newlySelectedOrg.id !== currentlySelectedOrg?.id) {
         history.push({ pathname: APP_PATHS.HOME });
       }

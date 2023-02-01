@@ -1,4 +1,4 @@
-import { AllOrganizationRoles } from './Organization';
+import { OrganizationRole } from './Organization';
 
 export type User = {
   id: number;
@@ -15,6 +15,6 @@ export type OrganizationUser = {
   lastName?: string;
   email: string;
   id: number;
-  role: AllOrganizationRoles;
+  role: OrganizationRole;
   addedTime?: string;
 };

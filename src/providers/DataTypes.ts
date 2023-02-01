@@ -1,6 +1,6 @@
 import React from 'react';
 import { User } from 'src/types/User';
-import { ServerOrganization } from '../types/Organization';
+import { Organization } from '../types/Organization';
 import { TimeZoneDescription } from '../types/TimeZones';
 
 export type PreferencesType = { [key: string]: unknown };
@@ -12,9 +12,9 @@ export type ProvidedUserData = {
 };
 
 export type ProvidedOrganizationData = {
-  selectedOrganization: ServerOrganization;
-  setSelectedOrganization: React.Dispatch<React.SetStateAction<ServerOrganization | undefined>>;
-  organizations: ServerOrganization[];
+  selectedOrganization: Organization;
+  setSelectedOrganization: React.Dispatch<React.SetStateAction<Organization | undefined>>;
+  organizations: Organization[];
   userPreferences: PreferencesType;
   orgPreferences: PreferencesType;
   reloadData: (selectedOrgId?: number) => void;

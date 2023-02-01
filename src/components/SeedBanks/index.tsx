@@ -5,7 +5,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import TfMain from '../common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { Facility, FacilityType } from 'src/api/types/facilities';
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type SeedBanksListProps = {
-  organization: ServerOrganization;
+  organization: Organization;
 };
 
 export default function SeedBanksList({ organization }: SeedBanksListProps): JSX.Element {

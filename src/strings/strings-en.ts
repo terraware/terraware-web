@@ -110,6 +110,7 @@ export const strings = {
     'You have withdrawn seeds by both count and weight. As a result, the app has calculated the amount of seeds withdrawn for you by weight.',
   BOUNDARIES_AND_PLOTS: 'Boundaries and Plots',
   CANCEL_DATA_CHECK: 'Cancel Data Check',
+  CHANGE_DEFAULT_WEIGHT_SYSTEM: 'You can change your default weight system from {0}',
   CANCEL_IMPORT: 'Cancel Import',
   CANCEL: 'Cancel',
   CANNOT_REMOVE_DELETE_MSG:
@@ -833,6 +834,9 @@ export const strings = {
   SPECIES_ERROR_SEARCH: "Couldn't load species list for search",
   SPECIES_IMPORT_COMPLETE: 'Species data import complete!',
   SPECIES_NAME: 'Species Name',
+  SPECIES_PROBLEM_NAME_IS_SYNONYM: 'Name Is Synonym',
+  SPECIES_PROBLEM_NAME_MISSPELLED: 'Name Misspelled',
+  SPECIES_PROBLEM_NAME_NOT_FOUND: 'Name Not Found',
   SPECIES_REQUIRED: 'Species *',
   SPECIES_SELECTED: 'Species Selected',
   SPECIES: 'Species',

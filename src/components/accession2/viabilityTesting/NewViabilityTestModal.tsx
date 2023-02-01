@@ -9,7 +9,7 @@ import { Dropdown } from '@terraware/web-components';
 import { seedTypes, testMethods, TEST_TYPES, treatments } from 'src/types/Accession';
 import { OrganizationUser, User } from 'src/types/User';
 import { useEffect, useState } from 'react';
-import { getOrganizationUsers } from 'src/api/organization/organization';
+import { OrganizationUserService } from 'src/services';
 import { getSeedBank, isContributor } from 'src/utils/organization';
 import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -92,7 +92,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   useEffect(() => {
     const getOrgUsers = async () => {
-      const response = await getOrganizationUsers(selectedOrganization);
+      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
       if (response.requestSucceeded) {
         setUsers(response.users);
       }

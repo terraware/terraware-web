@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { ProvidedUserData, ProvidedOrganizationData, ProvidedLocalizationData } from './DataTypes';
-import { ServerOrganization } from '../types/Organization';
+import { Organization } from '../types/Organization';
 
 export const UserContext = createContext<ProvidedUserData>({
   reloadUser: () => {
@@ -10,7 +10,7 @@ export const UserContext = createContext<ProvidedUserData>({
   bootstrapped: false,
 });
 
-export const defaultSelectedOrg: ServerOrganization = {
+export const defaultSelectedOrg: Organization = {
   id: -1,
   name: '',
   role: 'Contributor',

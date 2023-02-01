@@ -1,5 +1,5 @@
 /* tslint:disable:no-console */
-import { getOrganizations } from './organization';
+import OrganizationService from './OrganizationService';
 import axios from 'axios';
 
 jest.mock('axios');
@@ -22,9 +22,10 @@ test('getOrganizations() returns all data when no errors thrown', async () => {
       return Promise.resolve(SUCCESSFUL_GET_ORGANIZATIONS_RESPONSE);
     }
   });
-  await expect(getOrganizations()).resolves.toEqual({
+  const { organizations, requestSucceeded } = await OrganizationService.getOrganizations();
+  expect({ organizations, requestSucceeded }).toEqual({
     organizations: ORGANIZATIONS,
-    error: null,
+    requestSucceeded: true,
   });
 });
 
@@ -34,8 +35,10 @@ test('getOrganizations() fails', async () => {
       return Promise.reject(FAILURE_RESPONSE);
     }
   });
-  await expect(getOrganizations()).resolves.toEqual({
+  const { organizations, error, requestSucceeded } = await OrganizationService.getOrganizations();
+  expect({ organizations, error, requestSucceeded }).toEqual({
     organizations: [],
     error: 'GenericError',
+    requestSucceeded: false,
   });
 });

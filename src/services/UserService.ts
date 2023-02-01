@@ -13,9 +13,11 @@ import { InitializedUnits } from 'src/units';
 /**
  * Types exported from service
  */
-export type UserResponse = Response & {
+export type UserData = {
   user?: User;
 };
+
+export type UserResponse = Response & UserData;
 
 export type UpdateOptions = {
   skipAcknowledgeTimeZone?: boolean;
@@ -33,23 +35,22 @@ const httpCurrentUser = HttpService.root(CURRENT_USER_ENDPOINT);
  * get current/active user
  */
 const getUser = async (): Promise<UserResponse> => {
-  const response: UserResponse = await httpCurrentUser.get();
+  const response: UserResponse = await httpCurrentUser.get<UserServerResponse, UserData>({}, (data) => ({
+    user: data?.user
+      ? {
+          id: data.user.id,
+          email: data.user.email,
+          firstName: data.user.firstName,
+          lastName: data.user.lastName,
+          emailNotificationsEnabled: data.user.emailNotificationsEnabled,
+          timeZone: data.user.timeZone,
+          locale: data.user.locale,
+        }
+      : undefined,
+  }));
 
-  if (response.requestSucceeded) {
-    const data: UserServerResponse = response.data;
-    if (data?.user) {
-      response.user = {
-        id: data.user.id,
-        email: data.user.email,
-        firstName: data.user.firstName,
-        lastName: data.user.lastName,
-        emailNotificationsEnabled: data.user.emailNotificationsEnabled,
-        timeZone: data.user.timeZone,
-        locale: data.user.locale,
-      };
-      // TODO: remove after user is in redux
-      CachedUserService.setUser(response.user);
-    }
+  if (response.user) {
+    CachedUserService.setUser(response.user);
   }
 
   return response;

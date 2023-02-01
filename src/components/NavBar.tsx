@@ -6,7 +6,7 @@ import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { AllOrganizationRoles } from 'src/types/Organization';
+import { OrganizationRole } from 'src/types/Organization';
 import { hasNurseryWithdrawals } from 'src/api/tracking/withdrawals';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import NavFooter from './common/Navbar/NavFooter';
@@ -25,7 +25,7 @@ export default function NavBar({
   withdrawalCreated,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
-  const [role, setRole] = useState<AllOrganizationRoles>();
+  const [role, setRole] = useState<OrganizationRole>();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();

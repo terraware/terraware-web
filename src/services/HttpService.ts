@@ -1,4 +1,4 @@
-import axios from './axios';
+import axios, { AxiosResponse } from './axios';
 
 /**
  * Bare bones http service over an underlying implementation.
@@ -12,6 +12,9 @@ export type Replacements = Record<string, string>;
 /**
  * Request types
  */
+
+export type ServerData = { status?: 'ok' | 'error' };
+
 export type Request = {
   url?: string; // override url to use
   urlReplacements?: Replacements;
@@ -52,30 +55,34 @@ const addError = (source: any, destination: any) => {
 /**
  * Utility to process the response to an http request from the server
  */
-const handleRequest = async (httpPromise: Promise<object>): Promise<Response> => {
+async function handleRequest<I extends ServerData, O>(
+  httpPromise: Promise<AxiosResponse<I>>,
+  transform: (i?: I) => O
+): Promise<O & Response> {
   const response: Response = {
     requestSucceeded: false,
   };
 
   try {
-    const serverResponse: any = await httpPromise;
+    const serverResponse: AxiosResponse<I> = await httpPromise;
     if (serverResponse.status) {
       response.statusCode = serverResponse.status;
     }
-    const data = serverResponse.data;
+    const data: I = serverResponse.data;
     if (data?.status === 'error') {
       addError(data, response);
     } else {
       response.requestSucceeded = true;
-      response.data = data;
+      return { ...response, ...transform(data) };
     }
   } catch (e: any) {
     response.e = e;
     addError(e?.response?.data || {}, response);
+    response.statusCode = e?.response?.status;
   }
 
-  return response;
-};
+  return { ...response, ...transform() };
+}
 
 /**
  * Utility to replace placeholders with values in the url
@@ -91,37 +98,33 @@ const replace = (url: string, request: Request) => {
  * Service with bare bones http function calls
  */
 function RequestsHandler(url: string = '') {
-  const get = async (request: GetRequest = {}): Promise<Response> => {
+  async function get<I extends ServerData, O>(request: GetRequest, transform: (i?: I) => O): Promise<O & Response> {
     const { params, headers } = request;
 
-    return await handleRequest(axios.get(replace(url, request), { params, headers }));
-  };
+    return await handleRequest(axios.get<I>(replace(url, request), { params, headers }), transform);
+  }
 
   const post = async (request: PostRequest = {}): Promise<Response> => {
     const { entity, params, headers } = request;
 
-    return await handleRequest(axios.post(replace(url, request), entity, { params, headers }));
+    return await handleRequest(axios.post(replace(url, request), entity, { params, headers }), (data) => ({ data }));
   };
 
   const put = async (request: PutRequest = {}): Promise<Response> => {
     const { entity, params, headers } = request;
 
-    return await handleRequest(axios.put(replace(url, request), entity, { params, headers }));
-  };
-
-  const patch = async (request: PatchRequest = {}): Promise<Response> => {
-    const { entity, params, headers } = request;
-
-    return await handleRequest(axios.patch(replace(url, request), entity, { params, headers }));
+    return await handleRequest(axios.put(replace(url, request), entity, { params, headers }), (data) => ({ data }));
   };
 
   const _delete = async (request: DeleteRequest = {}): Promise<Response> => {
     const { entity, params, headers } = request;
 
-    return await handleRequest(axios.delete(replace(url, request), { params, headers, data: entity }));
+    return await handleRequest(axios.delete(replace(url, request), { params, headers, data: entity }), (data) => ({
+      data,
+    }));
   };
 
-  return { get, post, put, patch, delete: _delete };
+  return { get, post, put, delete: _delete };
 }
 
 /**

@@ -1,8 +1,8 @@
 import { Facility, FacilityType } from 'src/api/types/facilities';
-import { HighOrganizationRolesValues, ServerOrganization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, Organization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 
-export const getFacilitiesByType = (organization: ServerOrganization, type: FacilityType) => {
+export const getFacilitiesByType = (organization: Organization, type: FacilityType) => {
   let facilitiesByType: Facility[] = [];
   if (organization && organization.facilities) {
     facilitiesByType = organization?.facilities?.filter((facility) => facility.type === type);
@@ -10,27 +10,27 @@ export const getFacilitiesByType = (organization: ServerOrganization, type: Faci
   return facilitiesByType;
 };
 
-export const getAllSeedBanks = (organization: ServerOrganization): (Facility | undefined)[] => {
+export const getAllSeedBanks = (organization: Organization): (Facility | undefined)[] => {
   return getFacilitiesByType(organization, 'Seed Bank');
 };
 
-export const getSeedBank = (organization: ServerOrganization, facilityId: number): Facility | undefined => {
+export const getSeedBank = (organization: Organization, facilityId: number): Facility | undefined => {
   return getAllSeedBanks(organization).find((sb) => sb?.id === facilityId);
 };
 
-export const isAdmin = (organization: ServerOrganization | undefined) => {
+export const isAdmin = (organization: Organization | undefined) => {
   return HighOrganizationRolesValues.includes(organization?.role || '');
 };
 
-export const isContributor = (roleHolder: ServerOrganization | OrganizationUser | undefined) => {
+export const isContributor = (roleHolder: Organization | OrganizationUser | undefined) => {
   return roleHolder?.role === 'Contributor';
 };
 
-export const getAllNurseries = (organization: ServerOrganization): Facility[] => {
+export const getAllNurseries = (organization: Organization): Facility[] => {
   return getFacilitiesByType(organization, 'Nursery');
 };
 
-export const getNurseryById = (organization: ServerOrganization, id: number): Facility => {
+export const getNurseryById = (organization: Organization, id: number): Facility => {
   const allNurseries = getAllNurseries(organization);
   const found = allNurseries.filter((nurs) => nurs.id.toString() === id.toString());
   return found[0];

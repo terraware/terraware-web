@@ -1,23 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { updateOrganizationUser } from 'src/api/user/user';
-import { PreferencesService, UserService } from 'src/services';
+import { OrganizationUserService, OrganizationService, PreferencesService, UserService } from 'src/services';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { roleName, ServerOrganization } from 'src/types/Organization';
+import { roleName, Organization } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
 import TextField from '../common/Textfield/Textfield';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
-import { getOrganizationUsers, leaveOrganization, listOrganizationRoles } from 'src/api/organization/organization';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
 import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
 import DeleteOrgDialog from './DeleteOrgModal';
-import { deleteOrganization } from '../../api/organization/organization';
 import Checkbox from '../common/Checkbox';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -35,7 +32,7 @@ import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 
 type MyAccountProps = {
-  organizations?: ServerOrganization[];
+  organizations?: Organization[];
   edit: boolean;
   reloadData?: () => void;
 };
@@ -52,7 +49,7 @@ export default function MyAccount(props: MyAccountProps): JSX.Element | null {
 
 type MyAccountContentProps = {
   user: User;
-  organizations?: ServerOrganization[];
+  organizations?: Organization[];
   edit: boolean;
   reloadUser: () => void;
   reloadData?: () => void;
@@ -62,13 +59,13 @@ type MyAccountContentProps = {
  * Details of membership in an organization, with an additional property for the localized name
  * of the user's role.
  */
-type PersonOrganization = ServerOrganization & { roleName: string };
+type PersonOrganization = Organization & { roleName: string };
 
-function addRoleName(organization: ServerOrganization): PersonOrganization {
+function addRoleName(organization: Organization): PersonOrganization {
   return { ...organization, roleName: roleName(organization.role) };
 }
 
-function addRoleNames(organizations: ServerOrganization[]): PersonOrganization[] {
+function addRoleNames(organizations: Organization[]): PersonOrganization[] {
   return organizations.map(addRoleName);
 }
 
@@ -85,7 +82,7 @@ const MyAccountContent = ({
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
   const history = useHistory();
   const [record, setRecord, onChange] = useForm<User>(user);
-  const [removedOrg, setRemovedOrg] = useState<ServerOrganization>();
+  const [removedOrg, setRemovedOrg] = useState<Organization>();
   const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
   const [assignNewOwnerModalOpened, setAssignNewOwnerModalOpened] = useState(false);
   const [cannotRemoveOrgModalOpened, setCannotRemoveOrgModalOpened] = useState(false);
@@ -130,7 +127,7 @@ const MyAccountContent = ({
   useEffect(() => {
     const populatePeople = async () => {
       if (removedOrg) {
-        const response = await getOrganizationUsers(removedOrg);
+        const response = await OrganizationUserService.getOrganizationUsers(removedOrg.id);
         if (response.requestSucceeded) {
           const otherUsers = response.users.filter((orgUser) => orgUser.id !== user.id);
           setOrgPeople(otherUsers);
@@ -171,7 +168,7 @@ const MyAccountContent = ({
         setAssignNewOwnerModalOpened(false);
         setLeaveOrganizationModalOpened(true);
       } else if (removedOrg.totalUsers > 1) {
-        const organizationRoles = listOrganizationRoles(removedOrg.id);
+        const organizationRoles = OrganizationService.getOrganizationRoles(removedOrg.id);
         const owners = (await organizationRoles).roles?.find((role) => role.role === 'Owner');
         if (owners?.totalUsers === 1) {
           setAssignNewOwnerModalOpened(true);
@@ -217,10 +214,14 @@ const MyAccountContent = ({
     if (removedOrg) {
       let assignNewOwnerResponse;
       if (newOwner) {
-        assignNewOwnerResponse = await updateOrganizationUser(newOwner.id, removedOrg.id, 'Owner');
+        assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(
+          removedOrg.id,
+          newOwner.id,
+          'Owner'
+        );
       }
       if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
-        leaveOrgResponse = await leaveOrganization(removedOrg.id, user.id);
+        leaveOrgResponse = await OrganizationUserService.deleteOrganizationUser(removedOrg.id, user.id);
       }
     }
     if (updateUserResponse.requestSucceeded && leaveOrgResponse.requestSucceeded) {
@@ -238,7 +239,7 @@ const MyAccountContent = ({
 
   const deleteOrgHandler = async () => {
     if (removedOrg) {
-      const deleterOrgReponse = await deleteOrganization(removedOrg.id);
+      const deleterOrgReponse = await OrganizationService.deleteOrganization(removedOrg.id);
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded && deleterOrgReponse.requestSucceeded) {
         if (reloadData) {

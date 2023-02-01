@@ -6,6 +6,7 @@ import { searchCountries } from 'src/api/country/country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Dropdown } from '@terraware/web-components';
+import { useLocalization } from '../../providers';
 
 type RegionSelectorProps = {
   selectedCountryCode?: string;
@@ -28,17 +29,20 @@ export default function RegionSelector({
 }: RegionSelectorProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const { loadedStringsForLocale } = useLocalization();
   const [countries, setCountries] = useState<Country[]>();
 
   useEffect(() => {
-    const populateCountries = async () => {
-      const response = await searchCountries();
-      if (response) {
-        setCountries(response);
-      }
-    };
-    populateCountries();
-  }, []);
+    if (loadedStringsForLocale) {
+      const populateCountries = async () => {
+        const response = await searchCountries();
+        if (response) {
+          setCountries(response);
+        }
+      };
+      populateCountries();
+    }
+  }, [loadedStringsForLocale]);
 
   const onChangeCountry = (newValue: string) => {
     const found = countries?.find((country) => country.code.toString() === newValue);

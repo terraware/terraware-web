@@ -19,7 +19,7 @@ import { useHistory } from 'react-router-dom';
 import hexRgb from 'hex-rgb';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ServerOrganization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import Icon from './common/icon/Icon';
 import useEnvironment from 'src/utils/useEnvironment';
@@ -141,8 +141,8 @@ export default function SmallDeviceUserMenu({
     setNewOrganizationModalOpened(false);
   };
 
-  const selectOrganization = (newlySelectedOrg: ServerOrganization) => {
-    setSelectedOrganization((currentlySelectedOrg: ServerOrganization | undefined) => {
+  const selectOrganization = (newlySelectedOrg: Organization) => {
+    setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
       if (newlySelectedOrg.id !== currentlySelectedOrg?.id) {
         history.push({ pathname: APP_PATHS.HOME });
       }

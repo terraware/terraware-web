@@ -9,6 +9,7 @@ import { searchCountries } from 'src/api/country/country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { Country } from 'src/types/Country';
 import AddLink from 'src/components/common/AddLink';
+import { useLocalization } from '../../../providers';
 
 type Accession2AddressProps = {
   record: AccessionPostRequestBody;
@@ -22,18 +23,21 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
   const [countries, setCountries] = useState<Country[]>();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const { loadedStringsForLocale } = useLocalization();
   const [temporalCountryValue, setTemporalCountryValue] = useState('');
   const [temporalSubValue, setTemporalSubValue] = useState('');
 
   useEffect(() => {
-    const populateCountries = async () => {
-      const response = await searchCountries();
-      if (response) {
-        setCountries(response);
-      }
-    };
-    populateCountries();
-  }, []);
+    if (loadedStringsForLocale) {
+      const populateCountries = async () => {
+        const response = await searchCountries();
+        if (response) {
+          setCountries(response);
+        }
+      };
+      populateCountries();
+    }
+  }, [loadedStringsForLocale]);
 
   const gridSize = () => (isMobile ? 12 : 6);
 

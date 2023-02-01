@@ -1,9 +1,9 @@
 import React from 'react';
-import { ServerOrganization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import { getAllNurseries } from 'src/utils/organization';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
 
-export const getNurseryName = (facilityId: number, organization: ServerOrganization) => {
+export const getNurseryName = (facilityId: number, organization: Organization) => {
   const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
   if (found) {
     return found.name;

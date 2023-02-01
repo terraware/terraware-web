@@ -2,14 +2,21 @@ import { Box, Container, Grid, IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { deleteSpecies } from 'src/api/species/species';
+import { deleteSpecies, getSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import speciesAtom from 'src/state/species';
 import strings from 'src/strings';
-import { EcosystemType, Species, SpeciesProblemElement } from 'src/types/Species';
+import {
+  EcosystemType,
+  getEcosystemTypesString,
+  getGrowthFormString,
+  getSeedStorageBehaviorString,
+  Species,
+  SpeciesProblemElement,
+} from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
@@ -111,13 +118,18 @@ export type SpeciesFiltersType = {
   endangered?: boolean;
 };
 
-type SpeciesCS = Species & { conservationStatus?: string };
+type SpeciesSearchResultRow = Omit<Species, 'growthForm' | 'seedStorageBehavior' | 'ecosystemTypes'> & {
+  conservationStatus?: string;
+  growthForm?: string;
+  seedStorageBehavior?: string;
+  ecosystemTypes?: string[];
+};
 
 export default function SpeciesList({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
-  const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<Species[]>([]);
+  const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<SpeciesSearchResultRow[]>([]);
   const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
@@ -126,10 +138,10 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const [speciesState, setSpeciesState] = useRecoilState(speciesAtom);
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
-  const [results, setResults] = useState<Species[]>();
+  const [results, setResults] = useState<SpeciesSearchResultRow[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
   const contentRef = useRef(null);
-  const loadedStringsForLocale = useLocalization().loadedStringsForLocale;
+  const { loadedStringsForLocale } = useLocalization();
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
   const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
@@ -154,6 +166,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       return '';
     }
   };
+
   const columns: TableColumnType[] = React.useMemo(() => {
     // No-op to make lint happy so it doesn't think the dependency is unused.
     if (!loadedStringsForLocale) {
@@ -376,9 +389,15 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
       const getSpeciesListWithCS = () => {
-        const speciesListWithCS: SpeciesCS[] = [];
+        const speciesListWithCS: SpeciesSearchResultRow[] = [];
         species.forEach((sp) => {
-          speciesListWithCS.push({ ...sp, conservationStatus: getConservationStatusString(sp) });
+          speciesListWithCS.push({
+            ...sp,
+            conservationStatus: getConservationStatusString(sp),
+            growthForm: getGrowthFormString(sp),
+            seedStorageBehavior: getSeedStorageBehaviorString(sp),
+            ecosystemTypes: getEcosystemTypesString(sp),
+          });
         });
         return speciesListWithCS;
       };
@@ -390,7 +409,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         setRequestId('searchSpecies', requestId);
         const searchResults = await search(params);
         if (getRequestId('searchSpecies') === requestId) {
-          const speciesResults: SpeciesCS[] = [];
+          const speciesResults: SpeciesSearchResultRow[] = [];
           searchResults?.forEach((result) => {
             speciesResults.push({
               id: result.id as number,
@@ -416,12 +435,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   );
 
   // When the user switches locales, we need to update the state value that contains the list of
-  // column definitions.
+  // column definitions as well as reset the search filters.
   useEffect(() => {
     if (loadedStringsForLocale) {
+      setRecord({});
       setSelectedColumns(columns);
     }
-  }, [columns, setSelectedColumns, loadedStringsForLocale]);
+  }, [columns, setRecord, setSelectedColumns, loadedStringsForLocale]);
 
   useEffect(() => {
     if (speciesState?.checkData) {
@@ -443,6 +463,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       snackbar.toastSuccess(snackbarMessage);
     }
   };
+
   const onNewSpecies = () => {
     setSelectedSpecies(undefined);
     setEditSpeciesModalOpen(true);
@@ -452,14 +473,18 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     snackbar.toastError(snackbarMessage);
   };
 
-  const OnEditSpecies = () => {
-    setSelectedSpecies(selectedSpeciesRows[0]);
-    setEditSpeciesModalOpen(true);
+  const openEditSpeciesModal = async (speciesId: number) => {
+    const speciesResponse = await getSpecies(speciesId, selectedOrganization.id.toString());
+    if (speciesResponse.requestSucceeded) {
+      setSelectedSpecies(speciesResponse.species);
+      setEditSpeciesModalOpen(true);
+    } else {
+      setErrorSnackbar(strings.GENERIC_ERROR);
+    }
   };
 
-  const selectAndEditSpecies = (value: Species) => {
-    setSelectedSpeciesRows([value]);
-    setEditSpeciesModalOpen(true);
+  const OnEditSpecies = () => {
+    openEditSpeciesModal(selectedSpeciesRows[0].id);
   };
 
   const OnDeleteSpecies = () => {
@@ -747,7 +772,6 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
                   setSelectedRows={userCanEdit ? setSelectedSpeciesRows : undefined}
                   showTopBar={true}
                   Renderer={SpeciesCellRenderer}
-                  onSelect={userCanEdit ? selectAndEditSpecies : undefined}
                   controlledOnSelect={true}
                   reloadData={reloadDataProblemsHandler}
                   topBarButtons={
