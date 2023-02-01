@@ -24,7 +24,7 @@ import TextField from '../common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
 import { search, SearchNodePayload } from 'src/api/search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { useUser, useOrganization } from '../../providers/hooks';
+import { useUser, useOrganization, useLocalization } from '../../providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -74,6 +74,7 @@ export default function PeopleList(): JSX.Element {
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
+  const { loadedStringsForLocale } = useLocalization();
   const columns: TableColumnType[] = [
     { key: 'email', name: strings.EMAIL, type: 'string' },
     { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
@@ -138,8 +139,11 @@ export default function PeopleList(): JSX.Element {
         setResults(usersResults);
       }
     };
-    refreshSearch();
-  }, [debouncedSearchTerm, selectedOrganization]);
+
+    if (loadedStringsForLocale) {
+      refreshSearch();
+    }
+  }, [debouncedSearchTerm, selectedOrganization, loadedStringsForLocale]);
 
   const goToNewPerson = () => {
     const newPersonLocation = {
