@@ -63,7 +63,7 @@ export function conservationStatuses() {
   ];
 }
 
-export function ecosystemTypes() {
+export function ecosystemTypes(): { label: string; value: EcosystemType }[] {
   return [
     { label: strings.ECOSYSTEM_BOREAL_FOREST_TAIGA, value: 'Boreal forests/Taiga' },
     { label: strings.ECOSYSTEM_DESERT_XERIC_SHRUBLAND, value: 'Deserts and xeric shrublands' },

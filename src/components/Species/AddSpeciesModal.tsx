@@ -368,10 +368,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               onChange('ecosystemTypes', selectedTypes);
             }}
             onRemove={(type: EcosystemType) => {
-              const selectedTypes = record.ecosystemTypes ?? [];
-              const index = selectedTypes.findIndex((x) => x === type);
-              selectedTypes.splice(index, 1);
-              onChange('ecosystemTypes', selectedTypes);
+              onChange('ecosystemTypes', record.ecosystemTypes?.filter((et) => et !== type) ?? []);
             }}
             options={new Map(ecosystemTypes().map((type) => [type.value as EcosystemType, type.label]))}
             valueRenderer={(typeVal: string) => typeVal}
