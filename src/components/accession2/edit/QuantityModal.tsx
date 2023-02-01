@@ -174,7 +174,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
               value={
                 record.remainingQuantity?.units === 'Seeds'
                   ? record.remainingQuantity?.quantity.toString()
-                  : record.estimatedCount
+                  : record.estimatedCount?.toString()
               }
               errorText={
                 quantityError
