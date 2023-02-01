@@ -382,7 +382,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       // If we are loading search results because the locale changed, we need to reset the search
       // criteria since they might contain localized values from the old locale. In that case, we
       // need to skip populating the search results based on the old criteria, but we'll be called
-      // again as an effect of the setCriteria() call.
+      // again as an effect of the setSearchCriteria() call.
       if (!searchedLocaleRef.current) {
         // First rendering pass was before strings were loaded, so no need to reset criteria.
         searchedLocaleRef.current = loadedStringsForLocale;
