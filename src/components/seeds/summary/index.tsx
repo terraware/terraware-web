@@ -2,12 +2,10 @@ import { Container, Grid, CircularProgress, Box, Typography, Theme, useTheme } f
 import { makeStyles } from '@mui/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
 import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
 import TfMain from 'src/components/common/TfMain';
 import MainPaper from 'src/components/MainPaper';
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
-import { seedsSummarySelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import PageHeader from '../PageHeader';
 import SummaryPaper from './SummaryPaper';
@@ -64,15 +62,11 @@ export default function SeedSummary(): JSX.Element {
   const [summary, setSummary] = useState<GetSummaryResponse>();
   const [isEmptyState, setIsEmptyState] = useState<boolean>(false);
   const errorOccurred = summary ? summary.errorOccurred : false;
-  const [, setSelectedOrgInfo] = useRecoilState(seedsSummarySelectedOrgInfo);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
   useEffect(() => {
     if (selectedOrganization) {
-      const seedbankFacility =
-        selectedOrganization && selectedOrganization.facilities?.find((facility) => facility.name === 'Seed Bank');
-
       const populateSummary = async () => {
         const response = await getSummary(selectedOrganization.id);
         if (!response.value?.activeAccessions) {
@@ -91,13 +85,9 @@ export default function SeedSummary(): JSX.Element {
             // Clear an existing interval when the facilityId changes
             clearInterval(currInterval);
           }
-          return seedbankFacility?.id ? setInterval(populateSummary, API_PULL_INTERVAL) : undefined;
+          return setInterval(populateSummary, API_PULL_INTERVAL);
         });
       }
-
-      setSelectedOrgInfo({
-        selectedFacility: seedbankFacility,
-      });
     }
 
     // Clear interval on exit
@@ -109,7 +99,7 @@ export default function SeedSummary(): JSX.Element {
         return undefined;
       });
     };
-  }, [selectedOrganization, setSelectedOrgInfo]);
+  }, [selectedOrganization]);
 
   const cardGridSize = () => {
     if (isMobile) {

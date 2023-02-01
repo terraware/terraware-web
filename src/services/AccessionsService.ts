@@ -1,5 +1,7 @@
+import Coordinates from 'coordinate-parser';
 import { paths } from 'src/api/types/generated-schema';
-import { Accession } from 'src/types/Accession';
+import { Geolocation } from 'src/api/types/accessions';
+import { Accession, ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
 import HttpService, { Response } from './HttpService';
 import SearchService, {
   SearchCriteria,
@@ -144,6 +146,46 @@ const searchAccessions = async ({
 };
 
 /**
+ * Get allowed transition-to states from current state
+ */
+const getTransitionToStates = (from: AccessionState): AccessionState[] => {
+  switch (from) {
+    case 'Awaiting Check-In': {
+      return ['Awaiting Processing', 'Processing', 'Drying', 'In Storage', 'Used Up'];
+    }
+    case 'Awaiting Processing':
+    case 'Processing':
+    case 'Drying':
+    case 'In Storage': {
+      return ['Awaiting Processing', 'Processing', 'Drying', 'In Storage'];
+    }
+    default:
+      return ACCESSION_2_STATES;
+  }
+};
+
+/**
+ * Get parsed coords from user input gps coords
+ */
+const getParsedCoords = (coordsStr: string[]): Geolocation[] => {
+  return coordsStr
+    .filter((coords) => !!coords.trim())
+    .map((coords) => {
+      try {
+        const validCoords = new Coordinates(coords);
+        return {
+          latitude: validCoords.getLatitude(),
+          longitude: validCoords.getLongitude(),
+        } as Geolocation;
+      } catch {
+        // skip invalid coords
+        return null;
+      }
+    })
+    .filter((coords) => coords !== null) as Geolocation[];
+};
+
+/**
  * Exported functions
  */
 const AccessionsService = {
@@ -154,6 +196,8 @@ const AccessionsService = {
   updateAccession,
   deleteAccession,
   searchAccessions,
+  getTransitionToStates,
+  getParsedCoords,
 };
 
 export default AccessionsService;
