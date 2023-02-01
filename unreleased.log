@@ -1,3 +1,4 @@
+150a736 SW-2778 Reset searches when locale changes (#1127)
 d9c0954 SW-2283 Add Ecosystem Type to Species (#1120)
 79cd96c SW-2825 Allow viability % to be inputted as 0 (#1126)
 fe31f07 SW-2851 Allow setting accession QTY to 0 manually (#1124)
