@@ -99,7 +99,8 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
     const subdivision = accession?.collectionSiteCountrySubdivision;
     const data = [
       city,
-      countries && country && subdivision ? getSubdivisionByCode(countries, country, subdivision)?.name : '',
+      (countries && country && subdivision && getSubdivisionByCode(countries, country, subdivision)?.name) ??
+        subdivision,
       countries && country ? getCountryByCode(countries, country)?.name : '',
     ];
 
