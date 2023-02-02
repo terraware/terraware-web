@@ -210,7 +210,11 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 record.remainingQuantity.units,
                 userPreferences.preferredWeightSystem as string
               ) && (
-                <ConvertedValue quantity={record.remainingQuantity.quantity} unit={record.remainingQuantity.units} />
+                <ConvertedValue
+                  quantity={record.remainingQuantity.quantity}
+                  unit={record.remainingQuantity.units}
+                  showTooltip={true}
+                />
               )}
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>

@@ -210,10 +210,10 @@ export default function Accession2View(): JSX.Element {
   const showValueAndConversion = (quantity: number, unit: string, isEstimated?: boolean) => {
     if (weightUnitsEnabled && !isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
       return (
-        <>
+        <Box marginBottom={1}>
           {isEstimated && '~'} {quantity} {getUnitName(unit)}
           <ConvertedValue quantity={quantity} unit={unit} isEstimated={isEstimated} />
-        </>
+        </Box>
       );
     } else {
       return `${quantity} ${getUnitName(unit)}`;
