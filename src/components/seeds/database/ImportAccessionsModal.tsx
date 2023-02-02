@@ -4,7 +4,7 @@ import {
   resolveAccessionsUpload,
   uploadAccessionsFile,
 } from 'src/api/accessions2/accession';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import ImportModal from 'src/components/common/ImportModal';
 import strings from 'src/strings';
 

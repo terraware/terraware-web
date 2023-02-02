@@ -4,8 +4,8 @@ import { Grid, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/services/AccessionsService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getAllSeedBanks } from 'src/utils/organization';
-import { Facility, StorageLocationDetails } from 'src/api/types/facilities';
-import { listStorageLocations } from 'src/api/facility/facility';
+import { Facility, StorageLocationDetails } from 'src/types/Facility';
+import { SeedBankService } from 'src/services';
 import { StorageSubLocationSelector, StorageLocationSelector } from './';
 import { useOrganization } from 'src/providers/hooks';
 
@@ -34,11 +34,13 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
   useEffect(() => {
     const setLocation = async () => {
       if (record.facilityId) {
-        const response = await listStorageLocations(record.facilityId);
-        setStorageLocations(response.locations);
-      } else {
-        setStorageLocations([]);
+        const response = await SeedBankService.getStorageLocations(record.facilityId);
+        if (response.requestSucceeded) {
+          setStorageLocations(response.locations);
+          return;
+        }
       }
+      setStorageLocations([]);
     };
     setLocation();
   }, [record.facilityId]);

@@ -1,6 +1,6 @@
 import { components } from './generated-schema';
 
-export const schemas = 'schemas';
+const schemas = 'schemas';
 
 // planting site, zone, plot
 export type PlantingSite = components[typeof schemas]['PlantingSitePayload'];

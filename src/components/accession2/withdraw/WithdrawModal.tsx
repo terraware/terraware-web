@@ -22,7 +22,7 @@ import { renderUser } from 'src/utils/renderUser';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 import AddLink from 'src/components/common/AddLink';
 import { useOrganization } from 'src/providers/hooks';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export interface WithdrawDialogProps {

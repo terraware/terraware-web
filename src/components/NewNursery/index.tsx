@@ -6,7 +6,7 @@ import strings from 'src/strings';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { FacilityService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';

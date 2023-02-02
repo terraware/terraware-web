@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import EmptyMessage from '../common/EmptyMessage';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import EmptyStateContent from '../emptyStatePages/EmptyStateContent';
 import { EMPTY_STATE_CONTENT_STYLES } from '../emptyStatePages/EmptyStatePage';
 import SensorKitSetup from './SensorKitSetup';

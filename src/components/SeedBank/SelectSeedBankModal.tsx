@@ -2,7 +2,7 @@ import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import strings from 'src/strings';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import Button from '../common/button/Button';
 import Select from '../common/Select/Select';
 import DialogBox from '../common/DialogBox/DialogBox';

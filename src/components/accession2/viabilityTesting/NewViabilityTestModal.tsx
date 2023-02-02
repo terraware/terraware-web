@@ -29,7 +29,7 @@ import TooltipLearnMoreModal, {
 } from 'src/components/TooltipLearnMoreModal';
 import AddLink from 'src/components/common/AddLink';
 import { useOrganization } from 'src/providers/hooks';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
 

@@ -25,7 +25,7 @@ import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';

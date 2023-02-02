@@ -15,7 +15,7 @@ import { createBatch, CreateBatchRequestPayload } from 'src/api/batch/batch';
 import NurseryDropdown from './NurseryDropdown';
 import TfMain from 'src/components/common/TfMain';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { getNurseryById } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
 import isEnabled from 'src/features';

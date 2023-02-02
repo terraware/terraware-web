@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import { Organization } from 'src/types/Organization';
-import { Facility, FacilityType } from 'src/api/types/facilities';
+import { Facility, FacilityType } from 'src/types/Facility';
 import SearchService, { SearchNodePayload } from './SearchService';
 import HttpService, { Response } from './HttpService';
 import { getAllSeedBanks, getAllNurseries } from 'src/utils/organization';

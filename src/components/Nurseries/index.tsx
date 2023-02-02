@@ -5,7 +5,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FacilityService } from 'src/services';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';

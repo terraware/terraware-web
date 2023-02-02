@@ -3,7 +3,7 @@ import { Theme } from '@mui/material';
 import { Container, Grid } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { DeviceManager } from 'src/types/DeviceManager';
 import { Device } from 'src/types/Device';
 import { listFacilityDevicesById } from 'src/api/facility/facility';

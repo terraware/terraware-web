@@ -28,7 +28,7 @@ import PageForm from 'src/components/common/PageForm';
 import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';
 import { useOrganization } from 'src/providers/hooks';
 import isEnabled from 'src/features';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles((theme: Theme) => ({

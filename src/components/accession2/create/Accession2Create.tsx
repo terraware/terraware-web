@@ -24,7 +24,7 @@ import { Dropdown } from '@terraware/web-components';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useOrganization } from 'src/providers';
 import { getSeedBank } from 'src/utils/organization';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import isEnabled from 'src/features';
 

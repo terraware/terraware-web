@@ -15,7 +15,7 @@ export type GetSummaryResponse = {
   errorOccurred: boolean;
 };
 
-export const getSummary = async (organizationId: number): Promise<GetSummaryResponse> => {
+export const getSummary1 = async (organizationId: number): Promise<GetSummaryResponse> => {
   const response: GetSummaryResponse = {
     value: undefined,
     errorOccurred: false,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { listFacilityDevices } from 'src/api/facility/facility';
 import { Device } from 'src/types/Device';
 import Icon from '../../common/icon/Icon';

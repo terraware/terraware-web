@@ -7,7 +7,7 @@ import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useOrganization } from 'src/providers/hooks';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];

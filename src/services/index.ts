@@ -6,6 +6,7 @@ import OrganizationUserService from './OrganizationUserService';
 import OrganizationService from './OrganizationService';
 import PreferencesService from './PreferencesService';
 import SearchService from './SearchService';
+import SeedBankService from './SeedBankService';
 import SystemService from './SystemService';
 import UserService from './UserService';
 
@@ -20,6 +21,7 @@ export {
   OrganizationUserService,
   PreferencesService,
   SearchService,
+  SeedBankService,
   SystemService,
   UserService,
 };

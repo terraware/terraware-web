@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Device } from 'src/types/Device';
-import { Facility, StorageLocationDetails } from '../types/facilities';
+import { Facility } from 'src/types/Facility';
 import { paths } from '../types/generated-schema';
 
 const FACILITY_DEVICES = '/api/v1/facilities/{facilityId}/devices';
@@ -51,37 +51,6 @@ export async function markSensorKitConfigured(facilityId: number): Promise<Confi
 
   try {
     await axios.post(CONFIGURED_ENDPOINT.replace('{facilityId}', facilityId.toString()));
-  } catch {
-    response.requestSucceeded = false;
-  }
-
-  return response;
-}
-
-/**
- * Storage location
- */
-const STORAGE_LOCATION_ENDPOINT = '/api/v1/seedbank/values/storageLocation/{facilityId}';
-
-type ListStorageLocations =
-  paths[typeof STORAGE_LOCATION_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-type ListStorageLocationsResponse = {
-  locations: StorageLocationDetails[];
-  requestSucceeded: boolean;
-};
-
-export async function listStorageLocations(facilityId: number): Promise<ListStorageLocationsResponse> {
-  const response: ListStorageLocationsResponse = {
-    requestSucceeded: true,
-    locations: [],
-  };
-
-  try {
-    const serverResponse: ListStorageLocations = (
-      await axios.get(STORAGE_LOCATION_ENDPOINT.replace('{facilityId}', facilityId.toString()))
-    ).data;
-    response.locations = serverResponse.locations;
   } catch {
     response.requestSucceeded = false;
   }

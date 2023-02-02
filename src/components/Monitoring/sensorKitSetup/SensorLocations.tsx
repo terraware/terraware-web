@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 import { Grid, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { Device } from 'src/types/Device';
 import Select from '../../common/Select/Select';
 import FlowStep, { FlowError } from './FlowStep';

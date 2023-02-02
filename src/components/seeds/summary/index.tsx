@@ -2,7 +2,7 @@ import { Container, Grid, CircularProgress, Box, Typography, Theme, useTheme } f
 import { makeStyles } from '@mui/styles';
 import Cookies from 'cookies-js';
 import React, { useEffect, useState } from 'react';
-import { getSummary, GetSummaryResponse } from 'src/api/seeds/summary';
+import SeedBankService, { SummaryResponse } from 'src/services/SeedBankService';
 import TfMain from 'src/components/common/TfMain';
 import MainPaper from 'src/components/MainPaper';
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
@@ -59,16 +59,16 @@ export default function SeedSummary(): JSX.Element {
   const history = useHistory();
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
-  const [summary, setSummary] = useState<GetSummaryResponse>();
+  const [summary, setSummary] = useState<SummaryResponse>();
   const [isEmptyState, setIsEmptyState] = useState<boolean>(false);
-  const errorOccurred = summary ? summary.errorOccurred : false;
+  const errorOccurred = summary ? !summary.requestSucceeded : false;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
   useEffect(() => {
     if (selectedOrganization) {
       const populateSummary = async () => {
-        const response = await getSummary(selectedOrganization.id);
+        const response = await SeedBankService.getSummary(selectedOrganization.id);
         if (!response.value?.activeAccessions) {
           setIsEmptyState(true);
         }

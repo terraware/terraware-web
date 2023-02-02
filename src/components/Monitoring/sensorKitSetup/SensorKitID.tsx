@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { DeviceManager } from 'src/types/DeviceManager';
 import TextField from '../../common/Textfield/Textfield';
 import FlowStep, { FlowError } from './FlowStep';
