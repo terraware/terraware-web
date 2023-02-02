@@ -9,17 +9,19 @@ import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import moment from 'moment';
 import {
   ChartPalette,
-  TIME_PERIODS,
   getFirstWord,
   getTimePeriodParams,
   HumidityValues,
   getUnit,
   convertEntryTimestamp,
+  timePeriods,
 } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
 import 'chartjs-adapter-date-fns';
 import { Theme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { Dropdown } from '@terraware/web-components';
+import { useLocalization } from 'src/providers';
 
 declare global {
   interface Window {
@@ -102,6 +104,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   } = props;
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
+  const { loadedStringsForLocale } = useLocalization();
 
   useEffect(() => {
     if (defaultSensor) {
@@ -396,7 +399,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
     ) {
       getChartData();
     }
-  }, [availableLocations, selectedPeriod, selectedLocation, timeZone]);
+  }, [availableLocations, loadedStringsForLocale, selectedPeriod, selectedLocation, timeZone]);
 
   const onChangeLocation = (newValue: string) => {
     const location = availableLocations?.find((aL) => aL.name === newValue);
@@ -491,9 +494,9 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
           onChange={onChangeLocation}
           label={strings.LOCATION}
         />
-        <Select
+        <Dropdown
           className={classes.dropDowns}
-          options={TIME_PERIODS}
+          options={timePeriods()}
           onChange={onChangeSelectedPeriod}
           selectedValue={selectedPeriod}
           label={strings.TIME_PERIOD}

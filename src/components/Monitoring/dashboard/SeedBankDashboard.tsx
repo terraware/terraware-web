@@ -14,7 +14,7 @@ import { DeviceManager } from 'src/types/DeviceManager';
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useQuery from '../../../utils/useQuery';
-import { TIME_PERIODS } from './Common';
+import { timePeriods } from './Common';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
@@ -98,10 +98,11 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
       return;
     }
 
+    const defaultTimePeriod = timePeriods()[0].value;
     const lastVisitedLocation = availableLocations.find((loc) => loc.id === monitoringPreferences.sensorId);
     const locationToUse = lastVisitedLocation || availableLocations[0];
-    const sensorTimePeriodToUse = (monitoringPreferences.sensorTimePeriod as string) || TIME_PERIODS[0];
-    const pvTimePeriodToUse = (monitoringPreferences.pvTimePeriod as string) || TIME_PERIODS[0];
+    const sensorTimePeriodToUse = (monitoringPreferences.sensorTimePeriod as string) || defaultTimePeriod;
+    const pvTimePeriodToUse = (monitoringPreferences.pvTimePeriod as string) || defaultTimePeriod;
 
     setDefaultSensor(locationToUse);
     setDefaultSensorTimePeriod(sensorTimePeriodToUse);
@@ -148,7 +149,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
     // set time period to what url search param is set at
     if (urlTimePeriod) {
       query.delete('timePeriod');
-      timePeriod = TIME_PERIODS.find((period) => period === urlTimePeriod);
+      timePeriod = timePeriods().find((period) => period.value === urlTimePeriod)?.value;
     }
 
     // set new location if valid
