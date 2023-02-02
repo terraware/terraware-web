@@ -2,8 +2,8 @@ import strings from 'src/strings';
 import React from 'react';
 import { Typography } from '@mui/material';
 import { TERRAWARE_SUPPORT_LINK } from 'src/constants';
-import parseHtml from 'html-react-parser';
 import { Button, DialogBox } from '@terraware/web-components';
+import TextWithLink from '../common/TextWithLink';
 
 export type PlantingSiteWithMapHelpModalProps = {
   open: boolean;
@@ -23,12 +23,7 @@ export default function PlantingSiteWithMapHelpModal(props: PlantingSiteWithMapH
       middleButtons={[<Button onClick={onClose} id='done' label={strings.DONE} key='button-1' />]}
     >
       <Typography>
-        {parseHtml(
-          strings.formatString(
-            strings.PLANTING_SITE_WITH_MAP_HELP,
-            `<a href=${TERRAWARE_SUPPORT_LINK}>` + strings.CONTACT_US.toLowerCase() + '</a>'
-          ) as string
-        )}
+        <TextWithLink href={TERRAWARE_SUPPORT_LINK} text={strings.PLANTING_SITE_WITH_MAP_HELP} />
       </Typography>
     </DialogBox>
   );
