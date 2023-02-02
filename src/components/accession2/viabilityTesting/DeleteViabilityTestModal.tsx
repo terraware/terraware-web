@@ -3,14 +3,14 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Typography } from '@mui/material';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/api/types/accessions';
 import { deleteViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteViabilityTestModalProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   viabilityTest: ViabilityTest;
   onCancel: () => void;
   onDone: () => void;

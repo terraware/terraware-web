@@ -1,7 +1,7 @@
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Checkbox, DatePicker, DialogBox, SelectT, Textfield } from '@terraware/web-components';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
 import { putViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
 
 export interface NewViabilityTestModalProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   onClose: () => void;
   reload: () => void;
   user: User;

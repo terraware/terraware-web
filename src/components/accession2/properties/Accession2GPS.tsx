@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Close } from '@mui/icons-material';
 import { Grid, Box, IconButton, useTheme } from '@mui/material';
-import { AccessionPostRequestBody } from 'src/api/accessions2/accession';
+import AccessionsService, { AccessionPostRequestBody } from 'src/services/AccessionsService';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import { Geolocation } from 'src/api/types/accessions';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
-import Coordinates from 'coordinate-parser';
 import _ from 'lodash';
 import AddLink from 'src/components/common/AddLink';
 
@@ -30,21 +29,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
   const theme = useTheme();
 
   useEffect(() => {
-    const parsedCoords = gpsCoordsList
-      .filter((coords) => !!coords.trim())
-      .map((coords) => {
-        try {
-          const validCoords = new Coordinates(coords);
-          return {
-            latitude: validCoords.getLatitude(),
-            longitude: validCoords.getLongitude(),
-          } as Geolocation;
-        } catch {
-          // skip invalid coords
-          return null;
-        }
-      })
-      .filter((coords) => coords !== null) as Geolocation[];
+    const parsedCoords: Geolocation[] = AccessionsService.getParsedCoords(gpsCoordsList);
 
     if (!_.isEqual(parsedCoords, record.collectionSiteCoordinates)) {
       onChange('collectionSiteCoordinates', parsedCoords);

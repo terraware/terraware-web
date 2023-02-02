@@ -2,7 +2,7 @@ import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/api/types/accessions';
 import strings from 'src/strings';
 import ViabilityTestingDatabase from './ViabilityTestingDatabase';
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type ViabilityTestingPanelProps = {
-  accession: Accession2;
+  accession: Accession;
   canAddTest: boolean;
   reload: () => void;
   setNewViabilityTestOpened: React.Dispatch<React.SetStateAction<boolean>>;

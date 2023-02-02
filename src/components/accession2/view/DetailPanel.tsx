@@ -2,7 +2,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
 import strings from 'src/strings';
 import { searchCountries } from 'src/api/country/country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
@@ -14,7 +14,7 @@ import { isContributor } from 'src/utils/organization';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 
 type DetailPanelProps = {
-  accession?: Accession2;
+  accession?: Accession;
   reload: () => void;
 };
 export default function DetailPanel(props: DetailPanelProps): JSX.Element {

@@ -4,7 +4,7 @@ import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, useTheme } from '@mui/material';
 import { Checkbox, DatePicker, SelectT, Textfield } from '@terraware/web-components';
-import { Accession2, Withdrawal2 } from 'src/api/accessions2/accession';
+import { Accession, Withdrawal } from 'src/types/Accession';
 import { NurseryTransfer } from 'src/api/types/batch';
 import useForm from 'src/utils/useForm';
 import { transferToNursery, postWithdrawal } from 'src/api/accessions2/withdrawals';
@@ -27,7 +27,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export interface WithdrawDialogProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   onClose: () => void;
   reload: () => void;
   user: User;
@@ -55,7 +55,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const [timeZone, setTimeZone] = useState(tz.id);
 
-  const newWithdrawal: Withdrawal2 = {
+  const newWithdrawal: Withdrawal = {
     purpose: 'Nursery',
     withdrawnByUserId: user.id,
     date: getTodaysDateFormatted(timeZone),
@@ -92,7 +92,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   }, [tz.id, timeZone]);
 
   useEffect(() => {
-    setRecord((previousRecord: Withdrawal2): Withdrawal2 => {
+    setRecord((previousRecord: Withdrawal): Withdrawal => {
       return {
         ...previousRecord,
         date: getTodaysDateFormatted(timeZone),

@@ -3,15 +3,15 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Typography } from '@mui/material';
-import { Accession2 } from 'src/api/accessions2/accession';
-import { deleteAccession } from 'src/api/seeds/accession';
+import { Accession } from 'src/types/Accession';
+import AccessionsService from 'src/services/AccessionsService';
 import { APP_PATHS } from 'src/constants';
 import { useHistory } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteAccessionModalProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   onClose: () => void;
 }
 
@@ -21,7 +21,7 @@ export default function DeleteAccessionModal(props: DeleteAccessionModalProps): 
   const snackbar = useSnackbar();
 
   const deleteHandler = async () => {
-    const response = await deleteAccession(accession.id);
+    const response = await AccessionsService.deleteAccession(accession.id);
     if (response.requestSucceeded) {
       history.push(APP_PATHS.ACCESSIONS);
     } else {

@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import useForm from 'src/utils/useForm';
 import { Container, Grid, Typography, useTheme } from '@mui/material';
-import { AccessionPostRequestBody, postAccession } from 'src/api/accessions2/accession';
+import AccessionsService, { AccessionPostRequestBody } from 'src/services/AccessionsService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import {
   Accession2Address,
@@ -99,7 +99,7 @@ export default function CreateAccession(): JSX.Element {
       setValidateFields(true);
       return;
     }
-    const response = await postAccession(record);
+    const response = await AccessionsService.createAccession(record);
     if (response.requestSucceeded) {
       history.replace(accessionsDatabase);
       history.push({

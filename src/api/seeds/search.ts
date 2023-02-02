@@ -1,6 +1,5 @@
 import axios from '..';
 import { paths } from 'src/api/types/generated-schema';
-import { columnsIndexed } from 'src/components/seeds/database/columns';
 import {
   SearchCriteria,
   SearchRequestPayload,
@@ -9,7 +8,6 @@ import {
   convertToSearchNodePayload,
   search,
 } from 'src/api/search';
-import { DatabaseColumn } from '@terraware/web-components/components/table/types';
 
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
 export const DEFAULT_SEED_SEARCH_SORT_ORDER = { field: 'receivedDate', direction: 'Descending' } as SearchSortOrder;
@@ -33,29 +31,6 @@ export async function getPendingAccessions(organizationId: number): Promise<Sear
   };
 
   return await search(searchParams);
-}
-
-/***********************
- * COLUMN VALUES SEARCH
- ***********************/
-
-/*
- * filterSelectFields()
- * input: a list of search field names
- * output: a list of search field names that are associated with fields that have either
- *         single or multi select values (as opposed to date range values, for example).
- */
-export function filterSelectFields(fields: string[]): string[] {
-  const columns = columnsIndexed();
-
-  return fields.reduce((acum: string[], value) => {
-    const dbColumn: DatabaseColumn = columns[value];
-    if (['multiple_selection', 'single_selection'].includes(dbColumn.filter?.type ?? '')) {
-      acum.push(dbColumn.key);
-    }
-
-    return acum;
-  }, [] as string[]);
 }
 
 const ALL_FIELD_VALUES_ENDPOINT = '/api/v1/seedbank/values/all';
@@ -145,20 +120,5 @@ export async function getCollectors(organizationId: number): Promise<string[] | 
     return collectors.filter((colector) => colector !== null);
   } catch {
     return undefined;
-  }
-}
-
-const SEARCH_SUMMARY_ENDPOINT = '/api/v1/seedbank/summary';
-type SearchSummaryRequestPayload =
-  paths[typeof SEARCH_SUMMARY_ENDPOINT]['post']['requestBody']['content']['application/json'];
-export type SearchSummaryResponsePayload =
-  paths[typeof SEARCH_SUMMARY_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-
-export async function searchSummary(params: SearchSummaryRequestPayload): Promise<SearchSummaryResponsePayload | null> {
-  try {
-    const response: SearchSummaryResponsePayload = (await axios.post(SEARCH_SUMMARY_ENDPOINT, params)).data;
-    return response;
-  } catch {
-    return null;
   }
 }

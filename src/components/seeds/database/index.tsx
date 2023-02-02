@@ -8,19 +8,12 @@ import {
   AllFieldValuesMap,
   DEFAULT_SEED_SEARCH_FILTERS,
   FieldValuesMap,
-  filterSelectFields,
   getAllFieldValues,
   getPendingAccessions,
   searchFieldValues,
 } from 'src/api/seeds/search';
-import {
-  convertToSearchNodePayload,
-  search,
-  SearchNodePayload,
-  SearchResponseElement,
-  SearchCriteria,
-  SearchSortOrder,
-} from 'src/api/search';
+import { AccessionsService } from 'src/services';
+import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/services/SearchService';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
@@ -56,6 +49,7 @@ import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
+import { DatabaseColumn } from '@terraware/web-components/components/table/types';
 
 interface StyleProps {
   isMobile: boolean;
@@ -131,6 +125,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'right',
   },
 }));
+
+const filterSelectFields = (fields: string[]): string[] => {
+  const columns = columnsIndexed();
+
+  return fields.reduce((acum: string[], value) => {
+    const dbColumn: DatabaseColumn = columns[value];
+    if (['multiple_selection', 'single_selection'].includes(dbColumn.filter?.type ?? '')) {
+      acum.push(dbColumn.key);
+    }
+
+    return acum;
+  }, [] as string[]);
+};
 
 type DatabaseProps = {
   searchCriteria: SearchCriteria;
@@ -316,11 +323,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   useEffect(() => {
     const populateUnfilteredResults = async () => {
-      const apiResponse = await search({
-        prefix: 'facilities.accessions',
+      const apiResponse = await AccessionsService.searchAccessions({
+        organizationId: selectedOrganization.id,
         fields: ['id'],
-        search: convertToSearchNodePayload({}, selectedOrganization.id),
-        count: 1000,
       });
 
       setUnfilteredResults(apiResponse);
@@ -348,12 +353,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
     if (selectedOrganization) {
       const populateSearchResults = async () => {
-        const apiResponse = await search({
-          prefix: 'facilities.accessions',
+        const apiResponse = await AccessionsService.searchAccessions({
+          organizationId: selectedOrganization.id,
           fields: getFieldsFromSearchColumns(),
-          sortOrder: [searchSortOrder],
-          search: convertToSearchNodePayload(searchCriteria, selectedOrganization.id),
-          count: 1000,
+          sortOrder: searchSortOrder,
+          searchCriteria,
         });
 
         if (activeRequests) {

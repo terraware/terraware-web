@@ -5,8 +5,8 @@ import { Button, Icon } from '@terraware/web-components';
 import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Accession2, getAccession2 } from 'src/api/accessions2/accession';
-import { checkIn } from 'src/api/seeds/accession';
+import { Accession } from 'src/types/Accession';
+import AccessionsService from 'src/services/AccessionsService';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import DeleteAccessionModal from '../edit/DeleteAccessionModal';
@@ -84,7 +84,7 @@ export default function Accession2View(): JSX.Element {
   const preselectedTab = TABS.indexOf(tab) === -1 ? 'detail' : tab;
   const { accessionId } = useParams<{ accessionId: string }>();
   const [selectedTab, setSelectedTab] = useState(preselectedTab);
-  const [accession, setAccession] = useState<Accession2>();
+  const [accession, setAccession] = useState<Accession>();
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
   const [openEndDryingReminderModal, setOpenEndDryingReminderModal] = useState(false);
@@ -110,15 +110,15 @@ export default function Accession2View(): JSX.Element {
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
-      try {
-        const response = await getAccession2(parseInt(accessionId, 10));
-        if (!_.isEqual(response, accession)) {
-          setAccession(response);
+      const response = await AccessionsService.getAccession(parseInt(accessionId, 10));
+      if (response.requestSucceeded) {
+        if (!_.isEqual(response.accession, accession)) {
+          setAccession(response.accession);
           setHasPendingTests(
-            response?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false
+            response.accession?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false
           );
         }
-      } catch {
+      } else {
         snackbar.toastError();
       }
     };
@@ -197,7 +197,7 @@ export default function Accession2View(): JSX.Element {
   const checkInAccession = async () => {
     if (accession) {
       try {
-        await checkIn(accession.id);
+        await AccessionsService.checkInAccession(accession.id);
         reloadData();
         setOpenCheckInConfirmationModal(true);
       } catch (e) {

@@ -1,6 +1,7 @@
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
-import { Accession2, updateAccession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
+import AccessionsService from 'src/services/AccessionsService';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import { ViabilityTest } from 'src/api/types/accessions';
@@ -8,7 +9,7 @@ import { getCutTestViabilityPercent } from './utils';
 
 export interface ViabilityResultModalProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   onClose: () => void;
   reload: () => void;
   viabilityTest: ViabilityTest;
@@ -23,7 +24,7 @@ export default function ViabilityResultModal(props: ViabilityResultModalProps): 
   const saveResult = async () => {
     if (accession) {
       const newAccession = { ...accession, viabilityPercent: getViabilityPercent() };
-      const response = await updateAccession2(newAccession);
+      const response = await AccessionsService.updateAccession(newAccession);
 
       if (response.requestSucceeded) {
         reload();

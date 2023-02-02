@@ -4,15 +4,15 @@ import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Grid, useTheme } from '@mui/material';
 import { Checkbox, DatePicker } from '@terraware/web-components';
-import { Accession2 } from 'src/api/accessions2/accession';
+import { Accession } from 'src/types/Accession';
+import AccessionsService from 'src/services/AccessionsService';
 import useForm from 'src/utils/useForm';
-import { updateAccession2 } from 'src/api/accessions2/accession';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface EndDryingReminderModalProps {
   open: boolean;
-  accession: Accession2;
+  accession: Accession;
   onClose: () => void;
   reload: () => void;
 }
@@ -43,7 +43,7 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
       return;
     }
     if (record) {
-      const response = await updateAccession2(record);
+      const response = await AccessionsService.updateAccession(record);
       if (response.requestSucceeded) {
         reload();
         onClose();

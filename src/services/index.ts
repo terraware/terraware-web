@@ -1,3 +1,4 @@
+import AccessionsService from './AccessionsService';
 import CachedUserService from './CachedUserService';
 import FacilityService from './FacilityService';
 import HttpService from './HttpService';
@@ -12,6 +13,7 @@ import UserService from './UserService';
 export type { Response } from './HttpService';
 
 export {
+  AccessionsService,
   CachedUserService,
   FacilityService,
   HttpService,
