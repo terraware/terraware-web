@@ -14,6 +14,7 @@ import preventDefault from 'src/utils/preventDefaultEvent';
 import stopPropagation from 'src/utils/stopPropagationEvent';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import Timestamp from './common/Timestamp';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -350,9 +351,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
         secondary={
           <>
             <span className={classes.notificationBody}>{body}</span>
-            <span className={classes.notificationTimestamp}>
-              {moment(createdTime).format('MMMM Do YYYY \\a\\t h:mm:ss a')}
-            </span>
+            <Timestamp className={classes.notificationTimestamp} isoString={createdTime} />
           </>
         }
       />
