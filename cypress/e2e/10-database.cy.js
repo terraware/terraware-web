@@ -81,7 +81,7 @@ describe('Database', () => {
       cy.wait('@values');
       cy.get('#editColumnsDialog').should('not.exist');
 
-      cy.get('#table-header').children().should('have.length', 40);
+      cy.get('#table-header').children().should('have.length', 38);
       cy.get('table tr').should('have.length', 4);
     });
 

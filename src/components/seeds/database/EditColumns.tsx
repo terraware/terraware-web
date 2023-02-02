@@ -10,6 +10,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
+import { IconTooltip } from '@terraware/web-components';
 
 export interface Props {
   open: boolean;
@@ -102,11 +103,14 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
           </Grid>
         </Grid>
 
-        {sections(userPreferences.preferredWeightSystem as string).map(({ name, options }) => (
+        {sections(userPreferences.preferredWeightSystem as string).map(({ name, tooltip, options }) => (
           <React.Fragment key={name}>
             <Divisor />
-            <Typography component='p'>{name}</Typography>
-            <Grid container spacing={isMobile ? 1 : 4}>
+            <Typography component='p'>
+              {name}
+              {tooltip && <IconTooltip title={tooltip} />}
+            </Typography>
+            <Grid container spacing={isMobile ? 1 : 4} sx={{ marginTop: '-15px' }}>
               {options.map((optionsColumn, index) => (
                 <Grid key={index} item xs={gridSize()}>
                   <Grid container>
@@ -141,12 +145,33 @@ interface Option {
 
 interface Section {
   name: string;
+  tooltip?: string;
   options: Option[][];
 }
 
 function sections(system?: string): Section[] {
   const columns = columnsIndexed();
   const weightUnitsEnabled = isEnabled('Weight units');
+
+  const totalWithdrawnSection = () => {
+    if (weightUnitsEnabled) {
+      if (system === 'imperial') {
+        return [
+          [columns.totalWithdrawnCount, columns.totalWithdrawnWeightOunces],
+          [columns.totalWithdrawnWeightPounds, columns.totalWithdrawnWeightGrams],
+          [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightKilograms],
+        ];
+      } else {
+        return [
+          [columns.totalWithdrawnCount, columns.totalWithdrawnWeightGrams],
+          [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightKilograms],
+          [columns.totalWithdrawnWeightOunces, columns.totalWithdrawnWeightPounds],
+        ];
+      }
+    } else {
+      return [[columns.totalWithdrawnCount], [columns.totalWithdrawnWeightGrams]];
+    }
+  };
 
   const columnsSections = [
     {
@@ -204,14 +229,11 @@ function sections(system?: string): Section[] {
     },
     {
       name: strings.WITHDRAWAL,
-      options: [
-        [columns.withdrawalDate, columns.withdrawalQuantity],
-        [columns.withdrawalPurpose],
-        [columns.withdrawalNotes],
-      ],
+      options: totalWithdrawnSection(),
     },
     {
       name: strings.VIABILITY_TESTING,
+      tooltip: strings.VIABILITY_TESTING_SECTION_TOOLTIP,
       options: [
         [
           columns.viabilityTests_type,
