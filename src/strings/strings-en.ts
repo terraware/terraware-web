@@ -621,7 +621,7 @@ export const strings = {
   PLANT: 'plant',
   PLANTING_SITE_TYPE: 'Planting Site Type',
   PLANTING_SITE_WITH_MAP_HELP:
-    'If you are a Terraformation partner or accelerator participant, please {0} to create a site with a map.',
+    'If you are a Terraformation partner or accelerator participant, please [contact us] to create a site with a map.',
   PLANTING_SITE: 'Planting Site',
   PLANTING_SITES: 'Planting Sites',
   PLANTING_ZONE: 'Planting Zone',
