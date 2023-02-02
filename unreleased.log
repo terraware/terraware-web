@@ -1,1 +1,3 @@
+6783a0a SW-2806 Localize notification timestamps (#1131)
+831f7ad SW-2727 Show total accession withdrawal quantities (#1122)
 b4213ce SW-2807 refactor some of the accessions api into a singular service (#1125)
