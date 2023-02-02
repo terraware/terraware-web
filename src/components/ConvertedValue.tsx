@@ -7,16 +7,18 @@ type ConvertedValueProps = {
   quantity: number;
   unit: string;
   isEstimated?: boolean;
+  showTooltip?: boolean;
 };
 
 export default function ConvertedValue(props: ConvertedValueProps): JSX.Element {
-  const { quantity, unit, isEstimated } = props;
+  const { quantity, unit, isEstimated, showTooltip } = props;
   return (
     <Box display='flex'>
-      <Typography>
-        {isEstimated && '~'} {convertValue(quantity, unit)}
+      <Typography fontWeight={500}>
+        ({isEstimated && '~'}
+        {convertValue(quantity, unit)})
       </Typography>
-      <IconTooltip title={strings.CONVERTED_VALUE_INFO} />
+      {showTooltip && <IconTooltip title={strings.CONVERTED_VALUE_INFO} />}
     </Box>
   );
 }
