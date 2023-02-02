@@ -49,7 +49,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
 
   const validate = () => {
     const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);
-    if (isNaN(quantity) || quantity <= 0) {
+    if (isNaN(quantity) || quantity < 0) {
       setQuantityError(true);
       return false;
     }
@@ -173,7 +173,9 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
               onChange={(value) => onChangeRemainingQuantity('seedsQuantity', Number(value))}
               type='text'
               value={
-                record.remainingQuantity?.units === 'Seeds' ? record.remainingQuantity?.quantity : record.estimatedCount
+                record.remainingQuantity?.units === 'Seeds'
+                  ? record.remainingQuantity?.quantity.toString()
+                  : record.estimatedCount?.toString()
               }
               errorText={
                 quantityError
@@ -209,7 +211,11 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 record.remainingQuantity.units,
                 userPreferences.preferredWeightSystem as string
               ) && (
-                <ConvertedValue quantity={record.remainingQuantity.quantity} unit={record.remainingQuantity.units} />
+                <ConvertedValue
+                  quantity={record.remainingQuantity.quantity}
+                  unit={record.remainingQuantity.units}
+                  showTooltip={true}
+                />
               )}
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>

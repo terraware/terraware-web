@@ -6,6 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
 import {
   AllFieldValuesMap,
+  DEFAULT_SEED_SEARCH_FILTERS,
   FieldValuesMap,
   getAllFieldValues,
   getPendingAccessions,
@@ -44,7 +45,7 @@ import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
-import { useOrganization, useUser } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
@@ -155,6 +156,7 @@ type DatabaseProps = {
 
 export default function Database(props: DatabaseProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { loadedStringsForLocale } = useLocalization();
   const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
@@ -192,6 +194,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsDatabaseSelectedOrgInfo);
   const contentRef = useRef(null);
+  const searchedLocaleRef = useRef<string | null>(loadedStringsForLocale);
 
   /*
    * fieldOptions is a list of records
@@ -397,6 +400,17 @@ export default function Database(props: DatabaseProps): JSX.Element {
       updateSearchColumns(orgScopedPreferences.accessionsColumns as string[]);
     }
   }, [orgScopedPreferences, updateSearchColumns]);
+
+  useEffect(() => {
+    if (searchedLocaleRef.current && loadedStringsForLocale && searchedLocaleRef.current !== loadedStringsForLocale) {
+      // If we've already done a search with a different locale, throw away search criteria since
+      // they might contain localized values. Copy the default filters so React sees this as a
+      // modification even if the existing search was also using the default.
+      setSearchCriteria({ ...DEFAULT_SEED_SEARCH_FILTERS });
+    }
+
+    searchedLocaleRef.current = loadedStringsForLocale;
+  }, [loadedStringsForLocale, setSearchCriteria]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {

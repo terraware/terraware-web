@@ -29,6 +29,7 @@ export async function getAllSpecies(organizationId: number): Promise<GetSpeciesL
       response.species.push({
         id: iSpecies.id,
         commonName: iSpecies.commonName,
+        ecosystemTypes: iSpecies.ecosystemTypes,
         endangered: iSpecies.endangered,
         rare: iSpecies.rare,
         familyName: iSpecies.familyName,
@@ -59,6 +60,7 @@ export type CreateSpeciesResponse = {
 export async function createSpecies(species: Species, organizationId: number): Promise<CreateSpeciesResponse> {
   const speciesToCreate: PostSpeciesRequest = {
     commonName: species.commonName,
+    ecosystemTypes: species.ecosystemTypes,
     endangered: species.endangered,
     familyName: species.familyName,
     growthForm: species.growthForm,
@@ -129,6 +131,7 @@ export async function updateSpecies(species: Species, organizationId: number): P
   const response: UpdateSpeciesResponse = { requestSucceeded: true };
   const speciesToUpdate: PutSpeciesRequest = {
     commonName: species.commonName,
+    ecosystemTypes: species.ecosystemTypes,
     endangered: species.endangered,
     familyName: species.familyName,
     growthForm: species.growthForm,

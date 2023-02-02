@@ -10,7 +10,24 @@ export type Species = {
   rare?: boolean;
   seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
   problems?: SpeciesProblemElement[];
+  ecosystemTypes?: EcosystemType[];
 };
+
+export type EcosystemType =
+  | 'Boreal forests/Taiga'
+  | 'Deserts and xeric shrublands'
+  | 'Flooded grasslands and savannas'
+  | 'Mangroves'
+  | 'Mediterranean forests, woodlands and scrubs'
+  | 'Montane grasslands and shrublands'
+  | 'Temperate broad leaf and mixed forests'
+  | 'Temperate coniferous forest'
+  | 'Temperate grasslands, savannas and shrublands'
+  | 'Tropical and subtropical coniferous forests'
+  | 'Tropical and subtropical dry broad leaf forests'
+  | 'Tropical and subtropical grasslands, savannas and shrublands'
+  | 'Tropical and subtropical moist broad leaf forests'
+  | 'Tundra';
 
 export type SpeciesProblemElement = {
   id: number;
@@ -43,6 +60,37 @@ export function conservationStatuses() {
   return [
     { label: strings.RARE, value: 'Rare' },
     { label: strings.ENDANGERED, value: 'Endangered' },
+  ];
+}
+
+export function ecosystemTypes(): { label: string; value: EcosystemType }[] {
+  return [
+    { label: strings.ECOSYSTEM_BOREAL_FOREST_TAIGA, value: 'Boreal forests/Taiga' },
+    { label: strings.ECOSYSTEM_DESERT_XERIC_SHRUBLAND, value: 'Deserts and xeric shrublands' },
+    { label: strings.ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA, value: 'Flooded grasslands and savannas' },
+    { label: strings.ECOSYSTEM_MANGROVE, value: 'Mangroves' },
+    { label: strings.ECOSYSTEM_MEDITERRANEAN_FOREST, value: 'Mediterranean forests, woodlands and scrubs' },
+    { label: strings.ECOSYSTEM_MONTANE_GRASSLAND_SHRUBLAND, value: 'Montane grasslands and shrublands' },
+    { label: strings.ECOSYSTEM_TEMPERATE_BROADLEAF_MIXED_FOREST, value: 'Temperate broad leaf and mixed forests' },
+    { label: strings.ECOSYSTEM_TEMPERATE_CONIFEROUS_FOREST, value: 'Temperate coniferous forest' },
+    {
+      label: strings.ECOSYSTEM_TEMPERATE_GRASSLAND_SAVANNA_SHRUBLAND,
+      value: 'Temperate grasslands, savannas and shrublands',
+    },
+    { label: strings.ECOSYSTEM_TROPICAL_CONIFEROUS_FOREST, value: 'Tropical and subtropical coniferous forests' },
+    {
+      label: strings.ECOSYSTEM_TROPICAL_DRY_BROADLEAF_FOREST,
+      value: 'Tropical and subtropical dry broad leaf forests',
+    },
+    {
+      label: strings.ECOSYSTEM_TROPICAL_GRASSLAND_SAVANNA_SHRUBLAND,
+      value: 'Tropical and subtropical grasslands, savannas and shrublands',
+    },
+    {
+      label: strings.ECOSYSTEM_TROPICAL_MOIST_BROADLEAF_FOREST,
+      value: 'Tropical and subtropical moist broad leaf forests',
+    },
+    { label: strings.ECOSYSTEM_TUNDRA, value: 'Tundra' },
   ];
 }
 
@@ -81,6 +129,13 @@ export function getSeedStorageBehaviorString(species: Species) {
     return undefined;
   }
 }
+
+export const getEcosystemTypesString = (species: Species) => {
+  const result =
+    species.ecosystemTypes?.map((et) => ecosystemTypes().find((obj) => obj.label === et)?.value ?? '') ?? [];
+
+  return result.filter((str) => str !== '');
+};
 
 export type SpeciesWithScientificName = Species & {
   scientificName?: string;

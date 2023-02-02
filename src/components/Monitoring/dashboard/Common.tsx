@@ -1,8 +1,29 @@
 import moment from 'moment';
 import theme from 'src/theme';
 import { changeTimezone } from 'src/utils/useTimeZoneUtils';
+import { DropdownItem } from '@terraware/web-components';
+import strings from 'src/strings';
 
-export const TIME_PERIODS = ['Last 12 hours', 'Last 24 hours', 'Last 7 days', 'Last 30 days'];
+export function timePeriods(): DropdownItem[] {
+  return [
+    {
+      label: strings.PERIOD_LAST_12_HOURS,
+      value: 'Last 12 hours',
+    },
+    {
+      label: strings.PERIOD_LAST_24_HOURS,
+      value: 'Last 24 hours',
+    },
+    {
+      label: strings.PERIOD_LAST_7_DAYS,
+      value: 'Last 7 days',
+    },
+    {
+      label: strings.PERIOD_LAST_30_DAYS,
+      value: 'Last 30 days',
+    },
+  ];
+}
 
 export type HumidityValues = {
   timestamp: string;

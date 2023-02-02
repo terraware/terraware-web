@@ -210,10 +210,10 @@ export default function Accession2View(): JSX.Element {
   const showValueAndConversion = (quantity: number, unit: string, isEstimated?: boolean) => {
     if (weightUnitsEnabled && !isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
       return (
-        <>
+        <Box marginBottom={1}>
           {isEstimated && '~'} {quantity} {getUnitName(unit)}
           <ConvertedValue quantity={quantity} unit={unit} isEstimated={isEstimated} />
-        </>
+        </Box>
       );
     } else {
       return `${quantity} ${getUnitName(unit)}`;
@@ -452,7 +452,7 @@ export default function Accession2View(): JSX.Element {
               reload={reloadData}
               setNewViabilityTestOpened={setOpenNewViabilityTest}
               changeTab={handleChange}
-              title={accession?.viabilityPercent ? strings.EDIT_VIABILITY : strings.ADD_VIABILITY}
+              title={accession?.viabilityPercent?.toString() ? strings.EDIT_VIABILITY : strings.ADD_VIABILITY}
             />
           )}
         </>
@@ -621,11 +621,11 @@ export default function Accession2View(): JSX.Element {
         <Grid item xs={getOverviewGridSize(2)}>
           <OverviewItemCard
             isEditable={viabilityEditable}
-            hideEditIcon={!accession?.viabilityPercent && !isMobile}
+            hideEditIcon={!accession?.viabilityPercent?.toString() && !isMobile}
             title={strings.VIABILITY}
             onClick={() => setOpenViabilityModal(true)}
             contents={
-              accession?.viabilityPercent ? (
+              accession?.viabilityPercent?.toString() ? (
                 `${accession?.viabilityPercent}%`
               ) : viabilityEditable ? (
                 <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenViabilityModal(true)}>

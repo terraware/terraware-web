@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-import { conservationStatuses, growthForms, storageBehaviors } from 'src/types/Species';
+import { conservationStatuses, ecosystemTypes, growthForms, storageBehaviors } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 import { SpeciesFiltersType } from '.';
 import Button from '../common/button/Button';
@@ -162,6 +162,18 @@ export default function SpeciesFiltersPopover({ filters, setFilters }: SpeciesFi
                 options={storageBehaviors(true)}
                 label={strings.SEED_STORAGE_BEHAVIOR}
                 aria-label={strings.SEED_STORAGE_BEHAVIOR}
+                placeholder={strings.SELECT}
+                fullWidth={true}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Dropdown
+                id='ecosystemType'
+                selectedValue={temporalRecord.ecosystemType}
+                onChange={(value) => onChange('ecosystemType', value)}
+                options={ecosystemTypes()}
+                label={strings.ECOSYSTEM_TYPE}
+                aria-label={strings.ECOSYSTEM_TYPE}
                 placeholder={strings.SELECT}
                 fullWidth={true}
               />

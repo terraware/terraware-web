@@ -91,7 +91,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
                 id='viabilityPercent'
                 onChange={(value) => onChange('viabilityPercent', value)}
                 type='text'
-                value={record.viabilityPercent}
+                value={record.viabilityPercent?.toString()}
                 errorText={error}
               />
               <Box paddingLeft={2} sx={{ paddingTop: error === '' ? 3 : 0 }}>

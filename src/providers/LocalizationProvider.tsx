@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { LocalizationContext } from './contexts';
-import { getTimeZones } from 'src/api/timezones/timezones';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import strings, { ILocalizedStringsMap } from 'src/strings';
 import { ProvidedLocalizationData, useUser } from '.';
 import { supportedLocales } from '../strings/locales';
-import { HttpService } from 'src/services';
+import { HttpService, I18nService } from 'src/services';
 
 export type LocalizationProviderProps = {
   children?: React.ReactNode;
@@ -38,7 +37,7 @@ export default function LocalizationProvider({
   // This must come after the effect that configures the Accept-Language header.
   useEffect(() => {
     const fetchTimeZones = async () => {
-      const timeZoneResponse = await getTimeZones();
+      const timeZoneResponse = await I18nService.getTimeZones();
       if (!timeZoneResponse.error && timeZoneResponse.timeZones) {
         setTimeZones(timeZoneResponse.timeZones.sort((a, b) => a.longName.localeCompare(b.longName, locale)));
       }

@@ -1,11 +1,18 @@
 import { Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Dropdown, IconTooltip } from '@terraware/web-components';
+import { Dropdown, IconTooltip, MultiSelect } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
-import { growthForms, Species, SpeciesRequestError, storageBehaviors } from 'src/types/Species';
+import {
+  EcosystemType,
+  ecosystemTypes,
+  growthForms,
+  Species,
+  SpeciesRequestError,
+  storageBehaviors,
+} from 'src/types/Species';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
@@ -337,6 +344,36 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
                 />
               </>
             }
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <MultiSelect
+            fullWidth={true}
+            label={strings.ECOSYSTEM_TYPE}
+            tooltipTitle={
+              <>
+                {`${strings.TOOLTIP_ECOSYSTEM_TYPE} `}
+                <a
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  href='https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world'
+                >
+                  {strings.LEARN_MORE}
+                </a>
+              </>
+            }
+            onAdd={(type: EcosystemType) => {
+              const selectedTypes = record.ecosystemTypes ?? [];
+              selectedTypes.push(type);
+              onChange('ecosystemTypes', selectedTypes);
+            }}
+            onRemove={(type: EcosystemType) => {
+              onChange('ecosystemTypes', record.ecosystemTypes?.filter((et) => et !== type) ?? []);
+            }}
+            options={new Map(ecosystemTypes().map((type) => [type.value as EcosystemType, type.label]))}
+            valueRenderer={(typeVal: string) => typeVal}
+            selectedOptions={record.ecosystemTypes ?? []}
+            placeHolder={strings.SELECT}
           />
         </Grid>
       </Grid>
