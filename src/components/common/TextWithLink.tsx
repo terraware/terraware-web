@@ -21,7 +21,7 @@ export default function TextWithLink({ className, href, onClick, text }: TextWit
   let linkText: string;
   let suffix: string;
 
-  if (linkStart >= 0 && linkEnd >= 0) {
+  if (linkStart >= 0 && linkEnd >= 0 && linkStart < linkEnd) {
     prefix = text.substring(0, linkStart);
     linkText = text.substring(linkStart + 1, linkEnd);
     suffix = text.substring(linkEnd + 1);
