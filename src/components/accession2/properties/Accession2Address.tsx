@@ -44,6 +44,9 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
   const onChangeCountry = (newValue: string) => {
     setTemporalCountryValue(newValue);
     const found = countries?.find((country) => country.name === newValue);
+    if (getSelectedSubdivision()) {
+      onChangeSubdivision('');
+    }
     if (found) {
       onChange('collectionSiteCountryCode', found.code.toString());
     } else {
@@ -119,15 +122,25 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
             />
           </Grid>
           <Grid item xs={gridSize()} sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }}>
-            <Autocomplete
-              id='collectionSiteCountrySubdivision'
-              selected={getSelectedSubdivision()?.name || temporalSubValue}
-              onChange={(value: any) => onChangeSubdivision(value)}
-              label={strings.STATE_PROVINCE_REGION}
-              placeholder={strings.STATE_PROVINCE_REGION}
-              options={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name) || []}
-              freeSolo={true}
-            />
+            {getSelectedCountry()?.subdivisions ? (
+              <Autocomplete
+                id='collectionSiteCountrySubdivision'
+                selected={getSelectedSubdivision()?.name || temporalSubValue}
+                onChange={(value: any) => onChangeSubdivision(value)}
+                label={strings.STATE_PROVINCE_REGION}
+                placeholder={strings.SELECT}
+                options={getSelectedCountry()?.subdivisions?.map((subdivision) => subdivision.name) || []}
+                freeSolo={true}
+              />
+            ) : (
+              <Textfield
+                id='collectionSiteCountrySubdivision'
+                value={record.collectionSiteCountrySubdivision}
+                onChange={(value) => onChange('collectionSiteCountrySubdivision', value)}
+                type='text'
+                label={strings.STATE_PROVINCE_REGION}
+              />
+            )}
           </Grid>
         </Grid>
       )}
