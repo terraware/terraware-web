@@ -1,4 +1,5 @@
 import { Chart } from 'chart.js';
+import strings from 'src/strings';
 
 export const getOrCreateLegendList = (chart: any, id: string) => {
   const legendContainer = document.getElementById(id);
@@ -32,7 +33,7 @@ export const htmlLegendPlugin = {
     const generateLabelsFunction = chart.options?.plugins?.legend?.labels?.generateLabels;
     if (generateLabelsFunction) {
       const items = generateLabelsFunction(chart);
-      const hasHumidityTresholds = items.find((item) => item.text === 'Humidity Thresholds');
+      const hasHumidityTresholds = items.find((item) => item.text === strings.MONITORING_LABEL_HUMIDITY_THRESHOLDS);
       items.forEach((item, index) => {
         const li = document.createElement('li');
         li.style.alignItems = 'center';
@@ -40,10 +41,13 @@ export const htmlLegendPlugin = {
         li.style.display = 'flex';
         li.style.flexDirection = 'row';
 
-        if (item.text === 'Humidity Thresholds' || item.text === 'System Power') {
+        if (
+          item.text === strings.MONITORING_LABEL_HUMIDITY_THRESHOLDS ||
+          item.text === strings.MONITORING_LABEL_SYSTEM_POWER
+        ) {
           li.style.marginLeft = 'auto';
         }
-        if (!hasHumidityTresholds && item.text === 'Humidity') {
+        if (!hasHumidityTresholds && item.text === strings.MONITORING_LABEL_HUMIDITY) {
           li.style.marginLeft = 'auto';
         }
 
