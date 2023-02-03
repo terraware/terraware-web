@@ -116,9 +116,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       }
       if (orgToUse) {
         setSelectedOrganization(orgToUse);
-        if (userPreferences?.lastVisitedOrg !== orgToUse.id) {
-          PreferencesService.updateUserPreferences({ lastVisitedOrg: orgToUse.id });
-        }
+        PreferencesService.updateUserPreferences({ lastVisitedOrg: orgToUse.id });
       }
       if (organizationId) {
         query.delete('organizationId');
