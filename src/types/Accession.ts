@@ -62,6 +62,7 @@ export function labSubstrates() {
     { label: strings.SAND, value: 'Sand' },
     { label: strings.NURSERY_MEDIA, value: 'Nursery Media' },
     { label: strings.OTHER, value: 'Other' },
+    { label: strings.NONE, value: 'None' },
   ];
 }
 
@@ -73,6 +74,7 @@ export function nurserySubstrates() {
     { label: strings.MOSS, value: 'Moss' },
     { label: strings.PERLITE_VERMICULITE, value: 'Perlite/Vermiculite' },
     { label: strings.OTHER, value: 'Other' },
+    { label: strings.NONE, value: 'None' },
   ];
 }
 

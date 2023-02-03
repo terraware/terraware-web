@@ -429,6 +429,13 @@ export interface components {
       subsetCount?: number;
       /** @description Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
       subsetWeight?: components["schemas"]["SeedQuantityPayload"];
+      /**
+       * Format: int32
+       * @description Total number of seeds withdrawn. If withdrawals are measured by weight, this is an estimate based on the accession's subset count and weight.
+       */
+      totalWithdrawnCount?: number;
+      /** @description Total weight of seeds withdrawn. If withdrawals are measured by seed count, this is an estimate based on the accession's subset count and weight. */
+      totalWithdrawnWeight?: components["schemas"]["SeedQuantityPayload"];
       /** Format: int32 */
       viabilityPercent?: number;
       viabilityTests?: components["schemas"]["GetViabilityTestPayload"][];
@@ -854,7 +861,8 @@ export interface components {
         | "Media Mix"
         | "Soil"
         | "Moss"
-        | "Perlite/Vermiculite";
+        | "Perlite/Vermiculite"
+        | "None";
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       testType: "Lab" | "Nursery" | "Cut";
       treatment?:
@@ -1218,7 +1226,8 @@ export interface components {
         | "Media Mix"
         | "Soil"
         | "Moss"
-        | "Perlite/Vermiculite";
+        | "Perlite/Vermiculite"
+        | "None";
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       testType: "Lab" | "Nursery" | "Cut";
       /** Format: int32 */
@@ -2112,7 +2121,8 @@ export interface components {
         | "Media Mix"
         | "Soil"
         | "Moss"
-        | "Perlite/Vermiculite";
+        | "Perlite/Vermiculite"
+        | "None";
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       treatment?:
         | "Soak"
