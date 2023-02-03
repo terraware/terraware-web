@@ -1,3 +1,4 @@
+523b824 SW-2866 Use popover component in locale selector (#1137)
 72f66ca SW-2869 Add component for text with embedded link (#1133)
 6783a0a SW-2806 Localize notification timestamps (#1131)
 831f7ad SW-2727 Show total accession withdrawal quantities (#1122)
