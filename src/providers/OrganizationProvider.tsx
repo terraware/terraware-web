@@ -31,7 +31,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const history = useHistory();
   const query = useQuery();
   const location = useStateLocation();
-  const { userPreferences } = useUser();
+  const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
 
   const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -43,7 +43,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           const orgToSelect = response.organizations.find((org) => org.id === selectedOrgId);
           if (orgToSelect) {
             setSelectedOrganization(orgToSelect);
-            PreferencesService.updateUserPreferences({ lastVisitedOrg: orgToSelect.id });
           }
         }
         if (response.organizations.length === 0) {
@@ -56,6 +55,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
         setOrgAPIRequestStatus(APIRequestStatus.FAILED);
       }
     };
+
     await populateOrganizations();
   }, []);
 
@@ -96,6 +96,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
         setBootstrapped(true);
       }
     };
+
     getOrgPreferences();
   }, [selectedOrganization]);
 
@@ -104,29 +105,32 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [reloadOrgPreferences, selectedOrganization]);
 
   useEffect(() => {
-    if (organizations.length && userPreferences) {
+    if (userBootstrapped && organizations.length && userPreferences) {
       const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
-      setSelectedOrganization((previouslySelectedOrg: Organization | undefined) => {
-        let orgToUse = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
-        if (!orgToUse && userPreferences.lastVisitedOrg) {
-          orgToUse = organizations.find((org) => org.id === userPreferences.lastVisitedOrg);
-        }
-        if (!orgToUse) {
-          orgToUse = organizations[0];
-        }
-        if (orgToUse && userPreferences?.lastVisitedOrg !== orgToUse.id) {
-          PreferencesService.updateUserPreferences({ lastVisitedOrg: orgToUse.id });
-        }
-        return orgToUse;
-      });
+      let orgToUse = querySelectionOrg || organizations.find((org) => org.id === selectedOrganization?.id);
+      if (!orgToUse && userPreferences.lastVisitedOrg) {
+        orgToUse = organizations.find((org) => org.id === userPreferences.lastVisitedOrg);
+      }
+      if (!orgToUse) {
+        orgToUse = organizations[0];
+      }
+      if (orgToUse) {
+        setSelectedOrganization(orgToUse);
+      }
       if (organizationId) {
         query.delete('organizationId');
         // preserve other url params
         history.push(getLocation(location.pathname, location, query.toString()));
       }
     }
-  }, [organizations, selectedOrganization, query, location, history, userPreferences]);
+  }, [organizations, selectedOrganization, query, location, history, userPreferences, userBootstrapped]);
+
+  useEffect(() => {
+    if (selectedOrganization?.id && userPreferences.lastVisitedOrg !== selectedOrganization.id) {
+      updateUserPreferences({ lastVisitedOrg: selectedOrganization.id });
+    }
+  }, [selectedOrganization?.id, updateUserPreferences, userPreferences.lastVisitedOrg]);
 
   if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
     history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);

@@ -13,6 +13,7 @@ export const UserContext = createContext<ProvidedUserData>({
   },
   userPreferences: {},
   bootstrapped: false,
+  updateUserPreferences: () => Promise.resolve(true),
 });
 
 export const defaultSelectedOrg: Organization = {
