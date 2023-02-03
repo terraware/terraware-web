@@ -30,6 +30,8 @@ import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
 import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
+import LocaleSelector from '../LocaleSelector';
+import { supportedLocales } from 'src/strings/locales';
 
 type MyAccountProps = {
   organizations?: Organization[];
@@ -94,6 +96,7 @@ const MyAccountContent = ({
   const contentRef = useRef(null);
   const timeZonesEnabled = isEnabled('Timezones');
   const weightUnitsEnabled = isEnabled('Weight units');
+  const localeSelectionEnabled = isEnabled('Locale selection');
   const { locale } = useLocalization();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
@@ -107,6 +110,11 @@ const MyAccountContent = ({
     { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
     { key: 'roleName', name: strings.ROLE, type: 'string' },
   ];
+  const [localeSelected, setLocaleSelected] = useState(locale);
+
+  useEffect(() => {
+    setLocaleSelected(locale);
+  }, [locale]);
 
   useEffect(() => {
     if (organizations && loadedStringsForLocale) {
@@ -156,6 +164,8 @@ const MyAccountContent = ({
       setPersonOrganizations(addRoleNames(organizations));
     }
     setRemovedOrg(undefined);
+    setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
+    setLocaleSelected(locale);
     setSelectedRows([]);
     history.push(APP_PATHS.MY_ACCOUNT);
   };
@@ -197,7 +207,7 @@ const MyAccountContent = ({
   const saveProfileChanges = async () => {
     // Save the currently-selected locale, even if it differs from the locale in the profile data we
     // fetched from the server.
-    const updateUserResponse = await UserService.updateUser({ ...record, locale });
+    const updateUserResponse = await UserService.updateUser({ ...record, locale: localeSelected });
     return updateUserResponse;
   };
 
@@ -369,29 +379,32 @@ const MyAccountContent = ({
                 readonly={true}
               />
             </Grid>
-            <Grid item xs={12} />
-            {timeZonesEnabled && (
-              <>
-                <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
-                  {edit ? (
-                    <TimeZoneSelector
-                      onTimeZoneSelected={onTimeZoneChange}
-                      selectedTimeZone={record.timeZone}
-                      tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
-                      label={strings.TIME_ZONE}
-                    />
-                  ) : (
-                    <TextField
-                      label={strings.TIME_ZONE}
-                      id='timezone'
-                      type='text'
-                      value={tz.longName}
-                      tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
-                      display={true}
-                    />
-                  )}
-                </Grid>
-              </>
+            <Grid item xs={12}>
+              <Typography fontSize='20px' fontWeight={600}>
+                {strings.LANGUAGE_AND_REGION}
+              </Typography>
+            </Grid>
+            {localeSelectionEnabled && (
+              <Grid
+                item
+                xs={isMobile ? 12 : 4}
+                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+              >
+                {edit ? (
+                  <LocaleSelector
+                    onChangeLocale={(newValue) => setLocaleSelected(newValue)}
+                    selectedLocale={localeSelected}
+                  />
+                ) : (
+                  <TextField
+                    label={strings.LANGUAGE}
+                    id='locale'
+                    type='text'
+                    value={supportedLocales.find((sLocale) => sLocale.id === locale)?.name}
+                    display={true}
+                  />
+                )}
+              </Grid>
             )}
             {weightUnitsEnabled && (
               <Grid
@@ -414,6 +427,29 @@ const MyAccountContent = ({
                   />
                 )}
               </Grid>
+            )}
+            {timeZonesEnabled && (
+              <>
+                <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+                  {edit ? (
+                    <TimeZoneSelector
+                      onTimeZoneSelected={onTimeZoneChange}
+                      selectedTimeZone={record.timeZone}
+                      tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                      label={strings.TIME_ZONE}
+                    />
+                  ) : (
+                    <TextField
+                      label={strings.TIME_ZONE}
+                      id='timezone'
+                      type='text'
+                      value={tz.longName}
+                      tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                      display={true}
+                    />
+                  )}
+                </Grid>
+              </>
             )}
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>

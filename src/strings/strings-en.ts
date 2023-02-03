@@ -403,6 +403,8 @@ export const strings = {
   LAB_GERMINATION: 'Lab Germination',
   LAB: 'Lab',
   LANDOWNER: 'Landowner',
+  LANGUAGE: 'Language',
+  LANGUAGE_AND_REGION: 'Language and Region',
   LAST_NAME: 'Last Name',
   LATITUDE_LONGITUDE: 'Latitude, Longitude',
   LB_POUNDS: 'lb (pounds)',
