@@ -532,6 +532,7 @@ export const strings = {
   NO_SPECIES_DESCRIPTION:
     'It looks like you haven’t added any species yet. Having a master species list helps streamline your organization’s seed and plant data entry. You can either add species manually and individually, or import data from a CSV.',
   NO: 'No',
+  NONE: 'None',
   NOT_CONNECTED: 'Not Connected',
   NOT_READY_QUANTITY_REQUIRED: 'Not Ready Quantity *',
   NOT_READY_QUANTITY: 'Not Ready Quantity',
