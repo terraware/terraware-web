@@ -30,6 +30,8 @@ import { getUTC } from 'src/utils/useTimeZoneUtils';
 import isEnabled from 'src/features';
 import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
+import LocaleSelector from '../LocaleSelector';
+import { supportedLocales } from 'src/strings/locales';
 
 type MyAccountProps = {
   organizations?: Organization[];
@@ -94,6 +96,7 @@ const MyAccountContent = ({
   const contentRef = useRef(null);
   const timeZonesEnabled = isEnabled('Timezones');
   const weightUnitsEnabled = isEnabled('Weight units');
+  const localeSelectionEnabled = isEnabled('Locale selection');
   const { locale } = useLocalization();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
@@ -107,6 +110,8 @@ const MyAccountContent = ({
     { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
     { key: 'roleName', name: strings.ROLE, type: 'string' },
   ];
+  const userLocale = supportedLocales.find((sLocale) => sLocale.id === user.locale);
+  const [localeSelected, setLocaleSelected] = useState((userLocale?.id as string) || '');
 
   useEffect(() => {
     if (organizations && loadedStringsForLocale) {
@@ -156,6 +161,8 @@ const MyAccountContent = ({
       setPersonOrganizations(addRoleNames(organizations));
     }
     setRemovedOrg(undefined);
+    setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
+    setLocaleSelected(userLocale?.id || '');
     setSelectedRows([]);
     history.push(APP_PATHS.MY_ACCOUNT);
   };
@@ -182,6 +189,10 @@ const MyAccountContent = ({
       if (weightUnitsEnabled) {
         await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
         reloadUserPreferences();
+      }
+      if (localeSelectionEnabled) {
+        await UserService.updateUser({ ...user, locale: localeSelected });
+        reloadUser();
       }
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded) {
@@ -371,9 +382,31 @@ const MyAccountContent = ({
             </Grid>
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600}>
-                {strings.REGION}
+                {strings.LANGUAGE_AND_REGION}
               </Typography>
             </Grid>
+            {localeSelectionEnabled && (
+              <Grid
+                item
+                xs={isMobile ? 12 : 4}
+                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+              >
+                {edit ? (
+                  <LocaleSelector
+                    onChangeLanguage={(newValue) => setLocaleSelected(newValue)}
+                    selectedLanguage={localeSelected}
+                  />
+                ) : (
+                  <TextField
+                    label={strings.LANGUAGE}
+                    id='locale'
+                    type='text'
+                    value={userLocale ? userLocale.name : ''}
+                    display={true}
+                  />
+                )}
+              </Grid>
+            )}
             {weightUnitsEnabled && (
               <Grid
                 item

@@ -240,7 +240,7 @@ export default function NavBar({
           id='contactus'
         />
 
-        {isEnabled('Locale selection') && <LocaleSelector />}
+        {isEnabled('Locale selection') && <LocaleSelector transparent={true} />}
       </NavFooter>
     </Navbar>
   );

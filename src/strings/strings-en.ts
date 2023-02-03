@@ -403,6 +403,8 @@ export const strings = {
   LAB_GERMINATION: 'Lab Germination',
   LAB: 'Lab',
   LANDOWNER: 'Landowner',
+  LANGUAGE: 'Language',
+  LANGUAGE_AND_REGION: 'Language and Region',
   LAST_NAME: 'Last Name',
   LATITUDE_LONGITUDE: 'Latitude, Longitude',
   LB_POUNDS: 'lb (pounds)',
@@ -676,7 +678,6 @@ export const strings = {
   RECORDING_DATE: 'Recording Date',
   REFRESH_DATA: 'Refresh Data',
   REFRESH: 'Refresh',
-  REGION: 'Region',
   REINTRODUCED_DESCRIPTION:
     'Plants that have been transplanted from a nursery, greenhouse, or other location to a restoration site.',
   REINTRODUCED: 'Reintroduced',
