@@ -110,8 +110,11 @@ const MyAccountContent = ({
     { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
     { key: 'roleName', name: strings.ROLE, type: 'string' },
   ];
-  const userLocale = supportedLocales.find((sLocale) => sLocale.id === user.locale);
-  const [localeSelected, setLocaleSelected] = useState((userLocale?.id as string) || '');
+  const [localeSelected, setLocaleSelected] = useState(locale);
+
+  useEffect(() => {
+    setLocaleSelected(locale);
+  }, [locale]);
 
   useEffect(() => {
     if (organizations && loadedStringsForLocale) {
@@ -162,7 +165,7 @@ const MyAccountContent = ({
     }
     setRemovedOrg(undefined);
     setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
-    setLocaleSelected(userLocale?.id || '');
+    setLocaleSelected(locale);
     setSelectedRows([]);
     history.push(APP_PATHS.MY_ACCOUNT);
   };
@@ -190,10 +193,6 @@ const MyAccountContent = ({
         await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
         reloadUserPreferences();
       }
-      if (localeSelectionEnabled) {
-        await UserService.updateUser({ ...user, locale: localeSelected });
-        reloadUser();
-      }
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded) {
         reloadUser();
@@ -208,7 +207,7 @@ const MyAccountContent = ({
   const saveProfileChanges = async () => {
     // Save the currently-selected locale, even if it differs from the locale in the profile data we
     // fetched from the server.
-    const updateUserResponse = await UserService.updateUser({ ...record, locale });
+    const updateUserResponse = await UserService.updateUser({ ...record, locale: localeSelected });
     return updateUserResponse;
   };
 
@@ -393,15 +392,15 @@ const MyAccountContent = ({
               >
                 {edit ? (
                   <LocaleSelector
-                    onChangeLanguage={(newValue) => setLocaleSelected(newValue)}
-                    selectedLanguage={localeSelected}
+                    onChangeLocale={(newValue) => setLocaleSelected(newValue)}
+                    selectedLocale={localeSelected}
                   />
                 ) : (
                   <TextField
                     label={strings.LANGUAGE}
                     id='locale'
                     type='text'
-                    value={userLocale ? userLocale.name : ''}
+                    value={supportedLocales.find((sLocale) => sLocale.id === locale)?.name}
                     display={true}
                   />
                 )}

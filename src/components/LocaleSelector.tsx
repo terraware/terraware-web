@@ -11,8 +11,8 @@ import strings from 'src/strings';
 
 type LocaleSelectorProps = {
   transparent?: boolean;
-  onChangeLanguage?: (newValue: string) => void;
-  selectedLanguage?: string;
+  onChangeLocale?: (newValue: string) => void;
+  selectedLocale?: string;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -38,8 +38,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function LocaleSelector({
   transparent,
-  onChangeLanguage,
-  selectedLanguage,
+  onChangeLocale,
+  selectedLocale,
 }: LocaleSelectorProps): JSX.Element {
   const { user, reloadUser } = useUser();
   const localeItems: DropdownItem[] = supportedLocales.map((supportedLocale) => ({
@@ -94,11 +94,11 @@ export default function LocaleSelector({
                 />
               </div>
             ) : (
-              onChangeLanguage && (
+              onChangeLocale && (
                 <Dropdown
                   label={strings.LANGUAGE}
-                  onChange={onChangeLanguage}
-                  selectedValue={selectedLanguage}
+                  onChange={onChangeLocale}
+                  selectedValue={selectedLocale}
                   options={localeItems}
                 />
               )
