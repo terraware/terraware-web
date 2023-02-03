@@ -1,9 +1,33 @@
-import { DropdownItem } from '@terraware/web-components';
+import { DropdownItem, Icon } from '@terraware/web-components';
 import { supportedLocales } from '../strings/locales';
 import { LocalizationContext } from '../providers/contexts';
-import Dropdown from './common/Dropdown';
 import { UserService } from 'src/services';
 import { useUser } from '../providers';
+import { makeStyles } from '@mui/styles';
+import { IconButton, Theme } from '@mui/material';
+import { useState } from 'react';
+import PopoverMenu from './common/PopoverMenu';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  iconContainer: {
+    height: '48px',
+    borderRadius: '16px',
+    padding: theme.spacing(1.5, 2),
+  },
+  icon: {
+    width: '32px',
+    height: '32px',
+  },
+  chevronDown: {
+    marginLeft: '8px',
+    fill: theme.palette.TwClrIcn,
+  },
+  selected: {
+    fontSize: '16px',
+    paddingLeft: '8px',
+    color: theme.palette.TwClrTxt,
+  },
+}));
 
 export default function LocaleSelector(): JSX.Element {
   const { user, reloadUser } = useUser();
@@ -11,11 +35,21 @@ export default function LocaleSelector(): JSX.Element {
     value: supportedLocale.id,
     label: supportedLocale.name,
   }));
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const classes = useStyles();
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <LocalizationContext.Consumer>
       {({ locale, setLocale }) => {
-        const onChange = (newValue: string) => {
+        const onChange = (selectedItem: DropdownItem) => {
+          const newValue = selectedItem.value;
           if (locale !== newValue) {
             setLocale(newValue);
           }
@@ -28,9 +62,23 @@ export default function LocaleSelector(): JSX.Element {
 
             updateUserLocale();
           }
+          handleClose();
         };
 
-        return <Dropdown id={'localeSelector'} label={''} onChange={onChange} selected={locale} values={localeItems} />;
+        return (
+          <div>
+            <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
+              <span className={classes.selected}>{localeItems.find((iLocale) => iLocale.value === locale)?.label}</span>
+              <Icon name='chevronDown' size='medium' className={classes.chevronDown} />
+            </IconButton>
+            <PopoverMenu
+              sections={[localeItems]}
+              handleClick={onChange}
+              anchorElement={anchorEl}
+              setAnchorElement={setAnchorEl}
+            />
+          </div>
+        );
       }}
     </LocalizationContext.Consumer>
   );
