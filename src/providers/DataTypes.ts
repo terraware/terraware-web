@@ -11,6 +11,7 @@ export type ProvidedUserData = {
   bootstrapped: boolean;
   userPreferences: PreferencesType;
   reloadUserPreferences: () => void;
+  updateUserPreferences: (preferences: PreferencesType) => Promise<boolean>;
 };
 
 export type ProvidedOrganizationData = {

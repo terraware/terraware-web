@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { User } from 'src/types/User';
 import { PreferencesService, UserService } from 'src/services';
 import { UserContext } from './contexts';
 import { PreferencesType, ProvidedUserData } from './DataTypes';
@@ -11,37 +12,34 @@ export type UserProviderProps = {
 
 export default function UserProvider({ children }: UserProviderProps): JSX.Element {
   const [userState, setUserState] = useRecoilState(userAtom);
-  const [userPreferences, setUserPreferences] = useState<PreferencesType>({});
+  const [user, setUser] = useState<User>();
+  const [userPreferences, setUserPreferences] = useState<PreferencesType>();
+
+  const updateUserPreferences = useCallback(async (preferences: PreferencesType) => {
+    const response = await PreferencesService.updateUserPreferences(preferences);
+    if (response.requestSucceeded) {
+      setUserPreferences(response.preferences ?? {});
+    }
+
+    return Promise.resolve(response.requestSucceeded);
+  }, []);
 
   const reloadUserPreferences = useCallback(() => {
     const getUserPreferences = async () => {
       const response = await PreferencesService.getUserPreferences();
-      if (response.requestSucceeded && response.preferences) {
-        setUserPreferences(response.preferences);
-      }
+
+      setUserPreferences(response.preferences ?? {});
     };
+
     getUserPreferences();
   }, [setUserPreferences]);
-
-  useEffect(() => {
-    setUserData((prev) => ({
-      ...prev,
-      userPreferences,
-      reloadUserPreferences,
-    }));
-  }, [userPreferences, reloadUserPreferences]);
 
   const reloadUser = useCallback(() => {
     const populateUser = async () => {
       const response = await UserService.getUser();
+
       if (response.requestSucceeded) {
-        setUserData((previous: ProvidedUserData) => {
-          return {
-            ...previous,
-            user: response.user!,
-            bootstrapped: true,
-          };
-        });
+        setUser(response.user!);
         if (response.user && !userState?.gtmInstrumented && (window as any).INIT_GTAG) {
           setUserState({ gtmInstrumented: true });
           (window as any).INIT_GTAG(
@@ -51,26 +49,37 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
         }
       }
     };
+
     populateUser();
-  }, [userState, setUserState]);
+  }, [setUser, setUserState, userState?.gtmInstrumented]);
+
+  const [userData, setUserData] = useState<ProvidedUserData>({
+    reloadUser,
+    bootstrapped: false,
+    userPreferences: {},
+    reloadUserPreferences,
+    updateUserPreferences,
+  });
 
   useEffect(() => {
     reloadUserPreferences();
   }, [reloadUserPreferences]);
 
-  const [userData, setUserData] = useState<ProvidedUserData>({
-    reloadUser,
-    bootstrapped: false,
-    userPreferences,
-    reloadUserPreferences,
-  });
+  useEffect(() => {
+    if (!user) {
+      reloadUser();
+    }
+  }, [user, reloadUser]);
 
   useEffect(() => {
-    if (userData.user) {
-      return;
-    }
-    reloadUser();
-  }, [userData.user, reloadUser]);
+    setUserData((prev) => ({
+      ...prev,
+      user,
+      userPreferences: userPreferences ?? {},
+      reloadUserPreferences,
+      bootstrapped: Boolean(userPreferences && user),
+    }));
+  }, [user, userPreferences, reloadUserPreferences]);
 
   return <UserContext.Provider value={userData}>{children}</UserContext.Provider>;
 }
