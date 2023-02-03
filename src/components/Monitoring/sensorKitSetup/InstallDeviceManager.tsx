@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import React, { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { DeviceManager } from 'src/types/DeviceManager';
 import FlowStep, { FlowError } from './FlowStep';
 import { connectDeviceManager, getDeviceManager } from 'src/api/deviceManager/deviceManager';

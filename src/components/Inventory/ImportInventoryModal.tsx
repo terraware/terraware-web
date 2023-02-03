@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { downloadInventoryTemplate, getInventoryUploadStatus, uploadInventoryFile } from 'src/api/inventory/inventory';
 import { resolveSpeciesUpload } from 'src/api/species/species';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import ImportModal from '../common/ImportModal';

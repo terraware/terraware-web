@@ -7,7 +7,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
 import TfMain from '../common/TfMain';
 import Select from '../common/Select/Select';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { PreferencesService } from 'src/services';
 import SeedBankMonitoring from './SeedBankMonitoring';
 import Button from '../common/button/Button';

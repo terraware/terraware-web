@@ -1,4 +1,4 @@
-import { Facility, FacilityType } from 'src/api/types/facilities';
+import { Facility, FacilityType } from 'src/types/Facility';
 import { HighOrganizationRolesValues, Organization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 

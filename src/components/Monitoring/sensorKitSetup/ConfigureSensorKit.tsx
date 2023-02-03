@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import FlowStep, { FlowError } from './FlowStep';
 import { markSensorKitConfigured } from 'src/api/facility/facility';
 

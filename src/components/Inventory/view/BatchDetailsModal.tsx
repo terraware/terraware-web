@@ -15,7 +15,7 @@ import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
 import isEnabled from 'src/features';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { getNurseryById } from 'src/utils/organization';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 

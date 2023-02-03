@@ -3,13 +3,13 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Grid } from '@mui/material';
-import { Facility, StorageLocationDetails } from 'src/api/types/facilities';
+import { Facility, StorageLocationDetails } from 'src/types/Facility';
 import theme from 'src/theme';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Accession } from 'src/types/Accession';
 import AccessionsService from 'src/services/AccessionsService';
 import useForm from 'src/utils/useForm';
-import { getLocations } from 'src/api/seeds/locations';
+import { SeedBankService } from 'src/services';
 import { StorageLocationSelector, StorageSubLocationSelector } from '../properties';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
@@ -42,9 +42,9 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   useEffect(() => {
     const setLocations = async () => {
       if (record.facilityId) {
-        const response = await getLocations(record.facilityId);
-        if (response) {
-          setStorageLocations(response);
+        const response = await SeedBankService.getStorageLocations(record.facilityId);
+        if (response.requestSucceeded) {
+          setStorageLocations(response.locations);
         } else {
           setStorageLocations([]);
         }

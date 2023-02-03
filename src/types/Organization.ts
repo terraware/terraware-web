@@ -1,4 +1,4 @@
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from './Facility';
 import strings from 'src/strings';
 
 export type Organization = {

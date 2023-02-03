@@ -2,7 +2,7 @@ import { Box, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from 'src/api/types/uploadFile';
 import strings from 'src/strings';
 import Button from './button/Button';

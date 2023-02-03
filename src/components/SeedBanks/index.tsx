@@ -8,7 +8,7 @@ import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import TfMain from '../common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import SeedBanksCellRenderer from './TableCellRenderer';
 import TextField from '../common/Textfield/Textfield';
 import { FacilityService } from 'src/services';

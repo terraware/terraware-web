@@ -6,7 +6,7 @@ import strings from 'src/strings';
 import { FacilityService } from 'src/services';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import TfMain from '../common/TfMain';

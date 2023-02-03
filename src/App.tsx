@@ -27,7 +27,7 @@ import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
 import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
-import { FacilityType } from 'src/api/types/facilities';
+import { FacilityType } from 'src/types/Facility';
 import MyAccount from './components/MyAccount';
 import { getAllSpecies } from './api/species/species';
 import { Species } from './types/Species';

@@ -1,6 +1,6 @@
 import React from 'react';
 import strings from 'src/strings';
-import { Facility } from 'src/api/types/facilities';
+import { Facility } from 'src/types/Facility';
 import { SelectT } from '@terraware/web-components';
 
 type StorageLocationSelectorProps = {
