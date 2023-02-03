@@ -676,6 +676,7 @@ export const strings = {
   RECORDING_DATE: 'Recording Date',
   REFRESH_DATA: 'Refresh Data',
   REFRESH: 'Refresh',
+  REGION: 'Region',
   REINTRODUCED_DESCRIPTION:
     'Plants that have been transplanted from a nursery, greenhouse, or other location to a restoration site.',
   REINTRODUCED: 'Reintroduced',
