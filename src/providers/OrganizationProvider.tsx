@@ -108,11 +108,11 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
       let orgToUse = querySelectionOrg || organizations.find((org) => org.id === selectedOrganization?.id);
-      if (!orgToUse) {
-        orgToUse = organizations[0];
-      }
       if (!orgToUse && userPreferences.lastVisitedOrg) {
         orgToUse = organizations.find((org) => org.id === userPreferences.lastVisitedOrg);
+      }
+      if (!orgToUse) {
+        orgToUse = organizations[0];
       }
       if (orgToUse) {
         setSelectedOrganization(orgToUse);
