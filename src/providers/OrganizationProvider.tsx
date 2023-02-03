@@ -107,19 +107,17 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     if (organizations.length && userPreferences) {
       const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
-      setSelectedOrganization((previouslySelectedOrg: Organization | undefined) => {
-        let orgToUse = querySelectionOrg || organizations.find((org) => org.id === previouslySelectedOrg?.id);
-        if (!orgToUse && userPreferences.lastVisitedOrg) {
-          orgToUse = organizations.find((org) => org.id === userPreferences.lastVisitedOrg);
-        }
-        if (!orgToUse) {
-          orgToUse = organizations[0];
-        }
-        if (orgToUse && userPreferences?.lastVisitedOrg !== orgToUse.id) {
-          PreferencesService.updateUserPreferences({ lastVisitedOrg: orgToUse.id });
-        }
-        return orgToUse;
-      });
+      let orgToUse = querySelectionOrg || organizations.find((org) => org.id === selectedOrganization?.id);
+      if (!orgToUse && userPreferences.lastVisitedOrg) {
+        orgToUse = organizations.find((org) => org.id === userPreferences.lastVisitedOrg);
+      }
+      if (!orgToUse) {
+        orgToUse = organizations[0];
+      }
+      if (orgToUse) {
+        setSelectedOrganization(orgToUse);
+        PreferencesService.updateUserPreferences({ lastVisitedOrg: orgToUse.id });
+      }
       if (organizationId) {
         query.delete('organizationId');
         // preserve other url params
