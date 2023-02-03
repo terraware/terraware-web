@@ -22,6 +22,7 @@ import { Theme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Dropdown } from '@terraware/web-components';
 import { useLocalization } from 'src/providers';
+import { newChart } from '../../common/Chart';
 
 declare global {
   interface Window {
@@ -131,13 +132,13 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
       }
     };
 
-    const createHTChart = (
+    const createHTChart = async (
       temperatureValues: HumidityValues[],
       humidityValues: HumidityValues[],
       chartReference: React.RefObject<HTMLCanvasElement>
     ) => {
       const ctx = chartReference?.current?.getContext('2d');
-      if (ctx && selectedLocation && selectedPeriod) {
+      if (ctx && selectedLocation && selectedPeriod && loadedStringsForLocale) {
         const commonDatasets = [
           {
             data: temperatureValues?.map((entry) => {
@@ -288,7 +289,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
         }
 
         const timePeriodParams = getTimePeriodParams(selectedPeriod, timeZone);
-        window.temperatureHumidityChart = new Chart(ctx, {
+        window.temperatureHumidityChart = await newChart(loadedStringsForLocale, ctx, {
           type: 'scatter',
           data: {
             datasets: datasetsToUse,
@@ -298,7 +299,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
               y: {
                 ticks: {
                   callback: (value, index, ticks) => {
-                    return `${value}ºC`;
+                    return strings.formatString(strings.DEGREES_CELSIUS_VALUE, value) as string;
                   },
                 },
                 suggestedMax: Number(getMaxValue(temperatureValues)) + 10,
@@ -309,7 +310,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                 time: {
                   unit: getUnit(selectedPeriod),
                   displayFormats: {
-                    hour: 'MMM d h:mm',
+                    hour: 'PPp',
                   },
                 },
                 max:
@@ -331,7 +332,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                 },
                 ticks: {
                   callback: (value, index, ticks) => {
-                    return `${value}%`;
+                    return strings.formatString(strings.PERCENTAGE_VALUE, value) as string;
                   },
                 },
               },
@@ -386,7 +387,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             if (window.temperatureHumidityChart instanceof Chart) {
               window.temperatureHumidityChart.destroy();
             }
-            createHTChart(response.values[0]?.values, response.values[1]?.values, chartRef);
+            await createHTChart(response.values[0]?.values, response.values[1]?.values, chartRef);
           }
         }
       }
