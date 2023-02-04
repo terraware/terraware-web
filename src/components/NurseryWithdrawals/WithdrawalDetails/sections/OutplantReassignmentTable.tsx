@@ -1,5 +1,5 @@
 import { Species } from 'src/types/Species';
-import { Delivery } from 'src/api/types/tracking';
+import { Delivery } from 'src/types/Tracking';
 import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useEffect, useState } from 'react';

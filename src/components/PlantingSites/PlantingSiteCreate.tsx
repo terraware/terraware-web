@@ -17,7 +17,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useEffect, useState } from 'react';
 import PageSnackbar from '../PageSnackbar';
-import { PlantingSite } from 'src/api/types/tracking';
+import { PlantingSite } from 'src/types/Tracking';
 import BoundariesAndPlots from './BoundariesAndPlots';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';

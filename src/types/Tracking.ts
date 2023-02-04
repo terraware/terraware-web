@@ -1,4 +1,4 @@
-import { components } from './generated-schema';
+import { components } from 'src/api/types/generated-schema';
 
 const schemas = 'schemas';
 

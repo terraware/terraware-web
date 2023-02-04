@@ -1,5 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
+
 const TIMEZONES_ENDPOINT = '/api/v1/i18n/timeZones';
 
 type TimeZonesServerResponse = paths[typeof TIMEZONES_ENDPOINT]['get']['responses'][200]['content']['application/json'];

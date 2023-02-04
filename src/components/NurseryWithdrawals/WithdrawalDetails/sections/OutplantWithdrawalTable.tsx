@@ -1,7 +1,7 @@
 import { TableColumnType } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import { Delivery } from 'src/api/types/tracking';
+import { Delivery } from 'src/types/Tracking';
 import { Species } from 'src/types/Species';
 import Table from 'src/components/common/table';
 

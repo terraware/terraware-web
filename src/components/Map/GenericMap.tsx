@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Box, CircularProgress } from '@mui/material';
-import { getMapboxToken } from 'src/api/tracking/tracking';
+import { MapService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import Map from './Map';
-import { MapEntityOptions, MapOptions, MapPopupRenderer } from './MapModels';
+import { MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';
 
 const DUMMY_MAP_OPTIONS: MapOptions = {
   bbox: {
@@ -35,7 +35,7 @@ export default function GenericMap({
 
   // fetch token
   const fetchMapboxToken = useCallback(async () => {
-    const response = await getMapboxToken();
+    const response = await MapService.getMapboxToken();
     if (response.requestSucceeded) {
       setToken(response.token);
       setMapId(Date.now().toString());

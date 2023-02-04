@@ -1,7 +1,7 @@
 import axios from '../';
 import { addError } from '../utils';
 import { paths } from 'src/api/types/generated-schema';
-import { Delivery } from 'src/api/types/tracking';
+import { Delivery } from 'src/types/Tracking';
 
 /**
  * Get a delivery by id

@@ -10,7 +10,7 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import { useEffect, useState } from 'react';
 import PageSnackbar from '../PageSnackbar';
 import { makeStyles } from '@mui/styles';
-import { PlantingSite } from 'src/api/types/tracking';
+import { PlantingSite } from 'src/types/Tracking';
 import BoundariesAndPlots from './BoundariesAndPlots';
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
