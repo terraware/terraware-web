@@ -13,7 +13,7 @@
     "@mui/material": "^5.8.7",
     "@mui/styled-engine-sc": "^5.8.0",
     "@mui/styles": "^5.11.2",
-    "@mui/x-date-pickers": "^5.0.0-alpha.7",
+    "@mui/x-date-pickers": "^5.0.17",
     "@reduxjs/toolkit": "^1.9.1",
     "@terraware/web-components": "^2.1.7",
     "@testing-library/jest-dom": "^5.11.4",
