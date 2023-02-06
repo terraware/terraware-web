@@ -310,7 +310,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                 time: {
                   unit: getUnit(selectedPeriod),
                   displayFormats: {
-                    hour: 'PPp',
+                    hour: strings.MONITORING_DATE_FORMAT,
                   },
                 },
                 max:

@@ -464,6 +464,8 @@ export const strings = {
     'You must enter in a subset weight in order to create a viability test. This can be done by editing the quantity of this accession.',
   MONITORING_CARD_DESCRIPTION:
     'Add seed banks to your organization and then monitor things like temperature and humidity through their sensor kits.',
+  // https://date-fns.org/v2.29.3/docs/format
+  MONITORING_DATE_FORMAT: 'MMM d h:mmaaa',
   MONITORING_LABEL_HUMIDITY: 'Humidity',
   MONITORING_LABEL_HUMIDITY_THRESHOLDS: 'Humidity Thresholds',
   MONITORING_LABEL_STATE_OF_CHARGE: 'State of Charge',

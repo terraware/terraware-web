@@ -1,6 +1,11 @@
 import { strings as english } from './strings-en';
 import { ILocalizedStrings } from './index';
 
+/** Override the default gibberish strings in specific cases. */
+const overrides = {
+  MONITORING_DATE_FORMAT: 'kk:mm d Mo',
+};
+
 /**
  * Transforms the English strings table into gibberish.
  *
@@ -30,7 +35,7 @@ function generateGibberish(): ILocalizedStrings {
     gibberish[key as keyof ILocalizedStrings] = encodedWords.join(' ');
   });
 
-  return gibberish;
+  return { ...gibberish, ...overrides };
 }
 
 export const strings = generateGibberish();

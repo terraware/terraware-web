@@ -148,7 +148,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 time: {
                   unit: getUnit(selectedPVBatteryPeriod),
                   displayFormats: {
-                    hour: 'PPp',
+                    hour: strings.MONITORING_DATE_FORMAT,
                   },
                 },
                 max:

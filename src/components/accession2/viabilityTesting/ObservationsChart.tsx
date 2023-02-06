@@ -33,6 +33,12 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
           chartRef.current = null;
         }
 
+        // The X axis is the user-entered observation date. Since it's user-entered, we want to
+        // display it as-is rather than trying to do a time zone adjustment. Since Chart.js shows
+        // dates and times in the browser time zone, we therefore need to adjust the observation
+        // dates so they match the user's time zone. That is, if the user is in, say, East Africa
+        // Time, we need to take a user-entered date of 2023-01-26 and turn it into a timestamp of
+        // 2023-01-26T00:00:00 EAT.
         const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const data = observations.reverse().map((entry) => ({
           x: moment.tz(entry.recordingDate, localTimeZone).toDate(),
