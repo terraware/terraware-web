@@ -196,6 +196,7 @@ export const strings = {
   DATE_ADDED: 'Date Added',
   DATE: 'Date',
   DEAD: 'Dead',
+  DEGREES_CELSIUS_VALUE: '{0}ºC',
   DELETE_ACCESSION_MESSAGE: 'You’re about to delete accession {0}.',
   DELETE_ACCESSION: 'Delete Accession',
   DELETE_CONFIRMATION_MODAL_MAIN_TEXT:
@@ -463,6 +464,8 @@ export const strings = {
     'You must enter in a subset weight in order to create a viability test. This can be done by editing the quantity of this accession.',
   MONITORING_CARD_DESCRIPTION:
     'Add seed banks to your organization and then monitor things like temperature and humidity through their sensor kits.',
+  // https://date-fns.org/v2.29.3/docs/format
+  MONITORING_DATE_FORMAT: 'MMM d h:mmaaa',
   MONITORING_LABEL_HUMIDITY: 'Humidity',
   MONITORING_LABEL_HUMIDITY_THRESHOLDS: 'Humidity Thresholds',
   MONITORING_LABEL_STATE_OF_CHARGE: 'State of Charge',
@@ -605,6 +608,7 @@ export const strings = {
   PEOPLE_CARD_DESCRIPTION: 'We can’t do it alone! Add people to your Organization and assign them roles.',
   PEOPLE_DESCRIPTION: 'Manage the people in Terraware.',
   PEOPLE: 'People',
+  PERCENTAGE_VALUE: '{0}%',
   PERCENTAGE_VIABILITY: '% Viability',
   PERIOD_LAST_12_HOURS: 'Last 12 hours',
   PERIOD_LAST_24_HOURS: 'Last 24 hours',
@@ -650,7 +654,6 @@ export const strings = {
   PROCESSING_START_DATE: 'Processing Start Date',
   PROCESSING_STATUS_REQUIRED: 'Processing Status *',
   PROCESSING: 'Processing',
-  PROGRESS_PERCENT: '{0}%',
   PURPOSE_REQUIRED: 'Purpose *',
   PURPOSE: 'Purpose',
   PV_BATTERY_CHARGE: 'PV Battery Charge',
@@ -1047,6 +1050,7 @@ export const strings = {
   VIEW_SITES_ZONES_PLOTS: 'View Sites, Zones, and Plots on a map.',
   VIEW: 'View',
   WAITING_TO_DOWNLOAD: 'Waiting to download...',
+  WATTS_VALUE: '{0}W',
   WEIGHT_GRAMS: 'Weight (g)',
   WEIGHT_KILOGRAMS: 'Weight (kg)',
   WEIGHT_MILLIGRAMS: 'Weight (mg)',
