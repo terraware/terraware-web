@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Accession } from 'src/types/Accession';
-import AccessionsService from 'src/services/AccessionsService';
+import AccessionService from 'src/services/AccessionService';
 import useForm from 'src/utils/useForm';
 import EditState from './EditState';
 import QuantityModal from './QuantityModal';
@@ -26,7 +26,7 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
 
   const saveState = async () => {
     if (record) {
-      const response = await AccessionsService.updateAccession(record);
+      const response = await AccessionService.updateAccession(record);
       if (response.requestSucceeded) {
         reload();
       }

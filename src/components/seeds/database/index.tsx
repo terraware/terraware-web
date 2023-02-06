@@ -12,7 +12,7 @@ import {
   getPendingAccessions,
   searchFieldValues,
 } from 'src/api/seeds/search';
-import { AccessionsService } from 'src/services';
+import { SeedBankService } from 'src/services';
 import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/services/SearchService';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -323,7 +323,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   useEffect(() => {
     const populateUnfilteredResults = async () => {
-      const apiResponse = await AccessionsService.searchAccessions({
+      const apiResponse = await SeedBankService.searchAccessions({
         organizationId: selectedOrganization.id,
         fields: ['id'],
       });
@@ -353,7 +353,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
     if (selectedOrganization) {
       const populateSearchResults = async () => {
-        const apiResponse = await AccessionsService.searchAccessions({
+        const apiResponse = await SeedBankService.searchAccessions({
           organizationId: selectedOrganization.id,
           fields: getFieldsFromSearchColumns(),
           sortOrder: searchSortOrder,

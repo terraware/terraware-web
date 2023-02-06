@@ -5,7 +5,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Grid, useTheme } from '@mui/material';
 import { Checkbox, DatePicker } from '@terraware/web-components';
 import { Accession } from 'src/types/Accession';
-import AccessionsService from 'src/services/AccessionsService';
+import AccessionService from 'src/services/AccessionService';
 import useForm from 'src/utils/useForm';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -43,7 +43,7 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
       return;
     }
     if (record) {
-      const response = await AccessionsService.updateAccession(record);
+      const response = await AccessionService.updateAccession(record);
       if (response.requestSucceeded) {
         reload();
         onClose();

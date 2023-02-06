@@ -6,7 +6,7 @@ import moment from 'moment';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Accession } from 'src/types/Accession';
-import AccessionsService from 'src/services/AccessionsService';
+import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import DeleteAccessionModal from '../edit/DeleteAccessionModal';
@@ -110,7 +110,7 @@ export default function Accession2View(): JSX.Element {
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
-      const response = await AccessionsService.getAccession(parseInt(accessionId, 10));
+      const response = await AccessionService.getAccession(parseInt(accessionId, 10));
       if (response.requestSucceeded) {
         if (!_.isEqual(response.accession, accession)) {
           setAccession(response.accession);
@@ -197,7 +197,7 @@ export default function Accession2View(): JSX.Element {
   const checkInAccession = async () => {
     if (accession) {
       try {
-        await AccessionsService.checkInAccession(accession.id);
+        await AccessionService.checkInAccession(accession.id);
         reloadData();
         setOpenCheckInConfirmationModal(true);
       } catch (e) {
