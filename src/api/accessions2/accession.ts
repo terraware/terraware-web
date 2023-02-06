@@ -2,11 +2,11 @@ import axios from 'axios';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from '../types/uploadFile';
 import { paths } from '../types/generated-schema';
 
-const DOWNLOAD_ACCESSIONS_TEMPLATE = '/api/v2/seedbank/accessions/uploads/template';
+/*const DOWNLOAD_ACCESSIONS_TEMPLATE = '/api/v2/seedbank/accessions/uploads/template';
 export async function downloadAccessionsTemplate() {
   const response = (await axios.get(DOWNLOAD_ACCESSIONS_TEMPLATE)).data;
   return response;
-}
+}*/
 
 const UPLOAD_ACCESSIONS_FILE = '/api/v2/seedbank/accessions/uploads';
 type UploadAccessionsFileResponse =

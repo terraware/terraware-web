@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useRecoilState } from 'recoil';
-import { getPendingAccessions } from 'src/api/seeds/search';
+import { SeedBankService } from 'src/services';
 import { SearchResponseElement } from 'src/api/search';
 import Button from 'src/components/common/button/Button';
 import TfMain from 'src/components/common/TfMain';
@@ -64,7 +64,7 @@ export default function CheckIn(): JSX.Element {
   useEffect(() => {
     const populatePendingAccessions = async () => {
       if (selectedOrganization) {
-        setPendingAccessions(await getPendingAccessions(selectedOrganization.id));
+        setPendingAccessions(await SeedBankService.getPendingAccessions(selectedOrganization.id));
       }
     };
     populatePendingAccessions();

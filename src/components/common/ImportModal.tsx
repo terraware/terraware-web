@@ -3,7 +3,12 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { Facility } from 'src/types/Facility';
-import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from 'src/api/types/uploadFile';
+import {
+  UploadResponse,
+  GetUploadStatusResponsePayload,
+  ResolveResponse,
+  UploadFileResponse,
+} from 'src/api/types/uploadFile';
 import strings from 'src/strings';
 import Button from './button/Button';
 import DialogBox from './DialogBox/DialogBox';
@@ -76,7 +81,7 @@ export type ImportSpeciesModalProps = {
   uploaderDescription: string;
   uploadApi: (file: File, orgOrFacilityId: string) => Promise<UploadFileResponse>;
   templateApi: () => Promise<any>;
-  statusApi: (uploadId: number) => Promise<GetUploadStatusResponsePayload>;
+  statusApi: (uploadId: number) => Promise<GetUploadStatusResponsePayload | UploadResponse>;
   importCompleteLabel: string;
   importingLabel: string;
   duplicatedLabel: string;
@@ -87,7 +92,8 @@ export type ImportSpeciesModalProps = {
 
 export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>) => {
   const apiResponse = await templateApi();
-  const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
+  const data = apiResponse?.template ?? apiResponse; // TODO, make all API return a { template: <string> } type
+  const csvContent = 'data:text/csv;charset=utf-8,' + data;
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement('a');
   link.setAttribute('href', encodedUri);
@@ -194,7 +200,13 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   };
 
   const getFileStatus = async (id: number) => {
-    setFileStatus(await statusApi(id));
+    const status: any = await statusApi(id);
+    if (status?.requestSucceeded === true) {
+      setFileStatus(status.uploadStatus as GetUploadStatusResponsePayload);
+    } else if (status?.requestSucceeded !== false) {
+      // TODO: remove old format
+      setFileStatus(status);
+    }
   };
 
   const importDataHandler = async () => {

@@ -4,15 +4,11 @@ import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
-import {
-  AllFieldValuesMap,
+import SeedBankService, {
   DEFAULT_SEED_SEARCH_FILTERS,
+  AllFieldValuesMap,
   FieldValuesMap,
-  getAllFieldValues,
-  getPendingAccessions,
-  searchFieldValues,
-} from 'src/api/seeds/search';
-import { SeedBankService } from 'src/services';
+} from 'src/services/SeedBankService';
 import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/services/SearchService';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -41,7 +37,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportAccessionsModal from './ImportAccessionsModal';
 import { Message } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
-import { downloadAccessionsTemplate } from 'src/api/accessions2/accession';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
@@ -331,7 +326,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       setUnfilteredResults(apiResponse);
     };
     const populatePendingAccessions = async () => {
-      const data = await getPendingAccessions(selectedOrganization.id);
+      const data = await SeedBankService.getPendingAccessions(selectedOrganization.id);
       setPendingAccessions(data);
     };
     populateUnfilteredResults();
@@ -367,7 +362,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateAvailableFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        const data = await searchFieldValues(singleAndMultiChoiceFields, searchCriteria, selectedOrganization.id);
+        const data = await SeedBankService.searchFieldValues(
+          singleAndMultiChoiceFields,
+          searchCriteria,
+          selectedOrganization.id
+        );
 
         if (activeRequests) {
           setAvailableFieldOptions(data);
@@ -376,7 +375,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        const allValues = await getAllFieldValues(singleAndMultiChoiceFields, selectedOrganization.id);
+        const allValues = await SeedBankService.getAllFieldValues(singleAndMultiChoiceFields, selectedOrganization.id);
 
         if (activeRequests) {
           setFieldOptions(allValues);
@@ -525,7 +524,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           title: strings.IMPORT_ACCESSIONS_ALT_TITLE,
           text: strings.IMPORT_ACCESSIONS_WITH_TEMPLATE,
           linkText: strings.DOWNLOAD_THE_CSV_TEMPLATE,
-          onLinkClick: () => downloadCsvTemplateHandler(downloadAccessionsTemplate),
+          onLinkClick: () => downloadCsvTemplateHandler(SeedBankService.downloadAccessionsTemplate),
           buttonText: strings.IMPORT_ACCESSIONS,
           onClick: () => importAccessions(),
         },
