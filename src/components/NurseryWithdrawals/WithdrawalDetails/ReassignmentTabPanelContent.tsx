@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
 import { Species } from 'src/types/Species';
 import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
-import { Delivery } from 'src/api/types/tracking';
+import { Delivery } from 'src/types/Tracking';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 

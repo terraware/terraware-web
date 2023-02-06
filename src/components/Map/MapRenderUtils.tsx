@@ -1,6 +1,6 @@
 import { makeStyles } from '@mui/styles';
 import { Box, Typography, useTheme } from '@mui/material';
-import { MapPopupRenderer, MapSourceProperties } from './MapModels';
+import { MapPopupRenderer, MapSourceProperties } from 'src/types/Map';
 import strings from 'src/strings';
 
 const useStyles = makeStyles(() => ({

@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
-import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer } from './MapModels';
-import { getBoundingBox } from './MapUtils';
+import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';
+import { MapService } from 'src/services';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -131,7 +131,7 @@ export default function Map(props: MapProps): JSX.Element {
         return;
       }
       const coordinates = feature.geometry.coordinates;
-      const bbox = getBoundingBox([[coordinates]]);
+      const bbox = MapService.getBoundingBox([[coordinates]]);
       map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
     },
     [geoData]
@@ -188,19 +188,8 @@ export default function Map(props: MapProps): JSX.Element {
     const geo = sources
       .map((source) => {
         const features = source.entities
-          .map((data) => {
-            if (!data.boundary || !Array.isArray(data.boundary)) {
-              return null;
-            }
-            const multiPolygons = (data.boundary as number[][][][])
-              .map((geom) => {
-                if (!Array.isArray(geom)) {
-                  return null;
-                }
-                return geom as number[][][];
-              })
-              .filter((geom) => !!geom) as number[][][][];
-
+          .map((entity) => {
+            const multiPolygons = MapService.getMapEntityGeometry(entity);
             if (!multiPolygons.length) {
               return null;
             }
@@ -210,8 +199,8 @@ export default function Map(props: MapProps): JSX.Element {
                 type: 'Polygon',
                 coordinates: multiPolygon,
               },
-              properties: data.properties,
-              id: data.id,
+              properties: entity.properties,
+              id: entity.id,
             }));
           })
           .filter((f) => f)

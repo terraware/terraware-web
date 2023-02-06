@@ -55,7 +55,7 @@ import {
 import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { listPlantingSites } from './api/tracking/tracking';
-import { PlantingSite } from './api/types/tracking';
+import { PlantingSite } from 'src/types/Tracking';
 import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { TimeZoneDescription, InitializedTimeZone } from 'src/types/TimeZones';

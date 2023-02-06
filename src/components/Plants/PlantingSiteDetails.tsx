@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Grid, useTheme } from '@mui/material';
-import { PlantingSite } from 'src/api/types/tracking';
+import { PlantingSite } from 'src/types/Tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { search } from 'src/api/search';
 import SpeciesByPlotChart from './SpeciesByPlotChart';

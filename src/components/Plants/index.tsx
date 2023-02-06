@@ -4,7 +4,7 @@ import TfMain from 'src/components/common/TfMain';
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Select } from '@terraware/web-components';
 import { listPlantingSites } from 'src/api/tracking/tracking';
-import { PlantingSite } from 'src/api/types/tracking';
+import { PlantingSite } from 'src/types/Tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';

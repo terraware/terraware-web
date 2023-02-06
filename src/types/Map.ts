@@ -54,12 +54,15 @@ export type MapEntity = {
   id: number;
 };
 
-export type MapSource = {
+export type MapSourceBaseData = {
   id: string;
+  entities: MapEntity[];
+};
+
+export type MapSource = MapSourceBaseData & {
   fillColor: string;
   lineColor: string;
   lineWidth: number;
-  entities: MapEntity[];
   isInteractive?: boolean;
   // property name to render as a polygon annotation
   annotation?: MapAnnotation;

@@ -11,7 +11,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { NurseryWithdrawalsFiltersType } from './NurseryWithdrawals';
 import { NurseryWithdrawalPurposesValues } from 'src/api/types/batch';
 import { listPlantingSites } from 'src/api/tracking/tracking';
-import { PlantingSite } from 'src/api/types/tracking';
+import { PlantingSite } from 'src/types/Tracking';
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 import moment from 'moment';

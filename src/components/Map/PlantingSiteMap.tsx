@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, CircularProgress, useTheme } from '@mui/material';
 import hexRgb from 'hex-rgb';
-import { MultiPolygon, PlantingSite } from 'src/api/types/tracking';
+import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import GenericMap from './GenericMap';
-import { MapEntityId, MapEntityOptions, MapGeometry, MapOptions, MapPopupRenderer, MapSource } from './MapModels';
-import { getBoundingBox } from './MapUtils';
+import { MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer, MapSource } from 'src/types/Map';
+import { MapService } from 'src/services';
 import _ from 'lodash';
 
 export type PlantingSiteMapProps = {
@@ -61,76 +61,36 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     [theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300, theme.palette.TwClrBaseBlue300]
   );
 
-  const getPolygons = useCallback((boundary?: MultiPolygon): MapGeometry => {
-    if (!boundary) {
-      return [];
-    }
-    return boundary.coordinates;
-  }, []);
-
   const extractPlantingSite = useCallback(
     (site: PlantingSite): MapSource => {
-      const { id, name, description, boundary } = site;
       const renderAttributes = getRenderAttributes('site');
 
       return {
-        entities: [
-          {
-            properties: { id, name, description, type: 'site' },
-            boundary: getPolygons(boundary),
-            id,
-          },
-        ],
-        id: 'sites',
+        ...MapService.extractPlantingSite(site),
         ...renderAttributes,
       };
     },
-    [getPolygons, getRenderAttributes]
+    [getRenderAttributes]
   );
 
   const extractPlantingZones = useCallback(
     (site: PlantingSite): MapSource => {
       const renderAttributes = getRenderAttributes('zone');
 
-      const zonesData =
-        site.plantingZones?.map((zone) => {
-          const { id, name, boundary } = zone;
-          return {
-            properties: { id, name, type: 'zone' },
-            boundary: getPolygons(boundary),
-            id,
-          };
-        }) || [];
-
       return {
-        entities: zonesData,
-        id: 'zones',
+        ...MapService.extractPlantingZones(site),
         ...renderAttributes,
       };
     },
-    [getPolygons, getRenderAttributes]
+    [getRenderAttributes]
   );
 
   const extractPlots = useCallback(
     (site: PlantingSite): MapSource => {
       const renderAttributes = getRenderAttributes('plot');
 
-      const allPlotsData =
-        site.plantingZones?.flatMap((zone) => {
-          const { plots } = zone;
-          return plots.map((plot) => {
-            const { id, name, fullName, boundary } = plot;
-            return {
-              properties: { id, name, fullName, type: 'plot' },
-              boundary: getPolygons(boundary),
-              id,
-            };
-          });
-        }) || [];
-
       return {
-        entities: allPlotsData.flatMap((f) => f),
-        id: 'plots',
+        ...MapService.extractPlots(site),
         isInteractive: true,
         annotation: {
           textField: 'fullName',
@@ -140,7 +100,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         ...renderAttributes,
       };
     },
-    [getPolygons, getRenderAttributes, theme.palette.TwClrBaseWhite]
+    [getRenderAttributes, theme.palette.TwClrBaseWhite]
   );
 
   // fetch polygons and boundaries
@@ -150,14 +110,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       const zones = extractPlantingZones(plantingSite);
       const plots = extractPlots(plantingSite);
 
-      const geometries: MapGeometry[] = [
-        site.entities[0]?.boundary,
-        ...(zones?.entities.map((s) => s.boundary) || []),
-        ...(plots?.entities.map((s) => s.boundary) || []),
-      ].filter((g) => g) as MapGeometry[];
-
       const newMapOptions = {
-        bbox: getBoundingBox(geometries),
+        bbox: MapService.getPlantingSiteBoundingBox(plantingSite),
         sources: [site, plots, zones],
       };
 

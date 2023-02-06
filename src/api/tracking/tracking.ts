@@ -2,43 +2,7 @@ import axios from 'axios';
 import addQueryParams from 'src/api/helpers/addQueryParams';
 import { paths } from '../types/generated-schema';
 import { addError } from '../utils';
-import { PlantingSite } from 'src/api/types/tracking';
-
-/**
- * get temporary mapbox token
- */
-
-const MAPBOX_TOKEN_ENDPOINT = '/api/v1/tracking/mapbox/token';
-
-type GetMapboxTokenResponsePayload =
-  paths[typeof MAPBOX_TOKEN_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-type MapboxTokenResponse = {
-  requestSucceeded: boolean;
-  token?: string;
-  error?: string;
-};
-
-export const getMapboxToken = async (): Promise<MapboxTokenResponse> => {
-  const response: MapboxTokenResponse = {
-    requestSucceeded: true,
-  };
-
-  try {
-    const serverResponse: GetMapboxTokenResponsePayload = (await axios.get(MAPBOX_TOKEN_ENDPOINT)).data;
-    if (serverResponse.status === 'error') {
-      response.requestSucceeded = false;
-      addError(serverResponse, response);
-    } else {
-      response.token = serverResponse.token;
-    }
-  } catch (e: any) {
-    response.requestSucceeded = false;
-    addError(e?.response?.data || {}, response);
-  }
-
-  return response;
-};
+import { PlantingSite } from 'src/types/Tracking';
 
 /**
  * Planting sites - create / list
