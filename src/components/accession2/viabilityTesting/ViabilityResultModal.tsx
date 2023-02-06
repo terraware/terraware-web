@@ -4,7 +4,7 @@ import { Accession } from 'src/types/Accession';
 import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
-import { ViabilityTest } from 'src/api/types/accessions';
+import { ViabilityTest } from 'src/types/Accession';
 import { getCutTestViabilityPercent } from './utils';
 
 export interface ViabilityResultModalProps {

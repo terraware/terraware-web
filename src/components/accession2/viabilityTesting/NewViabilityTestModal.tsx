@@ -2,7 +2,7 @@ import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Checkbox, DatePicker, DialogBox, SelectT, Textfield } from '@terraware/web-components';
 import { Accession } from 'src/types/Accession';
-import { putViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
+import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { Dropdown } from '@terraware/web-components';
@@ -11,13 +11,12 @@ import { OrganizationUser, User } from 'src/types/User';
 import { useEffect, useState } from 'react';
 import { OrganizationUserService } from 'src/services';
 import { getSeedBank, isContributor } from 'src/utils/organization';
-import { postViabilityTest } from 'src/api/accessions2/viabilityTest';
 import useSnackbar from 'src/utils/useSnackbar';
 import { renderUser } from 'src/utils/renderUser';
 import { Close } from '@mui/icons-material';
 import { preventDefaultEvent, useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
-import { ViabilityTest } from 'src/api/types/accessions';
+import { ViabilityTest } from 'src/types/Accession';
 import ViabilityResultModal from './ViabilityResultModal';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 import TooltipLearnMoreModal, {
@@ -306,9 +305,9 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       }
       let response;
       if (record.id === -1) {
-        response = await postViabilityTest(record, accession.id);
+        response = await AccessionService.createViabilityTest(record, accession.id);
       } else {
-        response = await putViabilityTest(record, accession.id, record.id);
+        response = await AccessionService.updateViabilityTest(record, accession.id, record.id);
       }
       if (response.requestSucceeded) {
         reload();

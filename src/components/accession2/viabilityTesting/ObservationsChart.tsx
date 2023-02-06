@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material';
 import { Chart } from 'chart.js';
 import { useEffect, useRef } from 'react';
 import { makeStyles } from '@mui/styles';
-import { TestResult } from 'src/api/types/accessions';
+import { ViabilityTestResult } from 'src/types/Accession';
 import { useLocalization } from '../../../providers';
 import { newChart } from '../../common/Chart';
 import moment from 'moment-timezone';
@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export interface Props {
-  observations: TestResult[];
+  observations: ViabilityTestResult[];
 }
 
 export default function ObservationsChart({ observations }: Props): JSX.Element {

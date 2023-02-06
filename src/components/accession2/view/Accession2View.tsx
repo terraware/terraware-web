@@ -26,7 +26,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import ViabilityModal from '../edit/ViabilityModal';
 import NewViabilityTestModal from '../viabilityTesting/NewViabilityTestModal';
-import { ViabilityTest } from 'src/api/types/accessions';
+import { ViabilityTest } from 'src/types/Accession';
 import ViewViabilityTestModal from '../viabilityTesting/ViewViabilityTestModal';
 import { getSeedBank, isContributor } from 'src/utils/organization';
 import _ from 'lodash';

@@ -5,7 +5,7 @@ import { Grid, Box, IconButton, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import AccessionService from 'src/services/AccessionService';
 import Textfield from 'src/components/common/Textfield/Textfield';
-import { Geolocation } from 'src/api/types/accessions';
+import { Geolocation } from 'src/types/Accession';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import _ from 'lodash';
 import AddLink from 'src/components/common/AddLink';

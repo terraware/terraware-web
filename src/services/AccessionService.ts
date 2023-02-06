@@ -1,7 +1,6 @@
 import Coordinates from 'coordinate-parser';
 import { paths } from 'src/api/types/generated-schema';
-import { Geolocation } from 'src/api/types/accessions';
-import { Accession, ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
+import { Accession, ACCESSION_2_STATES, AccessionState, Geolocation } from 'src/types/Accession';
 import HttpService, { Response } from './HttpService';
 
 /**
@@ -12,6 +11,10 @@ const ACCESSION_ENDPOINT = '/api/v2/seedbank/accessions/{id}';
 const ACCESSION_DELETE_ENDPOINT = '/api/v1/seedbank/accessions/{id}';
 const ACCESSION_HISTORY_ENDPOINT = '/api/v1/seedbank/accessions/{id}/history';
 const ACCESSION_CHECKIN_ENDPOINT = '/api/v1/seedbank/accessions/{id}/checkIn';
+const VIABILITY_TESTS_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/viabilityTests';
+const VIABILITY_TEST_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/viabilityTests/{viabilityTestId}';
+const WITHDRAWALS_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/withdrawals';
+const TRANSFER_TO_NURSERY_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/transfers/nursery';
 
 type AccessionGetResponsePayload =
   paths[typeof ACCESSION_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -28,9 +31,24 @@ export type AccessionResponse = Response & AccessionData;
 export type HistoryData = { history?: AccessionHistoryEntry[] };
 export type AccessionHistoryResponse = Response & HistoryData;
 
+export type ViabilityTestPostRequest =
+  paths[typeof VIABILITY_TESTS_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
+export type ViabilityTestUpdateRequest =
+  paths[typeof VIABILITY_TEST_ENDPOINT]['put']['requestBody']['content']['application/json'];
+
+type WithdrawalsPostRequest = paths[typeof WITHDRAWALS_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
+type TransferToNurseryRequestBody =
+  paths[typeof TRANSFER_TO_NURSERY_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
 const httpAccession = HttpService.root(ACCESSION_ENDPOINT);
 const httpAccessionHistory = HttpService.root(ACCESSION_HISTORY_ENDPOINT);
 const httpAccessionCheckin = HttpService.root(ACCESSION_CHECKIN_ENDPOINT);
+const httpViabilityTests = HttpService.root(VIABILITY_TESTS_ENDPOINT);
+const httpViabilityTest = HttpService.root(VIABILITY_TEST_ENDPOINT);
+const httpWithdrawals = HttpService.root(WITHDRAWALS_ENDPOINT);
+const httpNurseryTransfer = HttpService.root(TRANSFER_TO_NURSERY_ENDPOINT);
 
 /**
  * Get an accession by id
@@ -94,6 +112,80 @@ const deleteAccession = async (accessionId: number): Promise<Response> => {
 };
 
 /**
+ * Viability Tests
+ */
+
+/**
+ * Create a viability test
+ */
+const createViabilityTest = async (viabilityTest: ViabilityTestPostRequest, accessionId: number): Promise<Response> => {
+  return await httpViabilityTests.post({
+    entity: viabilityTest,
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+    },
+  });
+};
+
+/**
+ * Update a viability test
+ */
+const updateViabilityTest = async (
+  viabilityTest: ViabilityTestUpdateRequest,
+  accessionId: number,
+  viabilityTestId: number
+): Promise<Response> => {
+  return await httpViabilityTest.put({
+    entity: viabilityTest,
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+      '{viabilityTestId}': viabilityTestId.toString(),
+    },
+  });
+};
+
+/**
+ * Delete a viability test
+ */
+const deleteViabilityTest = async (accessionId: number, viabilityTestId: number): Promise<Response> => {
+  return await httpViabilityTest.delete({
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+      '{viabilityTestId}': viabilityTestId.toString(),
+    },
+  });
+};
+
+/**
+ * Accession withdrawals
+ */
+
+/**
+ * Create a withdrawal
+ */
+const createWithdrawal = async (withdrawal: WithdrawalsPostRequest, accessionId: number): Promise<Response> => {
+  return await httpWithdrawals.post({
+    entity: withdrawal,
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+    },
+  });
+};
+
+/**
+ * Create a nursery withdrawal/transfer
+ */
+
+const transferToNursery = async (entity: TransferToNurseryRequestBody, accessionId: number): Promise<Response> => {
+  return await httpNurseryTransfer.post({
+    entity,
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+    },
+  });
+};
+
+/**
  * Get allowed transition-to states from current state
  */
 const getTransitionToStates = (from: AccessionState): AccessionState[] => {
@@ -142,6 +234,11 @@ const AccessionService = {
   checkInAccession,
   updateAccession,
   deleteAccession,
+  createViabilityTest,
+  updateViabilityTest,
+  deleteViabilityTest,
+  createWithdrawal,
+  transferToNursery,
   getTransitionToStates,
   getParsedCoords,
 };

@@ -7,8 +7,7 @@ import { Checkbox, DatePicker, SelectT, Textfield } from '@terraware/web-compone
 import { Accession, Withdrawal } from 'src/types/Accession';
 import { NurseryTransfer } from 'src/api/types/batch';
 import useForm from 'src/utils/useForm';
-import { transferToNursery, postWithdrawal } from 'src/api/accessions2/withdrawals';
-import { postViabilityTest, ViabilityTestPostRequest } from 'src/api/accessions2/viabilityTest';
+import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
 import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
 import { OrganizationUserService } from 'src/services';
 import { OrganizationUser, User } from 'src/types/User';
@@ -124,13 +123,13 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         return;
       }
       if (isNurseryTransfer) {
-        response = await transferToNursery(nurseryTransferRecord, accession.id);
+        response = await AccessionService.transferToNursery(nurseryTransferRecord, accession.id);
       } else if (record.purpose === 'Viability Testing') {
         viabilityTesting.seedsTested = record.withdrawnQuantity?.quantity || 0;
         viabilityTesting.startDate = record.date;
-        response = await postViabilityTest(viabilityTesting, accession.id);
+        response = await AccessionService.createViabilityTest(viabilityTesting, accession.id);
       } else {
-        response = await postWithdrawal(record, accession.id);
+        response = await AccessionService.createWithdrawal(record, accession.id);
       }
 
       if (response.requestSucceeded) {
