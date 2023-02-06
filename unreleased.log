@@ -1,3 +1,4 @@
+3db4307 remove dependency @mui/x-date-pickers from web (#1145)
 7281b2b SW-2873 Localize axis labels on charts (#1141)
 39722bf Bump http-cache-semantics from 4.1.0 to 4.1.1 (#1134)
 5bcf34b SW-2818 Map service + refactor (#1142)
