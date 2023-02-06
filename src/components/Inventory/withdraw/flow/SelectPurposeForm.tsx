@@ -22,7 +22,7 @@ import { DatePicker, Dropdown, Textfield, DropdownItem, IconTooltip } from '@ter
 import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { getAllSpecies } from 'src/api/species/species';
-import { PlantingSite } from 'src/api/types/tracking';
+import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';

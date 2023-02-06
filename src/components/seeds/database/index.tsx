@@ -35,8 +35,6 @@ import TfMain from 'src/components/common/TfMain';
 import { ACCESSION_STATES, ACCESSION_2_STATES } from '../../../types/Accession';
 import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportAccessionsModal from './ImportAccessionsModal';
 import { Message } from '@terraware/web-components';
@@ -590,7 +588,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <>
       {selectedOrgInfo.selectedFacility && (
         <ImportAccessionsModal
           open={openImportModal}
@@ -733,6 +731,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
           )}
         </Container>
       </TfMain>
-    </LocalizationProvider>
+    </>
   );
 }

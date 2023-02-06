@@ -11,7 +11,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { makeStyles } from '@mui/styles';
 import { getNurseryWithdrawal, listNurseryWithdrawals } from 'src/api/tracking/withdrawals';
 import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
-import { Delivery } from 'src/api/types/tracking';
+import { Delivery } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useQuery from 'src/utils/useQuery';

@@ -11,8 +11,6 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -104,56 +102,39 @@ export default function CheckIn(): JSX.Element {
   const pendingAccessionsById = transformPendingAccessions();
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <TfMain>
-        <PageHeaderWrapper nextElement={contentRef.current}>
-          <PageHeader
-            title={strings.CHECKIN_ACCESSIONS}
-            subtitle={getSubtitle()}
-            back={true}
-            backUrl={APP_PATHS.ACCESSIONS}
-            onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
-          />
-        </PageHeaderWrapper>
-        <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
-          <Grid container spacing={3}>
-            {pendingAccessionsById && (
-              <Grid item xs={12}>
-                {pendingAccessionsById.map((result) => {
-                  return (
-                    <Grid
-                      container
-                      key={result.accessionNumber as string}
-                      columns={16}
-                      sx={{
-                        backgroundColor: theme.palette.TwClrBg,
-                        borderRadius: '24px',
-                        padding: theme.spacing(3),
-                        marginBottom: theme.spacing(3),
-                        '&:last-of-type': {
-                          marginBottom: 0,
-                        },
-                      }}
-                    >
-                      <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
-                        {isMobile ? (
-                          <Box display='flex' justifyContent='space-between'>
-                            <TextField
-                              label={strings.ACCESSION}
-                              id='accession'
-                              type='text'
-                              value={result.accessionNumber as string}
-                              display={true}
-                            />
-                            <Button
-                              onClick={() => goToAccession(result.id! as string)}
-                              id='viewCollections'
-                              label={strings.VIEW}
-                              priority='secondary'
-                              type='productive'
-                            />
-                          </Box>
-                        ) : (
+    <TfMain>
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <PageHeader
+          title={strings.CHECKIN_ACCESSIONS}
+          subtitle={getSubtitle()}
+          back={true}
+          backUrl={APP_PATHS.ACCESSIONS}
+          onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
+        />
+      </PageHeaderWrapper>
+      <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
+        <Grid container spacing={3}>
+          {pendingAccessionsById && (
+            <Grid item xs={12}>
+              {pendingAccessionsById.map((result) => {
+                return (
+                  <Grid
+                    container
+                    key={result.accessionNumber as string}
+                    columns={16}
+                    sx={{
+                      backgroundColor: theme.palette.TwClrBg,
+                      borderRadius: '24px',
+                      padding: theme.spacing(3),
+                      marginBottom: theme.spacing(3),
+                      '&:last-of-type': {
+                        marginBottom: 0,
+                      },
+                    }}
+                  >
+                    <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                      {isMobile ? (
+                        <Box display='flex' justifyContent='space-between'>
                           <TextField
                             label={strings.ACCESSION}
                             id='accession'
@@ -161,65 +142,80 @@ export default function CheckIn(): JSX.Element {
                             value={result.accessionNumber as string}
                             display={true}
                           />
-                        )}
-                      </Grid>
-                      <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                          <Button
+                            onClick={() => goToAccession(result.id! as string)}
+                            id='viewCollections'
+                            label={strings.VIEW}
+                            priority='secondary'
+                            type='productive'
+                          />
+                        </Box>
+                      ) : (
                         <TextField
-                          label={strings.SPECIES}
-                          id='species'
+                          label={strings.ACCESSION}
+                          id='accession'
                           type='text'
-                          value={result.speciesName as string}
+                          value={result.accessionNumber as string}
                           display={true}
                         />
-                      </Grid>
-                      <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
-                        <TextField
-                          label={strings.SITE_LOCATION}
-                          id='location'
-                          type='text'
-                          value={result.collectionSiteName as string}
-                          display={true}
-                        />
-                      </Grid>
-                      <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
-                        <TextField
-                          label={strings.COLLECTED_DATE}
-                          id='collected'
-                          type='text'
-                          value={result.collectedDate as string}
-                          display={true}
-                        />
-                      </Grid>
-                      <Grid item xs={isMobile ? 16 : 3}>
-                        <TextField
-                          label={strings.RECEIVED_DATE}
-                          id='received'
-                          type='text'
-                          value={result.receivedDate as string}
-                          display={true}
-                        />
-                      </Grid>
-                      {!isMobile && (
-                        <Grid item xs={1}>
-                          <Box height='100%' display='flex' alignItems='center' justifyContent='flex-end'>
-                            <Button
-                              onClick={() => goToAccession(result.id! as string)}
-                              id='viewCollections'
-                              label={strings.VIEW}
-                              priority='secondary'
-                              type='productive'
-                            />
-                          </Box>
-                        </Grid>
                       )}
                     </Grid>
-                  );
-                })}
-              </Grid>
-            )}
-          </Grid>
-        </Container>
-      </TfMain>
-    </LocalizationProvider>
+                    <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                      <TextField
+                        label={strings.SPECIES}
+                        id='species'
+                        type='text'
+                        value={result.speciesName as string}
+                        display={true}
+                      />
+                    </Grid>
+                    <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                      <TextField
+                        label={strings.SITE_LOCATION}
+                        id='location'
+                        type='text'
+                        value={result.collectionSiteName as string}
+                        display={true}
+                      />
+                    </Grid>
+                    <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                      <TextField
+                        label={strings.COLLECTED_DATE}
+                        id='collected'
+                        type='text'
+                        value={result.collectedDate as string}
+                        display={true}
+                      />
+                    </Grid>
+                    <Grid item xs={isMobile ? 16 : 3}>
+                      <TextField
+                        label={strings.RECEIVED_DATE}
+                        id='received'
+                        type='text'
+                        value={result.receivedDate as string}
+                        display={true}
+                      />
+                    </Grid>
+                    {!isMobile && (
+                      <Grid item xs={1}>
+                        <Box height='100%' display='flex' alignItems='center' justifyContent='flex-end'>
+                          <Button
+                            onClick={() => goToAccession(result.id! as string)}
+                            id='viewCollections'
+                            label={strings.VIEW}
+                            priority='secondary'
+                            type='productive'
+                          />
+                        </Box>
+                      </Grid>
+                    )}
+                  </Grid>
+                );
+              })}
+            </Grid>
+          )}
+        </Grid>
+      </Container>
+    </TfMain>
   );
 }

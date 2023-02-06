@@ -3,7 +3,7 @@ import { Props } from '@terraware/web-components/components/ProgressCircle/Progr
 import strings from 'src/strings';
 
 function renderPercentText(percent: number): string {
-  return strings.formatString(strings.PROGRESS_PERCENT, percent) as string;
+  return strings.formatString(strings.PERCENTAGE_VALUE, percent) as string;
 }
 
 export default function ProgressCircle(props: Omit<Props, 'renderPercentText'>): JSX.Element {

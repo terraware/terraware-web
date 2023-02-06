@@ -1,7 +1,9 @@
-import React from 'react';
+import { useEffect, useRef } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Theme, useTheme } from '@mui/material';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
+import { useLocalization } from '../../providers';
+import { newChart } from '../common/Chart';
 import { Chart } from 'chart.js';
 
 export interface StyleProps {
@@ -24,59 +26,69 @@ export interface DashboardChartProps {
 export default function DashboardChart(props: DashboardChartProps): JSX.Element {
   const { chartId, chartLabels, chartValues, minHeight } = props;
   const classes = useStyles({ minHeight });
-  const chartRef = React.useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const chartRef = useRef<Chart | null>(null);
   const theme = useTheme();
+  const { loadedStringsForLocale } = useLocalization();
 
-  React.useEffect(() => {
-    const ctx = chartRef?.current?.getContext('2d');
-    if (ctx) {
-      const colors = generateTerrawareRandomColors(theme, chartLabels?.length || 0);
-      const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: chartLabels,
-          datasets: [
-            {
-              data: chartValues,
-              barThickness: 50, // number (pixels) or 'flex'
-              backgroundColor: colors,
-              minBarLength: 3,
-            },
-          ],
-        },
-        options: {
-          maintainAspectRatio: false,
-          layout: {
-            padding: {
-              left: 0,
-              right: 0,
-              top: 10,
-            },
+  useEffect(() => {
+    const createChart = async () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+        chartRef.current = null;
+      }
+
+      const ctx = canvasRef?.current?.getContext('2d');
+      if (ctx && loadedStringsForLocale) {
+        const colors = generateTerrawareRandomColors(theme, chartLabels?.length || 0);
+        chartRef.current = await newChart(loadedStringsForLocale, ctx, {
+          type: 'bar',
+          data: {
+            labels: chartLabels,
+            datasets: [
+              {
+                data: chartValues,
+                barThickness: 50, // number (pixels) or 'flex'
+                backgroundColor: colors,
+                minBarLength: 3,
+              },
+            ],
           },
-          plugins: {
-            legend: {
-              display: false,
+          options: {
+            maintainAspectRatio: false,
+            layout: {
+              padding: {
+                left: 0,
+                right: 0,
+                top: 10,
+              },
             },
-            tooltip: {
-              displayColors: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                displayColors: false,
+              },
             },
-          },
-          scales: {
-            y: {
-              ticks: {
-                precision: 0,
+            scales: {
+              y: {
+                ticks: {
+                  precision: 0,
+                },
               },
             },
           },
-        },
-      });
-      // when component unmounts
-      return () => {
-        myChart.destroy();
-      };
-    }
+        });
+        // when component unmounts
+        return () => {
+          chartRef.current?.destroy();
+        };
+      }
+    };
+    createChart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chartLabels, chartValues]);
+  }, [chartLabels, chartValues, loadedStringsForLocale]);
 
-  return <canvas id={chartId} ref={chartRef} className={classes.chart} />;
+  return <canvas id={chartId} ref={canvasRef} className={classes.chart} />;
 }

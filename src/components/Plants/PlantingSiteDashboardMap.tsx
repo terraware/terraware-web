@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
-import { PlantingSite } from 'src/api/types/tracking';
+import { PlantingSite } from 'src/types/Tracking';
 import { getPlantingSite } from 'src/api/tracking/tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PlantingSitePlot } from './PlantingSiteDetails';

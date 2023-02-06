@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
-import { Delivery } from 'src/api/types/tracking';
+import { Delivery } from 'src/types/Tracking';
 import { getDelivery } from 'src/api/tracking/deliveries';
 import { getPlantingSite } from 'src/api/tracking/tracking';
 import { getAllSpecies } from 'src/api/species/species';

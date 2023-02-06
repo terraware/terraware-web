@@ -20,6 +20,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Icon from '../../common/icon/Icon';
 import { Dropdown } from '@terraware/web-components';
 import { useLocalization } from 'src/providers';
+import { newChart } from '../../common/Chart';
 
 declare global {
   interface Window {
@@ -97,15 +98,15 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   }, [defaultTimePeriod]);
 
   useEffect(() => {
-    const createBatteryChart = (
+    const createBatteryChart = async (
       stateOfChargeValues: HumidityValues[],
       powerValues: HumidityValues[],
       chartReference: React.RefObject<HTMLCanvasElement>
     ) => {
       const ctx = chartReference?.current?.getContext('2d');
-      if (ctx && selectedPVBatteryPeriod) {
+      if (ctx && selectedPVBatteryPeriod && loadedStringsForLocale) {
         const timePeriodParams = getTimePeriodParams(selectedPVBatteryPeriod, timeZone);
-        window.pvBatteryChart = new Chart(ctx, {
+        window.pvBatteryChart = await newChart(loadedStringsForLocale, ctx, {
           type: 'scatter',
           data: {
             datasets: [
@@ -138,7 +139,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
               y: {
                 ticks: {
                   callback: (value, index, ticks) => {
-                    return `${value}%`;
+                    return strings.formatString(strings.PERCENTAGE_VALUE, value) as string;
                   },
                 },
               },
@@ -147,7 +148,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 time: {
                   unit: getUnit(selectedPVBatteryPeriod),
                   displayFormats: {
-                    hour: 'MMM d h:mm',
+                    hour: strings.MONITORING_DATE_FORMAT,
                   },
                 },
                 max:
@@ -169,7 +170,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 },
                 ticks: {
                   callback: (value, index, ticks) => {
-                    return `${value}W`;
+                    return strings.formatString(strings.WATTS_VALUE, value) as string;
                   },
                 },
               },
@@ -224,7 +225,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
             if (window.pvBatteryChart instanceof Chart) {
               window.pvBatteryChart.destroy();
             }
-            createBatteryChart(response.values[0]?.values, response.values[1]?.values, pvBatteryRef);
+            await createBatteryChart(response.values[0]?.values, response.values[1]?.values, pvBatteryRef);
           }
         }
       }

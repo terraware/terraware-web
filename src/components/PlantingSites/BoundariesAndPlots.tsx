@@ -1,7 +1,7 @@
 import { Typography, Box, CircularProgress } from '@mui/material';
 import { theme } from '@terraware/web-components';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/api/types/tracking';
+import { PlantingSite } from 'src/types/Tracking';
 import { PlantingSiteMap } from '../Map';
 
 type BoundariesAndPlotsProps = {

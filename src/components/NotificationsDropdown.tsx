@@ -191,7 +191,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
       return getTimeZone(timeZones, browserTimeZone) || getUTC(timeZones);
     };
 
-    const notifyTimeZoneUpdates = async (userTz: InitializedTimeZone, orgTz: InitializedTimeZone) => {
+    const notifyTimeZoneUpdates = (userTz: InitializedTimeZone, orgTz: InitializedTimeZone) => {
       const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
       const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
       setUserTimeZone(userTz.timeZone);
