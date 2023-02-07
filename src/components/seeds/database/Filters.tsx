@@ -245,15 +245,15 @@ export function getUpdatedFilters(
 }
 
 function getSearchTermFilter(searchCols: DatabaseColumn[], searchTerm: string): Record<string, SearchNodePayload> {
-  const orNode: SearchNodePayload = { children: [], operation: 'or' };
-  for (const col of searchCols) {
-    orNode.children.push({
+  const orNode: SearchNodePayload = {
+    children: searchCols.map((col) => ({
       operation: 'field',
       field: col.key,
       type: 'Fuzzy',
       values: [searchTerm],
-    });
-  }
+    })),
+    operation: 'or',
+  };
 
   return { searchTermFilter: orNode };
 }
