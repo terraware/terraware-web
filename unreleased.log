@@ -1,3 +1,4 @@
+bf2a39b2 SW-2897 Pass locale to cookie consent UI (#1149)
 a92a3252 SW-2865 Move timezone and units init message under notifications popup (#1146)
 57ca7e78 SW-2811 Accession/SeedBank refactor (#1147)
 f4cef22a SW-2898 accession history should refresh when there are changes to the accession (#1148)
