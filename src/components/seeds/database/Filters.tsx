@@ -1,7 +1,7 @@
 import { ArrowDropDown } from '@mui/icons-material';
 import { Chip, Container, Divider, Link, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
+import React, { useState } from 'react';
 import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
@@ -13,6 +13,10 @@ import Search from './filters/FilterSearch';
 import SingleSelection from './filters/FilterSingleSelection';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { DatabaseColumn, Option } from '@terraware/web-components/components/table/types';
+import TextField from '../../common/Textfield/Textfield';
+import useDebounce from '../../../utils/useDebounce';
+import Icon from '../../common/icon/Icon';
+import FilterMultiSelect from '../../common/FilterMultiSelect';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -27,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
   },
   pill: {
-    marginRight: theme.spacing(1.5),
     height: '32px',
     display: 'inline-block',
     marginBottom: (props: StyleProps) => (props.isDesktop ? 0 : theme.spacing(1)),
@@ -56,13 +59,22 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   filtersContainer: {
     minHeight: '32px',
-    flex: (props: StyleProps) => (props.isMobile ? '1 0' : '8 0 600px'),
+    display: 'flex',
+    flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
+    flexWrap: (props: StyleProps) => (props.isMobile ? 'nowrap' : 'wrap'),
+    alignItems: 'center',
+    gap: theme.spacing(1.5),
     marginTop: `-${theme.spacing(1)}`,
+  },
+  searchField: {
+    width: '300px',
+    marginTop: theme.spacing(-0.5),
   },
 }));
 
 interface Props {
   columns: DatabaseColumn[];
+  searchColumns: DatabaseColumn[];
   filters: Record<string, SearchNodePayload>;
   availableValues: FieldValuesPayload;
   allValues: FieldValuesPayload;
@@ -70,19 +82,26 @@ interface Props {
 }
 
 export default function Filters(props: Props): JSX.Element {
+  const { columns, searchColumns, filters, availableValues, allValues, onChange } = props;
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
   const [popover, setPopover] = React.useState<FilterPopover>();
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 250, (value) => {
+    const updatedSearchFilters = getSearchTermFilter(searchColumns, value);
+    onChange({ ...filters, ...updatedSearchFilters });
+  });
 
-  const onChange = (col: DatabaseColumn, filter: SearchNodePayload) => {
-    const updatedFilters = getUpdatedFilters(col, filter, props.filters);
-    props.onChange(updatedFilters);
+  const onChangeFilters = (col: DatabaseColumn, filter: SearchNodePayload) => {
+    const updatedFilters = getUpdatedFilters(col, filter, filters);
+    const updatedSearchFilters = getSearchTermFilter(searchColumns, debouncedSearchTerm);
+    onChange({ ...updatedFilters, ...updatedSearchFilters });
     setPopover(undefined);
   };
 
   const clearAllFilters = () => {
     const updatedFilters: Record<string, SearchNodePayload> = {};
-    props.onChange(updatedFilters);
+    onChange(updatedFilters);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, col: DatabaseColumn) => {
@@ -94,7 +113,7 @@ export default function Filters(props: Props): JSX.Element {
   };
 
   const getLabel = (col: DatabaseColumn): string | JSX.Element => {
-    const filter = props.filters[col.key];
+    const filter = filters[col.key];
     let totalFilteredValues = filter?.values?.length ?? 0;
     const isBoolean = col.type === 'boolean';
     if (filter && totalFilteredValues && isBoolean) {
@@ -114,19 +133,39 @@ export default function Filters(props: Props): JSX.Element {
     }
   };
 
+  const onChangeSearch = (value: unknown) => {
+    setSearchTerm(value as string);
+  };
+
+  const onClearSearch = () => {
+    setSearchTerm('');
+  };
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <div className={classes.filtersContainer}>
+        <TextField
+          placeholder={strings.SEARCH}
+          iconLeft='search'
+          label=''
+          id='search'
+          type='text'
+          className={classes.searchField}
+          onChange={onChangeSearch}
+          value={searchTerm}
+          iconRight='cancel'
+          onClickRightIcon={onClearSearch}
+        />
         <SimplePopover
           popover={popover}
-          columns={props.columns}
-          filters={props.filters}
-          availableValues={props.availableValues}
-          allValues={props.allValues}
-          onFilterChange={onChange}
+          columns={columns}
+          filters={filters}
+          availableValues={availableValues}
+          allValues={allValues}
+          onFilterChange={onChangeFilters}
           onClose={onClosePopover}
         />
-        {props.columns.map((col) => {
+        {columns.map((col) => {
           return (
             <div key={col.key} className={classes.pill}>
               <Chip
@@ -136,7 +175,7 @@ export default function Filters(props: Props): JSX.Element {
                 label={getLabel(col)}
                 onClick={(event) => handleClick(event, col)}
                 icon={<ArrowDropDown />}
-                className={props.filters[col.key] ? classes.selectedFilter : ''}
+                className={filters[col.key] ? classes.selectedFilter : ''}
               />
             </div>
           );
@@ -194,6 +233,20 @@ export function getUpdatedFilters(
   }
 
   return updatedFilters;
+}
+
+function getSearchTermFilter(searchCols: DatabaseColumn[], searchTerm: string): Record<string, SearchNodePayload> {
+  const orNode: SearchNodePayload = { children: [], operation: 'or' };
+  for (const col of searchCols) {
+    orNode.children.push({
+      operation: 'field',
+      field: col.key,
+      type: 'Fuzzy',
+      values: [searchTerm],
+    });
+  }
+
+  return { searchTerm: orNode };
 }
 
 function getOptions(col: DatabaseColumn, availableValues: FieldValuesPayload, allValues: FieldValuesPayload): Option[] {

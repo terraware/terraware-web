@@ -182,6 +182,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
     return detail;
   });
+  const searchTermColumns = Object.values(columns).filter(
+    (col) => col.key === 'accessionNumber' || col.key === 'speciesName' || col.key === 'collectionSiteName'
+  );
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
@@ -681,6 +684,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           availableValues={availableFieldOptions}
                           allValues={fieldOptions}
                           columns={displayColumnDetails}
+                          searchColumns={searchTermColumns}
                           onChange={onFilterChange}
                         />
                       )}
