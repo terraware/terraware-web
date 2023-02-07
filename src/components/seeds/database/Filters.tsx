@@ -13,8 +13,8 @@ import Search from './filters/FilterSearch';
 import SingleSelection from './filters/FilterSingleSelection';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { DatabaseColumn, Option } from '@terraware/web-components/components/table/types';
-import TextField from '../../common/Textfield/Textfield';
-import useDebounce from '../../../utils/useDebounce';
+import TextField from 'src/components/common/Textfield/Textfield';
+import useDebounce from 'src/utils/useDebounce';
 
 interface StyleProps {
   isMobile?: boolean;
