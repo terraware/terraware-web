@@ -96,7 +96,7 @@ export default function Filters(props: Props): JSX.Element {
       }
       onChange(newFilters);
     },
-    [searchColumns, filters]
+    [searchColumns, filters, onChange]
   );
   const debouncedSearchTerm = useDebounce(searchTerm, 250, searchTermCallback);
 
