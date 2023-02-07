@@ -29,7 +29,7 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
       }
     };
     loadHistory();
-  }, [accession.id, snackbar, history]);
+  }, [accession, snackbar, history]);
 
   if (!history) {
     return (
