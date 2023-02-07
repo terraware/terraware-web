@@ -1025,7 +1025,7 @@ export const strings = {
   UPLOAD_PHOTO: 'Upload Photo...',
   UPLOAD_PHOTOS: 'Upload Photo(s)',
   USED_UP: 'Used Up',
-  USER_NOTIFICATION_ACTION: 'To change your preferences, go to [“My account”]',
+  USER_NOTIFICATION_ACTION: 'To change your preferences, go to [“My Account”]',
   VALUE_CANT_EXCEED_100: 'Value can’t exceed 100%',
   VIABILITY_RATE: 'Viability Rate',
   VIABILITY_RESULT: 'Viability Result',
