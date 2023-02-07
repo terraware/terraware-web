@@ -167,7 +167,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const deleteSelectedBatches = () => {
     const promises = selectedRows.map((r) => NurseryBatchService.deleteBatch(r.id as number));
     Promise.allSettled(promises).then((results) => {
-      if (results.some((result) => result.status === 'rejected')) {
+      if (results.some((result) => result.status === 'rejected' || result?.value?.requestSucceeded === false)) {
         snackbar.toastError();
       }
       reloadData();
