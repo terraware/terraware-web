@@ -99,7 +99,7 @@ export default function Accession2View(): JSX.Element {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<HTMLButtonElement | null>(null);
   const openActionMenu = Boolean(actionMenuAnchorEl);
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
-  const [age, setAge] = useState<string>('');
+  const [age, setAge] = useState<string | null>(null);
   const snackbar = useSnackbar();
   const userCanEdit = !isContributor(selectedOrganization);
   const { isMobile, isTablet } = useDeviceInfo();
@@ -141,7 +141,7 @@ export default function Accession2View(): JSX.Element {
       const seedCollectionDate = accession?.collectedDate ? moment(accession?.collectedDate, 'YYYY-MM-DD') : undefined;
       const accessionAge = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
       if (accessionAge === undefined) {
-        setAge('');
+        setAge(null);
       } else if (accessionAge < 1) {
         setAge(strings.AGE_VALUE_LESS_THAN_1_MONTH);
       } else if (accessionAge === 1) {
@@ -617,7 +617,7 @@ export default function Accession2View(): JSX.Element {
           />
         </Grid>
         <Grid item xs={getOverviewGridSize(2)}>
-          <OverviewItemCard isEditable={false} title={strings.AGE} contents={age ? age : null} />
+          <OverviewItemCard isEditable={false} title={strings.AGE} contents={age} />
         </Grid>
         <Grid item xs={getOverviewGridSize(2)}>
           <OverviewItemCard
