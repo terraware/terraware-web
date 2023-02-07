@@ -5,8 +5,8 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid } from '@mui/material';
 import { Icon, Textfield } from '@terraware/web-components';
 import { ModalValuesType } from './BatchesCellRenderer';
-import { Batch } from 'src/api/types/batch';
-import { updateBatchQuantities } from 'src/api/batch/batch';
+import { Batch } from 'src/types/Batch';
+import { NurseryBatchService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
 
@@ -26,7 +26,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
   const snackbar = useSnackbar();
 
   const onSubmit = async () => {
-    const response = await updateBatchQuantities({ ...record, version: row.version });
+    const response = await NurseryBatchService.updateBatchQuantities({ ...record, version: row.version });
     if (response.requestSucceeded) {
       if (reload) {
         reload();

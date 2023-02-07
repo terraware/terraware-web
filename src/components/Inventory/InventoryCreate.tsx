@@ -11,7 +11,8 @@ import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-comp
 import useSnackbar from 'src/utils/useSnackbar';
 import { DatePicker } from '@terraware/web-components';
 import { Species2Dropdown } from '../accession2/properties';
-import { createBatch, CreateBatchRequestPayload } from 'src/api/batch/batch';
+import { CreateBatchRequestPayload } from 'src/types/Batch';
+import NurseryBatchService from 'src/services/NurseryBatchService';
 import NurseryDropdown from './NurseryDropdown';
 import TfMain from 'src/components/common/TfMain';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -108,7 +109,7 @@ export default function CreateInventory(): JSX.Element {
       setValidateFields(true);
       return;
     }
-    const response = await createBatch(record);
+    const response = await NurseryBatchService.createBatch(record);
     if (response.requestSucceeded) {
       history.replace(inventoryLocation);
       history.push({

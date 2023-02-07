@@ -3,7 +3,7 @@ import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import PageForm from 'src/components/common/PageForm';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import strings from 'src/strings';
-import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/types/Batch';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
 import WithdrawalBatchesCellRenderer from './WithdrawalBatchesCellRenderer';
 import useForm from 'src/utils/useForm';

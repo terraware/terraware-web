@@ -4,6 +4,7 @@ import FacilityService from './FacilityService';
 import HttpService from './HttpService';
 import I18nService from './I18nService';
 import MapService from './MapService';
+import NurseryBatchService from './NurseryBatchService';
 import OrganizationUserService from './OrganizationUserService';
 import OrganizationService from './OrganizationService';
 import PreferencesService from './PreferencesService';
@@ -21,6 +22,7 @@ export {
   HttpService,
   I18nService,
   MapService,
+  NurseryBatchService,
   OrganizationService,
   OrganizationUserService,
   PreferencesService,

@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { search } from 'src/api/search';
-import { NurseryWithdrawalRequest, NurseryWithdrawal, NurseryWithdrawalPurposes } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawal, NurseryWithdrawalPurposes } from 'src/types/Batch';
 import { isContributor } from 'src/utils/organization';
-import { createBatchWithdrawal, uploadWithdrawalPhoto } from 'src/api/batch/batch';
+import { NurseryBatchService } from 'src/services';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
@@ -121,7 +121,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
     setWithdrawInProgress(true);
 
-    const response = await createBatchWithdrawal(record);
+    const response = await NurseryBatchService.createBatchWithdrawal(record);
     if (!response.requestSucceeded) {
       snackbar.toastError(response.error);
       setWithdrawInProgress(false);
@@ -131,7 +131,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     const { withdrawal } = response;
     if (photos.length) {
       // upload photos
-      const uploadPhotoPromises = photos.map((photo) => uploadWithdrawalPhoto(withdrawal!.id, photo));
+      const uploadPhotoPromises = photos.map((photo) =>
+        NurseryBatchService.uploadWithdrawalPhoto(withdrawal!.id, photo)
+      );
       try {
         const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
         promiseResponses.forEach((promiseResponse) => {

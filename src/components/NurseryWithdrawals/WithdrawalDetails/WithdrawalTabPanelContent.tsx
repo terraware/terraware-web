@@ -2,7 +2,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import Photos from './sections/Photos';
 import OutplantWithdrawalTable from './sections/OutplantWithdrawalTable';
-import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
+import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
 import { Species } from 'src/types/Species';
 import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';

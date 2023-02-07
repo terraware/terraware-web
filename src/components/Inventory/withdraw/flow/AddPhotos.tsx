@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import SelectPhotos, { ErrorType } from 'src/components/common/SelectPhotos';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageForm from 'src/components/common/PageForm';
-import { NurseryWithdrawalPurposes } from 'src/api/types/batch';
+import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 
 type AddPhotosProps = {
   withdrawalPurpose: string;

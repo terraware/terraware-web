@@ -2,7 +2,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
 import { Species } from 'src/types/Species';
-import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
+import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useDeviceInfo from 'src/utils/useDeviceInfo';

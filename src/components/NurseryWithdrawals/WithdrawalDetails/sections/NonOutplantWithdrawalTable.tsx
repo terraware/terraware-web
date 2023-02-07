@@ -1,7 +1,7 @@
 import { TableColumnType } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
+import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
 import Table from 'src/components/common/table';
 
