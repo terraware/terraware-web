@@ -47,6 +47,19 @@ export default function LocalizationProvider({
   }, [locale]);
 
   useEffect(() => {
+    // Switch locales on the cookie consent UI, if enabled. This is an undocumented internal API of
+    // the cookie-script.com code, so it might stop working in future versions.
+    const func = (window as any).CookieScript?.instance?.applyTranslationByCode;
+    if (typeof func === 'function') {
+      try {
+        func(locale);
+      } catch (e) {
+        // Swallow it rather than surfacing an error to the user.
+      }
+    }
+  }, [locale]);
+
+  useEffect(() => {
     const fetchStrings = async () => {
       const language = locale.replace(/[-_].*/, ''); // 'en-US' => 'en'
       const localeDetails =
