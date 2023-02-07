@@ -617,11 +617,7 @@ export default function Accession2View(): JSX.Element {
           />
         </Grid>
         <Grid item xs={getOverviewGridSize(2)}>
-          <OverviewItemCard
-            isEditable={false}
-            title={strings.AGE}
-            contents={age ? age : null}
-          />
+          <OverviewItemCard isEditable={false} title={strings.AGE} contents={age ? age : null} />
         </Grid>
         <Grid item xs={getOverviewGridSize(2)}>
           <OverviewItemCard
