@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useTheme, Grid } from '@mui/material';
-import { DatePicker } from '@terraware/web-components';
+import DatePicker from 'src/components/common/DatePicker';
 import { Accession } from 'src/types/Accession';
 import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/utils/date';

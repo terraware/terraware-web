@@ -3,12 +3,13 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Grid, useTheme } from '@mui/material';
-import { Checkbox, DatePicker } from '@terraware/web-components';
+import { Checkbox } from '@terraware/web-components';
 import { Accession } from 'src/types/Accession';
 import AccessionService from 'src/services/AccessionService';
 import useForm from 'src/utils/useForm';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
+import DatePicker from 'src/components/common/DatePicker';
 
 export interface EndDryingReminderModalProps {
   open: boolean;
