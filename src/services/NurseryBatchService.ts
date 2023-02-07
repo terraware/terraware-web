@@ -1,6 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { Batch, NurseryWithdrawal, CreateBatchRequestPayload } from 'src/types/Batch';
+import SearchService, { SearchResponseElement } from './SearchService';
 
 /**
  * Nursery related services
@@ -62,6 +63,71 @@ const getBatch = async (batchId: number): Promise<Response & BatchData> => {
   );
 
   return response;
+};
+
+/**
+ * Get batches by list of ids
+ */
+const getBatches = async (batchIds: number[]): Promise<SearchResponseElement[] | null> => {
+  const searchResponse = await SearchService.search({
+    prefix: 'batches',
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'id',
+          values: batchIds.map((id) => id.toString()),
+        },
+      ],
+    },
+    fields: [
+      'id',
+      'batchNumber',
+      'germinatingQuantity',
+      'notReadyQuantity',
+      'readyQuantity',
+      'totalQuantity',
+      'totalQuantityWithdrawn',
+      'facility_id',
+      'facility_name',
+      'readyByDate',
+      'addedDate',
+      'version',
+      'accession_id',
+      'accession_accessionNumber',
+      'notes',
+      'species_id',
+      'species_scientificName',
+      'species_commonName',
+    ],
+    count: 1000,
+  });
+
+  return searchResponse;
+};
+
+/**
+ * Get batches for species
+ */
+const getBatchesForSpecies = async (speciesIds: number[]): Promise<SearchResponseElement[] | null> => {
+  const searchResponse = await SearchService.search({
+    prefix: 'batches',
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'species_id',
+          values: speciesIds.map((id) => id.toString()),
+        },
+      ],
+    },
+    fields: ['id'],
+    count: 1000,
+  });
+
+  return searchResponse;
 };
 
 /**
@@ -136,9 +202,9 @@ const createBatchWithdrawal = async (
 /**
  * Upload a photo for a batch withdrawal
  */
-const uploadWithdrawalPhoto = async (withdrawalId: number, file: File): Promise<Response & PhotoId> => {
+const uploadWithdrawalPhoto = async (withdrawalId: number, photo: File): Promise<Response & PhotoId> => {
   const entity = new FormData();
-  entity.append('file', file);
+  entity.append('file', photo);
 
   const headers = {
     'content-type': 'multipart/form-data',
@@ -159,16 +225,45 @@ const uploadWithdrawalPhoto = async (withdrawalId: number, file: File): Promise<
 };
 
 /**
+ * Upload multiple photos for a batch withdrawal
+ */
+const uploadWithdrawalPhotos = async (
+  withdrawalId: number,
+  photos: File[]
+): Promise<((Response & PhotoId) | string)[]> => {
+  const uploadPhotoPromises = photos.map((photo) => uploadWithdrawalPhoto(withdrawalId, photo));
+  try {
+    const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
+    return promiseResponses.map((response) => {
+      if (response.status === 'rejected') {
+        // tslint:disable-next-line: no-console
+        console.error(response.reason);
+        return response.reason;
+      } else {
+        return response.value as Response & PhotoId;
+      }
+    });
+  } catch (e) {
+    // swallow error
+  }
+
+  return [];
+};
+
+/**
  * Exported functions
  */
 const NurseryBatchService = {
   createBatch,
   getBatch,
+  getBatches,
+  getBatchesForSpecies,
   deleteBatch,
   updateBatch,
   updateBatchQuantities,
   createBatchWithdrawal,
   uploadWithdrawalPhoto,
+  uploadWithdrawalPhotos,
 };
 
 export default NurseryBatchService;
