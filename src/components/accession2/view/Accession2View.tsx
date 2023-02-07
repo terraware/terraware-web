@@ -34,7 +34,7 @@ import PageHeaderWrapper from '../../common/PageHeaderWrapper';
 import { APP_PATHS } from 'src/constants';
 import OverviewItemCard from '../../common/OverviewItemCard';
 import BackToLink from 'src/components/common/BackToLink';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { stateName } from '../../../types/Accession';
 import { getUnitName, isUnitInPreferredSystem } from 'src/units';
@@ -99,7 +99,7 @@ export default function Accession2View(): JSX.Element {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<HTMLButtonElement | null>(null);
   const openActionMenu = Boolean(actionMenuAnchorEl);
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
-  const [age, setAge] = useState({ value: '', unit: '' });
+  const [age, setAge] = useState<string>('');
   const snackbar = useSnackbar();
   const userCanEdit = !isContributor(selectedOrganization);
   const { isMobile, isTablet } = useDeviceInfo();
@@ -107,6 +107,7 @@ export default function Accession2View(): JSX.Element {
   const themeObj = useTheme();
   const contentRef = useRef(null);
   const weightUnitsEnabled = isEnabled('Weight units');
+  const { loadedStringsForLocale } = useLocalization();
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
@@ -135,17 +136,21 @@ export default function Accession2View(): JSX.Element {
   }, [accessionId, reloadData]);
 
   useEffect(() => {
-    const today = moment();
-    const seedCollectionDate = accession?.collectedDate ? moment(accession?.collectedDate, 'YYYY-MM-DD') : undefined;
-    const accessionAge = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
-    if (accessionAge === undefined) {
-      setAge({ value: '', unit: '' });
-    } else if (accessionAge < 1) {
-      setAge({ value: strings.LESS_THAN_ONE, unit: strings.MONTH.toLowerCase() });
-    } else {
-      setAge({ value: accessionAge.toString(), unit: strings.MONTHS });
+    if (loadedStringsForLocale) {
+      const today = moment();
+      const seedCollectionDate = accession?.collectedDate ? moment(accession?.collectedDate, 'YYYY-MM-DD') : undefined;
+      const accessionAge = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
+      if (accessionAge === undefined) {
+        setAge('');
+      } else if (accessionAge < 1) {
+        setAge(strings.AGE_VALUE_LESS_THAN_1_MONTH);
+      } else if (accessionAge === 1) {
+        setAge(strings.AGE_VALUE_1_MONTH);
+      } else {
+        setAge(strings.formatString(strings.AGE_VALUE_MONTHS, accessionAge) as string);
+      }
     }
-  }, [accession]);
+  }, [accession, loadedStringsForLocale]);
 
   useEffect(() => {
     setSelectedTab((query.get('tab') || 'detail') as string);
@@ -318,7 +323,7 @@ export default function Accession2View(): JSX.Element {
               setOpenDeleteAccession(true);
             }}
           >
-            Delete
+            {strings.DELETE}
           </MenuItem>
         </Menu>
       </>
@@ -615,7 +620,7 @@ export default function Accession2View(): JSX.Element {
           <OverviewItemCard
             isEditable={false}
             title={strings.AGE}
-            contents={accession?.collectedDate ? `${age.value} ${age.unit}` : null}
+            contents={age ? age : null}
           />
         </Grid>
         <Grid item xs={getOverviewGridSize(2)}>
