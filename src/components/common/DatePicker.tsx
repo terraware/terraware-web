@@ -16,5 +16,5 @@ export default function DatePicker(props: Props): JSX.Element {
     }
   }, [loadedStringsForLocale, props, setPropsWithLocale]);
 
-  return propsWithLocale && WebComponentsDatePicker(propsWithLocale);
+  return WebComponentsDatePicker(propsWithLocale);
 }
