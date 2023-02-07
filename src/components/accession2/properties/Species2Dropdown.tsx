@@ -7,6 +7,7 @@ import { Species } from 'src/types/Species';
 import { SelectT } from '@terraware/web-components';
 import useDebounce from 'src/utils/useDebounce';
 import { useOrganization } from 'src/providers/hooks';
+import { removeDiacritics } from 'src/utils/text';
 
 interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
   speciesId?: number;
@@ -29,12 +30,12 @@ export default function Species2Dropdown<T extends AccessionPostRequestBody>(
   const populateSpecies = useCallback(async () => {
     const response = await getAllSpecies(selectedOrganization.id);
     if (response.requestSucceeded) {
-      const searchValue = debouncedSearchTerm ? debouncedSearchTerm.toLowerCase() : '';
+      const searchValue = debouncedSearchTerm ? removeDiacritics(debouncedSearchTerm).toLowerCase() : '';
       const speciesToUse = searchValue
         ? response.species.filter((species) => {
             return (
               species.scientificName.toLowerCase().includes(searchValue) ||
-              (species.commonName && species.commonName.toLowerCase().includes(searchValue))
+              (species.commonName && removeDiacritics(species.commonName).toLowerCase().includes(searchValue))
             );
           })
         : response.species;
