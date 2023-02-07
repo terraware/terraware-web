@@ -1,7 +1,7 @@
 import { ArrowDropDown } from '@mui/icons-material';
 import { Chip, Container, Divider, Link, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
@@ -85,14 +85,25 @@ export default function Filters(props: Props): JSX.Element {
   const classes = useStyles({ isMobile, isDesktop });
   const [popover, setPopover] = React.useState<FilterPopover>();
   const [searchTerm, setSearchTerm] = React.useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 250, (value) => {
-    const updatedSearchFilters = getSearchTermFilter(searchColumns, value);
-    onChange({ ...filters, ...updatedSearchFilters });
-  });
+  const searchTermCallback = useCallback(
+    (value: string) => {
+      let newFilters;
+      if (value === '') {
+        newFilters = { ...filters };
+        delete newFilters.searchTermFilter;
+      } else {
+        newFilters = { ...filters, ...getSearchTermFilter(searchColumns, value) };
+      }
+      onChange(newFilters);
+    },
+    [searchColumns, filters]
+  );
+  const debouncedSearchTerm = useDebounce(searchTerm, 250, searchTermCallback);
 
   const onChangeFilters = (col: DatabaseColumn, filter: SearchNodePayload) => {
     const updatedFilters = getUpdatedFilters(col, filter, filters);
-    const updatedSearchFilters = getSearchTermFilter(searchColumns, debouncedSearchTerm);
+    const updatedSearchFilters =
+      debouncedSearchTerm === '' ? {} : getSearchTermFilter(searchColumns, debouncedSearchTerm);
     onChange({ ...updatedFilters, ...updatedSearchFilters });
     setPopover(undefined);
   };
@@ -244,7 +255,7 @@ function getSearchTermFilter(searchCols: DatabaseColumn[], searchTerm: string): 
     });
   }
 
-  return { searchTerm: orNode };
+  return { searchTermFilter: orNode };
 }
 
 function getOptions(col: DatabaseColumn, availableValues: FieldValuesPayload, allValues: FieldValuesPayload): Option[] {
