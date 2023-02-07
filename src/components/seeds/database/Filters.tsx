@@ -1,7 +1,7 @@
 import { ArrowDropDown } from '@mui/icons-material';
 import { Chip, Container, Divider, Link, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useState } from 'react';
+import React from 'react';
 import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
@@ -15,8 +15,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { DatabaseColumn, Option } from '@terraware/web-components/components/table/types';
 import TextField from '../../common/Textfield/Textfield';
 import useDebounce from '../../../utils/useDebounce';
-import Icon from '../../common/icon/Icon';
-import FilterMultiSelect from '../../common/FilterMultiSelect';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -62,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
     flexWrap: (props: StyleProps) => (props.isMobile ? 'nowrap' : 'wrap'),
-    alignItems: 'center',
+    alignItems: (props: StyleProps) => (props.isMobile ? 'flex-start' : 'center'),
     gap: theme.spacing(1.5),
     marginTop: `-${theme.spacing(1)}`,
   },
