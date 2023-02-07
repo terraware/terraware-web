@@ -1,3 +1,4 @@
+3f49c908 Revert index.html change that removed lang attribute (#1151)
 541a45a5 SW-1828 Ignore diacritics in species typeahead (#1150)
 bf2a39b2 SW-2897 Pass locale to cookie consent UI (#1149)
 a92a3252 SW-2865 Move timezone and units init message under notifications popup (#1146)
