@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Badge, Box, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
+import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
@@ -15,15 +15,9 @@ import stopPropagation from 'src/utils/stopPropagationEvent';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Timestamp from './common/Timestamp';
-import { InitializedUnits, weightSystemsNames } from 'src/units';
-import { OrganizationService, PreferencesService, UserService } from 'src/services';
-import { useOrganization, useTimeZones, useUser } from 'src/providers';
-import isEnabled from 'src/features';
-import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
-import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
-import { getTodaysDateFormatted } from '@terraware/web-components/utils';
-import { supportedLocales } from 'src/strings/locales';
-import TextWithLink from './common/TextWithLink';
+import { PreferencesService } from 'src/services';
+import { useOrganization, useUser } from 'src/providers';
+import useFeatureNotifications from './FeatureNotification';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -162,87 +156,10 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   const [lastSeen, setLastSeen] = useState<number>(0);
   const [notifications, setNotifications] = useState<Notifications>();
 
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
-  const weightUnitsEnabled = isEnabled('Weight units');
+  const { reloadUserPreferences: reloadPreferences } = useUser();
+  const { selectedOrganization } = useOrganization();
 
-  const { user, reloadUser, userPreferences, reloadUserPreferences: reloadPreferences } = useUser();
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
-  const timeZones = useTimeZones();
-
-  const [unitNotification, setUnitNotification] = useState(false);
-  const [timeZoneUserNotification, setTimeZoneUserNotification] = useState(false);
-  const [timeZoneOrgNotification, setTimeZoneOrgNotification] = useState(false);
-  const [userTimeZone, setUserTimeZone] = useState<string>();
-  const [orgTimeZone, setOrgTimeZone] = useState<string>();
-
-  useEffect(() => {
-    const getDefaultTimeZone = (): TimeZoneDescription => {
-      const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      return getTimeZone(timeZones, browserTimeZone) || getUTC(timeZones);
-    };
-
-    const notifyTimeZoneUpdates = (userTz: InitializedTimeZone, orgTz: InitializedTimeZone) => {
-      const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
-      const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
-      setUserTimeZone(userTz.timeZone);
-      setOrgTimeZone(orgTz.timeZone);
-      setTimeZoneOrgNotification(!!notifyOrg);
-      setTimeZoneUserNotification(!!notifyUser);
-    };
-
-    const initializeTimeZones = async () => {
-      if (!user) {
-        return;
-      }
-
-      const userTz: InitializedTimeZone = await UserService.initializeTimeZone(user, getDefaultTimeZone().id);
-      if (!userTz.timeZone) {
-        return;
-      }
-
-      let orgTz: InitializedTimeZone = {};
-      orgTz = await OrganizationService.initializeTimeZone(selectedOrganization, userTz.timeZone);
-
-      if (userTz.updated) {
-        reloadUser();
-      }
-
-      if (orgTz.updated) {
-        reloadOrganizations();
-      }
-
-      if (!userTz.updated && !orgTz.updated) {
-        notifyTimeZoneUpdates(userTz, orgTz);
-      }
-    };
-
-    if (timeZoneFeatureEnabled) {
-      initializeTimeZones();
-    }
-  }, [reloadOrganizations, reloadUser, selectedOrganization, timeZoneFeatureEnabled, user, userPreferences, timeZones]);
-
-  useEffect(() => {
-    const initializeWeightUnits = async () => {
-      const userUnit: InitializedUnits = await UserService.initializeUnits('metric');
-      if (!userUnit.units) {
-        return;
-      }
-
-      if (userUnit.updated) {
-        reloadPreferences();
-      }
-
-      if (!userUnit.unitsAcknowledgedOnMs) {
-        setUnitNotification(true);
-      } else {
-        setUnitNotification(false);
-      }
-    };
-
-    if (weightUnitsEnabled) {
-      initializeWeightUnits();
-    }
-  }, [user, userPreferences, weightUnitsEnabled, reloadPreferences]);
+  const featureNotifications = useFeatureNotifications();
 
   const populateNotifications = useCallback(async () => {
     const notificationsData = await getNotifications();
@@ -256,76 +173,9 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
       return dateB.getTime() - dateA.getTime();
     });
 
-    if (timeZoneOrgNotification) {
-      notificationsData.items.unshift({
-        id: -2,
-        notificationCriticality: 'Info',
-        organizationId: selectedOrganization.id,
-        title: strings.REVIEW_YOUR_ORGANIZATION_SETTING,
-        body: (
-          <div>
-            <ul>
-              <li>{strings.formatString(strings.TIME_ZONE_SELECTED, orgTimeZone || '')}</li>
-            </ul>
-            <Box paddingTop={1}>
-              <TextWithLink text={strings.ORG_NOTIFICATION_ACTION} href={APP_PATHS.ORGANIZATION} />
-            </Box>
-          </div>
-        ),
-        localUrl: APP_PATHS.ORGANIZATION,
-        createdTime: getTodaysDateFormatted(),
-        isRead: false,
-        hideDate: true,
-      });
-    }
-
-    if (unitNotification || timeZoneUserNotification) {
-      notificationsData.items.unshift({
-        id: -1,
-        notificationCriticality: 'Info',
-        organizationId: selectedOrganization.id,
-        title: strings.REVIEW_YOUR_ACCOUNT_SETTING,
-        body: (
-          <Box>
-            <ul>
-              <li>
-                {strings.formatString(
-                  strings.DEFAULT_LANGUAGE_SELECTED,
-                  supportedLocales.find((sLocale) => sLocale.id === user?.locale)?.name || ''
-                )}
-              </li>
-              <li>{strings.formatString(strings.TIME_ZONE_SELECTED, userTimeZone || '')}</li>
-              <li>
-                {strings.formatString(
-                  strings.WEIGHT_SYSTEM_SELECTED,
-                  weightSystemsNames().find((ws) => ws.value === userPreferences.preferredWeightSystem)?.label || ''
-                )}
-              </li>
-            </ul>
-            <Box paddingTop={1}>
-              <TextWithLink text={strings.USER_NOTIFICATION_ACTION} href={APP_PATHS.MY_ACCOUNT} />
-            </Box>
-          </Box>
-        ),
-        localUrl: APP_PATHS.MY_ACCOUNT,
-        createdTime: getTodaysDateFormatted(),
-        isRead: false,
-        hideDate: true,
-      });
-    }
-
+    notificationsData.items = [...featureNotifications, ...notificationsData.items];
     setNotifications(notificationsData);
-  }, [
-    organizationId,
-    timeZoneOrgNotification,
-    timeZoneUserNotification,
-    unitNotification,
-    selectedOrganization.id,
-    userTimeZone,
-    orgTimeZone,
-    user?.locale,
-    userPreferences.preferredWeightSystem,
-  ]);
+  }, [organizationId, featureNotifications]);
 
   useEffect(() => {
     // Update notifications now.
