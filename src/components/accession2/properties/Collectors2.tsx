@@ -1,7 +1,7 @@
 import { Close } from '@mui/icons-material';
 import { useTheme, Box, IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { getCollectors } from 'src/api/seeds/search';
+import { SeedBankService } from 'src/services';
 import Autocomplete from 'src/components/common/Autocomplete';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
@@ -21,7 +21,7 @@ export default function Collectors2({ collectors = [''], onChange }: Props): JSX
 
   useEffect(() => {
     const populateCollectors = async () => {
-      setCollectorsOpt(await getCollectors(selectedOrganization.id));
+      setCollectorsOpt(await SeedBankService.getCollectors(selectedOrganization.id));
     };
     populateCollectors();
   }, [selectedOrganization]);

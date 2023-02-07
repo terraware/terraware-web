@@ -5,7 +5,7 @@ import { TableColumnType } from 'src/components/common/table/types';
 import { Accession } from 'src/types/Accession';
 import strings from 'src/strings';
 import TableCellRenderer from './TableCellRenderer';
-import { ViabilityTest } from 'src/api/types/accessions';
+import { ViabilityTest } from 'src/types/Accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface ViabilityTestingDatabaseProps {

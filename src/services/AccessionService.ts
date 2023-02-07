@@ -1,29 +1,23 @@
 import Coordinates from 'coordinate-parser';
 import { paths } from 'src/api/types/generated-schema';
-import { Geolocation } from 'src/api/types/accessions';
-import { Accession, ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
+import { Accession, ACCESSION_2_STATES, AccessionState, Geolocation } from 'src/types/Accession';
 import HttpService, { Response } from './HttpService';
-import SearchService, {
-  SearchCriteria,
-  SearchRequestPayload,
-  SearchResponseElement,
-  SearchSortOrder,
-} from './SearchService';
 
 /**
  * Service for accessions related functionality
  */
 
-const ACCESSIONS_ENDPOINT = '/api/v2/seedbank/accessions';
 const ACCESSION_ENDPOINT = '/api/v2/seedbank/accessions/{id}';
 const ACCESSION_DELETE_ENDPOINT = '/api/v1/seedbank/accessions/{id}';
 const ACCESSION_HISTORY_ENDPOINT = '/api/v1/seedbank/accessions/{id}/history';
 const ACCESSION_CHECKIN_ENDPOINT = '/api/v1/seedbank/accessions/{id}/checkIn';
+const VIABILITY_TESTS_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/viabilityTests';
+const VIABILITY_TEST_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/viabilityTests/{viabilityTestId}';
+const WITHDRAWALS_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/withdrawals';
+const TRANSFER_TO_NURSERY_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/transfers/nursery';
 
-export type AccessionPostRequestBody =
-  paths[typeof ACCESSIONS_ENDPOINT]['post']['requestBody']['content']['application/json'];
-
-type AccessionPostResponse = paths[typeof ACCESSIONS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type AccessionGetResponsePayload =
+  paths[typeof ACCESSION_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type GetAccessionHistoryResponsePayload =
   paths[typeof ACCESSION_HISTORY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -34,28 +28,33 @@ export type AccessionHistoryEntry = Required<AccessionHistory>[0];
 
 export type AccessionData = { accession?: Accession };
 export type AccessionResponse = Response & AccessionData;
-export type CreateAccessionResponse = Response & {
-  id: number;
-};
 export type HistoryData = { history?: AccessionHistoryEntry[] };
 export type AccessionHistoryResponse = Response & HistoryData;
-export type AccessionsSearchParams = {
-  organizationId: number;
-  fields: string[];
-  searchCriteria?: SearchCriteria;
-  sortOrder?: SearchSortOrder;
-};
 
-const httpAccessions = HttpService.root(ACCESSIONS_ENDPOINT);
+export type ViabilityTestPostRequest =
+  paths[typeof VIABILITY_TESTS_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
+export type ViabilityTestUpdateRequest =
+  paths[typeof VIABILITY_TEST_ENDPOINT]['put']['requestBody']['content']['application/json'];
+
+type WithdrawalsPostRequest = paths[typeof WITHDRAWALS_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
+type TransferToNurseryRequestBody =
+  paths[typeof TRANSFER_TO_NURSERY_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
 const httpAccession = HttpService.root(ACCESSION_ENDPOINT);
 const httpAccessionHistory = HttpService.root(ACCESSION_HISTORY_ENDPOINT);
 const httpAccessionCheckin = HttpService.root(ACCESSION_CHECKIN_ENDPOINT);
+const httpViabilityTests = HttpService.root(VIABILITY_TESTS_ENDPOINT);
+const httpViabilityTest = HttpService.root(VIABILITY_TEST_ENDPOINT);
+const httpWithdrawals = HttpService.root(WITHDRAWALS_ENDPOINT);
+const httpNurseryTransfer = HttpService.root(TRANSFER_TO_NURSERY_ENDPOINT);
 
 /**
  * Get an accession by id
  */
 const getAccession = async (accessionId: number): Promise<AccessionResponse> => {
-  const response: AccessionResponse = await httpAccession.get<AccessionPostResponse, AccessionData>(
+  const response: AccessionResponse = await httpAccession.get<AccessionGetResponsePayload, AccessionData>(
     {
       urlReplacements: { '{id}': accessionId.toString() },
     },
@@ -76,16 +75,6 @@ const updateAccession = async (entity: Accession, simulate?: boolean): Promise<A
     urlReplacements: { '{id}': entity.id.toString() },
   });
   const response: AccessionResponse = { ...serverResponse, accession: serverResponse?.data?.accession };
-
-  return response;
-};
-
-/**
- * Create an accession
- */
-const createAccession = async (entity: AccessionPostRequestBody): Promise<CreateAccessionResponse> => {
-  const serverResponse: Response = await httpAccessions.post({ entity });
-  const response: CreateAccessionResponse = { ...serverResponse, id: serverResponse.data?.accession?.id ?? -1 };
 
   return response;
 };
@@ -123,26 +112,77 @@ const deleteAccession = async (accessionId: number): Promise<Response> => {
 };
 
 /**
- * Search accessions
+ * Viability Tests
  */
-const searchAccessions = async ({
-  organizationId,
-  fields,
-  searchCriteria,
-  sortOrder,
-}: AccessionsSearchParams): Promise<SearchResponseElement[] | null> => {
-  const params: SearchRequestPayload = {
-    prefix: 'facilities.accessions',
-    fields,
-    search: SearchService.convertToSearchNodePayload(searchCriteria ?? {}, organizationId),
-    count: 1000,
-  };
 
-  if (sortOrder) {
-    params.sortOrder = [sortOrder];
-  }
+/**
+ * Create a viability test
+ */
+const createViabilityTest = async (viabilityTest: ViabilityTestPostRequest, accessionId: number): Promise<Response> => {
+  return await httpViabilityTests.post({
+    entity: viabilityTest,
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+    },
+  });
+};
 
-  return await SearchService.search(params);
+/**
+ * Update a viability test
+ */
+const updateViabilityTest = async (
+  viabilityTest: ViabilityTestUpdateRequest,
+  accessionId: number,
+  viabilityTestId: number
+): Promise<Response> => {
+  return await httpViabilityTest.put({
+    entity: viabilityTest,
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+      '{viabilityTestId}': viabilityTestId.toString(),
+    },
+  });
+};
+
+/**
+ * Delete a viability test
+ */
+const deleteViabilityTest = async (accessionId: number, viabilityTestId: number): Promise<Response> => {
+  return await httpViabilityTest.delete({
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+      '{viabilityTestId}': viabilityTestId.toString(),
+    },
+  });
+};
+
+/**
+ * Accession withdrawals
+ */
+
+/**
+ * Create a withdrawal
+ */
+const createWithdrawal = async (withdrawal: WithdrawalsPostRequest, accessionId: number): Promise<Response> => {
+  return await httpWithdrawals.post({
+    entity: withdrawal,
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+    },
+  });
+};
+
+/**
+ * Create a nursery withdrawal/transfer
+ */
+
+const transferToNursery = async (entity: TransferToNurseryRequestBody, accessionId: number): Promise<Response> => {
+  return await httpNurseryTransfer.post({
+    entity,
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+    },
+  });
 };
 
 /**
@@ -188,16 +228,19 @@ const getParsedCoords = (coordsStr: string[]): Geolocation[] => {
 /**
  * Exported functions
  */
-const AccessionsService = {
-  createAccession,
+const AccessionService = {
   getAccession,
   getAccessionHistory,
   checkInAccession,
   updateAccession,
   deleteAccession,
-  searchAccessions,
+  createViabilityTest,
+  updateViabilityTest,
+  deleteViabilityTest,
+  createWithdrawal,
+  transferToNursery,
   getTransitionToStates,
   getParsedCoords,
 };
 
-export default AccessionsService;
+export default AccessionService;

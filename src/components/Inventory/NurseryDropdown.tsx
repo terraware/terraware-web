@@ -1,5 +1,5 @@
 import React from 'react';
-import { AccessionPostRequestBody } from 'src/services/AccessionsService';
+import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { Dropdown } from '@terraware/web-components';
 import { getAllNurseries } from 'src/utils/organization';

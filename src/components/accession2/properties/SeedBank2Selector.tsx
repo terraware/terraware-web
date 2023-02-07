@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import strings from 'src/strings';
 import { Grid, useTheme } from '@mui/material';
-import { AccessionPostRequestBody } from 'src/services/AccessionsService';
+import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility, StorageLocationDetails } from 'src/types/Facility';

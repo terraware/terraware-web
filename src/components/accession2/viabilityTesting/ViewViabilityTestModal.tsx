@@ -3,7 +3,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, IconTooltip } from '@terraware/web-components';
 import { Accession } from 'src/types/Accession';
 import strings from 'src/strings';
-import { ViabilityTest } from 'src/api/types/accessions';
+import { ViabilityTest } from 'src/types/Accession';
 import { getFullTestType } from 'src/utils/viabilityTest';
 import ObservationsChart from './ObservationsChart';
 import { useDeviceInfo } from '@terraware/web-components/utils';

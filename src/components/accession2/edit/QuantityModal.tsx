@@ -5,7 +5,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession } from 'src/types/Accession';
-import AccessionsService from 'src/services/AccessionsService';
+import AccessionService from 'src/services/AccessionService';
 import useForm from 'src/utils/useForm';
 import { isUnitInPreferredSystem, Unit, usePreferredWeightUnits } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -60,7 +60,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     if (!validate()) {
       return;
     }
-    const response = await AccessionsService.updateAccession(record);
+    const response = await AccessionService.updateAccession(record);
     if (response.requestSucceeded) {
       reload();
       onCloseHandler();

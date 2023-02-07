@@ -1,9 +1,4 @@
-import {
-  downloadAccessionsTemplate,
-  getAccessionsUploadStatus,
-  resolveAccessionsUpload,
-  uploadAccessionsFile,
-} from 'src/api/accessions2/accession';
+import { SeedBankService } from 'src/services';
 import { Facility } from 'src/types/Facility';
 import ImportModal from 'src/components/common/ImportModal';
 import strings from 'src/strings';
@@ -17,6 +12,8 @@ export type ImportAccessionsModalProps = {
 
 export default function ImportAccessionsModal(props: ImportAccessionsModalProps): JSX.Element {
   const { open, onClose, facility, reloadData } = props;
+  const { downloadAccessionsTemplate, getAccessionsUploadStatus, resolveAccessionsUpload, uploadAccessions } =
+    SeedBankService;
 
   return (
     <ImportModal
@@ -27,7 +24,7 @@ export default function ImportAccessionsModal(props: ImportAccessionsModalProps)
       resolveApi={resolveAccessionsUpload}
       uploaderTitle={strings.IMPORT_ACCESSIONS}
       uploaderDescription={strings.IMPORT_ACCESSIONS_DESC}
-      uploadApi={uploadAccessionsFile}
+      uploadApi={uploadAccessions}
       templateApi={downloadAccessionsTemplate}
       statusApi={getAccessionsUploadStatus}
       importCompleteLabel={strings.ACCESSIONS_IMPORT_COMPLETE}

@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@mui/material';
 import React, { useEffect, useState, useCallback } from 'react';
 import { getAllSpecies } from 'src/api/species/species';
-import { AccessionPostRequestBody } from 'src/services/AccessionsService';
+import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { SelectT } from '@terraware/web-components';

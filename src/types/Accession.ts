@@ -2,8 +2,10 @@ import strings from 'src/strings';
 import { components } from 'src/api/types/generated-schema';
 
 export type Accession = components['schemas']['AccessionPayloadV2'];
-
+export type ViabilityTest = components['schemas']['GetViabilityTestPayload'];
+export type ViabilityTestResult = Required<components['schemas']['GetViabilityTestPayload']>['testResults'][0];
 export type Withdrawal = Required<Accession>['withdrawals'][0];
+export type Geolocation = components['schemas']['Geolocation'];
 
 export const ACCESSION_STATES = [
   'Awaiting Check-In',

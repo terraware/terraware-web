@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Close } from '@mui/icons-material';
 import { Grid, Box, IconButton, useTheme } from '@mui/material';
-import AccessionsService, { AccessionPostRequestBody } from 'src/services/AccessionsService';
+import { AccessionPostRequestBody } from 'src/services/SeedBankService';
+import AccessionService from 'src/services/AccessionService';
 import Textfield from 'src/components/common/Textfield/Textfield';
-import { Geolocation } from 'src/api/types/accessions';
+import { Geolocation } from 'src/types/Accession';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 import _ from 'lodash';
 import AddLink from 'src/components/common/AddLink';
@@ -29,7 +30,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
   const theme = useTheme();
 
   useEffect(() => {
-    const parsedCoords: Geolocation[] = AccessionsService.getParsedCoords(gpsCoordsList);
+    const parsedCoords: Geolocation[] = AccessionService.getParsedCoords(gpsCoordsList);
 
     if (!_.isEqual(parsedCoords, record.collectionSiteCoordinates)) {
       onChange('collectionSiteCoordinates', parsedCoords);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import strings from 'src/strings';
 import { Grid, Box, useTheme } from '@mui/material';
-import { AccessionPostRequestBody } from 'src/services/AccessionsService';
+import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import Autocomplete from 'src/components/common/Autocomplete';

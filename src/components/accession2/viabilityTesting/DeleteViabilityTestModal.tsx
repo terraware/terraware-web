@@ -4,8 +4,8 @@ import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Typography } from '@mui/material';
 import { Accession } from 'src/types/Accession';
-import { ViabilityTest } from 'src/api/types/accessions';
-import { deleteViabilityTest } from 'src/api/accessions2/viabilityTest';
+import { ViabilityTest } from 'src/types/Accession';
+import { AccessionService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteViabilityTestModalProps {
@@ -21,7 +21,7 @@ export default function DeleteViabilityTestModal(props: DeleteViabilityTestModal
   const snackbar = useSnackbar();
 
   const deleteHandler = async () => {
-    const response = await deleteViabilityTest(accession.id, viabilityTest.id);
+    const response = await AccessionService.deleteViabilityTest(accession.id, viabilityTest.id);
     if (response.requestSucceeded) {
       onDone();
     } else {

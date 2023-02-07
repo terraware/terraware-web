@@ -5,7 +5,7 @@ import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import hexRgb from 'hex-rgb';
 import useStateLocation from './utils/useStateLocation';
-import { DEFAULT_SEED_SEARCH_FILTERS, DEFAULT_SEED_SEARCH_SORT_ORDER } from 'src/api/seeds/search';
+import { DEFAULT_SEED_SEARCH_FILTERS, DEFAULT_SEED_SEARCH_SORT_ORDER } from 'src/services/SeedBankService';
 import { SearchSortOrder, SearchCriteria } from 'src/services/SearchService';
 import ContactUs from 'src/components/ContactUs';
 import EditOrganization from 'src/components/EditOrganization';

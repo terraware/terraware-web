@@ -5,7 +5,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, Typography } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Accession } from 'src/types/Accession';
-import AccessionsService from 'src/services/AccessionsService';
+import AccessionService from 'src/services/AccessionService';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 import { preventDefaultEvent } from '@terraware/web-components/utils';
@@ -39,7 +39,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
       return;
     }
     setError('');
-    const response = await AccessionsService.updateAccession(record);
+    const response = await AccessionService.updateAccession(record);
     if (response.requestSucceeded) {
       reload();
       onCloseHandler();

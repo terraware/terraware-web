@@ -7,7 +7,7 @@ import { Facility, StorageLocationDetails } from 'src/types/Facility';
 import theme from 'src/theme';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Accession } from 'src/types/Accession';
-import AccessionsService from 'src/services/AccessionsService';
+import AccessionService from 'src/services/AccessionService';
 import useForm from 'src/utils/useForm';
 import { SeedBankService } from 'src/services';
 import { StorageLocationSelector, StorageSubLocationSelector } from '../properties';
@@ -54,7 +54,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   }, [record.facilityId]);
 
   const saveLocation = async () => {
-    const response = await AccessionsService.updateAccession({
+    const response = await AccessionService.updateAccession({
       ...accession,
       ...record,
     });

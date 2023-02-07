@@ -1,7 +1,7 @@
 import { useTheme, CircularProgress, Box, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Accession } from 'src/types/Accession';
-import AccessionsService, { AccessionHistoryEntry } from 'src/services/AccessionsService';
+import AccessionService, { AccessionHistoryEntry } from 'src/services/AccessionService';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import _ from 'lodash';
@@ -18,7 +18,7 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
 
   useEffect(() => {
     const loadHistory = async () => {
-      const response = await AccessionsService.getAccessionHistory(accession.id);
+      const response = await AccessionService.getAccessionHistory(accession.id);
       if (response.requestSucceeded) {
         if (!_.isEqual(history, response.history)) {
           setHistory(response.history);
