@@ -1,16 +1,5 @@
 import moment from 'moment';
-import {
-  Badge,
-  Box,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Popover,
-  Theme,
-  Typography,
-} from '@mui/material';
+import { Badge, Box, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
@@ -34,6 +23,7 @@ import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import { supportedLocales } from 'src/strings/locales';
+import TextWithLink from './common/TextWithLink';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -277,12 +267,9 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
             <ul>
               <li>{strings.formatString(strings.TIME_ZONE_SELECTED, orgTimeZone || '')}</li>
             </ul>
-            <Typography sx={{ fontSize: '14px', paddingTop: 1 }}>
-              {strings.formatString(
-                strings.ORG_NOTIFICATION_ACTION,
-                <Link to={APP_PATHS.ORGANIZATION}>{strings.SETTINGS_ORG}</Link>
-              )}
-            </Typography>
+            <Box paddingTop={1}>
+              <TextWithLink text={strings.ORG_NOTIFICATION_ACTION} href={APP_PATHS.ORGANIZATION} />
+            </Box>
           </div>
         ),
         localUrl: APP_PATHS.ORGANIZATION,
@@ -315,12 +302,9 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
                 )}
               </li>
             </ul>
-            <Typography sx={{ fontSize: '14px', paddingTop: 1 }}>
-              {strings.formatString(
-                strings.USER_NOTIFICATION_ACTION,
-                <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-              )}
-            </Typography>
+            <Box paddingTop={1}>
+              <TextWithLink text={strings.USER_NOTIFICATION_ACTION} href={APP_PATHS.MY_ACCOUNT} />
+            </Box>
           </Box>
         ),
         localUrl: APP_PATHS.MY_ACCOUNT,
