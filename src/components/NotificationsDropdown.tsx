@@ -201,7 +201,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     };
 
     const initializeTimeZones = async () => {
-      if (!user || !userPreferences) {
+      if (!user) {
         return;
       }
 
@@ -233,10 +233,6 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 
   useEffect(() => {
     const initializeWeightUnits = async () => {
-      if (!user || !userPreferences) {
-        return;
-      }
-
       const userUnit: InitializedUnits = await UserService.initializeUnits('metric');
       if (!userUnit.units) {
         return;
@@ -281,7 +277,12 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
             <ul>
               <li>{strings.formatString(strings.TIME_ZONE_SELECTED, orgTimeZone || '')}</li>
             </ul>
-            <Typography sx={{ fontSize: '14px', paddingTop: 1 }}>{strings.USER_NOTIFICATION_ACTION}</Typography>
+            <Typography sx={{ fontSize: '14px', paddingTop: 1 }}>
+              {strings.formatString(
+                strings.ORG_NOTIFICATION_ACTION,
+                <Link to={APP_PATHS.ORGANIZATION}>{strings.SETTINGS_ORG}</Link>
+              )}
+            </Typography>
           </div>
         ),
         localUrl: APP_PATHS.ORGANIZATION,
@@ -314,7 +315,12 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
                 )}
               </li>
             </ul>
-            <Typography sx={{ fontSize: '14px', paddingTop: 1 }}>{strings.ORG_NOTIFICATION_ACTION}</Typography>
+            <Typography sx={{ fontSize: '14px', paddingTop: 1 }}>
+              {strings.formatString(
+                strings.USER_NOTIFICATION_ACTION,
+                <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
+              )}
+            </Typography>
           </Box>
         ),
         localUrl: APP_PATHS.MY_ACCOUNT,
@@ -388,23 +394,23 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   };
 
   const markUserNotificationAsRead = async () => {
+    onPopoverClose();
     await PreferencesService.updateUserPreferences({
       unitsAcknowledgedOnMs: Date.now(),
       timeZoneAcknowledgedOnMs: Date.now(),
     });
 
     await reloadPreferences();
-    onPopoverClose();
     await populateNotifications();
   };
 
   const markOrgNotificationAsRead = async () => {
+    onPopoverClose();
     await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
       timeZoneAcknowledgedOnMs: Date.now(),
     });
 
     await reloadPreferences();
-    onPopoverClose();
     await populateNotifications();
   };
 
