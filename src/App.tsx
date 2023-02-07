@@ -57,19 +57,12 @@ import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } fr
 import { listPlantingSites } from './api/tracking/tracking';
 import { PlantingSite } from 'src/types/Tracking';
 import isEnabled from 'src/features';
-import useSnackbar from 'src/utils/useSnackbar';
-import { TimeZoneDescription, InitializedTimeZone } from 'src/types/TimeZones';
-import { useLocalization, useOrganization, useTimeZones, useUser } from 'src/providers';
-import { OrganizationService, PreferencesService, UserService } from 'src/services';
-import { Link } from 'react-router-dom';
-import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { defaultSelectedOrg } from 'src/providers/contexts';
-import strings from 'src/strings';
 import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
-import { InitializedUnits, weightSystemsNames } from 'src/units';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -158,14 +151,10 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadOrganizations, orgPreferences, orgPreferenceForId } =
-    useOrganization();
+  const { organizations, selectedOrganization, reloadOrganizations, orgPreferences } = useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
-  const { user, reloadUser, userPreferences, reloadUserPreferences: reloadPreferences } = useUser();
-  const snackbar = useSnackbar();
-  const timeZones = useTimeZones();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const { userPreferences, reloadUserPreferences: reloadPreferences } = useUser();
   const weightUnitsEnabled = isEnabled('Weight units');
   const preferredWeightSystem = weightUnitsEnabled ? (userPreferences.preferredWeightSystem as string) : '';
 
@@ -194,7 +183,6 @@ function AppContent() {
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const [plotNames, setPlotNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
-  const [showUnitSnackbar, setShowUnitSnackbar] = useState(false);
 
   const reloadSpecies = useCallback(() => {
     const populateSpecies = async () => {
@@ -265,151 +253,6 @@ function AppContent() {
       setShowNavBar(true);
     }
   }, [type]);
-
-  useEffect(() => {
-    if (showUnitSnackbar) {
-      snackbar.pageInfo(
-        strings.formatString<any>(
-          strings.UNITS_INITIALIZED_MESSAGE,
-          weightSystemsNames().find((ws) => ws.value === userPreferences.preferredWeightSystem ?? 'metric')?.label,
-          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-        ),
-        strings.UNITS_INITIALIZED_TITLE,
-
-        {
-          label: strings.GOT_IT,
-          apply: () => {
-            PreferencesService.updateUserPreferences({ unitsAcknowledgedOnMs: Date.now() });
-          },
-        },
-        'user'
-      );
-    }
-  }, [showUnitSnackbar, snackbar, userPreferences.preferredWeightSystem]);
-
-  useEffect(() => {
-    const initializeWeightUnits = async () => {
-      if (!user || !userPreferences) {
-        return;
-      }
-
-      const userUnit: InitializedUnits = await UserService.initializeUnits('metric');
-      if (!userUnit.units) {
-        return;
-      }
-
-      if (userUnit.updated) {
-        reloadPreferences();
-      }
-
-      if (!userUnit.unitsAcknowledgedOnMs) {
-        setShowUnitSnackbar(true);
-      }
-    };
-
-    if (weightUnitsEnabled) {
-      initializeWeightUnits();
-    }
-  }, [user, userPreferences, snackbar, weightUnitsEnabled, reloadPreferences]);
-
-  useEffect(() => {
-    const getDefaultTimeZone = (): TimeZoneDescription => {
-      const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      return getTimeZone(timeZones, browserTimeZone) || getUTC(timeZones);
-    };
-
-    const notifyTimeZoneUpdates = async (userTz: InitializedTimeZone, orgTz: InitializedTimeZone) => {
-      const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
-      const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
-      if (!notifyUser && !notifyOrg) {
-        snackbar.pageInfo('', undefined, undefined, 'org');
-        return;
-      }
-
-      let message: string | string[] = '';
-
-      if (notifyUser && notifyOrg) {
-        message = strings.formatString<any>(
-          strings.TIME_ZONE_INITIALIZED_USER_ORG_MESSAGE,
-          getTimeZone(timeZones, userTz.timeZone)?.longName,
-          <Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>,
-          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-        );
-      } else if (notifyUser) {
-        message = strings.formatString<any>(
-          strings.TIME_ZONE_INITIALIZED_USER_MESSAGE,
-          getTimeZone(timeZones, userTz.timeZone)?.longName,
-          <Link to={APP_PATHS.MY_ACCOUNT}>{strings.MY_ACCOUNT}</Link>
-        );
-      } else if (notifyOrg) {
-        message = strings.formatString<any>(
-          strings.TIME_ZONE_INITIALIZED_ORG_MESSAGE,
-          getTimeZone(timeZones, orgTz.timeZone)?.longName,
-          <Link to={APP_PATHS.ORGANIZATION}>{strings.ORGANIZATION}</Link>
-        );
-      }
-
-      snackbar.pageInfo(
-        message,
-        strings.TIME_ZONE_INITIALIZED_TITLE,
-        {
-          label: strings.GOT_IT,
-          apply: () => {
-            if (notifyUser) {
-              PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });
-            }
-            if (notifyOrg) {
-              PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-                timeZoneAcknowledgedOnMs: Date.now(),
-              });
-            }
-          },
-        },
-        'org'
-      );
-    };
-
-    const initializeTimeZones = async () => {
-      if (!user) {
-        return;
-      }
-
-      const userTz: InitializedTimeZone = await UserService.initializeTimeZone(user, getDefaultTimeZone().id);
-      if (!userTz.timeZone) {
-        return;
-      }
-
-      let orgTz: InitializedTimeZone = {};
-      if (!isPlaceholderOrg(selectedOrganization.id) && orgPreferenceForId === selectedOrganization.id) {
-        orgTz = await OrganizationService.initializeTimeZone(selectedOrganization, userTz.timeZone);
-      }
-
-      if (userTz.updated) {
-        reloadUser();
-      }
-
-      if (orgTz.updated) {
-        reloadOrganizations();
-      }
-
-      if (!userTz.updated && !orgTz.updated) {
-        notifyTimeZoneUpdates(userTz, orgTz);
-      }
-    };
-
-    if (timeZoneFeatureEnabled && !isPlaceholderOrg(selectedOrganization.id)) {
-      initializeTimeZones();
-    }
-  }, [
-    reloadOrganizations,
-    reloadUser,
-    selectedOrganization,
-    snackbar,
-    timeZoneFeatureEnabled,
-    timeZones,
-    user,
-    orgPreferenceForId,
-  ]);
 
   const selectedOrgHasSpecies = (): boolean => species.length > 0;
 

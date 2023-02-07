@@ -19,10 +19,11 @@ export type Notification = {
   notificationCriticality: NotificationCriticality;
   organizationId?: number;
   title: string;
-  body: string;
+  body: string | JSX.Element;
   localUrl: string;
   createdTime: string;
   isRead: boolean;
+  hideDate?: boolean;
 };
 
 export type Notifications = {
