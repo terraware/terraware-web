@@ -42,6 +42,16 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
         setUser(response.user!);
         if (response.user && !userState?.gtmInstrumented && (window as any).INIT_GTAG) {
           setUserState({ gtmInstrumented: true });
+
+          // Put the language in the "lang" attribute of the <html> tag before initializing Google
+          // Analytics because the cookie consent UI code will look there to determine which
+          // language to use for the consent UI. This needs to happen before the call to INIT_GTAG,
+          // so it lives here instead of in LocalizationProvider.
+          const locale = response.user.locale;
+          if (locale) {
+            document.documentElement.setAttribute('lang', locale);
+          }
+
           (window as any).INIT_GTAG(
             response.user.id.toString(),
             response.user.email?.toLowerCase()?.endsWith('@terraformation.com') ? 'true' : 'false'
