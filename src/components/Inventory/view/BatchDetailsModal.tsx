@@ -1,5 +1,6 @@
 import { Divider, Grid, Typography, useTheme } from '@mui/material';
-import { Button, DatePicker, DialogBox, Textfield } from '@terraware/web-components';
+import { Button, DialogBox, Textfield } from '@terraware/web-components';
+import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { useEffect, useState } from 'react';

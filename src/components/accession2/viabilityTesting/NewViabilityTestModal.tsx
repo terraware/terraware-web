@@ -1,6 +1,7 @@
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Checkbox, DatePicker, DialogBox, SelectT, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, DialogBox, SelectT, Textfield } from '@terraware/web-components';
+import DatePicker from 'src/components/common/DatePicker';
 import { Accession } from 'src/types/Accession';
 import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
 import strings from 'src/strings';

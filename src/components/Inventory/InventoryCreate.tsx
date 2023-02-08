@@ -9,7 +9,7 @@ import Textfield from 'src/components/common/Textfield/Textfield';
 import PageForm from 'src/components/common/PageForm';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import useSnackbar from 'src/utils/useSnackbar';
-import { DatePicker } from '@terraware/web-components';
+import DatePicker from 'src/components/common/DatePicker';
 import { Species2Dropdown } from '../accession2/properties';
 import { createBatch, CreateBatchRequestPayload } from 'src/api/batch/batch';
 import NurseryDropdown from './NurseryDropdown';

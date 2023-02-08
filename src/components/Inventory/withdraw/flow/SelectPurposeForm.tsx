@@ -18,7 +18,8 @@ import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/api/typ
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { APP_PATHS } from 'src/constants';
 import Divisor from 'src/components/common/Divisor';
-import { DatePicker, Dropdown, Textfield, DropdownItem, IconTooltip } from '@terraware/web-components';
+import { Dropdown, Textfield, DropdownItem, IconTooltip } from '@terraware/web-components';
+import DatePicker from 'src/components/common/DatePicker';
 import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { getAllSpecies } from 'src/api/species/species';
