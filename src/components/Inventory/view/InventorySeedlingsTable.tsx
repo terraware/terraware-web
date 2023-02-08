@@ -209,7 +209,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   };
 
   const selectionHasWithdrawableQuantities = () => {
-    return selectedRows.some((row) => Number(row.totalQuantity) > 0);
+    return selectedRows.some((row) => row.totalQuantity !== '0');
   };
 
   const isSelectionBulkWithdrawable = () => {

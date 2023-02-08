@@ -46,7 +46,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       const searchResponse = await NurseryBatchService.getBatches(batchIds.map((id) => Number(id)));
 
       if (searchResponse) {
-        const withdrawable = searchResponse.filter((batch) => Number(batch.totalQuantity) > 0);
+        const withdrawable = searchResponse.filter((batch) => batch.totalQuantity !== '0');
         if (!withdrawable.length) {
           snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
         }

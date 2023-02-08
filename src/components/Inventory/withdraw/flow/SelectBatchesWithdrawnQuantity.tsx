@@ -10,6 +10,8 @@ import useForm from 'src/utils/useForm';
 import { makeStyles } from '@mui/styles';
 import { useOrganization } from 'src/providers/hooks';
 import Table from 'src/components/common/table';
+import { useUser } from 'src/providers';
+import useNumberParser from 'src/utils/useNumberParser';
 
 type SelectBatchesWithdrawnQuantityProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
@@ -40,7 +42,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
+  const numberParser = useNumberParser();
   const { selectedOrganization } = useOrganization();
+  const { user } = useUser();
   const { onNext, onCancel, saveText, batches, nurseryWithdrawal } = props;
   const { OUTPLANT } = NurseryWithdrawalPurposes;
   const theme = useTheme();
@@ -149,11 +153,16 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   const isInvalidQuantity = (val: any) => isNaN(val) || +val < 0;
 
   const validateQuantities = () => {
+    const numericParser = numberParser(user?.locale ?? 'en');
     let noErrors = true;
     let newRecords: BatchWithdrawalForTable[] = [];
     if (nurseryWithdrawal.purpose === OUTPLANT) {
       let unsetValues = 0;
-      newRecords = record.map((rec) => {
+      newRecords = record.map((recordData) => {
+        const rec = {
+          ...recordData,
+          readyQuantity: numericParser.parse(recordData.readyQuantity.toString()),
+        };
         let readyQuantityWithdrawnError = '';
         if (rec.readyQuantityWithdrawn) {
           if (isInvalidQuantity(rec.readyQuantityWithdrawn)) {
@@ -182,7 +191,12 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       });
     } else {
       let unsetValues = 0;
-      newRecords = record.map((rec) => {
+      newRecords = record.map((recordData) => {
+        const rec = {
+          ...recordData,
+          notReadyQuantity: numericParser.parse(recordData.notReadyQuantity.toString()),
+          readyQuantity: numericParser.parse(recordData.readyQuantity.toString()),
+        };
         let readyQuantityWithdrawnError = '';
         let notReadyQuantityWithdrawnError = '';
         if (rec.readyQuantityWithdrawn) {

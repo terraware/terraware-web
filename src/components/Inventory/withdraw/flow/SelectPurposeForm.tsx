@@ -31,6 +31,8 @@ import { useOrganization } from 'src/providers/hooks';
 import isEnabled from 'src/features';
 import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useUser } from 'src/providers';
+import useNumberParser from 'src/utils/useNumberParser';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
@@ -60,6 +62,8 @@ type SelectPurposeFormProps = {
 
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { user } = useUser();
+  const numberParser = useNumberParser();
   const { nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
   const { OUTPLANT, NURSERY_TRANSFER, DEAD, OTHER } = NurseryWithdrawalPurposes;
   const contributor = isContributor(selectedOrganization);
@@ -216,13 +220,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const validateWithdrawnQuantity = () => {
+    const numericParser = numberParser(user?.locale ?? 'en');
     if (isSingleBatch && isOutplant) {
       if (withdrawnQuantity) {
         if (isNaN(withdrawnQuantity)) {
           setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
           return false;
         } else {
-          if (withdrawnQuantity > +batches[0].readyQuantity) {
+          if (withdrawnQuantity > +numericParser.parse(batches[0].readyQuantity)) {
             setIndividualError('withdrawnQuantity', strings.WITHDRAWN_QUANTITY_ERROR);
             return false;
           }
@@ -237,6 +242,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const validateReadyAndNotReadyQuantities = () => {
+    const numericParser = numberParser(user?.locale ?? 'en');
     let bothValid = true;
     if (isSingleBatch && !isOutplant) {
       if (!notReadyQuantityWithdrawn && notReadyQuantityWithdrawn !== 0) {
@@ -247,7 +253,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           setIndividualError('notReadyQuantityWithdrawn', strings.INVALID_VALUE);
           bothValid = false;
         } else {
-          if (+notReadyQuantityWithdrawn > +batches[0].notReadyQuantity) {
+          if (+notReadyQuantityWithdrawn > +numericParser.parse(batches[0].notReadyQuantity)) {
             setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
             bothValid = false;
           } else {
@@ -264,7 +270,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           setIndividualError('readyQuantityWithdrawn', strings.INVALID_VALUE);
           bothValid = false;
         } else {
-          if (+readyQuantityWithdrawn > +batches[0].readyQuantity) {
+          if (+readyQuantityWithdrawn > +numericParser.parse(batches[0].readyQuantity)) {
             setIndividualError('readyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
             bothValid = false;
           } else {
@@ -323,6 +329,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
 
     const isSingleOutplant = isSingleBatch && isOutplant;
+    const numericParser = numberParser(user?.locale ?? 'en');
 
     onNext({
       ...localRecord,
@@ -333,7 +340,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       batchWithdrawals: batches
         .filter((batch) => {
           return (
-            batch.facility_id.toString() === selectedNursery?.id.toString() && (!isOutplant || +batch.readyQuantity > 0)
+            batch.facility_id.toString() === selectedNursery?.id.toString() &&
+            (!isOutplant || +numericParser.parse(batch.readyQuantity) > 0)
           );
         })
         .map((batch) => ({
@@ -354,8 +362,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const getNurseriesOptions = () => {
+    const numericParser = numberParser(user?.locale ?? 'en');
     const nurseries = batches
-      .filter((batch) => {
+      .filter((batchData) => {
+        const batch = {
+          ...batchData,
+          readyQuantity: numericParser.parse(batchData.readyQuantity),
+          totalQuantity: numericParser.parse(batchData.totalQuantity),
+        };
         if (isOutplant) {
           return +batch.readyQuantity > 0;
         }
@@ -409,12 +423,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn]);
 
   useEffect(() => {
+    const numericParser = numberParser(user?.locale ?? 'en');
     if (localRecord.purpose === OUTPLANT) {
       const hasReadyQuantities = batches.some((batch) => {
         if (selectedNursery && batch.facility_id.toString() !== selectedNursery.id.toString()) {
           return false;
         }
-        return Number(batch.readyQuantity) > 0;
+        return numericParser.parse(batch.readyQuantity) > 0;
       });
 
       if (!hasReadyQuantities) {
@@ -425,7 +440,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         return;
       }
     }
-  }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, OUTPLANT, batches, updatePurpose]);
+  }, [
+    localRecord.purpose,
+    noReadySeedlings,
+    snackbar,
+    selectedNursery,
+    OUTPLANT,
+    batches,
+    updatePurpose,
+    user?.locale,
+    numberParser,
+  ]);
 
   useEffect(() => {
     const fetchSpecies = async () => {
@@ -456,8 +481,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [batchesFromNursery, speciesMap]);
 
   const totalReadyQuantity = useMemo(() => {
-    return batchesFromNursery.reduce((acc, batch) => acc + (+batch.readyQuantity || 0), 0);
-  }, [batchesFromNursery]);
+    const numericParser = numberParser(user?.locale ?? 'en');
+    return batchesFromNursery.reduce((acc, batch) => acc + (+numericParser.parse(batch.readyQuantity) || 0), 0);
+  }, [batchesFromNursery, user?.locale, numberParser]);
 
   const getOutplantLabel = () => {
     return (
