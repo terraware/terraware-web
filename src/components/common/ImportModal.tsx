@@ -215,14 +215,10 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
         id: 0,
         requestSucceeded: false,
       };
-      /**
-       * Is this needed?
-       */
-      if (selectedOrganization) {
-        //  response = await uploadApi(file, selectedOrganization.id.toString());
-      }
       if (facility) {
         response = await uploadApi(file, facility.id.toString());
+      } else if (selectedOrganization) {
+        response = await uploadApi(file, selectedOrganization.id.toString());
       }
       if (response) {
         if (response.requestSucceeded === false) {
