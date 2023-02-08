@@ -36,7 +36,15 @@ export default function DashboardChart(props: DashboardChartProps): JSX.Element 
     return null;
   }
 
-  return <DashboardChartContent {...props} locale={locale} chartLabels={chartLabels} chartValues={chartValues} />;
+  return (
+    <DashboardChartContent
+      {...props}
+      locale={locale}
+      chartLabels={chartLabels}
+      chartValues={chartValues}
+      key={`${locale}_${chartLabels.length}_${chartValues.length}`}
+    />
+  );
 }
 
 interface DashboardChartContentProps {
