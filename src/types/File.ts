@@ -1,8 +1,6 @@
-import { paths } from './generated-schema';
-const UPLOAD_STATUS = '/api/v1/species/uploads/{uploadId}';
+import { components } from 'src/api/types/generated-schema';
 
-export type GetUploadStatusResponsePayload =
-  paths[typeof UPLOAD_STATUS]['get']['responses'][200]['content']['application/json'];
+export type GetUploadStatusResponsePayload = components['schemas']['GetUploadStatusResponsePayload'];
 
 export type UploadResponse = {
   uploadStatus?: GetUploadStatusResponsePayload;

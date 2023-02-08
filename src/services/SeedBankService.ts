@@ -7,7 +7,7 @@ import SearchService, {
   SearchResponseElement,
   SearchSortOrder,
 } from './SearchService';
-import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/api/types/uploadFile';
+import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 
 /**
  * Seed bank related services
