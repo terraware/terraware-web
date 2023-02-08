@@ -18,8 +18,8 @@ export default function PlantBySpeciesChart({ plantsBySpecies }: PlantBySpeciesC
       setLabels(Object.keys(plantsBySpecies));
       setValues(Object.values(plantsBySpecies));
     } else {
-      setLabels(undefined);
-      setValues(undefined);
+      setLabels([]);
+      setValues([]);
     }
   }, [plantsBySpecies]);
 

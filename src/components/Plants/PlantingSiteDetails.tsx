@@ -8,7 +8,8 @@ import TotalCount from './TotalCount';
 import PlantingSiteDashboardMap from './PlantingSiteDashboardMap';
 import PlantBySpeciesChart from './PlantBySpeciesChart';
 import BusySpinner from 'src/components/common/BusySpinner';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization, useUser } from 'src/providers';
+import { useNumberParser } from 'src/utils/useNumber';
 
 export type Population = {
   species_scientificName: string;
@@ -40,6 +41,8 @@ export const cardTitleStyle = {
 
 export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { user } = useUser();
+  const numberParser = useNumberParser();
   const { plantingSite, plantsDashboardPreferences, setPlantsDashboardPreferences } = props;
   const [totalPlants, setTotalPlants] = useState<number>();
   const theme = useTheme();
@@ -51,6 +54,8 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   const [hasZones, setHasZones] = useState<boolean>(false);
   const [selectedPlotId, setSelectedPlotId] = useState<number | undefined>();
   const [selectedZoneId, setSelectedZoneId] = useState<number | undefined>();
+
+  const numericParser = useMemo(() => numberParser(user?.locale), [numberParser, user?.locale]);
 
   const widgetCardStyle = {
     backgroundColor: theme.palette.TwClrBg,
@@ -125,12 +130,12 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
         if (serverResponse) {
           let totalPlantsOfSite = 0;
           const plantsPerSpecies: { [key: string]: number } = serverResponse.reduce((acc, population) => {
-            totalPlantsOfSite = +totalPlantsOfSite + +population.totalPlants;
+            totalPlantsOfSite = +totalPlantsOfSite + numericParser.parse(population.totalPlants);
             if (acc[population.species_scientificName]) {
               acc[population.species_scientificName] =
-                +acc[population.species_scientificName] + +population.totalPlants;
+                +acc[population.species_scientificName] + numericParser.parse(population.totalPlants);
             } else {
-              acc[population.species_scientificName] = +population.totalPlants;
+              acc[population.species_scientificName] = numericParser.parse(population.totalPlants);
             }
             return acc;
           }, {} as { [key: string]: number });
@@ -143,7 +148,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
 
     populateZones();
     populateTotals();
-  }, [plantingSite, selectedOrganization]);
+  }, [plantingSite, selectedOrganization, numericParser]);
 
   const plotsWithPlants = useMemo(() => {
     if (!zonesWithPlants) {

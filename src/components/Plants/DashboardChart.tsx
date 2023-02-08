@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Theme, useTheme } from '@mui/material';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
@@ -23,13 +23,36 @@ export interface DashboardChartProps {
   minHeight?: string;
 }
 
-export default function DashboardChart(props: DashboardChartProps): JSX.Element {
-  const { chartId, chartLabels, chartValues, minHeight } = props;
+export default function DashboardChart(props: DashboardChartProps): JSX.Element | null {
+  const { chartLabels, chartValues } = props;
+  const { loadedStringsForLocale } = useLocalization();
+  const [locale, setLocale] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLocale(loadedStringsForLocale);
+  }, [loadedStringsForLocale]);
+
+  if (!locale || !chartLabels || !chartValues) {
+    return null;
+  }
+
+  return <DashboardChartContent {...props} locale={locale} chartLabels={chartLabels} chartValues={chartValues} />;
+}
+
+interface DashboardChartContentProps {
+  chartId: string;
+  chartLabels: string[];
+  chartValues: number[];
+  minHeight?: string;
+  locale: string;
+}
+
+function DashboardChartContent(props: DashboardChartContentProps): JSX.Element {
+  const { chartId, chartLabels, chartValues, minHeight, locale } = props;
   const classes = useStyles({ minHeight });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
   const theme = useTheme();
-  const { loadedStringsForLocale } = useLocalization();
 
   useEffect(() => {
     const createChart = async () => {
@@ -39,9 +62,9 @@ export default function DashboardChart(props: DashboardChartProps): JSX.Element 
       }
 
       const ctx = canvasRef?.current?.getContext('2d');
-      if (ctx && loadedStringsForLocale) {
+      if (ctx) {
         const colors = generateTerrawareRandomColors(theme, chartLabels?.length || 0);
-        chartRef.current = await newChart(loadedStringsForLocale, ctx, {
+        chartRef.current = await newChart(locale, ctx, {
           type: 'bar',
           data: {
             labels: chartLabels,
@@ -88,7 +111,7 @@ export default function DashboardChart(props: DashboardChartProps): JSX.Element 
     };
     createChart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chartLabels, chartValues, loadedStringsForLocale]);
+  }, [chartLabels, chartValues, locale]);
 
   return <canvas id={chartId} ref={canvasRef} className={classes.chart} />;
 }
