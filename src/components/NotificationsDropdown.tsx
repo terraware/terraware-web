@@ -15,8 +15,6 @@ import stopPropagation from 'src/utils/stopPropagationEvent';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Timestamp from './common/Timestamp';
-import { PreferencesService } from 'src/services';
-import { useOrganization, useUser } from 'src/providers';
 import useFeatureNotifications from './FeatureNotification';
 
 interface StyleProps {
@@ -156,9 +154,6 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   const [lastSeen, setLastSeen] = useState<number>(0);
   const [notifications, setNotifications] = useState<Notifications>();
 
-  const { reloadUserPreferences: reloadPreferences } = useUser();
-  const { selectedOrganization } = useOrganization();
-
   const featureNotifications = useFeatureNotifications();
 
   const populateNotifications = useCallback(async () => {
@@ -227,32 +222,11 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     await populateNotifications();
   };
 
-  const markUserNotificationAsRead = async () => {
-    onPopoverClose();
-    await PreferencesService.updateUserPreferences({
-      unitsAcknowledgedOnMs: Date.now(),
-      timeZoneAcknowledgedOnMs: Date.now(),
-    });
-
-    await reloadPreferences();
-    await populateNotifications();
-  };
-
-  const markOrgNotificationAsRead = async () => {
-    onPopoverClose();
-    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-      timeZoneAcknowledgedOnMs: Date.now(),
-    });
-
-    await reloadPreferences();
-    await populateNotifications();
-  };
-
-  const markAsRead = async (read: boolean, id: number, close?: boolean) => {
-    if (id === -1) {
-      markUserNotificationAsRead();
-    } else if (id === -2) {
-      markOrgNotificationAsRead();
+  const markAsRead = async (read: boolean, id: number, close?: boolean, individualMarkAsRead?: () => void) => {
+    if (individualMarkAsRead) {
+      onPopoverClose();
+      individualMarkAsRead();
+      await populateNotifications();
     } else {
       if (close) {
         onPopoverClose();
@@ -327,7 +301,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 
 type NotificationItemProps = {
   notification: Notification;
-  markAsRead: (read: boolean, id: number, close?: boolean) => void;
+  markAsRead: (read: boolean, id: number, close?: boolean, individualMarkAsRead?: () => void) => void;
   reloadOrganizationData: (selectedOrgId?: number) => void;
 };
 
@@ -344,7 +318,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
       const orgId: string | null = new URL(localUrl, window.location.origin).searchParams.get('organizationId');
       await reloadOrganizationData(orgId ? parseInt(orgId, 10) : undefined);
     }
-    markAsRead(read, id, close);
+    markAsRead(read, id, close, notification.markAsRead);
   };
 
   const onMouseEnter = () => {
