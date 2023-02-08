@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { SpeciesInventorySummary } from 'src/api/types/inventory';
-import { getSummary } from 'src/api/inventory/inventory';
+import { SpeciesInventorySummary } from 'src/types/Inventory';
+import { NurseryInventoryService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import _ from 'lodash';
 import OverviewItemCard from '../../common/OverviewItemCard';
@@ -21,7 +21,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
 
   const reloadData = useCallback(() => {
     const populateSummary = async () => {
-      const response = await getSummary(speciesId);
+      const response = await NurseryInventoryService.getSummary(speciesId);
       if (response.requestSucceeded === false) {
         snackbar.toastError(response.error);
       } else if (!_.isEqual(response.summary, summary)) {

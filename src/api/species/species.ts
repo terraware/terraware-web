@@ -2,7 +2,7 @@ import axios from 'src/api/index';
 import { paths } from 'src/api/types/generated-schema';
 import { Species, SpeciesRequestError } from 'src/types/Species';
 import addQueryParams from '../helpers/addQueryParams';
-import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from '../types/uploadFile';
+import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from 'src/types/File';
 
 /*
  * All functions in this module ALWAYS returns a promise that resolves. All errors will be caught and

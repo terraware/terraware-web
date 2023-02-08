@@ -17,7 +17,7 @@ import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { downloadCsvTemplateHandler } from '../common/ImportModal';
-import { downloadInventoryTemplate } from 'src/api/inventory/inventory';
+import { NurseryInventoryService } from 'src/services';
 import ImportInventoryModal from './ImportInventoryModal';
 import { Button } from '@terraware/web-components';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -117,7 +117,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
           title: strings.IMPORT_INVENTORY_ALT_TITLE,
           text: strings.IMPORT_INVENTORY_WITH_TEMPLATE,
           linkText: strings.DOWNLOAD_THE_CSV_TEMPLATE,
-          onLinkClick: () => downloadCsvTemplateHandler(downloadInventoryTemplate),
+          onLinkClick: () => downloadCsvTemplateHandler(NurseryInventoryService.downloadInventoryTemplate),
           buttonText: strings.IMPORT_INVENTORY,
           onClick: () => importInventory(),
         },

@@ -3,12 +3,7 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { Facility } from 'src/types/Facility';
-import {
-  UploadResponse,
-  GetUploadStatusResponsePayload,
-  ResolveResponse,
-  UploadFileResponse,
-} from 'src/api/types/uploadFile';
+import { UploadResponse, GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from 'src/types/File';
 import strings from 'src/strings';
 import Button from './button/Button';
 import DialogBox from './DialogBox/DialogBox';
@@ -220,8 +215,11 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
         id: 0,
         requestSucceeded: false,
       };
+      /**
+       * Is this needed?
+       */
       if (selectedOrganization) {
-        response = await uploadApi(file, selectedOrganization.id.toString());
+        //  response = await uploadApi(file, selectedOrganization.id.toString());
       }
       if (facility) {
         response = await uploadApi(file, facility.id.toString());
