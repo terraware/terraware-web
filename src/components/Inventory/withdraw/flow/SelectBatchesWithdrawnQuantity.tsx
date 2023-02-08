@@ -28,6 +28,7 @@ type BatchWithdrawalForTable = {
   readyQuantityWithdrawn: number;
   notReadyQuantity: number;
   readyQuantity: number;
+  totalQuantity: number;
   speciesId: number;
   facilityName: string;
   error: { [key: string]: string | undefined };
@@ -66,6 +67,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
             readyQuantityWithdrawn: bw.readyQuantityWithdrawn,
             notReadyQuantity: associatedBatch.notReadyQuantity,
             readyQuantity: associatedBatch.readyQuantity,
+            totalQuantity: associatedBatch.totalQuantity,
             batchNumber: associatedBatch.batchNumber,
             speciesId: associatedBatch.species_id,
             facilityName: associatedBatch.facility_name,

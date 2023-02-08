@@ -115,15 +115,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   }
 
   if (column.key === 'totalQuantity') {
-    return (
-      <CellRenderer
-        index={index}
-        column={column}
-        value={+row.readyQuantity + +row.notReadyQuantity}
-        row={row}
-        className={classes.text}
-      />
-    );
+    return <CellRenderer index={index} column={column} row={row} value={row.totalQuantity} className={classes.text} />;
   }
 
   if (column.key === 'totalWithdraw') {
