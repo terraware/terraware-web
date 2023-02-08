@@ -9,7 +9,7 @@ import {
   search,
   SearchSortOrder,
 } from 'src/api/search';
-import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
+import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
 import strings from 'src/strings';
 

@@ -6,7 +6,7 @@ import { Box, Grid, useTheme } from '@mui/material';
 import { Checkbox, SelectT, Textfield } from '@terraware/web-components';
 import DatePicker from 'src/components/common/DatePicker';
 import { Accession, Withdrawal } from 'src/types/Accession';
-import { NurseryTransfer } from 'src/api/types/batch';
+import { NurseryTransfer } from 'src/types/Batch';
 import useForm from 'src/utils/useForm';
 import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
 import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';

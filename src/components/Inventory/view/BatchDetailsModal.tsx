@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import NurseryDropdown from '../NurseryDropdown';
-import { Batch, CreateBatchRequestPayload } from 'src/api/types/batch';
-import { createBatch, updateBatch, updateBatchQuantities } from 'src/api/batch/batch';
+import { Batch, CreateBatchRequestPayload } from 'src/types/Batch';
+import { NurseryBatchService } from 'src/services';
 import { getSpecies } from 'src/api/species/species';
 import { Species } from 'src/types/Species';
 import { APP_PATHS } from 'src/constants';
@@ -150,11 +150,14 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       let response;
       let responseQuantities = { requestSucceeded: true };
       if (record.id === -1) {
-        response = await createBatch(record);
+        response = await NurseryBatchService.createBatch(record);
       } else {
-        response = await updateBatch(record);
+        response = await NurseryBatchService.updateBatch(record);
         if (response.batch) {
-          responseQuantities = await updateBatchQuantities({ ...record, version: response.batch.version });
+          responseQuantities = await NurseryBatchService.updateBatchQuantities({
+            ...record,
+            version: response.batch.version,
+          });
         }
       }
       if (response.requestSucceeded && responseQuantities.requestSucceeded) {

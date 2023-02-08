@@ -7,7 +7,7 @@ import { RendererProps } from '../common/table/types';
 import { Theme, useTheme } from '@mui/material';
 import { Button, TextTruncated } from '@terraware/web-components';
 import strings from 'src/strings';
-import { NurseryWithdrawalPurposes } from 'src/api/types/batch';
+import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {

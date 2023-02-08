@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { makeStyles } from '@mui/styles';
 import { getNurseryWithdrawal, listNurseryWithdrawals } from 'src/api/tracking/withdrawals';
-import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
+import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
@@ -20,7 +20,7 @@ import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelCon
 import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
 import NonOutplantWithdrawalContent from './WithdrawalDetails/NonOutplantWithdrawalContent';
 import { Species } from 'src/types/Species';
-import { NurseryWithdrawalPurposes } from 'src/api/types/batch';
+import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
 

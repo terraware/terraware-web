@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { search } from 'src/api/search';
+import { NurseryBatchService } from 'src/services';
 import useQuery from 'src/utils/useQuery';
 import BatchWithdrawFlow from './BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
@@ -31,21 +31,7 @@ export default function SpeciesBulkWithdrawWrapperComponent(
   useEffect(() => {
     const populateResults = async () => {
       if (speciesIds) {
-        const searchResponse = await search({
-          prefix: 'batches',
-          search: {
-            operation: 'and',
-            children: [
-              {
-                operation: 'field',
-                field: 'species_id',
-                values: speciesIds,
-              },
-            ],
-          },
-          fields: ['id'],
-          count: 1000,
-        });
+        const searchResponse = await NurseryBatchService.getBatchesForSpecies(speciesIds.map((id) => Number(id)));
         const ids = searchResponse?.map((sr) => sr.id as string);
         if (ids?.length) {
           setBatchIds(ids);

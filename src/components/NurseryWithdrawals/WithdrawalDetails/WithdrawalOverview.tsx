@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import strings from 'src/strings';
-import { NurseryWithdrawal } from 'src/api/types/batch';
+import { NurseryWithdrawal } from 'src/types/Batch';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';

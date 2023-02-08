@@ -10,7 +10,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { NurseryWithdrawalsFiltersType } from './NurseryWithdrawals';
-import { NurseryWithdrawalPurposesValues } from 'src/api/types/batch';
+import { NurseryWithdrawalPurposesValues } from 'src/types/Batch';
 import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/types/Tracking';
 import { Species } from 'src/types/Species';

@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import { Batch, NurseryWithdrawal } from 'src/api/types/batch';
+import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
 import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';
 import WithdrawalOverview from './WithdrawalOverview';

@@ -4,10 +4,9 @@ import { theme } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import { search } from 'src/api/search';
-import { NurseryWithdrawalRequest, NurseryWithdrawal, NurseryWithdrawalPurposes } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawal, NurseryWithdrawalPurposes } from 'src/types/Batch';
 import { isContributor } from 'src/utils/organization';
-import { createBatchWithdrawal, uploadWithdrawalPhoto } from 'src/api/batch/batch';
+import { NurseryBatchService } from 'src/services';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
@@ -44,40 +43,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   useEffect(() => {
     const populateBatches = async () => {
-      const searchResponse = await search({
-        prefix: 'batches',
-        search: {
-          operation: 'and',
-          children: [
-            {
-              operation: 'field',
-              field: 'id',
-              values: batchIds,
-            },
-          ],
-        },
-        fields: [
-          'id',
-          'batchNumber',
-          'germinatingQuantity',
-          'notReadyQuantity',
-          'readyQuantity',
-          'totalQuantity',
-          'totalQuantityWithdrawn',
-          'facility_id',
-          'facility_name',
-          'readyByDate',
-          'addedDate',
-          'version',
-          'accession_id',
-          'accession_accessionNumber',
-          'notes',
-          'species_id',
-          'species_scientificName',
-          'species_commonName',
-        ],
-        count: 1000,
-      });
+      const searchResponse = await NurseryBatchService.getBatches(batchIds.map((id) => Number(id)));
 
       if (searchResponse) {
         const withdrawable = searchResponse.filter((batch) => Number(batch.totalQuantity) > 0);
@@ -121,7 +87,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
     setWithdrawInProgress(true);
 
-    const response = await createBatchWithdrawal(record);
+    const response = await NurseryBatchService.createBatchWithdrawal(record);
     if (!response.requestSucceeded) {
       snackbar.toastError(response.error);
       setWithdrawInProgress(false);
@@ -131,18 +97,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     const { withdrawal } = response;
     if (photos.length) {
       // upload photos
-      const uploadPhotoPromises = photos.map((photo) => uploadWithdrawalPhoto(withdrawal!.id, photo));
-      try {
-        const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
-        promiseResponses.forEach((promiseResponse) => {
-          if (promiseResponse.status === 'rejected') {
-            // tslint:disable-next-line: no-console
-            console.error(promiseResponse.reason);
-          }
-        });
-      } catch (e) {
-        // swallow error
-      }
+      await NurseryBatchService.uploadWithdrawalPhotos(withdrawal!.id, photos);
     }
 
     setWithdrawInProgress(false);

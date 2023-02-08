@@ -7,7 +7,7 @@ import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
 import strings from 'src/strings';
 import ChangeQuantityModal from './ChangeQuantityModal';
-import { Batch } from 'src/api/types/batch';
+import { Batch } from 'src/types/Batch';
 import QuantitiesMenu from './QuantitiesMenu';
 
 const useStyles = makeStyles(() => ({

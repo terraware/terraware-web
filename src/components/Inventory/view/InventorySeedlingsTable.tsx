@@ -10,7 +10,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import { InventoryFiltersType } from '../InventoryFiltersPopover';
 import DeleteBatchesModal from './DeleteBatchesModal';
-import { deleteBatch } from 'src/api/batch/batch';
+import { NurseryBatchService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import BatchDetailsModal from './BatchDetailsModal';
 import Search from '../Search';
@@ -165,9 +165,9 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   }, [openBatchNumber, batches]);
 
   const deleteSelectedBatches = () => {
-    const promises = selectedRows.map((r) => deleteBatch(r.id as number));
+    const promises = selectedRows.map((r) => NurseryBatchService.deleteBatch(r.id as number));
     Promise.allSettled(promises).then((results) => {
-      if (results.some((result) => result.status === 'rejected')) {
+      if (results.some((result) => result.status === 'rejected' || result?.value?.requestSucceeded === false)) {
         snackbar.toastError();
       }
       reloadData();

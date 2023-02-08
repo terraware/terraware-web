@@ -14,7 +14,7 @@ import {
   useTheme,
 } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/api/types/batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/types/Batch';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { APP_PATHS } from 'src/constants';
 import Divisor from 'src/components/common/Divisor';
