@@ -182,9 +182,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
     return detail;
   });
-  const searchTermColumns = Object.values(columns).filter(
-    (col) => col.key === 'accessionNumber' || col.key === 'speciesName' || col.key === 'collectionSiteName'
-  );
+  const filterColumns = displayColumnDetails.filter((col) => col.key !== 'state');
+  const searchTermColumns = [columns.accessionNumber, columns.speciesName, columns.collectionSiteName];
+  const preExpFilterColumn = columns.state;
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
@@ -685,8 +685,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           filters={searchCriteria}
                           availableValues={availableFieldOptions}
                           allValues={fieldOptions}
-                          columns={displayColumnDetails}
+                          columns={filterColumns}
                           searchColumns={searchTermColumns}
+                          preExpFilterColumn={preExpFilterColumn}
                           onChange={onFilterChange}
                         />
                       )}
