@@ -1,9 +1,9 @@
+import { useEffect, useState, useMemo } from 'react';
 import { Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import { useEffect, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import NurseryDropdown from '../NurseryDropdown';
@@ -19,6 +19,8 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { Facility } from 'src/types/Facility';
 import { getNurseryById } from 'src/utils/organization';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
+import { useNumberParser, useNumberFormatter } from 'src/utils/useNumber';
+import { useUser } from 'src/providers';
 
 export interface BatchDetailsModalProps {
   open: boolean;
@@ -29,6 +31,9 @@ export interface BatchDetailsModalProps {
 }
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
+  const numberParser = useNumberParser();
+  const numberFormatter = useNumberFormatter();
+  const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const { onClose, open, reload, selectedBatch, speciesId } = props;
 
@@ -48,8 +53,11 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const [addedDateChanged, setAddedDateChanged] = useState(false);
 
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
+
   useEffect(() => {
     if (record) {
+      const numericParser = numberParser(user?.locale);
       const populateSpecies = async () => {
         const speciesResponse = await getSpecies(speciesId, selectedOrganization.id.toString());
         if (speciesResponse.requestSucceeded) {
@@ -57,14 +65,13 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         }
       };
 
-      setTotalQuantity(
-        (isNaN(record.notReadyQuantity) ? 0 : Number(record.notReadyQuantity)) +
-          (isNaN(record.readyQuantity) ? 0 : Number(record.readyQuantity))
-      );
+      const notReadyQuantity = numericParser.parse(record?.notReadyQuantity?.toString() ?? '');
+      const readyQuantity = numericParser.parse(record?.readyQuantity?.toString() ?? '');
+      setTotalQuantity((isNaN(notReadyQuantity) ? 0 : notReadyQuantity) + (isNaN(readyQuantity) ? 0 : readyQuantity));
 
       populateSpecies();
     }
-  }, [record, selectedOrganization, speciesId]);
+  }, [record, selectedOrganization, speciesId, numberParser, user?.locale]);
 
   useEffect(() => {
     if (record?.facilityId) {
@@ -328,7 +335,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='totalQuantity'
-                value={totalQuantity}
+                value={numericFormatter.format(totalQuantity)}
                 type='text'
                 label={strings.TOTAL_QUANTITY}
                 display={true}

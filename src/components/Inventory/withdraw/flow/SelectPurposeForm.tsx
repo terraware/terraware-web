@@ -32,7 +32,7 @@ import isEnabled from 'src/features';
 import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useUser } from 'src/providers';
-import useNumberParser from 'src/utils/useNumberParser';
+import { useNumberParser, useNumberFormatter } from 'src/utils/useNumber';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
@@ -64,6 +64,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { selectedOrganization } = useOrganization();
   const { user } = useUser();
   const numberParser = useNumberParser();
+  const numberFormatter = useNumberFormatter();
   const { nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
   const { OUTPLANT, NURSERY_TRANSFER, DEAD, OTHER } = NurseryWithdrawalPurposes;
   const contributor = isContributor(selectedOrganization);
@@ -91,6 +92,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const timeZoneFeatureEnabled = isEnabled('Timezones');
   const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedNursery : undefined);
   const [timeZone, setTimeZone] = useState(tz.id);
+
+  const numericParser = useMemo(() => numberParser(user?.locale), [numberParser, user?.locale]);
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   useEffect(() => {
     if (timeZone !== tz.id) {
@@ -220,7 +224,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const validateWithdrawnQuantity = () => {
-    const numericParser = numberParser(user?.locale ?? 'en');
     if (isSingleBatch && isOutplant) {
       if (withdrawnQuantity) {
         if (isNaN(withdrawnQuantity)) {
@@ -242,7 +245,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const validateReadyAndNotReadyQuantities = () => {
-    const numericParser = numberParser(user?.locale ?? 'en');
     let bothValid = true;
     if (isSingleBatch && !isOutplant) {
       if (!notReadyQuantityWithdrawn && notReadyQuantityWithdrawn !== 0) {
@@ -329,7 +331,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
 
     const isSingleOutplant = isSingleBatch && isOutplant;
-    const numericParser = numberParser(user?.locale ?? 'en');
 
     onNext({
       ...localRecord,
@@ -362,7 +363,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const getNurseriesOptions = () => {
-    const numericParser = numberParser(user?.locale ?? 'en');
     const nurseries = batches
       .filter((batchData) => {
         const batch = {
@@ -417,13 +417,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   useEffect(() => {
     setWithdrawnQuantity(
-      (readyQuantityWithdrawn ? +readyQuantityWithdrawn : 0) +
-        (notReadyQuantityWithdrawn ? +notReadyQuantityWithdrawn : 0)
+      (readyQuantityWithdrawn ? +numericParser.parse(readyQuantityWithdrawn) : 0) +
+        (notReadyQuantityWithdrawn ? +numericParser.parse(notReadyQuantityWithdrawn) : 0)
     );
-  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn]);
+  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, numericParser]);
 
   useEffect(() => {
-    const numericParser = numberParser(user?.locale ?? 'en');
     if (localRecord.purpose === OUTPLANT) {
       const hasReadyQuantities = batches.some((batch) => {
         if (selectedNursery && batch.facility_id.toString() !== selectedNursery.id.toString()) {
@@ -448,8 +447,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     OUTPLANT,
     batches,
     updatePurpose,
-    user?.locale,
-    numberParser,
+    numericParser,
   ]);
 
   useEffect(() => {
@@ -481,9 +479,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [batchesFromNursery, speciesMap]);
 
   const totalReadyQuantity = useMemo(() => {
-    const numericParser = numberParser(user?.locale ?? 'en');
     return batchesFromNursery.reduce((acc, batch) => acc + (+numericParser.parse(batch.readyQuantity) || 0), 0);
-  }, [batchesFromNursery, user?.locale, numberParser]);
+  }, [batchesFromNursery, numericParser]);
 
   const getOutplantLabel = () => {
     return (
@@ -637,7 +634,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       id='withdrawnQuantity'
                       onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
                       type='text'
-                      value={withdrawnQuantity}
+                      value={numericFormatter.format(withdrawnQuantity)}
                       errorText={fieldsErrors.withdrawnQuantity}
                       className={classes.withdrawnQuantity}
                     />
@@ -700,7 +697,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         id='withdrawQuantity'
                         onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
                         type='text'
-                        value={withdrawnQuantity}
+                        value={numericFormatter.format(withdrawnQuantity)}
                         display={true}
                       />
                     </Grid>

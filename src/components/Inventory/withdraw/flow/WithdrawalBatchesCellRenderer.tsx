@@ -6,6 +6,8 @@ import { RendererProps, TableRowType } from '@terraware/web-components';
 import { Textfield } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
+import { useNumberFormatter } from 'src/utils/useNumber';
+import { useUser } from 'src/providers';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -26,6 +28,8 @@ const useStyles = makeStyles(() => ({
 
 export default function WithdrawalBatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter()(user?.locale);
   const { column, row, value, index, onRowClick } = props;
 
   const createLinkToBatchDetail = (iValue: React.ReactNode | unknown[]) => {
@@ -123,7 +127,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
       <CellRenderer
         index={index}
         column={column}
-        value={+row.readyQuantityWithdrawn + +row.notReadyQuantityWithdrawn}
+        value={numberFormatter.format(+row.readyQuantityWithdrawn + +row.notReadyQuantityWithdrawn)}
         row={row}
         className={classes.text}
       />

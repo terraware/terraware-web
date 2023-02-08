@@ -11,7 +11,7 @@ import { makeStyles } from '@mui/styles';
 import { useOrganization } from 'src/providers/hooks';
 import Table from 'src/components/common/table';
 import { useUser } from 'src/providers';
-import useNumberParser from 'src/utils/useNumberParser';
+import { useNumberParser } from 'src/utils/useNumber';
 
 type SelectBatchesWithdrawnQuantityProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
@@ -155,7 +155,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   const isInvalidQuantity = (val: any) => isNaN(val) || +val < 0;
 
   const validateQuantities = () => {
-    const numericParser = numberParser(user?.locale ?? 'en');
+    const numericParser = numberParser(user?.locale);
     let noErrors = true;
     let newRecords: BatchWithdrawalForTable[] = [];
     if (nurseryWithdrawal.purpose === OUTPLANT) {
