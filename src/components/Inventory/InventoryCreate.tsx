@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
@@ -20,6 +20,8 @@ import { Facility } from 'src/types/Facility';
 import { getNurseryById } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
 import isEnabled from 'src/features';
+import { useUser } from 'src/providers';
+import { useNumberParser, useNumberFormatter } from 'src/utils/useNumber';
 
 const MANDATORY_FIELDS = [
   'speciesId',
@@ -37,6 +39,9 @@ export default function CreateInventory(): JSX.Element {
   const theme = useTheme();
   const history = useHistory();
   const snackbar = useSnackbar();
+  const { user } = useUser();
+  const numberParser = useNumberParser();
+  const numberFormatter = useNumberFormatter();
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const { selectedOrganization } = useOrganization();
@@ -45,6 +50,9 @@ export default function CreateInventory(): JSX.Element {
   const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedNursery : undefined);
   const [timeZone, setTimeZone] = useState(tz.id);
   const [addedDateChanged, setAddedDateChanged] = useState(false);
+
+  const numericParser = useMemo(() => numberParser(user?.locale), [user?.locale, numberParser]);
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
 
   const defaultBatch = (): CreateBatchRequestPayload =>
     ({
@@ -81,11 +89,12 @@ export default function CreateInventory(): JSX.Element {
   }, [timeZone, setRecord, addedDateChanged]);
 
   useEffect(() => {
+    const notReadyQuantity = numericParser.parse(record.notReadyQuantity?.toString() ?? '');
+    const readyQuantity = numericParser.parse(record.readyQuantity?.toString() ?? '');
     setTotalQuantity(
-      (isNaN(record.notReadyQuantity) ? 0 : Number(record.notReadyQuantity)) +
-        (isNaN(record.readyQuantity) ? 0 : Number(record.readyQuantity))
+      (isNaN(notReadyQuantity) ? 0 : Number(notReadyQuantity)) + (isNaN(readyQuantity) ? 0 : Number(readyQuantity))
     );
-  }, [record]);
+  }, [record, numericParser]);
 
   const inventoryLocation = {
     pathname: APP_PATHS.INVENTORY,
@@ -109,7 +118,15 @@ export default function CreateInventory(): JSX.Element {
       setValidateFields(true);
       return;
     }
-    const response = await NurseryBatchService.createBatch(record);
+    const readyQuantity = numericParser.parse(record.readyQuantity ?? '');
+    const notReadyQuantity = numericParser.parse(record.notReadyQuantity ?? '');
+    const germinatingQuantity = numericParser.parse(record.germinatingQuantity ?? '');
+    const response = await NurseryBatchService.createBatch({
+      ...record,
+      readyQuantity: isNaN(readyQuantity) ? undefined : readyQuantity,
+      notReadyQuantity: isNaN(notReadyQuantity) ? undefined : notReadyQuantity,
+      germinatingQuantity: isNaN(germinatingQuantity) ? undefined : germinatingQuantity,
+    });
     if (response.requestSucceeded) {
       history.replace(inventoryLocation);
       history.push({
@@ -240,8 +257,7 @@ export default function CreateInventory(): JSX.Element {
               <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
                 <Textfield
                   id='totalQuantity'
-                  value={totalQuantity}
-                  onChange={(value) => onChange('totalQuantity', value)}
+                  value={numericFormatter.format(totalQuantity)}
                   type='text'
                   label={strings.TOTAL_QUANTITY}
                   display={true}

@@ -16,6 +16,8 @@ import SelectPurposeForm from './flow/SelectPurposeForm';
 import TfMain from 'src/components/common/TfMain';
 import BusySpinner from 'src/components/common/BusySpinner';
 import { useOrganization } from 'src/providers/hooks';
+import { useNumberParser } from 'src/utils/useNumber';
+import { useUser } from 'src/providers';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
@@ -27,6 +29,8 @@ type BatchWithdrawFlowProps = {
 
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { user } = useUser();
+  const numberParser = useNumberParser();
   const { batchIds, sourcePage, withdrawalCreatedCallback } = props;
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
@@ -46,7 +50,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       const searchResponse = await NurseryBatchService.getBatches(batchIds.map((id) => Number(id)));
 
       if (searchResponse) {
-        const withdrawable = searchResponse.filter((batch) => Number(batch.totalQuantity) > 0);
+        const withdrawable = searchResponse.filter((batch) => batch.totalQuantity !== '0');
         if (!withdrawable.length) {
           snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
         }
@@ -75,10 +79,25 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       return;
     }
 
+    const numericParser = numberParser(user?.locale);
+
     // first create the withdrawal
-    record.batchWithdrawals = record.batchWithdrawals.filter((batchWithdrawal) => {
-      return Number(batchWithdrawal.readyQuantityWithdrawn) + Number(batchWithdrawal.notReadyQuantityWithdrawn) > 0;
-    });
+    record.batchWithdrawals = record.batchWithdrawals
+      .map((batchWithdrawal) => {
+        const readyQuantityWithdrawn = numericParser.parse(batchWithdrawal.readyQuantityWithdrawn?.toString() ?? '');
+        const notReadyQuantityWithdrawn = numericParser.parse(
+          batchWithdrawal.notReadyQuantityWithdrawn?.toString() ?? ''
+        );
+
+        return {
+          ...batchWithdrawal,
+          readyQuantityWithdrawn: isNaN(readyQuantityWithdrawn) ? 0 : readyQuantityWithdrawn,
+          notReadyQuantityWithdrawn: isNaN(notReadyQuantityWithdrawn) ? 0 : notReadyQuantityWithdrawn,
+        };
+      })
+      .filter((batchWithdrawal) => {
+        return batchWithdrawal.readyQuantityWithdrawn + batchWithdrawal.notReadyQuantityWithdrawn > 0;
+      });
 
     if (record.batchWithdrawals.length === 0) {
       snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design

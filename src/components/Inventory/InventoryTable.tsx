@@ -68,7 +68,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   };
 
   const isSelectionWithdrawable = () => {
-    return selectedRows.some((row) => row.species_id && Number(row.totalQuantity) > 0);
+    return selectedRows.some((row) => row.species_id && row.totalQuantity !== '0');
   };
 
   return (
