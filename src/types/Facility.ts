@@ -2,7 +2,7 @@ import { paths, components } from 'src/api/types/generated-schema';
 
 const schemas = 'schemas';
 
-export type StorageLocationDetails = components[typeof schemas]['StorageLocationDetails'];
+export type StorageLocationPayload = components[typeof schemas]['StorageLocationPayload'];
 
 export type FacilityType = components[typeof schemas]['FacilityPayload']['type'];
 

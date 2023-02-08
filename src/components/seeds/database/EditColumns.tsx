@@ -225,7 +225,7 @@ function sections(system?: string): Section[] {
     },
     {
       name: strings.STORING,
-      options: [[columns.storageCondition], [columns.storageLocationName]],
+      options: [[columns.storageLocation_name]],
     },
     {
       name: strings.WITHDRAWAL,

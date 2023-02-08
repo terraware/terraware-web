@@ -159,7 +159,6 @@ export const strings = {
   COMMON_NAME: 'Common Name',
   COMPLETE: 'Complete',
   COMPROMISED_SEEDS: 'Compromised Seeds',
-  CONDITION: 'Condition',
   CONNECT_FAILED: 'Connect failed',
   CONNECTED: 'Connected',
   CONSERV_STATUS: 'Conserv. Status',
@@ -863,7 +862,6 @@ export const strings = {
   STATE_REQUIRED: 'State *',
   STATE: 'State',
   STATUS: 'Status',
-  STORAGE_CONDITION: 'Storage Condition',
   STORAGE_DESCRIPTION: 'All the details about storing the seeds.',
   STORAGE_INFO:
     'By adding information about storage and saving changes, you will be automatically changing this accession’s stage from Pending to Stored.',

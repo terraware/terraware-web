@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Grid } from '@mui/material';
-import { Facility, StorageLocationDetails } from 'src/types/Facility';
+import { Facility, StorageLocationPayload } from 'src/types/Facility';
 import theme from 'src/theme';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Accession } from 'src/types/Accession';
@@ -12,7 +12,7 @@ import useForm from 'src/utils/useForm';
 import { SeedBankService } from 'src/services';
 import { StorageLocationSelector, StorageSubLocationSelector } from '../properties';
 import useSnackbar from 'src/utils/useSnackbar';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 
 export interface EditLocationModalProps {
   open: boolean;
@@ -23,9 +23,10 @@ export interface EditLocationModalProps {
 
 export default function EditLocationModal(props: EditLocationModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { loadedStringsForLocale } = useLocalization();
   const { onClose, open, accession, reload } = props;
   const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) as Facility[]) || [];
-  const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
+  const [storageLocations, setStorageLocations] = useState<StorageLocationPayload[]>([]);
   const snackbar = useSnackbar();
 
   const newRecord = {
@@ -41,17 +42,18 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
 
   useEffect(() => {
     const setLocations = async () => {
-      if (record.facilityId) {
+      if (record.facilityId && loadedStringsForLocale) {
         const response = await SeedBankService.getStorageLocations(record.facilityId);
         if (response.requestSucceeded) {
-          setStorageLocations(response.locations);
+          const collator = new Intl.Collator(loadedStringsForLocale);
+          setStorageLocations(response.locations.sort((a, b) => collator.compare(a.name, b.name)));
         } else {
           setStorageLocations([]);
         }
       }
     };
     setLocations();
-  }, [record.facilityId]);
+  }, [loadedStringsForLocale, record.facilityId]);
 
   const saveLocation = async () => {
     const response = await AccessionService.updateAccession({
@@ -108,7 +110,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
             id='edit-sub-location'
             label={strings.SUB_LOCATION}
             selectedStorageSubLocation={record.storageLocation}
-            storageSubLocations={storageLocations.map((obj) => obj.storageLocation)}
+            storageSubLocations={storageLocations.map((obj) => obj.name)}
             onChange={(value: string) => onChange('storageLocation', value)}
             disabled={!record.facilityId}
           />
