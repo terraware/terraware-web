@@ -1,7 +1,7 @@
 import { ArrowDropDown } from '@mui/icons-material';
 import { Chip, Container, Divider, Link, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FieldNodePayload, FieldValuesPayload, OrNodePayload, SearchNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
@@ -15,6 +15,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { DatabaseColumn, Option } from '@terraware/web-components/components/table/types';
 import TextField from 'src/components/common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
+import Icon from '../../common/icon/Icon';
+import FilterMultiSelect from '../../common/FilterMultiSelect';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -68,11 +70,44 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '300px',
     marginTop: theme.spacing(-0.5),
   },
+  preExpFilterDropdown: {
+    cursor: 'pointer',
+    border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
+    borderRadius: '4px',
+    width: '176px',
+    height: '40px',
+    padding: theme.spacing(1, 2, 1, 1),
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  preExpFilterIconRight: {
+    height: '24px',
+    width: '24px',
+  },
+  popoverContainer: {
+    '& .MuiPaper-root': {
+      borderRadius: '8px',
+      overflow: 'visible',
+      width: '320px',
+    },
+  },
+  mobileContainer: {
+    borderRadius: '8px',
+    overflow: 'visible',
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    maxHeight: '90%',
+    width: '90%',
+    zIndex: 1300,
+  },
 }));
 
 interface Props {
   columns: DatabaseColumn[];
   searchColumns: DatabaseColumn[];
+  preExpFilterColumn: DatabaseColumn;
   filters: Record<string, SearchNodePayload>;
   availableValues: FieldValuesPayload;
   allValues: FieldValuesPayload;
@@ -80,7 +115,7 @@ interface Props {
 }
 
 export default function Filters(props: Props): JSX.Element {
-  const { columns, searchColumns, filters, availableValues, allValues, onChange } = props;
+  const { columns, searchColumns, preExpFilterColumn, filters, availableValues, allValues, onChange } = props;
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
   const [popover, setPopover] = React.useState<FilterPopover>();
@@ -100,6 +135,25 @@ export default function Filters(props: Props): JSX.Element {
   );
   const debouncedSearchTerm = useDebounce(searchTerm, 250, searchTermCallback);
 
+  const [preExpAnchorEl, setPreExpAnchorEl] = useState<null | HTMLElement>(null);
+  const handlePreExpFilterClick = (event: React.MouseEvent<HTMLElement>) => {
+    setPreExpAnchorEl(event.currentTarget);
+  };
+  const handlePreExpFilterClose = () => {
+    setPreExpAnchorEl(null);
+  };
+
+  const onChangePreExpFilter = (selectedValues: string[]) => {
+    let newFilters;
+    if (selectedValues.length === 0) {
+      newFilters = { ...filters };
+      delete newFilters.preExpFilter;
+    } else {
+      newFilters = { ...filters, ...getPreExpFilter(preExpFilterColumn, selectedValues) };
+    }
+    onChange(newFilters);
+  };
+
   const onChangeFilters = (col: DatabaseColumn, filter: SearchNodePayload) => {
     const updatedFilters = getUpdatedFilters(col, filter, filters);
     const updatedSearchFilters =
@@ -110,6 +164,7 @@ export default function Filters(props: Props): JSX.Element {
 
   const clearAllFilters = () => {
     const updatedFilters: Record<string, SearchNodePayload> = {};
+    onClearSearch();
     onChange(updatedFilters);
   };
 
@@ -150,6 +205,27 @@ export default function Filters(props: Props): JSX.Element {
     setSearchTerm('');
   };
 
+  const preExpFilterOptions = getOptions(preExpFilterColumn, availableValues, allValues).filter(
+    (opt) => opt.value !== null
+  );
+  const numPreExpSelected = getCurrentPreExpFilterValues(preExpFilterColumn, filters).length;
+
+  const renderFilterMultiSelect = () => {
+    return (
+      <FilterMultiSelect
+        label={strings.NURSERIES}
+        initialSelection={getCurrentPreExpFilterValues(preExpFilterColumn, filters)}
+        onCancel={handlePreExpFilterClose}
+        onConfirm={(selectedValues: string[]) => {
+          handlePreExpFilterClose();
+          onChangePreExpFilter(selectedValues);
+        }}
+        options={preExpFilterOptions.map((opt) => opt.value!)}
+        renderOption={(val) => preExpFilterOptions.find((opt) => opt.value === val)?.label ?? ''}
+      />
+    );
+  };
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <div className={classes.filtersContainer}>
@@ -165,6 +241,40 @@ export default function Filters(props: Props): JSX.Element {
           iconRight='cancel'
           onClickRightIcon={onClearSearch}
         />
+        {preExpFilterColumn && (
+          <>
+            <div className={classes.preExpFilterDropdown} onClick={handlePreExpFilterClick}>
+              <Typography>
+                {`${preExpFilterColumn.name}${numPreExpSelected > 0 ? ' (' + numPreExpSelected + ')' : ''}`}
+              </Typography>
+              <Icon
+                name={Boolean(preExpAnchorEl) ? 'chevronUp' : 'chevronDown'}
+                className={classes.preExpFilterIconRight}
+              />
+            </div>
+            {isMobile && Boolean(preExpAnchorEl) ? (
+              <div className={classes.mobileContainer}>{renderFilterMultiSelect()}</div>
+            ) : (
+              <Popover
+                id='pre-exposed-filter-popover'
+                open={Boolean(preExpAnchorEl)}
+                onClose={handlePreExpFilterClose}
+                anchorEl={preExpAnchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                className={classes.popoverContainer}
+              >
+                {renderFilterMultiSelect()}
+              </Popover>
+            )}
+          </>
+        )}
         <SimplePopover
           popover={popover}
           columns={columns}
@@ -256,6 +366,21 @@ function getSearchTermFilter(searchCols: DatabaseColumn[], searchTerm: string): 
   };
 
   return { searchTermFilter: orNode };
+}
+
+function getPreExpFilter(col: DatabaseColumn, values: string[]): Record<string, SearchNodePayload> {
+  return {
+    preExpFilter: {
+      operation: 'field',
+      field: col.key,
+      type: 'Exact',
+      values,
+    },
+  };
+}
+
+function getCurrentPreExpFilterValues(col: DatabaseColumn, filters: Record<string, SearchNodePayload>): string[] {
+  return filters.preExpFilter?.values ?? [];
 }
 
 function getOptions(col: DatabaseColumn, availableValues: FieldValuesPayload, allValues: FieldValuesPayload): Option[] {
