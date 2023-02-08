@@ -23,6 +23,7 @@ import { Species } from 'src/types/Species';
 import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
+import { isTrue } from 'src/utils/boolean';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backToWithdrawals: {
@@ -106,7 +107,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
           plotNames: withdrawalSummaryRecord.plotNames as string,
           scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
           totalWithdrawn: Number(withdrawalSummaryRecord.totalWithdrawn),
-          hasReassignments: withdrawalSummaryRecord.hasReassignments === 'true',
+          hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),
         });
       }
     };

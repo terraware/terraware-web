@@ -109,6 +109,8 @@ export const strings = {
   BATCH_WITHDRAW_SUCCESS: '{0} {1} for a total of {2} {3} withdrawn.',
   BATCHES_PLURAL: 'batches',
   BATCHES_SINGULAR: 'batch',
+  BOOLEAN_FALSE: 'false',
+  BOOLEAN_TRUE: 'true',
   BOTH_WITHDRAWS_DESCRIPTION:
     'You have withdrawn seeds by both count and weight. As a result, the app has calculated the amount of seeds withdrawn for you by weight.',
   BOUNDARIES_AND_PLOTS: 'Boundaries and Plots',

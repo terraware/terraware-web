@@ -8,6 +8,7 @@ import { Theme, useTheme } from '@mui/material';
 import { Button, TextTruncated } from '@terraware/web-components';
 import strings from 'src/strings';
 import { NurseryWithdrawalPurposes } from 'src/types/Batch';
+import { isTrue } from 'src/utils/boolean';
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
@@ -86,7 +87,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
                 size='small'
                 priority='secondary'
                 className={classes.text}
-                disabled={row.hasReassignments === 'true'}
+                disabled={isTrue(row.hasReassignments)}
               />
             }
           />
