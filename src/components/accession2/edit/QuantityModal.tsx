@@ -171,7 +171,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
               label={strings.SEED_COUNT}
               id='seedsQuantity'
               onChange={(value) => onChangeRemainingQuantity('seedsQuantity', Number(value))}
-              type='text'
+              type='number'
               value={
                 record.remainingQuantity?.units === 'Seeds'
                   ? record.remainingQuantity?.quantity.toString()
