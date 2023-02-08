@@ -6,7 +6,7 @@ import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { NurseryWithdrawalRequest, NurseryWithdrawal, NurseryWithdrawalPurposes } from 'src/types/Batch';
 import { isContributor } from 'src/utils/organization';
-import { NurseryBatchService } from 'src/services';
+import { NurseryBatchService, NurseryWithdrawalService } from 'src/services';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
@@ -106,7 +106,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
     setWithdrawInProgress(true);
 
-    const response = await NurseryBatchService.createBatchWithdrawal(record);
+    const response = await NurseryWithdrawalService.createBatchWithdrawal(record);
     if (!response.requestSucceeded) {
       snackbar.toastError(response.error);
       setWithdrawInProgress(false);
@@ -116,7 +116,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     const { withdrawal } = response;
     if (photos.length) {
       // upload photos
-      await NurseryBatchService.uploadWithdrawalPhotos(withdrawal!.id, photos);
+      await NurseryWithdrawalService.uploadWithdrawalPhotos(withdrawal!.id, photos);
     }
 
     setWithdrawInProgress(false);

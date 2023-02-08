@@ -9,7 +9,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { useEffect, useRef, useState } from 'react';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { makeStyles } from '@mui/styles';
-import { getNurseryWithdrawal, listNurseryWithdrawals } from 'src/api/tracking/withdrawals';
+import { NurseryWithdrawalService } from 'src/services';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -74,7 +74,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
   const [batches, setBatches] = useState<Batch[] | undefined>(undefined);
   useEffect(() => {
     const updateWithdrawal = async () => {
-      const withdrawalResponse = await getNurseryWithdrawal(Number(withdrawalId));
+      const withdrawalResponse = await NurseryWithdrawalService.getNurseryWithdrawal(Number(withdrawalId));
       if (!withdrawalResponse.requestSucceeded || withdrawalResponse.error) {
         setWithdrawal(undefined);
         setDelivery(undefined);
@@ -86,7 +86,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
         setBatches(withdrawalResponse.batches);
       }
       // get summary information
-      const apiSearchResults = await listNurseryWithdrawals(selectedOrganization.id, [
+      const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(selectedOrganization.id, [
         {
           operation: 'field',
           field: 'id',

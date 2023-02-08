@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { useEffect, useState } from 'react';
-import { getWithdrawalPhotosList } from 'src/api/tracking/withdrawals';
+import { NurseryWithdrawalService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import ViewPhotosModal from 'src/components/common/ViewPhotosModal';
 
@@ -20,7 +20,7 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
 
   useEffect(() => {
     const getPhotos = async () => {
-      const photoListResponse = await getWithdrawalPhotosList(withdrawalId!!);
+      const photoListResponse = await NurseryWithdrawalService.getWithdrawalPhotosList(withdrawalId!!);
       if (!photoListResponse.requestSucceeded || photoListResponse.error) {
         setPhotoUrls([]);
         snackbar.toastError(photoListResponse.error);

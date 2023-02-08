@@ -7,7 +7,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { makeStyles } from '@mui/styles';
 import { SortOrder, TableColumnType } from '@terraware/web-components';
-import { listNurseryWithdrawals } from 'src/api/tracking/withdrawals';
+import { NurseryWithdrawalService } from 'src/services';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/api/search';
 import WithdrawalLogRenderer from './WithdrawalLogRenderer';
 import { APP_PATHS } from 'src/constants';
@@ -192,7 +192,11 @@ export default function NurseryWithdrawals(): JSX.Element {
     const searchChildren: FieldNodePayload[] = getSearchChildren();
     const requestId = Math.random().toString();
     setRequestId('searchWithdrawals', requestId);
-    const apiSearchResults = await listNurseryWithdrawals(selectedOrganization.id, searchChildren, searchSortOrder);
+    const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(
+      selectedOrganization.id,
+      searchChildren,
+      searchSortOrder
+    );
     if (apiSearchResults) {
       if (getRequestId('searchWithdrawals') === requestId) {
         setSearchResults(apiSearchResults);
