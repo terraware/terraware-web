@@ -54,10 +54,10 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const [addedDateChanged, setAddedDateChanged] = useState(false);
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
+  const numericParser = useMemo(() => numberParser(user?.locale), [numberParser, user?.locale]);
 
   useEffect(() => {
     if (record) {
-      const numericParser = numberParser(user?.locale);
       const populateSpecies = async () => {
         const speciesResponse = await getSpecies(speciesId, selectedOrganization.id.toString());
         if (speciesResponse.requestSucceeded) {
@@ -71,7 +71,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
       populateSpecies();
     }
-  }, [record, selectedOrganization, speciesId, numberParser, user?.locale]);
+  }, [record, selectedOrganization, speciesId, numericParser]);
 
   useEffect(() => {
     if (record?.facilityId) {
@@ -156,13 +156,25 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
       let response;
       let responseQuantities = { requestSucceeded: true };
+
+      const readyQuantity = numericParser.parse(record.readyQuantity ?? '');
+      const notReadyQuantity = numericParser.parse(record.notReadyQuantity ?? '');
+      const germinatingQuantity = numericParser.parse(record.germinatingQuantity ?? '');
+
+      const batchToSave = {
+        ...record,
+        readyQuantity: isNaN(readyQuantity) ? undefined : readyQuantity,
+        notReadyQuantity: isNaN(notReadyQuantity) ? undefined : notReadyQuantity,
+        germinatingQuantity: isNaN(germinatingQuantity) ? undefined : germinatingQuantity,
+      };
+
       if (record.id === -1) {
-        response = await NurseryBatchService.createBatch(record);
+        response = await NurseryBatchService.createBatch(batchToSave);
       } else {
-        response = await NurseryBatchService.updateBatch(record);
+        response = await NurseryBatchService.updateBatch(batchToSave);
         if (response.batch) {
           responseQuantities = await NurseryBatchService.updateBatchQuantities({
-            ...record,
+            ...batchToSave,
             version: response.batch.version,
           });
         }
