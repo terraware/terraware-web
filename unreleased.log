@@ -1,3 +1,5 @@
+c202ba80 SW-2812 Refactored nursery batch service  (#1153)
+bced9e39 SW-2915 Pass locale to date picker (#1156)
 28093531 SW-2906 Improve localization of accession details (#1155)
 753da23c Add Searchbar to Accessions Table (#1152)
 3f49c908 Revert index.html change that removed lang attribute (#1151)
