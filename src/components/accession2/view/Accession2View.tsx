@@ -100,6 +100,7 @@ export default function Accession2View(): JSX.Element {
   const openActionMenu = Boolean(actionMenuAnchorEl);
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState<string | null>(null);
+  const [dryingRelativeDate, setDryingRelativeDate] = useState<string | null>(null);
   const snackbar = useSnackbar();
   const userCanEdit = !isContributor(selectedOrganization);
   const { isMobile, isTablet } = useDeviceInfo();
@@ -148,6 +149,19 @@ export default function Accession2View(): JSX.Element {
         setAge(strings.AGE_VALUE_1_MONTH);
       } else {
         setAge(strings.formatString(strings.AGE_VALUE_MONTHS, accessionAge) as string);
+      }
+    }
+  }, [accession, loadedStringsForLocale]);
+
+  useEffect(() => {
+    if (loadedStringsForLocale) {
+      if (accession?.dryingEndDate) {
+        // MomentJS has its own version of a "gibberish" locale, but with a different name.
+        const momentLocale = loadedStringsForLocale === 'gx' ? 'x-pseudo' : loadedStringsForLocale;
+        const dryingMoment = moment(accession.dryingEndDate).locale(momentLocale);
+        setDryingRelativeDate(dryingMoment.fromNow());
+      } else {
+        setDryingRelativeDate(null);
       }
     }
   }, [accession, loadedStringsForLocale]);
@@ -574,11 +588,7 @@ export default function Accession2View(): JSX.Element {
               title={strings.END_DRYING_REMINDER}
               contents={
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Box>
-                    {accession?.dryingEndDate
-                      ? `${moment(accession.dryingEndDate).fromNow()}`
-                      : strings.END_DRYING_REMINDER_OFF}
-                  </Box>
+                  <Box>{dryingRelativeDate || strings.END_DRYING_REMINDER_OFF}</Box>
                   <Box>{accession?.dryingEndDate ? ` (${accession.dryingEndDate})` : null}</Box>
                 </Box>
               }
