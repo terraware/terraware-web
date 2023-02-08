@@ -15,8 +15,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { DatabaseColumn, Option } from '@terraware/web-components/components/table/types';
 import TextField from 'src/components/common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
-import Icon from '../../common/icon/Icon';
-import FilterMultiSelect from '../../common/FilterMultiSelect';
+import Icon from 'src/components/common/icon/Icon';
+import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 
 interface StyleProps {
   isMobile?: boolean;
