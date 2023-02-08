@@ -76,7 +76,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
     onCloseHandler();
   };
 
-  const onChangeSubsetWeight = (value: number) => {
+  const onChangeSubsetWeight = (value: any) => {
     setRecord({
       ...record,
       subsetWeight: { quantity: value, units: record.subsetWeight?.units || 'Grams' },
@@ -125,8 +125,8 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
                 <Textfield
                   label={strings.SUBSET_WEIGHT}
                   id='subsetWeight'
-                  onChange={(value) => onChangeSubsetWeight(Number(value))}
-                  type='text'
+                  onChange={(value) => onChangeSubsetWeight(value)}
+                  type='number'
                   value={record.subsetWeight?.quantity}
                   errorText={subsetError}
                 />
