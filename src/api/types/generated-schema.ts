@@ -184,6 +184,15 @@ export interface paths {
   "/api/v1/seedbank/log/{tag}": {
     post: operations["recordLogMessage"];
   };
+  "/api/v1/seedbank/storageLocations": {
+    get: operations["listStorageLocations"];
+    post: operations["createStorageLocation"];
+  };
+  "/api/v1/seedbank/storageLocations/{id}": {
+    get: operations["getStorageLocation"];
+    put: operations["updateStorageLocation"];
+    delete: operations["deleteStorageLocation"];
+  };
   "/api/v1/seedbank/summary": {
     get: operations["getSeedBankSummary"];
     post: operations["summarizeAccessionSearch"];
@@ -693,6 +702,7 @@ export interface components {
        */
       organizationId: number;
       name: string;
+      storageLocationNames?: string[];
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -813,6 +823,11 @@ export interface components {
       /** Format: int64 */
       id: number;
       status: components["schemas"]["SuccessOrError"];
+    };
+    CreateStorageLocationRequestPayload: {
+      /** Format: int64 */
+      facilityId: number;
+      name: string;
     };
     CreateTimeseriesEntry: {
       /**
@@ -1139,6 +1154,10 @@ export interface components {
       summary: components["schemas"]["SpeciesSummaryPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetStorageLocationResponsePayload: {
+      storageLocation: components["schemas"]["StorageLocationPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetTimeseriesHistoryRequestPayload: {
       /**
        * Format: date-time
@@ -1368,6 +1387,10 @@ export interface components {
     };
     ListSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListStorageLocationsResponsePayload: {
+      storageLocations: components["schemas"]["StorageLocationPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListTimeZoneNamesResponsePayload: {
@@ -1791,8 +1814,17 @@ export interface components {
       totalWithdrawn: number;
     };
     StorageLocationDetails: {
+      /** Format: int64 */
+      id: number;
       storageLocation: string;
       storageCondition: "Refrigerator" | "Freezer";
+    };
+    StorageLocationPayload: {
+      /** Format: int64 */
+      facilityId: number;
+      /** Format: int64 */
+      id: number;
+      name: string;
     };
     StorageLocationsResponsePayload: {
       locations: components["schemas"]["StorageLocationDetails"][];
@@ -2072,6 +2104,9 @@ export interface components {
        * @example America/New_York
        */
       timeZone?: string;
+    };
+    UpdateStorageLocationRequestPayload: {
+      name: string;
     };
     UpdateUserPreferencesRequestPayload: {
       /**
@@ -3548,6 +3583,98 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": string;
+      };
+    };
+  };
+  listStorageLocations: {
+    parameters: {
+      query: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListStorageLocationsResponsePayload"];
+        };
+      };
+    };
+  };
+  createStorageLocation: {
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetStorageLocationResponsePayload"];
+        };
+      };
+      /** A storage location with the requested name already exists at the facility. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateStorageLocationRequestPayload"];
+      };
+    };
+  };
+  getStorageLocation: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetStorageLocationResponsePayload"];
+        };
+      };
+    };
+  };
+  updateStorageLocation: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** A storage location with the requested name already exists at the facility. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateStorageLocationRequestPayload"];
+      };
+    };
+  };
+  deleteStorageLocation: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
       };
     };
   };

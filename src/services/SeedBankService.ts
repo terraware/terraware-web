@@ -1,5 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import { StorageLocationDetails } from 'src/types/Facility';
+import { StorageLocationPayload } from 'src/types/Facility';
 import HttpService, { Response } from './HttpService';
 import SearchService, {
   SearchCriteria,
@@ -14,7 +14,7 @@ import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/Fi
  */
 
 const SUMMARY_ENDPOINT = '/api/v1/seedbank/summary';
-const STORAGE_LOCATIONS_ENDPOINT = '/api/v1/seedbank/values/storageLocation/{facilityId}';
+const STORAGE_LOCATIONS_ENDPOINT = '/api/v1/seedbank/storageLocations';
 const ACCESSIONS_ENDPOINT = '/api/v2/seedbank/accessions';
 const ALL_FIELD_VALUES_ENDPOINT = '/api/v1/seedbank/values/all';
 const FIELD_VALUES_ENDPOINT = '/api/v1/seedbank/values';
@@ -52,7 +52,7 @@ export type Summary = {
 export type SummaryResponse = Response & Summary;
 
 export type StorageLocations = {
-  locations: StorageLocationDetails[];
+  locations: StorageLocationPayload[];
 };
 export type StorageLocationsResponse = Response & StorageLocations;
 
@@ -99,11 +99,11 @@ const getStorageLocations = async (seedbankId: number): Promise<StorageLocations
     StorageLocations
   >(
     {
-      urlReplacements: {
-        '{facilityId}': seedbankId.toString(),
+      params: {
+        facilityId: seedbankId.toString(),
       },
     },
-    (data) => ({ locations: data?.locations ?? [] })
+    (data) => ({ locations: data?.storageLocations ?? [] })
   );
 
   return response;

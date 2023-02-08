@@ -249,7 +249,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
           setShowDefaultSystemSnackbar(true);
         }
         const columnInfo = columnsIndexed();
-        const searchSelectedColumns = columnNames.reduce((acum, value) => {
+        const validColumns = columnNames.filter((name) => name in columnInfo);
+        const searchSelectedColumns = validColumns.reduce((acum, value) => {
           acum.push(value);
           const additionalColumns = columnInfo[value].additionalKeys;
           if (additionalColumns) {
@@ -260,7 +261,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         }, [] as string[]);
 
         setSearchColumns(searchSelectedColumns);
-        setDisplayColumnNames(columnNames);
+        setDisplayColumnNames(validColumns);
       }
     },
     [

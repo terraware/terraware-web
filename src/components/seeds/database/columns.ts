@@ -132,13 +132,7 @@ function columns(): DatabaseColumn[] {
       type: 'string',
     },
     {
-      key: 'storageCondition',
-      name: strings.STORAGE_CONDITION,
-      type: 'string',
-      filter: { type: 'single_selection' },
-    },
-    {
-      key: 'storageLocationName',
+      key: 'storageLocation_name',
       name: strings.SUB_LOCATION,
       type: 'string',
       filter: { type: 'multiple_selection' },
@@ -360,7 +354,6 @@ const generalInventoryPreset: Preset = {
     'species_rare',
     'plantsCollectedFrom',
     'estimatedSeedsIncoming',
-    'storageCondition',
   ],
 };
 
@@ -374,8 +367,7 @@ const seedStoragePreset: Preset = {
     'collectedDate',
     'receivedDate',
     'estimatedSeedsIncoming',
-    'storageCondition',
-    'storageLocationName',
+    'storageLocation_name',
   ],
 };
 
@@ -408,8 +400,7 @@ const germinationTestingPreset: Preset = {
     'active',
     'state',
     'collectedDate',
-    'storageCondition',
-    'storageLocationName',
+    'storageLocation_name',
     'viabilityTests_type',
     'viabilityTests_startDate',
   ],

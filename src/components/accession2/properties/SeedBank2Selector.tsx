@@ -4,10 +4,10 @@ import { Grid, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getAllSeedBanks } from 'src/utils/organization';
-import { Facility, StorageLocationDetails } from 'src/types/Facility';
+import { Facility, StorageLocationPayload } from 'src/types/Facility';
 import { SeedBankService } from 'src/services';
 import { StorageSubLocationSelector, StorageLocationSelector } from './';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 
 type SeedBank2SelectorProps = {
   record: AccessionPostRequestBody;
@@ -17,8 +17,9 @@ type SeedBank2SelectorProps = {
 
 export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { loadedStringsForLocale } = useLocalization();
   const { record, onChange, validate } = props;
-  const [storageLocations, setStorageLocations] = useState<StorageLocationDetails[]>([]);
+  const [storageLocations, setStorageLocations] = useState<StorageLocationPayload[]>([]);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) as Facility[]) || [];
@@ -33,17 +34,18 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
 
   useEffect(() => {
     const setLocation = async () => {
-      if (record.facilityId) {
+      if (record.facilityId && loadedStringsForLocale) {
         const response = await SeedBankService.getStorageLocations(record.facilityId);
         if (response.requestSucceeded) {
-          setStorageLocations(response.locations);
+          const collator = new Intl.Collator(loadedStringsForLocale);
+          setStorageLocations(response.locations.sort((a, b) => collator.compare(a.name, b.name)));
           return;
         }
       }
       setStorageLocations([]);
     };
     setLocation();
-  }, [record.facilityId]);
+  }, [loadedStringsForLocale, record.facilityId]);
 
   return (
     <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between'>
@@ -62,7 +64,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
           id='sub-location'
           label={strings.SUB_LOCATION}
           selectedStorageSubLocation={record.storageLocation}
-          storageSubLocations={storageLocations.map((obj) => obj.storageLocation)}
+          storageSubLocations={storageLocations.map((obj) => obj.name)}
           onChange={(value: string) => onChange('storageLocation', value)}
           disabled={!record.facilityId}
         />
