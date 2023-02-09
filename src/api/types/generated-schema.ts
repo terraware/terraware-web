@@ -355,6 +355,8 @@ export interface components {
       description: string;
       /** @description Full name of the person responsible for the event, if known. */
       fullName?: string;
+      /** @description User-entered notes about the event, if any. */
+      notes?: string;
       type:
         | "Created"
         | "QuantityUpdated"
@@ -1820,6 +1822,8 @@ export interface components {
       storageCondition: "Refrigerator" | "Freezer";
     };
     StorageLocationPayload: {
+      /** Format: int32 */
+      activeAccessions: number;
       /** Format: int64 */
       facilityId: number;
       /** Format: int64 */
