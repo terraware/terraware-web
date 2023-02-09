@@ -11,8 +11,8 @@ const availableDateModules: { [locale: string]: () => Promise<DateFnsModule> } =
   // The default locale if there isn't a better match.
   '': () => import('date-fns/locale/en-US'),
   es: () => import('date-fns/locale/es'),
-  // Render dates in Korean in the gibberish locale so they look visually distinct from English.
-  gx: () => import('date-fns/locale/ko'),
+  // Render dates in French in the gibberish locale so they look visually distinct from English.
+  gx: () => import('date-fns/locale/fr'),
 };
 
 function importDateFuncsForLocale(locale: string): Promise<DateFnsModule> {
@@ -29,7 +29,7 @@ export async function newChart<TType extends ChartType = ChartType, TData = Defa
 ): Promise<Chart<TType, TData, TLabel>> {
   // @ts-ignore
   if (typeof config.options === 'object' && 'scales' in config.options) {
-    config.options.locale = locale === 'gx' ? 'ko' : locale;
+    config.options.locale = locale === 'gx' ? 'fr' : locale;
     const scales = config.options.scales as { [name: string]: ScaleOptionsByType };
 
     for (const scaleOptions of Object.values(scales)) {

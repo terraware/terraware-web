@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
 import Select from '../../common/Select/Select';
 import Icon from '../../common/icon/Icon';
@@ -23,6 +23,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Dropdown } from '@terraware/web-components';
 import { useLocalization } from 'src/providers';
 import { newChart } from '../../common/Chart';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 declare global {
   interface Window {
@@ -106,6 +107,11 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
   const { loadedStringsForLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(
+    () => numberFormatter(loadedStringsForLocale),
+    [loadedStringsForLocale, numberFormatter]
+  );
 
   useEffect(() => {
     if (defaultSensor) {
@@ -299,7 +305,10 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
               y: {
                 ticks: {
                   callback: (value, index, ticks) => {
-                    return strings.formatString(strings.DEGREES_CELSIUS_VALUE, value) as string;
+                    return strings.formatString(
+                      strings.DEGREES_CELSIUS_VALUE,
+                      numericFormatter.format(value)
+                    ) as string;
                   },
                 },
                 suggestedMax: Number(getMaxValue(temperatureValues)) + 10,
@@ -332,7 +341,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                 },
                 ticks: {
                   callback: (value, index, ticks) => {
-                    return strings.formatString(strings.PERCENTAGE_VALUE, value) as string;
+                    return strings.formatString(strings.PERCENTAGE_VALUE, numericFormatter.format(value)) as string;
                   },
                 },
               },
@@ -400,7 +409,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
     ) {
       getChartData();
     }
-  }, [availableLocations, loadedStringsForLocale, selectedPeriod, selectedLocation, timeZone]);
+  }, [availableLocations, loadedStringsForLocale, numericFormatter, selectedPeriod, selectedLocation, timeZone]);
 
   const onChangeLocation = (newValue: string) => {
     const location = availableLocations?.find((aL) => aL.name === newValue);
