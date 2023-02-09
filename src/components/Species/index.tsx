@@ -46,6 +46,7 @@ import PopoverMenu from '../common/PopoverMenu';
 import { DropdownItem } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { PillList, PillListItem } from '@terraware/web-components';
+import { isTrue } from 'src/utils/boolean';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -156,11 +157,14 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   };
 
   const getConservationStatusString = (result: { [key: string]: unknown }) => {
-    if (result.endangered && result.rare) {
+    const endangered = isTrue(result.endangered);
+    const rare = isTrue(result.rare);
+
+    if (endangered && rare) {
       return strings.RARE_ENDANGERED;
-    } else if (result.endangered) {
+    } else if (endangered) {
       return strings.ENDANGERED;
-    } else if (result.rare) {
+    } else if (rare) {
       return strings.RARE;
     } else {
       return '';
@@ -338,7 +342,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         operation: 'field',
         field: 'endangered',
         type: 'Exact',
-        values: [record.endangered],
+        values: [record.endangered ? strings.BOOLEAN_TRUE : strings.BOOLEAN_FALSE],
       };
       params.search.children.push(newNode);
     }
@@ -348,7 +352,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         operation: 'field',
         field: 'rare',
         type: 'Exact',
-        values: [record.rare],
+        values: [record.rare ? strings.BOOLEAN_TRUE : strings.BOOLEAN_FALSE],
       };
       params.search.children.push(newNode);
     }
@@ -420,8 +424,8 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               growthForm: result.growthForm as any,
               seedStorageBehavior: result.seedStorageBehavior as any,
               ecosystemTypes: (result.ecosystemTypes as Record<string, EcosystemType>[])?.map((r) => r.ecosystemType),
-              rare: result.rare as boolean,
-              endangered: result.endangered as boolean,
+              rare: isTrue(result.rare),
+              endangered: isTrue(result.endangered),
               conservationStatus: getConservationStatusString(result),
             });
           });
