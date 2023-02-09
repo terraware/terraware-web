@@ -4,7 +4,7 @@ import { useMemo } from 'react';
  * See: https://observablehq.com/@mbostock/localized-number-parsing
  */
 
-const getLocaleToUse = (locale?: string) => (locale === 'gx' || !locale ? 'en' : locale);
+const getLocaleToUse = (locale?: string) => (locale === 'gx' ? 'fr' : locale || 'en');
 
 export const useNumberParser = (): any => {
   const parser = (locale?: string): any => {

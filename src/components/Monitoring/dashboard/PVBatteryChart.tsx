@@ -1,6 +1,6 @@
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
 import { Chart } from 'chart.js';
 import { Device } from 'src/types/Device';
@@ -21,6 +21,7 @@ import Icon from '../../common/icon/Icon';
 import { Dropdown } from '@terraware/web-components';
 import { useLocalization } from 'src/providers';
 import { newChart } from '../../common/Chart';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 declare global {
   interface Window {
@@ -90,6 +91,11 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   const { BMU, defaultTimePeriod, updateTimePeriodPreferences, timeZone } = props;
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
   const { loadedStringsForLocale } = useLocalization();
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(
+    () => numberFormatter(loadedStringsForLocale),
+    [loadedStringsForLocale, numberFormatter]
+  );
 
   useEffect(() => {
     if (defaultTimePeriod) {
@@ -170,7 +176,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                 },
                 ticks: {
                   callback: (value, index, ticks) => {
-                    return strings.formatString(strings.WATTS_VALUE, value) as string;
+                    return strings.formatString(strings.WATTS_VALUE, numericFormatter.format(value)) as string;
                   },
                 },
               },
@@ -233,7 +239,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
     if (selectedPVBatteryPeriod) {
       getChartData();
     }
-  }, [BMU, loadedStringsForLocale, selectedPVBatteryPeriod, timeZone]);
+  }, [BMU, loadedStringsForLocale, numericFormatter, selectedPVBatteryPeriod, timeZone]);
 
   const onChangePVBatterySelectedPeriod = (newValue: string) => {
     setSelectedPVBatteryPeriod(newValue);

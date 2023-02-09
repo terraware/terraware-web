@@ -1,5 +1,5 @@
-import { useLocalization } from '../../providers';
-import { useUserTimeZone } from '../../utils/useTimeZoneUtils';
+import { useLocalization } from 'src/providers';
+import { useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useEffect, useState } from 'react';
 
 export interface TimestampProps {
@@ -10,11 +10,11 @@ export interface TimestampProps {
 
 /** Returns a DateTimeFormat object for a locale and time zone. */
 function newDateTimeFormat(locale?: string, timeZone?: string) {
-  return new Intl.DateTimeFormat(locale, {
+  const localeToUse = locale === 'gx' ? 'fr' : locale || 'en';
+  return new Intl.DateTimeFormat(localeToUse, {
     dateStyle: 'long',
     timeStyle: 'medium',
     timeZone,
-    hourCycle: locale === 'gx' ? 'h24' : undefined,
   });
 }
 
@@ -22,20 +22,11 @@ function newDateTimeFormat(locale?: string, timeZone?: string) {
 export default function Timestamp({ className, isoString }: TimestampProps): JSX.Element | null {
   const timeZone = useUserTimeZone()?.id;
   const { locale } = useLocalization();
-  const [dateTimeFormat, setDateTimeFormat] = useState<Intl.DateTimeFormat>(newDateTimeFormat(locale, timeZone));
+  const [formattedDate, setFormattedDate] = useState<string | null>(null);
 
   useEffect(() => {
-    setDateTimeFormat(newDateTimeFormat(locale, timeZone));
-  }, [locale, timeZone, setDateTimeFormat]);
+    setFormattedDate(newDateTimeFormat(locale, timeZone).format(new Date(isoString)));
+  }, [isoString, locale, timeZone, setFormattedDate]);
 
-  const format = () => {
-    const formatted = dateTimeFormat.format(new Date(isoString));
-    if (locale === 'gx') {
-      return formatted?.replace(/[A-Za-z]/g, 'XY');
-    } else {
-      return formatted;
-    }
-  };
-
-  return <span className={className}>{format()}</span>;
+  return <span className={className}>{formattedDate}</span>;
 }

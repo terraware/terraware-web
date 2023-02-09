@@ -9,9 +9,9 @@ export default function DatePicker(props: Props): JSX.Element {
 
   useEffect(() => {
     if (loadedStringsForLocale) {
-      // Adding a custom gibberish locale to MUI's date picker is nontrivial; show Korean dates
+      // Adding a custom gibberish locale to MUI's date picker is nontrivial; show French dates
       // in the gibberish locale to support testing that the date picker is localized.
-      const effectiveLocale = loadedStringsForLocale === 'gx' ? 'ko' : loadedStringsForLocale;
+      const effectiveLocale = loadedStringsForLocale === 'gx' ? 'fr' : loadedStringsForLocale;
       setPropsWithLocale({ ...props, locale: effectiveLocale });
     }
   }, [loadedStringsForLocale, props, setPropsWithLocale]);
