@@ -614,15 +614,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     }
                   />
                 </Grid>
-                <PlotSelector
-                  zones={zones}
-                  onZoneSelected={onChangePlantingZone}
-                  onPlotSelected={onChangePlot}
-                  zoneError={fieldsErrors.zoneId}
-                  plotError={fieldsErrors.plotId}
-                  selectedPlot={selectedPlot}
-                  selectedZone={selectedZone}
-                />
+                {!!zones.length && (
+                  <PlotSelector
+                    zones={zones}
+                    onZoneSelected={onChangePlantingZone}
+                    onPlotSelected={onChangePlot}
+                    zoneError={fieldsErrors.zoneId}
+                    plotError={fieldsErrors.plotId}
+                    selectedPlot={selectedPlot}
+                    selectedZone={selectedZone}
+                  />
+                )}
               </>
             )}
             <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
