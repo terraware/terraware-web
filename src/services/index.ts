@@ -6,6 +6,7 @@ import I18nService from './I18nService';
 import MapService from './MapService';
 import NurseryBatchService from './NurseryBatchService';
 import NurseryInventoryService from './NurseryInventoryService';
+import NurseryWithdrawalService from './NurseryWithdrawalService';
 import OrganizationUserService from './OrganizationUserService';
 import OrganizationService from './OrganizationService';
 import PreferencesService from './PreferencesService';
@@ -25,6 +26,7 @@ export {
   MapService,
   NurseryBatchService,
   NurseryInventoryService,
+  NurseryWithdrawalService,
   OrganizationService,
   OrganizationUserService,
   PreferencesService,

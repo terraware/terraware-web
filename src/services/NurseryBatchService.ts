@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
-import { Batch, NurseryWithdrawal, CreateBatchRequestPayload } from 'src/types/Batch';
+import { Batch, CreateBatchRequestPayload } from 'src/types/Batch';
 import SearchService, { SearchResponseElement } from './SearchService';
 
 /**
@@ -10,8 +10,6 @@ import SearchService, { SearchResponseElement } from './SearchService';
 const BATCHES_ENDPOINT = '/api/v1/nursery/batches';
 const BATCH_ID_ENDPOINT = '/api/v1/nursery/batches/{id}';
 const BATCH_QUANTITIES_ENDPOINT = '/api/v1/nursery/batches/{id}/quantities';
-const BATCH_WITHDRAWALS_ENDPOINT = '/api/v1/nursery/withdrawals';
-const WITHDRAWAL_PHOTOS_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/photos';
 
 export type BatchId = {
   batchId: number | null;
@@ -19,19 +17,11 @@ export type BatchId = {
 export type BatchData = {
   batch: Batch | null;
 };
-export type BatchWithdrawalData = {
-  withdrawal: NurseryWithdrawal | null;
-};
-export type PhotoId = {
-  photoId: number | null;
-};
 
 export type UpdateBatchRequestPayload =
   paths[typeof BATCH_ID_ENDPOINT]['put']['requestBody']['content']['application/json'];
 export type UpdateBatchQuantitiesRequestPayload =
   paths[typeof BATCH_QUANTITIES_ENDPOINT]['put']['requestBody']['content']['application/json'];
-export type CreateNurseryWithdrawalRequestPayload =
-  paths[typeof BATCH_WITHDRAWALS_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
 type GetBatchResponsePayload = paths[typeof BATCH_ID_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
@@ -184,73 +174,6 @@ const updateBatchQuantities = async (batch: Batch): Promise<Response> => {
 };
 
 /**
- * Create a batch withdrawal
- */
-const createBatchWithdrawal = async (
-  createNurseryWithdrawalRequestPayload: CreateNurseryWithdrawalRequestPayload
-): Promise<Response & BatchWithdrawalData> => {
-  const response: Response = await HttpService.root(BATCH_WITHDRAWALS_ENDPOINT).post({
-    entity: createNurseryWithdrawalRequestPayload,
-  });
-
-  return {
-    ...response,
-    withdrawal: response?.data?.withdrawal ?? null,
-  };
-};
-
-/**
- * Upload a photo for a batch withdrawal
- */
-const uploadWithdrawalPhoto = async (withdrawalId: number, photo: File): Promise<Response & PhotoId> => {
-  const entity = new FormData();
-  entity.append('file', photo);
-
-  const headers = {
-    'content-type': 'multipart/form-data',
-  };
-
-  const response: Response = await HttpService.root(WITHDRAWAL_PHOTOS_ENDPOINT).post({
-    entity,
-    headers,
-    urlReplacements: {
-      '{withdrawalId}': withdrawalId.toString(),
-    },
-  });
-
-  return {
-    ...response,
-    photoId: response?.data?.id ?? null,
-  };
-};
-
-/**
- * Upload multiple photos for a batch withdrawal
- */
-const uploadWithdrawalPhotos = async (
-  withdrawalId: number,
-  photos: File[]
-): Promise<((Response & PhotoId) | string)[]> => {
-  const uploadPhotoPromises = photos.map((photo) => uploadWithdrawalPhoto(withdrawalId, photo));
-  try {
-    const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
-    return promiseResponses.map((response) => {
-      if (response.status === 'rejected') {
-        // tslint:disable-next-line: no-console
-        console.error(response.reason);
-        return response.reason;
-      } else {
-        return response.value as Response & PhotoId;
-      }
-    });
-  } catch (e) {
-    // swallow error
-  }
-
-  return [];
-};
-
-/**
  * Exported functions
  */
 const NurseryBatchService = {
@@ -261,9 +184,6 @@ const NurseryBatchService = {
   deleteBatch,
   updateBatch,
   updateBatchQuantities,
-  createBatchWithdrawal,
-  uploadWithdrawalPhoto,
-  uploadWithdrawalPhotos,
 };
 
 export default NurseryBatchService;

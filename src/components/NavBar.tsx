@@ -7,7 +7,7 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { OrganizationRole } from 'src/types/Organization';
-import { hasNurseryWithdrawals } from 'src/api/tracking/withdrawals';
+import { NurseryWithdrawalService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import NavFooter from './common/Navbar/NavFooter';
 import { useOrganization } from 'src/providers/hooks';
@@ -66,7 +66,7 @@ export default function NavBar({
   };
 
   const checkNurseryWithdrawals = useCallback(() => {
-    hasNurseryWithdrawals(selectedOrganization.id).then((result) => {
+    NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result) => {
       setShowNurseryWithdrawals(result);
     });
   }, [selectedOrganization.id]);
