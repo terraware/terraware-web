@@ -30,6 +30,7 @@ type UserServerResponse = paths[typeof CURRENT_USER_ENDPOINT]['get']['responses'
 type UpdateUserPayloadType = paths[typeof CURRENT_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
 const httpCurrentUser = HttpService.root(CURRENT_USER_ENDPOINT);
+let initializedTimeZonePromise: Promise<InitializedTimeZone> | null = null;
 
 /**
  * get current/active user
@@ -101,6 +102,17 @@ const initializeTimeZone = async (user: User, timeZone: string): Promise<Initial
 };
 
 /**
+ * return a cached promise for initialized time zone
+ * this avoids executing it twice
+ */
+const getInitializedTimeZone = (user: User, timeZone: string): Promise<InitializedTimeZone> => {
+  if (!initializedTimeZonePromise) {
+    initializedTimeZonePromise = initializeTimeZone(user, timeZone);
+  }
+  return initializedTimeZonePromise;
+};
+
+/**
  * initialize preferred units (if not already set)
  */
 const initializeUnits = async (units: string): Promise<InitializedUnits> => {
@@ -127,6 +139,7 @@ const initializeUnits = async (units: string): Promise<InitializedUnits> => {
  * Exported functions
  */
 const UserService = {
+  getInitializedTimeZone,
   getUser,
   initializeTimeZone,
   initializeUnits,
