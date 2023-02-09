@@ -78,7 +78,7 @@ export default function NurseryReassignment(): JSX.Element {
       if (response.requestSucceeded) {
         setDelivery(response.delivery);
       } else {
-        snackbar.toastError(response.error);
+        snackbar.toastError();
       }
     };
 
@@ -108,7 +108,7 @@ export default function NurseryReassignment(): JSX.Element {
         setPlots(zone.plots.map((plot) => ({ id: plot.id.toString(), name: plot.fullName })));
         setZoneName(zone.name);
       } else {
-        snackbar.toastError(response.error);
+        snackbar.toastError();
       }
     };
 
@@ -157,7 +157,7 @@ export default function NurseryReassignment(): JSX.Element {
     if (response.requestSucceeded) {
       goToWithdrawals();
     } else {
-      snackbar.toastError(response.error);
+      snackbar.toastError();
     }
   };
 

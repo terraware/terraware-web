@@ -41,7 +41,7 @@ export default function PlantsDashboard(): JSX.Element {
       if (serverResponse.requestSucceeded) {
         setPlantingSites(serverResponse.sites ?? []);
       } else {
-        snackbar.toastError(serverResponse.error);
+        snackbar.toastError();
       }
     };
     populatePlantingSites();

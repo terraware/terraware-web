@@ -126,7 +126,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (response.requestSucceeded && response.sites) {
       setPlantingSites(response.sites);
     } else {
-      snackbar.toastError(response.error);
+      snackbar.toastError();
     }
   }, [selectedOrganization, plantingSites, snackbar]);
 

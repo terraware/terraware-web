@@ -65,7 +65,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       reload();
       onCloseHandler();
     } else {
-      snackbar.toastError(response.error);
+      snackbar.toastError();
     }
   };
 

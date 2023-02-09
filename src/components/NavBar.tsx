@@ -66,7 +66,7 @@ export default function NavBar({
   };
 
   const checkNurseryWithdrawals = useCallback(() => {
-    NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result) => {
+    NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
       setShowNurseryWithdrawals(result);
     });
   }, [selectedOrganization.id]);

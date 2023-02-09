@@ -108,7 +108,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
     const response = await NurseryWithdrawalService.createBatchWithdrawal(record);
     if (!response.requestSucceeded) {
-      snackbar.toastError(response.error);
+      snackbar.toastError();
       setWithdrawInProgress(false);
       return;
     }

@@ -79,7 +79,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
         setWithdrawal(undefined);
         setDelivery(undefined);
         setBatches(undefined);
-        snackbar.toastError(withdrawalResponse.error);
+        snackbar.toastError();
       } else {
         setWithdrawal(withdrawalResponse.withdrawal);
         setDelivery(withdrawalResponse.delivery);

@@ -23,10 +23,10 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
       const photoListResponse = await NurseryWithdrawalService.getWithdrawalPhotosList(withdrawalId!!);
       if (!photoListResponse.requestSucceeded || photoListResponse.error) {
         setPhotoUrls([]);
-        snackbar.toastError(photoListResponse.error);
+        snackbar.toastError();
       } else {
         const photoUrlArray: string[] = [];
-        photoListResponse.photoIds?.forEach(({ id }) => {
+        photoListResponse.photoIds?.forEach(({ id }: { id: number }) => {
           photoUrlArray.push(
             NURSERY_WITHDRAWAL_PHOTO_ENDPOINT.replace('{withdrawalId}', withdrawalId!!.toString()).replace(
               '{photoId}',

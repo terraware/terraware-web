@@ -23,7 +23,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
     const populateSummary = async () => {
       const response = await NurseryInventoryService.getSummary(speciesId);
       if (response.requestSucceeded === false) {
-        snackbar.toastError(response.error);
+        snackbar.toastError();
       } else if (!_.isEqual(response.summary, summary)) {
         setSummary(response.summary || undefined);
       }
