@@ -1,9 +1,11 @@
+import { useEffect, useMemo, useState } from 'react';
 import { TableColumnType } from '@terraware/web-components';
-import { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Delivery } from 'src/types/Tracking';
 import { Species } from 'src/types/Species';
 import Table from 'src/components/common/table';
+import { useUser } from 'src/providers';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 type OutplantWithdrawalTableProps = {
   species: Species[];
@@ -16,6 +18,10 @@ export default function OutplantWithdrawalTable({
   plotNames,
   delivery,
 }: OutplantWithdrawalTableProps): JSX.Element {
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
+
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
   const columns: TableColumnType[] = [
     { key: 'species', name: strings.SPECIES, type: 'string' },
@@ -52,13 +58,13 @@ export default function OutplantWithdrawalTable({
         rows.push({
           species: species?.find((x) => x?.id === sp)?.scientificName ?? '',
           to_plot: plot > -1 ? plotNames[plot] ?? plot?.toString() : '',
-          quantity: speciesPlotMap[sp][plot].toString(),
+          quantity: numericFormatter.format(speciesPlotMap[sp][plot]),
         });
       }
     }
 
     setRowData(rows);
-  }, [delivery, species, plotNames]);
+  }, [delivery, species, plotNames, numericFormatter]);
 
   return <Table id='outplant-withdrawal-table' columns={columns} rows={rowData} orderBy={'name'} />;
 }

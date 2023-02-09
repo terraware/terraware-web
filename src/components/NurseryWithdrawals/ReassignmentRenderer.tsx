@@ -34,9 +34,16 @@ export type Reassignment = {
 export type ReassignmentRendererProps = {
   plots: PlotInfo[];
   setReassignment: (reassignment: Reassignment) => void;
+  numericParser: { parse: (str?: string) => number | typeof NaN };
+  numericFormatter: { format: (num: number) => string };
 };
 
-export default function ReassignmentRenderer({ plots, setReassignment }: ReassignmentRendererProps) {
+export default function ReassignmentRenderer({
+  plots,
+  setReassignment,
+  numericParser,
+  numericFormatter,
+}: ReassignmentRendererProps) {
   return function ReassignmentlCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
     const classes = useStyles();
     const { column, row } = props;
@@ -58,13 +65,13 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
         updateReassignment('quantity', undefined);
         return;
       }
-      const quantityValue = Number(value);
-      if (isNaN(quantityValue) || quantityValue < 0 || quantityValue > Number(numPlants)) {
+      const quantityValue = numericParser.parse(value?.toString());
+      if (isNaN(quantityValue) || quantityValue < 0 || quantityValue > numericParser.parse(numPlants?.toString())) {
         reassignment.error.quantity = strings.INVALID_VALUE;
       } else {
         reassignment.error.quantity = '';
       }
-      updateReassignment('quantity', value);
+      updateReassignment('quantity', quantityValue);
     };
 
     if (column.key === 'newPlot') {
@@ -104,7 +111,7 @@ export default function ReassignmentRenderer({ plots, setReassignment }: Reassig
             className={classes.input}
           />
           <Typography paddingLeft={1} paddingTop={error.quantity ? '10px' : 0}>
-            / {numPlants}
+            / {numericFormatter.format(numPlants)}
           </Typography>
         </Box>
       );
