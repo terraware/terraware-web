@@ -702,6 +702,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           sortHandler={onSortChange}
                           isInactive={isInactive}
                           onReorderEnd={reorderEndHandler}
+                          isPresorted={true}
                         />
                       )}
                       {searchResults === undefined && <CircularProgress />}
