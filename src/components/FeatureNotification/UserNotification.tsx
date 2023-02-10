@@ -43,7 +43,7 @@ export default function UserNotification(): Notification | undefined {
         return;
       }
 
-      const userTz: InitializedTimeZone = await UserService.initializeTimeZone(user, getDefaultTimeZone().id);
+      const userTz: InitializedTimeZone = await UserService.getInitializedTimeZone(user, getDefaultTimeZone().id);
       if (!userTz.timeZone) {
         return;
       }
