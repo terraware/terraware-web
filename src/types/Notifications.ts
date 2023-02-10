@@ -24,6 +24,7 @@ export type Notification = {
   createdTime: string;
   isRead: boolean;
   hideDate?: boolean;
+  markAsRead?: () => void;
 };
 
 export type Notifications = {
