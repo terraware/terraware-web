@@ -1,3 +1,7 @@
+a0a6940a Bump cypress from 12.3.0 to 12.5.1 (#1144)
+682e740a Bump jest-mock-extended from 2.0.9 to 3.0.1 (#1113)
+78efcdcf Create a 'FeatureNotifications' component to use in Notifications component (#1154)
+f5b29407 Bump start-server-and-test from 1.15.2 to 1.15.3 (#1111)
 c7f4a676 SW-2934 Misc updates for nursery withdrawals in withdrawal log (#1172)
 a94bd4c9 SW-2931 Use generic error messages (#1170)
 ac0373f1 SW-2933 Use French date/number formatting for gibberish (#1171)
