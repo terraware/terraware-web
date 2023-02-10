@@ -5,13 +5,13 @@ import { Notification } from 'src/types/Notifications';
 import TextWithLink from 'src/components/common/TextWithLink';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import isEnabled from 'src/features';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { OrganizationService, PreferencesService, UserService } from 'src/services';
 
-export default function OrganizationNotification(): Notification | undefined {
+export default function OrganizationNotification(): Notification | null {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
 
   const [timeZoneOrgNotification, setTimeZoneOrgNotification] = useState(false);
@@ -45,7 +45,10 @@ export default function OrganizationNotification(): Notification | undefined {
       }
 
       let orgTz: InitializedTimeZone = {};
-      orgTz = await OrganizationService.initializeTimeZone(selectedOrganization, userTz.timeZone);
+
+      if (selectedOrganization.id !== -1) {
+        orgTz = await OrganizationService.initializeTimeZone(selectedOrganization, userTz.timeZone);
+      }
 
       if (orgTz.updated) {
         reloadOrganizations();
@@ -61,33 +64,37 @@ export default function OrganizationNotification(): Notification | undefined {
     }
   }, [reloadOrganizations, reloadUser, selectedOrganization, timeZoneFeatureEnabled, user, userPreferences, timeZones]);
 
-  if (timeZoneOrgNotification) {
-    return {
-      id: -2,
-      notificationCriticality: 'Info',
-      organizationId: selectedOrganization.id,
-      title: strings.REVIEW_YOUR_ORGANIZATION_SETTING,
-      body: (
-        <div>
-          <ul>
-            <li>{strings.formatString(strings.TIME_ZONE_SELECTED, orgTimeZone || '')}</li>
-          </ul>
-          <Box paddingTop={1}>
-            <TextWithLink text={strings.ORG_NOTIFICATION_ACTION} href={APP_PATHS.ORGANIZATION} />
-          </Box>
-        </div>
-      ),
-      localUrl: APP_PATHS.ORGANIZATION,
-      createdTime: getTodaysDateFormatted(),
-      isRead: false,
-      hideDate: true,
-      markAsRead: async () => {
-        await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-          timeZoneAcknowledgedOnMs: Date.now(),
-        });
+  return useMemo(() => {
+    if (timeZoneOrgNotification) {
+      return {
+        id: -2,
+        notificationCriticality: 'Info',
+        organizationId: selectedOrganization.id,
+        title: strings.REVIEW_YOUR_ORGANIZATION_SETTING,
+        body: (
+          <div>
+            <ul>
+              <li>{strings.formatString(strings.TIME_ZONE_SELECTED, orgTimeZone || '')}</li>
+            </ul>
+            <Box paddingTop={1}>
+              <TextWithLink text={strings.ORG_NOTIFICATION_ACTION} href={APP_PATHS.ORGANIZATION} />
+            </Box>
+          </div>
+        ),
+        localUrl: APP_PATHS.ORGANIZATION,
+        createdTime: getTodaysDateFormatted(),
+        isRead: false,
+        hideDate: true,
+        markAsRead: async () => {
+          await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+            timeZoneAcknowledgedOnMs: Date.now(),
+          });
 
-        await reloadUserPreferences();
-      },
-    };
-  }
+          await reloadUserPreferences();
+        },
+      };
+    }
+
+    return null;
+  }, [timeZoneOrgNotification, orgTimeZone, reloadUserPreferences, selectedOrganization.id]);
 }

@@ -7,14 +7,14 @@ import { supportedLocales } from 'src/strings/locales';
 import TextWithLink from 'src/components/common/TextWithLink';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import isEnabled from 'src/features';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { PreferencesService, UserService } from 'src/services';
 import { InitializedUnits } from 'src/units';
 
-export default function UserNotification(): Notification | undefined {
+export default function UserNotification(): Notification | null {
   const [unitNotification, setUnitNotification] = useState(false);
   const [timeZoneUserNotification, setTimeZoneUserNotification] = useState(false);
   const [userTimeZone, setUserTimeZone] = useState<string>();
@@ -85,46 +85,58 @@ export default function UserNotification(): Notification | undefined {
     }
   }, [user, userPreferences, weightUnitsEnabled, reloadUserPreferences]);
 
-  if (unitNotification || timeZoneUserNotification) {
-    return {
-      id: -1,
-      notificationCriticality: 'Info',
-      organizationId: selectedOrganization.id,
-      title: strings.REVIEW_YOUR_ACCOUNT_SETTING,
-      body: (
-        <Box>
-          <ul>
-            <li>
-              {strings.formatString(
-                strings.DEFAULT_LANGUAGE_SELECTED,
-                supportedLocales.find((sLocale) => sLocale.id === user?.locale)?.name || ''
-              )}
-            </li>
-            <li>{strings.formatString(strings.TIME_ZONE_SELECTED, userTimeZone || '')}</li>
-            <li>
-              {strings.formatString(
-                strings.WEIGHT_SYSTEM_SELECTED,
-                weightSystemsNames().find((ws) => ws.value === userPreferences.preferredWeightSystem)?.label || ''
-              )}
-            </li>
-          </ul>
-          <Box paddingTop={1}>
-            <TextWithLink text={strings.USER_NOTIFICATION_ACTION} href={APP_PATHS.MY_ACCOUNT} />
+  return useMemo(() => {
+    if (unitNotification || timeZoneUserNotification) {
+      return {
+        id: -1,
+        notificationCriticality: 'Info',
+        organizationId: selectedOrganization.id,
+        title: strings.REVIEW_YOUR_ACCOUNT_SETTING,
+        body: (
+          <Box>
+            <ul>
+              <li>
+                {strings.formatString(
+                  strings.DEFAULT_LANGUAGE_SELECTED,
+                  supportedLocales.find((sLocale) => sLocale.id === user?.locale)?.name || ''
+                )}
+              </li>
+              <li>{strings.formatString(strings.TIME_ZONE_SELECTED, userTimeZone || '')}</li>
+              <li>
+                {strings.formatString(
+                  strings.WEIGHT_SYSTEM_SELECTED,
+                  weightSystemsNames().find((ws) => ws.value === userPreferences.preferredWeightSystem)?.label || ''
+                )}
+              </li>
+            </ul>
+            <Box paddingTop={1}>
+              <TextWithLink text={strings.USER_NOTIFICATION_ACTION} href={APP_PATHS.MY_ACCOUNT} />
+            </Box>
           </Box>
-        </Box>
-      ),
-      localUrl: APP_PATHS.MY_ACCOUNT,
-      createdTime: getTodaysDateFormatted(),
-      isRead: false,
-      hideDate: true,
-      markAsRead: async () => {
-        await PreferencesService.updateUserPreferences({
-          unitsAcknowledgedOnMs: Date.now(),
-          timeZoneAcknowledgedOnMs: Date.now(),
-        });
+        ),
+        localUrl: APP_PATHS.MY_ACCOUNT,
+        createdTime: getTodaysDateFormatted(),
+        isRead: false,
+        hideDate: true,
+        markAsRead: async () => {
+          await PreferencesService.updateUserPreferences({
+            unitsAcknowledgedOnMs: Date.now(),
+            timeZoneAcknowledgedOnMs: Date.now(),
+          });
 
-        await reloadUserPreferences();
-      },
-    };
-  }
+          await reloadUserPreferences();
+        },
+      };
+    }
+
+    return null;
+  }, [
+    unitNotification,
+    timeZoneUserNotification,
+    reloadUserPreferences,
+    selectedOrganization.id,
+    user?.locale,
+    userPreferences.preferredWeightSystem,
+    userTimeZone,
+  ]);
 }

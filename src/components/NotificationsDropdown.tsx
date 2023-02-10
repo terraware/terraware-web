@@ -156,7 +156,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 
   const featureNotifications = useFeatureNotifications();
 
-  const populateNotifications = useCallback(async () => {
+  const fetchNotifications = useCallback(async () => {
     const notificationsData = await getNotifications();
     if (organizationId) {
       const orgNotifications = await getNotifications(organizationId);
@@ -168,9 +168,15 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
       return dateB.getTime() - dateA.getTime();
     });
 
+    return notificationsData;
+  }, [organizationId]);
+
+  const populateNotifications = useCallback(async () => {
+    const notificationsData = await fetchNotifications();
+
     notificationsData.items = [...featureNotifications, ...notificationsData.items];
     setNotifications(notificationsData);
-  }, [organizationId, featureNotifications]);
+  }, [featureNotifications, fetchNotifications]);
 
   useEffect(() => {
     // Update notifications now.
