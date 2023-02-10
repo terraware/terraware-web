@@ -1,21 +1,23 @@
+import { useMemo } from 'react';
 import UserNotification from './UserNotification';
 import { Notification } from 'src/types/Notifications';
 import OrganizationNotification from './OrganizationNotification';
 
 export default function useFeatureNotifications(): Notification[] {
-  const featureNotifications: Notification[] = [];
-
   const userNotification = UserNotification();
-
-  if (userNotification) {
-    featureNotifications.push(userNotification);
-  }
-
   const orgNotification = OrganizationNotification();
 
-  if (orgNotification) {
-    featureNotifications.push(orgNotification);
-  }
-
-  return featureNotifications;
+  return useMemo(
+    () =>
+      [
+        // add all notifications here
+        userNotification,
+        orgNotification,
+      ].filter((notification) => notification !== null) as Notification[],
+    [
+      // add all notification dependencies here
+      userNotification,
+      orgNotification,
+    ]
+  );
 }
