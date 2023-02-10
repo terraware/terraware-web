@@ -23,11 +23,6 @@ export type UpdateOptions = {
   skipAcknowledgeTimeZone?: boolean;
 };
 
-type CachedTimeZone = {
-  cachedOn: number;
-  promise: Promise<InitializedTimeZone> | null;
-};
-
 // endpoint
 const CURRENT_USER_ENDPOINT = '/api/v1/users/me';
 
@@ -35,11 +30,6 @@ type UserServerResponse = paths[typeof CURRENT_USER_ENDPOINT]['get']['responses'
 type UpdateUserPayloadType = paths[typeof CURRENT_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
 const httpCurrentUser = HttpService.root(CURRENT_USER_ENDPOINT);
-
-const cachedTimeZone: CachedTimeZone = {
-  cachedOn: 0,
-  promise: null,
-};
 
 /**
  * get current/active user
@@ -111,25 +101,6 @@ const initializeTimeZone = async (user: User, timeZone: string): Promise<Initial
 };
 
 /**
- * return a cached promise for initialized time zone
- * this avoids executing it twice
- */
-const getInitializedTimeZone = (user: User, timeZone: string): Promise<InitializedTimeZone> => {
-  if (cachedTimeZone.promise) {
-    // clear the promise if this was cached before user acknowledged the time zone
-    const { timeZoneAcknowledgedOnMs } = CachedUserService.getUserPreferences();
-    if (!isNaN(timeZoneAcknowledgedOnMs) && timeZoneAcknowledgedOnMs > cachedTimeZone.cachedOn) {
-      cachedTimeZone.promise = null;
-    }
-  }
-  if (!cachedTimeZone.promise) {
-    cachedTimeZone.promise = initializeTimeZone(user, timeZone);
-    cachedTimeZone.cachedOn = Date.now();
-  }
-  return cachedTimeZone.promise;
-};
-
-/**
  * initialize preferred units (if not already set)
  */
 const initializeUnits = async (units: string): Promise<InitializedUnits> => {
@@ -156,7 +127,6 @@ const initializeUnits = async (units: string): Promise<InitializedUnits> => {
  * Exported functions
  */
 const UserService = {
-  getInitializedTimeZone,
   getUser,
   initializeTimeZone,
   initializeUnits,
