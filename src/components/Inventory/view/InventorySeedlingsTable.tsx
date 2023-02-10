@@ -4,7 +4,7 @@ import { Typography, Grid, Box, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
-import { search } from 'src/api/search';
+import SearchService, { SearchSortOrder } from 'src/services/SearchService';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -18,6 +18,7 @@ import { APP_PATHS } from 'src/constants';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { useOrganization } from 'src/providers/hooks';
 import Table from 'src/components/common/table';
+import { SortOrder } from 'src/components/common/table/sort';
 
 interface InventorySeedslingsTableProps {
   speciesId: number;
@@ -39,6 +40,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
   const [selectedBatch, setSelectedBatch] = useState<any>();
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const snackbar = useSnackbar();
   const history = useHistory();
@@ -122,7 +124,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           'notes',
         ],
         sortOrder: [
-          {
+          searchSortOrder ?? {
             field: 'batchNumber',
           },
         ],
@@ -137,7 +139,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
         });
       }
 
-      const searchResponse = await search(searchParams);
+      const searchResponse = await SearchService.search(searchParams);
 
       if (activeRequests) {
         const batchesResults = searchResponse?.map((sr) => {
@@ -154,7 +156,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return () => {
       activeRequests = false;
     };
-  }, [debouncedSearchTerm, selectedOrganization, speciesId, filters.facilityIds, modified]);
+  }, [debouncedSearchTerm, selectedOrganization, speciesId, filters.facilityIds, modified, searchSortOrder]);
 
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
@@ -246,6 +248,13 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return topBarButtons;
   };
 
+  const onSortChange = (order: SortOrder, orderBy: string) => {
+    setSearchSortOrder({
+      field: orderBy as string,
+      direction: order === 'asc' ? 'Ascending' : 'Descending',
+    });
+  };
+
   return (
     <Grid
       item
@@ -320,6 +329,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             topBarButtons={getTopBarButtons()}
             onSelect={onBatchSelected}
             controlledOnSelect={true}
+            sortHandler={onSortChange}
+            isPresorted={!!searchSortOrder}
           />
         </Box>
       </Grid>

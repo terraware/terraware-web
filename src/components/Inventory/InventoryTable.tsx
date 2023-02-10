@@ -10,6 +10,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
 import Search from './Search';
 import Table from 'src/components/common/table';
+import { SortOrder } from 'src/components/common/table/sort';
+import { SearchSortOrder } from 'src/services/SearchService';
 
 interface InventoryTableProps {
   results: SearchResponseElement[];
@@ -17,10 +19,13 @@ interface InventoryTableProps {
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
   filters: InventoryFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
+  setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
+  isPresorted: boolean;
 }
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
-  const { results, setTemporalSearchValue, temporalSearchValue, filters, setFilters } = props;
+  const { results, setTemporalSearchValue, temporalSearchValue, filters, setFilters, setSearchSortOrder, isPresorted } =
+    props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
   const theme = useTheme();
@@ -71,6 +76,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     return selectedRows.some((row) => row.species_id && row.totalQuantity !== '0');
   };
 
+  const onSortChange = (order: SortOrder, orderBy: string) => {
+    setSearchSortOrder({
+      field: orderBy as string,
+      direction: order === 'asc' ? 'Ascending' : 'Descending',
+    });
+  };
+
   return (
     <>
       <Grid item xs={12}>
@@ -107,6 +119,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     disabled: !isSelectionWithdrawable(),
                   },
                 ]}
+                sortHandler={onSortChange}
+                isPresorted={isPresorted}
               />
             </Grid>
           </Grid>
