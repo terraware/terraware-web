@@ -636,7 +636,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       id='withdrawnQuantity'
                       onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
                       type='text'
-                      value={numericFormatter.format(withdrawnQuantity)}
+                      value={withdrawnQuantity}
                       errorText={fieldsErrors.withdrawnQuantity}
                       className={classes.withdrawnQuantity}
                     />
@@ -646,7 +646,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       label={strings.TOTAL_READY_QUANTITY}
                       id='totalReadyQuantity'
                       type='text'
-                      value={totalReadyQuantity}
+                      value={numericFormatter.format(totalReadyQuantity)}
                       display={true}
                     />
                   </Grid>

@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
@@ -6,6 +7,8 @@ import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useUser } from 'src/providers';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 type ReassignmentTabPanelContentProps = {
   species: Species[];
@@ -21,8 +24,15 @@ export default function ReassignmentTabPanelContent({
   withdrawal,
   delivery,
 }: ReassignmentTabPanelContentProps): JSX.Element {
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+
+  const quantity = delivery?.plantings
+    ?.filter((planting) => planting.type === 'Reassignment To')
+    ?.reduce((acc, planting) => acc + planting.numPlants, 0);
 
   const overviewCardData = [
     {
@@ -35,11 +45,7 @@ export default function ReassignmentTabPanelContent({
     },
     {
       title: strings.QUANTITY,
-      data:
-        delivery?.plantings
-          ?.filter((planting) => planting.type === 'Reassignment To')
-          ?.reduce((acc, planting) => acc + planting.numPlants, 0)
-          .toString() ?? '',
+      data: typeof quantity === 'number' ? numericFormatter.format(quantity) : quantity,
     },
   ];
 

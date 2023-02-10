@@ -1,9 +1,11 @@
+import { useEffect, useMemo, useState } from 'react';
 import { TableColumnType } from '@terraware/web-components';
-import { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
 import Table from 'src/components/common/table';
+import { useUser } from 'src/providers';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 type SpeciesWithdrawal = {
   name?: string;
@@ -25,6 +27,10 @@ export default function NonOutplantWithdrawalTable({
   withdrawal,
   batches,
 }: NonOutplantWithdrawalTableProps): JSX.Element {
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
+
   const [rowData, setRowData] = useState<SpeciesWithdrawal[]>([]);
   const columns: TableColumnType[] = [
     { key: 'name', name: strings.SPECIES, type: 'string' },
@@ -59,8 +65,26 @@ export default function NonOutplantWithdrawalTable({
       }
     });
 
-    setRowData(Object.values(speciesBatchMap));
-  }, [species, batches, withdrawal]);
+    setRowData(
+      Object.values(speciesBatchMap).map((speciesInfo: any) => {
+        const getFormattedValue = (key: string) => {
+          const value = speciesInfo[key];
+          return isNaN(value) ? value : numericFormatter.format(value);
+        };
+
+        const notReady = getFormattedValue('notReady');
+        const ready = getFormattedValue('ready');
+        const total = getFormattedValue('total');
+
+        return {
+          ...speciesInfo,
+          notReady,
+          ready,
+          total,
+        };
+      })
+    );
+  }, [species, batches, withdrawal, numericFormatter]);
 
   return <Table id='non-outplant-withdrawal-table' columns={columns} rows={rowData} orderBy={'name'} />;
 }

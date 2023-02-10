@@ -1,9 +1,11 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Species } from 'src/types/Species';
 import { Delivery } from 'src/types/Tracking';
 import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
-import { useEffect, useState } from 'react';
 import Table from 'src/components/common/table';
+import { useUser } from 'src/providers';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 type OutplantReassignmentTableProps = {
   species: Species[];
@@ -18,6 +20,10 @@ export default function OutplantReassignmentTable({
   plotNames,
   withdrawalNotes,
 }: OutplantReassignmentTableProps): JSX.Element {
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
+
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
   const columns: TableColumnType[] = [
     { key: 'species', name: strings.SPECIES, type: 'string' },
@@ -49,8 +55,8 @@ export default function OutplantReassignmentTable({
           species: speciesName,
           from_plot: '',
           to_plot: deliveryPlanting.plotId ? plotNames[deliveryPlanting.plotId] : '',
-          original_qty: deliveryPlanting.numPlants.toString(),
-          final_qty: (deliveryPlanting.numPlants + reassignmentFromPlanting.numPlants).toString(),
+          original_qty: numericFormatter.format(deliveryPlanting.numPlants),
+          final_qty: numericFormatter.format(deliveryPlanting.numPlants + reassignmentFromPlanting.numPlants),
           notes: withdrawalNotes ?? '',
         });
         rows.push({
@@ -58,14 +64,14 @@ export default function OutplantReassignmentTable({
           from_plot: deliveryPlanting.plotId ? plotNames[deliveryPlanting.plotId] : '',
           to_plot: reassignmentToPlanting.plotId ? plotNames[reassignmentToPlanting.plotId] : '',
           original_qty: '0',
-          final_qty: reassignmentToPlanting.numPlants.toString(),
+          final_qty: numericFormatter.format(reassignmentToPlanting.numPlants),
           notes: reassignmentToPlanting.notes ?? '',
         });
       }
     }
 
     setRowData(rows);
-  }, [delivery, species, plotNames, withdrawalNotes]);
+  }, [delivery, species, plotNames, withdrawalNotes, numericFormatter]);
 
   return <Table id='outplant-reassignment-table' columns={columns} rows={rowData} orderBy={'name'} />;
 }

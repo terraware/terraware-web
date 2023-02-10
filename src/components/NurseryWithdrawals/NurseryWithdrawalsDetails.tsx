@@ -43,7 +43,7 @@ export interface WithdrawalSummary {
   destinationName: string;
   plotNames: string;
   scientificNames: string[];
-  totalWithdrawn: number;
+  totalWithdrawn: string;
   hasReassignments: boolean;
 }
 
@@ -106,7 +106,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
           destinationName: withdrawalSummaryRecord.destinationName as string,
           plotNames: withdrawalSummaryRecord.plotNames as string,
           scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
-          totalWithdrawn: Number(withdrawalSummaryRecord.totalWithdrawn),
+          totalWithdrawn: withdrawalSummaryRecord.totalWithdrawn as string,
           hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),
         });
       }
