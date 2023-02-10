@@ -210,7 +210,7 @@ export default function NurseryWithdrawals(): JSX.Element {
         setSearchResults(
           apiSearchResults.map((result: any) => ({
             ...result,
-            totalWithdrawn: numericParser.parse(result?.totalWithdrawn?.toString()),
+            totalWithdrawn: numericParser.parse(result.totalWithdrawn?.toString()),
           }))
         );
       }
