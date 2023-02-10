@@ -45,7 +45,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
       if (response.requestSucceeded) {
         setPlantingSite(response.site);
       } else {
-        snackbar.toastError(response.error);
+        snackbar.toastError();
       }
     };
 

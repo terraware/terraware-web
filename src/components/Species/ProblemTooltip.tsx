@@ -66,7 +66,7 @@ export default function ProblemTooltip({
   const acceptFix = async (problemId: number) => {
     const response = await acceptProblemSuggestion(problemId);
     if (!response.requestSucceeded) {
-      snackbar.toastError(response.error ?? strings.UNEXPECTED_ERROR, strings.GENERIC_ERROR);
+      snackbar.toastError(strings.UNEXPECTED_ERROR, strings.GENERIC_ERROR);
     }
     setOpenedTooltip(false);
     if (reloadData) {

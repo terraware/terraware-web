@@ -45,7 +45,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 export type AddSpeciesModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
-  onError?: (snackbarMessage: string) => void;
   initialSpecies?: Species;
 };
 

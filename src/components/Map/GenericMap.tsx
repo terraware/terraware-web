@@ -40,7 +40,7 @@ export default function GenericMap({
       setToken(response.token);
       setMapId(Date.now().toString());
     } else {
-      snackbar.toastError(response.error);
+      snackbar.toastError();
     }
   }, [snackbar]);
 

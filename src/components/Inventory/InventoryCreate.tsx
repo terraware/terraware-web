@@ -133,7 +133,7 @@ export default function CreateInventory(): JSX.Element {
         pathname: APP_PATHS.INVENTORY,
       });
     } else {
-      snackbar.toastError(response.error);
+      snackbar.toastError();
     }
   };
 

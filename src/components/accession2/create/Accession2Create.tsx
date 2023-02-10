@@ -106,7 +106,7 @@ export default function CreateAccession(): JSX.Element {
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
       });
     } else {
-      snackbar.toastError(response.error);
+      snackbar.toastError();
     }
   };
 

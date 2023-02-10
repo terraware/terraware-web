@@ -33,7 +33,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
       }
       onCloseHandler();
     } else {
-      snackbar.toastError(response.error);
+      snackbar.toastError();
     }
   };
 

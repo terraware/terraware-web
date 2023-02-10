@@ -137,7 +137,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         reload();
         onCloseHandler();
       } else {
-        snackbar.toastError(response.error);
+        snackbar.toastError();
       }
     }
   };

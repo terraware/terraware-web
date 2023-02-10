@@ -112,7 +112,7 @@ export default function NurseryWithdrawalsFiltersPopover({
       if (result.requestSucceeded) {
         setPlantingSites(result.sites);
       } else {
-        snackbar.toastError(result.error);
+        snackbar.toastError();
       }
     };
     populatePlantingSites();

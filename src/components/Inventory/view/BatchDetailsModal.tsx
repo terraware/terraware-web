@@ -183,7 +183,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         reload();
         onCloseHandler();
       } else {
-        snackbar.toastError(response.error);
+        snackbar.toastError();
       }
     }
   };
