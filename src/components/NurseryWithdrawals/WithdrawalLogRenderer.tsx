@@ -20,93 +20,83 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const WithdrawalLogRenderer = (formatter: { format: (num: number) => string }) => {
+export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
 
-  return (props: RendererProps<TableRowType>): JSX.Element => {
-    const { column, row, value, index, onRowClick } = props;
-    const { OUTPLANT } = NurseryWithdrawalPurposes;
-    const COLUMN_WIDTH = 250;
+  const { column, row, value, index, onRowClick } = props;
+  const { OUTPLANT } = NurseryWithdrawalPurposes;
+  const COLUMN_WIDTH = 250;
 
-    const rowClick = (event?: React.SyntheticEvent) => {
-      if (onRowClick) {
-        onRowClick();
-      }
-    };
-
-    const createLinkToNurseryWithdrawalDetail = (iValue: React.ReactNode | unknown[]) => {
-      const nurseryWithdrawalDetailLocation = APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(
-        ':withdrawalId',
-        row.id.toString()
-      );
-      return (
-        <Link to={nurseryWithdrawalDetailLocation} className={classes.link}>
-          {iValue as React.ReactNode}
-        </Link>
-      );
-    };
-
-    const getTruncated = (inputValues: any) => {
-      return (
-        <TextTruncated
-          stringList={inputValues}
-          maxLengthPx={COLUMN_WIDTH}
-          textStyle={{ fontSize: 14 }}
-          showAllStyle={{ padding: theme.spacing(2), fontSize: 14 }}
-          listSeparator={strings.LIST_SEPARATOR}
-          moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
-          moreText={strings.TRUNCATED_TEXT_MORE_LINK}
-        />
-      );
-    };
-
-    if (column.key === 'speciesScientificNames') {
-      return <CellRenderer index={index} column={column} value={getTruncated(value)} row={row} />;
+  const rowClick = (event?: React.SyntheticEvent) => {
+    if (onRowClick) {
+      onRowClick();
     }
-
-    if (column.key === 'plotNames' && value) {
-      return <CellRenderer index={index} column={column} value={getTruncated([value])} row={row} />;
-    }
-
-    if (column.key === 'withdrawnDate') {
-      return (
-        <CellRenderer index={index} column={column} value={createLinkToNurseryWithdrawalDetail(value)} row={row} />
-      );
-    }
-
-    if (column.key === 'totalWithdrawn') {
-      return <CellRenderer index={index} column={column} value={formatter.format(value as number)} row={row} />;
-    }
-
-    if (column.key === 'hasReassignments') {
-      if (row.purpose === OUTPLANT && row.plotNames) {
-        return (
-          <>
-            <CellRenderer
-              index={index}
-              column={column}
-              row={row}
-              value={
-                <Button
-                  id='reassign'
-                  label={strings.REASSIGN}
-                  onClick={rowClick}
-                  size='small'
-                  priority='secondary'
-                  className={classes.text}
-                  disabled={isTrue(row.hasReassignments)}
-                />
-              }
-            />
-          </>
-        );
-      }
-      return <CellRenderer index={index} column={column} row={row} value='' />;
-    }
-
-    return <CellRenderer {...props} />;
   };
-};
 
-export default WithdrawalLogRenderer;
+  const createLinkToNurseryWithdrawalDetail = (iValue: React.ReactNode | unknown[]) => {
+    const nurseryWithdrawalDetailLocation = APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(
+      ':withdrawalId',
+      row.id.toString()
+    );
+    return (
+      <Link to={nurseryWithdrawalDetailLocation} className={classes.link}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
+  };
+
+  const getTruncated = (inputValues: any) => {
+    return (
+      <TextTruncated
+        stringList={inputValues}
+        maxLengthPx={COLUMN_WIDTH}
+        textStyle={{ fontSize: 14 }}
+        showAllStyle={{ padding: theme.spacing(2), fontSize: 14 }}
+        listSeparator={strings.LIST_SEPARATOR}
+        moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
+        moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+      />
+    );
+  };
+
+  if (column.key === 'speciesScientificNames') {
+    return <CellRenderer index={index} column={column} value={getTruncated(value)} row={row} />;
+  }
+
+  if (column.key === 'plotNames' && value) {
+    return <CellRenderer index={index} column={column} value={getTruncated([value])} row={row} />;
+  }
+
+  if (column.key === 'withdrawnDate') {
+    return <CellRenderer index={index} column={column} value={createLinkToNurseryWithdrawalDetail(value)} row={row} />;
+  }
+
+  if (column.key === 'hasReassignments') {
+    if (row.purpose === OUTPLANT && row.plotNames) {
+      return (
+        <>
+          <CellRenderer
+            index={index}
+            column={column}
+            row={row}
+            value={
+              <Button
+                id='reassign'
+                label={strings.REASSIGN}
+                onClick={rowClick}
+                size='small'
+                priority='secondary'
+                className={classes.text}
+                disabled={isTrue(row.hasReassignments)}
+              />
+            }
+          />
+        </>
+      );
+    }
+    return <CellRenderer index={index} column={column} row={row} value='' />;
+  }
+
+  return <CellRenderer {...props} />;
+}

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, Theme, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
 import { Delivery } from 'src/types/Tracking';
 import { getDelivery } from 'src/api/tracking/deliveries';
@@ -23,8 +23,18 @@ import { useOrganization } from 'src/providers/hooks';
 import Table from 'src/components/common/table';
 import { useUser } from 'src/providers';
 import { useNumberParser, useNumberFormatter } from 'src/utils/useNumber';
+import { makeStyles } from '@mui/styles';
+import BackToLink from 'src/components/common/BackToLink';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  backToWithdrawals: {
+    marginLeft: 0,
+    marginTop: theme.spacing(2),
+  },
+}));
 
 export default function NurseryReassignment(): JSX.Element {
+  const classes = useStyles();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
   const numberParser = useNumberParser();
@@ -216,7 +226,17 @@ export default function NurseryReassignment(): JSX.Element {
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <TitleDescription title={strings.REASSIGN_SEEDLINGS} description={strings.REASSIGN_SEEDLINGS_DESCRIPTION} />
+        <Box>
+          <BackToLink
+            id='back'
+            to={APP_PATHS.NURSERY_WITHDRAWALS}
+            className={classes.backToWithdrawals}
+            name={strings.WITHDRAWAL_LOG}
+          />
+        </Box>
+        <Box marginTop={theme.spacing(3)}>
+          <TitleDescription title={strings.REASSIGN_SEEDLINGS} description={strings.REASSIGN_SEEDLINGS_DESCRIPTION} />
+        </Box>
       </PageHeaderWrapper>
       <Grid item xs={12}>
         <PageSnackbar />

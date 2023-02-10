@@ -1,6 +1,6 @@
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import strings from 'src/strings';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -23,8 +23,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
 import { PillList } from '@terraware/web-components';
 import Table from 'src/components/common/table';
-import { useUser } from 'src/providers';
-import { useNumberParser, useNumberFormatter } from 'src/utils/useNumber';
 
 export type NurseryWithdrawalsFiltersType = {
   fromNurseryIds?: string[];
@@ -42,9 +40,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function NurseryWithdrawals(): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { user } = useUser();
-  const numberParser = useNumberParser();
-  const numberFormatter = useNumberFormatter();
   const theme = useTheme();
   const contentRef = useRef(null);
   const classes = useStyles();
@@ -69,9 +64,6 @@ export default function NurseryWithdrawals(): JSX.Element {
     { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
     { key: 'hasReassignments', name: '', type: 'string' },
   ];
-
-  const numericParser = useMemo(() => numberParser(user?.locale), [numberParser, user?.locale]);
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   const onWithdrawalClicked = (withdrawal: any) => {
     history.push({
@@ -207,15 +199,10 @@ export default function NurseryWithdrawals(): JSX.Element {
     );
     if (apiSearchResults) {
       if (getRequestId('searchWithdrawals') === requestId) {
-        setSearchResults(
-          apiSearchResults.map((result: any) => ({
-            ...result,
-            totalWithdrawn: numericParser.parse(result.totalWithdrawn?.toString()),
-          }))
-        );
+        setSearchResults(apiSearchResults);
       }
     }
-  }, [getSearchChildren, selectedOrganization, searchSortOrder, numericParser]);
+  }, [getSearchChildren, selectedOrganization, searchSortOrder]);
 
   useEffect(() => {
     onApplyFilters();
@@ -297,8 +284,9 @@ export default function NurseryWithdrawals(): JSX.Element {
   );
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
+    const orderByStr = orderBy === 'speciesScientificNames' ? 'batchWithdrawals.batch_species_scientificName' : orderBy;
     setSearchSortOrder({
-      field: orderBy as string,
+      field: orderByStr as string,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };
@@ -352,9 +340,10 @@ export default function NurseryWithdrawals(): JSX.Element {
                 id='withdrawal-log'
                 columns={columns}
                 rows={searchResults || []}
-                Renderer={WithdrawalLogRenderer(numericFormatter)}
+                Renderer={WithdrawalLogRenderer}
                 orderBy={searchSortOrder.field}
                 order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+                isPresorted={searchSortOrder.field !== 'batchWithdrawals.batch_species_scientificName'}
                 onSelect={onWithdrawalClicked}
                 controlledOnSelect={true}
                 sortHandler={onSortChange}
