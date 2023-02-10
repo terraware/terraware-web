@@ -10,7 +10,12 @@ import { isAdmin } from 'src/utils/organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
-import { FieldNodePayload, search, SearchNodePayload, SearchResponseElement } from 'src/api/search';
+import SearchService, {
+  FieldNodePayload,
+  SearchNodePayload,
+  SearchResponseElement,
+  SearchSortOrder,
+} from 'src/services/SearchService';
 import InventoryTable from './InventoryTable';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
 import useDebounce from 'src/utils/useDebounce';
@@ -58,6 +63,16 @@ type FacilityName = {
   facility_name: string;
 };
 
+const BE_SORTED_FIELDS = [
+  'species_id',
+  'species_scientificName',
+  'facilityInventories.facility_name',
+  'germinatingQuantity',
+  'notReadyQuantity',
+  'readyQuantity',
+  'totalQuantity',
+];
+
 type InventoryResult = {
   species_id: string;
   species_scientificName: string;
@@ -81,6 +96,10 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
+    field: 'species_scientificName',
+    direction: 'Ascending',
+  });
   const contentRef = useRef(null);
 
   const goTo = (appPath: string) => {
@@ -129,19 +148,16 @@ export default function Inventory(props: InventoryProps): JSX.Element {
 
   const isOnboarded = hasNurseries && hasSpecies;
 
+  const onSearchSortOrder = (order: SearchSortOrder) => {
+    const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
+    setSearchSortOrder(isClientSorted ? undefined : order);
+  };
+
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
       prefix: 'inventories',
-      fields: [
-        'species_id',
-        'species_scientificName',
-        'species_commonName',
-        'facilityInventories.facility_name',
-        'germinatingQuantity',
-        'notReadyQuantity',
-        'readyQuantity',
-        'totalQuantity',
-      ],
+      fields: [...BE_SORTED_FIELDS, 'species_commonName'],
+      sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
       search: {
         operation: 'and',
         children: [
@@ -212,13 +228,13 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     }
 
     return params;
-  }, [filters, debouncedSearchTerm, selectedOrganization]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
 
   const onApplyFilters = useCallback(async () => {
     const params: SearchNodePayload = getParams();
     const requestId = Math.random().toString();
     setRequestId('searchInventory', requestId);
-    const apiSearchResults = await search(params);
+    const apiSearchResults = await SearchService.search(params);
     const updatedResult = apiSearchResults?.map((result) => {
       const resultTyped = result as InventoryResult;
       const facilityInventoriesNames = resultTyped.facilityInventories.map((nursery) => nursery.facility_name);
@@ -339,6 +355,8 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               setTemporalSearchValue={setTemporalSearchValue}
               filters={filters}
               setFilters={setFilters}
+              setSearchSortOrder={onSearchSortOrder}
+              isPresorted={!!searchSortOrder}
             />
           ) : unfilteredInventory === null ? (
             <div className={classes.spinnerContainer}>
