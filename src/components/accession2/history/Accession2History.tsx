@@ -62,6 +62,11 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
           </Typography>
           <Typography fontWeight={500}>
             {item.fullName || strings.NAME_UNKNOWN}&nbsp;{item.description}
+            {item.notes && (
+              <Typography fontSize={'14px'} fontWeight={300}>
+                {item.notes}
+              </Typography>
+            )}
           </Typography>
         </Box>
       ))}
