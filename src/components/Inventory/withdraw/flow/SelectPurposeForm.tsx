@@ -417,10 +417,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   useEffect(() => {
     setWithdrawnQuantity(
-      (readyQuantityWithdrawn ? +numericParser.parse(readyQuantityWithdrawn) : 0) +
-        (notReadyQuantityWithdrawn ? +numericParser.parse(notReadyQuantityWithdrawn) : 0)
+      (readyQuantityWithdrawn ? +readyQuantityWithdrawn : 0) +
+        (notReadyQuantityWithdrawn ? +notReadyQuantityWithdrawn : 0)
     );
-  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, numericParser]);
+  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn]);
 
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
