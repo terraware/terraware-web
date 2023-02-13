@@ -282,10 +282,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
     let newSearchCriteria = searchCriteria || {};
     if (stage.length || query.has('stage')) {
       delete newSearchCriteria.state;
-      const stageNames = ACCESSION_2_STATES.map(name => stateName(name));
-      const stages = (stage || []).filter(
-        (stageName) => stageNames.indexOf(stageName) !== -1
-      );
+      const stageNames = ACCESSION_2_STATES.map((name) => stateName(name));
+      const stages = (stage || []).filter((stageName) => stageNames.indexOf(stageName) !== -1);
       if (stages.length) {
         newSearchCriteria = {
           ...newSearchCriteria,

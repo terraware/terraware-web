@@ -234,7 +234,7 @@ export default function SeedSummary(): JSX.Element {
                         <Grid item xs={cardGridSize()} key={state}>
                           <AccessionByStatus
                             label={stateName(state)}
-                            status={state}
+                            status={stateName(state)}
                             quantity={summary.value?.accessionsByState[state]}
                           />
                         </Grid>
