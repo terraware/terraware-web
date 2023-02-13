@@ -106,12 +106,9 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   } = props;
   const [selectedLocation, setSelectedLocation] = useState<Device>();
   const [selectedPeriod, setSelectedPeriod] = useState<string>();
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(
-    () => numberFormatter(loadedStringsForLocale),
-    [loadedStringsForLocale, numberFormatter]
-  );
+  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
 
   useEffect(() => {
     if (defaultSensor) {
@@ -144,7 +141,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
       chartReference: React.RefObject<HTMLCanvasElement>
     ) => {
       const ctx = chartReference?.current?.getContext('2d');
-      if (ctx && selectedLocation && selectedPeriod && loadedStringsForLocale) {
+      if (ctx && selectedLocation && selectedPeriod && activeLocale) {
         const commonDatasets = [
           {
             data: temperatureValues?.map((entry) => {
@@ -295,7 +292,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
         }
 
         const timePeriodParams = getTimePeriodParams(selectedPeriod, timeZone);
-        window.temperatureHumidityChart = await newChart(loadedStringsForLocale, ctx, {
+        window.temperatureHumidityChart = await newChart(activeLocale, ctx, {
           type: 'scatter',
           data: {
             datasets: datasetsToUse,
@@ -409,7 +406,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
     ) {
       getChartData();
     }
-  }, [availableLocations, loadedStringsForLocale, numericFormatter, selectedPeriod, selectedLocation, timeZone]);
+  }, [availableLocations, activeLocale, numericFormatter, selectedPeriod, selectedLocation, timeZone]);
 
   const onChangeLocation = (newValue: string) => {
     const location = availableLocations?.find((aL) => aL.name === newValue);

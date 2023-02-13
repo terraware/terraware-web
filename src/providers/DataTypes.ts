@@ -25,9 +25,18 @@ export type ProvidedOrganizationData = {
 };
 
 export type ProvidedLocalizationData = {
-  locale: string;
+  /**
+   * Which locale's strings are currently available from the "strings" module. This is usually what
+   * you'll want to use if you need to reference the user's current locale.
+   */
+  activeLocale: string | null;
+  /**
+   * Which locale has been selected in the locale selector. Strings for this locale may not be
+   * available yet if the user has just changed locales or if the page is still loading; only use
+   * this if you don't need to look up anything from the "strings" module.
+   */
+  selectedLocale: string;
+  setSelectedLocale: (locale: string) => void;
   supportedTimeZones: TimeZoneDescription[];
-  setLocale: (locale: string) => void;
-  loadedStringsForLocale: string | null;
   bootstrapped: boolean;
 };

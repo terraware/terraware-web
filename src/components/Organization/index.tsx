@@ -26,14 +26,14 @@ export default function OrganizationView(): JSX.Element {
   const [countries, setCountries] = useState<Country[]>();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const { isMobile } = useDeviceInfo();
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const timeZones = useTimeZones();
   const utcTimeZone = getUTC(timeZones);
   const timeZoneFeatureEnabled = isEnabled('Timezones');
   const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization.timeZone)?.longName;
 
   useEffect(() => {
-    if (loadedStringsForLocale) {
+    if (activeLocale) {
       const populateCountries = async () => {
         const response = await searchCountries();
         if (response) {
@@ -43,7 +43,7 @@ export default function OrganizationView(): JSX.Element {
 
       populateCountries();
     }
-  }, [loadedStringsForLocale]);
+  }, [activeLocale]);
 
   useEffect(() => {
     const populatePeople = async () => {

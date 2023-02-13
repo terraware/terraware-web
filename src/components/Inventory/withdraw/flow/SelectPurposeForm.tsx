@@ -417,10 +417,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   useEffect(() => {
     setWithdrawnQuantity(
-      (readyQuantityWithdrawn ? +numericParser.parse(readyQuantityWithdrawn) : 0) +
-        (notReadyQuantityWithdrawn ? +numericParser.parse(notReadyQuantityWithdrawn) : 0)
+      (readyQuantityWithdrawn ? +readyQuantityWithdrawn : 0) +
+        (notReadyQuantityWithdrawn ? +notReadyQuantityWithdrawn : 0)
     );
-  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, numericParser]);
+  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn]);
 
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
@@ -635,7 +635,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       label={strings.WITHDRAW_QUANTITY_REQUIRED}
                       id='withdrawnQuantity'
                       onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
-                      type='text'
+                      type='number'
                       value={withdrawnQuantity}
                       errorText={fieldsErrors.withdrawnQuantity}
                       className={classes.withdrawnQuantity}
@@ -645,7 +645,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Textfield
                       label={strings.TOTAL_READY_QUANTITY}
                       id='totalReadyQuantity'
-                      type='text'
+                      type='number'
                       value={numericFormatter.format(totalReadyQuantity)}
                       display={true}
                     />
@@ -662,7 +662,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         label={strings.NOT_READY_QUANTITY_REQUIRED}
                         id='notReadyQuantityWithdrawn'
                         onChange={(value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
-                        type='text'
+                        type='number'
                         value={notReadyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                         className={classes.notReadyQuantityWithdrawn}
@@ -686,7 +686,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         label={strings.READY_QUANTITY_REQUIRED}
                         id='readyQuantityWithdrawn'
                         onChange={(value: unknown) => setReadyQuantityWithdrawn(value as number)}
-                        type='text'
+                        type='number'
                         value={readyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
                         className={classes.readyQuantityWithdrawn}

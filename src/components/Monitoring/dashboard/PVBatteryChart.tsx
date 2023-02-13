@@ -90,12 +90,9 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   const classes = useStyles({ isMobile, isDesktop });
   const { BMU, defaultTimePeriod, updateTimePeriodPreferences, timeZone } = props;
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(
-    () => numberFormatter(loadedStringsForLocale),
-    [loadedStringsForLocale, numberFormatter]
-  );
+  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
 
   useEffect(() => {
     if (defaultTimePeriod) {
@@ -110,9 +107,9 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
       chartReference: React.RefObject<HTMLCanvasElement>
     ) => {
       const ctx = chartReference?.current?.getContext('2d');
-      if (ctx && selectedPVBatteryPeriod && loadedStringsForLocale) {
+      if (ctx && selectedPVBatteryPeriod && activeLocale) {
         const timePeriodParams = getTimePeriodParams(selectedPVBatteryPeriod, timeZone);
-        window.pvBatteryChart = await newChart(loadedStringsForLocale, ctx, {
+        window.pvBatteryChart = await newChart(activeLocale, ctx, {
           type: 'scatter',
           data: {
             datasets: [
@@ -239,7 +236,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
     if (selectedPVBatteryPeriod) {
       getChartData();
     }
-  }, [BMU, loadedStringsForLocale, numericFormatter, selectedPVBatteryPeriod, timeZone]);
+  }, [BMU, activeLocale, numericFormatter, selectedPVBatteryPeriod, timeZone]);
 
   const onChangePVBatterySelectedPeriod = (newValue: string) => {
     setSelectedPVBatteryPeriod(newValue);

@@ -74,7 +74,7 @@ export default function PeopleList(): JSX.Element {
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const columns: TableColumnType[] = [
     { key: 'email', name: strings.EMAIL, type: 'string' },
     { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
@@ -140,10 +140,10 @@ export default function PeopleList(): JSX.Element {
       }
     };
 
-    if (loadedStringsForLocale) {
+    if (activeLocale) {
       refreshSearch();
     }
-  }, [debouncedSearchTerm, selectedOrganization, loadedStringsForLocale]);
+  }, [debouncedSearchTerm, selectedOrganization, activeLocale]);
 
   const goToNewPerson = () => {
     const newPersonLocation = {

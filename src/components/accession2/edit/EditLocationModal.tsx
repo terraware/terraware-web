@@ -23,7 +23,7 @@ export interface EditLocationModalProps {
 
 export default function EditLocationModal(props: EditLocationModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const { onClose, open, accession, reload } = props;
   const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) as Facility[]) || [];
   const [storageLocations, setStorageLocations] = useState<StorageLocationPayload[]>([]);
@@ -42,10 +42,10 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
 
   useEffect(() => {
     const setLocations = async () => {
-      if (record.facilityId && loadedStringsForLocale) {
+      if (record.facilityId && activeLocale) {
         const response = await SeedBankService.getStorageLocations(record.facilityId);
         if (response.requestSucceeded) {
-          const collator = new Intl.Collator(loadedStringsForLocale);
+          const collator = new Intl.Collator(activeLocale);
           setStorageLocations(response.locations.sort((a, b) => collator.compare(a.name, b.name)));
         } else {
           setStorageLocations([]);
@@ -53,7 +53,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
       }
     };
     setLocations();
-  }, [loadedStringsForLocale, record.facilityId]);
+  }, [activeLocale, record.facilityId]);
 
   const saveLocation = async () => {
     const response = await AccessionService.updateAccession({

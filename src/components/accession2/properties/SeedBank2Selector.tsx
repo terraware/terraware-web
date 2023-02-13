@@ -17,7 +17,7 @@ type SeedBank2SelectorProps = {
 
 export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const { record, onChange, validate } = props;
   const [storageLocations, setStorageLocations] = useState<StorageLocationPayload[]>([]);
   const { isMobile } = useDeviceInfo();
@@ -34,10 +34,10 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
 
   useEffect(() => {
     const setLocation = async () => {
-      if (record.facilityId && loadedStringsForLocale) {
+      if (record.facilityId && activeLocale) {
         const response = await SeedBankService.getStorageLocations(record.facilityId);
         if (response.requestSucceeded) {
-          const collator = new Intl.Collator(loadedStringsForLocale);
+          const collator = new Intl.Collator(activeLocale);
           setStorageLocations(response.locations.sort((a, b) => collator.compare(a.name, b.name)));
           return;
         }
@@ -45,7 +45,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
       setStorageLocations([]);
     };
     setLocation();
-  }, [loadedStringsForLocale, record.facilityId]);
+  }, [activeLocale, record.facilityId]);
 
   return (
     <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between'>

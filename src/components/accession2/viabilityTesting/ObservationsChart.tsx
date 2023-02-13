@@ -21,13 +21,13 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
   const classes = useStyles();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
 
   useEffect(() => {
     const createChart = async () => {
       const ctx = canvasRef?.current?.getContext('2d');
-      if (ctx && loadedStringsForLocale) {
+      if (ctx && activeLocale) {
         if (chartRef.current) {
           chartRef.current?.destroy();
           chartRef.current = null;
@@ -45,7 +45,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
           y: entry.seedsGerminated,
         }));
 
-        chartRef.current = await newChart(loadedStringsForLocale, ctx, {
+        chartRef.current = await newChart(activeLocale, ctx, {
           type: 'line',
           data: {
             datasets: [
@@ -121,7 +121,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
 
     return () => chartRef.current?.destroy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadedStringsForLocale, observations]);
+  }, [activeLocale, observations]);
 
   return <canvas id='myChart' ref={canvasRef} className={classes.chart} />;
 }

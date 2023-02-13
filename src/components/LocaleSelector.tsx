@@ -12,7 +12,7 @@ import strings from 'src/strings';
 type LocaleSelectorProps = {
   transparent?: boolean;
   onChangeLocale?: (newValue: string) => void;
-  selectedLocale?: string;
+  localeSelected?: string;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function LocaleSelector({
   transparent,
   onChangeLocale,
-  selectedLocale,
+  localeSelected,
 }: LocaleSelectorProps): JSX.Element {
   const { user, reloadUser } = useUser();
   const localeItems: DropdownItem[] = supportedLocales.map((supportedLocale) => ({
@@ -58,11 +58,11 @@ export default function LocaleSelector({
 
   return (
     <LocalizationContext.Consumer>
-      {({ locale, setLocale }) => {
+      {({ selectedLocale, setSelectedLocale }) => {
         const onChange = (selectedItem: DropdownItem) => {
           const newValue = selectedItem.value;
-          if (locale !== newValue) {
-            setLocale(newValue);
+          if (selectedLocale !== newValue) {
+            setSelectedLocale(newValue);
           }
 
           if (user && user.locale !== newValue) {
@@ -82,7 +82,7 @@ export default function LocaleSelector({
               <div>
                 <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
                   <span className={classes.selected}>
-                    {localeItems.find((iLocale) => iLocale.value === locale)?.label}
+                    {localeItems.find((iLocale) => iLocale.value === selectedLocale)?.label}
                   </span>
                   <Icon name='chevronDown' size='medium' className={classes.chevronDown} />
                 </IconButton>
