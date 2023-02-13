@@ -10,6 +10,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import theme from './theme';
 import { APP_PATHS } from './constants';
 import { ThemeProvider } from '@mui/material';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import AppBootstrap from './AppBootstrap';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -19,7 +22,11 @@ ReactDOM.render(
           <Switch>
             <Route path={APP_PATHS.ERROR}>
               <ThemeProvider theme={theme}>
-                <AppError />
+                <AppBootstrap>
+                  <Provider store={store}>
+                    <AppError />
+                  </Provider>
+                </AppBootstrap>
               </ThemeProvider>
             </Route>
             <Route path={'*'}>
