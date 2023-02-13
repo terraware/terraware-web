@@ -1,8 +1,7 @@
-import { Search as SearchIcon } from '@mui/icons-material';
-import { InputAdornment, TextField, Theme } from '@mui/material';
+import { TextField, Theme } from '@mui/material';
 import React from 'react';
 import strings from 'src/strings';
-import { FieldNodePayload } from '../../../../api/search';
+import { FieldNodePayload } from 'src/api/search';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -14,6 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   field: string;
   onChange: (filter: FieldNodePayload) => void;
+  onDelete: () => void;
   values: (string | null)[];
   autoFocus: boolean;
 }
@@ -26,22 +26,20 @@ export default function Search(props: Props): JSX.Element {
     setSearch(props.values[0] || '');
   }, [props.values]);
 
-  const onSearchClick = () => {
-    const values = [search];
+  const onSearch = (searchVal: string) => {
+    if (searchVal && searchVal !== '') {
+      const values = [searchVal];
 
-    const newFilter: FieldNodePayload = {
-      field: props.field,
-      values,
-      type: 'Fuzzy',
-      operation: 'field',
-    };
+      const newFilter: FieldNodePayload = {
+        field: props.field,
+        values,
+        type: 'Fuzzy',
+        operation: 'field',
+      };
 
-    props.onChange(newFilter);
-  };
-
-  const onEnter = (e: React.KeyboardEvent<Element>) => {
-    if (e.key === 'Enter') {
-      onSearchClick();
+      props.onChange(newFilter);
+    } else {
+      props.onDelete();
     }
   };
 
@@ -49,22 +47,15 @@ export default function Search(props: Props): JSX.Element {
     <div className={classes.box}>
       <TextField
         id={props.field ?? ''}
+        fullWidth={true}
         placeholder={strings.SEARCH}
         variant='outlined'
         value={search}
         autoFocus={props.autoFocus}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position='start'>
-              <SearchIcon onClick={onSearchClick} />
-            </InputAdornment>
-          ),
-        }}
         size='small'
         onChange={(event) => {
-          setSearch(event.target.value);
+          onSearch(event.target.value);
         }}
-        onKeyPress={(e) => onEnter(e)}
       />
     </div>
   );

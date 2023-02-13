@@ -3,7 +3,6 @@ import { makeStyles } from '@mui/styles';
 import React from 'react';
 import TextField from '../../../common/TextField';
 import { FieldNodePayload } from '../../../../api/search';
-import { ArrowForward } from '@mui/icons-material';
 import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -20,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   field: string;
   onChange: (filter: FieldNodePayload) => void;
+  onDelete: () => void;
   values: (string | null)[];
 }
 
@@ -34,7 +34,7 @@ export default function NumberRange(props: Props): JSX.Element {
   }, [props.values]);
 
   const onChange = (id: string, value?: unknown) => {
-    const newValues = props.values.length ? [...props.values] : [minValue, maxValue];
+    const newValues = [minValue, maxValue];
 
     if (id === 'minValue') {
       setMinValue(value as string);
@@ -44,49 +44,29 @@ export default function NumberRange(props: Props): JSX.Element {
       setMaxValue(value as string);
       newValues[1] = (value as string) || null;
     }
-  };
 
-  const onEnter = (e: React.KeyboardEvent<Element>) => {
-    if (e.key === 'Enter') {
-      if (minValue || maxValue) {
-        const newValues = [minValue, maxValue];
+    if (newValues[0] || newValues[1]) {
+      const newFilter: FieldNodePayload = {
+        field: props.field,
+        values: newValues,
+        type: 'Range',
+        operation: 'field',
+      };
 
-        const newFilter: FieldNodePayload = {
-          field: props.field,
-          values: newValues,
-          type: 'Range',
-          operation: 'field',
-        };
-
-        props.onChange(newFilter);
-      }
+      props.onChange(newFilter);
+    } else {
+      props.onDelete();
     }
   };
 
   return (
     <div className={classes.box}>
-      <Grid container spacing={4}>
-        <Grid item xs={5}>
-          <TextField
-            autoFocus={true}
-            id='minValue'
-            value={minValue}
-            onChange={onChange}
-            label={strings.MIN}
-            onKeyPress={(e) => onEnter(e)}
-          />
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <TextField id='minValue' value={minValue} onChange={onChange} label={strings.MIN} />
         </Grid>
-        <Grid item xs={1} className={classes.flexContainer}>
-          <ArrowForward />
-        </Grid>
-        <Grid item xs={5}>
-          <TextField
-            id='maxValue'
-            value={maxValue}
-            onChange={onChange}
-            label={strings.MAX}
-            onKeyPress={(e) => onEnter(e)}
-          />
+        <Grid item xs={6}>
+          <TextField id='maxValue' value={maxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
       </Grid>
     </div>
