@@ -1,4 +1,3 @@
-import { ArrowForward } from '@mui/icons-material';
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { format, isValid } from 'date-fns';
@@ -21,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   field: string;
   onChange: (filter: FieldNodePayload) => void;
+  onDelete: () => void;
   values: (string | null)[];
 }
 
@@ -35,62 +35,49 @@ export default function DateRange(props: Props): JSX.Element {
   }, [props.values]);
 
   const onChangeDate = (id: string, value?: string | null) => {
-    const newValues = props.values.length ? [...props.values] : [startDate, endDate];
+    const newValues = [startDate, endDate];
     if (id === 'startDate' && value) {
       setStartDate(value);
-      newValues[0] = value;
+      newValues[0] = value && isValid(value) ? format(value as unknown as Date, 'yyyy-MM-dd') : null;
     }
     if (id === 'endDate' && value) {
       setEndDate(value);
-      newValues[1] = value;
+      newValues[1] = value && isValid(value) ? format(value as unknown as Date, 'yyyy-MM-dd') : null;
     }
-  };
 
-  const onEnter = (e: React.KeyboardEvent<Element>) => {
-    if (e.key === 'Enter') {
-      if (startDate || endDate) {
-        const formattedStartDate =
-          startDate && isValid(startDate) ? format(startDate as unknown as Date, 'yyyy-MM-dd') : null;
-        const formattedEndDate = endDate && isValid(endDate) ? format(endDate as unknown as Date, 'yyyy-MM-dd') : null;
-        const newValues = [formattedStartDate, formattedEndDate];
+    if (newValues[0] || newValues[1]) {
+      const newFilter: FieldNodePayload = {
+        field: props.field,
+        values: newValues,
+        type: 'Range',
+        operation: 'field',
+      };
 
-        const newFilter: FieldNodePayload = {
-          field: props.field,
-          values: newValues,
-          type: 'Range',
-          operation: 'field',
-        };
-
-        props.onChange(newFilter);
-      }
+      props.onChange(newFilter);
+    } else {
+      props.onDelete();
     }
   };
 
   return (
     <div className={classes.box}>
-      <Grid container spacing={4}>
-        <Grid item xs={5}>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
           <DatePicker
             id='startDate'
-            autoFocus={true}
             value={startDate}
             onChange={(value) => onChangeDate('startDate', value)}
             label={strings.START}
             aria-label='Start date'
-            onKeyPress={(e) => onEnter(e)}
           />
         </Grid>
-        <Grid item xs={1} className={classes.flexContainer}>
-          <ArrowForward />
-        </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <DatePicker
             id='endDate'
             value={endDate}
             onChange={(value) => onChangeDate('endDate', value)}
             label={strings.END}
             aria-label='End date'
-            onKeyPress={(e) => onEnter(e)}
           />
         </Grid>
       </Grid>

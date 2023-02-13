@@ -33,15 +33,6 @@ export default function MultipleSelection(props: Props): JSX.Element {
     setSelections(props.values);
   }, [props.values]);
 
-  React.useEffect(() => {
-    return () => {
-      if (filter.current) {
-        props.onChange(filter.current);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleChange = (value: string | null) => {
     const updatesValues = [...selections];
 
@@ -60,6 +51,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
     };
 
     setSelections(updatesValues);
+    props.onChange(filter.current);
   };
 
   const options = [...props.options];

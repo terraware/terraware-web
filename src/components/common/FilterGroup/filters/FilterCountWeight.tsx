@@ -1,4 +1,3 @@
-import { ArrowForward } from '@mui/icons-material';
 import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
@@ -13,7 +12,7 @@ import { weightUnits } from 'src/units';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
-    width: '460px',
+    width: '100%',
     padding: theme.spacing(1.75),
   },
   flexContainer: {
@@ -58,29 +57,22 @@ export default function FilterCountWeight(props: Props): JSX.Element {
 
     const grams = props.payloads.find((p) => p.field === fields[1] && p.type === 'Range')?.values;
     const newEmptyFields = props.payloads.find((p) => p.type === 'Exact')?.values;
-    if (quantity) {
-      setSeedCount(true);
-      setCountMinValue(quantity[0]);
-      setCountMaxValue(quantity[1]);
-    }
-    if (grams) {
-      setSeedWeight(true);
-      setWeightMinValue(grams[0]?.split(' ')[0]);
-      setWeightMaxValue(grams[1]?.split(' ')[0]);
-      setWeightUnit(grams[0]?.split(' ')[1] ?? defaultWeightUnit);
-    }
-    if (newEmptyFields) {
-      setEmptyFields(true);
-    }
-  }, [fields, props.payloads]);
 
-  React.useEffect(() => {
-    return () => {
-      if (filter.current) {
-        props.onChange(filter.current);
-      }
-    };
-  }, [props]);
+    if (quantity) {
+      setSeedCount(Boolean(quantity));
+    }
+    setCountMinValue((quantity && quantity[0]) || null);
+    setCountMaxValue((quantity && quantity[1]) || null);
+
+    if (grams) {
+      setSeedWeight(Boolean(grams));
+    }
+    setWeightMinValue((grams && grams[0]?.split(' ')[0]) || null);
+    setWeightMaxValue((grams && grams[1]?.split(' ')[0]) || null);
+    setWeightUnit((grams && grams[0]?.split(' ')[1]) ?? defaultWeightUnit);
+
+    setEmptyFields(Boolean(newEmptyFields));
+  }, [fields, props.payloads]);
 
   const onChange = (id?: string, value?: unknown) => {
     let updatedCountMinValue = countMinValue;
@@ -162,11 +154,12 @@ export default function FilterCountWeight(props: Props): JSX.Element {
       operation: 'or',
       children,
     };
+    props.onChange(filter.current);
   };
 
   return (
     <div className={classes.box}>
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <Checkbox
             id='seedCount'
@@ -176,16 +169,13 @@ export default function FilterCountWeight(props: Props): JSX.Element {
             onChange={(value) => onChange('seedCount', value)}
           />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <TextField id='countMinValue' value={countMinValue} onChange={onChange} label={strings.MIN} />
         </Grid>
-        <Grid item xs={1} className={classes.flexContainer}>
-          <ArrowForward />
-        </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <TextField id='countMaxValue' value={countMaxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <TextField id='seeds' disabled={true} value={strings.SEEDS} onChange={onChange} label={strings.UNITS} />
         </Grid>
         <Grid item xs={12}>
@@ -200,16 +190,13 @@ export default function FilterCountWeight(props: Props): JSX.Element {
             onChange={(value) => onChange('seedWeight', value)}
           />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <TextField id='weightMinValue' value={weightMinValue} onChange={onChange} label={strings.MIN} />
         </Grid>
-        <Grid item xs={1} className={classes.flexContainer}>
-          <ArrowForward />
-        </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <TextField id='weightMaxValue' value={weightMaxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <Dropdown
             id='processingUnit'
             label={strings.UNITS}
