@@ -22,7 +22,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../common/Textfield/Textfield';
-import { FieldNodePayload, search, searchCsv, SearchNodePayload } from 'src/api/search';
+import { FieldNodePayload, search, searchCsv, SearchNodePayload, SearchSortOrder } from 'src/api/search';
 import SpeciesFilters from './SpeciesFiltersPopover';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
@@ -43,7 +43,7 @@ import TooltipLearnMoreModal, {
 } from 'src/components/TooltipLearnMoreModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PopoverMenu from '../common/PopoverMenu';
-import { DropdownItem } from '@terraware/web-components';
+import { DropdownItem, SortOrder } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { PillList, PillListItem } from '@terraware/web-components';
 import { isTrue } from 'src/utils/boolean';
@@ -126,6 +126,8 @@ type SpeciesSearchResultRow = Omit<Species, 'growthForm' | 'seedStorageBehavior'
   ecosystemTypes?: string[];
 };
 
+const BE_SORTED_FIELDS = ['scientificName', 'commonName', 'familyName', 'growthForm', 'seedStorageBehavior'];
+
 export default function SpeciesList({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
@@ -143,6 +145,10 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
   const contentRef = useRef(null);
   const { loadedStringsForLocale } = useLocalization();
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
+    field: 'scientificName',
+    direction: 'Descending',
+  } as SearchSortOrder);
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
   const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
@@ -288,18 +294,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
       prefix: 'species',
-      fields: [
-        'id',
-        'scientificName',
-        'commonName',
-        'familyName',
-        'endangered',
-        'rare',
-        'growthForm',
-        'seedStorageBehavior',
-        'ecosystemTypes.ecosystemType',
-        'organization_id',
-      ],
+      fields: [...BE_SORTED_FIELDS, 'id', 'endangered', 'rare', 'ecosystemTypes.ecosystemType', 'organization_id'],
       search: {
         operation: 'and',
         children: [
@@ -313,6 +308,10 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       },
       count: 0,
     };
+
+    if (searchSortOrder) {
+      params.sortOrder = [searchSortOrder];
+    }
 
     if (debouncedSearchTerm) {
       const searchValueChildren: FieldNodePayload[] = [];
@@ -388,26 +387,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     }
 
     return params;
-  }, [record, debouncedSearchTerm, selectedOrganization]);
+  }, [record, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
-      const getSpeciesListWithCS = () => {
-        const speciesListWithCS: SpeciesSearchResultRow[] = [];
-        species.forEach((sp) => {
-          speciesListWithCS.push({
-            ...sp,
-            conservationStatus: getConservationStatusString(sp),
-            growthForm: getGrowthFormString(sp),
-            seedStorageBehavior: getSeedStorageBehaviorString(sp),
-            ecosystemTypes: getEcosystemTypesString(sp),
-          });
-        });
-        return speciesListWithCS;
-      };
-
       const params: SearchNodePayload = getParams();
-      if (params.search.children.length > 1) {
+
+      if (species) {
         // organization id filter will always exist
         const requestId = Math.random().toString();
         setRequestId('searchSpecies', requestId);
@@ -421,18 +407,20 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               scientificName: result.scientificName as string,
               commonName: result.commonName as string,
               familyName: result.familyName as string,
-              growthForm: result.growthForm as any,
-              seedStorageBehavior: result.seedStorageBehavior as any,
-              ecosystemTypes: (result.ecosystemTypes as Record<string, EcosystemType>[])?.map((r) => r.ecosystemType),
+              growthForm: getGrowthFormString(result as Species),
+              seedStorageBehavior: getSeedStorageBehaviorString(result as Species),
+              ecosystemTypes: getEcosystemTypesString({
+                ...result,
+                ecosystemTypes: (result.ecosystemTypes as Record<string, EcosystemType>[])?.map((r) => r.ecosystemType),
+              } as Species),
               rare: isTrue(result.rare),
               endangered: isTrue(result.endangered),
               conservationStatus: getConservationStatusString(result),
             });
           });
+
           setResults(speciesResults);
         }
-      } else {
-        setResults(getSpeciesListWithCS());
       }
     },
     [getParams, species]
@@ -696,6 +684,18 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     </>
   );
 
+  const onSortChange = (order: SortOrder, orderBy: string) => {
+    const isClientSorted = BE_SORTED_FIELDS.indexOf(orderBy) === -1;
+    setSearchSortOrder(
+      isClientSorted
+        ? undefined
+        : {
+            field: orderBy as string,
+            direction: order === 'asc' ? 'Ascending' : 'Descending',
+          }
+    );
+  };
+
   return (
     <TfMain>
       <CheckDataModal
@@ -765,7 +765,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
                   id='species-table'
                   columns={selectedColumns}
                   rows={results}
-                  orderBy='name'
+                  orderBy={'scientificName'}
                   showCheckbox={userCanEdit}
                   selectedRows={selectedSpeciesRows}
                   setSelectedRows={userCanEdit ? setSelectedSpeciesRows : undefined}
@@ -773,6 +773,8 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
                   Renderer={SpeciesCellRenderer}
                   controlledOnSelect={true}
                   reloadData={reloadDataProblemsHandler}
+                  sortHandler={onSortChange}
+                  isPresorted={!!searchSortOrder}
                   topBarButtons={
                     selectedSpeciesRows.length === 1
                       ? [
