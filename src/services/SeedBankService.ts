@@ -1,5 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import { StorageLocationPayload } from 'src/types/Facility';
+import { StorageLocation } from 'src/types/Facility';
 import HttpService, { Response } from './HttpService';
 import SearchService, {
   SearchCriteria,
@@ -52,7 +52,7 @@ export type Summary = {
 export type SummaryResponse = Response & Summary;
 
 export type StorageLocations = {
-  locations: StorageLocationPayload[];
+  locations: StorageLocation[];
 };
 export type StorageLocationsResponse = Response & StorageLocations;
 

@@ -1,8 +1,9 @@
-import { paths, components } from 'src/api/types/generated-schema';
+import { components } from 'src/api/types/generated-schema';
+import strings from 'src/strings';
 
 const schemas = 'schemas';
 
-export type StorageLocationPayload = components[typeof schemas]['StorageLocationPayload'];
+export type StorageLocation = components[typeof schemas]['StorageLocationPayload'];
 
 export type FacilityType = components[typeof schemas]['FacilityPayload']['type'];
 
@@ -15,3 +16,14 @@ export interface Facility {
   connectionState: 'Not Connected' | 'Connected' | 'Configured';
   timeZone?: string;
 }
+
+export const ActiveStatuses = () => [
+  strings.AWAITING_CHECK_IN,
+  strings.PENDING,
+  strings.AWAITING_PROCESSING,
+  strings.PROCESSING,
+  strings.PROCESSED,
+  strings.DRYING,
+  strings.DRIED,
+  strings.IN_STORAGE,
+];
