@@ -1,3 +1,4 @@
+6265a4d5 SW-2883 Error page copy is missing (#1182)
 b4cc6148 SW-2940 Species table should use BE sorted results when sort order/field changes (#1177)
 475c80cb SW-2941 / SW-2942 Sort inventory/withdrawals table using BE sort order (#1176)
 4bdb3df3 SW-2924 Allow sorting to occur in BE (#1175)
