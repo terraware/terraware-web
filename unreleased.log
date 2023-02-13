@@ -1,3 +1,4 @@
+09bb3ea8 SW-2943 Allow users to enter in decimal values for seed weight (#1186)
 4d4bb471 SW-2907 Don't allow non-numeric entries for quantities in nursery withdrawal form (#1183)
 212c603b Rename locale properties (#1184)
 9259c6bc Bump cacheable-request from 10.2.5 to 10.2.7 (#1178)
