@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { ProvidedUserData, ProvidedOrganizationData, ProvidedLocalizationData } from './DataTypes';
+import { ProvidedLocalizationData, ProvidedOrganizationData, ProvidedUserData } from './DataTypes';
 import { Organization } from '../types/Organization';
 
 export const UserContext = createContext<ProvidedUserData>({
@@ -40,9 +40,9 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
 });
 
 export const LocalizationContext = createContext<ProvidedLocalizationData>({
-  loadedStringsForLocale: null,
-  locale: 'en',
-  setLocale: () => undefined,
+  activeLocale: null,
+  selectedLocale: 'en',
+  setSelectedLocale: () => undefined,
   supportedTimeZones: [],
   bootstrapped: false,
 });

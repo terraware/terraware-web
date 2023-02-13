@@ -23,12 +23,12 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
   const [countries, setCountries] = useState<Country[]>();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const [temporalCountryValue, setTemporalCountryValue] = useState('');
   const [temporalSubValue, setTemporalSubValue] = useState('');
 
   useEffect(() => {
-    if (loadedStringsForLocale) {
+    if (activeLocale) {
       const populateCountries = async () => {
         const response = await searchCountries();
         if (response) {
@@ -37,7 +37,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
       };
       populateCountries();
     }
-  }, [loadedStringsForLocale]);
+  }, [activeLocale]);
 
   const gridSize = () => (isMobile ? 12 : 6);
 

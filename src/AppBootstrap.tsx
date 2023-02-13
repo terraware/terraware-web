@@ -56,17 +56,17 @@ export type AppBootstrapProps = {
 };
 
 export default function AppBootstrap({ children }: AppBootstrapProps): JSX.Element {
-  const [locale, setLocale] = useState('en');
-  const [loadedStringsForLocale, setLoadedStringsForLocale] = useState<string | null>(null);
+  const [selectedLocale, setSelectedLocale] = useState('en');
+  const [activeLocale, setActiveLocale] = useState<string | null>(null);
 
   return (
     <UserProvider>
       <OrganizationProvider>
         <LocalizationProvider
-          locale={locale}
-          setLocale={setLocale}
-          loadedStringsForLocale={loadedStringsForLocale}
-          setLoadedStringsForLocale={setLoadedStringsForLocale}
+          selectedLocale={selectedLocale}
+          setSelectedLocale={setSelectedLocale}
+          activeLocale={activeLocale}
+          setActiveLocale={setActiveLocale}
         >
           <BlockingBootstrap>{children}</BlockingBootstrap>
         </LocalizationProvider>

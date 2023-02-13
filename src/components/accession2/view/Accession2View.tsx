@@ -108,7 +108,7 @@ export default function Accession2View(): JSX.Element {
   const themeObj = useTheme();
   const contentRef = useRef(null);
   const weightUnitsEnabled = isEnabled('Weight units');
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
@@ -137,7 +137,7 @@ export default function Accession2View(): JSX.Element {
   }, [accessionId, reloadData]);
 
   useEffect(() => {
-    if (loadedStringsForLocale) {
+    if (activeLocale) {
       const today = moment();
       const seedCollectionDate = accession?.collectedDate ? moment(accession?.collectedDate, 'YYYY-MM-DD') : undefined;
       const accessionAge = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
@@ -151,20 +151,20 @@ export default function Accession2View(): JSX.Element {
         setAge(strings.formatString(strings.AGE_VALUE_MONTHS, accessionAge) as string);
       }
     }
-  }, [accession, loadedStringsForLocale]);
+  }, [accession, activeLocale]);
 
   useEffect(() => {
-    if (loadedStringsForLocale) {
+    if (activeLocale) {
       if (accession?.dryingEndDate) {
         // MomentJS has its own version of a "gibberish" locale, but with a different name.
-        const momentLocale = loadedStringsForLocale === 'gx' ? 'x-pseudo' : loadedStringsForLocale;
+        const momentLocale = activeLocale === 'gx' ? 'x-pseudo' : activeLocale;
         const dryingMoment = moment(accession.dryingEndDate).locale(momentLocale);
         setDryingRelativeDate(dryingMoment.fromNow());
       } else {
         setDryingRelativeDate(null);
       }
     }
-  }, [accession, loadedStringsForLocale]);
+  }, [accession, activeLocale]);
 
   useEffect(() => {
     setSelectedTab((query.get('tab') || 'detail') as string);

@@ -149,7 +149,7 @@ type DatabaseProps = {
 
 export default function Database(props: DatabaseProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
@@ -190,7 +190,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsDatabaseSelectedOrgInfo);
   const contentRef = useRef(null);
-  const searchedLocaleRef = useRef<string | null>(loadedStringsForLocale);
+  const searchedLocaleRef = useRef<string | null>(activeLocale);
 
   /*
    * fieldOptions is a list of records
@@ -403,15 +403,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [orgScopedPreferences, updateSearchColumns]);
 
   useEffect(() => {
-    if (searchedLocaleRef.current && loadedStringsForLocale && searchedLocaleRef.current !== loadedStringsForLocale) {
+    if (searchedLocaleRef.current && activeLocale && searchedLocaleRef.current !== activeLocale) {
       // If we've already done a search with a different locale, throw away search criteria since
       // they might contain localized values. Copy the default filters so React sees this as a
       // modification even if the existing search was also using the default.
       setSearchCriteria({ ...DEFAULT_SEED_SEARCH_FILTERS });
     }
 
-    searchedLocaleRef.current = loadedStringsForLocale;
-  }, [loadedStringsForLocale, setSearchCriteria]);
+    searchedLocaleRef.current = activeLocale;
+  }, [activeLocale, setSearchCriteria]);
 
   const onSelect = (row: SearchResponseElement) => {
     if (row.id) {

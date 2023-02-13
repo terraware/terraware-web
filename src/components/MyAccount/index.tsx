@@ -97,24 +97,24 @@ const MyAccountContent = ({
   const timeZonesEnabled = isEnabled('Timezones');
   const weightUnitsEnabled = isEnabled('Weight units');
   const localeSelectionEnabled = isEnabled('Locale selection');
-  const { locale } = useLocalization();
+  const { selectedLocale } = useLocalization();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
   const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState(
     (userPreferences?.preferredWeightSystem as string) || 'metric'
   );
-  const loadedStringsForLocale = useLocalization().loadedStringsForLocale;
+  const loadedStringsForLocale = useLocalization().activeLocale;
   const columns: TableColumnType[] = [
     { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
     { key: 'description', name: strings.DESCRIPTION, type: 'string' },
     { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
     { key: 'roleName', name: strings.ROLE, type: 'string' },
   ];
-  const [localeSelected, setLocaleSelected] = useState(locale);
+  const [localeSelected, setLocaleSelected] = useState(selectedLocale);
 
   useEffect(() => {
-    setLocaleSelected(locale);
-  }, [locale]);
+    setLocaleSelected(selectedLocale);
+  }, [selectedLocale]);
 
   useEffect(() => {
     if (organizations && loadedStringsForLocale) {
@@ -165,7 +165,7 @@ const MyAccountContent = ({
     }
     setRemovedOrg(undefined);
     setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
-    setLocaleSelected(locale);
+    setLocaleSelected(selectedLocale);
     setSelectedRows([]);
     history.push(APP_PATHS.MY_ACCOUNT);
   };
@@ -393,14 +393,14 @@ const MyAccountContent = ({
                 {edit ? (
                   <LocaleSelector
                     onChangeLocale={(newValue) => setLocaleSelected(newValue)}
-                    selectedLocale={localeSelected}
+                    localeSelected={localeSelected}
                   />
                 ) : (
                   <TextField
                     label={strings.LANGUAGE}
                     id='locale'
                     type='text'
-                    value={supportedLocales.find((sLocale) => sLocale.id === locale)?.name}
+                    value={supportedLocales.find((sLocale) => sLocale.id === selectedLocale)?.name}
                     display={true}
                   />
                 )}
