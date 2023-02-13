@@ -1,6 +1,6 @@
 import { Box, Container, Grid, IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { deleteSpecies, getSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
@@ -125,6 +125,8 @@ type SpeciesSearchResultRow = Omit<Species, 'growthForm' | 'seedStorageBehavior'
   seedStorageBehavior?: string;
   ecosystemTypes?: string[];
 };
+
+const BE_SORTED_FIELDS = ['scientificName', 'commonName', 'familyName', 'growthForm', 'seedStorageBehavior'];
 
 export default function SpeciesList({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -289,10 +291,6 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const userCanEdit = !isContributor(selectedOrganization);
   const { isMobile } = useDeviceInfo();
 
-  const BE_SORTED_FIELDS = useMemo(() => {
-    return ['scientificName', 'commonName', 'familyName', 'growthForm', 'seedStorageBehavior'];
-  }, []);
-
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
       prefix: 'species',
@@ -389,7 +387,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     }
 
     return params;
-  }, [record, debouncedSearchTerm, selectedOrganization, searchSortOrder, BE_SORTED_FIELDS]);
+  }, [record, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
