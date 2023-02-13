@@ -1,3 +1,4 @@
+0dd7aa3f SW-2618 Build Generic Filter Edit Dialog Component (#1185)
 09bb3ea8 SW-2943 Allow users to enter in decimal values for seed weight (#1186)
 4d4bb471 SW-2907 Don't allow non-numeric entries for quantities in nursery withdrawal form (#1183)
 212c603b Rename locale properties (#1184)
