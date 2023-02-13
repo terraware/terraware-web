@@ -114,3 +114,11 @@ export function seedTypes() {
 }
 
 export type TEST_TYPES = 'Lab' | 'Nursery' | 'Cut';
+
+export const ActiveStatuses = () => [
+  strings.AWAITING_CHECK_IN,
+  strings.AWAITING_PROCESSING,
+  strings.PROCESSING,
+  strings.DRYING,
+  strings.IN_STORAGE,
+];

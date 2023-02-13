@@ -2,7 +2,7 @@ import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
-import { ActiveStatuses } from 'src/types/Facility';
+import { ActiveStatuses } from 'src/types/Accession';
 import { NumericFormatter } from 'src/utils/useNumber';
 
 export type StorageLocationsCellRendererProps = {

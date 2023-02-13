@@ -23,12 +23,13 @@ import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
 import { Facility } from 'src/types/Facility';
+import { stateName } from 'src/types/Accession';
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
-import { ACCESSION_STATES, ACCESSION_2_STATES } from '../../../types/Accession';
+import { ACCESSION_2_STATES } from '../../../types/Accession';
 import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -281,8 +282,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
     let newSearchCriteria = searchCriteria || {};
     if (stage.length || query.has('stage')) {
       delete newSearchCriteria.state;
+      const stageNames = ACCESSION_2_STATES.map(name => stateName(name));
       const stages = (stage || []).filter(
-        (stageName) => [...ACCESSION_STATES, ...ACCESSION_2_STATES].indexOf(stageName) !== -1
+        (stageName) => stageNames.indexOf(stageName) !== -1
       );
       if (stages.length) {
         newSearchCriteria = {

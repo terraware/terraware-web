@@ -1,4 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
+import strings from 'src/strings';
 import { StorageLocation } from 'src/types/Facility';
 import HttpService, { Response } from './HttpService';
 import SearchService, {
@@ -228,7 +229,7 @@ const getPendingAccessions = async (organizationId: number): Promise<SearchRespo
       [
         {
           field: 'state',
-          values: ['Awaiting Check-In'],
+          values: [strings.AWAITING_CHECK_IN],
           operation: 'field',
         },
       ],

@@ -1,5 +1,4 @@
 import { components } from 'src/api/types/generated-schema';
-import strings from 'src/strings';
 
 const schemas = 'schemas';
 
@@ -16,14 +15,3 @@ export interface Facility {
   connectionState: 'Not Connected' | 'Connected' | 'Configured';
   timeZone?: string;
 }
-
-export const ActiveStatuses = () => [
-  strings.AWAITING_CHECK_IN,
-  strings.PENDING,
-  strings.AWAITING_PROCESSING,
-  strings.PROCESSING,
-  strings.PROCESSED,
-  strings.DRYING,
-  strings.DRIED,
-  strings.IN_STORAGE,
-];
