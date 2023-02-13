@@ -21,12 +21,12 @@ function newDateTimeFormat(locale?: string, timeZone?: string) {
 /** Renders a timestamp using the current locale and the user's time zone. */
 export default function Timestamp({ className, isoString }: TimestampProps): JSX.Element | null {
   const timeZone = useUserTimeZone()?.id;
-  const { locale } = useLocalization();
+  const { selectedLocale } = useLocalization();
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
 
   useEffect(() => {
-    setFormattedDate(newDateTimeFormat(locale, timeZone).format(new Date(isoString)));
-  }, [isoString, locale, timeZone, setFormattedDate]);
+    setFormattedDate(newDateTimeFormat(selectedLocale, timeZone).format(new Date(isoString)));
+  }, [isoString, selectedLocale, timeZone, setFormattedDate]);
 
   return <span className={className}>{formattedDate}</span>;
 }

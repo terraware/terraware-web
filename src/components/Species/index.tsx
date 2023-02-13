@@ -144,7 +144,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
   const [record, setRecord] = useForm<SpeciesFiltersType>({});
   const contentRef = useRef(null);
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
     field: 'scientificName',
     direction: 'Descending',
@@ -179,7 +179,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
 
   const columns: TableColumnType[] = React.useMemo(() => {
     // No-op to make lint happy so it doesn't think the dependency is unused.
-    if (!loadedStringsForLocale) {
+    if (!activeLocale) {
       return [];
     }
 
@@ -274,7 +274,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         ),
       },
     ];
-  }, [loadedStringsForLocale]);
+  }, [activeLocale]);
 
   const [selectedColumns, setSelectedColumns] = useForm(columns);
   const [handleProblemsColumn, setHandleProblemsColumn] = useState<boolean>(false);
@@ -429,11 +429,11 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   // When the user switches locales, we need to update the state value that contains the list of
   // column definitions as well as reset the search filters.
   useEffect(() => {
-    if (loadedStringsForLocale) {
+    if (activeLocale) {
       setRecord({});
       setSelectedColumns(columns);
     }
-  }, [columns, setRecord, setSelectedColumns, loadedStringsForLocale]);
+  }, [columns, setRecord, setSelectedColumns, activeLocale]);
 
   useEffect(() => {
     if (speciesState?.checkData) {

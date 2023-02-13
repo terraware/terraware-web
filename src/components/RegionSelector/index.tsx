@@ -29,11 +29,11 @@ export default function RegionSelector({
 }: RegionSelectorProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const [countries, setCountries] = useState<Country[]>();
 
   useEffect(() => {
-    if (loadedStringsForLocale) {
+    if (activeLocale) {
       const populateCountries = async () => {
         const response = await searchCountries();
         if (response) {
@@ -42,7 +42,7 @@ export default function RegionSelector({
       };
       populateCountries();
     }
-  }, [loadedStringsForLocale]);
+  }, [activeLocale]);
 
   const onChangeCountry = (newValue: string) => {
     const found = countries?.find((country) => country.code.toString() === newValue);

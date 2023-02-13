@@ -19,7 +19,7 @@ type DetailPanelProps = {
 };
 export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const { accession, reload } = props;
   const userCanEdit = !isContributor(selectedOrganization);
   const theme = useTheme();
@@ -64,7 +64,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const classes = useStyles();
 
   useEffect(() => {
-    if (loadedStringsForLocale) {
+    if (activeLocale) {
       const populateCountries = async () => {
         const response = await searchCountries();
         if (response) {
@@ -73,7 +73,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
       };
       populateCountries();
     }
-  }, [loadedStringsForLocale]);
+  }, [activeLocale]);
 
   const getCollectionSource = () => {
     const source = accession?.collectionSource;

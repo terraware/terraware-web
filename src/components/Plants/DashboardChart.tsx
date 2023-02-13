@@ -25,12 +25,12 @@ export interface DashboardChartProps {
 
 export default function DashboardChart(props: DashboardChartProps): JSX.Element | null {
   const { chartLabels, chartValues } = props;
-  const { loadedStringsForLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const [locale, setLocale] = useState<string | null>(null);
 
   useEffect(() => {
-    setLocale(loadedStringsForLocale);
-  }, [loadedStringsForLocale]);
+    setLocale(activeLocale);
+  }, [activeLocale]);
 
   if (!locale || !chartLabels || !chartValues) {
     return null;
