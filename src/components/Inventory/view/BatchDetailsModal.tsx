@@ -19,7 +19,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { Facility } from 'src/types/Facility';
 import { getNurseryById } from 'src/utils/organization';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
-import { useNumberParser, useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter, useNumberParser } from 'src/utils/useNumber';
 import { useUser } from 'src/providers';
 
 export interface BatchDetailsModalProps {
@@ -65,13 +65,13 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         }
       };
 
-      const notReadyQuantity = numericParser.parse(record?.notReadyQuantity?.toString() ?? '');
-      const readyQuantity = numericParser.parse(record?.readyQuantity?.toString() ?? '');
-      setTotalQuantity((isNaN(notReadyQuantity) ? 0 : notReadyQuantity) + (isNaN(readyQuantity) ? 0 : readyQuantity));
+      const notReadyQuantity = record?.notReadyQuantity ?? 0;
+      const readyQuantity = record?.readyQuantity ?? 0;
+      setTotalQuantity(+notReadyQuantity + +readyQuantity);
 
       populateSpecies();
     }
-  }, [record, selectedOrganization, speciesId, numericParser]);
+  }, [record, selectedOrganization, speciesId]);
 
   useEffect(() => {
     if (record?.facilityId) {
@@ -108,7 +108,12 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     } as unknown as CreateBatchRequestPayload;
     const initBatch = () => {
       if (selectedBatch) {
-        return selectedBatch;
+        return {
+          ...selectedBatch,
+          readyQuantity: numericParser.parse(selectedBatch.readyQuantity),
+          notReadyQuantity: numericParser.parse(selectedBatch.notReadyQuantity),
+          germinatingQuantity: numericParser.parse(selectedBatch.germinatingQuantity),
+        };
       } else {
         return {
           ...newBatch,
@@ -128,7 +133,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     if (foundFacility) {
       setFacility(foundFacility);
     }
-  }, [selectedBatch, speciesId, setRecord, selectedOrganization, open]);
+  }, [selectedBatch, speciesId, setRecord, selectedOrganization, open, numericParser]);
 
   const MANDATORY_FIELDS = [
     'facilityId',
@@ -157,24 +162,13 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       let response;
       let responseQuantities = { requestSucceeded: true };
 
-      const readyQuantity = numericParser.parse(record.readyQuantity ?? '');
-      const notReadyQuantity = numericParser.parse(record.notReadyQuantity ?? '');
-      const germinatingQuantity = numericParser.parse(record.germinatingQuantity ?? '');
-
-      const batchToSave = {
-        ...record,
-        readyQuantity: isNaN(readyQuantity) ? undefined : readyQuantity,
-        notReadyQuantity: isNaN(notReadyQuantity) ? undefined : notReadyQuantity,
-        germinatingQuantity: isNaN(germinatingQuantity) ? undefined : germinatingQuantity,
-      };
-
       if (record.id === -1) {
-        response = await NurseryBatchService.createBatch(batchToSave);
+        response = await NurseryBatchService.createBatch(record);
       } else {
-        response = await NurseryBatchService.updateBatch(batchToSave);
+        response = await NurseryBatchService.updateBatch(record);
         if (response.batch) {
           responseQuantities = await NurseryBatchService.updateBatchQuantities({
-            ...batchToSave,
+            ...record,
             version: response.batch.version,
           });
         }
@@ -301,10 +295,11 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
                 onChange={(value) => onChange('germinatingQuantity', value)}
-                type='text'
+                type='number'
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
                 errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
+                min={0}
               />
             </Grid>
             <Grid item xs={12} sx={marginTop}>
@@ -315,10 +310,11 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 id='notReadyQuantity'
                 value={record.notReadyQuantity}
                 onChange={(value) => onChange('notReadyQuantity', value)}
-                type='text'
+                type='number'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                 errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
+                min={0}
               />
             </Grid>
             <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
@@ -336,10 +332,11 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 id='readyQuantity'
                 value={record.readyQuantity}
                 onChange={(value) => onChange('readyQuantity', value)}
-                type='text'
+                type='number'
                 label={strings.READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
                 errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}
+                min={0}
               />
             </Grid>
 
