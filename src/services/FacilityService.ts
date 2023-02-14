@@ -1,3 +1,4 @@
+import strings from 'src/strings';
 import { paths } from 'src/api/types/generated-schema';
 import { Organization } from 'src/types/Organization';
 import { Facility, FacilityType } from 'src/types/Facility';
@@ -96,6 +97,7 @@ const updateFacility = async (facility: Facility): Promise<Response> => {
  * Search facilities by parameters
  */
 const getFacilities = async ({ type, organizationId, query }: FacilitySearchParams): Promise<Facilities> => {
+  const typeVal = type === 'Seed Bank' ? strings.SEED_BANK : strings.NURSERY;
   const searchField = query
     ? {
         operation: 'or',
@@ -112,7 +114,7 @@ const getFacilities = async ({ type, organizationId, query }: FacilitySearchPara
     search: {
       operation: 'and',
       children: [
-        { operation: 'field', field: 'type', type: 'Exact', values: [type] },
+        { operation: 'field', field: 'type', type: 'Exact', values: [typeVal] },
         {
           operation: 'field',
           field: 'organization_id',
