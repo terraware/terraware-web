@@ -37,11 +37,14 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   ];
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
-    setSearchSortOrder({
-      field: orderBy as string,
-      direction: order === 'asc' ? 'Ascending' : 'Descending',
-    });
-    setIsPresorted(orderBy !== 'timeZone');
+    const isTimeZone = orderBy === 'timeZone';
+    if (!isTimeZone) {
+      setSearchSortOrder({
+        field: orderBy as string,
+        direction: order === 'asc' ? 'Ascending' : 'Descending',
+      });
+    }
+    setIsPresorted(!isTimeZone);
   };
 
   return (
