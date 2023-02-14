@@ -1,6 +1,6 @@
 import { Container, IconButton, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FieldValuesPayload, SearchNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -10,6 +10,7 @@ import useDebounce from 'src/utils/useDebounce';
 import Icon from 'src/components/common/icon/Icon';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import FilterGroup from 'src/components/common/FilterGroup';
+import { PillList, PillListItem } from '@terraware/web-components';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -21,7 +22,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(2, 0, 2, 0),
     padding: theme.spacing(0),
     display: 'flex',
-    flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
+    flexDirection: 'column',
+    gap: theme.spacing(1),
   },
   filtersContainer: {
     minHeight: '32px',
@@ -124,6 +126,30 @@ export default function Filters(props: Props): JSX.Element {
     setFilterAnchorEl(null);
   };
 
+  const filterPillItems = useMemo(() => {
+    const result: PillListItem<string>[] = [];
+    const preExpFilterPill: PillListItem<string> = filters.preExpFilter && {
+      id: 'preExpFilter',
+      label: strings.STATUS,
+      value: filters.preExpFilter.values.join(', '),
+    };
+    if (preExpFilterPill) {
+      result.push(preExpFilterPill);
+    }
+    for (const col of columns) {
+      const filter = filters[col.key];
+      if (filter) {
+        result.push({
+          id: col.key,
+          label: col.name,
+          value: filter.values.join(`, `),
+        } as PillListItem<string>);
+      }
+    }
+
+    return result;
+  }, [filters, columns]);
+
   const onChangePreExpFilter = (selectedValues: string[]) => {
     let newFilters;
     if (selectedValues.length === 0) {
@@ -140,6 +166,12 @@ export default function Filters(props: Props): JSX.Element {
       (ent) => ent[0] === 'searchTermFilter' || ent[0] === 'preExpFilter'
     );
     onChange({ ...Object.fromEntries(keepFilters), ...newFilters });
+  };
+
+  const removeFilter = (key: string) => {
+    const newFilters = { ...filters };
+    delete newFilters[key];
+    onChange(newFilters);
   };
 
   const onChangeSearch = (value: unknown) => {
@@ -254,6 +286,7 @@ export default function Filters(props: Props): JSX.Element {
           />
         </Popover>
       </div>
+      <PillList data={filterPillItems} onRemove={removeFilter} />
     </Container>
   );
 }
