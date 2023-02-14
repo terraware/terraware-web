@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { PlantingSite } from 'src/types/Tracking';
 import { TrackingService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
-import { PlantingSitePlot } from './PlantingSiteDetails';
+import { PlantingSitePlot } from 'src/types/PlantingSite';
 import { GenericMap, PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 

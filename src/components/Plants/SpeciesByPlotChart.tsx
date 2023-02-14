@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
-import { cardTitleStyle, PlantingSiteZone, PlantingSitePlot } from './PlantingSiteDetails';
+import { PlantingSiteZone, PlantingSitePlot } from 'src/types/PlantingSite';
+import { cardTitleStyle } from './PlantingSiteDetails';
 import strings from 'src/strings';
 import DashboardChart from './DashboardChart';
 import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';

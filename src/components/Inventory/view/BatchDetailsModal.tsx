@@ -19,7 +19,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { Facility } from 'src/types/Facility';
 import { getNurseryById } from 'src/utils/organization';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
-import { useNumberFormatter, useNumberParser } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumber';
 import { useUser } from 'src/providers';
 
 export interface BatchDetailsModalProps {
@@ -31,7 +31,6 @@ export interface BatchDetailsModalProps {
 }
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
-  const numberParser = useNumberParser();
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
@@ -54,7 +53,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const [addedDateChanged, setAddedDateChanged] = useState(false);
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
-  const numericParser = useMemo(() => numberParser(user?.locale), [numberParser, user?.locale]);
 
   useEffect(() => {
     if (record) {
@@ -108,11 +106,19 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     } as unknown as CreateBatchRequestPayload;
     const initBatch = () => {
       if (selectedBatch) {
+        const batchData: any = Object.keys(selectedBatch).reduce((data, key) => {
+          if (key.endsWith('(raw)')) {
+            return data;
+          }
+          data[key] = selectedBatch[key];
+          return data;
+        }, {} as any);
+
         return {
-          ...selectedBatch,
-          readyQuantity: numericParser.parse(selectedBatch.readyQuantity),
-          notReadyQuantity: numericParser.parse(selectedBatch.notReadyQuantity),
-          germinatingQuantity: numericParser.parse(selectedBatch.germinatingQuantity),
+          ...batchData,
+          readyQuantity: selectedBatch['readyQuantity(raw)'],
+          notReadyQuantity: selectedBatch['notReadyQuantity(raw)'],
+          germinatingQuantity: selectedBatch['germinatingQuantity(raw)'],
         };
       } else {
         return {
@@ -133,7 +139,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     if (foundFacility) {
       setFacility(foundFacility);
     }
-  }, [selectedBatch, speciesId, setRecord, selectedOrganization, open, numericParser]);
+  }, [selectedBatch, speciesId, setRecord, selectedOrganization, open]);
 
   const MANDATORY_FIELDS = [
     'facilityId',

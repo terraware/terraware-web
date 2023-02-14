@@ -10,19 +10,14 @@ import { isAdmin } from 'src/utils/organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
-import SearchService, {
-  FieldNodePayload,
-  SearchNodePayload,
-  SearchResponseElement,
-  SearchSortOrder,
-} from 'src/services/SearchService';
 import InventoryTable from './InventoryTable';
+import { SearchResponseElement, SearchSortOrder } from 'src/services/SearchService';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { downloadCsvTemplateHandler } from '../common/ImportModal';
-import { NurseryInventoryService } from 'src/services';
+import NurseryInventoryService, { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
 import ImportInventoryModal from './ImportInventoryModal';
 import { Button } from '@terraware/web-components';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -62,16 +57,6 @@ type InventoryProps = {
 type FacilityName = {
   facility_name: string;
 };
-
-const BE_SORTED_FIELDS = [
-  'species_id',
-  'species_scientificName',
-  'facilityInventories.facility_name',
-  'germinatingQuantity',
-  'notReadyQuantity',
-  'readyQuantity',
-  'totalQuantity',
-];
 
 type InventoryResult = {
   species_id: string;
@@ -153,102 +138,29 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     setSearchSortOrder(isClientSorted ? undefined : order);
   };
 
-  const getParams = useCallback(() => {
-    const params: SearchNodePayload = {
-      prefix: 'inventories',
-      fields: [...BE_SORTED_FIELDS, 'species_commonName'],
-      sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
-      search: {
-        operation: 'and',
-        children: [
-          {
-            operation: 'field',
-            field: 'organization_id',
-            values: [selectedOrganization.id],
-          },
-        ],
-      },
-      count: 0,
-    };
-
-    const searchValueChildren: FieldNodePayload[] = [];
-
-    if (debouncedSearchTerm) {
-      const scientificNameNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'species_scientificName',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
-      };
-      searchValueChildren.push(scientificNameNode);
-
-      const commonNameNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'species_commonName',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
-      };
-      searchValueChildren.push(commonNameNode);
-
-      const facilityNameNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'facilityInventories.facility_name',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
-      };
-      searchValueChildren.push(facilityNameNode);
-    }
-
-    let nurseryFilter: FieldNodePayload;
-    if (filters.facilityIds && filters.facilityIds.length > 0) {
-      nurseryFilter = {
-        operation: 'field',
-        field: 'facilityInventories.facility_id',
-        type: 'Exact',
-        values: filters.facilityIds.map((id) => id.toString()),
-      };
-    }
-
-    if (searchValueChildren.length) {
-      const searchValueNodes: FieldNodePayload = {
-        operation: 'or',
-        children: searchValueChildren,
-      };
-
-      if (nurseryFilter) {
-        params.search.children.push({
-          operation: 'and',
-          children: [nurseryFilter, searchValueNodes],
-        });
-      } else {
-        params.search.children.push(searchValueNodes);
-      }
-    } else if (nurseryFilter) {
-      params.search.children.push(nurseryFilter);
-    }
-
-    return params;
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
-
   const onApplyFilters = useCallback(async () => {
-    const params: SearchNodePayload = getParams();
     const requestId = Math.random().toString();
     setRequestId('searchInventory', requestId);
-    const apiSearchResults = await SearchService.search(params);
+    const apiSearchResults = await NurseryInventoryService.searchInventory({
+      organizationId: selectedOrganization.id,
+      query: debouncedSearchTerm,
+      facilityIds: filters.facilityIds,
+      searchSortOrder,
+    });
     const updatedResult = apiSearchResults?.map((result) => {
       const resultTyped = result as InventoryResult;
       const facilityInventoriesNames = resultTyped.facilityInventories.map((nursery) => nursery.facility_name);
       return { ...result, facilityInventories: facilityInventoriesNames.join('\r') };
     });
     if (updatedResult) {
-      if (params.search.children.length === 1) {
+      if (!debouncedSearchTerm && !filters.facilityIds?.length) {
         setUnfilteredInventory(updatedResult);
       }
       if (getRequestId('searchInventory') === requestId) {
         setSearchResults(updatedResult);
       }
     }
-  }, [getParams]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
 
   useEffect(() => {
     onApplyFilters();

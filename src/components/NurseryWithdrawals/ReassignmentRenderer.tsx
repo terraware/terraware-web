@@ -4,7 +4,7 @@ import { Box, Typography, Theme } from '@mui/material';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { Autocomplete, Textfield } from '@terraware/web-components';
-import { NumericFormatter, NumericParser } from 'src/types/Number';
+import { NumericFormatter } from 'src/types/Number';
 import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -35,16 +35,10 @@ export type Reassignment = {
 export type ReassignmentRendererProps = {
   plots: PlotInfo[];
   setReassignment: (reassignment: Reassignment) => void;
-  numericParser: NumericParser;
   numericFormatter: NumericFormatter;
 };
 
-export default function ReassignmentRenderer({
-  plots,
-  setReassignment,
-  numericParser,
-  numericFormatter,
-}: ReassignmentRendererProps) {
+export default function ReassignmentRenderer({ plots, setReassignment, numericFormatter }: ReassignmentRendererProps) {
   return function ReassignmentlCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
     const classes = useStyles();
     const { column, row } = props;
@@ -66,8 +60,8 @@ export default function ReassignmentRenderer({
         updateReassignment('quantity', undefined);
         return;
       }
-      const quantityValue = numericParser.parse(value?.toString());
-      if (isNaN(quantityValue) || quantityValue < 0 || quantityValue > numericParser.parse(numPlants?.toString())) {
+      const quantityValue = Number(value);
+      if (isNaN(quantityValue) || quantityValue < 0 || quantityValue > numPlants?.toString()) {
         reassignment.error.quantity = strings.INVALID_VALUE;
       } else {
         reassignment.error.quantity = '';

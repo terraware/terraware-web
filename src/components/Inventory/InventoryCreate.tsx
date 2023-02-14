@@ -21,7 +21,7 @@ import { getNurseryById } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
 import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
-import { useNumberParser, useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 const MANDATORY_FIELDS = [
   'speciesId',
@@ -40,7 +40,6 @@ export default function CreateInventory(): JSX.Element {
   const history = useHistory();
   const snackbar = useSnackbar();
   const { user } = useUser();
-  const numberParser = useNumberParser();
   const numberFormatter = useNumberFormatter();
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
@@ -51,7 +50,6 @@ export default function CreateInventory(): JSX.Element {
   const [timeZone, setTimeZone] = useState(tz.id);
   const [addedDateChanged, setAddedDateChanged] = useState(false);
 
-  const numericParser = useMemo(() => numberParser(user?.locale), [user?.locale, numberParser]);
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
 
   const defaultBatch = (): CreateBatchRequestPayload =>
@@ -89,12 +87,11 @@ export default function CreateInventory(): JSX.Element {
   }, [timeZone, setRecord, addedDateChanged]);
 
   useEffect(() => {
-    const notReadyQuantity = numericParser.parse(record.notReadyQuantity?.toString() ?? '');
-    const readyQuantity = numericParser.parse(record.readyQuantity?.toString() ?? '');
+    const { readyQuantity, notReadyQuantity } = record;
     setTotalQuantity(
       (isNaN(notReadyQuantity) ? 0 : Number(notReadyQuantity)) + (isNaN(readyQuantity) ? 0 : Number(readyQuantity))
     );
-  }, [record, numericParser]);
+  }, [record]);
 
   const inventoryLocation = {
     pathname: APP_PATHS.INVENTORY,
@@ -118,14 +115,14 @@ export default function CreateInventory(): JSX.Element {
       setValidateFields(true);
       return;
     }
-    const readyQuantity = numericParser.parse(record.readyQuantity ?? '');
-    const notReadyQuantity = numericParser.parse(record.notReadyQuantity ?? '');
-    const germinatingQuantity = numericParser.parse(record.germinatingQuantity ?? '');
+
+    const { readyQuantity, notReadyQuantity, germinatingQuantity } = record;
+
     const response = await NurseryBatchService.createBatch({
       ...record,
-      readyQuantity: isNaN(readyQuantity) ? undefined : readyQuantity,
-      notReadyQuantity: isNaN(notReadyQuantity) ? undefined : notReadyQuantity,
-      germinatingQuantity: isNaN(germinatingQuantity) ? undefined : germinatingQuantity,
+      readyQuantity: isNaN(readyQuantity) ? 0 : readyQuantity,
+      notReadyQuantity: isNaN(notReadyQuantity) ? 0 : notReadyQuantity,
+      germinatingQuantity: isNaN(germinatingQuantity) ? 0 : germinatingQuantity,
     });
     if (response.requestSucceeded) {
       history.replace(inventoryLocation);
@@ -214,7 +211,7 @@ export default function CreateInventory(): JSX.Element {
                   id='germinatingQuantity'
                   value={record.germinatingQuantity}
                   onChange={(value) => onChange('germinatingQuantity', value)}
-                  type='text'
+                  type='number'
                   label={strings.GERMINATING_QUANTITY_REQUIRED}
                   tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
                   errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
@@ -228,7 +225,7 @@ export default function CreateInventory(): JSX.Element {
                   id='notReadyQuantity'
                   value={record.notReadyQuantity}
                   onChange={(value) => onChange('notReadyQuantity', value)}
-                  type='text'
+                  type='number'
                   label={strings.NOT_READY_QUANTITY_REQUIRED}
                   tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                   errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
@@ -248,7 +245,7 @@ export default function CreateInventory(): JSX.Element {
                   id='readyQuantity'
                   value={record.readyQuantity}
                   onChange={(value) => onChange('readyQuantity', value)}
-                  type='text'
+                  type='number'
                   label={strings.READY_QUANTITY_REQUIRED}
                   tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
                   errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}

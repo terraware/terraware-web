@@ -4,7 +4,7 @@ import { Typography, Grid, Box, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
-import SearchService, { SearchSortOrder } from 'src/services/SearchService';
+import { SearchSortOrder } from 'src/services/SearchService';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -88,58 +88,12 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
 
     const populateResults = async () => {
       const searchFields = getSearchFields();
-      const searchParams = {
-        prefix: 'batches',
-        search: {
-          operation: 'and',
-          children: [
-            {
-              operation: 'field',
-              field: 'species_id',
-              values: [speciesId.toString()],
-            },
-            {
-              operation: 'field',
-              field: 'species_organization_id',
-              values: [selectedOrganization.id.toString()],
-              type: 'Exact',
-            },
-          ],
-        },
-        fields: [
-          'id',
-          'batchNumber',
-          'germinatingQuantity',
-          'notReadyQuantity',
-          'readyQuantity',
-          'totalQuantity',
-          'totalQuantityWithdrawn',
-          'facility_id',
-          'facility_name',
-          'readyByDate',
-          'addedDate',
-          'version',
-          'accession_id',
-          'accession_accessionNumber',
-          'notes',
-        ],
-        sortOrder: [
-          searchSortOrder ?? {
-            field: 'batchNumber',
-          },
-        ],
-        count: 1000,
-      };
-
-      if (searchFields.length) {
-        const children: any = searchParams.search.children;
-        children.push({
-          operation: 'and',
-          children: searchFields,
-        });
-      }
-
-      const searchResponse = await SearchService.search(searchParams);
+      const searchResponse = await NurseryBatchService.getBatchesForSpeciesById(
+        selectedOrganization.id,
+        speciesId,
+        searchFields,
+        searchSortOrder
+      );
 
       if (activeRequests) {
         const batchesResults = searchResponse?.map((sr) => {
@@ -211,7 +165,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   };
 
   const selectionHasWithdrawableQuantities = () => {
-    return selectedRows.some((row) => row.totalQuantity !== '0');
+    return selectedRows.some((row) => +row['totalQuantity(raw)'] > 0);
   };
 
   const isSelectionBulkWithdrawable = () => {
