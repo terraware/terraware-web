@@ -121,18 +121,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       inset: '0px',
     },
   },
-  spinner: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    margin: 'auto',
-    minHeight: '100vh',
-    '& .MuiCircularProgress-svg': {
-      color: theme.palette.TwClrIcnBrand,
-      height: '193px',
-    },
-  },
 }));
 
 const MINIMAL_USER_ROUTES: string[] = [
