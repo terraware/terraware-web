@@ -17,6 +17,7 @@ export const strings = {
   ACCESSIONS_ONBOARDING_SPECIES_MSG: 'Define a list of species used in your seed inventory',
   ACCESSIONS_TO_BE_CHECKED_IN: 'There are {0} accessions to check in.',
   ACCESSIONS: 'Accessions',
+  ACTIVE_ACCESSIONS: 'Active Accessions',
   ACTIVE_INACTIVE: 'Active/Inactive',
   ADD_A_NURSERY: 'Add a Nursery',
   ADD_A_PLANTING_SITE_SUBTITLE:
@@ -240,6 +241,7 @@ export const strings = {
     'You are about to download this datatable as a report. This csv file can be found in your Downloads. Please name your report below.',
   DOWNLOAD_THE_CSV_TEMPLATE: 'Download the CSV template.',
   DOWNLOAD: 'Download',
+  DRIED: 'Dried',
   DRY_CABINET: 'Dry Cabinet',
   DRYING_END_DATE: 'Estimated Drying End Date',
   DRYING_RACKS: 'Drying Racks',
@@ -648,6 +650,7 @@ export const strings = {
   PRIVACY_POLICY: 'Privacy Policy',
   PROBLEMS: 'Problems',
   PROCESSED_AND_DRIED_BY: 'Processed & Dried By',
+  PROCESSED: 'Processed',
   PROCESSING_AND_DRYING_DESCRIPTION: 'All the details about processing and drying the seeds.',
   PROCESSING_AND_DRYING_INFO:
     'By adding information about processing/drying and saving changes, you will be automatically changing this accession’s stage from Pending to either Processing, Processed, Drying, or Dried, depending on the information you fill in.',
@@ -876,6 +879,7 @@ export const strings = {
   STORING_START_DATE: 'Storing Start Date',
   STRATIFICATION: 'Stratification',
   SUB_LOCATION: 'Sub-Location',
+  SUB_LOCATIONS: 'Sub-Locations',
   SUBSET_COUNT: 'Subset Count',
   SUBSET_ERROR: 'Subset weight should be less than seed weight',
   SUBSET_WEIGHT: 'Weight of Seed Subset',

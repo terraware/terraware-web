@@ -64,6 +64,15 @@ export const OPT_IN_FEATURES: Feature[] = [
       'Some values such as accession statuses are currently still in English.',
     ],
   },
+  {
+    name: 'Storage locations',
+    preferenceName: 'enableStorageLocations',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Allow admin defined storage locations.'],
+    disclosure: ['This is WIP.'],
+  },
 ];
 
 type FeatureMap = { [key: string]: Feature };

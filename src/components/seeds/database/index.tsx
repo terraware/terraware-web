@@ -23,12 +23,13 @@ import EditColumns from './EditColumns';
 import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
 import { Facility } from 'src/types/Facility';
+import { stateName } from 'src/types/Accession';
 import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
-import { ACCESSION_STATES, ACCESSION_2_STATES } from '../../../types/Accession';
+import { ACCESSION_2_STATES } from '../../../types/Accession';
 import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -275,23 +276,41 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   useEffect(() => {
     // if url has stage=<accession state>, apply that filter
-    const stage = query.get('stage');
+    const stage = query.getAll('stage');
     const facilityId = query.get('facilityId');
+    const storageLocationName = query.get('storageLocationName');
     let newSearchCriteria = searchCriteria || {};
-    if (stage || query.has('stage')) {
+    if (stage.length || query.has('stage')) {
       delete newSearchCriteria.state;
-      if (stage && [...ACCESSION_STATES, ...ACCESSION_2_STATES].indexOf(stage) !== -1) {
+      const stageNames = ACCESSION_2_STATES.map((name) => stateName(name));
+      const stages = (stage || []).filter((stageName) => stageNames.indexOf(stageName) !== -1);
+      if (stages.length) {
         newSearchCriteria = {
           ...newSearchCriteria,
           state: {
             field: 'state',
-            values: [stage],
+            values: stages,
             type: 'Exact',
             operation: 'field',
           },
         };
       }
       query.delete('stage');
+    }
+    if (storageLocationName || query.has('storageLocationName')) {
+      delete newSearchCriteria.storageLocation_name;
+      if (storageLocationName) {
+        newSearchCriteria = {
+          ...newSearchCriteria,
+          storageLocation_name: {
+            field: 'storageLocation_name',
+            values: [storageLocationName],
+            type: 'Exact',
+            operation: 'field',
+          },
+        };
+      }
+      query.delete('storageLocationName');
     }
     if ((facilityId || query.has('facilityId')) && selectedOrganization) {
       const seedBanks = getAllSeedBanks(selectedOrganization);
@@ -312,7 +331,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       }
       query.delete('facilityId');
     }
-    if (stage || (facilityId && selectedOrganization)) {
+    if (stage.length || (facilityId && selectedOrganization) || storageLocationName) {
       history.replace(getLocation(location.pathname, location, query.toString()));
       setSearchCriteria(newSearchCriteria);
     }

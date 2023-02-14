@@ -4,7 +4,7 @@ import { Grid, useTheme } from '@mui/material';
 import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getAllSeedBanks } from 'src/utils/organization';
-import { Facility, StorageLocationPayload } from 'src/types/Facility';
+import { Facility, StorageLocation } from 'src/types/Facility';
 import { SeedBankService } from 'src/services';
 import { StorageSubLocationSelector, StorageLocationSelector } from './';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
@@ -19,7 +19,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const { record, onChange, validate } = props;
-  const [storageLocations, setStorageLocations] = useState<StorageLocationPayload[]>([]);
+  const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([]);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) as Facility[]) || [];

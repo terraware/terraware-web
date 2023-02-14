@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Grid } from '@mui/material';
-import { Facility, StorageLocationPayload } from 'src/types/Facility';
+import { Facility, StorageLocation } from 'src/types/Facility';
 import theme from 'src/theme';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Accession } from 'src/types/Accession';
@@ -26,7 +26,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   const { activeLocale } = useLocalization();
   const { onClose, open, accession, reload } = props;
   const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) as Facility[]) || [];
-  const [storageLocations, setStorageLocations] = useState<StorageLocationPayload[]>([]);
+  const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([]);
   const snackbar = useSnackbar();
 
   const newRecord = {
