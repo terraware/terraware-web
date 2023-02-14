@@ -7,4 +7,5 @@ export type InitializedTimeZone = {
   timeZone?: string;
   timeZoneAcknowledgedOnMs?: number;
   updated?: boolean;
+  timeZoneNotificationCreatedMs?: number;
 };

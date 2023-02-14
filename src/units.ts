@@ -58,6 +58,7 @@ export type InitializedUnits = {
   units?: string;
   unitsAcknowledgedOnMs?: number;
   updated?: boolean;
+  unitsNotificationCreatedMs?: number;
 };
 
 export function getUnitsForSystem(system: string) {

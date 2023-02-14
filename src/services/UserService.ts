@@ -91,10 +91,11 @@ const updateUser = async (user: User, options: UpdateOptions = {}): Promise<Resp
  * initialize user time zone
  */
 const initializeTimeZone = async (user: User, timeZone: string): Promise<InitializedTimeZone> => {
-  const { timeZoneAcknowledgedOnMs } = CachedUserService.getUserPreferences();
+  const { timeZoneAcknowledgedOnMs, timeZoneNotificationCreatedMs } = CachedUserService.getUserPreferences();
 
   const initializedTimeZone: InitializedTimeZone = {
     timeZoneAcknowledgedOnMs,
+    timeZoneNotificationCreatedMs,
   };
 
   if (!user.timeZone) {
@@ -105,6 +106,15 @@ const initializeTimeZone = async (user: User, timeZone: string): Promise<Initial
     }
   } else {
     initializedTimeZone.timeZone = user.timeZone;
+  }
+
+  if (!timeZoneNotificationCreatedMs) {
+    const response = await PreferencesService.updateUserPreferences({ timeZoneNotificationCreatedMs: Date.now() });
+    if (response.requestSucceeded) {
+      initializedTimeZone.timeZoneNotificationCreatedMs = Date.now();
+    }
+  } else {
+    initializedTimeZone.timeZoneNotificationCreatedMs = timeZoneNotificationCreatedMs;
   }
 
   return initializedTimeZone;
@@ -133,10 +143,12 @@ const getInitializedTimeZone = (user: User, timeZone: string): Promise<Initializ
  * initialize preferred units (if not already set)
  */
 const initializeUnits = async (units: string): Promise<InitializedUnits> => {
-  const { unitsAcknowledgedOnMs, preferredWeightSystem } = CachedUserService.getUserPreferences();
+  const { unitsAcknowledgedOnMs, preferredWeightSystem, unitsNotificationCreatedMs } =
+    CachedUserService.getUserPreferences();
 
   const initializedUnits: InitializedUnits = {
     unitsAcknowledgedOnMs,
+    unitsNotificationCreatedMs,
   };
 
   if (!preferredWeightSystem) {
@@ -147,6 +159,15 @@ const initializeUnits = async (units: string): Promise<InitializedUnits> => {
     }
   } else {
     initializedUnits.units = preferredWeightSystem;
+  }
+
+  if (!unitsNotificationCreatedMs) {
+    const response = await PreferencesService.updateUserPreferences({ unitsNotificationCreatedMs: Date.now() });
+    if (response.requestSucceeded) {
+      initializedUnits.unitsNotificationCreatedMs = Date.now();
+    }
+  } else {
+    initializedUnits.unitsNotificationCreatedMs = unitsNotificationCreatedMs;
   }
 
   return initializedUnits;

@@ -13,10 +13,13 @@ import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { PreferencesService, UserService } from 'src/services';
 import { InitializedUnits } from 'src/units';
+import { DateTime } from 'luxon';
 
 export default function UserNotification(): Notification | null {
   const [unitNotification, setUnitNotification] = useState(false);
+  const [unitNotificationRead, setUnitNotificationRead] = useState(false);
   const [timeZoneUserNotification, setTimeZoneUserNotification] = useState(false);
+  const [timeZoneUserNotificationRead, setTimeZoneUserNotificationRead] = useState(false);
   const [userTimeZone, setUserTimeZone] = useState<string>();
 
   const timeZoneFeatureEnabled = isEnabled('Timezones');
@@ -37,9 +40,18 @@ export default function UserNotification(): Notification | null {
     };
 
     const notifyTimeZoneUpdates = (userTz: InitializedTimeZone) => {
-      const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
+      const notifyUser =
+        userTz.timeZone &&
+        userTz.timeZoneNotificationCreatedMs &&
+        DateTime.now().plus({ days: -30 }).toMillis() <= userTz.timeZoneNotificationCreatedMs;
       setUserTimeZone(getTimeZoneById(userTz.timeZone).longName);
       setTimeZoneUserNotification(!!notifyUser);
+
+      if (userTz.timeZoneAcknowledgedOnMs) {
+        setTimeZoneUserNotificationRead(true);
+      } else {
+        setTimeZoneUserNotificationRead(false);
+      }
     };
 
     const initializeTimeZones = async () => {
@@ -78,6 +90,15 @@ export default function UserNotification(): Notification | null {
       }
 
       if (!userUnit.unitsAcknowledgedOnMs) {
+        setUnitNotificationRead(false);
+      } else {
+        setUnitNotificationRead(true);
+      }
+
+      if (
+        userUnit.unitsNotificationCreatedMs &&
+        DateTime.now().plus({ days: -30 }).toMillis() <= userUnit.unitsNotificationCreatedMs
+      ) {
         setUnitNotification(true);
       } else {
         setUnitNotification(false);
@@ -90,7 +111,7 @@ export default function UserNotification(): Notification | null {
   }, [user, userPreferences, weightUnitsEnabled, reloadUserPreferences]);
 
   return useMemo(() => {
-    if (unitNotification || timeZoneUserNotification) {
+    if (unitNotification && timeZoneUserNotification) {
       return {
         id: -1,
         notificationCriticality: 'Info',
@@ -120,7 +141,7 @@ export default function UserNotification(): Notification | null {
         ),
         localUrl: APP_PATHS.MY_ACCOUNT,
         createdTime: getTodaysDateFormatted(),
-        isRead: false,
+        isRead: unitNotificationRead || timeZoneUserNotificationRead,
         hideDate: true,
         markAsRead: async () => {
           await PreferencesService.updateUserPreferences({
@@ -142,5 +163,7 @@ export default function UserNotification(): Notification | null {
     user?.locale,
     userPreferences.preferredWeightSystem,
     userTimeZone,
+    timeZoneUserNotificationRead,
+    unitNotificationRead,
   ]);
 }
