@@ -13,6 +13,7 @@ import PreferencesService from './PreferencesService';
 import SearchService from './SearchService';
 import SeedBankService from './SeedBankService';
 import SystemService from './SystemService';
+import TrackingService from './TrackingService';
 import UserService from './UserService';
 
 export type { Response } from './HttpService';
@@ -33,5 +34,6 @@ export {
   SearchService,
   SeedBankService,
   SystemService,
+  TrackingService,
   UserService,
 };

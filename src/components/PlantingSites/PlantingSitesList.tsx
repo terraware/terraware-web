@@ -2,7 +2,7 @@ import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { search, SearchResponseElement } from 'src/api/search';
+import SearchService, { SearchResponseElement } from 'src/services/SearchService';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -11,6 +11,7 @@ import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import PlantingSitesTable from './PlantingSitesTable';
 import PlantingSiteTypeSelect from './PlantingSiteTypeSelect';
+import { SearchSortOrder } from 'src/services/SearchService';
 import { useOrganization } from 'src/providers/hooks';
 
 export default function PlantingSitesList(): JSX.Element {
@@ -19,6 +20,10 @@ export default function PlantingSitesList(): JSX.Element {
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [plantingSites, setPlantingSites] = useState<SearchResponseElement[] | null>();
   const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
+    field: 'name',
+    direction: 'Ascending',
+  });
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const { isMobile } = useDeviceInfo();
@@ -37,6 +42,7 @@ export default function PlantingSitesList(): JSX.Element {
     const params = {
       fields: ['boundary', 'id', 'name', 'numPlantingZones', 'numPlots', 'description', 'timeZone'],
       prefix: 'plantingSites',
+      sortOrder: [searchSortOrder],
       search: {
         operation: 'and',
         children: [
@@ -55,12 +61,12 @@ export default function PlantingSitesList(): JSX.Element {
       children.push(searchField);
     }
 
-    const apiSearchResults = await search(params);
+    const apiSearchResults = await SearchService.search(params);
     if (!debouncedSearchTerm) {
       setPlantingSites(apiSearchResults);
     }
     setSearchResults(apiSearchResults);
-  }, [selectedOrganization, debouncedSearchTerm]);
+  }, [selectedOrganization, debouncedSearchTerm, searchSortOrder]);
 
   useEffect(() => {
     onSearch();
@@ -112,6 +118,7 @@ export default function PlantingSitesList(): JSX.Element {
               results={searchResults || []}
               temporalSearchValue={temporalSearchValue}
               setTemporalSearchValue={setTemporalSearchValue}
+              setSearchSortOrder={(order: SearchSortOrder) => setSearchSortOrder(order)}
             />
           </Box>
         ) : (

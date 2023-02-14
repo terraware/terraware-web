@@ -54,7 +54,7 @@ import {
 } from './components/Inventory/withdraw';
 import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
-import { listPlantingSites } from './api/tracking/tracking';
+import { TrackingService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import isEnabled from 'src/features';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
@@ -119,18 +119,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       position: 'fixed',
       zIndex: 1300,
       inset: '0px',
-    },
-  },
-  spinner: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    margin: 'auto',
-    minHeight: '100vh',
-    '& .MuiCircularProgress-svg': {
-      color: theme.palette.TwClrIcnBrand,
-      height: '193px',
     },
   },
 }));
@@ -203,7 +191,7 @@ function AppContent() {
   const reloadTracking = useCallback(() => {
     const populatePlantingSites = async () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        const response = await listPlantingSites(selectedOrganization.id, true);
+        const response = await TrackingService.listPlantingSites(selectedOrganization.id, true);
         if (response.requestSucceeded) {
           setPlantingSites(response.sites || []);
         }

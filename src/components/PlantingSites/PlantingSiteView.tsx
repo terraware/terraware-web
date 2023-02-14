@@ -3,7 +3,7 @@ import { Typography, Grid, Theme, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { getPlantingSite } from 'src/api/tracking/tracking';
+import { TrackingService } from 'src/services';
 import { APP_PATHS } from 'src/constants';
 import { useHistory, useParams } from 'react-router-dom';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -37,7 +37,7 @@ export default function PlantingSiteView(): JSX.Element {
 
   useEffect(() => {
     const loadPlantingSite = async () => {
-      const response = await getPlantingSite(Number.parseInt(plantingSiteId, 10));
+      const response = await TrackingService.getPlantingSite(Number.parseInt(plantingSiteId, 10));
       if (response.requestSucceeded) {
         setPlantingSite(response.site);
       }

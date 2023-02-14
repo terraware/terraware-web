@@ -4,13 +4,7 @@ import strings from 'src/strings';
 import PageForm from 'src/components/common/PageForm';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import useForm from 'src/utils/useForm';
-import {
-  getPlantingSite,
-  PlantingSitePostRequestBody,
-  PlantingSitePutRequestBody,
-  postPlantingSite,
-  updatePlantingSite,
-} from 'src/api/tracking/tracking';
+import TrackingService, { PlantingSitePostRequestBody, PlantingSitePutRequestBody } from 'src/services/TrackingService';
 import { APP_PATHS } from 'src/constants';
 import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -49,7 +43,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   useEffect(() => {
     const fetchPlantingSite = async () => {
       if (plantingSiteId) {
-        const serverResponse = await getPlantingSite(Number.parseInt(plantingSiteId, 10));
+        const serverResponse = await TrackingService.getPlantingSite(Number.parseInt(plantingSiteId, 10));
         if (serverResponse.requestSucceeded) {
           setSelectedPlantingSite(serverResponse.site);
           setLoaded(true);
@@ -95,14 +89,14 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         organizationId: selectedOrganization.id,
         timeZone: record.timeZone,
       };
-      response = await postPlantingSite(newPlantingSite);
+      response = await TrackingService.createPlantingSite(newPlantingSite);
     } else {
       const updatedPlantingSite: PlantingSitePutRequestBody = {
         name: record.name,
         description: record.description,
         timeZone: record.timeZone,
       };
-      response = await updatePlantingSite(record.id, updatedPlantingSite);
+      response = await TrackingService.updatePlantingSite(record.id, updatedPlantingSite);
     }
 
     if (response.requestSucceeded) {
