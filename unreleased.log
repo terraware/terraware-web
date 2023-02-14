@@ -1,3 +1,4 @@
+f92ae29e SW-2949 Use (raw) fields for inventory quantity based logic (#1196)
 34172bd4 SW-2936 Disable Removing Status Column from Accessions (#1195)
 3ce66aa9 SW-2621 Add Pills to Accession Filters (#1192)
 b9d75246 SW-2955 Remove scrollbars during progress circle animation (#1190)
