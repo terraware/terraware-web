@@ -3,14 +3,13 @@ import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Select } from '@terraware/web-components';
-import { listPlantingSites } from 'src/api/tracking/tracking';
 import { PlantingSite } from 'src/types/Tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { APP_PATHS } from 'src/constants';
 import PlantingSiteDetails from './PlantingSiteDetails';
-import { PreferencesService } from 'src/services';
+import { PreferencesService, TrackingService } from 'src/services';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { useOrganization } from 'src/providers/hooks';
@@ -37,7 +36,7 @@ export default function PlantsDashboard(): JSX.Element {
 
   useEffect(() => {
     const populatePlantingSites = async () => {
-      const serverResponse = await listPlantingSites(selectedOrganization.id);
+      const serverResponse = await TrackingService.listPlantingSites(selectedOrganization.id);
       if (serverResponse.requestSucceeded) {
         setPlantingSites(serverResponse.sites ?? []);
       } else {

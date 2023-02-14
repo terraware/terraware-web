@@ -5,15 +5,18 @@ import strings from 'src/strings';
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 import isEnabled from 'src/features';
 import Table from 'src/components/common/table';
+import { SortOrder } from 'src/components/common/table/sort';
+import { SearchSortOrder } from 'src/services/SearchService';
 
 interface PlantingSitesTableProps {
   results: SearchResponseElement[];
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
+  setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
 }
 
 export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.Element {
-  const { results, setTemporalSearchValue, temporalSearchValue } = props;
+  const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder } = props;
   const theme = useTheme();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
   const columns: TableColumnType[] = [
@@ -30,6 +33,13 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
     { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
     { key: 'numPlots', name: strings.PLOTS, type: 'string' },
   ];
+
+  const onSortChange = (order: SortOrder, orderBy: string) => {
+    setSearchSortOrder({
+      field: orderBy as string,
+      direction: order === 'asc' ? 'Ascending' : 'Descending',
+    });
+  };
 
   return (
     <Box
@@ -68,6 +78,8 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
                 rows={results}
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}
+                sortHandler={onSortChange}
+                isPresorted={true}
               />
             </Grid>
           </Grid>

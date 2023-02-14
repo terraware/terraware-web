@@ -21,7 +21,7 @@ import Divisor from 'src/components/common/Divisor';
 import { Dropdown, Textfield, DropdownItem, IconTooltip } from '@terraware/web-components';
 import DatePicker from 'src/components/common/DatePicker';
 import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
-import { listPlantingSites } from 'src/api/tracking/tracking';
+import { TrackingService } from 'src/services';
 import { getAllSpecies } from 'src/api/species/species';
 import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -122,7 +122,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (plantingSites) {
       return;
     }
-    const response = await listPlantingSites(selectedOrganization.id, true);
+    const response = await TrackingService.listPlantingSites(selectedOrganization.id, true);
     if (response.requestSucceeded && response.sites) {
       setPlantingSites(response.sites);
     } else {

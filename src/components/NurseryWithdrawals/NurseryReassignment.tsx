@@ -3,10 +3,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Box, CircularProgress, Grid, Theme, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
 import { Delivery } from 'src/types/Tracking';
-import { getDelivery } from 'src/api/tracking/deliveries';
-import { getPlantingSite } from 'src/api/tracking/tracking';
+import { TrackingService } from 'src/services';
 import { getAllSpecies } from 'src/api/species/species';
-import { reassignPlantings } from 'src/api/tracking/deliveries';
 import useSnackbar from 'src/utils/useSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import strings from 'src/strings';
@@ -92,7 +90,7 @@ export default function NurseryReassignment(): JSX.Element {
     }
 
     const populateDelivery = async () => {
-      const response = await getDelivery(Number(deliveryId));
+      const response = await TrackingService.getDelivery(Number(deliveryId));
       if (response.requestSucceeded) {
         setDelivery(response.delivery);
       } else {
@@ -114,7 +112,7 @@ export default function NurseryReassignment(): JSX.Element {
       if (!plotIds.length) {
         return;
       }
-      const response = await getPlantingSite(delivery.plantingSiteId);
+      const response = await TrackingService.getPlantingSite(delivery.plantingSiteId);
       if (response.requestSucceeded && response.site) {
         setSiteName(response.site.name);
         const zone = response.site.plantingZones?.find((otherZone) =>
@@ -170,7 +168,7 @@ export default function NurseryReassignment(): JSX.Element {
     };
 
     setReassigning(true);
-    const response = await reassignPlantings(delivery!.id, request);
+    const response = await TrackingService.reassignPlantings(delivery!.id, request);
     setReassigning(false);
     if (response.requestSucceeded) {
       goToWithdrawals();

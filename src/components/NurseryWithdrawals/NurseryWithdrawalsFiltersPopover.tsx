@@ -11,7 +11,7 @@ import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { NurseryWithdrawalsFiltersType } from './NurseryWithdrawals';
 import { NurseryWithdrawalPurposesValues } from 'src/types/Batch';
-import { listPlantingSites } from 'src/api/tracking/tracking';
+import { TrackingService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -108,7 +108,7 @@ export default function NurseryWithdrawalsFiltersPopover({
 
   useEffect(() => {
     const populatePlantingSites = async () => {
-      const result = await listPlantingSites(selectedOrganization.id);
+      const result = await TrackingService.listPlantingSites(selectedOrganization.id);
       if (result.requestSucceeded) {
         setPlantingSites(result.sites);
       } else {

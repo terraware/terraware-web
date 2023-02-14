@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { PlantingSite } from 'src/types/Tracking';
-import { getPlantingSite } from 'src/api/tracking/tracking';
+import { TrackingService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PlantingSitePlot } from './PlantingSiteDetails';
 import { GenericMap, PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
@@ -41,7 +41,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
     }
 
     const fetchPlantingSite = async () => {
-      const response = await getPlantingSite(siteId);
+      const response = await TrackingService.getPlantingSite(siteId);
       if (response.requestSucceeded) {
         setPlantingSite(response.site);
       } else {
