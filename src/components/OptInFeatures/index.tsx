@@ -55,6 +55,11 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
     if (feature.set) {
       feature.set(value);
     } else {
+      // set it to true for a responsive feedback
+      setPreferences((prev) => ({
+        ...prev,
+        [feature.preferenceName]: value,
+      }));
       response = await PreferencesService.updateUserPreferences({ [feature.preferenceName]: value });
     }
 
