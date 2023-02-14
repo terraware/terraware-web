@@ -141,7 +141,7 @@ export default function NurseryView(): JSX.Element {
                 <LocationTimeZoneSelector
                   location={record}
                   onChangeTimeZone={onChangeTimeZone}
-                  tooltip='lorem ipsum dolor sit amet'
+                  tooltip={strings.TOOLTIP_TIME_ZONE_NURSERY}
                 />
               </Grid>
             )}

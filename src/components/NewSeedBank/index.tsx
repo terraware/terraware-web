@@ -150,7 +150,11 @@ export default function SeedBankView(): JSX.Element {
             </Grid>
             {timeZoneFeatureEnabled && (
               <Grid item xs={gridSize()}>
-                <LocationTimeZoneSelector location={record} onChangeTimeZone={onChangeTimeZone} />
+                <LocationTimeZoneSelector
+                  location={record}
+                  onChangeTimeZone={onChangeTimeZone}
+                  tooltip={strings.TOOLTIP_TIME_ZONE_SEEDBANK}
+                />
               </Grid>
             )}
           </Grid>
