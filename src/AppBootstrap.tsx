@@ -12,15 +12,18 @@ import {
 
 const useStyles = makeStyles((theme: Theme) => ({
   spinner: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
+    height: '200px',
+    width: '200px',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
     margin: 'auto',
-    minHeight: '100vh',
     '& .MuiCircularProgress-svg': {
       color: theme.palette.TwClrIcnBrand,
-      height: '193px',
+      height: '200px',
+      width: '200px',
     },
   },
 }));
