@@ -365,6 +365,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
       <ListItemText
         className={classes.notificationContent}
         primary={<span className={classes.notificationTitle}>{title}</span>}
+        sx={{ paddingBottom: hideDate ? 1 : 0 }}
         secondary={
           <>
             <span className={classes.notificationBody}>{body}</span>
