@@ -10,6 +10,7 @@ import useDebounce from 'src/utils/useDebounce';
 import Icon from 'src/components/common/icon/Icon';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import FilterGroup from 'src/components/common/FilterGroup';
+import { PillList, PillListItem } from '@terraware/web-components';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -21,7 +22,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(2, 0, 2, 0),
     padding: theme.spacing(0),
     display: 'flex',
-    flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
+    flexDirection: 'column',
+    gap: theme.spacing(1),
   },
   filtersContainer: {
     minHeight: '32px',
@@ -142,6 +144,12 @@ export default function Filters(props: Props): JSX.Element {
     onChange({ ...Object.fromEntries(keepFilters), ...newFilters });
   };
 
+  const removeFilter = (key: string) => {
+    const newFilters = { ...filters };
+    delete newFilters[key];
+    onChange(newFilters);
+  };
+
   const onChangeSearch = (value: unknown) => {
     setSearchTerm(value as string);
   };
@@ -170,6 +178,27 @@ export default function Filters(props: Props): JSX.Element {
       />
     );
   };
+
+  const preExpFilterPill: PillListItem<string> = filters.preExpFilter && {
+    id: 'preExpFilter',
+    label: strings.STATUS,
+    value: filters.preExpFilter.values.join(', '),
+  };
+
+  const filterPillItems = [];
+  if (preExpFilterPill) {
+    filterPillItems.push(preExpFilterPill);
+  }
+  for (const col of columns) {
+    const filter = filters[col.key];
+    if (filter) {
+      filterPillItems.push({
+        id: col.key,
+        label: col.name,
+        value: filter.values.join(` ${strings.TO.toLowerCase()} `),
+      } as PillListItem<string>);
+    }
+  }
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
@@ -254,6 +283,7 @@ export default function Filters(props: Props): JSX.Element {
           />
         </Popover>
       </div>
+      <PillList data={filterPillItems} onRemove={removeFilter} />
     </Container>
   );
 }
