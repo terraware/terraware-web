@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Grid, useTheme } from '@mui/material';
 import { TableColumnType, Textfield } from '@terraware/web-components';
 import { SearchResponseElement } from 'src/api/search';
@@ -17,6 +18,7 @@ interface PlantingSitesTableProps {
 
 export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.Element {
   const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder } = props;
+  const [isPresorted, setIsPresorted] = useState<boolean>(false);
   const theme = useTheme();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
   const columns: TableColumnType[] = [
@@ -39,6 +41,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
       field: orderBy as string,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
+    setIsPresorted(orderBy !== 'timeZone');
   };
 
   return (
@@ -79,7 +82,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}
                 sortHandler={onSortChange}
-                isPresorted={true}
+                isPresorted={isPresorted}
               />
             </Grid>
           </Grid>
