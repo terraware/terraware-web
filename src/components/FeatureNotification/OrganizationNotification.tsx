@@ -23,14 +23,18 @@ export default function OrganizationNotification(): Notification | null {
   const timeZones = useTimeZones();
 
   useEffect(() => {
+    const getTimeZoneById = (id?: string): TimeZoneDescription => {
+      return getTimeZone(timeZones, id) ?? getUTC(timeZones);
+    };
+
     const getDefaultTimeZone = (): TimeZoneDescription => {
       const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      return getTimeZone(timeZones, browserTimeZone) || getUTC(timeZones);
+      return getTimeZoneById(browserTimeZone);
     };
 
     const notifyTimeZoneUpdates = (orgTz: InitializedTimeZone) => {
       const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
-      setOrgTimeZone(orgTz.timeZone);
+      setOrgTimeZone(getTimeZoneById(orgTz.timeZone).longName);
       setTimeZoneOrgNotification(!!notifyOrg);
     };
 
