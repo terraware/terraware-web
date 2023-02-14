@@ -1,14 +1,13 @@
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
-import Checkbox from '../../../common/Checkbox';
-import { FieldNodePayload } from '../../../../api/search';
+import React, { useMemo } from 'react';
+import { FieldNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import { Option } from '@terraware/web-components/components/table/types';
+import { MultiSelect } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
-    width: '264px',
     padding: theme.spacing(1.75),
   },
   item: {
@@ -33,16 +32,33 @@ export default function MultipleSelection(props: Props): JSX.Element {
     setSelections(props.values);
   }, [props.values]);
 
-  const handleChange = (value: string | null) => {
-    const updatesValues = [...selections];
+  const optionsMap = useMemo(
+    () =>
+      new Map<string, string>(
+        props.options.filter((opt) => opt.value && opt.label).map((opt) => [opt.value!, opt.label!])
+      ),
+    [props.options]
+  );
 
+  const onAdd = (value: string | null) => {
+    const updatesValues = [...selections];
     const valueIndex = updatesValues.findIndex((v) => v === value);
     if (valueIndex < 0) {
       updatesValues.push(value);
-    } else {
+    }
+    updateFilters(updatesValues);
+  };
+
+  const onRemove = (value: string | null) => {
+    const updatesValues = [...selections];
+    const valueIndex = updatesValues.findIndex((v) => v === value);
+    if (valueIndex >= 0) {
       updatesValues.splice(valueIndex, 1);
     }
+    updateFilters(updatesValues);
+  };
 
+  const updateFilters = (updatesValues: (string | null)[]) => {
     filter.current = {
       field: props.field,
       values: updatesValues,
@@ -66,18 +82,14 @@ export default function MultipleSelection(props: Props): JSX.Element {
 
   return (
     <div id={`filter-list-${props.field}`} className={classes.box}>
-      {options.map(({ label, value, disabled }) => (
-        <div key={value} className={classes.item}>
-          <Checkbox
-            id={value || ''}
-            name={value || ''}
-            label={label}
-            value={selections.includes(value)}
-            onChange={() => handleChange(value)}
-            disabled={disabled}
-          />
-        </div>
-      ))}
+      <MultiSelect
+        fullWidth={true}
+        onAdd={onAdd}
+        onRemove={onRemove}
+        options={optionsMap}
+        valueRenderer={(v) => v}
+        selectedOptions={selections}
+      />
     </div>
   );
 }
