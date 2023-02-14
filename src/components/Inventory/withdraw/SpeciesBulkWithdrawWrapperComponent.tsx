@@ -4,6 +4,7 @@ import { NurseryBatchService } from 'src/services';
 import useQuery from 'src/utils/useQuery';
 import BatchWithdrawFlow from './BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers';
 
 type SpeciesBulkWithdrawWrapperComponentProps = {
   withdrawalCreatedCallback?: () => void;
@@ -11,6 +12,7 @@ type SpeciesBulkWithdrawWrapperComponentProps = {
 export default function SpeciesBulkWithdrawWrapperComponent(
   props: SpeciesBulkWithdrawWrapperComponentProps
 ): JSX.Element | null {
+  const { selectedOrganization } = useOrganization();
   const { withdrawalCreatedCallback } = props;
   const [speciesIds, setSpeciesIds] = useState<string[]>();
   const [batchIds, setBatchIds] = useState<string[]>();
@@ -31,7 +33,10 @@ export default function SpeciesBulkWithdrawWrapperComponent(
   useEffect(() => {
     const populateResults = async () => {
       if (speciesIds) {
-        const searchResponse = await NurseryBatchService.getBatchesForSpecies(speciesIds.map((id) => Number(id)));
+        const searchResponse = await NurseryBatchService.getBatchIdsForSpecies(
+          selectedOrganization.id,
+          speciesIds.map((id) => Number(id))
+        );
         const ids = searchResponse?.map((sr) => sr.id as string);
         if (ids?.length) {
           setBatchIds(ids);
@@ -43,7 +48,7 @@ export default function SpeciesBulkWithdrawWrapperComponent(
     };
 
     populateResults();
-  }, [speciesIds, history]);
+  }, [speciesIds, history, selectedOrganization.id]);
 
   return batchIds ? (
     <BatchWithdrawFlow

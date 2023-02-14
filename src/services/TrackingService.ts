@@ -1,6 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { Delivery, PlantingSite } from 'src/types/Tracking';
+import { PlantingSiteZone, Population } from 'src/types/PlantingSite';
+import SearchService, { SearchCriteria } from './SearchService';
 
 /**
  * Tracking related services
@@ -144,6 +146,55 @@ const reassignPlantings = async (deliveryId: number, reassignments: ReassignPost
   });
 };
 
+// helper to get search criteria
+const getSearchCriteria = (organizationId: number, siteId: number): SearchCriteria => ({
+  children: [
+    {
+      operation: 'field',
+      field: 'plantingSite_id',
+      values: [siteId.toString()],
+    },
+    {
+      operation: 'field',
+      field: 'plantingSite_organization_id',
+      values: [organizationId.toString()],
+    },
+  ],
+  operation: 'and',
+});
+
+/**
+ * Get planting zone total plants
+ */
+const getTotalPlantsInZones = async (organizationId: number, siteId: number): Promise<PlantingSiteZone[] | null> => {
+  return (await SearchService.search({
+    prefix: 'plantingSites.plantingZones',
+    fields: [
+      'plots.id',
+      'plots.fullName',
+      'plots.populations.species_scientificName',
+      'plots.populations.species_organization_id',
+      'plots.populations.totalPlants',
+      'id',
+      'name',
+    ],
+    search: getSearchCriteria(organizationId, siteId),
+    count: 0,
+  })) as PlantingSiteZone[] | null;
+};
+
+/**
+ * Get total plants in planting site
+ */
+const getTotalPlantsInSite = async (organizationId: number, siteId: number): Promise<Population[] | null> => {
+  return (await SearchService.search({
+    prefix: 'plantingSites.populations',
+    fields: ['species_scientificName', 'totalPlants(raw)'],
+    search: getSearchCriteria(organizationId, siteId),
+    count: 0,
+  })) as unknown as Population[] | null;
+};
+
 /**
  * Exported functions
  */
@@ -154,6 +205,8 @@ const TrackingService = {
   updatePlantingSite,
   getDelivery,
   reassignPlantings,
+  getTotalPlantsInZones,
+  getTotalPlantsInSite,
 };
 
 export default TrackingService;

@@ -20,7 +20,7 @@ import BusySpinner from 'src/components/common/BusySpinner';
 import { useOrganization } from 'src/providers/hooks';
 import Table from 'src/components/common/table';
 import { useUser } from 'src/providers';
-import { useNumberParser, useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumber';
 import { makeStyles } from '@mui/styles';
 import BackToLink from 'src/components/common/BackToLink';
 
@@ -35,7 +35,6 @@ export default function NurseryReassignment(): JSX.Element {
   const classes = useStyles();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
-  const numberParser = useNumberParser();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const history = useHistory();
@@ -61,7 +60,6 @@ export default function NurseryReassignment(): JSX.Element {
     { key: 'notes', name: strings.NOTES, type: 'string' },
   ];
 
-  const numericParser = useMemo(() => numberParser(user?.locale), [numberParser, user?.locale]);
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   // populate map of species id to scientific name
@@ -208,7 +206,6 @@ export default function NurseryReassignment(): JSX.Element {
   const reassignmentRenderer = useMemo(
     () =>
       ReassignmentRenderer({
-        numericParser,
         numericFormatter,
         plots: plots || [],
         setReassignment: (reassignment: Reassignment) =>
@@ -218,7 +215,7 @@ export default function NurseryReassignment(): JSX.Element {
             return newReassignments;
           }),
       }),
-    [plots, numericParser, numericFormatter]
+    [plots, numericFormatter]
   );
 
   return (

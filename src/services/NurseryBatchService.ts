@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { Batch, CreateBatchRequestPayload } from 'src/types/Batch';
-import SearchService, { SearchResponseElement } from './SearchService';
+import SearchService, { SearchNodePayload, SearchResponseElement, SearchSortOrder } from './SearchService';
 
 /**
  * Nursery related services
@@ -10,6 +10,29 @@ import SearchService, { SearchResponseElement } from './SearchService';
 const BATCHES_ENDPOINT = '/api/v1/nursery/batches';
 const BATCH_ID_ENDPOINT = '/api/v1/nursery/batches/{id}';
 const BATCH_QUANTITIES_ENDPOINT = '/api/v1/nursery/batches/{id}/quantities';
+
+const DEFAULT_BATCH_FIELDS = [
+  'id',
+  'batchNumber',
+  'germinatingQuantity',
+  'notReadyQuantity',
+  'readyQuantity',
+  'totalQuantity',
+  'totalQuantityWithdrawn',
+  'germinatingQuantity(raw)',
+  'notReadyQuantity(raw)',
+  'readyQuantity(raw)',
+  'totalQuantity(raw)',
+  'totalQuantityWithdrawn(raw)',
+  'facility_id',
+  'facility_name',
+  'readyByDate',
+  'addedDate',
+  'version',
+  'accession_id',
+  'accession_accessionNumber',
+  'notes',
+];
 
 export type BatchId = {
   batchId: number | null;
@@ -58,39 +81,20 @@ const getBatch = async (batchId: number): Promise<Response & BatchData> => {
 /**
  * Get batches by list of ids
  */
-const getBatches = async (batchIds: number[]): Promise<SearchResponseElement[] | null> => {
+const getBatches = async (organizationId: number, batchIds: number[]): Promise<SearchResponseElement[] | null> => {
   const searchResponse = await SearchService.search({
     prefix: 'batches',
-    search: {
-      operation: 'and',
-      children: [
-        {
+    search: SearchService.convertToSearchNodePayload(
+      {
+        children: {
           operation: 'field',
           field: 'id',
           values: batchIds.map((id) => id.toString()),
         },
-      ],
-    },
-    fields: [
-      'id',
-      'batchNumber',
-      'germinatingQuantity',
-      'notReadyQuantity',
-      'readyQuantity',
-      'totalQuantity',
-      'totalQuantityWithdrawn',
-      'facility_id',
-      'facility_name',
-      'readyByDate',
-      'addedDate',
-      'version',
-      'accession_id',
-      'accession_accessionNumber',
-      'notes',
-      'species_id',
-      'species_scientificName',
-      'species_commonName',
-    ],
+      },
+      organizationId
+    ),
+    fields: [...DEFAULT_BATCH_FIELDS, 'species_id', 'species_scientificName', 'species_commonName'],
     count: 1000,
   });
 
@@ -98,10 +102,41 @@ const getBatches = async (batchIds: number[]): Promise<SearchResponseElement[] |
 };
 
 /**
- * Get batches for species
+ * Get batch ids for species
  */
-const getBatchesForSpecies = async (speciesIds: number[]): Promise<SearchResponseElement[] | null> => {
+const getBatchIdsForSpecies = async (
+  organizationId: number,
+  speciesIds: number[]
+): Promise<SearchResponseElement[] | null> => {
   const searchResponse = await SearchService.search({
+    prefix: 'batches',
+    search: SearchService.convertToSearchNodePayload(
+      {
+        children: {
+          operation: 'field',
+          field: 'species_id',
+          values: speciesIds.map((id) => id.toString()),
+        },
+      },
+      organizationId
+    ),
+    fields: ['id'],
+    count: 1000,
+  });
+
+  return searchResponse;
+};
+
+/**
+ * Get batches for a single species by it's id
+ */
+const getBatchesForSpeciesById = async (
+  organizationId: number,
+  speciesId: number,
+  searchFields: SearchNodePayload[],
+  searchSortOrder?: SearchSortOrder
+): Promise<SearchResponseElement[] | null> => {
+  const searchParams = {
     prefix: 'batches',
     search: {
       operation: 'and',
@@ -109,15 +144,34 @@ const getBatchesForSpecies = async (speciesIds: number[]): Promise<SearchRespons
         {
           operation: 'field',
           field: 'species_id',
-          values: speciesIds.map((id) => id.toString()),
+          values: [speciesId.toString()],
+        },
+        {
+          operation: 'field',
+          field: 'species_organization_id',
+          values: [organizationId.toString()],
+          type: 'Exact',
         },
       ],
     },
-    fields: ['id'],
+    fields: DEFAULT_BATCH_FIELDS,
+    sortOrder: [
+      searchSortOrder ?? {
+        field: 'batchNumber',
+      },
+    ],
     count: 1000,
-  });
+  };
 
-  return searchResponse;
+  if (searchFields.length) {
+    const children: any = searchParams.search.children;
+    children.push({
+      operation: 'and',
+      children: searchFields,
+    });
+  }
+
+  return await SearchService.search(searchParams);
 };
 
 /**
@@ -180,7 +234,8 @@ const NurseryBatchService = {
   createBatch,
   getBatch,
   getBatches,
-  getBatchesForSpecies,
+  getBatchIdsForSpecies,
+  getBatchesForSpeciesById,
   deleteBatch,
   updateBatch,
   updateBatchQuantities,
