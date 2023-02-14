@@ -178,8 +178,8 @@ function sections(system?: string): Section[] {
       name: strings.GENERAL,
       options: [
         [{ ...columns.accessionNumber, disabled: true }],
+        [{ ...columns.state, disabled: true }],
         [columns.active],
-        [columns.state],
         [columns.facility_name],
       ],
     },
