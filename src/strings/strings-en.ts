@@ -941,11 +941,16 @@ export const strings = {
     'A structural category consisting of individuals or species of the same general habit of growth but not necessarily related.',
   TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR:
     'The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage.',
-  TOOLTIP_TIME_ZONE_MY_ACCOUNT: 'Lorem ipsum...',
-  TOOLTIP_TIME_ZONE_NURSERY: 'Lorem ipsum...',
-  TOOLTIP_TIME_ZONE_ORGANIZATION: 'Lorem ipsum...',
-  TOOLTIP_TIME_ZONE_PLANTING_SITE: 'Lorem ipsum...',
-  TOOLTIP_TIME_ZONE_SEEDBANK: 'Lorem ipsum...',
+  TOOLTIP_TIME_ZONE_MY_ACCOUNT:
+    'We use time zones to display notifications in your local time. Select the time zone that applies to you.',
+  TOOLTIP_TIME_ZONE_NURSERY:
+    'We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to this nursery. All work done in this nursery will use this time zone.',
+  TOOLTIP_TIME_ZONE_ORGANIZATION:
+    'We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to your organization as a whole. You can select time zones for your seed banks, nurseries, and planting sites in each of their settings pages.',
+  TOOLTIP_TIME_ZONE_PLANTING_SITE:
+    'We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to this specific planting site. All work done in this planting site will use this time zone.',
+  TOOLTIP_TIME_ZONE_SEEDBANK:
+    'We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to this seed bank. All work done in this seed bank will use this time zone.',
   TOOLTIP_TOTAL_QUANTITY: 'Total quantity is the sum of the not ready and ready quantities.',
   TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH: 'A dish that contains a growth medium of solidified agar.',
   TOOLTIP_VIABILITY_TEST_CHEMICAL:

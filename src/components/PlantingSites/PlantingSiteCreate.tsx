@@ -188,7 +188,11 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                   </Grid>
                   {timeZoneFeatureEnabled && (
                     <Grid item xs={gridSize()} marginTop={3}>
-                      <LocationTimeZoneSelector location={record} onChangeTimeZone={onChangeTimeZone} />
+                      <LocationTimeZoneSelector
+                        location={record}
+                        onChangeTimeZone={onChangeTimeZone}
+                        tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
+                      />
                     </Grid>
                   )}
                 </Box>
