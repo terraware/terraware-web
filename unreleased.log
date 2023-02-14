@@ -1,3 +1,4 @@
+2713ca24 SW-2962 Sort timezones by display name (#1191)
 60d079d2 SW-2911 / SW-2947 / SW-2953 Show storage locations in seed bank details view (#1187)
 7e5e413d SW-2817 TrackingService refactor  (#1188)
 628f1240 SW-2958 Use time zone's localized name instead of it's id in the notification (#1189)
