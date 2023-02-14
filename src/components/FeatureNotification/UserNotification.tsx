@@ -27,14 +27,18 @@ export default function UserNotification(): Notification | null {
   const timeZones = useTimeZones();
 
   useEffect(() => {
+    const getTimeZoneById = (id?: string): TimeZoneDescription => {
+      return getTimeZone(timeZones, id) ?? getUTC(timeZones);
+    };
+
     const getDefaultTimeZone = (): TimeZoneDescription => {
       const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      return getTimeZone(timeZones, browserTimeZone) || getUTC(timeZones);
+      return getTimeZoneById(browserTimeZone);
     };
 
     const notifyTimeZoneUpdates = (userTz: InitializedTimeZone) => {
       const notifyUser = userTz.timeZone && !userTz.timeZoneAcknowledgedOnMs;
-      setUserTimeZone(userTz.timeZone);
+      setUserTimeZone(getTimeZoneById(userTz.timeZone).longName);
       setTimeZoneUserNotification(!!notifyUser);
     };
 
