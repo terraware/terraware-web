@@ -45,8 +45,8 @@ export default function MultipleSelection(props: Props): JSX.Element {
     const valueIndex = updatesValues.findIndex((v) => v === value);
     if (valueIndex < 0) {
       updatesValues.push(value);
+      updateFilters(updatesValues);
     }
-    updateFilters(updatesValues);
   };
 
   const onRemove = (value: string | null) => {
@@ -54,8 +54,8 @@ export default function MultipleSelection(props: Props): JSX.Element {
     const valueIndex = updatesValues.findIndex((v) => v === value);
     if (valueIndex >= 0) {
       updatesValues.splice(valueIndex, 1);
+      updateFilters(updatesValues);
     }
-    updateFilters(updatesValues);
   };
 
   const updateFilters = (updatesValues: (string | null)[]) => {
