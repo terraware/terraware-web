@@ -1,5 +1,6 @@
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
-
+import { SearchResponseElement } from 'src/services/SearchService';
+import { Facility } from 'src/types/Facility';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 
 type Location = {
@@ -16,13 +17,19 @@ export const getTimeZone = (timeZones: TimeZoneDescription[], id?: string): Time
 };
 
 /**
- * util to get time zone or default to UTC
+ * Populate a search response element with time zone value
  */
-export const useGetTimeZone = () => {
-  const timeZones = useTimeZones();
-  const defaultTz = useDefaultTimeZone();
+export const setTimeZone = (
+  element: SearchResponseElement | Facility,
+  timeZones: TimeZoneDescription[],
+  defaultTimeZone: TimeZoneDescription
+) => {
+  const { timeZone } = element;
+  const tz = getTimeZone(timeZones, timeZone as string) ?? defaultTimeZone;
+
   return {
-    get: (id: string): TimeZoneDescription => getTimeZone(timeZones, id) ?? defaultTz.get(),
+    ...element,
+    timeZone: tz.longName,
   };
 };
 

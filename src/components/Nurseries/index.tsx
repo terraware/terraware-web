@@ -17,6 +17,8 @@ import NurseriesCellRenderer from './TableCellRenderer';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import isEnabled from 'src/features';
 import Table from 'src/components/common/table';
+import { useTimeZones } from 'src/providers/hooks';
+import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type NurseriesListProps = {
   organization: Organization;
@@ -24,6 +26,8 @@ type NurseriesListProps = {
 
 export default function NurseriesList({ organization }: NurseriesListProps): JSX.Element {
   const theme = useTheme();
+  const timeZones = useTimeZones();
+  const defaultTimeZone = useDefaultTimeZone().get();
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
@@ -62,12 +66,16 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
         type: 'Nursery',
       });
 
+      const transformedResults = nurseriesResults.map((nursery) =>
+        setTimeZone(nursery, timeZones, defaultTimeZone)
+      ) as Facility[];
+
       if (getRequestId('searchNurseries') === requestId) {
-        setResults(nurseriesResults);
+        setResults(transformedResults);
       }
     };
     refreshSearch();
-  }, [debouncedSearchTerm, organization]);
+  }, [debouncedSearchTerm, organization, timeZones, defaultTimeZone]);
 
   return (
     <TfMain>

@@ -1,7 +1,7 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import SearchService, { SearchResponseElement } from 'src/services/SearchService';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
@@ -12,10 +12,13 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import PlantingSitesTable from './PlantingSitesTable';
 import PlantingSiteTypeSelect from './PlantingSiteTypeSelect';
 import { SearchSortOrder } from 'src/services/SearchService';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization, useTimeZones } from 'src/providers/hooks';
+import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export default function PlantingSitesList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const timeZones = useTimeZones();
+  const defaultTimeZone = useDefaultTimeZone().get();
   const contentRef = useRef(null);
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [plantingSites, setPlantingSites] = useState<SearchResponseElement[] | null>();
@@ -62,11 +65,12 @@ export default function PlantingSitesList(): JSX.Element {
     }
 
     const apiSearchResults = await SearchService.search(params);
+    const transformedResults = apiSearchResults?.map((result) => setTimeZone(result, timeZones, defaultTimeZone));
     if (!debouncedSearchTerm) {
-      setPlantingSites(apiSearchResults);
+      setPlantingSites(transformedResults);
     }
-    setSearchResults(apiSearchResults);
-  }, [selectedOrganization, debouncedSearchTerm, searchSortOrder]);
+    setSearchResults(transformedResults);
+  }, [selectedOrganization, debouncedSearchTerm, searchSortOrder, timeZones, defaultTimeZone]);
 
   useEffect(() => {
     onSearch();

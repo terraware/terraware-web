@@ -19,6 +19,8 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import isEnabled from 'src/features';
+import { useTimeZones } from 'src/providers/hooks';
+import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -53,6 +55,8 @@ type SeedBanksListProps = {
 };
 
 export default function SeedBanksList({ organization }: SeedBanksListProps): JSX.Element {
+  const timeZones = useTimeZones();
+  const defaultTimeZone = useDefaultTimeZone().get();
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
@@ -93,13 +97,17 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
         type: 'Seed Bank',
       });
 
+      const transformedResults = seedBanksResults.map((seedBank) =>
+        setTimeZone(seedBank, timeZones, defaultTimeZone)
+      ) as Facility[];
+
       if (getRequestId('searchSeedbanks') === requestId) {
-        setResults(seedBanksResults);
+        setResults(transformedResults);
       }
     };
 
     refreshSearch();
-  }, [debouncedSearchTerm, organization]);
+  }, [debouncedSearchTerm, organization, timeZones, defaultTimeZone]);
 
   return (
     <TfMain>
