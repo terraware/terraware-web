@@ -1,3 +1,4 @@
+b9d75246 SW-2955 Remove scrollbars during progress circle animation (#1190)
 e101c3d6 SW-2965 Add bottom padding to feature notifications (#1193)
 2713ca24 SW-2962 Sort timezones by display name (#1191)
 60d079d2 SW-2911 / SW-2947 / SW-2953 Show storage locations in seed bank details view (#1187)
