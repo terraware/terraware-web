@@ -1,6 +1,6 @@
 import { Container, IconButton, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FieldValuesPayload, SearchNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -126,6 +126,30 @@ export default function Filters(props: Props): JSX.Element {
     setFilterAnchorEl(null);
   };
 
+  const filterPillItems = useMemo(() => {
+    const result: PillListItem<string>[] = [];
+    const preExpFilterPill: PillListItem<string> = filters.preExpFilter && {
+      id: 'preExpFilter',
+      label: strings.STATUS,
+      value: filters.preExpFilter.values.join(', '),
+    };
+    if (preExpFilterPill) {
+      result.push(preExpFilterPill);
+    }
+    for (const col of columns) {
+      const filter = filters[col.key];
+      if (filter) {
+        result.push({
+          id: col.key,
+          label: col.name,
+          value: filter.values.join(`, `),
+        } as PillListItem<string>);
+      }
+    }
+
+    return result;
+  }, [filters, columns]);
+
   const onChangePreExpFilter = (selectedValues: string[]) => {
     let newFilters;
     if (selectedValues.length === 0) {
@@ -178,27 +202,6 @@ export default function Filters(props: Props): JSX.Element {
       />
     );
   };
-
-  const preExpFilterPill: PillListItem<string> = filters.preExpFilter && {
-    id: 'preExpFilter',
-    label: strings.STATUS,
-    value: filters.preExpFilter.values.join(', '),
-  };
-
-  const filterPillItems = [];
-  if (preExpFilterPill) {
-    filterPillItems.push(preExpFilterPill);
-  }
-  for (const col of columns) {
-    const filter = filters[col.key];
-    if (filter) {
-      filterPillItems.push({
-        id: col.key,
-        label: col.name,
-        value: filter.values.join(`, `),
-      } as PillListItem<string>);
-    }
-  }
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
