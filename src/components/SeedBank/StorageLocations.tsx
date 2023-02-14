@@ -21,7 +21,7 @@ export default function SubLocations({ seedBankId }: SubLocationsProps): JSX.Ele
   const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([]);
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [numberFormatter, activeLocale]);
   const columns: TableColumnType[] = [
-    { key: 'name', name: strings.SUB_LOCATION, type: 'string' },
+    { key: 'name', name: strings.NAME, type: 'string' },
     { key: 'activeAccessions', name: strings.ACTIVE_ACCESSIONS, type: 'number' },
   ];
 
