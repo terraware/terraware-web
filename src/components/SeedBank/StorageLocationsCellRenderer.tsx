@@ -3,7 +3,7 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
 import { ActiveStatuses } from 'src/types/Accession';
-import { NumericFormatter } from 'src/utils/useNumber';
+import { NumericFormatter } from 'src/types/Number';
 
 export type StorageLocationsCellRendererProps = {
   seedBankId: number;

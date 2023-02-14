@@ -6,14 +6,6 @@ import { useMemo } from 'react';
 
 const getLocaleToUse = (locale?: string) => (locale === 'gx' ? 'fr' : locale || 'en');
 
-export type NumericParser = {
-  parse: (str: string) => number | typeof NaN;
-};
-
-export type NumericFormatter = {
-  format: (num: number) => string;
-};
-
 export const useNumberParser = (): any => {
   const parser = (locale?: string): any => {
     const localeToUse = getLocaleToUse(locale);

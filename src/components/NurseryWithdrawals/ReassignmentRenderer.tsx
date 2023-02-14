@@ -4,7 +4,7 @@ import { Box, Typography, Theme } from '@mui/material';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { Autocomplete, Textfield } from '@terraware/web-components';
-import { NumericFormatter, NumericParser } from 'src/utils/useNumber';
+import { NumericFormatter, NumericParser } from 'src/types/Number';
 import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
