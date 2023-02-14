@@ -195,7 +195,7 @@ export default function Filters(props: Props): JSX.Element {
       filterPillItems.push({
         id: col.key,
         label: col.name,
-        value: filter.values.join(` ${strings.TO.toLowerCase()} `),
+        value: filter.values.join(`, `),
       } as PillListItem<string>);
     }
   }
