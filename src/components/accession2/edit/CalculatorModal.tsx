@@ -112,7 +112,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
         onClose={onCloseHandler}
         open={open}
         title={strings.QUANTITY}
-        size='small'
+        size='medium'
         middleButtons={[
           <Button label={strings.BACK} type='passive' onClick={goToPrev} priority='secondary' key='button-1' />,
           <Button onClick={getTotalCount} label={strings.GET_TOTAL_COUNT} key='button-2' />,
@@ -154,13 +154,15 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
           </Grid>
           <Grid item xs={12} textAlign='left'>
             <Box display='flex' textAlign='left' alignItems='end'>
-              <Textfield
-                label={strings.TOTAL_WEIGHT}
-                id='remainingQuantity'
-                onChange={(value) => onChangeRemainingQuantity(Number(value))}
-                type='text'
-                value={record.remainingQuantity?.quantity}
-              />
+              <Box width='600px'>
+                <Textfield
+                  label={strings.TOTAL_WEIGHT}
+                  id='remainingQuantity'
+                  onChange={(value) => onChangeRemainingQuantity(Number(value))}
+                  type='text'
+                  value={record.remainingQuantity?.quantity}
+                />
+              </Box>
               <Dropdown
                 options={preferredUnits}
                 placeholder={strings.SELECT}
