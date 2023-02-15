@@ -6,18 +6,20 @@ import { ActiveStatuses } from 'src/types/Accession';
 import { NumericFormatter } from 'src/types/Number';
 
 export type StorageLocationsCellRendererProps = {
-  seedBankId: number;
+  seedBankId?: number;
   numericFormatter: NumericFormatter;
+  editMode: boolean;
 };
 
 export default function StorageLocationsCellRenderer({
   seedBankId,
   numericFormatter,
+  editMode,
 }: StorageLocationsCellRendererProps) {
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, value, row } = props;
 
-    const createLinkToAccessions = (locationName: string, numAccessions: string) => {
+    const createLinkToAccessions = (locationName: string, data: string) => {
       const to = [
         `${APP_PATHS.ACCESSIONS}/?`,
         `storageLocationName=${locationName}`,
@@ -25,16 +27,24 @@ export default function StorageLocationsCellRenderer({
         ...ActiveStatuses().map((status) => `stage=${status}`),
       ].join('&');
 
-      return <Link to={to}>{numAccessions}</Link>;
+      return <Link to={to}>{data}</Link>;
     };
 
     if (column.key === 'activeAccessions') {
+      const activeAccessionsStr = numericFormatter.format(value as number);
+
       return (
         <CellRenderer
           {...props}
-          value={createLinkToAccessions(row.name as string, numericFormatter.format(value as number))}
+          value={editMode ? activeAccessionsStr : createLinkToAccessions(row.name as string, activeAccessionsStr)}
         />
       );
+    }
+
+    if (column.key === 'name') {
+      const locationName = row.name as string;
+
+      return <CellRenderer {...props} value={editMode ? <Link>{locationName}</Link> : locationName} />;
     }
 
     return <CellRenderer {...props} value={value} />;
