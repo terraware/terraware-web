@@ -20,7 +20,7 @@ interface Props {
   field: string;
   onChange: (filter: FieldNodePayload) => void;
   options: Option[];
-  values: (string | null)[];
+  value: string | null;
   isBoolean: boolean;
 }
 
@@ -72,7 +72,7 @@ export default function SingleSelection(props: Props): JSX.Element {
       <Dropdown
         options={options.map(({ label, value }) => ({ label, value } as DropdownItem))}
         onChange={(val) => handleChange(val)}
-        selectedValue={props.values[0]}
+        selectedValue={props.value}
         fullWidth={true}
       />
     </div>

@@ -107,7 +107,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
             {f.type === 'single_selection' && (
               <SingleSelection
                 field={f.name}
-                values={filters[f.name]?.values ?? []}
+                value={filters[f.name]?.values[0]}
                 onChange={(filter) => onFilterChange(f.name, filter)}
                 options={getOptions(f.name, values)}
                 isBoolean={false}
@@ -119,7 +119,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
                 autoFocus={false}
                 onChange={(filter) => onFilterChange(f.name, filter)}
                 onDelete={() => onDeleteFilter(f.name)}
-                values={filters[f.name]?.values ?? []}
+                value={filters[f.name]?.values[0]}
               />
             )}
             {f.type === 'date_range' && (
