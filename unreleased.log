@@ -1,3 +1,4 @@
+e1d1eb86 SW-2966 Storage locations API wrappers (#1199)
 8427318f Use MultiSelect Component in FilterGroup (#1197)
 4842cb65 SW-2761 Tooltips for timezones (#1198)
 f92ae29e SW-2949 Use (raw) fields for inventory quantity based logic (#1196)
