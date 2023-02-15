@@ -1,3 +1,4 @@
+0de7a55f SW-2946 Make modal bigger to avoid button text overflow (#1200)
 e1d1eb86 SW-2966 Storage locations API wrappers (#1199)
 8427318f Use MultiSelect Component in FilterGroup (#1197)
 4842cb65 SW-2761 Tooltips for timezones (#1198)
