@@ -72,13 +72,13 @@ export default function SeedBankView(): JSX.Element {
     history.push(sitesLocation);
   };
 
-  const saveStorageLocations = async (facilityId: number, isNewSeedBank?: boolean) => {
+  const saveStorageLocations = async (facilityId: number) => {
     if (!editedStorageLocations) {
       return;
     }
 
     const isEqual = (location1: PartialStorageLocation, location2: PartialStorageLocation) => {
-      return isNewSeedBank ? location1.name === location2.name : location1.id === location2.id;
+      return location1.id === location2.id;
     };
 
     const isModified = (location1: PartialStorageLocation, location2: PartialStorageLocation) => {
@@ -137,9 +137,11 @@ export default function SeedBankView(): JSX.Element {
         snackbar.toastError();
       }
     } else {
-      const response = await FacilityService.createFacility(record);
+      const response = await FacilityService.createFacility({
+        ...record,
+        storageLocationNames: editedStorageLocations?.map((l) => l.name as string),
+      });
       if (response.requestSucceeded) {
-        await saveStorageLocations(response.facilityId as number, true);
         reloadOrganizations();
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
       } else {
