@@ -1,13 +1,13 @@
-import { List, ListItem, ListItemText, Theme } from '@mui/material';
+import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { FieldNodePayload } from 'src/api/search';
 import strings from 'src/strings';
 import { Option } from '@terraware/web-components/components/table/types';
+import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
-    width: '264px',
     padding: theme.spacing(1.75),
   },
   item: {
@@ -69,30 +69,12 @@ export default function SingleSelection(props: Props): JSX.Element {
 
   return (
     <div id={`filter-list-${props.field}`} className={classes.box}>
-      <List>
-        {options.map(({ label, value, disabled }) => (
-          <ListItem
-            button
-            key={label}
-            onClick={() => handleChange(value)}
-            selected={props.values.includes(value)}
-            disabled={disabled}
-          >
-            <ListItemText id={value ?? ''} primary={formatLabel(label)} />
-          </ListItem>
-        ))}
-      </List>
+      <Dropdown
+        options={options.map(({ label, value }) => ({ label, value } as DropdownItem))}
+        onChange={(val) => handleChange(val)}
+        selectedValue={props.values[0]}
+        fullWidth={true}
+      />
     </div>
   );
-}
-
-function formatLabel(label: string | null): string | undefined | null {
-  if (label === 'true') {
-    return strings.YES;
-  }
-  if (label === 'false') {
-    return strings.NO;
-  }
-
-  return label;
 }
