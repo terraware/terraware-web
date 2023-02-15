@@ -880,6 +880,7 @@ export const strings = {
   STORING_START_DATE: 'Storing Start Date',
   STRATIFICATION: 'Stratification',
   SUB_LOCATION_DETAILS: 'Sub-Location Details',
+  SUB_LOCATION_EXISTS: 'This storage location already exists',
   SUB_LOCATION: 'Sub-Location',
   SUB_LOCATIONS: 'Sub-Locations',
   SUBSET_COUNT: 'Subset Count',

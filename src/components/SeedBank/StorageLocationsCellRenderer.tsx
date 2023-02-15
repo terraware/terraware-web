@@ -1,3 +1,4 @@
+import React from 'react';
 import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
@@ -17,7 +18,13 @@ export default function StorageLocationsCellRenderer({
   editMode,
 }: StorageLocationsCellRendererProps) {
   return (props: RendererProps<TableRowType>): JSX.Element => {
-    const { column, value, row } = props;
+    const { column, value, row, onRowClick } = props;
+
+    const rowClick = (event?: React.SyntheticEvent) => {
+      if (editMode && !!onRowClick) {
+        onRowClick();
+      }
+    };
 
     const createLinkToAccessions = (locationName: string, data: string) => {
       const to = [
@@ -28,6 +35,10 @@ export default function StorageLocationsCellRenderer({
       ].join('&');
 
       return <Link to={to}>{data}</Link>;
+    };
+
+    const createLinkToName = (locationName: string) => {
+      return <Link onClick={rowClick}>{locationName}</Link>;
     };
 
     if (column.key === 'activeAccessions') {
@@ -44,7 +55,7 @@ export default function StorageLocationsCellRenderer({
     if (column.key === 'name') {
       const locationName = row.name as string;
 
-      return <CellRenderer {...props} value={editMode ? <Link>{locationName}</Link> : locationName} />;
+      return <CellRenderer {...props} value={editMode ? createLinkToName(locationName) : locationName} />;
     }
 
     return <CellRenderer {...props} value={value} />;

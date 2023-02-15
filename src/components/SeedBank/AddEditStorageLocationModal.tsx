@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Box } from '@mui/material';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -11,10 +12,12 @@ export interface AddEditStorageLocationProps {
   onEditStorageLocation: (location: StorageLocation) => void;
   onAddStorageLocation: (name: string) => void;
   onClose: () => void;
+  storageLocations: StorageLocation[];
 }
 
 export default function AddEditStorageLocationModal(props: AddEditStorageLocationProps): JSX.Element {
-  const { open, selectedStorageLocation, onEditStorageLocation, onAddStorageLocation, onClose } = props;
+  const { open, selectedStorageLocation, onEditStorageLocation, onAddStorageLocation, onClose, storageLocations } =
+    props;
   const [name, setName] = useState<string>('');
   const [errorText, setErrorText] = useState<string>('');
 
@@ -27,11 +30,24 @@ export default function AddEditStorageLocationModal(props: AddEditStorageLocatio
       setErrorText(strings.REQUIRED_FIELD);
       return;
     }
+
+    if (
+      storageLocations
+        .filter((location) => location.id !== selectedStorageLocation?.id)
+        .find((location) => location.name === name)
+    ) {
+      setErrorText(strings.SUB_LOCATION_EXISTS);
+      return;
+    }
+
     if (selectedStorageLocation) {
-      onEditStorageLocation({ ...selectedStorageLocation, name });
+      if (name !== selectedStorageLocation.name) {
+        onEditStorageLocation({ ...selectedStorageLocation, name });
+      }
     } else {
       onAddStorageLocation(name);
     }
+
     onClose();
   };
 
@@ -58,19 +74,21 @@ export default function AddEditStorageLocationModal(props: AddEditStorageLocatio
         />,
       ]}
     >
-      <TextField
-        id='storage-location-name'
-        label={strings.NAME}
-        type='text'
-        onChange={(value: any) => {
-          if (value?.length) {
-            setErrorText('');
-          }
-          setName(value ?? '');
-        }}
-        value={name}
-        errorText={errorText}
-      />
+      <Box textAlign='left'>
+        <TextField
+          id='storage-location-name'
+          label={strings.NAME}
+          type='text'
+          onChange={(value: any) => {
+            if (value?.length) {
+              setErrorText('');
+            }
+            setName(value ?? '');
+          }}
+          value={name}
+          errorText={errorText}
+        />
+      </Box>
     </DialogBox>
   );
 }

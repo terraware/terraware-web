@@ -116,8 +116,17 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
         onAddStorageLocation={(locationName: string) => addStorageLocation(locationName)}
         onEditStorageLocation={(location: StorageLocation) => editStorageLocation(location)}
         selectedStorageLocation={selectedStorageLocation}
+        storageLocations={storageLocations}
       />
-      <Grid item xs={12}>
+      <Grid
+        item
+        xs={12}
+        display='flex'
+        alignItems='center'
+        justifyContent='space-between'
+        marginTop={4}
+        marginBottom={2}
+      >
         <Typography fontSize='16px' fontWeight={600}>
           {strings.SUB_LOCATIONS}
         </Typography>
@@ -145,6 +154,7 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
           showTopBar={editMode}
           topBarButtons={getTopBarButtons()}
           onSelect={onStorageLocationSelected}
+          controlledOnSelect={true}
         />
       </Grid>
     </>

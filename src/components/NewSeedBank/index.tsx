@@ -17,6 +17,7 @@ import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import isEnabled from 'src/features';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
+import StorageLocations from 'src/components/SeedBank/StorageLocations';
 
 export default function SeedBankView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
@@ -158,6 +159,10 @@ export default function SeedBankView(): JSX.Element {
               </Grid>
             )}
           </Grid>
+          <StorageLocations
+            seedBankId={selectedSeedBank?.id === -1 ? undefined : selectedSeedBank?.id}
+            onEdit={(locations) => console.log('WUT', locations)}
+          />
         </Box>
       </PageForm>
     </TfMain>
