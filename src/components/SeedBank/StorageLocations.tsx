@@ -31,7 +31,7 @@ export default function SubLocations({ seedBankId }: SubLocationsProps): JSX.Ele
       if (response.requestSucceeded) {
         if (activeLocale) {
           const collator = new Intl.Collator(activeLocale);
-          setStorageLocations(response.locations.sort((a, b) => collator.compare(a.name, b.name)));
+          setStorageLocations(response.storageLocations.sort((a, b) => collator.compare(a.name, b.name)));
         }
       }
     };

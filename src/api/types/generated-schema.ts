@@ -203,9 +203,6 @@ export interface paths {
   "/api/v1/seedbank/values/all": {
     post: operations["listAllFieldValues"];
   };
-  "/api/v1/seedbank/values/storageLocation/{facilityId}": {
-    get: operations["getStorageLocations"];
-  };
   "/api/v1/species": {
     get: operations["listSpecies"];
     post: operations["createSpecies"];
@@ -697,13 +694,24 @@ export interface components {
       parentId?: number;
     };
     CreateFacilityRequestPayload: {
+      /** Format: date */
+      buildCompletedDate?: string;
+      /** Format: date */
+      buildStartedDate?: string;
+      /**
+       * Format: int32
+       * @description For nursery facilities, the number of plants this nursery is capable of holding.
+       */
+      capacity?: number;
       description?: string;
+      name: string;
+      /** Format: date */
+      operationStartedDate?: string;
       /**
        * Format: int64
        * @description Which organization this facility belongs to.
        */
       organizationId: number;
-      name: string;
       storageLocationNames?: string[];
       /**
        * @description Time zone name in IANA tz database format
@@ -1033,6 +1041,15 @@ export interface components {
       message: string;
     };
     FacilityPayload: {
+      /** Format: date */
+      buildCompletedDate?: string;
+      /** Format: date */
+      buildStartedDate?: string;
+      /**
+       * Format: int32
+       * @description For nursery facilities, the number of plants this nursery is capable of holding.
+       */
+      capacity?: number;
       connectionState: "Not Connected" | "Connected" | "Configured";
       /** Format: date-time */
       createdTime: string;
@@ -1040,6 +1057,8 @@ export interface components {
       /** Format: int64 */
       id: number;
       name: string;
+      /** Format: date */
+      operationStartedDate?: string;
       /** Format: int64 */
       organizationId: number;
       /**
@@ -1815,12 +1834,6 @@ export interface components {
        */
       totalWithdrawn: number;
     };
-    StorageLocationDetails: {
-      /** Format: int64 */
-      id: number;
-      storageLocation: string;
-      storageCondition: "Refrigerator" | "Freezer";
-    };
     StorageLocationPayload: {
       /** Format: int32 */
       activeAccessions: number;
@@ -1829,10 +1842,6 @@ export interface components {
       /** Format: int64 */
       id: number;
       name: string;
-    };
-    StorageLocationsResponsePayload: {
-      locations: components["schemas"]["StorageLocationDetails"][];
-      status: components["schemas"]["SuccessOrError"];
     };
     /** @description Indicates of success or failure of the requested operation. */
     SuccessOrError: "ok" | "error";
@@ -2062,8 +2071,19 @@ export interface components {
       parentId?: number;
     };
     UpdateFacilityRequestPayload: {
+      /** Format: date */
+      buildCompletedDate?: string;
+      /** Format: date */
+      buildStartedDate?: string;
+      /**
+       * Format: int32
+       * @description For nursery facilities, the number of plants this nursery is capable of holding.
+       */
+      capacity?: number;
       description?: string;
       name: string;
+      /** Format: date */
+      operationStartedDate?: string;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -3742,21 +3762,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
-      };
-    };
-  };
-  getStorageLocations: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["StorageLocationsResponsePayload"];
-        };
       };
     };
   };

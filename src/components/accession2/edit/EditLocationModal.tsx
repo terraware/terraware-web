@@ -46,7 +46,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
         const response = await SeedBankService.getStorageLocations(record.facilityId);
         if (response.requestSucceeded) {
           const collator = new Intl.Collator(activeLocale);
-          setStorageLocations(response.locations.sort((a, b) => collator.compare(a.name, b.name)));
+          setStorageLocations(response.storageLocations.sort((a, b) => collator.compare(a.name, b.name)));
         } else {
           setStorageLocations([]);
         }
