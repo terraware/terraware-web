@@ -9,6 +9,7 @@ import SearchService, {
   SearchSortOrder,
 } from './SearchService';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
+import { getPromisesResponse } from './utils';
 
 /**
  * Seed bank related services
@@ -32,6 +33,9 @@ type ListAllFieldValuesResponsePayload =
 type ValuesPostRequestBody = paths[typeof FIELD_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 type ValuesPostResponse = paths[typeof FIELD_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
+type StorageLocationsResponsePayload =
+  paths[typeof STORAGE_LOCATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
 export type AllFieldValuesMap = ListAllFieldValuesResponsePayload['results'];
 export type FieldValuesMap = ValuesPostResponse['results'];
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
@@ -52,10 +56,15 @@ export type Summary = {
 };
 export type SummaryResponse = Response & Summary;
 
-export type StorageLocations = {
-  locations: StorageLocation[];
+export type StorageLocationsData = {
+  storageLocations: StorageLocation[];
 };
-export type StorageLocationsResponse = Response & StorageLocations;
+export type StorageLocationsResponse = Response & StorageLocationsData;
+
+export type StorageLocationData = {
+  storageLocation?: StorageLocation;
+};
+export type StorageLocationResponse = Response & StorageLocationData;
 
 export type AccessionPostRequestBody =
   paths[typeof ACCESSIONS_ENDPOINT]['post']['requestBody']['content']['application/json'];
@@ -71,6 +80,8 @@ export type AccessionsSearchParams = {
   sortOrder?: SearchSortOrder;
 };
 
+const httpStorageLocations = HttpService.root(STORAGE_LOCATIONS_ENDPOINT);
+
 /**
  * Seed bank summary
  */
@@ -82,29 +93,6 @@ const getSummary = async (organizationId: number): Promise<SummaryResponse> => {
       },
     },
     (data) => ({ value: data })
-  );
-
-  return response;
-};
-
-type StorageLocationsResponsePayload =
-  paths[typeof STORAGE_LOCATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-/*
- * getLocations() returns all the storage locations associated with a given facility or null if the
- * API call failed.
- */
-const getStorageLocations = async (seedbankId: number): Promise<StorageLocationsResponse> => {
-  const response: StorageLocationsResponse = await HttpService.root(STORAGE_LOCATIONS_ENDPOINT).get<
-    StorageLocationsResponsePayload,
-    StorageLocations
-  >(
-    {
-      params: {
-        facilityId: seedbankId.toString(),
-      },
-    },
-    (data) => ({ locations: data?.storageLocations ?? [] })
   );
 
   return response;
@@ -301,12 +289,56 @@ const resolveAccessionsUpload = async (uploadId: number, overwriteExisting: bool
   });
 };
 
+/*
+ * getLocations() returns all the storage locations associated with a given facility or null if the
+ * API call failed.
+ */
+const getStorageLocations = async (seedbankId: number): Promise<StorageLocationsResponse> => {
+  const response: StorageLocationsResponse = await httpStorageLocations.get<
+    StorageLocationsResponsePayload,
+    StorageLocationsData
+  >(
+    {
+      params: {
+        facilityId: seedbankId.toString(),
+      },
+    },
+    (data) => ({ storageLocations: data?.storageLocations ?? [] })
+  );
+
+  return response;
+};
+
+/**
+ * Create a single storage location
+ */
+const createStorageLocation = async (facilityId: number, name: string): Promise<StorageLocationResponse> => {
+  const response: Response = await httpStorageLocations.post({
+    entity: { facilityId, name },
+  });
+
+  return {
+    ...response,
+    storageLocation: response.data?.storageLocation,
+  };
+};
+
+/**
+ * Create one or more storage locations
+ */
+const createStorageLocations = async (
+  facilityId: number,
+  names: string[]
+): Promise<(StorageLocationResponse | null)[]> => {
+  const promises = names.map((name) => createStorageLocation(facilityId, name));
+  return getPromisesResponse<StorageLocationResponse>(promises);
+};
+
 /**
  * Exported functions
  */
 const SeedBankService = {
   getSummary,
-  getStorageLocations,
   createAccession,
   searchAccessions,
   searchFieldValues,
@@ -317,6 +349,9 @@ const SeedBankService = {
   uploadAccessions,
   getAccessionsUploadStatus,
   resolveAccessionsUpload,
+  getStorageLocations,
+  createStorageLocation,
+  createStorageLocations,
 };
 
 export default SeedBankService;
