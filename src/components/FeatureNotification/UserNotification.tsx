@@ -42,8 +42,9 @@ export default function UserNotification(): Notification | null {
     const notifyTimeZoneUpdates = (userTz: InitializedTimeZone) => {
       const notifyUser =
         userTz.timeZone &&
-        userTz.timeZoneNotificationCreatedMs &&
-        DateTime.now().plus({ days: -30 }).toMillis() <= userTz.timeZoneNotificationCreatedMs;
+        (!userTz.timeZoneAcknowledgedOnMs ||
+          (userTz.timeZoneAcknowledgedOnMs &&
+            DateTime.now().plus({ days: -30 }).toMillis() <= userTz.timeZoneAcknowledgedOnMs));
       setUserTimeZone(getTimeZoneById(userTz.timeZone).longName);
       setTimeZoneUserNotification(!!notifyUser);
 
@@ -96,8 +97,9 @@ export default function UserNotification(): Notification | null {
       }
 
       if (
-        userUnit.unitsNotificationCreatedMs &&
-        DateTime.now().plus({ days: -30 }).toMillis() <= userUnit.unitsNotificationCreatedMs
+        !userUnit.unitsAcknowledgedOnMs ||
+        (userUnit.unitsAcknowledgedOnMs &&
+          DateTime.now().plus({ days: -30 }).toMillis() <= userUnit.unitsAcknowledgedOnMs)
       ) {
         setUnitNotification(true);
       } else {
