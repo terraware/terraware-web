@@ -13,7 +13,7 @@ import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { PreferencesService, UserService } from 'src/services';
 import { InitializedUnits } from 'src/units';
-import { DateTime } from 'luxon';
+import { featureNotificationExpired } from 'src/utils/featureNotifications';
 
 export default function UserNotification(): Notification | null {
   const [unitNotification, setUnitNotification] = useState(false);
@@ -40,11 +40,7 @@ export default function UserNotification(): Notification | null {
     };
 
     const notifyTimeZoneUpdates = (userTz: InitializedTimeZone) => {
-      const notifyUser =
-        userTz.timeZone &&
-        (!userTz.timeZoneAcknowledgedOnMs ||
-          (userTz.timeZoneAcknowledgedOnMs &&
-            DateTime.now().plus({ days: -30 }).toMillis() <= userTz.timeZoneAcknowledgedOnMs));
+      const notifyUser = userTz.timeZone && !featureNotificationExpired(userTz.timeZoneAcknowledgedOnMs);
       setUserTimeZone(getTimeZoneById(userTz.timeZone).longName);
       setTimeZoneUserNotification(!!notifyUser);
 
@@ -96,15 +92,7 @@ export default function UserNotification(): Notification | null {
         setUnitNotificationRead(true);
       }
 
-      if (
-        !userUnit.unitsAcknowledgedOnMs ||
-        (userUnit.unitsAcknowledgedOnMs &&
-          DateTime.now().plus({ days: -30 }).toMillis() <= userUnit.unitsAcknowledgedOnMs)
-      ) {
-        setUnitNotification(true);
-      } else {
-        setUnitNotification(false);
-      }
+      setUnitNotification(!featureNotificationExpired(userUnit.unitsAcknowledgedOnMs));
     };
 
     if (weightUnitsEnabled) {
