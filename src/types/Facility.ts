@@ -1,8 +1,11 @@
+import strings from 'src/strings';
 import { components } from 'src/api/types/generated-schema';
 
 const schemas = 'schemas';
 
 export type StorageLocation = components[typeof schemas]['StorageLocationPayload'];
+
+export type PartialStorageLocation = Partial<StorageLocation>;
 
 export type FacilityType = components[typeof schemas]['FacilityPayload']['type'];
 
@@ -15,3 +18,12 @@ export interface Facility {
   connectionState: 'Not Connected' | 'Connected' | 'Configured';
   timeZone?: string;
 }
+
+export const DEFAULT_STORAGE_LOCATIONS = (): string[] => [
+  strings.FREEZER_1,
+  strings.FREEZER_2,
+  strings.FREEZER_3,
+  strings.REFRIGERATOR_1,
+  strings.REFRIGERATOR_2,
+  strings.REFRIGERATOR_3,
+];

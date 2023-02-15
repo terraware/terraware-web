@@ -2,7 +2,7 @@ import { Grid, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
 import { SeedBankService } from 'src/services';
-import { StorageLocation } from 'src/types/Facility';
+import { DEFAULT_STORAGE_LOCATIONS, PartialStorageLocation } from 'src/types/Facility';
 import { useLocalization } from 'src/providers/hooks';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
@@ -13,18 +13,25 @@ import { TopBarButton } from '@terraware/web-components/components/table';
 import { Button } from '@terraware/web-components';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import AddEditStorageLocationModal from './AddEditStorageLocationModal';
+import _ from 'lodash';
 
 export type StorageLocationsProps = {
   seedBankId?: number;
-  onEdit?: (storageLocations: StorageLocation[]) => void;
+  onEdit?: (storageLocations: PartialStorageLocation[]) => void;
 };
+
+const storageLocationWith = (name: string, id: number) => ({
+  name,
+  id: -id,
+  activeAccessions: 0,
+});
 
 export default function StorageLocations({ seedBankId, onEdit }: StorageLocationsProps): JSX.Element | null {
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
-  const [selectedRows, setSelectedRows] = useState<StorageLocation[]>([]);
-  const [selectedStorageLocation, setSelectedStorageLocation] = useState<StorageLocation | undefined>();
-  const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([]);
+  const [selectedRows, setSelectedRows] = useState<PartialStorageLocation[]>([]);
+  const [selectedStorageLocation, setSelectedStorageLocation] = useState<PartialStorageLocation | undefined>();
+  const [storageLocations, setStorageLocations] = useState<PartialStorageLocation[]>([]);
   const [openStorageLocationModal, setOpenStorageLocationModal] = useState<boolean>(false);
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [numberFormatter, activeLocale]);
   const columns: TableColumnType[] = [
@@ -45,8 +52,12 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
       }
     };
 
-    if (featureEnabled && seedBankId) {
-      fetchStorageLocations();
+    if (featureEnabled) {
+      if (seedBankId) {
+        fetchStorageLocations();
+      } else {
+        setStorageLocations(DEFAULT_STORAGE_LOCATIONS().map((name, index) => storageLocationWith(name, index)));
+      }
     }
   }, [seedBankId, activeLocale, featureEnabled]);
 
@@ -58,17 +69,14 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
         buttonText: strings.DELETE,
         // we don't want to delete locations that have active accessions
         disabled: !selectedRows.some((location) => !location.activeAccessions),
-        onButtonClick: () =>
-          selectedRows
-            .filter((location) => !location.activeAccessions)
-            .forEach((location) => deleteStorageLocation(location)),
+        onButtonClick: () => deleteStorageLocations(selectedRows.filter((location) => !location.activeAccessions)),
       });
     }
 
     return topBarButtons;
   };
 
-  const onStorageLocationSelected = (location: StorageLocation, fromColumn?: string) => {
+  const onStorageLocationSelected = (location: PartialStorageLocation, fromColumn?: string) => {
     if (fromColumn === 'name') {
       setSelectedStorageLocation(location);
       setOpenStorageLocationModal(true);
@@ -80,7 +88,7 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
     setOpenStorageLocationModal(true);
   };
 
-  const setNewStorageLocations = (locations: StorageLocation[]) => {
+  const setNewStorageLocations = (locations: PartialStorageLocation[]) => {
     setStorageLocations(locations);
     if (onEdit) {
       onEdit(locations);
@@ -88,18 +96,15 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
   };
 
   const addStorageLocation = (name: string) => {
-    setNewStorageLocations([
-      ...storageLocations,
-      { name, id: -Date.now(), activeAccessions: 0, facilityId: seedBankId! },
-    ]);
+    setNewStorageLocations([...storageLocations, storageLocationWith(name, Date.now())]);
   };
 
-  const editStorageLocation = (location: StorageLocation) => {
+  const editStorageLocation = (location: PartialStorageLocation) => {
     setNewStorageLocations([...storageLocations.filter((l) => l.id !== location.id), location]);
   };
 
-  const deleteStorageLocation = (location: StorageLocation) => {
-    setNewStorageLocations([...storageLocations.filter((l) => l.id !== location.id)]);
+  const deleteStorageLocations = (locations: PartialStorageLocation[]) => {
+    setNewStorageLocations([..._.differenceWith(storageLocations, locations, (l1, l2) => l1.id === l2.id)]);
   };
 
   const editMode: boolean = !!onEdit;
@@ -114,7 +119,7 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
         open={openStorageLocationModal}
         onClose={() => setOpenStorageLocationModal(false)}
         onAddStorageLocation={(locationName: string) => addStorageLocation(locationName)}
-        onEditStorageLocation={(location: StorageLocation) => editStorageLocation(location)}
+        onEditStorageLocation={(location: PartialStorageLocation) => editStorageLocation(location)}
         selectedStorageLocation={selectedStorageLocation}
         storageLocations={storageLocations}
       />

@@ -4,15 +4,15 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from '../common/Textfield/Textfield';
-import { StorageLocation } from 'src/types/Facility';
+import { PartialStorageLocation } from 'src/types/Facility';
 
 export interface AddEditStorageLocationProps {
   open: boolean;
-  selectedStorageLocation?: StorageLocation;
-  onEditStorageLocation: (location: StorageLocation) => void;
+  selectedStorageLocation?: PartialStorageLocation;
+  onEditStorageLocation: (location: PartialStorageLocation) => void;
   onAddStorageLocation: (name: string) => void;
   onClose: () => void;
-  storageLocations: StorageLocation[];
+  storageLocations: PartialStorageLocation[];
 }
 
 export default function AddEditStorageLocationModal(props: AddEditStorageLocationProps): JSX.Element {
@@ -48,6 +48,7 @@ export default function AddEditStorageLocationModal(props: AddEditStorageLocatio
       onAddStorageLocation(name);
     }
 
+    setName('');
     onClose();
   };
 
@@ -87,6 +88,7 @@ export default function AddEditStorageLocationModal(props: AddEditStorageLocatio
           }}
           value={name}
           errorText={errorText}
+          autoFocus={true}
         />
       </Box>
     </DialogBox>
