@@ -1,6 +1,7 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import _ from 'lodash';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import TextField from '../common/Textfield/Textfield';
@@ -8,7 +9,7 @@ import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
-import { FacilityService } from 'src/services';
+import { FacilityService, SeedBankService, StorageLocationService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -17,12 +18,15 @@ import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import isEnabled from 'src/features';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
+import { PartialStorageLocation } from 'src/types/Facility';
+import StorageLocations from 'src/components/SeedBank/StorageLocations';
 
 export default function SeedBankView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const theme = useTheme();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+  const [editedStorageLocations, setEditedStorageLocations] = useState<PartialStorageLocation[]>();
   const snackbar = useSnackbar();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
 
@@ -41,7 +45,7 @@ export default function SeedBankView(): JSX.Element {
     if (isMobile) {
       return 12;
     }
-    return 6;
+    return timeZoneFeatureEnabled ? 4 : 6;
   };
 
   useEffect(() => {
@@ -68,6 +72,52 @@ export default function SeedBankView(): JSX.Element {
     history.push(sitesLocation);
   };
 
+  const saveStorageLocations = async (facilityId: number) => {
+    if (!editedStorageLocations) {
+      return;
+    }
+
+    const isEqual = (location1: PartialStorageLocation, location2: PartialStorageLocation) => {
+      return location1.id === location2.id;
+    };
+
+    const isModified = (location1: PartialStorageLocation, location2: PartialStorageLocation) => {
+      return location1.id === location2.id && location1.name !== location2.name;
+    };
+
+    /**
+     * Find existing locations and pick out the ones to delete, create and update.
+     * Use bulk API to delete, create, update.
+     */
+    const response = await SeedBankService.getStorageLocations(facilityId);
+    if (response.requestSucceeded) {
+      const { storageLocations } = response;
+      const toDelete = _.differenceWith(storageLocations, editedStorageLocations, isEqual);
+      const toCreate = _.differenceWith(editedStorageLocations, storageLocations, isEqual);
+      const toUpdate = _.intersectionWith(editedStorageLocations, storageLocations, isModified);
+
+      const promises = [];
+      if (toDelete.length) {
+        promises.push(StorageLocationService.deleteStorageLocations(toDelete.map((l) => l.id)));
+      }
+      if (toUpdate.length) {
+        promises.push(StorageLocationService.updateStorageLocations(toUpdate as { name: string; id: number }[]));
+      }
+      if (toCreate.length) {
+        promises.push(
+          SeedBankService.createStorageLocations(
+            facilityId,
+            toCreate.map((l) => l.name as string)
+          )
+        );
+      }
+
+      await Promise.allSettled(promises);
+    } else {
+      snackbar.toastError();
+    }
+  };
+
   const saveSeedBank = async () => {
     if (!record.name) {
       setNameError(strings.REQUIRED_FIELD);
@@ -80,13 +130,17 @@ export default function SeedBankView(): JSX.Element {
     if (selectedSeedBank) {
       const response = await FacilityService.updateFacility({ ...record } as Facility);
       if (response.requestSucceeded) {
+        await saveStorageLocations(selectedSeedBank.id as number);
         reloadOrganizations();
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
       }
     } else {
-      const response = await FacilityService.createFacility(record);
+      const response = await FacilityService.createFacility({
+        ...record,
+        storageLocationNames: editedStorageLocations?.map((l) => l.name as string),
+      });
       if (response.requestSucceeded) {
         reloadOrganizations();
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
@@ -158,6 +212,10 @@ export default function SeedBankView(): JSX.Element {
               </Grid>
             )}
           </Grid>
+          <StorageLocations
+            seedBankId={selectedSeedBank?.id === -1 ? undefined : selectedSeedBank?.id}
+            onEdit={(locations) => setEditedStorageLocations(locations)}
+          />
         </Box>
       </PageForm>
     </TfMain>
