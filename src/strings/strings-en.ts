@@ -543,6 +543,7 @@ export const strings = {
     'There are no species in your species list yet. Only admins can add species, so please reach out to yours for assistance.',
   NO_SPECIES_DESCRIPTION:
     'It looks like you haven’t added any species yet. Having a master species list helps streamline your organization’s seed and plant data entry. You can either add species manually and individually, or import data from a CSV.',
+  NO_SUB_LOCATIONS: 'There are no sub-locations. Edit this seed bank to add sub-locations.',
   NO: 'No',
   NONE: 'None',
   NOT_CONNECTED: 'Not Connected',
@@ -886,7 +887,7 @@ export const strings = {
   STORING_START_DATE: 'Storing Start Date',
   STRATIFICATION: 'Stratification',
   SUB_LOCATION_DETAILS: 'Sub-Location Details',
-  SUB_LOCATION_EXISTS: 'This storage location already exists',
+  SUB_LOCATION_EXISTS: 'This sub-location already exists',
   SUB_LOCATION: 'Sub-Location',
   SUB_LOCATIONS: 'Sub-Locations',
   SUBSET_COUNT: 'Subset Count',

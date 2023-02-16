@@ -109,7 +109,7 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
 
   const editMode: boolean = !!onEdit;
 
-  if (!featureEnabled || !(storageLocations.length || editMode)) {
+  if (!featureEnabled) {
     return null;
   }
 
@@ -146,21 +146,28 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
         )}
       </Grid>
       <Grid item xs={12}>
-        <Table
-          id='storage-sub-locations-table'
-          columns={columns}
-          rows={storageLocations}
-          orderBy='name'
-          Renderer={StorageLocationsCellRenderer({ seedBankId, numericFormatter, editMode })}
-          selectedRows={selectedRows}
-          setSelectedRows={setSelectedRows}
-          showCheckbox={editMode}
-          isClickable={() => false}
-          showTopBar={editMode}
-          topBarButtons={getTopBarButtons()}
-          onSelect={onStorageLocationSelected}
-          controlledOnSelect={true}
-        />
+        {storageLocations.length > 0 && (
+          <Table
+            id='storage-sub-locations-table'
+            columns={columns}
+            rows={storageLocations}
+            orderBy='name'
+            Renderer={StorageLocationsCellRenderer({ seedBankId, numericFormatter, editMode })}
+            selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
+            showCheckbox={editMode}
+            isClickable={() => false}
+            showTopBar={editMode}
+            topBarButtons={getTopBarButtons()}
+            onSelect={onStorageLocationSelected}
+            controlledOnSelect={true}
+          />
+        )}
+        {storageLocations.length === 0 && (
+          <Typography fontSize='14px' fontWeight={400}>
+            {strings.NO_SUB_LOCATIONS}
+          </Typography>
+        )}
       </Grid>
     </>
   );
