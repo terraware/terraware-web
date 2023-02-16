@@ -230,14 +230,16 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         </Grid>
 
         <Grid />
-        <Grid item xs={3} sx={{ display: 'flex', justifyContent: 'end' }}>
+        <Grid item xs={3} sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
           {userCanEdit ? (
-            <Button
-              onClick={() => setOpenEditAccessionModal(true)}
-              icon='iconEdit'
-              label={isMobile ? '' : strings.EDIT}
-              priority='secondary'
-            />
+            <Box height='32px'>
+              <Button
+                onClick={() => setOpenEditAccessionModal(true)}
+                icon='iconEdit'
+                label={isMobile ? '' : strings.EDIT}
+                priority='secondary'
+              />
+            </Box>
           ) : (
             spaceFiller()
           )}
