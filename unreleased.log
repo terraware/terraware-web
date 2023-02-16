@@ -1,1 +1,2 @@
+0791c16f Don't allow users enter decimals for the seed count (#1210)
 030df412 SW-2961 / SW-2979 Show seed-bank/sub-location columns when going from seed bank details to accessions table (#1211)
