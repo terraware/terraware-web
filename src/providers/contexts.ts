@@ -30,6 +30,10 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     // default no-op implementation
     return;
   },
+  reloadOrgPreferences: () => {
+    // default no-op implementation
+    return;
+  },
   setSelectedOrganization: (org) => {
     // no-op
     return;
