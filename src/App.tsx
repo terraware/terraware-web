@@ -172,6 +172,15 @@ function AppContent() {
   const [plotNames, setPlotNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
 
+  const setDefaults = useCallback(() => {
+    if (!isPlaceholderOrg(selectedOrganization.id)) {
+      const savedColumns = orgPreferences.accessionsColumns ? (orgPreferences.accessionsColumns as string[]) : [];
+      const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns(preferredWeightSystem).fields;
+      setAccessionsDisplayColumns(defaultColumns);
+      setWithdrawalCreated(false);
+    }
+  }, [selectedOrganization.id, preferredWeightSystem, orgPreferences.accessionsColumns]);
+
   const reloadSpecies = useCallback(() => {
     const populateSpecies = async () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
@@ -184,10 +193,6 @@ function AppContent() {
     populateSpecies();
   }, [selectedOrganization]);
 
-  useEffect(() => {
-    reloadSpecies();
-  }, [reloadSpecies]);
-
   const reloadTracking = useCallback(() => {
     const populatePlantingSites = async () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
@@ -199,6 +204,14 @@ function AppContent() {
     };
     populatePlantingSites();
   }, [selectedOrganization]);
+
+  useEffect(() => {
+    setDefaults();
+  }, [setDefaults]);
+
+  useEffect(() => {
+    reloadSpecies();
+  }, [reloadSpecies]);
 
   useEffect(() => {
     reloadTracking();
@@ -216,17 +229,6 @@ function AppContent() {
 
     setPlotNames(plots);
   }, [plantingSites]);
-
-  const setDefaults = useCallback(() => {
-    if (!isPlaceholderOrg(selectedOrganization.id)) {
-      setAccessionsDisplayColumns(DefaultColumns(preferredWeightSystem).fields);
-      setWithdrawalCreated(false);
-    }
-  }, [selectedOrganization.id, preferredWeightSystem]);
-
-  useEffect(() => {
-    setDefaults();
-  }, [setDefaults]);
 
   useEffect(() => {
     if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
@@ -369,7 +371,6 @@ function AppContent() {
                 hasSeedBanks={selectedOrgHasSeedBanks()}
                 hasSpecies={selectedOrgHasSpecies()}
                 reloadData={reloadOrganizations}
-                orgScopedPreferences={orgPreferences}
               />
             </Route>
             <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>

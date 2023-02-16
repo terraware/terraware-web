@@ -61,31 +61,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     await populateOrganizations();
   }, []);
 
-  const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
-    selectedOrganization: selectedOrganization || defaultSelectedOrg,
-    setSelectedOrganization,
-    organizations,
-    orgPreferences,
-    reloadOrganizations,
-    bootstrapped,
-    orgPreferenceForId,
-  });
-
-  useEffect(() => {
-    reloadOrganizations();
-  }, [reloadOrganizations]);
-
-  useEffect(() => {
-    setOrganizationData((prev) => ({
-      ...prev,
-      selectedOrganization: selectedOrganization || defaultSelectedOrg,
-      organizations,
-      orgPreferences,
-      bootstrapped,
-      orgPreferenceForId,
-    }));
-  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, orgPreferenceForId]);
-
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
       if (selectedOrganization) {
@@ -103,8 +78,24 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [selectedOrganization]);
 
   useEffect(() => {
+    reloadOrganizations();
+  }, [reloadOrganizations]);
+
+  useEffect(() => {
+    setOrganizationData((prev) => ({
+      ...prev,
+      selectedOrganization: selectedOrganization || defaultSelectedOrg,
+      organizations,
+      orgPreferences,
+      bootstrapped,
+      orgPreferenceForId,
+      reloadOrgPreferences,
+    }));
+  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, orgPreferenceForId, reloadOrgPreferences]);
+
+  useEffect(() => {
     reloadOrgPreferences();
-  }, [reloadOrgPreferences, selectedOrganization]);
+  }, [reloadOrgPreferences]);
 
   useEffect(() => {
     if (userBootstrapped && organizations.length && userPreferences) {
@@ -137,6 +128,17 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
     history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
   }
+
+  const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
+    selectedOrganization: selectedOrganization || defaultSelectedOrg,
+    setSelectedOrganization,
+    organizations,
+    orgPreferences,
+    reloadOrganizations,
+    reloadOrgPreferences,
+    bootstrapped,
+    orgPreferenceForId,
+  });
 
   return <OrganizationContext.Provider value={organizationData}>{children}</OrganizationContext.Provider>;
 }

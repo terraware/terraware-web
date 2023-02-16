@@ -20,6 +20,7 @@ export type ProvidedOrganizationData = {
   organizations: Organization[];
   orgPreferences: PreferencesType;
   reloadOrganizations: (selectedOrgId?: number) => void;
+  reloadOrgPreferences: () => void;
   bootstrapped: boolean;
   orgPreferenceForId: number;
 };

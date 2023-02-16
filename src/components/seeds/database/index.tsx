@@ -145,11 +145,10 @@ type DatabaseProps = {
   hasSeedBanks: boolean;
   hasSpecies: boolean;
   reloadData?: () => void;
-  orgScopedPreferences?: { [key: string]: unknown };
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { activeLocale } = useLocalization();
   const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
@@ -170,7 +169,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     hasSeedBanks,
     hasSpecies,
     reloadData,
-    orgScopedPreferences,
   } = props;
   const columns = columnsIndexed();
   const displayColumnDetails = displayColumnNames.map((name) => {
@@ -274,6 +272,21 @@ export default function Database(props: DatabaseProps): JSX.Element {
     ]
   );
 
+  const saveUpdateSearchColumns = useCallback(
+    async (columnNames?: string[]) => {
+      updateSearchColumns(columnNames);
+      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
+      reloadOrgPreferences();
+    },
+    [selectedOrganization.id, updateSearchColumns, reloadOrgPreferences]
+  );
+
+  useEffect(() => {
+    if (orgPreferences?.accessionsColumns) {
+      updateSearchColumns(orgPreferences.accessionsColumns as string[]);
+    }
+  }, [orgPreferences, updateSearchColumns]);
+
   useEffect(() => {
     // if url has stage=<accession state>, apply that filter
     const stage = query.getAll('stage');
@@ -331,11 +344,35 @@ export default function Database(props: DatabaseProps): JSX.Element {
       }
       query.delete('facilityId');
     }
+
     if (stage.length || (facilityId && selectedOrganization) || storageLocationName) {
       history.replace(getLocation(location.pathname, location, query.toString()));
       setSearchCriteria(newSearchCriteria);
+
+      // add seed bank and sub-location columns to show the filtered values as needed
+      if (facilityId || storageLocationName) {
+        const newColumns = displayColumnNames
+          .filter((name) => {
+            if (facilityId && name === 'facility_name') {
+              return false;
+            }
+            return name !== 'storageLocation_name';
+          })
+          .concat(facilityId ? ['facility_name'] : [])
+          .concat(storageLocationName ? ['storageLocation_name'] : []);
+        saveUpdateSearchColumns(newColumns);
+      }
     }
-  }, [query, location, history, setSearchCriteria, selectedOrganization, searchCriteria]);
+  }, [
+    query,
+    location,
+    history,
+    setSearchCriteria,
+    selectedOrganization,
+    searchCriteria,
+    displayColumnNames,
+    saveUpdateSearchColumns,
+  ]);
 
   useEffect(() => {
     const populateUnfilteredResults = async () => {
@@ -416,12 +453,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [searchCriteria, searchSortOrder, searchColumns, selectedOrganization]);
 
   useEffect(() => {
-    if (orgScopedPreferences?.accessionsColumns) {
-      updateSearchColumns(orgScopedPreferences.accessionsColumns as string[]);
-    }
-  }, [orgScopedPreferences, updateSearchColumns]);
-
-  useEffect(() => {
     if (searchedLocaleRef.current && activeLocale && searchedLocaleRef.current !== activeLocale) {
       // If we've already done a search with a different locale, throw away search criteria since
       // they might contain localized values. Copy the default filters so React sees this as a
@@ -466,8 +497,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const onCloseEditColumnsModal = (columnNames?: string[]) => {
     if (columnNames) {
-      updateSearchColumns(columnNames);
-      PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
+      saveUpdateSearchColumns(columnNames);
     }
     setEditColumnsModalOpen(false);
   };
