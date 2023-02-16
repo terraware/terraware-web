@@ -184,6 +184,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                     : strings.REQUIRED_FIELD
                   : ''
               }
+              disableDecimals={true}
             />
           </Grid>
           <Grid item xs={12}>
