@@ -52,6 +52,8 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       } else if (response.error === 'NotAuthenticated') {
         setOrgAPIRequestStatus(APIRequestStatus.FAILED_NO_AUTH);
       } else {
+        // tslint:disable-next-line: no-console
+        console.error('Failed org fetch', response);
         setOrgAPIRequestStatus(APIRequestStatus.FAILED);
       }
     };

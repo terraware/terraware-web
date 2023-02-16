@@ -14,17 +14,17 @@ interface Props {
   field: string;
   onChange: (filter: FieldNodePayload) => void;
   onDelete: () => void;
-  values: (string | null)[];
+  value: string | null;
   autoFocus: boolean;
 }
 
 export default function Search(props: Props): JSX.Element {
   const classes = useStyles();
-  const [search, setSearch] = React.useState(props.values[0] || '');
+  const [search, setSearch] = React.useState(props.value || '');
 
   React.useEffect(() => {
-    setSearch(props.values[0] || '');
-  }, [props.values]);
+    setSearch(props.value || '');
+  }, [props.value]);
 
   const onSearch = (searchVal: string) => {
     if (searchVal && searchVal !== '') {

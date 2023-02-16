@@ -10,11 +10,13 @@ import isEnabled from 'src/features';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { OrganizationService, PreferencesService, UserService } from 'src/services';
+import { featureNotificationExpired } from 'src/utils/featureNotifications';
 
 export default function OrganizationNotification(): Notification | null {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
 
   const [timeZoneOrgNotification, setTimeZoneOrgNotification] = useState(false);
+  const [timeZoneOrgNotificationRead, setTimeZoneOrgNotificationRead] = useState(false);
   const [orgTimeZone, setOrgTimeZone] = useState<string>();
 
   const timeZoneFeatureEnabled = isEnabled('Timezones');
@@ -33,9 +35,15 @@ export default function OrganizationNotification(): Notification | null {
     };
 
     const notifyTimeZoneUpdates = (orgTz: InitializedTimeZone) => {
-      const notifyOrg = orgTz.timeZone && !orgTz.timeZoneAcknowledgedOnMs;
+      const notifyOrg = orgTz.timeZone && !featureNotificationExpired(orgTz.timeZoneAcknowledgedOnMs);
       setOrgTimeZone(getTimeZoneById(orgTz.timeZone).longName);
       setTimeZoneOrgNotification(!!notifyOrg);
+
+      if (orgTz.timeZoneAcknowledgedOnMs) {
+        setTimeZoneOrgNotificationRead(true);
+      } else {
+        setTimeZoneOrgNotificationRead(false);
+      }
     };
 
     const initializeTimeZones = async () => {
@@ -87,7 +95,7 @@ export default function OrganizationNotification(): Notification | null {
         ),
         localUrl: APP_PATHS.ORGANIZATION,
         createdTime: getTodaysDateFormatted(),
-        isRead: false,
+        isRead: timeZoneOrgNotificationRead,
         hideDate: true,
         markAsRead: async () => {
           await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
@@ -100,5 +108,11 @@ export default function OrganizationNotification(): Notification | null {
     }
 
     return null;
-  }, [timeZoneOrgNotification, orgTimeZone, reloadUserPreferences, selectedOrganization.id]);
+  }, [
+    timeZoneOrgNotification,
+    orgTimeZone,
+    reloadUserPreferences,
+    selectedOrganization.id,
+    timeZoneOrgNotificationRead,
+  ]);
 }
