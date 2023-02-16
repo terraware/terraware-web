@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
 import { SeedBankService } from 'src/services';
@@ -62,25 +62,22 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
   }, [seedBankId, activeLocale, featureEnabled]);
 
   const getTopBarButtons = () => {
-    const topBarButtons: TopBarButton[] = [];
-    if (selectedRows.length) {
-      topBarButtons.push({
+    const topBarButtons: TopBarButton[] = [
+      {
         buttonType: 'destructive',
         buttonText: strings.DELETE,
         // we don't want to delete locations that have active accessions
         disabled: !selectedRows.some((location) => !location.activeAccessions),
         onButtonClick: () => deleteStorageLocations(selectedRows.filter((location) => !location.activeAccessions)),
-      });
-    }
+      },
+    ];
 
     return topBarButtons;
   };
 
   const onStorageLocationSelected = (location: PartialStorageLocation, fromColumn?: string) => {
-    if (fromColumn === 'name') {
-      setSelectedStorageLocation(location);
-      setOpenStorageLocationModal(true);
-    }
+    setSelectedStorageLocation(location);
+    setOpenStorageLocationModal(true);
   };
 
   const onAddStorageLocationClick = () => {
@@ -164,9 +161,11 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
           />
         )}
         {storageLocations.length === 0 && !editMode && (
-          <Typography fontSize='14px' fontWeight={400}>
-            {strings.NO_SUB_LOCATIONS}
-          </Typography>
+          <Box paddingY={isMobile ? 3 : 6} textAlign='center'>
+            <Typography fontSize='14px' fontWeight={400}>
+              {strings.NO_SUB_LOCATIONS}
+            </Typography>
+          </Box>
         )}
       </Grid>
     </>

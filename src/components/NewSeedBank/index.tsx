@@ -45,7 +45,7 @@ export default function SeedBankView(): JSX.Element {
     if (isMobile) {
       return 12;
     }
-    return 6;
+    return timeZoneFeatureEnabled ? 4 : 6;
   };
 
   useEffect(() => {
