@@ -28,7 +28,7 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      const href = location.href.endsWith('/error/cannot-fecth-org-data') ? location.origin : location.href;
+      const href = location.href.match('/error') ? location.origin : location.href;
       const redirect = encodeURIComponent(href);
       location.href = `/api/v1/login?redirect=${redirect}`;
     }
