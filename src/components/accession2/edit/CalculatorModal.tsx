@@ -150,7 +150,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
               onChange={(value) => onChange('subsetCount', value)}
               type='text'
               value={record.subsetCount}
-              disabledCharacters={[',', '.']}
+              disabledCharacters={[',', '.', '-']}
             />
           </Grid>
           <Grid item xs={12} textAlign='left'>

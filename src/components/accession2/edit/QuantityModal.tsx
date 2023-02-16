@@ -184,7 +184,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                     : strings.REQUIRED_FIELD
                   : ''
               }
-              disabledCharacters={[',', '.']}
+              disabledCharacters={[',', '.', '-']}
             />
           </Grid>
           <Grid item xs={12}>
