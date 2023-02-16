@@ -146,7 +146,7 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
         )}
       </Grid>
       <Grid item xs={12}>
-        {storageLocations.length > 0 && (
+        {(storageLocations.length > 0 || editMode) && (
           <Table
             id='storage-sub-locations-table'
             columns={columns}
@@ -163,7 +163,7 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
             controlledOnSelect={true}
           />
         )}
-        {storageLocations.length === 0 && (
+        {storageLocations.length === 0 && !editMode && (
           <Typography fontSize='14px' fontWeight={400}>
             {strings.NO_SUB_LOCATIONS}
           </Typography>
