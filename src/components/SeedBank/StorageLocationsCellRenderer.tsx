@@ -29,7 +29,7 @@ export default function StorageLocationsCellRenderer({
     const createLinkToAccessions = (locationName: string, data: string) => {
       const to = [
         `${APP_PATHS.ACCESSIONS}/?`,
-        `storageLocationName=${locationName}`,
+        `storageLocationName=${encodeURIComponent(locationName)}`,
         `facilityId=${seedBankId}`,
         ...ActiveStatuses().map((status) => `stage=${status}`),
       ].join('&');
