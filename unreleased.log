@@ -1,3 +1,4 @@
+f6808d22 SW-2982 Can't type date into date field (#1216)
 3074069d SW-2816 encode user input before sticking in accessions table url query param (#1214)
 dcfa8d74 SW-2816 / SW-2980 Notifications service refactor + bugfix (#1212)
 0791c16f Don't allow users enter decimals for the seed count (#1210)
