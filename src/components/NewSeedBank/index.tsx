@@ -29,6 +29,7 @@ export default function SeedBankView(): JSX.Element {
   const [editedStorageLocations, setEditedStorageLocations] = useState<PartialStorageLocation[]>();
   const snackbar = useSnackbar();
   const timeZoneFeatureEnabled = isEnabled('Timezones');
+  const [processing, setProcessing] = useState(false);
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -119,12 +120,15 @@ export default function SeedBankView(): JSX.Element {
   };
 
   const saveSeedBank = async () => {
+    setProcessing(true);
     if (!record.name) {
       setNameError(strings.REQUIRED_FIELD);
+      setProcessing(false);
       return;
     }
     if (!record.description) {
       setDescriptionError(strings.REQUIRED_FIELD);
+      setProcessing(false);
       return;
     }
     if (selectedSeedBank) {
@@ -167,6 +171,7 @@ export default function SeedBankView(): JSX.Element {
         saveID='saveCreateSeedBank'
         onCancel={goToSeedBanks}
         onSave={saveSeedBank}
+        saveDisabled={processing}
       >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
