@@ -36,6 +36,7 @@ export type NurseryWithdrawalData = {
 export type NurseryWithdrawalListPhotoIds = {
   photoIds?: { id: number }[];
 };
+export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };
 
 export type CreateNurseryWithdrawalRequestPayload =
   paths[typeof BATCH_WITHDRAWALS_ENDPOINT]['post']['requestBody']['content']['application/json'];
@@ -216,6 +217,55 @@ const getWithdrawalPhotosList = async (withdrawalId: number): Promise<Response &
 };
 
 /**
+ * Get Filter Options
+ */
+const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap> => {
+  const searchParams: SearchRequestPayload = {
+    prefix: 'nurseryWithdrawals',
+    fields: [
+      'id',
+      'purpose',
+      'facility_name',
+      'destinationName',
+      'plotNames',
+      'batchWithdrawals.batch_species_scientificName',
+    ],
+    search: SearchService.convertToSearchNodePayload([], organizationId),
+    sortOrder: [{ field: 'id', direction: 'Ascending' }],
+    count: 1000,
+  };
+
+  const data = await SearchService.search(searchParams);
+  const map: FieldOptionsMap = {};
+  if (data) {
+    for (const d of data) {
+      const keys = Object.keys(d);
+      for (const k of keys) {
+        if (k === 'batchWithdrawals') {
+          // flatten and add species names
+          const newKey = 'batchWithdrawals.batch_species_scientificName';
+          if (!Object.keys(map).includes(newKey)) {
+            map[newKey] = { partial: false, values: [] };
+          }
+          const speciesScientificNames = (d[k] as any[]).map(
+            (batchWithdrawal) => batchWithdrawal.batch_species_scientificName
+          );
+          map[newKey].values.push(...speciesScientificNames);
+        } else {
+          // add options
+          if (!Object.keys(map).includes(k)) {
+            map[k] = { partial: false, values: [] };
+          }
+          map[k].values.push(d[k] as string);
+        }
+      }
+    }
+  }
+
+  return map;
+};
+
+/**
  * Exported functions
  */
 const NurseryWithdrawalService = {
@@ -226,6 +276,7 @@ const NurseryWithdrawalService = {
   hasNurseryWithdrawals,
   getNurseryWithdrawal,
   getWithdrawalPhotosList,
+  getFilterOptions,
 };
 
 export default NurseryWithdrawalService;
