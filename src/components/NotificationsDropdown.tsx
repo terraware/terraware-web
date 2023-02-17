@@ -3,10 +3,11 @@ import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover,
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import { getNotifications, MarkAllNotificationsRead, MarkNotificationRead } from 'src/api/notification';
+import { NotificationsService } from 'src/services';
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { Notification, Notifications } from 'src/types/Notifications';
+import { NotificationsResponse } from 'src/services/NotificationsService';
+import { Notification } from 'src/types/Notifications';
 import Icon from './common/icon/Icon';
 import DivotPopover from './common/DivotPopover';
 import ErrorBox from './common/ErrorBox/ErrorBox';
@@ -152,14 +153,15 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   // notificationsInterval value is only being used when it is set.
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [lastSeen, setLastSeen] = useState<number>(0);
-  const [notifications, setNotifications] = useState<Notifications>();
+  const [notifications, setNotifications] = useState<NotificationsResponse>();
+  const [serverNotifications, setServerNotifications] = useState<NotificationsResponse>();
 
   const featureNotifications = useFeatureNotifications();
 
   const fetchNotifications = useCallback(async () => {
-    const notificationsData = await getNotifications();
+    const notificationsData = await NotificationsService.getNotifications();
     if (organizationId) {
-      const orgNotifications = await getNotifications(organizationId);
+      const orgNotifications = await NotificationsService.getNotifications(organizationId);
       notificationsData.items = notificationsData.items.concat(orgNotifications.items);
     }
     notificationsData.items = notificationsData.items.sort((a, b) => {
@@ -174,9 +176,8 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   const populateNotifications = useCallback(async () => {
     const notificationsData = await fetchNotifications();
 
-    notificationsData.items = [...featureNotifications, ...notificationsData.items];
-    setNotifications(notificationsData);
-  }, [featureNotifications, fetchNotifications]);
+    setServerNotifications(notificationsData);
+  }, [fetchNotifications]);
 
   useEffect(() => {
     // Update notifications now.
@@ -193,6 +194,15 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
       clearInterval(interval);
     };
   }, [populateNotifications, organizationId]);
+
+  useEffect(() => {
+    if (serverNotifications) {
+      const { items, ...data } = serverNotifications;
+      const newNotifications: NotificationsResponse = { ...data, items: [] };
+      newNotifications.items = [...(featureNotifications ?? []), ...(items ?? [])];
+      setNotifications(newNotifications);
+    }
+  }, [featureNotifications, serverNotifications]);
 
   const getTimeStamp = (notification: Notification) => moment(notification.createdTime).valueOf();
 
@@ -221,9 +231,9 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   };
 
   const markAllAsRead = async () => {
-    await MarkAllNotificationsRead(true);
+    await NotificationsService.markAllNotificationsRead(true);
     if (organizationId) {
-      await MarkAllNotificationsRead(true, organizationId);
+      await NotificationsService.markAllNotificationsRead(true, organizationId);
     }
     await populateNotifications();
   };
@@ -237,7 +247,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
       if (close) {
         onPopoverClose();
       }
-      await MarkNotificationRead(read, id);
+      await NotificationsService.markNotificationRead(read, id);
       await populateNotifications();
       if (notifications) {
         setLastSeen(getTimeStamp(notifications.items[0]));
@@ -276,7 +286,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
         size='large'
       >
         <List className={classes.listContainer}>
-          {(notifications === undefined || (notifications.items.length === 0 && !notifications.errorOccurred)) && (
+          {(notifications === undefined || (notifications.items.length === 0 && notifications.requestSucceeded)) && (
             <ListItem className={classes.noNotifications}>
               <ListItemText primary={strings.NO_NOTIFICATIONS} />
             </ListItem>
@@ -290,7 +300,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
                 reloadOrganizationData={reloadOrganizationData}
               />
             ))}
-          {notifications?.errorOccurred && (
+          {notifications?.requestSucceeded === false && (
             <ListItem>
               <ErrorBox
                 title={strings.SOMETHING_WENT_WRONG}
