@@ -29,10 +29,8 @@ export type Notification = {
 
 export type Notifications = {
   items: Notification[];
-  errorOccurred: boolean;
 };
 
 export type NotificationsCount = {
-  items: NotificationCount[];
-  errorOccurred: boolean;
+  counts: NotificationCount[];
 };

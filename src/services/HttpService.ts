@@ -15,11 +15,13 @@ export type Replacements = Record<string, string>;
 
 export type ServerData = { status?: 'ok' | 'error' };
 
+export type Params = Record<string, string>;
+
 export type Request = {
   url?: string; // override url to use
   urlReplacements?: Replacements;
   headers?: Record<string, any>;
-  params?: Record<string, string>; // query params
+  params?: Params; // query params
 };
 
 export type GetRequest = Request;
