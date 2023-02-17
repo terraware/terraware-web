@@ -37,7 +37,6 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     withdrawnDate: getTodaysDateFormatted(),
   });
   const [batches, setBatches] = useState<any[]>();
-  const [withdrawInProgress, setWithdrawInProgress] = useState<boolean>(false);
   const snackbar = useSnackbar();
   const history = useHistory();
 
@@ -74,10 +73,6 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   };
 
   const withdraw = async (photos: File[]) => {
-    if (withdrawInProgress) {
-      return;
-    }
-
     // first create the withdrawal
     record.batchWithdrawals = record.batchWithdrawals
       .map((batchWithdrawal) => {
@@ -98,12 +93,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       return;
     }
 
-    setWithdrawInProgress(true);
-
     const response = await NurseryWithdrawalService.createBatchWithdrawal(record);
     if (!response.requestSucceeded) {
       snackbar.toastError();
-      setWithdrawInProgress(false);
       return;
     }
 
@@ -113,7 +105,6 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       await NurseryWithdrawalService.uploadWithdrawalPhotos(withdrawal!.id, photos);
     }
 
-    setWithdrawInProgress(false);
     if (withdrawalCreatedCallback) {
       withdrawalCreatedCallback();
     }
@@ -162,7 +153,6 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   return (
     <TfMain>
-      {withdrawInProgress && <BusySpinner withSkrim={true} />}
       <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>
         {strings.WITHDRAW_FROM_BATCHES}
       </Typography>
