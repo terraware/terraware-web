@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { SearchResponseElement } from 'src/services/SearchService';
 import { Facility } from 'src/types/Facility';
@@ -48,21 +49,24 @@ export const useDefaultTimeZone = () => {
   const { selectedOrganization } = useOrganization();
   const timeZones = useTimeZones();
 
-  return {
-    get: (forEdit?: boolean) => {
-      const orgTimeZone = getTimeZone(timeZones, selectedOrganization.timeZone);
-      if (orgTimeZone) {
-        return orgTimeZone;
-      }
+  return useMemo(
+    () => ({
+      get: (forEdit?: boolean) => {
+        const orgTimeZone = getTimeZone(timeZones, selectedOrganization.timeZone);
+        if (orgTimeZone) {
+          return orgTimeZone;
+        }
 
-      const userTimeZone = forEdit ? getTimeZone(timeZones, user?.timeZone) : undefined;
-      if (userTimeZone) {
-        return userTimeZone;
-      }
+        const userTimeZone = forEdit ? getTimeZone(timeZones, user?.timeZone) : undefined;
+        if (userTimeZone) {
+          return userTimeZone;
+        }
 
-      return getUTC(timeZones);
-    },
-  };
+        return getUTC(timeZones);
+      },
+    }),
+    [user, selectedOrganization, timeZones]
+  );
 };
 
 /**
@@ -81,11 +85,14 @@ export const useLocationTimeZone = () => {
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone();
 
-  return {
-    get: (location?: Location, forEdit?: boolean) => {
-      return getTimeZone(timeZones, location?.timeZone) ?? defaultTimeZone.get(forEdit);
-    },
-  };
+  return useMemo(
+    () => ({
+      get: (location?: Location, forEdit?: boolean) => {
+        return getTimeZone(timeZones, location?.timeZone) ?? defaultTimeZone.get(forEdit);
+      },
+    }),
+    [timeZones, defaultTimeZone]
+  );
 };
 
 // TODO - add more utilities as we see fit
