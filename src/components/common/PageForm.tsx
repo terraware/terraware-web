@@ -35,7 +35,7 @@ export default function PageForm(props: PageFormProps): JSX.Element {
       <Box className={className} paddingBottom={hideEdit ? theme.spacing(4) : theme.spacing(isMobile ? 25 : 15)}>
         {children}
       </Box>
-      {!hideEdit && <FormBottomBar handleSave={handleSave} {...bottomBarProps} />}
+      {!hideEdit && <FormBottomBar onSave={handleSave} {...bottomBarProps} />}
     </>
   );
 }
