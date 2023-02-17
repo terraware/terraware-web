@@ -39,20 +39,20 @@ export interface Props {
   cancelID: string;
   saveID: string;
   onCancel: () => void;
-  onSave: () => void;
   cancelButtonText?: string;
   saveButtonText?: string;
   saveDisabled?: boolean;
+  handleSave: () => void;
 }
 
 export default function FormBottomBar({
   cancelID,
   saveID,
   onCancel,
-  onSave,
   cancelButtonText,
   saveButtonText,
   saveDisabled,
+  handleSave,
 }: Props): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
@@ -77,7 +77,7 @@ export default function FormBottomBar({
         id={saveID || 'saveBottomBar'}
         size='medium'
         label={saveButtonText || strings.SAVE}
-        onClick={onSave}
+        onClick={handleSave}
         className={classes.button}
         disabled={saveDisabled}
       />
