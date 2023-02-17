@@ -230,39 +230,30 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
       'plotNames',
       'batchWithdrawals.batch_species_scientificName',
     ],
-    search: SearchService.convertToSearchNodePayload([], organizationId),
+    search: SearchService.convertToSearchNodePayload({}, organizationId),
     sortOrder: [{ field: 'id', direction: 'Ascending' }],
     count: 1000,
   };
 
   const data = await SearchService.search(searchParams);
-  const map: FieldOptionsMap = {};
-  if (data) {
-    for (const d of data) {
-      const keys = Object.keys(d);
-      for (const k of keys) {
-        if (k === 'batchWithdrawals') {
-          // flatten and add species names
-          const newKey = 'batchWithdrawals.batch_species_scientificName';
-          if (!Object.keys(map).includes(newKey)) {
-            map[newKey] = { partial: false, values: [] };
-          }
-          const speciesScientificNames = (d[k] as any[]).map(
-            (batchWithdrawal) => batchWithdrawal.batch_species_scientificName
-          );
-          map[newKey].values.push(...speciesScientificNames);
-        } else {
-          // add options
-          if (!Object.keys(map).includes(k)) {
-            map[k] = { partial: false, values: [] };
-          }
-          map[k].values.push(d[k] as string);
-        }
+  return (data ?? []).reduce((acc, d) => {
+    return Object.keys(d).reduce((innerAcc, k) => {
+      const isBatchWithdrawals = k === 'batchWithdrawals';
+      const newKey = isBatchWithdrawals ? 'batchWithdrawals.batch_species_scientificName' : k;
+      if (!innerAcc[newKey]) {
+        innerAcc[newKey] = { partial: false, values: [] };
       }
-    }
-  }
-
-  return map;
+      const value = isBatchWithdrawals
+        ? (d[k] as any[]).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName)
+        : d[k];
+      if (Array.isArray(value)) {
+        (innerAcc[newKey] as Record<string, any>).values.push(...value);
+      } else {
+        (innerAcc[newKey] as Record<string, any>).values.push(value);
+      }
+      return innerAcc;
+    }, acc);
+  }, {}) as FieldOptionsMap;
 };
 
 /**
