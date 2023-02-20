@@ -1,3 +1,4 @@
+c2f8fe4d SW-2985 use seedbank's time zone in relative time display details (#1217)
 113022e4 SW-2989 restore accessions search bar value when user navigates back (#1218)
 8544f687 SW-2623 Use New Filters in Withdrawal Log Table (#1215)
 cc329dae Fix e2e failures due to Node17+ upgrade in github actions (#1219)
