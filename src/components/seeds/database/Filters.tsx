@@ -80,6 +80,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+const getSearchTermFromFilters = (filters: Record<string, SearchNodePayload>): string => {
+  const filterValues = filters.searchTermFilter;
+  return filterValues?.children[0]?.values[0] ?? '';
+};
+
 interface Props {
   columns: DatabaseColumn[];
   searchColumns: DatabaseColumn[];
@@ -94,7 +99,7 @@ export default function Filters(props: Props): JSX.Element {
   const { columns, searchColumns, preExpFilterColumn, filters, availableValues, allValues, onChange } = props;
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState(getSearchTermFromFilters(filters));
   const searchTermCallback = useCallback(
     (value: string) => {
       let newFilters;
