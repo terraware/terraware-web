@@ -27,7 +27,7 @@ import './commands';
 // so we don't have to depend on a Keycloak server to run the test suite. The
 // session value here is the base64-encoded session ID from dump/session.sql.
 beforeEach(() => {
-  cy.setCookie('SESSION', 'NTZiMGYzYzgtZjY3OS00YmEyLWFkNzgtYzM0ODFiNjM5ZjI0');
+  cy.setCookie('SESSION', 'Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh');
 });
 
 declare global {

@@ -21,7 +21,7 @@ case "$(uname -s)" in
      ;;
 esac
 
-COOKIE="SESSION=NTZiMGYzYzgtZjY3OS00YmEyLWFkNzgtYzM0ODFiNjM5ZjI0"
+COOKIE="SESSION=Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh"
 
 echo "---- E2E: adding species records ----"
 speciesId1=$(curl 'http://localhost:8080/api/v1/species' \
