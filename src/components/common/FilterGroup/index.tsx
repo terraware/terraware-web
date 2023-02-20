@@ -60,9 +60,11 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>(initialFilters);
 
   const onFilterChange = (key: string, filter: SearchNodePayload) => {
-    const newFilt: Record<string, SearchNodePayload> = {};
-    newFilt[key] = filter;
-    setFilters({ ...filters, ...newFilt });
+    if (filter.values.length) {
+      setFilters({ ...filters, [key]: filter });
+    } else {
+      onDeleteFilter(key);
+    }
   };
   const onDeleteFilter = (key: string) => {
     const newFilters = { ...filters };

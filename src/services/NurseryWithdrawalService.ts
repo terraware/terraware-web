@@ -36,6 +36,7 @@ export type NurseryWithdrawalData = {
 export type NurseryWithdrawalListPhotoIds = {
   photoIds?: { id: number }[];
 };
+export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };
 
 export type CreateNurseryWithdrawalRequestPayload =
   paths[typeof BATCH_WITHDRAWALS_ENDPOINT]['post']['requestBody']['content']['application/json'];
@@ -216,6 +217,46 @@ const getWithdrawalPhotosList = async (withdrawalId: number): Promise<Response &
 };
 
 /**
+ * Get Filter Options
+ */
+const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap> => {
+  const searchParams: SearchRequestPayload = {
+    prefix: 'nurseryWithdrawals',
+    fields: [
+      'id',
+      'purpose',
+      'facility_name',
+      'destinationName',
+      'plotNames',
+      'batchWithdrawals.batch_species_scientificName',
+    ],
+    search: SearchService.convertToSearchNodePayload({}, organizationId),
+    sortOrder: [{ field: 'id', direction: 'Ascending' }],
+    count: 1000,
+  };
+
+  const data = await SearchService.search(searchParams);
+  return (data ?? []).reduce((acc, d) => {
+    return Object.keys(d).reduce((innerAcc, k) => {
+      const isBatchWithdrawals = k === 'batchWithdrawals';
+      const newKey = isBatchWithdrawals ? 'batchWithdrawals.batch_species_scientificName' : k;
+      if (!innerAcc[newKey]) {
+        innerAcc[newKey] = { partial: false, values: [] };
+      }
+      const value = isBatchWithdrawals
+        ? (d[k] as any[]).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName)
+        : d[k];
+      if (Array.isArray(value)) {
+        (innerAcc[newKey] as Record<string, any>).values.push(...value);
+      } else {
+        (innerAcc[newKey] as Record<string, any>).values.push(value);
+      }
+      return innerAcc;
+    }, acc);
+  }, {}) as FieldOptionsMap;
+};
+
+/**
  * Exported functions
  */
 const NurseryWithdrawalService = {
@@ -226,6 +267,7 @@ const NurseryWithdrawalService = {
   hasNurseryWithdrawals,
   getNurseryWithdrawal,
   getWithdrawalPhotosList,
+  getFilterOptions,
 };
 
 export default NurseryWithdrawalService;
