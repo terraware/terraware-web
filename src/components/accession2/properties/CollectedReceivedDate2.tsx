@@ -53,7 +53,7 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
     (id: string, value?: string | undefined) => {
       setDateError(id, '');
       if (!value) {
-        const required = validate && !value;
+        const required = validate && value === undefined;
         setDateError(id, required ? strings.REQUIRED_FIELD : strings.INVALID_DATE);
         return false;
       } else if (isInTheFuture(value, timeZone)) {
@@ -70,8 +70,9 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
     setDates((curr) => ({ ...curr, [id]: value }));
 
     const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
-    const valid = validateDate(id, value);
-    onChange(id, valid ? date || '' : '');
+    if (date) {
+      onChange(id, date);
+    }
   };
 
   useEffect(() => {
