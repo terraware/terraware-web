@@ -1,12 +1,12 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { DateTime } from 'luxon';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme, Box, Link as LinkMUI, Menu, Tab, Theme, Typography, Grid, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
-import moment from 'moment';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Accession } from 'src/types/Accession';
-import AccessionService from 'src/services/AccessionService';
+import { AccessionService, FacilityService } from 'src/services';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import DeleteAccessionModal from '../edit/DeleteAccessionModal';
@@ -36,10 +36,11 @@ import OverviewItemCard from '../../common/OverviewItemCard';
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
-import { stateName } from '../../../types/Accession';
+import { stateName } from 'src/types/Accession';
 import { getUnitName, isUnitInPreferredSystem } from 'src/units';
 import isEnabled from 'src/features';
 import ConvertedValue from 'src/components/ConvertedValue';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -109,6 +110,19 @@ export default function Accession2View(): JSX.Element {
   const contentRef = useRef(null);
   const weightUnitsEnabled = isEnabled('Weight units');
   const { activeLocale } = useLocalization();
+  const locationTimeZone = useLocationTimeZone();
+
+  const seedBankTimeZone = useMemo(() => {
+    const facility = accession?.facilityId
+      ? FacilityService.getFacility({
+          organization: selectedOrganization,
+          facilityId: accession.facilityId,
+          type: 'Seed Bank',
+        })
+      : undefined;
+    const tz = locationTimeZone.get(facility);
+    return tz.id;
+  }, [accession?.facilityId, selectedOrganization, locationTimeZone]);
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
@@ -138,9 +152,13 @@ export default function Accession2View(): JSX.Element {
 
   useEffect(() => {
     if (activeLocale) {
-      const today = moment();
-      const seedCollectionDate = accession?.collectedDate ? moment(accession?.collectedDate, 'YYYY-MM-DD') : undefined;
-      const accessionAge = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
+      const today = DateTime.local().setZone(seedBankTimeZone);
+      const seedCollectionDate = accession?.collectedDate
+        ? DateTime.fromFormat(`${accession.collectedDate} ${seedBankTimeZone}`, 'yyyy-MM-dd z')
+        : undefined;
+      const accessionAgeDuration = seedCollectionDate ? today.diff(seedCollectionDate, 'months') : undefined;
+      const accessionAge =
+        accessionAgeDuration?.months !== undefined ? Math.trunc(accessionAgeDuration?.months) : undefined;
       if (accessionAge === undefined) {
         setAge(null);
       } else if (accessionAge < 1) {
@@ -151,20 +169,23 @@ export default function Accession2View(): JSX.Element {
         setAge(strings.formatString(strings.AGE_VALUE_MONTHS, accessionAge) as string);
       }
     }
-  }, [accession, activeLocale]);
+  }, [accession, activeLocale, seedBankTimeZone]);
 
   useEffect(() => {
     if (activeLocale) {
       if (accession?.dryingEndDate) {
-        // MomentJS has its own version of a "gibberish" locale, but with a different name.
-        const momentLocale = activeLocale === 'gx' ? 'x-pseudo' : activeLocale;
-        const dryingMoment = moment(accession.dryingEndDate).locale(momentLocale);
-        setDryingRelativeDate(dryingMoment.fromNow());
+        // luxon has no pseudo locales, use Korean for gibberish.
+        const dateLocale = activeLocale === 'gx' ? 'ko' : activeLocale;
+        const dryingDate = DateTime.fromFormat(
+          `${accession.dryingEndDate} ${seedBankTimeZone}`,
+          'yyyy-MM-dd z'
+        ).setLocale(dateLocale);
+        setDryingRelativeDate(dryingDate.toRelative());
       } else {
         setDryingRelativeDate(null);
       }
     }
-  }, [accession, activeLocale]);
+  }, [accession, activeLocale, seedBankTimeZone]);
 
   useEffect(() => {
     setSelectedTab((query.get('tab') || 'detail') as string);
