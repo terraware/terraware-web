@@ -1,3 +1,4 @@
+113022e4 SW-2989 restore accessions search bar value when user navigates back (#1218)
 8544f687 SW-2623 Use New Filters in Withdrawal Log Table (#1215)
 cc329dae Fix e2e failures due to Node17+ upgrade in github actions (#1219)
 f6808d22 SW-2982 Can't type date into date field (#1216)
