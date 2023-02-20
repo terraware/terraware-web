@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
-  screenshotOnRunFailure: true,
+  screenshotOnRunFailure: false,
   video: false,
   watchForFileChanges: false,
   blockHosts: '*cookie-script.com',
