@@ -8,8 +8,7 @@ import strings from 'src/strings';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
 import { Country } from 'src/types/Country';
-import { searchCountries } from 'src/api/country/country';
-import { OrganizationUserService } from 'src/services';
+import { LocationService, OrganizationUserService } from 'src/services';
 import { OrganizationUser } from 'src/types/User';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -35,7 +34,7 @@ export default function OrganizationView(): JSX.Element {
   useEffect(() => {
     if (activeLocale) {
       const populateCountries = async () => {
-        const response = await searchCountries();
+        const response = await LocationService.getCountries();
         if (response) {
           setCountries(response);
         }

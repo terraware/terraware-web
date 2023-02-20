@@ -5,7 +5,7 @@ import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import Autocomplete from 'src/components/common/Autocomplete';
-import { searchCountries } from 'src/api/country/country';
+import { LocationService } from 'src/services';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { Country } from 'src/types/Country';
 import AddLink from 'src/components/common/AddLink';
@@ -30,7 +30,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
   useEffect(() => {
     if (activeLocale) {
       const populateCountries = async () => {
-        const response = await searchCountries();
+        const response = await LocationService.getCountries();
         if (response) {
           setCountries(response);
         }

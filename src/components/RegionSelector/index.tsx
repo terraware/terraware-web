@@ -2,7 +2,7 @@ import { Grid, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { Country, Subdivision } from 'src/types/Country';
-import { searchCountries } from 'src/api/country/country';
+import { LocationService } from 'src/services';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Dropdown } from '@terraware/web-components';
@@ -35,7 +35,7 @@ export default function RegionSelector({
   useEffect(() => {
     if (activeLocale) {
       const populateCountries = async () => {
-        const response = await searchCountries();
+        const response = await LocationService.getCountries();
         if (response) {
           setCountries(response);
         }

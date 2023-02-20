@@ -2,7 +2,7 @@ import AccessionService from './AccessionService';
 import CachedUserService from './CachedUserService';
 import FacilityService from './FacilityService';
 import HttpService from './HttpService';
-import I18nService from './I18nService';
+import LocationService from './LocationService';
 import MapService from './MapService';
 import NotificationsService from './NotificationsService';
 import NurseryBatchService from './NurseryBatchService';
@@ -25,7 +25,7 @@ export {
   CachedUserService,
   FacilityService,
   HttpService,
-  I18nService,
+  LocationService,
   MapService,
   NotificationsService,
   NurseryBatchService,
