@@ -1,5 +1,5 @@
 /* tslint:disable:no-console */
-import OrganizationService from './OrganizationService';
+import OrganizationService from '../OrganizationService';
 import axios from 'axios';
 
 jest.mock('axios');
