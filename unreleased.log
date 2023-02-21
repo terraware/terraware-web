@@ -1,3 +1,4 @@
+2bcd346c SW-2624 Use New Filters in Species Table (#1230)
 6aaf9e85 SW-2835 unit tests for HttpService (#1225)
 c21311cc SW-2929 / SW-2999 Fix locations icon, fix total-active-accessions tootip (#1226)
 3b78abd2 SW-2913 Move country search api into location service (#1224)
