@@ -198,7 +198,7 @@ export default function NavBar({
             }}
             id='people'
           />
-          <NavItem label={strings.LOCATIONS} icon='seedbankNav' id='locations'>
+          <NavItem label={strings.LOCATIONS} icon='iconMyLocation' id='locations'>
             <SubNavbar>
               <NavItem
                 label={strings.SEED_BANKS}
