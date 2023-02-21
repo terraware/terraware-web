@@ -1,3 +1,4 @@
+6aaf9e85 SW-2835 unit tests for HttpService (#1225)
 c21311cc SW-2929 / SW-2999 Fix locations icon, fix total-active-accessions tootip (#1226)
 3b78abd2 SW-2913 Move country search api into location service (#1224)
 c2f8fe4d SW-2985 use seedbank's time zone in relative time display details (#1217)
