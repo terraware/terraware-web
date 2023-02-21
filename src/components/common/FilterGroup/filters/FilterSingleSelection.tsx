@@ -74,6 +74,7 @@ export default function SingleSelection(props: Props): JSX.Element {
         onChange={(val) => handleChange(val)}
         selectedValue={props.value}
         fullWidth={true}
+        disabled={options.length === 0}
       />
     </div>
   );

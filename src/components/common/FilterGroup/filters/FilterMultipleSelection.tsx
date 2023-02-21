@@ -89,6 +89,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
         options={optionsMap}
         valueRenderer={(v) => v}
         selectedOptions={selections}
+        disabled={options.length === 0}
       />
     </div>
   );
