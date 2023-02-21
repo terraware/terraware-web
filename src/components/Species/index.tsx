@@ -1,6 +1,6 @@
-import { Box, Container, Grid, IconButton, Theme } from '@mui/material';
+import { Box, Container, Grid, IconButton, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { deleteSpecies, getSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
@@ -22,8 +22,14 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../common/Textfield/Textfield';
-import { FieldNodePayload, search, searchCsv, SearchNodePayload, SearchSortOrder } from 'src/api/search';
-import SpeciesFilters from './SpeciesFiltersPopover';
+import {
+  FieldNodePayload,
+  search,
+  searchCsv,
+  SearchNodePayload,
+  SearchRequestPayload,
+  SearchSortOrder,
+} from 'src/api/search';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
 import ImportSpeciesModal from './ImportSpeciesModal';
@@ -47,6 +53,9 @@ import { DropdownItem, SortOrder } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { PillList, PillListItem } from '@terraware/web-components';
 import { isTrue } from 'src/utils/boolean';
+import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+import { FieldOptionsMap } from 'src/services/NurseryWithdrawalService';
+import SearchService from 'src/services/SearchService';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -109,15 +118,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   headerIconContainer: {
     marginLeft: '12px',
   },
+  popoverContainer: {
+    '& .MuiPaper-root': {
+      border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+      borderRadius: '8px',
+      width: '320px',
+    },
+  },
 }));
-
-export type SpeciesFiltersType = {
-  growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern';
-  seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
-  ecosystemType?: EcosystemType;
-  rare?: boolean;
-  endangered?: boolean;
-};
 
 type SpeciesSearchResultRow = Omit<Species, 'growthForm' | 'seedStorageBehavior' | 'ecosystemTypes'> & {
   conservationStatus?: string;
@@ -142,7 +150,15 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
-  const [record, setRecord] = useForm<SpeciesFiltersType>({});
+
+  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
+  const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
+    setFilterAnchorEl(event.currentTarget);
+  };
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
+  };
+
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
@@ -276,6 +292,62 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     ];
   }, [activeLocale]);
 
+  const filterColumns = useMemo<FilterField[]>(
+    () => [
+      { name: 'growthForm', label: strings.GROWTH_FORM, type: 'multiple_selection' },
+      { name: 'conservationStatus', label: strings.CONSERVATION_STATUS, type: 'multiple_selection' },
+      { name: 'seedStorageBehavior', label: strings.SEED_STORAGE_BEHAVIOR, type: 'multiple_selection' },
+      { name: 'ecosystemTypes.ecosystemType', label: strings.ECOSYSTEM_TYPE, type: 'multiple_selection' },
+    ],
+    []
+  );
+
+  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
+
+  useEffect(() => {
+    const getApiSearchResults = async () => {
+      const searchParams: SearchRequestPayload = {
+        prefix: 'species',
+        fields: ['id', 'growthForm', 'seedStorageBehavior', 'ecosystemTypes.ecosystemType'],
+        search: {
+          operation: 'and',
+          children: [
+            {
+              operation: 'field',
+              field: 'organization_id',
+              type: 'Exact',
+              values: [selectedOrganization.id],
+            },
+          ],
+        },
+        sortOrder: [{ field: 'id', direction: 'Ascending' }],
+        count: 1000,
+      };
+
+      const data = await SearchService.search(searchParams);
+      const result = (data ?? []).reduce((acc, d) => {
+        return Object.keys(d).reduce((innerAcc, k) => {
+          const isEcosystemTypes = k === 'ecosystemTypes';
+          const newKey = isEcosystemTypes ? 'ecosystemTypes.ecosystemType' : k;
+          if (!innerAcc[newKey]) {
+            innerAcc[newKey] = { partial: false, values: [] };
+          }
+          const value = isEcosystemTypes ? (d[k] as any[]).map((et) => et.ecosystemType) : d[k];
+          if (Array.isArray(value)) {
+            (innerAcc[newKey] as Record<string, any>).values.push(...value);
+          } else {
+            (innerAcc[newKey] as Record<string, any>).values.push(value);
+          }
+          return innerAcc;
+        }, acc);
+      }, {}) as FieldOptionsMap;
+      result.conservationStatus = { partial: false, values: [strings.RARE, strings.ENDANGERED] };
+      setFilterOptions(result);
+    };
+    getApiSearchResults();
+  }, [selectedOrganization, results]);
+
   const [selectedColumns, setSelectedColumns] = useForm(columns);
   const [handleProblemsColumn, setHandleProblemsColumn] = useState<boolean>(false);
   const [hasNewData, setHasNewData] = useState<boolean>(false);
@@ -336,58 +408,45 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       });
     }
 
-    if (record.endangered !== undefined) {
-      const newNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'endangered',
-        type: 'Exact',
-        values: [record.endangered ? strings.BOOLEAN_TRUE : strings.BOOLEAN_FALSE],
-      };
-      params.search.children.push(newNode);
+    if (filters.conservationStatus) {
+      const conservationStatusFilter: FieldNodePayload[] = [];
+      const values = filters.conservationStatus.values as string[];
+      if (values.find((s) => s === strings.RARE)) {
+        const newNode: FieldNodePayload = {
+          operation: 'field',
+          field: 'rare',
+          type: 'Exact',
+          values: [strings.BOOLEAN_TRUE],
+        };
+        conservationStatusFilter.push(newNode);
+      }
+      if (values.find((s) => s === strings.ENDANGERED)) {
+        const newNode: FieldNodePayload = {
+          operation: 'field',
+          field: 'endangered',
+          type: 'Exact',
+          values: [strings.BOOLEAN_TRUE],
+        };
+        conservationStatusFilter.push(newNode);
+      }
+      params.search.children.push({
+        operation: 'or',
+        children: conservationStatusFilter,
+      });
     }
 
-    if (record.rare !== undefined) {
-      const newNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'rare',
-        type: 'Exact',
-        values: [record.rare ? strings.BOOLEAN_TRUE : strings.BOOLEAN_FALSE],
-      };
-      params.search.children.push(newNode);
+    if (filters.growthForm) {
+      params.search.children.push(filters.growthForm);
     }
-
-    if (record.seedStorageBehavior !== undefined) {
-      const newNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'seedStorageBehavior',
-        type: 'Exact',
-        values: [record.seedStorageBehavior],
-      };
-      params.search.children.push(newNode);
+    if (filters.seedStorageBehavior) {
+      params.search.children.push(filters.seedStorageBehavior);
     }
-
-    if (record.growthForm !== undefined) {
-      const newNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'growthForm',
-        type: 'Exact',
-        values: [record.growthForm],
-      };
-      params.search.children.push(newNode);
-    }
-
-    if (record.ecosystemType !== undefined) {
-      const newNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'ecosystemTypes.ecosystemType',
-        type: 'Exact',
-        values: [record.ecosystemType],
-      };
-      params.search.children.push(newNode);
+    if (filters['ecosystemTypes.ecosystemType']) {
+      params.search.children.push(filters['ecosystemTypes.ecosystemType']);
     }
 
     return params;
-  }, [record, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
@@ -430,10 +489,10 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   // column definitions as well as reset the search filters.
   useEffect(() => {
     if (activeLocale) {
-      setRecord({});
+      setFilters({});
       setSelectedColumns(columns);
     }
-  }, [columns, setRecord, setSelectedColumns, activeLocale]);
+  }, [columns, setSelectedColumns, activeLocale]);
 
   useEffect(() => {
     if (speciesState?.checkData) {
@@ -444,7 +503,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
 
   useEffect(() => {
     onApplyFilters();
-  }, [record, onApplyFilters]);
+  }, [onApplyFilters]);
 
   const onCloseEditSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
     if (saved) {
@@ -520,18 +579,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     }
   };
 
-  const onRemoveFilterHandler = (filterRemoved: keyof SpeciesFiltersType) => {
-    return () =>
-      setRecord((previousRecord: SpeciesFiltersType): SpeciesFiltersType => {
-        return { ...previousRecord, [filterRemoved]: undefined };
-      });
+  const onRemoveFilter = (key: string) => {
+    if (filters[key]) {
+      const newFilters = { ...filters };
+      delete newFilters[key];
+      setFilters(newFilters);
+    }
   };
-
-  const noFilters =
-    record.endangered === undefined &&
-    record.rare === undefined &&
-    record.growthForm === undefined &&
-    record.seedStorageBehavior === undefined;
 
   const onImportSpecies = () => {
     setImportSpeciesModalOpen(true);
@@ -623,36 +677,37 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
 
   const getFilterPillData = (): PillListItem<string>[] => {
     const result = [];
-    if (record.growthForm) {
+    if (filters.conservationStatus) {
+      result.push({
+        id: 'conservationStatus',
+        label: strings.CONSERVATION_STATUS,
+        value: filters.conservationStatus.values?.join(', ') ?? '',
+        onRemove: () => onRemoveFilter('conservationStatus'),
+      });
+    }
+
+    if (filters.growthForm) {
       result.push({
         id: 'growthForm',
         label: strings.GROWTH_FORM,
-        value: record.growthForm,
-        onRemove: onRemoveFilterHandler('growthForm'),
+        value: filters.growthForm.values?.join(', ') ?? '',
+        onRemove: () => onRemoveFilter('growthForm'),
       });
     }
-    if (record.rare || record.endangered) {
-      result.push({
-        id: 'rare',
-        label: strings.CONSERVATION_STATUS,
-        value: record.rare ? strings.RARE : strings.ENDANGERED,
-        onRemove: record.rare ? onRemoveFilterHandler('rare') : onRemoveFilterHandler('endangered'),
-      });
-    }
-    if (record.seedStorageBehavior) {
+    if (filters.seedStorageBehavior) {
       result.push({
         id: 'seedStorageBehavior',
         label: strings.SEED_STORAGE_BEHAVIOR,
-        value: record.seedStorageBehavior,
-        onRemove: onRemoveFilterHandler('seedStorageBehavior'),
+        value: filters.seedStorageBehavior.values?.join(', ') ?? '',
+        onRemove: () => onRemoveFilter('seedStorageBehavior'),
       });
     }
-    if (record.ecosystemType) {
+    if (filters['ecosystemTypes.ecosystemType']) {
       result.push({
-        id: 'ecosystemType',
+        id: 'ecosystemTypes.ecosystemType',
         label: strings.ECOSYSTEM_TYPE,
-        value: record.ecosystemType,
-        onRemove: onRemoveFilterHandler('ecosystemType'),
+        value: filters['ecosystemTypes.ecosystemType'].values?.join(', ') ?? '',
+        onRemove: () => onRemoveFilter('ecosystemTypes.ecosystemType'),
       });
     }
 
@@ -750,12 +805,40 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               iconRight='cancel'
               onClickRightIcon={clearSearch}
             />
-            <SpeciesFilters filters={record} setFilters={setRecord} />
+            <IconButton onClick={handleFilterClick} size='small' className={classes.iconContainer}>
+              <Icon name='filter' size='medium' className={classes.icon} />
+            </IconButton>
+            <Popover
+              id='simple-popover'
+              open={Boolean(filterAnchorEl)}
+              anchorEl={filterAnchorEl}
+              onClose={handleFilterClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              className={classes.popoverContainer}
+            >
+              <FilterGroup
+                initialFilters={filters}
+                fields={filterColumns}
+                values={filterOptions || {}}
+                onConfirm={(fs) => {
+                  handleFilterClose();
+                  setFilters(fs);
+                }}
+                onCancel={handleFilterClose}
+              />
+            </Popover>
             <IconButton onClick={downloadReportHandler} size='small' className={classes.iconContainer}>
               <Icon name='iconExport' size='medium' className={classes.icon} />
             </IconButton>
           </Grid>
-          <Grid item xs={12} className={noFilters ? '' : classes.searchBar}>
+          <Grid item xs={12} className={classes.searchBar}>
             <PillList data={getFilterPillData()} />
           </Grid>
           {species && species.length ? (
