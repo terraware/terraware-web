@@ -46,8 +46,7 @@ describe('Organization service', () => {
 
     expect({ organizations, error, requestSucceeded }).toEqual({
       organizations: [],
-      // fake an error for now to test github action
-      error: 'GenericErrorr',
+      error: 'GenericError',
       requestSucceeded: false,
     });
   });
