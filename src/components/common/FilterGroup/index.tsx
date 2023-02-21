@@ -92,63 +92,65 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
         </Typography>
       </Box>
       <Box flex='1 1 auto' overflow='auto' maxHeight='380px'>
-        {fields.map((f, index) => (
-          <Box key={f.name}>
-            {index > 0 && <hr className={classes.divider} />}
-            <Typography fontSize='14px' fontWeight={600} margin={theme.spacing(2, 2, 0, 2)}>
-              {f.label}
-            </Typography>
-            {f.type === 'multiple_selection' && (
-              <MultipleSelection
-                field={f.name}
-                values={filters[f.name]?.values ?? []}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                options={getOptions(f.name, values)}
-              />
-            )}
-            {f.type === 'single_selection' && (
-              <SingleSelection
-                field={f.name}
-                value={filters[f.name]?.values[0]}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                options={getOptions(f.name, values)}
-                isBoolean={false}
-              />
-            )}
-            {f.type === 'search' && (
-              <Search
-                field={f.name}
-                autoFocus={false}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                onDelete={() => onDeleteFilter(f.name)}
-                value={filters[f.name]?.values[0]}
-              />
-            )}
-            {f.type === 'date_range' && (
-              <DateRange
-                field={f.name}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                onDelete={() => onDeleteFilter(f.name)}
-                values={filters[f.name]?.values ?? []}
-              />
-            )}
-            {f.type === 'number_range' && (
-              <FilterNumberRange
-                field={f.name}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                onDelete={() => onDeleteFilter(f.name)}
-                values={filters[f.name]?.values ?? []}
-              />
-            )}
-            {f.type === 'count_weight' && (
-              <FilterCountWeight
-                field={f.name}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                payloads={filters[f.name]?.children ?? []}
-              />
-            )}
-          </Box>
-        ))}
+        {fields
+          .filter((f) => getOptions(f.name, values).length > 0)
+          .map((f, index) => (
+            <Box key={f.name}>
+              {index > 0 && <hr className={classes.divider} />}
+              <Typography fontSize='14px' fontWeight={600} margin={theme.spacing(2, 2, 0, 2)}>
+                {f.label}
+              </Typography>
+              {f.type === 'multiple_selection' && (
+                <MultipleSelection
+                  field={f.name}
+                  values={filters[f.name]?.values ?? []}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  options={getOptions(f.name, values)}
+                />
+              )}
+              {f.type === 'single_selection' && (
+                <SingleSelection
+                  field={f.name}
+                  value={filters[f.name]?.values[0]}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  options={getOptions(f.name, values)}
+                  isBoolean={false}
+                />
+              )}
+              {f.type === 'search' && (
+                <Search
+                  field={f.name}
+                  autoFocus={false}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  onDelete={() => onDeleteFilter(f.name)}
+                  value={filters[f.name]?.values[0]}
+                />
+              )}
+              {f.type === 'date_range' && (
+                <DateRange
+                  field={f.name}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  onDelete={() => onDeleteFilter(f.name)}
+                  values={filters[f.name]?.values ?? []}
+                />
+              )}
+              {f.type === 'number_range' && (
+                <FilterNumberRange
+                  field={f.name}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  onDelete={() => onDeleteFilter(f.name)}
+                  values={filters[f.name]?.values ?? []}
+                />
+              )}
+              {f.type === 'count_weight' && (
+                <FilterCountWeight
+                  field={f.name}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  payloads={filters[f.name]?.children ?? []}
+                />
+              )}
+            </Box>
+          ))}
       </Box>
       <Box
         display='flex'
