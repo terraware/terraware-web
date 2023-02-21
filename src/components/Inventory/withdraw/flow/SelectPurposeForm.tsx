@@ -28,7 +28,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';
 import { useOrganization } from 'src/providers/hooks';
-import isEnabled from 'src/features';
 import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useUser } from 'src/providers';
@@ -88,8 +87,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [selectedPlot, setSelectedPlot] = useState<PlotInfo>();
   const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
   const [speciesMap, setSpeciesMap] = useState<{ [key: string]: string }>({});
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
-  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedNursery : undefined);
+  const tz = useLocationTimeZone().get(selectedNursery);
   const [timeZone, setTimeZone] = useState(tz.id);
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);

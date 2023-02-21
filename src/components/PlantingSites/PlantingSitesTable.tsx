@@ -4,7 +4,6 @@ import { TableColumnType, Textfield } from '@terraware/web-components';
 import { SearchResponseElement } from 'src/api/search';
 import strings from 'src/strings';
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
-import isEnabled from 'src/features';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { SearchSortOrder } from 'src/services/SearchService';
@@ -20,7 +19,6 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder } = props;
   const [isPresorted, setIsPresorted] = useState<boolean>(false);
   const theme = useTheme();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
   const columns: TableColumnType[] = [
     {
       key: 'name',
@@ -34,6 +32,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
     },
     { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
     { key: 'numPlots', name: strings.PLOTS, type: 'string' },
+    { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
   ];
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
@@ -76,11 +75,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             <Grid item xs={12}>
               <Table
                 id='planting-sites-table'
-                columns={
-                  timeZoneFeatureEnabled
-                    ? [...columns, { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' }]
-                    : columns
-                }
+                columns={columns}
                 rows={results}
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}

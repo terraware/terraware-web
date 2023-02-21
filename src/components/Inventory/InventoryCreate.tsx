@@ -19,7 +19,6 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { Facility } from 'src/types/Facility';
 import { getNurseryById } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
-import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
@@ -44,9 +43,8 @@ export default function CreateInventory(): JSX.Element {
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const { selectedOrganization } = useOrganization();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
   const [selectedNursery, setSelectedNursery] = useState<Facility>();
-  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedNursery : undefined);
+  const tz = useLocationTimeZone().get(selectedNursery);
   const [timeZone, setTimeZone] = useState(tz.id);
   const [addedDateChanged, setAddedDateChanged] = useState(false);
 

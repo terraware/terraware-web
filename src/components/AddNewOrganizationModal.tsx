@@ -12,7 +12,6 @@ import { useHistory } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import isEnabled from 'src/features';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import RegionSelector from 'src/components/RegionSelector';
 
@@ -37,7 +36,6 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     role: 'Owner',
     totalUsers: 0,
   });
-  const timeZonesEnabled = isEnabled('Timezones');
 
   useEffect(() => {
     setNewOrganization({
@@ -63,7 +61,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       hasErrors = true;
     }
 
-    if (timeZonesEnabled && !newOrganization.timeZone) {
+    if (!newOrganization.timeZone) {
       setTimeZoneError(strings.REQUIRED_FIELD);
       hasErrors = true;
     }
@@ -159,18 +157,16 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           countryError={countryError}
           countrySubdivisionError={stateError}
         />
-        {timeZonesEnabled && (
-          <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
-            <TimeZoneSelector
-              label={strings.TIME_ZONE_REQUIRED}
-              onTimeZoneSelected={onTimeZoneChange}
-              selectedTimeZone={newOrganization.timeZone}
-              countryCode={newOrganization.countryCode}
-              tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
-              errorText={timeZoneError}
-            />
-          </Grid>
-        )}
+        <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
+          <TimeZoneSelector
+            label={strings.TIME_ZONE_REQUIRED}
+            onTimeZoneSelected={onTimeZoneChange}
+            selectedTimeZone={newOrganization.timeZone}
+            countryCode={newOrganization.countryCode}
+            tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
+            errorText={timeZoneError}
+          />
+        </Grid>
       </Grid>
     </DialogBox>
   );

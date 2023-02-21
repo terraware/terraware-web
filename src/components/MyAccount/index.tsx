@@ -94,7 +94,6 @@ const MyAccountContent = ({
   const { userPreferences, reloadUserPreferences } = useUser();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
-  const timeZonesEnabled = isEnabled('Timezones');
   const weightUnitsEnabled = isEnabled('Weight units');
   const localeSelectionEnabled = isEnabled('Locale selection');
   const { selectedLocale } = useLocalization();
@@ -428,29 +427,25 @@ const MyAccountContent = ({
                 )}
               </Grid>
             )}
-            {timeZonesEnabled && (
-              <>
-                <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
-                  {edit ? (
-                    <TimeZoneSelector
-                      onTimeZoneSelected={onTimeZoneChange}
-                      selectedTimeZone={record.timeZone}
-                      tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
-                      label={strings.TIME_ZONE}
-                    />
-                  ) : (
-                    <TextField
-                      label={strings.TIME_ZONE}
-                      id='timezone'
-                      type='text'
-                      value={tz.longName}
-                      tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
-                      display={true}
-                    />
-                  )}
-                </Grid>
-              </>
-            )}
+            <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+              {edit ? (
+                <TimeZoneSelector
+                  onTimeZoneSelected={onTimeZoneChange}
+                  selectedTimeZone={record.timeZone}
+                  tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                  label={strings.TIME_ZONE}
+                />
+              ) : (
+                <TextField
+                  label={strings.TIME_ZONE}
+                  id='timezone'
+                  type='text'
+                  value={tz.longName}
+                  tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                  display={true}
+                />
+              )}
+            </Grid>
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
                 {strings.NOTIFICATIONS}

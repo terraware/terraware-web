@@ -14,7 +14,6 @@ import { Species } from 'src/types/Species';
 import { APP_PATHS } from 'src/constants';
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
-import isEnabled from 'src/features';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { Facility } from 'src/types/Facility';
 import { getNurseryById } from 'src/utils/organization';
@@ -46,8 +45,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const [speciesSelected, setSpeciesSelected] = useState<Species>();
   const [facility, setFacility] = useState<Facility>();
 
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
-  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? facility : undefined);
+  const tz = useLocationTimeZone().get(facility);
   const [timeZone, setTimeZone] = useState(tz.id);
 
   const [addedDateChanged, setAddedDateChanged] = useState(false);

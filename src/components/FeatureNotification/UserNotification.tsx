@@ -22,7 +22,6 @@ export default function UserNotification(): Notification | null {
   const [timeZoneUserNotificationRead, setTimeZoneUserNotificationRead] = useState(false);
   const [userTimeZone, setUserTimeZone] = useState<string>();
 
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
   const weightUnitsEnabled = isEnabled('Weight units');
 
   const { user, reloadUser, userPreferences, reloadUserPreferences } = useUser();
@@ -70,10 +69,8 @@ export default function UserNotification(): Notification | null {
       }
     };
 
-    if (timeZoneFeatureEnabled) {
-      initializeTimeZones();
-    }
-  }, [reloadUser, timeZoneFeatureEnabled, user, userPreferences, timeZones]);
+    initializeTimeZones();
+  }, [reloadUser, user, userPreferences, timeZones]);
 
   useEffect(() => {
     const initializeWeightUnits = async () => {

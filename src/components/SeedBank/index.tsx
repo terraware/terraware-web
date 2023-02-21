@@ -13,7 +13,6 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import TfMain from '../common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
-import isEnabled from 'src/features';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import StorageLocations from './StorageLocations';
 
@@ -32,7 +31,6 @@ export default function SeedBankDetails(): JSX.Element {
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [seedBank, setSeedBank] = useState<Facility>();
   const history = useHistory();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
   const tz = useLocationTimeZone().get(seedBank);
 
   useEffect(() => {
@@ -110,18 +108,16 @@ export default function SeedBankDetails(): JSX.Element {
             display={true}
           />
         </Grid>
-        {timeZoneFeatureEnabled && (
-          <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
-            <TextField
-              label={strings.TIME_ZONE}
-              id='timezone'
-              type='text'
-              value={tz.longName}
-              tooltipTitle={strings.TOOLTIP_TIME_ZONE_SEEDBANK}
-              display={true}
-            />
-          </Grid>
-        )}
+        <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+          <TextField
+            label={strings.TIME_ZONE}
+            id='timezone'
+            type='text'
+            value={tz.longName}
+            tooltipTitle={strings.TOOLTIP_TIME_ZONE_SEEDBANK}
+            display={true}
+          />
+        </Grid>
         {seedBank && <StorageLocations seedBankId={seedBank.id} />}
       </Grid>
     </TfMain>
