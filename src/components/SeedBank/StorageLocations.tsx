@@ -7,7 +7,6 @@ import { useLocalization } from 'src/providers/hooks';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { useNumberFormatter } from 'src/utils/useNumber';
-import isEnabled from 'src/features';
 import StorageLocationsCellRenderer from './StorageLocationsCellRenderer';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { Button } from '@terraware/web-components';
@@ -39,7 +38,6 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
     { key: 'activeAccessions', name: strings.ACTIVE_ACCESSIONS, type: 'number' },
   ];
   const { isMobile } = useDeviceInfo();
-  const featureEnabled = isEnabled('Storage locations');
 
   useEffect(() => {
     const fetchStorageLocations = async () => {
@@ -52,14 +50,12 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
       }
     };
 
-    if (featureEnabled) {
-      if (seedBankId) {
-        fetchStorageLocations();
-      } else {
-        setStorageLocations(DEFAULT_STORAGE_LOCATIONS().map((name, index) => storageLocationWith(name, index)));
-      }
+    if (seedBankId) {
+      fetchStorageLocations();
+    } else {
+      setStorageLocations(DEFAULT_STORAGE_LOCATIONS().map((name, index) => storageLocationWith(name, index)));
     }
-  }, [seedBankId, activeLocale, featureEnabled]);
+  }, [seedBankId, activeLocale]);
 
   const getTopBarButtons = () => {
     const topBarButtons: TopBarButton[] = [
@@ -105,10 +101,6 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
   };
 
   const editMode: boolean = !!onEdit;
-
-  if (!featureEnabled) {
-    return null;
-  }
 
   return (
     <>
