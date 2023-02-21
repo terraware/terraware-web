@@ -934,7 +934,7 @@ export const strings = {
   TOOLTIP_ACCESSIONS_SUBLOCATION: 'Specific area within the place where seeds are being processed.',
   TOOLTIP_COMMON_NAME: 'The name an organism is known by to the general public, rather than its scientific name.',
   TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
-    'This number represents all accessions with the statuses awaiting processing, cleaning, drying, and in storage.',
+    'This number represents all accessions with the statuses awaiting processing, processing, drying, and in storage.',
   TOOLTIP_ECOSYSTEM_TYPE:
     'Relatively large units of land or water containing a distinct assemblage of natural communities sharing a large majority of species, dynamics, and environmental conditions.',
   TOOLTIP_GERMINATING_QUANTITY:
