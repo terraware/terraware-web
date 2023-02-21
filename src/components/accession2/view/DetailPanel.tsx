@@ -4,7 +4,7 @@ import { Button, Icon } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import { Accession } from 'src/types/Accession';
 import strings from 'src/strings';
-import { searchCountries } from 'src/api/country/country';
+import { LocationService } from 'src/services';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { Country } from 'src/types/Country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -66,7 +66,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   useEffect(() => {
     if (activeLocale) {
       const populateCountries = async () => {
-        const response = await searchCountries();
+        const response = await LocationService.getCountries();
         if (response) {
           setCountries(response);
         }
