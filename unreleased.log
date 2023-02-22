@@ -1,3 +1,4 @@
+cce272e6 SW-2739 Disable call-to-action buttons while processing (#1213)
 4640bb62 zSW-3003 Refactor org service test, introduce mock utilities for http service (#1229)
 cbc087e6 Bump @reduxjs/toolkit from 1.9.1 to 1.9.3 (#1233)
 92cd9d70 SW-3007 Map service utilities unit tests (#1234)
