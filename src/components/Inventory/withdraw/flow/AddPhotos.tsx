@@ -24,12 +24,12 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
     setPhotos(photosList);
   };
 
-  const onNextHandler = () => {
+  const onNextHandler = async () => {
     if (photosRequired && !photos.length) {
       setError({ title: strings.PHOTOS_REQUIRED, text: strings.PHOTOS_OUTPLANT_DESCRIPTION });
     } else {
       setError(undefined);
-      onNext(photos);
+      await onNext(photos);
     }
   };
 

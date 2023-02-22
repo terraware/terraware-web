@@ -15,7 +15,6 @@ import Link from 'src/components/common/Link';
 import EditState from './EditState';
 import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
-import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import ConvertedValue from 'src/components/ConvertedValue';
 
@@ -44,7 +43,6 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const preferredUnits = usePreferredWeightUnits();
-  const weightUnitsEnabled = isEnabled('Weight units');
   const { userPreferences } = useUser();
 
   const validate = () => {
@@ -205,8 +203,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 className={classes.units}
               />
             </Box>
-            {weightUnitsEnabled &&
-              record.remainingQuantity?.units &&
+            {record.remainingQuantity?.units &&
               record.remainingQuantity?.units !== 'Seeds' &&
               !isUnitInPreferredSystem(
                 record.remainingQuantity.units,

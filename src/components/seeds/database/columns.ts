@@ -1,6 +1,5 @@
 import strings from 'src/strings';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
-import isEnabled from 'src/features';
 
 function columns(): DatabaseColumn[] {
   return [
@@ -407,9 +406,8 @@ const germinationTestingPreset: Preset = {
 };
 
 export const searchPresets = (preferredWeightSystem: string) => {
-  const weightUnitsEnabled = isEnabled('Weight units');
   return [
-    defaultPreset(weightUnitsEnabled ? preferredWeightSystem : ''),
+    defaultPreset(preferredWeightSystem),
     generalInventoryPreset,
     seedStoragePreset,
     viabilitySummaryPreset,

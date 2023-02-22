@@ -40,7 +40,6 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
-import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
@@ -210,7 +209,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [openImportModal, setOpenImportModal] = useState<boolean>(false);
   const [showDefaultSystemSnackbar, setShowDefaultSystemSnackbar] = useState(false);
   const { userPreferences } = useUser();
-  const weightUnitsEnabled = isEnabled('Weight units');
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -240,7 +238,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     (columnNames?: string[]) => {
       if (columnNames) {
         if (
-          weightUnitsEnabled &&
           !userPreferences.defaultWeightSystemAcknowledgedOnMs &&
           userPreferences.preferredWeightSystem !== 'imperial' &&
           columnNames.find((cn) => cn === 'estimatedWeightOunces' || cn === 'estimatedWeightPounds')
@@ -266,7 +263,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     [
       setSearchColumns,
       setDisplayColumnNames,
-      weightUnitsEnabled,
       userPreferences.preferredWeightSystem,
       userPreferences.defaultWeightSystemAcknowledgedOnMs,
     ]

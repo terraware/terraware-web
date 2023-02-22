@@ -1,7 +1,7 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName = 'Show Production View' | 'Weight units' | 'Locale selection';
+export type FeatureName = 'Show Production View' | 'Locale selection';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Weight units',
-    preferenceName: 'enablePreferredWeightUnits',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Allow choosing preferred weight units'],
-    disclosure: ['This is WIP.'],
   },
   {
     name: 'Locale selection',
