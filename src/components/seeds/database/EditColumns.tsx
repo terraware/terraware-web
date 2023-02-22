@@ -151,25 +151,20 @@ interface Section {
 
 function sections(system?: string): Section[] {
   const columns = columnsIndexed();
-  const weightUnitsEnabled = isEnabled('Weight units');
 
   const totalWithdrawnSection = () => {
-    if (weightUnitsEnabled) {
-      if (system === 'imperial') {
-        return [
-          [columns.totalWithdrawnCount, columns.totalWithdrawnWeightOunces],
-          [columns.totalWithdrawnWeightPounds, columns.totalWithdrawnWeightGrams],
-          [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightKilograms],
-        ];
-      } else {
-        return [
-          [columns.totalWithdrawnCount, columns.totalWithdrawnWeightGrams],
-          [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightKilograms],
-          [columns.totalWithdrawnWeightOunces, columns.totalWithdrawnWeightPounds],
-        ];
-      }
+    if (system === 'imperial') {
+      return [
+        [columns.totalWithdrawnCount, columns.totalWithdrawnWeightOunces],
+        [columns.totalWithdrawnWeightPounds, columns.totalWithdrawnWeightGrams],
+        [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightKilograms],
+      ];
     } else {
-      return [[columns.totalWithdrawnCount], [columns.totalWithdrawnWeightGrams]];
+      return [
+        [columns.totalWithdrawnCount, columns.totalWithdrawnWeightGrams],
+        [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightKilograms],
+        [columns.totalWithdrawnWeightOunces, columns.totalWithdrawnWeightPounds],
+      ];
     }
   };
 
@@ -194,22 +189,13 @@ function sections(system?: string): Section[] {
           columns.collectedDate,
           columns.estimatedCount,
         ],
-        weightUnitsEnabled
-          ? [
-              columns.species_endangered,
-              columns.species_rare,
-              columns.collectionSource,
-              columns.ageYears,
-              columns.ageMonths,
-            ]
-          : [
-              columns.species_endangered,
-              columns.species_rare,
-              columns.collectionSource,
-              columns.ageYears,
-              columns.ageMonths,
-              columns.estimatedWeightGrams,
-            ],
+        [
+          columns.species_endangered,
+          columns.species_rare,
+          columns.collectionSource,
+          columns.ageYears,
+          columns.ageMonths,
+        ],
         [
           columns.plantsCollectedFrom,
           columns.bagNumber,
@@ -218,6 +204,21 @@ function sections(system?: string): Section[] {
           columns.collectionSiteName,
         ],
       ],
+    },
+    {
+      name: strings.WEIGHT_UNITS,
+      options:
+        system === 'imperial'
+          ? [
+              [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
+              [columns.estimatedWeightGrams, columns.estimatedWeightMilligrams],
+              [columns.estimatedWeightKilograms],
+            ]
+          : [
+              [columns.estimatedWeightGrams, columns.estimatedWeightMilligrams],
+              [columns.estimatedWeightKilograms],
+              [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
+            ],
     },
     {
       name: strings.PROCESSING_AND_DRYING,
@@ -251,27 +252,6 @@ function sections(system?: string): Section[] {
       ],
     },
   ];
-
-  // TODO: When undoing the feature check move this code to the original sections
-  if (weightUnitsEnabled) {
-    columnsSections
-      .splice(2, 0, {
-        name: strings.WEIGHT_UNITS,
-        options:
-          system === 'imperial'
-            ? [
-                [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
-                [columns.estimatedWeightGrams, columns.estimatedWeightMilligrams],
-                [columns.estimatedWeightKilograms],
-              ]
-            : [
-                [columns.estimatedWeightGrams, columns.estimatedWeightMilligrams],
-                [columns.estimatedWeightKilograms],
-                [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
-              ],
-      })
-      .join();
-  }
 
   return columnsSections;
 }

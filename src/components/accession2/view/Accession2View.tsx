@@ -108,7 +108,6 @@ export default function Accession2View(): JSX.Element {
   const classes = useStyles({ isMobile });
   const themeObj = useTheme();
   const contentRef = useRef(null);
-  const weightUnitsEnabled = isEnabled('Weight units');
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
 
@@ -248,7 +247,7 @@ export default function Accession2View(): JSX.Element {
   };
 
   const showValueAndConversion = (quantity: number, unit: string, isEstimated?: boolean) => {
-    if (weightUnitsEnabled && !isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
+    if (!isUnitInPreferredSystem(unit, userPreferences.preferredWeightSystem as string)) {
       return (
         <Box marginBottom={1}>
           {isEstimated && '~'} {quantity} {getUnitName(unit)}

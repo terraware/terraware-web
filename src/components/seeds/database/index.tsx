@@ -210,7 +210,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [openImportModal, setOpenImportModal] = useState<boolean>(false);
   const [showDefaultSystemSnackbar, setShowDefaultSystemSnackbar] = useState(false);
   const { userPreferences } = useUser();
-  const weightUnitsEnabled = isEnabled('Weight units');
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -240,7 +239,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     (columnNames?: string[]) => {
       if (columnNames) {
         if (
-          weightUnitsEnabled &&
           !userPreferences.defaultWeightSystemAcknowledgedOnMs &&
           userPreferences.preferredWeightSystem !== 'imperial' &&
           columnNames.find((cn) => cn === 'estimatedWeightOunces' || cn === 'estimatedWeightPounds')
@@ -266,7 +264,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     [
       setSearchColumns,
       setDisplayColumnNames,
-      weightUnitsEnabled,
       userPreferences.preferredWeightSystem,
       userPreferences.defaultWeightSystemAcknowledgedOnMs,
     ]

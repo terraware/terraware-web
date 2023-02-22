@@ -44,7 +44,6 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const preferredUnits = usePreferredWeightUnits();
-  const weightUnitsEnabled = isEnabled('Weight units');
   const { userPreferences } = useUser();
 
   const validate = () => {
@@ -205,8 +204,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 className={classes.units}
               />
             </Box>
-            {weightUnitsEnabled &&
-              record.remainingQuantity?.units &&
+            {record.remainingQuantity?.units &&
               record.remainingQuantity?.units !== 'Seeds' &&
               !isUnitInPreferredSystem(
                 record.remainingQuantity.units,

@@ -407,9 +407,8 @@ const germinationTestingPreset: Preset = {
 };
 
 export const searchPresets = (preferredWeightSystem: string) => {
-  const weightUnitsEnabled = isEnabled('Weight units');
   return [
-    defaultPreset(weightUnitsEnabled ? preferredWeightSystem : ''),
+    defaultPreset(preferredWeightSystem),
     generalInventoryPreset,
     seedStoragePreset,
     viabilitySummaryPreset,
