@@ -719,7 +719,8 @@ export const strings = {
   REPORT_PROBLEM: 'Report Problem',
   REPORT: 'Report',
   REQUEST_FEATURE: 'Request Feature',
-  REQUIRED_FIELD: 'Required field.',
+  REQUIRED_FIELD: 'Required field',
+  REQUIRED_VALUE_AND_UNITS_FIELD: 'Value and units required',
   RESET: 'Reset',
   REVIEW_ERRORS: 'Review Errors',
   REVIEW_YOUR_ACCOUNT_SETTING: 'Review your account setting',
@@ -891,7 +892,7 @@ export const strings = {
   SUB_LOCATION: 'Sub-Location',
   SUB_LOCATIONS: 'Sub-Locations',
   SUBSET_COUNT: 'Subset Count',
-  SUBSET_ERROR: 'Subset weight should be less than seed weight',
+  SUBSET_WEIGHT_ERROR: 'Subset weight should be less than seed weight',
   SUBSET_WEIGHT: 'Weight of Seed Subset',
   SUBSTRATE: 'Substrate',
   SUBTITLE_GET_STARTED:
