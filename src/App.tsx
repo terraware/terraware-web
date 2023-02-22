@@ -62,6 +62,8 @@ import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
+import isEnabled from './features';
+import { ReportList, ReportView, ReportEdit } from './components/Reports';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -483,6 +485,22 @@ function AppContent() {
             <Route exact path={APP_PATHS.MY_ACCOUNT}>
               <MyAccount organizations={organizations} edit={false} />
             </Route>
+
+            {isEnabled('Reporting V1') && (
+              <Route exact path={APP_PATHS.REPORTS}>
+                <ReportList />
+              </Route>
+            )}
+            {isEnabled('Reporting V1') && (
+              <Route path={APP_PATHS.REPORTS_EDIT}>
+                <ReportEdit />
+              </Route>
+            )}
+            {isEnabled('Reporting V1') && (
+              <Route path={APP_PATHS.REPORTS_VIEW}>
+                <ReportView />
+              </Route>
+            )}
 
             {!isProduction && (
               <Route exact path={APP_PATHS.OPT_IN}>
