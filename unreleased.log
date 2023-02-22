@@ -1,3 +1,4 @@
+181431ce SW-3006 Remove opt-in for storage locations (#1228)
 7548966d SW-3004 Remove opt-in flag/code for time zones (#1227)
 73a76ecb Bump up web components version to fix datepicker first keypress ignored (#1236)
 cce272e6 SW-2739 Disable call-to-action buttons while processing (#1213)
