@@ -28,13 +28,6 @@ export default function CollectedReceivedDate2({ onChange, record, type, validat
     receivedDate: record.receivedDate,
   });
 
-  useEffect(() => {
-    setDates({
-      collectedDate: record.collectedDate,
-      receivedDate: record.receivedDate,
-    });
-  }, [record]);
-
   const datePickerStyle = {
     '.MuiFormControl-root': {
       width: '100%',
