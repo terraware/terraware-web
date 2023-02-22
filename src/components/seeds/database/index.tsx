@@ -40,7 +40,6 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem } from '@terraware/web-components';
 import PopoverMenu from 'src/components/common/PopoverMenu';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
-import isEnabled from 'src/features';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';

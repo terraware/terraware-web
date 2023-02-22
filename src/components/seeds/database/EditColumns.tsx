@@ -8,7 +8,6 @@ import { columnsIndexed, Preset, searchPresets } from './columns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import { IconTooltip } from '@terraware/web-components';
 

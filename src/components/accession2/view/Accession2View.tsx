@@ -38,7 +38,6 @@ import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { stateName } from 'src/types/Accession';
 import { getUnitName, isUnitInPreferredSystem } from 'src/units';
-import isEnabled from 'src/features';
 import ConvertedValue from 'src/components/ConvertedValue';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
