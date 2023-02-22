@@ -8,7 +8,6 @@ import TextWithLink from 'src/components/common/TextWithLink';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import { useEffect, useMemo, useState } from 'react';
-import isEnabled from 'src/features';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { PreferencesService, UserService } from 'src/services';
@@ -21,8 +20,6 @@ export default function UserNotification(): Notification | null {
   const [timeZoneUserNotification, setTimeZoneUserNotification] = useState(false);
   const [timeZoneUserNotificationRead, setTimeZoneUserNotificationRead] = useState(false);
   const [userTimeZone, setUserTimeZone] = useState<string>();
-
-  const weightUnitsEnabled = isEnabled('Weight units');
 
   const { user, reloadUser, userPreferences, reloadUserPreferences } = useUser();
   const { selectedOrganization } = useOrganization();
@@ -92,10 +89,8 @@ export default function UserNotification(): Notification | null {
       setUnitNotification(!featureNotificationExpired(userUnit.unitsAcknowledgedOnMs));
     };
 
-    if (weightUnitsEnabled) {
-      initializeWeightUnits();
-    }
-  }, [user, userPreferences, weightUnitsEnabled, reloadUserPreferences]);
+    initializeWeightUnits();
+  }, [user, userPreferences, reloadUserPreferences]);
 
   return useMemo(() => {
     if (unitNotification && timeZoneUserNotification) {

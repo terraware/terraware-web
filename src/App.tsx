@@ -56,7 +56,6 @@ import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { TrackingService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { defaultSelectedOrg } from 'src/providers/contexts';
 import AppBootstrap from './AppBootstrap';
@@ -143,8 +142,7 @@ function AppContent() {
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
   const { userPreferences, reloadUserPreferences: reloadPreferences } = useUser();
-  const weightUnitsEnabled = isEnabled('Weight units');
-  const preferredWeightSystem = weightUnitsEnabled ? (userPreferences.preferredWeightSystem as string) : '';
+  const preferredWeightSystem = userPreferences.preferredWeightSystem as string;
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);

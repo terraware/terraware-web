@@ -91,7 +91,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
           {strings.FILTERS}
         </Typography>
       </Box>
-      <Box flex='1 1 auto' overflow='auto'>
+      <Box flex='1 1 auto' overflow='auto' maxHeight='380px'>
         {fields.map((f, index) => (
           <Box key={f.name}>
             {index > 0 && <hr className={classes.divider} />}
@@ -189,13 +189,14 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
 }
 
 function getOptions(field: string, values: FieldValuesPayload): Option[] {
-  const map1 = values[field].values.map((v) => {
-    return {
-      label: v,
-      value: v,
-      disabled: false,
-    };
-  });
+  const map1 =
+    values[field]?.values?.map((v) => {
+      return {
+        label: v,
+        value: v,
+        disabled: false,
+      };
+    }) ?? [];
 
   return map1;
 }

@@ -94,7 +94,6 @@ const MyAccountContent = ({
   const { userPreferences, reloadUserPreferences } = useUser();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
-  const weightUnitsEnabled = isEnabled('Weight units');
   const localeSelectionEnabled = isEnabled('Locale selection');
   const { selectedLocale } = useLocalization();
   const timeZones = useTimeZones();
@@ -188,10 +187,9 @@ const MyAccountContent = ({
         setCannotRemoveOrgModalOpened(true);
       }
     } else {
-      if (weightUnitsEnabled) {
-        await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
-        reloadUserPreferences();
-      }
+      await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
+      reloadUserPreferences();
+
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded) {
         reloadUser();
@@ -405,28 +403,26 @@ const MyAccountContent = ({
                 )}
               </Grid>
             )}
-            {weightUnitsEnabled && (
-              <Grid
-                item
-                xs={isMobile ? 12 : 4}
-                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              >
-                {edit ? (
-                  <WeightSystemSelector
-                    onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
-                    selectedWeightSystem={preferredWeightSystemSelected}
-                  />
-                ) : (
-                  <TextField
-                    label={strings.PREFERRED_WEIGHT_SYSTEM}
-                    id='preferredWeightSystem'
-                    type='text'
-                    value={weightSystems().find((ws) => ws.value === preferredWeightSystemSelected)?.label}
-                    display={true}
-                  />
-                )}
-              </Grid>
-            )}
+            <Grid
+              item
+              xs={isMobile ? 12 : 4}
+              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+            >
+              {edit ? (
+                <WeightSystemSelector
+                  onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
+                  selectedWeightSystem={preferredWeightSystemSelected}
+                />
+              ) : (
+                <TextField
+                  label={strings.PREFERRED_WEIGHT_SYSTEM}
+                  id='preferredWeightSystem'
+                  type='text'
+                  value={weightSystems().find((ws) => ws.value === preferredWeightSystemSelected)?.label}
+                  display={true}
+                />
+              )}
+            </Grid>
             <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
               {edit ? (
                 <TimeZoneSelector
