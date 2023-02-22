@@ -31,7 +31,6 @@ import AddLink from 'src/components/common/AddLink';
 import { useOrganization } from 'src/providers/hooks';
 import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import isEnabled from 'src/features';
 
 const useStyles = makeStyles(() => ({
   checkbox: {
@@ -65,8 +64,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [viabilityFieldsErrors, setViabilityFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
-  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedSeedBank : undefined);
+  const tz = useLocationTimeZone().get(selectedSeedBank);
 
   const readOnly = !!viabilityTest?.endDate && !!(viabilityTest?.testResults && viabilityTest?.testResults?.length > 0);
   const { isMobile } = useDeviceInfo();

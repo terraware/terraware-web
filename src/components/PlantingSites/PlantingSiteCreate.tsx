@@ -15,7 +15,6 @@ import { PlantingSite } from 'src/types/Tracking';
 import BoundariesAndPlots from './BoundariesAndPlots';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import isEnabled from 'src/features';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
 type CreatePlantingSiteProps = {
@@ -33,7 +32,6 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const [nameError, setNameError] = useState('');
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [loaded, setLoaded] = useState(false);
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
@@ -121,7 +119,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     if (isMobile) {
       return 12;
     }
-    return 6;
+    return 4;
   };
 
   return (
@@ -185,16 +183,14 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                         value={record.description}
                       />
                     </Grid>
-                  </Grid>
-                  {timeZoneFeatureEnabled && (
-                    <Grid item xs={gridSize()} marginTop={3}>
+                    <Grid item xs={gridSize()}>
                       <LocationTimeZoneSelector
                         location={record}
                         onChangeTimeZone={onChangeTimeZone}
                         tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
                       />
                     </Grid>
-                  )}
+                  </Grid>
                 </Box>
               </Grid>
               {record?.boundary && <BoundariesAndPlots plantingSite={record} />}

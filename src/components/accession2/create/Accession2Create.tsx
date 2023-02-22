@@ -26,7 +26,6 @@ import { useOrganization } from 'src/providers';
 import { getSeedBank } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
-import isEnabled from 'src/features';
 
 const SubTitleStyle = {
   fontSize: '20px',
@@ -44,8 +43,7 @@ export default function CreateAccession(): JSX.Element {
   const snackbar = useSnackbar();
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
-  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedSeedBank : undefined);
+  const tz = useLocationTimeZone().get(selectedSeedBank);
   const [timeZone, setTimeZone] = useState<string>(tz.id);
   const { selectedOrganization } = useOrganization();
 

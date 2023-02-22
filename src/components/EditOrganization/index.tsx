@@ -12,7 +12,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
-import isEnabled from 'src/features';
 import { getUTC, useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
@@ -36,7 +35,6 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
     setOrganizationRecord((previousRecord: Organization): Organization => {
@@ -151,17 +149,15 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             countryError={countryError}
             countrySubdivisionError={subdivisionError}
           />
-          {timeZoneFeatureEnabled && (
-            <Grid item xs={gridSize()}>
-              <TimeZoneSelector
-                selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
-                countryCode={organizationRecord.countryCode}
-                onTimeZoneSelected={onChangeTimeZone}
-                label={strings.TIME_ZONE_REQUIRED}
-                tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
-              />
-            </Grid>
-          )}
+          <Grid item xs={gridSize()}>
+            <TimeZoneSelector
+              selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
+              countryCode={organizationRecord.countryCode}
+              onTimeZoneSelected={onChangeTimeZone}
+              label={strings.TIME_ZONE_REQUIRED}
+              tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
+            />
+          </Grid>
         </Grid>
       </PageForm>
     </TfMain>

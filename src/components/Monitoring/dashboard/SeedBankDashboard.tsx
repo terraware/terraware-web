@@ -17,7 +17,6 @@ import useQuery from '../../../utils/useQuery';
 import { timePeriods } from './Common';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import isEnabled from 'src/features';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 
@@ -68,7 +67,6 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [defaultSensorTimePeriod, setDefaultSensorTimePeriod] = useState<string>();
   const [defaultPvTimePeriod, setDefaultPvTimePeriod] = useState<string>();
   const [defaultSensor, setDefaultSensor] = useState<Device>();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
   const tz = useLocationTimeZone().get(seedBank);
   const [tzSelected, setTzSelected] = useState<string>(tz.id);
 
@@ -82,7 +80,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
     if (isMobile) {
       return 12;
     }
-    return timeZoneFeatureEnabled ? 4 : 6;
+    return 4;
   };
 
   useEffect(() => {
@@ -238,16 +236,14 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
           <p className={classes.panelValue}>{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}</p>
         </div>
       </Grid>
-      {timeZoneFeatureEnabled && (
-        <Grid item xs={gridSize()}>
-          <div className={classes.graphContainer}>
-            <div className={classes.panelTitle}>
-              <p>{strings.TIME_ZONE}</p>
-            </div>
-            <TimeZoneSelector selectedTimeZone={tzSelected} onTimeZoneSelected={onChangeTimeZone} />
+      <Grid item xs={gridSize()}>
+        <div className={classes.graphContainer}>
+          <div className={classes.panelTitle}>
+            <p>{strings.TIME_ZONE}</p>
           </div>
-        </Grid>
-      )}
+          <TimeZoneSelector selectedTimeZone={tzSelected} onTimeZoneSelected={onChangeTimeZone} />
+        </div>
+      </Grid>
       <Grid item xs={12}>
         <TemperatureHumidityChart
           availableLocations={availableLocations}

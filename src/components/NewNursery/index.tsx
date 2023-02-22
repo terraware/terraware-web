@@ -15,7 +15,6 @@ import { getAllNurseries } from 'src/utils/organization';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import isEnabled from 'src/features';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 
 export default function NurseryView(): JSX.Element {
@@ -24,7 +23,6 @@ export default function NurseryView(): JSX.Element {
   const [descriptionError, setDescriptionError] = useState('');
   const snackbar = useSnackbar();
   const theme = useTheme();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -41,7 +39,7 @@ export default function NurseryView(): JSX.Element {
     if (isMobile) {
       return 12;
     }
-    return 6;
+    return 4;
   };
 
   useEffect(() => {
@@ -136,15 +134,13 @@ export default function NurseryView(): JSX.Element {
                 errorText={record.description ? '' : descriptionError}
               />
             </Grid>
-            {timeZoneFeatureEnabled && (
-              <Grid item xs={gridSize()}>
-                <LocationTimeZoneSelector
-                  location={record}
-                  onChangeTimeZone={onChangeTimeZone}
-                  tooltip={strings.TOOLTIP_TIME_ZONE_NURSERY}
-                />
-              </Grid>
-            )}
+            <Grid item xs={gridSize()}>
+              <LocationTimeZoneSelector
+                location={record}
+                onChangeTimeZone={onChangeTimeZone}
+                tooltip={strings.TOOLTIP_TIME_ZONE_NURSERY}
+              />
+            </Grid>
           </Grid>
         </Box>
       </PageForm>

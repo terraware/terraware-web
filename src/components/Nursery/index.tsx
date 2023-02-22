@@ -14,7 +14,6 @@ import PageSnackbar from '../PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -32,7 +31,6 @@ export default function NurseryDetails(): JSX.Element {
   const [nursery, setNursery] = useState<Facility>();
   const history = useHistory();
   const tz = useLocationTimeZone().get(nursery);
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -110,18 +108,16 @@ export default function NurseryDetails(): JSX.Element {
             display={true}
           />
         </Grid>
-        {timeZoneFeatureEnabled && (
-          <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
-            <TextField
-              label={strings.TIME_ZONE}
-              id='timezone'
-              type='text'
-              value={tz.longName}
-              tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
-              display={true}
-            />
-          </Grid>
-        )}
+        <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+          <TextField
+            label={strings.TIME_ZONE}
+            id='timezone'
+            type='text'
+            value={tz.longName}
+            tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
+            display={true}
+          />
+        </Grid>
       </Grid>
     </TfMain>
   );

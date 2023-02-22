@@ -15,7 +15,6 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocalization, useOrganization, useTimeZones } from 'src/providers/hooks';
-import isEnabled from 'src/features';
 import { getUTC } from '../../utils/useTimeZoneUtils';
 
 export default function OrganizationView(): JSX.Element {
@@ -28,7 +27,6 @@ export default function OrganizationView(): JSX.Element {
   const { activeLocale } = useLocalization();
   const timeZones = useTimeZones();
   const utcTimeZone = getUTC(timeZones);
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
   const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization.timeZone)?.longName;
 
   useEffect(() => {
@@ -161,18 +159,16 @@ export default function OrganizationView(): JSX.Element {
             display={true}
           />
         </Grid>
-        {timeZoneFeatureEnabled && (
-          <Grid item xs={gridSize()}>
-            <TextField
-              label={strings.TIME_ZONE}
-              id='timeZone'
-              type='text'
-              value={currentTimeZone || utcTimeZone.longName}
-              display={true}
-              tooltipTitle={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
-            />
-          </Grid>
-        )}
+        <Grid item xs={gridSize()}>
+          <TextField
+            label={strings.TIME_ZONE}
+            id='timeZone'
+            type='text'
+            value={currentTimeZone || utcTimeZone.longName}
+            display={true}
+            tooltipTitle={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
+          />
+        </Grid>
       </Grid>
     </TfMain>
   );

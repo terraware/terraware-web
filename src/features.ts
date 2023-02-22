@@ -1,8 +1,10 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
+export type FeatureName = 'Show Production View' | 'Locale selection' | 'Storage locations';
+
 export type Feature = {
-  name: string;
+  name: FeatureName;
   preferenceName: string;
   // whether this feature check is active
   active: boolean;
@@ -32,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Timezones',
-    preferenceName: 'enableTimezones',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Allow choosing time zone'],
-    disclosure: ['This is WIP.'],
   },
   {
     name: 'Locale selection',
@@ -78,7 +71,7 @@ OPT_IN_FEATURES.forEach((feature) => {
 /**
  * Utility function to check if a feature is enabled
  */
-export default function isEnabled(name: string, organizationId?: number) {
+export default function isEnabled(name: FeatureName, organizationId?: number) {
   const { isProduction } = env();
   const feature = FEATURE_MAP[name];
 
@@ -107,7 +100,7 @@ export default function isEnabled(name: string, organizationId?: number) {
   return feature.allowInternalProduction && CachedUserService.getUser().isTerraformation;
 }
 
-export function isRouteEnabled(name: string) {
+export function isRouteEnabled(name: FeatureName) {
   const { isProduction } = env();
   const feature = FEATURE_MAP[name];
 

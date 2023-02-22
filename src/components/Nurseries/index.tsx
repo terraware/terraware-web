@@ -15,7 +15,6 @@ import TfMain from '../common/TfMain';
 import PageSnackbar from '../PageSnackbar';
 import NurseriesCellRenderer from './TableCellRenderer';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import isEnabled from 'src/features';
 import Table from 'src/components/common/table';
 import { useTimeZones } from 'src/providers/hooks';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -34,10 +33,10 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
   const contentRef = useRef(null);
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
   const columns: TableColumnType[] = [
     { key: 'name', name: strings.NAME, type: 'string' },
     { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+    { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
   ];
 
   const goToNewNursery = () => {
@@ -132,11 +131,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           {results && (
             <Table
               id='nurseries-table'
-              columns={
-                timeZoneFeatureEnabled
-                  ? [...columns, { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' }]
-                  : columns
-              }
+              columns={columns}
               rows={results}
               orderBy='name'
               Renderer={NurseriesCellRenderer}

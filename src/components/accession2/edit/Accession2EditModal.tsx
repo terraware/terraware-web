@@ -17,7 +17,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { getSeedBank } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
-import isEnabled from 'src/features';
 
 export interface Accession2EditModalProps {
   open: boolean;
@@ -37,8 +36,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
   const selectedSeedBank = getSeedBank(selectedOrganization, record.facilityId);
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
-  const tz = useLocationTimeZone().get(timeZoneFeatureEnabled ? selectedSeedBank : undefined);
+  const tz = useLocationTimeZone().get(selectedSeedBank);
   const timeZone = tz.id;
 
   const hasErrors = () => {

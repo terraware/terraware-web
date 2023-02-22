@@ -18,7 +18,6 @@ import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import isEnabled from 'src/features';
 import { useTimeZones } from 'src/providers/hooks';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -65,10 +64,10 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   const [results, setResults] = useState<Facility[]>([]);
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
   const columns: TableColumnType[] = [
     { key: 'name', name: strings.NAME, type: 'string' },
     { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+    { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
   ];
 
   const goToNewSeedBank = () => {
@@ -156,11 +155,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
                   <Grid item xs={12}>
                     <Table
                       id='seed-banks-table'
-                      columns={
-                        timeZoneFeatureEnabled
-                          ? [...columns, { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' }]
-                          : columns
-                      }
+                      columns={columns}
                       rows={results}
                       orderBy='name'
                       Renderer={SeedBanksCellRenderer}

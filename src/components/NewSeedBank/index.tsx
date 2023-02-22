@@ -16,7 +16,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import isEnabled from 'src/features';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import { PartialStorageLocation } from 'src/types/Facility';
 import StorageLocations from 'src/components/SeedBank/StorageLocations';
@@ -28,7 +27,6 @@ export default function SeedBankView(): JSX.Element {
   const [descriptionError, setDescriptionError] = useState('');
   const [editedStorageLocations, setEditedStorageLocations] = useState<PartialStorageLocation[]>();
   const snackbar = useSnackbar();
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -45,7 +43,7 @@ export default function SeedBankView(): JSX.Element {
     if (isMobile) {
       return 12;
     }
-    return timeZoneFeatureEnabled ? 4 : 6;
+    return 4;
   };
 
   useEffect(() => {
@@ -202,15 +200,13 @@ export default function SeedBankView(): JSX.Element {
                 errorText={record.description ? '' : descriptionError}
               />
             </Grid>
-            {timeZoneFeatureEnabled && (
-              <Grid item xs={gridSize()}>
-                <LocationTimeZoneSelector
-                  location={record}
-                  onChangeTimeZone={onChangeTimeZone}
-                  tooltip={strings.TOOLTIP_TIME_ZONE_SEEDBANK}
-                />
-              </Grid>
-            )}
+            <Grid item xs={gridSize()}>
+              <LocationTimeZoneSelector
+                location={record}
+                onChangeTimeZone={onChangeTimeZone}
+                tooltip={strings.TOOLTIP_TIME_ZONE_SEEDBANK}
+              />
+            </Grid>
           </Grid>
           <StorageLocations
             seedBankId={selectedSeedBank?.id === -1 ? undefined : selectedSeedBank?.id}

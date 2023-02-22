@@ -6,7 +6,6 @@ import TextWithLink from 'src/components/common/TextWithLink';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import { useEffect, useMemo, useState } from 'react';
-import isEnabled from 'src/features';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 import { OrganizationService, PreferencesService, UserService } from 'src/services';
@@ -18,8 +17,6 @@ export default function OrganizationNotification(): Notification | null {
   const [timeZoneOrgNotification, setTimeZoneOrgNotification] = useState(false);
   const [timeZoneOrgNotificationRead, setTimeZoneOrgNotificationRead] = useState(false);
   const [orgTimeZone, setOrgTimeZone] = useState<string>();
-
-  const timeZoneFeatureEnabled = isEnabled('Timezones');
 
   const { user, reloadUser, userPreferences, reloadUserPreferences } = useUser();
   const timeZones = useTimeZones();
@@ -71,10 +68,8 @@ export default function OrganizationNotification(): Notification | null {
       }
     };
 
-    if (timeZoneFeatureEnabled) {
-      initializeTimeZones();
-    }
-  }, [reloadOrganizations, reloadUser, selectedOrganization, timeZoneFeatureEnabled, user, userPreferences, timeZones]);
+    initializeTimeZones();
+  }, [reloadOrganizations, reloadUser, selectedOrganization, user, userPreferences, timeZones]);
 
   return useMemo(() => {
     if (timeZoneOrgNotification) {
