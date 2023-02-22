@@ -127,6 +127,8 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
                   id='subsetWeight'
                   onChange={(value) => onChangeSubsetWeight(value)}
                   type='number'
+                  min={0}
+                  disabledCharacters={['-']}
                   value={record.subsetWeight?.quantity}
                   errorText={subsetError}
                 />
@@ -148,9 +150,10 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
               label={strings.SUBSET_COUNT}
               id='subsetCount'
               onChange={(value) => onChange('subsetCount', value)}
-              type='text'
+              type='number'
+              min={0}
+              disabledCharacters={['.', '-']}
               value={record.subsetCount}
-              disabledCharacters={[',', '.', '-']}
             />
           </Grid>
           <Grid item xs={12} textAlign='left'>
@@ -158,8 +161,10 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
               <Textfield
                 label={strings.TOTAL_WEIGHT}
                 id='remainingQuantity'
-                onChange={(value) => onChangeRemainingQuantity(Number(value))}
-                type='text'
+                onChange={(value) => onChangeRemainingQuantity(value as number)}
+                type='number'
+                min={0}
+                disabledCharacters={['-']}
                 value={record.remainingQuantity?.quantity}
               />
               <Dropdown
