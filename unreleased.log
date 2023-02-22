@@ -1,3 +1,4 @@
+d20247c5 SW-3005 Remove opt-in so that imperial units is ready for production deployment (#1235)
 1da913c2 SW-3002 Fix back to link effective area (#1232)
 2bcd346c SW-2624 Use New Filters in Species Table (#1230)
 6aaf9e85 SW-2835 unit tests for HttpService (#1225)
