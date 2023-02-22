@@ -1,7 +1,7 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName = 'Show Production View' | 'Locale selection' | 'Storage locations';
+export type FeatureName = 'Show Production View' | 'Locale selection';
 
 export type Feature = {
   name: FeatureName;
@@ -47,15 +47,6 @@ export const OPT_IN_FEATURES: Feature[] = [
       'Locale selection is not saved, so will reset when you reload the page.',
       'Some values such as accession statuses are currently still in English.',
     ],
-  },
-  {
-    name: 'Storage locations',
-    preferenceName: 'enableStorageLocations',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Allow admin defined storage locations.'],
-    disclosure: ['This is WIP.'],
   },
 ];
 

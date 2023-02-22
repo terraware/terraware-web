@@ -20,7 +20,6 @@ export default function UserNotification(): Notification | null {
   const [timeZoneUserNotification, setTimeZoneUserNotification] = useState(false);
   const [timeZoneUserNotificationRead, setTimeZoneUserNotificationRead] = useState(false);
   const [userTimeZone, setUserTimeZone] = useState<string>();
-
   const { user, reloadUser, userPreferences, reloadUserPreferences } = useUser();
   const { selectedOrganization } = useOrganization();
   const timeZones = useTimeZones();
