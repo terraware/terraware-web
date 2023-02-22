@@ -47,6 +47,7 @@ export default function NavBar({
   const isPlantsDashboardRoute = useRouteMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
   const isWithdrawalLogRoute = useRouteMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
   const isReassignmentRoute = useRouteMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
+  const isReportsRoute = useRouteMatch(APP_PATHS.REPORTS + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -177,6 +178,20 @@ export default function NavBar({
           />
         </SubNavbar>
       </NavItem>
+      {isEnabled('Reporting V1') && (
+        <>
+          <NavSection />
+          <NavItem
+            icon='iconGraphReport'
+            label={strings.REPORTS}
+            selected={!!isReportsRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.REPORTS);
+            }}
+            id='reports-list'
+          />
+        </>
+      )}
       {role && ['Admin', 'Owner'].includes(role) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />

@@ -718,6 +718,7 @@ export const strings = {
   REPORT_NAME: 'Report Name',
   REPORT_PROBLEM: 'Report Problem',
   REPORT: 'Report',
+  REPORTS: 'Reports',
   REQUEST_FEATURE: 'Request Feature',
   REQUIRED_FIELD: 'Required field.',
   RESET: 'Reset',
