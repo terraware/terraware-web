@@ -23,7 +23,6 @@ export default function UserNotification(): Notification | null {
   const [userTimeZone, setUserTimeZone] = useState<string>();
 
   const timeZoneFeatureEnabled = isEnabled('Timezones');
-  const weightUnitsEnabled = isEnabled('Weight units');
 
   const { user, reloadUser, userPreferences, reloadUserPreferences } = useUser();
   const { selectedOrganization } = useOrganization();
@@ -95,10 +94,8 @@ export default function UserNotification(): Notification | null {
       setUnitNotification(!featureNotificationExpired(userUnit.unitsAcknowledgedOnMs));
     };
 
-    if (weightUnitsEnabled) {
-      initializeWeightUnits();
-    }
-  }, [user, userPreferences, weightUnitsEnabled, reloadUserPreferences]);
+    initializeWeightUnits();
+  }, [user, userPreferences, reloadUserPreferences]);
 
   return useMemo(() => {
     if (unitNotification && timeZoneUserNotification) {
