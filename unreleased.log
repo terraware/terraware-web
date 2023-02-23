@@ -1,3 +1,4 @@
+fcd8c928 Don't update collected/received value when changing other field (#1238)
 82f4ba75 SW-2891 Add Reporting Opt-in Feature and Basic Routing/Nav (#1239)
 21458c17 SW-3011 accession utility unit tests (#1237)
 181431ce SW-3006 Remove opt-in for storage locations (#1228)
