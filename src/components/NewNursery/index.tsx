@@ -16,6 +16,7 @@ import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
+import { CreateFacilityResponse } from 'src/services/FacilityService';
 
 export default function NurseryView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
@@ -59,9 +60,9 @@ export default function NurseryView(): JSX.Element {
     });
   }, [selectedNursery, setRecord, selectedOrganization]);
 
-  const goToNurseries = () => {
+  const goToNursery = (id?: number) => {
     const nurseriesLocation = {
-      pathname: APP_PATHS.NURSERIES,
+      pathname: APP_PATHS.NURSERIES + (id ? `/${id}` : ''),
     };
     history.push(nurseriesLocation);
   };
@@ -75,14 +76,18 @@ export default function NurseryView(): JSX.Element {
       setDescriptionError(strings.REQUIRED_FIELD);
       return;
     }
+    let id = selectedNursery?.id;
     const response = selectedNursery
       ? await FacilityService.updateFacility({ ...record } as Facility)
       : await FacilityService.createFacility(record);
 
     if (response.requestSucceeded) {
-      reloadOrganizations();
+      await reloadOrganizations(selectedOrganization.id);
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
-      goToNurseries();
+      if (!selectedNursery) {
+        id = (response as CreateFacilityResponse).facilityId || undefined;
+      }
+      goToNursery(id);
     } else {
       snackbar.toastError();
     }
@@ -99,7 +104,12 @@ export default function NurseryView(): JSX.Element {
 
   return (
     <TfMain>
-      <PageForm cancelID='cancelCreateNursery' saveID='saveCreateNursery' onCancel={goToNurseries} onSave={saveNursery}>
+      <PageForm
+        cancelID='cancelCreateNursery'
+        saveID='saveCreateNursery'
+        onCancel={() => goToNursery(selectedNursery?.id)}
+        onSave={saveNursery}
+      >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
             {selectedNursery ? selectedNursery.name : strings.ADD_NURSERY}

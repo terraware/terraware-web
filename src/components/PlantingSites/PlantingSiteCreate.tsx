@@ -16,6 +16,7 @@ import BoundariesAndPlots from './BoundariesAndPlots';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
+import { PlantingSiteId } from 'src/services/TrackingService';
 
 type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
@@ -66,9 +67,9 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     });
   }, [selectedPlantingSite, setRecord]);
 
-  const goToPlantingSites = () => {
+  const goToPlantingSite = (id?: number) => {
     const plantingSitesLocation = {
-      pathname: APP_PATHS.PLANTING_SITES,
+      pathname: APP_PATHS.PLANTING_SITES + (id && id !== -1 ? `/${id}` : ''),
     };
     history.push(plantingSitesLocation);
   };
@@ -80,6 +81,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     }
 
     let response;
+    let id = record.id;
     if (record.id === -1) {
       const newPlantingSite: PlantingSitePostRequestBody = {
         name: record.name,
@@ -88,6 +90,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         timeZone: record.timeZone,
       };
       response = await TrackingService.createPlantingSite(newPlantingSite);
+      id = (response as PlantingSiteId).id;
     } else {
       const updatedPlantingSite: PlantingSitePutRequestBody = {
         name: record.name,
@@ -100,7 +103,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     if (response.requestSucceeded) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reloadPlantingSites();
-      goToPlantingSites();
+      goToPlantingSite(id);
     } else {
       snackbar.toastError();
     }
@@ -127,7 +130,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       <PageForm
         cancelID='cancelCreatePlantingSite'
         saveID='saveCreatePlantingSite'
-        onCancel={goToPlantingSites}
+        onCancel={() => goToPlantingSite(record.id)}
         onSave={savePlantingSite}
       >
         <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>

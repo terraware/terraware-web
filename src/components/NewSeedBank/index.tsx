@@ -63,9 +63,9 @@ export default function SeedBankView(): JSX.Element {
     });
   }, [selectedSeedBank, setRecord, selectedOrganization]);
 
-  const goToSeedBanks = () => {
+  const goToSeedBank = (id?: number) => {
     const sitesLocation = {
-      pathname: APP_PATHS.SEED_BANKS,
+      pathname: APP_PATHS.SEED_BANKS + (id ? `/${id}` : ''),
     };
     history.push(sitesLocation);
   };
@@ -117,6 +117,7 @@ export default function SeedBankView(): JSX.Element {
   };
 
   const saveSeedBank = async () => {
+    let id = selectedSeedBank?.id;
     if (!record.name) {
       setNameError(strings.REQUIRED_FIELD);
       return;
@@ -129,7 +130,7 @@ export default function SeedBankView(): JSX.Element {
       const response = await FacilityService.updateFacility({ ...record } as Facility);
       if (response.requestSucceeded) {
         await saveStorageLocations(selectedSeedBank.id as number);
-        reloadOrganizations();
+        await reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
@@ -140,13 +141,14 @@ export default function SeedBankView(): JSX.Element {
         storageLocationNames: editedStorageLocations?.map((l) => l.name as string),
       });
       if (response.requestSucceeded) {
-        reloadOrganizations();
+        await reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
+        id = response.facilityId || undefined;
       } else {
         snackbar.toastError();
       }
     }
-    goToSeedBanks();
+    goToSeedBank(id);
   };
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
@@ -163,7 +165,7 @@ export default function SeedBankView(): JSX.Element {
       <PageForm
         cancelID='cancelCreateSeedBank'
         saveID='saveCreateSeedBank'
-        onCancel={goToSeedBanks}
+        onCancel={() => goToSeedBank(selectedSeedBank?.id)}
         onSave={saveSeedBank}
       >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
