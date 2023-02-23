@@ -163,7 +163,7 @@ export default function NurseryWithdrawals(): JSX.Element {
 
       if (filterValueChildren.length) {
         const filterValueNodes: FieldNodePayload = {
-          operation: 'or',
+          operation: 'and',
           children: filterValueChildren,
         };
 
@@ -176,7 +176,7 @@ export default function NurseryWithdrawals(): JSX.Element {
       }
     } else if (filterValueChildren.length) {
       const filterValueNodes: FieldNodePayload = {
-        operation: 'or',
+        operation: 'and',
         children: filterValueChildren,
       };
       finalSearchValueChildren.push(filterValueNodes);
