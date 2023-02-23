@@ -115,12 +115,14 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
   return accession ? (
     <>
-      <Accession2EditModal
-        accession={accession}
-        open={openEditAccessionModal}
-        onClose={() => setOpenEditAccessionModal(false)}
-        reload={reload}
-      />
+      {openEditAccessionModal && (
+        <Accession2EditModal
+          accession={accession}
+          open={openEditAccessionModal}
+          onClose={() => setOpenEditAccessionModal(false)}
+          reload={reload}
+        />
+      )}
       <ViewPhotosModal
         photosUrls={
           accession.photoFilenames?.map((file) => `/api/v1/seedbank/accessions/${accession.id}/photos/${file}`) || []
