@@ -2,12 +2,8 @@ import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { SpeciesInventorySummary } from 'src/types/Inventory';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
-import SearchService, {
-  FieldNodePayload,
-  SearchNodePayload,
-  SearchResponseElement,
-  SearchSortOrder,
-} from './SearchService';
+import SearchService from './SearchService';
+import { FieldNodePayload, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 
 /**
  * Nursery related services

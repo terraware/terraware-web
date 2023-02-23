@@ -1,7 +1,7 @@
 import { Container, IconButton, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useMemo, useState } from 'react';
-import { FieldValuesPayload, SearchNodePayload } from 'src/api/search';
+import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { DatabaseColumn, Option } from '@terraware/web-components/components/table/types';

@@ -1,7 +1,7 @@
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useMemo } from 'react';
-import { FieldNodePayload } from 'src/api/search';
+import { FieldNodePayload } from 'src/types/Search';
 import strings from 'src/strings';
 import { Option } from '@terraware/web-components/components/table/types';
 import { MultiSelect } from '@terraware/web-components';

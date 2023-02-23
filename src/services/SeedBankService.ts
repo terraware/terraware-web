@@ -2,12 +2,8 @@ import { paths } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 import { StorageLocation } from 'src/types/Facility';
 import HttpService, { Response } from './HttpService';
-import SearchService, {
-  SearchCriteria,
-  SearchRequestPayload,
-  SearchResponseElement,
-  SearchSortOrder,
-} from './SearchService';
+import SearchService, { SearchRequestPayload } from './SearchService';
+import { SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import { getPromisesResponse } from './utils';
 

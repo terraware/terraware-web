@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
-import { SearchResponseElement } from 'src/services/SearchService';
+import { SearchResponseElement } from 'src/types/Search';
 import { Facility } from 'src/types/Facility';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 

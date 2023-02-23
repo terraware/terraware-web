@@ -22,7 +22,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TextField from '../common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
-import { search, SearchNodePayload } from 'src/api/search';
+import { SearchNodePayload } from 'src/types/Search';
+import { SearchService } from 'src/services';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { useUser, useOrganization, useLocalization } from '../../providers/hooks';
 
@@ -123,7 +124,7 @@ export default function PeopleList(): JSX.Element {
 
       const requestId = Math.random().toString();
       setRequestId('searchUsers', requestId);
-      const searchResults = await search(params);
+      const searchResults = await SearchService.search(params);
       const usersResults: OrganizationUser[] = [];
       searchResults?.forEach((result) => {
         usersResults.push({

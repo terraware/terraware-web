@@ -2,12 +2,8 @@ import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
-import SearchService, {
-  SearchCriteria,
-  SearchRequestPayload,
-  SearchResponseElement,
-  SearchSortOrder,
-} from './SearchService';
+import SearchService, { SearchRequestPayload } from './SearchService';
+import { SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import strings from 'src/strings';
 
 /**

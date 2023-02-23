@@ -11,7 +11,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
 import InventoryTable from './InventoryTable';
-import { SearchResponseElement, SearchSortOrder } from 'src/services/SearchService';
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';

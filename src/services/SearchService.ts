@@ -1,4 +1,15 @@
 import { paths, components } from 'src/api/types/generated-schema';
+import {
+  AndNodePayload,
+  FieldNodePayload,
+  NotNodePayload,
+  OrNodePayload,
+  SearchNodePayload,
+  FieldValuesPayload,
+  SearchCriteria,
+  SearchSortOrder,
+  SearchResponseElement,
+} from 'src/types/Search';
 import HttpService from './HttpService';
 
 /**
@@ -12,18 +23,9 @@ const SEARCH_ENDPOINT = '/api/v1/search';
  * Types exported from service
  */
 
-export type AndNodePayload = components['schemas']['AndNodePayload'] & { operation: 'and' };
-export type FieldNodePayload = components['schemas']['FieldNodePayload'] & { operation: 'field' };
-export type NotNodePayload = components['schemas']['NotNodePayload'] & { operation: 'not' };
-export type OrNodePayload = components['schemas']['OrNodePayload'] & { operation: 'or' };
-export type SearchNodePayload = AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
-export type FieldValuesPayload = { [key: string]: components['schemas']['FieldValuesPayload'] };
-export type SearchCriteria = Record<string, SearchNodePayload>;
-export type SearchSortOrder = components['schemas']['SearchSortOrderElement'];
 export type SearchRequestPayload = paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
 export type SearchResponsePayload =
   paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-export type SearchResponseElement = SearchResponsePayload['results'][0];
 
 const httpSearch = HttpService.root(SEARCH_ENDPOINT);
 

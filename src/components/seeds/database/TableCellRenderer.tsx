@@ -2,7 +2,7 @@ import { FiberManualRecord } from '@mui/icons-material';
 import { TableCell, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { SearchResponseElement } from 'src/api/search';
+import { SearchResponseElement } from 'src/types/Search';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { RIGHT_ALIGNED_COLUMNS } from './columns';

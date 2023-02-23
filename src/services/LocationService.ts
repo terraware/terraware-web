@@ -1,7 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
 import { Country } from 'src/types/Country';
 import HttpService, { Response } from './HttpService';
-import SearchService, { SearchRequestPayload, SearchResponseElement } from './SearchService';
+import SearchService, { SearchRequestPayload } from './SearchService';
+import { SearchResponseElement } from 'src/types/Search';
 
 const TIMEZONES_ENDPOINT = '/api/v1/i18n/timeZones';
 

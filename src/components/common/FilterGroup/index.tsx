@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FieldValuesPayload, SearchNodePayload } from 'src/services/SearchService';
+import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import MultipleSelection from './filters/FilterMultipleSelection';

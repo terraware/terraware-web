@@ -1,7 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { Batch, CreateBatchRequestPayload } from 'src/types/Batch';
-import SearchService, { SearchNodePayload, SearchResponseElement, SearchSortOrder } from './SearchService';
+import SearchService from './SearchService';
+import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 
 /**
  * Nursery related services

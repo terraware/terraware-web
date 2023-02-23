@@ -1,5 +1,6 @@
 import React from 'react';
-import { convertToSearchNodePayload, searchCsv, SearchCriteria, SearchSortOrder } from 'src/api/search';
+import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
+import { SearchService } from 'src/services';
 import strings from 'src/strings';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
@@ -26,11 +27,11 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
   };
 
   const handleOk = async () => {
-    const apiResponse = await searchCsv({
+    const apiResponse = await SearchService.searchCsv({
       prefix: 'facilities.accessions',
       fields: searchColumns.includes('active') ? [...searchColumns] : [...searchColumns, 'active'],
       sortOrder: [searchSortOrder],
-      search: convertToSearchNodePayload(searchCriteria, selectedOrganization.id),
+      search: SearchService.convertToSearchNodePayload(searchCriteria, selectedOrganization.id),
       count: 1000,
     });
 

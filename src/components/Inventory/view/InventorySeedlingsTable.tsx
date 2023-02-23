@@ -4,7 +4,7 @@ import { Typography, Grid, Box, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
-import { SearchSortOrder } from 'src/services/SearchService';
+import { SearchSortOrder } from 'src/types/Search';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
