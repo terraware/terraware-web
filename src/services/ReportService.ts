@@ -169,7 +169,7 @@ const getReportFiles = async (reportId: number): Promise<ReportFilesResponse> =>
  * upload report file
  */
 const uploadReportFile = async (file: string): Promise<UploadReportFileResponse> => {
-  const response: UploadReportFileResponse = await httpUploadReportFile.post({ entity: { file: file } });
+  const response: UploadReportFileResponse = await httpUploadReportFile.post({ entity: { file } });
 
   if (response.requestSucceeded) {
     const data: UploadReportFileResponsePayload = response.data;
@@ -284,7 +284,7 @@ const submitReport = async (id: number): Promise<Response> => {
  * upload report photo
  */
 const uploadReportPhoto = async (file: string): Promise<UploadReportPhotoResponse> => {
-  const response: UploadReportPhotoResponse = await httpUploadReportPhoto.post({ entity: { file: file } });
+  const response: UploadReportPhotoResponse = await httpUploadReportPhoto.post({ entity: { file } });
 
   if (response.requestSucceeded) {
     const data: UploadReportPhotoResponsePayload = response.data;
