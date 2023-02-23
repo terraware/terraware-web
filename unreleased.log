@@ -1,3 +1,4 @@
+8ec65cbf SW-3010 Use AND Logic Across Different Filters (#1245)
 30d044ba SW-3022 / SW-3023 Add/edit for inventory and reassign should send user back to context (#1244)
 6511c8e4 Reports service to abstract APIs (#1243)
 8681f5c8 SW-3025 fix edit accession view stickiness upon cancel (#1242)
