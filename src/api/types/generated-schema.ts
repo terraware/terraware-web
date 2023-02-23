@@ -157,6 +157,50 @@ export interface paths {
     /** Does not remove any data created by the user. */
     delete: operations["deleteOrganizationUser"];
   };
+  "/api/v1/reports": {
+    get: operations["listReports"];
+  };
+  "/api/v1/reports/{id}": {
+    get: operations["getReport"];
+    /** The report must be locked by the current user. */
+    put: operations["updateReport"];
+  };
+  "/api/v1/reports/{id}/files": {
+    get: operations["listReportFiles"];
+  };
+  "/api/v1/reports/{id}/lock": {
+    /** Only succeeds if the report is not currently locked or if it is locked by the current user. */
+    post: operations["lockReport"];
+  };
+  "/api/v1/reports/{id}/lock/force": {
+    post: operations["forceLockReport"];
+  };
+  "/api/v1/reports/{id}/photos": {
+    get: operations["listReportPhotos"];
+  };
+  "/api/v1/reports/{id}/submit": {
+    /** The report must be locked by the current user. Submitting a report releases the lock. Once a report is submitted, it may no longer be locked or updated. */
+    post: operations["submitReport"];
+  };
+  "/api/v1/reports/{id}/unlock": {
+    post: operations["unlockReport"];
+  };
+  "/api/v1/reports/{reportId}/files": {
+    post: operations["uploadReportFile"];
+  };
+  "/api/v1/reports/{reportId}/files/{fileId}": {
+    get: operations["downloadReportFile"];
+    delete: operations["deleteReportFile"];
+  };
+  "/api/v1/reports/{reportId}/photos": {
+    post: operations["uploadReportPhoto"];
+  };
+  "/api/v1/reports/{reportId}/photos/{photoId}": {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    get: operations["getReportPhoto"];
+    put: operations["updateReportPhoto"];
+    delete: operations["deleteReportPhoto"];
+  };
   "/api/v1/search": {
     post: operations["search_1"];
   };
@@ -465,6 +509,20 @@ export interface components {
       children?: components["schemas"]["SearchNodePayload"][];
     } & {
       children: unknown;
+    };
+    AnnualDetailsPayloadV1: {
+      bestMonthsForObservation: number[];
+      budgetNarrativeSummary?: string;
+      catalyticDetail?: string;
+      challenges?: string;
+      isCatalytic: boolean;
+      keyLessons?: string;
+      nextSteps?: string;
+      projectImpact?: string;
+      projectSummary?: string;
+      socialImpact?: string;
+      successStories?: string;
+      sustainableDevelopmentGoals: components["schemas"]["GoalProgressPayloadV1"][];
     };
     AutomationPayload: {
       /** Format: int64 */
@@ -1144,6 +1202,24 @@ export interface components {
       notifications: components["schemas"]["NotificationPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetNurseryV1: {
+      /** Format: date */
+      buildCompletedDate?: string;
+      buildCompletedDateEditable: boolean;
+      /** Format: date */
+      buildStartedDate?: string;
+      buildStartedDateEditable: boolean;
+      /** Format: int32 */
+      capacity?: number;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      notes?: string;
+      /** Format: date */
+      operationStartedDate?: string;
+      operationStartedDateEditable: boolean;
+      workers: components["schemas"]["WorkersPayloadV1"];
+    };
     GetNurseryWithdrawalResponsePayload: {
       batches: components["schemas"]["BatchPayload"][];
       /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
@@ -1162,6 +1238,99 @@ export interface components {
     GetPlantingSiteResponsePayload: {
       site: components["schemas"]["PlantingSitePayload"];
       status: components["schemas"]["SuccessOrError"];
+    };
+    GetPlantingSiteSpeciesV1: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int32 */
+      mortalityRateInField?: number;
+      /** Format: int32 */
+      mortalityRateInNursery?: number;
+      /** Format: int32 */
+      totalPlanted?: number;
+    };
+    GetPlantingSiteV1: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      species: components["schemas"]["GetPlantingSiteSpeciesV1"][];
+      /** Format: int32 */
+      mortalityRate?: number;
+      /** Format: int32 */
+      totalPlantedArea?: number;
+      /** Format: int32 */
+      totalPlantingSiteArea?: number;
+      /** Format: int32 */
+      totalPlantsPlanted?: number;
+      /** Format: int32 */
+      totalTreesPlanted?: number;
+      workers: components["schemas"]["WorkersPayloadV1"];
+    };
+    GetReportPayload: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int32 */
+      year: number;
+      lockedByName?: string;
+      /** Format: int64 */
+      lockedByUserId?: number;
+      status: "New" | "In Progress" | "Locked" | "Submitted";
+      /** Format: date-time */
+      lockedTime?: string;
+      /** Format: int32 */
+      quarter: number;
+      version: string;
+    };
+    GetReportPayloadV1: components["schemas"]["GetReportPayload"] & {
+      annualDetails?: components["schemas"]["AnnualDetailsPayloadV1"];
+      isAnnual?: boolean;
+      notes?: string;
+      nurseries?: components["schemas"]["GetNurseryV1"][];
+      organizationName?: string;
+      plantingSites?: components["schemas"]["GetPlantingSiteV1"][];
+      seedBanks?: components["schemas"]["GetSeedBankV1"][];
+      summaryOfProgress?: string;
+      /** Format: int32 */
+      totalNurseries?: number;
+      /** Format: int32 */
+      totalPlantingSites?: number;
+      /** Format: int32 */
+      totalSeedBanks?: number;
+    } & {
+      id: unknown;
+      isAnnual: unknown;
+      nurseries: unknown;
+      organizationName: unknown;
+      plantingSites: unknown;
+      quarter: unknown;
+      seedBanks: unknown;
+      status: unknown;
+      totalNurseries: unknown;
+      totalPlantingSites: unknown;
+      totalSeedBanks: unknown;
+      year: unknown;
+    };
+    GetReportResponsePayload: {
+      report: components["schemas"]["GetReportPayloadV1"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetSeedBankV1: {
+      /** Format: date */
+      buildCompletedDate?: string;
+      buildCompletedDateEditable: boolean;
+      /** Format: date */
+      buildStartedDate?: string;
+      buildStartedDateEditable: boolean;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      notes?: string;
+      /** Format: date */
+      operationStartedDate?: string;
+      operationStartedDateEditable: boolean;
+      /** Format: int64 */
+      totalSeedsStored: number;
+      workers: components["schemas"]["WorkersPayloadV1"];
     };
     GetSpeciesProblemResponsePayload: {
       problem: components["schemas"]["SpeciesProblemElement"];
@@ -1336,6 +1505,27 @@ export interface components {
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    GoalProgressPayloadV1: {
+      goal:
+        | "NoPoverty"
+        | "ZeroHunger"
+        | "GoodHealth"
+        | "QualityEducation"
+        | "GenderEquality"
+        | "CleanWater"
+        | "AffordableEnergy"
+        | "DecentWork"
+        | "Industry"
+        | "ReducedInequalities"
+        | "SustainableCities"
+        | "ResponsibleConsumption"
+        | "ClimateAction"
+        | "LifeBelowWater"
+        | "LifeOnLand"
+        | "Peace"
+        | "Partnerships";
+      progress?: string;
+    };
     ListAllFieldValuesRequestPayload: {
       /** Format: int64 */
       facilityId?: number;
@@ -1404,6 +1594,42 @@ export interface components {
     };
     ListPlantingSitesResponsePayload: {
       sites: components["schemas"]["PlantingSitePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListReportFilesResponseElement: {
+      filename: string;
+      /** Format: int64 */
+      id: number;
+    };
+    ListReportFilesResponsePayload: {
+      files: components["schemas"]["ListReportFilesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListReportPhotosResponseElement: {
+      caption?: string;
+      /** Format: int64 */
+      id: number;
+    };
+    ListReportPhotosResponsePayload: {
+      photos: components["schemas"]["ListReportPhotosResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListReportsResponseElement: {
+      /** Format: int64 */
+      id: number;
+      lockedByName?: string;
+      /** Format: int64 */
+      lockedByUserId?: number;
+      /** Format: date-time */
+      lockedTime?: string;
+      /** Format: int32 */
+      quarter: number;
+      status: "New" | "In Progress" | "Locked" | "Submitted";
+      /** Format: int32 */
+      year: number;
+    };
+    ListReportsResponsePayload: {
+      reports: components["schemas"]["ListReportsResponseElement"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListSpeciesResponsePayload: {
@@ -1489,6 +1715,8 @@ export interface components {
       children: unknown;
     };
     OrganizationPayload: {
+      /** @description Whether this organization can submit reports to Terraformation. */
+      canSubmitReports: boolean;
       /**
        * @description ISO 3166 alpha-2 code of organization's country.
        * @example AU
@@ -1585,6 +1813,76 @@ export interface components {
       /** Format: int64 */
       id: number;
       name: string;
+    };
+    PutNurseryV1: {
+      /** Format: date */
+      buildCompletedDate?: string;
+      /** Format: date */
+      buildStartedDate?: string;
+      /** Format: int32 */
+      capacity?: number;
+      /** Format: int64 */
+      id: number;
+      notes?: string;
+      /** Format: date */
+      operationStartedDate?: string;
+      workers: components["schemas"]["WorkersPayloadV1"];
+    };
+    PutPlantingSiteSpeciesV1: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int32 */
+      mortalityRateInField?: number;
+      /** Format: int32 */
+      mortalityRateInNursery?: number;
+      /** Format: int32 */
+      totalPlanted?: number;
+    };
+    PutPlantingSiteV1: {
+      /** Format: int64 */
+      id: number;
+      species: components["schemas"]["PutPlantingSiteSpeciesV1"][];
+      /** Format: int32 */
+      mortalityRate?: number;
+      /** Format: int32 */
+      totalPlantedArea?: number;
+      /** Format: int32 */
+      totalPlantingSiteArea?: number;
+      /** Format: int32 */
+      totalPlantsPlanted?: number;
+      /** Format: int32 */
+      totalTreesPlanted?: number;
+      workers: components["schemas"]["WorkersPayloadV1"];
+    };
+    PutReportPayload: {
+      version: string;
+    };
+    PutReportPayloadV1: components["schemas"]["PutReportPayload"] & {
+      annualDetails?: components["schemas"]["AnnualDetailsPayloadV1"];
+      notes?: string;
+      nurseries?: components["schemas"]["PutNurseryV1"][];
+      plantingSites?: components["schemas"]["PutPlantingSiteV1"][];
+      seedBanks?: components["schemas"]["PutSeedBankV1"][];
+      summaryOfProgress?: string;
+    } & {
+      nurseries: unknown;
+      plantingSites: unknown;
+      seedBanks: unknown;
+    };
+    PutReportRequestPayload: {
+      report: components["schemas"]["PutReportPayloadV1"];
+    };
+    PutSeedBankV1: {
+      /** Format: date */
+      buildCompletedDate?: string;
+      /** Format: date */
+      buildStartedDate?: string;
+      /** Format: int64 */
+      id: number;
+      notes?: string;
+      /** Format: date */
+      operationStartedDate?: string;
+      workers: components["schemas"]["WorkersPayloadV1"];
     };
     ReassignDeliveryRequestPayload: {
       reassignments: components["schemas"]["ReassignmentPayload"][];
@@ -2129,6 +2427,9 @@ export interface components {
        */
       timeZone?: string;
     };
+    UpdateReportPhotoRequestPayload: {
+      caption?: string;
+    };
     UpdateStorageLocationRequestPayload: {
       name: string;
     };
@@ -2236,6 +2537,11 @@ export interface components {
       /** @description The value that caused the problem. Absent if the problem wasn't caused by a specific field value. */
       value?: string;
     };
+    UploadReportFileResponsePayload: {
+      /** Format: int64 */
+      fileId: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
     UserProfilePayload: {
       /**
        * Format: int64
@@ -2273,6 +2579,14 @@ export interface components {
       recordingDate: string;
       /** Format: int32 */
       seedsGerminated: number;
+    };
+    WorkersPayloadV1: {
+      /** Format: int32 */
+      femalePaidWorkers?: number;
+      /** Format: int32 */
+      paidWorkers?: number;
+      /** Format: int32 */
+      volunteers?: number;
     };
   };
 }
@@ -3412,6 +3726,318 @@ export interface operations {
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  listReports: {
+    parameters: {
+      query: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListReportsResponsePayload"];
+        };
+      };
+    };
+  };
+  getReport: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetReportResponsePayload"];
+        };
+      };
+    };
+  };
+  /** The report must be locked by the current user. */
+  updateReport: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The report is not locked by the current user. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PutReportRequestPayload"];
+      };
+    };
+  };
+  listReportFiles: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListReportFilesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Only succeeds if the report is not currently locked or if it is locked by the current user. */
+  lockReport: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The report is now locked by the current user. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The report was already locked by another user. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  forceLockReport: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The report is now locked by the current user. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  listReportPhotos: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListReportPhotosResponsePayload"];
+        };
+      };
+    };
+  };
+  /** The report must be locked by the current user. Submitting a report releases the lock. Once a report is submitted, it may no longer be locked or updated. */
+  submitReport: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The report is missing required information and can't be submitted. */
+      400: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The report is not locked by the current user or has already been submitted. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  unlockReport: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The report is no longer locked. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The report is locked by another user. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  uploadReportFile: {
+    parameters: {
+      path: {
+        reportId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadReportFileResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+  };
+  downloadReportFile: {
+    parameters: {
+      path: {
+        reportId: number;
+        fileId: number;
+      };
+    };
+    responses: {
+      /** The file was successfully retrieved. */
+      200: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  deleteReportFile: {
+    parameters: {
+      path: {
+        reportId: number;
+        fileId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  uploadReportPhoto: {
+    parameters: {
+      path: {
+        reportId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadReportFileResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+  };
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  getReportPhoto: {
+    parameters: {
+      path: {
+        reportId: number;
+        photoId: number;
+      };
+      query: {
+        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
+    };
+    responses: {
+      /** The photo was successfully retrieved. */
+      200: {
+        content: {
+          "image/jpeg": string;
+          "image/png": string;
+        };
+      };
+    };
+  };
+  updateReportPhoto: {
+    parameters: {
+      path: {
+        reportId: number;
+        photoId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateReportPhotoRequestPayload"];
+      };
+    };
+  };
+  deleteReportPhoto: {
+    parameters: {
+      path: {
+        reportId: number;
+        photoId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
