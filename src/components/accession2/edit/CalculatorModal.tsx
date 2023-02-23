@@ -33,17 +33,40 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
   const classes = useStyles();
   const snackbar = useSnackbar();
   const [subsetError, setSubsetError] = useState('');
+  const [subsetWeightError, setSubsetWeightError] = useState('');
+  const [totalWeightError, setTotalWeightError] = useState('');
+  const [subsetCountError, setSubsetCountError] = useState('');
   const preferredUnits = usePreferredWeightUnits();
 
   const validateFields = () => {
-    if (record.subsetWeight?.units === record.remainingQuantity?.units) {
+    let hasErrors = false;
+
+    setSubsetError('');
+    setSubsetWeightError('');
+    if (!record.subsetWeight?.quantity || !record.subsetWeight?.units) {
+      setSubsetError(strings.REQUIRED_VALUE_AND_UNITS_FIELD);
+      hasErrors = true;
+    } else if (record.subsetWeight?.units === record.remainingQuantity?.units) {
       if (+(record.subsetWeight?.quantity || 0) > +(record.remainingQuantity?.quantity || 0)) {
-        setSubsetError(strings.SUBSET_ERROR);
-        return false;
+        setSubsetWeightError(strings.SUBSET_WEIGHT_ERROR);
+        hasErrors = true;
       }
     }
-    setSubsetError('');
-    return true;
+
+    setSubsetCountError('');
+    if (!record.subsetCount) {
+      setSubsetCountError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    }
+
+    setTotalWeightError('');
+    const totalWeightUnits = record.remainingQuantity?.units;
+    if (!record.remainingQuantity?.quantity || !totalWeightUnits || totalWeightUnits === 'Seeds') {
+      setTotalWeightError(strings.REQUIRED_VALUE_AND_UNITS_FIELD);
+      hasErrors = true;
+    }
+
+    return !hasErrors;
   };
 
   const getTotalCount = async () => {
@@ -55,7 +78,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
           response.accession.latestObservedQuantity?.grams &&
           response.accession.subsetWeight?.grams > response.accession.latestObservedQuantity?.grams
         ) {
-          setSubsetError(strings.SUBSET_ERROR);
+          setSubsetWeightError(strings.SUBSET_WEIGHT_ERROR);
           return;
         }
         goToPrev();
@@ -68,6 +91,10 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
 
   const onCloseHandler = () => {
     setSubsetError('');
+    setSubsetWeightError('');
+    setSubsetCountError('');
+    setTotalWeightError('');
+
     onClose();
   };
 
@@ -77,6 +104,8 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
   };
 
   const onChangeSubsetWeight = (value: any) => {
+    setSubsetWeightError('');
+    setSubsetError('');
     setRecord({
       ...record,
       subsetWeight: { quantity: value, units: record.subsetWeight?.units || 'Grams' },
@@ -84,6 +113,8 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
   };
 
   const onChangeSubsetUnit = (newValue: string) => {
+    setSubsetWeightError('');
+    setSubsetError('');
     setRecord({
       ...record,
       subsetWeight: { quantity: record.subsetWeight?.quantity || 0, units: newValue as Unit['value'] },
@@ -91,6 +122,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
   };
 
   const onChangeRemainingQuantity = (value: number) => {
+    setTotalWeightError('');
     setRecord({
       ...record,
       remainingQuantity: { quantity: value, units: record.remainingQuantity?.units || 'Grams' },
@@ -98,12 +130,18 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
   };
 
   const onChangeRemainingQuantityUnit = (newValue: string) => {
+    setTotalWeightError('');
     if (record) {
       setRecord({
         ...record,
         remainingQuantity: { quantity: record.remainingQuantity?.quantity || 0, units: newValue as Unit['value'] },
       });
     }
+  };
+
+  const onChangeSubsetCount = (value: number) => {
+    setSubsetCountError('');
+    onChange('subsetCount', value);
   };
 
   return (
@@ -127,11 +165,13 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
                   id='subsetWeight'
                   onChange={(value) => onChangeSubsetWeight(value)}
                   type='number'
+                  min={0}
+                  disabledCharacters={['-']}
                   value={record.subsetWeight?.quantity}
-                  errorText={subsetError}
+                  errorText={subsetError || subsetWeightError}
                 />
               </Box>
-              <Box height={subsetError ? '85px' : 'auto'}>
+              <Box height={subsetWeightError ? '85px' : subsetError ? '65px' : 'auto'}>
                 <Dropdown
                   options={preferredUnits}
                   placeholder={strings.SELECT}
@@ -147,10 +187,12 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
             <Textfield
               label={strings.SUBSET_COUNT}
               id='subsetCount'
-              onChange={(value) => onChange('subsetCount', value)}
-              type='text'
+              onChange={(value) => onChangeSubsetCount(value as number)}
+              type='number'
+              min={0}
+              disabledCharacters={['.', ',', '-']}
               value={record.subsetCount}
-              disabledCharacters={[',', '.', '-']}
+              errorText={subsetCountError}
             />
           </Grid>
           <Grid item xs={12} textAlign='left'>
@@ -158,18 +200,23 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
               <Textfield
                 label={strings.TOTAL_WEIGHT}
                 id='remainingQuantity'
-                onChange={(value) => onChangeRemainingQuantity(Number(value))}
-                type='text'
+                onChange={(value) => onChangeRemainingQuantity(value as number)}
+                type='number'
+                min={0}
+                disabledCharacters={['-']}
                 value={record.remainingQuantity?.quantity}
+                errorText={totalWeightError}
               />
-              <Dropdown
-                options={preferredUnits}
-                placeholder={strings.SELECT}
-                onChange={onChangeRemainingQuantityUnit}
-                selectedValue={record.remainingQuantity?.units}
-                fullWidth={true}
-                className={classes.units}
-              />
+              <Box height={totalWeightError ? '85px' : 'auto'}>
+                <Dropdown
+                  options={preferredUnits}
+                  placeholder={strings.SELECT}
+                  onChange={onChangeRemainingQuantityUnit}
+                  selectedValue={record.remainingQuantity?.units}
+                  fullWidth={true}
+                  className={classes.units}
+                />
+              </Box>
             </Box>
           </Grid>
         </Grid>
