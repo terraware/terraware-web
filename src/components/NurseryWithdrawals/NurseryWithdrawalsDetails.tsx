@@ -144,6 +144,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
     if (delivery) {
       history.push({
         pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', delivery.id.toString()),
+        search: '?fromWithdrawal',
       });
     }
   };
