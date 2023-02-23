@@ -60,8 +60,8 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
     }
 
     setTotalWeightError('');
-    const totalWeightUnits = record.remainingQuantity?.units ?? 'Seeds';
-    if (!record.remainingQuantity?.quantity || totalWeightUnits === 'Seeds') {
+    const totalWeightUnits = record.remainingQuantity?.units;
+    if (!record.remainingQuantity?.quantity || !totalWeightUnits || totalWeightUnits === 'Seeds') {
       setTotalWeightError(strings.REQUIRED_VALUE_AND_UNITS_FIELD);
       hasErrors = true;
     }
