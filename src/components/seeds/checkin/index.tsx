@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useRecoilState } from 'recoil';
 import { SeedBankService } from 'src/services';
-import { SearchResponseElement } from 'src/api/search';
+import { SearchResponseElement } from 'src/types/Search';
 import Button from 'src/components/common/button/Button';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';

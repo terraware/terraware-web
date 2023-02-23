@@ -22,14 +22,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../common/Textfield/Textfield';
-import {
-  FieldNodePayload,
-  search,
-  searchCsv,
-  SearchNodePayload,
-  SearchRequestPayload,
-  SearchSortOrder,
-} from 'src/api/search';
+import SearchService, { SearchRequestPayload } from 'src/services/SearchService';
+import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
 import ImportSpeciesModal from './ImportSpeciesModal';
@@ -55,7 +49,6 @@ import { PillList, PillListItem } from '@terraware/web-components';
 import { isTrue } from 'src/utils/boolean';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { FieldOptionsMap } from 'src/services/NurseryWithdrawalService';
-import SearchService from 'src/services/SearchService';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -456,7 +449,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         // organization id filter will always exist
         const requestId = Math.random().toString();
         setRequestId('searchSpecies', requestId);
-        const searchResults = await search(params);
+        const searchResults = await SearchService.search(params);
         if (getRequestId('searchSpecies') === requestId) {
           const speciesResults: SpeciesSearchResultRow[] = [];
           searchResults?.forEach((result) => {
@@ -567,7 +560,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     if (!params.search.children.length) {
       params.search = null;
     }
-    const apiResponse = await searchCsv(params);
+    const apiResponse = await SearchService.searchCsv(params);
 
     if (apiResponse !== null) {
       const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;

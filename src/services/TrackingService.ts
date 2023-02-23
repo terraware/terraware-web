@@ -2,7 +2,8 @@ import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { Delivery, PlantingSite } from 'src/types/Tracking';
 import { PlantingSiteZone, Population } from 'src/types/PlantingSite';
-import SearchService, { SearchCriteria } from './SearchService';
+import SearchService from './SearchService';
+import { SearchCriteria } from 'src/types/Search';
 
 /**
  * Tracking related services

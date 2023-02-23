@@ -2,7 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import SearchService, { SearchResponseElement } from 'src/services/SearchService';
+import { SearchService } from 'src/services';
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -11,7 +12,6 @@ import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import PlantingSitesTable from './PlantingSitesTable';
 import PlantingSiteTypeSelect from './PlantingSiteTypeSelect';
-import { SearchSortOrder } from 'src/services/SearchService';
 import { useOrganization, useTimeZones } from 'src/providers/hooks';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 

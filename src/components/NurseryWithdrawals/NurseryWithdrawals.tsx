@@ -8,7 +8,7 @@ import TfMain from 'src/components/common/TfMain';
 import { makeStyles } from '@mui/styles';
 import { SortOrder } from '@terraware/web-components';
 import { NurseryWithdrawalService } from 'src/services';
-import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/api/search';
+import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import WithdrawalLogRenderer from './WithdrawalLogRenderer';
 import { APP_PATHS } from 'src/constants';
 import { useHistory } from 'react-router-dom';

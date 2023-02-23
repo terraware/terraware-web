@@ -2,7 +2,7 @@ import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import TextField from '../../../common/TextField';
-import { FieldNodePayload } from '../../../../api/search';
+import { FieldNodePayload } from 'src/types/Search';
 import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({

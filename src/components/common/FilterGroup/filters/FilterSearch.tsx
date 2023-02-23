@@ -1,7 +1,7 @@
 import { TextField, Theme } from '@mui/material';
 import React from 'react';
 import strings from 'src/strings';
-import { FieldNodePayload } from 'src/api/search';
+import { FieldNodePayload } from 'src/types/Search';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({

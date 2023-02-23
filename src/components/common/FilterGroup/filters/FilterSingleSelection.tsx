@@ -1,7 +1,7 @@
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { FieldNodePayload } from 'src/api/search';
+import { FieldNodePayload } from 'src/types/Search';
 import strings from 'src/strings';
 import { Option } from '@terraware/web-components/components/table/types';
 import { Dropdown, DropdownItem } from '@terraware/web-components';

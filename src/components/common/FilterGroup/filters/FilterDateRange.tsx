@@ -2,7 +2,7 @@ import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { format, isValid } from 'date-fns';
 import React from 'react';
-import { FieldNodePayload } from 'src/api/search';
+import { FieldNodePayload } from 'src/types/Search';
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 

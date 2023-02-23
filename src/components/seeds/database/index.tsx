@@ -9,7 +9,7 @@ import SeedBankService, {
   AllFieldValuesMap,
   FieldValuesMap,
 } from 'src/services/SeedBankService';
-import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/services/SearchService';
+import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/types/Search';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';

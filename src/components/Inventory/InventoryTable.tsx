@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
 import { Box, Grid, useTheme } from '@mui/material';
-import { SearchResponseElement } from 'src/api/search';
+import { SearchResponseElement } from 'src/types/Search';
 import InventoryCellRenderer from './InventoryCellRenderer';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -11,7 +11,7 @@ import { APP_PATHS } from 'src/constants';
 import Search from './Search';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
-import { SearchSortOrder } from 'src/services/SearchService';
+import { SearchSortOrder } from 'src/types/Search';
 
 interface InventoryTableProps {
   results: SearchResponseElement[];

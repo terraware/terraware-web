@@ -2,7 +2,7 @@ import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 import React from 'react';
-import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } from 'src/api/search';
+import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } from 'src/types/Search';
 import Checkbox from 'src/components/common/Checkbox';
 import Divisor from 'src/components/common/Divisor';
 import Dropdown from 'src/components/common/Dropdown';

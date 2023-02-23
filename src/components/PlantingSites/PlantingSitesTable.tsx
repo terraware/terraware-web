@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Box, Grid, useTheme } from '@mui/material';
 import { TableColumnType, Textfield } from '@terraware/web-components';
-import { SearchResponseElement } from 'src/api/search';
+import { SearchResponseElement } from 'src/types/Search';
 import strings from 'src/strings';
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
-import { SearchSortOrder } from 'src/services/SearchService';
+import { SearchSortOrder } from 'src/types/Search';
 
 interface PlantingSitesTableProps {
   results: SearchResponseElement[];
