@@ -1,3 +1,4 @@
+6511c8e4 Reports service to abstract APIs (#1243)
 8681f5c8 SW-3025 fix edit accession view stickiness upon cancel (#1242)
 e08968b0 SW-3017 Allow decimals in total weight / calculator  (#1240)
 e586a30b SW-3024 Add/edit locations flows should redirect user to recent context (#1241)
