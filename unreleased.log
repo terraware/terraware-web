@@ -1,3 +1,4 @@
+fe1dd923 SW-3014  reimport search models and functions from types and services (#1246)
 8ec65cbf SW-3010 Use AND Logic Across Different Filters (#1245)
 30d044ba SW-3022 / SW-3023 Add/edit for inventory and reassign should send user back to context (#1244)
 6511c8e4 Reports service to abstract APIs (#1243)
