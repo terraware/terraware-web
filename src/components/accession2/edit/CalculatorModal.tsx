@@ -190,7 +190,7 @@ export default function CalculatorModal(props: CalculatorModalProps): JSX.Elemen
               onChange={(value) => onChangeSubsetCount(value as number)}
               type='number'
               min={0}
-              disabledCharacters={['.', '-']}
+              disabledCharacters={['.', ',', '-']}
               value={record.subsetCount}
               errorText={subsetCountError}
             />
