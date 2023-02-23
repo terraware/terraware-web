@@ -1,7 +1,5 @@
-import fs from 'fs';
+import { readData } from './utils';
 import MapService from '../MapService';
-
-const readData = (fileName: string) => JSON.parse(fs.readFileSync(`src/services/test/data/${fileName}`, 'utf8'));
 
 describe('Map service', () => {
   describe('Geometry utilities', () => {
