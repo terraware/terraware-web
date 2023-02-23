@@ -1,3 +1,4 @@
+e08968b0 SW-3017 Allow decimals in total weight / calculator  (#1240)
 e586a30b SW-3024 Add/edit locations flows should redirect user to recent context (#1241)
 fcd8c928 Don't update collected/received value when changing other field (#1238)
 82f4ba75 SW-2891 Add Reporting Opt-in Feature and Basic Routing/Nav (#1239)
