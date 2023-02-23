@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box, CircularProgress, Grid, Theme, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
+import useQuery from 'src/utils/useQuery';
 import { Delivery } from 'src/types/Tracking';
 import { TrackingService } from 'src/services';
 import { getAllSpecies } from 'src/api/species/species';
@@ -16,7 +17,6 @@ import PageForm from 'src/components/common/PageForm';
 import ReassignmentRenderer, { Reassignment, PlotInfo } from './ReassignmentRenderer';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import BusySpinner from 'src/components/common/BusySpinner';
 import { useOrganization } from 'src/providers/hooks';
 import Table from 'src/components/common/table';
 import { useUser } from 'src/providers';
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function NurseryReassignment(): JSX.Element {
   const classes = useStyles();
+  const query = useQuery();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
   const { selectedOrganization } = useOrganization();
@@ -48,7 +49,6 @@ export default function NurseryReassignment(): JSX.Element {
   const [siteName, setSiteName] = useState<string>();
   const [reassignments, setReassignments] = useState<{ [plotId: string]: Reassignment }>({});
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
-  const [reassigning, setReassigning] = useState<boolean>(false);
   const contentRef = useRef(null);
   const columns: TableColumnType[] = [
     { key: 'species', name: strings.SPECIES, type: 'string' },
@@ -86,7 +86,6 @@ export default function NurseryReassignment(): JSX.Element {
     if (!deliveryId) {
       return;
     }
-
     const populateDelivery = async () => {
       const response = await TrackingService.getDelivery(Number(deliveryId));
       if (response.requestSucceeded) {
@@ -130,7 +129,8 @@ export default function NurseryReassignment(): JSX.Element {
   }, [delivery, snackbar]);
 
   const goToWithdrawals = () => {
-    history.push({ pathname: APP_PATHS.NURSERY_WITHDRAWALS });
+    const withdrawalId = query.has('fromWithdrawal') ? delivery?.withdrawalId : undefined;
+    history.push({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
   };
 
   const reassign = async () => {
@@ -165,9 +165,7 @@ export default function NurseryReassignment(): JSX.Element {
       })),
     };
 
-    setReassigning(true);
     const response = await TrackingService.reassignPlantings(delivery!.id, request);
-    setReassigning(false);
     if (response.requestSucceeded) {
       goToWithdrawals();
     } else {
@@ -258,7 +256,6 @@ export default function NurseryReassignment(): JSX.Element {
             minWidth='fit-content'
             ref={contentRef}
           >
-            {reassigning && <BusySpinner withSkrim={true} />}
             <Card>
               <Table
                 id='reassignments'

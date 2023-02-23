@@ -125,7 +125,7 @@ export default function CreateInventory(): JSX.Element {
     if (response.requestSucceeded) {
       history.replace(inventoryLocation);
       history.push({
-        pathname: APP_PATHS.INVENTORY,
+        pathname: `${APP_PATHS.INVENTORY}/${record.speciesId}`,
       });
     } else {
       snackbar.toastError();
