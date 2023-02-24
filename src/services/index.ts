@@ -13,6 +13,7 @@ import OrganizationService from './OrganizationService';
 import PreferencesService from './PreferencesService';
 import SearchService from './SearchService';
 import SeedBankService from './SeedBankService';
+import SpeciesService from './SpeciesService';
 import StorageLocationService from './StorageLocationService';
 import SystemService from './SystemService';
 import TrackingService from './TrackingService';
@@ -36,6 +37,7 @@ export {
   PreferencesService,
   SearchService,
   SeedBankService,
+  SpeciesService,
   StorageLocationService,
   SystemService,
   TrackingService,

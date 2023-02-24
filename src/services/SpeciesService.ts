@@ -152,10 +152,14 @@ const deleteSpecies = async (speciesId: number, organizationId: number): Promise
 /**
  * Get all species
  */
-const getAllSpecies = async (): Promise<AllSpeciesResponse> => {
-  const response: AllSpeciesResponse = await httpSpecies.get<SpeciesResponsePayload, AllSpeciesData>({}, (data) => ({
-    species: data?.species,
-  }));
+const getAllSpecies = async (organizationId: number): Promise<AllSpeciesResponse> => {
+  const params = { organizationId: organizationId.toString() };
+  const response: AllSpeciesResponse = await httpSpecies.get<SpeciesResponsePayload, AllSpeciesData>(
+    { params },
+    (data) => ({
+      species: data?.species,
+    })
+  );
 
   return response;
 };
