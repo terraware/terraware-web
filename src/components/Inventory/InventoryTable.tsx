@@ -6,7 +6,6 @@ import { Box, Grid, useTheme } from '@mui/material';
 import { SearchResponseElement } from 'src/types/Search';
 import InventoryCellRenderer from './InventoryCellRenderer';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
-import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
 import Search from './Search';
 import Table from 'src/components/common/table';
@@ -85,9 +84,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   return (
     <>
-      <Grid item xs={12}>
-        <PageSnackbar />
-      </Grid>
       <Box marginBottom={theme.spacing(2)}>
         <Search
           searchValue={temporalSearchValue}

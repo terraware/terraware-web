@@ -250,6 +250,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
           </Grid>
         </Box>
       </PageHeaderWrapper>
+      <PageSnackbar />
       <Box
         ref={contentRef}
         sx={{
@@ -281,7 +282,6 @@ export default function Inventory(props: InventoryProps): JSX.Element {
           )
         ) : (
           <Container maxWidth={false} className={classes.mainContainer}>
-            <PageSnackbar />
             {isAdmin(selectedOrganization) ? (
               <EmptyMessage
                 className={classes.message}
