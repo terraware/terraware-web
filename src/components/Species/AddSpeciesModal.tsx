@@ -3,7 +3,6 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Dropdown, IconTooltip, MultiSelect } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
-import { createSpecies, getSpeciesDetails, listSpeciesNames, updateSpecies } from 'src/api/species/species';
 import strings from 'src/strings';
 import {
   EcosystemType,
@@ -29,6 +28,7 @@ import TooltipLearnMoreModal, {
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 import { useOrganization } from 'src/providers/hooks';
+import { SpeciesService } from 'src/services';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spacing: {
@@ -95,7 +95,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     const getOptionsForTyped = async () => {
       const requestId = Math.random().toString();
       setRequestId('names', requestId);
-      const response = await listSpeciesNames(debouncedSearchTerm);
+      const response = await SpeciesService.getSpeciesNames(debouncedSearchTerm);
       if (response.requestSucceeded) {
         if (getRequestId('names') === requestId) {
           setOptionsForName(response.names);
@@ -110,24 +110,25 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       if (debouncedSearchTerm.length > 1) {
         const requestId = Math.random().toString();
         setRequestId('details', requestId);
-        const response = await getSpeciesDetails(debouncedSearchTerm);
+        const response = await SpeciesService.getSpeciesDetails(debouncedSearchTerm);
         if (response.requestSucceeded) {
           if (getRequestId('details') === requestId) {
             setNewScientificName(false);
+            const speciesDetails = response.speciesDetails;
             setRecord((previousRecord: Species) => {
-              if (response.commonNames.length === 1) {
+              if (speciesDetails?.commonNames?.length === 1) {
                 return {
                   ...previousRecord,
-                  familyName: response.familyName,
-                  endangered: response.endangered,
-                  commonName: response.commonNames[0].name,
+                  familyName: speciesDetails.familyName,
+                  endangered: speciesDetails.endangered,
+                  commonName: speciesDetails.commonNames[0].name,
                 };
               } else {
-                setOptionsForCommonName(response.commonNames.map((cN) => cN.name));
+                setOptionsForCommonName(speciesDetails?.commonNames?.map((cN) => cN.name));
                 return {
                   ...previousRecord,
-                  familyName: response.familyName,
-                  endangered: response.endangered,
+                  familyName: speciesDetails?.familyName,
+                  endangered: speciesDetails?.endangered,
                 };
               }
             });
@@ -150,8 +151,8 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
-      const response = await createSpecies(record, organizationId);
-      if (response.id !== -1) {
+      const response = await SpeciesService.createSpecies(record, organizationId);
+      if (response.requestSucceeded) {
         onClose(true);
       } else {
         if (response.error === SpeciesRequestError.PreexistingSpecies) {
@@ -165,7 +166,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
-      const response = await updateSpecies(record, organizationId);
+      const response = await SpeciesService.updateSpecies(record, organizationId);
       if (response.requestSucceeded) {
         onClose(true);
       }

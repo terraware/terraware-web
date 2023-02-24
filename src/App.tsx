@@ -29,7 +29,6 @@ import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { FacilityType } from 'src/types/Facility';
 import MyAccount from './components/MyAccount';
-import { getAllSpecies } from './api/species/species';
 import { Species } from './types/Species';
 import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
@@ -54,7 +53,7 @@ import {
 } from './components/Inventory/withdraw';
 import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
-import { TrackingService } from 'src/services';
+import { SpeciesService, TrackingService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { defaultSelectedOrg } from 'src/providers/contexts';
@@ -184,8 +183,8 @@ function AppContent() {
   const reloadSpecies = useCallback(() => {
     const populateSpecies = async () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        const response = await getAllSpecies(selectedOrganization.id);
-        if (response.requestSucceeded) {
+        const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
+        if (response.requestSucceeded && response.species) {
           setSpecies(response.species);
         }
       }

@@ -21,8 +21,7 @@ import Divisor from 'src/components/common/Divisor';
 import { Dropdown, Textfield, DropdownItem, IconTooltip } from '@terraware/web-components';
 import DatePicker from 'src/components/common/DatePicker';
 import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
-import { TrackingService } from 'src/services';
-import { getAllSpecies } from 'src/api/species/species';
+import { SpeciesService, TrackingService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageForm from 'src/components/common/PageForm';
@@ -439,7 +438,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   useEffect(() => {
     const fetchSpecies = async () => {
-      const result = await getAllSpecies(selectedOrganization.id);
+      const result = await SpeciesService.getAllSpecies(selectedOrganization.id);
       const speciesNamesMap = (result.species || []).reduce((acc, sp) => {
         const { scientificName, commonName } = sp;
         return {

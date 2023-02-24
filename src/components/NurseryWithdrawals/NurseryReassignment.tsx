@@ -4,8 +4,7 @@ import { Box, CircularProgress, Grid, Theme, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
 import useQuery from 'src/utils/useQuery';
 import { Delivery } from 'src/types/Tracking';
-import { TrackingService } from 'src/services';
-import { getAllSpecies } from 'src/api/species/species';
+import { SpeciesService, TrackingService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import strings from 'src/strings';
@@ -65,10 +64,10 @@ export default function NurseryReassignment(): JSX.Element {
   // populate map of species id to scientific name
   useEffect(() => {
     const populateSpecies = async () => {
-      const speciesResponse = await getAllSpecies(selectedOrganization.id);
+      const speciesResponse = await SpeciesService.getAllSpecies(selectedOrganization.id);
       if (speciesResponse.requestSucceeded) {
         setSpeciesMap(
-          speciesResponse.species.reduce((acc: any, current: any) => {
+          speciesResponse.species?.reduce((acc: any, current: any) => {
             acc[current.id] = current.scientificName;
             return acc;
           }, {})

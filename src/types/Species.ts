@@ -1,3 +1,4 @@
+import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
 export type Species = {
@@ -149,3 +150,5 @@ export enum SpeciesRequestError {
   // setting up the request. In other words, there was a developer error or server outage.
   RequestFailed = 'AN_UNRECOVERABLE_ERROR_OCCURRED',
 }
+
+export type SpeciesDetails = components['schemas']['SpeciesLookupDetailsResponsePayload'];

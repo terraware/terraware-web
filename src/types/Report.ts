@@ -1,11 +1,9 @@
 import { components } from 'src/api/types/generated-schema';
 
-const schemas = 'schemas';
+export type Report = components['schemas']['GetReportPayloadV1'];
 
-export type Report = components[typeof schemas]['GetReportPayloadV1'];
+export type ListReport = components['schemas']['ListReportsResponseElement'];
 
-export type ListReport = components[typeof schemas]['ListReportsResponseElement'];
+export type ReportFile = components['schemas']['ListReportFilesResponseElement'];
 
-export type ReportFile = components[typeof schemas]['ListReportFilesResponseElement'];
-
-export type ReportPhoto = components[typeof schemas]['ListReportPhotosResponseElement'];
+export type ReportPhoto = components['schemas']['ListReportPhotosResponseElement'];

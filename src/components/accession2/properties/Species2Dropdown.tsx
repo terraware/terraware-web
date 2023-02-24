@@ -1,6 +1,5 @@
 import { Grid, Typography } from '@mui/material';
 import React, { useEffect, useState, useCallback } from 'react';
-import { getAllSpecies } from 'src/api/species/species';
 import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
@@ -8,6 +7,7 @@ import { SelectT } from '@terraware/web-components';
 import useDebounce from 'src/utils/useDebounce';
 import { useOrganization } from 'src/providers/hooks';
 import { removeDiacritics } from 'src/utils/text';
+import { SpeciesService } from 'src/services';
 
 interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
   speciesId?: number;
@@ -28,8 +28,8 @@ export default function Species2Dropdown<T extends AccessionPostRequestBody>(
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
   const populateSpecies = useCallback(async () => {
-    const response = await getAllSpecies(selectedOrganization.id);
-    if (response.requestSucceeded) {
+    const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
+    if (response.requestSucceeded && response.species) {
       const searchValue = debouncedSearchTerm ? removeDiacritics(debouncedSearchTerm).toLowerCase() : '';
       const speciesToUse = searchValue
         ? response.species.filter((species) => {

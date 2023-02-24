@@ -1,4 +1,3 @@
 import { components } from 'src/api/types/generated-schema';
 
-const schemas = 'schemas';
-export type SpeciesInventorySummary = components[typeof schemas]['SpeciesSummaryPayload'];
+export type SpeciesInventorySummary = components['schemas']['SpeciesSummaryPayload'];

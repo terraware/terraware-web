@@ -76,7 +76,7 @@ export type ImportSpeciesModalProps = {
   uploaderDescription: string;
   uploadApi: (file: File, orgOrFacilityId: string) => Promise<UploadFileResponse>;
   templateApi: () => Promise<any>;
-  statusApi: (uploadId: number) => Promise<GetUploadStatusResponsePayload | UploadResponse>;
+  statusApi: (uploadId: number) => Promise<UploadResponse>;
   importCompleteLabel: string;
   importingLabel: string;
   duplicatedLabel: string;
@@ -198,9 +198,6 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     const status: any = await statusApi(id);
     if (status?.requestSucceeded === true) {
       setFileStatus(status.uploadStatus as GetUploadStatusResponsePayload);
-    } else if (status?.requestSucceeded !== false) {
-      // TODO: remove old format
-      setFileStatus(status);
     }
   };
 
