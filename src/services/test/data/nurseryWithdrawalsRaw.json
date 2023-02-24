@@ -1,0 +1,34 @@
+[
+  {
+    "id": "59",
+    "withdrawnDate": "2023-02-23",
+    "purpose": "Other",
+    "facility_name": "testOther",
+    "totalWithdrawn": "1",
+    "hasReassignments": "false",
+    "batchWithdrawals": [
+      {
+        "batch_species_scientificName": "Abarema asplenifoliaasdfasdasdfa"
+      }
+    ]
+  },
+  {
+    "id": "56",
+    "delivery_id": "24",
+    "withdrawnDate": "2023-02-14",
+    "purpose": "Out Plant",
+    "facility_name": "testOutplant",
+    "destinationName": "testSite",
+    "plotNames": "PZ2-A9 (PZ2-B9)",
+    "totalWithdrawn": "1,005",
+    "hasReassignments": "true",
+    "batchWithdrawals": [
+      {
+        "batch_species_scientificName": "Abelia macrotera var. deutziaefolia"
+      },
+      {
+        "batch_species_scientificName": "Abarema asplenifoliaasdfasdasdfa"
+      }
+    ]
+  }
+]
