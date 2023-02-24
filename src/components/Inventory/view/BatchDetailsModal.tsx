@@ -8,8 +8,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import NurseryDropdown from '../NurseryDropdown';
 import { Batch, CreateBatchRequestPayload } from 'src/types/Batch';
-import { NurseryBatchService } from 'src/services';
-import { getSpecies } from 'src/api/species/species';
+import { NurseryBatchService, SpeciesService } from 'src/services';
 import { Species } from 'src/types/Species';
 import { APP_PATHS } from 'src/constants';
 import Link from 'src/components/common/Link';
@@ -55,7 +54,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   useEffect(() => {
     if (record) {
       const populateSpecies = async () => {
-        const speciesResponse = await getSpecies(speciesId, selectedOrganization.id.toString());
+        const speciesResponse = await SpeciesService.getSpecies(speciesId, selectedOrganization.id);
         if (speciesResponse.requestSucceeded) {
           setSpeciesSelected(speciesResponse.species);
         }

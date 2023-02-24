@@ -1,10 +1,10 @@
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { acceptProblemSuggestion, ignoreProblemSuggestion } from 'src/api/species/species';
 import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
 import Button from '../common/button/Button';
 import useSnackbar from 'src/utils/useSnackbar';
+import { SpeciesService } from 'src/services';
 
 const useStyles = makeStyles((theme: Theme) => ({
   tooltipContainer: {
@@ -56,7 +56,7 @@ export default function ProblemTooltip({
   const classes = useStyles();
   const snackbar = useSnackbar();
   const ignoreFix = async (problemId: number) => {
-    await ignoreProblemSuggestion(problemId);
+    await SpeciesService.ignoreProblemSuggestion(problemId);
     setOpenedTooltip(false);
     if (reloadData) {
       reloadData();
@@ -64,7 +64,7 @@ export default function ProblemTooltip({
   };
 
   const acceptFix = async (problemId: number) => {
-    const response = await acceptProblemSuggestion(problemId);
+    const response = await SpeciesService.acceptProblemSuggestion(problemId);
     if (!response.requestSucceeded) {
       snackbar.toastError(strings.UNEXPECTED_ERROR, strings.GENERIC_ERROR);
     }

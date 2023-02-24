@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NurseryInventoryService } from 'src/services';
-import { resolveSpeciesUpload } from 'src/api/species/species';
+import { NurseryInventoryService, SpeciesService } from 'src/services';
 import { Facility } from 'src/types/Facility';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
@@ -57,7 +56,7 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
       onClose={onCloseHandler}
       open={open}
       title={strings.IMPORT_INVENTORY}
-      resolveApi={resolveSpeciesUpload}
+      resolveApi={SpeciesService.resolveSpeciesUpload}
       uploaderTitle={strings.IMPORT_INVENTORY}
       uploaderDescription={strings.IMPORT_INVENTORY_DESC}
       uploadApi={NurseryInventoryService.uploadInventory}

@@ -11,11 +11,6 @@ import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/Fi
  * Types exported from service
  */
 
-export type GetSpeciesRequest = {
-  organizationId: number;
-  speciesId: number;
-};
-
 export type CreateSpeciesResponse = Response & {
   speciesId: number | null;
 };
@@ -97,7 +92,7 @@ const createSpecies = async (species: Omit<Species, 'id'>, organizationId: numbe
 /**
  * get a species by id
  */
-const getSpecies = async ({ speciesId, organizationId }: GetSpeciesRequest): Promise<SpeciesIdResponse> => {
+const getSpecies = async (speciesId: number, organizationId: number): Promise<SpeciesIdResponse> => {
   const params = { organizationId: organizationId.toString() };
   const response: SpeciesIdResponse = await httpSpeciesId.get<SpeciesIdResponsePayload, SpeciesIdData>(
     {

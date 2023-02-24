@@ -2,7 +2,6 @@ import { Box, Container, Grid, IconButton, Popover, Theme } from '@mui/material'
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { deleteSpecies, getSpecies } from 'src/api/species/species';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import Table from 'src/components/common/table';
@@ -49,6 +48,7 @@ import { PillList, PillListItem } from '@terraware/web-components';
 import { isTrue } from 'src/utils/boolean';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { FieldOptionsMap } from 'src/services/NurseryWithdrawalService';
+import { SpeciesService } from 'src/services';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -518,7 +518,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   };
 
   const openEditSpeciesModal = async (speciesId: number) => {
-    const speciesResponse = await getSpecies(speciesId, selectedOrganization.id.toString());
+    const speciesResponse = await SpeciesService.getSpecies(speciesId, selectedOrganization.id);
     if (speciesResponse.requestSucceeded) {
       setSelectedSpecies(speciesResponse.species);
       setEditSpeciesModalOpen(true);
@@ -547,7 +547,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     if (selectedSpeciesRows.length > 0) {
       await Promise.all(
         selectedSpeciesRows.map(async (iSelectedSpecies) => {
-          await deleteSpecies(iSelectedSpecies.id, selectedOrganization.id);
+          await SpeciesService.deleteSpecies(iSelectedSpecies.id, selectedOrganization.id);
         })
       );
       setDeleteSpeciesModalOpen(false);
