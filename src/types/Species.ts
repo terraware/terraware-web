@@ -1,6 +1,5 @@
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
-const schemas = 'schemas';
 
 export type Species = {
   id: number;
@@ -152,4 +151,4 @@ export enum SpeciesRequestError {
   RequestFailed = 'AN_UNRECOVERABLE_ERROR_OCCURRED',
 }
 
-export type SpeciesDetails = components[typeof schemas]['SpeciesLookupDetailsResponsePayload'];
+export type SpeciesDetails = components['schemas']['SpeciesLookupDetailsResponsePayload'];

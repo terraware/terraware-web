@@ -1,13 +1,11 @@
 import strings from 'src/strings';
 import { components } from 'src/api/types/generated-schema';
 
-const schemas = 'schemas';
-
-export type StorageLocation = components[typeof schemas]['StorageLocationPayload'];
+export type StorageLocation = components['schemas']['StorageLocationPayload'];
 
 export type PartialStorageLocation = Partial<StorageLocation>;
 
-export type FacilityType = components[typeof schemas]['FacilityPayload']['type'];
+export type FacilityType = components['schemas']['FacilityPayload']['type'];
 
 export interface Facility {
   id: number;
