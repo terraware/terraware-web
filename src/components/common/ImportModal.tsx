@@ -76,7 +76,7 @@ export type ImportSpeciesModalProps = {
   uploaderDescription: string;
   uploadApi: (file: File, orgOrFacilityId: string) => Promise<UploadFileResponse>;
   templateApi: () => Promise<any>;
-  statusApi: (uploadId: number) => Promise<GetUploadStatusResponsePayload | UploadResponse>;
+  statusApi: (uploadId: number) => Promise<UploadResponse>;
   importCompleteLabel: string;
   importingLabel: string;
   duplicatedLabel: string;
