@@ -9,45 +9,6 @@ import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } f
  * surfaced to the caller via the requestSucceeded or error field.
  */
 
-const GET_SPECIES_ENDPOINT = '/api/v1/species';
-
-export type GetSpeciesListResponse = {
-  species: Species[];
-  requestSucceeded: boolean;
-};
-
-export async function getAllSpecies(organizationId: number): Promise<GetSpeciesListResponse> {
-  const response: GetSpeciesListResponse = {
-    species: [],
-    requestSucceeded: true,
-  };
-
-  try {
-    const endpoint = `${GET_SPECIES_ENDPOINT}?organizationId=${organizationId}`;
-    const serverSpecies: Species[] = (await axios.get(endpoint)).data.species;
-    serverSpecies.forEach((iSpecies: Species) => {
-      response.species.push({
-        id: iSpecies.id,
-        commonName: iSpecies.commonName,
-        ecosystemTypes: iSpecies.ecosystemTypes,
-        endangered: iSpecies.endangered,
-        rare: iSpecies.rare,
-        familyName: iSpecies.familyName,
-        growthForm: iSpecies.growthForm,
-        scientificName: iSpecies.scientificName,
-        seedStorageBehavior: iSpecies.seedStorageBehavior,
-        problems: iSpecies.problems,
-      });
-    });
-  } catch (error) {
-    // tslint:disable-next-line: no-console
-    console.error(error);
-    response.requestSucceeded = false;
-  }
-
-  return response;
-}
-
 const SPECIES_ENDPOINT = '/api/v1/species';
 type PostSpeciesRequest = paths[typeof SPECIES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 type PostSpeciesResponse = paths[typeof SPECIES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
