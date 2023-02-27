@@ -1,3 +1,4 @@
+e6140622 Bump cypress from 12.5.1 to 12.7.0 (#1250)
 1d300a3f SW-2982 Fix error management for collected/received date (#1252)
 1a97ad3d SW-3057 Show reload-app banner outside the inventory table container (#1249)
 1e1cb86a SW-2729 Species service (#1248)
