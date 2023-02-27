@@ -43,13 +43,13 @@ export default function CollectedReceivedDate2({
   };
 
   const validateDate = useCallback(
-    (value?: string | undefined) => {
+    (newValue?: string | undefined) => {
       onDateError('');
-      if (!value) {
-        const required = validate && value === undefined;
+      if (!newValue) {
+        const required = validate && newValue === undefined;
         onDateError(required ? strings.REQUIRED_FIELD : strings.INVALID_DATE);
         return false;
-      } else if (isInTheFuture(value, timeZone)) {
+      } else if (isInTheFuture(newValue, timeZone)) {
         onDateError(strings.NO_FUTURE_DATES);
         return false;
       } else {
@@ -59,10 +59,10 @@ export default function CollectedReceivedDate2({
     [timeZone, validate, onDateError]
   );
 
-  const changeDate = (value?: any) => {
-    setDateValue(value);
+  const changeDate = (newValue?: any) => {
+    setDateValue(newValue);
 
-    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
+    const date = newValue ? getDateDisplayValue(newValue.getTime(), timeZone) : null;
     if (date) {
       onChange(id, date);
     }
@@ -72,8 +72,8 @@ export default function CollectedReceivedDate2({
     validateDate(dateValue);
   }, [validate, dateValue, validateDate]);
 
-  const onErrorHandler = (value: any) => {
-    setDateValue(value);
+  const onErrorHandler = (newValue: any) => {
+    setDateValue(newValue);
   };
 
   return (
@@ -83,11 +83,11 @@ export default function CollectedReceivedDate2({
         label={label}
         aria-label={label}
         value={dateValue}
-        onChange={(value) => changeDate(value)}
+        onChange={(newValue) => changeDate(newValue)}
         errorText={validate ? dateError : ''}
         maxDate={maxDate}
         defaultTimeZone={timeZone}
-        onError={(reason, value) => onErrorHandler(value)}
+        onError={(reason, newValue) => onErrorHandler(newValue)}
       />
     </Grid>
   );
