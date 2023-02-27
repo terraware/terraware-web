@@ -1,3 +1,5 @@
+1d300a3f SW-2982 Fix error management for collected/received date (#1252)
+1a97ad3d SW-3057 Show reload-app banner outside the inventory table container (#1249)
 1e1cb86a SW-2729 Species service (#1248)
 5aa7b8fc SW-2994 Limit Jira transitions on production releases (#1231)
 0e116fb7 SW-2837 Nursery withdrawal service unit tests (#1247)
