@@ -38,10 +38,15 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const selectedSeedBank = getSeedBank(selectedOrganization, record.facilityId);
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const timeZone = tz.id;
+  const [collectedDateError, setCollectedDateError] = useState<string>();
+
+  const onCollectedDateError = (error?: string) => {
+    setCollectedDateError(error);
+  };
 
   const hasErrors = () => {
     const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record || !record[field]);
-    return missingRequiredField;
+    return missingRequiredField || collectedDateError;
   };
 
   useEffect(() => {
@@ -107,11 +112,15 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
           validate={validateFields}
         />
         <CollectedReceivedDate2
-          record={record}
           onChange={onChange}
-          type='collected'
           validate={validateFields}
           timeZone={timeZone}
+          id='collectedDate'
+          onDateError={onCollectedDateError}
+          label={strings.COLLECTION_DATE_REQUIRED}
+          maxDate={new Date()}
+          dateError={collectedDateError}
+          value={record.collectedDate}
         />
         <Grid item xs={12}>
           <Collectors2 onChange={onChange} collectors={record.collectors} />
