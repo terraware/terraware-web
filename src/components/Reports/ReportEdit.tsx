@@ -48,7 +48,7 @@ export default function ReportEdit(): JSX.Element {
     history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
   };
 
-  const handleSubmitButtonClicked = () => {
+  const handleSubmitButton = () => {
     setConfirmSubmitDialogOpen(true);
   };
 
@@ -125,13 +125,7 @@ export default function ReportEdit(): JSX.Element {
           cancelID='cancelEdits'
           saveID='submitReport'
           onCancel={() => gotoReportView(false)}
-          onSave={
-            report.isAnnual && showAnnual
-              ? showAnnual
-                ? handleSubmitButtonClicked
-                : handleSaveAndNext
-              : handleSubmitButtonClicked
-          }
+          onSave={report.isAnnual ? (showAnnual ? handleSubmitButton : handleSaveAndNext) : handleSubmitButton}
           saveButtonText={
             report.isAnnual ? (showAnnual ? strings.REPORT_SUBMIT : strings.SAVE_AND_NEXT) : strings.REPORT_SUBMIT
           }
