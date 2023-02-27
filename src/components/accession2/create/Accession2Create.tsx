@@ -46,6 +46,16 @@ export default function CreateAccession(): JSX.Element {
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const [timeZone, setTimeZone] = useState<string>(tz.id);
   const { selectedOrganization } = useOrganization();
+  const [collectedDateError, setCollectedDateError] = useState<string>();
+  const [receivedDateError, setReceivedDateError] = useState<string>();
+
+  const onCollectedDateError = (error?: string) => {
+    setCollectedDateError(error);
+  };
+
+  const onReceivedDateError = (error?: string) => {
+    setReceivedDateError(error);
+  };
 
   const defaultAccession = (): AccessionPostRequestBody =>
     ({
@@ -89,7 +99,7 @@ export default function CreateAccession(): JSX.Element {
 
   const hasErrors = () => {
     const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
-    return missingRequiredField;
+    return missingRequiredField || collectedDateError || receivedDateError;
   };
 
   const saveAccession = async () => {
@@ -146,11 +156,14 @@ export default function CreateAccession(): JSX.Element {
               <Species2Dropdown record={record} setRecord={setRecord} validate={validateFields} />
             </Grid>
             <CollectedReceivedDate2
-              record={record}
               onChange={onChange}
-              type='collected'
               validate={validateFields}
               timeZone={timeZone}
+              id='collectedDate'
+              onDateError={onCollectedDateError}
+              label={strings.COLLECTION_DATE_REQUIRED}
+              maxDate={new Date()}
+              dateError={collectedDateError}
             />
             <Grid item xs={12} sx={marginTop}>
               <Collectors2 collectors={record.collectors} onChange={onChange} />
@@ -188,11 +201,14 @@ export default function CreateAccession(): JSX.Element {
           </Grid>
           <Grid container>
             <CollectedReceivedDate2
-              record={record}
               onChange={onChange}
-              type='received'
               validate={validateFields}
               timeZone={timeZone}
+              value={record.receivedDate}
+              id='receivedDate'
+              onDateError={onReceivedDateError}
+              label={strings.RECEIVING_DATE_REQUIRED}
+              dateError={receivedDateError}
             />
             <Grid item xs={12} sx={marginTop}>
               <Dropdown
