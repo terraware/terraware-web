@@ -33,7 +33,20 @@ const useStyles = makeStyles((theme: Theme) => ({
   button: {
     marginTop: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 'auto'),
   },
+  rightButtons: {
+    marginTop: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 'auto'),
+    marginRight: theme.spacing(1),
+  },
 }));
+
+export interface FormButton {
+  id: string;
+  text: string;
+  disabled: boolean;
+  onClick: () => void;
+  buttonPriority?: 'primary' | 'secondary';
+  buttonType?: 'passive' | 'productive' | 'destructive';
+}
 
 export interface Props {
   cancelID: string;
@@ -43,6 +56,8 @@ export interface Props {
   saveButtonText?: string;
   saveDisabled?: boolean;
   onSave: () => void;
+  additionalLeftButtons?: FormButton[];
+  additionalRightButtons?: FormButton[];
 }
 
 export default function FormBottomBar({
@@ -53,6 +68,8 @@ export default function FormBottomBar({
   saveButtonText,
   saveDisabled,
   onSave,
+  additionalLeftButtons,
+  additionalRightButtons,
 }: Props): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
@@ -73,14 +90,30 @@ export default function FormBottomBar({
         type='passive'
         className={classes.button}
       />
-      <Button
-        id={saveID || 'saveBottomBar'}
-        size='medium'
-        label={saveButtonText || strings.SAVE}
-        onClick={onSave}
-        className={classes.button}
-        disabled={saveDisabled}
-      />
+      <div>
+        {additionalRightButtons &&
+          additionalRightButtons.map((btn) => (
+            <Button
+              id={btn.id}
+              key={btn.id}
+              priority={btn.buttonPriority}
+              type={btn.buttonType}
+              size='medium'
+              label={btn.text}
+              onClick={btn.onClick}
+              className={classes.rightButtons}
+              disabled={btn.disabled}
+            />
+          ))}
+        <Button
+          id={saveID || 'saveBottomBar'}
+          size='medium'
+          label={saveButtonText || strings.SAVE}
+          onClick={onSave}
+          className={classes.button}
+          disabled={saveDisabled}
+        />
+      </div>
     </AppBar>
   );
 }
