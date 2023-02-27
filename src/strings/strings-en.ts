@@ -90,6 +90,7 @@ export const strings = {
   ALREADY_INVITED_PERSON_ERROR:
     'It looks like you have already added or invited this person. Please enter a unique email address or go to the existing person’s profile.',
   AMOUNT_REMAINING: 'Amount ({0} remaining)',
+  APP_TITLE: 'Terraware App',
   APPLY_FILTERS: 'Apply Filters',
   APPLY_RESULT_QUESTION: 'Do you want to apply this result to the accession?',
   APPLY_RESULT: 'Apply Result',

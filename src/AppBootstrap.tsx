@@ -9,6 +9,7 @@ import {
   OrganizationProvider,
   UserProvider,
 } from 'src/providers';
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spinner: {
@@ -61,6 +62,10 @@ export type AppBootstrapProps = {
 export default function AppBootstrap({ children }: AppBootstrapProps): JSX.Element {
   const [selectedLocale, setSelectedLocale] = useState('en');
   const [activeLocale, setActiveLocale] = useState<string | null>(null);
+
+  useEffect(() => {
+    window.document.title = strings.APP_TITLE;
+  }, [activeLocale]);
 
   return (
     <UserProvider>
