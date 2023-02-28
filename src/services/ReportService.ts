@@ -1,8 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
-import { Id } from 'src/types/Id';
 import { ListReport, Report, ReportFile, ReportPhoto } from 'src/types/Report';
 import HttpService, { Response } from './HttpService';
-import { getPromisesResponse } from './utils';
 
 /**
  * Report related services
@@ -107,10 +105,16 @@ const httpReportPhoto = HttpService.root(REPORT_PHOTO_ENDPOINT);
 /**
  * Get all reports
  */
-const getReports = async (): Promise<ReportsResponse> => {
-  const response: ReportsResponse = await httpReports.get<ReportsResponsePayload, ReportsData>({}, (data) => ({
-    reports: data?.reports,
-  }));
+const getReports = async (organizationId: number): Promise<ReportsResponse> => {
+  const params = { organizationId: organizationId.toString() };
+  const response: ReportsResponse = await httpReports.get<ReportsResponsePayload, ReportsData>(
+    {
+      params,
+    },
+    (data) => ({
+      reports: data?.reports,
+    })
+  );
 
   return response;
 };
