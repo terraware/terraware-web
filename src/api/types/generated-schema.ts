@@ -518,6 +518,7 @@ export interface components {
       isCatalytic: boolean;
       keyLessons?: string;
       nextSteps?: string;
+      opportunities?: string;
       projectImpact?: string;
       projectSummary?: string;
       socialImpact?: string;
@@ -1213,11 +1214,15 @@ export interface components {
       capacity?: number;
       /** Format: int64 */
       id: number;
+      /** Format: int32 */
+      mortalityRate: number;
       name: string;
       notes?: string;
       /** Format: date */
       operationStartedDate?: string;
       operationStartedDateEditable: boolean;
+      /** Format: int64 */
+      totalPlantsPropagated: number;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
     GetNurseryWithdrawalResponsePayload: {
@@ -1252,10 +1257,11 @@ export interface components {
     GetPlantingSiteV1: {
       /** Format: int64 */
       id: number;
-      name: string;
-      species: components["schemas"]["GetPlantingSiteSpeciesV1"][];
       /** Format: int32 */
       mortalityRate?: number;
+      name: string;
+      notes?: string;
+      species: components["schemas"]["GetPlantingSiteSpeciesV1"][];
       /** Format: int32 */
       totalPlantedArea?: number;
       /** Format: int32 */
@@ -1274,11 +1280,21 @@ export interface components {
       lockedByName?: string;
       /** Format: int64 */
       lockedByUserId?: number;
+      modifiedByName?: string;
+      /** Format: int64 */
+      modifiedByUserId?: number;
+      submittedByName?: string;
+      /** Format: int64 */
+      submittedByUserId?: number;
       status: "New" | "In Progress" | "Locked" | "Submitted";
-      /** Format: date-time */
-      lockedTime?: string;
       /** Format: int32 */
       quarter: number;
+      /** Format: date-time */
+      modifiedTime?: string;
+      /** Format: date-time */
+      lockedTime?: string;
+      /** Format: date-time */
+      submittedTime?: string;
       version: string;
     };
     GetReportPayloadV1: components["schemas"]["GetReportPayload"] & {
@@ -1607,6 +1623,7 @@ export interface components {
     };
     ListReportPhotosResponseElement: {
       caption?: string;
+      filename: string;
       /** Format: int64 */
       id: number;
     };
@@ -1622,9 +1639,19 @@ export interface components {
       lockedByUserId?: number;
       /** Format: date-time */
       lockedTime?: string;
+      modifiedByName?: string;
+      /** Format: int64 */
+      modifiedByUserId?: number;
+      /** Format: date-time */
+      modifiedTime?: string;
       /** Format: int32 */
       quarter: number;
       status: "New" | "In Progress" | "Locked" | "Submitted";
+      submittedByName?: string;
+      /** Format: int64 */
+      submittedByUserId?: number;
+      /** Format: date-time */
+      submittedTime?: string;
       /** Format: int32 */
       year: number;
     };
@@ -1841,6 +1868,7 @@ export interface components {
     PutPlantingSiteV1: {
       /** Format: int64 */
       id: number;
+      notes?: string;
       species: components["schemas"]["PutPlantingSiteSpeciesV1"][];
       /** Format: int32 */
       mortalityRate?: number;

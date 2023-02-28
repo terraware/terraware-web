@@ -105,10 +105,16 @@ const httpReportPhoto = HttpService.root(REPORT_PHOTO_ENDPOINT);
 /**
  * Get all reports
  */
-const getReports = async (): Promise<ReportsResponse> => {
-  const response: ReportsResponse = await httpReports.get<ReportsResponsePayload, ReportsData>({}, (data) => ({
-    reports: data?.reports,
-  }));
+const getReports = async (organizationId: number): Promise<ReportsResponse> => {
+  const params = { organizationId: organizationId.toString() };
+  const response: ReportsResponse = await httpReports.get<ReportsResponsePayload, ReportsData>(
+    {
+      params,
+    },
+    (data) => ({
+      reports: data?.reports,
+    })
+  );
 
   return response;
 };
