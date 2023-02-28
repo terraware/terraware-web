@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import FormBottomBar from './FormBottomBar';
+import FormBottomBar, { FormButton } from './FormBottomBar';
 import BusySpinner from './BusySpinner';
 
 export interface PageFormProps {
@@ -15,6 +15,8 @@ export interface PageFormProps {
   saveDisabled?: boolean;
   className?: string;
   hideEdit?: boolean;
+  additionalLeftButtons?: FormButton[];
+  additionalRightButtons?: FormButton[];
 }
 
 export default function PageForm(props: PageFormProps): JSX.Element {
