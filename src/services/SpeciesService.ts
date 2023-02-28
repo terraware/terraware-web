@@ -173,9 +173,9 @@ const downloadSpeciesTemplate = async (): Promise<Response & SpeciesUploadTempla
 /**
  * upload species
  */
-const uploadSpecies = async (file: File, seedbankId: string): Promise<UploadFileResponse> => {
+const uploadSpecies = async (file: File, organizationId: string): Promise<UploadFileResponse> => {
   const entity = new FormData();
-  entity.append('facilityId', seedbankId);
+  entity.append('organizationId', organizationId);
   entity.append('file', file);
   const headers = { 'content-type': 'multipart/form-data' };
 
