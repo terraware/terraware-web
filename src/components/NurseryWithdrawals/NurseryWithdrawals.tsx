@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, Popover, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Popover, Theme, Typography, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import strings from 'src/strings';
@@ -19,7 +19,6 @@ import { Button, PillList } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
-import Icon from 'src/components/common/icon/Icon';
 import { FieldOptionsMap } from 'src/services/NurseryWithdrawalService';
 
 const useStyles = makeStyles((theme: Theme) => ({
