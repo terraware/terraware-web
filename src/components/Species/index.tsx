@@ -792,7 +792,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
             />
             <Button
               id='filterSpecies'
-              onClick={() => handleFilterClick}
+              onClick={(event) => event && handleFilterClick(event)}
               type='passive'
               priority='ghost'
               icon='filter'
@@ -825,7 +825,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
             </Popover>
             <Button
               id='downladSpeciesReport'
-              onClick={() => downloadReportHandler}
+              onClick={() => downloadReportHandler()}
               type='passive'
               priority='ghost'
               icon='iconExport'

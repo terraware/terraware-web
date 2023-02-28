@@ -243,7 +243,7 @@ export default function NurseryWithdrawals(): JSX.Element {
               />
               <Button
                 id='filterNurseryWithdrawal'
-                onClick={() => handleFilterClick}
+                onClick={(event) => event && handleFilterClick(event)}
                 type='passive'
                 priority='ghost'
                 icon='filter'

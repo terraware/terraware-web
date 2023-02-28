@@ -1,4 +1,4 @@
-import { Container, IconButton, Popover, Theme, Typography } from '@mui/material';
+import { Container, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
@@ -257,7 +257,13 @@ export default function Filters(props: Props): JSX.Element {
             )}
           </>
         )}
-        <Button id='filter' onClick={() => handleFilterClick} type='passive' priority='ghost' icon='filter' />
+        <Button
+          id='filter'
+          onClick={(event) => event && handleFilterClick(event)}
+          type='passive'
+          priority='ghost'
+          icon='filter'
+        />
         <Popover
           id='simple-popover'
           open={Boolean(filterAnchorEl)}
