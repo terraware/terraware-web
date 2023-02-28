@@ -15,7 +15,7 @@ import { useHistory } from 'react-router-dom';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { useOrganization } from 'src/providers/hooks';
-import { PillList } from '@terraware/web-components';
+import { Button, PillList } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
@@ -25,15 +25,6 @@ import { FieldOptionsMap } from 'src/services/NurseryWithdrawalService';
 const useStyles = makeStyles((theme: Theme) => ({
   searchField: {
     width: '300px',
-  },
-  iconContainer: {
-    borderRadius: 0,
-    fontSize: '16px',
-    marginLeft: '8px',
-    padding: 0,
-  },
-  icon: {
-    fill: theme.palette.TwClrIcnSecondary,
   },
   popoverContainer: {
     '& .MuiPaper-root': {
@@ -251,9 +242,13 @@ export default function NurseryWithdrawals(): JSX.Element {
                 value={searchValue}
                 onChange={(value) => setSearchValue(value as string)}
               />
-              <IconButton onClick={handleFilterClick} size='medium' className={classes.iconContainer}>
-                <Icon name='filter' className={classes.icon} size='medium' />
-              </IconButton>
+              <Button
+                id='filterNurseryWithdrawal'
+                onClick={() => handleFilterClick}
+                type='passive'
+                priority='ghost'
+                icon='filter'
+              />
               <Popover
                 id='simple-popover'
                 open={Boolean(anchorEl)}
