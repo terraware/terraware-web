@@ -14,7 +14,6 @@ import {
   getGrowthFormString,
   getSeedStorageBehaviorString,
   Species,
-  SpeciesProblemElement,
 } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -455,7 +454,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
           searchResults?.forEach((result) => {
             speciesResults.push({
               id: result.id as number,
-              problems: result.problems as SpeciesProblemElement[],
+              problems: species.find((sp) => sp.id.toString() === (result.id as string))?.problems,
               scientificName: result.scientificName as string,
               commonName: result.commonName as string,
               familyName: result.familyName as string,
