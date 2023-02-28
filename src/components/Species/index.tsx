@@ -791,12 +791,12 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               onClickRightIcon={clearSearch}
             />
             <Button
-                id='filterSpecies'
-                onClick={() => handleFilterClick}
-                type='passive'
-                priority='ghost'
-                icon='filter'
-              />
+              id='filterSpecies'
+              onClick={() => handleFilterClick}
+              type='passive'
+              priority='ghost'
+              icon='filter'
+            />
             <Popover
               id='simple-popover'
               open={Boolean(filterAnchorEl)}
@@ -829,7 +829,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               type='passive'
               priority='ghost'
               icon='iconExport'
-              />
+            />
           </Grid>
           <Grid item xs={12} className={classes.searchBar}>
             <PillList data={getFilterPillData()} />

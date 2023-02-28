@@ -257,13 +257,7 @@ export default function Filters(props: Props): JSX.Element {
             )}
           </>
         )}
-        <Button
-          id='filter'
-          onClick={() => handleFilterClick}
-          type='passive'
-          priority='ghost'
-          icon='filter'
-        />
+        <Button id='filter' onClick={() => handleFilterClick} type='passive' priority='ghost' icon='filter' />
         <Popover
           id='simple-popover'
           open={Boolean(filterAnchorEl)}
