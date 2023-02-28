@@ -1,4 +1,4 @@
-import { Box, Container, Grid, IconButton, Popover, Theme } from '@mui/material';
+import { Box, Container, Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -93,16 +93,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   searchBar: {
     display: 'flex',
+    alignItems: 'center',
     marginBottom: '16px',
-  },
-  iconContainer: {
-    borderRadius: 0,
-    fontSize: '16px',
-    height: '48px',
-    marginLeft: '8px',
-  },
-  buttonSpace: {
-    marginRight: '8px',
   },
   icon: {
     fill: theme.palette.TwClrIcnSecondary,
@@ -797,9 +789,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               iconRight='cancel'
               onClickRightIcon={clearSearch}
             />
-            <IconButton onClick={handleFilterClick} size='small' className={classes.iconContainer}>
-              <Icon name='filter' size='medium' className={classes.icon} />
-            </IconButton>
+            <Button
+              id='filterSpecies'
+              onClick={(event) => event && handleFilterClick(event)}
+              type='passive'
+              priority='ghost'
+              icon='filter'
+            />
             <Popover
               id='simple-popover'
               open={Boolean(filterAnchorEl)}
@@ -826,9 +822,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
                 onCancel={handleFilterClose}
               />
             </Popover>
-            <IconButton onClick={downloadReportHandler} size='small' className={classes.iconContainer}>
-              <Icon name='iconExport' size='medium' className={classes.icon} />
-            </IconButton>
+            <Button
+              id='downladSpeciesReport'
+              onClick={() => downloadReportHandler()}
+              type='passive'
+              priority='ghost'
+              icon='iconExport'
+            />
           </Grid>
           <Grid item xs={12} className={classes.searchBar}>
             <PillList data={getFilterPillData()} />
