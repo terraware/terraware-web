@@ -7,7 +7,7 @@ import Link from '../common/Link';
 export default function ReportsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, index } = props;
 
-  const createLinkToSeedBank = () => {
+  const createLinkReport = () => {
     const reportLocation = {
       pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', row.id.toString()),
     };
@@ -15,7 +15,7 @@ export default function ReportsCellRenderer(props: RendererProps<TableRowType>):
   };
 
   if (column.key === 'name') {
-    return <CellRenderer index={index} column={column} value={createLinkToSeedBank()} row={row} />;
+    return <CellRenderer index={index} column={column} value={createLinkReport()} row={row} />;
   }
 
   return <CellRenderer {...props} />;

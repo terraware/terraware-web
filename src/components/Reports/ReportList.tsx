@@ -6,7 +6,6 @@ import TfMain from 'src/components/common/TfMain';
 import ReportService from 'src/services/ReportService';
 import strings from 'src/strings';
 import { ListReport } from 'src/types/Report';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import ReportsCellRenderer from './TableCellRenderer';
 import { useOrganization } from 'src/providers';
@@ -27,14 +26,8 @@ export default function ReportList(): JSX.Element {
 
   useEffect(() => {
     const refreshSearch = async () => {
-      const requestId = Math.random().toString();
-      setRequestId('searchReports', requestId);
-
       const reportsResults = await ReportService.getReports(selectedOrganization.id);
-
-      if (getRequestId('searchReports') === requestId) {
-        setResults(reportsResults.reports || []);
-      }
+      setResults(reportsResults.reports || []);
     };
 
     refreshSearch();
