@@ -10,6 +10,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Button, DialogBox } from '@terraware/web-components';
 import BackToLink from 'src/components/common/BackToLink';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
@@ -19,17 +20,21 @@ export default function ReportView(): JSX.Element {
 
   const history = useHistory();
 
+  const snackbar = useSnackbar();
+
   const [report, setReport] = useState<Report>();
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
       if (result.requestSucceeded) {
         setReport(result.report);
+      } else {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
       }
     };
 
     getReport();
-  }, [reportIdInt]);
+  }, [reportIdInt, snackbar]);
 
   const [showAnnual, setShowAnnual] = useState(false);
 
@@ -45,10 +50,14 @@ export default function ReportView(): JSX.Element {
 
   const confirmEdit = async () => {
     // lock the report
-    await ReportService.forceLockReport(reportIdInt);
+    const lockResult = await ReportService.forceLockReport(reportIdInt);
 
-    // then navigate to editing
-    history.replace({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', reportId) });
+    if (lockResult.requestSucceeded) {
+      // then navigate to editing
+      history.replace({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', reportId) });
+    } else {
+      snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
+    }
   };
 
   return (
@@ -73,7 +82,7 @@ export default function ReportView(): JSX.Element {
         <Typography fontSize='16px' fontWeight={400}>
           {strings.formatString(strings.REPORT_CONCURRENT_EDITOR_WARNING_1, report?.lockedByName ?? '')}
         </Typography>
-        <Typography fontSize='16px' fontWeight={400}>
+        <Typography fontSize='16px' fontWeight={400} marginTop={theme.spacing(3)}>
           {strings.REPORT_CONCURRENT_EDITOR_WARNING_2}
         </Typography>
       </DialogBox>

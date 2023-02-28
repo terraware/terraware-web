@@ -11,6 +11,7 @@ import { APP_PATHS } from 'src/constants';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import { Button, DialogBox } from '@terraware/web-components';
 import { FormButton } from 'src/components/common/FormBottomBar';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export default function ReportEdit(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
@@ -20,32 +21,46 @@ export default function ReportEdit(): JSX.Element {
 
   const history = useHistory();
 
+  const snackbar = useSnackbar();
+
   const [report, setReport] = useState<Report>();
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
       if (result.requestSucceeded) {
         setReport(result.report);
+      } else {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
       }
     };
 
-    getReport();
-  }, [reportIdInt]);
+    if (reportIdInt) {
+      getReport();
+    } else {
+      snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
+    }
+  }, [reportIdInt, snackbar]);
 
   const [showAnnual, setShowAnnual] = useState(false);
 
   const [confirmSubmitDialogOpen, setConfirmSubmitDialogOpen] = useState(false);
 
   const gotoReportView = async (saveChanges: boolean) => {
+    let saveResult;
     if (saveChanges && report) {
-      await ReportService.updateReport(report);
+      saveResult = await ReportService.updateReport(report);
+      if (!saveResult.requestSucceeded) {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+      }
     }
 
-    // unlock the report
-    await ReportService.unlockReport(reportIdInt);
+    if (!saveResult || saveResult.requestSucceeded) {
+      // unlock the report
+      await ReportService.unlockReport(reportIdInt);
 
-    // then navigate to view
-    history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
+      // then navigate to view
+      history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
+    }
   };
 
   const handleSubmitButton = () => {
@@ -54,23 +69,38 @@ export default function ReportEdit(): JSX.Element {
 
   const handleSaveAndNext = async () => {
     if (report) {
-      await ReportService.updateReport(report);
+      const saveResult = await ReportService.updateReport(report);
       setShowAnnual(true);
+      if (!saveResult.requestSucceeded) {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+      }
     }
   };
 
   const handleBack = async () => {
     if (report) {
-      await ReportService.updateReport(report);
+      const saveResult = await ReportService.updateReport(report);
       setShowAnnual(false);
+      if (!saveResult.requestSucceeded) {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+      }
     }
   };
 
   const submitReport = async () => {
     if (report) {
-      await ReportService.updateReport(report);
-      await ReportService.submitReport(reportIdInt);
-      await ReportService.unlockReport(reportIdInt);
+      const saveResult = await ReportService.updateReport(report);
+      if (saveResult.requestSucceeded) {
+        const submitResult = await ReportService.submitReport(reportIdInt);
+        if (submitResult.requestSucceeded) {
+          await ReportService.unlockReport(reportIdInt);
+          history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
+        } else {
+          snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
+        }
+      } else {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+      }
     }
   };
 

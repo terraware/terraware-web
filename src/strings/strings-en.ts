@@ -720,6 +720,10 @@ export const strings = {
   REPORT_CONCURRENT_EDITOR_WARNING_2:
     'By continuing to edit this report, their changes will be discarded. Are you sure you want to continue?',
   REPORT_CONFIRM_SUBMIT: 'Are you sure you wish to submit this report? This action cannot be undone.',
+  REPORT_COULD_NOT_EDIT: 'Could not edit report',
+  REPORT_COULD_NOT_OPEN: 'Could not open report',
+  REPORT_COULD_NOT_SAVE: 'Could not save report',
+  REPORT_COULD_NOT_SUBMIT: 'Could not submit report',
   REPORT_EDIT: 'Edit Report',
   REPORT_NAME: 'Report Name',
   REPORT_PROBLEM: 'Report Problem',
