@@ -35,6 +35,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     }
   });
 
+  const smallItemGridWidth = () => (isMobile ? 12 : 4);
+
   return (
     <Grid
       container
@@ -54,13 +56,13 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
       <Grid item xs={12} marginLeft={theme.spacing(-3)} marginTop={theme.spacing(-3)}>
         <OverviewItemCard isEditable={false} title={strings.ORGANIZATION} contents={report.organizationName ?? ''} />
       </Grid>
-      <Grid item xs={isMobile ? 12 : 4} marginLeft={theme.spacing(-3)} marginTop={theme.spacing(-3)}>
+      <Grid item xs={smallItemGridWidth()} marginLeft={theme.spacing(-3)} marginTop={theme.spacing(-3)}>
         <OverviewItemCard isEditable={false} title={strings.SEED_BANKS} contents={`${report.totalSeedBanks}` ?? '0'} />
       </Grid>
-      <Grid item xs={isMobile ? 12 : 4} marginLeft={theme.spacing(-3)} marginTop={theme.spacing(-3)}>
+      <Grid item xs={smallItemGridWidth()} marginLeft={theme.spacing(-3)} marginTop={theme.spacing(-3)}>
         <OverviewItemCard isEditable={false} title={strings.NURSERIES} contents={`${report.totalNurseries}` ?? '0'} />
       </Grid>
-      <Grid item xs={isMobile ? 12 : 4} marginLeft={theme.spacing(-3)} marginTop={theme.spacing(-3)}>
+      <Grid item xs={smallItemGridWidth()} marginLeft={theme.spacing(-3)} marginTop={theme.spacing(-3)}>
         <OverviewItemCard
           isEditable={false}
           title={strings.PLANTING_SITES}

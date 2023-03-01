@@ -921,7 +921,7 @@ export const strings = {
     "To get started, please create your organization now. You'll also be able to set up and manage information on people and species.",
   SUGGESTION: 'Suggestion',
   SUMMARY_OF_PROGRESS: 'Summary of Progress',
-  SUMMARY_OF_PROGRESS_DESCRIPTION: 'Give a brief summary this project.',
+  SUMMARY_OF_PROGRESS_DESCRIPTION: 'Give a brief summary of this project.',
   SUMMARY: 'Summary',
   SUSTAINABLE_TIMBER: 'Sustainable Timber',
   TAKE_ME_THERE: 'Take Me There',
