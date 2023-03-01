@@ -1,3 +1,4 @@
+11678c65 Factor Dialogs into Components (#1258)
 597b2ff6 Bump mapbox-gl from 2.12.0 to 2.13.0 (#1251)
 28bcb3c4 SW-2037 / SW-2448 Various button style updates (#1257)
 5bd8f935 Bump typescript from 4.9.4 to 4.9.5 (#1221)
