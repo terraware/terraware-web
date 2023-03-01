@@ -12,10 +12,12 @@ import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import { FormButton } from 'src/components/common/FormBottomBar';
 import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
+import { useUser } from 'src/providers';
 
 export default function ReportEdit(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
   const reportIdInt = parseInt(reportId, 10);
+  const { user } = useUser();
 
   const theme = useTheme();
 
@@ -24,6 +26,8 @@ export default function ReportEdit(): JSX.Element {
   const snackbar = useSnackbar();
 
   const [report, setReport] = useState<Report>();
+
+  const [checkUserInterval, setCheckUserInterval] = useState<NodeJS.Timer>();
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
@@ -39,7 +43,19 @@ export default function ReportEdit(): JSX.Element {
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
+
+    setCheckUserInterval(setInterval(getReport, 60000));
   }, [reportIdInt, snackbar]);
+
+  useEffect(() => {
+    if (report && user && report?.lockedByUserId !== user?.id) {
+      if (checkUserInterval) {
+        clearInterval(checkUserInterval);
+        setCheckUserInterval(undefined);
+      }
+      history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId).concat('?invalidEditor=true'));
+    }
+  }, [report, user, history, reportId, checkUserInterval]);
 
   const [showAnnual, setShowAnnual] = useState(false);
 
