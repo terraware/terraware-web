@@ -12,6 +12,7 @@ import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import { FormButton } from 'src/components/common/FormBottomBar';
 import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
+import produce from 'immer';
 
 export default function ReportEdit(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
@@ -27,7 +28,7 @@ export default function ReportEdit(): JSX.Element {
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
-      if (result.requestSucceeded) {
+      if (result.requestSucceeded && result.report) {
         setReport(result.report);
       } else {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
@@ -122,6 +123,22 @@ export default function ReportEdit(): JSX.Element {
     buttonType: 'passive',
   });
 
+  /**
+   * Report update functions
+   */
+  const updateReport = (field: string, value: any) => {
+    if (report) {
+      setReport(
+        produce((draft) => {
+          // @ts-ignore
+          draft[field] = value;
+        })
+      );
+    }
+  };
+
+  /** end of update functions */
+
   return (
     <TfMain>
       <SubmitConfirmationDialog
@@ -151,7 +168,7 @@ export default function ReportEdit(): JSX.Element {
             (showAnnual ? (
               <ReportFormAnnual editable={true} report={report} />
             ) : (
-              <ReportForm editable={true} report={report} />
+              <ReportForm editable={true} report={report} onUpdateReport={updateReport} />
             ))}
         </PageForm>
       )}
