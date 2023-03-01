@@ -1131,7 +1131,7 @@ export interface components {
       field?: string;
       /** @description List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
       values?: (string | null)[];
-      type?: "Exact" | "Fuzzy" | "Range";
+      type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "Range";
     } & {
       field: unknown;
       type: unknown;
@@ -1277,6 +1277,11 @@ export interface components {
       id: number;
       /** Format: int32 */
       year: number;
+      status: "New" | "In Progress" | "Locked" | "Submitted";
+      /** Format: int32 */
+      quarter: number;
+      /** Format: date-time */
+      modifiedTime?: string;
       lockedByName?: string;
       /** Format: int64 */
       lockedByUserId?: number;
@@ -1286,11 +1291,6 @@ export interface components {
       submittedByName?: string;
       /** Format: int64 */
       submittedByUserId?: number;
-      status: "New" | "In Progress" | "Locked" | "Submitted";
-      /** Format: int32 */
-      quarter: number;
-      /** Format: date-time */
-      modifiedTime?: string;
       /** Format: date-time */
       lockedTime?: string;
       /** Format: date-time */
