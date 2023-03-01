@@ -7,10 +7,11 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Report } from 'src/types/Report';
 import ReportService from 'src/services/ReportService';
 import { useHistory, useParams } from 'react-router-dom';
-import { Button, DialogBox } from '@terraware/web-components';
+import { Button } from '@terraware/web-components';
 import BackToLink from 'src/components/common/BackToLink';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
+import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
 
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
@@ -62,30 +63,13 @@ export default function ReportView(): JSX.Element {
 
   return (
     <TfMain>
-      <DialogBox
+      <ConcurrentEditorWarningDialog
         open={confirmEditDialogOpen}
-        title={strings.REPORT_CONCURRENT_EDITOR}
-        size='medium'
+        lockedBy={report?.lockedByName ?? ''}
         onClose={() => setConfirmEditDialogOpen(false)}
-        middleButtons={[
-          <Button
-            id='cancelEditReport'
-            label={strings.CANCEL}
-            priority='secondary'
-            type='passive'
-            onClick={() => setConfirmEditDialogOpen(false)}
-            key='button-1'
-          />,
-          <Button id='confirmEdit' label={strings.REPORT_EDIT} onClick={confirmEdit} key='button-2' />,
-        ]}
-      >
-        <Typography fontSize='16px' fontWeight={400}>
-          {strings.formatString(strings.REPORT_CONCURRENT_EDITOR_WARNING_1, report?.lockedByName ?? '')}
-        </Typography>
-        <Typography fontSize='16px' fontWeight={400} marginTop={theme.spacing(3)}>
-          {strings.REPORT_CONCURRENT_EDITOR_WARNING_2}
-        </Typography>
-      </DialogBox>
+        onCancel={() => setConfirmEditDialogOpen(false)}
+        onConfirm={confirmEdit}
+      />
       <Box display='flex' flexDirection='column'>
         <Box paddingLeft={theme.spacing(3)}>
           <BackToLink id='backToReports' name={strings.REPORTS} to={APP_PATHS.REPORTS} />

@@ -9,9 +9,9 @@ import { Report } from 'src/types/Report';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
-import { Button, DialogBox } from '@terraware/web-components';
 import { FormButton } from 'src/components/common/FormBottomBar';
 import useSnackbar from 'src/utils/useSnackbar';
+import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
 
 export default function ReportEdit(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
@@ -124,27 +124,12 @@ export default function ReportEdit(): JSX.Element {
 
   return (
     <TfMain>
-      <DialogBox
+      <SubmitConfirmationDialog
         open={confirmSubmitDialogOpen}
-        title={strings.REPORT_SUBMIT}
-        size='medium'
         onClose={() => setConfirmSubmitDialogOpen(false)}
-        middleButtons={[
-          <Button
-            id='cancelSubmitReport'
-            label={strings.CANCEL}
-            priority='secondary'
-            type='passive'
-            onClick={() => setConfirmSubmitDialogOpen(false)}
-            key='button-1'
-          />,
-          <Button id='confirmEdit' label={strings.REPORT_SUBMIT} onClick={submitReport} key='button-2' />,
-        ]}
-      >
-        <Typography fontSize='16px' fontWeight={400}>
-          {strings.REPORT_CONFIRM_SUBMIT}
-        </Typography>
-      </DialogBox>
+        onCancel={() => setConfirmSubmitDialogOpen(false)}
+        onSubmit={submitReport}
+      />
       <Box padding={theme.spacing(3)}>
         <Typography fontSize='24px' fontWeight={600}>
           {report ? `Report (${report?.year}-Q${report?.quarter})` : ''}
