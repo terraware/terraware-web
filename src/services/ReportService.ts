@@ -146,7 +146,7 @@ const updateReport = async (report: Report): Promise<Response> => {
   const response: Response = await httpReport.put({
     entity: request,
     urlReplacements: {
-      '{reportId}': report.id.toString(),
+      '{id}': report.id.toString(),
     },
   });
 
