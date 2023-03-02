@@ -14,6 +14,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
 import useQuery from 'src/utils/useQuery';
 
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
 
@@ -29,11 +31,15 @@ export default function ReportView(): JSX.Element {
 
   const [report, setReport] = useState<Report>();
 
+  const stateLocation = useStateLocation();
+
   useEffect(() => {
     if (invalidEditor) {
+      query.delete('invalidEditor');
       snackbar.toastInfo(strings.INVALID_EDITOR);
+      history.push(getLocation(stateLocation.pathname, stateLocation));
     }
-  }, [invalidEditor, snackbar]);
+  }, [invalidEditor, snackbar, query, history, stateLocation]);
 
   useEffect(() => {
     const getReport = async () => {
