@@ -115,34 +115,61 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
-        <Textfield
-          label={strings.WORKERS_PAID_ENGAGED}
-          id={`${seedbank.id}-workers-paid-engaged`}
-          type='number'
-          value={workersPaidEngaged}
-          readonly={!editable}
-          onChange={(value) => setWorkersPaidEngaged(value as number)}
-        />
+        {editable ? (
+          <Textfield
+            label={strings.WORKERS_PAID_ENGAGED}
+            id={`${seedbank.id}-workers-paid-engaged`}
+            type='number'
+            value={workersPaidEngaged}
+            readonly={!editable}
+            onChange={(value) => setWorkersPaidEngaged(value as number)}
+          />
+        ) : (
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.WORKERS_PAID_ENGAGED}
+            contents={seedbank.workers.paidWorkers?.toString() ?? '0'}
+            className={classes.infoCardStyle}
+          />
+        )}
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
-        <Textfield
-          label={strings.WORKERS_PAID_FEMALE}
-          id={`${seedbank.id}-workers-paid-female`}
-          type='number'
-          value={workersPaidFemale}
-          readonly={!editable}
-          onChange={(value) => setWorkersPaidFemale(value as number)}
-        />
+        {editable ? (
+          <Textfield
+            label={strings.WORKERS_PAID_FEMALE}
+            id={`${seedbank.id}-workers-paid-female`}
+            type='number'
+            value={workersPaidFemale}
+            readonly={!editable}
+            onChange={(value) => setWorkersPaidFemale(value as number)}
+          />
+        ) : (
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.WORKERS_PAID_FEMALE}
+            contents={seedbank.workers.femalePaidWorkers?.toString() ?? '0'}
+            className={classes.infoCardStyle}
+          />
+        )}
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
-        <Textfield
-          label={strings.WORKERS_VOLUNTEERS}
-          id={`${seedbank.id}-workers-volunteer`}
-          type='number'
-          value={workersVolunteer}
-          readonly={!editable}
-          onChange={(value) => setWorkersVolunteer(value as number)}
-        />
+        {editable ? (
+          <Textfield
+            label={strings.WORKERS_VOLUNTEERS}
+            id={`${seedbank.id}-workers-volunteer`}
+            type='number'
+            value={workersVolunteer}
+            readonly={!editable}
+            onChange={(value) => setWorkersVolunteer(value as number)}
+          />
+        ) : (
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.WORKERS_VOLUNTEERS}
+            contents={seedbank.workers.volunteers?.toString() ?? '0'}
+            className={classes.infoCardStyle}
+          />
+        )}
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <Textfield
