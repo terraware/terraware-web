@@ -12,15 +12,10 @@ import BackToLink from 'src/components/common/BackToLink';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
 import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
-import useQuery from 'src/utils/useQuery';
-
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
 
-  const query = useQuery();
-  const invalidEditor = !!query.get('invalidEditor');
   const reportIdInt = parseInt(reportId, 10);
 
   const theme = useTheme();
@@ -30,16 +25,6 @@ export default function ReportView(): JSX.Element {
   const snackbar = useSnackbar();
 
   const [report, setReport] = useState<Report>();
-
-  const stateLocation = useStateLocation();
-
-  useEffect(() => {
-    if (invalidEditor) {
-      query.delete('invalidEditor');
-      snackbar.toastInfo(strings.INVALID_EDITOR);
-      history.push(getLocation(stateLocation.pathname, stateLocation));
-    }
-  }, [invalidEditor, snackbar, query, history, stateLocation]);
 
   useEffect(() => {
     const getReport = async () => {

@@ -14,6 +14,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
 import { useUser } from 'src/providers';
 import produce from 'immer';
+import CannotEditReportDialog from './InvalidUserModal';
 
 export default function ReportEdit(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
@@ -27,6 +28,7 @@ export default function ReportEdit(): JSX.Element {
   const snackbar = useSnackbar();
 
   const [report, setReport] = useState<Report>();
+  const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
 
   useEffect(() => {
     const getReport = async () => {
@@ -46,7 +48,7 @@ export default function ReportEdit(): JSX.Element {
 
     let interval: ReturnType<typeof setInterval>;
 
-    interval = setInterval(getReport, 600);
+    interval = setInterval(getReport, 60000);
 
     // Clean up existing interval.
     return () => {
@@ -55,10 +57,10 @@ export default function ReportEdit(): JSX.Element {
   }, [reportIdInt, snackbar]);
 
   useEffect(() => {
-    if (report && user && report?.lockedByUserId !== user?.id) {
-      history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId).concat('?invalidEditor=true'));
+    if (report && user && report?.lockedByUserId !== user?.id && !showInvalidUserModal) {
+      setShowInvalidUserModal(true);
     }
-  }, [report, user, history, reportId]);
+  }, [report, user, showInvalidUserModal]);
 
   const [showAnnual, setShowAnnual] = useState(false);
 
@@ -155,10 +157,21 @@ export default function ReportEdit(): JSX.Element {
     }
   };
 
+  const redirectToReportView = () => {
+    history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId).concat('?invalidEditor=true'));
+  };
+
   /** end of update functions */
 
   return (
     <TfMain>
+      {showInvalidUserModal && (
+        <CannotEditReportDialog
+          open={showInvalidUserModal}
+          onClose={redirectToReportView}
+          onSubmit={redirectToReportView}
+        />
+      )}
       <SubmitConfirmationDialog
         open={confirmSubmitDialogOpen}
         onClose={() => setConfirmSubmitDialogOpen(false)}
