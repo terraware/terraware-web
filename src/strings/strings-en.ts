@@ -399,7 +399,7 @@ export const strings = {
   INITIAL_SEEDS: 'Initial Seeds',
   INTERMEDIATE: 'Intermediate',
   INVALID_DATE: 'Invalid date',
-  INVALID_EDITOR: 'This report is beign edited by another user',
+  INVALID_EDITOR: 'This report is being edited by another user',
   INVALID_VALUE: 'Invalid Value',
   INVENTORY_DATA: 'Inventory Data',
   INVENTORY_IMPORT_COMPLETE: 'Inventory data import complete!',

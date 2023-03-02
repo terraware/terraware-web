@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import TfMain from 'src/components/common/TfMain';
 import PageForm from 'src/components/common/PageForm';
 import strings from 'src/strings';
@@ -27,7 +27,8 @@ export default function ReportEdit(): JSX.Element {
 
   const [report, setReport] = useState<Report>();
 
-  const [checkUserInterval, setCheckUserInterval] = useState<NodeJS.Timer>();
+  const intervalref = useRef<number | null>(null);
+
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
@@ -44,18 +45,26 @@ export default function ReportEdit(): JSX.Element {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
 
-    setCheckUserInterval(setInterval(getReport, 60000));
+    if (intervalref.current !== null) return;
+    intervalref.current = window.setInterval(getReport, 600);
+
+    return () => {
+      if (intervalref.current) {
+        window.clearInterval(intervalref.current);
+        intervalref.current = null;
+      }
+    };
   }, [reportIdInt, snackbar]);
 
   useEffect(() => {
     if (report && user && report?.lockedByUserId !== user?.id) {
-      if (checkUserInterval) {
-        clearInterval(checkUserInterval);
-        setCheckUserInterval(undefined);
+      if (intervalref.current) {
+        window.clearInterval(intervalref.current);
+        intervalref.current = null;
       }
       history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId).concat('?invalidEditor=true'));
     }
-  }, [report, user, history, reportId, checkUserInterval]);
+  }, [report, user, history, reportId]);
 
   const [showAnnual, setShowAnnual] = useState(false);
 
