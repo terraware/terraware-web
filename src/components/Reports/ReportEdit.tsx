@@ -46,7 +46,9 @@ export default function ReportEdit(): JSX.Element {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
 
-    if (intervalref.current !== null) return;
+    if (intervalref.current !== null) {
+      return;
+    }
     intervalref.current = window.setInterval(getReport, 600);
 
     return () => {
