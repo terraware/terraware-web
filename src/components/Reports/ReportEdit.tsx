@@ -158,7 +158,7 @@ export default function ReportEdit(): JSX.Element {
   };
 
   const redirectToReportView = () => {
-    history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId).concat('?invalidEditor=true'));
+    history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId));
   };
 
   /** end of update functions */
