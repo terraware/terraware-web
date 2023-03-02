@@ -12,10 +12,12 @@ import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import { FormButton } from 'src/components/common/FormBottomBar';
 import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
+import { useUser } from 'src/providers';
 import produce from 'immer';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Organization } from 'src/types/Organization';
 import { Facility } from 'src/types/Facility';
+import CannotEditReportDialog from './InvalidUserModal';
 
 export type ReportEditProps = {
   organization: Organization;
@@ -24,12 +26,15 @@ export type ReportEditProps = {
 export default function ReportEdit({ organization }: ReportEditProps): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
   const reportIdInt = parseInt(reportId, 10);
+  const { user } = useUser();
 
   const theme = useTheme();
 
   const history = useHistory();
 
   const snackbar = useSnackbar();
+
+  const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
 
   const [report, setReport] = useState<Report>();
   const [draftReport, setDraftReport] = useState<Report>();
@@ -49,7 +54,22 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
+
+    let interval: ReturnType<typeof setInterval>;
+
+    interval = setInterval(getReport, 60000);
+
+    // Clean up existing interval.
+    return () => {
+      clearInterval(interval);
+    };
   }, [reportIdInt, snackbar]);
+
+  useEffect(() => {
+    if (report && user && report?.lockedByUserId !== user?.id && !showInvalidUserModal) {
+      setShowInvalidUserModal(true);
+    }
+  }, [report, user, showInvalidUserModal]);
 
   const [showAnnual, setShowAnnual] = useState(false);
 
@@ -132,6 +152,10 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     buttonType: 'passive',
   });
 
+  const redirectToReportView = () => {
+    history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId));
+  };
+
   /**
    * Report update functions
    */
@@ -172,6 +196,13 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   return (
     <TfMain>
+      {showInvalidUserModal && (
+        <CannotEditReportDialog
+          open={showInvalidUserModal}
+          onClose={redirectToReportView}
+          onSubmit={redirectToReportView}
+        />
+      )}
       <SubmitConfirmationDialog
         open={confirmSubmitDialogOpen}
         onClose={() => setConfirmSubmitDialogOpen(false)}

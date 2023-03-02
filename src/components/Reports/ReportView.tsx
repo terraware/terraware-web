@@ -15,6 +15,7 @@ import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEdit
 
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
+
   const reportIdInt = parseInt(reportId, 10);
 
   const theme = useTheme();
@@ -24,6 +25,7 @@ export default function ReportView(): JSX.Element {
   const snackbar = useSnackbar();
 
   const [report, setReport] = useState<Report>();
+
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
