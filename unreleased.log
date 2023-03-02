@@ -1,3 +1,4 @@
+211f8449 SW-3074 Poll BE for editing lock to make sure the user is still the current editor (#1261)
 2e38aed9 SW-3070 Apply ExactOrFuzzy Search to Accession Number Only (#1262)
 0018b45d Allow Editing Actual Report Fields (#1260)
 8c58eda0 SW-3012 Add unit tests for cached user service (#1259)
