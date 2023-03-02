@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TfMain from 'src/components/common/TfMain';
 import PageForm from 'src/components/common/PageForm';
 import strings from 'src/strings';
@@ -28,8 +28,6 @@ export default function ReportEdit(): JSX.Element {
 
   const [report, setReport] = useState<Report>();
 
-  const intervalref = useRef<number | null>(null);
-
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
@@ -46,25 +44,18 @@ export default function ReportEdit(): JSX.Element {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
 
-    if (intervalref.current !== null) {
-      return;
-    }
-    intervalref.current = window.setInterval(getReport, 600);
+    let interval: ReturnType<typeof setInterval>;
 
+    interval = setInterval(getReport, 600);
+
+    // Clean up existing interval.
     return () => {
-      if (intervalref.current) {
-        window.clearInterval(intervalref.current);
-        intervalref.current = null;
-      }
+      clearInterval(interval);
     };
   }, [reportIdInt, snackbar]);
 
   useEffect(() => {
     if (report && user && report?.lockedByUserId !== user?.id) {
-      if (intervalref.current) {
-        window.clearInterval(intervalref.current);
-        intervalref.current = null;
-      }
       history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId).concat('?invalidEditor=true'));
     }
   }, [report, user, history, reportId]);
