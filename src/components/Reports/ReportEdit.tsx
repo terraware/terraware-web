@@ -12,11 +12,14 @@ import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import { FormButton } from 'src/components/common/FormBottomBar';
 import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
+import { useUser } from 'src/providers';
 import produce from 'immer';
+import CannotEditReportDialog from './InvalidUserModal';
 
 export default function ReportEdit(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
   const reportIdInt = parseInt(reportId, 10);
+  const { user } = useUser();
 
   const theme = useTheme();
 
@@ -25,6 +28,8 @@ export default function ReportEdit(): JSX.Element {
   const snackbar = useSnackbar();
 
   const [report, setReport] = useState<Report>();
+  const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
+
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
@@ -40,7 +45,22 @@ export default function ReportEdit(): JSX.Element {
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
+
+    let interval: ReturnType<typeof setInterval>;
+
+    interval = setInterval(getReport, 60000);
+
+    // Clean up existing interval.
+    return () => {
+      clearInterval(interval);
+    };
   }, [reportIdInt, snackbar]);
+
+  useEffect(() => {
+    if (report && user && report?.lockedByUserId !== user?.id && !showInvalidUserModal) {
+      setShowInvalidUserModal(true);
+    }
+  }, [report, user, showInvalidUserModal]);
 
   const [showAnnual, setShowAnnual] = useState(false);
 
@@ -137,10 +157,21 @@ export default function ReportEdit(): JSX.Element {
     }
   };
 
+  const redirectToReportView = () => {
+    history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId));
+  };
+
   /** end of update functions */
 
   return (
     <TfMain>
+      {showInvalidUserModal && (
+        <CannotEditReportDialog
+          open={showInvalidUserModal}
+          onClose={redirectToReportView}
+          onSubmit={redirectToReportView}
+        />
+      )}
       <SubmitConfirmationDialog
         open={confirmSubmitDialogOpen}
         onClose={() => setConfirmSubmitDialogOpen(false)}

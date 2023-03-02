@@ -120,6 +120,7 @@ export const strings = {
   CHANGE_DEFAULT_WEIGHT_SYSTEM: 'You can change your default weight system from {0}',
   CANCEL_IMPORT: 'Cancel Import',
   CANCEL: 'Cancel',
+  CANNOT_EDIT: 'Cannot Edit',
   CANNOT_REMOVE_DELETE_MSG:
     'You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?',
   CANNOT_REMOVE_MSG:
@@ -399,6 +400,7 @@ export const strings = {
   INITIAL_SEEDS: 'Initial Seeds',
   INTERMEDIATE: 'Intermediate',
   INVALID_DATE: 'Invalid date',
+  INVALID_EDITOR: 'This report is being edited by another user',
   INVALID_VALUE: 'Invalid Value',
   INVENTORY_DATA: 'Inventory Data',
   INVENTORY_IMPORT_COMPLETE: 'Inventory data import complete!',
