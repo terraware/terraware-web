@@ -81,7 +81,12 @@ export default function ReportView(): JSX.Element {
           {report?.status !== 'Submitted' && <Button label={strings.REPORT_EDIT} icon='iconEdit' onClick={startEdit} />}
         </Box>
       </Box>
-      {report && (showAnnual ? <ReportFormAnnual report={report} /> : <ReportForm report={report} />)}
+      {report &&
+        (showAnnual ? (
+          <ReportFormAnnual report={report} />
+        ) : (
+          <ReportForm editable={false} draftReport={report} allSeedbanks={report.seedBanks} />
+        ))}
       <Box display='flex' justifyContent='flex-end'>
         {report?.isAnnual &&
           (showAnnual ? (

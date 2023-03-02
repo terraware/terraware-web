@@ -492,7 +492,7 @@ function AppContent() {
             )}
             {isEnabled('Reporting V1') && (
               <Route path={APP_PATHS.REPORTS_EDIT}>
-                <ReportEdit />
+                <ReportEdit organization={selectedOrganization} />
               </Route>
             )}
             {isEnabled('Reporting V1') && (

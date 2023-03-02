@@ -1,4 +1,4 @@
-import { paths } from 'src/api/types/generated-schema';
+import { paths, components } from 'src/api/types/generated-schema';
 import { ListReport, Report, ReportFile, ReportPhoto } from 'src/types/Report';
 import HttpService, { Response } from './HttpService';
 
@@ -47,6 +47,9 @@ type DownloadReportPhotoResponsePayload = {
 export type Reports = ListReport[];
 export type ReportFiles = ReportFile[];
 export type ReportPhotos = ReportPhoto[];
+
+export type GetSeedBankV1 = components['schemas']['GetSeedBankV1'];
+
 /**
  * exported types
  */
