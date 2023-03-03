@@ -1,7 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
-import { ListReport, Report, ReportFile, ReportPhoto } from 'src/types/Report';
+import { ListReport, Report, ReportFile, ReportPhoto, ReportSeedBank } from 'src/types/Report';
 import HttpService, { Response } from './HttpService';
 import PhotoService from './PhotoService';
+import { Facility } from 'src/types/Facility';
 
 /**
  * Report related services
@@ -46,6 +47,7 @@ type DownloadReportPhotoResponsePayload = {
 export type Reports = ListReport[];
 export type ReportFiles = ReportFile[];
 export type ReportPhotos = ReportPhoto[];
+
 /**
  * exported types
  */
@@ -338,6 +340,26 @@ const deleteReportPhoto = async (reportId: number, fileId: number): Promise<Resp
 };
 
 /**
+ * Convert Facility to ReportSeedBank
+ */
+const seedbankFromFacility = (facility: Facility, originalReport: Report): ReportSeedBank => {
+  const existingSeedbank = originalReport.seedBanks?.find((sb) => sb.id === facility.id);
+  if (existingSeedbank) {
+    return existingSeedbank;
+  }
+
+  return {
+    id: facility.id,
+    name: facility.name,
+    buildCompletedDateEditable: true,
+    buildStartedDateEditable: true,
+    operationStartedDateEditable: true,
+    totalSeedsStored: 0,
+    workers: {},
+  };
+};
+
+/**
  * Exported functions
  */
 const ReportService = {
@@ -357,6 +379,7 @@ const ReportService = {
   getReportPhoto,
   updateReportPhoto,
   deleteReportPhoto,
+  seedbankFromFacility,
 };
 
 export default ReportService;

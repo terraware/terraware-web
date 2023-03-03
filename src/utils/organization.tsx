@@ -10,7 +10,7 @@ export const getFacilitiesByType = (organization: Organization, type: FacilityTy
   return facilitiesByType;
 };
 
-export const getAllSeedBanks = (organization: Organization): (Facility | undefined)[] => {
+export const getAllSeedBanks = (organization: Organization): Facility[] => {
   return getFacilitiesByType(organization, 'Seed Bank');
 };
 

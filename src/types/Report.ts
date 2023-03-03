@@ -7,3 +7,5 @@ export type ListReport = components['schemas']['ListReportsResponseElement'];
 export type ReportFile = components['schemas']['ListReportFilesResponseElement'];
 
 export type ReportPhoto = components['schemas']['ListReportPhotosResponseElement'];
+
+export type ReportSeedBank = components['schemas']['GetSeedBankV1'];
