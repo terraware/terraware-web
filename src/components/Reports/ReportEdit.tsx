@@ -14,7 +14,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
 import { useUser } from 'src/providers';
 import produce from 'immer';
-import { getAllSeedBanks } from 'src/utils/organization';
 import { Organization } from 'src/types/Organization';
 import CannotEditReportDialog from './InvalidUserModal';
 
@@ -36,13 +35,11 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
 
   const [report, setReport] = useState<Report>();
-  const [draftReport, setDraftReport] = useState<Report>();
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
       if (result.requestSucceeded && result.report) {
         setReport(result.report);
-        setDraftReport(structuredClone(result.report));
       } else {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
       }
@@ -53,6 +50,16 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
+  }, [reportIdInt, snackbar]);
+
+  const [currentUserEditing, setCurrentUserEditing] = useState(true);
+  useEffect(() => {
+    const getReport = async () => {
+      const result = await ReportService.getReport(reportIdInt);
+      if (result.requestSucceeded && result.report) {
+        setCurrentUserEditing(result.report.lockedByUserId === user?.id);
+      }
+    };
 
     let interval: ReturnType<typeof setInterval>;
 
@@ -62,13 +69,13 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     return () => {
       clearInterval(interval);
     };
-  }, [reportIdInt, snackbar]);
+  }, [reportIdInt, user?.id]);
 
   useEffect(() => {
-    if (report && user && report?.lockedByUserId !== user?.id && !showInvalidUserModal) {
+    if (report && user && !currentUserEditing && !showInvalidUserModal) {
       setShowInvalidUserModal(true);
     }
-  }, [report, user, showInvalidUserModal]);
+  }, [report, user, showInvalidUserModal, currentUserEditing]);
 
   const [showAnnual, setShowAnnual] = useState(false);
 
@@ -76,8 +83,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const gotoReportView = async (saveChanges: boolean) => {
     let saveResult;
-    if (saveChanges && draftReport) {
-      saveResult = await ReportService.updateReport(draftReport);
+    if (saveChanges && report) {
+      saveResult = await ReportService.updateReport(report);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       }
@@ -85,7 +92,10 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
     if (!saveResult || saveResult.requestSucceeded) {
       // unlock the report
-      await ReportService.unlockReport(reportIdInt);
+      const unlockResult = await ReportService.unlockReport(reportIdInt);
+      if (!unlockResult.requestSucceeded) {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_UNLOCK);
+      }
 
       // then navigate to view
       history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
@@ -97,8 +107,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   };
 
   const handleSaveAndNext = async () => {
-    if (draftReport) {
-      const saveResult = await ReportService.updateReport(draftReport);
+    if (report) {
+      const saveResult = await ReportService.updateReport(report);
       setShowAnnual(true);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
@@ -107,8 +117,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   };
 
   const handleBack = async () => {
-    if (draftReport) {
-      const saveResult = await ReportService.updateReport(draftReport);
+    if (report) {
+      const saveResult = await ReportService.updateReport(report);
       setShowAnnual(false);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
@@ -117,8 +127,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   };
 
   const submitReport = async () => {
-    if (draftReport) {
-      const saveResult = await ReportService.updateReport(draftReport);
+    if (report) {
+      const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded) {
@@ -160,7 +170,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
    */
   const updateReport = (field: string, value: any) => {
     if (report) {
-      setDraftReport(
+      setReport(
         produce((draft) => {
           // @ts-ignore
           draft[field] = value;
@@ -171,7 +181,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const updateSeedbank = (seedbankIndex: number, seedbankField: string, value: any) => {
     if (report && report.seedBanks) {
-      setDraftReport(
+      setReport(
         produce((draft) => {
           // @ts-ignore
           draft.seedBanks[seedbankIndex][seedbankField] = value;
@@ -182,7 +192,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const updateSeedbankWorkers = (seedbankIndex: number, workersField: string, value: any) => {
     if (report && report.seedBanks) {
-      setDraftReport(
+      setReport(
         produce((draft) => {
           // @ts-ignore
           draft.seedBanks[seedbankIndex].workers[workersField] = value;
@@ -226,15 +236,14 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
           additionalRightButtons={rightButtons}
         >
           {report &&
-            draftReport &&
             (showAnnual ? (
               <ReportFormAnnual editable={true} report={report} />
             ) : (
               <ReportForm
                 editable={true}
-                draftReport={draftReport}
+                draftReport={report}
                 onUpdateReport={updateReport}
-                allSeedbanks={getAllSeedBanks(organization).map((f) => ReportService.seedbankFromFacility(f, report))}
+                allSeedbanks={report.seedBanks ?? []}
                 onUpdateSeedbank={updateSeedbank}
                 onUpdateSeedbankWorkers={updateSeedbankWorkers}
               />

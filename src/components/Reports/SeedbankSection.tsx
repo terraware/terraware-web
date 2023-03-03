@@ -10,12 +10,6 @@ import { ReportSeedBank } from 'src/types/Report';
 
 const DEBOUNCE_TIME_MS = 500;
 
-const useStyles = makeStyles((theme: Theme) => ({
-  infoCardStyle: {
-    padding: 0,
-  },
-}));
-
 export type SeedbankSectionProps = {
   editable: boolean;
   seedbank: ReportSeedBank;
@@ -27,7 +21,6 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
   const { editable, seedbank, onUpdateSeedbank, onUpdateSeedbankWorkers } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles();
 
   const [workersPaidEngaged, setWorkersPaidEngaged] = useState<number>(seedbank.workers?.paidWorkers ?? 0);
   const [workersPaidFemale, setWorkersPaidFemale] = useState<number>(seedbank.workers?.femalePaidWorkers ?? 0);
@@ -59,7 +52,6 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
           editable={editable && seedbank.buildStartedDateEditable}
           value={seedbank.buildStartedDate ?? ''}
           onChange={(value) => onUpdateSeedbank('buildStartedDate', value)}
-          className={classes.infoCardStyle}
           type='date'
         />
       </Grid>
@@ -70,7 +62,6 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
           editable={editable && seedbank.buildCompletedDateEditable}
           value={seedbank.buildCompletedDate ?? ''}
           onChange={(value) => onUpdateSeedbank('buildCompletedDate', value)}
-          className={classes.infoCardStyle}
           type='date'
         />
       </Grid>
@@ -81,7 +72,6 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
           editable={editable && seedbank.buildCompletedDateEditable}
           value={seedbank.operationStartedDate ?? ''}
           onChange={(value) => onUpdateSeedbank('operationStartedDate', value)}
-          className={classes.infoCardStyle}
           type='date'
         />
       </Grid>
@@ -90,7 +80,6 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
           isEditable={false}
           title={strings.TOTAL_SEEDS_STORED}
           contents={seedbank.totalSeedsStored.toString() ?? '0'}
-          className={classes.infoCardStyle}
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
@@ -100,7 +89,6 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
           editable={editable}
           value={editable ? workersPaidEngaged : seedbank.workers.paidWorkers?.toString() ?? '0'}
           onChange={(value) => setWorkersPaidEngaged(value as number)}
-          className={classes.infoCardStyle}
           type='text'
         />
       </Grid>
@@ -111,7 +99,6 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
           editable={editable}
           value={editable ? workersPaidFemale : seedbank.workers.femalePaidWorkers?.toString() ?? '0'}
           onChange={(value) => setWorkersPaidFemale(value as number)}
-          className={classes.infoCardStyle}
           type='text'
         />
       </Grid>
@@ -122,7 +109,6 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
           editable={editable}
           value={editable ? workersVolunteer : seedbank.workers.volunteers?.toString() ?? '0'}
           onChange={(value) => setWorkersVolunteer(value as number)}
-          className={classes.infoCardStyle}
           type='text'
         />
       </Grid>
@@ -148,18 +134,24 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
   );
 }
 
+const useStyles = makeStyles((theme: Theme) => ({
+  infoCardStyle: {
+    padding: 0,
+  },
+}));
+
 type InfoFieldProps = {
   id: string;
   label: string;
   editable: boolean;
   value: string | number;
   onChange: (value: any) => void;
-  className: string;
   type: 'text' | 'date';
 };
 
 function InfoField(props: InfoFieldProps): JSX.Element {
-  const { id, label, editable, value, onChange, className, type } = props;
+  const { id, label, editable, value, onChange, type } = props;
+  const classes = useStyles();
   return editable ? (
     type === 'text' ? (
       <Textfield label={label} id={id} type='number' value={value} readonly={!editable} onChange={onChange} />
@@ -169,6 +161,11 @@ function InfoField(props: InfoFieldProps): JSX.Element {
       <></>
     )
   ) : (
-    <OverviewItemCard isEditable={false} title={label} contents={value.toString() ?? '0'} className={className} />
+    <OverviewItemCard
+      isEditable={false}
+      title={label}
+      contents={value.toString() ?? '0'}
+      className={classes.infoCardStyle}
+    />
   );
 }

@@ -732,6 +732,7 @@ export const strings = {
   REPORT_COULD_NOT_OPEN: 'Could not open report',
   REPORT_COULD_NOT_SAVE: 'Could not save report',
   REPORT_COULD_NOT_SUBMIT: 'Could not submit report',
+  REPORT_COULD_NOT_UNLOCK: 'Could not unlock report',
   REPORT_EDIT: 'Edit Report',
   REPORT_NAME: 'Report Name',
   REPORT_NO_SEEDBANKS: 'No seed banks included in report.',
