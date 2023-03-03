@@ -46,7 +46,8 @@ const getClock = async (): Promise<ClockResponse> => {
  * get app version
  */
 const getLatestAppVersion = async (): Promise<AppVersionResponse> => {
-  const response: AppVersionResponse = await httpAppVersion.get<any, AppVersion>({}, (version) => ({
+  const params = { timestamp: Date.now().toString() };
+  const response: AppVersionResponse = await httpAppVersion.get<any, AppVersion>({ params }, (version) => ({
     version: version ?? '',
   }));
 
