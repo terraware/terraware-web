@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { GetSeedBankV1 } from 'src/services/ReportService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
 import { DatePicker, Textfield } from '@terraware/web-components';
@@ -7,6 +6,7 @@ import strings from 'src/strings';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useDebounce from 'src/utils/useDebounce';
 import { makeStyles } from '@mui/styles';
+import { ReportSeedBank } from 'src/types/Report';
 
 const DEBOUNCE_TIME_MS = 500;
 
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export type SeedbankSectionProps = {
   editable: boolean;
-  seedbank: GetSeedBankV1;
+  seedbank: ReportSeedBank;
   onUpdateSeedbank: (seedbankField: string, value: any) => void;
   onUpdateSeedbankWorkers: (workersField: string, value: any) => void;
 };
@@ -53,58 +53,37 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
   return (
     <>
       <Grid item xs={smallItemGridWidth()}>
-        {editable && seedbank.buildStartedDateEditable ? (
-          <DatePicker
-            id={`${seedbank.id}-seedbank-buildStartDate`}
-            label={strings.REPORT_SEEDBANK_BUILD_START_DATE}
-            value={seedbank.buildStartedDate ?? ''}
-            onChange={(value) => onUpdateSeedbank('buildStartedDate', value)}
-            aria-label={`Build Start Date for Seedbank ${seedbank.name}`}
-          />
-        ) : (
-          <OverviewItemCard
-            isEditable={false}
-            title={strings.REPORT_SEEDBANK_BUILD_START_DATE}
-            contents={seedbank.buildStartedDate ?? ''}
-            className={classes.infoCardStyle}
-          />
-        )}
+        <InfoField
+          id={`${seedbank.id}-seedbank-buildStartDate`}
+          label={strings.REPORT_SEEDBANK_BUILD_START_DATE}
+          editable={editable && seedbank.buildStartedDateEditable}
+          value={seedbank.buildStartedDate ?? ''}
+          onChange={(value) => onUpdateSeedbank('buildStartedDate', value)}
+          className={classes.infoCardStyle}
+          type='date'
+        />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
-        {editable && seedbank.buildCompletedDateEditable ? (
-          <DatePicker
-            id={`${seedbank.id}-seedbank-buildCompletedDate`}
-            label={strings.REPORT_SEEDBANK_BUILD_COMPLETION_DATE}
-            value={seedbank.buildCompletedDate ?? ''}
-            onChange={(value) => onUpdateSeedbank('buildCompletedDate', value)}
-            aria-label={`Build Completed Date for Seedbank ${seedbank.name}`}
-          />
-        ) : (
-          <OverviewItemCard
-            isEditable={false}
-            title={strings.REPORT_SEEDBANK_BUILD_COMPLETION_DATE}
-            contents={seedbank.buildCompletedDate ?? ''}
-            className={classes.infoCardStyle}
-          />
-        )}
+        <InfoField
+          id={`${seedbank.id}-seedbank-buildCompletedDate`}
+          label={strings.REPORT_SEEDBANK_BUILD_COMPLETION_DATE}
+          editable={editable && seedbank.buildCompletedDateEditable}
+          value={seedbank.buildCompletedDate ?? ''}
+          onChange={(value) => onUpdateSeedbank('buildCompletedDate', value)}
+          className={classes.infoCardStyle}
+          type='date'
+        />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
-        {editable && seedbank.operationStartedDateEditable ? (
-          <DatePicker
-            id={`${seedbank.id}-seedbank-operationStartDate`}
-            label={strings.REPORT_SEEDBANK_OPERATION_START_DATE}
-            value={seedbank.operationStartedDate ?? ''}
-            onChange={(value) => onUpdateSeedbank('operationStartedDate', value)}
-            aria-label={`Operation Start Date for Seedbank ${seedbank.name}`}
-          />
-        ) : (
-          <OverviewItemCard
-            isEditable={false}
-            title={strings.REPORT_SEEDBANK_OPERATION_START_DATE}
-            contents={seedbank.operationStartedDate ?? ''}
-            className={classes.infoCardStyle}
-          />
-        )}
+        <InfoField
+          id={`${seedbank.id}-seedbank-operationStartDate`}
+          label={strings.REPORT_SEEDBANK_OPERATION_START_DATE}
+          editable={editable && seedbank.buildCompletedDateEditable}
+          value={seedbank.operationStartedDate ?? ''}
+          onChange={(value) => onUpdateSeedbank('operationStartedDate', value)}
+          className={classes.infoCardStyle}
+          type='date'
+        />
       </Grid>
       <Grid item xs={12}>
         <OverviewItemCard
@@ -115,61 +94,37 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
-        {editable ? (
-          <Textfield
-            label={strings.WORKERS_PAID_ENGAGED}
-            id={`${seedbank.id}-workers-paid-engaged`}
-            type='number'
-            value={workersPaidEngaged}
-            readonly={!editable}
-            onChange={(value) => setWorkersPaidEngaged(value as number)}
-          />
-        ) : (
-          <OverviewItemCard
-            isEditable={false}
-            title={strings.WORKERS_PAID_ENGAGED}
-            contents={seedbank.workers.paidWorkers?.toString() ?? '0'}
-            className={classes.infoCardStyle}
-          />
-        )}
+        <InfoField
+          id={`${seedbank.id}-workers-paid-engaged`}
+          label={strings.WORKERS_PAID_ENGAGED}
+          editable={editable}
+          value={editable ? workersPaidEngaged : seedbank.workers.paidWorkers?.toString() ?? '0'}
+          onChange={(value) => setWorkersPaidEngaged(value as number)}
+          className={classes.infoCardStyle}
+          type='text'
+        />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
-        {editable ? (
-          <Textfield
-            label={strings.WORKERS_PAID_FEMALE}
-            id={`${seedbank.id}-workers-paid-female`}
-            type='number'
-            value={workersPaidFemale}
-            readonly={!editable}
-            onChange={(value) => setWorkersPaidFemale(value as number)}
-          />
-        ) : (
-          <OverviewItemCard
-            isEditable={false}
-            title={strings.WORKERS_PAID_FEMALE}
-            contents={seedbank.workers.femalePaidWorkers?.toString() ?? '0'}
-            className={classes.infoCardStyle}
-          />
-        )}
+        <InfoField
+          id={`${seedbank.id}-workers-paid-female`}
+          label={strings.WORKERS_PAID_FEMALE}
+          editable={editable}
+          value={editable ? workersPaidFemale : seedbank.workers.femalePaidWorkers?.toString() ?? '0'}
+          onChange={(value) => setWorkersPaidFemale(value as number)}
+          className={classes.infoCardStyle}
+          type='text'
+        />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
-        {editable ? (
-          <Textfield
-            label={strings.WORKERS_VOLUNTEERS}
-            id={`${seedbank.id}-workers-volunteer`}
-            type='number'
-            value={workersVolunteer}
-            readonly={!editable}
-            onChange={(value) => setWorkersVolunteer(value as number)}
-          />
-        ) : (
-          <OverviewItemCard
-            isEditable={false}
-            title={strings.WORKERS_VOLUNTEERS}
-            contents={seedbank.workers.volunteers?.toString() ?? '0'}
-            className={classes.infoCardStyle}
-          />
-        )}
+        <InfoField
+          id={`${seedbank.id}-workers-volunteer`}
+          label={strings.WORKERS_VOLUNTEERS}
+          editable={editable}
+          value={editable ? workersVolunteer : seedbank.workers.volunteers?.toString() ?? '0'}
+          onChange={(value) => setWorkersVolunteer(value as number)}
+          className={classes.infoCardStyle}
+          type='text'
+        />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <Textfield
@@ -180,10 +135,40 @@ export default function SeedbankSection(props: SeedbankSectionProps): JSX.Elemen
           value={seedbankNotes}
           onChange={(value) => setSeedbankNotes(value as string)}
         />
-        <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
+        <Typography
+          color={theme.palette.TwClrTxtSecondary}
+          fontSize='14px'
+          fontWeight={400}
+          marginTop={theme.spacing(0.5)}
+        >
           {strings.NOTE_ANY_ISSUES}
         </Typography>
       </Grid>
     </>
+  );
+}
+
+type InfoFieldProps = {
+  id: string;
+  label: string;
+  editable: boolean;
+  value: string | number;
+  onChange: (value: any) => void;
+  className: string;
+  type: 'text' | 'date';
+};
+
+function InfoField(props: InfoFieldProps): JSX.Element {
+  const { id, label, editable, value, onChange, className, type } = props;
+  return editable ? (
+    type === 'text' ? (
+      <Textfield label={label} id={id} type='number' value={value} readonly={!editable} onChange={onChange} />
+    ) : type === 'date' ? (
+      <DatePicker id={id} label={label} value={value as string} onChange={onChange} aria-label='date-picker' />
+    ) : (
+      <></>
+    )
+  ) : (
+    <OverviewItemCard isEditable={false} title={label} contents={value.toString() ?? '0'} className={className} />
   );
 }

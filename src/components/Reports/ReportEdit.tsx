@@ -4,7 +4,7 @@ import PageForm from 'src/components/common/PageForm';
 import strings from 'src/strings';
 import ReportForm from 'src/components/Reports/ReportForm';
 import { Box, Typography, useTheme } from '@mui/material';
-import ReportService, { GetSeedBankV1 } from 'src/services/ReportService';
+import ReportService from 'src/services/ReportService';
 import { Report } from 'src/types/Report';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -16,7 +16,6 @@ import { useUser } from 'src/providers';
 import produce from 'immer';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Organization } from 'src/types/Organization';
-import { Facility } from 'src/types/Facility';
 import CannotEditReportDialog from './InvalidUserModal';
 
 export type ReportEditProps = {
@@ -235,9 +234,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 editable={true}
                 draftReport={draftReport}
                 onUpdateReport={updateReport}
-                allSeedbanks={getAllSeedBanks(organization)
-                  .filter((f) => !!f)
-                  .map((f) => seedbankFromFacility(f!, report))}
+                allSeedbanks={getAllSeedBanks(organization).map((f) => ReportService.seedbankFromFacility(f, report))}
                 onUpdateSeedbank={updateSeedbank}
                 onUpdateSeedbankWorkers={updateSeedbankWorkers}
               />
@@ -247,20 +244,3 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     </TfMain>
   );
 }
-
-const seedbankFromFacility = (facility: Facility, originalReport: Report): GetSeedBankV1 => {
-  const existingSeedbank = originalReport.seedBanks?.find((sb) => sb.id === facility.id);
-  if (existingSeedbank) {
-    return existingSeedbank;
-  }
-
-  return {
-    id: facility.id,
-    name: facility.name,
-    buildCompletedDateEditable: true,
-    buildStartedDateEditable: true,
-    operationStartedDateEditable: true,
-    totalSeedsStored: 0,
-    workers: {},
-  };
-};

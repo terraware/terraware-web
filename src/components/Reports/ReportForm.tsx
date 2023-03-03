@@ -6,9 +6,9 @@ import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useDebounce from 'src/utils/useDebounce';
-import { GetSeedBankV1 } from 'src/services/ReportService';
+import { ReportSeedBank } from 'src/types/Report';
 import { makeStyles } from '@mui/styles';
-import SeedbankSection from 'src/components/Reports/SeedbankSection';
+import SeedbankSection from './SeedbankSection';
 
 const DEBOUNCE_TIME_MS = 500;
 
@@ -28,7 +28,7 @@ export type ReportFormProps = {
   draftReport: Report;
   onChange?: (report: Report) => void;
   onUpdateReport?: (field: string, value: any) => void;
-  allSeedbanks?: GetSeedBankV1[];
+  allSeedbanks?: ReportSeedBank[];
   onUpdateSeedbank?: (seedbankIndex: number, seedbankField: string, value: any) => void;
   onUpdateSeedbankWorkers?: (seedbankIndex: number, workersField: string, value: any) => void;
 };
@@ -53,14 +53,14 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     }
   });
 
-  const handleAddRemoveSeedbank = (value: boolean, seedbank: GetSeedBankV1) => {
+  const handleAddRemoveSeedbank = (add: boolean, seedbank: ReportSeedBank) => {
     const newSeedbanks = structuredClone(draftReport.seedBanks ?? []);
-    if (value) {
+    if (add) {
       // add the seedbank
       newSeedbanks.push(seedbank);
     } else {
       // remove the seedbank
-      const index = newSeedbanks.findIndex((sb: GetSeedBankV1) => sb.id === seedbank.id);
+      const index = newSeedbanks.findIndex((sb: ReportSeedBank) => sb.id === seedbank.id);
       newSeedbanks.splice(index, 1);
     }
     // call update
@@ -140,7 +140,12 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           value={projectNotes}
           onChange={(value) => setProjectNotes(value as string)}
         />
-        <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
+        <Typography
+          color={theme.palette.TwClrTxtSecondary}
+          fontSize='14px'
+          fontWeight={400}
+          marginTop={theme.spacing(0.5)}
+        >
           {strings.NOTE_ANY_ISSUES}
         </Typography>
       </Grid>
