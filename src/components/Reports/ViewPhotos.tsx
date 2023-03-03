@@ -36,12 +36,17 @@ export default function ViewPhotos({ reportId }: PhotosSectionProps): JSX.Elemen
     getPhotos();
   }, [reportId, snackbar]);
 
+  const closeHandler = () => {
+    setPhotosModalOpened(false);
+    setSelectedSlide(0);
+  };
+
   return (
     <>
       <ViewPhotosModal
         photosUrls={photoUrls}
         open={photosModalOpened}
-        onClose={() => setPhotosModalOpened(false)}
+        onClose={closeHandler}
         selectedSlide={selectedSlide}
       />
       <Box display='flex' flexWrap='wrap'>

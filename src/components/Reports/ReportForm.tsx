@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Report } from 'src/types/Report';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useDebounce from 'src/utils/useDebounce';
-import UploadPhotos from './UploadPhotos';
 import ViewPhotos from './ViewPhotos';
+import SelectPhotos from '../common/SelectPhotos';
 
 const DEBOUNCE_TIME_MS = 500;
 
@@ -101,7 +101,11 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           </Typography>
         </Grid>
         <ViewPhotos reportId={report.id} />
-        {editable && onPhotosChanged && <UploadPhotos onPhotosChanged={onPhotosChanged} />}
+        {editable && onPhotosChanged && (
+          <Container maxWidth={false}>
+            <SelectPhotos onPhotosChanged={onPhotosChanged} multipleSelection={true} />
+          </Container>
+        )}
       </Grid>
     </Grid>
   );
