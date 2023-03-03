@@ -17,6 +17,7 @@ type OverviewItemCardProps = {
   title: string;
   titleInfoTooltip?: React.ReactNode;
   contents: JSX.Element | string | null;
+  className?: string;
 };
 
 export default function OverviewItemCard({
@@ -26,6 +27,7 @@ export default function OverviewItemCard({
   title,
   titleInfoTooltip,
   contents,
+  className,
 }: OverviewItemCardProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -33,6 +35,7 @@ export default function OverviewItemCard({
 
   return (
     <Box
+      className={className}
       sx={{
         alignItems: 'flex-start',
         backgroundColor: `${theme.palette.TwClrBg}`,

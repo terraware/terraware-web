@@ -14,9 +14,15 @@ import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
 import { useUser } from 'src/providers';
 import produce from 'immer';
+import { getAllSeedBanks } from 'src/utils/organization';
+import { Organization } from 'src/types/Organization';
 import CannotEditReportDialog from './InvalidUserModal';
 
-export default function ReportEdit(): JSX.Element {
+export type ReportEditProps = {
+  organization: Organization;
+};
+
+export default function ReportEdit({ organization }: ReportEditProps): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
   const reportIdInt = parseInt(reportId, 10);
   const { user } = useUser();
@@ -27,14 +33,16 @@ export default function ReportEdit(): JSX.Element {
 
   const snackbar = useSnackbar();
 
-  const [report, setReport] = useState<Report>();
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
 
+  const [report, setReport] = useState<Report>();
+  const [draftReport, setDraftReport] = useState<Report>();
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
       if (result.requestSucceeded && result.report) {
         setReport(result.report);
+        setDraftReport(structuredClone(result.report));
       } else {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
       }
@@ -68,8 +76,8 @@ export default function ReportEdit(): JSX.Element {
 
   const gotoReportView = async (saveChanges: boolean) => {
     let saveResult;
-    if (saveChanges && report) {
-      saveResult = await ReportService.updateReport(report);
+    if (saveChanges && draftReport) {
+      saveResult = await ReportService.updateReport(draftReport);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       }
@@ -89,8 +97,8 @@ export default function ReportEdit(): JSX.Element {
   };
 
   const handleSaveAndNext = async () => {
-    if (report) {
-      const saveResult = await ReportService.updateReport(report);
+    if (draftReport) {
+      const saveResult = await ReportService.updateReport(draftReport);
       setShowAnnual(true);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
@@ -99,8 +107,8 @@ export default function ReportEdit(): JSX.Element {
   };
 
   const handleBack = async () => {
-    if (report) {
-      const saveResult = await ReportService.updateReport(report);
+    if (draftReport) {
+      const saveResult = await ReportService.updateReport(draftReport);
       setShowAnnual(false);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
@@ -109,8 +117,8 @@ export default function ReportEdit(): JSX.Element {
   };
 
   const submitReport = async () => {
-    if (report) {
-      const saveResult = await ReportService.updateReport(report);
+    if (draftReport) {
+      const saveResult = await ReportService.updateReport(draftReport);
       if (saveResult.requestSucceeded) {
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded) {
@@ -143,12 +151,16 @@ export default function ReportEdit(): JSX.Element {
     buttonType: 'passive',
   });
 
+  const redirectToReportView = () => {
+    history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId));
+  };
+
   /**
    * Report update functions
    */
   const updateReport = (field: string, value: any) => {
     if (report) {
-      setReport(
+      setDraftReport(
         produce((draft) => {
           // @ts-ignore
           draft[field] = value;
@@ -157,8 +169,26 @@ export default function ReportEdit(): JSX.Element {
     }
   };
 
-  const redirectToReportView = () => {
-    history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId));
+  const updateSeedbank = (seedbankIndex: number, seedbankField: string, value: any) => {
+    if (report && report.seedBanks) {
+      setDraftReport(
+        produce((draft) => {
+          // @ts-ignore
+          draft.seedBanks[seedbankIndex][seedbankField] = value;
+        })
+      );
+    }
+  };
+
+  const updateSeedbankWorkers = (seedbankIndex: number, workersField: string, value: any) => {
+    if (report && report.seedBanks) {
+      setDraftReport(
+        produce((draft) => {
+          // @ts-ignore
+          draft.seedBanks[seedbankIndex].workers[workersField] = value;
+        })
+      );
+    }
   };
 
   /** end of update functions */
@@ -196,10 +226,18 @@ export default function ReportEdit(): JSX.Element {
           additionalRightButtons={rightButtons}
         >
           {report &&
+            draftReport &&
             (showAnnual ? (
               <ReportFormAnnual editable={true} report={report} />
             ) : (
-              <ReportForm editable={true} report={report} onUpdateReport={updateReport} />
+              <ReportForm
+                editable={true}
+                draftReport={draftReport}
+                onUpdateReport={updateReport}
+                allSeedbanks={getAllSeedBanks(organization).map((f) => ReportService.seedbankFromFacility(f, report))}
+                onUpdateSeedbank={updateSeedbank}
+                onUpdateSeedbankWorkers={updateSeedbankWorkers}
+              />
             ))}
         </PageForm>
       )}
