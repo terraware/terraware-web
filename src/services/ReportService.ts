@@ -17,7 +17,7 @@ const SUBMIT_REPORT_ENDPOINT = '/api/v1/reports/{id}/submit';
 const UNLOCK_REPORT_ENDPOINT = '/api/v1/reports/{id}/unlock';
 const UPLOAD_REPORT_FILES_ENDPOINT = '/api/v1/reports/{reportId}/files';
 const UPLOAD_REPORT_PHOTO_ENDPOINT = '/api/v1/reports/{reportId}/photos';
-const REPORT_PHOTO_ENDPOINT = '/api/v1/reports/{reportId}/photos/{photoId}';
+export const REPORT_PHOTO_ENDPOINT = '/api/v1/reports/{reportId}/photos/{photoId}';
 
 type ReportsResponsePayload = paths[typeof REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type ReportResponsePayload = paths[typeof REPORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -50,6 +50,11 @@ export type ReportPhotos = ReportPhoto[];
 /**
  * exported types
  */
+
+type PhotoId = {
+  photoId: number | null;
+};
+
 export type ReportsData = {
   reports?: Reports;
 };
@@ -287,8 +292,21 @@ const submitReport = async (id: number): Promise<Response> => {
 /**
  * upload report photo
  */
-const uploadReportPhoto = async (file: string): Promise<UploadReportPhotoResponse> => {
-  const response: UploadReportPhotoResponse = await httpUploadReportPhoto.post({ entity: { file } });
+const uploadReportPhoto = async (reportId: number, file: File): Promise<UploadReportPhotoResponse> => {
+  const entity = new FormData();
+  entity.append('file', file);
+
+  const headers = {
+    'content-type': 'multipart/form-data',
+  };
+
+  const response: UploadReportPhotoResponse = await httpUploadReportPhoto.post({
+    entity,
+    headers,
+    urlReplacements: {
+      '{reportId}': reportId.toString(),
+    },
+  });
 
   if (response.requestSucceeded) {
     const data: UploadReportPhotoResponsePayload = response.data;
@@ -296,6 +314,29 @@ const uploadReportPhoto = async (file: string): Promise<UploadReportPhotoRespons
   }
 
   return response;
+};
+
+/**
+ * Upload multiple photos for a report
+ */
+const uploadReportPhotos = async (reportId: number, photos: File[]): Promise<((Response & PhotoId) | string)[]> => {
+  const uploadPhotoPromises = photos.map((photo) => uploadReportPhoto(reportId, photo));
+  try {
+    const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
+    return promiseResponses.map((response) => {
+      if (response.status === 'rejected') {
+        // tslint:disable-next-line: no-console
+        console.error(response.reason);
+        return response.reason;
+      } else {
+        return response.value as Response & PhotoId;
+      }
+    });
+  } catch (e) {
+    // swallow error
+  }
+
+  return [];
 };
 
 /**
@@ -316,7 +357,7 @@ const getReportPhoto = async (reportId: number, photoId: number): Promise<Report
 };
 
 /**
- * Updatea report photo
+ * Update a report photo
  */
 const updateReportPhoto = async (reportId: number, photoId: number, caption: string): Promise<Response> => {
   return await httpReportPhoto.put({
@@ -357,6 +398,7 @@ const ReportService = {
   getReportPhotos,
   submitReport,
   uploadReportPhoto,
+  uploadReportPhotos,
   getReportPhoto,
   updateReportPhoto,
   deleteReportPhoto,

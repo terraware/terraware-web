@@ -51,8 +51,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type SelectPhotosProps = {
-  title: string;
-  description: string | string[];
+  title?: string;
+  description?: string | string[];
   onPhotosChanged: (photos: File[]) => void;
   multipleSelection?: boolean;
   error?: ErrorType;

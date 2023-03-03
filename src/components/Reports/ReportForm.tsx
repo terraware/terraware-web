@@ -6,6 +6,8 @@ import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useDebounce from 'src/utils/useDebounce';
+import UploadPhotos from './UploadPhotos';
+import ViewPhotos from './ViewPhotos';
 
 const DEBOUNCE_TIME_MS = 500;
 
@@ -14,10 +16,11 @@ export type ReportFormProps = {
   report: Report;
   onChange?: (report: Report) => void;
   onUpdateReport?: (field: string, value: any) => void;
+  onPhotosChanged?: (photos: File[]) => void;
 };
 
 export default function ReportForm(props: ReportFormProps): JSX.Element {
-  const { editable, report, onUpdateReport } = props;
+  const { editable, report, onUpdateReport, onPhotosChanged } = props;
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
@@ -92,6 +95,13 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
           {strings.PROJECT_NOTES_DESCRIPTION}
         </Typography>
+        <Grid item xs={12}>
+          <Typography fontSize='20px' fontWeight={600} marginTop={4}>
+            {strings.PROJECT_PHOTOS}
+          </Typography>
+        </Grid>
+        <ViewPhotos reportId={report.id} />
+        {editable && onPhotosChanged && <UploadPhotos onPhotosChanged={onPhotosChanged} />}
       </Grid>
     </Grid>
   );

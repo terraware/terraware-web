@@ -30,6 +30,8 @@ export default function ReportEdit(): JSX.Element {
   const [report, setReport] = useState<Report>();
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
 
+  const [photos, setPhotos] = useState<File[]>([]);
+
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
@@ -112,6 +114,7 @@ export default function ReportEdit(): JSX.Element {
     if (report) {
       const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
+        await ReportService.uploadReportPhotos(report.id, photos);
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded) {
           await ReportService.unlockReport(reportIdInt);
@@ -123,6 +126,10 @@ export default function ReportEdit(): JSX.Element {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       }
     }
+  };
+
+  const onPhotosChanged = (photosList: File[]) => {
+    setPhotos(photosList);
   };
 
   const rightButtons: FormButton[] = [];
@@ -199,7 +206,12 @@ export default function ReportEdit(): JSX.Element {
             (showAnnual ? (
               <ReportFormAnnual editable={true} report={report} />
             ) : (
-              <ReportForm editable={true} report={report} onUpdateReport={updateReport} />
+              <ReportForm
+                editable={true}
+                report={report}
+                onUpdateReport={updateReport}
+                onPhotosChanged={onPhotosChanged}
+              />
             ))}
         </PageForm>
       )}
