@@ -50,7 +50,7 @@ const setHttpServiceMocks = (mocks: any) => {
   httpServiceMocks.mockedImpls = {
     get: get as Get,
     put: put as Put,
-    post: put as Post,
+    post: post as Post,
     delete: del as Delete,
   };
 };
