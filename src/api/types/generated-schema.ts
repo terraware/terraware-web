@@ -1221,6 +1221,7 @@ export interface components {
       /** Format: date */
       operationStartedDate?: string;
       operationStartedDateEditable: boolean;
+      selected: boolean;
       /** Format: int64 */
       totalPlantsPropagated: number;
       workers: components["schemas"]["WorkersPayloadV1"];
@@ -1261,6 +1262,7 @@ export interface components {
       mortalityRate?: number;
       name: string;
       notes?: string;
+      selected: boolean;
       species: components["schemas"]["GetPlantingSiteSpeciesV1"][];
       /** Format: int32 */
       totalPlantedArea?: number;
@@ -1277,11 +1279,6 @@ export interface components {
       id: number;
       /** Format: int32 */
       year: number;
-      status: "New" | "In Progress" | "Locked" | "Submitted";
-      /** Format: int32 */
-      quarter: number;
-      /** Format: date-time */
-      modifiedTime?: string;
       lockedByName?: string;
       /** Format: int64 */
       lockedByUserId?: number;
@@ -1291,6 +1288,11 @@ export interface components {
       submittedByName?: string;
       /** Format: int64 */
       submittedByUserId?: number;
+      status: "New" | "In Progress" | "Locked" | "Submitted";
+      /** Format: int32 */
+      quarter: number;
+      /** Format: date-time */
+      modifiedTime?: string;
       /** Format: date-time */
       lockedTime?: string;
       /** Format: date-time */
@@ -1344,6 +1346,7 @@ export interface components {
       /** Format: date */
       operationStartedDate?: string;
       operationStartedDateEditable: boolean;
+      selected: boolean;
       /** Format: int64 */
       totalSeedsStored: number;
       workers: components["schemas"]["WorkersPayloadV1"];
@@ -1853,6 +1856,7 @@ export interface components {
       notes?: string;
       /** Format: date */
       operationStartedDate?: string;
+      selected: boolean;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
     PutPlantingSiteSpeciesV1: {
@@ -1869,6 +1873,7 @@ export interface components {
       /** Format: int64 */
       id: number;
       notes?: string;
+      selected: boolean;
       species: components["schemas"]["PutPlantingSiteSpeciesV1"][];
       /** Format: int32 */
       mortalityRate?: number;
@@ -1910,6 +1915,7 @@ export interface components {
       notes?: string;
       /** Format: date */
       operationStartedDate?: string;
+      selected: boolean;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
     ReassignDeliveryRequestPayload: {
@@ -2567,7 +2573,7 @@ export interface components {
     };
     UploadReportFileResponsePayload: {
       /** Format: int64 */
-      fileId: number;
+      id: number;
       status: components["schemas"]["SuccessOrError"];
     };
     UserProfilePayload: {
