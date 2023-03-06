@@ -22,6 +22,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const { editable, location, onUpdateLocation, onUpdateWorkers, locationType } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const classes = useStyles();
 
   const [workersPaidEngaged, setWorkersPaidEngaged] = useState<number>(location.workers?.paidWorkers ?? 0);
   const [workersPaidFemale, setWorkersPaidFemale] = useState<number>(location.workers?.femalePaidWorkers ?? 0);
@@ -94,6 +95,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             isEditable={false}
             title={strings.TOTAL_SEEDS_STORED}
             contents={(location as ReportSeedBank).totalSeedsStored.toString() ?? '0'}
+            className={classes.infoCardStyle}
           />
         </Grid>
       ) : (
@@ -113,6 +115,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               isEditable={false}
               title={strings.TOTAL_NUMBER_OF_PLANTS_PROPAGATED}
               contents={(location as ReportNursery).totalPlantsPropagated.toString() ?? '0'}
+              className={classes.infoCardStyle}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -120,6 +123,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               isEditable={false}
               title={strings.NURSERY_MORTALITY_RATE}
               contents={(location as ReportNursery).mortalityRate.toString() ?? '0'}
+              className={classes.infoCardStyle}
             />
           </Grid>
         </>

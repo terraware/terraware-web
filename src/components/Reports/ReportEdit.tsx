@@ -191,7 +191,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       setReport(
         produce((draft) => {
           // @ts-ignore
-          draft[location][index][seedbankField] = value;
+          draft[location][index][field] = value;
         })
       );
     }
