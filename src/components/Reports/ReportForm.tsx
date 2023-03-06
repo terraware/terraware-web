@@ -64,19 +64,9 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     }
   });
 
-  const handleAddRemoveSeedbank = (add: boolean, seedbank: ReportSeedBank) => {
-    const newSeedbanks = structuredClone(draftReport.seedBanks ?? []);
-    if (add) {
-      // add the seedbank
-      newSeedbanks.push(seedbank);
-    } else {
-      // remove the seedbank
-      const index = newSeedbanks.findIndex((sb: ReportSeedBank) => sb.id === seedbank.id);
-      newSeedbanks.splice(index, 1);
-    }
-    // call update
-    if (onUpdateReport) {
-      onUpdateReport('seedBanks', newSeedbanks);
+  const handleAddRemoveSeedbank = (selected: boolean, index: number) => {
+    if (onUpdateSeedbank) {
+      onUpdateSeedbank(index, 'selected', selected);
     }
   };
 
@@ -187,11 +177,11 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
                   disabled={!editable}
                   name={seedbank.name}
                   label={seedbank.name}
-                  value={!!draftReport.seedBanks?.find((sb) => sb.id === seedbank.id) ?? false}
-                  onChange={(value) => handleAddRemoveSeedbank(value, seedbank)}
+                  value={seedbank.selected}
+                  onChange={(value) => handleAddRemoveSeedbank(value, index)}
                 />
               </Grid>
-              {(!!draftReport.seedBanks?.find((sb) => sb.id === seedbank.id) ?? false) && (
+              {seedbank.selected && (
                 <SeedbankSection
                   editable={editable}
                   seedbank={seedbank}

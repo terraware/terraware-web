@@ -36,7 +36,9 @@ export default function ReportView(): JSX.Element {
       }
     };
 
-    getReport();
+    if (reportIdInt) {
+      getReport();
+    }
   }, [reportIdInt, snackbar]);
 
   const [showAnnual, setShowAnnual] = useState(false);
@@ -44,7 +46,7 @@ export default function ReportView(): JSX.Element {
   const [confirmEditDialogOpen, setConfirmEditDialogOpen] = useState(false);
 
   const startEdit = () => {
-    if (report?.lockedByName) {
+    if (report?.lockedByUserId) {
       setConfirmEditDialogOpen(true);
     } else {
       confirmEdit();
