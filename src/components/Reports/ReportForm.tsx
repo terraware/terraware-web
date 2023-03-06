@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 import { Report } from 'src/types/Report';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useDebounce from 'src/utils/useDebounce';
+import ViewPhotos from './ViewPhotos';
+import SelectPhotos from '../common/SelectPhotos';
 import { ReportSeedBank } from 'src/types/Report';
 import { makeStyles } from '@mui/styles';
 import SeedbankSection from './SeedbankSection';
@@ -31,10 +33,19 @@ export type ReportFormProps = {
   allSeedbanks?: ReportSeedBank[];
   onUpdateSeedbank?: (seedbankIndex: number, seedbankField: string, value: any) => void;
   onUpdateSeedbankWorkers?: (seedbankIndex: number, workersField: string, value: any) => void;
+  onPhotosChanged?: (photos: File[]) => void;
 };
 
 export default function ReportForm(props: ReportFormProps): JSX.Element {
-  const { editable, draftReport, onUpdateReport, allSeedbanks, onUpdateSeedbank, onUpdateSeedbankWorkers } = props;
+  const {
+    editable,
+    draftReport,
+    onUpdateReport,
+    allSeedbanks,
+    onUpdateSeedbank,
+    onUpdateSeedbankWorkers,
+    onPhotosChanged,
+  } = props;
   const theme = useTheme();
   const classes = useStyles();
   const { isMobile } = useDeviceInfo();
@@ -138,6 +149,17 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         >
           {strings.NOTE_ANY_ISSUES}
         </Typography>
+        <Grid item xs={12}>
+          <Typography fontSize='20px' fontWeight={600} marginTop={4}>
+            {strings.PROJECT_PHOTOS}
+          </Typography>
+        </Grid>
+        <ViewPhotos reportId={draftReport.id} />
+        {editable && onPhotosChanged && (
+          <Container maxWidth={false}>
+            <SelectPhotos onPhotosChanged={onPhotosChanged} multipleSelection={true} />
+          </Container>
+        )}
       </Grid>
       <Grid item xs={12}>
         <Typography fontSize='20px' fontWeight={600}>

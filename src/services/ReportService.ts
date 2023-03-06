@@ -1,6 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { ListReport, Report, ReportFile, ReportPhoto } from 'src/types/Report';
 import HttpService, { Response } from './HttpService';
+import PhotoService from './PhotoService';
 
 /**
  * Report related services
@@ -17,7 +18,7 @@ const SUBMIT_REPORT_ENDPOINT = '/api/v1/reports/{id}/submit';
 const UNLOCK_REPORT_ENDPOINT = '/api/v1/reports/{id}/unlock';
 const UPLOAD_REPORT_FILES_ENDPOINT = '/api/v1/reports/{reportId}/files';
 const UPLOAD_REPORT_PHOTO_ENDPOINT = '/api/v1/reports/{reportId}/photos';
-const REPORT_PHOTO_ENDPOINT = '/api/v1/reports/{reportId}/photos/{photoId}';
+export const REPORT_PHOTO_ENDPOINT = '/api/v1/reports/{reportId}/photos/{photoId}';
 
 type ReportsResponsePayload = paths[typeof REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type ReportResponsePayload = paths[typeof REPORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -28,8 +29,6 @@ type ReportPhotosResponsePayload =
   paths[typeof REPORT_PHOTOS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UploadReportFileResponsePayload =
   paths[typeof UPLOAD_REPORT_FILES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-type UploadReportPhotoResponsePayload =
-  paths[typeof UPLOAD_REPORT_PHOTO_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 type ReportPhotoResponsePayload = paths[typeof REPORT_PHOTO_ENDPOINT]['get']['responses'][200]['content'];
 
 type UpdateReportRequestPayload = paths[typeof REPORT_ENDPOINT]['put']['requestBody']['content']['application/json'];
@@ -51,6 +50,11 @@ export type ReportPhotos = ReportPhoto[];
 /**
  * exported types
  */
+
+type PhotoId = {
+  photoId: number | null;
+};
+
 export type ReportsData = {
   reports?: Reports;
 };
@@ -100,7 +104,6 @@ const httpReportPhotos = HttpService.root(REPORT_PHOTOS_ENDPOINT);
 const httpSubmitReport = HttpService.root(SUBMIT_REPORT_ENDPOINT);
 const httpUnlockReport = HttpService.root(UNLOCK_REPORT_ENDPOINT);
 const httpUploadReportFile = HttpService.root(UPLOAD_REPORT_FILES_ENDPOINT);
-const httpUploadReportPhoto = HttpService.root(UPLOAD_REPORT_PHOTO_ENDPOINT);
 const httpReportPhoto = HttpService.root(REPORT_PHOTO_ENDPOINT);
 
 /**
@@ -286,17 +289,11 @@ const submitReport = async (id: number): Promise<Response> => {
 };
 
 /**
- * upload report photo
+ * Upload multiple photos for a report
  */
-const uploadReportPhoto = async (file: string): Promise<UploadReportPhotoResponse> => {
-  const response: UploadReportPhotoResponse = await httpUploadReportPhoto.post({ entity: { file } });
-
-  if (response.requestSucceeded) {
-    const data: UploadReportPhotoResponsePayload = response.data;
-    response.fileId = data?.id;
-  }
-
-  return response;
+const uploadReportPhotos = async (reportId: number, photos: File[]): Promise<((Response & PhotoId) | string)[]> => {
+  const url = UPLOAD_REPORT_PHOTO_ENDPOINT.replace('{reportId}', reportId.toString());
+  return PhotoService.uploadPhotos(url, photos);
 };
 
 /**
@@ -317,7 +314,7 @@ const getReportPhoto = async (reportId: number, photoId: number): Promise<Report
 };
 
 /**
- * Updatea report photo
+ * Update a report photo
  */
 const updateReportPhoto = async (reportId: number, photoId: number, caption: string): Promise<Response> => {
   return await httpReportPhoto.put({
@@ -357,7 +354,7 @@ const ReportService = {
   unlockReport,
   getReportPhotos,
   submitReport,
-  uploadReportPhoto,
+  uploadReportPhotos,
   getReportPhoto,
   updateReportPhoto,
   deleteReportPhoto,

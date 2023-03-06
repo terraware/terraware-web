@@ -34,6 +34,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
 
+  const [photos, setPhotos] = useState<File[]>([]);
+
   const [report, setReport] = useState<Report>();
   useEffect(() => {
     const getReport = async () => {
@@ -130,6 +132,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     if (report) {
       const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
+        await ReportService.uploadReportPhotos(reportIdInt, photos);
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded) {
           await ReportService.unlockReport(reportIdInt);
@@ -141,6 +144,10 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       }
     }
+  };
+
+  const onPhotosChanged = (photosList: File[]) => {
+    setPhotos(photosList);
   };
 
   const rightButtons: FormButton[] = [];
@@ -246,6 +253,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 allSeedbanks={report.seedBanks ?? []}
                 onUpdateSeedbank={updateSeedbank}
                 onUpdateSeedbankWorkers={updateSeedbankWorkers}
+                onPhotosChanged={onPhotosChanged}
               />
             ))}
         </PageForm>

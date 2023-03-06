@@ -1279,15 +1279,15 @@ export interface components {
       id: number;
       /** Format: int32 */
       year: number;
-      status: "New" | "In Progress" | "Locked" | "Submitted";
       /** Format: int32 */
       quarter: number;
-      /** Format: date-time */
-      modifiedTime?: string;
+      status: "New" | "In Progress" | "Locked" | "Submitted";
       /** Format: date-time */
       lockedTime?: string;
       /** Format: date-time */
       submittedTime?: string;
+      /** Format: date-time */
+      modifiedTime?: string;
       lockedByName?: string;
       /** Format: int64 */
       lockedByUserId?: number;

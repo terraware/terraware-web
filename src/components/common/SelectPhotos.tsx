@@ -51,8 +51,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type SelectPhotosProps = {
-  title: string;
-  description: string | string[];
+  title?: string;
+  description?: string | string[];
   onPhotosChanged: (photos: File[]) => void;
   multipleSelection?: boolean;
   error?: ErrorType;
@@ -137,12 +137,16 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
       }}
     >
       <Box>
-        <Typography fontSize={20} fontWeight={600}>
-          {title}
-        </Typography>
-        <Typography fontSize={14} fontWeight={400} marginTop={theme.spacing(1)} marginBottom={theme.spacing(2)}>
-          {Array.isArray(description) ? description.map((txt, i) => <div key={i}>{txt}</div>) : description}
-        </Typography>
+        {title && (
+          <Typography fontSize={20} fontWeight={600}>
+            {title}
+          </Typography>
+        )}
+        {description && (
+          <Typography fontSize={14} fontWeight={400} marginTop={theme.spacing(1)} marginBottom={theme.spacing(2)}>
+            {Array.isArray(description) ? description.map((txt, i) => <div key={i}>{txt}</div>) : description}
+          </Typography>
+        )}
         {error && <ErrorBox title={error.title} text={error.text} className={classes.error} />}
         {filesData.length > 0 && (
           <Box display='flex' flexDirection='row' flexWrap='wrap' marginBottom={theme.spacing(2)}>
