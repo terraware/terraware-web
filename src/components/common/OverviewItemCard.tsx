@@ -43,7 +43,7 @@ export default function OverviewItemCard({
         display: 'flex',
         height: '100%',
         justifyContent: 'space-between',
-        padding: theme.spacing(3),
+        padding: 0,
         width: '100%',
         '&:hover': {
           backgroundColor: `${isEditable && theme.palette.TwClrBgGhostHover}`,
