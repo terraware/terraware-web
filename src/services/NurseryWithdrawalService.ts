@@ -5,6 +5,7 @@ import { Delivery } from 'src/types/Tracking';
 import SearchService, { SearchRequestPayload } from './SearchService';
 import { SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import strings from 'src/strings';
+import PhotoService from './PhotoService';
 
 /**
  * Nursery withdrawal related services
@@ -58,32 +59,6 @@ const createBatchWithdrawal = async (
     withdrawal: response?.data?.withdrawal ?? null,
   };
 };
-
-/**
- * Upload a photo for a batch withdrawal
- */
-const uploadWithdrawalPhoto = async (withdrawalId: number, photo: File): Promise<Response & PhotoId> => {
-  const entity = new FormData();
-  entity.append('file', photo);
-
-  const headers = {
-    'content-type': 'multipart/form-data',
-  };
-
-  const response: Response = await HttpService.root(WITHDRAWAL_PHOTOS_ENDPOINT).post({
-    entity,
-    headers,
-    urlReplacements: {
-      '{withdrawalId}': withdrawalId.toString(),
-    },
-  });
-
-  return {
-    ...response,
-    photoId: response?.data?.id ?? null,
-  };
-};
-
 /**
  * Upload multiple photos for a batch withdrawal
  */
@@ -91,23 +66,8 @@ const uploadWithdrawalPhotos = async (
   withdrawalId: number,
   photos: File[]
 ): Promise<((Response & PhotoId) | string)[]> => {
-  const uploadPhotoPromises = photos.map((photo) => uploadWithdrawalPhoto(withdrawalId, photo));
-  try {
-    const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
-    return promiseResponses.map((response) => {
-      if (response.status === 'rejected') {
-        // tslint:disable-next-line: no-console
-        console.error(response.reason);
-        return response.reason;
-      } else {
-        return response.value as Response & PhotoId;
-      }
-    });
-  } catch (e) {
-    // swallow error
-  }
-
-  return [];
+  const url = WITHDRAWAL_PHOTOS_ENDPOINT.replace('{withdrawalId}', withdrawalId.toString());
+  return PhotoService.uploadPhotos(url, photos);
 };
 
 /**
@@ -257,7 +217,6 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
  */
 const NurseryWithdrawalService = {
   createBatchWithdrawal,
-  uploadWithdrawalPhoto,
   uploadWithdrawalPhotos,
   listNurseryWithdrawals,
   hasNurseryWithdrawals,
