@@ -182,7 +182,7 @@ const uploadReportFile = async (file: string): Promise<UploadReportFileResponse>
 
   if (response.requestSucceeded) {
     const data: UploadReportFileResponsePayload = response.data;
-    response.fileId = data?.fileId;
+    response.fileId = data?.id;
   }
 
   return response;
@@ -356,6 +356,7 @@ const seedbankFromFacility = (facility: Facility, originalReport: Report): Repor
     operationStartedDateEditable: true,
     totalSeedsStored: 0,
     workers: {},
+    selected: true,
   };
 };
 
