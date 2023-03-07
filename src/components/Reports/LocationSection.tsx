@@ -129,21 +129,23 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     { key: 'mortalityRateInNursery', name: strings.MORTALITY_RATE_IN_NURSERY, type: 'string' },
   ];
 
-  const onEditHandler = (species: PlantingSiteSpecies, fromColumn?: string, value?: any) => {
-    const speciesToEditIndex = (location as ReportPlantingSite).species.findIndex(
-      (iSpecies) => iSpecies.id === species.id
-    );
-    const speciesToEdit = (location as ReportPlantingSite).species[speciesToEditIndex];
+  const onEditPlantingSiteReport = (species: PlantingSiteSpecies, fromColumn?: string, value?: any) => {
+    if (fromColumn && value) {
+      const speciesToEditIndex = (location as ReportPlantingSite).species.findIndex(
+        (iSpecies) => iSpecies.id === species.id
+      );
+      const speciesToEdit = (location as ReportPlantingSite).species[speciesToEditIndex];
 
-    const newSpecies = [...(location as ReportPlantingSite).species];
-    const speciesModified = {
-      ...speciesToEdit,
-      [fromColumn as 'mortalityRateInField' | 'mortalityRateInNursery' | 'totalPlanted']: value,
-    };
+      const newSpecies = [...(location as ReportPlantingSite).species];
+      const speciesModified = {
+        ...speciesToEdit,
+        [fromColumn as 'mortalityRateInField' | 'mortalityRateInNursery' | 'totalPlanted']: value,
+      };
 
-    newSpecies[speciesToEditIndex] = speciesModified;
+      newSpecies[speciesToEditIndex] = speciesModified;
 
-    onUpdateLocation('species', newSpecies);
+      onUpdateLocation('species', newSpecies);
+    }
   };
 
   return (
@@ -297,7 +299,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 rows={plantingSiteSpecies}
                 Renderer={PlantingSiteSpeciesCellRenderer({ editMode: editable })}
                 showPagination={false}
-                onSelect={onEditHandler}
+                onSelect={onEditPlantingSiteReport}
                 controlledOnSelect={true}
                 orderBy={'species'}
                 isClickable={() => false}
