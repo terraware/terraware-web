@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
-import { Report } from 'src/types/Report';
+import { Report, ReportNursery } from 'src/types/Report';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
@@ -10,7 +10,7 @@ import ViewPhotos from './ViewPhotos';
 import SelectPhotos from '../common/SelectPhotos';
 import { ReportSeedBank } from 'src/types/Report';
 import { makeStyles } from '@mui/styles';
-import SeedbankSection from './SeedbankSection';
+import LocationSection from './LocationSection';
 
 const DEBOUNCE_TIME_MS = 500;
 
@@ -31,8 +31,9 @@ export type ReportFormProps = {
   onChange?: (report: Report) => void;
   onUpdateReport?: (field: string, value: any) => void;
   allSeedbanks?: ReportSeedBank[];
-  onUpdateSeedbank?: (seedbankIndex: number, seedbankField: string, value: any) => void;
-  onUpdateSeedbankWorkers?: (seedbankIndex: number, workersField: string, value: any) => void;
+  allNurseries?: ReportNursery[];
+  onUpdateLocation?: (index: number, field: string, value: any, location: 'seedBanks' | 'nurseries') => void;
+  onUpdateWorkers?: (index: number, workersField: string, value: any, location: 'seedBanks' | 'nurseries') => void;
   onPhotosChanged?: (photos: File[]) => void;
 };
 
@@ -42,8 +43,9 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     draftReport,
     onUpdateReport,
     allSeedbanks,
-    onUpdateSeedbank,
-    onUpdateSeedbankWorkers,
+    allNurseries,
+    onUpdateLocation,
+    onUpdateWorkers,
     onPhotosChanged,
   } = props;
   const theme = useTheme();
@@ -64,9 +66,9 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     }
   });
 
-  const handleAddRemoveSeedbank = (selected: boolean, index: number) => {
-    if (onUpdateSeedbank) {
-      onUpdateSeedbank(index, 'selected', selected);
+  const handleAddRemoveLocation = (selected: boolean, index: number, location: 'seedBanks' | 'nurseries') => {
+    if (onUpdateLocation) {
+      onUpdateLocation(index, 'selected', selected, location);
     }
   };
 
@@ -178,17 +180,59 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
                   name={seedbank.name}
                   label={seedbank.name}
                   value={seedbank.selected}
-                  onChange={(value) => handleAddRemoveSeedbank(value, index)}
+                  onChange={(value) => handleAddRemoveLocation(value, index, 'seedBanks')}
                 />
               </Grid>
               {seedbank.selected && (
-                <SeedbankSection
+                <LocationSection
                   editable={editable}
-                  seedbank={seedbank}
-                  onUpdateSeedbank={(field, value) => onUpdateSeedbank && onUpdateSeedbank(index, field, value)}
-                  onUpdateSeedbankWorkers={(field, value) =>
-                    onUpdateSeedbankWorkers && onUpdateSeedbankWorkers(index, field, value)
+                  location={seedbank}
+                  onUpdateLocation={(field, value) =>
+                    onUpdateLocation && onUpdateLocation(index, field, value, 'seedBanks')
                   }
+                  onUpdateWorkers={(field, value) =>
+                    onUpdateWorkers && onUpdateWorkers(index, field, value, 'seedBanks')
+                  }
+                  locationType='seedBank'
+                />
+              )}
+            </Grid>
+          ))
+        ) : (
+          <Typography marginLeft={theme.spacing(3)}>{strings.REPORT_NO_SEEDBANKS}</Typography>
+        )}
+      </Grid>
+      <Grid item xs={12}>
+        <Typography fontSize='20px' fontWeight={600}>
+          {strings.NURSERIES}
+        </Typography>
+      </Grid>
+      <Grid container>
+        {allNurseries ? (
+          allNurseries.map((nursery, index) => (
+            <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
+              {index !== 0 && <Grid item xs={12} className={classes.section} />}
+              <Grid item xs={12}>
+                <Checkbox
+                  id={nursery.id.toString()}
+                  disabled={!editable}
+                  name={nursery.name}
+                  label={nursery.name}
+                  value={nursery.selected}
+                  onChange={(value) => handleAddRemoveLocation(value, index, 'nurseries')}
+                />
+              </Grid>
+              {nursery.selected && (
+                <LocationSection
+                  editable={editable}
+                  location={nursery}
+                  onUpdateLocation={(field, value) =>
+                    onUpdateLocation && onUpdateLocation(index, field, value, 'nurseries')
+                  }
+                  onUpdateWorkers={(field, value) =>
+                    onUpdateWorkers && onUpdateWorkers(index, field, value, 'nurseries')
+                  }
+                  locationType='nursery'
                 />
               )}
             </Grid>

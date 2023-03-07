@@ -89,7 +89,12 @@ export default function ReportView(): JSX.Element {
         (showAnnual ? (
           <ReportFormAnnual report={report} />
         ) : (
-          <ReportForm editable={false} draftReport={report} allSeedbanks={report.seedBanks} />
+          <ReportForm
+            editable={false}
+            draftReport={report}
+            allSeedbanks={report.seedBanks}
+            allNurseries={report.nurseries}
+          />
         ))}
       <Box display='flex' justifyContent='flex-end'>
         {report?.isAnnual &&
