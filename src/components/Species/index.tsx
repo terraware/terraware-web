@@ -701,7 +701,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const getHeaderButtons = () => (
     <>
       <Box marginLeft={1} display='inline'>
-        <Tooltip title='More Options'>
+        <Tooltip title={strings.MORE_OPTIONS}>
           <Button
             id='more-options'
             icon='menuVertical'
@@ -791,7 +791,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               iconRight='cancel'
               onClickRightIcon={clearSearch}
             />
-            <Tooltip title='Filter'>
+            <Tooltip title={strings.FILTER}>
               <Button
                 id='filterSpecies'
                 onClick={(event) => event && handleFilterClick(event)}
@@ -826,7 +826,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
                 onCancel={handleFilterClose}
               />
             </Popover>
-            <Tooltip title='Export'>
+            <Tooltip title={strings.EXPORT}>
               <Button
                 id='downladSpeciesReport'
                 onClick={() => downloadReportHandler()}

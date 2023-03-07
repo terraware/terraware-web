@@ -257,7 +257,7 @@ export default function Filters(props: Props): JSX.Element {
             )}
           </>
         )}
-        <Tooltip title='Filter'>
+        <Tooltip title={strings.FILTER}>
           <Button
             id='filter'
             onClick={(event) => event && handleFilterClick(event)}

@@ -193,7 +193,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const getHeaderButtons = () => (
     <>
       <Box marginLeft={1} display='inline'>
-        <Tooltip title='More Options'>
+        <Tooltip title={strings.MORE_OPTIONS}>
           <Button
             id='more-options'
             icon='menuVertical'

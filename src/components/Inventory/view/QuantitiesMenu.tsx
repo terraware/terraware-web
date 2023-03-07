@@ -65,7 +65,7 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
           </MenuItem>
         </MenuList>
       </Popover>
-      <Tooltip title='More Options'>
+      <Tooltip title={strings.MORE_OPTIONS}>
         <Button
           onClick={(event) => event && openMenuHandler(event)}
           icon='menuVertical'

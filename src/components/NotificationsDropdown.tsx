@@ -273,7 +273,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 
   return (
     <div>
-      <Tooltip title='Notifications'>
+      <Tooltip title={strings.NOTIFICATIONS}>
         <IconButton id='notifications-button' onClick={onIconClick}>
           <Badge id='notifications-badge' color='secondary' className={classes.notificationsBadgeWrapper}>
             <Icon name='notification' size='medium' className={classes.notificationIcon} />
@@ -445,7 +445,7 @@ function NotificationItemMenu(props: NotificationItemMenuProps): JSX.Element {
 
   return (
     <div>
-      <Tooltip title='More Options'>
+      <Tooltip title={strings.MORE_OPTIONS}>
         <Button
           onClick={(event) => event && handleClick(event)}
           icon='menuVertical'

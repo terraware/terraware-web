@@ -241,7 +241,7 @@ export default function NurseryWithdrawals(): JSX.Element {
                 value={searchValue}
                 onChange={(value) => setSearchValue(value as string)}
               />
-              <Tooltip title='Filter'>
+              <Tooltip title={strings.FILTER}>
                 <Button
                   id='filterNurseryWithdrawal'
                   onClick={(event) => event && handleFilterClick(event)}

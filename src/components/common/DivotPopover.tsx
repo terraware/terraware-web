@@ -4,6 +4,7 @@ import Icon from 'src/components/common/icon/Icon';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Button, Tooltip } from '@terraware/web-components';
+import strings from 'src/strings';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -136,7 +137,7 @@ function PopoverHeaderMenu({ menuItems }: PopoverHeaderMenuProps): JSX.Element {
 
   return (
     <div>
-      <Tooltip title='More Options'>
+      <Tooltip title={strings.MORE_OPTIONS}>
         <Button
           onClick={(event) => event && handleClick(event)}
           icon='menuVertical'

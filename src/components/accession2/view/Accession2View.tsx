@@ -342,7 +342,7 @@ export default function Accession2View(): JSX.Element {
   const renderActionMenuButton = () => {
     return (
       <>
-        <Tooltip title='More Options'>
+        <Tooltip title={strings.MORE_OPTIONS}>
           <Button
             className={classes.actionMenuButton}
             onClick={(ev) => ev && setActionMenuAnchorEl(ev.currentTarget)}
