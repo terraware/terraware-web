@@ -10,7 +10,7 @@ import useDebounce from 'src/utils/useDebounce';
 import Icon from 'src/components/common/icon/Icon';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import FilterGroup from 'src/components/common/FilterGroup';
-import { Button, PillList, PillListItem } from '@terraware/web-components';
+import { Button, PillList, PillListItem, Tooltip } from '@terraware/web-components';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -257,13 +257,15 @@ export default function Filters(props: Props): JSX.Element {
             )}
           </>
         )}
-        <Button
-          id='filter'
-          onClick={(event) => event && handleFilterClick(event)}
-          type='passive'
-          priority='ghost'
-          icon='filter'
-        />
+        <Tooltip title='Filter'>
+          <Button
+            id='filter'
+            onClick={(event) => event && handleFilterClick(event)}
+            type='passive'
+            priority='ghost'
+            icon='filter'
+          />
+        </Tooltip>
         <Popover
           id='simple-popover'
           open={Boolean(filterAnchorEl)}

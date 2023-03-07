@@ -6,7 +6,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { makeStyles } from '@mui/styles';
-import { SortOrder } from '@terraware/web-components';
+import { SortOrder, Tooltip } from '@terraware/web-components';
 import { NurseryWithdrawalService } from 'src/services';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import WithdrawalLogRenderer from './WithdrawalLogRenderer';
@@ -241,13 +241,15 @@ export default function NurseryWithdrawals(): JSX.Element {
                 value={searchValue}
                 onChange={(value) => setSearchValue(value as string)}
               />
-              <Button
-                id='filterNurseryWithdrawal'
-                onClick={(event) => event && handleFilterClick(event)}
-                type='passive'
-                priority='ghost'
-                icon='filter'
-              />
+              <Tooltip title='Filter'>
+                <Button
+                  id='filterNurseryWithdrawal'
+                  onClick={(event) => event && handleFilterClick(event)}
+                  type='passive'
+                  priority='ghost'
+                  icon='filter'
+                />
+              </Tooltip>
               <Popover
                 id='simple-popover'
                 open={Boolean(anchorEl)}

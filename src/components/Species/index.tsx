@@ -43,7 +43,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PopoverMenu from '../common/PopoverMenu';
 import { DropdownItem, SortOrder } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { PillList, PillListItem } from '@terraware/web-components';
+import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
 import { isTrue } from 'src/utils/boolean';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { FieldOptionsMap } from 'src/services/NurseryWithdrawalService';
@@ -701,13 +701,15 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const getHeaderButtons = () => (
     <>
       <Box marginLeft={1} display='inline'>
-        <Button
-          id='more-options'
-          icon='menuVertical'
-          onClick={(event) => event && handleClickActionMenuButton(event)}
-          priority='secondary'
-          size='medium'
-        />
+        <Tooltip title='More Options'>
+          <Button
+            id='more-options'
+            icon='menuVertical'
+            onClick={(event) => event && handleClickActionMenuButton(event)}
+            priority='secondary'
+            size='medium'
+          />
+        </Tooltip>
       </Box>
       <PopoverMenu
         sections={[
@@ -789,13 +791,15 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               iconRight='cancel'
               onClickRightIcon={clearSearch}
             />
-            <Button
-              id='filterSpecies'
-              onClick={(event) => event && handleFilterClick(event)}
-              type='passive'
-              priority='ghost'
-              icon='filter'
-            />
+            <Tooltip title='Filter'>
+              <Button
+                id='filterSpecies'
+                onClick={(event) => event && handleFilterClick(event)}
+                type='passive'
+                priority='ghost'
+                icon='filter'
+              />
+            </Tooltip>
             <Popover
               id='simple-popover'
               open={Boolean(filterAnchorEl)}
@@ -822,13 +826,15 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
                 onCancel={handleFilterClose}
               />
             </Popover>
-            <Button
-              id='downladSpeciesReport'
-              onClick={() => downloadReportHandler()}
-              type='passive'
-              priority='ghost'
-              icon='iconExport'
-            />
+            <Tooltip title='Export'>
+              <Button
+                id='downladSpeciesReport'
+                onClick={() => downloadReportHandler()}
+                type='passive'
+                priority='ghost'
+                icon='iconExport'
+              />
+            </Tooltip>
           </Grid>
           <Grid item xs={12} className={classes.searchBar}>
             <PillList data={getFilterPillData()} />

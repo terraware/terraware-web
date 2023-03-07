@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme, Box, Link as LinkMUI, Menu, Tab, Theme, Typography, Grid, MenuItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Icon } from '@terraware/web-components';
+import { Button, Icon, Tooltip } from '@terraware/web-components';
 import { useHistory, useParams } from 'react-router-dom';
 import { Accession } from 'src/types/Accession';
 import { AccessionService, FacilityService } from 'src/services';
@@ -342,13 +342,15 @@ export default function Accession2View(): JSX.Element {
   const renderActionMenuButton = () => {
     return (
       <>
-        <Button
-          className={classes.actionMenuButton}
-          onClick={(ev) => ev && setActionMenuAnchorEl(ev.currentTarget)}
-          icon='menuVertical'
-          priority='secondary'
-          size='small'
-        />
+        <Tooltip title='More Options'>
+          <Button
+            className={classes.actionMenuButton}
+            onClick={(ev) => ev && setActionMenuAnchorEl(ev.currentTarget)}
+            icon='menuVertical'
+            priority='secondary'
+            size='small'
+          />
+        </Tooltip>
         <Menu anchorEl={actionMenuAnchorEl} open={openActionMenu} onClose={() => setActionMenuAnchorEl(null)}>
           <MenuItem
             onClick={() => {
