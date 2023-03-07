@@ -15,7 +15,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from '../../providers/hooks';
-import { Dropdown } from '@terraware/web-components';
+import { Dropdown, IconTooltip } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleSubtitle: {
@@ -250,14 +250,7 @@ export default function PersonView(): JSX.Element {
             </Grid>
           </Grid>
           <Box display='flex' flexDirection='column' marginTop={isDesktop ? theme.spacing(3) : theme.spacing(4)}>
-            <Box>
-              <p className={classes.roleDescription}>{strings.ROLES_INFO}</p>
-              <ul className={classes.rolesList}>
-                <li>{strings.CONTRIBUTOR_INFO}</li>
-                <li>{strings.MANAGER_INFO}</li>
-                <li>{strings.ADMIN_INFO}</li>
-              </ul>
-            </Box>
+
             <Box width={roleSelectSize()} marginTop={theme.spacing(4)}>
               <Dropdown
                 id='role'
@@ -267,6 +260,15 @@ export default function PersonView(): JSX.Element {
                 disabled={newPerson.role === 'Owner'}
                 selectedValue={newPerson.role}
                 fullWidth
+                tooltipTitle={
+                  <Box>
+                    <p className={classes.roleDescription}>{strings.ROLES_INFO}</p>
+                    <ul className={classes.rolesList}>
+                      <li>{strings.CONTRIBUTOR_INFO}</li>
+                      <li>{strings.MANAGER_INFO}</li>
+                      <li>{strings.ADMIN_INFO}</li>
+                    </ul>
+                  </Box>}
               />
             </Box>
           </Box>
