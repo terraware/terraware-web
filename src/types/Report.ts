@@ -11,3 +11,5 @@ export type ReportPhoto = components['schemas']['ListReportPhotosResponseElement
 export type ReportSeedBank = components['schemas']['GetSeedBankV1'];
 
 export type ReportNursery = components['schemas']['GetNurseryV1'];
+
+export type ReportPlantingSite = components['schemas']['GetPlantingSiteV1'];

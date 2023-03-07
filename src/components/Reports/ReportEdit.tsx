@@ -186,7 +186,12 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
-  const updateLocation = (index: number, field: string, value: any, location: 'seedBanks' | 'nurseries') => {
+  const updateLocation = (
+    index: number,
+    field: string,
+    value: any,
+    location: 'seedBanks' | 'nurseries' | 'plantingSites'
+  ) => {
     if (report && report[location]) {
       setReport(
         produce((draft) => {
@@ -197,7 +202,12 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
-  const updateWorkers = (index: number, workersField: string, value: any, location: 'seedBanks' | 'nurseries') => {
+  const updateWorkers = (
+    index: number,
+    workersField: string,
+    value: any,
+    location: 'seedBanks' | 'nurseries' | 'plantingSites'
+  ) => {
     if (report && report[location]) {
       setReport(
         produce((draft) => {
@@ -252,6 +262,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 onUpdateReport={updateReport}
                 allSeedbanks={report.seedBanks ?? []}
                 allNurseries={report.nurseries ?? []}
+                allPlantingSites={report.plantingSites ?? []}
                 onUpdateLocation={updateLocation}
                 onUpdateWorkers={updateWorkers}
                 onPhotosChanged={onPhotosChanged}

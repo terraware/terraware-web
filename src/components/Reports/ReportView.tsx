@@ -94,6 +94,7 @@ export default function ReportView(): JSX.Element {
             draftReport={report}
             allSeedbanks={report.seedBanks}
             allNurseries={report.nurseries}
+            allPlantingSites={report.plantingSites}
           />
         ))}
       <Box display='flex' justifyContent='flex-end'>
