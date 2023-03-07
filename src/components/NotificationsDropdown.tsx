@@ -17,6 +17,7 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Timestamp from './common/Timestamp';
 import useFeatureNotifications from './FeatureNotification';
+import { Button, Tooltip } from '@terraware/web-components';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -272,12 +273,14 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 
   return (
     <div>
-      <IconButton id='notifications-button' onClick={onIconClick}>
-        <Badge id='notifications-badge' color='secondary' className={classes.notificationsBadgeWrapper}>
-          <Icon name='notification' size='medium' className={classes.notificationIcon} />
-          {hasUnseen() && <div className={classes.newNotificationsIndicator} />}
-        </Badge>
-      </IconButton>
+      <Tooltip title={strings.NOTIFICATIONS}>
+        <IconButton id='notifications-button' onClick={onIconClick}>
+          <Badge id='notifications-badge' color='secondary' className={classes.notificationsBadgeWrapper}>
+            <Icon name='notification' size='medium' className={classes.notificationIcon} />
+            {hasUnseen() && <div className={classes.newNotificationsIndicator} />}
+          </Badge>
+        </IconButton>
+      </Tooltip>
       <DivotPopover
         anchorEl={anchorEl}
         onClose={onPopoverClose}
@@ -403,7 +406,6 @@ function NotificationItemMenu(props: NotificationItemMenuProps): JSX.Element {
     markAsRead,
     notification: { localUrl, isRead },
   } = props;
-  const classes = useStyles({});
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const disableEventPropagation = (event: React.MouseEvent<HTMLElement>, allowDefault?: boolean) => {
@@ -443,9 +445,15 @@ function NotificationItemMenu(props: NotificationItemMenuProps): JSX.Element {
 
   return (
     <div>
-      <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
-        <Icon name='menuVertical' className={classes.icon} />
-      </IconButton>
+      <Tooltip title={strings.MORE_OPTIONS}>
+        <Button
+          onClick={(event) => event && handleClick(event)}
+          icon='menuVertical'
+          type='passive'
+          priority='ghost'
+          size='small'
+        />
+      </Tooltip>
       <Popover
         onClick={disableEventPropagation}
         open={Boolean(anchorEl)}

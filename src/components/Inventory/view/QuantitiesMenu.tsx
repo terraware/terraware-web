@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { IconButton, MenuItem, MenuList, Popover, Typography, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
+import { MenuItem, MenuList, Popover, Typography, useTheme } from '@mui/material';
+import { Button, Tooltip } from '@terraware/web-components';
 import strings from 'src/strings';
 import { ModalValuesType } from './BatchesCellRenderer';
 
@@ -65,9 +65,15 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
           </MenuItem>
         </MenuList>
       </Popover>
-      <IconButton onClick={openMenuHandler} size='small'>
-        <Icon name='menuVertical' />
-      </IconButton>
+      <Tooltip title={strings.MORE_OPTIONS}>
+        <Button
+          onClick={(event) => event && openMenuHandler(event)}
+          icon='menuVertical'
+          type='passive'
+          priority='ghost'
+          size='small'
+        />
+      </Tooltip>
     </>
   );
 }

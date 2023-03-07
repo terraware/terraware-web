@@ -19,9 +19,8 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { downloadCsvTemplateHandler } from '../common/ImportModal';
 import NurseryInventoryService, { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
 import ImportInventoryModal from './ImportInventoryModal';
-import { Button } from '@terraware/web-components';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { DropdownItem } from '@terraware/web-components';
+import { Button, DropdownItem, Tooltip } from '@terraware/web-components';
 import PopoverMenu from '../common/PopoverMenu';
 import { useOrganization } from 'src/providers/hooks';
 
@@ -194,13 +193,15 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const getHeaderButtons = () => (
     <>
       <Box marginLeft={1} display='inline'>
-        <Button
-          id='more-options'
-          icon='menuVertical'
-          onClick={(event) => event && handleClickActionMenuButton(event)}
-          priority='secondary'
-          size='medium'
-        />
+        <Tooltip title={strings.MORE_OPTIONS}>
+          <Button
+            id='more-options'
+            icon='menuVertical'
+            onClick={(event) => event && handleClickActionMenuButton(event)}
+            priority='secondary'
+            size='medium'
+          />
+        </Tooltip>
       </Box>
 
       <PopoverMenu

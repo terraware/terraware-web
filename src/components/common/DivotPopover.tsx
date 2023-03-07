@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, IconButton, List, ListItem, ListSubheader, Popover, Theme, Typography } from '@mui/material';
+import { Divider, List, ListItem, ListSubheader, Popover, Theme, Typography } from '@mui/material';
 import Icon from 'src/components/common/icon/Icon';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { Button, Tooltip } from '@terraware/web-components';
+import strings from 'src/strings';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -125,7 +127,6 @@ type PopoverHeaderMenuProps = {
 };
 
 function PopoverHeaderMenu({ menuItems }: PopoverHeaderMenuProps): JSX.Element {
-  const classes = useStyles({});
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -136,9 +137,15 @@ function PopoverHeaderMenu({ menuItems }: PopoverHeaderMenuProps): JSX.Element {
 
   return (
     <div>
-      <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
-        <Icon name='menuVertical' size='medium' className={classes.icon} />
-      </IconButton>
+      <Tooltip title={strings.MORE_OPTIONS}>
+        <Button
+          onClick={(event) => event && handleClick(event)}
+          icon='menuVertical'
+          type='passive'
+          priority='ghost'
+          size='small'
+        />
+      </Tooltip>
       <Popover
         id='simple-popover'
         open={Boolean(anchorEl)}

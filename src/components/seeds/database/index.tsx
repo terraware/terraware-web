@@ -34,7 +34,7 @@ import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportAccessionsModal from './ImportAccessionsModal';
-import { Message } from '@terraware/web-components';
+import { Message, Tooltip } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem } from '@terraware/web-components';
@@ -607,13 +607,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const getHeaderButtons = () => (
     <>
       <Box marginLeft={1} display='inline'>
-        <Button
-          id='more-options'
-          icon='menuVertical'
-          onClick={(event) => event && handleClick(event)}
-          priority='secondary'
-          size='medium'
-        />
+        <Tooltip title={strings.MORE_OPTIONS}>
+          <Button
+            id='more-options'
+            icon='menuVertical'
+            onClick={(event) => event && handleClick(event)}
+            priority='secondary'
+            size='medium'
+          />
+        </Tooltip>
       </Box>
 
       <PopoverMenu
