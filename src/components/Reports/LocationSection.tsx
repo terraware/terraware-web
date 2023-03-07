@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
-import { DatePicker, Textfield } from '@terraware/web-components';
+import { DatePicker, TableColumnType, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useDebounce from 'src/utils/useDebounce';
 import { makeStyles } from '@mui/styles';
 import { ReportNursery, ReportPlantingSite, ReportSeedBank } from 'src/types/Report';
+import PlantingSiteSpeciesCellRenderer from './PlantingSitesSpeciesCellRenderer';
+import Table from '../common/table';
+import { useOrganization } from 'src/providers';
+import { SpeciesService } from 'src/services';
+import { Species } from 'src/types/Species';
+
+type PlantingSiteSpecies = {
+  id: number;
+  name: string;
+  growthForm?: string;
+  mortalityRateInField?: number | undefined;
+  mortalityRateInNursery?: number | undefined;
+  totalPlanted?: number | undefined;
+};
 
 const DEBOUNCE_TIME_MS = 500;
 
@@ -23,6 +37,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
+  const { selectedOrganization } = useOrganization();
 
   const isSeedBank = locationType === 'seedBank';
   const isNursery = locationType === 'nursery';
@@ -57,6 +72,78 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       return strings.ADDITIONAL_NURSERY_NOTES;
     }
     return strings.ADDITIONAL_PLANTING_SITES_NOTES;
+  };
+
+  const [allSpecies, setAllSpecies] = useState<Species[]>();
+  const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
+
+  useEffect(() => {
+    const populateSpecies = async () => {
+      const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
+      if (response.requestSucceeded) {
+        setAllSpecies(response.species);
+      }
+    };
+    if (isPlantingSite) {
+      populateSpecies();
+    }
+  }, [isPlantingSite, selectedOrganization.id, location]);
+
+  useEffect(() => {
+    if (allSpecies && isPlantingSite) {
+      const psSpecies: PlantingSiteSpecies[] = [];
+      (location as ReportPlantingSite).species.forEach((iSpecies) => {
+        const foundSpecies = allSpecies.find((serverSpecies) => serverSpecies.id === iSpecies.id);
+        if (foundSpecies) {
+          psSpecies.push({
+            id: iSpecies.id,
+            name: foundSpecies.scientificName,
+            growthForm: foundSpecies.growthForm,
+            mortalityRateInField: iSpecies.mortalityRateInField,
+            mortalityRateInNursery: iSpecies.mortalityRateInNursery,
+            totalPlanted: iSpecies.totalPlanted,
+          });
+        }
+      });
+      setPlantingSiteSpecies(psSpecies);
+    }
+  }, [allSpecies, isPlantingSite, location]);
+
+  const columns: TableColumnType[] = [
+    {
+      key: 'name',
+      name: strings.SPECIES,
+      type: 'string',
+    },
+    {
+      key: 'growthForm',
+      name: strings.GROWTH_FORM,
+      type: 'string',
+    },
+    {
+      key: 'totalPlanted',
+      name: strings.TOTAL_PLANTED,
+      type: 'string',
+    },
+    { key: 'mortalityRateInField', name: strings.MORTALITY_RATE_IN_FIELD, type: 'string' },
+    { key: 'mortalityRateInNursery', name: strings.MORTALITY_RATE_IN_NURSERY, type: 'string' },
+  ];
+
+  const onEditHandler = (species: PlantingSiteSpecies, fromColumn?: string, value?: any) => {
+    const speciesToEditIndex = (location as ReportPlantingSite).species.findIndex(
+      (iSpecies) => iSpecies.id === species.id
+    );
+    const speciesToEdit = (location as ReportPlantingSite).species[speciesToEditIndex];
+
+    const newSpecies = [...(location as ReportPlantingSite).species];
+    const speciesModified = {
+      ...speciesToEdit,
+      [fromColumn as 'mortalityRateInField' | 'mortalityRateInNursery' | 'totalPlanted']: value,
+    };
+
+    newSpecies[speciesToEditIndex] = speciesModified;
+
+    onUpdateLocation('species', newSpecies);
   };
 
   return (
@@ -169,7 +256,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               type='text'
             />
           </Grid>
-          <Grid item xs={smallItemGridWidth()}></Grid>
+          <Grid item xs={smallItemGridWidth()} />
           <Grid item xs={smallItemGridWidth()}>
             <InfoField
               id={`${location.id}-total-trees-planted`}
@@ -202,6 +289,21 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               type='text'
             />
           </Grid>
+          {plantingSiteSpecies && (
+            <Grid item xs={12} marginBottom={3}>
+              <Table
+                id='species-table'
+                columns={columns}
+                rows={plantingSiteSpecies}
+                Renderer={PlantingSiteSpeciesCellRenderer({ editMode: editable })}
+                showPagination={false}
+                onSelect={onEditHandler}
+                controlledOnSelect={true}
+                orderBy={'species'}
+                isClickable={() => false}
+              />
+            </Grid>
+          )}
         </>
       )}
       <Grid item xs={smallItemGridWidth()}>
