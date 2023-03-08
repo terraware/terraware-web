@@ -89,6 +89,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       saveResult = await ReportService.updateReport(report);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+      } else {
+        await ReportService.uploadReportPhotos(report.id, photos);
       }
     }
 
@@ -114,6 +116,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       setShowAnnual(true);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+      } else {
+        await ReportService.uploadReportPhotos(report.id, photos);
       }
     }
   };
@@ -186,7 +190,12 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
-  const updateLocation = (index: number, field: string, value: any, location: 'seedBanks' | 'nurseries') => {
+  const updateLocation = (
+    index: number,
+    field: string,
+    value: any,
+    location: 'seedBanks' | 'nurseries' | 'plantingSites'
+  ) => {
     if (report && report[location]) {
       setReport(
         produce((draft) => {
@@ -197,7 +206,12 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
-  const updateWorkers = (index: number, workersField: string, value: any, location: 'seedBanks' | 'nurseries') => {
+  const updateWorkers = (
+    index: number,
+    workersField: string,
+    value: any,
+    location: 'seedBanks' | 'nurseries' | 'plantingSites'
+  ) => {
     if (report && report[location]) {
       setReport(
         produce((draft) => {
@@ -284,6 +298,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 onUpdateReport={updateReport}
                 allSeedbanks={report.seedBanks ?? []}
                 allNurseries={report.nurseries ?? []}
+                allPlantingSites={report.plantingSites ?? []}
                 onUpdateLocation={updateLocation}
                 onUpdateWorkers={updateWorkers}
                 onPhotosChanged={onPhotosChanged}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
-import { Report, ReportNursery } from 'src/types/Report';
+import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
@@ -32,8 +32,19 @@ export type ReportFormProps = {
   onUpdateReport?: (field: string, value: any) => void;
   allSeedbanks?: ReportSeedBank[];
   allNurseries?: ReportNursery[];
-  onUpdateLocation?: (index: number, field: string, value: any, location: 'seedBanks' | 'nurseries') => void;
-  onUpdateWorkers?: (index: number, workersField: string, value: any, location: 'seedBanks' | 'nurseries') => void;
+  allPlantingSites?: ReportPlantingSite[];
+  onUpdateLocation?: (
+    index: number,
+    field: string,
+    value: any,
+    location: 'seedBanks' | 'nurseries' | 'plantingSites'
+  ) => void;
+  onUpdateWorkers?: (
+    index: number,
+    workersField: string,
+    value: any,
+    location: 'seedBanks' | 'nurseries' | 'plantingSites'
+  ) => void;
   onPhotosChanged?: (photos: File[]) => void;
 };
 
@@ -44,6 +55,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     onUpdateReport,
     allSeedbanks,
     allNurseries,
+    allPlantingSites,
     onUpdateLocation,
     onUpdateWorkers,
     onPhotosChanged,
@@ -66,7 +78,11 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     }
   });
 
-  const handleAddRemoveLocation = (selected: boolean, index: number, location: 'seedBanks' | 'nurseries') => {
+  const handleAddRemoveLocation = (
+    selected: boolean,
+    index: number,
+    location: 'seedBanks' | 'nurseries' | 'plantingSites'
+  ) => {
     if (onUpdateLocation) {
       onUpdateLocation(index, 'selected', selected, location);
     }
@@ -238,7 +254,47 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             </Grid>
           ))
         ) : (
-          <Typography marginLeft={theme.spacing(3)}>{strings.REPORT_NO_SEEDBANKS}</Typography>
+          <Typography marginLeft={theme.spacing(3)}>{strings.REPORT_NO_NURSERIES}</Typography>
+        )}
+      </Grid>
+
+      <Grid item xs={12}>
+        <Typography fontSize='20px' fontWeight={600}>
+          {strings.PLANTING_SITES}
+        </Typography>
+      </Grid>
+      <Grid container>
+        {allPlantingSites ? (
+          allPlantingSites.map((plantingSite, index) => (
+            <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
+              {index !== 0 && <Grid item xs={12} className={classes.section} />}
+              <Grid item xs={12}>
+                <Checkbox
+                  id={plantingSite.id.toString()}
+                  disabled={!editable}
+                  name={plantingSite.name}
+                  label={plantingSite.name}
+                  value={plantingSite.selected}
+                  onChange={(value) => handleAddRemoveLocation(value, index, 'plantingSites')}
+                />
+              </Grid>
+              {plantingSite.selected && (
+                <LocationSection
+                  editable={editable}
+                  location={plantingSite}
+                  onUpdateLocation={(field, value) =>
+                    onUpdateLocation && onUpdateLocation(index, field, value, 'plantingSites')
+                  }
+                  onUpdateWorkers={(field, value) =>
+                    onUpdateWorkers && onUpdateWorkers(index, field, value, 'plantingSites')
+                  }
+                  locationType='plantingSite'
+                />
+              )}
+            </Grid>
+          ))
+        ) : (
+          <Typography marginLeft={theme.spacing(3)}>{strings.REPORT_NO_PLANTING_SITES}</Typography>
         )}
       </Grid>
     </Grid>
