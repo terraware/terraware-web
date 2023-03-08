@@ -46,6 +46,7 @@ export type ReportFormProps = {
     location: 'seedBanks' | 'nurseries' | 'plantingSites'
   ) => void;
   onPhotosChanged?: (photos: File[]) => void;
+  onPhotoRemove?: (id: number) => void;
 };
 
 export default function ReportForm(props: ReportFormProps): JSX.Element {
@@ -59,6 +60,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     onUpdateLocation,
     onUpdateWorkers,
     onPhotosChanged,
+    onPhotoRemove,
   } = props;
   const theme = useTheme();
   const classes = useStyles();
@@ -172,7 +174,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             {strings.PROJECT_PHOTOS}
           </Typography>
         </Grid>
-        <ViewPhotos reportId={draftReport.id} />
+        <ViewPhotos reportId={draftReport.id} onPhotoRemove={onPhotoRemove} editable={editable} />
         {editable && onPhotosChanged && (
           <Container maxWidth={false}>
             <SelectPhotos onPhotosChanged={onPhotosChanged} multipleSelection={true} />

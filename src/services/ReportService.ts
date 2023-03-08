@@ -327,13 +327,36 @@ const updateReportPhoto = async (reportId: number, photoId: number, caption: str
 };
 
 /**
+ * Delete multiple photos for a report
+ */
+const deleteReportPhotos = async (reportId: number, photosId: number[]): Promise<(Response | string)[]> => {
+  const deletePhotoPromises = photosId.map((photoId) => deleteReportPhoto(reportId, photoId));
+  try {
+    const promiseResponses = await Promise.allSettled(deletePhotoPromises);
+    return promiseResponses.map((response) => {
+      if (response.status === 'rejected') {
+        // tslint:disable-next-line: no-console
+        console.error(response.reason);
+        return response.reason;
+      } else {
+        return response.value as Response;
+      }
+    });
+  } catch (e) {
+    // swallow error
+  }
+
+  return [];
+};
+
+/**
  * delete report file
  */
 const deleteReportPhoto = async (reportId: number, fileId: number): Promise<Response> => {
   return await httpReportPhoto.delete({
     urlReplacements: {
       '{reportId}': reportId.toString(),
-      '{fileId}': fileId.toString(),
+      '{photoId}': fileId.toString(),
     },
   });
 };
@@ -358,6 +381,7 @@ const ReportService = {
   getReportPhoto,
   updateReportPhoto,
   deleteReportPhoto,
+  deleteReportPhotos,
 };
 
 export default ReportService;

@@ -36,6 +36,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const [photos, setPhotos] = useState<File[]>([]);
 
+  const [photosIdToRemove, setPhotosIdToRemove] = useState<number[]>([]);
+
   const [report, setReport] = useState<Report>();
   useEffect(() => {
     const getReport = async () => {
@@ -83,6 +85,13 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const [confirmSubmitDialogOpen, setConfirmSubmitDialogOpen] = useState(false);
 
+  const updatePhotos = async (reportId: number) => {
+    await ReportService.uploadReportPhotos(reportId, photos);
+    if (photosIdToRemove) {
+      await ReportService.deleteReportPhotos(reportId, photosIdToRemove);
+    }
+  };
+
   const gotoReportView = async (saveChanges: boolean) => {
     let saveResult;
     if (saveChanges && report) {
@@ -90,7 +99,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
-        await ReportService.uploadReportPhotos(report.id, photos);
+        updatePhotos(report.id);
       }
     }
 
@@ -117,7 +126,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
-        await ReportService.uploadReportPhotos(report.id, photos);
+        updatePhotos(report.id);
       }
     }
   };
@@ -136,7 +145,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     if (report) {
       const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
-        await ReportService.uploadReportPhotos(reportIdInt, photos);
+        updatePhotos(report.id);
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded) {
           await ReportService.unlockReport(reportIdInt);
@@ -222,6 +231,12 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
+  const onAddPhotoIdToRemove = (id: number) => {
+    const newIds = [...photosIdToRemove];
+    newIds.push(id);
+    setPhotosIdToRemove(newIds);
+  };
+
   /** end of update functions */
 
   return (
@@ -270,6 +285,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 onUpdateLocation={updateLocation}
                 onUpdateWorkers={updateWorkers}
                 onPhotosChanged={onPhotosChanged}
+                onPhotoRemove={onAddPhotoIdToRemove}
               />
             ))}
         </PageForm>
