@@ -2,6 +2,7 @@ import { paths } from 'src/api/types/generated-schema';
 import { ListReport, Report, ReportFile, ReportPhoto } from 'src/types/Report';
 import HttpService, { Response } from './HttpService';
 import PhotoService from './PhotoService';
+import { getPromisesResponse } from './utils';
 
 /**
  * Report related services
@@ -329,24 +330,10 @@ const updateReportPhoto = async (reportId: number, photoId: number, caption: str
 /**
  * Delete multiple photos for a report
  */
-const deleteReportPhotos = async (reportId: number, photosId: number[]): Promise<(Response | string)[]> => {
+const deleteReportPhotos = async (reportId: number, photosId: number[]): Promise<(Response | null)[]> => {
   const deletePhotoPromises = photosId.map((photoId) => deleteReportPhoto(reportId, photoId));
-  try {
-    const promiseResponses = await Promise.allSettled(deletePhotoPromises);
-    return promiseResponses.map((response) => {
-      if (response.status === 'rejected') {
-        // tslint:disable-next-line: no-console
-        console.error(response.reason);
-        return response.reason;
-      } else {
-        return response.value as Response;
-      }
-    });
-  } catch (e) {
-    // swallow error
-  }
 
-  return [];
+  return getPromisesResponse(deletePhotoPromises);
 };
 
 /**

@@ -36,7 +36,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const [photos, setPhotos] = useState<File[]>([]);
 
-  const [photosIdToRemove, setPhotosIdToRemove] = useState<number[]>([]);
+  const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
 
   const [report, setReport] = useState<Report>();
   useEffect(() => {
@@ -87,8 +87,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const updatePhotos = async (iReportId: number) => {
     await ReportService.uploadReportPhotos(iReportId, photos);
-    if (photosIdToRemove) {
-      await ReportService.deleteReportPhotos(iReportId, photosIdToRemove);
+    if (photoIdsToRemove) {
+      await ReportService.deleteReportPhotos(iReportId, photoIdsToRemove);
     }
   };
 
@@ -99,7 +99,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
-        updatePhotos(report.id);
+        await updatePhotos(report.id);
       }
     }
 
@@ -126,7 +126,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
-        updatePhotos(report.id);
+        await updatePhotos(report.id);
       }
     }
   };
@@ -145,7 +145,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     if (report) {
       const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
-        updatePhotos(report.id);
+        await updatePhotos(report.id);
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded) {
           await ReportService.unlockReport(reportIdInt);
@@ -231,10 +231,10 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
-  const onAddPhotoIdToRemove = (id: number) => {
-    const newIds = [...photosIdToRemove];
+  const onRemovePhoto = (id: number) => {
+    const newIds = [...photoIdsToRemove];
     newIds.push(id);
-    setPhotosIdToRemove(newIds);
+    setPhotoIdsToRemove(newIds);
   };
 
   /** end of update functions */
@@ -285,7 +285,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 onUpdateLocation={updateLocation}
                 onUpdateWorkers={updateWorkers}
                 onPhotosChanged={onPhotosChanged}
-                onPhotoRemove={onAddPhotoIdToRemove}
+                onPhotoRemove={onRemovePhoto}
               />
             ))}
         </PageForm>
