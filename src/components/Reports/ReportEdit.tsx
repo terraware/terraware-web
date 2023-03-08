@@ -222,6 +222,31 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
+  const updateAnnualDetails = (field: string, value: any) => {
+    if (report && report.annualDetails) {
+      setReport(
+        produce((draft) => {
+          // @ts-ignore
+          draft.annualDetails[field] = value;
+        })
+      );
+    }
+  };
+
+  const updateSDGProgress = (index: number, value: string) => {
+    if (
+      report?.annualDetails?.sustainableDevelopmentGoals &&
+      report?.annualDetails?.sustainableDevelopmentGoals[index]
+    ) {
+      setReport(
+        produce((draft) => {
+          // @ts-ignore
+          draft.annualDetails.sustainableDevelopmentGoals[index].progress = value;
+        })
+      );
+    }
+  };
+
   /** end of update functions */
 
   return (
@@ -258,7 +283,12 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         >
           {report &&
             (showAnnual ? (
-              <ReportFormAnnual editable={true} report={report} />
+              <ReportFormAnnual
+                editable={true}
+                report={report}
+                updateDetails={updateAnnualDetails}
+                updateSDGProgress={updateSDGProgress}
+              />
             ) : (
               <ReportForm
                 editable={true}
