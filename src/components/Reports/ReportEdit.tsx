@@ -235,10 +235,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const updateSDGProgress = (index: number, value: string) => {
     if (
-      report &&
-      report.annualDetails &&
-      report.annualDetails.sustainableDevelopmentGoals &&
-      report.annualDetails.sustainableDevelopmentGoals[index]
+      report?.annualDetails?.sustainableDevelopmentGoals &&
+      report?.annualDetails?.sustainableDevelopmentGoals[index]
     ) {
       setReport(
         produce((draft) => {

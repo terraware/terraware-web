@@ -6,7 +6,7 @@ import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useDebounce from 'src/utils/useDebounce';
 import { SustainableDevelopmentGoal, SDG } from 'src/types/Report';
-import useSDGProgress from 'src/components/Reports/useSDGProgress';
+import useSDGProgress from './useSDGProgress';
 
 const DEBOUNCE_TIME_MS = 500;
 
@@ -38,23 +38,23 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
   ];
 
   const SDG_STRING: { [key in SustainableDevelopmentGoal]: string } = {
-    NoPoverty: strings.SDG_NO_POVERTY,
-    ZeroHunger: strings.SDG_ZERO_HUNGER,
-    GoodHealth: strings.SDG_GOOD_HEALTH_AND_WELL_BEING,
-    QualityEducation: strings.SDG_QUALITY_EDUCATION,
-    GenderEquality: strings.SDG_GENDER_EQUALITY,
-    CleanWater: strings.SDG_CLEAN_WATER_AND_SANITATION,
-    AffordableEnergy: strings.SDG_AFFORDABLE_AND_CLEAN_ENERGY,
-    DecentWork: strings.SDG_DECENT_WORK_AND_ECONOMIC_GROWTH,
-    Industry: strings.SDG_INDUSTRY_INNOVATION_AND_INFRASTRUCTURE,
-    ReducedInequalities: strings.SDG_REDUCED_INEQUALITIES,
-    SustainableCities: strings.SDG_SUSTAINABLE_CITIES_AND_COMMUNITIES,
-    ResponsibleConsumption: strings.SDG_RESPONSIBLE_CONSUMPTION_AND_PRODUCTION,
-    ClimateAction: strings.SDG_CLIMATE_ACTION,
-    LifeBelowWater: strings.SDG_LIFE_BELOW_WATER,
-    LifeOnLand: strings.SDG_LIFE_ON_LAND,
-    Peace: strings.SDG_PEACE_JUSTICE_AND_STRONG_INSTITUTIONS,
-    Partnerships: strings.SDG_PARTNERSHIPS_FOR_THE_GOALS,
+    NoPoverty: strings.SDG_01,
+    ZeroHunger: strings.SDG_02,
+    GoodHealth: strings.SDG_03,
+    QualityEducation: strings.SDG_04,
+    GenderEquality: strings.SDG_05,
+    CleanWater: strings.SDG_06,
+    AffordableEnergy: strings.SDG_07,
+    DecentWork: strings.SDG_08,
+    Industry: strings.SDG_09,
+    ReducedInequalities: strings.SDG_10,
+    SustainableCities: strings.SDG_11,
+    ResponsibleConsumption: strings.SDG_12,
+    ClimateAction: strings.SDG_13,
+    LifeBelowWater: strings.SDG_14,
+    LifeOnLand: strings.SDG_15,
+    Peace: strings.SDG_16,
+    Partnerships: strings.SDG_17,
   };
 
   const [projectSummary, setProjectSummary] = useState(report.annualDetails?.projectSummary ?? '');
