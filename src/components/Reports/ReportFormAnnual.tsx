@@ -4,11 +4,8 @@ import { Button, Checkbox, Textfield } from '@terraware/web-components';
 import { Report } from 'src/types/Report';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useDebounce from 'src/utils/useDebounce';
 import { SustainableDevelopmentGoal, SDG } from 'src/types/Report';
 import useSDGProgress from './useSDGProgress';
-
-const DEBOUNCE_TIME_MS = 500;
 
 export type ReportFormAnnualProps = {
   editable: boolean;
@@ -58,80 +55,22 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
   };
 
   const [projectSummary, setProjectSummary] = useState(report.annualDetails?.projectSummary ?? '');
-  useDebounce(projectSummary, DEBOUNCE_TIME_MS, (value) => {
-    if (updateDetails) {
-      updateDetails('projectSummary', value);
-    }
-  });
-
   const [projectImpact, setProjectImpact] = useState(report.annualDetails?.projectImpact ?? '');
-  useDebounce(projectImpact, DEBOUNCE_TIME_MS, (value) => {
-    if (updateDetails) {
-      updateDetails('projectImpact', value);
-    }
-  });
-
   const [budgetNarrativeSummary, setBudgetNarrativeSummary] = useState(
     report.annualDetails?.budgetNarrativeSummary ?? ''
   );
-  useDebounce(budgetNarrativeSummary, DEBOUNCE_TIME_MS, (value) => {
-    if (updateDetails) {
-      updateDetails('budgetNarrativeSummary', value);
-    }
-  });
-
   const [socialImpact, setSocialImpact] = useState(report.annualDetails?.socialImpact ?? '');
-  useDebounce(socialImpact, DEBOUNCE_TIME_MS, (value) => {
-    if (updateDetails) {
-      updateDetails('socialImpact', value);
-    }
-  });
 
   const [sdgList, setSdgList] = useState(report.annualDetails?.sustainableDevelopmentGoals.map((g) => g.goal) ?? []);
-  const [sdgProgressStates, setSdgProgressStates] = useSDGProgress(report, updateSDGProgress);
+  const [sdgProgressStates, setSdgProgressStates] = useSDGProgress(report);
 
   const [challenges, setChallenges] = useState(report.annualDetails?.challenges ?? '');
-  useDebounce(challenges, DEBOUNCE_TIME_MS, (value) => {
-    if (updateDetails) {
-      updateDetails('challenges', value);
-    }
-  });
-
   const [keyLessons, setKeyLessons] = useState(report.annualDetails?.keyLessons ?? '');
-  useDebounce(keyLessons, DEBOUNCE_TIME_MS, (value) => {
-    if (updateDetails) {
-      updateDetails('keyLessons', value);
-    }
-  });
-
   const [successStories, setSuccessStories] = useState(report.annualDetails?.successStories ?? '');
-  useDebounce(successStories, DEBOUNCE_TIME_MS, (value) => {
-    if (updateDetails) {
-      updateDetails('successStories', value);
-    }
-  });
-
   const [isCatalytic, setIsCatalytic] = useState(report.annualDetails?.isCatalytic ?? false);
   const [catalyticDetail, setCatalyticDetail] = useState(report.annualDetails?.catalyticDetail ?? '');
-  useDebounce(catalyticDetail, DEBOUNCE_TIME_MS, (value) => {
-    if (updateDetails) {
-      updateDetails('catalyticDetail', value);
-    }
-  });
-
   const [opportunities, setOpportunities] = useState(report.annualDetails?.opportunities ?? '');
-  useDebounce(opportunities, DEBOUNCE_TIME_MS, (value) => {
-    if (updateDetails) {
-      updateDetails('opportunities', value);
-    }
-  });
-
   const [nextSteps, setNextSteps] = useState(report.annualDetails?.nextSteps ?? '');
-  useDebounce(nextSteps, DEBOUNCE_TIME_MS, (value) => {
-    if (updateDetails) {
-      updateDetails('nextSteps', value);
-    }
-  });
 
   const handleObservationMonthChange = (add: boolean, monthNumber: number) => {
     const currentMonths = report.annualDetails?.bestMonthsForObservation ?? [];
@@ -224,7 +163,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           instructions={strings.PROJECT_SUMMARY_INSTRUCTIONS}
           editable={editable}
           value={projectSummary}
-          onChange={setProjectSummary}
+          onChange={(value) => {
+            setProjectSummary(value);
+            if (updateDetails) {
+              updateDetails('projectSummary', value);
+            }
+          }}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -233,7 +177,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           instructions={strings.PROJECT_IMPACT_INSTRUCTIONS}
           editable={editable}
           value={projectImpact}
-          onChange={setProjectImpact}
+          onChange={(value) => {
+            setProjectImpact(value);
+            if (updateDetails) {
+              updateDetails('projectImpact', value);
+            }
+          }}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -242,7 +191,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           instructions={strings.BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS}
           editable={editable}
           value={budgetNarrativeSummary}
-          onChange={setBudgetNarrativeSummary}
+          onChange={(value) => {
+            setBudgetNarrativeSummary(value);
+            if (updateDetails) {
+              updateDetails('budgetNarrativeSummary', value);
+            }
+          }}
         />
       </Grid>
       <Grid item xs={12}>
@@ -257,7 +211,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           instructions={strings.SOCIAL_IMPACT_INSTRUCTIONS}
           editable={editable}
           value={socialImpact}
-          onChange={setSocialImpact}
+          onChange={(value) => {
+            setSocialImpact(value);
+            if (updateDetails) {
+              updateDetails('socialImpact', value);
+            }
+          }}
         />
       </Grid>
       <Grid item xs={12}>
@@ -282,7 +241,13 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               type='textarea'
               readonly={!editable}
               value={sdgProgressStates[SDG.findIndex((sdg) => key === sdg)]}
-              onChange={(value) => setSdgProgressStates[SDG.findIndex((sdg) => key === sdg)](value as string)}
+              onChange={(value) => {
+                setSdgProgressStates[SDG.findIndex((sdg) => key === sdg)](value as string);
+                const index = report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key);
+                if (updateSDGProgress && index !== undefined && index >= 0) {
+                  updateSDGProgress(index, value as string);
+                }
+              }}
             />
           )}
         </Grid>
@@ -294,7 +259,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           instructions={strings.CHALLENGES_INSTRUCTIONS}
           editable={editable}
           value={challenges}
-          onChange={setChallenges}
+          onChange={(value) => {
+            setChallenges(value);
+            if (updateDetails) {
+              updateDetails('challenges', value);
+            }
+          }}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -303,7 +273,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           instructions={strings.KEY_LESSONS_INSTRUCTIONS}
           editable={editable}
           value={keyLessons}
-          onChange={setKeyLessons}
+          onChange={(value) => {
+            setKeyLessons(value);
+            if (updateDetails) {
+              updateDetails('keyLessons', value);
+            }
+          }}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -312,7 +287,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           instructions={strings.SUCCESS_STORIES_INSTRUCTIONS}
           editable={editable}
           value={successStories}
-          onChange={setSuccessStories}
+          onChange={(value) => {
+            setSuccessStories(value);
+            if (updateDetails) {
+              updateDetails('successStories', value);
+            }
+          }}
         />
       </Grid>
       <Grid item xs={12}>
@@ -334,7 +314,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           type='textarea'
           label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
           readonly={!editable}
-          onChange={(v) => setCatalyticDetail(v as string)}
+          onChange={(v) => {
+            setCatalyticDetail(v as string);
+            if (updateDetails) {
+              updateDetails('catalyticDetail', v);
+            }
+          }}
           value={catalyticDetail}
         />
       </Grid>
@@ -344,7 +329,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           instructions={strings.OPPORTUNITIES_INSTRUCTIONS}
           editable={editable}
           value={opportunities}
-          onChange={setOpportunities}
+          onChange={(value) => {
+            setOpportunities(value);
+            if (updateDetails) {
+              updateDetails('opportunities', value);
+            }
+          }}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -353,7 +343,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           instructions={strings.NEXT_STEPS_INSTRUCTIONS}
           editable={editable}
           value={nextSteps}
-          onChange={setNextSteps}
+          onChange={(value) => {
+            setNextSteps(value);
+            if (updateDetails) {
+              updateDetails('nextSteps', value);
+            }
+          }}
         />
       </Grid>
     </Grid>
