@@ -20,7 +20,7 @@ export type LocationSectionProps = {
 
 export default function LocationSection(props: LocationSectionProps): JSX.Element {
   const { editable, location, onUpdateLocation, onUpdateWorkers, locationType } = props;
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isTablet } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
 
@@ -43,7 +43,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   });
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
-  const mediumItemGridWidth = () => (isMobile ? 12 : 8);
+  const mediumItemGridWidth = () => (isMobile || isTablet ? 12 : 8);
 
   return (
     <>

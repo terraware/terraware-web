@@ -87,7 +87,7 @@ export default function ReportView(): JSX.Element {
       </Box>
       {report &&
         (showAnnual ? (
-          <ReportFormAnnual report={report} />
+          <ReportFormAnnual editable={false} report={report} />
         ) : (
           <ReportForm
             editable={false}
@@ -96,7 +96,7 @@ export default function ReportView(): JSX.Element {
             allNurseries={report.nurseries}
           />
         ))}
-      <Box display='flex' justifyContent='flex-end'>
+      <Box display='flex' justifyContent='flex-end' padding={theme.spacing(3)}>
         {report?.isAnnual &&
           (showAnnual ? (
             <Button label={strings.BACK} type='passive' onClick={() => setShowAnnual(false)} />
