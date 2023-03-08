@@ -47,7 +47,7 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
         setPhotos([]);
         snackbar.toastError();
       } else {
-        const photos: ReportPhotoWithUrl[] =
+        const photosWithUrl: ReportPhotoWithUrl[] =
           photoListResponse.photos?.map((photo) => {
             return {
               ...photo,
@@ -58,7 +58,7 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
             };
           }) || [];
 
-        setPhotos(photos);
+        setPhotos(photosWithUrl);
       }
     };
 

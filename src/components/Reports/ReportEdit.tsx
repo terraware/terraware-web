@@ -85,10 +85,10 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const [confirmSubmitDialogOpen, setConfirmSubmitDialogOpen] = useState(false);
 
-  const updatePhotos = async (reportId: number) => {
-    await ReportService.uploadReportPhotos(reportId, photos);
+  const updatePhotos = async (iReportId: number) => {
+    await ReportService.uploadReportPhotos(iReportId, photos);
     if (photosIdToRemove) {
-      await ReportService.deleteReportPhotos(reportId, photosIdToRemove);
+      await ReportService.deleteReportPhotos(iReportId, photosIdToRemove);
     }
   };
 
