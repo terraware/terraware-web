@@ -89,6 +89,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       saveResult = await ReportService.updateReport(report);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+      } else {
+        await ReportService.uploadReportPhotos(report.id, photos);
       }
     }
 
@@ -114,6 +116,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       setShowAnnual(true);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+      } else {
+        await ReportService.uploadReportPhotos(report.id, photos);
       }
     }
   };
