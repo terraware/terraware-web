@@ -90,7 +90,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
-        ReportService.uploadReportPhotos(report.id, photos);
+        await ReportService.uploadReportPhotos(report.id, photos);
       }
     }
 
