@@ -16,6 +16,7 @@ import { useUser } from 'src/providers';
 import produce from 'immer';
 import { Organization } from 'src/types/Organization';
 import CannotEditReportDialog from './InvalidUserModal';
+import useReportFiles from 'src/components/Reports/useReportFiles';
 
 export type ReportEditProps = {
   organization: Organization;
@@ -56,11 +57,11 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   }, [reportIdInt, snackbar]);
 
-  const [newReportFiles, setNewReportFiles] = useState<File[]>();
+  const [newReportFiles, setNewReportFiles] = useState<File[]>([]);
 
-  const [initialReportFiles, setInitialReportFiles] = useState<ReportFile[]>();
+  const [updatedReportFiles, setUpdatedReportFiles] = useState<ReportFile[]>([]);
 
-  const [updatedReportFiles, setUpdatedReportFiles] = useState<ReportFile[]>();
+  const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
 
   const updateFiles = async () => {
     await Promise.all(
@@ -73,28 +74,6 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     );
     await Promise.all(newReportFiles?.map((f) => ReportService.uploadReportFile(reportIdInt, f)) ?? []);
   };
-
-  useEffect(() => {
-    const getFiles = async () => {
-      if (report) {
-        const fileListResponse = await ReportService.getReportFiles(report.id);
-        if (!fileListResponse.requestSucceeded || fileListResponse.error) {
-          setInitialReportFiles([]);
-          snackbar.toastError();
-        } else {
-          const fileArray: ReportFile[] = [];
-          fileListResponse.files?.forEach((f) => {
-            fileArray.push(f);
-          });
-
-          setInitialReportFiles(fileArray);
-          setUpdatedReportFiles(fileArray);
-        }
-      }
-    };
-
-    getFiles();
-  }, [report, snackbar]);
 
   const [currentUserEditing, setCurrentUserEditing] = useState(true);
   useEffect(() => {

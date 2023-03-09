@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import ReportForm from './ReportForm';
 import { APP_PATHS } from 'src/constants';
 import { Box, Typography, useTheme } from '@mui/material';
-import { Report, ReportFile } from 'src/types/Report';
+import { Report } from 'src/types/Report';
 import ReportService from 'src/services/ReportService';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button } from '@terraware/web-components';
@@ -12,6 +12,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
 import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
+import useReportFiles from 'src/components/Reports/useReportFiles';
 
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
@@ -45,6 +46,8 @@ export default function ReportView(): JSX.Element {
 
   const [confirmEditDialogOpen, setConfirmEditDialogOpen] = useState(false);
 
+  const initialReportFiles = useReportFiles(report);
+
   const startEdit = () => {
     if (report?.lockedByUserId) {
       setConfirmEditDialogOpen(true);
@@ -64,28 +67,6 @@ export default function ReportView(): JSX.Element {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
     }
   };
-
-  const [initialReportFiles, setInitialReportFiles] = useState<ReportFile[]>();
-  useEffect(() => {
-    const getFiles = async () => {
-      if (report) {
-        const fileListResponse = await ReportService.getReportFiles(report.id);
-        if (!fileListResponse.requestSucceeded || fileListResponse.error) {
-          setInitialReportFiles([]);
-          snackbar.toastError();
-        } else {
-          const fileArray: ReportFile[] = [];
-          fileListResponse.files?.forEach((f) => {
-            fileArray.push(f);
-          });
-
-          setInitialReportFiles(fileArray);
-        }
-      }
-    };
-
-    getFiles();
-  }, [report, snackbar]);
 
   return (
     <TfMain>
