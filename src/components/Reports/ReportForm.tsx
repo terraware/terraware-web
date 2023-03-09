@@ -5,14 +5,11 @@ import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import useDebounce from 'src/utils/useDebounce';
 import ViewPhotos from './ViewPhotos';
 import SelectPhotos from '../common/SelectPhotos';
 import { ReportSeedBank } from 'src/types/Report';
 import { makeStyles } from '@mui/styles';
 import LocationSection from './LocationSection';
-
-const DEBOUNCE_TIME_MS = 500;
 
 const useStyles = makeStyles((theme: Theme) => ({
   infoCardStyle: {
@@ -65,18 +62,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
   const { isMobile, isTablet } = useDeviceInfo();
 
   const [summaryOfProgress, setSummaryOfProgress] = useState(draftReport.summaryOfProgress ?? '');
-  useDebounce(summaryOfProgress, DEBOUNCE_TIME_MS, (value) => {
-    if (onUpdateReport) {
-      onUpdateReport('summaryOfProgress', value);
-    }
-  });
-
   const [projectNotes, setProjectNotes] = useState(draftReport.notes ?? '');
-  useDebounce(projectNotes, DEBOUNCE_TIME_MS, (value) => {
-    if (onUpdateReport) {
-      onUpdateReport('notes', value);
-    }
-  });
 
   const handleAddRemoveLocation = (
     selected: boolean,
@@ -147,7 +133,12 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           type='textarea'
           disabled={!editable}
           value={summaryOfProgress}
-          onChange={(value) => setSummaryOfProgress(value as string)}
+          onChange={(value) => {
+            setSummaryOfProgress(value as string);
+            if (onUpdateReport) {
+              onUpdateReport('summaryOfProgress', value);
+            }
+          }}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -157,7 +148,12 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           type='textarea'
           disabled={!editable}
           value={projectNotes}
-          onChange={(value) => setProjectNotes(value as string)}
+          onChange={(value) => {
+            setProjectNotes(value as string);
+            if (onUpdateReport) {
+              onUpdateReport('notes', value);
+            }
+          }}
         />
         <Typography
           color={theme.palette.TwClrTxtSecondary}

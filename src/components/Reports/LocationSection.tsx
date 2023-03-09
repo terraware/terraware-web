@@ -4,7 +4,6 @@ import { Grid, Theme, Typography, useTheme } from '@mui/material';
 import { DatePicker, TableColumnType, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import useDebounce from 'src/utils/useDebounce';
 import { makeStyles } from '@mui/styles';
 import { ReportNursery, ReportPlantingSite, ReportSeedBank } from 'src/types/Report';
 import PlantingSiteSpeciesCellRenderer from './PlantingSitesSpeciesCellRenderer';
@@ -21,8 +20,6 @@ type PlantingSiteSpecies = {
   mortalityRateInNursery?: number | undefined;
   totalPlanted?: number | undefined;
 };
-
-const DEBOUNCE_TIME_MS = 500;
 
 export type LocationSectionProps = {
   editable: boolean;
@@ -43,23 +40,10 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const isNursery = locationType === 'nursery';
   const isPlantingSite = locationType === 'plantingSite';
 
-  const [workersPaidEngaged, setWorkersPaidEngaged] = useState<number>(location.workers?.paidWorkers ?? 0);
-  const [workersPaidFemale, setWorkersPaidFemale] = useState<number>(location.workers?.femalePaidWorkers ?? 0);
-  const [workersVolunteer, setWorkersVolunteer] = useState<number>(location.workers?.volunteers ?? 0);
-  useDebounce(workersPaidEngaged, DEBOUNCE_TIME_MS, (value) => {
-    onUpdateWorkers('paidWorkers', value);
-  });
-  useDebounce(workersPaidFemale, DEBOUNCE_TIME_MS, (value) => {
-    onUpdateWorkers('femalePaidWorkers', value);
-  });
-  useDebounce(workersVolunteer, DEBOUNCE_TIME_MS, (value) => {
-    onUpdateWorkers('volunteers', value);
-  });
-
+  const [paidWorkers, setPaidWorkers] = useState<number>(location.workers?.paidWorkers ?? 0);
+  const [femalePaidWorkers, setFemalePaidWorkers] = useState<number>(location.workers?.femalePaidWorkers ?? 0);
+  const [volunteers, setVolunteers] = useState<number>(location.workers?.volunteers ?? 0);
   const [locationNotes, setLocationNotes] = useState(location.notes ?? '');
-  useDebounce(locationNotes, DEBOUNCE_TIME_MS, (value) => {
-    onUpdateLocation('notes', value);
-  });
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
   const mediumItemGridWidth = () => (isMobile || isTablet ? 12 : 8);
@@ -313,8 +297,11 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-workers-paid-engaged`}
           label={strings.WORKERS_PAID_ENGAGED}
           editable={editable}
-          value={editable ? workersPaidEngaged : location.workers.paidWorkers?.toString() ?? '0'}
-          onChange={(value) => setWorkersPaidEngaged(value as number)}
+          value={editable ? paidWorkers : location.workers.paidWorkers?.toString() ?? '0'}
+          onChange={(value) => {
+            setPaidWorkers(value as number);
+            onUpdateWorkers('paidWorkers', value);
+          }}
           type='text'
         />
       </Grid>
@@ -323,8 +310,11 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-${locationType}-paid-female`}
           label={strings.WORKERS_PAID_FEMALE}
           editable={editable}
-          value={editable ? workersPaidFemale : location.workers.femalePaidWorkers?.toString() ?? '0'}
-          onChange={(value) => setWorkersPaidFemale(value as number)}
+          value={editable ? femalePaidWorkers : location.workers.femalePaidWorkers?.toString() ?? '0'}
+          onChange={(value) => {
+            setFemalePaidWorkers(value as number);
+            onUpdateWorkers('femalePaidWorkers', value);
+          }}
           type='text'
         />
       </Grid>
@@ -333,8 +323,11 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-${locationType}-volunteer`}
           label={strings.WORKERS_VOLUNTEERS}
           editable={editable}
-          value={editable ? workersVolunteer : location.workers.volunteers?.toString() ?? '0'}
-          onChange={(value) => setWorkersVolunteer(value as number)}
+          value={editable ? volunteers : location.workers.volunteers?.toString() ?? '0'}
+          onChange={(value) => {
+            setVolunteers(value as number);
+            onUpdateWorkers('volunteers', value);
+          }}
           type='text'
         />
       </Grid>
@@ -345,7 +338,10 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           type='textarea'
           disabled={!editable}
           value={locationNotes}
-          onChange={(value) => setLocationNotes(value as string)}
+          onChange={(value) => {
+            setLocationNotes(value as string);
+            onUpdateLocation('notes', value);
+          }}
         />
         <Typography
           color={theme.palette.TwClrTxtSecondary}
