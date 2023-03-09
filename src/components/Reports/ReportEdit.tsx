@@ -39,6 +39,9 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
 
   const [report, setReport] = useState<Report>();
+
+  const [validateFields, setValidateFields] = useState(false);
+
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
@@ -141,8 +144,33 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
+  const hasEmptyRequieredFields = (report: Report) => {
+    const emptySeedbankFields = report.seedBanks?.some((sb) => {
+      return !sb.buildStartedDate || !sb.buildCompletedDate || !sb.operationStartedDate;
+    });
+    const emptyNurseryFields = report.nurseries?.some((nursery) => {
+      return (
+        !nursery.buildStartedDate || !nursery.buildCompletedDate || !nursery.operationStartedDate || !nursery.capacity
+      );
+    });
+    const emptyPlantingSitesFields = report.plantingSites?.some((plantingSite) => {
+      return (
+        !plantingSite.totalPlantingSiteArea ||
+        !plantingSite.totalPlantedArea ||
+        !plantingSite.totalTreesPlanted ||
+        !plantingSite.totalPlantsPlanted ||
+        !plantingSite.mortalityRate
+      );
+    });
+    return emptySeedbankFields || emptyNurseryFields || emptyPlantingSitesFields;
+  };
   const submitReport = async () => {
     if (report) {
+      if (hasEmptyRequieredFields(report)) {
+        setValidateFields(true);
+        setShowAnnual(false);
+        return;
+      }
       const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
         await updatePhotos(report.id);
@@ -316,6 +344,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 onUpdateWorkers={updateWorkers}
                 onPhotosChanged={onPhotosChanged}
                 onPhotoRemove={onRemovePhoto}
+                validate={validateFields}
               />
             ))}
         </PageForm>
