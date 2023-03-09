@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import ReportForm from './ReportForm';
 import { APP_PATHS } from 'src/constants';
 import { Box, Typography, useTheme } from '@mui/material';
-import { Report } from 'src/types/Report';
+import { Report, ReportFile } from 'src/types/Report';
 import ReportService from 'src/services/ReportService';
 import { useHistory, useParams } from 'react-router-dom';
 import { Button } from '@terraware/web-components';
@@ -65,6 +65,28 @@ export default function ReportView(): JSX.Element {
     }
   };
 
+  const [initialReportFiles, setInitialReportFiles] = useState<ReportFile[]>();
+  useEffect(() => {
+    const getFiles = async () => {
+      if (report) {
+        const fileListResponse = await ReportService.getReportFiles(report.id);
+        if (!fileListResponse.requestSucceeded || fileListResponse.error) {
+          setInitialReportFiles([]);
+          snackbar.toastError();
+        } else {
+          const fileArray: ReportFile[] = [];
+          fileListResponse.files?.forEach((f) => {
+            fileArray.push(f);
+          });
+
+          setInitialReportFiles(fileArray);
+        }
+      }
+    };
+
+    getFiles();
+  }, [report, snackbar]);
+
   return (
     <TfMain>
       <ConcurrentEditorWarningDialog
@@ -87,7 +109,7 @@ export default function ReportView(): JSX.Element {
       </Box>
       {report &&
         (showAnnual ? (
-          <ReportFormAnnual editable={false} report={report} />
+          <ReportFormAnnual editable={false} report={report} initialReportFiles={initialReportFiles ?? []} />
         ) : (
           <ReportForm
             editable={false}

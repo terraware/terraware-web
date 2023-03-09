@@ -1,21 +1,41 @@
-import React, { useState } from 'react';
-import { Grid, Typography, useTheme } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Textfield } from '@terraware/web-components';
-import { Report } from 'src/types/Report';
+import { Report, ReportFile } from 'src/types/Report';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { SustainableDevelopmentGoal, SDG } from 'src/types/Report';
 import useSDGProgress from './useSDGProgress';
+import { REPORT_FILE_ENDPOINT } from 'src/services/ReportService';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  hiddenInput: {
+    display: 'none',
+  },
+}));
 
 export type ReportFormAnnualProps = {
   editable: boolean;
   report: Report;
   updateDetails?: (field: string, value: any) => void;
   updateSDGProgress?: (index: number, value: string) => void;
+  initialReportFiles: ReportFile[];
+  onNewFilesChanged?: (files: File[]) => void;
+  onExistingFilesChanged?: (files: ReportFile[]) => void;
 };
 
 export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Element {
-  const { editable, report, updateDetails, updateSDGProgress } = props;
+  const {
+    editable,
+    report,
+    updateDetails,
+    updateSDGProgress,
+    initialReportFiles,
+    onNewFilesChanged,
+    onExistingFilesChanged,
+  } = props;
+  const classes = useStyles();
   const theme = useTheme();
   const { isMobile, isTablet } = useDeviceInfo();
 
@@ -72,6 +92,46 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
   const [opportunities, setOpportunities] = useState(report.annualDetails?.opportunities ?? '');
   const [nextSteps, setNextSteps] = useState(report.annualDetails?.nextSteps ?? '');
 
+  const [existingFiles, setExistingFiles] = useState<ReportFile[]>(initialReportFiles);
+  const [newFiles, setNewFiles] = useState<File[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const onRemoveExistingFile = (id: number) => {
+    const updatedFiles = existingFiles.filter((f) => f.id !== id);
+    setExistingFiles(updatedFiles);
+    if (onExistingFilesChanged) {
+      onExistingFilesChanged(updatedFiles);
+    }
+  };
+
+  const onChooseFileHandler = () => {
+    inputRef.current?.click();
+    divRef.current?.focus();
+  };
+
+  const onFileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.currentTarget.files && event.currentTarget.files[0]) {
+      const updatedFiles = [...newFiles, event.currentTarget.files[0]];
+      setNewFiles(updatedFiles);
+      if (onNewFilesChanged) {
+        onNewFilesChanged(updatedFiles);
+      }
+    }
+  };
+
+  const onRemoveFile = (filename: string) => {
+    const updatedFiles = newFiles.filter((f) => f.name !== filename);
+    setNewFiles(updatedFiles);
+    if (onNewFilesChanged) {
+      onNewFilesChanged(updatedFiles);
+    }
+  };
+
+  const getReportFileUrl = (reportId: number, fileId: number) => {
+    return REPORT_FILE_ENDPOINT.replace('{reportId}', reportId.toString()).replace('{fileId}', fileId.toString());
+  };
+
   const handleObservationMonthChange = (add: boolean, monthNumber: number) => {
     const currentMonths = report.annualDetails?.bestMonthsForObservation ?? [];
     if (updateDetails && add && !currentMonths.includes(monthNumber)) {
@@ -114,11 +174,6 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       setIsCatalytic(catalytic);
       updateDetails('isCatalytic', catalytic);
     }
-  };
-
-  const handleFileUploadButtonClick = () => {
-    // TODO
-    return undefined;
   };
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
@@ -199,11 +254,42 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           }}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} ref={divRef}>
+        <input type='file' ref={inputRef} className={classes.hiddenInput} value='' onChange={onFileChosen} />
         <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
           {strings.BUDGET_DOCUMENT_XLS}
         </Typography>
-        <Button onClick={handleFileUploadButtonClick} priority='secondary' type='passive' label={strings.CHOOSE_FILE} />
+        <Button
+          disabled={!editable}
+          onClick={onChooseFileHandler}
+          priority='secondary'
+          type='passive'
+          label={strings.CHOOSE_FILE}
+        />
+        {newFiles.map((f) => (
+          <Box key={f.name} display='flex' alignItems='center'>
+            <Button
+              disabled={!editable}
+              priority='ghost'
+              type='passive'
+              icon='iconTrashCan'
+              onClick={() => onRemoveFile(f.name)}
+            />
+            <Typography>{f.name}</Typography>
+          </Box>
+        ))}
+        {existingFiles.map((f) => (
+          <Box key={f.id} display='flex' alignItems='center'>
+            {editable ? (
+              <Button priority='ghost' type='passive' icon='iconTrashCan' onClick={() => onRemoveExistingFile(f.id)} />
+            ) : (
+              <a href={getReportFileUrl(report.id, f.id)}>
+                <Button priority='ghost' type='passive' icon='iconExport' onClick={() => undefined} />
+              </a>
+            )}
+            <Typography>{f.filename}</Typography>
+          </Box>
+        ))}
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField

@@ -10,7 +10,6 @@ import PhotoService from './PhotoService';
 const REPORTS_ENDPOINT = '/api/v1/reports';
 const REPORT_ENDPOINT = '/api/v1/reports/{id}';
 const REPORT_FILES_ENDPOINT = '/api/v1/reports/{id}/files';
-const REPORT_FILE_ENDPOINT = '/api/v1/reports/{reportId}/files/{fileId}';
 const LOCK_REPORT_ENDPOINT = '/api/v1/reports/{id}/lock';
 const FORCE_LOCK_REPORT_ENDPOINT = '/api/v1/reports/{id}/lock/force';
 const REPORT_PHOTOS_ENDPOINT = '/api/v1/reports/{id}/photos';
@@ -19,6 +18,7 @@ const UNLOCK_REPORT_ENDPOINT = '/api/v1/reports/{id}/unlock';
 const UPLOAD_REPORT_FILES_ENDPOINT = '/api/v1/reports/{reportId}/files';
 const UPLOAD_REPORT_PHOTO_ENDPOINT = '/api/v1/reports/{reportId}/photos';
 export const REPORT_PHOTO_ENDPOINT = '/api/v1/reports/{reportId}/photos/{photoId}';
+export const REPORT_FILE_ENDPOINT = '/api/v1/reports/{reportId}/files/{fileId}';
 
 type ReportsResponsePayload = paths[typeof REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type ReportResponsePayload = paths[typeof REPORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -176,8 +176,18 @@ const getReportFiles = async (reportId: number): Promise<ReportFilesResponse> =>
 /**
  * upload report file
  */
-const uploadReportFile = async (file: string): Promise<UploadReportFileResponse> => {
-  const response: UploadReportFileResponse = await httpUploadReportFile.post({ entity: { file } });
+const uploadReportFile = async (reportId: number, file: File): Promise<UploadReportFileResponse> => {
+  const entity = new FormData();
+  entity.append('file', file);
+  const headers = { 'content-type': 'multipart/form-data' };
+
+  const response: UploadReportFileResponse = await httpUploadReportFile.post({
+    urlReplacements: {
+      '{reportId}': reportId.toString(),
+    },
+    entity,
+    headers,
+  });
 
   if (response.requestSucceeded) {
     const data: UploadReportFileResponsePayload = response.data;

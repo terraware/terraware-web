@@ -5,7 +5,7 @@ import strings from 'src/strings';
 import ReportForm from 'src/components/Reports/ReportForm';
 import { Box, Typography, useTheme } from '@mui/material';
 import ReportService from 'src/services/ReportService';
-import { Report } from 'src/types/Report';
+import { Report, ReportFile } from 'src/types/Report';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
@@ -54,6 +54,46 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   }, [reportIdInt, snackbar]);
 
+  const [newReportFiles, setNewReportFiles] = useState<File[]>();
+
+  const [initialReportFiles, setInitialReportFiles] = useState<ReportFile[]>();
+
+  const [updatedReportFiles, setUpdatedReportFiles] = useState<ReportFile[]>();
+
+  const updateFiles = async () => {
+    await Promise.all(
+      initialReportFiles?.map((f) => {
+        if (!updatedReportFiles?.includes(f)) {
+          return ReportService.deleteReportFile(reportIdInt, f.id);
+        }
+        return undefined;
+      }) ?? []
+    );
+    await Promise.all(newReportFiles?.map((f) => ReportService.uploadReportFile(reportIdInt, f)) ?? []);
+  };
+
+  useEffect(() => {
+    const getFiles = async () => {
+      if (report) {
+        const fileListResponse = await ReportService.getReportFiles(report.id);
+        if (!fileListResponse.requestSucceeded || fileListResponse.error) {
+          setInitialReportFiles([]);
+          snackbar.toastError();
+        } else {
+          const fileArray: ReportFile[] = [];
+          fileListResponse.files?.forEach((f) => {
+            fileArray.push(f);
+          });
+
+          setInitialReportFiles(fileArray);
+          setUpdatedReportFiles(fileArray);
+        }
+      }
+    };
+
+    getFiles();
+  }, [report, snackbar]);
+
   const [currentUserEditing, setCurrentUserEditing] = useState(true);
   useEffect(() => {
     const getReport = async () => {
@@ -91,6 +131,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
         await ReportService.uploadReportPhotos(report.id, photos);
+        await updateFiles();
       }
     }
 
@@ -118,6 +159,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
         await ReportService.uploadReportPhotos(report.id, photos);
+        await updateFiles();
       }
     }
   };
@@ -137,6 +179,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
         await ReportService.uploadReportPhotos(reportIdInt, photos);
+        await updateFiles();
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded) {
           await ReportService.unlockReport(reportIdInt);
@@ -152,6 +195,14 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const onPhotosChanged = (photosList: File[]) => {
     setPhotos(photosList);
+  };
+
+  const onNewFilesChanged = (filesList: File[]) => {
+    setNewReportFiles(filesList);
+  };
+
+  const onExistingFilesChanged = (filesList: ReportFile[]) => {
+    setUpdatedReportFiles(filesList);
   };
 
   const rightButtons: FormButton[] = [];
@@ -288,6 +339,9 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 report={report}
                 updateDetails={updateAnnualDetails}
                 updateSDGProgress={updateSDGProgress}
+                initialReportFiles={initialReportFiles ?? []}
+                onNewFilesChanged={onNewFilesChanged}
+                onExistingFilesChanged={onExistingFilesChanged}
               />
             ) : (
               <ReportForm
