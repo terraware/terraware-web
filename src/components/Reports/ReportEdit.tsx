@@ -144,7 +144,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
-  const hasEmptyRequieredFields = (iReport: Report) => {
+  const hasEmptyRequiredFields = (iReport: Report) => {
     const emptySeedbankFields = iReport.seedBanks?.some((sb) => {
       return !sb.buildStartedDate || !sb.buildCompletedDate || !sb.operationStartedDate;
     });
@@ -166,9 +166,10 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   };
   const submitReport = async () => {
     if (report) {
-      if (hasEmptyRequieredFields(report)) {
+      if (hasEmptyRequiredFields(report)) {
+        setConfirmSubmitDialogOpen(false);
         setValidateFields(true);
-        setShowAnnual(false);
+        handleBack();
         return;
       }
       const saveResult = await ReportService.updateReport(report);
