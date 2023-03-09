@@ -13,3 +13,25 @@ export type ReportSeedBank = components['schemas']['GetSeedBankV1'];
 export type ReportNursery = components['schemas']['GetNurseryV1'];
 
 export type ReportPlantingSite = components['schemas']['GetPlantingSiteV1'];
+
+export type SustainableDevelopmentGoal = components['schemas']['GoalProgressPayloadV1']['goal'];
+
+export const SDG: SustainableDevelopmentGoal[] = [
+  'NoPoverty',
+  'ZeroHunger',
+  'GoodHealth',
+  'QualityEducation',
+  'GenderEquality',
+  'CleanWater',
+  'AffordableEnergy',
+  'DecentWork',
+  'Industry',
+  'ReducedInequalities',
+  'SustainableCities',
+  'ResponsibleConsumption',
+  'ClimateAction',
+  'LifeBelowWater',
+  'LifeOnLand',
+  'Peace',
+  'Partnerships',
+];

@@ -64,7 +64,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
   } = props;
   const theme = useTheme();
   const classes = useStyles();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isTablet } = useDeviceInfo();
 
   const [summaryOfProgress, setSummaryOfProgress] = useState(draftReport.summaryOfProgress ?? '');
   useDebounce(summaryOfProgress, DEBOUNCE_TIME_MS, (value) => {
@@ -91,7 +91,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
   };
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
-  const mediumItemGridWidth = () => (isMobile ? 12 : 8);
+  const mediumItemGridWidth = () => (isMobile || isTablet ? 12 : 8);
 
   return (
     <Grid
