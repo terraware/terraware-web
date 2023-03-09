@@ -333,7 +333,7 @@ const updateReportPhoto = async (reportId: number, photoId: number, caption: str
 const deleteReportPhotos = async (reportId: number, photosId: number[]): Promise<(Response | null)[]> => {
   const deletePhotoPromises = photosId.map((photoId) => deleteReportPhoto(reportId, photoId));
 
-  return getPromisesResponse(deletePhotoPromises);
+  return getPromisesResponse<Response>(deletePhotoPromises);
 };
 
 /**
