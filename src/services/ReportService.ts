@@ -2,6 +2,7 @@ import { paths } from 'src/api/types/generated-schema';
 import { ListReport, Report, ReportFile, ReportPhoto } from 'src/types/Report';
 import HttpService, { Response } from './HttpService';
 import PhotoService from './PhotoService';
+import { getPromisesResponse } from './utils';
 
 /**
  * Report related services
@@ -337,13 +338,22 @@ const updateReportPhoto = async (reportId: number, photoId: number, caption: str
 };
 
 /**
+ * Delete multiple photos for a report
+ */
+const deleteReportPhotos = async (reportId: number, photosId: number[]): Promise<(Response | null)[]> => {
+  const deletePhotoPromises = photosId.map((photoId) => deleteReportPhoto(reportId, photoId));
+
+  return getPromisesResponse<Response>(deletePhotoPromises);
+};
+
+/**
  * delete report file
  */
 const deleteReportPhoto = async (reportId: number, fileId: number): Promise<Response> => {
   return await httpReportPhoto.delete({
     urlReplacements: {
       '{reportId}': reportId.toString(),
-      '{fileId}': fileId.toString(),
+      '{photoId}': fileId.toString(),
     },
   });
 };
@@ -368,6 +378,7 @@ const ReportService = {
   getReportPhoto,
   updateReportPhoto,
   deleteReportPhoto,
+  deleteReportPhotos,
 };
 
 export default ReportService;
