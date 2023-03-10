@@ -169,7 +169,9 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       if (hasEmptyRequiredFields(report)) {
         setConfirmSubmitDialogOpen(false);
         setValidateFields(true);
-        handleBack();
+        if (showAnnual) {
+          handleBack();
+        }
         return;
       }
       const saveResult = await ReportService.updateReport(report);
