@@ -15,7 +15,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from '../../providers/hooks';
-import { Dropdown, IconTooltip } from '@terraware/web-components';
+import { Dropdown } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleSubtitle: {
@@ -250,7 +250,6 @@ export default function PersonView(): JSX.Element {
             </Grid>
           </Grid>
           <Box display='flex' flexDirection='column' marginTop={isDesktop ? theme.spacing(3) : theme.spacing(4)}>
-
             <Box width={roleSelectSize()} marginTop={theme.spacing(4)}>
               <Dropdown
                 id='role'
@@ -268,7 +267,8 @@ export default function PersonView(): JSX.Element {
                       <li>{strings.MANAGER_INFO}</li>
                       <li>{strings.ADMIN_INFO}</li>
                     </ul>
-                  </Box>}
+                  </Box>
+                }
               />
             </Box>
           </Box>
