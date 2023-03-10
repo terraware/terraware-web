@@ -5,7 +5,7 @@ import strings from 'src/strings';
 import ReportForm from 'src/components/Reports/ReportForm';
 import { Box, Typography, useTheme } from '@mui/material';
 import ReportService from 'src/services/ReportService';
-import { Report } from 'src/types/Report';
+import { Report, ReportFile } from 'src/types/Report';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
@@ -16,6 +16,7 @@ import { useUser } from 'src/providers';
 import produce from 'immer';
 import { Organization } from 'src/types/Organization';
 import CannotEditReportDialog from './InvalidUserModal';
+import useReportFiles from 'src/components/Reports/useReportFiles';
 
 export type ReportEditProps = {
   organization: Organization;
@@ -55,6 +56,24 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
   }, [reportIdInt, snackbar]);
+
+  const [newReportFiles, setNewReportFiles] = useState<File[]>([]);
+
+  const [updatedReportFiles, setUpdatedReportFiles] = useState<ReportFile[]>([]);
+
+  const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
+
+  const updateFiles = async () => {
+    await Promise.all(
+      initialReportFiles?.map((f) => {
+        if (!updatedReportFiles?.includes(f)) {
+          return ReportService.deleteReportFile(reportIdInt, f.id);
+        }
+        return undefined;
+      }) ?? []
+    );
+    await Promise.all(newReportFiles?.map((f) => ReportService.uploadReportFile(reportIdInt, f)) ?? []);
+  };
 
   const [currentUserEditing, setCurrentUserEditing] = useState(true);
   useEffect(() => {
@@ -99,6 +118,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
+        await updateFiles();
         await updatePhotos(report.id);
       }
     }
@@ -126,6 +146,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
+        await updateFiles();
         await updatePhotos(report.id);
       }
     }
@@ -145,6 +166,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     if (report) {
       const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
+        await updateFiles();
         await updatePhotos(report.id);
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded) {
@@ -161,6 +183,14 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const onPhotosChanged = (photosList: File[]) => {
     setPhotos(photosList);
+  };
+
+  const onNewFilesChanged = (filesList: File[]) => {
+    setNewReportFiles(filesList);
+  };
+
+  const onExistingFilesChanged = (filesList: ReportFile[]) => {
+    setUpdatedReportFiles(filesList);
   };
 
   const rightButtons: FormButton[] = [];
@@ -303,6 +333,9 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 report={report}
                 updateDetails={updateAnnualDetails}
                 updateSDGProgress={updateSDGProgress}
+                initialReportFiles={initialReportFiles ?? []}
+                onNewFilesChanged={onNewFilesChanged}
+                onExistingFilesChanged={onExistingFilesChanged}
               />
             ) : (
               <ReportForm

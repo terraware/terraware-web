@@ -12,6 +12,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
 import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
+import useReportFiles from 'src/components/Reports/useReportFiles';
 
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
@@ -44,6 +45,8 @@ export default function ReportView(): JSX.Element {
   const [showAnnual, setShowAnnual] = useState(false);
 
   const [confirmEditDialogOpen, setConfirmEditDialogOpen] = useState(false);
+
+  const initialReportFiles = useReportFiles(report);
 
   const startEdit = () => {
     if (report?.lockedByUserId) {
@@ -87,7 +90,7 @@ export default function ReportView(): JSX.Element {
       </Box>
       {report &&
         (showAnnual ? (
-          <ReportFormAnnual editable={false} report={report} />
+          <ReportFormAnnual editable={false} report={report} initialReportFiles={initialReportFiles ?? []} />
         ) : (
           <ReportForm
             editable={false}
