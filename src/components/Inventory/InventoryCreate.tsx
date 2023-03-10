@@ -236,6 +236,7 @@ export default function CreateInventory(): JSX.Element {
                   aria-label={strings.ESTIMATED_READY_DATE}
                   value={record.readyByDate}
                   onChange={(value) => changeDate('readyByDate', value)}
+                  defaultTimeZone={timeZone}
                 />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
