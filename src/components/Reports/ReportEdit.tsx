@@ -146,6 +146,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     if (report) {
       const saveResult = await ReportService.updateReport(report);
       setShowAnnual(true);
+      setValidateFields(false);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
@@ -159,6 +160,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     if (report) {
       const saveResult = await ReportService.updateReport(report);
       setShowAnnual(false);
+      setValidateFields(false);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       }
@@ -183,16 +185,41 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         !plantingSite.mortalityRate
       );
     });
-    return emptySeedbankFields || emptyNurseryFields || emptyPlantingSitesFields;
+    return !iReport.summaryOfProgress || emptySeedbankFields || emptyNurseryFields || emptyPlantingSitesFields;
   };
+
+  const hasEmptyRequiredAnnualFields = (iReport: Report) => {
+    if (!iReport.isAnnual) {
+      return false;
+    }
+    return (
+      !iReport.annualDetails?.projectSummary ||
+      !iReport.annualDetails?.projectImpact ||
+      !iReport.annualDetails?.budgetNarrativeSummary ||
+      !iReport.annualDetails?.socialImpact ||
+      !iReport.annualDetails?.challenges ||
+      !iReport.annualDetails?.keyLessons ||
+      !iReport.annualDetails?.successStories ||
+      !iReport.annualDetails?.opportunities ||
+      !iReport.annualDetails?.nextSteps ||
+      (iReport.annualDetails?.isCatalytic && !iReport.annualDetails?.catalyticDetail) ||
+      iReport.annualDetails?.sustainableDevelopmentGoals.some((sdg) => !sdg?.progress)
+    );
+  };
+
   const submitReport = async () => {
     if (report) {
       if (hasEmptyRequiredFields(report)) {
         setConfirmSubmitDialogOpen(false);
-        setValidateFields(true);
         if (showAnnual) {
           handleBack();
         }
+        setValidateFields(true);
+        return;
+      }
+      if (hasEmptyRequiredAnnualFields(report)) {
+        setConfirmSubmitDialogOpen(false);
+        setValidateFields(true);
         return;
       }
       const saveResult = await ReportService.updateReport(report);
@@ -367,6 +394,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 initialReportFiles={initialReportFiles ?? []}
                 onNewFilesChanged={onNewFilesChanged}
                 onExistingFilesChanged={onExistingFilesChanged}
+                validate={validateFields}
               />
             ) : (
               <ReportForm

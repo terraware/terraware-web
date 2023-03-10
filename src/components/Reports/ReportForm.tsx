@@ -143,6 +143,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
               onUpdateReport('summaryOfProgress', value);
             }
           }}
+          errorText={validate && !draftReport.summaryOfProgress ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
