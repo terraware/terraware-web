@@ -562,7 +562,7 @@ export default function Accession2View(): JSX.Element {
           <Grid item xs={getOverviewGridSize(1)}>
             <OverviewItemCard
               isEditable={!(isAwaitingCheckin || !userCanEdit)}
-              onClick={() => setOpenEditStateModal(true)}
+              handleEdit={() => setOpenEditStateModal(true)}
               title={strings.STATUS}
               contents={
                 <Typography
@@ -590,7 +590,7 @@ export default function Accession2View(): JSX.Element {
           <Grid item xs={getOverviewGridSize(1)}>
             <OverviewItemCard
               isEditable={userCanEdit}
-              onClick={() => setOpenEditLocationModal(true)}
+              handleEdit={() => setOpenEditLocationModal(true)}
               title={strings.LOCATION}
               contents={
                 <Box>
@@ -605,7 +605,7 @@ export default function Accession2View(): JSX.Element {
           <Grid item xs={getOverviewGridSize(1)}>
             <OverviewItemCard
               isEditable={userCanEdit}
-              onClick={() => setOpenEndDryingReminderModal(true)}
+              handleEdit={() => setOpenEndDryingReminderModal(true)}
               title={strings.END_DRYING_REMINDER}
               contents={
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -619,8 +619,8 @@ export default function Accession2View(): JSX.Element {
         <Grid item xs={getOverviewGridSize(1)}>
           <OverviewItemCard
             isEditable={quantityEditable}
+            handleEdit={() => setOpenQuantityModal(true)}
             hideEditIcon={accession?.remainingQuantity?.quantity === undefined && !isMobile}
-            onClick={() => setOpenQuantityModal(true)}
             title={strings.QUANTITY}
             titleInfoTooltip={!quantityEditable && strings.EDIT_QUANTITY_DISABLED}
             contents={
@@ -653,9 +653,9 @@ export default function Accession2View(): JSX.Element {
         <Grid item xs={getOverviewGridSize(2)}>
           <OverviewItemCard
             isEditable={viabilityEditable}
+            handleEdit={() => setOpenViabilityModal(true)}
             hideEditIcon={!accession?.viabilityPercent?.toString() && !isMobile}
             title={strings.VIABILITY}
-            onClick={() => setOpenViabilityModal(true)}
             contents={
               accession?.viabilityPercent?.toString() ? (
                 `${accession?.viabilityPercent}%`
