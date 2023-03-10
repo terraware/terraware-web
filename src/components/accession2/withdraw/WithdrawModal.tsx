@@ -110,6 +110,27 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     getOrgUsers();
   }, [selectedOrganization]);
 
+  useEffect(() => {
+    setRecord((previousRecord: Withdrawal): Withdrawal => {
+      if (previousRecord.withdrawnQuantity) {
+        return {
+          ...previousRecord,
+          withdrawnQuantity: {
+            quantity: previousRecord.withdrawnQuantity?.quantity,
+            units:
+              isNurseryTransfer || record.purpose === 'Viability Testing'
+                ? 'Seeds'
+                : previousRecord.withdrawnQuantity?.units !== 'Seeds'
+                ? previousRecord.withdrawnQuantity?.units
+                : 'Grams',
+          },
+        };
+      } else {
+        return previousRecord;
+      }
+    });
+  }, [record.purpose, isNurseryTransfer, setRecord]);
+
   const saveWithdrawal = async () => {
     let response;
     if (record) {
@@ -159,7 +180,11 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
           ? undefined
           : {
               quantity: value || 0,
-              units: prev.withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams',
+              units:
+                prev.withdrawnQuantity?.units ||
+                (isNurseryTransfer || record.purpose === 'Viability Testing'
+                  ? 'Seeds'
+                  : accession.remainingQuantity?.units || 'Grams'),
             },
     }));
 
