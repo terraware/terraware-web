@@ -135,7 +135,7 @@ export default function Filters(props: Props): JSX.Element {
     const result: PillListItem<string>[] = [];
     const preExpFilterPill: PillListItem<string> = filters.preExpFilter && {
       id: 'preExpFilter',
-      label: strings.STATUS,
+      label: preExpFilterColumn.name,
       value: filters.preExpFilter.values.join(', '),
     };
     if (preExpFilterPill) {
@@ -151,9 +151,8 @@ export default function Filters(props: Props): JSX.Element {
         } as PillListItem<string>);
       }
     }
-
     return result;
-  }, [filters, columns]);
+  }, [filters, columns, preExpFilterColumn.name]);
 
   const onChangePreExpFilter = (selectedValues: string[]) => {
     let newFilters;

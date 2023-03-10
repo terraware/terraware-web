@@ -290,13 +290,13 @@ export default function Database(props: DatabaseProps): JSX.Element {
     const storageLocationName = query.get('storageLocationName');
     let newSearchCriteria = searchCriteria || {};
     if (stage.length || query.has('stage')) {
-      delete newSearchCriteria.state;
+      delete newSearchCriteria.preExpFilter;
       const stageNames = ACCESSION_2_STATES.map((name) => stateName(name));
       const stages = (stage || []).filter((stageName) => stageNames.indexOf(stageName) !== -1);
       if (stages.length) {
         newSearchCriteria = {
           ...newSearchCriteria,
-          state: {
+          preExpFilter: {
             field: 'state',
             values: stages,
             type: 'Exact',
