@@ -54,8 +54,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     { key: 'facility_name', name: strings.NURSERY, type: 'string' },
     { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
     { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
-    { key: 'quantitiesMenu', name: '', type: 'string' },
     { key: 'withdraw', name: '', type: 'string' },
+    { key: 'quantitiesMenu', name: '', type: 'string' },
   ];
 
   useEffect(() => {

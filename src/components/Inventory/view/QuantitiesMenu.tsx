@@ -71,7 +71,7 @@ export default function QuantitiesMenu(props: QuantitiesMenuProps): JSX.Element 
           icon='menuVertical'
           type='passive'
           priority='ghost'
-          size='small'
+          size='medium'
         />
       </Tooltip>
     </>
