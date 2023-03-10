@@ -2,7 +2,6 @@ import { Box, Theme, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
-import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
