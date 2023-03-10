@@ -27,10 +27,11 @@ export type LocationSectionProps = {
   onUpdateLocation: (field: string, value: any) => void;
   onUpdateWorkers: (workersField: string, value: any) => void;
   locationType: 'seedBank' | 'nursery' | 'plantingSite';
+  validate?: boolean;
 };
 
 export default function LocationSection(props: LocationSectionProps): JSX.Element {
-  const { editable, location, onUpdateLocation, onUpdateWorkers, locationType } = props;
+  const { editable, location, onUpdateLocation, onUpdateWorkers, locationType, validate } = props;
   const { isMobile, isTablet } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
@@ -148,6 +149,9 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportSeedBank | ReportNursery).buildStartedDate ?? ''}
               onChange={(value) => onUpdateLocation('buildStartedDate', value)}
               type='date'
+              errorText={
+                validate && !(location as ReportSeedBank | ReportNursery).buildStartedDate ? strings.REQUIRED_FIELD : ''
+              }
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -162,6 +166,11 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportSeedBank | ReportNursery).buildCompletedDate ?? ''}
               onChange={(value) => onUpdateLocation('buildCompletedDate', value)}
               type='date'
+              errorText={
+                validate && !(location as ReportSeedBank | ReportNursery).buildCompletedDate
+                  ? strings.REQUIRED_FIELD
+                  : ''
+              }
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -176,6 +185,11 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportSeedBank | ReportNursery).operationStartedDate ?? ''}
               onChange={(value) => onUpdateLocation('operationStartedDate', value)}
               type='date'
+              errorText={
+                validate && !(location as ReportSeedBank | ReportNursery).operationStartedDate
+                  ? strings.REQUIRED_FIELD
+                  : ''
+              }
             />
           </Grid>
         </>
@@ -200,6 +214,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               editable={editable}
               onChange={(value) => onUpdateLocation('capacity', value)}
               type='text'
+              errorText={validate && !(location as ReportNursery).capacity ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -230,6 +245,9 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               editable={editable}
               onChange={(value) => onUpdateLocation('totalPlantingSiteArea', value)}
               type='text'
+              errorText={
+                validate && !(location as ReportPlantingSite).totalPlantingSiteArea ? strings.REQUIRED_FIELD : ''
+              }
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -240,6 +258,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               editable={editable}
               onChange={(value) => onUpdateLocation('totalPlantedArea', value)}
               type='text'
+              errorText={validate && !(location as ReportPlantingSite).totalPlantedArea ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()} />
@@ -252,6 +271,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               onChange={(value) => onUpdateLocation('totalTreesPlanted', value)}
               type='text'
               helper={strings.TOTAL_TREES_PLANTED_HELPER_TEXT}
+              errorText={validate && !(location as ReportPlantingSite).totalTreesPlanted ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -263,6 +283,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               onChange={(value) => onUpdateLocation('totalPlantsPlanted', value)}
               type='text'
               helper={strings.TOTAL_PLANTS_PLANTED_HELPER_TEXT}
+              errorText={validate && !(location as ReportPlantingSite).totalPlantsPlanted ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -273,6 +294,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               editable={editable}
               onChange={(value) => onUpdateLocation('mortalityRate', value)}
               type='text'
+              errorText={validate && !(location as ReportPlantingSite).mortalityRate ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
           {plantingSiteSpecies && (
@@ -370,10 +392,11 @@ type InfoFieldProps = {
   onChange: (value: any) => void;
   type: 'text' | 'date';
   helper?: string;
+  errorText?: string;
 };
 
 function InfoField(props: InfoFieldProps): JSX.Element {
-  const { id, label, editable, value, onChange, type, helper } = props;
+  const { id, label, editable, value, onChange, type, helper, errorText } = props;
   const classes = useStyles();
   return editable ? (
     type === 'text' ? (
@@ -385,9 +408,17 @@ function InfoField(props: InfoFieldProps): JSX.Element {
         readonly={!editable}
         onChange={onChange}
         helperText={helper}
+        errorText={errorText}
       />
     ) : type === 'date' ? (
-      <DatePicker id={id} label={label} value={value as string} onChange={onChange} aria-label='date-picker' />
+      <DatePicker
+        id={id}
+        label={label}
+        value={value as string}
+        onChange={onChange}
+        aria-label='date-picker'
+        errorText={errorText}
+      />
     ) : (
       <></>
     )

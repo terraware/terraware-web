@@ -44,6 +44,7 @@ export type ReportFormProps = {
   ) => void;
   onPhotosChanged?: (photos: File[]) => void;
   onPhotoRemove?: (id: number) => void;
+  validate?: boolean;
 };
 
 export default function ReportForm(props: ReportFormProps): JSX.Element {
@@ -58,6 +59,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     onUpdateWorkers,
     onPhotosChanged,
     onPhotoRemove,
+    validate,
   } = props;
   const theme = useTheme();
   const classes = useStyles();
@@ -208,6 +210,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
                     onUpdateWorkers && onUpdateWorkers(index, field, value, 'seedBanks')
                   }
                   locationType='seedBank'
+                  validate={validate}
                 />
               )}
             </Grid>
@@ -247,6 +250,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
                     onUpdateWorkers && onUpdateWorkers(index, field, value, 'nurseries')
                   }
                   locationType='nursery'
+                  validate={validate}
                 />
               )}
             </Grid>
@@ -287,6 +291,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
                     onUpdateWorkers && onUpdateWorkers(index, field, value, 'plantingSites')
                   }
                   locationType='plantingSite'
+                  validate={validate}
                 />
               )}
             </Grid>

@@ -40,6 +40,9 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
 
   const [report, setReport] = useState<Report>();
+
+  const [validateFields, setValidateFields] = useState(false);
+
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
@@ -162,8 +165,36 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
+  const hasEmptyRequiredFields = (iReport: Report) => {
+    const emptySeedbankFields = iReport.seedBanks?.some((sb) => {
+      return !sb.buildStartedDate || !sb.buildCompletedDate || !sb.operationStartedDate;
+    });
+    const emptyNurseryFields = iReport.nurseries?.some((nursery) => {
+      return (
+        !nursery.buildStartedDate || !nursery.buildCompletedDate || !nursery.operationStartedDate || !nursery.capacity
+      );
+    });
+    const emptyPlantingSitesFields = iReport.plantingSites?.some((plantingSite) => {
+      return (
+        !plantingSite.totalPlantingSiteArea ||
+        !plantingSite.totalPlantedArea ||
+        !plantingSite.totalTreesPlanted ||
+        !plantingSite.totalPlantsPlanted ||
+        !plantingSite.mortalityRate
+      );
+    });
+    return emptySeedbankFields || emptyNurseryFields || emptyPlantingSitesFields;
+  };
   const submitReport = async () => {
     if (report) {
+      if (hasEmptyRequiredFields(report)) {
+        setConfirmSubmitDialogOpen(false);
+        setValidateFields(true);
+        if (showAnnual) {
+          handleBack();
+        }
+        return;
+      }
       const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
         await updateFiles();
@@ -349,6 +380,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
                 onUpdateWorkers={updateWorkers}
                 onPhotosChanged={onPhotosChanged}
                 onPhotoRemove={onRemovePhoto}
+                validate={validateFields}
               />
             ))}
         </PageForm>
