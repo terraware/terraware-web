@@ -99,6 +99,7 @@ export default function Filters(props: Props): JSX.Element {
   const { columns, searchColumns, preExpFilterColumn, filters, availableValues, allValues, onChange } = props;
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
+  const preExpFilterKey = preExpFilterColumn.key;
   const [searchTerm, setSearchTerm] = React.useState(getSearchTermFromFilters(filters));
   const searchTermCallback = useCallback(
     (value: string) => {
@@ -133,10 +134,10 @@ export default function Filters(props: Props): JSX.Element {
 
   const filterPillItems = useMemo(() => {
     const result: PillListItem<string>[] = [];
-    const preExpFilterPill: PillListItem<string> = filters.preExpFilter && {
-      id: 'preExpFilter',
-      label: strings.STATUS,
-      value: filters.preExpFilter.values.join(', '),
+    const preExpFilterPill: PillListItem<string> = filters[preExpFilterKey] && {
+      id: preExpFilterKey,
+      label: preExpFilterColumn.name,
+      value: filters[preExpFilterKey].values.join(', '),
     };
     if (preExpFilterPill) {
       result.push(preExpFilterPill);
@@ -151,15 +152,14 @@ export default function Filters(props: Props): JSX.Element {
         } as PillListItem<string>);
       }
     }
-
     return result;
-  }, [filters, columns]);
+  }, [filters, columns, preExpFilterColumn.name, preExpFilterKey]);
 
   const onChangePreExpFilter = (selectedValues: string[]) => {
     let newFilters;
     if (selectedValues.length === 0) {
       newFilters = { ...filters };
-      delete newFilters.preExpFilter;
+      delete newFilters[preExpFilterKey];
     } else {
       newFilters = { ...filters, ...getPreExpFilter(preExpFilterColumn, selectedValues) };
     }
@@ -168,7 +168,7 @@ export default function Filters(props: Props): JSX.Element {
 
   const onUpdateFilters = (newFilters: Record<string, SearchNodePayload>) => {
     const keepFilters = Object.entries(filters).filter(
-      (ent) => ent[0] === 'searchTermFilter' || ent[0] === 'preExpFilter'
+      (ent) => ent[0] === 'searchTermFilter' || ent[0] === preExpFilterKey
     );
     onChange({ ...Object.fromEntries(keepFilters), ...newFilters });
   };
@@ -318,7 +318,7 @@ function getSearchTermFilter(searchCols: DatabaseColumn[], searchTerm: string): 
 
 function getPreExpFilter(col: DatabaseColumn, values: string[]): Record<string, SearchNodePayload> {
   return {
-    preExpFilter: {
+    [col.key]: {
       operation: 'field',
       field: col.key,
       type: 'Exact',
@@ -328,7 +328,7 @@ function getPreExpFilter(col: DatabaseColumn, values: string[]): Record<string, 
 }
 
 function getCurrentPreExpFilterValues(col: DatabaseColumn, filters: Record<string, SearchNodePayload>): string[] {
-  return filters.preExpFilter?.values ?? [];
+  return filters[col.key]?.values ?? [];
 }
 
 function getOptions(col: DatabaseColumn, availableValues: FieldValuesPayload, allValues: FieldValuesPayload): Option[] {
