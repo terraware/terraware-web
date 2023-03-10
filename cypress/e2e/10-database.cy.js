@@ -2,7 +2,6 @@ describe('Database', () => {
   context('Customize columns', () => {
     it('should display the default columns', () => {
       cy.visit('/accessions');
-      cy.wait(2000);
       cy.get('#table-header').children().should('have.length', 8);
       cy.get('#table-header-accessionNumber').contains('ACCESSION');
       cy.get('#table-header-state').contains('STATUS');
