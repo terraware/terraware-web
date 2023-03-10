@@ -23,6 +23,7 @@ export type ReportFormAnnualProps = {
   initialReportFiles: ReportFile[];
   onNewFilesChanged?: (files: File[]) => void;
   onExistingFilesChanged?: (files: ReportFile[]) => void;
+  validate?: boolean;
 };
 
 export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Element {
@@ -34,6 +35,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
     initialReportFiles,
     onNewFilesChanged,
     onExistingFilesChanged,
+    validate,
   } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -224,6 +226,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('projectSummary', value);
             }
           }}
+          errorText={validate && !report.annualDetails?.projectSummary ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -238,6 +241,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('projectImpact', value);
             }
           }}
+          errorText={validate && !report.annualDetails?.projectImpact ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -252,6 +256,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('budgetNarrativeSummary', value);
             }
           }}
+          errorText={validate && !report.annualDetails?.budgetNarrativeSummary ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={12} ref={divRef}>
@@ -303,6 +308,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('socialImpact', value);
             }
           }}
+          errorText={validate && !report.annualDetails?.socialImpact ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={12}>
@@ -334,6 +340,14 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
                   updateSDGProgress(index, value as string);
                 }
               }}
+              errorText={
+                validate &&
+                !report.annualDetails?.sustainableDevelopmentGoals[
+                  report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key)
+                ].progress
+                  ? strings.REQUIRED_FIELD
+                  : ''
+              }
             />
           )}
         </Grid>
@@ -351,6 +365,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('challenges', value);
             }
           }}
+          errorText={validate && !report.annualDetails?.challenges ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -365,6 +380,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('keyLessons', value);
             }
           }}
+          errorText={validate && !report.annualDetails?.keyLessons ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -379,6 +395,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('successStories', value);
             }
           }}
+          errorText={validate && !report.annualDetails?.successStories ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={12}>
@@ -407,6 +424,11 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
             }
           }}
           value={catalyticDetail}
+          errorText={
+            validate && report.annualDetails?.isCatalytic && !report.annualDetails?.catalyticDetail
+              ? strings.REQUIRED_FIELD
+              : ''
+          }
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -421,6 +443,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('opportunities', value);
             }
           }}
+          errorText={validate && !report.annualDetails?.opportunities ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -435,6 +458,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('nextSteps', value);
             }
           }}
+          errorText={validate && !report.annualDetails?.nextSteps ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
     </Grid>
@@ -447,10 +471,11 @@ type ReportFieldProps = {
   editable: boolean;
   value: string;
   onChange: (value: string) => void;
+  errorText?: string;
 };
 
 function ReportField(props: ReportFieldProps): JSX.Element {
-  const { title, instructions, editable, value, onChange } = props;
+  const { title, instructions, editable, value, onChange, errorText } = props;
   const theme = useTheme();
   return (
     <>
@@ -464,6 +489,7 @@ function ReportField(props: ReportFieldProps): JSX.Element {
         readonly={!editable}
         onChange={(v) => onChange(v as string)}
         value={value}
+        errorText={errorText}
       />
     </>
   );
