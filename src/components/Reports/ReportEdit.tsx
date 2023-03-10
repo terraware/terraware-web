@@ -194,16 +194,16 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
     return (
       !iReport.annualDetails?.projectSummary ||
-      !iReport.annualDetails.projectImpact ||
-      !iReport.annualDetails.budgetNarrativeSummary ||
-      !iReport.annualDetails.socialImpact ||
-      !iReport.annualDetails.challenges ||
-      !iReport.annualDetails.keyLessons ||
-      !iReport.annualDetails.successStories ||
-      !iReport.annualDetails.opportunities ||
-      !iReport.annualDetails.nextSteps ||
-      (iReport.annualDetails.isCatalytic && !iReport.annualDetails.catalyticDetail) ||
-      iReport.annualDetails.sustainableDevelopmentGoals.some((sdg) => !sdg.progress)
+      !iReport.annualDetails?.projectImpact ||
+      !iReport.annualDetails?.budgetNarrativeSummary ||
+      !iReport.annualDetails?.socialImpact ||
+      !iReport.annualDetails?.challenges ||
+      !iReport.annualDetails?.keyLessons ||
+      !iReport.annualDetails?.successStories ||
+      !iReport.annualDetails?.opportunities ||
+      !iReport.annualDetails?.nextSteps ||
+      (iReport.annualDetails?.isCatalytic && !iReport.annualDetails?.catalyticDetail) ||
+      iReport.annualDetails?.sustainableDevelopmentGoals.some((sdg) => !sdg?.progress)
     );
   };
 
