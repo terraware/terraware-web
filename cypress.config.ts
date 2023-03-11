@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
-  screenshotOnRunFailure: false,
+  screenshotOnRunFailure: true,
   video: false,
   watchForFileChanges: false,
   blockHosts: '*cookie-script.com',
@@ -12,5 +12,7 @@ export default defineConfig({
       return require('./cypress/plugins/index.js')(on, config);
     },
     baseUrl: 'http://localhost:3000',
+    pageLoadTimeout: 90000,
+    responseTimeout: 60000,
   },
 });

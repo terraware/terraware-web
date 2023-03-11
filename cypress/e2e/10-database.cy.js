@@ -1,4 +1,11 @@
 describe('Database', () => {
+  it('visits accessions before running tests to clear network problems', () => {
+    cy.on('uncaught:exception', () => {
+      return false;
+    });
+    cy.visit('/accessions');
+    cy.wait(5000);
+  });
   context('Customize columns', () => {
     it('should display the default columns', () => {
       cy.visit('/accessions');
