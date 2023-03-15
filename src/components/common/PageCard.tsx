@@ -2,7 +2,6 @@ import { Box, Theme, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
-import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -11,15 +10,10 @@ import Link from './Link';
 
 export type LinkStyle = 'plain' | 'button';
 
-type StyleProps = {
-  linkStyle: LinkStyle;
-};
-
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     background: theme.palette.TwClrBg,
     borderRadius: '24px',
-    cursor: (props: StyleProps) => (props.linkStyle === 'plain' ? 'pointer' : 'default'),
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
@@ -78,7 +72,6 @@ export default function PageCard(props: PageCardProps): JSX.Element {
   const { name, isNameBold, icon, description, linkText, link, linkStyle } = props;
   const classes = useStyles({ linkStyle });
   const theme = useTheme();
-  const history = useHistory();
   const { isMobile } = useDeviceInfo();
 
   const stopBubblingEvent = (event?: React.MouseEvent) => {
@@ -87,15 +80,8 @@ export default function PageCard(props: PageCardProps): JSX.Element {
     }
   };
 
-  const goToPage = (event?: React.MouseEvent) => {
-    if (linkStyle === 'button') {
-      return;
-    }
-    history.push({ pathname: link });
-  };
-
   return (
-    <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`} onClick={goToPage}>
+    <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`}>
       <div className={classes.title}>
         <Icon name={icon} size='medium' className={classes.icon} />
         <Typography

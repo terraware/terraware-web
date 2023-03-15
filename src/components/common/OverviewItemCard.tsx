@@ -1,19 +1,13 @@
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Icon, IconTooltip } from '@terraware/web-components';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Button, Tooltip, IconTooltip } from '@terraware/web-components';
 import useDeviceInfo from '../../utils/useDeviceInfo';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  editIcon: {
-    display: 'none',
-    fill: theme.palette.TwClrIcn,
-  },
-}));
+import strings from 'src/strings';
 
 type OverviewItemCardProps = {
   isEditable: boolean;
   hideEditIcon?: boolean;
   onClick?: () => void;
+  handleEdit?: () => void;
   title: string;
   titleInfoTooltip?: React.ReactNode;
   contents: JSX.Element | string | null;
@@ -24,6 +18,7 @@ export default function OverviewItemCard({
   isEditable,
   hideEditIcon,
   onClick,
+  handleEdit,
   title,
   titleInfoTooltip,
   contents,
@@ -31,7 +26,6 @@ export default function OverviewItemCard({
 }: OverviewItemCardProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles();
 
   return (
     <Box
@@ -45,20 +39,7 @@ export default function OverviewItemCard({
         justifyContent: 'space-between',
         padding: theme.spacing(3),
         width: '100%',
-        '&:hover': {
-          backgroundColor: `${isEditable && theme.palette.TwClrBgGhostHover}`,
-        },
-        '&:hover .edit-icon': {
-          display: 'block',
-          position: 'absolute',
-        },
-        '.edit-icon': {
-          display: isMobile ? 'block' : 'none',
-          position: 'absolute',
-        },
-        cursor: isEditable ? 'pointer' : 'auto',
       }}
-      onClick={() => isEditable && onClick && onClick()}
     >
       <Box
         sx={{
@@ -93,8 +74,16 @@ export default function OverviewItemCard({
         </Box>
       </Box>
       {isEditable && !hideEditIcon ? (
-        <Box sx={{ marginLeft: 1, height: '16px', width: '16px' }}>
-          <Icon name='iconEdit' className={`${classes.editIcon} edit-icon`} />
+        <Box sx={{ marginLeft: 1, position: 'relative', top: '-11px' }}>
+          <Tooltip title={strings.EDIT}>
+            <Button
+              onClick={() => isEditable && handleEdit && handleEdit()}
+              icon='iconEdit'
+              type='passive'
+              priority='ghost'
+              size='small'
+            />
+          </Tooltip>
         </Box>
       ) : (
         <Box sx={{ marginLeft: 1, height: '16px', width: 2 }} />

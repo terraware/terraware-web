@@ -17,6 +17,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   text: {
     minWidth: '150px',
   },
+  cell: {
+    '&.MuiTableCell-root': {
+      height: '76px',
+    },
+  },
 }));
 
 export type PlotInfo = {
@@ -89,7 +94,7 @@ export default function ReassignmentRenderer({ plots, setReassignment, numericFo
         />
       );
 
-      return <CellRenderer {...props} value={value} />;
+      return <CellRenderer {...props} value={value} className={classes.cell} />;
     }
 
     if (column.key === 'reassign') {
@@ -111,7 +116,7 @@ export default function ReassignmentRenderer({ plots, setReassignment, numericFo
         </Box>
       );
 
-      return <CellRenderer {...props} value={value} />;
+      return <CellRenderer {...props} value={value} className={classes.cell} />;
     }
 
     if (column.key === 'notes') {
@@ -126,7 +131,7 @@ export default function ReassignmentRenderer({ plots, setReassignment, numericFo
         />
       );
 
-      return <CellRenderer {...props} value={value} />;
+      return <CellRenderer {...props} value={value} className={classes.cell} />;
     }
 
     if (column.key === 'originalPlot') {
