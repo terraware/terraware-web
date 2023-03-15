@@ -27,8 +27,8 @@ const useStyles = makeStyles(() => ({
   cell: {
     '&.MuiTableCell-root': {
       height: '76px',
-    }
-  }
+    },
+  },
 }));
 
 export default function WithdrawalBatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
