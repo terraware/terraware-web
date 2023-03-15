@@ -1,3 +1,4 @@
+49f5c2b3 SW-2485 / SW-2501 / SW-2529 Visual updates leftovers (#1287)
 e899f06b Bump webpack from 5.75.0 to 5.76.1 (#1293)
 cadd3240 SW-3184 Inventory batch edit quantities change on scroll (#1292)
 57750b42 Bump @testing-library/user-event from 12.8.3 to 14.4.3 (#1291)
