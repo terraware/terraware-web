@@ -1,3 +1,4 @@
+534ff6ae SW-3185 Fix delete photo upload trash icon is stretched (#1294)
 795a2ff0 SW-3013 Fix datepicker error state background color is missing (#1295)
 49f5c2b3 SW-2485 / SW-2501 / SW-2529 Visual updates leftovers (#1287)
 e899f06b Bump webpack from 5.75.0 to 5.76.1 (#1293)
