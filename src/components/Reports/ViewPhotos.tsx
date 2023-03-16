@@ -18,17 +18,9 @@ type ReportPhotoWithUrl = ReportPhoto & { url: string };
 const useStyles = makeStyles((theme: Theme) => ({
   removePhoto: {
     position: 'absolute',
-    width: theme.spacing(3),
-    height: theme.spacing(3),
     top: -10,
     right: -10,
-    paddingBottom: 0,
     backgroundColor: theme.palette.TwClrBgDanger,
-    '& > svg': {
-      position: 'relative',
-      top: '-4px',
-      right: '4px',
-    },
   },
 }));
 
