@@ -2315,10 +2315,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.3.12":
-  version "2.3.12"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.12.tgz#da84552ee2887c74ef44fdb7359fc49c9d9de8dd"
-  integrity sha512-+ip9bHUG5qPgCVVC38EBSZFU/xre++0FxWTt3HsmGOaPwjR6s1680DADwSMhYzJQWOtvWPgxjWR+qIY3tqj8dQ==
+"@terraware/web-components@^2.3.13":
+  version "2.3.13"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.13.tgz#2982edab4323f7858ab67305ae7470cd32ef35c9"
+  integrity sha512-PHLHoBRKWja0u/RUXF0MSskQutJqAywm0rQZUeKeuP//Za0VCOZKiglId3imIK6PG0vjVmglB4iPvQGMIWDzZQ==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
@@ -2340,7 +2340,7 @@
     react-sortable-hoc "^2.0.0"
     sass "^1.57.1"
     tinycolor2 "^1.6.0"
-    web-vitals "^3.0.0"
+    web-vitals "^3.3.0"
 
 "@testing-library/dom@^8.0.0":
   version "8.19.1"
@@ -11694,10 +11694,15 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
-web-vitals@^3.0.0, web-vitals@^3.1.1:
+web-vitals@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-3.1.1.tgz#bb124a03df7a135617f495c5bb7dbc30ecf2cce3"
   integrity sha512-qvllU+ZeQChqzBhZ1oyXmWsjJ8a2jHYpH8AMaVuf29yscOPZfTQTjQFRX6+eADTdsDE8IanOZ0cetweHMs8/2A==
+
+web-vitals@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-3.3.0.tgz#2e14bcbb3acf71d00c49519ab92cc517511476d5"
+  integrity sha512-GZsEmJBNclIpViS/7QVOTr7Kbt4BgLeR7kQ5zCCtJVuiWsA+K6xTXaoEXssvl8yYFICEyNmA2Nr+vgBYTnS4bA==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
