@@ -86,7 +86,7 @@ const createPlantingSite = async (plantingSite: PlantingSitePostRequestBody): Pr
 };
 
 /**
- * Get a planting site by id, also returns associated planting zones -> plots
+ * Get a planting site by id, also returns associated planting zones -> planting subzones
  */
 const getPlantingSite = async (siteId: number): Promise<PlantingSiteData & Response> => {
   const response: PlantingSiteData & Response = await httpPlantingSite.get<
@@ -171,11 +171,11 @@ const getTotalPlantsInZones = async (organizationId: number, siteId: number): Pr
   return (await SearchService.search({
     prefix: 'plantingSites.plantingZones',
     fields: [
-      'plots.id',
-      'plots.fullName',
-      'plots.populations.species_scientificName',
-      'plots.populations.species_organization_id',
-      'plots.populations.totalPlants',
+      'plantingSubzones.id',
+      'plantingSubzones.fullName',
+      'plantingSubzones.populations.species_scientificName',
+      'plantingSubzones.populations.species_organization_id',
+      'plantingSubzones.populations.totalPlants',
       'id',
       'name',
     ],

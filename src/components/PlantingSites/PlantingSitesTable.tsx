@@ -31,7 +31,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
       type: 'string',
     },
     { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
-    { key: 'numPlots', name: strings.PLOTS, type: 'string' },
+    { key: 'numPlantingSubzones', name: strings.SUBZONES, type: 'string' },
     { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
   ];
 

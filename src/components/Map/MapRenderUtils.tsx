@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
 /**
  * Species / plants renderer
  */
-export function useSpeciesPlantsRenderer(plotsWithPlants: any): MapPopupRenderer {
+export function useSpeciesPlantsRenderer(subzonesWithPlants: any): MapPopupRenderer {
   const theme = useTheme();
   const classes = useStyles();
 
@@ -42,7 +42,7 @@ export function useSpeciesPlantsRenderer(plotsWithPlants: any): MapPopupRenderer
     className: classes.popup,
     render: (data: MapSourceProperties): JSX.Element => {
       const { id } = data;
-      const populations = plotsWithPlants[id.toString()];
+      const populations = subzonesWithPlants[id.toString()];
 
       if (!populations) {
         return (

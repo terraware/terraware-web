@@ -63,7 +63,7 @@ export default function NurseryWithdrawals(): JSX.Element {
     { key: 'purpose', name: strings.PURPOSE, type: 'string' },
     { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
     { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
-    { key: 'plotNames', name: strings.TO_PLOT, type: 'string' },
+    { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
     { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
     { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
     { key: 'hasReassignments', name: '', type: 'string' },

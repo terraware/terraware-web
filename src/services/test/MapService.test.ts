@@ -71,11 +71,11 @@ describe('Map service', () => {
       expect(observed).toEqual(readData('extractedZones.json'));
     });
 
-    it('should extract plots info from planting site hierarchy', () => {
+    it('should extract subzones info from planting site hierarchy', () => {
       const data = readData('plantingSite.json');
-      const observed = MapService.extractPlots(data);
+      const observed = MapService.extractSubzones(data);
 
-      expect(observed).toEqual(readData('extractedPlots.json'));
+      expect(observed).toEqual(readData('extractedSubzones.json'));
     });
   });
 });

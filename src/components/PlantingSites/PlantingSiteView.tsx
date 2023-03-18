@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import PageSnackbar from '../PageSnackbar';
 import { makeStyles } from '@mui/styles';
 import { PlantingSite } from 'src/types/Tracking';
-import BoundariesAndPlots from './BoundariesAndPlots';
+import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones';
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -113,7 +113,7 @@ export default function PlantingSiteView(): JSX.Element {
           />
         </Grid>
       </Grid>
-      {plantingSite?.boundary && <BoundariesAndPlots plantingSite={plantingSite} />}
+      {plantingSite?.boundary && <BoundariesAndZones plantingSite={plantingSite} />}
     </TfMain>
   );
 }

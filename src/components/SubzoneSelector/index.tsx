@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export type PlotInfo = {
+export type SubzoneInfo = {
   id: number | string;
   fullName: string;
 };
@@ -21,40 +21,50 @@ export type PlotInfo = {
 export type ZoneInfo = {
   id: number | string;
   name: string;
-  plots?: PlotInfo[];
+  plantingSubzones?: SubzoneInfo[];
 };
 
-export type PlotSelectorProps = {
+export type SubzoneSelectorProps = {
   zones: ZoneInfo[];
-  onPlotSelected: (plot?: PlotInfo) => void;
+  onSubzoneSelected: (subzone?: SubzoneInfo) => void;
   onZoneSelected: (zone?: ZoneInfo) => void;
   zoneError?: string;
-  plotError?: string;
+  subzoneError?: string;
   horizontalLayout?: boolean;
-  selectedPlot?: PlotInfo;
+  selectedSubzone?: SubzoneInfo;
   selectedZone?: ZoneInfo;
 };
 
-export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
-  const { zones, onZoneSelected, onPlotSelected, zoneError, plotError, horizontalLayout, selectedPlot, selectedZone } =
-    props;
+export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Element {
+  const {
+    zones,
+    onZoneSelected,
+    onSubzoneSelected,
+    zoneError,
+    subzoneError,
+    horizontalLayout,
+    selectedSubzone,
+    selectedZone,
+  } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
 
   const zoneToDropdownItem = (zone?: ZoneInfo) =>
     zone ? { label: zone.name, value: zone.id } : { label: '', value: '' };
-  const plotToDropdownItem = (plot?: PlotInfo) =>
-    plot ? { label: plot.fullName, value: plot.id } : { label: '', value: '' };
+  const subzoneToDropdownItem = (subzone?: SubzoneInfo) =>
+    subzone ? { label: subzone.fullName, value: subzone.id } : { label: '', value: '' };
 
   const onChangeZone = (zone: any) => {
     const foundZone = zones.find((zoneItem) => zoneItem.id.toString() === zone?.value?.toString());
     onZoneSelected(foundZone);
   };
 
-  const onChangePlot = (plot: any) => {
-    const foundPlot = selectedZone?.plots?.find((plotItem) => plotItem.id.toString() === plot?.value?.toString());
-    onPlotSelected(foundPlot);
+  const onChangeSubzone = (subzone: any) => {
+    const foundSubzone = selectedZone?.plantingSubzones?.find(
+      (subzoneItem) => subzoneItem.id.toString() === subzone?.value?.toString()
+    );
+    onSubzoneSelected(foundSubzone);
   };
 
   const isEqual = (optionA: any, optionB: any) => {
@@ -85,18 +95,18 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
 
   const zoneOptions: any[] = useMemo(() => {
     return zones
-      .filter((zone) => zone.plots)
+      .filter((zone) => zone.plantingSubzones)
       .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
       .map((zone) => zoneToDropdownItem(zone));
   }, [zones]);
 
-  const plotOptions: any[] = useMemo(() => {
-    if (!selectedZone?.plots) {
+  const subzoneOptions: any[] = useMemo(() => {
+    if (!selectedZone?.plantingSubzones) {
       return [];
     }
-    return selectedZone.plots
+    return selectedZone.plantingSubzones
       .sort((a, b) => a.fullName.localeCompare(b.fullName, undefined, { numeric: true }))
-      .map((plot) => plotToDropdownItem(plot));
+      .map((subzone) => subzoneToDropdownItem(subzone));
   }, [selectedZone]);
 
   return (
@@ -127,16 +137,16 @@ export default function PlotSelector(props: PlotSelectorProps): JSX.Element {
         />
       </Box>
       <Box flex={1} margin={theme.spacing(2, 0, 0)} sx={horizontalLayout ? horizontalStyle : {}}>
-        {horizontalLayout && horizontalLabel(strings.PLOT)}
+        {horizontalLayout && horizontalLabel(strings.SUBZONE)}
         <Autocomplete
-          id='plot'
+          id='subzone'
           placeholder={strings.SELECT}
-          label={horizontalLayout ? '' : strings.PLOT_REQUIRED}
-          selected={plotToDropdownItem(selectedPlot)}
-          options={plotOptions}
-          onChange={(value) => onChangePlot(value)}
-          errorText={plotError}
-          disabled={!selectedZone?.plots?.length}
+          label={horizontalLayout ? '' : strings.SUBZONE_REQUIRED}
+          selected={subzoneToDropdownItem(selectedSubzone)}
+          options={subzoneOptions}
+          onChange={(value) => onChangeSubzone(value)}
+          errorText={subzoneError}
+          disabled={!selectedZone?.plantingSubzones?.length}
           isEqual={isEqual}
           freeSolo={false}
           hideClearIcon={true}

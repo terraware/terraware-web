@@ -1,9 +1,9 @@
 import { components } from 'src/api/types/generated-schema';
 
-// planting site, zone, plot
+// planting site, zone, subzone
 export type PlantingSite = components['schemas']['PlantingSitePayload'];
 export type PlantingZone = components['schemas']['PlantingZonePayload'];
-export type Plot = components['schemas']['PlotPayload'];
+export type PlantingSubzone = components['schemas']['PlantingSubzonePayload'];
 
 // geometry and types of geometries
 export type MultiPolygon = components['schemas']['MultiPolygon'];

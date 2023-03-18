@@ -4,18 +4,18 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { PlantingSiteMap } from '../Map';
 
-type BoundariesAndPlotsProps = {
+type BoundariesAndZonesProps = {
   plantingSite: PlantingSite;
 };
 
-export default function BoundariesAndPlots(props: BoundariesAndPlotsProps): JSX.Element {
+export default function BoundariesAndZones(props: BoundariesAndZonesProps): JSX.Element {
   const { plantingSite } = props;
 
   return (
     <Box display='flex' flexGrow={plantingSite?.boundary ? 1 : 0} flexDirection='column' paddingTop={theme.spacing(3)}>
       <Box display='flex' flexGrow={0}>
         <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
-          {strings.BOUNDARIES_AND_PLOTS}
+          {strings.BOUNDARIES_AND_ZONES}
         </Typography>
       </Box>
       <Box display='flex' sx={{ flexGrow: 1 }}>

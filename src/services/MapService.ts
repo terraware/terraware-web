@@ -103,12 +103,12 @@ const getBoundingBox = (geometries: MapGeometry[]): MapBoundingBox => {
 const getPlantingSiteBoundingBox = (plantingSite: PlantingSite): MapBoundingBox => {
   const site: MapSourceBaseData = extractPlantingSite(plantingSite);
   const zones: MapSourceBaseData = extractPlantingZones(plantingSite);
-  const plots: MapSourceBaseData = extractPlots(plantingSite);
+  const subzones: MapSourceBaseData = extractSubzones(plantingSite);
 
   const geometries: MapGeometry[] = [
     site.entities[0]?.boundary,
     ...(zones?.entities.map((s) => s.boundary) || []),
-    ...(plots?.entities.map((s) => s.boundary) || []),
+    ...(subzones?.entities.map((s) => s.boundary) || []),
   ].filter((g) => g) as MapGeometry[];
 
   return getBoundingBox(geometries);
@@ -163,16 +163,16 @@ const extractPlantingZones = (site: PlantingSite): MapSourceBaseData => {
 };
 
 /**
- * Transform plots geometry data into UI model
+ * Transform subzones geometry data into UI model
  */
-const extractPlots = (site: PlantingSite): MapSourceBaseData => {
-  const allPlotsData =
+const extractSubzones = (site: PlantingSite): MapSourceBaseData => {
+  const allPlantingSubzonesData =
     site.plantingZones?.flatMap((zone) => {
-      const { plots } = zone;
-      return plots.map((plot) => {
-        const { id, name, fullName, boundary } = plot;
+      const { plantingSubzones } = zone;
+      return plantingSubzones.map((subzone) => {
+        const { id, name, fullName, boundary } = subzone;
         return {
-          properties: { id, name, fullName, type: 'plot' },
+          properties: { id, name, fullName, type: 'subzone' },
           boundary: getPolygons(boundary),
           id,
         };
@@ -180,8 +180,8 @@ const extractPlots = (site: PlantingSite): MapSourceBaseData => {
     }) || [];
 
   return {
-    entities: allPlotsData.flatMap((f) => f),
-    id: 'plots',
+    entities: allPlantingSubzonesData.flatMap((f) => f),
+    id: 'subzones',
   };
 };
 
@@ -215,7 +215,7 @@ const MapService = {
   getMapEntityGeometry,
   extractPlantingSite,
   extractPlantingZones,
-  extractPlots,
+  extractSubzones,
 };
 
 export default MapService;
