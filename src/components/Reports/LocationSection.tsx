@@ -291,7 +291,9 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               id={`${location.id}-mortality-rate`}
               label={strings.MORTALITY_RATE}
               value={
-                (location as ReportPlantingSite).mortalityRate
+                editable
+                  ? (location as ReportPlantingSite).mortalityRate ?? ''
+                  : (location as ReportPlantingSite).mortalityRate
                   ? `${(location as ReportPlantingSite).mortalityRate}%`
                   : ''
               }
