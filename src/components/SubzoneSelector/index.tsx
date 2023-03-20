@@ -80,7 +80,7 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
       fontWeight={500}
       color={theme.palette.TwClrTxt}
       marginRight={theme.spacing(1)}
-      minWidth='40px'
+      minWidth='80px'
       textAlign='right'
     >
       {text}
