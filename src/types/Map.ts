@@ -46,7 +46,7 @@ export type MapAnnotation = {
 
 /**
  * A renderable map entity
- * eg. site, zone, plot
+ * eg. site, zone, subzone
  */
 export type MapEntity = {
   properties: MapSourceProperties;
@@ -95,7 +95,7 @@ export type MapPopupRenderer = {
  */
 export type MapEntityId = {
   id?: number; // id of entity, undefined for unknown
-  sourceId: string; // source type of entity 'plot', 'zone', 'site', etc.
+  sourceId: string; // source type of entity 'subzone', 'zone', 'site', etc.
 };
 
 /**

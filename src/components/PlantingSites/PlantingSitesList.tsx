@@ -43,7 +43,7 @@ export default function PlantingSitesList(): JSX.Element {
       : null;
 
     const params = {
-      fields: ['boundary', 'id', 'name', 'numPlantingZones', 'numPlots', 'description', 'timeZone'],
+      fields: ['boundary', 'id', 'name', 'numPlantingZones', 'numPlantingSubzones', 'description', 'timeZone'],
       prefix: 'plantingSites',
       sortOrder: [searchSortOrder],
       search: {

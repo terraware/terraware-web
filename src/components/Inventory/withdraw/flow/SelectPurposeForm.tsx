@@ -25,7 +25,7 @@ import { SpeciesService, TrackingService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageForm from 'src/components/common/PageForm';
-import PlotSelector, { PlotInfo, ZoneInfo } from 'src/components/PlotSelector';
+import SubzoneSelector, { SubzoneInfo, ZoneInfo } from 'src/components/SubzoneSelector';
 import { useOrganization } from 'src/providers/hooks';
 import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -83,7 +83,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
-  const [selectedPlot, setSelectedPlot] = useState<PlotInfo>();
+  const [selectedSubzone, setSelectedSubzone] = useState<SubzoneInfo>();
   const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
   const [speciesMap, setSpeciesMap] = useState<{ [key: string]: string }>({});
   const tz = useLocationTimeZone().get(selectedNursery);
@@ -148,10 +148,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const onChangePlantingSite = (value: string) => {
-    updateField('plotId', undefined); // clear plot id when there's a new planting site id
+    updateField('plantingSubzoneId', undefined); // clear subzone id when there's a new planting site id
     updateField('plantingSiteId', value);
     setSelectedZone(undefined);
-    setSelectedPlot(undefined);
+    setSelectedSubzone(undefined);
     const plantingSite = plantingSites ? plantingSites.find((site) => site.id.toString() === value.toString()) : null;
     setZones(plantingSite?.plantingZones || []);
     setZoneId(undefined);
@@ -159,14 +159,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   const onChangePlantingZone = (value: any) => {
     setSelectedZone(value);
-    setSelectedPlot(undefined);
+    setSelectedSubzone(undefined);
     setZoneId(value?.id);
-    updateField('plotId', undefined); // clear plot id when there's a new planting zone id
+    updateField('plantingSubzoneId', undefined); // clear subzone id when there's a new planting zone id
   };
 
-  const onChangePlot = (value: any) => {
-    setSelectedPlot(value);
-    updateField('plotId', value?.id);
+  const onChangeSubzone = (value: any) => {
+    setSelectedSubzone(value);
+    updateField('plantingSubzoneId', value?.id);
   };
 
   const setIndividualError = (id: string, error?: string) => {
@@ -279,10 +279,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return bothValid;
   };
 
-  const validatePlantingSitePlot = () => {
+  const validatePlantingSiteSubzone = () => {
     setIndividualError('plantingSiteId', '');
     setIndividualError('zoneId', '');
-    setIndividualError('plotId', '');
+    setIndividualError('subzoneId', '');
 
     if (!isOutplant) {
       return true;
@@ -293,7 +293,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
 
     if (!zones.length) {
-      // zone/plot not required if site has no zones/plots
+      // zone/subzone not required if site has no zones/subzones
       return !!localRecord.plantingSiteId;
     }
 
@@ -301,25 +301,25 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       setIndividualError('zoneId', strings.REQUIRED_FIELD);
     }
 
-    if (!localRecord.plotId) {
-      setIndividualError('plotId', strings.REQUIRED_FIELD);
+    if (!localRecord.plantingSubzoneId) {
+      setIndividualError('subzoneId', strings.REQUIRED_FIELD);
     }
 
-    return localRecord.plantingSiteId && localRecord.plotId;
+    return localRecord.plantingSiteId && localRecord.plantingSubzoneId;
   };
 
   const onNextHandler = () => {
     const nurseryTransferInvalid = !validateNurseryTransfer();
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
-    const plantingSitePlotInvalid = !validatePlantingSitePlot();
+    const plantingSiteSubzoneInvalid = !validatePlantingSiteSubzone();
     const readyAndNotReadyInvalid = !validateReadyAndNotReadyQuantities();
     if (
       fieldsErrors.withdrawnDate ||
       nurseryTransferInvalid ||
       selectedNurseryInvalid ||
       withdrawnQuantityInvalid ||
-      plantingSitePlotInvalid ||
+      plantingSiteSubzoneInvalid ||
       readyAndNotReadyInvalid
     ) {
       return;
@@ -331,7 +331,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       ...localRecord,
       destinationFacilityId: isNurseryTransfer ? localRecord.destinationFacilityId : undefined,
       plantingSiteId: isOutplant ? localRecord.plantingSiteId : undefined,
-      plotId: isOutplant ? localRecord.plotId : undefined,
+      plantingSubzoneId: isOutplant ? localRecord.plantingSubzoneId : undefined,
       facilityId: Number(selectedNursery?.id || -1),
       batchWithdrawals: batches
         .filter((batch) => {
@@ -595,19 +595,19 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     errorText={fieldsErrors.plantingSiteId}
                     tooltipTitle={
                       <a href={APP_PATHS.PLANTING_SITES} target='_blank' rel='noreferrer'>
-                        {strings.VIEW_SITES_ZONES_PLOTS}
+                        {strings.VIEW_SITES_ZONES_SUBZONES}
                       </a>
                     }
                   />
                 </Grid>
                 {!!zones.length && (
-                  <PlotSelector
+                  <SubzoneSelector
                     zones={zones}
                     onZoneSelected={onChangePlantingZone}
-                    onPlotSelected={onChangePlot}
+                    onSubzoneSelected={onChangeSubzone}
                     zoneError={fieldsErrors.zoneId}
-                    plotError={fieldsErrors.plotId}
-                    selectedPlot={selectedPlot}
+                    subzoneError={fieldsErrors.subzoneId}
+                    selectedSubzone={selectedSubzone}
                     selectedZone={selectedZone}
                   />
                 )}

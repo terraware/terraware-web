@@ -14,20 +14,20 @@ export type PlantingSiteMapProps = {
   style?: object;
   // context on-click renderer
   contextRenderer?: MapPopupRenderer;
-  // selected plot
-  selectedPlotId?: number;
+  // selected subzone
+  selectedSubzoneId?: number;
   // selected zone
   selectedZoneId?: number;
 };
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
-  const { plantingSite, style, contextRenderer, selectedPlotId, selectedZoneId } = props;
+  const { plantingSite, style, contextRenderer, selectedSubzoneId, selectedZoneId } = props;
   const theme = useTheme();
   const snackbar = useSnackbar();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
 
   const getRenderAttributes = useCallback(
-    (objectType: 'site' | 'zone' | 'plot') => {
+    (objectType: 'site' | 'zone' | 'subzone') => {
       const getRgbaFromHex = (hex: string, opacity: number) => {
         const rgba = hexRgb(hex, { alpha: opacity, format: 'object' });
         const { red, green, blue, alpha } = rgba;
@@ -47,7 +47,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           lineWidth: 4,
         };
       } else {
-        // plot
+        // subzone
         return {
           fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
           hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.4),
@@ -85,12 +85,12 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     [getRenderAttributes]
   );
 
-  const extractPlots = useCallback(
+  const extractSubzones = useCallback(
     (site: PlantingSite): MapSource => {
-      const renderAttributes = getRenderAttributes('plot');
+      const renderAttributes = getRenderAttributes('subzone');
 
       return {
-        ...MapService.extractPlots(site),
+        ...MapService.extractSubzones(site),
         isInteractive: true,
         annotation: {
           textField: 'fullName',
@@ -108,11 +108,11 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     const fetchPlantingSite = () => {
       const site = extractPlantingSite(plantingSite);
       const zones = extractPlantingZones(plantingSite);
-      const plots = extractPlots(plantingSite);
+      const subzones = extractSubzones(plantingSite);
 
       const newMapOptions = {
         bbox: MapService.getPlantingSiteBoundingBox(plantingSite),
-        sources: [site, plots, zones],
+        sources: [site, subzones, zones],
       };
 
       if (!_.isEqual(newMapOptions, mapOptions)) {
@@ -121,18 +121,21 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     };
 
     fetchPlantingSite();
-  }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractPlots, mapOptions]);
+  }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractSubzones, mapOptions]);
 
-  const plotEntity: MapEntityId = useMemo(() => ({ sourceId: 'plots', id: selectedPlotId }), [selectedPlotId]);
+  const subzoneEntity: MapEntityId = useMemo(
+    () => ({ sourceId: 'subzones', id: selectedSubzoneId }),
+    [selectedSubzoneId]
+  );
 
   const zoneEntity: MapEntityId = useMemo(() => ({ sourceId: 'zones', id: selectedZoneId }), [selectedZoneId]);
 
   const entityOptions: MapEntityOptions = useMemo(
     () => ({
-      highlight: plotEntity,
+      highlight: subzoneEntity,
       focus: zoneEntity,
     }),
-    [plotEntity, zoneEntity]
+    [subzoneEntity, zoneEntity]
   );
 
   if (!mapOptions) {

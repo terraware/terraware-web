@@ -38,8 +38,8 @@ export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: Wi
       data: withdrawalSummary?.destinationName ?? '',
     },
     {
-      title: strings.TO_PLOT,
-      data: withdrawalSummary?.plotNames ?? '',
+      title: strings.TO_SUBZONE,
+      data: withdrawalSummary?.subzoneNames ?? '',
     },
     {
       title: strings.NOTES,

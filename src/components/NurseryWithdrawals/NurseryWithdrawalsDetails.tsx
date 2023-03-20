@@ -41,7 +41,7 @@ export interface WithdrawalSummary {
   purpose: string;
   facilityName: string;
   destinationName: string;
-  plotNames: string;
+  subzoneNames: string;
   scientificNames: string[];
   totalWithdrawn: string;
   hasReassignments: boolean;
@@ -49,10 +49,13 @@ export interface WithdrawalSummary {
 
 type NurseryWithdrawalsDetailsProps = {
   species: Species[];
-  plotNames: Record<number, string>;
+  plantingSubzoneNames: Record<number, string>;
 };
 
-export default function NurseryWithdrawalsDetails({ species, plotNames }: NurseryWithdrawalsDetailsProps): JSX.Element {
+export default function NurseryWithdrawalsDetails({
+  species,
+  plantingSubzoneNames,
+}: NurseryWithdrawalsDetailsProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
@@ -104,7 +107,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
           purpose: withdrawalSummaryRecord.purpose as string,
           facilityName: withdrawalSummaryRecord.facilityName as string,
           destinationName: withdrawalSummaryRecord.destinationName as string,
-          plotNames: withdrawalSummaryRecord.plotNames as string,
+          subzoneNames: withdrawalSummaryRecord.plantingSubzoneNames as string,
           scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
           totalWithdrawn: withdrawalSummaryRecord.totalWithdrawn as string,
           hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),
@@ -138,7 +141,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
     minWidth: 'fit-content',
   };
 
-  const hasPlots = delivery?.plantings?.some((planting) => planting.plotId) ?? false;
+  const hasSubzones = delivery?.plantings?.some((planting) => planting.plantingSubzoneId) ?? false;
 
   const handleReassign = () => {
     if (delivery) {
@@ -175,7 +178,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
             <Typography color={theme.palette.TwClrTxt} fontSize='24px' lineHeight='32px' fontWeight={600}>
               {withdrawal?.withdrawnDate}
             </Typography>
-            {withdrawal?.purpose === OUTPLANT && hasPlots && (
+            {withdrawal?.purpose === OUTPLANT && hasSubzones && (
               <Button
                 size='medium'
                 priority='secondary'
@@ -216,7 +219,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
             <TabPanel value='withdrawal' sx={contentPanelProps}>
               <WithdrawalTabPanelContent
                 species={species}
-                plotNames={plotNames}
+                plantingSubzoneNames={plantingSubzoneNames}
                 withdrawal={withdrawal}
                 withdrawalSummary={withdrawalSummary}
                 delivery={delivery}
@@ -226,7 +229,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
             <TabPanel value='reassignment' sx={contentPanelProps}>
               <ReassignmentTabPanelContent
                 species={species}
-                plotNames={plotNames}
+                plantingSubzoneNames={plantingSubzoneNames}
                 withdrawal={withdrawal}
                 delivery={delivery}
                 batches={batches}
@@ -238,7 +241,7 @@ export default function NurseryWithdrawalsDetails({ species, plotNames }: Nurser
           <Box sx={contentPanelProps}>
             <WithdrawalTabPanelContent
               species={species}
-              plotNames={plotNames}
+              plantingSubzoneNames={plantingSubzoneNames}
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}
               delivery={delivery}

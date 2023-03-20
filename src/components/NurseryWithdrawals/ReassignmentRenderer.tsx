@@ -8,7 +8,7 @@ import { NumericFormatter } from 'src/types/Number';
 import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  plot: {
+  subzone: {
     minWidth: '175px',
   },
   input: {
@@ -24,41 +24,45 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export type PlotInfo = {
+export type SubzoneInfo = {
   id: string;
   name: string;
 };
 
 export type Reassignment = {
   plantingId: number;
-  newPlot?: PlotInfo;
+  newSubzone?: SubzoneInfo;
   quantity?: string;
   notes?: string;
   error: object;
 };
 
 export type ReassignmentRendererProps = {
-  plots: PlotInfo[];
+  subzones: SubzoneInfo[];
   setReassignment: (reassignment: Reassignment) => void;
   numericFormatter: NumericFormatter;
 };
 
-export default function ReassignmentRenderer({ plots, setReassignment, numericFormatter }: ReassignmentRendererProps) {
+export default function ReassignmentRenderer({
+  subzones,
+  setReassignment,
+  numericFormatter,
+}: ReassignmentRendererProps) {
   return function ReassignmentlCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
     const classes = useStyles();
     const { column, row } = props;
-    const { plot, reassignment, numPlants } = row;
-    const { plantingId, newPlot, error, quantity, notes } = reassignment;
+    const { subzone, reassignment, numPlants } = row;
+    const { plantingId, newSubzone, error, quantity, notes } = reassignment;
 
     const updateReassignment = (id: string, value: unknown) => {
       reassignment[id] = value;
       setReassignment(reassignment);
     };
 
-    const otherPlots = plots
-      .filter((otherPlot) => plot.id !== otherPlot.id)
+    const otherSubzones = subzones
+      .filter((otherSubzone) => subzone.id !== otherSubzone.id)
       .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-      .map((otherPlot) => ({ ...otherPlot, value: otherPlot.id, label: otherPlot.name }));
+      .map((otherSubzone) => ({ ...otherSubzone, value: otherSubzone.id, label: otherSubzone.name }));
 
     const onUpdateQuantity = (value: any) => {
       if (value === '') {
@@ -74,23 +78,23 @@ export default function ReassignmentRenderer({ plots, setReassignment, numericFo
       updateReassignment('quantity', quantityValue);
     };
 
-    if (column.key === 'newPlot') {
+    if (column.key === 'newSubzone') {
       const value = (
         <Autocomplete
-          id={`newPlot_${plantingId}`}
-          selected={newPlot}
-          onChange={(newPlotValue: any) => {
-            if (newPlotValue.value) {
-              updateReassignment('newPlot', newPlotValue);
+          id={`newSubzone_${plantingId}`}
+          selected={newSubzone}
+          onChange={(newSubzoneValue: any) => {
+            if (newSubzoneValue.value) {
+              updateReassignment('newSubzone', newSubzoneValue);
             }
           }}
           isEqual={(option: any, selected: any) => option?.value === selected?.value}
           label={''}
           placeholder={strings.SELECT}
-          options={otherPlots}
+          options={otherSubzones}
           freeSolo={false}
           hideClearIcon={true}
-          className={classes.plot}
+          className={classes.subzone}
         />
       );
 
@@ -134,8 +138,8 @@ export default function ReassignmentRenderer({ plots, setReassignment, numericFo
       return <CellRenderer {...props} value={value} className={classes.cell} />;
     }
 
-    if (column.key === 'originalPlot') {
-      return <CellRenderer {...props} value={plot.name} />;
+    if (column.key === 'originalSubzone') {
+      return <CellRenderer {...props} value={subzone.name} />;
     }
 
     return <CellRenderer {...props} />;

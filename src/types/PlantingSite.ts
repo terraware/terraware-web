@@ -4,7 +4,7 @@ export type Population = {
   'totalPlants(raw)': number;
 };
 
-export type PlantingSitePlot = {
+export type PlantingSiteSubzone = {
   id: string;
   fullName: string;
   populations: Population[];
@@ -13,5 +13,5 @@ export type PlantingSitePlot = {
 export type PlantingSiteZone = {
   id: string;
   name: string;
-  plots: PlantingSitePlot[];
+  plantingSubzones: PlantingSiteSubzone[];
 };

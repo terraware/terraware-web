@@ -64,7 +64,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
     return <CellRenderer index={index} column={column} value={getTruncated(value)} row={row} />;
   }
 
-  if (column.key === 'plotNames' && value) {
+  if (column.key === 'subzoneNames' && value) {
     return <CellRenderer index={index} column={column} value={getTruncated([value])} row={row} />;
   }
 
@@ -73,7 +73,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'hasReassignments') {
-    if (row.purpose === OUTPLANT && row.plotNames) {
+    if (row.purpose === OUTPLANT && row.subzoneNames) {
       return (
         <>
           <CellRenderer

@@ -833,9 +833,9 @@ export interface components {
       plantingSiteId?: number;
       /**
        * Format: int64
-       * @description If purpose is "Out Plant", the ID of the plot to which the seedlings were delivered. Must be specified if the planting site has plots, but must be omitted or set to null if the planting site has no plots.
+       * @description If purpose is "Out Plant", the ID of the planting subzone to which the seedlings were delivered. Must be specified if the planting site has planting subzones, but must be omitted or set to null if the planting site has no planting subzones.
        */
-      plotId?: number;
+      plantingSubzoneId?: number;
       purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
       /**
        * Format: date
@@ -1279,15 +1279,13 @@ export interface components {
       id: number;
       /** Format: int32 */
       year: number;
-      /** Format: int32 */
-      quarter: number;
       status: "New" | "In Progress" | "Locked" | "Submitted";
+      /** Format: date-time */
+      modifiedTime?: string;
       /** Format: date-time */
       lockedTime?: string;
       /** Format: date-time */
       submittedTime?: string;
-      /** Format: date-time */
-      modifiedTime?: string;
       lockedByName?: string;
       /** Format: int64 */
       lockedByUserId?: number;
@@ -1297,6 +1295,8 @@ export interface components {
       submittedByName?: string;
       /** Format: int64 */
       submittedByUserId?: number;
+      /** Format: int32 */
+      quarter: number;
       version: string;
     };
     GetReportPayloadV1: components["schemas"]["GetReportPayload"] & {
@@ -1686,6 +1686,13 @@ export interface components {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    MonitoringPlotPayload: {
+      boundary: components["schemas"]["MultiPolygon"];
+      fullName: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+    };
     MultiPolygon: {
       coordinates: number[][][][];
       type: "MultiPolygon";
@@ -1812,7 +1819,7 @@ export interface components {
        */
       numPlants: number;
       /** Format: int64 */
-      plotId?: number;
+      plantingSubzoneId?: number;
       /** Format: int64 */
       speciesId: number;
       type: "Delivery" | "Reassignment From" | "Reassignment To";
@@ -1830,19 +1837,20 @@ export interface components {
        */
       timeZone?: string;
     };
-    PlantingZonePayload: {
-      boundary: components["schemas"]["MultiPolygon"];
-      /** Format: int64 */
-      id: number;
-      name: string;
-      plots: components["schemas"]["PlotPayload"][];
-    };
-    PlotPayload: {
+    PlantingSubzonePayload: {
       boundary: components["schemas"]["MultiPolygon"];
       fullName: string;
       /** Format: int64 */
       id: number;
       name: string;
+      monitoringPlots: components["schemas"]["MonitoringPlotPayload"][];
+    };
+    PlantingZonePayload: {
+      boundary: components["schemas"]["MultiPolygon"];
+      /** Format: int64 */
+      id: number;
+      name: string;
+      plantingSubzones: components["schemas"]["PlantingSubzonePayload"][];
     };
     PutNurseryV1: {
       /** Format: date */
@@ -1926,12 +1934,12 @@ export interface components {
       fromPlantingId: number;
       /**
        * Format: int32
-       * @description Number of plants to reassign from the planting's original plot to the new one. Must be less than or equal to the number of plants in the original planting.
+       * @description Number of plants to reassign from the planting's original subzone to the new one. Must be less than or equal to the number of plants in the original planting.
        */
       numPlants: number;
       notes?: string;
       /** Format: int64 */
-      toPlotId: number;
+      toPlantingSubzoneId: number;
     };
     RecordTimeseriesValuesRequestPayload: {
       timeseries: components["schemas"]["TimeseriesValuesPayload"][];
@@ -4892,7 +4900,7 @@ export interface operations {
     parameters: {
       query: {
         organizationId: number;
-        /** If true, include planting zones and plots for each site. */
+        /** If true, include planting zones and subzones for each site. */
         full?: string;
       };
     };

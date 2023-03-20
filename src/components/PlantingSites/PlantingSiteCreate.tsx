@@ -12,7 +12,7 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import { useEffect, useState } from 'react';
 import PageSnackbar from '../PageSnackbar';
 import { PlantingSite } from 'src/types/Tracking';
-import BoundariesAndPlots from './BoundariesAndPlots';
+import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
@@ -196,7 +196,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                   </Grid>
                 </Box>
               </Grid>
-              {record?.boundary && <BoundariesAndPlots plantingSite={record} />}
+              {record?.boundary && <BoundariesAndZones plantingSite={record} />}
             </>
           )}
         </Container>

@@ -168,7 +168,7 @@ function AppContent() {
   const history = useHistory();
   const [species, setSpecies] = useState<Species[]>([]);
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
-  const [plotNames, setPlotNames] = useState<Record<number, string>>({});
+  const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
 
   const setDefaults = useCallback(() => {
@@ -217,16 +217,16 @@ function AppContent() {
   }, [reloadTracking]);
 
   useEffect(() => {
-    const plots: Record<number, string> = {};
+    const subzones: Record<number, string> = {};
     for (const plantingSite of plantingSites) {
       for (const plantingZone of plantingSite.plantingZones ?? []) {
-        for (const plot of plantingZone.plots ?? []) {
-          plots[plot.id] = plot.name;
+        for (const subzone of plantingZone.plantingSubzones ?? []) {
+          subzones[subzone.id] = subzone.name;
         }
       }
     }
 
-    setPlotNames(plots);
+    setPlantingSubzoneNames(subzones);
   }, [plantingSites]);
 
   useEffect(() => {
@@ -470,7 +470,7 @@ function AppContent() {
               <NurseryWithdrawals />
             </Route>
             <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-              <NurseryWithdrawalsDetails species={species} plotNames={plotNames} />
+              <NurseryWithdrawalsDetails species={species} plantingSubzoneNames={plantingSubzoneNames} />
             </Route>
             <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
               <NurseryReassignment />
