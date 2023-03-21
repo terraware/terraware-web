@@ -462,13 +462,15 @@ export const buildStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
 };
 
 export const buildCompletedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+  let afterStartConditionMet = true;
+  let beforeOpStartedConditionMet = true;
   if (loc.buildStartedDate && loc.buildCompletedDate) {
-    return Date.parse(loc.buildStartedDate) <= Date.parse(loc.buildCompletedDate);
+    afterStartConditionMet = Date.parse(loc.buildStartedDate) <= Date.parse(loc.buildCompletedDate);
   }
   if (loc.buildCompletedDate && loc.operationStartedDate) {
-    return Date.parse(loc.buildCompletedDate) <= Date.parse(loc.operationStartedDate);
+    beforeOpStartedConditionMet = Date.parse(loc.buildCompletedDate) <= Date.parse(loc.operationStartedDate);
   }
-  return true;
+  return afterStartConditionMet && beforeOpStartedConditionMet;
 };
 
 export const operationStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
