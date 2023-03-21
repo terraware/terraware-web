@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { RendererProps, TableRowType } from '@terraware/web-components';
 import { Textfield } from '@terraware/web-components';
@@ -32,17 +32,7 @@ export default function PlantingSiteSpeciesCellRenderer({ editMode }: PlantingSi
     const { column, row, index, onRowClick } = props;
     const createInput = (id: string) => {
       if (onRowClick) {
-        return (
-          <Textfield
-            id={id}
-            type='number'
-            onChange={(newValue) => onRowClick(newValue as string)}
-            value={row[id]}
-            label={''}
-            className={classes.input}
-            min={0}
-          />
-        );
+        return <TableCellInput id={id} initialValue={row[id]} onConfirmEdit={onRowClick} className={classes.input} />;
       }
     };
 
@@ -65,4 +55,29 @@ export default function PlantingSiteSpeciesCellRenderer({ editMode }: PlantingSi
 
     return <CellRenderer {...props} className={classes.text} />;
   };
+}
+
+type TableCellInputProps = {
+  id: string;
+  initialValue: string;
+  onConfirmEdit: (value: string) => void;
+  className: string;
+};
+
+function TableCellInput(props: TableCellInputProps): JSX.Element {
+  const { id, initialValue, onConfirmEdit, className } = props;
+  const [inputValue, setInputValue] = useState(initialValue);
+
+  return (
+    <Textfield
+      id={id}
+      type='number'
+      onChange={(newValue) => setInputValue(newValue as string)}
+      onBlur={() => onConfirmEdit(inputValue)}
+      value={inputValue}
+      label={''}
+      className={className}
+      min={0}
+    />
+  );
 }
