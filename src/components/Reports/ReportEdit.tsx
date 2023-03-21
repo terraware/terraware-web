@@ -121,6 +121,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
         await updateFiles();
         await updatePhotos(report.id);
       }
@@ -146,6 +147,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
         await updateFiles();
         await updatePhotos(report.id);
       }
@@ -158,6 +160,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       setShowAnnual(false);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+      } else {
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
       }
     }
   };
