@@ -229,7 +229,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             <OverviewItemCard
               isEditable={false}
               title={strings.NURSERY_MORTALITY_RATE}
-              contents={(location as ReportNursery).mortalityRate.toString() ?? '0'}
+              contents={`${(location as ReportNursery).mortalityRate.toString() ?? '0'}%`}
               className={classes.infoCardStyle}
             />
           </Grid>
@@ -290,7 +290,13 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             <InfoField
               id={`${location.id}-mortality-rate`}
               label={strings.MORTALITY_RATE}
-              value={(location as ReportPlantingSite).mortalityRate ?? ''}
+              value={
+                editable
+                  ? (location as ReportPlantingSite).mortalityRate ?? ''
+                  : (location as ReportPlantingSite).mortalityRate
+                  ? `${(location as ReportPlantingSite).mortalityRate}%`
+                  : ''
+              }
               editable={editable}
               onChange={(value) => onUpdateLocation('mortalityRate', value)}
               type='text'
