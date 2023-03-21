@@ -149,8 +149,13 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportSeedBank | ReportNursery).buildStartedDate ?? ''}
               onChange={(value) => onUpdateLocation('buildStartedDate', value)}
               type='date'
+              maxDate={(location as ReportSeedBank | ReportNursery).buildCompletedDate}
               errorText={
-                validate && !(location as ReportSeedBank | ReportNursery).buildStartedDate ? strings.REQUIRED_FIELD : ''
+                validate && !(location as ReportSeedBank | ReportNursery).buildStartedDate
+                  ? strings.REQUIRED_FIELD
+                  : validate && !buildStartedDateValid(location as ReportSeedBank | ReportNursery)
+                  ? strings.REPORT_NURSERY_BUILD_START_DATE_INVALID
+                  : ''
               }
             />
           </Grid>
@@ -166,9 +171,13 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportSeedBank | ReportNursery).buildCompletedDate ?? ''}
               onChange={(value) => onUpdateLocation('buildCompletedDate', value)}
               type='date'
+              minDate={(location as ReportSeedBank | ReportNursery).buildStartedDate}
+              maxDate={(location as ReportSeedBank | ReportNursery).operationStartedDate}
               errorText={
                 validate && !(location as ReportSeedBank | ReportNursery).buildCompletedDate
                   ? strings.REQUIRED_FIELD
+                  : validate && !buildCompletedDateValid(location as ReportSeedBank | ReportNursery)
+                  ? strings.REPORT_NURSERY_BUILD_COMPLETION_DATE_INVALID
                   : ''
               }
             />
@@ -185,9 +194,12 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportSeedBank | ReportNursery).operationStartedDate ?? ''}
               onChange={(value) => onUpdateLocation('operationStartedDate', value)}
               type='date'
+              minDate={(location as ReportSeedBank | ReportNursery).buildCompletedDate}
               errorText={
                 validate && !(location as ReportSeedBank | ReportNursery).operationStartedDate
                   ? strings.REQUIRED_FIELD
+                  : validate && !operationStartedDateValid(location as ReportSeedBank | ReportNursery)
+                  ? strings.REPORT_NURSERY_OPERATION_START_DATE_INVALID
                   : ''
               }
             />
@@ -399,10 +411,12 @@ type InfoFieldProps = {
   type: 'text' | 'date';
   helper?: string;
   errorText?: string;
+  maxDate?: any;
+  minDate?: any;
 };
 
 function InfoField(props: InfoFieldProps): JSX.Element {
-  const { id, label, editable, value, onChange, type, helper, errorText } = props;
+  const { id, label, editable, value, onChange, type, helper, errorText, maxDate, minDate } = props;
   const classes = useStyles();
   return editable ? (
     type === 'text' ? (
@@ -424,6 +438,8 @@ function InfoField(props: InfoFieldProps): JSX.Element {
         onChange={onChange}
         aria-label='date-picker'
         errorText={errorText}
+        maxDate={maxDate}
+        minDate={minDate}
       />
     ) : (
       <></>
@@ -437,3 +453,27 @@ function InfoField(props: InfoFieldProps): JSX.Element {
     />
   );
 }
+
+export const buildStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+  if (loc.buildStartedDate && loc.buildCompletedDate) {
+    return Date.parse(loc.buildStartedDate) <= Date.parse(loc.buildCompletedDate);
+  }
+  return true;
+};
+
+export const buildCompletedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+  if (loc.buildStartedDate && loc.buildCompletedDate) {
+    return Date.parse(loc.buildStartedDate) <= Date.parse(loc.buildCompletedDate);
+  }
+  if (loc.buildCompletedDate && loc.operationStartedDate) {
+    return Date.parse(loc.buildCompletedDate) <= Date.parse(loc.operationStartedDate);
+  }
+  return true;
+};
+
+export const operationStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+  if (loc.buildCompletedDate && loc.operationStartedDate) {
+    return Date.parse(loc.buildCompletedDate) <= Date.parse(loc.operationStartedDate);
+  }
+  return true;
+};

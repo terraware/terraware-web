@@ -17,6 +17,11 @@ import produce from 'immer';
 import { Organization } from 'src/types/Organization';
 import CannotEditReportDialog from './InvalidUserModal';
 import useReportFiles from 'src/components/Reports/useReportFiles';
+import {
+  buildCompletedDateValid,
+  buildStartedDateValid,
+  operationStartedDateValid,
+} from 'src/components/Reports/LocationSection';
 
 export type ReportEditProps = {
   organization: Organization;
@@ -168,11 +173,24 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const hasEmptyRequiredFields = (iReport: Report) => {
     const emptySeedbankFields = iReport.seedBanks?.some((sb) => {
-      return !sb.buildStartedDate || !sb.buildCompletedDate || !sb.operationStartedDate;
+      return (
+        !sb.buildStartedDate ||
+        !sb.buildCompletedDate ||
+        !sb.operationStartedDate ||
+        !buildStartedDateValid(sb) ||
+        !buildCompletedDateValid(sb) ||
+        !operationStartedDateValid(sb)
+      );
     });
     const emptyNurseryFields = iReport.nurseries?.some((nursery) => {
       return (
-        !nursery.buildStartedDate || !nursery.buildCompletedDate || !nursery.operationStartedDate || !nursery.capacity
+        !nursery.buildStartedDate ||
+        !nursery.buildCompletedDate ||
+        !nursery.operationStartedDate ||
+        !nursery.capacity ||
+        !buildStartedDateValid(nursery) ||
+        !buildCompletedDateValid(nursery) ||
+        !operationStartedDateValid(nursery)
       );
     });
     const emptyPlantingSitesFields = iReport.plantingSites?.some((plantingSite) => {
