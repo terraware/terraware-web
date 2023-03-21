@@ -1394,7 +1394,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.8.0.tgz#f580f9beb67176fa57aae70b08ed510e1b18980f"
   integrity sha512-G/YwXTkv7Den9mXDO7AhLWkE3q+I92B+VqAE+dYG4NGPaHZGvt3G8Q0p9vmE+sq7rTGphUbAvmQ9YpbfMQGGlA==
 
-"@emotion/react@^11.10.5", "@emotion/react@^11.10.6":
+"@emotion/react@^11.10.6":
   version "11.10.6"
   resolved "https://registry.yarnpkg.com/@emotion/react/-/react-11.10.6.tgz#dbe5e650ab0f3b1d2e592e6ab1e006e75fd9ac11"
   integrity sha512-6HT8jBmcSkfzO7mc+N1L9uwvOnlcGoix8Zn7srt+9ga0MjREo6lRpuVX0kzo6Jp6oTqDhREOFsygN6Ew4fEQbw==
@@ -2315,16 +2315,16 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.3.13":
-  version "2.3.13"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.13.tgz#2982edab4323f7858ab67305ae7470cd32ef35c9"
-  integrity sha512-PHLHoBRKWja0u/RUXF0MSskQutJqAywm0rQZUeKeuP//Za0VCOZKiglId3imIK6PG0vjVmglB4iPvQGMIWDzZQ==
+"@terraware/web-components@2.3.14":
+  version "2.3.14"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.14.tgz#a3d3e0d73699a293f5a5f27c0a207503aa19b155"
+  integrity sha512-jGjEprqZdNWIOv6dhU6H3+n0Yq5p3PROBYl28Kg4qN2d8kReNJpVu074nU41vyeoi0kLxWkku4X9K+YGjl0tUQ==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^7.0.2"
-    "@emotion/react" "^11.10.5"
+    "@emotion/react" "^11.10.6"
     "@mui/icons-material" "^5.11.11"
     "@mui/material" "^5.11.9"
     "@mui/styles" "^5.11.9"
