@@ -138,10 +138,6 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
-  const handleSubmitButton = () => {
-    setConfirmSubmitDialogOpen(true);
-  };
-
   const handleSaveAndNext = async () => {
     if (report) {
       const saveResult = await ReportService.updateReport(report);
@@ -160,7 +156,6 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     if (report) {
       const saveResult = await ReportService.updateReport(report);
       setShowAnnual(false);
-      setValidateFields(false);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       }
@@ -207,7 +202,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     );
   };
 
-  const submitReport = async () => {
+  const handleSubmitButton = () => {
     if (report) {
       if (hasEmptyRequiredFields(report)) {
         setConfirmSubmitDialogOpen(false);
@@ -215,13 +210,21 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
           handleBack();
         }
         setValidateFields(true);
+        snackbar.toastError(strings.GENERIC_ERROR, strings.FILL_OUT_ALL_FIELDS);
         return;
       }
       if (hasEmptyRequiredAnnualFields(report)) {
         setConfirmSubmitDialogOpen(false);
         setValidateFields(true);
+        snackbar.toastError(strings.GENERIC_ERROR, strings.FILL_OUT_ALL_FIELDS);
         return;
       }
+    }
+    setConfirmSubmitDialogOpen(true);
+  };
+
+  const submitReport = async () => {
+    if (report) {
       const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
         await updateFiles();
