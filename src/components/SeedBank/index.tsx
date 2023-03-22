@@ -1,5 +1,5 @@
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
@@ -15,6 +15,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import StorageLocations from './StorageLocations';
+import { DatePicker } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -115,6 +116,36 @@ export default function SeedBankDetails(): JSX.Element {
             type='text'
             value={tz.longName}
             tooltipTitle={strings.TOOLTIP_TIME_ZONE_SEEDBANK}
+            display={true}
+          />
+        </Grid>
+        <Grid item xs={gridSize()}>
+          <TextField
+            id={'buildStartedDate'}
+            label={strings.REPORT_NURSERY_BUILD_START_DATE}
+            value={seedBank?.buildStartedDate ?? ''}
+            type='text'
+            aria-label='date-picker'
+            display={true}
+          />
+        </Grid>
+        <Grid item xs={gridSize()}>
+          <TextField
+            id={'buildCompletedDate'}
+            label={strings.REPORT_NURSERY_BUILD_COMPLETION_DATE}
+            value={seedBank?.buildCompletedDate ?? ''}
+            type='text'
+            aria-label='date-picker'
+            display={true}
+          />
+        </Grid>
+        <Grid item xs={gridSize()}>
+          <TextField
+            id={'operationStartedDate'}
+            label={strings.REPORT_NURSERY_OPERATION_START_DATE}
+            value={seedBank?.operationStartedDate ?? ''}
+            type='text'
+            aria-label='date-picker'
             display={true}
           />
         </Grid>

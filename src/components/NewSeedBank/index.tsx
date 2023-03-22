@@ -1,5 +1,5 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import _ from 'lodash';
 import { APP_PATHS } from 'src/constants';
@@ -19,12 +19,14 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import { PartialStorageLocation } from 'src/types/Facility';
 import StorageLocations from 'src/components/SeedBank/StorageLocations';
+import { DatePicker } from '@terraware/web-components';
 
 export default function SeedBankView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const theme = useTheme();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+  const [validateDates, setValidateDates] = useState(false);
   const [editedStorageLocations, setEditedStorageLocations] = useState<PartialStorageLocation[]>();
   const snackbar = useSnackbar();
 
@@ -60,6 +62,9 @@ export default function SeedBankView(): JSX.Element {
       type: 'Seed Bank',
       connectionState: 'Not Connected',
       timeZone: selectedSeedBank?.timeZone,
+      buildStartedDate: selectedSeedBank?.buildStartedDate,
+      buildCompletedDate: selectedSeedBank?.buildCompletedDate,
+      operationStartedDate: selectedSeedBank?.operationStartedDate,
     });
   }, [selectedSeedBank, setRecord, selectedOrganization]);
 
@@ -118,12 +123,28 @@ export default function SeedBankView(): JSX.Element {
 
   const saveSeedBank = async () => {
     let id = selectedSeedBank?.id;
-    if (!record.name) {
-      setNameError(strings.REQUIRED_FIELD);
-      return;
-    }
-    if (!record.description) {
-      setDescriptionError(strings.REQUIRED_FIELD);
+    if (
+      !record.name ||
+      !record.description ||
+      !FacilityService.facilityBuildStartedDateValid(
+        record.buildStartedDate,
+        record.buildCompletedDate,
+        record.operationStartedDate
+      ) ||
+      !FacilityService.facilityBuildCompletedDateValid(
+        record.buildStartedDate,
+        record.buildCompletedDate,
+        record.operationStartedDate
+      ) ||
+      !FacilityService.facilityOperationStartedDateValid(
+        record.buildStartedDate,
+        record.buildCompletedDate,
+        record.operationStartedDate
+      )
+    ) {
+      setNameError(!record.name ? strings.REQUIRED_FIELD : '');
+      setDescriptionError(!record.description ? strings.REQUIRED_FIELD : '');
+      setValidateDates(true);
       return;
     }
     if (selectedSeedBank) {
@@ -156,6 +177,15 @@ export default function SeedBankView(): JSX.Element {
       return {
         ...previousRecord,
         timeZone: newTimeZone ? newTimeZone.id : undefined,
+      };
+    });
+  };
+
+  const onUpdateDate = (field: string, value: any) => {
+    setRecord((previousRecord: Facility): Facility => {
+      return {
+        ...previousRecord,
+        [field]: value,
       };
     });
   };
@@ -207,6 +237,67 @@ export default function SeedBankView(): JSX.Element {
                 location={record}
                 onChangeTimeZone={onChangeTimeZone}
                 tooltip={strings.TOOLTIP_TIME_ZONE_SEEDBANK}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <DatePicker
+                id={'buildStartedDate'}
+                label={strings.REPORT_NURSERY_BUILD_START_DATE}
+                value={record.buildStartedDate ?? ''}
+                onChange={(value) => onUpdateDate('buildStartedDate', value)}
+                aria-label='date-picker'
+                errorText={
+                  validateDates &&
+                  !FacilityService.facilityBuildStartedDateValid(
+                    record.buildStartedDate,
+                    record.buildCompletedDate,
+                    record.operationStartedDate
+                  )
+                    ? strings.FACILITY_BUILD_START_DATE_INVALID
+                    : ''
+                }
+                maxDate={record.buildCompletedDate}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <DatePicker
+                id={'buildCompletedDate'}
+                label={strings.REPORT_NURSERY_BUILD_COMPLETION_DATE}
+                value={record.buildCompletedDate ?? ''}
+                onChange={(value) => onUpdateDate('buildCompletedDate', value)}
+                aria-label='date-picker'
+                errorText={
+                  validateDates &&
+                  !FacilityService.facilityBuildCompletedDateValid(
+                    record.buildStartedDate,
+                    record.buildCompletedDate,
+                    record.operationStartedDate
+                  )
+                    ? strings.FACILITY_BUILD_COMPLETION_DATE_INVALID
+                    : ''
+                }
+                minDate={record.buildStartedDate}
+                maxDate={record.operationStartedDate}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <DatePicker
+                id={'operationStartedDate'}
+                label={strings.REPORT_NURSERY_OPERATION_START_DATE}
+                value={record.operationStartedDate ?? ''}
+                onChange={(value) => onUpdateDate('operationStartedDate', value)}
+                aria-label='date-picker'
+                errorText={
+                  validateDates &&
+                  !FacilityService.facilityOperationStartedDateValid(
+                    record.buildStartedDate,
+                    record.buildCompletedDate,
+                    record.operationStartedDate
+                  )
+                    ? strings.FACILITY_OPERATION_START_DATE_INVALID
+                    : ''
+                }
+                minDate={record.buildCompletedDate}
               />
             </Grid>
           </Grid>
