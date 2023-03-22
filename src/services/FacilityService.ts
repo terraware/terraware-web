@@ -58,6 +58,9 @@ const createFacility = async (facility: Omit<Facility, 'id'> & StorageLocations)
     type: facility.type,
     timeZone: facility.timeZone,
     storageLocationNames: facility.storageLocationNames,
+    buildStartedDate: facility.buildStartedDate,
+    buildCompletedDate: facility.buildCompletedDate,
+    operationStartedDate: facility.operationStartedDate,
   };
 
   const serverResponse: Response = await httpFacilities.post({ entity });
@@ -89,6 +92,10 @@ const updateFacility = async (facility: Facility): Promise<Response> => {
     name: facility.name,
     description: facility.description,
     timeZone: facility.timeZone,
+    buildStartedDate: facility.buildStartedDate,
+    buildCompletedDate: facility.buildCompletedDate,
+    operationStartedDate: facility.operationStartedDate,
+    capacity: facility.capacity,
   };
 
   return await httpFacility.put({
@@ -116,7 +123,18 @@ const getFacilities = async ({ type, organizationId, query }: FacilitySearchPara
 
   const params: SearchNodePayload = {
     prefix: 'facilities',
-    fields: ['id', 'name', 'description', 'type', 'organization_id', 'timeZone'],
+    fields: [
+      'id',
+      'name',
+      'description',
+      'type',
+      'organization_id',
+      'timeZone',
+      'buildStartedDate',
+      'buildCompletedDate',
+      'operationStartedDate',
+      'capacity',
+    ],
     search: {
       operation: 'and',
       children: [
@@ -147,10 +165,65 @@ const getFacilities = async ({ type, organizationId, query }: FacilitySearchPara
         type: result.type as FacilityType,
         connectionState: result.connectionState as 'Not Connected' | 'Connected' | 'Configured',
         timeZone: result.timeZone as string,
+        buildStartedDate: result.buildStartedDate as string,
+        buildCompletedDate: result.buildCompletedDate as string,
+        operationStartedDate: result.operationStartedDate as string,
+        capacity: result.capacity as number,
       };
     }) ?? [];
 
   return facilities;
+};
+
+/** Return true by default since we don't require setting the field in the facility view */
+const facilityBuildStartedDateValid = (
+  buildStart: string | undefined,
+  buildComplete: string | undefined,
+  opStart: string | undefined
+) => {
+  let beforeBuildCompletedConditionMet = true;
+  let beforeOpStartedConditionMet = true;
+  if (buildStart && buildComplete) {
+    beforeBuildCompletedConditionMet = Date.parse(buildStart) <= Date.parse(buildComplete);
+  }
+  if (buildStart && opStart) {
+    beforeOpStartedConditionMet = Date.parse(buildStart) <= Date.parse(opStart);
+  }
+  return beforeBuildCompletedConditionMet && beforeOpStartedConditionMet;
+};
+
+/** Return true by default since we don't require setting the field in the facility view */
+const facilityBuildCompletedDateValid = (
+  buildStart: string | undefined,
+  buildComplete: string | undefined,
+  opStart: string | undefined
+) => {
+  let afterStartConditionMet = true;
+  let beforeOpStartedConditionMet = true;
+  if (buildStart && buildComplete) {
+    afterStartConditionMet = Date.parse(buildStart) <= Date.parse(buildComplete);
+  }
+  if (buildComplete && opStart) {
+    beforeOpStartedConditionMet = Date.parse(buildComplete) <= Date.parse(opStart);
+  }
+  return afterStartConditionMet && beforeOpStartedConditionMet;
+};
+
+/** Return true by default since we don't require setting the field in the facility view */
+const facilityOperationStartedDateValid = (
+  buildStart: string | undefined,
+  buildComplete: string | undefined,
+  opStart: string | undefined
+) => {
+  let afterBuildStartedConditionMet = true;
+  let afterBuildCompletedConditionMet = true;
+  if (buildStart && opStart) {
+    afterBuildStartedConditionMet = Date.parse(buildStart) <= Date.parse(opStart);
+  }
+  if (buildComplete && opStart) {
+    afterBuildCompletedConditionMet = Date.parse(buildComplete) <= Date.parse(opStart);
+  }
+  return afterBuildStartedConditionMet && afterBuildCompletedConditionMet;
 };
 
 /**
@@ -161,6 +234,9 @@ const FacilityService = {
   getFacility,
   createFacility,
   updateFacility,
+  facilityBuildStartedDateValid,
+  facilityBuildCompletedDateValid,
+  facilityOperationStartedDateValid,
 };
 
 export default FacilityService;

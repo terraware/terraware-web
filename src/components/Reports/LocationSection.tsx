@@ -143,7 +143,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               label={
                 locationType === 'seedBank'
                   ? strings.REPORT_SEEDBANK_BUILD_START_DATE
-                  : strings.REPORT_NURSERY_BUILD_START_DATE
+                  : strings.FACILITY_BUILD_START_DATE_REQUIRED
               }
               editable={editable && (location as ReportSeedBank | ReportNursery).buildStartedDateEditable}
               value={(location as ReportSeedBank | ReportNursery).buildStartedDate ?? ''}
@@ -154,7 +154,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 validate && !(location as ReportSeedBank | ReportNursery).buildStartedDate
                   ? strings.REQUIRED_FIELD
                   : validate && !buildStartedDateValid(location as ReportSeedBank | ReportNursery)
-                  ? strings.REPORT_NURSERY_BUILD_START_DATE_INVALID
+                  ? strings.FACILITY_BUILD_START_DATE_INVALID
                   : ''
               }
             />
@@ -165,7 +165,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               label={
                 locationType === 'seedBank'
                   ? strings.REPORT_SEEDBANK_BUILD_COMPLETION_DATE
-                  : strings.REPORT_NURSERY_BUILD_COMPLETION_DATE
+                  : strings.FACILITY_BUILD_COMPLETION_DATE_REQUIRED
               }
               editable={editable && (location as ReportSeedBank | ReportNursery).buildCompletedDateEditable}
               value={(location as ReportSeedBank | ReportNursery).buildCompletedDate ?? ''}
@@ -177,7 +177,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 validate && !(location as ReportSeedBank | ReportNursery).buildCompletedDate
                   ? strings.REQUIRED_FIELD
                   : validate && !buildCompletedDateValid(location as ReportSeedBank | ReportNursery)
-                  ? strings.REPORT_NURSERY_BUILD_COMPLETION_DATE_INVALID
+                  ? strings.FACILITY_BUILD_COMPLETION_DATE_INVALID
                   : ''
               }
             />
@@ -188,7 +188,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               label={
                 locationType === 'seedBank'
                   ? strings.REPORT_SEEDBANK_OPERATION_START_DATE
-                  : strings.REPORT_NURSERY_OPERATION_START_DATE
+                  : strings.FACILITY_OPERATION_START_DATE_REQUIRED
               }
               editable={editable && (location as ReportSeedBank | ReportNursery).operationStartedDateEditable}
               value={(location as ReportSeedBank | ReportNursery).operationStartedDate ?? ''}
@@ -199,7 +199,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 validate && !(location as ReportSeedBank | ReportNursery).operationStartedDate
                   ? strings.REQUIRED_FIELD
                   : validate && !operationStartedDateValid(location as ReportSeedBank | ReportNursery)
-                  ? strings.REPORT_NURSERY_OPERATION_START_DATE_INVALID
+                  ? strings.FACILITY_OPERATION_START_DATE_INVALID
                   : ''
               }
             />
@@ -221,7 +221,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           <Grid item xs={smallItemGridWidth()}>
             <InfoField
               id={`${location.id}-nursery-capacity`}
-              label={strings.REPORT_NURSERY_CAPACITY}
+              label={strings.NURSERY_CAPACITY_REQUIRED}
               value={(location as ReportNursery).capacity ?? ''}
               editable={editable}
               onChange={(value) => onUpdateLocation('capacity', value)}
@@ -455,10 +455,15 @@ function InfoField(props: InfoFieldProps): JSX.Element {
 }
 
 export const buildStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+  let beforeBuildCompletedConditionMet = false;
+  let beforeOpStartedConditionMet = false;
   if (loc.buildStartedDate && loc.buildCompletedDate) {
-    return Date.parse(loc.buildStartedDate) <= Date.parse(loc.buildCompletedDate);
+    beforeBuildCompletedConditionMet = Date.parse(loc.buildStartedDate) <= Date.parse(loc.buildCompletedDate);
   }
-  return false;
+  if (loc.buildStartedDate && loc.operationStartedDate) {
+    beforeOpStartedConditionMet = Date.parse(loc.buildStartedDate) <= Date.parse(loc.operationStartedDate);
+  }
+  return beforeBuildCompletedConditionMet && beforeOpStartedConditionMet;
 };
 
 export const buildCompletedDateValid = (loc: ReportSeedBank | ReportNursery) => {
@@ -474,8 +479,13 @@ export const buildCompletedDateValid = (loc: ReportSeedBank | ReportNursery) => 
 };
 
 export const operationStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
-  if (loc.buildCompletedDate && loc.operationStartedDate) {
-    return Date.parse(loc.buildCompletedDate) <= Date.parse(loc.operationStartedDate);
+  let afterBuildStartedConditionMet = false;
+  let afterBuildCompletedConditionMet = false;
+  if (loc.buildStartedDate && loc.operationStartedDate) {
+    afterBuildStartedConditionMet = Date.parse(loc.buildStartedDate) <= Date.parse(loc.operationStartedDate);
   }
-  return false;
+  if (loc.buildCompletedDate && loc.operationStartedDate) {
+    afterBuildCompletedConditionMet = Date.parse(loc.buildCompletedDate) <= Date.parse(loc.operationStartedDate);
+  }
+  return afterBuildStartedConditionMet && afterBuildCompletedConditionMet;
 };

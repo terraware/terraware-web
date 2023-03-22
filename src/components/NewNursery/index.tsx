@@ -1,5 +1,5 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
@@ -17,11 +17,13 @@ import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import { CreateFacilityResponse } from 'src/services/FacilityService';
+import { DatePicker } from '@terraware/web-components';
 
 export default function NurseryView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+  const [validateDates, setValidateDates] = useState(false);
   const snackbar = useSnackbar();
   const theme = useTheme();
 
@@ -57,6 +59,10 @@ export default function NurseryView(): JSX.Element {
       type: 'Nursery',
       connectionState: 'Not Connected',
       timeZone: selectedNursery?.timeZone,
+      buildStartedDate: selectedNursery?.buildStartedDate,
+      buildCompletedDate: selectedNursery?.buildCompletedDate,
+      operationStartedDate: selectedNursery?.operationStartedDate,
+      capacity: selectedNursery?.capacity,
     });
   }, [selectedNursery, setRecord, selectedOrganization]);
 
@@ -68,12 +74,28 @@ export default function NurseryView(): JSX.Element {
   };
 
   const saveNursery = async () => {
-    if (!record.name) {
-      setNameError(strings.REQUIRED_FIELD);
-      return;
-    }
-    if (!record.description) {
-      setDescriptionError(strings.REQUIRED_FIELD);
+    if (
+      !record.name ||
+      !record.description ||
+      !FacilityService.facilityBuildStartedDateValid(
+        record.buildStartedDate,
+        record.buildCompletedDate,
+        record.operationStartedDate
+      ) ||
+      !FacilityService.facilityBuildCompletedDateValid(
+        record.buildStartedDate,
+        record.buildCompletedDate,
+        record.operationStartedDate
+      ) ||
+      !FacilityService.facilityOperationStartedDateValid(
+        record.buildStartedDate,
+        record.buildCompletedDate,
+        record.operationStartedDate
+      )
+    ) {
+      setNameError(!record.name ? strings.REQUIRED_FIELD : '');
+      setDescriptionError(!record.description ? strings.REQUIRED_FIELD : '');
+      setValidateDates(true);
       return;
     }
     let id = selectedNursery?.id;
@@ -98,6 +120,24 @@ export default function NurseryView(): JSX.Element {
       return {
         ...previousRecord,
         timeZone: newTimeZone ? newTimeZone.id : undefined,
+      };
+    });
+  };
+
+  const onUpdateDate = (field: string, value: any) => {
+    setRecord((previousRecord: Facility): Facility => {
+      return {
+        ...previousRecord,
+        [field]: value,
+      };
+    });
+  };
+
+  const onUpdateCapacity = (value: number) => {
+    setRecord((previousRecord: Facility): Facility => {
+      return {
+        ...previousRecord,
+        capacity: value,
       };
     });
   };
@@ -149,6 +189,78 @@ export default function NurseryView(): JSX.Element {
                 location={record}
                 onChangeTimeZone={onChangeTimeZone}
                 tooltip={strings.TOOLTIP_TIME_ZONE_NURSERY}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <DatePicker
+                id={'buildStartedDate'}
+                label={strings.FACILITY_BUILD_START_DATE}
+                value={record.buildStartedDate ?? ''}
+                onChange={(value) => onUpdateDate('buildStartedDate', value)}
+                aria-label='date-picker'
+                errorText={
+                  validateDates &&
+                  !FacilityService.facilityBuildStartedDateValid(
+                    record.buildStartedDate,
+                    record.buildCompletedDate,
+                    record.operationStartedDate
+                  )
+                    ? strings.FACILITY_BUILD_START_DATE_INVALID
+                    : ''
+                }
+                maxDate={record.buildCompletedDate}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <DatePicker
+                id={'buildCompletedDate'}
+                label={strings.FACILITY_BUILD_COMPLETION_DATE}
+                value={record.buildCompletedDate ?? ''}
+                onChange={(value) => onUpdateDate('buildCompletedDate', value)}
+                aria-label='date-picker'
+                errorText={
+                  validateDates &&
+                  !FacilityService.facilityBuildCompletedDateValid(
+                    record.buildStartedDate,
+                    record.buildCompletedDate,
+                    record.operationStartedDate
+                  )
+                    ? strings.FACILITY_BUILD_COMPLETION_DATE_INVALID
+                    : ''
+                }
+                minDate={record.buildStartedDate}
+                maxDate={record.operationStartedDate}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <DatePicker
+                id={'operationStartedDate'}
+                label={strings.FACILITY_OPERATION_START_DATE}
+                value={record.operationStartedDate ?? ''}
+                onChange={(value) => onUpdateDate('operationStartedDate', value)}
+                aria-label='date-picker'
+                errorText={
+                  validateDates &&
+                  !FacilityService.facilityOperationStartedDateValid(
+                    record.buildStartedDate,
+                    record.buildCompletedDate,
+                    record.operationStartedDate
+                  )
+                    ? strings.FACILITY_OPERATION_START_DATE_INVALID
+                    : ''
+                }
+                minDate={record.buildCompletedDate}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <TextField
+                id={'capacity'}
+                label={strings.NURSERY_CAPACITY}
+                value={record.capacity ?? ''}
+                onChange={(value) => onUpdateCapacity(value as number)}
+                type='number'
+                min={0}
+                aria-label='date-picker'
               />
             </Grid>
           </Grid>
