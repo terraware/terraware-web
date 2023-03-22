@@ -15,7 +15,6 @@ import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import StorageLocations from './StorageLocations';
-import { DatePicker } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
