@@ -143,7 +143,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               label={
                 locationType === 'seedBank'
                   ? strings.REPORT_SEEDBANK_BUILD_START_DATE
-                  : strings.REPORT_NURSERY_BUILD_START_DATE_REQUIRED
+                  : strings.FACILITY_BUILD_START_DATE_REQUIRED
               }
               editable={editable && (location as ReportSeedBank | ReportNursery).buildStartedDateEditable}
               value={(location as ReportSeedBank | ReportNursery).buildStartedDate ?? ''}
@@ -165,7 +165,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               label={
                 locationType === 'seedBank'
                   ? strings.REPORT_SEEDBANK_BUILD_COMPLETION_DATE
-                  : strings.REPORT_NURSERY_BUILD_COMPLETION_DATE_REQUIRED
+                  : strings.FACILITY_BUILD_COMPLETION_DATE_REQUIRED
               }
               editable={editable && (location as ReportSeedBank | ReportNursery).buildCompletedDateEditable}
               value={(location as ReportSeedBank | ReportNursery).buildCompletedDate ?? ''}
@@ -188,7 +188,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               label={
                 locationType === 'seedBank'
                   ? strings.REPORT_SEEDBANK_OPERATION_START_DATE
-                  : strings.REPORT_NURSERY_OPERATION_START_DATE_REQUIRED
+                  : strings.FACILITY_OPERATION_START_DATE_REQUIRED
               }
               editable={editable && (location as ReportSeedBank | ReportNursery).operationStartedDateEditable}
               value={(location as ReportSeedBank | ReportNursery).operationStartedDate ?? ''}
@@ -221,7 +221,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           <Grid item xs={smallItemGridWidth()}>
             <InfoField
               id={`${location.id}-nursery-capacity`}
-              label={strings.REPORT_NURSERY_CAPACITY}
+              label={strings.NURSERY_CAPACITY_REQUIRED}
               value={(location as ReportNursery).capacity ?? ''}
               editable={editable}
               onChange={(value) => onUpdateLocation('capacity', value)}

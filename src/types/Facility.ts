@@ -18,6 +18,7 @@ export interface Facility {
   buildStartedDate?: string;
   buildCompletedDate?: string;
   operationStartedDate?: string;
+  capacity?: number;
 }
 
 export const DEFAULT_STORAGE_LOCATIONS = (): string[] => [

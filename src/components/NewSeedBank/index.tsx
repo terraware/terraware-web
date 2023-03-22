@@ -242,7 +242,7 @@ export default function SeedBankView(): JSX.Element {
             <Grid item xs={gridSize()}>
               <DatePicker
                 id={'buildStartedDate'}
-                label={strings.REPORT_NURSERY_BUILD_START_DATE}
+                label={strings.FACILITY_BUILD_START_DATE}
                 value={record.buildStartedDate ?? ''}
                 onChange={(value) => onUpdateDate('buildStartedDate', value)}
                 aria-label='date-picker'
@@ -262,7 +262,7 @@ export default function SeedBankView(): JSX.Element {
             <Grid item xs={gridSize()}>
               <DatePicker
                 id={'buildCompletedDate'}
-                label={strings.REPORT_NURSERY_BUILD_COMPLETION_DATE}
+                label={strings.FACILITY_BUILD_COMPLETION_DATE}
                 value={record.buildCompletedDate ?? ''}
                 onChange={(value) => onUpdateDate('buildCompletedDate', value)}
                 aria-label='date-picker'
@@ -283,7 +283,7 @@ export default function SeedBankView(): JSX.Element {
             <Grid item xs={gridSize()}>
               <DatePicker
                 id={'operationStartedDate'}
-                label={strings.REPORT_NURSERY_OPERATION_START_DATE}
+                label={strings.FACILITY_OPERATION_START_DATE}
                 value={record.operationStartedDate ?? ''}
                 onChange={(value) => onUpdateDate('operationStartedDate', value)}
                 aria-label='date-picker'

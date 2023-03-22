@@ -118,21 +118,31 @@ export default function NurseryDetails(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
           <TextField
             id={'buildStartedDate'}
-            label={strings.REPORT_NURSERY_BUILD_START_DATE}
+            label={strings.FACILITY_BUILD_START_DATE}
             value={nursery?.buildStartedDate ?? ''}
             type='text'
             aria-label='date-picker'
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
           <TextField
             id={'buildCompletedDate'}
-            label={strings.REPORT_NURSERY_BUILD_COMPLETION_DATE}
+            label={strings.FACILITY_BUILD_COMPLETION_DATE}
             value={nursery?.buildCompletedDate ?? ''}
+            type='text'
+            aria-label='date-picker'
+            display={true}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          <TextField
+            id={'operationStartedDate'}
+            label={strings.FACILITY_OPERATION_START_DATE}
+            value={nursery?.operationStartedDate ?? ''}
             type='text'
             aria-label='date-picker'
             display={true}
@@ -140,10 +150,10 @@ export default function NurseryDetails(): JSX.Element {
         </Grid>
         <Grid item xs={gridSize()}>
           <TextField
-            id={'operationStartedDate'}
-            label={strings.REPORT_NURSERY_OPERATION_START_DATE}
-            value={nursery?.operationStartedDate ?? ''}
-            type='text'
+            id={'capacity'}
+            label={strings.NURSERY_CAPACITY}
+            value={nursery?.capacity ?? ''}
+            type='number'
             aria-label='date-picker'
             display={true}
           />

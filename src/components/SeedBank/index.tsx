@@ -121,7 +121,7 @@ export default function SeedBankDetails(): JSX.Element {
         <Grid item xs={gridSize()}>
           <TextField
             id={'buildStartedDate'}
-            label={strings.REPORT_NURSERY_BUILD_START_DATE}
+            label={strings.FACILITY_BUILD_START_DATE}
             value={seedBank?.buildStartedDate ?? ''}
             type='text'
             aria-label='date-picker'
@@ -131,7 +131,7 @@ export default function SeedBankDetails(): JSX.Element {
         <Grid item xs={gridSize()}>
           <TextField
             id={'buildCompletedDate'}
-            label={strings.REPORT_NURSERY_BUILD_COMPLETION_DATE}
+            label={strings.FACILITY_BUILD_COMPLETION_DATE}
             value={seedBank?.buildCompletedDate ?? ''}
             type='text'
             aria-label='date-picker'
@@ -141,7 +141,7 @@ export default function SeedBankDetails(): JSX.Element {
         <Grid item xs={gridSize()}>
           <TextField
             id={'operationStartedDate'}
-            label={strings.REPORT_NURSERY_OPERATION_START_DATE}
+            label={strings.FACILITY_OPERATION_START_DATE}
             value={seedBank?.operationStartedDate ?? ''}
             type='text'
             aria-label='date-picker'

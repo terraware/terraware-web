@@ -62,6 +62,7 @@ export default function NurseryView(): JSX.Element {
       buildStartedDate: selectedNursery?.buildStartedDate,
       buildCompletedDate: selectedNursery?.buildCompletedDate,
       operationStartedDate: selectedNursery?.operationStartedDate,
+      capacity: selectedNursery?.capacity,
     });
   }, [selectedNursery, setRecord, selectedOrganization]);
 
@@ -132,6 +133,15 @@ export default function NurseryView(): JSX.Element {
     });
   };
 
+  const onUpdateCapacity = (value: number) => {
+    setRecord((previousRecord: Facility): Facility => {
+      return {
+        ...previousRecord,
+        capacity: value,
+      };
+    });
+  };
+
   return (
     <TfMain>
       <PageForm
@@ -184,7 +194,7 @@ export default function NurseryView(): JSX.Element {
             <Grid item xs={gridSize()}>
               <DatePicker
                 id={'buildStartedDate'}
-                label={strings.REPORT_NURSERY_BUILD_START_DATE}
+                label={strings.FACILITY_BUILD_START_DATE}
                 value={record.buildStartedDate ?? ''}
                 onChange={(value) => onUpdateDate('buildStartedDate', value)}
                 aria-label='date-picker'
@@ -204,7 +214,7 @@ export default function NurseryView(): JSX.Element {
             <Grid item xs={gridSize()}>
               <DatePicker
                 id={'buildCompletedDate'}
-                label={strings.REPORT_NURSERY_BUILD_COMPLETION_DATE}
+                label={strings.FACILITY_BUILD_COMPLETION_DATE}
                 value={record.buildCompletedDate ?? ''}
                 onChange={(value) => onUpdateDate('buildCompletedDate', value)}
                 aria-label='date-picker'
@@ -225,7 +235,7 @@ export default function NurseryView(): JSX.Element {
             <Grid item xs={gridSize()}>
               <DatePicker
                 id={'operationStartedDate'}
-                label={strings.REPORT_NURSERY_OPERATION_START_DATE}
+                label={strings.FACILITY_OPERATION_START_DATE}
                 value={record.operationStartedDate ?? ''}
                 onChange={(value) => onUpdateDate('operationStartedDate', value)}
                 aria-label='date-picker'
@@ -240,6 +250,17 @@ export default function NurseryView(): JSX.Element {
                     : ''
                 }
                 minDate={record.buildCompletedDate}
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <TextField
+                id={'capacity'}
+                label={strings.NURSERY_CAPACITY}
+                value={record.capacity ?? ''}
+                onChange={(value) => onUpdateCapacity(value as number)}
+                type='number'
+                min={0}
+                aria-label='date-picker'
               />
             </Grid>
           </Grid>

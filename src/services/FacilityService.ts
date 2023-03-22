@@ -95,6 +95,7 @@ const updateFacility = async (facility: Facility): Promise<Response> => {
     buildStartedDate: facility.buildStartedDate,
     buildCompletedDate: facility.buildCompletedDate,
     operationStartedDate: facility.operationStartedDate,
+    capacity: facility.capacity,
   };
 
   return await httpFacility.put({
@@ -132,6 +133,7 @@ const getFacilities = async ({ type, organizationId, query }: FacilitySearchPara
       'buildStartedDate',
       'buildCompletedDate',
       'operationStartedDate',
+      'capacity',
     ],
     search: {
       operation: 'and',
@@ -166,6 +168,7 @@ const getFacilities = async ({ type, organizationId, query }: FacilitySearchPara
         buildStartedDate: result.buildStartedDate as string,
         buildCompletedDate: result.buildCompletedDate as string,
         operationStartedDate: result.operationStartedDate as string,
+        capacity: result.capacity as number,
       };
     }) ?? [];
 
