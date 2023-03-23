@@ -1,0 +1,23 @@
+phrase:
+  project_id: "8c9d8895494d179a2412d18b31e38203"
+  file_format: csv
+
+  push:
+    sources:
+      - file: ./src/strings/csv/en.csv
+        params:
+          file_encoding: UTF-8
+          format_options:
+            comment_index: 3
+            header_content_row: true
+            key_index: 1
+          locale_mapping:
+            en: 2
+          update_descriptions: true
+          update_translations: true
+
+  pull:
+    targets:
+      - file: ./src/strings/csv/<locale_name>.csv
+        params:
+          encoding: UTF-8
