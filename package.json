@@ -105,6 +105,7 @@
     "@craco/craco": "^7.0.0",
     "@cypress/code-coverage": "^3.10.0",
     "@cypress/instrument-cra": "^1.4.0",
+    "btoa": "^1.2.1",
     "csv": "^6.2.8",
     "cypress": "^12.7.0",
     "esm": "^3.2.25",

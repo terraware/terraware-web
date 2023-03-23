@@ -4,6 +4,7 @@
  *
  * It needs to be a CommonJS module because it is invoked by Webpack in dev environments.
  */
+const btoa = require('btoa');
 const fs = require('fs/promises');
 const { parse } = require('csv-parse/sync');
 const path = require('path');
