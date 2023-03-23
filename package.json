@@ -71,7 +71,7 @@
     "generate-types": "node -r esm scripts/openapi-typescript-formatter.js",
     "cy:run": "TZ=UTC cypress run",
     "cy": "TZ=UTC cypress open",
-    "e2e": "NODE_OPTIONS=--max-old-space-size=2048 start-server-and-test start:dev http://127.0.0.1:3000 cy:run && yarn e2e:report",
+    "e2e": "NODE_OPTIONS=--max-old-space-size=3172 start-server-and-test start:dev http://127.0.0.1:3000 cy:run && yarn e2e:report",
     "e2e:report": "npx nyc report --reporter=text",
     "license-report": "license-report --only=prod --department.value=terraware --relatedTo.value=terraware-web --output=html > docs/license-report.html",
     "lint": "tslint --project tsconfig.json",
