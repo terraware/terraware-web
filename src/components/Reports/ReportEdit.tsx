@@ -114,8 +114,10 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const updatePhotos = async (iReportId: number) => {
     await ReportService.uploadReportPhotos(iReportId, photos);
+    setPhotos([]);
     if (photoIdsToRemove) {
       await ReportService.deleteReportPhotos(iReportId, photoIdsToRemove);
+      setPhotoIdsToRemove([]);
     }
   };
 
