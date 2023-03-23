@@ -216,7 +216,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       ))}
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.PROJECT_SUMMARY}
+          title={strings.PROJECT_SUMMARY_REQUIRED}
           instructions={strings.PROJECT_SUMMARY_INSTRUCTIONS}
           editable={editable}
           value={projectSummary}
@@ -231,7 +231,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.PROJECT_IMPACT}
+          title={strings.PROJECT_IMPACT_REQUIRED}
           instructions={strings.PROJECT_IMPACT_INSTRUCTIONS}
           editable={editable}
           value={projectImpact}
@@ -246,7 +246,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.BUDGET_NARRATIVE_SUMMARY}
+          title={strings.BUDGET_NARRATIVE_SUMMARY_REQUIRED}
           instructions={strings.BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS}
           editable={editable}
           value={budgetNarrativeSummary}
@@ -298,7 +298,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.SOCIAL_IMPACT}
+          title={strings.SOCIAL_IMPACT_REQUIRED}
           instructions={strings.SOCIAL_IMPACT_INSTRUCTIONS}
           editable={editable}
           value={socialImpact}
@@ -355,7 +355,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       <br />
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.CHALLENGES}
+          title={strings.CHALLENGES_REQUIRED}
           instructions={strings.CHALLENGES_INSTRUCTIONS}
           editable={editable}
           value={challenges}
@@ -370,7 +370,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.KEY_LESSONS}
+          title={strings.KEY_LESSONS_REQUIRED}
           instructions={strings.KEY_LESSONS_INSTRUCTIONS}
           editable={editable}
           value={keyLessons}
@@ -385,7 +385,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.SUCCESS_STORIES}
+          title={strings.SUCCESS_STORIES_REQUIRED}
           instructions={strings.SUCCESS_STORIES_INSTRUCTIONS}
           editable={editable}
           value={successStories}
@@ -411,29 +411,31 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           value={isCatalytic}
         />
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
-        <Textfield
-          id={`catalyticDetail-field`}
-          type='textarea'
-          label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
-          readonly={!editable}
-          onChange={(v) => {
-            setCatalyticDetail(v as string);
-            if (updateDetails) {
-              updateDetails('catalyticDetail', v);
+      {isCatalytic && (
+        <Grid item xs={mediumItemGridWidth()}>
+          <Textfield
+            id={`catalyticDetail-field`}
+            type='textarea'
+            label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
+            readonly={!editable}
+            onChange={(v) => {
+              setCatalyticDetail(v as string);
+              if (updateDetails) {
+                updateDetails('catalyticDetail', v);
+              }
+            }}
+            value={catalyticDetail}
+            errorText={
+              validate && report.annualDetails?.isCatalytic && !report.annualDetails?.catalyticDetail
+                ? strings.REQUIRED_FIELD
+                : ''
             }
-          }}
-          value={catalyticDetail}
-          errorText={
-            validate && report.annualDetails?.isCatalytic && !report.annualDetails?.catalyticDetail
-              ? strings.REQUIRED_FIELD
-              : ''
-          }
-        />
-      </Grid>
+          />
+        </Grid>
+      )}
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.OPPORTUNITIES}
+          title={strings.OPPORTUNITIES_REQUIRED}
           instructions={strings.OPPORTUNITIES_INSTRUCTIONS}
           editable={editable}
           value={opportunities}
@@ -448,7 +450,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.NEXT_STEPS}
+          title={strings.NEXT_STEPS_REQUIRED}
           instructions={strings.NEXT_STEPS_INSTRUCTIONS}
           editable={editable}
           value={nextSteps}
