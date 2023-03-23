@@ -4,11 +4,14 @@ const { whenDev } = require('@craco/craco');
 
 module.exports = {
   devServer: {
-    onBeforeSetupMiddleware: () => {
+    setupMiddlewares: (middlewares, _) => {
       // Support hot reloading of edits to strings CSV files by converting them to JS when they
-      // change; the JS edits will be picked up by Webpack.
+      // change; the JS edits will be picked up by Webpack. The "add" event is fired when Chokidar
+      // first discovers each file, which will cause JS to be generated as part of server
+      // initialization.
       const convert = (path) => convertCsvFile(path, 'src/strings');
       chokidar.watch('src/strings/csv/*.csv').on('add', convert).on('change', convert);
+      return middlewares;
     },
   },
   webpack: {
