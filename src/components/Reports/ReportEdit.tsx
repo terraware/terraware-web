@@ -117,6 +117,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     setPhotos([]);
     if (photoIdsToRemove) {
       await ReportService.deleteReportPhotos(iReportId, photoIdsToRemove);
+      setPhotoIdsToRemove([]);
     }
   };
 
