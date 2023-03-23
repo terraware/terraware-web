@@ -176,6 +176,14 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         <ViewPhotos reportId={draftReport.id} onPhotoRemove={onPhotoRemove} editable={editable} />
         {editable && onPhotosChanged && (
           <Container maxWidth={false}>
+            <Typography
+              color={theme.palette.TwClrTxtSecondary}
+              fontSize='14px'
+              fontWeight={400}
+              marginTop={theme.spacing(2)}
+            >
+              {strings.PHOTOS_TO_UPLOAD + ':'}
+            </Typography>
             <SelectPhotos onPhotosChanged={onPhotosChanged} multipleSelection={true} />
           </Container>
         )}
