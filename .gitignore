@@ -37,5 +37,8 @@ report.csv
 # build version file
 public/build-version.txt
 
+# generated strings files
+src/strings/strings-*.js
+
 # ignore .vim swap files
 *.swp

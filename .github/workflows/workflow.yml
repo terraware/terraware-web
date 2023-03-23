@@ -58,6 +58,9 @@ jobs:
       - name: Check that code is formatted
         run: yarn prettier --check .
 
+      - name: Generate strings
+        run: yarn generate-strings
+
       - name: Run linter
         run: yarn lint
 
