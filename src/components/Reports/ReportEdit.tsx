@@ -144,10 +144,22 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const switchPages = (doShowAnnual: boolean) => {
+    setShowAnnual(doShowAnnual);
+    goToTop();
+  };
+
   const handleSaveAndNext = async () => {
     if (report) {
       const saveResult = await ReportService.updateReport(report);
-      setShowAnnual(true);
+      switchPages(true);
       setValidateFields(false);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
@@ -162,7 +174,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   const handleBack = async () => {
     if (report) {
       const saveResult = await ReportService.updateReport(report);
-      setShowAnnual(false);
+      switchPages(false);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
@@ -239,6 +251,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         setConfirmSubmitDialogOpen(false);
         setValidateFields(true);
         snackbar.toastError(strings.GENERIC_ERROR, strings.FILL_OUT_ALL_FIELDS);
+        goToTop();
         return;
       }
     }
