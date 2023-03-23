@@ -68,6 +68,18 @@ export default function ReportView(): JSX.Element {
     }
   };
 
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const switchPages = (doShowAnnual: boolean) => {
+    setShowAnnual(doShowAnnual);
+    goToTop();
+  };
+
   return (
     <TfMain>
       <ConcurrentEditorWarningDialog
@@ -103,9 +115,9 @@ export default function ReportView(): JSX.Element {
       <Box display='flex' justifyContent='flex-end' padding={theme.spacing(3)}>
         {report?.isAnnual &&
           (showAnnual ? (
-            <Button label={strings.BACK} type='passive' onClick={() => setShowAnnual(false)} />
+            <Button label={strings.BACK} type='passive' onClick={() => switchPages(false)} />
           ) : (
-            <Button label={strings.NEXT} type='passive' onClick={() => setShowAnnual(true)} />
+            <Button label={strings.NEXT} type='passive' onClick={() => switchPages(true)} />
           ))}
       </Box>
     </TfMain>
