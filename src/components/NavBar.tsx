@@ -13,6 +13,7 @@ import NavFooter from './common/Navbar/NavFooter';
 import { useOrganization } from 'src/providers/hooks';
 import LocaleSelector from './LocaleSelector';
 import isEnabled from '../features';
+import ReportService, { Reports } from 'src/services/ReportService';
 
 type NavBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,6 +28,7 @@ export default function NavBar({
   const { selectedOrganization } = useOrganization();
   const [role, setRole] = useState<OrganizationRole>();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
+  const [reports, setReports] = useState<Reports>([]);
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
 
@@ -85,6 +87,15 @@ export default function NavBar({
       checkNurseryWithdrawals();
     }
   }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
+
+  useEffect(() => {
+    const reportSearch = async () => {
+      const reportsResults = await ReportService.getReports(selectedOrganization.id);
+      setReports(reportsResults.reports || []);
+    };
+
+    reportSearch();
+  }, [selectedOrganization.id]);
 
   const getSeedlingsMenuItems = () => {
     const inventoryMenu = (
@@ -178,7 +189,7 @@ export default function NavBar({
           />
         </SubNavbar>
       </NavItem>
-      {isEnabled('Reporting V1') && (
+      {isEnabled('Reporting V1') && reports.length > 0 && selectedOrganization.canSubmitReports && (
         <>
           <NavSection />
           <NavItem

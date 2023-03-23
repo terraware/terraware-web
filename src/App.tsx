@@ -485,17 +485,17 @@ function AppContent() {
               <MyAccount organizations={organizations} edit={false} />
             </Route>
 
-            {isEnabled('Reporting V1') && (
+            {isEnabled('Reporting V1') && selectedOrganization.canSubmitReports && (
               <Route exact path={APP_PATHS.REPORTS}>
                 <ReportList />
               </Route>
             )}
-            {isEnabled('Reporting V1') && (
+            {isEnabled('Reporting V1') && selectedOrganization.canSubmitReports && (
               <Route path={APP_PATHS.REPORTS_EDIT}>
                 <ReportEdit organization={selectedOrganization} />
               </Route>
             )}
-            {isEnabled('Reporting V1') && (
+            {isEnabled('Reporting V1') && selectedOrganization.canSubmitReports && (
               <Route path={APP_PATHS.REPORTS_VIEW}>
                 <ReportView />
               </Route>
