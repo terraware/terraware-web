@@ -66,6 +66,7 @@
     "build-version-file": "echo $(git rev-parse --short HEAD) > public/build-version.txt",
     "test": "TZ=America/Los_Angeles craco test",
     "eject": "craco eject",
+    "generate-collateral": "yarn build-version-file",
     "generate-types": "node -r esm scripts/openapi-typescript-formatter.js",
     "cy:run": "TZ=UTC cypress run",
     "cy": "TZ=UTC cypress open",
