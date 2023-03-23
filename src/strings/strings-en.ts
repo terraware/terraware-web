@@ -120,7 +120,7 @@ export const strings = {
     'You have withdrawn seeds by both count and weight. As a result, the app has calculated the amount of seeds withdrawn for you by weight.',
   BOUNDARIES_AND_ZONES: 'Boundaries and Zones',
   BUDGET_DOCUMENT_XLS: 'Budget Document (.XLS)',
-  BUDGET_NARRATIVE_SUMMARY: 'Budget Narrative Summary',
+  BUDGET_NARRATIVE_SUMMARY: 'Budget Narrative Summary *',
   BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS:
     'Provide a high level narrative of your budget-to-actuals, noting any major discrepancies and listing any contributors. (One-half page maximum.)',
   CANCEL_DATA_CHECK: 'Cancel Data Check',
@@ -136,8 +136,8 @@ export const strings = {
     'Terraformation’s support has been catalytic in securing additional funding or partnerships for our work.',
   CATALYTIC_DETAIL: 'Catalytic Funding',
   CATALYTIC_DETAIL_INSTRUCTIONS:
-    'Please state whether Terraformation’s support has been catalytic in securing additional funding or partnerships for your work. Provide detail where possible. (One-quarter page maximum.)',
-  CHALLENGES: 'Challenges and Setbacks',
+    'Please state how Terraformation’s support has been catalytic in securing additional funding or partnerships for your work. Provide detail where possible. (One-quarter page maximum.)',
+  CHALLENGES: 'Challenges and Setbacks *',
   CHALLENGES_INSTRUCTIONS:
     'Terraformation believes that the learnings from challenges and failures are often where the greatest growth happens, and sharing these challenges can have a positive global benefit. Please list any challenges or setbacks you experienced during the reporting period. What is the impact of these challenges, and what are the ways in which these setbacks can be overcome in the current project? What would you want to do differently in a future project? (One page maximum.)',
   CHANGE_DEFAULT_WEIGHT_SYSTEM: 'You can change your default weight system from {0}',
@@ -435,7 +435,7 @@ export const strings = {
   ISSUE: 'Issue',
   KEEP_ORIGINAL: 'Keep Original',
   KEY_BELONGS_TO_ANOTHER_SEED_BANK: 'Key is associated with another seed bank.',
-  KEY_LESSONS: 'Key Lessons Learned',
+  KEY_LESSONS: 'Key Lessons Learned *',
   KEY_LESSONS_INSTRUCTIONS:
     'Provide details of key lessons learned during the project reporting period, including both positive and negative unintended consequences if applicable. (One-half page maximum.)',
   KEY_WAS_NOT_RECOGNIZED: 'Key was not recognized.',
@@ -554,7 +554,7 @@ export const strings = {
   NEW_WITHDRAWAL: 'New Withdrawal',
   NEXT_ARROW: 'Next >',
   NEXT_PROCESSING_AND_DRYING: 'Next: Processing & Drying',
-  NEXT_STEPS: 'Next Steps',
+  NEXT_STEPS: 'Next Steps *',
   NEXT_STEPS_INSTRUCTIONS: 'Summarize the next phases in your project. (One-quarter page maximum.)',
   NEXT_STORING: 'Next: Storing',
   NEXT_WITHDRAWAL: 'Next: Withdrawal',
@@ -638,7 +638,7 @@ export const strings = {
   NURSERY_TRANSFER: 'Nursery Transfer',
   NURSERY: 'Nursery',
   ONBOARDING_ADMIN_TITLE: 'Just a moment, let’s complete setup first',
-  OPPORTUNITIES: 'Opportunities',
+  OPPORTUNITIES: 'Opportunities *',
   OPPORTUNITIES_INSTRUCTIONS:
     'This may include opportunities for project expansion, new markets, referrals, training to other organizations, etc. (One-quarter page maximum.)',
   OPT_IN: 'Opt-In Features',
@@ -718,13 +718,13 @@ export const strings = {
   PROCESSING_START_DATE: 'Processing Start Date',
   PROCESSING_STATUS_REQUIRED: 'Processing Status *',
   PROCESSING: 'Processing',
-  PROJECT_IMPACT: 'Project Impact',
+  PROJECT_IMPACT: 'Project Impact *',
   PROJECT_IMPACT_INSTRUCTIONS:
     'Provide the details of your impact during the reporting period, including key accomplishments and progress toward meeting stated goals and key milestones. In addition to forestry goals, please include jobs created (full-time, part-time, and seasonal), using specific figures disaggregated by gender. (Approximately one page.)',
   PROJECT_INFORMATION: 'Project Information',
   PROJECT_NOTES: 'Additional Project Information Notes',
   PROJECT_PHOTOS: 'Project Photos',
-  PROJECT_SUMMARY: 'Project Summary',
+  PROJECT_SUMMARY: 'Project Summary *',
   PROJECT_SUMMARY_INSTRUCTIONS:
     'Provide a short narrative description of the progress since your previous report. This summary should be written for a general audience and be suitable for publication. (Under 100 words.)',
   PURPOSE_REQUIRED: 'Purpose *',
@@ -946,7 +946,7 @@ export const strings = {
   SNACKBAR_MSG_PLANT_DELETED: 'Plant deleted just now.',
   SNACKBAR_MSG_SPECIES_DELETED: 'Species deleted just now.',
   SOAK: 'Soak',
-  SOCIAL_IMPACT: 'Social Impact and Community Benefits',
+  SOCIAL_IMPACT: 'Social Impact and Community Benefits *',
   SOCIAL_IMPACT_INSTRUCTIONS:
     'List the direct benefits of the project to the local community. Specific benefits may include the impact on livelihoods; community education and training; access to safe water; support to youth, women, and/or minority groups; and other socioeconomic and community benefits of the project. Please include the specific indicators you are using to measure community impact and the results you have monitored over time. (One-half page maximum.)',
   SOIL: 'Soil',
@@ -1007,11 +1007,11 @@ export const strings = {
   SUBSTRATE: 'Substrate',
   SUBTITLE_GET_STARTED:
     "To get started, please create your organization now. You'll also be able to set up and manage information on people and species.",
-  SUCCESS_STORIES: 'Success Stories',
+  SUCCESS_STORIES: 'Success Stories *',
   SUCCESS_STORIES_INSTRUCTIONS:
     'Provide a concise narrative of one to two personalized success stories. (One-half page maximum.)',
   SUGGESTION: 'Suggestion',
-  SUMMARY_OF_PROGRESS: 'Summary of Progress',
+  SUMMARY_OF_PROGRESS: 'Summary of Progress *',
   SUMMARY_OF_PROGRESS_DESCRIPTION: 'Give a brief summary of this project.',
   SUMMARY: 'Summary',
   SUSTAINABLE_DEVELOPMENT_GOALS: 'Sustainable Development Goals',

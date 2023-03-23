@@ -411,26 +411,28 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           value={isCatalytic}
         />
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
-        <Textfield
-          id={`catalyticDetail-field`}
-          type='textarea'
-          label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
-          readonly={!editable}
-          onChange={(v) => {
-            setCatalyticDetail(v as string);
-            if (updateDetails) {
-              updateDetails('catalyticDetail', v);
+      {isCatalytic && (
+        <Grid item xs={mediumItemGridWidth()}>
+          <Textfield
+            id={`catalyticDetail-field`}
+            type='textarea'
+            label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
+            readonly={!editable}
+            onChange={(v) => {
+              setCatalyticDetail(v as string);
+              if (updateDetails) {
+                updateDetails('catalyticDetail', v);
+              }
+            }}
+            value={catalyticDetail}
+            errorText={
+              validate && report.annualDetails?.isCatalytic && !report.annualDetails?.catalyticDetail
+                ? strings.REQUIRED_FIELD
+                : ''
             }
-          }}
-          value={catalyticDetail}
-          errorText={
-            validate && report.annualDetails?.isCatalytic && !report.annualDetails?.catalyticDetail
-              ? strings.REQUIRED_FIELD
-              : ''
-          }
-        />
-      </Grid>
+          />
+        </Grid>
+      )}
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
           title={strings.OPPORTUNITIES}
