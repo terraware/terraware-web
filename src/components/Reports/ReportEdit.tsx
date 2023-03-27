@@ -208,12 +208,17 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       );
     });
     const emptyPlantingSitesFields = iReport.plantingSites?.some((plantingSite) => {
+      const speciesDataMissing =
+        plantingSite.species?.some(
+          (sp) => !sp.totalPlanted || !sp.mortalityRateInField || !sp.mortalityRateInNursery
+        ) ?? false;
       return (
         !plantingSite.totalPlantingSiteArea ||
         !plantingSite.totalPlantedArea ||
         !plantingSite.totalTreesPlanted ||
         !plantingSite.totalPlantsPlanted ||
-        !plantingSite.mortalityRate
+        !plantingSite.mortalityRate ||
+        speciesDataMissing
       );
     });
     return !iReport.summaryOfProgress || emptySeedbankFields || emptyNurseryFields || emptyPlantingSitesFields;
