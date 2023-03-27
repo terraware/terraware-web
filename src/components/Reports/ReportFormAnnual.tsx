@@ -13,6 +13,21 @@ const useStyles = makeStyles((theme: Theme) => ({
   hiddenInput: {
     display: 'none',
   },
+  quarterPage: {
+    '& textarea': {
+      minHeight: '240px',
+    },
+  },
+  halfPage: {
+    '& textarea': {
+      minHeight: '480px',
+    },
+  },
+  fullPage: {
+    '& textarea': {
+      minHeight: '720px',
+    },
+  },
 }));
 
 export type ReportFormAnnualProps = {
@@ -233,6 +248,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         <ReportField
           title={strings.PROJECT_IMPACT_REQUIRED}
           instructions={strings.PROJECT_IMPACT_INSTRUCTIONS}
+          pageSize='full'
           editable={editable}
           value={projectImpact}
           onChange={(value) => {
@@ -248,6 +264,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         <ReportField
           title={strings.BUDGET_NARRATIVE_SUMMARY_REQUIRED}
           instructions={strings.BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS}
+          pageSize='half'
           editable={editable}
           value={budgetNarrativeSummary}
           onChange={(value) => {
@@ -300,6 +317,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         <ReportField
           title={strings.SOCIAL_IMPACT_REQUIRED}
           instructions={strings.SOCIAL_IMPACT_INSTRUCTIONS}
+          pageSize='half'
           editable={editable}
           value={socialImpact}
           onChange={(value) => {
@@ -357,6 +375,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         <ReportField
           title={strings.CHALLENGES_REQUIRED}
           instructions={strings.CHALLENGES_INSTRUCTIONS}
+          pageSize='full'
           editable={editable}
           value={challenges}
           onChange={(value) => {
@@ -372,6 +391,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         <ReportField
           title={strings.KEY_LESSONS_REQUIRED}
           instructions={strings.KEY_LESSONS_INSTRUCTIONS}
+          pageSize='half'
           editable={editable}
           value={keyLessons}
           onChange={(value) => {
@@ -387,6 +407,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         <ReportField
           title={strings.SUCCESS_STORIES_REQUIRED}
           instructions={strings.SUCCESS_STORIES_INSTRUCTIONS}
+          pageSize='half'
           editable={editable}
           value={successStories}
           onChange={(value) => {
@@ -416,6 +437,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           <Textfield
             id={`catalyticDetail-field`}
             type='textarea'
+            className={classes.quarterPage}
             label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
             readonly={!editable}
             onChange={(v) => {
@@ -437,6 +459,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         <ReportField
           title={strings.OPPORTUNITIES_REQUIRED}
           instructions={strings.OPPORTUNITIES_INSTRUCTIONS}
+          pageSize='quarter'
           editable={editable}
           value={opportunities}
           onChange={(value) => {
@@ -452,6 +475,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         <ReportField
           title={strings.NEXT_STEPS_REQUIRED}
           instructions={strings.NEXT_STEPS_INSTRUCTIONS}
+          pageSize='quarter'
           editable={editable}
           value={nextSteps}
           onChange={(value) => {
@@ -474,11 +498,13 @@ type ReportFieldProps = {
   value: string;
   onChange: (value: string) => void;
   errorText?: string;
+  pageSize?: 'quarter' | 'half' | 'full';
 };
 
 function ReportField(props: ReportFieldProps): JSX.Element {
-  const { title, instructions, editable, value, onChange, errorText } = props;
+  const { title, instructions, editable, value, onChange, errorText, pageSize } = props;
   const theme = useTheme();
+  const classes = useStyles();
   return (
     <>
       <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
@@ -492,6 +518,15 @@ function ReportField(props: ReportFieldProps): JSX.Element {
         onChange={(v) => onChange(v as string)}
         value={value}
         errorText={errorText}
+        className={
+          pageSize === 'quarter'
+            ? classes.quarterPage
+            : pageSize === 'half'
+            ? classes.halfPage
+            : pageSize === 'full'
+            ? classes.fullPage
+            : ''
+        }
       />
     </>
   );
