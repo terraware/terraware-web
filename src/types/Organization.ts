@@ -12,6 +12,7 @@ export type Organization = {
   createdTime?: string;
   totalUsers: number;
   timeZone?: string;
+  canSubmitReports?: boolean;
 };
 
 export type HighOrganizationRoles = 'Admin' | 'Owner';
