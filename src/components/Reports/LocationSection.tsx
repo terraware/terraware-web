@@ -107,11 +107,11 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     },
     {
       key: 'totalPlanted',
-      name: strings.TOTAL_PLANTED,
+      name: strings.TOTAL_PLANTED_REQUIRED,
       type: 'string',
     },
-    { key: 'mortalityRateInField', name: strings.MORTALITY_RATE_IN_FIELD, type: 'string' },
-    { key: 'mortalityRateInNursery', name: strings.MORTALITY_RATE_IN_NURSERY, type: 'string' },
+    { key: 'mortalityRateInField', name: strings.MORTALITY_RATE_IN_FIELD_REQUIRED, type: 'string' },
+    { key: 'mortalityRateInNursery', name: strings.MORTALITY_RATE_IN_NURSERY_REQUIRED, type: 'string' },
   ];
 
   const onEditPlantingSiteReport = (species: PlantingSiteSpecies, fromColumn?: string, value?: any) => {
@@ -321,7 +321,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 id='species-table'
                 columns={columns}
                 rows={plantingSiteSpecies}
-                Renderer={PlantingSiteSpeciesCellRenderer({ editMode: editable })}
+                Renderer={PlantingSiteSpeciesCellRenderer({ editMode: editable, validate })}
                 showPagination={false}
                 onSelect={onEditPlantingSiteReport}
                 controlledOnSelect={true}

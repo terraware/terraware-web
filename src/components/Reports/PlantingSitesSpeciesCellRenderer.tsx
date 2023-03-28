@@ -3,6 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { RendererProps, TableRowType } from '@terraware/web-components';
 import { Textfield } from '@terraware/web-components';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
+import strings from 'src/strings';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles(() => ({
     },
   },
   input: {
-    maxWidth: '88px',
+    maxWidth: '140px',
 
     '& label': {
       whiteSpace: 'break-spaces',
@@ -23,16 +24,25 @@ const useStyles = makeStyles(() => ({
 
 export type PlantingSiteSpeciesCellRendererProps = {
   editMode: boolean;
+  validate?: boolean;
 };
 
-export default function PlantingSiteSpeciesCellRenderer({ editMode }: PlantingSiteSpeciesCellRendererProps) {
+export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: PlantingSiteSpeciesCellRendererProps) {
   const classes = useStyles();
 
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, index, onRowClick } = props;
     const createInput = (id: string) => {
       if (onRowClick) {
-        return <TableCellInput id={id} initialValue={row[id]} onConfirmEdit={onRowClick} className={classes.input} />;
+        return (
+          <TableCellInput
+            id={id}
+            initialValue={row[id]}
+            onConfirmEdit={onRowClick}
+            className={classes.input}
+            validate={validate}
+          />
+        );
       }
     };
 
@@ -62,10 +72,11 @@ type TableCellInputProps = {
   initialValue: string;
   onConfirmEdit: (value: string) => void;
   className: string;
+  validate?: boolean;
 };
 
 function TableCellInput(props: TableCellInputProps): JSX.Element {
-  const { id, initialValue, onConfirmEdit, className } = props;
+  const { id, initialValue, onConfirmEdit, className, validate } = props;
   const [inputValue, setInputValue] = useState(initialValue);
 
   return (
@@ -78,6 +89,7 @@ function TableCellInput(props: TableCellInputProps): JSX.Element {
       label={''}
       className={className}
       min={0}
+      errorText={validate && !inputValue ? strings.REQUIRED_FIELD : ''}
     />
   );
 }
