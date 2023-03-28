@@ -8,6 +8,7 @@ import { SustainableDevelopmentGoal, SDG } from 'src/types/Report';
 import useSDGProgress from './useSDGProgress';
 import { REPORT_FILE_ENDPOINT } from 'src/services/ReportService';
 import { makeStyles } from '@mui/styles';
+import { numWords, overWordLimit } from 'src/utils/text';
 
 const useStyles = makeStyles((theme: Theme) => ({
   hiddenInput: {
@@ -241,8 +242,24 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('projectSummary', value);
             }
           }}
-          errorText={validate && !report.annualDetails?.projectSummary ? strings.REQUIRED_FIELD : ''}
+          errorText={
+            validate && !report.annualDetails?.projectSummary
+              ? strings.REQUIRED_FIELD
+              : validate && overWordLimit(projectSummary, 100)
+              ? strings.OVER_WORD_LIMIT
+              : ''
+          }
         />
+        {editable && (
+          <Typography
+            color={theme.palette.TwClrTxtSecondary}
+            fontSize='14px'
+            fontWeight={400}
+            marginTop={theme.spacing(0.5)}
+          >
+            {`(${numWords(projectSummary)} ${strings.WORDS})`}
+          </Typography>
+        )}
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
