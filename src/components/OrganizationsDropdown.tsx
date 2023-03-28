@@ -1,4 +1,5 @@
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
+import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { APP_PATHS } from 'src/constants';
@@ -7,7 +8,14 @@ import { Organization } from 'src/types/Organization';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import { useOrganization } from 'src/providers/hooks';
 
+const useStyles = makeStyles(() => ({
+  anchorText: {
+    fontSize: '16px',
+  },
+}));
+
 export default function OrganizationsDropdown(): JSX.Element {
+  const classes = useStyles();
   const { selectedOrganization, setSelectedOrganization, organizations } = useOrganization();
   const history = useHistory();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
@@ -44,7 +52,7 @@ export default function OrganizationsDropdown(): JSX.Element {
     <div>
       <AddNewOrganizationModal open={newOrganizationModalOpened} onCancel={onCloseCreateOrganizationModal} />
       <PopoverMenu
-        anchor={<p>{selectedOrganization.name}</p>}
+        anchor={<p className={classes.anchorText}>{selectedOrganization.name}</p>}
         menuSections={[
           organizations?.map((organization) => ({ label: organization.name, value: organization.id.toString() })) || [],
           [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }],
