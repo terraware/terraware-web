@@ -40,8 +40,7 @@ import TooltipLearnMoreModal, {
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import PopoverMenu from '../common/PopoverMenu';
-import { DropdownItem, SortOrder } from '@terraware/web-components';
+import { DropdownItem, Popover as PopoverMenu, SortOrder } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
 import { isTrue } from 'src/utils/boolean';

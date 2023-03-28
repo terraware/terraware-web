@@ -20,8 +20,7 @@ import { downloadCsvTemplateHandler } from '../common/ImportModal';
 import NurseryInventoryService, { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
 import ImportInventoryModal from './ImportInventoryModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { Button, DropdownItem, Tooltip } from '@terraware/web-components';
-import PopoverMenu from '../common/PopoverMenu';
+import { Button, DropdownItem, Popover, Tooltip } from '@terraware/web-components';
 import { useOrganization } from 'src/providers/hooks';
 
 interface StyleProps {
@@ -204,7 +203,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         </Tooltip>
       </Box>
 
-      <PopoverMenu
+      <Popover
         sections={[[{ label: strings.IMPORT, value: 'import' }]]}
         handleClick={onItemClick}
         anchorElement={actionMenuAnchorEl}

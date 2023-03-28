@@ -37,8 +37,7 @@ import ImportAccessionsModal from './ImportAccessionsModal';
 import { Message, Tooltip } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { DropdownItem } from '@terraware/web-components';
-import PopoverMenu from 'src/components/common/PopoverMenu';
+import { DropdownItem, Popover } from '@terraware/web-components';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
@@ -618,7 +617,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         </Tooltip>
       </Box>
 
-      <PopoverMenu
+      <Popover
         sections={[
           [
             { label: strings.IMPORT, value: 'import' },
