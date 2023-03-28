@@ -1,4 +1,4 @@
-import { Container, Popover, Theme, Typography } from '@mui/material';
+import { Box, Container, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
@@ -19,7 +19,7 @@ interface StyleProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
-    margin: theme.spacing(2, 0, 2, 0),
+    margin: theme.spacing(2, 0, 0, 0),
     padding: theme.spacing(0),
     display: 'flex',
     flexDirection: 'column',
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: (props: StyleProps) => (props.isMobile ? 'flex-start' : 'center'),
     gap: theme.spacing(1),
     marginTop: `-${theme.spacing(1)}`,
+    marginBottom: '8px',
   },
   searchField: {
     width: '300px',
@@ -210,7 +211,7 @@ export default function Filters(props: Props): JSX.Element {
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
-      <div className={classes.filtersContainer}>
+      <Box className={classes.filtersContainer}>
         <TextField
           placeholder={strings.SEARCH}
           iconLeft='search'
@@ -296,7 +297,7 @@ export default function Filters(props: Props): JSX.Element {
             }}
           />
         </Popover>
-      </div>
+      </Box>
       <PillList data={filterPillItems} onRemove={removeFilter} />
     </Container>
   );

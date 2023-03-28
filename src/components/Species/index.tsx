@@ -93,7 +93,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   searchBar: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: '16px',
+  },
+  pillList: {
+    display: 'flex',
+    alightItems: 'center',
+    marginTop: '16px',
   },
   icon: {
     fill: theme.palette.TwClrIcnSecondary,
@@ -835,7 +839,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               />
             </Tooltip>
           </Grid>
-          <Grid item xs={12} className={classes.searchBar}>
+          <Grid item xs={12} className={classes.pillList}>
             <PillList data={getFilterPillData()} />
           </Grid>
           {species && species.length ? (

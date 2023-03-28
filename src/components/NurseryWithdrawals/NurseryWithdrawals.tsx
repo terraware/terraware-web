@@ -277,7 +277,7 @@ export default function NurseryWithdrawals(): JSX.Element {
                 />
               </Popover>
             </Grid>
-            <Grid xs={12} display='flex' sx={{ marginBottom: 2 }}>
+            <Grid xs={12} display='flex'>
               <PillList data={filterPillData} />
             </Grid>
 

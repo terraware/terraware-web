@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { SearchResponseElement } from 'src/types/Search';
 import InventoryCellRenderer from './InventoryCellRenderer';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
@@ -27,7 +27,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
-  const theme = useTheme();
   const columns: TableColumnType[] = [
     {
       key: 'species_scientificName',
@@ -84,7 +83,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   return (
     <>
-      <Box marginBottom={theme.spacing(2)}>
+      <Box>
         <Search
           searchValue={temporalSearchValue}
           onSearch={(val) => setTemporalSearchValue(val)}
