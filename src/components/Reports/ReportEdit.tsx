@@ -8,7 +8,7 @@ import ReportService from 'src/services/ReportService';
 import { Report, ReportFile } from 'src/types/Report';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
-import ReportFormAnnual, { overWordLimit } from 'src/components/Reports/ReportFormAnnual';
+import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import { FormButton } from 'src/components/common/FormBottomBar';
 import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
@@ -22,6 +22,7 @@ import {
   buildStartedDateValid,
   operationStartedDateValid,
 } from 'src/components/Reports/LocationSection';
+import { overWordLimit } from 'src/utils/text';
 
 export type ReportEditProps = {
   organization: Organization;

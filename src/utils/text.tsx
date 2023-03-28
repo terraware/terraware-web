@@ -14,4 +14,12 @@ export function removeDiacritics(s: string): string {
   return normalized.replace(/\p{Mn}/gu, '');
 }
 
+export const numWords = (testString: string): number => {
+  return testString.trim().split(/\s+/).length;
+};
+
+export const overWordLimit = (testString: string, wordLimit: number): boolean => {
+  return numWords(testString) > wordLimit;
+};
+
 export default isWhitespaces;

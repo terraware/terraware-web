@@ -8,6 +8,7 @@ import { SustainableDevelopmentGoal, SDG } from 'src/types/Report';
 import useSDGProgress from './useSDGProgress';
 import { REPORT_FILE_ENDPOINT } from 'src/services/ReportService';
 import { makeStyles } from '@mui/styles';
+import { numWords, overWordLimit } from 'src/utils/text';
 
 const useStyles = makeStyles((theme: Theme) => ({
   hiddenInput: {
@@ -547,11 +548,3 @@ function ReportField(props: ReportFieldProps): JSX.Element {
     </>
   );
 }
-
-const numWords = (testString: string): number => {
-  return testString.trim().split(/\s+/).length;
-};
-
-export const overWordLimit = (testString: string, wordLimit: number): boolean => {
-  return numWords(testString) > wordLimit;
-};
