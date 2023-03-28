@@ -654,7 +654,7 @@ export default function Accession2View(): JSX.Element {
           <OverviewItemCard
             isEditable={viabilityEditable}
             handleEdit={() => setOpenViabilityModal(true)}
-            hideEditIcon={!accession?.viabilityPercent?.toString() && !isMobile}
+            hideEditIcon={!accession?.viabilityPercent?.toString()}
             title={strings.VIABILITY}
             contents={
               accession?.viabilityPercent?.toString() ? (
