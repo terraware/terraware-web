@@ -1,39 +1,24 @@
-import { IconButton, Theme } from '@mui/material';
+import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
-import { DropdownItem } from '@terraware/web-components';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
-import PopoverMenu from './common/PopoverMenu';
 import { useOrganization } from 'src/providers/hooks';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  iconContainer: {
-    borderRadius: '16px',
+const useStyles = makeStyles(() => ({
+  anchorText: {
     fontSize: '16px',
-    height: '48px',
-    color: theme.palette.TwClrTxt,
-    padding: theme.spacing(1.5, 2),
-  },
-  icon: {
-    fill: theme.palette.TwClrIcn,
-    marginLeft: '8px',
   },
 }));
 
 export default function OrganizationsDropdown(): JSX.Element {
-  const { selectedOrganization, setSelectedOrganization, organizations } = useOrganization();
   const classes = useStyles();
+  const { selectedOrganization, setSelectedOrganization, organizations } = useOrganization();
   const history = useHistory();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const selectOrganization = (newlySelectedOrg: Organization) => {
     setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
@@ -42,16 +27,13 @@ export default function OrganizationsDropdown(): JSX.Element {
       }
       return newlySelectedOrg;
     });
-    setAnchorEl(null);
   };
 
   const onCloseCreateOrganizationModal = () => {
     setNewOrganizationModalOpened(false);
-    setAnchorEl(null);
   };
 
   const openNewOrganizationModal = () => {
-    setAnchorEl(null);
     setNewOrganizationModalOpened(true);
   };
 
@@ -69,18 +51,13 @@ export default function OrganizationsDropdown(): JSX.Element {
   return (
     <div>
       <AddNewOrganizationModal open={newOrganizationModalOpened} onCancel={onCloseCreateOrganizationModal} />
-      <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
-        <p>{selectedOrganization.name}</p>
-        <Icon name='chevronDown' size='medium' className={classes.icon} />
-      </IconButton>
       <PopoverMenu
-        sections={[
+        anchor={<p className={classes.anchorText}>{selectedOrganization.name}</p>}
+        menuSections={[
           organizations?.map((organization) => ({ label: organization.name, value: organization.id.toString() })) || [],
           [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }],
         ]}
-        handleClick={changeOrganization}
-        anchorElement={anchorEl}
-        setAnchorElement={setAnchorEl}
+        onClick={changeOrganization}
       />
     </div>
   );
