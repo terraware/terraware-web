@@ -212,9 +212,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     });
     const emptyPlantingSitesFields = iReport.plantingSites?.some((plantingSite) => {
       const speciesDataMissing =
-        plantingSite.species?.some(
-          (sp) => !sp.totalPlanted || !sp.mortalityRateInField || !sp.mortalityRateInNursery
-        ) ?? false;
+        plantingSite.species?.some((sp) => !sp.totalPlanted || !sp.mortalityRateInField) ?? false;
       return (
         plantingSite.selected &&
         (!plantingSite.totalPlantingSiteArea ||
