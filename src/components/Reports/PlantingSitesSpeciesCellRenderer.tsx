@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
     },
   },
   input: {
-    maxWidth: '88px',
+    maxWidth: '140px',
 
     '& label': {
       whiteSpace: 'break-spaces',
