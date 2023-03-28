@@ -41,9 +41,9 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const isNursery = locationType === 'nursery';
   const isPlantingSite = locationType === 'plantingSite';
 
-  const [paidWorkers, setPaidWorkers] = useState<number>(location.workers?.paidWorkers ?? 0);
-  const [femalePaidWorkers, setFemalePaidWorkers] = useState<number>(location.workers?.femalePaidWorkers ?? 0);
-  const [volunteers, setVolunteers] = useState<number>(location.workers?.volunteers ?? 0);
+  const [paidWorkers, setPaidWorkers] = useState<number | undefined>(location.workers?.paidWorkers);
+  const [femalePaidWorkers, setFemalePaidWorkers] = useState<number | undefined>(location.workers?.femalePaidWorkers);
+  const [volunteers, setVolunteers] = useState<number | undefined>(location.workers?.volunteers);
   const [locationNotes, setLocationNotes] = useState(location.notes ?? '');
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
@@ -111,7 +111,6 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       type: 'string',
     },
     { key: 'mortalityRateInField', name: strings.MORTALITY_RATE_IN_FIELD_REQUIRED, type: 'string' },
-    { key: 'mortalityRateInNursery', name: strings.MORTALITY_RATE_IN_NURSERY_REQUIRED, type: 'string' },
   ];
 
   const onEditPlantingSiteReport = (species: PlantingSiteSpecies, fromColumn?: string, value?: any) => {
@@ -124,7 +123,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       const newSpecies = [...(location as ReportPlantingSite).species];
       const speciesModified = {
         ...speciesToEdit,
-        [fromColumn as 'mortalityRateInField' | 'mortalityRateInNursery' | 'totalPlanted']: value,
+        [fromColumn as 'mortalityRateInField' | 'totalPlanted']: value,
       };
 
       newSpecies[speciesToEditIndex] = speciesModified;
@@ -223,8 +222,9 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               id={`${location.id}-nursery-capacity`}
               label={strings.NURSERY_CAPACITY_REQUIRED}
               value={(location as ReportNursery).capacity ?? ''}
+              minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('capacity', value)}
+              onChange={(value) => onUpdateLocation('capacity', Math.floor(value as number))}
               type='text'
               errorText={validate && !(location as ReportNursery).capacity ? strings.REQUIRED_FIELD : ''}
             />
@@ -254,8 +254,9 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               id={`${location.id}-planting-site-area`}
               label={strings.TOTAL_PLANTING_SITE_AREA_HA}
               value={(location as ReportPlantingSite).totalPlantingSiteArea ?? ''}
+              minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalPlantingSiteArea', value)}
+              onChange={(value) => onUpdateLocation('totalPlantingSiteArea', Math.floor(value as number))}
               type='text'
               errorText={
                 validate && !(location as ReportPlantingSite).totalPlantingSiteArea ? strings.REQUIRED_FIELD : ''
@@ -267,8 +268,9 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               id={`${location.id}-total-planted-area`}
               label={strings.TOTAL_PLANTED_AREA_HA}
               value={(location as ReportPlantingSite).totalPlantedArea ?? ''}
+              minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalPlantedArea', value)}
+              onChange={(value) => onUpdateLocation('totalPlantedArea', Math.floor(value as number))}
               type='text'
               errorText={validate && !(location as ReportPlantingSite).totalPlantedArea ? strings.REQUIRED_FIELD : ''}
             />
@@ -279,8 +281,9 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               id={`${location.id}-total-trees-planted`}
               label={strings.TOTAL_TREES_PLANTED}
               value={(location as ReportPlantingSite).totalTreesPlanted ?? ''}
+              minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalTreesPlanted', value)}
+              onChange={(value) => onUpdateLocation('totalTreesPlanted', Math.floor(value as number))}
               type='text'
               helper={strings.TOTAL_TREES_PLANTED_HELPER_TEXT}
               errorText={validate && !(location as ReportPlantingSite).totalTreesPlanted ? strings.REQUIRED_FIELD : ''}
@@ -291,8 +294,9 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               id={`${location.id}-total-plants-planted`}
               label={strings.TOTAL_PLANTS_PLANTED}
               value={(location as ReportPlantingSite).totalPlantsPlanted ?? ''}
+              minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalPlantsPlanted', value)}
+              onChange={(value) => onUpdateLocation('totalPlantsPlanted', Math.floor(value as number))}
               type='text'
               helper={strings.TOTAL_PLANTS_PLANTED_HELPER_TEXT}
               errorText={validate && !(location as ReportPlantingSite).totalPlantsPlanted ? strings.REQUIRED_FIELD : ''}
@@ -309,8 +313,10 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                   ? `${(location as ReportPlantingSite).mortalityRate}%`
                   : ''
               }
+              minNum={0}
+              maxNum={100}
               editable={editable}
-              onChange={(value) => onUpdateLocation('mortalityRate', value)}
+              onChange={(value) => onUpdateLocation('mortalityRate', Math.min(100, Math.floor(value as number)))}
               type='text'
               errorText={validate && !(location as ReportPlantingSite).mortalityRate ? strings.REQUIRED_FIELD : ''}
             />
@@ -337,10 +343,12 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-workers-paid-engaged`}
           label={strings.WORKERS_PAID_ENGAGED}
           editable={editable}
-          value={editable ? paidWorkers : location.workers.paidWorkers?.toString() ?? '0'}
+          value={editable ? paidWorkers ?? '' : location.workers.paidWorkers?.toString() ?? ''}
+          minNum={0}
           onChange={(value) => {
-            setPaidWorkers(value as number);
-            onUpdateWorkers('paidWorkers', value);
+            const newValue = Math.floor(value as number);
+            setPaidWorkers(newValue);
+            onUpdateWorkers('paidWorkers', newValue);
           }}
           type='text'
         />
@@ -350,10 +358,12 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-${locationType}-paid-female`}
           label={strings.WORKERS_PAID_FEMALE}
           editable={editable}
-          value={editable ? femalePaidWorkers : location.workers.femalePaidWorkers?.toString() ?? '0'}
+          value={editable ? femalePaidWorkers ?? '' : location.workers.femalePaidWorkers?.toString() ?? ''}
+          minNum={0}
           onChange={(value) => {
-            setFemalePaidWorkers(value as number);
-            onUpdateWorkers('femalePaidWorkers', value);
+            const newValue = Math.floor(value as number);
+            setFemalePaidWorkers(newValue);
+            onUpdateWorkers('femalePaidWorkers', newValue);
           }}
           type='text'
         />
@@ -363,10 +373,12 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-${locationType}-volunteer`}
           label={strings.WORKERS_VOLUNTEERS}
           editable={editable}
-          value={editable ? volunteers : location.workers.volunteers?.toString() ?? '0'}
+          value={editable ? volunteers ?? '' : location.workers.volunteers?.toString() ?? ''}
+          minNum={0}
           onChange={(value) => {
-            setVolunteers(value as number);
-            onUpdateWorkers('volunteers', value);
+            const newValue = Math.floor(value as number);
+            setVolunteers(newValue);
+            onUpdateWorkers('volunteers', newValue);
           }}
           type='text'
         />
@@ -411,12 +423,14 @@ type InfoFieldProps = {
   type: 'text' | 'date';
   helper?: string;
   errorText?: string;
+  minNum?: number;
+  maxNum?: number;
   maxDate?: any;
   minDate?: any;
 };
 
 function InfoField(props: InfoFieldProps): JSX.Element {
-  const { id, label, editable, value, onChange, type, helper, errorText, maxDate, minDate } = props;
+  const { id, label, editable, value, onChange, type, helper, errorText, minNum, maxNum, maxDate, minDate } = props;
   const classes = useStyles();
   return editable ? (
     type === 'text' ? (
@@ -425,6 +439,8 @@ function InfoField(props: InfoFieldProps): JSX.Element {
         id={id}
         type='number'
         value={value}
+        min={minNum}
+        max={maxNum}
         readonly={!editable}
         onChange={onChange}
         helperText={helper}

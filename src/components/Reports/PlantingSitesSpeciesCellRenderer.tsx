@@ -38,6 +38,7 @@ export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: 
           <TableCellInput
             id={id}
             initialValue={row[id]}
+            isPercentage={column.key === 'mortalityRateInField'}
             onConfirmEdit={onRowClick}
             className={classes.input}
             validate={validate}
@@ -46,12 +47,7 @@ export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: 
       }
     };
 
-    if (
-      editMode &&
-      (column.key === 'totalPlanted' ||
-        column.key === 'mortalityRateInField' ||
-        column.key === 'mortalityRateInNursery')
-    ) {
+    if (editMode && (column.key === 'totalPlanted' || column.key === 'mortalityRateInField')) {
       return (
         <CellRenderer
           index={index}
@@ -70,25 +66,31 @@ export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: 
 type TableCellInputProps = {
   id: string;
   initialValue: string;
+  isPercentage?: boolean;
   onConfirmEdit: (value: string) => void;
   className: string;
   validate?: boolean;
 };
 
 function TableCellInput(props: TableCellInputProps): JSX.Element {
-  const { id, initialValue, onConfirmEdit, className, validate } = props;
+  const { id, initialValue, isPercentage, onConfirmEdit, className, validate } = props;
   const [inputValue, setInputValue] = useState(initialValue);
 
   return (
     <Textfield
       id={id}
       type='number'
-      onChange={(newValue) => setInputValue(newValue as string)}
+      onChange={(newValue) =>
+        setInputValue(
+          `${isPercentage ? Math.min(100, Math.floor(newValue as number)) : Math.floor(newValue as number)}`
+        )
+      }
       onBlur={() => onConfirmEdit(inputValue)}
       value={inputValue}
       label={''}
       className={className}
       min={0}
+      max={isPercentage ? 100 : undefined}
       errorText={validate && !inputValue ? strings.REQUIRED_FIELD : ''}
     />
   );
