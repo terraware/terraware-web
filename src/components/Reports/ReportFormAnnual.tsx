@@ -241,8 +241,24 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('projectSummary', value);
             }
           }}
-          errorText={validate && !report.annualDetails?.projectSummary ? strings.REQUIRED_FIELD : ''}
+          errorText={
+            validate && !report.annualDetails?.projectSummary
+              ? strings.REQUIRED_FIELD
+              : validate && overWordLimit(projectSummary, 100)
+              ? strings.OVER_WORD_LIMIT
+              : ''
+          }
         />
+        {editable && (
+          <Typography
+            color={theme.palette.TwClrTxtSecondary}
+            fontSize='14px'
+            fontWeight={400}
+            marginTop={theme.spacing(0.5)}
+          >
+            {`(${numWords(projectSummary)} ${strings.WORDS})`}
+          </Typography>
+        )}
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
@@ -531,3 +547,11 @@ function ReportField(props: ReportFieldProps): JSX.Element {
     </>
   );
 }
+
+const numWords = (testString: string): number => {
+  return testString.trim().split(/\s+/).length;
+};
+
+export const overWordLimit = (testString: string, wordLimit: number): boolean => {
+  return numWords(testString) > wordLimit;
+};

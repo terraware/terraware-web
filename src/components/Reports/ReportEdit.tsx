@@ -8,7 +8,7 @@ import ReportService from 'src/services/ReportService';
 import { Report, ReportFile } from 'src/types/Report';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
-import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
+import ReportFormAnnual, { overWordLimit } from 'src/components/Reports/ReportFormAnnual';
 import { FormButton } from 'src/components/common/FormBottomBar';
 import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
@@ -188,23 +188,25 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   const hasEmptyRequiredFields = (iReport: Report) => {
     const emptySeedbankFields = iReport.seedBanks?.some((sb) => {
       return (
-        !sb.buildStartedDate ||
-        !sb.buildCompletedDate ||
-        !sb.operationStartedDate ||
-        !buildStartedDateValid(sb) ||
-        !buildCompletedDateValid(sb) ||
-        !operationStartedDateValid(sb)
+        sb.selected &&
+        (!sb.buildStartedDate ||
+          !sb.buildCompletedDate ||
+          !sb.operationStartedDate ||
+          !buildStartedDateValid(sb) ||
+          !buildCompletedDateValid(sb) ||
+          !operationStartedDateValid(sb))
       );
     });
     const emptyNurseryFields = iReport.nurseries?.some((nursery) => {
       return (
-        !nursery.buildStartedDate ||
-        !nursery.buildCompletedDate ||
-        !nursery.operationStartedDate ||
-        !nursery.capacity ||
-        !buildStartedDateValid(nursery) ||
-        !buildCompletedDateValid(nursery) ||
-        !operationStartedDateValid(nursery)
+        nursery.selected &&
+        (!nursery.buildStartedDate ||
+          !nursery.buildCompletedDate ||
+          !nursery.operationStartedDate ||
+          !nursery.capacity ||
+          !buildStartedDateValid(nursery) ||
+          !buildCompletedDateValid(nursery) ||
+          !operationStartedDateValid(nursery))
       );
     });
     const emptyPlantingSitesFields = iReport.plantingSites?.some((plantingSite) => {
@@ -213,12 +215,13 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
           (sp) => !sp.totalPlanted || !sp.mortalityRateInField || !sp.mortalityRateInNursery
         ) ?? false;
       return (
-        !plantingSite.totalPlantingSiteArea ||
-        !plantingSite.totalPlantedArea ||
-        !plantingSite.totalTreesPlanted ||
-        !plantingSite.totalPlantsPlanted ||
-        !plantingSite.mortalityRate ||
-        speciesDataMissing
+        plantingSite.selected &&
+        (!plantingSite.totalPlantingSiteArea ||
+          !plantingSite.totalPlantedArea ||
+          !plantingSite.totalTreesPlanted ||
+          !plantingSite.totalPlantsPlanted ||
+          !plantingSite.mortalityRate ||
+          speciesDataMissing)
       );
     });
     return !iReport.summaryOfProgress || emptySeedbankFields || emptyNurseryFields || emptyPlantingSitesFields;
@@ -230,6 +233,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
     return (
       !iReport.annualDetails?.projectSummary ||
+      overWordLimit(iReport.annualDetails?.projectSummary, 100) ||
       !iReport.annualDetails?.projectImpact ||
       !iReport.annualDetails?.budgetNarrativeSummary ||
       !iReport.annualDetails?.socialImpact ||
