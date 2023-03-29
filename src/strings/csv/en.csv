@@ -753,6 +753,8 @@ REPORT_TOTAL_TREES_PLANTED_INFO,Please include all trees planted that are affili
 REPORT_TOTAL_VOLUNTEERS_INFO,Please list the total number of volunteers engaged in planting in this project. If none write 0.,
 REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO,Of the total workers listed above how many total are women?,
 REPORT_SUBMIT,Submit Report,
+REPORT_VIEW_ANNUAL,View Annual Report,
+REPORT_VIEW_QUARTERLY,View Quarterly Report,
 REQUEST_FEATURE,Request Feature,
 REQUIRED_FIELD,Required field,
 REQUIRED_VALUE_AND_UNITS_FIELD,Value and units required,
