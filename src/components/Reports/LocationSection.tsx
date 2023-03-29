@@ -227,6 +227,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               onChange={(value) => onUpdateLocation('capacity', Math.floor(value as number))}
               type='text'
               errorText={validate && !(location as ReportNursery).capacity ? strings.REQUIRED_FIELD : ''}
+              tooltipTitle={strings.REPORT_NURSERY_CAPACITY_INFO}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -261,6 +262,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               errorText={
                 validate && !(location as ReportPlantingSite).totalPlantingSiteArea ? strings.REQUIRED_FIELD : ''
               }
+              tooltipTitle={strings.REPORT_TOTAL_PLANTING_SITE_AREA_INFO}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -273,6 +275,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               onChange={(value) => onUpdateLocation('totalPlantedArea', Math.floor(value as number))}
               type='text'
               errorText={validate && !(location as ReportPlantingSite).totalPlantedArea ? strings.REQUIRED_FIELD : ''}
+              tooltipTitle={strings.REPORT_TOTAL_PLANTED_AREA_INFO}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()} />
@@ -287,6 +290,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               type='text'
               helper={strings.TOTAL_TREES_PLANTED_HELPER_TEXT}
               errorText={validate && !(location as ReportPlantingSite).totalTreesPlanted ? strings.REQUIRED_FIELD : ''}
+              tooltipTitle={strings.REPORT_TOTAL_TREES_PLANTED_INFO}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -300,6 +304,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               type='text'
               helper={strings.TOTAL_PLANTS_PLANTED_HELPER_TEXT}
               errorText={validate && !(location as ReportPlantingSite).totalPlantsPlanted ? strings.REQUIRED_FIELD : ''}
+              tooltipTitle={strings.REPORT_TOTAL_NON_TREES_PLANTED_INFO}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -319,6 +324,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               onChange={(value) => onUpdateLocation('mortalityRate', Math.min(100, Math.floor(value as number)))}
               type='text'
               errorText={validate && !(location as ReportPlantingSite).mortalityRate ? strings.REQUIRED_FIELD : ''}
+              tooltipTitle={strings.REPORT_MORTALITY_RATE_INFO}
             />
           </Grid>
           {plantingSiteSpecies && (
@@ -351,6 +357,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             onUpdateWorkers('paidWorkers', newValue);
           }}
           type='text'
+          tooltipTitle={strings.REPORT_TOTAL_PAID_WORKERS_INFO}
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
@@ -366,6 +373,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             onUpdateWorkers('femalePaidWorkers', newValue);
           }}
           type='text'
+          tooltipTitle={strings.REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO}
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
@@ -381,6 +389,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             onUpdateWorkers('volunteers', newValue);
           }}
           type='text'
+          tooltipTitle={strings.REPORT_TOTAL_VOLUNTEERS_INFO}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -388,7 +397,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           label={getNotesLabel()}
           id={`${location.id}-notes`}
           type='textarea'
-          disabled={!editable}
+          display={!editable}
           value={locationNotes}
           onChange={(value) => {
             setLocationNotes(value as string);
@@ -427,10 +436,25 @@ type InfoFieldProps = {
   maxNum?: number;
   maxDate?: any;
   minDate?: any;
+  tooltipTitle?: string;
 };
 
 function InfoField(props: InfoFieldProps): JSX.Element {
-  const { id, label, editable, value, onChange, type, helper, errorText, minNum, maxNum, maxDate, minDate } = props;
+  const {
+    id,
+    label,
+    editable,
+    value,
+    onChange,
+    type,
+    helper,
+    errorText,
+    minNum,
+    maxNum,
+    maxDate,
+    minDate,
+    tooltipTitle,
+  } = props;
   const classes = useStyles();
   return editable ? (
     type === 'text' ? (
@@ -441,10 +465,11 @@ function InfoField(props: InfoFieldProps): JSX.Element {
         value={value}
         min={minNum}
         max={maxNum}
-        readonly={!editable}
+        display={!editable}
         onChange={onChange}
         helperText={helper}
         errorText={errorText}
+        tooltipTitle={tooltipTitle}
       />
     ) : type === 'date' ? (
       <DatePicker
@@ -456,6 +481,7 @@ function InfoField(props: InfoFieldProps): JSX.Element {
         errorText={errorText}
         maxDate={maxDate}
         minDate={minDate}
+        helperText={tooltipTitle}
       />
     ) : (
       <></>
@@ -466,6 +492,7 @@ function InfoField(props: InfoFieldProps): JSX.Element {
       title={label}
       contents={value.toString() ?? '0'}
       className={classes.infoCardStyle}
+      titleInfoTooltip={tooltipTitle}
     />
   );
 }

@@ -135,7 +135,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           placeholder={strings.SUMMARY_OF_PROGRESS_DESCRIPTION}
           id='summary'
           type='textarea'
-          disabled={!editable}
+          display={!editable}
           value={summaryOfProgress}
           onChange={(value) => {
             setSummaryOfProgress(value as string);
@@ -144,6 +144,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             }
           }}
           errorText={validate && !draftReport.summaryOfProgress ? strings.REQUIRED_FIELD : ''}
+          tooltipTitle={strings.REPORT_SUMMARY_OF_PROGRESS_INFO}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -151,7 +152,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           label={strings.PROJECT_NOTES}
           id='notes'
           type='textarea'
-          disabled={!editable}
+          display={!editable}
           value={projectNotes}
           onChange={(value) => {
             setProjectNotes(value as string);
