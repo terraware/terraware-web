@@ -154,15 +154,15 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     });
   };
 
-  const switchPages = (doShowAnnual: boolean) => {
-    setShowAnnual(doShowAnnual);
+  const switchPages = (page: 'quarterly' | 'annual') => {
+    setShowAnnual(page === 'annual');
     goToTop();
   };
 
   const handleSaveAndNext = async () => {
     if (report) {
       const saveResult = await ReportService.updateReport(report);
-      switchPages(true);
+      switchPages('annual');
       setValidateFields(false);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
@@ -177,7 +177,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   const handleBack = async () => {
     if (report) {
       const saveResult = await ReportService.updateReport(report);
-      switchPages(false);
+      switchPages('quarterly');
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
@@ -185,6 +185,14 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       }
     }
   };
+
+  useEffect(() => {
+    window.history.pushState(null, document.title, window.location.href);
+    window.addEventListener('popstate', (event) => {
+      window.history.pushState(null, document.title, window.location.href);
+      snackbar.toastWarning(strings.REPORT_BACK_WARNING);
+    });
+  }, [snackbar]);
 
   const hasEmptyRequiredFields = (iReport: Report) => {
     const emptySeedbankFields = iReport.seedBanks?.some((sb) => {
