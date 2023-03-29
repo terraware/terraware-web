@@ -37,6 +37,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 'auto'),
     marginRight: theme.spacing(1),
   },
+  rightButtonGroup: {
+    display: 'flex',
+    flexDirection: (props: StyleProps) => (props.isMobile ? 'column-reverse' : 'row'),
+  },
 }));
 
 export interface FormButton {
@@ -90,7 +94,7 @@ export default function FormBottomBar({
         type='passive'
         className={classes.button}
       />
-      <div>
+      <div className={classes.rightButtonGroup}>
         {additionalRightButtons &&
           additionalRightButtons.map((btn) => (
             <Button
