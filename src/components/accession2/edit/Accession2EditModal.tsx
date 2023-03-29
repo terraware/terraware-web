@@ -37,8 +37,12 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const { selectedOrganization } = useOrganization();
   const selectedSeedBank = getSeedBank(selectedOrganization, record.facilityId);
   const tz = useLocationTimeZone().get(selectedSeedBank);
-  const timeZone = tz.id;
+  const [timeZone, setTimeZone] = useState<string>(tz.id);
   const [collectedDateError, setCollectedDateError] = useState<string>();
+
+  useEffect(() => {
+    setTimeZone(tz.id);
+  }, [tz]);
 
   const onCollectedDateError = (error?: string) => {
     setCollectedDateError(error);
