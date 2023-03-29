@@ -11,7 +11,7 @@ export default function BusySpinner({ withSkrim }: BusySpinnerProps): JSX.Elemen
   return (
     <Box
       sx={{
-        position: 'absolute',
+        position: 'fixed',
         left: 0,
         right: 0,
         top: 0,
