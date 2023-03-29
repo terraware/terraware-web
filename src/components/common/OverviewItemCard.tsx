@@ -74,7 +74,7 @@ export default function OverviewItemCard({
         </Box>
       </Box>
       {isEditable && !hideEditIcon ? (
-        <Box sx={{ marginLeft: 1, position: 'relative', top: '-11px' }}>
+        <Box sx={{ marginLeft: 1, position: 'relative', top: '-8px', right: '-8px' }}>
           <Tooltip title={strings.EDIT}>
             <Button
               onClick={() => isEditable && handleEdit && handleEdit()}
