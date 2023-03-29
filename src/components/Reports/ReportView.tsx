@@ -75,8 +75,8 @@ export default function ReportView(): JSX.Element {
     });
   };
 
-  const switchPages = (doShowAnnual: boolean) => {
-    setShowAnnual(doShowAnnual);
+  const switchPages = (page: 'quarterly' | 'annual') => {
+    setShowAnnual(page === 'annual');
     goToTop();
   };
 
@@ -97,7 +97,27 @@ export default function ReportView(): JSX.Element {
           <Typography fontSize='24px' fontWeight={600}>
             {report ? `Report (${report?.year}-Q${report?.quarter})` : ''}
           </Typography>
-          {report?.status !== 'Submitted' && <Button label={strings.REPORT_EDIT} icon='iconEdit' onClick={startEdit} />}
+          <Box gap={theme.spacing(1)}>
+            {report?.isAnnual &&
+              (showAnnual ? (
+                <Button
+                  label={strings.REPORT_VIEW_QUARTERLY}
+                  type='productive'
+                  priority='secondary'
+                  onClick={() => switchPages('quarterly')}
+                />
+              ) : (
+                <Button
+                  label={strings.REPORT_VIEW_ANNUAL}
+                  type='productive'
+                  priority='secondary'
+                  onClick={() => switchPages('annual')}
+                />
+              ))}
+            {report?.status !== 'Submitted' && (
+              <Button label={strings.REPORT_EDIT} icon='iconEdit' onClick={startEdit} />
+            )}
+          </Box>
         </Box>
       </Box>
       {report &&
@@ -115,9 +135,19 @@ export default function ReportView(): JSX.Element {
       <Box display='flex' justifyContent='flex-end' padding={theme.spacing(3)}>
         {report?.isAnnual &&
           (showAnnual ? (
-            <Button label={strings.BACK} type='passive' onClick={() => switchPages(false)} />
+            <Button
+              label={strings.REPORT_VIEW_QUARTERLY}
+              type='productive'
+              priority='secondary'
+              onClick={() => switchPages('quarterly')}
+            />
           ) : (
-            <Button label={strings.NEXT} type='passive' onClick={() => switchPages(true)} />
+            <Button
+              label={strings.REPORT_VIEW_ANNUAL}
+              type='productive'
+              priority='secondary'
+              onClick={() => switchPages('annual')}
+            />
           ))}
       </Box>
     </TfMain>
