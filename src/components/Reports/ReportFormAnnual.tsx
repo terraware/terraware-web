@@ -214,8 +214,17 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+        <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
           {strings.BEST_MONTHS_FOR_OBSERVATIONS}
+        </Typography>
+        <Typography
+          color={theme.palette.TwClrTxtSecondary}
+          fontSize='14px'
+          fontWeight={400}
+          marginTop={theme.spacing(0.5)}
+          maxWidth='800px'
+        >
+          {strings.BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS}
         </Typography>
       </Grid>
       {MONTHS.map((monthName, index) => (
@@ -456,7 +465,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
             type='textarea'
             className={classes.quarterPage}
             label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
-            readonly={!editable}
+            display={!editable}
             onChange={(v) => {
               setCatalyticDetail(v as string);
               if (updateDetails) {
@@ -531,7 +540,7 @@ function ReportField(props: ReportFieldProps): JSX.Element {
         label={instructions}
         id={`${title}-field`}
         type='textarea'
-        readonly={!editable}
+        display={!editable}
         onChange={(v) => onChange(v as string)}
         value={value}
         errorText={errorText}
