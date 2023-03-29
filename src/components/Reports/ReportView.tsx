@@ -75,8 +75,8 @@ export default function ReportView(): JSX.Element {
     });
   };
 
-  const switchPages = (doShowAnnual: boolean) => {
-    setShowAnnual(doShowAnnual);
+  const switchPages = (page: 'quarterly' | 'annual') => {
+    setShowAnnual(page === 'annual');
     goToTop();
   };
 
@@ -104,14 +104,14 @@ export default function ReportView(): JSX.Element {
                   label={strings.REPORT_VIEW_QUARTERLY}
                   type='productive'
                   priority='secondary'
-                  onClick={() => switchPages(false)}
+                  onClick={() => switchPages('quarterly')}
                 />
               ) : (
                 <Button
                   label={strings.REPORT_VIEW_ANNUAL}
                   type='productive'
                   priority='secondary'
-                  onClick={() => switchPages(true)}
+                  onClick={() => switchPages('annual')}
                 />
               ))}
             {report?.status !== 'Submitted' && (
@@ -139,14 +139,14 @@ export default function ReportView(): JSX.Element {
               label={strings.REPORT_VIEW_QUARTERLY}
               type='productive'
               priority='secondary'
-              onClick={() => switchPages(false)}
+              onClick={() => switchPages('quarterly')}
             />
           ) : (
             <Button
               label={strings.REPORT_VIEW_ANNUAL}
               type='productive'
               priority='secondary'
-              onClick={() => switchPages(true)}
+              onClick={() => switchPages('annual')}
             />
           ))}
       </Box>
