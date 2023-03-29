@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
 import strings from 'src/strings';
@@ -82,7 +82,6 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
   const mediumItemGridWidth = () => (isMobile || isTablet ? 12 : 8);
 
   return (
-    // <Box>
     <Grid
       container
       spacing={theme.spacing(3)}
@@ -313,6 +312,5 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         )}
       </Grid>
     </Grid>
-    // </Box>
   );
 }
