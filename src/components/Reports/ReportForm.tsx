@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
@@ -10,6 +10,9 @@ import SelectPhotos from '../common/SelectPhotos';
 import { ReportSeedBank } from 'src/types/Report';
 import { makeStyles } from '@mui/styles';
 import LocationSection from './LocationSection';
+import ReportService from 'src/services/ReportService';
+
+const MAX_PHOTOS = 30;
 
 const useStyles = makeStyles((theme: Theme) => ({
   infoCardStyle: {
@@ -67,6 +70,20 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
 
   const [summaryOfProgress, setSummaryOfProgress] = useState(draftReport.summaryOfProgress ?? '');
   const [projectNotes, setProjectNotes] = useState(draftReport.notes ?? '');
+  const [photoCount, setPhotoCount] = useState(0);
+
+  useEffect(() => {
+    const getPhotoCount = async () => {
+      const photoListResponse = await ReportService.getReportPhotos(draftReport.id);
+      if (!photoListResponse.requestSucceeded || photoListResponse.error) {
+        setPhotoCount(0);
+      } else {
+        setPhotoCount(photoListResponse.photos?.length ?? 0);
+      }
+    };
+
+    getPhotoCount();
+  }, [draftReport.id]);
 
   const handleAddRemoveLocation = (
     selected: boolean,
@@ -175,7 +192,16 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             {strings.PROJECT_PHOTOS}
           </Typography>
         </Grid>
-        <ViewPhotos reportId={draftReport.id} onPhotoRemove={onPhotoRemove} editable={editable} />
+        <ViewPhotos
+          reportId={draftReport.id}
+          onPhotoRemove={(id) => {
+            setPhotoCount(photoCount - 1);
+            if (onPhotoRemove) {
+              onPhotoRemove(id);
+            }
+          }}
+          editable={editable}
+        />
         {editable && onPhotosChanged && (
           <Container maxWidth={false}>
             <Typography
@@ -186,7 +212,11 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             >
               {strings.PHOTOS_TO_UPLOAD + ':'}
             </Typography>
-            <SelectPhotos onPhotosChanged={onPhotosChanged} multipleSelection={true} />
+            <SelectPhotos
+              onPhotosChanged={onPhotosChanged}
+              multipleSelection={true}
+              maxPhotos={MAX_PHOTOS - photoCount}
+            />
           </Container>
         )}
       </Grid>

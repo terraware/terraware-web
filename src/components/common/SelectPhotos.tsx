@@ -48,11 +48,12 @@ type SelectPhotosProps = {
   description?: string | string[];
   onPhotosChanged: (photos: File[]) => void;
   multipleSelection?: boolean;
+  maxPhotos?: number;
   error?: ErrorType;
 };
 
 export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
-  const { title, description, onPhotosChanged, multipleSelection, error } = props;
+  const { title, description, onPhotosChanged, multipleSelection, maxPhotos, error } = props;
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const [files, setFiles] = useState<File[]>([]);
@@ -72,7 +73,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
     }
 
     if (newFiles.length) {
-      updateSelection([...files, ...newFiles]);
+      updateSelection([...files, ...newFiles].slice(0, maxPhotos));
     }
   };
 
