@@ -41,9 +41,11 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const isNursery = locationType === 'nursery';
   const isPlantingSite = locationType === 'plantingSite';
 
-  const [paidWorkers, setPaidWorkers] = useState<number | undefined>(location.workers?.paidWorkers);
-  const [femalePaidWorkers, setFemalePaidWorkers] = useState<number | undefined>(location.workers?.femalePaidWorkers);
-  const [volunteers, setVolunteers] = useState<number | undefined>(location.workers?.volunteers);
+  const [paidWorkers, setPaidWorkers] = useState<number | null>(location.workers?.paidWorkers ?? null);
+  const [femalePaidWorkers, setFemalePaidWorkers] = useState<number | null>(
+    location.workers?.femalePaidWorkers ?? null
+  );
+  const [volunteers, setVolunteers] = useState<number | null>(location.workers?.volunteers ?? null);
   const [locationNotes, setLocationNotes] = useState(location.notes ?? '');
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
@@ -114,7 +116,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   ];
 
   const onEditPlantingSiteReport = (species: PlantingSiteSpecies, fromColumn?: string, value?: any) => {
-    if (fromColumn && value) {
+    if (fromColumn) {
       const speciesToEditIndex = (location as ReportPlantingSite).species.findIndex(
         (iSpecies) => iSpecies.id === species.id
       );
@@ -224,9 +226,11 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportNursery).capacity ?? ''}
               minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('capacity', Math.floor(value as number))}
+              onChange={(value) =>
+                onUpdateLocation('capacity', value === '' ? null : Math.max(0, Math.floor(value as number)))
+              }
               type='text'
-              errorText={validate && !(location as ReportNursery).capacity ? strings.REQUIRED_FIELD : ''}
+              errorText={validate && (location as ReportNursery).capacity === null ? strings.REQUIRED_FIELD : ''}
               tooltipTitle={strings.REPORT_NURSERY_CAPACITY_INFO}
             />
           </Grid>
@@ -257,10 +261,17 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportPlantingSite).totalPlantingSiteArea ?? ''}
               minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalPlantingSiteArea', Math.floor(value as number))}
+              onChange={(value) =>
+                onUpdateLocation(
+                  'totalPlantingSiteArea',
+                  value === '' ? null : Math.max(0, Math.floor(value as number))
+                )
+              }
               type='text'
               errorText={
-                validate && !(location as ReportPlantingSite).totalPlantingSiteArea ? strings.REQUIRED_FIELD : ''
+                validate && (location as ReportPlantingSite).totalPlantingSiteArea === null
+                  ? strings.REQUIRED_FIELD
+                  : ''
               }
               tooltipTitle={strings.REPORT_TOTAL_PLANTING_SITE_AREA_INFO}
             />
@@ -272,9 +283,13 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportPlantingSite).totalPlantedArea ?? ''}
               minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalPlantedArea', Math.floor(value as number))}
+              onChange={(value) =>
+                onUpdateLocation('totalPlantedArea', value === '' ? null : Math.max(0, Math.floor(value as number)))
+              }
               type='text'
-              errorText={validate && !(location as ReportPlantingSite).totalPlantedArea ? strings.REQUIRED_FIELD : ''}
+              errorText={
+                validate && (location as ReportPlantingSite).totalPlantedArea === null ? strings.REQUIRED_FIELD : ''
+              }
               tooltipTitle={strings.REPORT_TOTAL_PLANTED_AREA_INFO}
             />
           </Grid>
@@ -286,10 +301,14 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportPlantingSite).totalTreesPlanted ?? ''}
               minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalTreesPlanted', Math.floor(value as number))}
+              onChange={(value) =>
+                onUpdateLocation('totalTreesPlanted', value === '' ? null : Math.max(0, Math.floor(value as number)))
+              }
               type='text'
               helper={strings.TOTAL_TREES_PLANTED_HELPER_TEXT}
-              errorText={validate && !(location as ReportPlantingSite).totalTreesPlanted ? strings.REQUIRED_FIELD : ''}
+              errorText={
+                validate && (location as ReportPlantingSite).totalTreesPlanted === null ? strings.REQUIRED_FIELD : ''
+              }
               tooltipTitle={strings.REPORT_TOTAL_TREES_PLANTED_INFO}
             />
           </Grid>
@@ -300,10 +319,14 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportPlantingSite).totalPlantsPlanted ?? ''}
               minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalPlantsPlanted', Math.floor(value as number))}
+              onChange={(value) =>
+                onUpdateLocation('totalPlantsPlanted', value === '' ? null : Math.max(0, Math.floor(value as number)))
+              }
               type='text'
               helper={strings.TOTAL_PLANTS_PLANTED_HELPER_TEXT}
-              errorText={validate && !(location as ReportPlantingSite).totalPlantsPlanted ? strings.REQUIRED_FIELD : ''}
+              errorText={
+                validate && (location as ReportPlantingSite).totalPlantsPlanted === null ? strings.REQUIRED_FIELD : ''
+              }
               tooltipTitle={strings.REPORT_TOTAL_NON_TREES_PLANTED_INFO}
             />
           </Grid>
@@ -321,9 +344,16 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               minNum={0}
               maxNum={100}
               editable={editable}
-              onChange={(value) => onUpdateLocation('mortalityRate', Math.min(100, Math.floor(value as number)))}
+              onChange={(value) =>
+                onUpdateLocation(
+                  'mortalityRate',
+                  value === '' ? null : Math.min(100, Math.max(0, Math.floor(value as number)))
+                )
+              }
               type='text'
-              errorText={validate && !(location as ReportPlantingSite).mortalityRate ? strings.REQUIRED_FIELD : ''}
+              errorText={
+                validate && (location as ReportPlantingSite).mortalityRate === null ? strings.REQUIRED_FIELD : ''
+              }
               tooltipTitle={strings.REPORT_MORTALITY_RATE_INFO}
             />
           </Grid>
@@ -352,12 +382,13 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           value={editable ? paidWorkers ?? '' : location.workers.paidWorkers?.toString() ?? ''}
           minNum={0}
           onChange={(value) => {
-            const newValue = Math.floor(value as number);
+            const newValue = value === '' ? null : Math.max(0, Math.floor(value as number));
             setPaidWorkers(newValue);
             onUpdateWorkers('paidWorkers', newValue);
           }}
           type='text'
           tooltipTitle={strings.REPORT_TOTAL_PAID_WORKERS_INFO}
+          errorText={validate && location.workers.paidWorkers === null ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
@@ -368,12 +399,13 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           value={editable ? femalePaidWorkers ?? '' : location.workers.femalePaidWorkers?.toString() ?? ''}
           minNum={0}
           onChange={(value) => {
-            const newValue = Math.floor(value as number);
+            const newValue = value === '' ? null : Math.max(0, Math.floor(value as number));
             setFemalePaidWorkers(newValue);
             onUpdateWorkers('femalePaidWorkers', newValue);
           }}
           type='text'
           tooltipTitle={strings.REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO}
+          errorText={validate && location.workers.femalePaidWorkers === null ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
@@ -384,12 +416,13 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           value={editable ? volunteers ?? '' : location.workers.volunteers?.toString() ?? ''}
           minNum={0}
           onChange={(value) => {
-            const newValue = Math.floor(value as number);
+            const newValue = value === '' ? null : Math.max(0, Math.floor(value as number));
             setVolunteers(newValue);
             onUpdateWorkers('volunteers', newValue);
           }}
           type='text'
           tooltipTitle={strings.REPORT_TOTAL_VOLUNTEERS_INFO}
+          errorText={validate && location.workers.volunteers === null ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>

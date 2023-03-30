@@ -67,7 +67,7 @@ type TableCellInputProps = {
   id: string;
   initialValue: string;
   isPercentage?: boolean;
-  onConfirmEdit: (value: string) => void;
+  onConfirmEdit: (value: string | undefined) => void;
   className: string;
   validate?: boolean;
 };
@@ -75,6 +75,7 @@ type TableCellInputProps = {
 function TableCellInput(props: TableCellInputProps): JSX.Element {
   const { id, initialValue, isPercentage, onConfirmEdit, className, validate } = props;
   const [inputValue, setInputValue] = useState(initialValue);
+  const inputInvalid = inputValue === null || inputValue === undefined || inputValue === '';
 
   return (
     <Textfield
@@ -82,7 +83,13 @@ function TableCellInput(props: TableCellInputProps): JSX.Element {
       type='number'
       onChange={(newValue) =>
         setInputValue(
-          `${isPercentage ? Math.min(100, Math.floor(newValue as number)) : Math.floor(newValue as number)}`
+          `${
+            newValue === ''
+              ? ''
+              : isPercentage
+              ? Math.max(0, Math.min(100, Math.floor(newValue as number)))
+              : Math.max(0, Math.floor(newValue as number))
+          }`
         )
       }
       onBlur={() => onConfirmEdit(inputValue)}
@@ -91,7 +98,7 @@ function TableCellInput(props: TableCellInputProps): JSX.Element {
       className={className}
       min={0}
       max={isPercentage ? 100 : undefined}
-      errorText={validate && !inputValue ? strings.REQUIRED_FIELD : ''}
+      errorText={validate && inputInvalid ? strings.REQUIRED_FIELD : ''}
     />
   );
 }
