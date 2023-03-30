@@ -204,18 +204,16 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         />
         {editable && onPhotosChanged && (
           <Container maxWidth={false}>
-            <Typography
-              color={theme.palette.TwClrTxtSecondary}
-              fontSize='14px'
-              fontWeight={400}
-              marginTop={theme.spacing(2)}
-            >
-              {strings.PHOTOS_TO_UPLOAD + ':'}
-            </Typography>
             <SelectPhotos
               onPhotosChanged={onPhotosChanged}
               multipleSelection={true}
               maxPhotos={MAX_PHOTOS - photoCount}
+              description={
+                strings.PHOTOS_TO_UPLOAD +
+                ' ' +
+                strings.formatString(strings.PHOTOS_TO_UPLOAD_LIMIT, MAX_PHOTOS - photoCount) +
+                ':'
+              }
             />
           </Container>
         )}

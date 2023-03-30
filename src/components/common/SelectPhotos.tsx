@@ -194,6 +194,7 @@ export default function SelectPhotos(props: SelectPhotosProps): JSX.Element {
         />
         <Button
           onClick={onChooseFileHandler}
+          disabled={maxPhotos !== undefined ? files.length >= maxPhotos : false}
           label={strings.UPLOAD_PHOTO}
           priority='secondary'
           type='passive'
