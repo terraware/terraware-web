@@ -149,7 +149,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <Textfield
-          label={strings.SUMMARY_OF_PROGRESS}
+          label={strings.SUMMARY_OF_PROGRESS_REQUIRED}
           placeholder={strings.SUMMARY_OF_PROGRESS_DESCRIPTION}
           id='summary'
           type='textarea'
