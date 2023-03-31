@@ -395,7 +395,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
                     : ''
                 }
               />
-              <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+              <Typography
+                fontSize='14px'
+                fontWeight={400}
+                color={theme.palette.TwClrTxtSecondary}
+                margin={theme.spacing(0.5, 0, 0, 0.5)}
+              >
                 {strings.REQUIRED}
               </Typography>
             </>
