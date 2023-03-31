@@ -193,8 +193,14 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       snackbar.toastWarning(strings.REPORT_BACK_WARNING);
     });
   }, [snackbar]);
-
   const hasEmptyRequiredFields = (iReport: Report) => {
+    const emptyWorkerField = (location: any) => {
+      return (
+        location.workers.paidWorkers === null ||
+        location.workers.femalePaidWorkers === null ||
+        location.workers.volunteers === null
+      );
+    };
     const emptySeedbankFields = iReport.seedBanks?.some((sb) => {
       return (
         sb.selected &&
@@ -203,7 +209,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
           !sb.operationStartedDate ||
           !buildStartedDateValid(sb) ||
           !buildCompletedDateValid(sb) ||
-          !operationStartedDateValid(sb))
+          !operationStartedDateValid(sb) ||
+          emptyWorkerField(sb))
       );
     });
     const emptyNurseryFields = iReport.nurseries?.some((nursery) => {
@@ -212,23 +219,25 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         (!nursery.buildStartedDate ||
           !nursery.buildCompletedDate ||
           !nursery.operationStartedDate ||
-          !nursery.capacity ||
+          nursery.capacity === null ||
           !buildStartedDateValid(nursery) ||
           !buildCompletedDateValid(nursery) ||
-          !operationStartedDateValid(nursery))
+          !operationStartedDateValid(nursery) ||
+          emptyWorkerField(nursery))
       );
     });
     const emptyPlantingSitesFields = iReport.plantingSites?.some((plantingSite) => {
       const speciesDataMissing =
-        plantingSite.species?.some((sp) => !sp.totalPlanted || !sp.mortalityRateInField) ?? false;
+        plantingSite.species?.some((sp) => sp.totalPlanted === null || sp.mortalityRateInField === null) ?? false;
       return (
         plantingSite.selected &&
-        (!plantingSite.totalPlantingSiteArea ||
-          !plantingSite.totalPlantedArea ||
-          !plantingSite.totalTreesPlanted ||
-          !plantingSite.totalPlantsPlanted ||
-          !plantingSite.mortalityRate ||
-          speciesDataMissing)
+        (plantingSite.totalPlantingSiteArea === null ||
+          plantingSite.totalPlantedArea === null ||
+          plantingSite.totalTreesPlanted === null ||
+          plantingSite.totalPlantsPlanted === null ||
+          plantingSite.mortalityRate === null ||
+          speciesDataMissing ||
+          emptyWorkerField(plantingSite))
       );
     });
     return !iReport.summaryOfProgress || emptySeedbankFields || emptyNurseryFields || emptyPlantingSitesFields;
