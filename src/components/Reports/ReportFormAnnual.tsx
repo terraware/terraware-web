@@ -372,28 +372,33 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
             onChange={(value) => handleSDGChange(value, key as SustainableDevelopmentGoal)}
           />
           {sdgList.includes(key as SustainableDevelopmentGoal) && (
-            <Textfield
-              label=''
-              id={key}
-              type='textarea'
-              readonly={!editable}
-              value={sdgProgressStates[SDG.findIndex((sdg) => key === sdg)]}
-              onChange={(value) => {
-                setSdgProgressStates[SDG.findIndex((sdg) => key === sdg)](value as string);
-                const index = report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key);
-                if (updateSDGProgress && index !== undefined && index >= 0) {
-                  updateSDGProgress(index, value as string);
+            <>
+              <Textfield
+                label=''
+                id={key}
+                type='textarea'
+                readonly={!editable}
+                value={sdgProgressStates[SDG.findIndex((sdg) => key === sdg)]}
+                onChange={(value) => {
+                  setSdgProgressStates[SDG.findIndex((sdg) => key === sdg)](value as string);
+                  const index = report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key);
+                  if (updateSDGProgress && index !== undefined && index >= 0) {
+                    updateSDGProgress(index, value as string);
+                  }
+                }}
+                errorText={
+                  validate &&
+                  !report.annualDetails?.sustainableDevelopmentGoals[
+                    report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key)
+                  ].progress
+                    ? strings.REQUIRED_FIELD
+                    : ''
                 }
-              }}
-              errorText={
-                validate &&
-                !report.annualDetails?.sustainableDevelopmentGoals[
-                  report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key)
-                ].progress
-                  ? strings.REQUIRED_FIELD
-                  : ''
-              }
-            />
+              />
+              <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                {strings.REQUIRED}
+              </Typography>
+            </>
           )}
         </Grid>
       ))}
