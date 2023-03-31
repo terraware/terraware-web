@@ -87,7 +87,6 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             name: foundSpecies.scientificName,
             growthForm: foundSpecies.growthForm,
             mortalityRateInField: iSpecies.mortalityRateInField,
-            mortalityRateInNursery: iSpecies.mortalityRateInNursery,
             totalPlanted: iSpecies.totalPlanted,
           });
         }
