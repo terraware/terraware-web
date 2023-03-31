@@ -3,6 +3,7 @@ import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 import Link from '../common/Link';
+import { DateTime } from 'luxon';
 
 export default function ReportsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, index } = props;
@@ -16,6 +17,14 @@ export default function ReportsCellRenderer(props: RendererProps<TableRowType>):
 
   if (column.key === 'name') {
     return <CellRenderer index={index} column={column} value={createLinkReport()} row={row} />;
+  }
+
+  if (column.key === 'submittedTime') {
+    if (!row.submittedTime) {
+      return <CellRenderer index={index} row={row} column={column} value='' />;
+    }
+    const date = DateTime.fromISO(row.submittedTime);
+    return <CellRenderer index={index} row={row} column={column} value={date.toISODate()} />;
   }
 
   return <CellRenderer {...props} />;
