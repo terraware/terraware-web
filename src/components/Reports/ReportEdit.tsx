@@ -293,7 +293,6 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         await updatePhotos(report.id);
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded) {
-          await ReportService.unlockReport(reportIdInt);
           history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
         } else {
           snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
