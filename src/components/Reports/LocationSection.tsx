@@ -226,9 +226,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportNursery).capacity ?? ''}
               minNum={0}
               editable={editable}
-              onChange={(value) =>
-                onUpdateLocation('capacity', value === '' ? null : Math.max(0, Math.floor(value as number)))
-              }
+              onChange={(value) => onUpdateLocation('capacity', transformNumericValue(value, { min: 0 }))}
               type='text'
               errorText={validate && (location as ReportNursery).capacity === null ? strings.REQUIRED_FIELD : ''}
               tooltipTitle={strings.REPORT_NURSERY_CAPACITY_INFO}
@@ -261,12 +259,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportPlantingSite).totalPlantingSiteArea ?? ''}
               minNum={0}
               editable={editable}
-              onChange={(value) =>
-                onUpdateLocation(
-                  'totalPlantingSiteArea',
-                  value === '' ? null : Math.max(0, Math.floor(value as number))
-                )
-              }
+              onChange={(value) => onUpdateLocation('totalPlantingSiteArea', transformNumericValue(value, { min: 0 }))}
               type='text'
               errorText={
                 validate && (location as ReportPlantingSite).totalPlantingSiteArea === null
@@ -283,9 +276,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportPlantingSite).totalPlantedArea ?? ''}
               minNum={0}
               editable={editable}
-              onChange={(value) =>
-                onUpdateLocation('totalPlantedArea', value === '' ? null : Math.max(0, Math.floor(value as number)))
-              }
+              onChange={(value) => onUpdateLocation('totalPlantedArea', transformNumericValue(value, { min: 0 }))}
               type='text'
               errorText={
                 validate && (location as ReportPlantingSite).totalPlantedArea === null ? strings.REQUIRED_FIELD : ''
@@ -301,9 +292,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportPlantingSite).totalTreesPlanted ?? ''}
               minNum={0}
               editable={editable}
-              onChange={(value) =>
-                onUpdateLocation('totalTreesPlanted', value === '' ? null : Math.max(0, Math.floor(value as number)))
-              }
+              onChange={(value) => onUpdateLocation('totalTreesPlanted', transformNumericValue(value, { min: 0 }))}
               type='text'
               helper={strings.TOTAL_TREES_PLANTED_HELPER_TEXT}
               errorText={
@@ -319,9 +308,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               value={(location as ReportPlantingSite).totalPlantsPlanted ?? ''}
               minNum={0}
               editable={editable}
-              onChange={(value) =>
-                onUpdateLocation('totalPlantsPlanted', value === '' ? null : Math.max(0, Math.floor(value as number)))
-              }
+              onChange={(value) => onUpdateLocation('totalPlantsPlanted', transformNumericValue(value, { min: 0 }))}
               type='text'
               helper={strings.TOTAL_PLANTS_PLANTED_HELPER_TEXT}
               errorText={
@@ -345,10 +332,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               maxNum={100}
               editable={editable}
               onChange={(value) =>
-                onUpdateLocation(
-                  'mortalityRate',
-                  value === '' ? null : Math.min(100, Math.max(0, Math.floor(value as number)))
-                )
+                onUpdateLocation('mortalityRate', transformNumericValue(value, { min: 0, max: 100 }))
               }
               type='text'
               errorText={
@@ -382,7 +366,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           value={editable ? paidWorkers ?? '' : location.workers.paidWorkers?.toString() ?? ''}
           minNum={0}
           onChange={(value) => {
-            const newValue = value === '' ? null : Math.max(0, Math.floor(value as number));
+            const newValue = transformNumericValue(value, { min: 0 });
             setPaidWorkers(newValue);
             onUpdateWorkers('paidWorkers', newValue);
           }}
@@ -399,7 +383,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           value={editable ? femalePaidWorkers ?? '' : location.workers.femalePaidWorkers?.toString() ?? ''}
           minNum={0}
           onChange={(value) => {
-            const newValue = value === '' ? null : Math.max(0, Math.floor(value as number));
+            const newValue = transformNumericValue(value, { min: 0 });
             setFemalePaidWorkers(newValue);
             onUpdateWorkers('femalePaidWorkers', newValue);
           }}
@@ -416,7 +400,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           value={editable ? volunteers ?? '' : location.workers.volunteers?.toString() ?? ''}
           minNum={0}
           onChange={(value) => {
-            const newValue = value === '' ? null : Math.max(0, Math.floor(value as number));
+            const newValue = transformNumericValue(value, { min: 0 });
             setVolunteers(newValue);
             onUpdateWorkers('volunteers', newValue);
           }}
@@ -564,4 +548,8 @@ export const operationStartedDateValid = (loc: ReportSeedBank | ReportNursery) =
     afterBuildCompletedConditionMet = Date.parse(loc.buildCompletedDate) <= Date.parse(loc.operationStartedDate);
   }
   return afterBuildStartedConditionMet && afterBuildCompletedConditionMet;
+};
+
+const transformNumericValue = (value: any, { min = -Infinity, max = Infinity }): number | null => {
+  return value === '' ? null : Math.min(max, Math.max(min, Math.floor(value as number)));
 };
