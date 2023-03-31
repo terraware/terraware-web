@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FormButton } from '@terraware/web-components';
 import TfMain from 'src/components/common/TfMain';
 import PageForm from 'src/components/common/PageForm';
 import strings from 'src/strings';
@@ -9,7 +10,6 @@ import { Report, ReportFile } from 'src/types/Report';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
-import { FormButton } from 'src/components/common/FormBottomBar';
 import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
 import { useUser } from 'src/providers';

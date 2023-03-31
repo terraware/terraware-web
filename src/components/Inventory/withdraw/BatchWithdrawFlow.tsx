@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { useHistory } from 'react-router-dom';
-import { theme } from '@terraware/web-components';
+import { BusySpinner, theme } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
@@ -14,7 +14,6 @@ import AddPhotos from './flow/AddPhotos';
 import SelectBatchesWithdrawnQuantity from './flow/SelectBatchesWithdrawnQuantity';
 import SelectPurposeForm from './flow/SelectPurposeForm';
 import TfMain from 'src/components/common/TfMain';
-import BusySpinner from 'src/components/common/BusySpinner';
 import { useOrganization } from 'src/providers/hooks';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
