@@ -460,8 +460,6 @@ export interface components {
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** @description Which source of data this accession originally came from. */
       source?: "Web" | "Seed Collector App" | "File Import";
-      /** @description Scientific name of the species. */
-      speciesScientificName?: string;
       /** @description Common name of the species, if defined. */
       speciesCommonName?: string;
       /**
@@ -469,6 +467,8 @@ export interface components {
        * @description Server-generated unique ID of the species.
        */
       speciesId?: number;
+      /** @description Scientific name of the species. */
+      speciesScientificName?: string;
       state:
         | "Awaiting Check-In"
         | "Awaiting Processing"
@@ -498,10 +498,10 @@ export interface components {
       role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     AllFieldValuesPayload: {
-      /** @description All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
-      values: string[];
       /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
       partial: boolean;
+      /** @description All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
+      values: string[];
     };
     /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
     AndNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -526,35 +526,35 @@ export interface components {
       sustainableDevelopmentGoals: components["schemas"]["GoalProgressPayloadV1"][];
     };
     AutomationPayload: {
-      /** Format: int64 */
-      id: number;
-      /** Format: int64 */
-      facilityId: number;
-      type: string;
-      /** @description Short human-readable name of this automation. */
-      name: string;
       /** @description Human-readable description of this automation. */
       description?: string;
       /** Format: int64 */
       deviceId?: number;
-      timeseriesName?: string;
-      /** Format: int32 */
-      verbosity: number;
+      /** Format: int64 */
+      facilityId: number;
+      /** Format: int64 */
+      id: number;
       /** Format: double */
       lowerThreshold?: number;
-      /** Format: double */
-      upperThreshold?: number;
+      /** @description Short human-readable name of this automation. */
+      name: string;
       /** @description Client-defined configuration data for this automation. */
       settings?: { [key: string]: unknown };
+      timeseriesName?: string;
+      type: string;
+      /** Format: double */
+      upperThreshold?: number;
+      /** Format: int32 */
+      verbosity: number;
     };
     AutomationTriggerRequestPayload: {
+      /** @description Default message to publish if the automation type isn't yet supported by the server. */
+      message?: string;
       /**
        * Format: double
        * @description For automations that are triggered by changes to timeseries values, the value that triggered the automation.
        */
       timeseriesValue?: number;
-      /** @description Default message to publish if the automation type isn't yet supported by the server. */
-      message?: string;
     };
     BatchPayload: {
       /**
@@ -573,9 +573,9 @@ export interface components {
       id: number;
       /** Format: date-time */
       latestObservedTime: string;
-      notes?: string;
       /** Format: int32 */
       notReadyQuantity: number;
+      notes?: string;
       /** Format: date */
       readyByDate?: string;
       /** Format: int32 */
@@ -604,8 +604,8 @@ export interface components {
     };
     /** @description Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
     CRS: {
-      type: "name";
       properties: components["schemas"]["CRSProperties"];
+      type: "name";
     };
     CRSProperties: {
       /**
@@ -659,21 +659,21 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     CreateAutomationRequestPayload: {
-      /** Format: int64 */
-      facilityId: number;
-      type: string;
-      name: string;
       description?: string;
       /** Format: int64 */
       deviceId?: number;
-      timeseriesName?: string;
-      /** Format: int32 */
-      verbosity?: number;
+      /** Format: int64 */
+      facilityId: number;
       /** Format: double */
       lowerThreshold?: number;
+      name: string;
+      settings?: { [key: string]: unknown };
+      timeseriesName?: string;
+      type: string;
       /** Format: double */
       upperThreshold?: number;
-      settings?: { [key: string]: unknown };
+      /** Format: int32 */
+      verbosity?: number;
     };
     CreateAutomationResponsePayload: {
       /** Format: int64 */
@@ -685,34 +685,29 @@ export interface components {
       addedDate: string;
       /** Format: int64 */
       facilityId: number;
-      notes?: string;
-      /** Format: date */
-      readyByDate?: string;
-      /** Format: int64 */
-      speciesId: number;
       /** Format: int32 */
       germinatingQuantity: number;
       /** Format: int32 */
       notReadyQuantity: number;
+      notes?: string;
+      /** Format: date */
+      readyByDate?: string;
       /** Format: int32 */
       readyQuantity: number;
+      /** Format: int64 */
+      speciesId: number;
     };
     CreateDeviceRequestPayload: {
+      /**
+       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
+       * @example 192.168.1.100
+       */
+      address?: string;
       /**
        * Format: int64
        * @description Identifier of facility where this device is located.
        */
       facilityId: number;
-      /**
-       * @description Name of this device.
-       * @example BMU-1
-       */
-      name: string;
-      /**
-       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
-       * @example inverter
-       */
-      type: string;
       /**
        * @description Name of device manufacturer.
        * @example InHand Networks
@@ -724,33 +719,38 @@ export interface components {
        */
       model: string;
       /**
-       * @description Device manager protocol name.
-       * @example modbus
+       * @description Name of this device.
+       * @example BMU-1
        */
-      protocol?: string;
+      name: string;
       /**
-       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
-       * @example 192.168.1.100
+       * Format: int64
+       * @description ID of parent device such as a hub or gateway, if any. The parent device must exist.
        */
-      address?: string;
+      parentId?: number;
       /**
        * Format: int32
        * @description Port number if relevant for the protocol.
        * @example 50000
        */
       port?: number;
+      /**
+       * @description Device manager protocol name.
+       * @example modbus
+       */
+      protocol?: string;
       /** @description Protocol- and device-specific custom settings. This is an arbitrary JSON object; the exact settings depend on the device type. */
       settings?: { [key: string]: unknown };
+      /**
+       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
+       * @example inverter
+       */
+      type: string;
       /**
        * Format: int32
        * @description Level of diagnostic information to log.
        */
       verbosity?: number;
-      /**
-       * Format: int64
-       * @description ID of parent device such as a hub or gateway, if any. The parent device must exist.
-       */
-      parentId?: number;
     };
     CreateFacilityRequestPayload: {
       /** Format: date */
@@ -791,9 +791,9 @@ export interface components {
       destinationFacilityId: number;
       /** Format: int32 */
       germinatingQuantity: number;
-      notes?: string;
       /** Format: int32 */
       notReadyQuantity: number;
+      notes?: string;
       /** Format: date */
       readyByDate?: string;
       /** Format: int32 */
@@ -900,6 +900,11 @@ export interface components {
     };
     CreateTimeseriesEntry: {
       /**
+       * Format: int32
+       * @description Number of significant fractional digits (after the decimal point), if this is a timeseries with non-integer numeric values.
+       */
+      decimalPlaces?: number;
+      /**
        * Format: int64
        * @description ID of device that produces this timeseries.
        */
@@ -907,11 +912,6 @@ export interface components {
       /** @description Name of this timeseries. Duplicate timeseries names for the same device aren't allowed, but different devices can have timeseries with the same name. */
       timeseriesName: string;
       type: "Numeric" | "Text";
-      /**
-       * Format: int32
-       * @description Number of significant fractional digits (after the decimal point), if this is a timeseries with non-integer numeric values.
-       */
-      decimalPlaces?: number;
       /**
        * @description Units of measure for values in this timeseries.
        * @example volts
@@ -925,6 +925,7 @@ export interface components {
       /** Format: date */
       endDate?: string;
       notes?: string;
+      seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
       /** Format: int32 */
@@ -933,7 +934,6 @@ export interface components {
       seedsFilled?: number;
       /** Format: int32 */
       seedsTested: number;
-      seedType?: "Fresh" | "Stored";
       /** Format: date */
       startDate?: string;
       substrate?:
@@ -965,8 +965,8 @@ export interface components {
     CreateWithdrawalRequestPayload: {
       /** Format: date */
       date?: string;
-      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
        * @description ID of the user who withdrew the seeds. Default is the current user's ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization.
@@ -979,33 +979,28 @@ export interface components {
     DeliveryPayload: {
       /** Format: int64 */
       id: number;
-      plantings: components["schemas"]["PlantingPayload"][];
       /** Format: int64 */
       plantingSiteId: number;
+      plantings: components["schemas"]["PlantingPayload"][];
       /** Format: int64 */
       withdrawalId: number;
     };
     DeviceConfig: {
       /**
-       * Format: int64
-       * @description Unique identifier of this device.
+       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
+       * @example 192.168.1.100
        */
-      id: number;
+      address?: string;
       /**
        * Format: int64
        * @description Identifier of facility where this device is located.
        */
       facilityId: number;
       /**
-       * @description Name of this device.
-       * @example BMU-1
+       * Format: int64
+       * @description Unique identifier of this device.
        */
-      name: string;
-      /**
-       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
-       * @example inverter
-       */
-      type: string;
+      id: number;
       /**
        * @description Name of device manufacturer.
        * @example InHand Networks
@@ -1017,37 +1012,39 @@ export interface components {
        */
       model: string;
       /**
-       * @description Device manager protocol name.
-       * @example modbus
+       * @description Name of this device.
+       * @example BMU-1
        */
-      protocol?: string;
+      name: string;
       /**
-       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
-       * @example 192.168.1.100
+       * Format: int64
+       * @description ID of parent device such as a hub or gateway, if any.
        */
-      address?: string;
+      parentId?: number;
       /**
        * Format: int32
        * @description Port number if relevant for the protocol.
        * @example 50000
        */
       port?: number;
+      /**
+       * @description Device manager protocol name.
+       * @example modbus
+       */
+      protocol?: string;
       settings?: { [key: string]: unknown };
+      /**
+       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
+       * @example inverter
+       */
+      type: string;
       /**
        * Format: int32
        * @description Level of diagnostic information to log.
        */
       verbosity?: number;
-      /**
-       * Format: int64
-       * @description ID of parent device such as a hub or gateway, if any.
-       */
-      parentId?: number;
     };
     DeviceManagerPayload: {
-      /** Format: int64 */
-      id: number;
-      sensorKitId: string;
       /** @description If true, this device manager is available to connect to a facility. */
       available: boolean;
       /**
@@ -1055,6 +1052,8 @@ export interface components {
        * @description The facility this device manager is connected to, or null if it is not connected.
        */
       facilityId?: number;
+      /** Format: int64 */
+      id: number;
       /** @description If true, this device manager is currently online. */
       isOnline: boolean;
       /**
@@ -1062,6 +1061,7 @@ export interface components {
        * @description When the device manager's isOnline value changed most recently. In other words, if isOnline is true, the device manager has been online since this time; if isOnline is false, the device manager has been offline since this time. This may be null if the device manager has not come online for the first time yet.
        */
       onlineChangedTime?: string;
+      sensorKitId: string;
       /**
        * Format: int32
        * @description If an update is being downloaded or installed, its progress as a percentage. Not present if no update is in progress.
@@ -1069,32 +1069,32 @@ export interface components {
       updateProgress?: number;
     };
     DeviceTemplatePayload: {
+      address?: string;
+      category: "PV" | "Seed Bank Default";
       /** Format: int64 */
       id: number;
-      category: "PV" | "Seed Bank Default";
-      name: string;
-      type: string;
       make: string;
       model: string;
-      protocol?: string;
-      address?: string;
+      name: string;
       /** Format: int32 */
       port?: number;
+      protocol?: string;
       settings?: { [key: string]: unknown };
+      type: string;
       /** Format: int32 */
       verbosity?: number;
     };
     DeviceUnresponsiveRequestPayload: {
       /**
-       * Format: date-time
-       * @description When the device most recently responded. Null or absent if the device has never responded.
-       */
-      lastRespondedTime?: string;
-      /**
        * Format: int32
        * @description The expected amount of time between updates from the device. Null or absent if there is no fixed update interval.
        */
       expectedIntervalSecs?: number;
+      /**
+       * Format: date-time
+       * @description When the device most recently responded. Null or absent if the device has never responded.
+       */
+      lastRespondedTime?: string;
     };
     ErrorDetails: {
       message: string;
@@ -1129,24 +1129,24 @@ export interface components {
     };
     FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
       field?: string;
+      type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "Range";
       /** @description List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
       values?: (string | null)[];
-      type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "Range";
     } & {
       field: unknown;
       type: unknown;
       values: unknown;
     };
     FieldValuesPayload: {
-      /** @description List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
-      values: (string | null)[];
       /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
       partial: boolean;
+      /** @description List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
+      values: (string | null)[];
     };
     Geolocation: {
+      accuracy?: number;
       latitude: number;
       longitude: number;
-      accuracy?: number;
     };
     GetAccessionHistoryResponsePayload: {
       /** @description History of changes in descending time order (newest first.) */
@@ -1188,8 +1188,8 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     GetMapboxTokenResponsePayload: {
-      token: string;
       status: components["schemas"]["SuccessOrError"];
+      token: string;
     };
     GetNotificationResponsePayload: {
       notification: components["schemas"]["NotificationPayload"];
@@ -1230,16 +1230,16 @@ export interface components {
       batches: components["schemas"]["BatchPayload"][];
       /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
       delivery?: components["schemas"]["DeliveryPayload"];
-      withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
       status: components["schemas"]["SuccessOrError"];
+      withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
     };
     GetOrganizationResponsePayload: {
       organization: components["schemas"]["OrganizationPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationUserResponsePayload: {
-      user: components["schemas"]["OrganizationUserPayload"];
       status: components["schemas"]["SuccessOrError"];
+      user: components["schemas"]["OrganizationUserPayload"];
     };
     GetPlantingSiteResponsePayload: {
       site: components["schemas"]["PlantingSitePayload"];
@@ -1250,8 +1250,6 @@ export interface components {
       id: number;
       /** Format: int32 */
       mortalityRateInField?: number;
-      /** Format: int32 */
-      mortalityRateInNursery?: number;
       /** Format: int32 */
       totalPlanted?: number;
     };
@@ -1277,27 +1275,27 @@ export interface components {
     GetReportPayload: {
       /** Format: int64 */
       id: number;
-      /** Format: int32 */
-      year: number;
-      status: "New" | "In Progress" | "Locked" | "Submitted";
-      /** Format: date-time */
-      modifiedTime?: string;
-      /** Format: date-time */
-      lockedTime?: string;
-      /** Format: date-time */
-      submittedTime?: string;
       lockedByName?: string;
       /** Format: int64 */
       lockedByUserId?: number;
+      /** Format: date-time */
+      lockedTime?: string;
       modifiedByName?: string;
       /** Format: int64 */
       modifiedByUserId?: number;
+      /** Format: date-time */
+      modifiedTime?: string;
+      /** Format: int32 */
+      quarter: number;
+      status: "New" | "In Progress" | "Locked" | "Submitted";
       submittedByName?: string;
       /** Format: int64 */
       submittedByUserId?: number;
-      /** Format: int32 */
-      quarter: number;
+      /** Format: date-time */
+      submittedTime?: string;
       version: string;
+      /** Format: int32 */
+      year: number;
     };
     GetReportPayloadV1: components["schemas"]["GetReportPayload"] & {
       annualDetails?: components["schemas"]["AnnualDetailsPayloadV1"];
@@ -1360,19 +1358,19 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesSummaryResponsePayload: {
-      summary: components["schemas"]["SpeciesSummaryPayload"];
       status: components["schemas"]["SuccessOrError"];
+      summary: components["schemas"]["SpeciesSummaryPayload"];
     };
     GetStorageLocationResponsePayload: {
-      storageLocation: components["schemas"]["StorageLocationPayload"];
       status: components["schemas"]["SuccessOrError"];
+      storageLocation: components["schemas"]["StorageLocationPayload"];
     };
     GetTimeseriesHistoryRequestPayload: {
       /**
-       * Format: date-time
-       * @description Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent.
+       * Format: int32
+       * @description Number of values to return. The time range is divided into this many equal intervals, and a value is returned from each interval if available.
        */
-      startTime?: string;
+      count: number;
       /**
        * Format: date-time
        * @description End of time range to query. If this is non-null, startTime must also be specified, and seconds must be null or absent.
@@ -1384,10 +1382,10 @@ export interface components {
        */
       seconds?: number;
       /**
-       * Format: int32
-       * @description Number of values to return. The time range is divided into this many equal intervals, and a value is returned from each interval if available.
+       * Format: date-time
+       * @description Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent.
        */
-      count: number;
+      startTime?: string;
       /** @description Timeseries to query. May be from different devices. */
       timeseries: components["schemas"]["TimeseriesIdPayload"][];
     };
@@ -1395,6 +1393,9 @@ export interface components {
       values: components["schemas"]["TimeseriesValuesPayload"][];
     };
     GetUploadStatusDetailsPayload: {
+      errors?: components["schemas"]["UploadProblemPayload"][];
+      /** @description True if the server is finished processing the file, either successfully or not. */
+      finished: boolean;
       /** Format: int64 */
       id: number;
       status:
@@ -1408,10 +1409,7 @@ export interface components {
         | "Awaiting Validation"
         | "Awaiting User Action"
         | "Awaiting Processing";
-      errors?: components["schemas"]["UploadProblemPayload"][];
       warnings?: components["schemas"]["UploadProblemPayload"][];
-      /** @description True if the server is finished processing the file, either successfully or not. */
-      finished: boolean;
     };
     GetUploadStatusResponsePayload: {
       details: components["schemas"]["GetUploadStatusDetailsPayload"];
@@ -1423,8 +1421,8 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     GetUserResponsePayload: {
-      user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
+      user: components["schemas"]["UserProfilePayload"];
     };
     GetViabilityTestPayload: {
       /** Format: int64 */
@@ -1434,6 +1432,7 @@ export interface components {
       /** Format: int64 */
       id: number;
       notes?: string;
+      seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
       /** Format: int32 */
@@ -1442,7 +1441,6 @@ export interface components {
       seedsFilled?: number;
       /** Format: int32 */
       seedsTested: number;
-      seedType?: "Fresh" | "Stored";
       /** Format: date */
       startDate?: string;
       substrate?:
@@ -1481,8 +1479,8 @@ export interface components {
       withdrawnByUserId?: number;
     };
     GetViabilityTestResponsePayload: {
-      viabilityTest: components["schemas"]["GetViabilityTestPayload"];
       status: components["schemas"]["SuccessOrError"];
+      viabilityTest: components["schemas"]["GetViabilityTestPayload"];
     };
     GetWithdrawalPayload: {
       /** Format: date */
@@ -1499,8 +1497,8 @@ export interface components {
        * @description Server-assigned unique ID of this withdrawal.
        */
       id?: number;
-      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
        * @description If this withdrawal is of purpose "Viability Testing", the ID of the test it is associated with.
@@ -1517,12 +1515,12 @@ export interface components {
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
     GetWithdrawalResponsePayload: {
-      withdrawal: components["schemas"]["GetWithdrawalPayload"];
       status: components["schemas"]["SuccessOrError"];
+      withdrawal: components["schemas"]["GetWithdrawalPayload"];
     };
     GetWithdrawalsResponsePayload: {
-      withdrawals: components["schemas"]["GetWithdrawalPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      withdrawals: components["schemas"]["GetWithdrawalPayload"][];
     };
     GoalProgressPayloadV1: {
       goal:
@@ -1567,8 +1565,8 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     ListDeviceTemplatesResponsePayload: {
-      templates: components["schemas"]["DeviceTemplatePayload"][];
       status: components["schemas"]["SuccessOrError"];
+      templates: components["schemas"]["DeviceTemplatePayload"][];
     };
     ListFacilitiesResponse: {
       facilities: components["schemas"]["FacilityPayload"][];
@@ -1595,8 +1593,8 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationUsersResponsePayload: {
-      users: components["schemas"]["OrganizationUserPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      users: components["schemas"]["OrganizationUserPayload"][];
     };
     ListOrganizationsResponsePayload: {
       organizations: components["schemas"]["OrganizationPayload"][];
@@ -1667,20 +1665,20 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     ListStorageLocationsResponsePayload: {
-      storageLocations: components["schemas"]["StorageLocationPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      storageLocations: components["schemas"]["StorageLocationPayload"][];
     };
     ListTimeZoneNamesResponsePayload: {
-      timeZones: components["schemas"]["TimeZonePayload"][];
       status: components["schemas"]["SuccessOrError"];
+      timeZones: components["schemas"]["TimeZonePayload"][];
     };
     ListTimeseriesResponsePayload: {
-      timeseries: components["schemas"]["TimeseriesPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      timeseries: components["schemas"]["TimeseriesPayload"][];
     };
     ListViabilityTestsResponsePayload: {
-      viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
     };
     ListWithdrawalPhotosResponsePayload: {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
@@ -1695,8 +1693,8 @@ export interface components {
     };
     MultiPolygon: {
       coordinates: number[][][][];
-      type: "MultiPolygon";
       crs?: components["schemas"]["CRS"];
+      type: "MultiPolygon";
     };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1711,18 +1709,18 @@ export interface components {
       unread: number;
     };
     NotificationPayload: {
+      body: string;
+      /** Format: date-time */
+      createdTime: string;
       /** Format: int64 */
       id: number;
+      isRead: boolean;
+      /** Format: uri */
+      localUrl: string;
       notificationCriticality: "Info" | "Warning" | "Error" | "Success";
       /** Format: int64 */
       organizationId?: number;
       title: string;
-      body: string;
-      /** Format: uri */
-      localUrl: string;
-      /** Format: date-time */
-      createdTime: string;
-      isRead: boolean;
     };
     NurseryWithdrawalPayload: {
       batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
@@ -1800,10 +1798,10 @@ export interface components {
        */
       addedTime: string;
       email: string;
-      /** Format: int64 */
-      id: number;
       /** @description The user's first name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       firstName?: string;
+      /** Format: int64 */
+      id: number;
       /** @description The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
       role: "Contributor" | "Manager" | "Admin" | "Owner";
@@ -1842,8 +1840,8 @@ export interface components {
       fullName: string;
       /** Format: int64 */
       id: number;
-      name: string;
       monitoringPlots: components["schemas"]["MonitoringPlotPayload"][];
+      name: string;
     };
     PlantingZonePayload: {
       boundary: components["schemas"]["MultiPolygon"];
@@ -1873,18 +1871,16 @@ export interface components {
       /** Format: int32 */
       mortalityRateInField?: number;
       /** Format: int32 */
-      mortalityRateInNursery?: number;
-      /** Format: int32 */
       totalPlanted?: number;
     };
     PutPlantingSiteV1: {
       /** Format: int64 */
       id: number;
+      /** Format: int32 */
+      mortalityRate?: number;
       notes?: string;
       selected: boolean;
       species: components["schemas"]["PutPlantingSiteSpeciesV1"][];
-      /** Format: int32 */
-      mortalityRate?: number;
       /** Format: int32 */
       totalPlantedArea?: number;
       /** Format: int32 */
@@ -1932,12 +1928,12 @@ export interface components {
     ReassignmentPayload: {
       /** Format: int64 */
       fromPlantingId: number;
+      notes?: string;
       /**
        * Format: int32
        * @description Number of plants to reassign from the planting's original subzone to the new one. Must be less than or equal to the number of plants in the original planting.
        */
       numPlants: number;
-      notes?: string;
       /** Format: int64 */
       toPlantingSubzoneId: number;
     };
@@ -1946,10 +1942,10 @@ export interface components {
     };
     /** @description Results of a request to record timeseries values. */
     RecordTimeseriesValuesResponsePayload: {
+      error?: components["schemas"]["ErrorDetails"];
       /** @description List of values that the server failed to record. Will not be included if all the values were recorded successfully. */
       failures?: components["schemas"]["TimeseriesValuesErrorPayload"][];
       status: components["schemas"]["SuccessOrError"];
-      error?: components["schemas"]["ErrorDetails"];
     };
     ResolveUploadRequestPayload: {
       /** @description If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
@@ -1959,23 +1955,6 @@ export interface components {
     SearchNodePayload: any;
     SearchRequestPayload: {
       /**
-       * @description Prefix for field names. This determines how field names are interpreted, and also how results are structured. Each element in the "results" array in the response will be an instance of whatever entity the prefix points to. Always evaluated starting from the "organizations" level. If not present, the search will return a list of organizations.
-       * @example facilities.accessions
-       */
-      prefix?: string;
-      /**
-       * @description List of fields to return. Field names should be relative to the prefix. They may navigate the data hierarchy using '.' or '_' as delimiters.
-       * @example processingStartDate,viabilityTests.seedsTested,facility_name
-       */
-      fields: string[];
-      /** @description How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
-      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
-      search?:
-        | components["schemas"]["AndNodePayload"]
-        | components["schemas"]["FieldNodePayload"]
-        | components["schemas"]["NotNodePayload"]
-        | components["schemas"]["OrNodePayload"];
-      /**
        * Format: int32
        * @description Maximum number of top-level search results to return. The system may impose a limit on this value. A separate system-imposed limit may also be applied to lists of child objects inside the top-level results. Use a value of 0 to return the maximum number of allowed results.
        * @default 25
@@ -1983,22 +1962,34 @@ export interface components {
       count: number;
       /** @description Starting point for search results. If present, a previous search will be continued from where it left off. This should be the value of the cursor that was returned in the response to a previous search. */
       cursor?: string;
+      /**
+       * @description List of fields to return. Field names should be relative to the prefix. They may navigate the data hierarchy using '.' or '_' as delimiters.
+       * @example processingStartDate,viabilityTests.seedsTested,facility_name
+       */
+      fields: string[];
+      /**
+       * @description Prefix for field names. This determines how field names are interpreted, and also how results are structured. Each element in the "results" array in the response will be an instance of whatever entity the prefix points to. Always evaluated starting from the "organizations" level. If not present, the search will return a list of organizations.
+       * @example facilities.accessions
+       */
+      prefix?: string;
+      search?:
+        | components["schemas"]["AndNodePayload"]
+        | components["schemas"]["FieldNodePayload"]
+        | components["schemas"]["NotNodePayload"]
+        | components["schemas"]["OrNodePayload"];
+      /** @description How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
+      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
     };
     SearchResponsePayload: {
-      results: { [key: string]: unknown }[];
       cursor?: string;
+      results: { [key: string]: unknown }[];
     };
     SearchSortOrderElement: {
-      field: string;
       /** @default Ascending */
       direction?: "Ascending" | "Descending";
+      field: string;
     };
     SeedCountSummaryPayload: {
-      /**
-       * Format: int64
-       * @description Total number of seeds remaining. The sum of subtotalBySeedCount and subtotalByWeightEstimate.
-       */
-      total: number;
       /**
        * Format: int64
        * @description Total number of seeds remaining in accessions whose quantities are measured in seeds.
@@ -2010,6 +2001,11 @@ export interface components {
        */
       subtotalByWeightEstimate: number;
       /**
+       * Format: int64
+       * @description Total number of seeds remaining. The sum of subtotalBySeedCount and subtotalByWeightEstimate.
+       */
+      total: number;
+      /**
        * Format: int32
        * @description Number of accessions that are measured by weight and don't have subset weight and count data. The system cannot estimate how many seeds they have.
        */
@@ -2017,6 +2013,8 @@ export interface components {
     };
     /** @description Represents a quantity of seeds, measured either in individual seeds or by weight. */
     SeedQuantityPayload: {
+      /** @description If this quantity is a weight measurement, the weight in grams. This is not set if the "units" field is "Seeds". This is always calculated on the server side and is ignored on input. */
+      grams?: number;
       /** @description Number of units of seeds. If "units" is "Seeds", this is the number of seeds and must be an integer. Otherwise it is a measurement in the weight units specified in the "units" field, and may have a fractional part. */
       quantity: number;
       units:
@@ -2026,13 +2024,11 @@ export interface components {
         | "Kilograms"
         | "Ounces"
         | "Pounds";
-      /** @description If this quantity is a weight measurement, the weight in grams. This is not set if the "units" field is "Seeds". This is always calculated on the server side and is ignored on input. */
-      grams?: number;
     };
     SendFacilityAlertRequestPayload: {
-      subject: string;
       /** @description Alert body in plain text. HTML alerts are not supported yet. */
       body: string;
+      subject: string;
     };
     SimpleErrorResponsePayload: {
       error: components["schemas"]["ErrorDetails"];
@@ -2042,19 +2038,19 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SpeciesLookupCommonNamePayload: {
-      name: string;
       /** @description ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
       language?: string;
+      name: string;
     };
     SpeciesLookupDetailsResponsePayload: {
-      scientificName: string;
       /** @description List of known common names for the species, if any. */
       commonNames?: components["schemas"]["SpeciesLookupCommonNamePayload"][];
-      familyName: string;
       /** @description True if the species is known to be endangered, false if the species is known to not be endangered. This value will not be present if the server's taxonomic database doesn't indicate whether or not the species is endangered. */
       endangered?: boolean;
+      familyName: string;
       /** @description If this is not the accepted name for the species, the type of problem the name has. Currently, this will always be "Name Is Synonym". */
       problemType?: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
+      scientificName: string;
       /** @description If this is not the accepted name for the species, the name to suggest as an alternative. */
       suggestedScientificName?: string;
     };
@@ -2065,14 +2061,15 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SpeciesProblemElement: {
+      field: "Scientific Name";
       /** Format: int64 */
       id: number;
-      field: "Scientific Name";
-      type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
       /** @description Value for the field in question that would correct the problem. Absent if the system is unable to calculate a corrected value. */
       suggestedValue?: string;
+      type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
     };
     SpeciesRequestPayload: {
+      commonName?: string;
       ecosystemTypes?: (
         | "Boreal forests/Taiga"
         | "Deserts and xeric shrublands"
@@ -2089,7 +2086,6 @@ export interface components {
         | "Tropical and subtropical moist broad leaf forests"
         | "Tundra"
       )[];
-      commonName?: string;
       endangered?: boolean;
       familyName?: string;
       growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
@@ -2107,6 +2103,7 @@ export interface components {
         | "Unknown";
     };
     SpeciesResponseElement: {
+      commonName?: string;
       ecosystemTypes?: (
         | "Boreal forests/Taiga"
         | "Deserts and xeric shrublands"
@@ -2123,7 +2120,6 @@ export interface components {
         | "Tropical and subtropical moist broad leaf forests"
         | "Tundra"
       )[];
-      commonName?: string;
       endangered?: boolean;
       familyName?: string;
       growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
@@ -2195,21 +2191,21 @@ export interface components {
     SummarizeAccessionSearchResponsePayload: {
       /** Format: int32 */
       accessions: number;
+      seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
       /** Format: int32 */
       species: number;
-      seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     /** @description Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponsePayload: {
-      /** Format: int32 */
-      activeAccessions: number;
-      /** Format: int32 */
-      species: number;
       /** @description Number of accessions in each state. */
       accessionsByState: { [key: string]: number };
+      /** Format: int32 */
+      activeAccessions: number;
       /** @description Summary of the number of seeds remaining across all active accessions. */
       seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
+      /** Format: int32 */
+      species: number;
       status: components["schemas"]["SuccessOrError"];
     };
     TimeZonePayload: {
@@ -2231,24 +2227,24 @@ export interface components {
     };
     TimeseriesPayload: {
       /**
-       * Format: int64
-       * @description ID of device that produces this timeseries.
-       */
-      deviceId: number;
-      timeseriesName: string;
-      type: "Numeric" | "Text";
-      /**
        * Format: int32
        * @description Number of significant fractional digits (after the decimal point), if this is a timeseries with non-integer numeric values.
        */
       decimalPlaces?: number;
       /**
+       * Format: int64
+       * @description ID of device that produces this timeseries.
+       */
+      deviceId: number;
+      /** @description If any values have been recorded for the timeseries, the latest one. */
+      latestValue?: components["schemas"]["TimeseriesValuePayload"];
+      timeseriesName: string;
+      type: "Numeric" | "Text";
+      /**
        * @description Units of measure for values in this timeseries.
        * @example volts
        */
       units?: string;
-      /** @description If any values have been recorded for the timeseries, the latest one. */
-      latestValue?: components["schemas"]["TimeseriesValuePayload"];
     };
     TimeseriesValuePayload: {
       /** Format: date-time */
@@ -2262,12 +2258,12 @@ export interface components {
        * @description Device ID as specified in the failing request.
        */
       deviceId: number;
+      /** @description Human-readable details about the failure. */
+      message: string;
       /** @description Name of timeseries as specified in the failing request. */
       timeseriesName: string;
       /** @description Values that the server was not able to successfully record. */
       values: components["schemas"]["TimeseriesValuePayload"][];
-      /** @description Human-readable details about the failure. */
-      message: string;
     };
     TimeseriesValuesPayload: {
       /**
@@ -2329,19 +2325,19 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     UpdateAutomationRequestPayload: {
-      type: string;
-      name: string;
       description?: string;
       /** Format: int64 */
       deviceId?: number;
-      timeseriesName?: string;
-      /** Format: int32 */
-      verbosity?: number;
       /** Format: double */
       lowerThreshold?: number;
+      name: string;
+      settings?: { [key: string]: unknown };
+      timeseriesName?: string;
+      type: string;
       /** Format: double */
       upperThreshold?: number;
-      settings?: { [key: string]: unknown };
+      /** Format: int32 */
+      verbosity?: number;
     };
     UpdateBatchQuantitiesRequestPayload: {
       /** Format: int32 */
@@ -2362,15 +2358,10 @@ export interface components {
     };
     UpdateDeviceRequestPayload: {
       /**
-       * @description Name of this device.
-       * @example BMU-1
+       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
+       * @example 192.168.1.100
        */
-      name: string;
-      /**
-       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
-       * @example inverter
-       */
-      type: string;
+      address?: string;
       /**
        * @description Name of device manufacturer.
        * @example InHand Networks
@@ -2382,33 +2373,38 @@ export interface components {
        */
       model: string;
       /**
-       * @description Device manager protocol name.
-       * @example modbus
+       * @description Name of this device.
+       * @example BMU-1
        */
-      protocol?: string;
+      name: string;
       /**
-       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
-       * @example 192.168.1.100
+       * Format: int64
+       * @description ID of parent device such as a hub or gateway, if any. The parent device must exist.
        */
-      address?: string;
+      parentId?: number;
       /**
        * Format: int32
        * @description Port number if relevant for the protocol.
        * @example 50000
        */
       port?: number;
+      /**
+       * @description Device manager protocol name.
+       * @example modbus
+       */
+      protocol?: string;
       /** @description Protocol- and device-specific custom settings. This is an arbitrary JSON object; the exact settings depend on the device type. */
       settings?: { [key: string]: unknown };
+      /**
+       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
+       * @example inverter
+       */
+      type: string;
       /**
        * Format: int32
        * @description Level of diagnostic information to log.
        */
       verbosity?: number;
-      /**
-       * Format: int64
-       * @description ID of parent device such as a hub or gateway, if any. The parent device must exist.
-       */
-      parentId?: number;
     };
     UpdateFacilityRequestPayload: {
       /** Format: date */
@@ -2434,9 +2430,9 @@ export interface components {
       read: boolean;
     };
     UpdateNotificationsRequestPayload: {
-      read: boolean;
       /** Format: int64 */
       organizationId?: number;
+      read: boolean;
     };
     UpdateOrganizationRequestPayload: {
       /**
@@ -2503,6 +2499,7 @@ export interface components {
       /** Format: date */
       endDate?: string;
       notes?: string;
+      seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
       /** Format: int32 */
@@ -2511,7 +2508,6 @@ export interface components {
       seedsFilled?: number;
       /** Format: int32 */
       seedsTested: number;
-      seedType?: "Fresh" | "Stored";
       /** Format: date */
       startDate?: string;
       substrate?:
@@ -2542,8 +2538,8 @@ export interface components {
     UpdateWithdrawalRequestPayload: {
       /** Format: date */
       date?: string;
-      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
        * @description ID of the user who withdrew the seeds. Default is the withdrawal's existing user ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization.
@@ -2585,15 +2581,15 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     UserProfilePayload: {
+      email: string;
+      /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
+      emailNotificationsEnabled: boolean;
+      firstName?: string;
       /**
        * Format: int64
        * @description User's unique ID. This should not be shown to the user, but is a required input to some API endpoints.
        */
       id: number;
-      email: string;
-      /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
-      emailNotificationsEnabled: boolean;
-      firstName?: string;
       lastName?: string;
       /**
        * @description IETF locale code containing user's preferred language.
@@ -2608,13 +2604,13 @@ export interface components {
     };
     VersionsEntryPayload: {
       appName: string;
-      platform: string;
       minimumVersion: string;
+      platform: string;
       recommendedVersion: string;
     };
     VersionsResponsePayload: {
-      versions: components["schemas"]["VersionsEntryPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      versions: components["schemas"]["VersionsEntryPayload"][];
     };
     ViabilityTestResultPayload: {
       /** Format: date */
