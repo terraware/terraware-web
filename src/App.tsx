@@ -78,17 +78,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundAttachment: 'fixed',
     minHeight: '100vh',
     '& .navbar': {
-      backgroundColor: theme.palette.TwClrBaseGray025,
-      backgroundImage:
+      backgroundColor: (props: StyleProps) => (props.isDesktop ? theme.palette.TwClrBaseGray025 : theme.palette.TwClrBaseWhite),
+      backgroundImage: (props: StyleProps) => (props.isDesktop ?
         'linear-gradient(180deg,' +
         `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0, format: 'css' })} 0%,` +
-        `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`,
+        `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`
+        : null),
       backgroundAttachment: 'fixed',
       paddingRight: (props: StyleProps) => (props.isDesktop ? '8px' : undefined),
-      marginTop: (props: StyleProps) => (props.isDesktop ? '96px' : '8px'),
+      marginTop: (props: StyleProps) => (props.isDesktop ? '96px' : '0px'),
       paddingTop: 0,
       overflowY: 'auto',
-      width: (props: StyleProps) => (props.isDesktop ? '210px' : undefined),
+      width: (props: StyleProps) => (props.isDesktop ? '210px' : '300px'),
       zIndex: 1000,
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: theme.palette.TwClrBgGhostActive,
@@ -111,7 +112,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   navBarOpened: {
-    '& .blurred': {
       backdropFilter: 'blur(8px)',
       background: hexRgb(`${theme.palette.TwClrBgSecondary}`, { alpha: 0.8, format: 'css' }),
       height: '100%',
@@ -119,7 +119,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       position: 'fixed',
       zIndex: 1300,
       inset: '0px',
-    },
   },
 }));
 
@@ -321,12 +320,9 @@ function AppContent() {
 
   const getContent = () => (
     <>
-      {showNavBar ? (
-        <div className={type !== 'desktop' ? classes.navBarOpened : ''}>
-          <div className='blurred'>
             {type !== 'desktop' ? (
               <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-                <div>
+                <div className={classes.navBarOpened}>
                   <NavBar setShowNavBar={setShowNavBar} withdrawalCreated={withdrawalCreated} />
                 </div>
               </Slide>
@@ -337,9 +333,6 @@ function AppContent() {
                 withdrawalCreated={withdrawalCreated}
               />
             )}
-          </div>
-        </div>
-      ) : null}
       <div
         className={`${type === 'desktop' && showNavBar ? classes.contentWithNavBar : ''} ${
           classes.content

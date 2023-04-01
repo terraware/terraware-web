@@ -16,6 +16,7 @@ ACCESSION_HISTORY,Accession History,
 ACCESSION_ID,Accession ID,
 ACCESSION_NUMBER_CHECKED_IN,Accession {0} was successfully checked in!,
 ACCESSION_SAVED,Accession saved,
+ACCOUNT,Account,User access to website or application typically by entering a username and password (noun)
 ACTIVE_ACCESSIONS,Active Accessions,
 ACTIVE_INACTIVE,Active/Inactive,
 ADD,Add,
