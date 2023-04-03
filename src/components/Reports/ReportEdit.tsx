@@ -196,12 +196,18 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   };
 
   useEffect(() => {
-    window.history.pushState(null, document.title, window.location.href);
-    window.addEventListener('popstate', (event) => {
+    const popStateEventHandler = (event: PopStateEvent) => {
       window.history.pushState(null, document.title, window.location.href);
       snackbar.toastWarning(strings.REPORT_BACK_WARNING);
-    });
+    };
+
+    window.history.pushState(null, document.title, window.location.href);
+    window.addEventListener('popstate', popStateEventHandler);
+    return () => {
+      window.removeEventListener('popstate', popStateEventHandler);
+    };
   }, [snackbar]);
+
   const hasEmptyRequiredFields = (iReport: Report) => {
     const emptyWorkerField = (location: any) => {
       return (
