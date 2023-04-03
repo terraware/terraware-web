@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FormButton } from '@terraware/web-components';
+import { BusySpinner, FormButton } from '@terraware/web-components';
 import TfMain from 'src/components/common/TfMain';
 import PageForm from 'src/components/common/PageForm';
 import strings from 'src/strings';
@@ -57,6 +57,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   const [report, setReport] = useState<Report>();
 
   const [validateFields, setValidateFields] = useState(false);
+
+  const [busyState, setBusyState] = useState(false);
 
   useEffect(() => {
     const getReport = async () => {
@@ -134,6 +136,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   const gotoReportView = async (saveChanges: boolean) => {
     let saveResult;
     if (saveChanges && report) {
+      setBusyState(true);
       saveResult = await ReportService.updateReport(report);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
@@ -142,6 +145,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         await updateFiles();
         await updatePhotos(report.id);
       }
+      setBusyState(false);
     }
 
     if (!saveResult || saveResult.requestSucceeded) {
@@ -170,6 +174,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const handleSaveAndNext = async () => {
     if (report) {
+      setBusyState(true);
       const saveResult = await ReportService.updateReport(report);
       switchPages('annual');
       setValidateFields(false);
@@ -180,11 +185,13 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         await updateFiles();
         await updatePhotos(report.id);
       }
+      setBusyState(false);
     }
   };
 
   const handleBack = async () => {
     if (report) {
+      setBusyState(true);
       const saveResult = await ReportService.updateReport(report);
       switchPages('quarterly');
       if (!saveResult.requestSucceeded) {
@@ -192,6 +199,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       } else {
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       }
+      setBusyState(false);
     }
   };
 
@@ -303,6 +311,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const submitReport = async () => {
     if (report) {
+      setBusyState(true);
       const saveResult = await ReportService.updateReport(report);
       if (saveResult.requestSucceeded) {
         await updateFiles();
@@ -316,6 +325,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       } else {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       }
+      setBusyState(false);
     }
   };
 
@@ -447,6 +457,9 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         onCancel={() => setConfirmSubmitDialogOpen(false)}
         onSubmit={submitReport}
       />
+      {busyState && (
+        <BusySpinner withSkrim={true}/>
+      )}
       <Box padding={theme.spacing(3)}>
         <Typography fontSize='24px' fontWeight={600}>
           {report ? `Report (${report?.year}-Q${report?.quarter})` : ''}
