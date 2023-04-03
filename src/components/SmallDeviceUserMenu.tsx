@@ -51,8 +51,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   closeIcon: {
     fill: theme.palette.TwClrIcnSecondary,
-    width: '27px',
-    height: '27px',
   },
   userMenuOpened: {
     '& .blurred': {
@@ -67,11 +65,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   menuItem: {
     fontSize: '14px',
-    padding: '16px 0',
+    padding: '16px 16px',
     display: 'flex',
+    fontWeight: 500,
+    borderRadius: '16px',
   },
-  checkmarkIcon: {
-    marginLeft: 'auto',
+  menuItemSelected: {
+    backgroundColor: theme.palette.TwClrBgGhostActive,
   },
   menuList: {
     display: 'flex',
@@ -175,17 +175,34 @@ export default function SmallDeviceUserMenu({
                   className={classes.menuList}
                 >
                   <Box sx={{ display: 'flex' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
+                    <button onClick={handleClose} className={classes.closeButton}>
+                      <Icon name='close' size='medium' className={classes.closeIcon} />
+                    </button>
+                  </Box>
+                  <Typography
+                    sx={{
+                      paddingLeft: '16px',
+                      paddingBottom: '16px',
+                      color: theme.palette.TwClrTxt,
+                      fontSize: '12px',
+                      fontWeight: 400,
+                    }}
+                  >
+                    {strings.ACCOUNT.toUpperCase()}
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: '16px' }}>
+                    <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
+                    <div>
                       <Typography sx={{ paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
                         {user?.firstName} {user?.lastName}
                       </Typography>
-                    </Box>
-                    <button onClick={handleClose} className={classes.closeButton}>
-                      <Icon name='close' className={classes.closeIcon} />
-                    </button>
+                      <Typography
+                        sx={{ paddingLeft: '8px', fontSize: '12px', fontWeight: 400, color: theme.palette.TwClrTxt }}
+                      >
+                        {user?.email}
+                      </Typography>
+                    </div>
                   </Box>
-                  <Divider sx={{ margin: '16px 0' }} />
                   <MenuItem
                     onClick={(e) => {
                       navigate(APP_PATHS.MY_ACCOUNT);
@@ -204,7 +221,18 @@ export default function SmallDeviceUserMenu({
                   >
                     {strings.LOG_OUT}
                   </MenuItem>
-                  {hasOrganizations ? <Divider className={classes.divider} sx={{ margin: '16px 0' }} /> : null}
+                  <Divider className={classes.divider} sx={{ margin: '16px 0' }} />
+                  <Typography
+                    sx={{
+                      paddingLeft: '16px',
+                      paddingBottom: '16px',
+                      color: theme.palette.TwClrTxt,
+                      fontSize: '12px',
+                      fontWeight: 400,
+                    }}
+                  >
+                    {strings.ORGANIZATIONS.toUpperCase()}
+                  </Typography>
                   {hasOrganizations ? (
                     <div className={classes.orgsList}>
                       {organizations?.map((org, index) => {
@@ -214,41 +242,31 @@ export default function SmallDeviceUserMenu({
                               selectOrganization(org);
                               handleClose(e);
                             }}
-                            className={classes.menuItem}
+                            className={
+                              selectedOrganization.id === org.id
+                                ? `${classes.menuItem} ${classes.menuItemSelected}`
+                                : classes.menuItem
+                            }
                             key={`item-${index}`}
                           >
-                            <Typography
-                              sx={{ fontSize: '14px', fontWeight: selectedOrganization.id === org.id ? 600 : 400 }}
-                            >
-                              {org.name}
-                            </Typography>
-                            {selectedOrganization.id === org.id ? (
-                              <Box className={classes.checkmarkIcon}>
-                                <Icon name='checkmark' />
-                              </Box>
-                            ) : null}
+                            {org.name}
                           </MenuItem>
                         );
                       })}
                     </div>
                   ) : null}
-                  {hasOrganizations ? (
-                    <>
-                      <MenuItem className={classes.menuItem}> --- </MenuItem>
-                      <MenuItem
-                        onClick={(e) => {
-                          handleClose(e);
-                          setNewOrganizationModalOpened(true);
-                        }}
-                        className={classes.menuItem}
-                      >
-                        {strings.CREATE_NEW_ORGANIZATION}
-                      </MenuItem>
-                    </>
-                  ) : null}
+                  <MenuItem
+                    onClick={(e) => {
+                      handleClose(e);
+                      setNewOrganizationModalOpened(true);
+                    }}
+                    className={classes.menuItem}
+                  >
+                    <Icon name='plus' />
+                    &nbsp;{strings.CREATE_NEW_ORGANIZATION}
+                  </MenuItem>
                   {!isProduction && hasOrganizations ? (
                     <>
-                      <MenuItem className={classes.menuItem}> --- </MenuItem>
                       <MenuItem
                         onClick={(e) => {
                           navigate(APP_PATHS.OPT_IN);
