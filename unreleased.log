@@ -1,3 +1,4 @@
+5119a7f6 SW-2704 / SW-2705 Update styles of nav and user menus on mobile (#1338)
 26cff6f1 Bump @types/node from 15.14.9 to 18.15.11 (#1341)
 873cc633 SW-3365 Require Best Months For Observation (#1342)
 cb386dd3 SW-3352 Update generated-types and completely remove mortalityRateInNursery (#1337)
