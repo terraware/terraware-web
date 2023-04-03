@@ -14,6 +14,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   hiddenInput: {
     display: 'none',
   },
+  noDisplayTextField: {
+    '& .textfield-value--display': {
+      display: 'none',
+    },
+    '& .textfield-label-container': {
+      marginTop: theme.spacing(1),
+    },
+  },
   quarterPage: {
     '& textarea': {
       minHeight: '240px',
@@ -240,6 +248,20 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           />
         </Grid>
       ))}
+      <Grid item xs={12} paddingTop={0} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
+        <Textfield
+          label=''
+          id='observations-months-validation'
+          type='text'
+          display={true}
+          className={classes.noDisplayTextField}
+          errorText={
+            validate && (report.annualDetails?.bestMonthsForObservation?.length ?? 0) === 0
+              ? strings.BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR
+              : ''
+          }
+        />
+      </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
           title={strings.PROJECT_SUMMARY_REQUIRED}
