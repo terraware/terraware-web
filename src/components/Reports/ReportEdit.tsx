@@ -248,6 +248,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       return false;
     }
     return (
+      (iReport.annualDetails?.bestMonthsForObservation?.length ?? 0) === 0 ||
       !iReport.annualDetails?.projectSummary ||
       overWordLimit(iReport.annualDetails?.projectSummary, 100) ||
       !iReport.annualDetails?.projectImpact ||
