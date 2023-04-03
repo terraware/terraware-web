@@ -12,6 +12,6 @@ export default function WrappedPageForm(props: PageFormProps): JSX.Element {
   return PageForm({
     ...formProps,
     saveButtonText: saveButtonText || strings.SAVE,
-    cancelButtonText: saveButtonText || strings.CANCEL,
+    cancelButtonText: cancelButtonText || strings.CANCEL,
   });
 }

@@ -23,6 +23,13 @@ import {
   operationStartedDateValid,
 } from 'src/components/Reports/LocationSection';
 import { overWordLimit } from 'src/utils/text';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  form: {
+    paddingBottom: '250px',
+  },
+}));
 
 export type ReportEditProps = {
   organization: Organization;
@@ -34,6 +41,8 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   const { user } = useUser();
 
   const theme = useTheme();
+
+  const classes = useStyles();
 
   const history = useHistory();
 
@@ -439,6 +448,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
       </Box>
       {report && (
         <PageForm
+          className={classes.form}
           cancelID='cancelEdits'
           saveID='submitReport'
           onCancel={() => gotoReportView(false)}
