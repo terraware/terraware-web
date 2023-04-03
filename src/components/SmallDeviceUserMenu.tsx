@@ -179,19 +179,29 @@ export default function SmallDeviceUserMenu({
                       <Icon name='close' size='medium' className={classes.closeIcon} />
                     </button>
                   </Box>
-                  <Typography sx={{ paddingLeft: '16px', paddingBottom: '16px', color: theme.palette.TwClrTxt, fontSize: '12px', fontWeight: 400 }}>
-                        {strings.ACCOUNT.toUpperCase()}
+                  <Typography
+                    sx={{
+                      paddingLeft: '16px',
+                      paddingBottom: '16px',
+                      color: theme.palette.TwClrTxt,
+                      fontSize: '12px',
+                      fontWeight: 400,
+                    }}
+                  >
+                    {strings.ACCOUNT.toUpperCase()}
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: '16px' }}>
-                      <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
-                      <div>
-                        <Typography sx={{ paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
-                          {user?.firstName} {user?.lastName}
-                        </Typography>
-                        <Typography sx={{ paddingLeft: '8px', fontSize: '12px', fontWeight: 400, color: theme.palette.TwClrTxt }}>
-                          {user?.email}
-                        </Typography>
-                      </div>
+                    <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
+                    <div>
+                      <Typography sx={{ paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
+                        {user?.firstName} {user?.lastName}
+                      </Typography>
+                      <Typography
+                        sx={{ paddingLeft: '8px', fontSize: '12px', fontWeight: 400, color: theme.palette.TwClrTxt }}
+                      >
+                        {user?.email}
+                      </Typography>
+                    </div>
                   </Box>
                   <MenuItem
                     onClick={(e) => {
@@ -212,8 +222,16 @@ export default function SmallDeviceUserMenu({
                     {strings.LOG_OUT}
                   </MenuItem>
                   <Divider className={classes.divider} sx={{ margin: '16px 0' }} />
-                  <Typography sx={{ paddingLeft: '16px', paddingBottom: '16px', color: theme.palette.TwClrTxt, fontSize: '12px', fontWeight: 400 }}>
-                        {strings.ORGANIZATIONS.toUpperCase()}
+                  <Typography
+                    sx={{
+                      paddingLeft: '16px',
+                      paddingBottom: '16px',
+                      color: theme.palette.TwClrTxt,
+                      fontSize: '12px',
+                      fontWeight: 400,
+                    }}
+                  >
+                    {strings.ORGANIZATIONS.toUpperCase()}
                   </Typography>
                   {hasOrganizations ? (
                     <div className={classes.orgsList}>
@@ -224,7 +242,11 @@ export default function SmallDeviceUserMenu({
                               selectOrganization(org);
                               handleClose(e);
                             }}
-                            className={selectedOrganization.id === org.id ? (`${classes.menuItem} ${classes.menuItemSelected}`) : classes.menuItem}
+                            className={
+                              selectedOrganization.id === org.id
+                                ? `${classes.menuItem} ${classes.menuItemSelected}`
+                                : classes.menuItem
+                            }
                             key={`item-${index}`}
                           >
                             {org.name}
@@ -240,7 +262,8 @@ export default function SmallDeviceUserMenu({
                     }}
                     className={classes.menuItem}
                   >
-                    <Icon name='plus'/>&nbsp;{strings.CREATE_NEW_ORGANIZATION}
+                    <Icon name='plus' />
+                    &nbsp;{strings.CREATE_NEW_ORGANIZATION}
                   </MenuItem>
                   {!isProduction && hasOrganizations ? (
                     <>
