@@ -457,9 +457,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         onCancel={() => setConfirmSubmitDialogOpen(false)}
         onSubmit={submitReport}
       />
-      {busyState && (
-        <BusySpinner withSkrim={true}/>
-      )}
+      {busyState && <BusySpinner withSkrim={true} />}
       <Box padding={theme.spacing(3)}>
         <Typography fontSize='24px' fontWeight={600}>
           {report ? `Report (${report?.year}-Q${report?.quarter})` : ''}
