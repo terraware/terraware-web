@@ -15,3 +15,9 @@ phrase:
             en: 2
           update_descriptions: true
           update_translations: true
+
+  pull:
+    targets:
+      - file: ./src/strings/csv/<locale_name>.csv
+        params:
+          encoding: UTF-8
