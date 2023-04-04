@@ -43,7 +43,18 @@ function stringsToJS(stringsMap) {
   return `export const strings = ${json};\n`;
 }
 
-async function exportStrings(stringsMap, locale, targetDir) {
+async function exportStrings(englishStrings, localizedStrings, locale, targetDir) {
+  const stringsMap = {};
+  for (let key in englishStrings) {
+    if (key in localizedStrings) {
+      stringsMap[key] = localizedStrings[key];
+    } else {
+      // tslint:disable-next-line:no-console
+      console.warn(`Locale ${locale} has no translation for ${key}`);
+      stringsMap[key] = englishStrings[key];
+    }
+  }
+
   const javascript = stringsToJS(stringsMap);
 
   const exportPath = path.resolve(targetDir, `strings-${locale}.js`);
@@ -53,6 +64,8 @@ async function exportStrings(stringsMap, locale, targetDir) {
 
 /**
  * Converts a CSV strings file to a JavaScript source file that exports a constant called "strings".
+ * This will be an object that has the same keys as the English strings file; the English strings
+ * will be used for any keys that aren't translated yet.
  *
  * @param {string} [csvPath] - Location of CSV file. The filename is assumed to be the locale
  * code with a ".csv" suffix.
@@ -68,10 +81,19 @@ async function convertCsvFile(csvPath, targetDir) {
   const csvData = await fs.readFile(csvPath, { encoding: 'utf-8' });
   const stringsMap = csvToStrings(csvData);
 
-  await exportStrings(stringsMap, locale, targetDir);
+  let englishStringsMap;
+  if (locale === 'en') {
+    englishStringsMap = stringsMap;
+  } else {
+    const englishPath = path.resolve(path.dirname(csvPath), 'en.csv');
+    const englishCsvData = await fs.readFile(englishPath, { encoding: 'utf-8' });
+    englishStringsMap = csvToStrings(englishCsvData);
+  }
+
+  await exportStrings(englishStringsMap, stringsMap, locale, targetDir);
 
   if (locale === 'en') {
-    await exportStrings(generateGibberish(stringsMap), 'gx', targetDir);
+    await exportStrings(englishStringsMap, generateGibberish(englishStringsMap), 'gx', targetDir);
   }
 }
 
