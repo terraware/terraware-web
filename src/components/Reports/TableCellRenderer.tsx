@@ -5,6 +5,7 @@ import { RendererProps } from '../common/table/types';
 import Link from '../common/Link';
 import { DateTime } from 'luxon';
 import strings from 'src/strings';
+import { statusName } from 'src/types/Report';
 
 export default function ReportsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, index } = props;
@@ -21,22 +22,7 @@ export default function ReportsCellRenderer(props: RendererProps<TableRowType>):
   }
 
   if (column.key === 'status') {
-    let statusValue = '';
-    switch (row.status) {
-      case 'New':
-        statusValue = strings.NEW;
-        break;
-      case 'In Progress':
-        statusValue = strings.IN_PROGRESS;
-        break;
-      case 'Locked':
-        statusValue = strings.LOCKED;
-        break;
-      case 'Submitted':
-        statusValue = strings.SUBMITTED;
-        break;
-    }
-    return <CellRenderer index={index} row={row} column={column} value={statusValue} />;
+    return <CellRenderer index={index} row={row} column={column} value={statusName(row.status)} />;
   }
 
   if (column.key === 'submittedTime') {
