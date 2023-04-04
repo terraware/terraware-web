@@ -83,8 +83,8 @@ async function convertCsvFile(csvPath, targetDir) {
   if (locale === 'en') {
     englishStringsMap = stringsMap;
   } else {
-    const englishPath = path.resolve(path.dirname(csvPath), "en.csv");
-    const englishCsvData = await fs.readFile(englishPath, { encoding: 'utf-8'});
+    const englishPath = path.resolve(path.dirname(csvPath), 'en.csv');
+    const englishCsvData = await fs.readFile(englishPath, { encoding: 'utf-8' });
     englishStringsMap = csvToStrings(englishCsvData);
   }
 
