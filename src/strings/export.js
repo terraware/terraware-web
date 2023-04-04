@@ -19,6 +19,8 @@ function csvToStrings(csvData) {
   const rows = parse(csvData, {
     // Skip header row
     from: 2,
+    // Only rows for strings that have comments have 3 fields.
+    relax_column_count_less: true,
     // Skip empty "row" that is really just the terminating linefeed
     skip_empty_lines: true,
   });
