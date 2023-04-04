@@ -223,7 +223,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
+        <Typography id='observation-months' fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
           {strings.BEST_MONTHS_FOR_OBSERVATIONS}
         </Typography>
         <Typography
@@ -264,6 +264,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
+          id='project-summary'
           title={strings.PROJECT_SUMMARY_REQUIRED}
           instructions={strings.PROJECT_SUMMARY_INSTRUCTIONS}
           editable={editable}
@@ -295,6 +296,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
+          id='project-impact'
           title={strings.PROJECT_IMPACT_REQUIRED}
           instructions={strings.PROJECT_IMPACT_INSTRUCTIONS}
           pageSize='full'
@@ -311,6 +313,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
+          id='budget-narrative'
           title={strings.BUDGET_NARRATIVE_SUMMARY_REQUIRED}
           instructions={strings.BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS}
           pageSize='half'
@@ -364,6 +367,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
+          id='social-impact'
           title={strings.SOCIAL_IMPACT_REQUIRED}
           instructions={strings.SOCIAL_IMPACT_INSTRUCTIONS}
           pageSize='half'
@@ -379,7 +383,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         />
       </Grid>
       <Grid item xs={12}>
-        <Typography fontSize='20px' fontWeight={600}>
+        <Typography id='sdg' fontSize='20px' fontWeight={600}>
           {strings.SUSTAINABLE_DEVELOPMENT_GOALS}
         </Typography>
       </Grid>
@@ -432,6 +436,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       <br />
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
+          id='challenges'
           title={strings.CHALLENGES_REQUIRED}
           instructions={strings.CHALLENGES_INSTRUCTIONS}
           pageSize='full'
@@ -448,6 +453,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
+          id='key-lessons'
           title={strings.KEY_LESSONS_REQUIRED}
           instructions={strings.KEY_LESSONS_INSTRUCTIONS}
           pageSize='half'
@@ -464,6 +470,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
+          id='success-stories'
           title={strings.SUCCESS_STORIES_REQUIRED}
           instructions={strings.SUCCESS_STORIES_INSTRUCTIONS}
           pageSize='half'
@@ -494,7 +501,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       {isCatalytic && (
         <Grid item xs={mediumItemGridWidth()}>
           <Textfield
-            id={`catalyticDetail-field`}
+            id={`catalytic-detail`}
             type='textarea'
             className={classes.quarterPage}
             label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
@@ -516,6 +523,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       )}
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
+          id='opportunities'
           title={strings.OPPORTUNITIES_REQUIRED}
           instructions={strings.OPPORTUNITIES_INSTRUCTIONS}
           pageSize='quarter'
@@ -532,6 +540,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
+          id='next-steps'
           title={strings.NEXT_STEPS_REQUIRED}
           instructions={strings.NEXT_STEPS_INSTRUCTIONS}
           pageSize='quarter'
@@ -551,6 +560,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
 }
 
 type ReportFieldProps = {
+  id: string;
   title: string;
   instructions: string;
   editable: boolean;
@@ -561,17 +571,17 @@ type ReportFieldProps = {
 };
 
 function ReportField(props: ReportFieldProps): JSX.Element {
-  const { title, instructions, editable, value, onChange, errorText, pageSize } = props;
+  const { id, title, instructions, editable, value, onChange, errorText, pageSize } = props;
   const theme = useTheme();
   const classes = useStyles();
   return (
     <>
-      <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
+      <Typography id={id} fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
         {title}
       </Typography>
       <Textfield
+        id={`${id}-input`}
         label={instructions}
-        id={`${title}-field`}
         type='textarea'
         display={!editable}
         onChange={(v) => onChange(v as string)}
