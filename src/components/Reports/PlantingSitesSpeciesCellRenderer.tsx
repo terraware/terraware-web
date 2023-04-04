@@ -47,6 +47,28 @@ export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: 
       }
     };
 
+    if (column.key === 'growthForm') {
+      let growthFormValue = '';
+      switch (row.growthForm) {
+        case 'Tree':
+          growthFormValue = strings.TREE;
+          break;
+        case 'Shrub':
+          growthFormValue = strings.SHRUB;
+          break;
+        case 'Forb':
+          growthFormValue = strings.FORB;
+          break;
+        case 'Graminoid':
+          growthFormValue = strings.GRAMINOID;
+          break;
+        case 'Fern':
+          growthFormValue = strings.FERN;
+          break;
+      }
+      return <CellRenderer index={index} row={row} column={column} value={growthFormValue} />;
+    }
+
     if (editMode && (column.key === 'totalPlanted' || column.key === 'mortalityRateInField')) {
       return (
         <CellRenderer
