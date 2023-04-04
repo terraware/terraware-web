@@ -4,7 +4,6 @@ import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 import Link from '../common/Link';
 import { DateTime } from 'luxon';
-import strings from 'src/strings';
 import { statusName } from 'src/types/Report';
 
 export default function ReportsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
