@@ -151,7 +151,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         <Textfield
           label={strings.SUMMARY_OF_PROGRESS_REQUIRED}
           placeholder={strings.SUMMARY_OF_PROGRESS_DESCRIPTION}
-          id='summary'
+          id='summary-of-progress'
           type='textarea'
           display={!editable}
           value={summaryOfProgress}
@@ -230,7 +230,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
               {index !== 0 && <Grid item xs={12} className={classes.section} />}
               <Grid item xs={12}>
                 <Checkbox
-                  id={seedbank.id.toString()}
+                  id={`seedbank-${index}`}
                   disabled={!editable}
                   name={seedbank.name}
                   label={seedbank.name}
@@ -270,7 +270,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
               {index !== 0 && <Grid item xs={12} className={classes.section} />}
               <Grid item xs={12}>
                 <Checkbox
-                  id={nursery.id.toString()}
+                  id={`nursery-${index}`}
                   disabled={!editable}
                   name={nursery.name}
                   label={nursery.name}
@@ -311,7 +311,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
               {index !== 0 && <Grid item xs={12} className={classes.section} />}
               <Grid item xs={12}>
                 <Checkbox
-                  id={plantingSite.id.toString()}
+                  id={`planting-site-${index}`}
                   disabled={!editable}
                   name={plantingSite.name}
                   label={plantingSite.name}

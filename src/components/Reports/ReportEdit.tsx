@@ -58,6 +58,15 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
 
   const [validateFields, setValidateFields] = useState(false);
 
+  const [idInView, setIdInView] = useState('');
+  useEffect(() => {
+    const el = document.getElementById(idInView);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      setIdInView('');
+    }
+  }, [idInView]);
+
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
@@ -183,14 +192,16 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
     }
   };
 
-  const handleBack = async () => {
+  const handleBack = async (hideToast?: boolean) => {
     if (report) {
       const saveResult = await ReportService.updateReport(report);
       switchPages('quarterly');
-      if (!saveResult.requestSucceeded) {
-        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
-      } else {
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
+      if (!hideToast) {
+        if (!saveResult.requestSucceeded) {
+          snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+        } else {
+          snackbar.toastSuccess(strings.CHANGES_SAVED);
+        }
       }
     }
   };
@@ -209,6 +220,10 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
   }, [snackbar]);
 
   const hasEmptyRequiredFields = (iReport: Report) => {
+    if (!iReport.summaryOfProgress) {
+      return 'summary-of-progress';
+    }
+
     const emptyWorkerField = (location: any) => {
       return (
         location.workers.paidWorkers === null ||
@@ -216,7 +231,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         location.workers.volunteers === null
       );
     };
-    const emptySeedbankFields = iReport.seedBanks?.some((sb) => {
+    const emptySeedbankFields = iReport.seedBanks?.findIndex((sb) => {
       return (
         sb.selected &&
         (!sb.buildStartedDate ||
@@ -228,7 +243,11 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
           emptyWorkerField(sb))
       );
     });
-    const emptyNurseryFields = iReport.nurseries?.some((nursery) => {
+    if (emptySeedbankFields !== undefined && emptySeedbankFields >= 0) {
+      return `seedbank-${emptySeedbankFields}`;
+    }
+
+    const emptyNurseryFields = iReport.nurseries?.findIndex((nursery) => {
       return (
         nursery.selected &&
         (!nursery.buildStartedDate ||
@@ -241,7 +260,11 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
           emptyWorkerField(nursery))
       );
     });
-    const emptyPlantingSitesFields = iReport.plantingSites?.some((plantingSite) => {
+    if (emptyNurseryFields !== undefined && emptyNurseryFields >= 0) {
+      return `nursery-${emptyNurseryFields}`;
+    }
+
+    const emptyPlantingSitesFields = iReport.plantingSites?.findIndex((plantingSite) => {
       const speciesDataMissing =
         plantingSite.species?.some((sp) => sp.totalPlanted === null || sp.mortalityRateInField === null) ?? false;
       return (
@@ -255,46 +278,64 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
           emptyWorkerField(plantingSite))
       );
     });
-    return !iReport.summaryOfProgress || emptySeedbankFields || emptyNurseryFields || emptyPlantingSitesFields;
+    if (emptyPlantingSitesFields !== undefined && emptyPlantingSitesFields >= 0) {
+      return `planting-site-${emptyPlantingSitesFields}`;
+    }
+
+    return '';
   };
 
   const hasEmptyRequiredAnnualFields = (iReport: Report) => {
     if (!iReport.isAnnual) {
-      return false;
+      return '';
     }
-    return (
-      (iReport.annualDetails?.bestMonthsForObservation?.length ?? 0) === 0 ||
-      !iReport.annualDetails?.projectSummary ||
-      overWordLimit(iReport.annualDetails?.projectSummary, 100) ||
-      !iReport.annualDetails?.projectImpact ||
-      !iReport.annualDetails?.budgetNarrativeSummary ||
-      !iReport.annualDetails?.socialImpact ||
-      !iReport.annualDetails?.challenges ||
-      !iReport.annualDetails?.keyLessons ||
-      !iReport.annualDetails?.successStories ||
-      !iReport.annualDetails?.opportunities ||
-      !iReport.annualDetails?.nextSteps ||
-      (iReport.annualDetails?.isCatalytic && !iReport.annualDetails?.catalyticDetail) ||
-      iReport.annualDetails?.sustainableDevelopmentGoals.some((sdg) => !sdg?.progress)
-    );
+
+    if ((iReport.annualDetails?.bestMonthsForObservation?.length ?? 0) === 0) {
+      return 'observation-months';
+    } else if (!iReport.annualDetails?.projectSummary || overWordLimit(iReport.annualDetails?.projectSummary, 100)) {
+      return 'project-summary';
+    } else if (!iReport.annualDetails?.projectImpact) {
+      return 'project-impact';
+    } else if (!iReport.annualDetails?.budgetNarrativeSummary) {
+      return 'budget-narrative';
+    } else if (!iReport.annualDetails?.socialImpact) {
+      return 'social-impact';
+    } else if (iReport.annualDetails?.sustainableDevelopmentGoals.some((sdg) => !sdg?.progress)) {
+      return 'sdg';
+    } else if (!iReport.annualDetails?.challenges) {
+      return 'challenges';
+    } else if (!iReport.annualDetails?.keyLessons) {
+      return 'key-lessons';
+    } else if (!iReport.annualDetails?.successStories) {
+      return 'success-stories';
+    } else if (iReport.annualDetails?.isCatalytic && !iReport.annualDetails?.catalyticDetail) {
+      return 'catalytic-detail';
+    } else if (!iReport.annualDetails?.opportunities) {
+      return 'opportunities';
+    } else if (!iReport.annualDetails?.nextSteps) {
+      return 'next-steps';
+    } else {
+      return '';
+    }
   };
 
   const handleSubmitButton = () => {
     if (report) {
-      if (hasEmptyRequiredFields(report)) {
-        setConfirmSubmitDialogOpen(false);
+      const invalidField = hasEmptyRequiredFields(report);
+      if (invalidField !== '') {
         if (showAnnual) {
-          handleBack();
+          handleBack(true).then(() => setIdInView(invalidField));
         }
         setValidateFields(true);
         snackbar.toastError(strings.GENERIC_ERROR, strings.FILL_OUT_ALL_FIELDS);
         return;
       }
-      if (hasEmptyRequiredAnnualFields(report)) {
-        setConfirmSubmitDialogOpen(false);
+
+      const invalidAnnualField = hasEmptyRequiredAnnualFields(report);
+      if (invalidAnnualField !== '') {
+        setIdInView(invalidAnnualField);
         setValidateFields(true);
         snackbar.toastError(strings.GENERIC_ERROR, strings.FILL_OUT_ALL_FIELDS);
-        goToTop();
         return;
       }
     }
