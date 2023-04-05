@@ -1,3 +1,11 @@
+#
+# Specify where our strings live.
+#
+# This is read by Phrase when it does a GitHub import.
+#
+# Documentation (see especially the sample config file linked from this page):
+# https://support.phrase.com/hc/en-us/articles/5784093898908-Create-a-CLI-Configuration-File-Strings-
+#
 phrase:
   project_id: '8c9d8895494d179a2412d18b31e38203'
   file_format: csv
