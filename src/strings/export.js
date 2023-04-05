@@ -43,8 +43,38 @@ function stringsToJS(stringsMap) {
   return `export const strings = ${json};\n`;
 }
 
+/**
+ * Returns a list of extra strings to include in the string table for a locale. This is necessary
+ * because Phrase doesn't work well with punctuation-only strings such as list separators; including
+ * them in a translation order can cause the order to get stuck indefinitely.
+ *
+ * @param {string} [locale] - Locale whose extra strings should be returned.
+ * @return {{LIST_SEPARATOR_SECONDARY: string, LIST_SEPARATOR: string, TRUNCATED_TEXT_MORE_SEPARATOR: string}}
+ */
+function extraStrings(locale) {
+  if (locale.startsWith('gx')) {
+    return {
+      LIST_SEPARATOR: '_ ',
+      LIST_SEPARATOR_SECONDARY: '! ',
+      TRUNCATED_TEXT_MORE_SEPARATOR: ',,,',
+    };
+  } else if (locale.startsWith('zh')) {
+    return {
+      LIST_SEPARATOR: '、',
+      LIST_SEPARATOR_SECONDARY: '；',
+      TRUNCATED_TEXT_MORE_SEPARATOR: '……',
+    };
+  } else {
+    return {
+      LIST_SEPARATOR: ', ',
+      LIST_SEPARATOR_SECONDARY: '; ',
+      TRUNCATED_TEXT_MORE_SEPARATOR: '...',
+    };
+  }
+}
+
 async function exportStrings(englishStrings, localizedStrings, locale, targetDir) {
-  const stringsMap = {};
+  const stringsMap = extraStrings(locale);
   for (let key in englishStrings) {
     if (key in localizedStrings) {
       stringsMap[key] = localizedStrings[key];
