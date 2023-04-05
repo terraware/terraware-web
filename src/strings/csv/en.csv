@@ -302,7 +302,7 @@ EST_READY_DATE,Est. Ready Date
 ESTIMATED_DRYING_END_DATE,Estimated Drying End Date
 ESTIMATED_READY_DATE,Estimated Ready Date
 ESTIMATED_SEEDS_INCOMING,Estimated Seeds Incoming
-EXISTING_SPECIES_MSG,“{0}” is already in your species list. 
+EXISTING_SPECIES_MSG,“{0}” is already in your species list.
 EXPORT,Export
 EXPORT_RECORDS,Export Records
 FACILITY,Facility
@@ -1058,7 +1058,7 @@ TOTAL_SEEDS_TESTED,Total Seeds Tested
 TOTAL_SEEDS_TESTED_ERROR,Seeds tested should not be more than remaining seeds
 TOTAL_TREES_PLANTED,Total Trees Planted *
 TOTAL_TREES_PLANTED_HELPER_TEXT,Species classified as “trees” in the species list.
-TOTAL_WEIGHT,Total Weight 
+TOTAL_WEIGHT,Total Weight
 TOTAL_WEIGHT_OF_SEEDS,Total Weight of Seeds
 TOTAL_WITHDRAW,Total Withdraw
 TOTAL_WITHDRAWN,Total Withdrawn
