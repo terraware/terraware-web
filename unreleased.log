@@ -1,3 +1,4 @@
+e50a2a9a SW-3272 Add Phrase config file (#1354)
 c566dc58 SW-3272 Remove translatable punctuation strings (#1352)
 e0f0c550 SW-3272 Include all English keys in JS strings (#1351)
 5def3f03 SW-3272 Use Phrase export format for English strings (#1350)
