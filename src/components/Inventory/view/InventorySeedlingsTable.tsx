@@ -31,7 +31,7 @@ interface InventorySeedslingsTableProps {
 export default function InventorySeedslingsTable(props: InventorySeedslingsTableProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { speciesId, modified, setModified, openBatchNumber, onUpdateOpenBatch } = props;
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isDesktop } = useDeviceInfo();
   const theme = useTheme();
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
   const [batches, setBatches] = useState<any[]>([]);
@@ -243,6 +243,8 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             justifyContent: 'space-between',
             alignItems: 'center',
             marginBottom: theme.spacing(4),
+            width: (isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 76px)'),
+            maxWidth: '100%',
           }}
         >
           <Typography
