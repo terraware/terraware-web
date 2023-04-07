@@ -243,7 +243,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
             justifyContent: 'space-between',
             alignItems: 'center',
             marginBottom: theme.spacing(4),
-            width: (isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 76px)'),
+            width: isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 76px)',
             maxWidth: '100%',
           }}
         >
