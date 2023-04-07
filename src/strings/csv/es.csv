@@ -94,8 +94,8 @@ ASSIGN_NEW_OWNER,Asignar Dueño Nuevo
 ASSIGN_NEW_OWNER_DESC,Debe asignar un dueño nuevo para retirar el dueño actual.
 AUTOCALCULATED,(Calculado automáticamente)
 AVAILABLE,disponible
-AWAITING_CHECK_IN,Esperando Registro
-AWAITING_PROCESSING,Esperando Proceso
+AWAITING_CHECK_IN,Pendiente de facturación
+AWAITING_PROCESSING,Pendiente de tramitación
 BACK,Atrás
 BACK_OF_SEED_BANK,Parte de Atrás del Banco de Semillas
 BACK_TO_TERRAWARE,Volver a Terraware
@@ -241,9 +241,9 @@ DOWNLOAD_FAILED_DESCRIPTION,La descarga ha fallado. Envía un correo electrónic
 DOWNLOAD_IN_PROGRESS,Descarga en curso...
 DOWNLOAD_REPORT_DESCRIPTION,"Está a punto de descargar esta tabla de datos como informe. Este archivo csv se encuentra en la sección Descargas. Por favor, asigne un nombre a su informe."
 DOWNLOAD_THE_CSV_TEMPLATE,Descargar la plantilla CSV.
-DRIED,Secado
+DRIED,Seco
 DRY_CABINET,Armario de secado
-DRYING,Secar
+DRYING,Secando
 DRYING_END_DATE,Fecha estimada de finalización del secado
 DRYING_RACKS,Bastidores de secado
 DRYING_START_DATE,Fecha de inicio del secado
@@ -401,7 +401,7 @@ IMPORTING_ACCESSIONS,Importando accesiones... esto puede tardar unos minutos.
 IMPORTING_INVENTORY,Importando inventario... esto puede tardar unos minutos.
 IMPORTING_SPECIES,Importando especies... esto puede tardar unos minutos
 IN_PROGRESS,En curso
-IN_STORAGE,En almacenamiento
+IN_STORAGE,En almacén
 INCLUDE_EMPTY_FIELDS,Incluir campos vacíos
 INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.
 INITIAL_SEEDS,Semillas iniciales
@@ -671,7 +671,7 @@ PRIVACY_POLICY,Política de privacidad
 PROBLEMS,Problemas
 PROCESSED,Procesado
 PROCESSED_AND_DRIED_BY,Procesado y secado por
-PROCESSING,En proceso
+PROCESSING,Procesando
 PROCESSING_AND_DRYING,Procesamiento y secado
 PROCESSING_AND_DRYING_DESCRIPTION,Todos los detalles sobre el procesamiento y el secado de las semillas.
 PROCESSING_AND_DRYING_INFO,"Al añadir información sobre el procesamiento y el secado y guardar los cambios, usted cambiará automáticamente la etapa de esta accesión de Pendiente a En proceso, Procesada, En secado o Secada, según la información que introduzca."
@@ -842,7 +842,7 @@ SEED_STORAGE_BEHAVIOR,Ver comportamiento de almacenamiento
 SEED_TYPE,Tipo de semilla
 SEED_WEIGHT,Peso de semillas
 SEEDLING_BATCH,Lote de plántula
-SEEDLING_BATCH_DETAILS,Detalles del lote de plántula
+SEEDLING_BATCH_DETAILS,Detalles lote de plántula
 SEEDLINGS,Plántulas
 SEEDLINGS_BATCHES,Lotes de plántulas
 SEEDLINGS_PLURAL,plántulas
@@ -1093,7 +1093,7 @@ UPLOAD_PHOTO_DESCRIPTION,"Busca o arrastra y coloca aquí un archivo (JPG, PNG).
 UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Buscar archivos (JPG, PNG)."
 UPLOAD_PHOTOS,Cargar foto(s)
 USE_ORGANIZATION_TIME_ZONE,Utilizar zona horaria de la organización
-USED_UP,Utilizado
+USED_UP,Agotado
 USER_NOTIFICATION_ACTION,"Para cambiar las preferencias, ve a [“Mi cuenta”]"
 VALUE_CANT_EXCEED_100,El valor no puede sobrepasar 100%
 VIABILITY,Viabilidad
@@ -1147,7 +1147,7 @@ WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Ingresar una cantidad en al menos una 
 WITHDRAWAL_DESCRIPTION,Todos los detalles acerca de la extracción de las semillas.
 WITHDRAWAL_DETAILS,Detalles de extracción
 WITHDRAWAL_LOG,Registro de extracción
-WITHDRAWN,Extraída
+WITHDRAWN,Retirada
 WITHDRAWN_BY,Extraída por
 WITHDRAWN_DATE,Fecha de extracción
 WITHDRAWN_ON,Extraída el
