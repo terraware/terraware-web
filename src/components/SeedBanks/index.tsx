@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.TwClrBg,
     padding: theme.spacing(3),
     borderRadius: '32px',
+    minWidth: 'fit-content',
   },
   searchField: {
     width: '300px',

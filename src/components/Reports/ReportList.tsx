@@ -44,7 +44,7 @@ export default function ReportList(): JSX.Element {
         <Container
           ref={contentRef}
           maxWidth={false}
-          sx={{ padding: 3, borderRadius: 4, backgroundColor: theme.palette.TwClrBaseWhite }}
+          sx={{ padding: 3, borderRadius: 4, backgroundColor: theme.palette.TwClrBaseWhite, minWidth: 'fit-content' }}
         >
           <Grid item xs={12}>
             <Table id='reports-table' columns={columns} rows={results} orderBy='name' Renderer={ReportsCellRenderer} />
