@@ -136,6 +136,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
         onPrevious={() => setIsCalculatorOpened(false)}
       />
       <DialogBox
+        scrolled={true}
         onClose={onCloseHandler}
         open={open && !isCalculatorOpened}
         title={props.title}

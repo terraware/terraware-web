@@ -39,15 +39,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '32px',
   },
   largeIcon: {
-    width: '48px',
-    height: '48px',
+    width: '40px',
+    height: '40px',
   },
   closeButton: {
     background: 'none',
     border: 'none',
     cursor: 'pointer',
     marginLeft: 'auto',
-    height: 'fit-content',
+    height: 'auto',
+    paddingBottom: '16px',
   },
   closeIcon: {
     fill: theme.palette.TwClrIcnSecondary,
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       position: 'fixed',
       zIndex: 1300,
       inset: '0px',
+      overflowY: 'scroll',
     },
   },
   menuItem: {
@@ -76,15 +78,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   menuList: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
-  },
-  orgsList: {
-    overflow: 'auto',
   },
   divider: {
+    background: theme.palette.TwClrBrdrTertiary,
     '&.MuiDivider-root': {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
+      margin: theme.spacing(1, 2, 1, 2),
     },
   },
   avatarButton: {
@@ -122,9 +120,10 @@ export default function SmallDeviceUserMenu({
   const handleClose = (event: Event | React.SyntheticEvent) => {
     if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
+    } else {
+      event.preventDefault();
+      setOpen(false);
     }
-
-    setOpen(false);
   };
 
   // return focus to the button when we transitioned from !open -> open
@@ -161,11 +160,12 @@ export default function SmallDeviceUserMenu({
           open={open}
           anchorEl={anchorRef.current}
           placement='top-end'
+          disablePortal={true}
           transition
           sx={{ width: '300px', height: '100%', right: '0 !important', left: 'auto !important', zIndex: 1111 }}
         >
           <Slide direction='left' in={open} mountOnEnter unmountOnExit>
-            <Paper sx={{ width: '300px', height: '100%' }}>
+            <Paper sx={{ width: '300px', height: 'auto', boxShadow: 'none' }}>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList
                   autoFocusItem={open}
@@ -182,7 +182,7 @@ export default function SmallDeviceUserMenu({
                   <Typography
                     sx={{
                       paddingLeft: '16px',
-                      paddingBottom: '16px',
+                      paddingBottom: '12px',
                       color: theme.palette.TwClrTxt,
                       fontSize: '12px',
                       fontWeight: 400,
@@ -190,14 +190,28 @@ export default function SmallDeviceUserMenu({
                   >
                     {strings.ACCOUNT.toUpperCase()}
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: '16px' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      paddingLeft: '16px',
+                      paddingTop: '8px',
+                      paddingBottom: '12px',
+                    }}
+                  >
                     <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
                     <div>
-                      <Typography sx={{ paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
+                      <Typography sx={{ height: '24px', paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
                         {user?.firstName} {user?.lastName}
                       </Typography>
                       <Typography
-                        sx={{ paddingLeft: '8px', fontSize: '12px', fontWeight: 400, color: theme.palette.TwClrTxt }}
+                        sx={{
+                          paddingLeft: '8px',
+                          paddingTop: '4px',
+                          fontSize: '12px',
+                          fontWeight: 400,
+                          color: theme.palette.TwClrTxt,
+                        }}
                       >
                         {user?.email}
                       </Typography>
@@ -225,7 +239,8 @@ export default function SmallDeviceUserMenu({
                   <Typography
                     sx={{
                       paddingLeft: '16px',
-                      paddingBottom: '16px',
+                      paddingBottom: '12px',
+                      paddingTop: '12px',
                       color: theme.palette.TwClrTxt,
                       fontSize: '12px',
                       fontWeight: 400,
@@ -234,7 +249,7 @@ export default function SmallDeviceUserMenu({
                     {strings.ORGANIZATIONS.toUpperCase()}
                   </Typography>
                   {hasOrganizations ? (
-                    <div className={classes.orgsList}>
+                    <div>
                       {organizations?.map((org, index) => {
                         return (
                           <MenuItem
@@ -263,10 +278,10 @@ export default function SmallDeviceUserMenu({
                     className={classes.menuItem}
                   >
                     <Icon name='plus' />
-                    &nbsp;{strings.CREATE_NEW_ORGANIZATION}
+                    <div style={{ paddingLeft: '8px' }}>{strings.CREATE_NEW_ORGANIZATION}</div>
                   </MenuItem>
                   {!isProduction && hasOrganizations ? (
-                    <>
+                    <div>
                       <MenuItem
                         onClick={(e) => {
                           navigate(APP_PATHS.OPT_IN);
@@ -276,7 +291,7 @@ export default function SmallDeviceUserMenu({
                       >
                         {strings.OPT_IN}
                       </MenuItem>
-                    </>
+                    </div>
                   ) : null}
                 </MenuList>
               </ClickAwayListener>
