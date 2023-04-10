@@ -4,7 +4,7 @@ import { RendererProps, TableRowType } from '@terraware/web-components';
 import { Textfield } from '@terraware/web-components';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import strings from 'src/strings';
-import { getGrowthFormString } from 'src/types/Species';
+import { getGrowthFormString, Species } from 'src/types/Species';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -49,7 +49,7 @@ export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: 
     };
 
     if (column.key === 'growthForm') {
-      return <CellRenderer index={index} row={row} column={column} value={getGrowthFormString(row.growthForm)} />;
+      return <CellRenderer index={index} row={row} column={column} value={getGrowthFormString(row as Species)} />;
     }
 
     if (editMode && (column.key === 'totalPlanted' || column.key === 'mortalityRateInField')) {
