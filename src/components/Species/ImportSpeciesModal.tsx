@@ -12,7 +12,7 @@ export type ImportSpeciesModalProps = {
 
 export const downloadCsvTemplate = async () => {
   const apiResponse = await SpeciesService.downloadSpeciesTemplate();
-  const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
+  const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse.template;
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement('a');
   link.setAttribute('href', encodedUri);

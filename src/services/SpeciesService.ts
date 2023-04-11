@@ -215,7 +215,7 @@ const resolveSpeciesUpload = async (uploadId: number, overwriteExisting: boolean
     urlReplacements: {
       '{uploadId}': uploadId.toString(),
     },
-    params: { overwriteExisting: overwriteExisting.toString() },
+    entity: { overwriteExisting: overwriteExisting.toString() },
   });
 };
 
