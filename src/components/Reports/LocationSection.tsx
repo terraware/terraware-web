@@ -420,14 +420,16 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             onUpdateLocation('notes', value);
           }}
         />
-        <Typography
-          color={theme.palette.TwClrTxtSecondary}
-          fontSize='14px'
-          fontWeight={400}
-          marginTop={theme.spacing(0.5)}
-        >
-          {strings.NOTE_ANY_ISSUES}
-        </Typography>
+        {editable && (
+          <Typography
+            color={theme.palette.TwClrTxtSecondary}
+            fontSize='14px'
+            fontWeight={400}
+            marginTop={theme.spacing(0.5)}
+          >
+            {strings.NOTE_ANY_ISSUES}
+          </Typography>
+        )}
       </Grid>
     </>
   );

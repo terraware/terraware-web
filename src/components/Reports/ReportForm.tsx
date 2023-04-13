@@ -179,14 +179,16 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             }
           }}
         />
-        <Typography
-          color={theme.palette.TwClrTxtSecondary}
-          fontSize='14px'
-          fontWeight={400}
-          marginTop={theme.spacing(0.5)}
-        >
-          {strings.NOTE_ANY_ISSUES}
-        </Typography>
+        {editable && (
+          <Typography
+            color={theme.palette.TwClrTxtSecondary}
+            fontSize='14px'
+            fontWeight={400}
+            marginTop={theme.spacing(0.5)}
+          >
+            {strings.NOTE_ANY_ISSUES}
+          </Typography>
+        )}
         <Grid item xs={12}>
           <Typography fontSize='20px' fontWeight={600} marginTop={4}>
             {strings.PROJECT_PHOTOS}
