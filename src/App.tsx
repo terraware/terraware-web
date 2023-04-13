@@ -487,7 +487,7 @@ function AppContent() {
             )}
             {isEnabled('Reporting V1') && selectedOrganization.canSubmitReports && (
               <Route path={APP_PATHS.REPORTS_EDIT}>
-                <ReportEdit organization={selectedOrganization} />
+                <ReportEdit />
               </Route>
             )}
             {isEnabled('Reporting V1') && selectedOrganization.canSubmitReports && (

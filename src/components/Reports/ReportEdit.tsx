@@ -12,9 +12,8 @@ import { APP_PATHS } from 'src/constants';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
-import { useUser } from 'src/providers';
+import { useOrganization, useUser } from 'src/providers';
 import produce from 'immer';
-import { Organization } from 'src/types/Organization';
 import CannotEditReportDialog from './InvalidUserModal';
 import useReportFiles from 'src/components/Reports/useReportFiles';
 import {
@@ -31,11 +30,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export type ReportEditProps = {
-  organization: Organization;
-};
-
-export default function ReportEdit({ organization }: ReportEditProps): JSX.Element {
+export default function ReportEdit(): JSX.Element {
+  const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { reportId } = useParams<{ reportId: string }>();
   const reportIdInt = parseInt(reportId, 10);
   const { user } = useUser();
@@ -359,6 +355,7 @@ export default function ReportEdit({ organization }: ReportEditProps): JSX.Eleme
         await updatePhotos(report.id);
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded) {
+          reloadOrganizations(selectedOrganization.id);
           history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
         } else {
           snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
