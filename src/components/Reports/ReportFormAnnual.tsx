@@ -22,6 +22,11 @@ const useStyles = makeStyles((theme: Theme) => ({
       marginTop: theme.spacing(1),
     },
   },
+  textfieldDisplay: {
+    '& p': {
+      whiteSpace: 'pre-line',
+    },
+  },
   quarterPage: {
     '& textarea': {
       minHeight: '240px',
@@ -403,6 +408,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
                 label=''
                 id={key}
                 type='textarea'
+                className={classes.textfieldDisplay}
                 display={!editable}
                 value={sdgProgressStates[SDG.findIndex((sdg) => key === sdg)]}
                 onChange={(value) => {
@@ -505,7 +511,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           <Textfield
             id={`catalytic-detail`}
             type='textarea'
-            className={classes.quarterPage}
+            className={`${classes.textfieldDisplay} ${classes.quarterPage}`}
             label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
             display={!editable}
             onChange={(v) => {
@@ -589,7 +595,7 @@ function ReportField(props: ReportFieldProps): JSX.Element {
         onChange={(v) => onChange(v as string)}
         value={value}
         errorText={errorText}
-        className={
+        className={`${classes.textfieldDisplay} ${
           pageSize === 'quarter'
             ? classes.quarterPage
             : pageSize === 'half'
@@ -597,7 +603,7 @@ function ReportField(props: ReportFieldProps): JSX.Element {
             : pageSize === 'full'
             ? classes.fullPage
             : ''
-        }
+        }`}
       />
     </>
   );

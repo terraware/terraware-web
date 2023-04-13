@@ -23,6 +23,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginLeft: theme.spacing(3),
     borderBottom: `solid 1px ${theme.palette.TwClrBrdrTertiary}`,
   },
+  textfieldDisplay: {
+    '& p': {
+      whiteSpace: 'pre-line',
+    },
+  },
 }));
 
 export type ReportFormProps = {
@@ -153,6 +158,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           placeholder={strings.SUMMARY_OF_PROGRESS_DESCRIPTION}
           id='summary-of-progress'
           type='textarea'
+          className={classes.textfieldDisplay}
           display={!editable}
           value={summaryOfProgress}
           onChange={(value) => {
@@ -170,6 +176,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           label={strings.PROJECT_NOTES}
           id='notes'
           type='textarea'
+          className={classes.textfieldDisplay}
           display={!editable}
           value={projectNotes}
           onChange={(value) => {

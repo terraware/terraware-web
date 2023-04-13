@@ -12,6 +12,17 @@ import { useOrganization } from 'src/providers';
 import { SpeciesService } from 'src/services';
 import { Species } from 'src/types/Species';
 
+const useStyles = makeStyles((theme: Theme) => ({
+  infoCardStyle: {
+    padding: 0,
+  },
+  textfieldDisplay: {
+    '& p': {
+      whiteSpace: 'pre-line',
+    },
+  },
+}));
+
 type PlantingSiteSpecies = {
   id: number;
   name: string;
@@ -413,6 +424,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           label={getNotesLabel()}
           id={`${location.id}-notes`}
           type='textarea'
+          className={classes.textfieldDisplay}
           display={!editable}
           value={locationNotes}
           onChange={(value) => {
@@ -434,12 +446,6 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     </>
   );
 }
-
-const useStyles = makeStyles((theme: Theme) => ({
-  infoCardStyle: {
-    padding: 0,
-  },
-}));
 
 type InfoFieldProps = {
   id: string;
