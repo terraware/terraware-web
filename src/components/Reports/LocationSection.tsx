@@ -414,6 +414,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-notes`}
           type='textarea'
           display={!editable}
+          preserveNewlines={true}
           value={locationNotes}
           onChange={(value) => {
             setLocationNotes(value as string);
