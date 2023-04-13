@@ -746,7 +746,7 @@ REPORT_COULD_NOT_SAVE,Could not save report
 REPORT_COULD_NOT_SUBMIT,Could not submit report
 REPORT_COULD_NOT_UNLOCK,Could not unlock report
 REPORT_EDIT,Edit Report
-REPORT_MORTALITY_RATE_INFO,If known please list the death rates of all planted trees and other plants as a percentage. If unknown please leave blank.
+REPORT_MORTALITY_RATE_INFO,If known please list the death rates of all planted trees and other plants as a percentage. If unknown please enter 0.
 REPORT_NAME,Report Name
 REPORT_NO_NURSERIES,No nurseries included in report.
 REPORT_NO_PLANTING_SITES,No planting sites included in report.

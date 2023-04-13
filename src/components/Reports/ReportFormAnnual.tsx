@@ -290,7 +290,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
             fontWeight={400}
             marginTop={theme.spacing(0.5)}
           >
-            {`(${numWords(projectSummary)} ${strings.WORDS})`}
+            {`${strings.WORDS}: ${numWords(projectSummary)}`}
           </Typography>
         )}
       </Grid>
@@ -403,7 +403,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
                 label=''
                 id={key}
                 type='textarea'
-                readonly={!editable}
+                display={!editable}
                 value={sdgProgressStates[SDG.findIndex((sdg) => key === sdg)]}
                 onChange={(value) => {
                   setSdgProgressStates[SDG.findIndex((sdg) => key === sdg)](value as string);
@@ -421,14 +421,16 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
                     : ''
                 }
               />
-              <Typography
-                fontSize='14px'
-                fontWeight={400}
-                color={theme.palette.TwClrTxtSecondary}
-                margin={theme.spacing(0.5, 0, 0, 0.5)}
-              >
-                {strings.REQUIRED}
-              </Typography>
+              {editable && (
+                <Typography
+                  fontSize='14px'
+                  fontWeight={400}
+                  color={theme.palette.TwClrTxtSecondary}
+                  margin={theme.spacing(0.5, 0, 0, 0.5)}
+                >
+                  {strings.REQUIRED}
+                </Typography>
+              )}
             </>
           )}
         </Grid>
