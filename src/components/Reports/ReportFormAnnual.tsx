@@ -254,6 +254,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           id='observations-months-validation'
           type='text'
           display={true}
+          preserveNewlines={true}
           className={classes.noDisplayTextField}
           errorText={
             validate && (report.annualDetails?.bestMonthsForObservation?.length ?? 0) === 0
@@ -404,6 +405,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
                 id={key}
                 type='textarea'
                 display={!editable}
+                preserveNewlines={true}
                 value={sdgProgressStates[SDG.findIndex((sdg) => key === sdg)]}
                 onChange={(value) => {
                   setSdgProgressStates[SDG.findIndex((sdg) => key === sdg)](value as string);
@@ -508,6 +510,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
             className={classes.quarterPage}
             label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
             display={!editable}
+            preserveNewlines={true}
             onChange={(v) => {
               setCatalyticDetail(v as string);
               if (updateDetails) {
@@ -586,6 +589,7 @@ function ReportField(props: ReportFieldProps): JSX.Element {
         label={instructions}
         type='textarea'
         display={!editable}
+        preserveNewlines={true}
         onChange={(v) => onChange(v as string)}
         value={value}
         errorText={errorText}

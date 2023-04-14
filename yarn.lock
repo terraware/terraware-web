@@ -2315,10 +2315,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.3.18":
-  version "2.3.18"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.18.tgz#8d8c4c4ad6ad62f292221ce7b83016fad75ef052"
-  integrity sha512-L2gHNNckSta+TPckC5J9rd0QgBq7L8Zn9OACABfNbJ8XvSAhYEY116kBjgQTvLuRc9wN6bFhXvoMSAquxT+p6Q==
+"@terraware/web-components@^2.3.20":
+  version "2.3.20"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.20.tgz#83a95f32379592637eed413686ad09bb327a0141"
+  integrity sha512-ar5zp3R3ELrvlqEQfk1mqPzTgco6Fvu5yZOEyHRolWokSrmFxkJuwK5NcQ8Kcz9dtRXURgP6FAdh/0XDjoaiuA==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
@@ -2333,7 +2333,7 @@
     date-fns "^2.29.3"
     luxon "^3.3.0"
     moment "^2.29.4"
-    moment-timezone "^0.5.41"
+    moment-timezone "^0.5.43"
     react "^17.0.2"
     react-dom "^17.0.2"
     react-responsive "^9.0.2"
@@ -8332,10 +8332,10 @@ mkdirp@^0.5.3, mkdirp@~0.5.1:
   dependencies:
     minimist "^1.2.6"
 
-moment-timezone@^0.5.41:
-  version "0.5.42"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.42.tgz#c59f2aa00442d0dcd1d258d2182873d637b4e17b"
-  integrity sha512-tjI9goqwzkflKSTxJo+jC/W8riTFwEjjunssmFvAWlvNVApjbkJM7UHggyKO0q1Fd/kZVKY77H7C9A0XKhhAFw==
+moment-timezone@^0.5.43:
+  version "0.5.43"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.43.tgz#3dd7f3d0c67f78c23cd1906b9b2137a09b3c4790"
+  integrity sha512-72j3aNyuIsDxdF1i7CEgV2FfxM1r6aaqJyLB2vwb33mXYyoyLly+F1zbWqhA3/bVIoJ4szlUoMbUnVdid32NUQ==
   dependencies:
     moment "^2.29.4"
 

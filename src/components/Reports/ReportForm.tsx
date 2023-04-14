@@ -154,6 +154,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           id='summary-of-progress'
           type='textarea'
           display={!editable}
+          preserveNewlines={true}
           value={summaryOfProgress}
           onChange={(value) => {
             setSummaryOfProgress(value as string);
@@ -171,6 +172,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           id='notes'
           type='textarea'
           display={!editable}
+          preserveNewlines={true}
           value={projectNotes}
           onChange={(value) => {
             setProjectNotes(value as string);
