@@ -323,15 +323,15 @@ export default function ReportEdit(): JSX.Element {
     }
   };
 
-  const handleSubmitButton = () => {
+  const handleSubmitButton = async () => {
     if (report) {
       const invalidField = hasEmptyRequiredFields(report);
       if (invalidField !== '') {
         if (showAnnual) {
-          handleBack(true).then(() => setIdInView(invalidField));
+          await handleBack(true).then(() => setIdInView(invalidField));
         }
         setValidateFields(true);
-        snackbar.toastError(strings.GENERIC_ERROR, strings.FILL_OUT_ALL_FIELDS);
+        snackbar.toastError(strings.PROBLEMS_WITH_ENTRIES);
         return;
       }
 
@@ -339,7 +339,7 @@ export default function ReportEdit(): JSX.Element {
       if (invalidAnnualField !== '') {
         setIdInView(invalidAnnualField);
         setValidateFields(true);
-        snackbar.toastError(strings.GENERIC_ERROR, strings.FILL_OUT_ALL_FIELDS);
+        snackbar.toastError(strings.PROBLEMS_WITH_ENTRIES);
         return;
       }
     }
