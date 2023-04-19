@@ -189,7 +189,7 @@ export default function NavBar({
           />
         </SubNavbar>
       </NavItem>
-      {isEnabled('Reporting V1') && reports.length > 0 && selectedOrganization.canSubmitReports && (
+      {reports.length > 0 && selectedOrganization.canSubmitReports && (
         <>
           <NavSection />
           <NavItem
