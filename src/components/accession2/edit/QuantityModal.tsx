@@ -140,7 +140,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
         onClose={onCloseHandler}
         open={open && !isCalculatorOpened}
         title={props.title}
-        size='small'
+        size='medium'
         middleButtons={[
           <Button
             id='cancelQuantity'
