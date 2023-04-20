@@ -61,7 +61,6 @@ import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
-import isEnabled from './features';
 import { ReportList, ReportView, ReportEdit } from './components/Reports';
 
 interface StyleProps {
@@ -480,17 +479,17 @@ function AppContent() {
               <MyAccount organizations={organizations} edit={false} />
             </Route>
 
-            {isEnabled('Reporting V1') && selectedOrganization.canSubmitReports && (
+            {selectedOrganization.canSubmitReports && (
               <Route exact path={APP_PATHS.REPORTS}>
                 <ReportList />
               </Route>
             )}
-            {isEnabled('Reporting V1') && selectedOrganization.canSubmitReports && (
+            {selectedOrganization.canSubmitReports && (
               <Route path={APP_PATHS.REPORTS_EDIT}>
                 <ReportEdit />
               </Route>
             )}
-            {isEnabled('Reporting V1') && selectedOrganization.canSubmitReports && (
+            {selectedOrganization.canSubmitReports && (
               <Route path={APP_PATHS.REPORTS_VIEW}>
                 <ReportView />
               </Route>
