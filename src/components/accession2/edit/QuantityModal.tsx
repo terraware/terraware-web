@@ -17,12 +17,7 @@ import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
 import { useUser } from 'src/providers';
 import ConvertedValue from 'src/components/ConvertedValue';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  units: {
-    marginLeft: theme.spacing(0.5),
-  },
-}));
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export interface QuantityModalProps {
   open: boolean;
@@ -36,7 +31,6 @@ export interface QuantityModalProps {
 export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const { onClose, open, accession, reload, statusEdit } = props;
 
-  const classes = useStyles();
   const [record, setRecord, onChange] = useForm(accession);
   const [isCalculatorOpened, setIsCalculatorOpened] = useState(false);
   const [quantityError, setQuantityError] = useState(false);
@@ -44,6 +38,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const snackbar = useSnackbar();
   const preferredUnits = usePreferredWeightUnits();
   const { userPreferences } = useUser();
+  const { isMobile } = useDeviceInfo();
 
   const validate = () => {
     const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);
@@ -105,6 +100,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       });
     }
   };
+  const gridSize = () => (isMobile ? 12 : 6);
 
   const onChangeStatus = (id: string, value: unknown) => {
     onChange(id, value);
@@ -186,8 +182,8 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
               disabledCharacters={[',', '.', '-']}
             />
           </Grid>
-          <Grid item xs={12}>
-            <Box display='flex' textAlign='left' alignItems='end'>
+          <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} textAlign='left'  alignItems='end'>
+            <Grid item xs={gridSize()} marginTop={theme.spacing(2)} width='100%'>
               <Textfield
                 label={strings.OR_SEED_WEIGHT}
                 id='quantity'
@@ -195,15 +191,18 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 type='number'
                 value={record.remainingQuantity?.units !== 'Seeds' ? record.remainingQuantity?.quantity : ''}
               />
+            </Grid>
+            <Grid item xs={gridSize()} marginTop={theme.spacing(2)} marginLeft={isMobile ? '0px' : theme.spacing(0.5)} width='100%'>
               <Dropdown
                 options={preferredUnits}
                 placeholder={strings.SELECT}
                 onChange={onChangeUnit}
                 selectedValue={record.remainingQuantity?.units}
                 fullWidth={true}
-                className={classes.units}
               />
-            </Box>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} textAlign='left'>
             {record.remainingQuantity?.units &&
               record.remainingQuantity?.units !== 'Seeds' &&
               !isUnitInPreferredSystem(
