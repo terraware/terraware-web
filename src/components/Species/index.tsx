@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '& .MuiPaper-root': {
       border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
       borderRadius: '8px',
-      width: '320px',
+      width: '480px',
     },
   },
 }));

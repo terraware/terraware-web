@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '& .MuiPaper-root': {
       borderRadius: '8px',
       overflow: 'visible',
-      width: '320px',
+      width: '480px',
     },
   },
   mobileContainer: {

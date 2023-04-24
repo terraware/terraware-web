@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       border: `1px solid ${theme.palette.TwClrBaseGray300}`,
       borderRadius: '8px',
       overflow: 'visible',
-      width: '320px',
+      width: '480px',
     },
   },
 }));
