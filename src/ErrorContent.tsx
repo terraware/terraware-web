@@ -1,10 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { APP_PATHS, TERRAWARE_SUPPORT_LINK } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { makeStyles } from '@mui/styles';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import Button from './components/common/button/Button';
+import { useDocLinks } from 'src/docLinks';
 
 interface StyleProps {
   inApp?: boolean;
@@ -33,6 +34,7 @@ export default function ErrorContent({ text, inApp }: ErrorContentProps) {
   const classes = useStyles({ inApp });
   const theme = useTheme();
   const history = useHistory();
+  const docLinks = useDocLinks();
 
   return (
     <div className={classes.main}>
@@ -53,7 +55,7 @@ export default function ErrorContent({ text, inApp }: ErrorContentProps) {
           <Button
             size='medium'
             label={strings.CONTACT_US}
-            onClick={() => (window.location.href = TERRAWARE_SUPPORT_LINK)}
+            onClick={() => (window.location.href = docLinks.contact_us)}
           />
         </Box>
       </Grid>

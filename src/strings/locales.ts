@@ -6,3 +6,7 @@ export const supportedLocales: LocaleDetails[] = [
   { id: 'es', name: 'Español', loadModule: () => import('./strings-es') },
   { id: 'gx', name: 'Gibberish', loadModule: () => import('./strings-gx') },
 ];
+
+const supportedLocaleIds = supportedLocales.map((locale: LocaleDetails) => locale.id);
+
+export type SupportedLocaleId = typeof supportedLocaleIds[number];

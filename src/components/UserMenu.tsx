@@ -1,12 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from '../../src/strings';
-import { APP_PATHS, TERRAFORMATION_PRIVACY_POLICY } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useEnvironment from 'src/utils/useEnvironment';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 import { useUser } from 'src/providers';
+import { useDocLinks } from 'src/docLinks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   userName: {
@@ -25,6 +26,7 @@ export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Eleme
   const { user } = useUser();
   const { isProduction } = useEnvironment();
   const history = useHistory();
+  const docLinks = useDocLinks();
 
   const onHandleLogout = () => {
     window.location.href = `/sso/logout`;
@@ -33,7 +35,7 @@ export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Eleme
   const onItemClick = (selectedItem: DropdownItem) => {
     switch (selectedItem.value) {
       case 'privacyPolicy': {
-        window.open(TERRAFORMATION_PRIVACY_POLICY, '_blank');
+        window.open(docLinks.privacy_policy, '_blank');
         break;
       }
       case 'logOut': {

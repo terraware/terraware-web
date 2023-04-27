@@ -1,6 +1,4 @@
 export const API_PULL_INTERVAL = 60000;
-export const TERRAWARE_SUPPORT_LINK = 'https://www.terraformation.com/contact-us/terraware-support';
-export const TERRAFORMATION_PRIVACY_POLICY = 'https://www.terraformation.com/privacy-policy';
 
 export enum APP_PATHS {
   ACCESSIONS = '/accessions',
