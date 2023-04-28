@@ -1,3 +1,3 @@
 export default function getHelpEmail(): JSX.Element {
-  return <a href='mailto: help@terraformation.com'>help@terraformation.com</a>;
+  return <a href='mailto: terraware-support@terraformation.com'>terraware-support@terraformation.com</a>;
 }
