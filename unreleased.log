@@ -1,4 +1,1 @@
-f3dc2110 Bump @mui/styled-engine-sc from 5.11.9 to 5.12.0 (#1371)
-b39e4623 Updated translations from Phrase (#1375)
-dd97b059 Update typescript to 5.0.0 (#1380)
-ffd0da6e SW-3405 / SW-3406 Increase widths of popups (#1377)
+e6fea0e4 SW-2760/SW-3486 Add contact us card on help page, show links by locale (#1381)
