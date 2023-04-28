@@ -7,6 +7,7 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import strings from 'src/strings';
+import getHelpEmail from 'src/components/common/HelpEmail';
 import { useDocLinks } from 'src/docLinks';
 
 const useStyles = makeStyles(() => ({
@@ -52,10 +53,7 @@ export default function ContactUs(): JSX.Element {
     {
       icon: 'mail',
       title: strings.CONTACT_US,
-      description: strings.formatString(
-        strings.CONTACT_US_DESCRIPTION,
-        <a href='mailto: terraware-support@terraformation.com'>terraware-support@terraformation.com</a>
-      ) as string,
+      description: strings.formatString(strings.CONTACT_US_DESCRIPTION, getHelpEmail()) as string,
       buttonText: strings.CONTACT_US,
       link: docLinks.contact_us,
     },
