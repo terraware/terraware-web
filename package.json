@@ -51,7 +51,7 @@
     "react-scripts": "^5.0.1",
     "recoil": "^0.7.1",
     "sass": "^1.38.0",
-    "styled-components": "^5.3.5",
+    "styled-components": "^5.3.10",
     "tslint-plugin-cypress": "^1.0.4",
     "typescript": "^5.0.0",
     "utm": "^1.1.1",
