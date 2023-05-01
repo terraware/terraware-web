@@ -382,6 +382,14 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       };
       searchValueChildren.push(nameNode);
 
+      const commonNameNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'commonName',
+        type: 'Fuzzy',
+        values: [debouncedSearchTerm],
+      };
+      searchValueChildren.push(commonNameNode);
+
       const familyNode: FieldNodePayload = {
         operation: 'field',
         field: 'familyName',
