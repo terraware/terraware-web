@@ -341,7 +341,7 @@ const MyAccountContent = ({
                 />
                 <OptionsMenu
                   onOptionItemClick={onOptionItemClick}
-                  optionItems={[{ label: strings.DELETE_ACCOUNT, value: 'delete-account' }]}
+                  optionItems={[{ label: strings.DELETE_ACCOUNT, value: 'delete-account', type: 'destructive' }]}
                 />
               </Box>
             )}

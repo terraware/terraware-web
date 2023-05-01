@@ -346,7 +346,7 @@ export default function Accession2View(): JSX.Element {
           setOpenDeleteAccession(true);
         }
       }}
-      optionItems={[{ label: strings.DELETE, value: 'delete-accession' }]}
+      optionItems={[{ label: strings.DELETE, value: 'delete-accession', type: 'destructive' }]}
     />
   );
 
