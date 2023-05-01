@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Popover, Theme } from '@mui/material';
+import { Container, Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -40,13 +40,14 @@ import TooltipLearnMoreModal, {
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { DropdownItem, Popover as PopoverOptions, SortOrder } from '@terraware/web-components';
+import { DropdownItem, SortOrder } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
 import { isTrue } from 'src/utils/boolean';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { FieldOptionsMap } from 'src/services/NurseryWithdrawalService';
 import { SpeciesService } from 'src/services';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -634,30 +635,15 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     columns,
   ]);
 
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLElement | null>(null);
-
-  const handleClickActionMenuButton = (event: React.MouseEvent<HTMLElement>) => {
-    setActionMenuAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseActionMenu = () => {
-    setActionMenuAnchorEl(null);
-  };
-
-  const onItemClick = (selectedItem: DropdownItem) => {
-    switch (selectedItem.value) {
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    switch (optionItem.value) {
       case 'checkData': {
-        handleCloseActionMenu();
         onCheckData();
         break;
       }
       case 'import': {
-        handleCloseActionMenu();
         onImportSpecies();
         break;
-      }
-      default: {
-        handleCloseActionMenu();
       }
     }
   };
@@ -700,33 +686,6 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
 
     return result;
   };
-
-  const getHeaderButtons = () => (
-    <>
-      <Box marginLeft={1} display='inline'>
-        <Tooltip title={strings.MORE_OPTIONS}>
-          <Button
-            id='more-options'
-            icon='menuVertical'
-            onClick={(event) => event && handleClickActionMenuButton(event)}
-            priority='secondary'
-            size='medium'
-          />
-        </Tooltip>
-      </Box>
-      <PopoverOptions
-        sections={[
-          [
-            { label: strings.CHECK_DATA, value: 'checkData' },
-            { label: strings.IMPORT, value: 'import' },
-          ],
-        ]}
-        handleClick={onItemClick}
-        anchorElement={actionMenuAnchorEl}
-        setAnchorElement={setActionMenuAnchorEl}
-      />
-    </>
-  );
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
     const isClientSorted = BE_SORTED_FIELDS.indexOf(orderBy) === -1;
@@ -773,7 +732,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
             {species && species.length > 0 && !isMobile && userCanEdit && (
               <div>
                 <Button id='add-species' label={strings.ADD_SPECIES} icon='plus' onClick={onNewSpecies} size='medium' />
-                {getHeaderButtons()}
+                <OptionsMenu
+                  onOptionItemClick={onOptionItemClick}
+                  optionItems={[
+                    { label: strings.CHECK_DATA, value: 'checkData' },
+                    { label: strings.IMPORT, value: 'import' },
+                  ]}
+                />
               </div>
             )}
             {isMobile && userCanEdit && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}

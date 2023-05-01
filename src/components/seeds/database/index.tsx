@@ -34,14 +34,14 @@ import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportAccessionsModal from './ImportAccessionsModal';
-import { Message, Tooltip } from '@terraware/web-components';
+import { DropdownItem, Message } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { DropdownItem, Popover } from '@terraware/web-components';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 
 interface StyleProps {
   isMobile: boolean;
@@ -481,12 +481,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const onOpenEditColumnsModal = () => {
-    setAnchorEl(null);
     setEditColumnsModalOpen(true);
   };
 
   const onDownloadReport = () => {
-    setAnchorEl(null);
     setReportModalOpen(true);
   };
 
@@ -537,16 +535,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setSelectSeedBankForImportModalOpen(true);
   };
 
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const getEmptyState = () => {
     const emptyState = [];
 
@@ -582,10 +570,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const isOnboarded = hasSeedBanks && hasSpecies;
 
-  const onItemClick = (selectedItem: DropdownItem) => {
-    switch (selectedItem.value) {
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    switch (optionItem.value) {
       case 'import': {
-        handleClose();
         setSelectSeedBankForImportModalOpen(true);
         break;
       }
@@ -597,40 +584,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
         onOpenEditColumnsModal();
         break;
       }
-      default: {
-        handleClose();
-      }
     }
   };
-
-  const getHeaderButtons = () => (
-    <>
-      <Box marginLeft={1} display='inline'>
-        <Tooltip title={strings.MORE_OPTIONS}>
-          <Button
-            id='more-options'
-            icon='menuVertical'
-            onClick={(event) => event && handleClick(event)}
-            priority='secondary'
-            size='medium'
-          />
-        </Tooltip>
-      </Box>
-
-      <Popover
-        sections={[
-          [
-            { label: strings.IMPORT, value: 'import' },
-            { label: strings.EXPORT, value: 'export' },
-            { label: strings.CUSTOMIZE_TABLE_COLUMNS, value: 'tableColumns' },
-          ],
-        ]}
-        handleClick={onItemClick}
-        anchorElement={anchorEl}
-        setAnchorElement={setAnchorEl}
-      />
-    </>
-  );
 
   const emptyStateSpacer = () => {
     return <Grid item xs={12} padding={theme.spacing(3)} />;
@@ -684,7 +639,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         id='newAccession'
                       />
                     ))}
-                  {getHeaderButtons()}
+                  <OptionsMenu
+                    onOptionItemClick={onOptionItemClick}
+                    optionItems={[
+                      { label: strings.IMPORT, value: 'import' },
+                      { label: strings.EXPORT, value: 'export' },
+                      { label: strings.CUSTOMIZE_TABLE_COLUMNS, value: 'tableColumns' },
+                    ]}
+                  />
                 </>
               ) : undefined
             }

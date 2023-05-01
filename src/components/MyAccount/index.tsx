@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Button, DropdownItem } from '@terraware/web-components';
 import { OrganizationUserService, OrganizationService, PreferencesService, UserService } from 'src/services';
-import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
@@ -274,6 +275,12 @@ const MyAccountContent = ({
     }
   };
 
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    if (optionItem.value === 'delete-account') {
+      setOpenDeleteAccountModal(true);
+    }
+  };
+
   return (
     <TfMain>
       <PageForm
@@ -325,21 +332,16 @@ const MyAccountContent = ({
               <Box display='flex' height='fit-content'>
                 {openDeleteAccountModal && <DeleteAccountModal onCancel={() => setOpenDeleteAccountModal(false)} />}
                 <Button
-                  id='delete-account'
-                  icon='iconTrashCan'
-                  label={isMobile ? '' : strings.DELETE_ACCOUNT}
-                  onClick={() => setOpenDeleteAccountModal(true)}
-                  size='medium'
-                  priority='secondary'
-                  type='destructive'
-                />
-                <Button
                   id='edit-account'
                   icon='iconEdit'
                   label={isMobile ? '' : strings.EDIT_ACCOUNT}
                   onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
                   size='medium'
                   priority='primary'
+                />
+                <OptionsMenu
+                  onOptionItemClick={onOptionItemClick}
+                  optionItems={[{ label: strings.DELETE_ACCOUNT, value: 'delete-account' }]}
                 />
               </Box>
             )}
