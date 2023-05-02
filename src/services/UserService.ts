@@ -90,6 +90,11 @@ const updateUser = async (user: User, options: UpdateOptions = {}): Promise<Resp
 };
 
 /**
+ * Delete current user
+ */
+const deleteUser = async (): Promise<Response> => await httpCurrentUser.delete({});
+
+/**
  * initialize user time zone
  */
 const initializeTimeZone = async (user: User, timeZone: string): Promise<InitializedTimeZone> => {
@@ -168,6 +173,7 @@ const UserService = {
   initializeTimeZone,
   initializeUnits,
   updateUser,
+  deleteUser,
 };
 
 export default UserService;

@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Button, DropdownItem } from '@terraware/web-components';
 import { OrganizationUserService, OrganizationService, PreferencesService, UserService } from 'src/services';
-import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
@@ -32,6 +33,7 @@ import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import LocaleSelector from '../LocaleSelector';
 import { supportedLocales } from 'src/strings/locales';
+import DeleteAccountModal from './DeleteAccountModal';
 
 type MyAccountProps = {
   organizations?: Organization[];
@@ -84,6 +86,7 @@ const MyAccountContent = ({
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
   const history = useHistory();
   const [record, setRecord, onChange] = useForm<User>(user);
+  const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState<boolean>(false);
   const [removedOrg, setRemovedOrg] = useState<Organization>();
   const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
   const [assignNewOwnerModalOpened, setAssignNewOwnerModalOpened] = useState(false);
@@ -272,6 +275,12 @@ const MyAccountContent = ({
     }
   };
 
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    if (optionItem.value === 'delete-account') {
+      setOpenDeleteAccountModal(true);
+    }
+  };
+
   return (
     <TfMain>
       <PageForm
@@ -320,14 +329,21 @@ const MyAccountContent = ({
           >
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
             {!edit && (
-              <Button
-                id='edit-account'
-                icon='iconEdit'
-                label={isMobile ? '' : strings.EDIT_ACCOUNT}
-                onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
-                size='medium'
-                priority='primary'
-              />
+              <Box display='flex' height='fit-content'>
+                {openDeleteAccountModal && <DeleteAccountModal onCancel={() => setOpenDeleteAccountModal(false)} />}
+                <Button
+                  id='edit-account'
+                  icon='iconEdit'
+                  label={isMobile ? '' : strings.EDIT_ACCOUNT}
+                  onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
+                  size='medium'
+                  priority='primary'
+                />
+                <OptionsMenu
+                  onOptionItemClick={onOptionItemClick}
+                  optionItems={[{ label: strings.DELETE_ACCOUNT, value: 'delete-account', type: 'destructive' }]}
+                />
+              </Box>
             )}
           </Box>
         </PageHeaderWrapper>

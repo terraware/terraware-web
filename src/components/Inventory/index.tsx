@@ -20,8 +20,9 @@ import { downloadCsvTemplateHandler } from '../common/ImportModal';
 import NurseryInventoryService, { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
 import ImportInventoryModal from './ImportInventoryModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { Button, DropdownItem, Popover, Tooltip } from '@terraware/web-components';
+import { Button, DropdownItem } from '@terraware/web-components';
 import { useOrganization } from 'src/providers/hooks';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 
 interface StyleProps {
   isMobile: boolean;
@@ -166,51 +167,11 @@ export default function Inventory(props: InventoryProps): JSX.Element {
 
   const shouldShowTable = isOnboarded && unfilteredInventory && unfilteredInventory.length > 0;
 
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLElement | null>(null);
-
-  const handleClickActionMenuButton = (event: React.MouseEvent<HTMLElement>) => {
-    setActionMenuAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseActionMenu = () => {
-    setActionMenuAnchorEl(null);
-  };
-
-  const onItemClick = (selectedItem: DropdownItem) => {
-    switch (selectedItem.value) {
-      case 'import': {
-        handleCloseActionMenu();
-        setImportInventoryModalOpen(true);
-        break;
-      }
-      default: {
-        handleCloseActionMenu();
-      }
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    if (optionItem.value === 'import') {
+      setImportInventoryModalOpen(true);
     }
   };
-
-  const getHeaderButtons = () => (
-    <>
-      <Box marginLeft={1} display='inline'>
-        <Tooltip title={strings.MORE_OPTIONS}>
-          <Button
-            id='more-options'
-            icon='menuVertical'
-            onClick={(event) => event && handleClickActionMenuButton(event)}
-            priority='secondary'
-            size='medium'
-          />
-        </Tooltip>
-      </Box>
-
-      <Popover
-        sections={[[{ label: strings.IMPORT, value: 'import' }]]}
-        handleClick={onItemClick}
-        anchorElement={actionMenuAnchorEl}
-        setAnchorElement={setActionMenuAnchorEl}
-      />
-    </>
-  );
 
   return (
     <TfMain backgroundImageVisible={!isOnboarded}>
@@ -242,7 +203,10 @@ export default function Inventory(props: InventoryProps): JSX.Element {
                         size='medium'
                       />
                     </Box>
-                    {getHeaderButtons()}
+                    <OptionsMenu
+                      onOptionItemClick={onOptionItemClick}
+                      optionItems={[{ label: strings.IMPORT, value: 'import' }]}
+                    />
                   </>
                 )}
               </Grid>

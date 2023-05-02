@@ -210,6 +210,9 @@ DEGREES_CELSIUS_VALUE,{0}ºC
 DELETE,Delete
 DELETE_ACCESSION,Delete Accession
 DELETE_ACCESSION_MESSAGE,You’re about to delete accession {0}.
+DELETE_ACCOUNT,Delete Account
+DELETE_ACCOUNT_CONFIRMATION,Are you sure you want to delete your account? This cannot be undone.
+DELETE_ACCOUNT_ERROR,There was an error deleting your account.
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,"Are you sure you want to delete your selected species? This will delete them from your list, but you’ll keep all data attached to existing entries."
 DELETE_ORGANIZATION,Delete Organization
 DELETE_ORGANIZATION_MSG,Are you sure you want to delete {0}?
