@@ -69,7 +69,7 @@ export default function LocaleSelector({
                 <Dropdown
                   label={strings.LANGUAGE}
                   onChange={onChangeLocale}
-                  selectedValue={selectedLocale}
+                  selectedValue={localeSelected}
                   options={localeItems}
                 />
               )
