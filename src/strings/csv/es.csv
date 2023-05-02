@@ -210,6 +210,9 @@ DEGREES_CELSIUS_VALUE,{0}ºC
 DELETE,Borrar
 DELETE_ACCESSION,Borrar accesión
 DELETE_ACCESSION_MESSAGE,Está a punto de borrar la accesión {0}.
+DELETE_ACCOUNT,Eliminar cuenta
+DELETE_ACCOUNT_CONFIRMATION,¿Seguro que desea eliminar su cuenta? Esta acción no puede deshacerse.
+DELETE_ACCOUNT_ERROR,Ocurrió un error al eliminar su cuenta.
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,"¿Está seguro de que quiere borrar las especies seleccionadas? Esto las eliminará de su lista, pero conservará todos los datos adjuntos a las entradas existentes."
 DELETE_ORGANIZATION,Borrar Organización
 DELETE_ORGANIZATION_MSG,¿Está seguro de que deseas borrar {0}?
