@@ -193,11 +193,14 @@ const MyAccountContent = ({
       await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
       reloadUserPreferences();
 
+      const lastLocale = selectedLocale;
+      setSelectedLocale(localeSelected);
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded) {
         reloadUser();
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
+        setSelectedLocale(lastLocale);
         snackbar.toastError();
       }
       history.push(APP_PATHS.MY_ACCOUNT);
@@ -207,7 +210,6 @@ const MyAccountContent = ({
   const saveProfileChanges = async () => {
     // Save the currently-selected locale, even if it differs from the locale in the profile data we
     // fetched from the server.
-    setSelectedLocale(localeSelected);
     const updateUserResponse = await UserService.updateUser({ ...record, locale: localeSelected });
     return updateUserResponse;
   };
