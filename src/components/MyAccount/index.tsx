@@ -98,7 +98,7 @@ const MyAccountContent = ({
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
   const localeSelectionEnabled = isEnabled('Locale selection');
-  const { selectedLocale } = useLocalization();
+  const { selectedLocale, setSelectedLocale } = useLocalization();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
   const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState(
@@ -207,6 +207,7 @@ const MyAccountContent = ({
   const saveProfileChanges = async () => {
     // Save the currently-selected locale, even if it differs from the locale in the profile data we
     // fetched from the server.
+    setSelectedLocale(localeSelected);
     const updateUserResponse = await UserService.updateUser({ ...record, locale: localeSelected });
     return updateUserResponse;
   };
