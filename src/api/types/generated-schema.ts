@@ -4,6 +4,9 @@
  */
 
 export interface paths {
+  "/admin/plantingSite/{plantingSiteId}/plots": {
+    get: operations["getMonitoringPlots"];
+  };
   "/api/v1/automations": {
     get: operations["listAutomations"];
     post: operations["createAutomation"];
@@ -1684,13 +1687,6 @@ export interface components {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    MonitoringPlotPayload: {
-      boundary: components["schemas"]["MultiPolygon"];
-      fullName: string;
-      /** Format: int64 */
-      id: number;
-      name: string;
-    };
     MultiPolygon: {
       coordinates: number[][][][];
       crs?: components["schemas"]["CRS"];
@@ -1840,7 +1836,6 @@ export interface components {
       fullName: string;
       /** Format: int64 */
       id: number;
-      monitoringPlots: components["schemas"]["MonitoringPlotPayload"][];
       name: string;
     };
     PlantingZonePayload: {
@@ -2088,7 +2083,15 @@ export interface components {
       )[];
       endangered?: boolean;
       familyName?: string;
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
+      growthForm?:
+        | "Tree"
+        | "Shrub"
+        | "Forb"
+        | "Graminoid"
+        | "Fern"
+        | "Fungi"
+        | "Lichen"
+        | "Moss";
       /**
        * Format: int64
        * @description Which organization's species list to update.
@@ -2122,7 +2125,15 @@ export interface components {
       )[];
       endangered?: boolean;
       familyName?: string;
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
+      growthForm?:
+        | "Tree"
+        | "Shrub"
+        | "Forb"
+        | "Graminoid"
+        | "Fern"
+        | "Fungi"
+        | "Lichen"
+        | "Moss";
       /** Format: int64 */
       id: number;
       problems?: components["schemas"]["SpeciesProblemElement"][];
@@ -2630,6 +2641,21 @@ export interface components {
 }
 
 export interface operations {
+  getMonitoringPlots: {
+    parameters: {
+      path: {
+        plantingSiteId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": { [key: string]: { [key: string]: unknown } };
+        };
+      };
+    };
+  };
   listAutomations: {
     parameters: {
       query: {

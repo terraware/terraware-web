@@ -6,7 +6,7 @@ export type Species = {
   commonName?: string;
   endangered?: boolean;
   familyName?: string;
-  growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern';
+  growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern' | 'Fungi' | 'Lichen' | 'Moss';
   scientificName: string;
   rare?: boolean;
   seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
@@ -45,6 +45,9 @@ export function growthForms(useLocalizedValues = false) {
     { label: strings.FORB, value: useLocalizedValues ? strings.FORB : 'Forb' },
     { label: strings.GRAMINOID, value: useLocalizedValues ? strings.GRAMINOID : 'Graminoid' },
     { label: strings.FERN, value: useLocalizedValues ? strings.FERN : 'Fern' },
+    { label: strings.FUNGI, value: useLocalizedValues ? strings.FUNGI : 'Fungi' },
+    { label: strings.LICHEN, value: useLocalizedValues ? strings.LICHEN : 'Lichen' },
+    { label: strings.MOSS, value: useLocalizedValues ? strings.MOSS : 'Moss' },
   ];
 }
 
@@ -102,8 +105,14 @@ export function getGrowthFormString(species: Species) {
         return strings.FERN;
       case 'Forb':
         return strings.FORB;
+      case 'Fungi':
+        return strings.FUNGI;
       case 'Graminoid':
         return strings.GRAMINOID;
+      case 'Lichen':
+        return strings.LICHEN;
+      case 'Moss':
+        return strings.MOSS;
       case 'Shrub':
         return strings.SHRUB;
       case 'Tree':

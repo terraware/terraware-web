@@ -352,6 +352,7 @@ FROM_NURSERY,From: Nursery
 FROM_NURSERY_REQUIRED,From: Nursery *
 FROM_SUBZONE,From: Subzone
 FRONT_OF_SEED_BANK,Front of Seed Bank
+FUNGI,Fungi
 G,g
 G_GRAMS,g (grams)
 GA3,GA3
@@ -452,6 +453,7 @@ LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Seeds tolerate levels of desiccation r
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Seeds do not tolerate levels of desiccation required for ex situ (off-site) conservation.
 LEAVE_AND_SAVE,Leave and Save
 LEAVE_ORGANIZATION,Leave Organization
+LICHEN,Lichen
 LIGHT,Light
 LOADING,Loading...
 LOCATION,Location
