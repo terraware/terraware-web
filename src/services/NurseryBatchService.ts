@@ -35,6 +35,17 @@ const DEFAULT_BATCH_FIELDS = [
   'notes',
 ];
 
+const EXPORT_BATCH_FIELDS = [
+  'batchNumber',
+  'species_scientificName',
+  'germinatingQuantity',
+  'notReadyQuantity',
+  'readyQuantity',
+  'totalQuantity',
+  'facility_name',
+  'addedDate',
+];
+
 export type BatchId = {
   batchId: number | null;
 };
@@ -135,8 +146,9 @@ const getBatchesForSpeciesById = async (
   organizationId: number,
   speciesId: number,
   searchFields: SearchNodePayload[],
-  searchSortOrder?: SearchSortOrder
-): Promise<SearchResponseElement[] | null> => {
+  searchSortOrder?: SearchSortOrder,
+  isExport?: boolean
+): Promise<any> => {
   const searchParams = {
     prefix: 'batches',
     search: {
@@ -155,7 +167,7 @@ const getBatchesForSpeciesById = async (
         },
       ],
     },
-    fields: DEFAULT_BATCH_FIELDS,
+    fields: isExport ? EXPORT_BATCH_FIELDS : DEFAULT_BATCH_FIELDS,
     sortOrder: [
       searchSortOrder ?? {
         field: 'batchNumber',
@@ -172,7 +184,19 @@ const getBatchesForSpeciesById = async (
     });
   }
 
-  return await SearchService.search(searchParams);
+  return isExport ? await SearchService.searchCsv(searchParams) : await SearchService.search(searchParams);
+};
+
+/**
+ * Export batches
+ */
+const exportBatchesForSpeciesById = async (
+  organizationId: number,
+  speciesId: number,
+  searchFields: SearchNodePayload[],
+  searchSortOrder?: SearchSortOrder
+): Promise<any> => {
+  return await getBatchesForSpeciesById(organizationId, speciesId, searchFields, searchSortOrder, true);
 };
 
 /**
@@ -240,6 +264,7 @@ const NurseryBatchService = {
   deleteBatch,
   updateBatch,
   updateBatchQuantities,
+  exportBatchesForSpeciesById,
 };
 
 export default NurseryBatchService;

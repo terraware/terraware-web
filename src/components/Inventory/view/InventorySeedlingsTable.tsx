@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme } from '@mui/material';
-import { Button, TableColumnType } from '@terraware/web-components';
+import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
-import { SearchSortOrder } from 'src/types/Search';
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -19,6 +19,8 @@ import { TopBarButton } from '@terraware/web-components/components/table';
 import { useOrganization } from 'src/providers/hooks';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import BatchesExportModal from './BatchesExportModal';
 
 interface InventorySeedslingsTableProps {
   speciesId: number;
@@ -33,6 +35,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const { speciesId, modified, setModified, openBatchNumber, onUpdateOpenBatch } = props;
   const { isMobile, isDesktop } = useDeviceInfo();
   const theme = useTheme();
+  const [openExportModal, setOpenExportModal] = useState<boolean>(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
   const [batches, setBatches] = useState<any[]>([]);
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
@@ -58,33 +61,33 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     { key: 'quantitiesMenu', name: '', type: 'string' },
   ];
 
+  const getSearchFields = useCallback(() => {
+    // Skip fuzzy search on empty strings since the query will be
+    // expensive and results will be the same as not adding the fuzzy search
+    const fields = debouncedSearchTerm
+      ? [
+          {
+            operation: 'field',
+            field: 'facility_name',
+            type: 'Fuzzy',
+            values: [debouncedSearchTerm],
+          },
+        ]
+      : [];
+
+    if (filters.facilityIds && filters.facilityIds.length > 0) {
+      fields.push({
+        operation: 'field',
+        field: 'facility_id',
+        type: 'Exact',
+        values: filters.facilityIds.map((id) => id.toString()),
+      });
+    }
+    return fields;
+  }, [debouncedSearchTerm, filters?.facilityIds]);
+
   useEffect(() => {
     let activeRequests = true;
-
-    const getSearchFields = () => {
-      // Skip fuzzy search on empty strings since the query will be
-      // expensive and results will be the same as not adding the fuzzy search
-      const fields = debouncedSearchTerm
-        ? [
-            {
-              operation: 'field',
-              field: 'facility_name',
-              type: 'Fuzzy',
-              values: [debouncedSearchTerm],
-            },
-          ]
-        : [];
-
-      if (filters.facilityIds && filters.facilityIds.length > 0) {
-        fields.push({
-          operation: 'field',
-          field: 'facility_id',
-          type: 'Exact',
-          values: filters.facilityIds.map((id) => id.toString()),
-        });
-      }
-      return fields;
-    };
 
     const populateResults = async () => {
       const searchFields = getSearchFields();
@@ -96,7 +99,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
       );
 
       if (activeRequests) {
-        const batchesResults = searchResponse?.map((sr) => {
+        const batchesResults = searchResponse?.map((sr: SearchResponseElement) => {
           return { ...sr, facilityId: sr.facility_id };
         });
         setBatches(batchesResults || []);
@@ -110,7 +113,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     return () => {
       activeRequests = false;
     };
-  }, [debouncedSearchTerm, selectedOrganization, speciesId, filters.facilityIds, modified, searchSortOrder]);
+  }, [getSearchFields, selectedOrganization, speciesId, filters.facilityIds, modified, searchSortOrder]);
 
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
@@ -209,87 +212,111 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
     });
   };
 
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    if (optionItem.value === 'export') {
+      setOpenExportModal(true);
+    }
+  };
+
   return (
-    <Grid
-      item
-      xs={12}
-      sx={{
-        backgroundColor: theme.palette.TwClrBg,
-        borderRadius: '32px',
-        marginTop: theme.spacing(3),
-        minWidth: 'fit-content',
-        padding: theme.spacing(3),
-      }}
-    >
-      <BatchDetailsModal
-        open={openNewBatchModal}
-        reload={reloadData}
-        onClose={() => {
-          onUpdateOpenBatch(null);
-          setOpenNewBatchModal(false);
+    <>
+      {openExportModal && (
+        <BatchesExportModal
+          speciesId={speciesId}
+          organizationId={selectedOrganization.id}
+          searchFields={getSearchFields()}
+          searchSortOrder={searchSortOrder}
+          onClose={() => setOpenExportModal(false)}
+        />
+      )}
+      <Grid
+        item
+        xs={12}
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          marginTop: theme.spacing(3),
+          minWidth: 'fit-content',
+          padding: theme.spacing(3),
         }}
-        speciesId={speciesId}
-        selectedBatch={selectedBatch}
-      />
-      <DeleteBatchesModal
-        open={openDeleteModal}
-        onClose={() => setOpenDeleteModal(false)}
-        onSubmit={deleteSelectedBatches}
-      />
-      <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: theme.spacing(4),
-            width: isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 76px)',
-            maxWidth: '100%',
+      >
+        <BatchDetailsModal
+          open={openNewBatchModal}
+          reload={reloadData}
+          onClose={() => {
+            onUpdateOpenBatch(null);
+            setOpenNewBatchModal(false);
           }}
-        >
-          <Typography
+          speciesId={speciesId}
+          selectedBatch={selectedBatch}
+        />
+        <DeleteBatchesModal
+          open={openDeleteModal}
+          onClose={() => setOpenDeleteModal(false)}
+          onSubmit={deleteSelectedBatches}
+        />
+        <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
+          <Box
             sx={{
-              fontSize: '20px',
-              fontWeight: 600,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: theme.spacing(4),
+              width: isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 76px)',
+              maxWidth: '100%',
             }}
           >
-            {strings.SEEDLINGS_BATCHES}
-          </Typography>
-          <Button
-            id='new-batch'
-            icon='plus'
-            label={isMobile ? '' : strings.ADD_BATCH}
-            onClick={addBatch}
-            size='small'
+            <Typography
+              sx={{
+                fontSize: '20px',
+                fontWeight: 600,
+              }}
+            >
+              {strings.SEEDLINGS_BATCHES}
+            </Typography>
+            <Box display='flex' alignItems='center'>
+              <Button
+                id='new-batch'
+                icon='plus'
+                label={isMobile ? '' : strings.ADD_BATCH}
+                onClick={addBatch}
+                size='small'
+              />
+              <OptionsMenu
+                onOptionItemClick={onOptionItemClick}
+                optionItems={[{ label: strings.EXPORT, value: 'export' }]}
+                size='small'
+              />
+            </Box>
+          </Box>
+          <Search
+            searchValue={temporalSearchValue}
+            onSearch={(val) => setTemporalSearchValue(val)}
+            filters={filters}
+            setFilters={setFilters}
           />
-        </Box>
-        <Search
-          searchValue={temporalSearchValue}
-          onSearch={(val) => setTemporalSearchValue(val)}
-          filters={filters}
-          setFilters={setFilters}
-        />
-        <Box marginTop={theme.spacing(2)}>
-          <Table
-            id='batches-table'
-            columns={columns}
-            rows={batches}
-            orderBy='batchNumber'
-            Renderer={BatchesCellRenderer}
-            reloadData={reloadData}
-            selectedRows={selectedRows}
-            setSelectedRows={setSelectedRows}
-            showCheckbox={true}
-            isClickable={() => false}
-            showTopBar={true}
-            topBarButtons={getTopBarButtons()}
-            onSelect={onBatchSelected}
-            controlledOnSelect={true}
-            sortHandler={onSortChange}
-            isPresorted={!!searchSortOrder}
-          />
-        </Box>
+          <Box marginTop={theme.spacing(2)}>
+            <Table
+              id='batches-table'
+              columns={columns}
+              rows={batches}
+              orderBy='batchNumber'
+              Renderer={BatchesCellRenderer}
+              reloadData={reloadData}
+              selectedRows={selectedRows}
+              setSelectedRows={setSelectedRows}
+              showCheckbox={true}
+              isClickable={() => false}
+              showTopBar={true}
+              topBarButtons={getTopBarButtons()}
+              onSelect={onBatchSelected}
+              controlledOnSelect={true}
+              sortHandler={onSortChange}
+              isPresorted={!!searchSortOrder}
+            />
+          </Box>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }
