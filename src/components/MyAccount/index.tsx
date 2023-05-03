@@ -98,7 +98,7 @@ const MyAccountContent = ({
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
   const localeSelectionEnabled = isEnabled('Locale selection');
-  const { selectedLocale } = useLocalization();
+  const { selectedLocale, setSelectedLocale } = useLocalization();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
   const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState(
@@ -193,11 +193,14 @@ const MyAccountContent = ({
       await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
       reloadUserPreferences();
 
+      const lastLocale = selectedLocale;
+      setSelectedLocale(localeSelected);
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded) {
         reloadUser();
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
+        setSelectedLocale(lastLocale);
         snackbar.toastError();
       }
       history.push(APP_PATHS.MY_ACCOUNT);
