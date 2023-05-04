@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NurseryWithdrawalService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import { ViewPhotosDialog } from '@terraware/web-components';

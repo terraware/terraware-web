@@ -1,7 +1,7 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon, ViewPhotosDialog } from '@terraware/web-components';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Accession } from 'src/types/Accession';
 import strings from 'src/strings';
 import { LocationService } from 'src/services';

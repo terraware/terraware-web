@@ -1,5 +1,5 @@
 import { Box, Theme, useTheme } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
 import ReportService, { REPORT_PHOTO_ENDPOINT } from 'src/services/ReportService';
 import { Button, ViewPhotosDialog } from '@terraware/web-components';
