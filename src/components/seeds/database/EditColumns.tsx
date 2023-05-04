@@ -187,15 +187,23 @@ function sections(system?: string): Section[] {
     {
       name: strings.SEED_COLLECTION,
       options: [
-        [columns.speciesName, columns.species_commonName, columns.species_familyName, columns.estimatedCount],
-        [columns.ageYears, columns.ageMonths],
+        [columns.speciesName, columns.species_commonName, columns.species_familyName],
         [
           columns.collectedDate,
           columns.collectionSiteName,
           columns.collectionSiteLandowner,
           columns.collectionSiteNotes,
         ],
+        [columns.ageYears, columns.ageMonths],
       ],
+    },
+    {
+      name: strings.WITHDRAWAL,
+      options: totalWithdrawnSection(),
+    },
+    {
+      name: strings.VIABILITY,
+      options: [[columns.totalViabilityPercent]],
     },
     {
       name: strings.WEIGHT_UNITS,
@@ -211,8 +219,8 @@ function sections(system?: string): Section[] {
             ],
     },
     {
-      name: strings.WITHDRAWAL,
-      options: totalWithdrawnSection(),
+      name: strings.COUNT,
+      options: [[columns.estimatedCount]],
     },
   ];
 

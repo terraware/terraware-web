@@ -113,7 +113,7 @@ function columns(): DatabaseColumn[] {
       filter: { type: 'number_range' },
     },
     {
-      key: 'viabilityPercent',
+      key: 'totalViabilityPercent',
       name: strings.VIABILITY,
       type: 'number',
       filter: { type: 'number_range' },
@@ -200,4 +200,10 @@ export const searchPresets = (preferredWeightSystem: string) => {
   return [defaultPreset(preferredWeightSystem), generalInventoryPreset, seedStoragePreset];
 };
 
-export const RIGHT_ALIGNED_COLUMNS = ['ageMonths', 'ageYears', 'estimatedWeightGrams', 'estimatedCount'];
+export const RIGHT_ALIGNED_COLUMNS = [
+  'ageMonths',
+  'ageYears',
+  'estimatedWeightGrams',
+  'estimatedCount',
+  'totalViabilityPercent',
+];
