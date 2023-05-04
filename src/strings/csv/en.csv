@@ -18,7 +18,6 @@ ACCESSIONS_ONBOARDING_SPECIES_MSG,Define a list of species used in your seed inv
 ACCESSIONS_TO_BE_CHECKED_IN,There are {0} accessions to check in.
 ACCOUNT,Account,User access to website or application typically by entering a username and password (noun)
 ACTIVE_ACCESSIONS,Active Accessions
-ACTIVE_INACTIVE,Active/Inactive
 ADD,Add
 ADD_A_NURSERY,Add a Nursery
 ADD_A_PLANTING_SITE,Add a Planting Site
@@ -100,7 +99,6 @@ BACK,Back
 BACK_OF_SEED_BANK,Back of Seed Bank
 BACK_TO_TERRAWARE,Back to Terraware
 BAG_ID,Bag ID
-BAG_IDS,Bag IDs
 BATCH_WITHDRAW_SUCCESS,{0} {1} for a total of {2} {3} withdrawn.
 BATCHES_PLURAL,batches
 BATCHES_SINGULAR,batch
@@ -248,7 +246,6 @@ DOWNLOAD_THE_CSV_TEMPLATE,Download the CSV template.
 DRIED,Dried
 DRY_CABINET,Dry Cabinet
 DRYING,Drying
-DRYING_END_DATE,Estimated Drying End Date
 DRYING_RACKS,Drying Racks
 DRYING_START_DATE,Drying Start Date
 DUPLICATE_SPECIES_FOUND,Duplicate species found.
@@ -305,7 +302,6 @@ ENVIRONMENTAL_NOTES_PLACEHOLDER,"Important notes about landscape, climate, and e
 EST_READY_DATE,Est. Ready Date
 ESTIMATED_DRYING_END_DATE,Estimated Drying End Date
 ESTIMATED_READY_DATE,Estimated Ready Date
-ESTIMATED_SEEDS_INCOMING,Estimated Seeds Incoming
 EXISTING_SPECIES_MSG,“{0}” is already in your species list.
 EXPORT,Export
 EXPORT_RECORDS,Export Records
@@ -570,18 +566,14 @@ NOTES,Notes
 NOTIFICATIONS,Notifications
 NUMBER_OF_PACKETS,Number of Packets
 NUMBER_OF_PEOPLE,Number of People
-NUMBER_OF_PLANTS,Number of Plants
 NUMBER_OF_PLANTS_BY_SPECIES,Number of Plants by Species
 NUMBER_OF_PLANTS_BY_SUBZONE_AND_SPECIES,Number of Plants by Subzone and Species
-NUMBER_OF_SEEDS_COMPROMISED,Number of Seeds Compromised
+NUMBER_OF_SEEDS_COMPROMISED,# Seeds Compromised
 NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Seeds Compromised *
-NUMBER_OF_SEEDS_COMPROMISED_V2,# Seeds Compromised
-NUMBER_OF_SEEDS_EMPTY,Number of Seeds Empty
+NUMBER_OF_SEEDS_EMPTY,# Seeds Empty
 NUMBER_OF_SEEDS_EMPTY_REQUIRED,# Seeds Empty *
-NUMBER_OF_SEEDS_EMPTY_V2,# Seeds Empty
-NUMBER_OF_SEEDS_FILLED,Number of Seeds Filled
+NUMBER_OF_SEEDS_FILLED,# Seeds Filled
 NUMBER_OF_SEEDS_FILLED_REQUIRED,# Seeds Filled *
-NUMBER_OF_SEEDS_FILLED_V2,# Seeds Filled
 NUMBER_OF_SEEDS_GERMINATED,# Seeds Germinated
 NUMBER_OF_SEEDS_GERMINATED_REQUIRED,# Seeds Germinated *
 NUMBER_OF_SEEDS_IN_SUBSET,# of Seeds in Subset
@@ -681,8 +673,6 @@ PROCESSING,Processing
 PROCESSING_AND_DRYING,Processing & Drying
 PROCESSING_AND_DRYING_DESCRIPTION,All the details about processing and drying the seeds.
 PROCESSING_AND_DRYING_INFO,"By adding information about processing/drying and saving changes, you will be automatically changing this accession’s stage from Pending to either Processing, Processed, Drying, or Dried, depending on the information you fill in."
-PROCESSING_METHOD,Processing Method
-PROCESSING_START_DATE,Processing Start Date
 PROCESSING_STATUS_REQUIRED,Processing Status *
 PROJECT_IMPACT,Project Impact
 PROJECT_IMPACT_INSTRUCTIONS,"Provide the details of your impact during the reporting period, including key accomplishments and progress toward meeting stated goals and key milestones. In addition to forestry goals, please include jobs created (full-time, part-time, and seasonal), using specific figures disaggregated by gender. (Approximately one page.)"
@@ -726,7 +716,6 @@ REFRIGERATOR_3,Refrigerator 3
 REINTRODUCED,Reintroduced
 REINTRODUCED_DESCRIPTION,"Plants that have been transplanted from a nursery, greenhouse, or other location to a restoration site."
 REMAINING,Remaining
-REMAINING_UNITS,Remaining Units
 REMINDER_DATE,Reminder Date
 REMOVE,Remove
 REMOVE_AND_SAVE,Remove & Save
@@ -856,9 +845,7 @@ SEEDLINGS_SINGULAR,seedling
 SEEDS,Seeds
 SEEDS_GERMINATED,Seeds Germinated
 SEEDS_GERMINATED_LC,seeds germinated
-SEEDS_REMAINING,Seeds Remaining
 SEEDS_SOWN,Seeds Sown
-SEEDS_UNITS,Units Quantity of Seeds
 SELECT,Select...
 SELECT_BATCHES,Select Batches
 SELECT_BUTTON,Select
@@ -1046,7 +1033,6 @@ TOTAL_ESTIMATED_PERCENTAGE_VIABILITY,Total Estimated % Viability
 TOTAL_ESTIMATED_VIABILITY,Total Estimated Viability
 TOTAL_NUMBER_OF_PLANTS,Total Number of Plants
 TOTAL_NUMBER_OF_PLANTS_PROPAGATED,Total Number of Plants Propagated
-TOTAL_OF_SEEDS_GERMINATED,Total of Seeds Germinated
 TOTAL_PLANTED,Total Planted
 TOTAL_PLANTED_AREA_HA,Total Planted Area (Ha) *
 TOTAL_PLANTED_REQUIRED,Total Planted *
@@ -1074,8 +1060,6 @@ TOTAL_WITHDRAWN_WEIGHT_KILOGRAMS,Total Withdrawn (kg)
 TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,Total Withdrawn (mg)
 TOTAL_WITHDRAWN_WEIGHT_OUNCES,Total Withdrawn (oz)
 TOTAL_WITHDRAWN_WEIGHT_POUNDS,Total Withdrawn (lb)
-TOTAL_WITHDRAWN_WEIGHT_QUANTITY,Total Withdrawn Weight
-TOTAL_WITHDRAWN_WEIGHT_UNITS,Total Withdrawn Weight Units
 TREATMENT,Treatment
 TREE,Tree
 TRUNCATED_TEXT_MORE_LINK,more
@@ -1105,8 +1089,6 @@ VALUE_CANT_EXCEED_100,Value can’t exceed 100%
 VIABILITY,Viability
 VIABILITY_RATE,Viability Rate
 VIABILITY_RESULT,Viability Result
-VIABILITY_START_DATE,Viability Start Date
-VIABILITY_SUBSTRATE,Viability Substrate
 VIABILITY_TEST,Viability Test
 VIABILITY_TEST_NUMBER,Viability Test (#{0})
 VIABILITY_TEST_START_DATE_ERROR,This should not be before the date when seeds were collected
@@ -1117,7 +1099,6 @@ VIABILITY_TESTING,Viability Testing
 VIABILITY_TESTING_EMPTY_MESSAGE,"Viability Testing helps you track seed quality. You can conduct a nursery or lab germination test, or perform a cut test."
 VIABILITY_TESTING_SECTION_TOOLTIP,"Each test will be listed separately, which may cause an accession to appear more than once in the table."
 VIABILITY_TESTS,Viability Tests
-VIABILITY_TREATMENT,Viability Treatment
 VIEW,View
 VIEW_ACCESSION,View accession
 VIEW_SITES_ZONES_SUBZONES,"View Sites, Zones, and Subzones on a map."

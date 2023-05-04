@@ -154,14 +154,14 @@ function sections(system?: string): Section[] {
   const totalWithdrawnSection = () => {
     if (system === 'imperial') {
       return [
-        [columns.totalWithdrawnCount, columns.totalWithdrawnWeightOunces],
-        [columns.totalWithdrawnWeightPounds, columns.totalWithdrawnWeightGrams],
-        [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightKilograms],
+        [columns.totalWithdrawnCount],
+        [columns.totalWithdrawnWeightOunces, columns.totalWithdrawnWeightPounds],
+        [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightGrams, columns.totalWithdrawnWeightKilograms],
       ];
     } else {
       return [
-        [columns.totalWithdrawnCount, columns.totalWithdrawnWeightGrams],
-        [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightKilograms],
+        [columns.totalWithdrawnCount],
+        [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightGrams, columns.totalWithdrawnWeightKilograms],
         [columns.totalWithdrawnWeightOunces, columns.totalWithdrawnWeightPounds],
       ];
     }
@@ -173,8 +173,13 @@ function sections(system?: string): Section[] {
       options: [
         [{ ...columns.accessionNumber, disabled: true }],
         [{ ...columns.state, disabled: true }],
-        [columns.active],
+      ],
+    },
+    {
+      name: strings.STORING,
+      options: [
         [columns.facility_name],
+        [columns.storageLocation_name],
       ],
     },
     {
@@ -184,23 +189,17 @@ function sections(system?: string): Section[] {
           columns.speciesName,
           columns.species_commonName,
           columns.species_familyName,
-          columns.receivedDate,
-          columns.collectedDate,
           columns.estimatedCount,
         ],
         [
-          columns.species_endangered,
-          columns.species_rare,
-          columns.collectionSource,
           columns.ageYears,
           columns.ageMonths,
         ],
         [
-          columns.plantsCollectedFrom,
-          columns.bagNumber,
+          columns.collectedDate,
+          columns.collectionSiteName,
           columns.collectionSiteLandowner,
           columns.collectionSiteNotes,
-          columns.collectionSiteName,
         ],
       ],
     },
@@ -210,45 +209,16 @@ function sections(system?: string): Section[] {
         system === 'imperial'
           ? [
               [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
-              [columns.estimatedWeightGrams, columns.estimatedWeightMilligrams],
-              [columns.estimatedWeightKilograms],
+              [columns.estimatedWeightMilligrams, columns.estimatedWeightGrams, columns.estimatedWeightKilograms],
             ]
           : [
-              [columns.estimatedWeightGrams, columns.estimatedWeightMilligrams],
-              [columns.estimatedWeightKilograms],
+              [columns.estimatedWeightMilligrams, columns.estimatedWeightGrams, columns.estimatedWeightKilograms],
               [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
             ],
     },
     {
-      name: strings.PROCESSING_AND_DRYING,
-      options: [[columns.dryingEndDate], [columns.remainingQuantity]],
-    },
-    {
-      name: strings.STORING,
-      options: [[columns.storageLocation_name]],
-    },
-    {
       name: strings.WITHDRAWAL,
       options: totalWithdrawnSection(),
-    },
-    {
-      name: strings.VIABILITY_TESTING,
-      tooltip: strings.VIABILITY_TESTING_SECTION_TOOLTIP,
-      options: [
-        [
-          columns.viabilityTests_type,
-          columns.viabilityTests_seedType,
-          columns.viabilityTests_treatment,
-          columns.viabilityTests_seedsFilled,
-        ],
-        [
-          columns.viabilityTests_startDate,
-          columns.viabilityTests_seedsSown,
-          columns.viabilityTests_viabilityTestResults_seedsGerminated,
-          columns.viabilityTests_seedsEmpty,
-        ],
-        [columns.viabilityTests_substrate, columns.viabilityTests_seedsCompromised, columns.viabilityTests_notes],
-      ],
     },
   ];
 
