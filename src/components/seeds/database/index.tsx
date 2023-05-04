@@ -271,14 +271,26 @@ export default function Database(props: DatabaseProps): JSX.Element {
     [userPreferences.preferredWeightSystem, userPreferences.defaultWeightSystemAcknowledgedOnMs, updateSearchColumns]
   );
 
-  const saveUpdateSearchColumns = useCallback(
+  const saveSearchColumns = useCallback(
     async (columnNames?: string[]) => {
-      updateSearchColumns(columnNames);
       await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
       reloadOrgPreferences();
     },
-    [selectedOrganization.id, updateSearchColumns, reloadOrgPreferences]
+    [selectedOrganization.id, reloadOrgPreferences]
   );
+
+  const saveUpdateSearchColumns = useCallback(
+    async (columnNames?: string[]) => {
+      updateSearchColumns(columnNames);
+      await saveSearchColumns(columnNames);
+    },
+    [updateSearchColumns, saveSearchColumns]
+  );
+
+  const reorderSearchColumns = async (columnNames: string[]) => {
+    setDisplayColumnNames(columnNames);
+    await saveSearchColumns(columnNames);
+  };
 
   useEffect(() => {
     if (orgPreferences?.accessionsColumns) {
@@ -709,7 +721,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           onSelect={onSelect}
                           sortHandler={onSortChange}
                           isInactive={isInactive}
-                          onReorderEnd={saveUpdateSearchColumns}
+                          onReorderEnd={(reorderedColumns: string[]) => reorderSearchColumns(reorderedColumns)}
                           isPresorted={true}
                         />
                       )}

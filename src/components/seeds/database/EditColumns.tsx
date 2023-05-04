@@ -156,12 +156,20 @@ function sections(system?: string): Section[] {
       return [
         [columns.totalWithdrawnCount],
         [columns.totalWithdrawnWeightOunces, columns.totalWithdrawnWeightPounds],
-        [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightGrams, columns.totalWithdrawnWeightKilograms],
+        [
+          columns.totalWithdrawnWeightMilligrams,
+          columns.totalWithdrawnWeightGrams,
+          columns.totalWithdrawnWeightKilograms,
+        ],
       ];
     } else {
       return [
         [columns.totalWithdrawnCount],
-        [columns.totalWithdrawnWeightMilligrams, columns.totalWithdrawnWeightGrams, columns.totalWithdrawnWeightKilograms],
+        [
+          columns.totalWithdrawnWeightMilligrams,
+          columns.totalWithdrawnWeightGrams,
+          columns.totalWithdrawnWeightKilograms,
+        ],
         [columns.totalWithdrawnWeightOunces, columns.totalWithdrawnWeightPounds],
       ];
     }
@@ -170,31 +178,17 @@ function sections(system?: string): Section[] {
   const columnsSections = [
     {
       name: strings.GENERAL,
-      options: [
-        [{ ...columns.accessionNumber, disabled: true }],
-        [{ ...columns.state, disabled: true }],
-      ],
+      options: [[{ ...columns.accessionNumber, disabled: true }], [{ ...columns.state, disabled: true }]],
     },
     {
       name: strings.STORING,
-      options: [
-        [columns.facility_name],
-        [columns.storageLocation_name],
-      ],
+      options: [[columns.facility_name], [columns.storageLocation_name]],
     },
     {
       name: strings.SEED_COLLECTION,
       options: [
-        [
-          columns.speciesName,
-          columns.species_commonName,
-          columns.species_familyName,
-          columns.estimatedCount,
-        ],
-        [
-          columns.ageYears,
-          columns.ageMonths,
-        ],
+        [columns.speciesName, columns.species_commonName, columns.species_familyName, columns.estimatedCount],
+        [columns.ageYears, columns.ageMonths],
         [
           columns.collectedDate,
           columns.collectionSiteName,
