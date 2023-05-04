@@ -2,7 +2,7 @@ import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { NurseryBatchService } from 'src/services';
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
 
-interface DownloadReportModalProps {
+interface BatchesExportModalProps {
   organizationId: number;
   speciesId: number;
   searchFields: SearchNodePayload[];
@@ -10,7 +10,7 @@ interface DownloadReportModalProps {
   onClose: () => void;
 }
 
-export default function DownloadReportModal(props: DownloadReportModalProps): JSX.Element {
+export default function BatchesExportModal(props: BatchesExportModalProps): JSX.Element {
   const { organizationId, speciesId, searchFields, searchSortOrder, onClose } = props;
 
   const onExport = async () => {
