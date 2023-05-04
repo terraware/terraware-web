@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import { useEffect, useState } from 'react';
 import { NurseryWithdrawalService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
-import ViewPhotosModal from 'src/components/common/ViewPhotosModal';
+import { ViewPhotosDialog } from '@terraware/web-components';
 
 const NURSERY_WITHDRAWAL_PHOTO_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}';
 
@@ -45,11 +45,14 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
 
   return (
     <>
-      <ViewPhotosModal
-        photosUrls={photoUrls}
+      <ViewPhotosDialog
+        photos={photoUrls.map((url) => ({ url }))}
         open={photosModalOpened}
         onClose={() => setPhotosModalOpened(false)}
-        selectedSlide={selectedSlide}
+        initialSelectedSlide={selectedSlide}
+        nextButtonLabel={strings.NEXT}
+        prevButtonLabel={strings.PREVIOUS}
+        title={strings.PHOTOS}
       />
       <Typography fontSize='20px' fontWeight={600}>
         {strings.PHOTOS}

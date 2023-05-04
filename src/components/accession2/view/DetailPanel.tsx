@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Icon } from '@terraware/web-components';
+import { Button, Icon, ViewPhotosDialog } from '@terraware/web-components';
 import { useEffect, useState } from 'react';
 import { Accession } from 'src/types/Accession';
 import strings from 'src/strings';
@@ -9,7 +9,6 @@ import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { Country } from 'src/types/Country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Accession2EditModal from '../edit/Accession2EditModal';
-import ViewPhotosModal from 'src/components/common/ViewPhotosModal';
 import { isContributor } from 'src/utils/organization';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 
@@ -123,13 +122,18 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
           reload={reload}
         />
       )}
-      <ViewPhotosModal
-        photosUrls={
-          accession.photoFilenames?.map((file) => `/api/v1/seedbank/accessions/${accession.id}/photos/${file}`) || []
+      <ViewPhotosDialog
+        photos={
+          accession.photoFilenames?.map((file) => ({
+            url: `/api/v1/seedbank/accessions/${accession.id}/photos/${file}`,
+          })) || []
         }
         open={photosModalOpened}
         onClose={() => setPhotosModalOpened(false)}
-        selectedSlide={selectedSlide}
+        initialSelectedSlide={selectedSlide}
+        nextButtonLabel={strings.NEXT}
+        prevButtonLabel={strings.PREVIOUS}
+        title={strings.PHOTOS}
       />
       <Grid container>
         <Grid item xs={9}>

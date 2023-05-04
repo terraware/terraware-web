@@ -2315,10 +2315,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.3.28":
-  version "2.3.28"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.28.tgz#7907db6a394efd702b4638f85bb476011109f2ab"
-  integrity sha512-rZBPrkudAo4ytPgboGuDsvH2t/7vCy/CBkznm8oKz/TiwAYaiWUJ4TUc4+Ja9Ge5wd0QLKnlb2LKHz0heL2f+w==
+"@terraware/web-components@^2.3.32":
+  version "2.3.32"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.32.tgz#bb7ee5b482eefbea4f0b9355dd98b6074da0574e"
+  integrity sha512-9qU/UWI5RxPN2+wT0IAwASOfcQrwkexhTzfYMl3apFYNENwf9E+aM8tq7ANW87Ut/WNRjmNd3W1vGYgqJ2sYKQ==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
@@ -2337,6 +2337,7 @@
     moment-timezone "^0.5.43"
     react "^17.0.2"
     react-dom "^17.0.2"
+    react-multi-carousel "^2.8.2"
     react-responsive "^9.0.2"
     react-sortable-hoc "^2.0.0"
     sass "^1.57.1"
