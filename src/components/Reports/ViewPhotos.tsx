@@ -1,11 +1,11 @@
 import { Box, Theme, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
-import ViewPhotosModal from 'src/components/common/ViewPhotosModal';
 import ReportService, { REPORT_PHOTO_ENDPOINT } from 'src/services/ReportService';
-import { Button } from '@terraware/web-components';
+import { Button, ViewPhotosDialog } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
 import { ReportPhoto } from 'src/types/Report';
+import strings from 'src/strings';
 
 type PhotosSectionProps = {
   reportId: number;
@@ -71,11 +71,14 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
 
   return (
     <>
-      <ViewPhotosModal
-        photosUrls={photos.map((photo) => photo.url)}
+      <ViewPhotosDialog
+        photos={photos.map((photo) => ({ url: photo.url }))}
         open={photosModalOpened}
         onClose={closeHandler}
-        selectedSlide={selectedSlide}
+        initialSelectedSlide={selectedSlide}
+        nextButtonLabel={strings.NEXT}
+        prevButtonLabel={strings.PREVIOUS}
+        title={strings.PHOTOS}
       />
       <Box display='flex' flexWrap='wrap'>
         {photos.map((photo, index) => (
