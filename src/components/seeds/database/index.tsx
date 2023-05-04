@@ -721,7 +721,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           onSelect={onSelect}
                           sortHandler={onSortChange}
                           isInactive={isInactive}
-                          onReorderEnd={(reorderedColumns: string[]) => reorderSearchColumns(reorderedColumns)}
+                          onReorderEnd={reorderSearchColumns}
                           isPresorted={true}
                         />
                       )}
