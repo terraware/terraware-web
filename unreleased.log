@@ -1,3 +1,4 @@
+218f8aeb Updates to Use Photo Viewer from web-components (#1396)
 9d24bd38 SW-3437 Switch to selected locale on MyAccount save so confirmation reflects new locale (#1393)
 d6e0c2fe SW-3437 Fix locale selector in My Account (#1392)
 30b8694f Updated translations from Phrase (#1391)
