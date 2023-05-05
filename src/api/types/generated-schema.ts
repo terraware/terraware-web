@@ -2089,7 +2089,7 @@ export interface components {
         | "Forb"
         | "Graminoid"
         | "Fern"
-        | "Fungi"
+        | "Fungus"
         | "Lichen"
         | "Moss";
       /**
@@ -2131,7 +2131,7 @@ export interface components {
         | "Forb"
         | "Graminoid"
         | "Fern"
-        | "Fungi"
+        | "Fungus"
         | "Lichen"
         | "Moss";
       /** Format: int64 */
