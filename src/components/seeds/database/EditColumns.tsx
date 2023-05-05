@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import Checkbox from '../../common/Checkbox';
 import Divisor from '../../common/Divisor';
 import RadioButton from '../../common/RadioButton';
-import { columnsIndexed, Preset, searchPresets } from './columns';
+import { orderedColumnNames, columnsIndexed, Preset, searchPresets } from './columns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
@@ -12,18 +12,17 @@ import { useUser } from 'src/providers';
 import { IconTooltip } from '@terraware/web-components';
 
 export interface Props {
-  open: boolean;
   onClose: (columns?: string[]) => void;
   value: string[];
 }
 
 export default function EditColumnsDialog(props: Props): JSX.Element {
-  const { onClose, open } = props;
+  const { onClose } = props;
   const [preset, setPreset] = React.useState<Preset>();
   const { isMobile } = useDeviceInfo();
   const { userPreferences } = useUser();
 
-  const [value, setValue] = React.useState(props.value ?? []);
+  const [value, setValue] = React.useState(props.value);
 
   React.useEffect(() => {
     setValue(props.value);
@@ -35,7 +34,27 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   };
 
   const handleOk = () => {
-    onClose(value);
+    // fetch system defined preferred order of column names
+    const ordered = orderedColumnNames();
+
+    // preserve order of existing visible columns
+    // filter out those that are not in the new list of columns to set
+    // i.e. current columns: A, C, D, B
+    //      new columns: A, B, D, E, F
+    //      preserved order of original list of columns: A, D, B (C is not in the new list)
+    const orderToMaintain = props.value.filter((name) => value.indexOf(name) !== -1);
+
+    // identify new columns to insert into the preserved order
+    // i.e. preserved order: A, D, B
+    //      new columns to insert: E, F
+    const keysToInsert = value.filter((name) => orderToMaintain.indexOf(name) === -1);
+
+    // insert keys into the maintained order
+    // get the index for the keys from the ordered keys in new values
+    const systemOrder = value.sort((a, b) => ordered.indexOf(a) - ordered.indexOf(b));
+    keysToInsert.forEach((key) => orderToMaintain.splice(systemOrder.indexOf(key), 0, key));
+
+    onClose(orderToMaintain);
   };
 
   const onSelectPreset = (updatedPreset: Preset) => {
@@ -64,7 +83,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     <DialogBox
       scrolled
       onClose={handleCancel}
-      open={open}
+      open={true}
       title={strings.CUSTOMIZE_TABLE_COLUMNS}
       size='x-large'
       middleButtons={[
