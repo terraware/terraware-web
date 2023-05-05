@@ -4,9 +4,6 @@
  */
 
 export interface paths {
-  "/admin/plantingSite/{plantingSiteId}/plots": {
-    get: operations["getMonitoringPlots"];
-  };
   "/api/v1/automations": {
     get: operations["listAutomations"];
     post: operations["createAutomation"];
@@ -2641,21 +2638,6 @@ export interface components {
 }
 
 export interface operations {
-  getMonitoringPlots: {
-    parameters: {
-      path: {
-        plantingSiteId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": { [key: string]: { [key: string]: unknown } };
-        };
-      };
-    };
-  };
   listAutomations: {
     parameters: {
       query: {
