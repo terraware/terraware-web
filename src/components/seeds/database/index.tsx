@@ -236,13 +236,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const updateSearchColumns = useCallback(
     (columnNames?: string[]) => {
       if (columnNames) {
-        if (
-          !userPreferences.defaultWeightSystemAcknowledgedOnMs &&
-          userPreferences.preferredWeightSystem !== 'imperial' &&
-          columnNames.find((cn) => cn === 'estimatedWeightOunces' || cn === 'estimatedWeightPounds')
-        ) {
-          setShowDefaultSystemSnackbar(true);
-        }
         const columnInfo = columnsIndexed();
         const validColumns = columnNames.filter((name) => name in columnInfo);
         const searchSelectedColumns = validColumns.reduce((acum, value) => {
@@ -259,28 +252,51 @@ export default function Database(props: DatabaseProps): JSX.Element {
         setDisplayColumnNames(validColumns);
       }
     },
-    [
-      setSearchColumns,
-      setDisplayColumnNames,
-      userPreferences.preferredWeightSystem,
-      userPreferences.defaultWeightSystemAcknowledgedOnMs,
-    ]
+    [setSearchColumns, setDisplayColumnNames]
+  );
+
+  const updateSearchColumnsBootstrap = useCallback(
+    (columnNames?: string[]) => {
+      if (columnNames) {
+        if (
+          !userPreferences.defaultWeightSystemAcknowledgedOnMs &&
+          userPreferences.preferredWeightSystem !== 'imperial' &&
+          columnNames.find((cn) => cn === 'estimatedWeightOunces' || cn === 'estimatedWeightPounds')
+        ) {
+          setShowDefaultSystemSnackbar(true);
+        }
+        updateSearchColumns(columnNames);
+      }
+    },
+    [userPreferences.preferredWeightSystem, userPreferences.defaultWeightSystemAcknowledgedOnMs, updateSearchColumns]
+  );
+
+  const saveSearchColumns = useCallback(
+    async (columnNames?: string[]) => {
+      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
+      reloadOrgPreferences();
+    },
+    [selectedOrganization.id, reloadOrgPreferences]
   );
 
   const saveUpdateSearchColumns = useCallback(
     async (columnNames?: string[]) => {
       updateSearchColumns(columnNames);
-      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
-      reloadOrgPreferences();
+      await saveSearchColumns(columnNames);
     },
-    [selectedOrganization.id, updateSearchColumns, reloadOrgPreferences]
+    [updateSearchColumns, saveSearchColumns]
   );
+
+  const reorderSearchColumns = async (columnNames: string[]) => {
+    setDisplayColumnNames(columnNames);
+    await saveSearchColumns(columnNames);
+  };
 
   useEffect(() => {
     if (orgPreferences?.accessionsColumns) {
-      updateSearchColumns(orgPreferences.accessionsColumns as string[]);
+      updateSearchColumnsBootstrap(orgPreferences.accessionsColumns as string[]);
     }
-  }, [orgPreferences, updateSearchColumns]);
+  }, [orgPreferences, updateSearchColumnsBootstrap]);
 
   useEffect(() => {
     // if url has stage=<accession state>, apply that filter
@@ -503,10 +519,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     return false;
   };
 
-  const reorderEndHandler = (newOrder: string[]) => {
-    setDisplayColumnNames(newOrder);
-  };
-
   const handleViewCollections = () => {
     history.push(APP_PATHS.CHECKIN);
   };
@@ -709,7 +721,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           onSelect={onSelect}
                           sortHandler={onSortChange}
                           isInactive={isInactive}
-                          onReorderEnd={reorderEndHandler}
+                          onReorderEnd={reorderSearchColumns}
                           isPresorted={true}
                         />
                       )}

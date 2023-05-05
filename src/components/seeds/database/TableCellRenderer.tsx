@@ -68,6 +68,12 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
     return <CellRenderer index={index} column={column} value={`${value === 'true' ? 'Yes' : 'No'}`} row={row} />;
   }
 
+  if (column.key === 'totalViabilityPercent' && value !== undefined) {
+    return (
+      <CellRenderer index={index} column={column} value={`${value}%`} row={row} className={classes.rightAligned} />
+    );
+  }
+
   const className = RIGHT_ALIGNED_COLUMNS.indexOf(column.key) !== -1 ? classes.rightAligned : '';
 
   return <CellRenderer {...props} className={className} />;
