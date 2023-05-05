@@ -258,7 +258,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             </Grid>
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
-                {viabilityTest.testType === 'Cut' ? strings.NUMBER_OF_SEEDS_FILLED : strings.NUMBER_OF_SEEDS_TESTED_V2}
+                {viabilityTest.testType === 'Cut' ? strings.NUMBER_OF_SEEDS_FILLED_V2 : strings.NUMBER_OF_SEEDS_TESTED}
               </Grid>
               <Grid xs={12}>
                 {viabilityTest.testType === 'Cut' ? viabilityTest.seedsFilled : viabilityTest.seedsTested}
