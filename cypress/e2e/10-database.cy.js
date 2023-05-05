@@ -123,20 +123,21 @@ describe('Database', () => {
         cy.get('#more-options').click();
         cy.get('.MuiList-root > :nth-child(3)').click();
 
-        cy.get('#General\\ Inventory').click();
         cy.get('#Default').click();
         cy.get('#saveColumnsButton').click();
         cy.wait('@search');
         cy.wait('@values');
         cy.get('#editColumnsDialog').should('not.exist');
 
-        cy.get('#table-header').children().should('have.length', 6);
+        cy.get('#table-header').children().should('have.length', 8);
         cy.get('#table-header-accessionNumber').contains('ACCESSION');
         cy.get('#table-header-state').contains('STATUS');
         cy.get('#table-header-speciesName').contains('SPECIES');
         cy.get('#table-header-collectedDate').contains('COLLECTION DATE');
         cy.get('#table-header-collectionSiteName').contains('COLLECTING SITE');
-        cy.get('#table-header-collectionSiteLandowner').contains('LANDOWNER');
+        cy.get('#table-header-ageMonths').contains('AGE (MONTH');
+        cy.get('#table-header-estimatedWeightGrams').contains('WEIGHT (G)');
+        cy.get('#table-header-estimatedCount').contains('COUNT');
       });
 
       it('Seed Storage Status', () => {
