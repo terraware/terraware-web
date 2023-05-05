@@ -83,6 +83,15 @@ export const LearnMoreModalContentGrowthForm = (): JSX.Element => (
     <p>
       <strong>{strings.TREE}:</strong> {strings.LEARN_MORE_GROWTH_FORM_TREE}
     </p>
+    <p>
+      <strong>{strings.FUNGUS}:</strong> {strings.LEARN_MORE_GROWTH_FORM_FUNGUS}
+    </p>
+    <p>
+      <strong>{strings.LICHEN}:</strong> {strings.LEARN_MORE_GROWTH_FORM_LICHEN}
+    </p>
+    <p>
+      <strong>{strings.MOSS}:</strong> {strings.LEARN_MORE_GROWTH_FORM_MOSS}
+    </p>
   </>
 );
 

@@ -1684,13 +1684,6 @@ export interface components {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    MonitoringPlotPayload: {
-      boundary: components["schemas"]["MultiPolygon"];
-      fullName: string;
-      /** Format: int64 */
-      id: number;
-      name: string;
-    };
     MultiPolygon: {
       coordinates: number[][][][];
       crs?: components["schemas"]["CRS"];
@@ -1840,7 +1833,6 @@ export interface components {
       fullName: string;
       /** Format: int64 */
       id: number;
-      monitoringPlots: components["schemas"]["MonitoringPlotPayload"][];
       name: string;
     };
     PlantingZonePayload: {
@@ -2088,7 +2080,15 @@ export interface components {
       )[];
       endangered?: boolean;
       familyName?: string;
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
+      growthForm?:
+        | "Tree"
+        | "Shrub"
+        | "Forb"
+        | "Graminoid"
+        | "Fern"
+        | "Fungus"
+        | "Lichen"
+        | "Moss";
       /**
        * Format: int64
        * @description Which organization's species list to update.
@@ -2122,7 +2122,15 @@ export interface components {
       )[];
       endangered?: boolean;
       familyName?: string;
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
+      growthForm?:
+        | "Tree"
+        | "Shrub"
+        | "Forb"
+        | "Graminoid"
+        | "Fern"
+        | "Fungus"
+        | "Lichen"
+        | "Moss";
       /** Format: int64 */
       id: number;
       problems?: components["schemas"]["SpeciesProblemElement"][];

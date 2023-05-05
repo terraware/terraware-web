@@ -348,6 +348,7 @@ FROM_NURSERY,From: Nursery
 FROM_NURSERY_REQUIRED,From: Nursery *
 FROM_SUBZONE,From: Subzone
 FRONT_OF_SEED_BANK,Front of Seed Bank
+FUNGUS,Fungus
 G,g
 G_GRAMS,g (grams)
 GA3,GA3
@@ -443,11 +444,15 @@ LEARN_MORE_GROWTH_FORM_FORB,"A herbaceous (non-woody) plant that is NOT a gramin
 LEARN_MORE_GROWTH_FORM_GRAMINOID,"A herbaceous (non-woody) plant with a grass-like morphology, that is elongated culms with long, blade-like leaves, in the grass, sedge, or rush family."
 LEARN_MORE_GROWTH_FORM_SHRUB,A woody plant which is smaller than a tree and has several main stems arising at or near the ground.
 LEARN_MORE_GROWTH_FORM_TREE,"A woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground."
+LEARN_MORE_GROWTH_FORM_FUNGUS,"Usually a eukaryotic organism (non-plant) that is heterotrophic (cannot produce its own food), grows in filaments (hyphae), and produces spores."
+LEARN_MORE_GROWTH_FORM_LICHEN,"A symbiotic cluster of fungus and alga, fungus being the dominant partner, lending to its thallus shape and fruiting body."
+LEARN_MORE_GROWTH_FORM_MOSS,"A non-vascular flowerless plant typically formed as dense green clumps or mats, often in damp or shady locations."
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Seeds are between orthodox and recalcitrant seeds in their behavior; may include tolerating partial desiccation, tolerating cool but not freezing temperatures, or being short-lived regardless of storage conditions."
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Seeds tolerate levels of desiccation required for frozen storage (5-8% moisture content) and temperatures of -20°C or lower.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Seeds do not tolerate levels of desiccation required for ex situ (off-site) conservation.
 LEAVE_AND_SAVE,Leave and Save
 LEAVE_ORGANIZATION,Leave Organization
+LICHEN,Lichen
 LIGHT,Light
 LOADING,Loading...
 LOCATION,Location
