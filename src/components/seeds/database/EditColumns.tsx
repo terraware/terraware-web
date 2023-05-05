@@ -206,21 +206,19 @@ function sections(system?: string): Section[] {
       options: [[columns.totalViabilityPercent]],
     },
     {
-      name: strings.WEIGHT_UNITS,
+      name: strings.QUANTITY,
       options:
         system === 'imperial'
           ? [
               [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
               [columns.estimatedWeightMilligrams, columns.estimatedWeightGrams, columns.estimatedWeightKilograms],
+              [columns.estimatedCount],
             ]
           : [
               [columns.estimatedWeightMilligrams, columns.estimatedWeightGrams, columns.estimatedWeightKilograms],
               [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
+              [columns.estimatedCount],
             ],
-    },
-    {
-      name: strings.COUNT,
-      options: [[columns.estimatedCount]],
     },
   ];
 
