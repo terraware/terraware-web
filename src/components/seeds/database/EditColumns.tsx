@@ -37,24 +37,40 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     // fetch system defined preferred order of column names
     const ordered = orderedColumnNames();
 
-    // preserve order of existing visible columns
-    // filter out those that are not in the new list of columns to set
-    // i.e. current columns: A, C, D, B
-    //      new columns: A, B, D, E, F
-    //      preserved order of original list of columns: A, D, B (C is not in the new list)
+    // Determine order of previous columns to maintain such, skip those that aren't in the new list of columns
     const orderToMaintain = props.value.filter((name) => value.indexOf(name) !== -1);
 
-    // identify new columns to insert into the preserved order
-    // i.e. preserved order: A, D, B
-    //      new columns to insert: E, F
-    const keysToInsert = value.filter((name) => orderToMaintain.indexOf(name) === -1);
+    // sort these keys by system order
+    const orderToMaintainSorted = [...orderToMaintain].sort((a, b) => ordered.indexOf(a) - ordered.indexOf(b));
+    let i = 0;
+    let j = 0;
+    const shuffledColumns: { name: string; index: number }[] = [];
 
-    // insert keys into the maintained order
-    // get the index for the keys from the ordered keys in new values
-    const systemOrder = value.sort((a, b) => ordered.indexOf(a) - ordered.indexOf(b));
-    keysToInsert.forEach((key) => orderToMaintain.splice(systemOrder.indexOf(key), 0, key));
+    // determine which columns were shuffled and book-keep them with shuffled position,
+    // do this by comparing the orderToMaintain values against the system sorted values
+    while (i < orderToMaintain.length && j < orderToMaintain.length) {
+      const currentKey = orderToMaintain[i];
+      const sortedKey = orderToMaintainSorted[j];
+      if (shuffledColumns.find((col: any) => col.name === sortedKey)) {
+        j++;
+      } else if (sortedKey !== currentKey) {
+        shuffledColumns.unshift({ name: currentKey, index: j });
+        i++;
+      } else {
+        i++;
+        j++;
+      }
+    }
 
-    onClose(orderToMaintain);
+    // Sort new columns by system order and filter out the shuffled columns
+    const systemOrder = value
+      .sort((a, b) => ordered.indexOf(a) - ordered.indexOf(b))
+      .filter((k) => !shuffledColumns.find((col: any) => col.name === k));
+
+    // insert shuffled columns in correct position
+    shuffledColumns.forEach((col: any) => systemOrder.splice(col.index, 0, col.name));
+
+    onClose(systemOrder);
   };
 
   const onSelectPreset = (updatedPreset: Preset) => {
