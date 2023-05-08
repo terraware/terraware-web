@@ -258,7 +258,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             </Grid>
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
-                {viabilityTest.testType === 'Cut' ? strings.NUMBER_OF_SEEDS_FILLED : strings.NUMBER_OF_SEEDS_TESTED}
+                {viabilityTest.testType === 'Cut' ? strings.NUMBER_OF_SEEDS_FILLED_V2 : strings.NUMBER_OF_SEEDS_TESTED}
               </Grid>
               <Grid xs={12}>
                 {viabilityTest.testType === 'Cut' ? viabilityTest.seedsFilled : viabilityTest.seedsTested}
@@ -270,13 +270,13 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
               <Grid xs={12} display='flex' paddingTop={2}>
                 <Grid xs={smallColumn}>
                   <Grid xs={12} sx={titleStyle}>
-                    {strings.NUMBER_OF_SEEDS_COMPROMISED}
+                    {strings.NUMBER_OF_SEEDS_COMPROMISED_V2}
                   </Grid>
                   <Grid xs={12}>{viabilityTest.seedsCompromised}</Grid>
                 </Grid>
                 <Grid xs={smallColumn}>
                   <Grid xs={12} sx={titleStyle}>
-                    {strings.NUMBER_OF_SEEDS_EMPTY}
+                    {strings.NUMBER_OF_SEEDS_EMPTY_V2}
                   </Grid>
                   <Grid xs={12}>{viabilityTest.seedsEmpty}</Grid>
                 </Grid>

@@ -18,6 +18,7 @@ ACCESSIONS_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su 
 ACCESSIONS_TO_BE_CHECKED_IN,Hay {0} accesiones para ingresar.
 ACCOUNT,Cuenta,User access to website or application typically by entering a username and password (noun)
 ACTIVE_ACCESSIONS,Accesiones activas
+ACTIVE_INACTIVE,Activo/Inactivo
 ADD,Añadir
 ADD_A_NURSERY,Añadir un vivero
 ADD_A_PLANTING_SITE,Añadir un lugar de plantación
@@ -99,6 +100,7 @@ BACK,Atrás
 BACK_OF_SEED_BANK,Parte de Atrás del Banco de Semillas
 BACK_TO_TERRAWARE,Volver a Terraware
 BAG_ID,ID de Bolsa
+BAG_IDS,ID de las bolsas
 BATCH_WITHDRAW_SUCCESS,{0} {1} para un total de {2} {3} retirados.
 BATCHES_PLURAL,lotes
 BATCHES_SINGULAR,lote
@@ -246,6 +248,7 @@ DOWNLOAD_THE_CSV_TEMPLATE,Descargar la plantilla CSV.
 DRIED,Seco
 DRY_CABINET,Armario de secado
 DRYING,Secando
+DRYING_END_DATE,Fecha estimada de finalización del secado
 DRYING_RACKS,Bastidores de secado
 DRYING_START_DATE,Fecha de inicio del secado
 DUPLICATE_SPECIES_FOUND,Especies duplicadas encontradas.
@@ -302,6 +305,7 @@ ENVIRONMENTAL_NOTES_PLACEHOLDER,"Notas importantes sobre el paisaje, el clima y 
 EST_READY_DATE,Fecha estimada de disponibilidad
 ESTIMATED_DRYING_END_DATE,Fecha estimada de finalización del secado
 ESTIMATED_READY_DATE,Fecha estimada de finalización
+ESTIMATED_SEEDS_INCOMING,Estimación de entrada de semillas
 EXISTING_SPECIES_MSG,"""{0}"" ya está en su lista de especies."
 EXPORT,Exportar
 EXPORT_RECORDS,Exportar los registros
@@ -348,6 +352,7 @@ FROM_NURSERY,De: Vivero
 FROM_NURSERY_REQUIRED,De: Vivero *
 FROM_SUBZONE,De: Subzona
 FRONT_OF_SEED_BANK,Frente del banco de semillas
+FUNGUS,Hongo
 G,g
 G_GRAMS,g (gramos)
 GA3,GA3
@@ -440,7 +445,10 @@ LEARN_MORE_CONSERVATION_STATUS_ENDANGERED,Especies poco comunes y cuyas poblacio
 LEARN_MORE_CONSERVATION_STATUS_RARE,"Especies con poblaciones silvestres de tamaño limitado, que a menudo se encuentran en lugares geográficos aislados; pueden cumplir los criterios de situación en peligro o bajo amenaza pero aún no se han incluido o evaluado legalmente."
 LEARN_MORE_GROWTH_FORM_FERN,"Planta vascular que no florece y se reproduce mediante esporas, que pertenece al grupo de plantas de las pteridofitas."
 LEARN_MORE_GROWTH_FORM_FORB,"Planta herbácea (no leñosa) que NO es una gramínea (césped, juncia o junco)."
+LEARN_MORE_GROWTH_FORM_FUNGUS,"Usualmente, un organismo eucariota (no vegetal) que es heterótrofo (que no puede producir su propio alimento), que crece en filamentos (hifas) y que produce esporas."
 LEARN_MORE_GROWTH_FORM_GRAMINOID,"Planta herbácea (no leñosa) cuya morfología se asemeja a la del césped, es decir culmos alargados con hojas largas en forma de cuchilla, de la familia del césped, la juncia o el junco."
+LEARN_MORE_GROWTH_FORM_LICHEN,"Un grupo de hongo y alga, en el cual el hongo es el elemento dominante, debido a su forma de talo y su cuerpo fructífero."
+LEARN_MORE_GROWTH_FORM_MOSS,"Una planta no vascular y sin flores, típicamente con forma de masas o alfombrillas verdes y densas, a menudo en lugares húmedos o sombreados."
 LEARN_MORE_GROWTH_FORM_SHRUB,Planta leñosa que es más pequeña que un árbol y posee varios tallos principales que nacen en el suelo o cerca de él.
 LEARN_MORE_GROWTH_FORM_TREE,"Planta leñosa perenne, que suele tener un solo tallo o tronco que crece hasta una altura considerable y posee ramas laterales a cierta distancia del suelo."
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Las semillas exhiben un comportamiento intermedio entre las semillas ortodoxas y las recalcitrantes; pueden soportar la desecación parcial, soportar temperaturas frías pero no de congelación o tener una vida breve, independientemente de las condiciones de almacenamiento."
@@ -448,6 +456,7 @@ LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Las semillas toleran los niveles de de
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Las semillas no toleran los niveles de desecación necesarios para su conservación ex situ (fuera del sitio).
 LEAVE_AND_SAVE,Salir y guardar
 LEAVE_ORGANIZATION,Salir de la organización
+LICHEN,Liquen
 LIGHT,Luz
 LOADING,Cargando...
 LOCATION,Lugar
@@ -566,14 +575,18 @@ NOTES,Notas
 NOTIFICATIONS,Notificaciones
 NUMBER_OF_PACKETS,Número de paquetes
 NUMBER_OF_PEOPLE,Número de personas
+NUMBER_OF_PLANTS,Número de plantas
 NUMBER_OF_PLANTS_BY_SPECIES,Número de plantas por especie
 NUMBER_OF_PLANTS_BY_SUBZONE_AND_SPECIES,Número de plantas por subzona y especie
-NUMBER_OF_SEEDS_COMPROMISED,# Semillas Afectadas
+NUMBER_OF_SEEDS_COMPROMISED,Número de semillas afectadas
 NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Semillas Afectadas *
-NUMBER_OF_SEEDS_EMPTY,# Semillas Vacías
+NUMBER_OF_SEEDS_COMPROMISED_V2,# Semillas Afectadas
+NUMBER_OF_SEEDS_EMPTY,Número de semillas Vacías
 NUMBER_OF_SEEDS_EMPTY_REQUIRED,# Semillas Vacías *
-NUMBER_OF_SEEDS_FILLED,# Semillas Rellenadas
+NUMBER_OF_SEEDS_EMPTY_V2,# Semillas Vacías
+NUMBER_OF_SEEDS_FILLED,Número de semillas rellenadas
 NUMBER_OF_SEEDS_FILLED_REQUIRED,# Semillas Rellenadas *
+NUMBER_OF_SEEDS_FILLED_V2,# Semillas Rellenadas
 NUMBER_OF_SEEDS_GERMINATED,# Semillas Germinadas
 NUMBER_OF_SEEDS_GERMINATED_REQUIRED,# Semillas Germinadas *
 NUMBER_OF_SEEDS_IN_SUBSET,# de semillas en el Subconjunto
@@ -673,6 +686,8 @@ PROCESSING,Procesando
 PROCESSING_AND_DRYING,Procesamiento y secado
 PROCESSING_AND_DRYING_DESCRIPTION,Todos los detalles sobre el procesamiento y el secado de las semillas.
 PROCESSING_AND_DRYING_INFO,"Al añadir información sobre el procesamiento y el secado y guardar los cambios, usted cambiará automáticamente la etapa de esta accesión de Pendiente a En proceso, Procesada, En secado o Secada, según la información que introduzca."
+PROCESSING_METHOD,Método de procesamiento
+PROCESSING_START_DATE,Fecha de inicio del procesamiento
 PROCESSING_STATUS_REQUIRED,Estado del procesamiento *
 PROJECT_IMPACT,Impacto del proyecto
 PROJECT_IMPACT_INSTRUCTIONS,"Proporcione los detalles de su impacto durante el período del informe, incluidos los logros más importantes y los avances hacia la consecución de los objetivos declarados y las metas principales. Además de los objetivos forestales, por favor incluya los puestos de trabajo creados (a tiempo completo, a tiempo parcial y estacionales), con cifras específicas desglosadas por género. (Aproximadamente una página)."
@@ -716,6 +731,7 @@ REFRIGERATOR_3,Refrigerador 3
 REINTRODUCED,Reintroducida/s
 REINTRODUCED_DESCRIPTION,"Plantas que fueron trasplantadas desde un vivero, invernadero u otro sitio a un lugar de restauración."
 REMAINING,Restante/s
+REMAINING_UNITS,Unidades restantes
 REMINDER_DATE,Fecha del recordatorio
 REMOVE,Eliminar
 REMOVE_AND_SAVE,Eliminar y guardar
@@ -845,7 +861,9 @@ SEEDLINGS_SINGULAR,plántula
 SEEDS,Semillas
 SEEDS_GERMINATED,Semillas germinadas
 SEEDS_GERMINATED_LC,semillas germinadas
+SEEDS_REMAINING,Semillas restantes
 SEEDS_SOWN,Semillas sembradas
+SEEDS_UNITS,Cantidad de semillas en unidades
 SELECT,Seleccionar...
 SELECT_BATCHES,Seleccionar lotes
 SELECT_BUTTON,Seleccionar
@@ -1033,6 +1051,7 @@ TOTAL_ESTIMATED_PERCENTAGE_VIABILITY,Estimación total de viabilidad en %
 TOTAL_ESTIMATED_VIABILITY,Viabilidad total estimada
 TOTAL_NUMBER_OF_PLANTS,Número total de plantas
 TOTAL_NUMBER_OF_PLANTS_PROPAGATED,Número total de plantas propagadas
+TOTAL_OF_SEEDS_GERMINATED,Total de semillas germinadas
 TOTAL_PLANTED,Total sembrado
 TOTAL_PLANTED_AREA_HA,Superficie total sembrada (Ha) *
 TOTAL_PLANTED_REQUIRED,Plantados en total *
@@ -1060,6 +1079,8 @@ TOTAL_WITHDRAWN_WEIGHT_KILOGRAMS,Total de extraídos (kg)
 TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,Total de extraídos (mg)
 TOTAL_WITHDRAWN_WEIGHT_OUNCES,Total de extraídos (oz)
 TOTAL_WITHDRAWN_WEIGHT_POUNDS,Total de extraídos (lb)
+TOTAL_WITHDRAWN_WEIGHT_QUANTITY,Peso total extraído
+TOTAL_WITHDRAWN_WEIGHT_UNITS,Peso total de unidades extraídas
 TREATMENT,Tratamiento
 TREE,Árbol
 TRUNCATED_TEXT_MORE_LINK,más
@@ -1089,6 +1110,8 @@ VALUE_CANT_EXCEED_100,El valor no puede sobrepasar 100%
 VIABILITY,Viabilidad
 VIABILITY_RATE,Tasa de viabilidad
 VIABILITY_RESULT,Resultado de viabilidad
+VIABILITY_START_DATE,Fecha de inicio de viabilidad
+VIABILITY_SUBSTRATE,Sustrato de viabilidad
 VIABILITY_TEST,Prueba de viabilidad
 VIABILITY_TEST_NUMBER,Prueba de viabilidad (#{0})
 VIABILITY_TEST_START_DATE_ERROR,Esto no debería ser antes de la fecha de recolección de las semillas
@@ -1099,6 +1122,7 @@ VIABILITY_TESTING,Ensayo de viabilidad
 VIABILITY_TESTING_EMPTY_MESSAGE,"El Ensayo de viabilidad te ayuda a seguir la calidad de la semilla. Puedes conducir una prueba en vivero o de germinación en laboratorio, o llevar a cabo una prueba de corte."
 VIABILITY_TESTING_SECTION_TOOLTIP,"Cada prueba será listada por separado, lo que podría causar que una adhesión aparezca más de una vez en la tabla."
 VIABILITY_TESTS,Pruebas de viabilidad
+VIABILITY_TREATMENT,Tratamiento de viabilidad
 VIEW,Ver
 VIEW_ACCESSION,Ver adhesión
 VIEW_SITES_ZONES_SUBZONES,"Ver Sitios, Zonas y Subzonas en el mapa."
