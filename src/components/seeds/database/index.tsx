@@ -11,7 +11,7 @@ import SeedBankService, {
 } from 'src/services/SeedBankService';
 import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/types/Search';
 import Button from 'src/components/common/button/Button';
-import Table from 'src/components/common/table';
+import { BaseTable as Table } from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
