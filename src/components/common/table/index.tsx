@@ -41,6 +41,7 @@ export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Ele
 
 export type OrderPreserveableTableProps = {
   setColumns: (columns: TableColumnType[]) => void;
+  id: string;
 };
 
 export function OrderPreserveableTable<T extends TableRowType>(
