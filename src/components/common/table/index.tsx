@@ -54,7 +54,9 @@ export function OrderPreserveableTable<T extends TableRowType>(
 
   const getTableColumns = useCallback(
     (columnNames: string[]): TableColumnType[] =>
-      columnNames.map((columnName) => columns.find((column) => column.key === columnName)) as TableColumnType[],
+      columnNames
+        .map((columnName) => columns.find((column) => column.key === columnName))
+        .filter((column) => !!column) as TableColumnType[],
     [columns]
   );
 
@@ -80,7 +82,6 @@ export function OrderPreserveableTable<T extends TableRowType>(
       const columnNames: string[] | undefined = orgPreferences[getPreferenceName()] as string[] | undefined;
       if (
         columnNames?.length &&
-        columns.length === columnNames.length &&
         !_.isEqual(
           columns.map((column) => column.key),
           columnNames
