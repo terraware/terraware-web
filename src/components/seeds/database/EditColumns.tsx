@@ -33,6 +33,45 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     onClose();
   };
 
+  /**
+   * When user confirms selection of table columns to show, this function
+   * callback is invoked to pass the information back to the client accessions table.
+   * The order of columns in the selection is predetermined by the system (as provided by product/design).
+   *
+   * However, some of these columns may have been dragged around and changed position.
+   * The expectation is that the dragged column positions are maintained.
+   *
+   * This callback function tries to ensure that by doing the following:
+   *
+   * For illustration, lets assume the following:
+   *
+   * Columns before applying the change X = [A, E, B, C, D, I, H] (Here, E and F were dragged into new positions)
+   * Newly selected columns Y = [A, C, D, E, F, H, I]
+   * Expected final order Z = [A, E, C, D, F, I, H]
+   *
+   * 1) Find the intersection of X and Y
+   *    orderToMaintain = [A, E, C, D]
+   *    this represents the columns that were retained (from the original list prior to selection)
+   * 2) Sort orderToMaintain to represent the system defined order
+   *    orderToMaintainSorted = [A, C, D, E]
+   * 3) Compare orderToMaintainSorted and orderToMaintain to identify switched columns
+   *    i) loop over orderToMaintainSorted (index i), keep another running index j which identifies shuffled position index
+   *    ii) if orderToMaintainSorted[i] and orderToMaintain[j] are the same, increment both i and j and keep checking
+   *    iii) if they are not the same, orderToMaintain at position j was shuffled, book keep that as { [column name]: shuffled-index }
+   *         example: [{ F: 1 }], this entry is pushed onto the stack, not a queue, because it will be reinserted in that order
+   *    iv) basically, we keep incrementing i and j as long as they match,
+   *         if not, we keep incrementing j until i and j match,
+   *         mismatches are pushed onto the shuffled index stack
+   *         if orderToMaintainSorted[i] was previously encountered as a shuffled column in orderToMaintain, increment i alone and continue
+   *    v) we end up with the shuffled columns S = [{ I: 4 }, { E: 1 }], the order and indices at which we reinsert them
+   * 4) Now we can look at the new selections to use
+   *    Y = [A, C, D, E, F, H, I]
+   *    Remove columns that are on the shuffled list, Y - S = Y'=[A, C, D, F, H]
+   * 5) Iterate over S and insert entries into Y',
+   *    insert I at index 4, Y' = [A, C, D, F, I, H]
+   *    insert E at index 1, Y= [A, E, C, D, F, I, H]
+   *
+   */
   const handleOk = () => {
     // fetch system defined preferred order of column names
     const ordered = orderedColumnNames();
