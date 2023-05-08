@@ -111,7 +111,9 @@ export function OrderPreserveableTable<T extends TableRowType>(
  * where client does not need extra semantics to filter columns.
  * Species table is an example where this won't work, uses its own setColumns implementation.
  */
-export default function OrderPreservedTable<T extends TableRowType>(props: TableProps<T>): JSX.Element {
+export default function OrderPreservedTable<T extends TableRowType>(
+  props: TableProps<T> & { id: string }
+): JSX.Element {
   const { columns, ...tableProps } = props;
   const [tableColumns, setTableColumns] = useState<TableColumnType[]>(columns);
 
