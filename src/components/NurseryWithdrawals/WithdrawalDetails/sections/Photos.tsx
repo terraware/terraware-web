@@ -50,8 +50,8 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
         open={photosModalOpened}
         onClose={() => setPhotosModalOpened(false)}
         initialSelectedSlide={selectedSlide}
-        nextButtonLabel={strings.NEXT}
-        prevButtonLabel={strings.PREVIOUS}
+        nextButtonLabel={strings.NEXT_ARROW}
+        prevButtonLabel={strings.PREVIOUS_ARROW}
         title={strings.PHOTOS}
       />
       <Typography fontSize='20px' fontWeight={600}>
