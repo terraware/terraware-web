@@ -131,8 +131,8 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
         open={photosModalOpened}
         onClose={() => setPhotosModalOpened(false)}
         initialSelectedSlide={selectedSlide}
-        nextButtonLabel={strings.NEXT_ARROW}
-        prevButtonLabel={strings.PREVIOUS_ARROW}
+        nextButtonLabel={strings.NEXT}
+        prevButtonLabel={strings.PREVIOUS}
         title={strings.PHOTOS}
       />
       <Grid container>
