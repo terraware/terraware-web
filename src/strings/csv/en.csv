@@ -173,7 +173,7 @@ CONTACT_US,Contact Us
 CONTACT_US_DESCRIPTION,Have a question or would like to get in touch with someone from our team? We’re always happy to answer questions and help make sure you are getting the most out of Terraware! You can reach us using this form or by emailing {0}
 CONTACT_US_TO_RESOLVE_ISSUE,Please contact us to resolve this issue.
 CONTRIBUTOR,Contributor
-CONTRIBUTOR_INFO,A contributor can only add data entries for seeds.
+CONTRIBUTOR_INFO,"A contributor can add data entries for seeds, manage nursery inventory except outplant withdrawals, view withdrawals, manage nursery reassignments and visualize a planting site’s plantings on a geographical map."
 CONTRIBUTORS,Contributors
 CONVERTED_VALUE_INFO,This value is auto-calculated for informational purposes.
 COUNT,Count
@@ -466,7 +466,7 @@ LOCKED,Locked
 LOG_OUT,Log Out
 LOSS_RATE,Loss Rate
 MANAGER,Manager
-MANAGER_INFO,A manager can do the above as well as edit data entries for seeds and manage species.
+MANAGER_INFO,"A manager can do the above as well as edit data entries for seeds and manage outplant withdrawals, planting sites and species."
 MARK_ALL_AS_READ,Mark All As Read
 MARK_AS_COMPLETE,Mark as Complete
 MARK_AS_READ,Mark As Read
