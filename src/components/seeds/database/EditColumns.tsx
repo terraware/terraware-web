@@ -45,31 +45,32 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
    *
    * For illustration, lets assume the following:
    *
-   * Columns before applying the change X = [A, E, B, C, D, I, H] (Here, E and F were dragged into new positions)
+   * Columns before applying the change X = [A, E, B, C, D, I, H] (Here, E and I were dragged into new positions)
    * Newly selected columns Y = [A, C, D, E, F, H, I]
-   * Expected final order Z = [A, E, C, D, F, I, H]
+   * Expected final order Z = [A, E, C, D, I, F, H]
    *
    * 1) Find the intersection of X and Y
-   *    orderToMaintain = [A, E, C, D]
+   *    orderToMaintain = [A, E, C, D, I, H]
    *    this represents the columns that were retained (from the original list prior to selection)
    * 2) Sort orderToMaintain to represent the system defined order
-   *    orderToMaintainSorted = [A, C, D, E]
+   *    orderToMaintainSorted = [A, C, D, E, H, I]
    * 3) Compare orderToMaintainSorted and orderToMaintain to identify switched columns
-   *    i) loop over orderToMaintainSorted (index i), keep another running index j which identifies shuffled position index
-   *    ii) if orderToMaintainSorted[i] and orderToMaintain[j] are the same, increment both i and j and keep checking
-   *    iii) if they are not the same, orderToMaintain at position j was shuffled, book keep that as { [column name]: shuffled-index }
-   *         example: [{ F: 1 }], this entry is pushed onto the stack, not a queue, because it will be reinserted in that order
-   *    iv) basically, we keep incrementing i and j as long as they match,
-   *         if not, we keep incrementing j until i and j match,
-   *         mismatches are pushed onto the shuffled index stack
-   *         if orderToMaintainSorted[i] was previously encountered as a shuffled column in orderToMaintain, increment i alone and continue
-   *    v) we end up with the shuffled columns S = [{ I: 4 }, { E: 1 }], the order and indices at which we reinsert them
+   *    i) loop over orderToMaintain (index i), keep another running index j over orderToMaintainSorted which identifies shuffled position index
+   *    ii) if orderToMaintain[i] and orderToMaintainSorted[j] are the same, increment both i and j and keep checking
+   *    iii) if they are not the same, orderToMaintainSorted at position j was shuffled, book keep that as { [column name]: shuffled-index }
+   *         example: { E: 1 }
+   *    iv) continue these checks, increment the appropriate index
+   *        (we don't want j to move until values at i and j match - since that jumps to the next possible shuffled position)
+   *        (if we encounter a column at index j that was already flagged as shuffled, skip over that and continue checking)
+   *    v) we end up with the shuffled columns S = { I: 4 ,  E: 1 }
    * 4) Now we can look at the new selections to use
    *    Y = [A, C, D, E, F, H, I]
    *    Remove columns that are on the shuffled list, Y - S = Y'=[A, C, D, F, H]
-   * 5) Iterate over S and insert entries into Y',
-   *    insert I at index 4, Y' = [A, C, D, F, I, H]
-   *    insert E at index 1, Y= [A, E, C, D, F, I, H]
+   *    Reverse this list so we can pop items off like a stack, Y"=[H, F, D, C, A]
+   * 5) Create a new result which we populate iterating over the total number of new column names using an index
+   *    If the index exists in the shuffled columns, push that into the result
+   *    Otherwise, pop colum name off Y" and push that onto the result.
+   *    This essentially rebuilds the order of column names while preserving shuffled indices and keeping preferred system order as much as possible.
    *
    */
   const handleOk = () => {
@@ -83,17 +84,17 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     const orderToMaintainSorted = [...orderToMaintain].sort((a, b) => ordered.indexOf(a) - ordered.indexOf(b));
     let i = 0;
     let j = 0;
-    const shuffledColumns: { name: string; index: number }[] = [];
+    const shuffledColumns: Record<string, number> = {};
 
     // determine which columns were shuffled and book-keep them with shuffled position,
     // do this by comparing the orderToMaintain values against the system sorted values
     while (i < orderToMaintain.length && j < orderToMaintain.length) {
       const currentKey = orderToMaintain[i];
       const sortedKey = orderToMaintainSorted[j];
-      if (shuffledColumns.find((col: any) => col.name === sortedKey)) {
+      if (shuffledColumns[sortedKey]) {
         j++;
       } else if (sortedKey !== currentKey) {
-        shuffledColumns.unshift({ name: currentKey, index: j });
+        shuffledColumns[currentKey] = i;
         i++;
       } else {
         i++;
@@ -102,14 +103,31 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     }
 
     // Sort new columns by system order and filter out the shuffled columns
-    const systemOrder = value
+    const systemOrder: string[] = value
       .sort((a, b) => ordered.indexOf(a) - ordered.indexOf(b))
-      .filter((k) => !shuffledColumns.find((col: any) => col.name === k));
+      .filter((k) => !shuffledColumns[k]);
 
-    // insert shuffled columns in correct position
-    shuffledColumns.forEach((col: any) => systemOrder.splice(col.index, 0, col.name));
+    systemOrder.reverse(); // reverse so we can pop values off the end
 
-    onClose(systemOrder);
+    // create a reverse map of { index: column-name } for quick look-up
+    const indexToShuffledColumn: Record<number, string> = Object.keys(shuffledColumns).reduce(
+      (acc, curr) => ({ ...acc, [shuffledColumns[curr]]: curr }),
+      {} as Record<number, string>
+    );
+
+    const result: string[] = []; // populate the list now
+    for (let index = 0; index < value.length; index++) {
+      if (indexToShuffledColumn[index]) {
+        result.push(indexToShuffledColumn[index]);
+      } else {
+        const columnName = systemOrder.pop();
+        if (columnName) {
+          result.push(columnName);
+        }
+      }
+    }
+
+    onClose(result);
   };
 
   const onSelectPreset = (updatedPreset: Preset) => {
