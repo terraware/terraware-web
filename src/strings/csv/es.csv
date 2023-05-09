@@ -618,6 +618,7 @@ ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, vaya a [""Ajustes > Organi
 ORGANIZATION,Organización
 ORGANIZATION_CREATE_FAILED,No se puede crear la organización.
 ORGANIZATION_CREATED_MSG,"Puede acceder a las organizaciones a las que pertenece haciendo clic en la flecha de la esquina superior derecha, junto a su perfil."
+ORGANIZATION_CREATED_MSG_DESKTOP,"Puede acceder a las organizaciones en las que está dando clic en la flecha en la esquina superior izquierda, a un lado del logo."
 ORGANIZATION_CREATED_TITLE,¡Ha creado {0}!
 ORGANIZATION_DATA_NOT_AVAILABLE,Datos de la organización no disponibles
 ORGANIZATION_DESC,Gestione su organización.
