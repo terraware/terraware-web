@@ -76,10 +76,9 @@ export function OrderPreserveableTable<T extends TableRowType>(
 
   useEffect(() => {
     const fetchSavedColumns = () => {
-      if (!orgPreferences) {
+      if (!orgPreferences || initialized) {
         return;
       }
-      setInitialized(true);
       const columnNames: string[] | undefined = orgPreferences[getPreferenceName()] as string[] | undefined;
       if (
         columnNames?.length &&
@@ -91,11 +90,10 @@ export function OrderPreserveableTable<T extends TableRowType>(
         const columnsToSet = getTableColumns(columnNames);
         setColumns(columnsToSet);
       }
+      setInitialized(true);
     };
 
-    if (!initialized) {
-      fetchSavedColumns();
-    }
+    fetchSavedColumns();
   });
 
   return BaseTable<T>({
