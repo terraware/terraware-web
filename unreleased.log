@@ -1,3 +1,4 @@
+d80eda83 Revert "SW-3541 Preserve system order of accession columns where possible (#1401)"
 e38d9c82 SW-3541 Preserve system order of accession columns where possible (#1401)
 fbb81989 Updated translations from Phrase (#1400)
 f56f43b9 SW-3526 Add support for new growth forms in terraware-web (#1394)
