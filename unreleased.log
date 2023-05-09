@@ -1,3 +1,4 @@
+022290bf SW-3440 Fix change status/quantities modal in seedlings batches when the numbers are large (#1405)
 dab92368 Updated translations from Phrase (#1408)
 43bdb8f4 SW-3553 Replace Arrows on Photo Dialog Buttons (#1406)
 2a1b8231 SW-3431 Re-orient organization-created message content (#1407)
