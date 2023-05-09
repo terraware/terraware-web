@@ -61,6 +61,7 @@ const createFacility = async (facility: Omit<Facility, 'id'> & StorageLocations)
     buildStartedDate: facility.buildStartedDate,
     buildCompletedDate: facility.buildCompletedDate,
     operationStartedDate: facility.operationStartedDate,
+    capacity: facility.capacity,
   };
 
   const serverResponse: Response = await httpFacilities.post({ entity });
