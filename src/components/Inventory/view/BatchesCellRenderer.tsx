@@ -75,13 +75,14 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
         row={row}
         value={
           <>
-            <ChangeQuantityModal
-              open={modalValues.openChangeQuantityModal}
-              onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
-              modalValues={modalValues}
-              row={row as Batch}
-              reload={onRowClick}
-            />
+            {modalValues.openChangeQuantityModal && (
+              <ChangeQuantityModal
+                onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
+                modalValues={modalValues}
+                row={row as Batch}
+                reload={onRowClick}
+              />
+            )}
             <QuantitiesMenu setModalValues={setModalValues} batch={row} />
           </>
         }
