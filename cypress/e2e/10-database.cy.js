@@ -58,11 +58,11 @@ describe('Database', () => {
       cy.get('#table-header').children().should('have.length', 7);
       cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
       cy.get('#table-header > :nth-child(2)').contains('STATUS');
-      cy.get('#table-header > :nth-child(7)').contains('SEED BANKS');
-      cy.get('#table-header > :nth-child(3)').contains('COLLECTING SITE');
-      cy.get('#table-header > :nth-child(4)').contains('AGE (MONTH');
-      cy.get('#table-header > :nth-child(5)').contains('WEIGHT (G)');
-      cy.get('#table-header > :nth-child(6)').contains('COUNT');
+      cy.get('#table-header > :nth-child(3)').contains('SEED BANKS');
+      cy.get('#table-header > :nth-child(4)').contains('COLLECTING SITE');
+      cy.get('#table-header > :nth-child(5)').contains('AGE (MONTH');
+      cy.get('#table-header > :nth-child(6)').contains('WEIGHT (G)');
+      cy.get('#table-header > :nth-child(7)').contains('COUNT');
     });
 
     it('should select ALL the columns', () => {
@@ -172,12 +172,12 @@ describe('Database', () => {
 
         cy.get('#table-header').children().should('have.length', 7);
         cy.get('#table-header > :nth-child(1)').contains('ACCESSION');
-        cy.get('#table-header > :nth-child(2)').contains('SPECIES');
-        cy.get('#table-header > :nth-child(3)').contains('STATUS');
-        cy.get('#table-header > :nth-child(4)').contains('COLLECTION DATE');
-        cy.get('#table-header > :nth-child(5)').contains('SEED BANKS');
-        cy.get('#table-header > :nth-child(6)').contains('SUB-LOCATION');
-        cy.get('#table-header > :nth-child(7)').contains('COMMON NAME');
+        cy.get('#table-header > :nth-child(2)').contains('STATUS');
+        cy.get('#table-header > :nth-child(3)').contains('SEED BANKS');
+        cy.get('#table-header > :nth-child(4)').contains('SUB-LOCATION');
+        cy.get('#table-header > :nth-child(5)').contains('SPECIES');
+        cy.get('#table-header > :nth-child(6)').contains('COMMON NAME');
+        cy.get('#table-header > :nth-child(7)').contains('COLLECTION DATE');
       });
     });
   });

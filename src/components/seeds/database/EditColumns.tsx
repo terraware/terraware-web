@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import Checkbox from '../../common/Checkbox';
 import Divisor from '../../common/Divisor';
 import RadioButton from '../../common/RadioButton';
-import { columnsIndexed, Preset, searchPresets } from './columns';
+import { orderedColumnNames, columnsIndexed, Preset, searchPresets } from './columns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
@@ -23,7 +23,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const { userPreferences } = useUser();
 
-  const [value, setValue] = React.useState(props.value ?? []);
+  const [value, setValue] = React.useState(props.value);
 
   React.useEffect(() => {
     setValue(props.value);
@@ -35,7 +35,9 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   };
 
   const handleOk = () => {
-    onClose(value);
+    const ordered = orderedColumnNames();
+    const sortedValues = [...value].sort((a, b) => ordered.indexOf(a) - ordered.indexOf(b));
+    onClose(sortedValues);
   };
 
   const onSelectPreset = (updatedPreset: Preset) => {

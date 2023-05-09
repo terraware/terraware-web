@@ -343,7 +343,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           {plantingSiteSpecies && (
             <Grid item xs={12} marginBottom={3}>
               <Table
-                id='species-table'
+                id='reports-species-table'
                 columns={columns}
                 rows={plantingSiteSpecies}
                 Renderer={PlantingSiteSpeciesCellRenderer({ editMode: editable, validate })}

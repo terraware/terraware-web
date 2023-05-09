@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import Table from 'src/components/common/table';
+import { OrderPreserveableTable as Table } from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import speciesAtom from 'src/state/species';
 import strings from 'src/strings';
@@ -48,6 +48,7 @@ import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { FieldOptionsMap } from 'src/services/NurseryWithdrawalService';
 import { SpeciesService } from 'src/services';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import _ from 'lodash';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -626,7 +627,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       if (hasErrors?.length) {
         newColumns = [problemsColumn, ...columns];
       }
-      if (selectedColumns[0].key !== newColumns[0].key) {
+      if (!_.isEqual(selectedColumns, newColumns)) {
         setSelectedColumns(newColumns);
       }
       setHandleProblemsColumn(false);
@@ -819,6 +820,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
             <Grid item xs={12}>
               {results && (
                 <Table
+                  setColumns={(columnsToSet: TableColumnType[]) => {
+                    // show the check-data error column only if it was already exposed
+                    const showProblemsColumn = selectedColumns.find((column) => column.key === problemsColumn.key);
+                    setSelectedColumns(
+                      columnsToSet.filter((column) => showProblemsColumn || column.key !== problemsColumn.key)
+                    );
+                  }}
                   id='species-table'
                   columns={selectedColumns}
                   rows={results}

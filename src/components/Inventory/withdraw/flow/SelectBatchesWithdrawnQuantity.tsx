@@ -311,7 +311,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                   <Grid item xs={12} marginBottom={5}>
                     {record.length > 0 && (
                       <Table
-                        id='inventory-table'
+                        id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}
                         columns={nurseryWithdrawal.purpose === OUTPLANT ? outplantColumns : columns}
                         rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
                         Renderer={WithdrawalBatchesCellRenderer}
