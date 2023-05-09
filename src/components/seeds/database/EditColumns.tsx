@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import Checkbox from '../../common/Checkbox';
 import Divisor from '../../common/Divisor';
 import RadioButton from '../../common/RadioButton';
-import { columnsIndexed, Preset, searchPresets } from './columns';
+import { orderedColumnNames, columnsIndexed, Preset, searchPresets } from './columns';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
@@ -12,18 +12,17 @@ import { useUser } from 'src/providers';
 import { IconTooltip } from '@terraware/web-components';
 
 export interface Props {
-  open: boolean;
   onClose: (columns?: string[]) => void;
   value: string[];
 }
 
 export default function EditColumnsDialog(props: Props): JSX.Element {
-  const { onClose, open } = props;
+  const { onClose } = props;
   const [preset, setPreset] = React.useState<Preset>();
   const { isMobile } = useDeviceInfo();
   const { userPreferences } = useUser();
 
-  const [value, setValue] = React.useState(props.value ?? []);
+  const [value, setValue] = React.useState(props.value);
 
   React.useEffect(() => {
     setValue(props.value);
@@ -34,8 +33,101 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     onClose();
   };
 
+  /**
+   * When user confirms selection of table columns to show, this function
+   * callback is invoked to pass the information back to the client accessions table.
+   * The order of columns in the selection is predetermined by the system (as provided by product/design).
+   *
+   * However, some of these columns may have been dragged around and changed position.
+   * The expectation is that the dragged column positions are maintained.
+   *
+   * This callback function tries to ensure that by doing the following:
+   *
+   * For illustration, lets assume the following:
+   *
+   * Columns before applying the change X = [A, E, B, C, D, I, H] (Here, E and I were dragged into new positions)
+   * Newly selected columns Y = [A, C, D, E, F, H, I]
+   * Expected final order Z = [A, E, C, D, I, F, H]
+   *
+   * 1) Find the intersection of X and Y
+   *    orderToMaintain = [A, E, C, D, I, H]
+   *    this represents the columns that were retained (from the original list prior to selection)
+   * 2) Sort orderToMaintain to represent the system defined order
+   *    orderToMaintainSorted = [A, C, D, E, H, I]
+   * 3) Compare orderToMaintainSorted and orderToMaintain to identify switched columns
+   *    i) loop over orderToMaintain (index i), keep another running index j over orderToMaintainSorted which identifies shuffled position index
+   *    ii) if orderToMaintain[i] and orderToMaintainSorted[j] are the same, increment both i and j and keep checking
+   *    iii) if they are not the same, orderToMaintainSorted at position j was shuffled, book keep that as { [column name]: shuffled-index }
+   *         example: { E: 1 }
+   *    iv) continue these checks, increment the appropriate index
+   *        (we don't want j to move until values at i and j match - since that jumps to the next possible shuffled position)
+   *        (if we encounter a column at index j that was already flagged as shuffled, skip over that and continue checking)
+   *    v) we end up with the shuffled columns S = { I: 4 ,  E: 1 }
+   * 4) Now we can look at the new selections to use
+   *    Y = [A, C, D, E, F, H, I]
+   *    Remove columns that are on the shuffled list, Y - S = Y'=[A, C, D, F, H]
+   *    Reverse this list so we can pop items off like a stack, Y"=[H, F, D, C, A]
+   * 5) Create a new result which we populate iterating over the total number of new column names using an index
+   *    If the index exists in the shuffled columns, push that into the result
+   *    Otherwise, pop colum name off Y" and push that onto the result.
+   *    This essentially rebuilds the order of column names while preserving shuffled indices and keeping preferred system order as much as possible.
+   *
+   */
   const handleOk = () => {
-    onClose(value);
+    // fetch system defined preferred order of column names
+    const ordered = orderedColumnNames();
+
+    // Determine order of previous columns to maintain such, skip those that aren't in the new list of columns
+    const orderToMaintain = props.value.filter((name) => value.indexOf(name) !== -1);
+
+    // sort these keys by system order
+    const orderToMaintainSorted = [...orderToMaintain].sort((a, b) => ordered.indexOf(a) - ordered.indexOf(b));
+    let i = 0;
+    let j = 0;
+    const shuffledColumns: Record<string, number> = {};
+
+    // determine which columns were shuffled and book-keep them with shuffled position,
+    // do this by comparing the orderToMaintain values against the system sorted values
+    while (i < orderToMaintain.length && j < orderToMaintain.length) {
+      const currentKey = orderToMaintain[i];
+      const sortedKey = orderToMaintainSorted[j];
+      if (shuffledColumns[sortedKey]) {
+        j++;
+      } else if (sortedKey !== currentKey) {
+        shuffledColumns[currentKey] = i;
+        i++;
+      } else {
+        i++;
+        j++;
+      }
+    }
+
+    // Sort new columns by system order and filter out the shuffled columns
+    const systemOrder: string[] = value
+      .sort((a, b) => ordered.indexOf(a) - ordered.indexOf(b))
+      .filter((k) => !shuffledColumns[k]);
+
+    systemOrder.reverse(); // reverse so we can pop values off the end
+
+    // create a reverse map of { index: column-name } for quick look-up
+    const indexToShuffledColumn: Record<number, string> = Object.keys(shuffledColumns).reduce(
+      (acc, curr) => ({ ...acc, [shuffledColumns[curr]]: curr }),
+      {} as Record<number, string>
+    );
+
+    const result: string[] = []; // populate the list now
+    for (let index = 0; index < value.length; index++) {
+      if (indexToShuffledColumn[index]) {
+        result.push(indexToShuffledColumn[index]);
+      } else {
+        const columnName = systemOrder.pop();
+        if (columnName) {
+          result.push(columnName);
+        }
+      }
+    }
+
+    onClose(result);
   };
 
   const onSelectPreset = (updatedPreset: Preset) => {
@@ -64,7 +156,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     <DialogBox
       scrolled
       onClose={handleCancel}
-      open={open}
+      open={true}
       title={strings.CUSTOMIZE_TABLE_COLUMNS}
       size='x-large'
       middleButtons={[

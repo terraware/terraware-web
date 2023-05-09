@@ -157,6 +157,10 @@ function columns(): DatabaseColumn[] {
   ];
 }
 
+export function orderedColumnNames(): string[] {
+  return columns().map((column) => column.key);
+}
+
 export function columnsIndexed(): Record<string, DatabaseColumn> {
   return columns().reduce((acum, value) => {
     acum[value.key] = value;
