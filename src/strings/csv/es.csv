@@ -173,7 +173,7 @@ CONTACT_US,Contáctenos
 CONTACT_US_DESCRIPTION,¿Tiene una pregunta o desea ponerse en contacto con un miembro de nuestro equipo? ¡Siempre estamos dispuestos a responder sus preguntas y a asegurarnos de que pueda sacarle provecho a Terraware! Puede ponerse en contacto con nosotros con este formulario o enviando un correo electrónico a {0}
 CONTACT_US_TO_RESOLVE_ISSUE,Contáctenos para resolver este problema.
 CONTRIBUTOR,Colaborador
-CONTRIBUTOR_INFO,Un colaborador solo puede añadir entradas de datos para semillas.
+CONTRIBUTOR_INFO,"Un colaborador puede agregar entradas de datos para semillas, gestionar el inventario del vivero excepto los retiros de plantas en campo, ver los retiros, gestionar las reasignaciones del vivero y visualizar las plantaciones de un sitio de plantación en un mapa geográfico."
 CONTRIBUTORS,Colaboradores
 CONVERTED_VALUE_INFO,Este valor se calcula automáticamente con fines informativos.
 COUNT,Recuento
@@ -466,7 +466,7 @@ LOCKED,Bloqueado
 LOG_OUT,Cerrar sesión
 LOSS_RATE,Tasa de pérdidas
 MANAGER,Gestor
-MANAGER_INFO,"Un gestor puede hacer lo anterior, así como editar las entradas de datos de las semillas y gestionar las especies."
+MANAGER_INFO,"Un administrador puede hacer lo anterior, además de editar la entradas de datos para semillas y gestionar los retiros de plantas en campo, sitios de plantación y especies."
 MARK_ALL_AS_READ,Marcar todo como leído
 MARK_AS_COMPLETE,Marcar como completo
 MARK_AS_READ,Marcar como leído
@@ -578,13 +578,13 @@ NUMBER_OF_PEOPLE,Número de personas
 NUMBER_OF_PLANTS,Número de plantas
 NUMBER_OF_PLANTS_BY_SPECIES,Número de plantas por especie
 NUMBER_OF_PLANTS_BY_SUBZONE_AND_SPECIES,Número de plantas por subzona y especie
-NUMBER_OF_SEEDS_COMPROMISED,Número de semillas afectadas
+NUMBER_OF_SEEDS_COMPROMISED,# semillas afectadas
 NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Semillas Afectadas *
 NUMBER_OF_SEEDS_COMPROMISED_V2,# Semillas Afectadas
-NUMBER_OF_SEEDS_EMPTY,Número de semillas Vacías
+NUMBER_OF_SEEDS_EMPTY,# semillas vacías
 NUMBER_OF_SEEDS_EMPTY_REQUIRED,# Semillas Vacías *
 NUMBER_OF_SEEDS_EMPTY_V2,# Semillas Vacías
-NUMBER_OF_SEEDS_FILLED,Número de semillas rellenadas
+NUMBER_OF_SEEDS_FILLED,# semillas llenadas
 NUMBER_OF_SEEDS_FILLED_REQUIRED,# Semillas Rellenadas *
 NUMBER_OF_SEEDS_FILLED_V2,# Semillas Rellenadas
 NUMBER_OF_SEEDS_GERMINATED,# Semillas Germinadas
@@ -617,7 +617,7 @@ OR_SEED_WEIGHT,o peso de la semilla
 ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, vaya a [""Ajustes > Organización""]."
 ORGANIZATION,Organización
 ORGANIZATION_CREATE_FAILED,No se puede crear la organización.
-ORGANIZATION_CREATED_MSG,"Puede acceder a las organizaciones a las que pertenece haciendo clic en la flecha de la esquina superior derecha, junto a su perfil."
+ORGANIZATION_CREATED_MSG,Puede acceder a las organizaciones en las que se encuentra dando clic en el menú de perfil de usuario en la esquina superior derecha.
 ORGANIZATION_CREATED_MSG_DESKTOP,"Puede acceder a las organizaciones en las que está dando clic en la flecha en la esquina superior izquierda, a un lado del logo."
 ORGANIZATION_CREATED_TITLE,¡Ha creado {0}!
 ORGANIZATION_DATA_NOT_AVAILABLE,Datos de la organización no disponibles
@@ -758,7 +758,7 @@ REPORT_COULD_NOT_SAVE,No se pudo guardar el informe
 REPORT_COULD_NOT_SUBMIT,No se pudo enviar el informe
 REPORT_COULD_NOT_UNLOCK,No se pudo desbloquear el informe
 REPORT_EDIT,Editar informe
-REPORT_MORTALITY_RATE_INFO,"Si las conoce, por favor enumere las tasas de mortalidad de todos los árboles plantados y de otras plantas como porcentajes. Si no lo conoce, déjelo en blanco."
+REPORT_MORTALITY_RATE_INFO,"Si se conoce, indique las tasas de mortalidad de todos los árboles plantados y de otras plantas en porcentaje. Si se desconoce, ingrese 0."
 REPORT_NAME,Nombre del informe
 REPORT_NO_NURSERIES,No se incluyeron viveros en el informe.
 REPORT_NO_PLANTING_SITES,No se incluyeron lugares de siembra en el informe.
