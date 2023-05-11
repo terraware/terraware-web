@@ -8,6 +8,7 @@ function columns(): DatabaseColumn[] {
       name: strings.ACCESSION,
       type: 'string',
       filter: { type: 'search' },
+      searchType: 'ExactOrFuzzy',
     },
     {
       key: 'state',
@@ -56,6 +57,7 @@ function columns(): DatabaseColumn[] {
       name: strings.COLLECTING_SITE,
       type: 'string',
       filter: { type: 'search' },
+      searchType: 'ExactOrFuzzy',
     },
     {
       key: 'collectionSiteLandowner',

@@ -308,7 +308,7 @@ function getSearchTermFilter(searchCols: DatabaseColumn[], searchTerm: string): 
     children: searchCols.map((col) => ({
       operation: 'field',
       field: col.key,
-      type: col.key === 'accessionNumber' ? 'ExactOrFuzzy' : 'Fuzzy',
+      type: col.searchType ?? 'Fuzzy',
       values: [searchTerm],
     })),
     operation: 'or',
