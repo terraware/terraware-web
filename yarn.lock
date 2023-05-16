@@ -1945,13 +1945,13 @@
     react-is "^18.2.0"
     react-transition-group "^4.4.5"
 
-"@mui/private-theming@^5.11.9":
-  version "5.11.9"
-  resolved "https://registry.yarnpkg.com/@mui/private-theming/-/private-theming-5.11.9.tgz#ce3f7b7fa7de3e8d6b2a3132a22bffd6bfaabe9b"
-  integrity sha512-XMyVIFGomVCmCm92EvYlgq3zrC9K+J6r7IKl/rBJT2/xVYoRY6uM7jeB+Wxh7kXxnW9Dbqsr2yL3cx6wSD1sAg==
+"@mui/private-theming@^5.11.9", "@mui/private-theming@^5.12.3":
+  version "5.12.3"
+  resolved "https://registry.yarnpkg.com/@mui/private-theming/-/private-theming-5.12.3.tgz#f5e4704e25d9d91b906561cae573cda8f3801e10"
+  integrity sha512-o1e7Z1Bp27n4x2iUHhegV4/Jp6H3T6iBKHJdLivS5GbwsuAE/5l4SnZ+7+K+e5u9TuhwcAKZLkjvqzkDe8zqfA==
   dependencies:
-    "@babel/runtime" "^7.20.13"
-    "@mui/utils" "^5.11.9"
+    "@babel/runtime" "^7.21.0"
+    "@mui/utils" "^5.12.3"
     prop-types "^15.8.1"
 
 "@mui/styled-engine-sc@^5.12.0":
@@ -1972,18 +1972,18 @@
     csstype "^3.1.1"
     prop-types "^15.8.1"
 
-"@mui/styles@^5.11.9":
-  version "5.11.9"
-  resolved "https://registry.yarnpkg.com/@mui/styles/-/styles-5.11.9.tgz#b71022c904bceba64234f97c0b2e8e7012d4183d"
-  integrity sha512-AWur9Cx5IQ/FWHEpsHU78pNRelGiJLr4jHu+M3PT0rC9w5n7tjMT8oEdaZKPt1bYUiRvkLC/vpNH+E8ov8gXxA==
+"@mui/styles@^5.11.9", "@mui/styles@^5.12.3":
+  version "5.12.3"
+  resolved "https://registry.yarnpkg.com/@mui/styles/-/styles-5.12.3.tgz#2856fea1002199155bca02d4188b3771539481c6"
+  integrity sha512-y0GN1kTYO2FF/0LH8a0PpVxwLotlcunFqdJpCL5gza0w5Fqz9wxlwauPZW0bDt0+sF79CrohzdzWkh+fxB+oww==
   dependencies:
-    "@babel/runtime" "^7.20.13"
+    "@babel/runtime" "^7.21.0"
     "@emotion/hash" "^0.9.0"
-    "@mui/private-theming" "^5.11.9"
-    "@mui/types" "^7.2.3"
-    "@mui/utils" "^5.11.9"
+    "@mui/private-theming" "^5.12.3"
+    "@mui/types" "^7.2.4"
+    "@mui/utils" "^5.12.3"
     clsx "^1.2.1"
-    csstype "^3.1.1"
+    csstype "^3.1.2"
     hoist-non-react-statics "^3.3.2"
     jss "^10.10.0"
     jss-plugin-camel-case "^10.10.0"
@@ -2009,28 +2009,17 @@
     csstype "^3.1.1"
     prop-types "^15.8.1"
 
-"@mui/types@^7.2.3":
-  version "7.2.3"
-  resolved "https://registry.yarnpkg.com/@mui/types/-/types-7.2.3.tgz#06faae1c0e2f3a31c86af6f28b3a4a42143670b9"
-  integrity sha512-tZ+CQggbe9Ol7e/Fs5RcKwg/woU+o8DCtOnccX6KmbBc7YrfqMYEYuaIcXHuhpT880QwNkZZ3wQwvtlDFA2yOw==
+"@mui/types@^7.2.3", "@mui/types@^7.2.4":
+  version "7.2.4"
+  resolved "https://registry.yarnpkg.com/@mui/types/-/types-7.2.4.tgz#b6fade19323b754c5c6de679a38f068fd50b9328"
+  integrity sha512-LBcwa8rN84bKF+f5sDyku42w1NTxaPgPyYKODsh01U1fVstTClbUoSA96oyRBnSNyEiAVjKm6Gwx9vjR+xyqHA==
 
-"@mui/utils@^5.10.3":
-  version "5.11.2"
-  resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.11.2.tgz#29764311acb99425159b159b1cb382153ad9be1f"
-  integrity sha512-AyizuHHlGdAtH5hOOXBW3kriuIwUIKUIgg0P7LzMvzf6jPhoQbENYqY6zJqfoZ7fAWMNNYT8mgN5EftNGzwE2w==
+"@mui/utils@^5.10.3", "@mui/utils@^5.11.9", "@mui/utils@^5.12.3":
+  version "5.12.3"
+  resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.12.3.tgz#3fa3570dac7ec66bb9cc84ab7c16ab6e1b7200f2"
+  integrity sha512-D/Z4Ub3MRl7HiUccid7sQYclTr24TqUAQFFlxHQF8FR177BrCTQ0JJZom7EqYjZCdXhwnSkOj2ph685MSKNtIA==
   dependencies:
-    "@babel/runtime" "^7.20.7"
-    "@types/prop-types" "^15.7.5"
-    "@types/react-is" "^16.7.1 || ^17.0.0"
-    prop-types "^15.8.1"
-    react-is "^18.2.0"
-
-"@mui/utils@^5.11.9":
-  version "5.11.9"
-  resolved "https://registry.yarnpkg.com/@mui/utils/-/utils-5.11.9.tgz#8fab9cf773c63ad916597921860d2344b5d4b706"
-  integrity sha512-eOJaqzcEs4qEwolcvFAmXGpln+uvouvOS9FUX6Wkrte+4I8rZbjODOBDVNlK+V6/ziTfD4iNKC0G+KfOTApbqg==
-  dependencies:
-    "@babel/runtime" "^7.20.13"
+    "@babel/runtime" "^7.21.0"
     "@types/prop-types" "^15.7.5"
     "@types/react-is" "^16.7.1 || ^17.0.0"
     prop-types "^15.8.1"
@@ -4551,10 +4540,10 @@ cssstyle@^2.3.0:
   dependencies:
     cssom "~0.3.6"
 
-csstype@^3.0.2, csstype@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.1.tgz#841b532c45c758ee546a11d5bd7b7b473c8c30b9"
-  integrity sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==
+csstype@^3.0.2, csstype@^3.1.1, csstype@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
+  integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
 csv-generate@^4.2.2:
   version "4.2.2"
