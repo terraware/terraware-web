@@ -1,4 +1,4 @@
-import MapLegend from 'src/components/Observations/MapLegend';
+import MapLegend from 'src/components/common/MapLegend';
 import { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
