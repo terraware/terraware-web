@@ -1,18 +1,22 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-export type MapLegendItem = {
+type MapLegendItem = {
   borderColor: string;
   fillColor: string;
   label: string;
 };
 
-export type MapLegendProps = {
+type MapLegendGroup = {
   title: string;
   items: MapLegendItem[];
 };
 
-export default function MapLegend({ title, items }: MapLegendProps): JSX.Element {
+type MapLegendProps = {
+  legends: MapLegendGroup[];
+};
+
+export default function MapLegend({ legends }: MapLegendProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
@@ -20,24 +24,30 @@ export default function MapLegend({ title, items }: MapLegendProps): JSX.Element
     <Box
       display='flex'
       justifyItems='flex-start'
-      flexWrap='wrap'
-      sx={{
-        border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-        borderRadius: '8px',
-        padding: theme.spacing(2),
-        rowGap: theme.spacing(2),
-      }}
+      flexDirection='column'
+      border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+      borderRadius='8px'
+      padding={theme.spacing(2)}
+      rowGap={theme.spacing(3)}
     >
-      <Typography
-        fontSize='14px'
-        fontWeight={600}
-        width={isMobile ? '100%' : undefined}
-        marginRight={isMobile ? 0 : theme.spacing(4)}
-      >
-        {title}
-      </Typography>
-      {items.map((item) => (
-        <LabeledSwatch key={item.label} borderColor={item.borderColor} fillColor={item.fillColor} label={item.label} />
+      {legends.map((legend) => (
+        <Grid container key={legend.title} spacing={2} columns={8}>
+          <Grid item xs={isMobile ? 8 : 1}>
+            <Typography
+              fontSize='14px'
+              fontWeight={600}
+              width={isMobile ? '100%' : undefined}
+              marginRight={isMobile ? 0 : theme.spacing(4)}
+            >
+              {legend.title}
+            </Typography>
+          </Grid>
+          {legend.items.map((item) => (
+            <Grid item xs={isMobile ? 4 : 1} key={`${legend.title}-${item.label}`}>
+              <LabeledSwatch borderColor={item.borderColor} fillColor={item.fillColor} label={item.label} />
+            </Grid>
+          ))}
+        </Grid>
       ))}
     </Box>
   );
@@ -49,7 +59,7 @@ function LabeledSwatch({ borderColor, fillColor, label }: LabeledSwatchProps): J
   const theme = useTheme();
 
   return (
-    <Box display='flex' alignItems='center' marginRight={theme.spacing(3)}>
+    <Box display='flex' alignItems='center'>
       <Box
         sx={{
           border: `2px solid ${borderColor}`,

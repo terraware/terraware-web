@@ -15,22 +15,46 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    title: 'Boundaries',
-    items: [
+    legends: [
       {
-        fillColor: '#009900',
-        borderColor: '#005500',
-        label: 'Forest',
+        title: 'Boundaries',
+        items: [
+          {
+            fillColor: '#009900',
+            borderColor: '#005500',
+            label: 'Forest',
+          },
+          {
+            fillColor: '#000099',
+            borderColor: '#000055',
+            label: 'Water',
+          },
+          {
+            fillColor: '#00ff00',
+            borderColor: '#000000',
+            label: 'Radioactive Waste',
+          },
+        ],
       },
       {
-        fillColor: '#000099',
-        borderColor: '#000055',
-        label: 'Water',
-      },
-      {
-        fillColor: '#00ff00',
-        borderColor: '#000000',
-        label: 'Radioactive Waste',
+        title: 'Regions',
+        items: [
+          {
+            fillColor: '#990000',
+            borderColor: '#550000',
+            label: 'Planting Site',
+          },
+          {
+            fillColor: '#0000ff',
+            borderColor: '#000099',
+            label: 'Zone',
+          },
+          {
+            fillColor: '#ff0000',
+            borderColor: '#000000',
+            label: 'Subzone',
+          },
+        ],
       },
     ],
   },
