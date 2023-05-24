@@ -16,13 +16,27 @@ const preview: Preview = {
 export default preview;
 
 import theme from '../src/theme';
+import { useState } from 'react';
+import { LocalizationProvider } from '../src/providers';
 
 export const decorators = [
-  (Story) => (
-    <ThemeProvider theme={theme}>
-      <StyledEngineProvider injectFirst>
-        <Story />
-      </StyledEngineProvider>
-    </ThemeProvider>
-  ),
+  (Story) => {
+    const [selectedLocale, setSelectedLocale] = useState('en');
+    const [activeLocale, setActiveLocale] = useState<string | null>(null);
+
+    return (
+      <ThemeProvider theme={theme}>
+        <LocalizationProvider
+          selectedLocale={selectedLocale}
+          setSelectedLocale={setSelectedLocale}
+          activeLocale={activeLocale}
+          setActiveLocale={setActiveLocale}
+        >
+          <StyledEngineProvider injectFirst>
+            <Story />
+          </StyledEngineProvider>
+        </LocalizationProvider>
+      </ThemeProvider>
+    );
+  },
 ];
