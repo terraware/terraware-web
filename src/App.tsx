@@ -62,6 +62,8 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
 import { ReportList, ReportView, ReportEdit } from './components/Reports';
+import isEnabled from 'src/features';
+import Observations from 'src/components/Observations';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -170,6 +172,7 @@ function AppContent() {
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
   const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
+  const trackingV2 = isEnabled('TrackingV2');
 
   const setDefaults = useCallback(() => {
     if (!isPlaceholderOrg(selectedOrganization.id)) {
@@ -492,6 +495,18 @@ function AppContent() {
             {selectedOrganization.canSubmitReports && (
               <Route path={APP_PATHS.REPORTS_VIEW}>
                 <ReportView />
+              </Route>
+            )}
+
+            {trackingV2 && (
+              <Route exact path={APP_PATHS.OBSERVATIONS}>
+                <Observations />
+              </Route>
+            )}
+
+            {trackingV2 && (
+              <Route exact path={APP_PATHS.PLANTING_SITE_OBSERVATIONS}>
+                <Observations />
               </Route>
             )}
 

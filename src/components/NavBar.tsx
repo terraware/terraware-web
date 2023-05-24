@@ -31,6 +31,7 @@ export default function NavBar({
   const [reports, setReports] = useState<Reports>([]);
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
+  const trackingV2 = isEnabled('TrackingV2');
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
   const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
@@ -50,6 +51,7 @@ export default function NavBar({
   const isWithdrawalLogRoute = useRouteMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
   const isReassignmentRoute = useRouteMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
   const isReportsRoute = useRouteMatch(APP_PATHS.REPORTS + '/');
+  const isObservationsRoute = useRouteMatch(APP_PATHS.OBSERVATIONS + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -187,6 +189,16 @@ export default function NavBar({
             }}
             id='plants-dashboard'
           />
+          {trackingV2 && (
+            <NavItem
+              label={strings.OBSERVATIONS}
+              selected={!!isObservationsRoute}
+              onClick={() => {
+                closeAndNavigateTo(APP_PATHS.OBSERVATIONS);
+              }}
+              id='observations'
+            />
+          )}
         </SubNavbar>
       </NavItem>
       {reports.length > 0 && selectedOrganization.canSubmitReports && (
