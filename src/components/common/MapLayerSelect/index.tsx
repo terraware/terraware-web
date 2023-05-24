@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Icon, PopoverMultiSelect } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
+import strings from 'src/strings';
 
 export type MapLayer = 'Planting Site' | 'Zones' | 'Monitoring Plots';
 
@@ -33,15 +34,15 @@ export default function MapLayerSelect({ initialSelection, onUpdateSelection }: 
   const menuSections: { label: string; value: MapLayer }[][] = [
     [
       {
-        label: 'Planting Site',
+        label: strings.PLANTING_SITE,
         value: 'Planting Site',
       },
       {
-        label: 'Zones',
+        label: strings.ZONES,
         value: 'Zones',
       },
       {
-        label: 'Monitoring Plots',
+        label: strings.MONITORING_PLOTS,
         value: 'Monitoring Plots',
       },
     ],
