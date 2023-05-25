@@ -491,6 +491,7 @@ MONITORING_LABEL_STATE_OF_CHARGE,Estado de carga
 MONITORING_LABEL_SYSTEM_POWER,Potencia del sistema
 MONITORING_LABEL_TEMPERATURE,Temperatura
 MONITORING_LABEL_TEMPERATURE_THRESHOLDS,Umbrales de temperatura
+MONITORING_PLOTS,Control de parcelas
 MONTH_01,Enero
 MONTH_02,Febrero
 MONTH_03,Marzo
@@ -607,6 +608,7 @@ NURSERY_MEDIA,Medios del vivero
 NURSERY_MORTALITY_RATE,Tasa de mortalidad en el vivero
 NURSERY_REQUIRED,Vivero *
 NURSERY_TRANSFER,Traslado de vivero
+OBSERVATIONS,Observaciones
 ONBOARDING_ADMIN_TITLE,"Un momento, vamos a completar la configuración en primer lugar"
 OPPORTUNITIES,Oportunidades
 OPPORTUNITIES_INSTRUCTIONS,"Puede incluir oportunidades de expansión del proyecto, nuevos mercados, referencias, formación a otras organizaciones, etc. (Máximo un cuarto de página.)"
@@ -1173,3 +1175,4 @@ YES,Sí
 ZERO,Cero
 ZONE,Zona
 ZONE_REQUIRED,Zona *
+ZONES,Zonas
