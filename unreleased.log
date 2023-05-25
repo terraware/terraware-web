@@ -1,3 +1,4 @@
+9402cf34 Bump web-components to pick up DatePicker fix (#1420)
 7d8970ee Updated translations from Phrase (#1419)
 094ee182 SW-3669 Opt-in flag for tracking v2 + react routing (#1418)
 36a56cc6 SW-3633 Create Layer Selection Dropdown (#1417)
