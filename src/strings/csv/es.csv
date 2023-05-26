@@ -79,6 +79,7 @@ AGE_VALUE_MONTHS,{0} Meses
 AGE_YEARS,Edad (año)
 AGROFORESTRY,Agrosilvicultura
 ALERTS,Alertas
+ALL,Todo
 ALL_SEEDS_WITHDRAWN_MSG,"Como todas las semillas ya se han retirado, los retiros nuevos se desactivan, la etapa de adhesión se configura como Retirada y la adhesión en sí se marca como Inactiva."
 ALL_SENSORS_FOUND,Se encontraron todos los sensores.
 ALREADY_INVITED_PERSON_ERROR,Parece que ya añadió o invitó a esta persona. Por favor ingrese un correo electrónico único o vaya al perfil existente de la persona.
