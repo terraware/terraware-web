@@ -2,6 +2,7 @@ import DateSlider from './DateSlider';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useMemo, useState } from 'react';
+import Card from 'src/components/common/Card';
 
 type MapDateSelectProps = {
   dates: Date[];
@@ -58,16 +59,19 @@ export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): 
   const getDateString = (date: Date) => {
     return `${monthStrings[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
   };
+  const getDateLabel = (date: Date) => <Typography fontSize='12px'>{getDateString(date)}</Typography>;
 
   return (
-    <Box
-      border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-      borderRadius='8px'
-      display='flex'
-      flexDirection='column'
-      padding={theme.spacing(2)}
-      maxWidth='270px'
-      width={dates.length > 1 ? '270px' : undefined}
+    <Card
+      style={{
+        border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+        borderRadius: '8px',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: theme.spacing(2),
+        maxWidth: '270px',
+        width: dates.length > 1 ? '270px' : undefined,
+      }}
     >
       {selectedDate && (
         <Typography fontSize='14px' fontWeight={600} textAlign='right'>
@@ -78,11 +82,11 @@ export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): 
         <>
           <DateSlider dates={dates} onChange={handleChange} initialSelectionIndex={latestDateIndex} />
           <Box display='flex' justifyContent='space-between'>
-            <Typography fontSize='12px'>{getDateString(earliestDate)}</Typography>
-            <Typography fontSize='12px'>{getDateString(latestDate)}</Typography>
+            {getDateLabel(earliestDate)}
+            {getDateLabel(latestDate)}
           </Box>
         </>
       )}
-    </Box>
+    </Card>
   );
 }
