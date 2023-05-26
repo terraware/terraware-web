@@ -20,7 +20,7 @@ export default function PlantsDashboard(): JSX.Element {
       title={strings.DASHBOARD}
       onSelect={onSelect}
       pagePath={APP_PATHS.PLANTING_SITE_DASHBOARD}
-      lastVisitedPreferenceName='lastDashboardPlantingSite'
+      lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
       plantsSitePreferences={plantsDashboardPreferences}
       setPlantsSitePreferences={onPreferences}
     >

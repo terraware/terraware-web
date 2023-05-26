@@ -1,5 +1,9 @@
 import type { Preview } from '@storybook/react';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material';
+import { MemoryRouter } from 'react-router';
+import { RecoilRoot } from 'recoil';
+import { Provider } from 'react-redux';
+import { store } from 'src/redux/store';
 
 const preview: Preview = {
   parameters: {
@@ -33,7 +37,13 @@ export const decorators = [
           setActiveLocale={setActiveLocale}
         >
           <StyledEngineProvider injectFirst>
-            <Story />
+            <MemoryRouter initialEntries={['/']}>
+              <RecoilRoot>
+                <Provider store={store}>
+                  <Story />
+                </Provider>
+              </RecoilRoot>
+            </MemoryRouter>
           </StyledEngineProvider>
         </LocalizationProvider>
       </ThemeProvider>
