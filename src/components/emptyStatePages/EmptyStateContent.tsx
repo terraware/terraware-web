@@ -103,8 +103,8 @@ export type ListItemContent = {
 
 type EmptyStateContentProps = {
   title: string;
-  subtitle: string;
-  listItems: ListItemContent[];
+  subtitle: string | string[];
+  listItems?: ListItemContent[];
   buttonText?: string;
   buttonIcon?: IconName;
   onClickButton?: () => void;
@@ -117,6 +117,8 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ ...styles, isMobile });
 
+  const subtitleParagraphs: string[] = typeof subtitle === 'string' ? [subtitle] : subtitle;
+
   const gridSize = () => {
     if (isMobile) {
       return 12;
@@ -127,9 +129,13 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
   return (
     <Container className={classes.container}>
       <h1 className={classes.title}>{title}</h1>
-      <p className={classes.subtitle}>{subtitle}</p>
+      {subtitleParagraphs.map((para, index) => (
+        <p className={classes.subtitle} key={index}>
+          {para}
+        </p>
+      ))}
       <div className={classes.listContainer}>
-        {listItems.map((item, index) => {
+        {listItems?.map((item, index) => {
           return (
             <Grid item xs={gridSize()} key={`${item.title}-${index}`} className={`${classes.listItem}`}>
               <Icon name={item.icon} className={classes.listItemIcon} />

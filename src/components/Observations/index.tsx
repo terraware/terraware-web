@@ -2,6 +2,9 @@ import { useCallback, useState } from 'react';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
+import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
+import { EMPTY_STATE_CONTENT_STYLES } from 'src/components/emptyStatePages/EmptyStatePage';
+import Card from 'src/components/common/Card';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 
 export default function PlantsDashboard(): JSX.Element {
@@ -31,7 +34,17 @@ export default function PlantsDashboard(): JSX.Element {
       onPlantingSites={onPlantingSites}
       isEmptyState={!plantingSites?.length || !hasObservations}
     >
-      <div>placeholder for selected planting site {selectedPlantingSite?.id}</div>
+      {hasObservations ? (
+        <div>placeholder for selected planting site {selectedPlantingSite?.id}</div>
+      ) : (
+        <Card style={{ margin: 'auto' }}>
+          <EmptyStateContent
+            title={strings.OBSERVATIONS_EMPTY_STATE_TITLE}
+            subtitle={[strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]}
+            styles={EMPTY_STATE_CONTENT_STYLES}
+          />
+        </Card>
+      )}
     </PlantsPrimaryPage>
   );
 }
