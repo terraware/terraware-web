@@ -15,14 +15,14 @@ type Story = StoryObj<typeof meta>;
 
 export const MultipleOptions: Story = {
   args: {
-    dates: [new Date(2023, 4), new Date(2023, 0), new Date(2022, 4), new Date(2022, 2), new Date(2022, 0)],
+    dates: ['2023-05-01', '2023-01-01', '2022-05-01', '2022-03-01', '2022-01-01'],
     onChange: () => undefined,
   },
 };
 
 export const SingleOption: Story = {
   args: {
-    dates: [new Date(2023, 4)],
+    dates: ['2023-05'],
     onChange: () => undefined,
   },
 };

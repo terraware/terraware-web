@@ -2,8 +2,8 @@ import { Slider } from '@terraware/web-components';
 import { useMemo } from 'react';
 
 type DateSliderProps = {
-  dates: Date[];
-  onChange: (newDate: Date) => void;
+  dates: string[]; // date strings in the format 'YYYY-MM-DD'
+  onChange: (newDate: string) => void;
   initialSelectionIndex: number;
 };
 
@@ -11,21 +11,21 @@ export default function DateSlider(props: DateSliderProps): JSX.Element {
   const { dates, onChange, initialSelectionIndex } = props;
 
   const minTime = useMemo(() => {
-    return Math.min(...dates.map((d) => d.getTime()));
+    return Math.min(...dates.map((d) => Date.parse(d)));
   }, [dates]);
 
   const maxTime = useMemo(() => {
-    return Math.max(...dates.map((d) => d.getTime()));
+    return Math.max(...dates.map((d) => Date.parse(d)));
   }, [dates]);
 
   const marks = useMemo(() => {
-    return dates.map((date) => ({ value: date.getTime() }));
+    return dates.map((date) => ({ value: Date.parse(date) }));
   }, [dates]);
 
   const timestampForDate = useMemo(() => {
-    const tsMap = new Map<number, Date>();
+    const tsMap = new Map<number, string>();
     for (const date of dates) {
-      tsMap.set(date.getTime(), date);
+      tsMap.set(Date.parse(date), date);
     }
 
     return tsMap;

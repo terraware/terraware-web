@@ -1,35 +1,21 @@
 import DateSlider from './DateSlider';
-import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useMemo, useState } from 'react';
 import Card from 'src/components/common/Card';
+import { useLocalization } from 'src/providers';
 
 type MapDateSelectProps = {
-  dates: Date[];
-  onChange: (newDate: Date) => void;
+  dates: string[]; // date strings in the format 'YYYY-MM-DD'
+  onChange: (newDate: string) => void;
 };
 
 export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): JSX.Element {
   const theme = useTheme();
-
-  const monthStrings = [
-    strings.MONTH_01,
-    strings.MONTH_02,
-    strings.MONTH_03,
-    strings.MONTH_04,
-    strings.MONTH_05,
-    strings.MONTH_06,
-    strings.MONTH_07,
-    strings.MONTH_08,
-    strings.MONTH_09,
-    strings.MONTH_10,
-    strings.MONTH_11,
-    strings.MONTH_12,
-  ];
+  const locale = useLocalization().selectedLocale;
 
   const earliestDate = useMemo(() => {
     return dates.reduce((prev, curr) => {
-      if (prev.getTime() < curr.getTime()) {
+      if (Date.parse(prev) < Date.parse(curr)) {
         return prev;
       }
       return curr;
@@ -38,7 +24,7 @@ export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): 
 
   const latestDate = useMemo(() => {
     return dates.reduce((prev, curr) => {
-      if (prev.getTime() > curr.getTime()) {
+      if (Date.parse(prev) > Date.parse(curr)) {
         return prev;
       }
       return curr;
@@ -51,15 +37,15 @@ export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): 
 
   const [selectedDate, setSelectedDate] = useState(latestDate);
 
-  const handleChange = (newDate: Date) => {
+  const handleChange = (newDate: string) => {
     setSelectedDate(newDate);
     onChange(newDate);
   };
 
-  const getDateString = (date: Date) => {
-    return `${monthStrings[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+  const getDateString = (date: string) => {
+    return new Intl.DateTimeFormat(locale, { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(date));
   };
-  const getDateLabel = (date: Date) => <Typography fontSize='12px'>{getDateString(date)}</Typography>;
+  const getDateLabel = (date: string) => <Typography fontSize='12px'>{getDateString(date)}</Typography>;
 
   return (
     <Card
