@@ -3813,10 +3813,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.3.43":
-  version "2.3.43"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.43.tgz#aa02a6f68fd7c33a987b9fdebfbfeace98b76558"
-  integrity sha512-rg6guurEhpgBs4bzUdcQVE2HDgq80ivG0oMbR/WlaS+c9LSjIJKrBVD81dmyLm+GDeEN743qnRffQt3+rrCBSQ==
+"@terraware/web-components@^2.3.45":
+  version "2.3.45"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.45.tgz#0497a8a848e7b3904a82b0eb6c7dc12df0c9022f"
+  integrity sha512-KnTvBKAs9whgDvqXzmEiFQ1Qd1t2t9VQBvafzWNEjQPiqd4yBMPkY90/oHgLPe2/J87+CDcRFz13oMZ489XRJQ==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
