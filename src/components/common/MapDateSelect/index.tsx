@@ -43,6 +43,8 @@ export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): 
   };
 
   const getDateString = (date: string) => {
+    // TODO: Determine whether the dates input to this component are UTC or local to a planting site. This may influence
+    //       whether we need to localize them in the Intl.DateTimeFormatter
     return new Intl.DateTimeFormat(locale, { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(date));
   };
   const getDateLabel = (date: string) => <Typography fontSize='12px'>{getDateString(date)}</Typography>;
