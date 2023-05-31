@@ -5,7 +5,6 @@ import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
 import EmptyStateContent from '../emptyStatePages/EmptyStateContent';
-import { EMPTY_STATE_CONTENT_STYLES } from '../emptyStatePages/EmptyStatePage';
 import SensorKitSetup from './SensorKitSetup';
 import SeedBankDashboard from './dashboard/SeedBankDashboard';
 import { Grid, Theme } from '@mui/material';
@@ -72,7 +71,6 @@ export default function Monitoring(props: SeedBankMonitoringProps): JSX.Element 
                   listItems={[{ icon: 'monitoring' }]}
                   buttonText={strings.SET_UP}
                   onClickButton={() => setOnboarding(true)}
-                  styles={EMPTY_STATE_CONTENT_STYLES}
                 />
               </div>
             </Grid>

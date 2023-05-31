@@ -19,11 +19,13 @@ type NavBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
   backgroundTransparent?: boolean;
   withdrawalCreated?: boolean;
+  hasPlantingSites?: boolean;
 };
 export default function NavBar({
   setShowNavBar,
   backgroundTransparent,
   withdrawalCreated,
+  hasPlantingSites,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
   const [role, setRole] = useState<OrganizationRole>();
@@ -189,7 +191,7 @@ export default function NavBar({
             }}
             id='plants-dashboard'
           />
-          {trackingV2 && (
+          {trackingV2 && hasPlantingSites === true && (
             <NavItem
               label={strings.OBSERVATIONS}
               selected={!!isObservationsRoute}

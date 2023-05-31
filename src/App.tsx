@@ -330,7 +330,11 @@ function AppContent() {
       {type !== 'desktop' ? (
         <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
           <div className={classes.navBarOpened}>
-            <NavBar setShowNavBar={setShowNavBar} withdrawalCreated={withdrawalCreated} />
+            <NavBar
+              setShowNavBar={setShowNavBar}
+              withdrawalCreated={withdrawalCreated}
+              hasPlantingSites={selectedOrgHasPlantingSites()}
+            />
           </div>
         </Slide>
       ) : (
@@ -338,6 +342,7 @@ function AppContent() {
           setShowNavBar={setShowNavBar}
           backgroundTransparent={viewHasBackgroundImage()}
           withdrawalCreated={withdrawalCreated}
+          hasPlantingSites={selectedOrgHasPlantingSites()}
         />
       )}
       <div

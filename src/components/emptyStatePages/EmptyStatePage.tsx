@@ -48,14 +48,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export const EMPTY_STATE_CONTENT_STYLES = {
-  titleFontSize: '20px',
-  titleLineHeight: '28px',
-  subtitleFontSize: '16px',
-  subtitleLineHeight: '24px',
-  listContainerVerticalMargin: '24px',
-};
-
 type PageContent = {
   title1?: string;
   title2: string;
@@ -310,7 +302,6 @@ export default function EmptyStatePage({
               buttonText={content.buttonText}
               buttonIcon={content.buttonIcon}
               onClickButton={goToNewLocation}
-              styles={EMPTY_STATE_CONTENT_STYLES}
             />
           </div>
         </Container>
