@@ -459,6 +459,7 @@ LEAVE_AND_SAVE,Salir y guardar
 LEAVE_ORGANIZATION,Salir de la organización
 LICHEN,Liquen
 LIGHT,Luz
+LIST,Lista
 LOADING,Cargando...
 LOCATION,Lugar
 LOCATION_REQUIRED,Lugar *
@@ -468,6 +469,7 @@ LOG_OUT,Cerrar sesión
 LOSS_RATE,Tasa de pérdidas
 MANAGER,Gestor
 MANAGER_INFO,"Un administrador puede hacer lo anterior, además de editar la entradas de datos para semillas y gestionar los retiros de plantas en campo, sitios de plantación y especies."
+MAP,Mapa
 MARK_ALL_AS_READ,Marcar todo como leído
 MARK_AS_COMPLETE,Marcar como completo
 MARK_AS_READ,Marcar como leído
