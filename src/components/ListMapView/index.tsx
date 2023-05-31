@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import Card from 'src/components/common/Card';
 import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
 
@@ -18,6 +18,7 @@ export type ListMapViewProps = {
 
 export default function ListMapView({ search, list, map, onView, initialView }: ListMapViewProps): JSX.Element {
   const [view, setView] = useState<View>(initialView);
+  const theme = useTheme();
 
   const updateView = (nextView: View) => {
     setView(nextView);
@@ -38,7 +39,7 @@ export default function ListMapView({ search, list, map, onView, initialView }: 
         {search}
         <ListMapSelector view={view} onView={updateView} />
       </Box>
-      <Box display='flex' flexGrow={1} marginTop='20px'>
+      <Box display='flex' flexGrow={1} marginTop={theme.spacing(2)}>
         <Box display={view === 'list' ? 'flex' : 'none'}>{list}</Box>
         <Box display={view === 'map' ? 'flex' : 'none'}>{map}</Box>
       </Box>
