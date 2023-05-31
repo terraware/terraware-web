@@ -459,6 +459,7 @@ LEAVE_AND_SAVE,Leave and Save
 LEAVE_ORGANIZATION,Leave Organization
 LICHEN,Lichen
 LIGHT,Light
+LIST,List
 LOADING,Loading...
 LOCATION,Location
 LOCATION_REQUIRED,Location *
@@ -468,6 +469,7 @@ LOG_OUT,Log Out
 LOSS_RATE,Loss Rate
 MANAGER,Manager
 MANAGER_INFO,"A manager can do the above as well as edit data entries for seeds and manage outplant withdrawals, planting sites and species."
+MAP,Map
 MARK_ALL_AS_READ,Mark All As Read
 MARK_AS_COMPLETE,Mark as Complete
 MARK_AS_READ,Mark As Read
