@@ -612,9 +612,9 @@ NURSERY_MORTALITY_RATE,Nursery Mortality Rate
 NURSERY_REQUIRED,Nursery *
 NURSERY_TRANSFER,Nursery Transfer
 OBSERVATIONS,Observations
-OBSERVATIONS_EMPTY_STATE_TITLE,No Observations Yet
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Observations are when you record data from a sample of monitoring plots using our mobile app in the field. This allows us to calculate mortality rates, and eventually carbon sequestration."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"You will be notified when it is time to take your observations (typically, the next time you end a planting season). After you've completed your first observations, you'll see the records here."
+OBSERVATIONS_EMPTY_STATE_TITLE,No Observations Yet
 ONBOARDING_ADMIN_TITLE,"Just a moment, let’s complete setup first"
 OPPORTUNITIES,Opportunities
 OPPORTUNITIES_INSTRUCTIONS,"This may include opportunities for project expansion, new markets, referrals, training to other organizations, etc. (One-quarter page maximum.)"
