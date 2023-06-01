@@ -20,9 +20,10 @@ export type PlantsPrimaryPageProps = {
   onPlantingSites?: (plantingSites: PlantingSite[]) => void; // optional callback to pass planting sites list on fetch
 };
 
-const allSitesOption = () => ({
+const allSitesOption = (organizationId: number): PlantingSite => ({
   name: strings.ALL,
   id: -1,
+  organizationId,
 });
 
 export default function PlantsPrimaryPage({
@@ -58,7 +59,7 @@ export default function PlantsPrimaryPage({
       if (serverResponse.requestSucceeded) {
         const plantingSitesList: PlantingSite[] =
           allowAllAsSiteSelection && serverResponse.sites?.length
-            ? [allSitesOption(), ...serverResponse.sites]
+            ? [allSitesOption(selectedOrganization.id), ...serverResponse.sites]
             : serverResponse.sites ?? [];
         setPlantingSites(plantingSitesList);
         if (onPlantingSites) {

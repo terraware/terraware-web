@@ -37,6 +37,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
     name: '',
+    organizationId: selectedOrganization.id,
   });
 
   useEffect(() => {
@@ -64,8 +65,9 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       boundary: selectedPlantingSite?.boundary,
       plantingZones: selectedPlantingSite?.plantingZones,
       timeZone: selectedPlantingSite?.timeZone,
+      organizationId: selectedOrganization.id,
     });
-  }, [selectedPlantingSite, setRecord]);
+  }, [selectedPlantingSite, setRecord, selectedOrganization.id]);
 
   const goToPlantingSite = (id?: number) => {
     const plantingSitesLocation = {
@@ -86,7 +88,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       const newPlantingSite: PlantingSitePostRequestBody = {
         name: record.name,
         description: record.description,
-        organizationId: selectedOrganization.id,
+        organizationId: record.organizationId,
         timeZone: record.timeZone,
       };
       response = await TrackingService.createPlantingSite(newPlantingSite);

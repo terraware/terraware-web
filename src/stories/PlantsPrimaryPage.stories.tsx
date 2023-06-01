@@ -25,9 +25,9 @@ Default.args = {
   title: 'Cloudforest Sites',
   isEmptyState: true,
   plantingSites: [
-    { name: 'Monteverde', id: 5 },
-    { name: 'Amazon', id: 99 },
-    { name: 'Congo', id: 3 },
+    { name: 'Monteverde', id: 5, organizationId: 1 },
+    { name: 'Amazon', id: 99, organizationId: 1 },
+    { name: 'Congo', id: 3, organizationId: 1 },
   ],
   selectedPlantingSiteId: 99,
 };
