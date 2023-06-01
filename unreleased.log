@@ -1,3 +1,4 @@
+a15daf1e fix build warnings in terraware-web related to typescript version (#1430)
 6ac46152 SW-3675 bread crumbs navigation wrapper component (#1429)
 40fe530d Updated translations from Phrase (#1428)
 4a688301 Updated translations from Phrase (#1427)
