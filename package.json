@@ -136,5 +136,8 @@
     "tslint-eslint-rules": "^5.4.0",
     "tslint-react": "^5.0.0",
     "tslint-react-hooks": "^2.2.2"
+  },
+  "resolutions": {
+    "fork-ts-checker-webpack-plugin": "^6.5.3"
   }
 }
