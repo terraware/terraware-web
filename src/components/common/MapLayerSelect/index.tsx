@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     border: `1px solid ${theme.palette.TwClrBaseGray300}`,
     borderRadius: '4px',
     backgroundColor: theme.palette.TwClrBg,
+    cursor: 'pointer',
     height: '24px',
     minWidth: '24px',
     display: 'flex',

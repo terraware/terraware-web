@@ -13,9 +13,11 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   layerSelectContainer: {
+    height: theme.spacing(3),
     position: 'relative',
     right: theme.spacing(5.5),
     top: theme.spacing(2),
+    width: theme.spacing(3),
     zIndex: 1000,
   },
 }));
@@ -39,6 +41,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const classes = useStyles();
   const snackbar = useSnackbar();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
+  const [includedLayers, setIncludedLayers] = useState<MapLayer[] | undefined>(layerOptions);
 
   const getRenderAttributes = useCallback(
     (objectType: 'site' | 'zone' | 'subzone') => {
@@ -118,7 +121,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   );
 
   // fetch polygons and boundaries
-  const [includedLayers, setIncludedLayers] = useState<MapLayer[] | undefined>(layerOptions);
   useEffect(() => {
     const fetchPlantingSite = () => {
       const site = extractPlantingSite(plantingSite);
@@ -126,13 +128,13 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       const subzones = extractSubzones(plantingSite);
 
       const includedSources = new Array<MapSource>();
-      if (includedLayers?.includes('Sub-Zones')) {
+      if (includedLayers === undefined || includedLayers?.includes('Sub-Zones')) {
         includedSources.push(subzones);
       }
-      if (includedLayers?.includes('Zones')) {
+      if (includedLayers === undefined || includedLayers?.includes('Zones')) {
         includedSources.push(zones);
       }
-      if (includedLayers?.includes('Planting Site')) {
+      if (includedLayers === undefined || includedLayers?.includes('Planting Site')) {
         includedSources.push(site);
       }
 
