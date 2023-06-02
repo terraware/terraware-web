@@ -290,8 +290,8 @@ export default function Map(props: MapProps): JSX.Element {
     if (!geoData) {
       return null;
     }
-    const sources = (geoData as any[]).map((geo: any, index) => (
-      <Source type='geojson' key={`${geo.id}-${index}`} data={geo.data} id={geo.id}>
+    const sources = (geoData as any[]).map((geo: any) => (
+      <Source type='geojson' key={geo.id} data={geo.data} id={geo.id}>
         {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
         {geo.layerOutline && <Layer {...geo.layerOutline} />}
         {geo.layer && <Layer {...geo.layer} />}
