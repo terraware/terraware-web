@@ -175,9 +175,6 @@ export default function Map(props: MapProps): JSX.Element {
 
   useEffect(() => {
     const { sources } = options;
-    if (geoData) {
-      return;
-    }
 
     /**
      * Initialize sources - we want ONE source per data type, eg. one source containing all geometries for zones.
@@ -267,7 +264,7 @@ export default function Map(props: MapProps): JSX.Element {
     if (popupRenderer) {
       setLayerIds(geo.filter((g: any) => g.isInteractive).map((g: any) => g.layer.id));
     }
-  }, [options, geoData, setGeoData, token, popupRenderer]);
+  }, [options, setGeoData, token, popupRenderer]);
 
   useEffect(() => {
     if (entityOptions?.highlight) {
@@ -293,8 +290,8 @@ export default function Map(props: MapProps): JSX.Element {
     if (!geoData) {
       return null;
     }
-    const sources = (geoData as any[]).map((geo: any, index) => (
-      <Source type='geojson' key={index} data={geo.data} id={geo.id}>
+    const sources = (geoData as any[]).map((geo: any) => (
+      <Source type='geojson' key={geo.id} data={geo.data} id={geo.id}>
         {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
         {geo.layerOutline && <Layer {...geo.layerOutline} />}
         {geo.layer && <Layer {...geo.layer} />}

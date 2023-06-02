@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, CircularProgress, useTheme } from '@mui/material';
+import { Box, CircularProgress, Theme, useTheme } from '@mui/material';
 import hexRgb from 'hex-rgb';
 import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -7,6 +7,20 @@ import GenericMap from './GenericMap';
 import { MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer, MapSource } from 'src/types/Map';
 import { MapService } from 'src/services';
 import _ from 'lodash';
+import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
+import strings from 'src/strings';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  layerSelectContainer: {
+    height: theme.spacing(3),
+    position: 'relative',
+    right: theme.spacing(5.5),
+    top: theme.spacing(2),
+    width: theme.spacing(3),
+    zIndex: 1000,
+  },
+}));
 
 export type PlantingSiteMapProps = {
   plantingSite: PlantingSite;
@@ -18,13 +32,16 @@ export type PlantingSiteMapProps = {
   selectedSubzoneId?: number;
   // selected zone
   selectedZoneId?: number;
+  layerOptions?: MapLayer[];
 };
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
-  const { plantingSite, style, contextRenderer, selectedSubzoneId, selectedZoneId } = props;
+  const { plantingSite, style, contextRenderer, selectedSubzoneId, selectedZoneId, layerOptions } = props;
   const theme = useTheme();
+  const classes = useStyles();
   const snackbar = useSnackbar();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
+  const [includedLayers, setIncludedLayers] = useState<MapLayer[] | undefined>(layerOptions);
 
   const getRenderAttributes = useCallback(
     (objectType: 'site' | 'zone' | 'subzone') => {
@@ -110,9 +127,20 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       const zones = extractPlantingZones(plantingSite);
       const subzones = extractSubzones(plantingSite);
 
+      const includedSources = new Array<MapSource>();
+      if (includedLayers === undefined || includedLayers?.includes('Sub-Zones')) {
+        includedSources.push(subzones);
+      }
+      if (includedLayers === undefined || includedLayers?.includes('Zones')) {
+        includedSources.push(zones);
+      }
+      if (includedLayers === undefined || includedLayers?.includes('Planting Site')) {
+        includedSources.push(site);
+      }
+
       const newMapOptions = {
         bbox: MapService.getPlantingSiteBoundingBox(plantingSite),
-        sources: [site, subzones, zones],
+        sources: includedSources,
       };
 
       if (!_.isEqual(newMapOptions, mapOptions)) {
@@ -121,7 +149,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     };
 
     fetchPlantingSite();
-  }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractSubzones, mapOptions]);
+  }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractSubzones, mapOptions, includedLayers]);
 
   const subzoneEntity: MapEntityId = useMemo(
     () => ({ sourceId: 'subzones', id: selectedSubzoneId }),
@@ -138,6 +166,13 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     [subzoneEntity, zoneEntity]
   );
 
+  const layerOptionLabels: Record<MapLayer, string> = {
+    'Planting Site': strings.PLANTING_SITE,
+    Zones: strings.ZONES,
+    'Sub-Zones': strings.SUBZONES,
+    'Monitoring Plots': strings.MONITORING_PLOTS,
+  };
+
   if (!mapOptions) {
     return (
       <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', margin: 'auto' }}>
@@ -149,6 +184,20 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <GenericMap options={mapOptions} contextRenderer={contextRenderer} style={style} entityOptions={entityOptions} />
+      {layerOptions && (
+        <div className={classes.layerSelectContainer}>
+          <MapLayerSelect
+            initialSelection={layerOptions}
+            onUpdateSelection={(selection) => setIncludedLayers(selection)}
+            menuSections={[
+              layerOptions.map((opt) => ({
+                label: layerOptionLabels[opt],
+                value: opt,
+              })),
+            ]}
+          />
+        </div>
+      )}
     </Box>
   );
 }
