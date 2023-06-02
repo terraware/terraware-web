@@ -22,7 +22,11 @@ export default function BoundariesAndZones(props: BoundariesAndZonesProps): JSX.
         {plantingSite ? (
           <>
             {plantingSite.boundary ? (
-              <PlantingSiteMap plantingSite={plantingSite} style={{ borderRadius: '24px' }} />
+              <PlantingSiteMap
+                plantingSite={plantingSite}
+                style={{ borderRadius: '24px' }}
+                layerOptions={['Planting Site', 'Zones', 'Sub-Zones']}
+              />
             ) : null}
           </>
         ) : (

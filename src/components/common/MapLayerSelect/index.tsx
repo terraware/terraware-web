@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { Icon, PopoverMultiSelect } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
-import strings from 'src/strings';
 
-export type MapLayer = 'Planting Site' | 'Zones' | 'Monitoring Plots';
+export type MapLayer = 'Planting Site' | 'Zones' | 'Sub-Zones' | 'Monitoring Plots';
 
 const useStyles = makeStyles((theme: Theme) => ({
   layerButton: {
@@ -22,31 +21,19 @@ const useStyles = makeStyles((theme: Theme) => ({
 type MapLayerSelectProps = {
   initialSelection: MapLayer[];
   onUpdateSelection: (selection: MapLayer[]) => void;
+  menuSections: { label: string; value: MapLayer }[][];
 };
 
-export default function MapLayerSelect({ initialSelection, onUpdateSelection }: MapLayerSelectProps): JSX.Element {
+export default function MapLayerSelect({
+  initialSelection,
+  onUpdateSelection,
+  menuSections,
+}: MapLayerSelectProps): JSX.Element {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleClick = (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
     setAnchorEl(event?.currentTarget ?? null);
   };
-
-  const menuSections: { label: string; value: MapLayer }[][] = [
-    [
-      {
-        label: strings.PLANTING_SITE,
-        value: 'Planting Site',
-      },
-      {
-        label: strings.ZONES,
-        value: 'Zones',
-      },
-      {
-        label: strings.MONITORING_PLOTS,
-        value: 'Monitoring Plots',
-      },
-    ],
-  ];
 
   return (
     <>
