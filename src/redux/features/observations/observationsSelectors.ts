@@ -9,9 +9,11 @@ export const selectCompletedObservationsResults = createSelector(selectObservati
 );
 
 export const selectPlantingSiteObservationsResults = createSelector(
-  [selectObservationsResults, (state, plantingSiteId) => plantingSiteId],
+  [selectCompletedObservationsResults, (state, plantingSiteId) => plantingSiteId],
   (observationsResults, plantingSiteId) =>
-    observationsResults?.filter((observationResults) => observationResults.plantingSiteId === plantingSiteId)
+    plantingSiteId === -1
+      ? observationsResults
+      : observationsResults?.filter((observationResults) => observationResults.plantingSiteId === plantingSiteId)
 );
 
 // add more selectors for drill down views, as needed

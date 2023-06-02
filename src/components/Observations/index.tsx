@@ -9,13 +9,13 @@ import { useOrganization } from 'src/providers/hooks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import {
-  selectCompletedObservationsResults,
+  selectPlantingSiteObservationsResults,
   selectObservationsResultsError,
 } from 'src/redux/features/observations/observationsSelectors';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import Card from 'src/components/common/Card';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
-import ObservationsView from './ObservationsView';
+import ObservationsDataView from './ObservationsDataView';
 
 export default function Observations(): JSX.Element {
   const history = useHistory();
@@ -25,7 +25,9 @@ export default function Observations(): JSX.Element {
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
-  const observationsResults = useAppSelector(selectCompletedObservationsResults);
+  const observationsResults = useAppSelector((state) =>
+    selectPlantingSiteObservationsResults(state, selectedPlantingSite?.id)
+  );
   const observationsResultsError = useAppSelector(selectObservationsResultsError);
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
@@ -71,8 +73,8 @@ export default function Observations(): JSX.Element {
     >
       {observationsResults === undefined && observationsResultsError === undefined ? (
         <CircularProgress sx={{ margin: 'auto' }} />
-      ) : observationsResults?.length && selectedPlantingSite ? (
-        <ObservationsView selectedPlantingSiteId={selectedPlantingSite.id} />
+      ) : selectedPlantingSite && observationsResults?.length ? (
+        <ObservationsDataView selectedPlantingSiteId={selectedPlantingSite.id} />
       ) : (
         <Card style={{ margin: 'auto' }}>
           <EmptyStateContent
