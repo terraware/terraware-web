@@ -1,9 +1,11 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 import { appVersionReducer } from './features/appVersion/appVersionSlice';
+import { observationsResultsReducer } from './features/observations/observationsSlice';
 
 // assembly of app reducers
 export const reducers = {
   appVersion: appVersionReducer,
+  observationsResults: observationsResultsReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

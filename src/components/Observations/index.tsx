@@ -1,18 +1,32 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useOrganization } from 'src/providers/hooks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import {
+  selectCompletedObservationsResults,
+  selectObservationsResultsError,
+} from 'src/redux/features/observations/observationsSelectors';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import Card from 'src/components/common/Card';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import ObservationsView from './ObservationsView';
 
-export default function PlantsDashboard(): JSX.Element {
+export default function Observations(): JSX.Element {
   const history = useHistory();
+  const { selectedOrganization } = useOrganization();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
-  const hasObservations = false;
+  const snackbar = useSnackbar();
+  const dispatch = useAppDispatch();
+  const observationsResults = useAppSelector(selectCompletedObservationsResults);
+  const observationsResultsError = useAppSelector(selectObservationsResultsError);
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
 
@@ -31,6 +45,18 @@ export default function PlantsDashboard(): JSX.Element {
     [setPlantingSites, history]
   );
 
+  useEffect(() => {
+    if (plantingSites?.length) {
+      dispatch(requestObservationsResults(selectedOrganization.id));
+    }
+  }, [dispatch, plantingSites, selectedOrganization.id]);
+
+  useEffect(() => {
+    if (observationsResultsError) {
+      snackbar.toastError();
+    }
+  }, [observationsResultsError, snackbar]);
+
   return (
     <PlantsPrimaryPage
       title={strings.OBSERVATIONS}
@@ -41,10 +67,12 @@ export default function PlantsDashboard(): JSX.Element {
       setPlantsSitePreferences={onPreferences}
       allowAllAsSiteSelection={true}
       onPlantingSites={onPlantingSites}
-      isEmptyState={!plantingSites?.length || !hasObservations}
+      isEmptyState={!plantingSites?.length || !observationsResults?.length}
     >
-      {hasObservations ? (
-        <div>placeholder for selected planting site {selectedPlantingSite?.id}</div>
+      {observationsResults === undefined && observationsResultsError === undefined ? (
+        <CircularProgress sx={{ margin: 'auto' }} />
+      ) : observationsResults?.length && selectedPlantingSite ? (
+        <ObservationsView selectedPlantingSiteId={selectedPlantingSite.id} />
       ) : (
         <Card style={{ margin: 'auto' }}>
           <EmptyStateContent
