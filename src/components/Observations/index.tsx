@@ -5,6 +5,7 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useOrganization } from 'src/providers/hooks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -29,6 +30,7 @@ export default function Observations(): JSX.Element {
     selectPlantingSiteObservationsResults(state, selectedPlantingSite?.id)
   );
   const observationsResultsError = useAppSelector(selectObservationsResultsError);
+  const locationTimeZone = useLocationTimeZone();
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
 
@@ -49,9 +51,14 @@ export default function Observations(): JSX.Element {
 
   useEffect(() => {
     if (plantingSites?.length) {
-      dispatch(requestObservationsResults(selectedOrganization.id));
+      dispatch(
+        requestObservationsResults(
+          selectedOrganization.id,
+          plantingSites.map((site) => ({ id: site.id, timeZone: locationTimeZone.get(site).id }))
+        )
+      );
     }
-  }, [dispatch, plantingSites, selectedOrganization.id]);
+  }, [dispatch, plantingSites, selectedOrganization.id, locationTimeZone]);
 
   useEffect(() => {
     if (observationsResultsError) {

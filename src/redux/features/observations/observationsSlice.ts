@@ -11,7 +11,7 @@ type Data = {
 const initialState: Data = {};
 
 export const observationsResultsSlice = createSlice({
-  name: 'observationsResults',
+  name: 'observationsResultsSlice',
   initialState,
   reducers: {
     setObservationsResultsAction: (state, action: PayloadAction<Data>) => {
