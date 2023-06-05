@@ -1,3 +1,4 @@
+39723935 Set map/view selector icon order based on initial/default view (#1434)
 d4ec156f SW-3715 Add Layer Selection to Planting Site Map (#1432)
 a15daf1e fix build warnings in terraware-web related to typescript version (#1430)
 6ac46152 SW-3675 bread crumbs navigation wrapper component (#1429)
