@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
 import {
-  ObservationResults,
-  ObservationPlantingZoneResults,
-  ObservationPlantingSubzoneResults,
+  ObservationResultsPayload,
+  ObservationPlantingZoneResultsPayload,
+  ObservationPlantingSubzoneResultsPayload,
   ObservationMonitoringPlotResults,
 } from 'src/types/Observations';
 import { ObservationsService } from 'src/services';
@@ -19,14 +19,14 @@ export type PlantingSiteTimeZone = {
  * Apply time zones to completed time dates
  * TODO: apply them to other dates as we see-fit (for now completed times are the only used dates)
  */
-const applyTimeZone = (observation: ObservationResults, timeZone?: string): ObservationResults => {
+const applyTimeZone = (observation: ObservationResultsPayload, timeZone?: string): ObservationResultsPayload => {
   return {
     ...observation,
     completedTime: observation.completedTime ? getDateDisplayValue(observation.completedTime, timeZone) : undefined,
-    plantingZones: observation.plantingZones.map((zone: ObservationPlantingZoneResults) => ({
+    plantingZones: observation.plantingZones.map((zone: ObservationPlantingZoneResultsPayload) => ({
       ...zone,
       completedTime: zone.completedTime ? getDateDisplayValue(zone.completedTime, timeZone) : undefined,
-      plantingSubzones: zone.plantingSubzones.map((subZone: ObservationPlantingSubzoneResults) => ({
+      plantingSubzones: zone.plantingSubzones.map((subZone: ObservationPlantingSubzoneResultsPayload) => ({
         ...subZone,
         monitoringPlots: subZone.monitoringPlots.map((monitoringPlot: ObservationMonitoringPlotResults) => ({
           ...monitoringPlot,
