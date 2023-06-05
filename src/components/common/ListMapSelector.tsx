@@ -23,16 +23,19 @@ const useStyles = makeStyles((theme: Theme) => ({
 export type View = 'list' | 'map';
 
 export type ListMapSelectorProps = {
+  defaultView: View;
   view: View;
   onView: (view: View) => void;
 };
 
-export default function ListMapSelector({ view, onView }: ListMapSelectorProps): JSX.Element {
+export default function ListMapSelector({ defaultView, view, onView }: ListMapSelectorProps): JSX.Element {
   const classes = useStyles();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const renderSelector = (iconName: IconName, title: string, selectorView: View) => {
+  const renderSelector = (selectorView: View) => {
+    const iconName: IconName = selectorView === 'list' ? 'iconList' : 'iconTreasureMap';
+    const title: string = selectorView === 'list' ? strings.LIST : strings.MAP;
     const isSelected = view === selectorView;
     return (
       <Box
@@ -77,8 +80,8 @@ export default function ListMapSelector({ view, onView }: ListMapSelectorProps):
       gap={theme.spacing(0.5)}
       style={{ backgroundColor: theme.palette.TwClrBgSecondary }}
     >
-      {renderSelector('iconList', strings.LIST, 'list')}
-      {renderSelector('iconTreasureMap', strings.MAP, 'map')}
+      {renderSelector(defaultView === 'list' ? 'list' : 'map')}
+      {renderSelector(defaultView !== 'list' ? 'list' : 'map')}
     </Box>
   );
 }
