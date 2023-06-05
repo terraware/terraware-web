@@ -23,12 +23,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 export type View = 'list' | 'map';
 
 export type ListMapSelectorProps = {
+  defaultView: View;
   view: View;
   onView: (view: View) => void;
 };
 
-export default function ListMapSelector({ view, onView }: ListMapSelectorProps): JSX.Element {
-  const [initialView] = useState<View>(view);
+export default function ListMapSelector({ defaultView, view, onView }: ListMapSelectorProps): JSX.Element {
   const classes = useStyles();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -80,8 +80,8 @@ export default function ListMapSelector({ view, onView }: ListMapSelectorProps):
       gap={theme.spacing(0.5)}
       style={{ backgroundColor: theme.palette.TwClrBgSecondary }}
     >
-      {renderSelector(initialView === 'list' ? 'list' : 'map')}
-      {renderSelector(initialView !== 'list' ? 'list' : 'map')}
+      {renderSelector(defaultView === 'list' ? 'list' : 'map')}
+      {renderSelector(defaultView !== 'list' ? 'list' : 'map')}
     </Box>
   );
 }

@@ -3,9 +3,9 @@ import { Story } from '@storybook/react';
 import ListMapSelector, { View, ListMapSelectorProps } from 'src/components/common/ListMapSelector';
 
 const ListMapSelectorTemplate: Story<ListMapSelectorProps> = (args) => {
-  const [view, setView] = useState<View>(args.view);
+  const [view, setView] = useState<View>(args.defaultView);
 
-  return <ListMapSelector view={view} onView={setView} />;
+  return <ListMapSelector {...args} view={view} onView={setView} />;
 };
 
 export default {
@@ -16,11 +16,11 @@ export default {
 export const DefaultList = ListMapSelectorTemplate.bind({});
 
 DefaultList.args = {
-  view: 'list',
+  defaultView: 'list',
 };
 
 export const DefaultMap = ListMapSelectorTemplate.bind({});
 
 DefaultMap.args = {
-  view: 'map',
+  defaultView: 'map',
 };
