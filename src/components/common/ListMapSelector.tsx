@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import hexRgb from 'hex-rgb';
 import strings from 'src/strings';
