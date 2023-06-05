@@ -13,8 +13,14 @@ export default {
   component: ListMapSelector,
 };
 
-export const Default = ListMapSelectorTemplate.bind({});
+export const DefaultList = ListMapSelectorTemplate.bind({});
 
-Default.args = {
+DefaultList.args = {
   view: 'list',
+};
+
+export const DefaultMap = ListMapSelectorTemplate.bind({});
+
+DefaultMap.args = {
+  view: 'map',
 };

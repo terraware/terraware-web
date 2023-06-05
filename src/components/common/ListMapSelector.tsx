@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import hexRgb from 'hex-rgb';
 import strings from 'src/strings';
@@ -28,11 +28,14 @@ export type ListMapSelectorProps = {
 };
 
 export default function ListMapSelector({ view, onView }: ListMapSelectorProps): JSX.Element {
+  const [initialView] = useState<View>(view);
   const classes = useStyles();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const renderSelector = (iconName: IconName, title: string, selectorView: View) => {
+  const renderSelector = (selectorView: View) => {
+    const iconName: IconName = selectorView === 'list' ? 'iconList' : 'iconTreasureMap';
+    const title: string = selectorView === 'list' ? strings.LIST : strings.MAP;
     const isSelected = view === selectorView;
     return (
       <Box
@@ -77,8 +80,8 @@ export default function ListMapSelector({ view, onView }: ListMapSelectorProps):
       gap={theme.spacing(0.5)}
       style={{ backgroundColor: theme.palette.TwClrBgSecondary }}
     >
-      {renderSelector('iconList', strings.LIST, 'list')}
-      {renderSelector('iconTreasureMap', strings.MAP, 'map')}
+      {renderSelector(initialView === 'list' ? 'list' : 'map')}
+      {renderSelector(initialView !== 'list' ? 'list' : 'map')}
     </Box>
   );
 }
