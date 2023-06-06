@@ -126,9 +126,7 @@ const mergeObservations = (
         ...observation,
         plantingSiteName: site.name,
         boundary: site.boundary,
-        completedTime: observation.completedTime
-          ? getDateDisplayValue(observation.completedTime, site.timeZone)
-          : undefined,
+        completedTime: getDateDisplayValue(observation.completedTime!, site.timeZone),
         plantingZones: mergeZones(
           observation.plantingZones,
           zones,
