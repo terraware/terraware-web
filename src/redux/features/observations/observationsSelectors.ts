@@ -33,13 +33,15 @@ export const selectPlantingSiteObservationsResults = createSelector(
 );
 
 export const selectMergedPlantingSiteObservations = createCachedSelector(
-  (state: RootState, plantingSiteId: number) => selectPlantingSiteObservationsResults(state, plantingSiteId),
-  (state: RootState, plantingSiteId: number) => selectPlantingSites(state),
-  (state: RootState, plantingSiteId: number) => selectSpecies(state),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string) =>
+    selectPlantingSiteObservationsResults(state, plantingSiteId),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string) => selectPlantingSites(state),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string) => selectSpecies(state),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string) => defaultTimeZone,
 
   // here we have the responses from first three selectors
   // merge the results so observations results have names and boundaries and time zones applied
-  (observations, plantingSites, species) => {
+  (observations, plantingSites, species, defaultTimeZone) => {
     if (!observations) {
       return observations;
     }
@@ -49,9 +51,9 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
     const subzonesMap = subzonesReverseMap(plantingSites ?? []);
     const speciesMap = speciesReverseMap(species ?? []);
 
-    return mergeObservations(observations, sitesMap, zonesMap, subzonesMap, speciesMap);
+    return mergeObservations(observations, sitesMap, zonesMap, subzonesMap, speciesMap, defaultTimeZone);
   }
-)((state: RootState, plantingSiteId: number) => plantingSiteId); // planting site id is the key for the cache
+)((state: RootState, plantingSiteId: number, defaultTimeZone: string) => `${plantingSiteId}_${defaultTimeZone}`); // planting site id / default time zone is the key for the cache
 
 // add more selectors for drill down views, as needed
 
@@ -111,7 +113,8 @@ const mergeObservations = (
   sites: Record<number, Value>,
   zones: Record<number, Value>,
   subzones: Record<number, Value>,
-  species: Record<number, SpeciesValue>
+  species: Record<number, SpeciesValue>,
+  defaultTimeZone: string
 ): ObservationResults[] => {
   return observations
     .filter((observation) => sites[observation.plantingSiteId])
@@ -126,7 +129,13 @@ const mergeObservations = (
         completedTime: observation.completedTime
           ? getDateDisplayValue(observation.completedTime, site.timeZone)
           : undefined,
-        plantingZones: mergeZones(observation.plantingZones, zones, subzones, species, site.timeZone),
+        plantingZones: mergeZones(
+          observation.plantingZones,
+          zones,
+          subzones,
+          species,
+          site.timeZone ?? defaultTimeZone
+        ),
       };
     });
 };

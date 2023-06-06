@@ -4,11 +4,9 @@ import { CircularProgress } from '@mui/material';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
-import useSnackbar from 'src/utils/useSnackbar';
-import { useOrganization } from 'src/providers/hooks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import { selectPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useAppSelector } from 'src/redux/store';
+import { selectMergedPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import Card from 'src/components/common/Card';
@@ -17,14 +15,12 @@ import ObservationsDataView from './ObservationsDataView';
 
 export default function ObservationsHome(): JSX.Element {
   const history = useHistory();
-  const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
-  const snackbar = useSnackbar();
-  const dispatch = useAppDispatch();
+  const defaultTimeZone = useDefaultTimeZone();
   const plantingSites = useAppSelector(selectPlantingSites);
-  const observationsResults = useAppSelector((state) =>
-    selectPlantingSiteObservationsResults(state, selectedPlantingSite?.id)
+  const observationsResults = useAppSelector(
+    (state) => selectMergedPlantingSiteObservations(state, selectedPlantingSite?.id || 0, defaultTimeZone.get().id) // default to 0 which is a non-existing site, until we have a selection
   );
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
@@ -33,6 +29,12 @@ export default function ObservationsHome(): JSX.Element {
     (preferences: Record<string, unknown>) => setPlantsSitePreferences(preferences),
     [setPlantsSitePreferences]
   );
+
+  useEffect(() => {
+    if (plantingSites?.length === 0) {
+      history.push(APP_PATHS.HOME);
+    }
+  }, [history, plantingSites?.length]);
 
   return (
     <PlantsPrimaryPage
