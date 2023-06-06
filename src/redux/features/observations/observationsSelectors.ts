@@ -55,7 +55,22 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
   }
 )((state: RootState, plantingSiteId: number, defaultTimeZone: string) => `${plantingSiteId}_${defaultTimeZone}`); // planting site id / default time zone is the key for the cache
 
-// add more selectors for drill down views, as needed
+// search observations (search planting zone name only)
+export const searchObservations = createCachedSelector(
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =>
+    selectMergedPlantingSiteObservations(state, plantingSiteId, defaultTimeZone),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) => search,
+  (observations, search) =>
+    observations?.filter((observation: ObservationResults) => {
+      const regexp = new RegExp(search, 'i');
+      return observation.plantingZones.some(
+        (zone: ObservationPlantingZoneResults) => !!zone.plantingZoneName.match(regexp)
+      );
+    })
+)(
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =>
+    `${plantingSiteId}_${defaultTimeZone}_${search}`
+);
 
 // utils
 
