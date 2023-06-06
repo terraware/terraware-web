@@ -1,4 +1,6 @@
 import { createCachedSelector } from 're-reselect';
+import { createSelector } from '@reduxjs/toolkit';
+import getDateDisplayValue from '@terraware/web-components/utils/date';
 import { RootState } from 'src/redux/rootReducer';
 import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
 import {
@@ -11,10 +13,8 @@ import {
   ObservationSpeciesResultsPayload,
   ObservationSpeciesResults,
 } from 'src/types/Observations';
-import { createSelector } from '@reduxjs/toolkit';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 export const selectObservationsResults = (state: RootState) => state.observationsResults?.observations;
 export const selectObservationsResultsError = (state: RootState) => state.observationsResults?.error;
@@ -30,7 +30,7 @@ export const selectPlantingSiteObservationsResults = createSelector(
       ? observationsResults
       : observationsResults?.filter((observationResults) => observationResults.plantingSiteId === plantingSiteId)
 );
-/*
+
 export const selectMergedPlantingSiteObservations = createCachedSelector(
   (state: RootState, plantingSiteId: number) => selectPlantingSiteObservationsResults(state, plantingSiteId),
   (state: RootState, plantingSiteId: number) => selectPlantingSites(state),
@@ -44,7 +44,8 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
     const subzonesMap = subzonesReverseMap(plantingSites ?? []);
     const speciesMap = reverseMap(species ?? [], 'species');
 
-    return mergeObservation(observations, sitesMap, zonesMap, subzonesMap, speciesMap);
+    //    return mergeObservation(observations, sitesMap, zonesMap, subzonesMap, speciesMap);
+    return [];
   }
 )((state: RootState, plantingSiteId: number) => plantingSiteId); // planting site id is the key for the cache
 
@@ -58,24 +59,27 @@ type Value = {
   boundary: MultiPolygon;
   timeZone?: string;
 };
-const EMPTY_VALUE: Value = { name: '', boundary: [] };
 
 // get zones reverse map
 const zonesReverseMap = (sites: PlantingSite[]): Record<number, Value> =>
-  reverseMap(sites.filter((site) => site.plantingZones).flatMap((site) => site.plantingZones));
+  reverseMap(
+    sites.filter((site) => site.plantingZones).flatMap((site) => site.plantingZones),
+    'zone'
+  );
 
 // get subzones reverse map
 const subzonesReverseMap = (sites: PlantingSite[]): Record<number, Value> =>
   reverseMap(
     sites
       .filter((site) => site.plantingZones)
-      .flatMap((site) => site.plantingZones)
-      .filter((zone) => site.plantingSubzones)
-      .flatMap((zone) => site.plantingSubzones)
+      .flatMap((site) =>
+        site.plantingZones!.filter((zone) => zone.plantingSubzones).flatMap((zone) => zone.plantingSubzones)
+      ),
+    'subzone'
   );
 
 // reverse map of id to name, boundary (for planting site, zone, subzone), optionally just name for species
-const reverseMap = (ary: any[], type = 'site' | 'zone' | undefined): Record<number, any> =>
+const reverseMap = (ary: any[], type: string): Record<number, any> =>
   ary.reduce((acc, curr) => {
     const { id, name, boundary, timeZone } = curr;
     if (type === 'species') {
@@ -90,6 +94,7 @@ const reverseMap = (ary: any[], type = 'site' | 'zone' | undefined): Record<numb
     return acc;
   }, {} as Record<number, any>);
 
+/*
 // merge observation
 const mergeObservation = (
   observations: ObservationResultsPayload[],
