@@ -16,6 +16,7 @@ import {
 } from 'src/types/Observations';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { regexMatch } from 'src/utils/search';
 
 export const selectObservationsResults = (state: RootState) => state.observationsResults?.observations;
 export const selectObservationsResultsError = (state: RootState) => state.observationsResults?.error;
@@ -62,9 +63,8 @@ export const searchObservations = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) => search,
   (observations, search) =>
     observations?.filter((observation: ObservationResults) => {
-      const regexp = new RegExp(search, 'i');
-      return observation.plantingZones.some(
-        (zone: ObservationPlantingZoneResults) => !!zone.plantingZoneName.match(regexp)
+      return observation.plantingZones.some((zone: ObservationPlantingZoneResults) =>
+        regexMatch(zone.plantingZoneName, search)
       );
     })
 )(
