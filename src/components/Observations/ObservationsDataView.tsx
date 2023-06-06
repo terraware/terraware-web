@@ -1,5 +1,6 @@
 import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectMergedPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
 import ListMapView from 'src/components/ListMapView';
 
 export type ObservationsDataViewProps = {
@@ -7,8 +8,9 @@ export type ObservationsDataViewProps = {
 };
 
 export default function ObservationsDataView({ selectedPlantingSiteId }: ObservationsDataViewProps): JSX.Element {
+  const defaultTimeZone = useDefaultTimeZone();
   const observationsResults = useAppSelector((state) =>
-    selectPlantingSiteObservationsResults(state, selectedPlantingSiteId)
+    selectMergedPlantingSiteObservations(state, selectedPlantingSiteId, defaultTimeZone.get())
   );
 
   return (
