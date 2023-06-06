@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
-import { ObservationResults } from 'src/types/Observations';
+import { ObservationResultsPayload } from 'src/types/Observations';
 
 /**
  * Tracking observations related services
@@ -15,7 +15,7 @@ type ObservationsResultsResponsePayload =
  * exported response type
  */
 export type ObservationsResultsData = {
-  observations: ObservationResults[];
+  observations: ObservationResultsPayload[];
 };
 
 const httpObservationsResults = HttpService.root(OBSERVATIONS_RESULTS_ENDPOINT);

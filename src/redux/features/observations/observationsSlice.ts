@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ObservationResults } from 'src/types/Observations';
+import { ObservationResultsPayload } from 'src/types/Observations';
 
 // Define a type for the slice state
 type Data = {
   error?: string;
-  observations?: ObservationResults[];
+  observations?: ObservationResultsPayload[];
 };
 
 // Define the initial state

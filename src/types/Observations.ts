@@ -1,4 +1,5 @@
 import { components } from 'src/api/types/generated-schema';
+import { MultiPolygon } from './Tracking';
 
 // basic information on a single observation (excluding observation results)
 export type Observation = components['schemas']['ObservationPayload'];
@@ -6,21 +7,49 @@ export type Observation = components['schemas']['ObservationPayload'];
 // "Upcoming" | "InProgress" | "Completed" | "Overdue"
 export type ObservationState = Observation['state'];
 
+type Boundary = {
+  boundary: MultiPolygon;
+};
+
 // expanded information on an observation including observed results down to monitoring plot level detail
 // requires navigating a tree of zone results -> subzone results -> ( species results | monitoring plot results )
-export type ObservationResults = components['schemas']['ObservationResultsPayload'];
+export type ObservationResultsPayload = components['schemas']['ObservationResultsPayload'];
+export type ObservationResults = ObservationResultsPayload &
+  Boundary & {
+    plantingSiteName: string;
+    plantingZones: ObservationPlantingZoneResults[];
+  };
 
 // zone level results -> contains a list of subzone level results
-export type ObservationPlantingZoneResults = components['schemas']['ObservationPlantingZoneResultsPayload'];
+export type ObservationPlantingZoneResultsPayload = components['schemas']['ObservationPlantingZoneResultsPayload'];
+export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPayload &
+  Boundary & {
+    plantingZoneName: string;
+    plantingSubzones: ObservationPlantingSubzoneResults[];
+    species: ObservationSpeciesResults[];
+  };
 
 // subzone level results -> contains lists of both species level results and monitoring plot level results
-export type ObservationPlantingSubzoneResults = components['schemas']['ObservationPlantingSubzoneResultsPayload'];
-
-// species related observation statistics
-export type ObservationSpeciesResults = components['schemas']['ObservationSpeciesResultsPayload'];
+export type ObservationPlantingSubzoneResultsPayload =
+  components['schemas']['ObservationPlantingSubzoneResultsPayload'];
+export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResultsPayload &
+  Boundary & {
+    plantingSubzoneName: string;
+    monitoringPlots: ObservationMonitoringPlotResults[];
+  };
 
 // monitoring plot level results
-export type ObservationMonitoringPlotResults = components['schemas']['ObservationMonitoringPlotResultsPayload'];
+export type ObservationMonitoringPlotResultsPayload = components['schemas']['ObservationMonitoringPlotResultsPayload'];
+export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsPayload & {
+  species: ObservationSpeciesResults[];
+};
 
 // monitoring plot photos
 export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationMonitoringPlotPhotoPayload'];
+
+// species related observation statistics
+export type ObservationSpeciesResultsPayload = components['schemas']['ObservationSpeciesResultsPayload'];
+export type ObservationSpeciesResults = ObservationSpeciesResultsPayload & {
+  speciesCommonName?: string;
+  speciesScientificName: string;
+};
