@@ -16,7 +16,8 @@ describe('Map service', () => {
 
     it('should calcualte the bounding box from planting sites data', () => {
       const data = readData('plantingSite.json');
-      const observedBbox = MapService.getPlantingSiteBoundingBox(data);
+      const mapData = MapService.getMapDataFromPlantingSite(data);
+      const observedBbox = MapService.getPlantingSiteBoundingBox(mapData);
       const expectedBbox = {
         lowerLeft: [-138.12211603, 26.89432882],
         upperRight: [-138.10623684, 26.90304444],
