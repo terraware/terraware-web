@@ -12,6 +12,7 @@ import {
   ObservationPlantingSubzoneResults,
   ObservationSpeciesResultsPayload,
   ObservationSpeciesResults,
+  ObservationMonitoringPlotResultsPayload,
 } from 'src/types/Observations';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
@@ -39,13 +40,16 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
   // here we have the responses from first three selectors
   // merge the results so observations results have names and boundaries and time zones applied
   (observations, plantingSites, species) => {
+    if (!observations) {
+      return observations;
+    }
+
     const sitesMap = reverseMap(plantingSites ?? [], 'site');
     const zonesMap = zonesReverseMap(plantingSites ?? []);
     const subzonesMap = subzonesReverseMap(plantingSites ?? []);
-    const speciesMap = reverseMap(species ?? [], 'species');
+    const speciesMap = speciesReverseMap(species ?? []);
 
-    //    return mergeObservation(observations, sitesMap, zonesMap, subzonesMap, speciesMap);
-    return [];
+    return mergeObservations(observations, sitesMap, zonesMap, subzonesMap, speciesMap);
   }
 )((state: RootState, plantingSiteId: number) => plantingSiteId); // planting site id is the key for the cache
 
@@ -53,7 +57,10 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
 
 // utils
 
-type SpeciesValue = { name: string };
+type SpeciesValue = {
+  commonName?: string;
+  scientificName: string;
+};
 type Value = {
   name: string;
   boundary: MultiPolygon;
@@ -79,108 +86,123 @@ const subzonesReverseMap = (sites: PlantingSite[]): Record<number, Value> =>
   );
 
 // reverse map of id to name, boundary (for planting site, zone, subzone), optionally just name for species
-const reverseMap = (ary: any[], type: string): Record<number, any> =>
+const reverseMap = (ary: any[], type: string): Record<number, Value> =>
   ary.reduce((acc, curr) => {
     const { id, name, boundary, timeZone } = curr;
-    if (type === 'species') {
-      acc[id] = { name };
+    if (type === 'site') {
+      acc[id] = { name, boundary, timeZone };
     } else {
-      if (type === 'site') {
-        acc[id] = { name, boundary, timeZone };
-      } else {
-        acc[id] = { name, boundary };
-      }
+      acc[id] = { name, boundary };
     }
     return acc;
-  }, {} as Record<number, any>);
+  }, {} as Record<number, Value>);
 
-/*
+// species reverse map
+const speciesReverseMap = (ary: any[]): Record<number, SpeciesValue> =>
+  ary.reduce((acc, curr) => {
+    const { id, commonName, scientificName } = curr;
+    acc[id] = { commonName, scientificName };
+    return acc;
+  }, {} as Record<number, SpeciesValue>);
+
 // merge observation
-const mergeObservation = (
+const mergeObservations = (
   observations: ObservationResultsPayload[],
   sites: Record<number, Value>,
   zones: Record<number, Value>,
   subzones: Record<number, Value>,
   species: Record<number, SpeciesValue>
 ): ObservationResults[] => {
-  const { plantingSiteId } = observation;
-  const site = sites[plantingSiteId] || EMPTY_VALUE;
+  return observations
+    .filter((observation) => sites[observation.plantingSiteId])
+    .map((observation: ObservationResultsPayload): ObservationResults => {
+      const { plantingSiteId } = observation;
+      const site = sites[plantingSiteId];
 
-  return observations.map(
-    (observation: ObservationResultsPayload): ObservationResults => ({
-      ...observation,
-      plantingSiteName: site.name,
-      boundary: site.boundary,
-      completedTime: observation.completedTime ? getDateDisplayValue(observation.completedTime, timeZone) : undefined,
-      plantingZones: observation.plantingZones.map((zone: ObservationPlantingZoneResultsPayload) =>
-        mergeZone(zone, zones, subzones, species, timeZone)
-      ),
-    })
-  );
+      return {
+        ...observation,
+        plantingSiteName: site.name,
+        boundary: site.boundary,
+        completedTime: observation.completedTime
+          ? getDateDisplayValue(observation.completedTime, site.timeZone)
+          : undefined,
+        plantingZones: mergeZones(observation.plantingZones, zones, subzones, species, site.timeZone),
+      };
+    });
 };
 
 // merge zone
-const mergeZone = (
-  zoneObservations: ObservationPlantingZoneResultsPayload,
+const mergeZones = (
+  zoneObservations: ObservationPlantingZoneResultsPayload[],
   zones: Record<number, Value>,
   subzones: Record<number, Value>,
   species: Record<number, SpeciesValue>,
   timeZone?: string
 ): ObservationPlantingZoneResults[] => {
-  const { plantingZoneId } = zoneObservation;
-  const zone = zones[plantingZoneId] || EMPTY_VALUE;
+  return zoneObservations
+    .filter((zoneObservation: ObservationPlantingZoneResultsPayload) => zones[zoneObservation.plantingZoneId])
+    .map((zoneObservation: ObservationPlantingZoneResultsPayload): ObservationPlantingZoneResults => {
+      const { plantingZoneId } = zoneObservation;
+      const zone = zones[plantingZoneId];
 
-  return zoneObservations.map(
-    (zoneObservation: ObservationPlantingZoneResultsPayload): ObservationPlantingZoneResults => ({
-      ...zoneObservation,
-      name: zone.name,
-      boundary: zone.boundary,
-      completedTime: zoneObservation.completedTime
-        ? getDateDisplayValue(zoneObservation.completedTime, timeZone)
-        : undefined,
-      species: mergeSpecies(zone.species, species),
-      plantingSubzones: mergeSubzone(zone.plantingSubzones, subzone, subzones, species, timeZone),
-    })
-  );
+      return {
+        ...zoneObservation,
+        plantingZoneName: zone.name,
+        boundary: zone.boundary,
+        completedTime: zoneObservation.completedTime
+          ? getDateDisplayValue(zoneObservation.completedTime, timeZone)
+          : undefined,
+        species: mergeSpecies(zoneObservation.species, species),
+        plantingSubzones: mergeSubzones(zoneObservation.plantingSubzones, subzones, species, timeZone),
+      };
+    });
 };
 
 // merge subzone
-const mergeSubzone = (
+const mergeSubzones = (
   subzoneObservations: ObservationPlantingSubzoneResultsPayload[],
   subzones: Record<number, Value>,
   species: Record<number, SpeciesValue>,
   timeZone?: string
 ): ObservationPlantingSubzoneResults[] => {
-  const { plantingSubzoneId } = subzoneObservation;
-  const subzone = subzones[plantingSubzoneId] || EMPTY_VALUE;
+  return subzoneObservations
+    .filter(
+      (subzoneObservation: ObservationPlantingSubzoneResultsPayload) => subzones[subzoneObservation.plantingSubzoneId]
+    )
+    .map((subzoneObservation: ObservationPlantingSubzoneResultsPayload): ObservationPlantingSubzoneResults => {
+      const { plantingSubzoneId } = subzoneObservation;
+      const subzone = subzones[plantingSubzoneId];
 
-  return subzoneObservations.map(
-    (subzonObservation: ObservationPlantingSubzoneResultsPayload): ObservationPlantingSubzoneResults => ({
-      ...subZone,
-      plantingSubzoneName: subzone.name,
-      boundary: subzone.boundary,
-      monitoringPlots: subZone.monitoringPlots.map((monitoringPlot: ObservationMonitoringPlotResults) => {
-        return {
-          ...monitoringPlot,
-          species: mergeSpecies(monitoringPlot.species, species),
-          completedTime: monitoringPlot.completedTime
-            ? getDateDisplayValue(monitoringPlot.completedTime, timeZone)
-            : undefined,
-        };
-      }),
-    })
-  );
+      return {
+        ...subzoneObservation,
+        plantingSubzoneName: subzone.name,
+        boundary: subzone.boundary,
+        monitoringPlots: subzoneObservation.monitoringPlots.map(
+          (monitoringPlot: ObservationMonitoringPlotResultsPayload) => {
+            return {
+              ...monitoringPlot,
+              species: mergeSpecies(monitoringPlot.species, species),
+              completedTime: monitoringPlot.completedTime
+                ? getDateDisplayValue(monitoringPlot.completedTime, timeZone)
+                : undefined,
+            };
+          }
+        ),
+      };
+    });
 };
 
 const mergeSpecies = (
-  speciesObservation: ObservationSpeciesResultsPayload[],
+  speciesObservations: ObservationSpeciesResultsPayload[],
   species: Record<number, SpeciesValue>
-): ObservationSpeciesPayload[] => {
-  return speciesObservations.map(
-    (speciesObservation: ObservationSpeciesResultsPayload): ObservationSpeciesPayload => ({
-      ...speciesObservation,
-      speciesName: species[speciesObservation.speciesId] ?? '',
-    })
-  );
+): ObservationSpeciesResults[] => {
+  return speciesObservations
+    .filter((speciesObservation: ObservationSpeciesResultsPayload) => species[speciesObservation.speciesId])
+    .map(
+      (speciesObservation: ObservationSpeciesResultsPayload): ObservationSpeciesResults => ({
+        ...speciesObservation,
+        speciesCommonName: species[speciesObservation.speciesId].commonName,
+        speciesScientificName: species[speciesObservation.speciesId].scientificName,
+      })
+    );
 };
-*/
