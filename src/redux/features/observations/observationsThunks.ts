@@ -1,10 +1,4 @@
 import { Dispatch } from 'redux';
-import {
-  ObservationResultsPayload,
-  ObservationPlantingZoneResultsPayload,
-  ObservationPlantingSubzoneResultsPayload,
-  ObservationMonitoringPlotResults,
-} from 'src/types/Observations';
 import { ObservationsService } from 'src/services';
 import { RootState } from 'src/redux/rootReducer';
 import { setObservationsResultsAction } from './observationsSlice';
