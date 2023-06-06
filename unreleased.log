@@ -1,3 +1,4 @@
+3cdc991b Planting Site Map Controls (#1436)
 39723935 Set map/view selector icon order based on initial/default view (#1434)
 d4ec156f SW-3715 Add Layer Selection to Planting Site Map (#1432)
 a15daf1e fix build warnings in terraware-web related to typescript version (#1430)
