@@ -37,7 +37,7 @@ export default function BoundariesAndZones(props: BoundariesAndZonesProps): JSX.
               <PlantingSiteMap
                 plantingSite={plantingSite}
                 style={{ borderRadius: '24px' }}
-                includedLayers={includedLayers}
+                layers={includedLayers}
                 topRightMapControl={
                   <MapLayerSelect
                     initialSelection={layerOptions}

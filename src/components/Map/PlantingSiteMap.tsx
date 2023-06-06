@@ -39,7 +39,8 @@ export type PlantingSiteMapProps = {
   selectedSubzoneId?: number;
   // selected zone
   selectedZoneId?: number;
-  includedLayers?: MapLayer[];
+  // layers to be displayed on map
+  layers?: MapLayer[];
   bottomLeftMapControl?: React.ReactNode;
   topRightMapControl?: React.ReactNode;
 };
@@ -51,7 +52,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     contextRenderer,
     selectedSubzoneId,
     selectedZoneId,
-    includedLayers,
+    layers,
     bottomLeftMapControl,
     topRightMapControl,
   } = props;
@@ -145,13 +146,13 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       const subzones = extractSubzones(plantingSite);
 
       const includedSources = new Array<MapSource>();
-      if (includedLayers === undefined || includedLayers?.includes('Sub-Zones')) {
+      if (layers === undefined || layers?.includes('Sub-Zones')) {
         includedSources.push(subzones);
       }
-      if (includedLayers === undefined || includedLayers?.includes('Zones')) {
+      if (layers === undefined || layers?.includes('Zones')) {
         includedSources.push(zones);
       }
-      if (includedLayers === undefined || includedLayers?.includes('Planting Site')) {
+      if (layers === undefined || layers?.includes('Planting Site')) {
         includedSources.push(site);
       }
 
@@ -166,7 +167,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     };
 
     fetchPlantingSite();
-  }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractSubzones, mapOptions, includedLayers]);
+  }, [plantingSite, snackbar, extractPlantingSite, extractPlantingZones, extractSubzones, mapOptions, layers]);
 
   const subzoneEntity: MapEntityId = useMemo(
     () => ({ sourceId: 'subzones', id: selectedSubzoneId }),
