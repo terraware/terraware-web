@@ -16,6 +16,7 @@ import {
 } from 'src/types/Observations';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { regexMatch } from 'src/utils/search';
 
 export const selectObservationsResults = (state: RootState) => state.observationsResults?.observations;
 export const selectObservationsResultsError = (state: RootState) => state.observationsResults?.error;
@@ -55,7 +56,21 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
   }
 )((state: RootState, plantingSiteId: number, defaultTimeZone: string) => `${plantingSiteId}_${defaultTimeZone}`); // planting site id / default time zone is the key for the cache
 
-// add more selectors for drill down views, as needed
+// search observations (search planting zone name only)
+export const searchObservations = createCachedSelector(
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =>
+    selectMergedPlantingSiteObservations(state, plantingSiteId, defaultTimeZone),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) => search,
+  (observations, search) =>
+    observations?.filter((observation: ObservationResults) => {
+      return observation.plantingZones.some((zone: ObservationPlantingZoneResults) =>
+        regexMatch(zone.plantingZoneName, search)
+      );
+    })
+)(
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =>
+    `${plantingSiteId}_${defaultTimeZone}_${search}`
+);
 
 // utils
 
