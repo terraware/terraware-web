@@ -7,17 +7,24 @@ import GenericMap from './GenericMap';
 import { MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer, MapSource } from 'src/types/Map';
 import { MapService } from 'src/services';
 import _ from 'lodash';
-import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
-import strings from 'src/strings';
+import { MapLayer } from 'src/components/common/MapLayerSelect';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  layerSelectContainer: {
-    height: theme.spacing(3),
-    position: 'relative',
-    right: theme.spacing(5.5),
+  bottomLeftControl: {
+    height: 'max-content',
+    position: 'absolute',
+    left: theme.spacing(2),
+    bottom: theme.spacing(4),
+    width: 'max-content',
+    zIndex: 1000,
+  },
+  topRightControl: {
+    height: 'max-content',
+    position: 'absolute',
+    right: theme.spacing(2),
     top: theme.spacing(2),
-    width: theme.spacing(3),
+    width: 'max-content',
     zIndex: 1000,
   },
 }));
@@ -32,16 +39,26 @@ export type PlantingSiteMapProps = {
   selectedSubzoneId?: number;
   // selected zone
   selectedZoneId?: number;
-  layerOptions?: MapLayer[];
+  includedLayers?: MapLayer[];
+  bottomLeftMapControl?: React.ReactNode;
+  topRightMapControl?: React.ReactNode;
 };
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
-  const { plantingSite, style, contextRenderer, selectedSubzoneId, selectedZoneId, layerOptions } = props;
+  const {
+    plantingSite,
+    style,
+    contextRenderer,
+    selectedSubzoneId,
+    selectedZoneId,
+    includedLayers,
+    bottomLeftMapControl,
+    topRightMapControl,
+  } = props;
   const theme = useTheme();
   const classes = useStyles();
   const snackbar = useSnackbar();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
-  const [includedLayers, setIncludedLayers] = useState<MapLayer[] | undefined>(layerOptions);
 
   const getRenderAttributes = useCallback(
     (objectType: 'site' | 'zone' | 'subzone') => {
@@ -166,13 +183,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     [subzoneEntity, zoneEntity]
   );
 
-  const layerOptionLabels: Record<MapLayer, string> = {
-    'Planting Site': strings.PLANTING_SITE,
-    Zones: strings.ZONES,
-    'Sub-Zones': strings.SUBZONES,
-    'Monitoring Plots': strings.MONITORING_PLOTS,
-  };
-
   if (!mapOptions) {
     return (
       <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', margin: 'auto' }}>
@@ -182,22 +192,10 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   }
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1 }}>
+    <Box sx={{ display: 'flex', flexGrow: 1, position: 'relative', minHeight: '436px' }}>
       <GenericMap options={mapOptions} contextRenderer={contextRenderer} style={style} entityOptions={entityOptions} />
-      {layerOptions && (
-        <div className={classes.layerSelectContainer}>
-          <MapLayerSelect
-            initialSelection={layerOptions}
-            onUpdateSelection={(selection) => setIncludedLayers(selection)}
-            menuSections={[
-              layerOptions.map((opt) => ({
-                label: layerOptionLabels[opt],
-                value: opt,
-              })),
-            ]}
-          />
-        </div>
-      )}
+      {topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
+      {bottomLeftMapControl && <div className={classes.bottomLeftControl}>{bottomLeftMapControl}</div>}
     </Box>
   );
 }
