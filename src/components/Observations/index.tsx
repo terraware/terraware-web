@@ -6,9 +6,12 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
-import { selectObservationsResultsError, selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import {
+  selectObservationsResultsError,
+  selectObservationsResults,
+} from 'src/redux/features/observations/observationsSelectors';
+import { selectSpeciesError, selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { selectPlantingSitesError, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import ObservationsHome from './ObservationsHome';
 
 /**
@@ -21,8 +24,12 @@ export default function Observations(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
+  // listen for error
   const observationsResultsError = useAppSelector(selectObservationsResultsError);
-  const observationResults = useAppSelector(selectObservationResults);
+  const speciesError = useAppSelector(selectSpeciesError);
+  const plantingSitesError = useAppSelector(selectPlantingSitesError);
+  // listen for data
+  const observationsResults = useAppSelector(selectObservationsResults);
   const species = useAppSelector(selectSpecies);
   const plantingSites = useAppSelector(selectPlantingSites);
 
@@ -39,17 +46,26 @@ export default function Observations(): JSX.Element {
   }, [dispatch, selectedOrganization.id, plantingSites]);
 
   useEffect(() => {
-    if (species !== undefined && plantingSites !== undefined && observationResults === undefined) {
-      dispatch(requestObservationResults(selectedOrganization.id));
+    if (species !== undefined && plantingSites !== undefined && observationsResults === undefined) {
+      dispatch(requestObservationsResults(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id, species, plantingSites]);
+  }, [dispatch, selectedOrganization.id, species, plantingSites, observationsResults]);
 
   useEffect(() => {
-  }, [
+    if (observationsResultsError || speciesError || plantingSitesError) {
+      snackbar.toastError();
+    }
+  }, [snackbar, observationsResultsError, speciesError, plantingSitesError]);
 
+  // show spinner while initializing data
   if (
+    observationsResults === undefined &&
+    observationsResultsError === undefined &&
+    speciesError === undefined &&
+    plantingSitesError === undefined
+  ) {
+    return <CircularProgress sx={{ margin: 'auto' }} />;
+  }
 
-  return (
-    <ObservationsHome />
-  );
+  return <ObservationsHome />;
 }

@@ -17,6 +17,7 @@ export type ObservationResultsPayload = components['schemas']['ObservationResult
 export type ObservationResults = ObservationResultsPayload &
   Boundary & {
     plantingSiteName: string;
+    plantingZones: ObservationPlantingZoneResults[];
   };
 
 // zone level results -> contains a list of subzone level results
@@ -24,6 +25,8 @@ export type ObservationPlantingZoneResultsPayload = components['schemas']['Obser
 export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPayload &
   Boundary & {
     plantingZoneName: string;
+    plantingSubzones: ObservationPlantingSubzoneResults[];
+    species: ObservationSpeciesResults[];
   };
 
 // subzone level results -> contains lists of both species level results and monitoring plot level results
@@ -32,7 +35,17 @@ export type ObservationPlantingSubzoneResultsPayload =
 export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResultsPayload &
   Boundary & {
     plantingSubzoneName: string;
+    monitoringPlots: ObservationMonitoringPlotResults[];
   };
+
+// monitoring plot level results
+export type ObservationMonitoringPlotResultsPayload = components['schemas']['ObservationMonitoringPlotResultsPayload'];
+export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsPayload & {
+  species: ObservationSpeciesResults[];
+};
+
+// monitoring plot photos
+export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationMonitoringPlotPhotoPayload'];
 
 // species related observation statistics
 export type ObservationSpeciesResultsPayload = components['schemas']['ObservationSpeciesResultsPayload'];
@@ -40,9 +53,3 @@ export type ObservationSpeciesResults = ObservationSpeciesResultsPayload & {
   speciesCommonName?: string;
   speciesScientificName: string;
 };
-
-// monitoring plot level results
-export type ObservationMonitoringPlotResults = components['schemas']['ObservationMonitoringPlotResultsPayload'];
-
-// monitoring plot photos
-export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationMonitoringPlotPhotoPayload'];
