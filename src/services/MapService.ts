@@ -21,6 +21,9 @@ const MAPBOX_TOKEN_ENDPOINT = '/api/v1/tracking/mapbox/token';
 type MapboxTokenServerResponse =
   paths[typeof MAPBOX_TOKEN_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
+export type MapObject = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot';
+export type MapData = Record<MapObject, MapSourceBaseData | undefined>;
+
 /**
  * Fetch a mapbox api token.
  */
@@ -100,10 +103,10 @@ const getBoundingBox = (geometries: MapGeometry[]): MapBoundingBox => {
 /**
  * Get planting site bounding box
  */
-const getPlantingSiteBoundingBox = (plantingSite: PlantingSite): MapBoundingBox => {
-  const site: MapSourceBaseData = extractPlantingSite(plantingSite);
-  const zones: MapSourceBaseData = extractPlantingZones(plantingSite);
-  const subzones: MapSourceBaseData = extractSubzones(plantingSite);
+const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
+  const site: MapSourceBaseData = mapData.site ?? { id: 'site', entities: [] };
+  const zones: MapSourceBaseData = mapData.zone ?? { id: 'zone', entities: [] };
+  const subzones: MapSourceBaseData = mapData.subzone ?? { id: 'subzone', entities: [] };
 
   const geometries: MapGeometry[] = [
     site.entities[0]?.boundary,
@@ -206,11 +209,25 @@ const getMapEntityGeometry = (entity: MapEntity): MapGeometry => {
 };
 
 /**
+ * Extract Planting Site, Zones, Subzones from planting site data
+ */
+const getMapDataFromPlantingSite = (plantingSite: PlantingSite): MapData => {
+  return {
+    site: extractPlantingSite(plantingSite),
+    zone: extractPlantingZones(plantingSite),
+    subzone: extractSubzones(plantingSite),
+    permanentPlot: undefined,
+    temporaryPlot: undefined,
+  };
+};
+
+/**
  * Exported functions
  */
 const MapService = {
   getMapboxToken,
   getBoundingBox,
+  getMapDataFromPlantingSite,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,
   extractPlantingSite,

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { PlantingSite } from 'src/types/Tracking';
-import { TrackingService } from 'src/services';
+import { MapService, TrackingService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PlantingSiteSubzone } from 'src/types/PlantingSite';
 import { GenericMap, PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
@@ -59,7 +59,7 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
     <Box display='flex' height='100%'>
       {hasPolygons ? (
         <PlantingSiteMap
-          plantingSite={plantingSite}
+          mapData={MapService.getMapDataFromPlantingSite(plantingSite)}
           key={plantingSite?.id}
           style={MAP_STYLE}
           contextRenderer={contextRenderer}
