@@ -107,11 +107,15 @@ const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
   const site: MapSourceBaseData = mapData.site ?? { id: 'site', entities: [] };
   const zones: MapSourceBaseData = mapData.zone ?? { id: 'zone', entities: [] };
   const subzones: MapSourceBaseData = mapData.subzone ?? { id: 'subzone', entities: [] };
+  const permanentPlots: MapSourceBaseData = mapData.permanentPlot ?? { id: 'permanentPlot', entities: [] };
+  const temporaryPlots: MapSourceBaseData = mapData.temporaryPlot ?? { id: 'temporaryPlot', entities: [] };
 
   const geometries: MapGeometry[] = [
     site.entities[0]?.boundary,
     ...(zones?.entities.map((s) => s.boundary) || []),
     ...(subzones?.entities.map((s) => s.boundary) || []),
+    ...(permanentPlots?.entities.map((s) => s.boundary) || []),
+    ...(temporaryPlots?.entities.map((s) => s.boundary) || []),
   ].filter((g) => g) as MapGeometry[];
 
   return getBoundingBox(geometries);
