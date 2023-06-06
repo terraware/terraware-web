@@ -4,9 +4,8 @@ import { CircularProgress } from '@mui/material';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useAppSelector } from 'src/redux/store';
-import { selectMergedPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import Card from 'src/components/common/Card';
@@ -17,10 +16,9 @@ export default function ObservationsHome(): JSX.Element {
   const history = useHistory();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
-  const defaultTimeZone = useDefaultTimeZone();
   const plantingSites = useAppSelector(selectPlantingSites);
-  const observationsResults = useAppSelector(
-    (state) => selectMergedPlantingSiteObservations(state, selectedPlantingSite?.id || 0, defaultTimeZone.get().id) // default to 0 which is a non-existing site, until we have a selection
+  const observationsResults = useAppSelector((state) =>
+    selectPlantingSiteObservationsResults(state, selectedPlantingSite?.id)
   );
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
