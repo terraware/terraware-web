@@ -3,12 +3,19 @@ import { Box, CircularProgress, Theme, useTheme } from '@mui/material';
 import hexRgb from 'hex-rgb';
 import useSnackbar from 'src/utils/useSnackbar';
 import GenericMap from './GenericMap';
-import { MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer, MapSource } from 'src/types/Map';
+import {
+  MapData,
+  MapEntityId,
+  MapEntityOptions,
+  MapObject,
+  MapOptions,
+  MapPopupRenderer,
+  MapSource,
+} from 'src/types/Map';
 import { MapService } from 'src/services';
 import _ from 'lodash';
 import { MapLayer } from 'src/components/common/MapLayerSelect';
 import { makeStyles } from '@mui/styles';
-import { MapData, MapObject } from 'src/services/MapService';
 
 const useStyles = makeStyles((theme: Theme) => ({
   bottomLeftControl: {

@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
-import { MapBoundingBox, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
+import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
 import HttpService, { Response } from './HttpService';
 
 /**
@@ -20,9 +20,6 @@ export type MapboxTokenResponse = Response & MapboxToken;
 const MAPBOX_TOKEN_ENDPOINT = '/api/v1/tracking/mapbox/token';
 type MapboxTokenServerResponse =
   paths[typeof MAPBOX_TOKEN_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-export type MapObject = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot';
-export type MapData = Record<MapObject, MapSourceBaseData | undefined>;
 
 /**
  * Fetch a mapbox api token.
