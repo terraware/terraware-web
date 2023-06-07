@@ -1,6 +1,6 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Grid, Popover, Theme, Typography, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import strings from 'src/strings';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -14,7 +14,7 @@ import { APP_PATHS } from 'src/constants';
 import { useHistory } from 'react-router-dom';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers';
 import { Button, PillList } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function NurseryWithdrawals(): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
   const contentRef = useRef(null);
   const classes = useStyles();
@@ -58,26 +59,40 @@ export default function NurseryWithdrawals(): JSX.Element {
     field: 'withdrawnDate',
     direction: 'Descending',
   } as SearchSortOrder);
-  const columns: TableColumnType[] = [
-    { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
-    { key: 'purpose', name: strings.PURPOSE, type: 'string' },
-    { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
-    { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
-    { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
-    { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
-    { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
-    { key: 'hasReassignments', name: '', type: 'string' },
-  ];
+
+  const columns: TableColumnType[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
+            { key: 'purpose', name: strings.PURPOSE, type: 'string' },
+            { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
+            { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
+            { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
+            { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
+            { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
+            { key: 'hasReassignments', name: '', type: 'string' },
+          ]
+        : [],
+    [activeLocale]
+  );
 
   const filterColumns = useMemo<FilterField[]>(
-    () => [
-      { name: 'purpose', label: strings.PURPOSE, type: 'multiple_selection' },
-      { name: 'facility_name', label: strings.FROM_NURSERY, type: 'multiple_selection' },
-      { name: 'destinationName', label: strings.DESTINATION, type: 'multiple_selection' },
-      { name: 'batchWithdrawals.batch_species_scientificName', label: strings.SPECIES, type: 'multiple_selection' },
-      { name: 'withdrawnDate', label: strings.WITHDRAWN_DATE, type: 'date_range' },
-    ],
-    []
+    () =>
+      activeLocale
+        ? [
+            { name: 'purpose', label: strings.PURPOSE, type: 'multiple_selection' },
+            { name: 'facility_name', label: strings.FROM_NURSERY, type: 'multiple_selection' },
+            { name: 'destinationName', label: strings.DESTINATION, type: 'multiple_selection' },
+            {
+              name: 'batchWithdrawals.batch_species_scientificName',
+              label: strings.SPECIES,
+              type: 'multiple_selection',
+            },
+            { name: 'withdrawnDate', label: strings.WITHDRAWN_DATE, type: 'date_range' },
+          ]
+        : [],
+    [activeLocale]
   );
 
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});

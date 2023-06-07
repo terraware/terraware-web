@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
 import Table from 'src/components/common/table';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type SpeciesWithdrawal = {
@@ -28,16 +28,24 @@ export default function NonOutplantWithdrawalTable({
   batches,
 }: NonOutplantWithdrawalTableProps): JSX.Element {
   const { user } = useUser();
+  const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   const [rowData, setRowData] = useState<SpeciesWithdrawal[]>([]);
-  const columns: TableColumnType[] = [
-    { key: 'name', name: strings.SPECIES, type: 'string' },
-    { key: 'notReady', name: strings.NOT_READY, type: 'number' },
-    { key: 'ready', name: strings.READY, type: 'number' },
-    { key: 'total', name: strings.TOTAL, type: 'number' },
-  ];
+
+  const columns: TableColumnType[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            { key: 'name', name: strings.SPECIES, type: 'string' },
+            { key: 'notReady', name: strings.NOT_READY, type: 'number' },
+            { key: 'ready', name: strings.READY, type: 'number' },
+            { key: 'total', name: strings.TOTAL, type: 'number' },
+          ]
+        : [],
+    [activeLocale]
+  );
 
   useEffect(() => {
     // get map of batch id to species id - for correlation

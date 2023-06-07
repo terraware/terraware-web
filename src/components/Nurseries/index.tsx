@@ -1,8 +1,8 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FacilityService } from 'src/services';
 import { Facility } from 'src/types/Facility';
@@ -16,7 +16,7 @@ import PageSnackbar from '../PageSnackbar';
 import NurseriesCellRenderer from './TableCellRenderer';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import Table from 'src/components/common/table';
-import { useTimeZones } from 'src/providers/hooks';
+import { useLocalization, useTimeZones } from 'src/providers';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type NurseriesListProps = {
@@ -26,6 +26,7 @@ type NurseriesListProps = {
 export default function NurseriesList({ organization }: NurseriesListProps): JSX.Element {
   const theme = useTheme();
   const timeZones = useTimeZones();
+  const { activeLocale } = useLocalization();
   const defaultTimeZone = useDefaultTimeZone().get();
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
@@ -33,11 +34,18 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
   const contentRef = useRef(null);
-  const columns: TableColumnType[] = [
-    { key: 'name', name: strings.NAME, type: 'string' },
-    { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-    { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
-  ];
+
+  const columns: TableColumnType[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            { key: 'name', name: strings.NAME, type: 'string' },
+            { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+            { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
+          ]
+        : [],
+    [activeLocale]
+  );
 
   const goToNewNursery = () => {
     const newNurseryLocation = {

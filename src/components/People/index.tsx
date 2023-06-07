@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -70,13 +70,20 @@ export default function PeopleList(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
-  const columns: TableColumnType[] = [
-    { key: 'email', name: strings.EMAIL, type: 'string' },
-    { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
-    { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
-    { key: 'role', name: strings.ROLE, type: 'string' },
-    { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
-  ];
+
+  const columns: TableColumnType[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            { key: 'email', name: strings.EMAIL, type: 'string' },
+            { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
+            { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
+            { key: 'role', name: strings.ROLE, type: 'string' },
+            { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
+          ]
+        : [],
+    [activeLocale]
+  );
 
   useEffect(() => {
     const refreshSearch = async () => {

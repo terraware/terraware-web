@@ -9,6 +9,7 @@ import { Button, TextTruncated } from '@terraware/web-components';
 import strings from 'src/strings';
 import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 import { isTrue } from 'src/utils/boolean';
+import { NurseryWithdrawalPurpose, purposeLabel } from 'src/types/Batch';
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
@@ -73,7 +74,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'hasReassignments') {
-    if (row.purpose === OUTPLANT && row.subzoneNames) {
+    if (row.purpose === OUTPLANT && row.plantingSubzoneNames) {
       return (
         <>
           <CellRenderer
@@ -96,6 +97,10 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
       );
     }
     return <CellRenderer index={index} column={column} row={row} value='' />;
+  }
+
+  if (column.key === 'purpose') {
+    return <CellRenderer {...props} value={purposeLabel(value as NurseryWithdrawalPurpose)} />;
   }
 
   return <CellRenderer {...props} />;
