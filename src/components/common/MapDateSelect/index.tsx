@@ -12,7 +12,7 @@ type MapDateSelectProps = {
 
 export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): JSX.Element {
   const theme = useTheme();
-  const locale = useLocalization().selectedLocale;
+  const locale = useLocalization().activeLocale;
 
   const earliestDate = useMemo(() => {
     return dates.reduce((prev, curr) => {

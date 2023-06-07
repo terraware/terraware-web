@@ -12,7 +12,7 @@ import strings from 'src/strings';
 const COLUMN_WIDTH = 250;
 
 const OrgObservationsRenderer =
-  (locale: string, theme: Theme, classes: any) =>
+  (theme: Theme, classes: any, locale: string | undefined | null) =>
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 

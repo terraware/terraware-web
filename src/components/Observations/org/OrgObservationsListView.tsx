@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Box, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -26,7 +26,7 @@ export type OrgObservationsListViewProps = {
 };
 
 export default function OrgObservationsListView({ observationsResults }: OrgObservationsListViewProps): JSX.Element {
-  const { selectedLocale } = useLocalization();
+  const { activeLocale } = useLocalization();
   const [results, setResults] = useState<any>([]);
   const classes = useStyles();
   const theme = useTheme();
@@ -53,52 +53,58 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
     );
   }, [observationsResults]);
 
-  const columns = (): TableColumnType[] => [
-    {
-      key: 'completedTime',
-      name: strings.DATE,
-      type: 'string',
-    },
-    {
-      key: 'state',
-      name: strings.STATUS,
-      type: 'string',
-    },
-    {
-      key: 'plantingZones',
-      name: strings.ZONES,
-      type: 'string',
-    },
-    {
-      key: 'plantingSubzones',
-      name: strings.SUBZONES,
-      type: 'string',
-    },
-    {
-      key: 'totalPlants',
-      name: strings.PLANTS,
-      type: 'number',
-    },
-    {
-      key: 'totalSpecies',
-      name: strings.SPECIES,
-      type: 'number',
-    },
-    {
-      key: 'mortalityRate',
-      name: strings.MORTALITY_RATE,
-      type: 'number',
-    },
-  ];
+  const columns: TableColumnType[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            {
+              key: 'completedTime',
+              name: strings.DATE,
+              type: 'string',
+            },
+            {
+              key: 'state',
+              name: strings.STATUS,
+              type: 'string',
+            },
+            {
+              key: 'plantingZones',
+              name: strings.ZONES,
+              type: 'string',
+            },
+            {
+              key: 'plantingSubzones',
+              name: strings.SUBZONES,
+              type: 'string',
+            },
+            {
+              key: 'totalPlants',
+              name: strings.PLANTS,
+              type: 'number',
+            },
+            {
+              key: 'totalSpecies',
+              name: strings.SPECIES,
+              type: 'number',
+            },
+            {
+              key: 'mortalityRate',
+              name: strings.MORTALITY_RATE,
+              type: 'number',
+            },
+          ]
+        : [],
+    [activeLocale]
+  );
 
   return (
     <Box>
       <Table
         id='org-observations-table'
-        columns={columns()}
+        columns={columns}
         rows={results}
         orderBy='completionTime'
-        Renderer={OrgObservationsRenderer(selectedLocale, theme, classes)}
+        Renderer={OrgObservationsRenderer(theme, classes, activeLocale)}
       />
     </Box>
   );
