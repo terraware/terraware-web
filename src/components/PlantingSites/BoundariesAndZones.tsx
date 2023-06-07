@@ -5,6 +5,7 @@ import { PlantingSite } from 'src/types/Tracking';
 import { PlantingSiteMap } from '../Map';
 import React, { useState } from 'react';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
+import { MapService } from 'src/services';
 
 type BoundariesAndZonesProps = {
   plantingSite: PlantingSite;
@@ -35,7 +36,7 @@ export default function BoundariesAndZones(props: BoundariesAndZonesProps): JSX.
           <>
             {plantingSite.boundary ? (
               <PlantingSiteMap
-                plantingSite={plantingSite}
+                mapData={MapService.getMapDataFromPlantingSite(plantingSite)}
                 style={{ borderRadius: '24px' }}
                 layers={includedLayers}
                 topRightMapControl={

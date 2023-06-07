@@ -105,3 +105,13 @@ export type MapEntityOptions = {
   highlight?: MapEntityId;
   focus?: MapEntityId;
 };
+
+/**
+ * Types of objects that can be added to MapData
+ */
+export type MapObject = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot';
+
+/**
+ * Sources for a map
+ */
+export type MapData = Record<MapObject, MapSourceBaseData | undefined>;
