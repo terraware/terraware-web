@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
-import { MapBoundingBox, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
+import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
 import HttpService, { Response } from './HttpService';
 
 /**
@@ -100,15 +100,19 @@ const getBoundingBox = (geometries: MapGeometry[]): MapBoundingBox => {
 /**
  * Get planting site bounding box
  */
-const getPlantingSiteBoundingBox = (plantingSite: PlantingSite): MapBoundingBox => {
-  const site: MapSourceBaseData = extractPlantingSite(plantingSite);
-  const zones: MapSourceBaseData = extractPlantingZones(plantingSite);
-  const subzones: MapSourceBaseData = extractSubzones(plantingSite);
+const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
+  const site: MapSourceBaseData = mapData.site ?? { id: 'site', entities: [] };
+  const zones: MapSourceBaseData = mapData.zone ?? { id: 'zone', entities: [] };
+  const subzones: MapSourceBaseData = mapData.subzone ?? { id: 'subzone', entities: [] };
+  const permanentPlots: MapSourceBaseData = mapData.permanentPlot ?? { id: 'permanentPlot', entities: [] };
+  const temporaryPlots: MapSourceBaseData = mapData.temporaryPlot ?? { id: 'temporaryPlot', entities: [] };
 
   const geometries: MapGeometry[] = [
     site.entities[0]?.boundary,
     ...(zones?.entities.map((s) => s.boundary) || []),
     ...(subzones?.entities.map((s) => s.boundary) || []),
+    ...(permanentPlots?.entities.map((s) => s.boundary) || []),
+    ...(temporaryPlots?.entities.map((s) => s.boundary) || []),
   ].filter((g) => g) as MapGeometry[];
 
   return getBoundingBox(geometries);
@@ -206,11 +210,25 @@ const getMapEntityGeometry = (entity: MapEntity): MapGeometry => {
 };
 
 /**
+ * Extract Planting Site, Zones, Subzones from planting site data
+ */
+const getMapDataFromPlantingSite = (plantingSite: PlantingSite): MapData => {
+  return {
+    site: extractPlantingSite(plantingSite),
+    zone: extractPlantingZones(plantingSite),
+    subzone: extractSubzones(plantingSite),
+    permanentPlot: undefined,
+    temporaryPlot: undefined,
+  };
+};
+
+/**
  * Exported functions
  */
 const MapService = {
   getMapboxToken,
   getBoundingBox,
+  getMapDataFromPlantingSite,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,
   extractPlantingSite,
