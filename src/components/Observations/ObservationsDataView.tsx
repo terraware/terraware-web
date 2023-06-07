@@ -5,7 +5,7 @@ import { searchObservations } from 'src/redux/features/observations/observations
 import ListMapView from 'src/components/ListMapView';
 import Search from './search';
 import OrgObservationsListView from './org/OrgObservationsListView';
-import ObservationMapView from 'src/components/Observations/map/ObservationMapView';
+import ObservationMapView from './map/ObservationMapView';
 
 export type ObservationsDataViewProps = {
   selectedPlantingSiteId: number;
