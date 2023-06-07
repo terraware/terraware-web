@@ -1,3 +1,4 @@
+c631e8aa SW-3724 Make table columns i18n friendly, plus other i18n fixes (#1440)
 7252904f Planting Site Map Data (#1438)
 3cdc991b Planting Site Map Controls (#1436)
 39723935 Set map/view selector icon order based on initial/default view (#1434)
