@@ -510,12 +510,6 @@ function AppContent() {
               </Route>
             )}
 
-            {trackingV2 && (
-              <Route exact path={APP_PATHS.PLANTING_SITE_OBSERVATIONS}>
-                <Observations />
-              </Route>
-            )}
-
             {!isProduction && (
               <Route exact path={APP_PATHS.OPT_IN}>
                 <OptInFeatures refresh={reloadPreferences} />
