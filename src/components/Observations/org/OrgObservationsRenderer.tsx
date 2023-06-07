@@ -51,6 +51,10 @@ const OrgObservationsRenderer =
       return <CellRenderer {...props} value={getStatus(value as ObservationState)} />;
     }
 
+    if (column.key === 'mortalityRate') {
+      return <CellRenderer {...props} value={`${value}%`} />;
+    }
+
     return <CellRenderer {...props} />;
   };
 

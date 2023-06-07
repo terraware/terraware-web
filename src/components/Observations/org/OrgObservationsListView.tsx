@@ -88,6 +88,11 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
               type: 'number',
             },
             {
+              key: 'plantingDensity',
+              name: strings.PLANTING_DENSITY,
+              type: 'number',
+            },
+            {
               key: 'mortalityRate',
               name: strings.MORTALITY_RATE,
               type: 'number',

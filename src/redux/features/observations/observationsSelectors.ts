@@ -221,12 +221,12 @@ const mergeSpecies = (
   species: Record<number, SpeciesValue>
 ): ObservationSpeciesResults[] => {
   return speciesObservations
-    .filter((speciesObservation: ObservationSpeciesResultsPayload) => species[speciesObservation.speciesId])
+    .filter((speciesObservation: ObservationSpeciesResultsPayload) => species[speciesObservation.speciesId ?? -1])
     .map(
       (speciesObservation: ObservationSpeciesResultsPayload): ObservationSpeciesResults => ({
         ...speciesObservation,
-        speciesCommonName: species[speciesObservation.speciesId].commonName,
-        speciesScientificName: species[speciesObservation.speciesId].scientificName,
+        speciesCommonName: species[speciesObservation.speciesId ?? -1].commonName,
+        speciesScientificName: species[speciesObservation.speciesId ?? -1].scientificName,
       })
     );
 };

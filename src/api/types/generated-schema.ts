@@ -1913,9 +1913,15 @@ export interface components {
       plantingDensity: number;
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       status: "Outstanding" | "InProgress" | "Completed";
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
+       */
       totalPlants: number;
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+       */
       totalSpecies: number;
     };
     ObservationPayload: {
@@ -1947,6 +1953,7 @@ export interface components {
       plantingSubzoneId: number;
     };
     ObservationPlantingZoneResultsPayload: {
+      areaHa: number;
       /** Format: date-time */
       completedTime?: string;
       /** Format: int32 */
@@ -1962,7 +1969,10 @@ export interface components {
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /** Format: int32 */
       totalPlants: number;
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+       */
       totalSpecies: number;
     };
     ObservationResultsPayload: {
@@ -1972,25 +1982,42 @@ export interface components {
       mortalityRate: number;
       /** Format: int64 */
       observationId: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as finished planting.
+       */
+      plantingDensity?: number;
       /** Format: int64 */
       plantingSiteId: number;
       plantingZones: components["schemas"]["ObservationPlantingZoneResultsPayload"][];
       /** Format: date */
       startDate: string;
       state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
-      /** Format: int32 */
-      totalPlants: number;
+      /**
+       * Format: int32
+       * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as finished planting.
+       */
+      totalPlants?: number;
       /** Format: int32 */
       totalSpecies: number;
     };
     ObservationSpeciesResultsPayload: {
+      certainty: "Known" | "Other" | "Unknown";
       /** Format: int32 */
-      mortalityRate: number;
+      mortalityRate?: number;
       /** Format: int64 */
-      speciesId: number;
+      speciesId?: number;
+      speciesName?: string;
       /** Format: int32 */
       totalDead: number;
       /** Format: int32 */
+      totalExisting: number;
+      /** Format: int32 */
+      totalLive: number;
+      /**
+       * Format: int32
+       * @description Total number of live and existing plants of this species.
+       */
       totalPlants: number;
     };
     /** @description Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
@@ -2101,6 +2128,11 @@ export interface components {
     PlantingSubzonePayload: {
       boundary: components["schemas"]["MultiPolygon"];
       finishedPlanting: boolean;
+      /**
+       * Format: date-time
+       * @description When the planting subzone was marked as finished planting.
+       */
+      finishedTime?: string;
       fullName: string;
       /** Format: int64 */
       id: number;
@@ -2236,15 +2268,15 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     RecordedPlantPayload: {
-      certainty: "Known" | "Other" | "CantTell";
+      certainty: "Known" | "Other" | "Unknown";
       /** @description GPS coordinates where plant was observed. */
       gpsCoordinates: components["schemas"]["Point"];
       /**
        * Format: int64
-       * @description Required if certainty is Known. Ignored if certainty is CantTell or Other.
+       * @description Required if certainty is Known. Ignored if certainty is Other or Unknown.
        */
       speciesId?: number;
-      /** @description If certainty is Other, the optional user-supplied name of the species. Ignored if certainty is CantTell or Known. */
+      /** @description If certainty is Other, the optional user-supplied name of the species. Ignored if certainty is Known or Unknown. */
       speciesName?: string;
       status: "Live" | "Dead" | "Existing";
     };
