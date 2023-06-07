@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import { Delivery } from 'src/types/Tracking';
 import { Species } from 'src/types/Species';
 import Table from 'src/components/common/table';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type OutplantWithdrawalTableProps = {
@@ -19,15 +19,23 @@ export default function OutplantWithdrawalTable({
   delivery,
 }: OutplantWithdrawalTableProps): JSX.Element {
   const { user } = useUser();
+  const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
-  const columns: TableColumnType[] = [
-    { key: 'species', name: strings.SPECIES, type: 'string' },
-    { key: 'to_subzone', name: strings.TO_SUBZONE, type: 'string' },
-    { key: 'quantity', name: strings.QUANTITY, type: 'string' },
-  ];
+
+  const columns: TableColumnType[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            { key: 'species', name: strings.SPECIES, type: 'string' },
+            { key: 'to_subzone', name: strings.TO_SUBZONE, type: 'string' },
+            { key: 'quantity', name: strings.QUANTITY, type: 'string' },
+          ]
+        : [],
+    [activeLocale]
+  );
 
   useEffect(() => {
     // get list of distinct species

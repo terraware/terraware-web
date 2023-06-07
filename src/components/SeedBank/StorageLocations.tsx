@@ -1,9 +1,9 @@
-import { Box, Grid, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
+import { Box, Grid, Typography } from '@mui/material';
 import strings from 'src/strings';
 import { SeedBankService } from 'src/services';
 import { DEFAULT_STORAGE_LOCATIONS, PartialStorageLocation } from 'src/types/Facility';
-import { useLocalization } from 'src/providers/hooks';
+import { useLocalization } from 'src/providers';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { useNumberFormatter } from 'src/utils/useNumber';
@@ -27,17 +27,24 @@ const storageLocationWith = (name: string, id: number) => ({
 
 export default function StorageLocations({ seedBankId, onEdit }: StorageLocationsProps): JSX.Element | null {
   const { activeLocale } = useLocalization();
+  const { isMobile } = useDeviceInfo();
   const numberFormatter = useNumberFormatter();
   const [selectedRows, setSelectedRows] = useState<PartialStorageLocation[]>([]);
   const [selectedStorageLocation, setSelectedStorageLocation] = useState<PartialStorageLocation | undefined>();
   const [storageLocations, setStorageLocations] = useState<PartialStorageLocation[]>([]);
   const [openStorageLocationModal, setOpenStorageLocationModal] = useState<boolean>(false);
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [numberFormatter, activeLocale]);
-  const columns: TableColumnType[] = [
-    { key: 'name', name: strings.NAME, type: 'string' },
-    { key: 'activeAccessions', name: strings.ACTIVE_ACCESSIONS, type: 'number' },
-  ];
-  const { isMobile } = useDeviceInfo();
+
+  const columns: TableColumnType[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            { key: 'name', name: strings.NAME, type: 'string' },
+            { key: 'activeAccessions', name: strings.ACTIVE_ACCESSIONS, type: 'number' },
+          ]
+        : [],
+    [activeLocale]
+  );
 
   useEffect(() => {
     const fetchStorageLocations = async () => {

@@ -1,4 +1,5 @@
 import { components } from 'src/api/types/generated-schema';
+import strings from 'src/strings';
 
 export type Batch = components['schemas']['BatchResponsePayload']['batch'];
 export type CreateBatchRequestPayload = components['schemas']['CreateBatchRequestPayload'];
@@ -17,3 +18,16 @@ export const NurseryWithdrawalPurposesValues = Object.values(NurseryWithdrawalPu
 
 export type NurseryTransfer = components['schemas']['CreateNurseryTransferRequestPayload'];
 export type NurseryWithdrawalRequest = components['schemas']['CreateNurseryWithdrawalRequestPayload'];
+
+export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
+  switch (purpose) {
+    case 'Out Plant':
+      return strings.OUTPLANT;
+    case 'Nursery Transfer':
+      return strings.NURSERY_TRANSFER;
+    case 'Dead':
+      return strings.DEAD;
+    default:
+      return strings.OTHER;
+  }
+};

@@ -5,6 +5,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';
 import { useOrganization } from 'src/providers/hooks';
+import { NurseryWithdrawalPurpose, purposeLabel } from 'src/types/Batch';
 
 type WithdrawalOverviewProps = {
   withdrawal?: NurseryWithdrawal;
@@ -23,7 +24,7 @@ export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: Wi
     },
     {
       title: strings.PURPOSE,
-      data: withdrawal?.purpose ?? '',
+      data: withdrawal?.purpose ? purposeLabel(withdrawal.purpose as NurseryWithdrawalPurpose) : '',
     },
     {
       title: strings.QUANTITY,
