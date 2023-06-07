@@ -32,7 +32,7 @@ const OrgObservationsRenderer =
     };
 
     const createLinkToSiteObservation = (date: string) => {
-      const url = APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', row.plantingSiteId.toString()).replace(
+      const url = APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', row.plantingSiteId.toString()).replace(
         ':observationId',
         row.observationId.toString()
       );
