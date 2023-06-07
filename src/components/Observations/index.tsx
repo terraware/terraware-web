@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
@@ -22,6 +22,7 @@ import ObservationsHome from './ObservationsHome';
  */
 export default function Observations(): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const [dispatched, setDispatched] = useState<boolean>(false);
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
   // listen for error
@@ -34,22 +35,16 @@ export default function Observations(): JSX.Element {
   const plantingSites = useAppSelector(selectPlantingSites);
 
   useEffect(() => {
-    if (species === undefined) {
-      dispatch(requestSpecies(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization.id, species]);
+    dispatch(requestSpecies(selectedOrganization.id));
+    dispatch(requestPlantingSites(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    if (plantingSites === undefined) {
-      dispatch(requestPlantingSites(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization.id, plantingSites]);
-
-  useEffect(() => {
-    if (species !== undefined && plantingSites !== undefined && observationsResults === undefined) {
+    if (species !== undefined && plantingSites !== undefined && !dispatched) {
+      setDispatched(true);
       dispatch(requestObservationsResults(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id, species, plantingSites, observationsResults]);
+  }, [dispatch, selectedOrganization.id, species, plantingSites, dispatched]);
 
   useEffect(() => {
     if (observationsResultsError || speciesError || plantingSitesError) {
@@ -58,12 +53,7 @@ export default function Observations(): JSX.Element {
   }, [snackbar, observationsResultsError, speciesError, plantingSitesError]);
 
   // show spinner while initializing data
-  if (
-    observationsResults === undefined &&
-    observationsResultsError === undefined &&
-    speciesError === undefined &&
-    plantingSitesError === undefined
-  ) {
+  if (observationsResults === undefined && !(observationsResultsError || speciesError || plantingSitesError)) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 

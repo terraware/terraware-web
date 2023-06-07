@@ -3,6 +3,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { useMemo, useState } from 'react';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
+import { getShortDate } from 'src/utils/dateFormatter';
 
 type MapDateSelectProps = {
   dates: string[]; // date strings in the format 'YYYY-MM-DD'
@@ -42,11 +43,8 @@ export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): 
     onChange(newDate);
   };
 
-  const getDateString = (date: string) => {
-    // TODO: Determine whether the dates input to this component are UTC or local to a planting site. This may influence
-    //       whether we need to localize them in the Intl.DateTimeFormatter
-    return new Intl.DateTimeFormat(locale, { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(date));
-  };
+  const getDateString = (date: string) => getShortDate(date, locale);
+
   const getDateLabel = (date: string) => <Typography fontSize='12px'>{getDateString(date)}</Typography>;
 
   return (

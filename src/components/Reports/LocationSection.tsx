@@ -319,7 +319,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           <Grid item xs={smallItemGridWidth()}>
             <InfoField
               id={`${location.id}-mortality-rate`}
-              label={strings.MORTALITY_RATE}
+              label={strings.MORTALITY_RATE_PERCENT_REQUIRED}
               value={
                 editable
                   ? (location as ReportPlantingSite).mortalityRate ?? ''
