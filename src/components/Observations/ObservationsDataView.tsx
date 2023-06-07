@@ -5,6 +5,7 @@ import { searchObservations } from 'src/redux/features/observations/observations
 import ListMapView from 'src/components/ListMapView';
 import Search from './search';
 import OrgObservationsListView from './org/OrgObservationsListView';
+import ObservationMapView from 'src/components/Observations/map/ObservationMapView';
 
 export type ObservationsDataViewProps = {
   selectedPlantingSiteId: number;
@@ -22,11 +23,7 @@ export default function ObservationsDataView({ selectedPlantingSiteId }: Observa
       initialView='list'
       search={<Search value={search} onSearch={(value: string) => setSearch(value)} />}
       list={<OrgObservationsListView observationsResults={observationsResults} />}
-      map={
-        selectedPlantingSiteId === -1 ? undefined : (
-          <div>Placeholder for map view of observations results. Total count: {observationsResults?.length}</div>
-        )
-      }
+      map={selectedPlantingSiteId === -1 ? undefined : <ObservationMapView observationsResults={observationsResults} />}
     />
   );
 }

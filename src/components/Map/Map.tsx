@@ -11,6 +11,7 @@ import { MapService } from 'src/services';
  */
 import mapboxgl from 'mapbox-gl';
 import MapBanner from './MapBanner';
+import { useIsVisible } from 'src/hooks/useIsVisible';
 const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -43,7 +44,7 @@ export type MapProps = {
   entityOptions?: MapEntityOptions;
 };
 
-export default function Map(props: MapProps): JSX.Element {
+export default function Map(props: MapProps): JSX.Element | null {
   const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, entityOptions } = props;
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
@@ -51,9 +52,19 @@ export default function Map(props: MapProps): JSX.Element {
   const [deferredHighlightEntity, setDeferredHighlightEntity] = useState<MapEntityId | undefined>();
   const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId | undefined>();
   const mapRef = useRef(null);
+  const containerRef = useRef(null);
   const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
   const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
   const highlightStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
+  const [firstVisible, setFirstVisible] = useState(false);
+  const visible = useIsVisible(containerRef);
+
+  useEffect(() => {
+    // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
+    // rendered if `firstVisible` is true. This accounts for cases in which the map is initially rendered hidden, and
+    // is improperly resized when it first becomes visible.
+    setFirstVisible((fv) => fv || visible);
+  }, [visible]);
 
   const getFillColor = (source: MapSource, type: 'highlight' | 'select' | 'hover' | 'default') => {
     switch (type) {
@@ -306,44 +317,46 @@ export default function Map(props: MapProps): JSX.Element {
   });
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }}>
+    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }} ref={containerRef}>
       {bannerMessage && <MapBanner message={bannerMessage} />}
-      <ReactMapGL
-        key={mapId}
-        mapboxAccessToken={token}
-        mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true'
-        initialViewState={{
-          bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
-          fitBoundsOptions: hasEntities ? { padding: 20 } : undefined,
-        }}
-        interactiveLayerIds={layerIds}
-        onError={onMapError}
-        onClick={onMapClick}
-        style={style}
-        attributionControl={false}
-        onLoad={onLoad}
-        ref={mapRef}
-        onRender={(event) => event.target.resize()}
-      >
-        {mapSources}
-        <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
-        <AttributionControl compact={true} style={{ marginRight: '5px' }} />
-        {popupInfo && popupRenderer && (
-          <Popup
-            anchor='top'
-            longitude={Number(popupInfo.lng)}
-            latitude={Number(popupInfo.lat)}
-            onClose={() => {
-              setPopupInfo(null);
-              updateFeatureState(selectStateId, 'select', { sourceId: popupInfo.sourceId });
-            }}
-            style={popupRenderer.style}
-            className={popupRenderer.className}
-          >
-            {popupRenderer.render(popupInfo.properties)}
-          </Popup>
-        )}
-      </ReactMapGL>
+      {firstVisible && (
+        <ReactMapGL
+          key={mapId}
+          mapboxAccessToken={token}
+          mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true'
+          initialViewState={{
+            bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
+            fitBoundsOptions: hasEntities ? { padding: 20 } : undefined,
+          }}
+          interactiveLayerIds={layerIds}
+          onError={onMapError}
+          onClick={onMapClick}
+          style={style}
+          attributionControl={false}
+          onLoad={onLoad}
+          ref={mapRef}
+          onRender={(event) => event.target.resize()}
+        >
+          {mapSources}
+          <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
+          <AttributionControl compact={true} style={{ marginRight: '5px' }} />
+          {popupInfo && popupRenderer && (
+            <Popup
+              anchor='top'
+              longitude={Number(popupInfo.lng)}
+              latitude={Number(popupInfo.lat)}
+              onClose={() => {
+                setPopupInfo(null);
+                updateFeatureState(selectStateId, 'select', { sourceId: popupInfo.sourceId });
+              }}
+              style={popupRenderer.style}
+              className={popupRenderer.className}
+            >
+              {popupRenderer.render(popupInfo.properties)}
+            </Popup>
+          )}
+        </ReactMapGL>
+      )}
     </Box>
   );
 }
