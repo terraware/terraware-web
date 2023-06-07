@@ -58,12 +58,7 @@ export default function Observations(): JSX.Element {
   }, [snackbar, observationsResultsError, speciesError, plantingSitesError]);
 
   // show spinner while initializing data
-  if (
-    observationsResults === undefined &&
-    observationsResultsError === undefined &&
-    speciesError === undefined &&
-    plantingSitesError === undefined
-  ) {
+  if (observationsResults === undefined && !(observationsResultsError || speciesError || plantingSitesError)) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 

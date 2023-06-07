@@ -105,9 +105,11 @@ const subzonesReverseMap = (sites: PlantingSite[]): Record<number, Value> =>
 // reverse map of id to name, boundary (for planting site, zone, subzone), optionally just name for species
 const reverseMap = (ary: any[], type: string): Record<number, Value> =>
   ary.reduce((acc, curr) => {
-    const { id, name, boundary, timeZone } = curr;
+    const { id, name, fullName, boundary, timeZone } = curr;
     if (type === 'site') {
       acc[id] = { name, boundary, timeZone };
+    } else if (type === 'subzone') {
+      acc[id] = { name: fullName, boundary };
     } else {
       acc[id] = { name, boundary };
     }

@@ -165,6 +165,7 @@ COLLECTOR,Collector
 COLLECTORS,Collectors
 COMMON_NAME,Common Name
 COMPLETE,Complete
+COMPLETED,Completed
 COMPROMISED_SEEDS,Compromised Seeds
 CONNECT_FAILED,Connect failed
 CONNECTED,Connected
@@ -508,7 +509,8 @@ MONTH_10,October
 MONTH_11,November
 MONTH_12,December
 MORE_OPTIONS,More Options
-MORTALITY_RATE,Mortality Rate (%) *
+MORTALITY_RATE,Mortality Rate
+MORTALITY_RATE_PERCENT_REQUIRED,Mortality Rate (%) *
 MORTALITY_RATE_IN_FIELD,Mortality Rate in Field (%)
 MORTALITY_RATE_IN_FIELD_REQUIRED,Mortality Rate in Field (%) *
 MORTALITY_RATE_IN_NURSERY,Mortality Rate in Nursery (%)
@@ -642,6 +644,7 @@ OUT_PLANTING,Out-planting
 OUTPLANT,Outplant
 OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Outplants require batches with seedlings that are ""ready."""
 OVER_WORD_LIMIT,Over word limit
+OVERDUE,Overdue
 OWNER,Owner
 OZ,oz
 OZ_OUNCES,oz (ounces)
@@ -672,6 +675,7 @@ PLANT_DETAIL,Plant Detail
 PLANT_ID,Plant ID
 PLANT_ID_TOOLTIP,It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.
 PLANT_LABEL,Plant
+PLANTING_DENSITY,Planting Density
 PLANTING_SITE,Planting Site
 PLANTING_SITE_TYPE,Planting Site Type
 PLANTING_SITE_WITH_MAP_HELP,"If you are a Terraformation partner or accelerator participant, please [contact us] to create a site with a map."
@@ -1107,6 +1111,7 @@ UNITS_INITIALIZED_MESSAGE,Your Weight System was updated to {0}. You can edit th
 UNKNOWN,Unknown
 UNSPECIFIED,Unspecified
 UNSURE,Unsure
+UPCOMING,Upcoming
 UPDATE_STATUS_WARNING,You‘re about to update the status
 UPLOAD_PHOTO,Upload Photo...
 UPLOAD_PHOTO_DESCRIPTION,"Browse or drag and drop a file (JPG, PNG)."

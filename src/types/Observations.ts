@@ -1,5 +1,6 @@
 import { components } from 'src/api/types/generated-schema';
 import { MultiPolygon } from './Tracking';
+import strings from 'src/strings';
 
 // basic information on a single observation (excluding observation results)
 export type Observation = components['schemas']['ObservationPayload'];
@@ -52,4 +53,17 @@ export type ObservationSpeciesResultsPayload = components['schemas']['Observatio
 export type ObservationSpeciesResults = ObservationSpeciesResultsPayload & {
   speciesCommonName?: string;
   speciesScientificName: string;
+};
+
+export const getStatus = (state: ObservationState): string => {
+  switch (state) {
+    case 'Completed':
+      return strings.COMPLETED;
+    case 'InProgress':
+      return strings.IN_PROGRESS;
+    case 'Overdue':
+      return strings.OVERDUE;
+    default:
+      return strings.UPCOMING;
+  }
 };
