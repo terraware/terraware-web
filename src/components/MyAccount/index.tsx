@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, DropdownItem } from '@terraware/web-components';
 import { OrganizationUserService, OrganizationService, PreferencesService, UserService } from 'src/services';
@@ -105,12 +105,20 @@ const MyAccountContent = ({
     (userPreferences?.preferredWeightSystem as string) || 'metric'
   );
   const loadedStringsForLocale = useLocalization().activeLocale;
-  const columns: TableColumnType[] = [
-    { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
-    { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-    { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
-    { key: 'roleName', name: strings.ROLE, type: 'string' },
-  ];
+
+  const columns: TableColumnType[] = useMemo(
+    () =>
+      loadedStringsForLocale
+        ? [
+            { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
+            { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+            { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
+            { key: 'roleName', name: strings.ROLE, type: 'string' },
+          ]
+        : [],
+    [loadedStringsForLocale]
+  );
+
   const [localeSelected, setLocaleSelected] = useState(selectedLocale);
 
   useEffect(() => {

@@ -1,28 +1,35 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import Table from 'src/components/common/table';
-import React, { useEffect, useRef, useState } from 'react';
 import TfMain from 'src/components/common/TfMain';
 import ReportService from 'src/services/ReportService';
 import strings from 'src/strings';
 import { ListReport } from 'src/types/Report';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import ReportsCellRenderer from './TableCellRenderer';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 
 export default function ReportList(): JSX.Element {
   const contentRef = useRef(null);
   const [results, setResults] = useState<ListReport[]>([]);
   const { selectedOrganization } = useOrganization();
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
 
-  const columns: TableColumnType[] = [
-    { key: 'name', name: strings.REPORT, type: 'string' },
-    { key: 'status', name: strings.STATUS, type: 'string' },
-    { key: 'modifiedByName', name: strings.LAST_EDITED_BY, type: 'string' },
-    { key: 'submittedByName', name: strings.SUBMITTED_BY, type: 'string' },
-    { key: 'submittedTime', name: strings.DATE_SUBMITTED, type: 'string' },
-  ];
+  const columns: TableColumnType[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            { key: 'name', name: strings.REPORT, type: 'string' },
+            { key: 'status', name: strings.STATUS, type: 'string' },
+            { key: 'modifiedByName', name: strings.LAST_EDITED_BY, type: 'string' },
+            { key: 'submittedByName', name: strings.SUBMITTED_BY, type: 'string' },
+            { key: 'submittedTime', name: strings.DATE_SUBMITTED, type: 'string' },
+          ]
+        : [],
+    [activeLocale]
+  );
 
   useEffect(() => {
     const refreshSearch = async () => {

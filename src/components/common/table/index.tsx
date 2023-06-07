@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Table as WebComponentsTable, TableColumnType, TableRowType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { LocalizationProps, Props } from '@terraware/web-components/components/table';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization } from 'src/providers';
 import { PreferencesService } from 'src/services';
 import _ from 'lodash';
 
@@ -114,6 +114,18 @@ export default function OrderPreservedTable<T extends TableRowType>(
 ): JSX.Element {
   const { columns, ...tableProps } = props;
   const [tableColumns, setTableColumns] = useState<TableColumnType[]>(columns);
+
+  useEffect(() => {
+    const refreshedColumns: TableColumnType[] = tableColumns
+      .map((tableColumn: TableColumnType) =>
+        columns.find((sourceColumn: TableColumnType) => sourceColumn.key === tableColumn.key)
+      )
+      .filter((tableColumn?: TableColumnType) => !!tableColumn) as TableColumnType[];
+
+    if (!_.isEqual(tableColumns, refreshedColumns)) {
+      setTableColumns(refreshedColumns);
+    }
+  }, [columns, tableColumns]);
 
   return OrderPreserveableTable<T>({
     ...tableProps,
