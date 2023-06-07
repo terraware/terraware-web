@@ -9,6 +9,7 @@ import { OrganizationContext } from './contexts';
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
 import { defaultSelectedOrg } from './contexts';
 import { useUser } from './hooks';
+import { store } from 'src/redux/store';
 
 export type OrganizationProviderProps = {
   children?: React.ReactNode;
@@ -124,6 +125,11 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       updateUserPreferences({ lastVisitedOrg: selectedOrganization.id });
     }
   }, [selectedOrganization?.id, updateUserPreferences, userPreferences.lastVisitedOrg]);
+
+  useEffect(() => {
+    // reset redux store when org changes
+    store.dispatch({ type: 'RESET_APP' });
+  }, [selectedOrganization?.id]);
 
   if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
     history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);

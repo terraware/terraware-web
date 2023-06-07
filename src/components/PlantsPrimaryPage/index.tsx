@@ -17,12 +17,14 @@ export type PlantsPrimaryPageProps = {
   setPlantsSitePreferences: (preferences: Record<string, unknown>) => void;
   allowAllAsSiteSelection?: boolean; // whether to support 'All' as a planting site selection
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
-  onPlantingSites?: (plantingSites: PlantingSite[]) => void; // optional callback to pass planting sites list on fetch
+  // this is to allow redux based components to pass in already selected data
+  plantingSitesData?: PlantingSite[];
 };
 
-const allSitesOption = () => ({
+const allSitesOption = (organizationId: number): PlantingSite => ({
   name: strings.ALL,
   id: -1,
+  organizationId,
 });
 
 export default function PlantsPrimaryPage({
@@ -35,7 +37,7 @@ export default function PlantsPrimaryPage({
   setPlantsSitePreferences,
   allowAllAsSiteSelection,
   isEmptyState,
-  onPlantingSites,
+  plantingSitesData,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -54,22 +56,24 @@ export default function PlantsPrimaryPage({
 
   useEffect(() => {
     const populatePlantingSites = async () => {
-      const serverResponse = await TrackingService.listPlantingSites(selectedOrganization.id);
-      if (serverResponse.requestSucceeded) {
-        const plantingSitesList: PlantingSite[] =
-          allowAllAsSiteSelection && serverResponse.sites?.length
-            ? [allSitesOption(), ...serverResponse.sites]
-            : serverResponse.sites ?? [];
-        setPlantingSites(plantingSitesList);
-        if (onPlantingSites) {
-          onPlantingSites(plantingSitesList);
+      let plantingSitesList: PlantingSite[] | undefined = plantingSitesData;
+      if (plantingSitesList === undefined) {
+        const serverResponse = await TrackingService.listPlantingSites(selectedOrganization.id);
+        if (serverResponse.requestSucceeded) {
+          plantingSitesList = serverResponse.sites;
+        } else {
+          snackbar.toastError();
+          return;
         }
-      } else {
-        snackbar.toastError();
       }
+      plantingSitesList =
+        allowAllAsSiteSelection && plantingSitesList?.length
+          ? [allSitesOption(selectedOrganization.id), ...plantingSitesList]
+          : plantingSitesList ?? [];
+      setPlantingSites(plantingSitesList);
     };
     populatePlantingSites();
-  }, [selectedOrganization.id, snackbar, allowAllAsSiteSelection, onPlantingSites]);
+  }, [selectedOrganization.id, snackbar, allowAllAsSiteSelection, plantingSitesData]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {

@@ -219,6 +219,7 @@ export interface paths {
   "/api/v1/seedbank/accessions/{id}/photos/{photoFilename}": {
     /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
     get: operations["getPhoto"];
+    /** If there was already a photo with the specified filename, replaces it. */
     post: operations["uploadPhoto"];
   };
   "/api/v1/seedbank/clock": {
@@ -310,6 +311,34 @@ export interface paths {
   "/api/v1/tracking/mapbox/token": {
     get: operations["getMapboxToken"];
   };
+  "/api/v1/tracking/observations": {
+    get: operations["listObservations"];
+  };
+  "/api/v1/tracking/observations/results": {
+    get: operations["listObservationResults"];
+  };
+  "/api/v1/tracking/observations/{observationId}": {
+    get: operations["getObservation"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots": {
+    get: operations["listAssignedPlots"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}": {
+    post: operations["completePlotObservation"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/claim": {
+    /** A plot may only be claimed by one user at a time. */
+    post: operations["claimMonitoringPlot"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos": {
+    post: operations["uploadPlotPhoto"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/release": {
+    post: operations["releaseMonitoringPlot"];
+  };
+  "/api/v1/tracking/observations/{observationId}/results": {
+    get: operations["getObservationResults"];
+  };
   "/api/v1/tracking/sites": {
     get: operations["listPlantingSites"];
     post: operations["createPlantingSite"];
@@ -317,6 +346,12 @@ export interface paths {
   "/api/v1/tracking/sites/{id}": {
     get: operations["getPlantingSite"];
     put: operations["updatePlantingSite"];
+  };
+  "/api/v1/tracking/subzones/{id}": {
+    put: operations["updatePlantingSubzone"];
+  };
+  "/api/v1/tracking/subzones/{id}/species": {
+    get: operations["listPlantingSubzoneSpecies"];
   };
   "/api/v1/users/me": {
     get: operations["getMyself"];
@@ -525,6 +560,28 @@ export interface components {
       successStories?: string;
       sustainableDevelopmentGoals: components["schemas"]["GoalProgressPayloadV1"][];
     };
+    AssignedPlotPayload: {
+      boundary: components["schemas"]["Geometry"];
+      claimedByName?: string;
+      /** Format: int64 */
+      claimedByUserId?: number;
+      completedByName?: string;
+      /** Format: int64 */
+      completedByUserId?: number;
+      /** Format: date-time */
+      completedTime?: string;
+      /** @description True if this is the first observation to include the monitoring plot. */
+      isFirstObservation: boolean;
+      isPermanent: boolean;
+      /** Format: int64 */
+      observationId: number;
+      /** Format: int64 */
+      plantingSubzoneId: number;
+      plantingSubzoneName: string;
+      /** Format: int64 */
+      plotId: number;
+      plotName: string;
+    };
     AutomationPayload: {
       /** @description Human-readable description of this automation. */
       description?: string;
@@ -613,6 +670,24 @@ export interface components {
        * @example EPSG:4326
        */
       name: string;
+    };
+    CompletePlotObservationRequestPayload: {
+      conditions: (
+        | "AnimalDamage"
+        | "FastGrowth"
+        | "FavorableWeather"
+        | "Fungus"
+        | "Pests"
+        | "SeedProduction"
+        | "UnfavorableWeather"
+      )[];
+      notes?: string;
+      /**
+       * Format: date-time
+       * @description Date and time the observation was performed in the field.
+       */
+      observedTime: string;
+      plants: components["schemas"]["RecordedPlantPayload"][];
     };
     ConnectDeviceManagerRequestPayload: {
       /** Format: int64 */
@@ -877,6 +952,16 @@ export interface components {
       name: string;
       /** Format: int64 */
       organizationId: number;
+      /**
+       * Format: int32
+       * @description What month this site's planting season ends. 1=January.
+       */
+      plantingSeasonEndMonth?: number;
+      /**
+       * Format: int32
+       * @description What month this site's planting season starts. 1=January.
+       */
+      plantingSeasonStartMonth?: number;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -1148,6 +1233,26 @@ export interface components {
       latitude: number;
       longitude: number;
     };
+    /** @description GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
+    Geometry: {
+      type:
+        | "Point"
+        | "LineString"
+        | "Polygon"
+        | "MultiPoint"
+        | "MultiLineString"
+        | "MultiPolygon"
+        | "GeometryCollection";
+      coordinates: number[];
+      crs?: components["schemas"]["CRS"];
+    };
+    GeometryCollection: components["schemas"]["Geometry"] & {
+      geometries?: components["schemas"]["Geometry"][];
+      type?: "GeometryCollection";
+    } & {
+      geometries: unknown;
+      type: unknown;
+    };
     GetAccessionHistoryResponsePayload: {
       /** @description History of changes in descending time order (newest first.) */
       history: components["schemas"]["AccessionHistoryEntryPayload"][];
@@ -1232,6 +1337,14 @@ export interface components {
       delivery?: components["schemas"]["DeliveryPayload"];
       status: components["schemas"]["SuccessOrError"];
       withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
+    };
+    GetObservationResponsePayload: {
+      observation: components["schemas"]["ObservationPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetObservationResultsResponsePayload: {
+      observation: components["schemas"]["ObservationResultsPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationResponsePayload: {
       organization: components["schemas"]["OrganizationPayload"];
@@ -1543,17 +1656,26 @@ export interface components {
         | "Partnerships";
       progress?: string;
     };
+    LineString: components["schemas"]["Geometry"] & {
+      coordinates?: number[][];
+      type?: "LineString";
+    } & {
+      coordinates: unknown;
+      type: unknown;
+    };
     ListAllFieldValuesRequestPayload: {
-      /** Format: int64 */
-      facilityId?: number;
       fields: string[];
       /** Format: int64 */
-      organizationId?: number;
+      organizationId: number;
     };
     ListAllFieldValuesResponsePayload: {
       results: {
         [key: string]: components["schemas"]["AllFieldValuesPayload"];
       };
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListAssignedPlotsResponsePayload: {
+      plots: components["schemas"]["AssignedPlotPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListAutomationsResponsePayload: {
@@ -1588,6 +1710,19 @@ export interface components {
       results: { [key: string]: components["schemas"]["FieldValuesPayload"] };
       status: components["schemas"]["SuccessOrError"];
     };
+    ListObservationResultsResponsePayload: {
+      observations: components["schemas"]["ObservationResultsPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListObservationsResponsePayload: {
+      observations: components["schemas"]["ObservationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+      /**
+       * Format: int32
+       * @description Total number of monitoring plots that haven't been claimed yet across all current observations.
+       */
+      totalUnclaimedPlots: number;
+    };
     ListOrganizationRolesResponsePayload: {
       roles: components["schemas"]["OrganizationRolePayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -1611,6 +1746,10 @@ export interface components {
     };
     ListPlantingSitesResponsePayload: {
       sites: components["schemas"]["PlantingSitePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListPlantingSubzoneSpeciesResponsePayload: {
+      species: components["schemas"]["PlantingSubzoneSpeciesPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListReportFilesResponseElement: {
@@ -1684,10 +1823,26 @@ export interface components {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    MultiPolygon: {
-      coordinates: number[][][][];
-      crs?: components["schemas"]["CRS"];
-      type: "MultiPolygon";
+    MultiLineString: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][];
+      type?: "MultiLineString";
+    } & {
+      coordinates: unknown;
+      type: unknown;
+    };
+    MultiPoint: components["schemas"]["Geometry"] & {
+      coordinates?: number[][];
+      type?: "MultiPoint";
+    } & {
+      coordinates: unknown;
+      type: unknown;
+    };
+    MultiPolygon: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][][];
+      type?: "MultiPolygon";
+    } & {
+      coordinates: unknown;
+      type: unknown;
     };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1734,6 +1889,136 @@ export interface components {
     NurseryWithdrawalPhotoPayload: {
       /** Format: int64 */
       id: number;
+    };
+    ObservationMonitoringPlotPhotoPayload: {
+      /** Format: int64 */
+      fileId: number;
+    };
+    ObservationMonitoringPlotResultsPayload: {
+      boundary: components["schemas"]["Polygon"];
+      claimedByName?: string;
+      /** Format: int64 */
+      claimedByUserId?: number;
+      /** Format: date-time */
+      completedTime?: string;
+      isPermanent: boolean;
+      /** Format: int64 */
+      monitoringPlotId: number;
+      monitoringPlotName: string;
+      /** Format: int32 */
+      mortalityRate: number;
+      notes?: string;
+      photos: components["schemas"]["ObservationMonitoringPlotPhotoPayload"][];
+      /** Format: int32 */
+      plantingDensity: number;
+      species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+      status: "Outstanding" | "InProgress" | "Completed";
+      /**
+       * Format: int32
+       * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
+       */
+      totalPlants: number;
+      /**
+       * Format: int32
+       * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+       */
+      totalSpecies: number;
+    };
+    ObservationPayload: {
+      /**
+       * Format: date
+       * @description Date this observation is scheduled to end.
+       */
+      endDate: string;
+      /** Format: int64 */
+      id: number;
+      /**
+       * Format: int32
+       * @description Total number of monitoring plots that haven't been claimed yet.
+       */
+      numUnclaimedPlots: number;
+      /** Format: int64 */
+      plantingSiteId: number;
+      plantingSiteName: string;
+      /**
+       * Format: date
+       * @description Date this observation started.
+       */
+      startDate: string;
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
+    };
+    ObservationPlantingSubzoneResultsPayload: {
+      monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
+      /** Format: int64 */
+      plantingSubzoneId: number;
+    };
+    ObservationPlantingZoneResultsPayload: {
+      areaHa: number;
+      /** Format: date-time */
+      completedTime?: string;
+      /** Format: int32 */
+      mortalityRate: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the zone, based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as finished planting.
+       */
+      plantingDensity?: number;
+      plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
+      /** Format: int64 */
+      plantingZoneId: number;
+      species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+      /** Format: int32 */
+      totalPlants: number;
+      /**
+       * Format: int32
+       * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+       */
+      totalSpecies: number;
+    };
+    ObservationResultsPayload: {
+      /** Format: date-time */
+      completedTime?: string;
+      /** Format: int32 */
+      mortalityRate: number;
+      /** Format: int64 */
+      observationId: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as finished planting.
+       */
+      plantingDensity?: number;
+      /** Format: int64 */
+      plantingSiteId: number;
+      plantingZones: components["schemas"]["ObservationPlantingZoneResultsPayload"][];
+      /** Format: date */
+      startDate: string;
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
+      /**
+       * Format: int32
+       * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as finished planting.
+       */
+      totalPlants?: number;
+      /** Format: int32 */
+      totalSpecies: number;
+    };
+    ObservationSpeciesResultsPayload: {
+      certainty: "Known" | "Other" | "Unknown";
+      /** Format: int32 */
+      mortalityRate?: number;
+      /** Format: int64 */
+      speciesId?: number;
+      speciesName?: string;
+      /** Format: int32 */
+      totalDead: number;
+      /** Format: int32 */
+      totalExisting: number;
+      /** Format: int32 */
+      totalLive: number;
+      /**
+       * Format: int32
+       * @description Total number of live and existing plants of this species.
+       */
+      totalPlants: number;
     };
     /** @description Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
     OrNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1821,6 +2106,18 @@ export interface components {
       /** Format: int64 */
       id: number;
       name: string;
+      /** Format: int64 */
+      organizationId: number;
+      /**
+       * Format: int32
+       * @description What month this site's planting season ends. 1=January.
+       */
+      plantingSeasonEndMonth?: number;
+      /**
+       * Format: int32
+       * @description What month this site's planting season starts. 1=January.
+       */
+      plantingSeasonStartMonth?: number;
       plantingZones?: components["schemas"]["PlantingZonePayload"][];
       /**
        * @description Time zone name in IANA tz database format
@@ -1830,10 +2127,22 @@ export interface components {
     };
     PlantingSubzonePayload: {
       boundary: components["schemas"]["MultiPolygon"];
+      finishedPlanting: boolean;
+      /**
+       * Format: date-time
+       * @description When the planting subzone was marked as finished planting.
+       */
+      finishedTime?: string;
       fullName: string;
       /** Format: int64 */
       id: number;
       name: string;
+    };
+    PlantingSubzoneSpeciesPayload: {
+      commonName?: string;
+      /** Format: int64 */
+      id: number;
+      scientificName: string;
     };
     PlantingZonePayload: {
       boundary: components["schemas"]["MultiPolygon"];
@@ -1841,6 +2150,25 @@ export interface components {
       id: number;
       name: string;
       plantingSubzones: components["schemas"]["PlantingSubzonePayload"][];
+      targetPlantingDensity: number;
+    };
+    Point: components["schemas"]["Geometry"] & {
+      /**
+       * @description A single position consisting of X and Y values in the coordinate system specified by the crs field.
+       * @example 120,-9.53
+       */
+      coordinates?: number[];
+      type?: "Point";
+    } & {
+      coordinates: unknown;
+      type: unknown;
+    };
+    Polygon: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][];
+      type?: "Polygon";
+    } & {
+      coordinates: unknown;
+      type: unknown;
     };
     PutNurseryV1: {
       /** Format: date */
@@ -1938,6 +2266,19 @@ export interface components {
       /** @description List of values that the server failed to record. Will not be included if all the values were recorded successfully. */
       failures?: components["schemas"]["TimeseriesValuesErrorPayload"][];
       status: components["schemas"]["SuccessOrError"];
+    };
+    RecordedPlantPayload: {
+      certainty: "Known" | "Other" | "Unknown";
+      /** @description GPS coordinates where plant was observed. */
+      gpsCoordinates: components["schemas"]["Point"];
+      /**
+       * Format: int64
+       * @description Required if certainty is Known. Ignored if certainty is Other or Unknown.
+       */
+      speciesId?: number;
+      /** @description If certainty is Other, the optional user-supplied name of the species. Ignored if certainty is Known or Unknown. */
+      speciesName?: string;
+      status: "Live" | "Dead" | "Existing";
     };
     ResolveUploadRequestPayload: {
       /** @description If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
@@ -2468,10 +2809,23 @@ export interface components {
       description?: string;
       name: string;
       /**
+       * Format: int32
+       * @description What month this site's planting season ends. 1=January.
+       */
+      plantingSeasonEndMonth?: number;
+      /**
+       * Format: int32
+       * @description What month this site's planting season starts. 1=January.
+       */
+      plantingSeasonStartMonth?: number;
+      /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
        */
       timeZone?: string;
+    };
+    UpdatePlantingSubzoneRequestPayload: {
+      finishedPlanting: boolean;
     };
     UpdateReportPhotoRequestPayload: {
       caption?: string;
@@ -2562,6 +2916,19 @@ export interface components {
        * @description ID of uploaded file. This may be used to poll for the file's status.
        */
       id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    UploadPlotPhotoRequestPayload: {
+      gpsCoordinates: components["schemas"]["Point"];
+      position:
+        | "SouthwestCorner"
+        | "SoutheastCorner"
+        | "NortheastCorner"
+        | "NorthwestCorner";
+    };
+    UploadPlotPhotoResponsePayload: {
+      /** Format: int64 */
+      fileId: number;
       status: components["schemas"]["SuccessOrError"];
     };
     /** @description List of conditions that might cause the user to want to cancel the upload but that can be automatically resolved if desired. */
@@ -4218,6 +4585,7 @@ export interface operations {
       };
     };
   };
+  /** If there was already a photo with the specified filename, replaces it. */
   uploadPhoto: {
     parameters: {
       path: {
@@ -4234,12 +4602,6 @@ export interface operations {
       };
       /** The specified accession does not exist. */
       404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-      /** The requested photo already exists on the accession. */
-      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
@@ -4900,6 +5262,182 @@ export interface operations {
       };
     };
   };
+  listObservations: {
+    parameters: {
+      query: {
+        /** Limit results to observations of planting sites in a specific organization. Ignored if plantingSiteId is specified. */
+        organizationId?: string;
+        /** Limit results to observations of a specific planting site. Required if organizationId is not specified. */
+        plantingSiteId?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListObservationsResponsePayload"];
+        };
+      };
+    };
+  };
+  listObservationResults: {
+    parameters: {
+      query: {
+        organizationId?: number;
+        plantingSiteId?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListObservationResultsResponsePayload"];
+        };
+      };
+    };
+  };
+  getObservation: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetObservationResponsePayload"];
+        };
+      };
+    };
+  };
+  listAssignedPlots: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAssignedPlotsResponsePayload"];
+        };
+      };
+    };
+  };
+  completePlotObservation: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The observation of the plot was already completed. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CompletePlotObservationRequestPayload"];
+      };
+    };
+  };
+  /** A plot may only be claimed by one user at a time. */
+  claimMonitoringPlot: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The plot is already claimed by someone else. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  uploadPlotPhoto: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadPlotPhotoResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+          payload: components["schemas"]["UploadPlotPhotoRequestPayload"];
+        };
+      };
+    };
+  };
+  releaseMonitoringPlot: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** You don't have a claim on the plot. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  getObservationResults: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetObservationResultsResponsePayload"];
+        };
+      };
+    };
+  };
   listPlantingSites: {
     parameters: {
       query: {
@@ -4964,6 +5502,41 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdatePlantingSiteRequestPayload"];
+      };
+    };
+  };
+  updatePlantingSubzone: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdatePlantingSubzoneRequestPayload"];
+      };
+    };
+  };
+  listPlantingSubzoneSpecies: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListPlantingSubzoneSpeciesResponsePayload"];
+        };
       };
     };
   };

@@ -1,58 +1,61 @@
-import { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
-import { APP_PATHS } from 'src/constants';
-import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
-import Card from 'src/components/common/Card';
-import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import { useEffect, useState } from 'react';
+import { CircularProgress } from '@mui/material';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useOrganization } from 'src/providers/hooks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
+import {
+  selectObservationsResultsError,
+  selectObservationsResults,
+} from 'src/redux/features/observations/observationsSelectors';
+import { selectSpeciesError, selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { selectPlantingSitesError, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import ObservationsHome from './ObservationsHome';
 
-export default function PlantsDashboard(): JSX.Element {
-  const history = useHistory();
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
-  const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
-  const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
-  const hasObservations = false;
+/**
+ * This page will route to the correct component based on url params
+ * eg. /observations or /observations/<planting-site-id> goes to <ObservationsHome />
+ *     /observations/<planting-site-id>/<observation-id> will go to drilled down components (TODO)
+ * Having this wrapper component allows us to pre-request data for all the views without being redundant.
+ */
+export default function Observations(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
+  const [dispatched, setDispatched] = useState<boolean>(false);
+  const snackbar = useSnackbar();
+  const dispatch = useAppDispatch();
+  // listen for error
+  const observationsResultsError = useAppSelector(selectObservationsResultsError);
+  const speciesError = useAppSelector(selectSpeciesError);
+  const plantingSitesError = useAppSelector(selectPlantingSitesError);
+  // listen for data
+  const observationsResults = useAppSelector(selectObservationsResults);
+  const species = useAppSelector(selectSpecies);
+  const plantingSites = useAppSelector(selectPlantingSites);
 
-  const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
+  useEffect(() => {
+    dispatch(requestSpecies(selectedOrganization.id));
+    dispatch(requestPlantingSites(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
 
-  const onPreferences = useCallback(
-    (preferences: Record<string, unknown>) => setPlantsSitePreferences(preferences),
-    [setPlantsSitePreferences]
-  );
+  useEffect(() => {
+    if (species !== undefined && plantingSites !== undefined && !dispatched) {
+      setDispatched(true);
+      dispatch(requestObservationsResults(selectedOrganization.id));
+    }
+  }, [dispatch, selectedOrganization.id, species, plantingSites, dispatched]);
 
-  const onPlantingSites = useCallback(
-    (sites: PlantingSite[]) => {
-      if (!sites.length) {
-        history.push(APP_PATHS.HOME);
-      }
-      setPlantingSites(sites);
-    },
-    [setPlantingSites, history]
-  );
+  useEffect(() => {
+    if (observationsResultsError || speciesError || plantingSitesError) {
+      snackbar.toastError();
+    }
+  }, [snackbar, observationsResultsError, speciesError, plantingSitesError]);
 
-  return (
-    <PlantsPrimaryPage
-      title={strings.OBSERVATIONS}
-      onSelect={onSelect}
-      pagePath={APP_PATHS.PLANTING_SITE_OBSERVATIONS}
-      lastVisitedPreferenceName='plants.observations.lastVisitedPlantingSite'
-      plantsSitePreferences={plantsSitePreferences}
-      setPlantsSitePreferences={onPreferences}
-      allowAllAsSiteSelection={true}
-      onPlantingSites={onPlantingSites}
-      isEmptyState={!plantingSites?.length || !hasObservations}
-    >
-      {hasObservations ? (
-        <div>placeholder for selected planting site {selectedPlantingSite?.id}</div>
-      ) : (
-        <Card style={{ margin: 'auto' }}>
-          <EmptyStateContent
-            title={strings.OBSERVATIONS_EMPTY_STATE_TITLE}
-            subtitle={[strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]}
-          />
-        </Card>
-      )}
-    </PlantsPrimaryPage>
-  );
+  // show spinner while initializing data
+  if (observationsResults === undefined && !(observationsResultsError || speciesError || plantingSitesError)) {
+    return <CircularProgress sx={{ margin: 'auto' }} />;
+  }
+
+  return <ObservationsHome />;
 }
