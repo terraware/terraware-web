@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
@@ -11,7 +11,6 @@ import Search from './Search';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { SearchSortOrder } from 'src/types/Search';
-import { useLocalization } from 'src/providers';
 
 interface InventoryTableProps {
   results: SearchResponseElement[];
@@ -23,48 +22,41 @@ interface InventoryTableProps {
   isPresorted: boolean;
 }
 
+const columns = (): TableColumnType[] => [
+  {
+    key: 'species_scientificName',
+    name: strings.SPECIES,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
+  },
+  {
+    key: 'species_commonName',
+    name: strings.COMMON_NAME,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_COMMON_NAME,
+  },
+  { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
+  {
+    key: 'germinatingQuantity',
+    name: strings.GERMINATING,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+  },
+  {
+    key: 'notReadyQuantity',
+    name: strings.NOT_READY,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+  },
+  { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
+  { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
+];
+
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
-  const { activeLocale } = useLocalization();
   const { results, setTemporalSearchValue, temporalSearchValue, filters, setFilters, setSearchSortOrder, isPresorted } =
     props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
-
-  const columns: TableColumnType[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            {
-              key: 'species_scientificName',
-              name: strings.SPECIES,
-              type: 'string',
-              tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
-            },
-            {
-              key: 'species_commonName',
-              name: strings.COMMON_NAME,
-              type: 'string',
-              tooltipTitle: strings.TOOLTIP_COMMON_NAME,
-            },
-            { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
-            {
-              key: 'germinatingQuantity',
-              name: strings.GERMINATING,
-              type: 'string',
-              tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-            },
-            {
-              key: 'notReadyQuantity',
-              name: strings.NOT_READY,
-              type: 'string',
-              tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-            },
-            { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
-            { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
-          ]
-        : [],
-    [activeLocale]
-  );
 
   const withdrawInventory = () => {
     const speciesIds = selectedRows.filter((row) => row.species_id).map((row) => `speciesId=${row.species_id}`);

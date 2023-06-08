@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Table as WebComponentsTable, TableColumnType, TableRowType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { LocalizationProps, Props } from '@terraware/web-components/components/table';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { PreferencesService } from 'src/services';
 import _ from 'lodash';
 
@@ -109,23 +109,29 @@ export function OrderPreserveableTable<T extends TableRowType>(
  * where client does not need extra semantics to filter columns.
  * Species table is an example where this won't work, uses its own setColumns implementation.
  */
+export type OrderPreservedTableProps = {
+  id: string;
+  columns: () => TableColumnType[];
+};
 export default function OrderPreservedTable<T extends TableRowType>(
-  props: TableProps<T> & { id: string }
+  props: Omit<TableProps<T>, 'columns'> & OrderPreservedTableProps
 ): JSX.Element {
   const { columns, ...tableProps } = props;
-  const [tableColumns, setTableColumns] = useState<TableColumnType[]>(columns);
+  const { activeLocale } = useLocalization();
+  const [tableColumns, setTableColumns] = useState<TableColumnType[]>(columns());
 
   useEffect(() => {
+    const sourceColumns = activeLocale ? columns() : [];
     const refreshedColumns: TableColumnType[] = tableColumns
       .map((tableColumn: TableColumnType) =>
-        columns.find((sourceColumn: TableColumnType) => sourceColumn.key === tableColumn.key)
+        sourceColumns.find((sourceColumn: TableColumnType) => sourceColumn.key === tableColumn.key)
       )
       .filter((tableColumn?: TableColumnType) => !!tableColumn) as TableColumnType[];
 
     if (!_.isEqual(tableColumns, refreshedColumns)) {
       setTableColumns(refreshedColumns);
     }
-  }, [columns, tableColumns]);
+  }, [activeLocale, columns, tableColumns]);
 
   return OrderPreserveableTable<T>({
     ...tableProps,

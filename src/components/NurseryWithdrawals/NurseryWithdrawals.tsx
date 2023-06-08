@@ -35,6 +35,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+const columns = (): TableColumnType[] => [
+  { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
+  { key: 'purpose', name: strings.PURPOSE, type: 'string' },
+  { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
+  { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
+  { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
+  { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
+  { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
+  { key: 'hasReassignments', name: '', type: 'string' },
+];
+
 export default function NurseryWithdrawals(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
@@ -59,23 +70,6 @@ export default function NurseryWithdrawals(): JSX.Element {
     field: 'withdrawnDate',
     direction: 'Descending',
   } as SearchSortOrder);
-
-  const columns: TableColumnType[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
-            { key: 'purpose', name: strings.PURPOSE, type: 'string' },
-            { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
-            { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
-            { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
-            { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
-            { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
-            { key: 'hasReassignments', name: '', type: 'string' },
-          ]
-        : [],
-    [activeLocale]
-  );
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
