@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, CircularProgress, Theme, useTheme } from '@mui/material';
-import hexRgb from 'hex-rgb';
 import useSnackbar from 'src/utils/useSnackbar';
 import GenericMap from './GenericMap';
 import {
@@ -16,6 +15,7 @@ import { MapService } from 'src/services';
 import _ from 'lodash';
 import { MapLayer } from 'src/components/common/MapLayerSelect';
 import { makeStyles } from '@mui/styles';
+import { getRgbaFromHex } from 'src/utils/color';
 
 const useStyles = makeStyles((theme: Theme) => ({
   bottomLeftControl: {
@@ -70,12 +70,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   const getRenderAttributes = useCallback(
     (objectType: MapObject) => {
-      const getRgbaFromHex = (hex: string, opacity: number) => {
-        const rgba = hexRgb(hex, { alpha: opacity, format: 'object' });
-        const { red, green, blue, alpha } = rgba;
-        return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-      };
-
       if (objectType === 'site') {
         return {
           fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),

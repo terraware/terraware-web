@@ -8,6 +8,7 @@ import { MapService } from 'src/services';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import strings from 'src/strings';
 import MapDateSelect from 'src/components/common/MapDateSelect';
+import { getRgbaFromHex } from 'src/utils/color';
 
 type ObservationMapViewProps = {
   observationsResults?: ObservationResults[];
@@ -59,10 +60,38 @@ export default function ObservationMapView({ observationsResults }: ObservationM
     'Monitoring Plots': strings.MONITORING_PLOTS,
   };
 
+  const legends = [
+    {
+      title: strings.BOUNDARIES,
+      items: [
+        {
+          label: strings.PLANTING_SITE,
+          borderColor: theme.palette.TwClrBaseGreen300 as string,
+          fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
+        },
+        {
+          label: strings.ZONES,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+        },
+        {
+          label: strings.PLOTS_PERMANENT,
+          borderColor: theme.palette.TwClrBasePink300 as string,
+          fillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.2),
+        },
+        {
+          label: strings.PLOTS_TEMPORARY,
+          borderColor: theme.palette.TwClrBaseYellow300 as string,
+          fillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.2),
+        },
+      ],
+    },
+  ];
+
   return (
     <Box display='flex' flexDirection='column'>
       <Box marginBottom={theme.spacing(2)}>
-        <MapLegend legends={[]} />
+        <MapLegend legends={legends} />
       </Box>
       <Box display='flex' sx={{ flexGrow: 1 }}>
         {mapData.site && (
