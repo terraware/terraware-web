@@ -44,7 +44,7 @@ export type MapProps = {
   entityOptions?: MapEntityOptions;
 };
 
-export default function Map(props: MapProps): JSX.Element | null {
+export default function Map(props: MapProps): JSX.Element {
   const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, entityOptions } = props;
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
