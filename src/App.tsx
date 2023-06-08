@@ -264,8 +264,6 @@ function AppContent() {
 
   const selectedOrgHasPlantingSites = (): boolean => plantingSites.length > 0;
 
-  const selectedOrgHasObservations = (): boolean => false;
-
   const getSeedBanksView = (): JSX.Element => {
     if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasSeedBanks()) {
       return <SeedBanks organization={selectedOrganization} />;
@@ -290,7 +288,7 @@ function AppContent() {
       (location.pathname.startsWith(APP_PATHS.INVENTORY) && (!selectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||
       (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
       (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
-      (location.pathname.startsWith(APP_PATHS.OBSERVATIONS) && !selectedOrgHasObservations()) ||
+      location.pathname.startsWith(APP_PATHS.OBSERVATIONS) ||
       (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites())
     ) {
       return true;
@@ -507,13 +505,7 @@ function AppContent() {
             )}
 
             {trackingV2 && (
-              <Route exact path={APP_PATHS.OBSERVATIONS}>
-                <Observations />
-              </Route>
-            )}
-
-            {trackingV2 && (
-              <Route exact path={APP_PATHS.PLANTING_SITE_OBSERVATIONS}>
+              <Route path={APP_PATHS.OBSERVATIONS}>
                 <Observations />
               </Route>
             )}

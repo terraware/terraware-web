@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
+import { APP_PATHS } from 'src/constants';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization } from 'src/providers/hooks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -13,6 +15,9 @@ import {
 import { selectSpeciesError, selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSitesError, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import ObservationsHome from './ObservationsHome';
+import ObservationDetails from './details';
+import ObservationPlantingZoneDetails from './zone';
+import ObservationMonitoringPlotDetails from './plot';
 
 /**
  * This page will route to the correct component based on url params
@@ -57,5 +62,23 @@ export default function Observations(): JSX.Element {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
-  return <ObservationsHome />;
+  return (
+    <Switch>
+      <Route exact path={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS}>
+        <ObservationMonitoringPlotDetails />
+      </Route>
+      <Route exact path={APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS}>
+        <ObservationPlantingZoneDetails />
+      </Route>
+      <Route exact path={APP_PATHS.OBSERVATION_DETAILS}>
+        <ObservationDetails />
+      </Route>
+      <Route exact path={APP_PATHS.PLANTING_SITE_OBSERVATIONS}>
+        <ObservationsHome />
+      </Route>
+      <Route path={'*'}>
+        <ObservationsHome />
+      </Route>
+    </Switch>
+  );
 }
