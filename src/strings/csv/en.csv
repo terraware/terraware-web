@@ -510,11 +510,11 @@ MONTH_11,November
 MONTH_12,December
 MORE_OPTIONS,More Options
 MORTALITY_RATE,Mortality Rate
-MORTALITY_RATE_PERCENT_REQUIRED,Mortality Rate (%) *
 MORTALITY_RATE_IN_FIELD,Mortality Rate in Field (%)
 MORTALITY_RATE_IN_FIELD_REQUIRED,Mortality Rate in Field (%) *
 MORTALITY_RATE_IN_NURSERY,Mortality Rate in Nursery (%)
 MORTALITY_RATE_IN_NURSERY_REQUIRED,Mortality Rate in Nursery (%) *
+MORTALITY_RATE_PERCENT_REQUIRED,Mortality Rate (%) *
 MOSS,Moss
 MOST_RECENT_PERCENTAGE_VIABILITY,Most Recent % Viability
 MOVE,Move
