@@ -16,7 +16,6 @@ import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import hexRgb from 'hex-rgb';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
@@ -25,6 +24,7 @@ import Icon from './common/icon/Icon';
 import useEnvironment from 'src/utils/useEnvironment';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
+import { getRgbaFromHex } from 'src/utils/color';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   userMenuOpened: {
     '& .blurred': {
       backdropFilter: 'blur(8px)',
-      background: hexRgb(`${theme.palette.TwClrBgSecondary}`, { alpha: 0.8, format: 'css' }),
+      background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
       height: '100%',
       alignItems: 'center',
       position: 'fixed',

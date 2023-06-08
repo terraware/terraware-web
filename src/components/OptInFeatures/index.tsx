@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, LinearProgress, Switch, Stack, Grid, useTheme } from '@mui/material';
-import hexRgb from 'hex-rgb';
 import { PreferencesService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { Feature, OPT_IN_FEATURES } from 'src/features';
 import TfMain from 'src/components/common/TfMain';
+import { getRgbaFromHex } from 'src/utils/color';
 
 type OptInFeaturesProps = {
   refresh?: () => void;
@@ -126,7 +126,7 @@ export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Elem
                 border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
                 padding: '10px',
                 borderRadius: '5px',
-                backgroundColor: hexRgb(`${theme.palette.TwClrBg}`, { alpha: 0.8, format: 'css' }),
+                backgroundColor: getRgbaFromHex(theme.palette.TwClrBg as string, 0.8),
                 marginBottom: '10px',
               }}
               key={i}

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Box, Theme, Typography, useTheme } from '@mui/material';
-import hexRgb from 'hex-rgb';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
 import { makeStyles } from '@mui/styles';
+import { getRgbaFromHex } from 'src/utils/color';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -48,7 +48,7 @@ export default function ListMapSelector({ defaultView, view, onView }: ListMapSe
         sx={{
           background: isSelected ? theme.palette.TwClrBaseWhite : 'transparent',
           boxShadow: isSelected
-            ? `0.0px 2.0px 4.0px 0px ${hexRgb(`${theme.palette.TwClrBaseGray800}`, { alpha: 0.2, format: 'css' })}`
+            ? `0.0px 2.0px 4.0px 0px ${getRgbaFromHex(theme.palette.TwClrBaseGray800 as string, 0.2)}`
             : 'none',
           cursor: 'pointer',
         }}
