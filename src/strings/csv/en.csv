@@ -111,6 +111,7 @@ BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,Please select at least one month.
 BOOLEAN_FALSE,false
 BOOLEAN_TRUE,true
 BOTH_WITHDRAWS_DESCRIPTION,"You have withdrawn seeds by both count and weight. As a result, the app has calculated the amount of seeds withdrawn for you by weight."
+BOUNDARIES,Boundaries
 BOUNDARIES_AND_ZONES,Boundaries and Zones
 BUDGET_DOCUMENT_XLS,Budget Document (.XLS)
 BUDGET_NARRATIVE_SUMMARY,Budget Narrative Summary
@@ -685,6 +686,8 @@ PLANTING_ZONES,Planting Zones
 PLANTS,Plants
 PLANTS_CARD_DESCRIPTION,They’ve taken root! View all your plants in one place.
 PLEASE_TRY_AGAIN,Please try again.
+PLOTS_PERMANENT,Permanent Plots
+PLOTS_TEMPORARY,Temporary Plots
 POUNDS,Pounds
 PREEXISTING_SPECIES,This species already exists
 PREFERRED_WEIGHT_SYSTEM,Preferred Weight System

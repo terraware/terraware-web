@@ -2,6 +2,11 @@ import { paths } from 'src/api/types/generated-schema';
 import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
 import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
 import HttpService, { Response } from './HttpService';
+import {
+  ObservationPlantingSubzoneResults,
+  ObservationPlantingZoneResults,
+  ObservationResults,
+} from 'src/types/Observations';
 
 /**
  * Map related service
@@ -223,12 +228,92 @@ const getMapDataFromPlantingSite = (plantingSite: PlantingSite): MapData => {
 };
 
 /**
+ * Extract Planting Site, Zones, Subzones, and Plots from an ObservationResult
+ */
+const getMapDataFromObservation = (observation: ObservationResults): MapData => {
+  const plantingSiteEntities = [
+    {
+      id: observation.plantingSiteId,
+      properties: {
+        id: observation.plantingSiteId,
+        name: observation.plantingSiteName,
+        type: 'site',
+      },
+      boundary: getPolygons(observation.boundary),
+    },
+  ];
+
+  const zoneEntities = observation.plantingZones.map((zone: ObservationPlantingZoneResults) => ({
+    id: zone.plantingZoneId,
+    properties: {
+      id: zone.plantingZoneId,
+      name: zone.plantingZoneName,
+      type: 'zone',
+    },
+    boundary: getPolygons(zone.boundary),
+  }));
+
+  const subzoneEntities = observation.plantingZones.flatMap((zone: ObservationPlantingZoneResults) =>
+    zone.plantingSubzones.map((sz: ObservationPlantingSubzoneResults) => ({
+      id: sz.plantingSubzoneId,
+      properties: {
+        id: sz.plantingSubzoneId,
+        name: sz.plantingSubzoneName,
+        type: 'subzone',
+      },
+      boundary: getPolygons(sz.boundary),
+    }))
+  );
+
+  const permanentPlotEntities = observation.plantingZones.flatMap((zone: ObservationPlantingZoneResults) =>
+    zone.plantingSubzones.flatMap((sz: ObservationPlantingSubzoneResults) =>
+      sz.monitoringPlots
+        .filter((plot) => plot.isPermanent)
+        .map((plot) => ({
+          id: plot.monitoringPlotId,
+          properties: {
+            id: plot.monitoringPlotId,
+            name: plot.monitoringPlotName,
+            type: 'permanentPlot',
+          },
+          boundary: [plot.boundary.coordinates],
+        }))
+    )
+  );
+
+  const temporaryPlotEntities = observation.plantingZones.flatMap((zone: ObservationPlantingZoneResults) =>
+    zone.plantingSubzones.flatMap((sz: ObservationPlantingSubzoneResults) =>
+      sz.monitoringPlots
+        .filter((plot) => !plot.isPermanent)
+        .map((plot) => ({
+          id: plot.monitoringPlotId,
+          properties: {
+            id: plot.monitoringPlotId,
+            name: plot.monitoringPlotName,
+            type: 'permanentPlot',
+          },
+          boundary: [plot.boundary.coordinates],
+        }))
+    )
+  );
+
+  return {
+    site: { id: 'sites', entities: plantingSiteEntities },
+    zone: { id: 'zones', entities: zoneEntities },
+    subzone: { id: 'subzones', entities: subzoneEntities },
+    permanentPlot: { id: 'permanentPlots', entities: permanentPlotEntities },
+    temporaryPlot: { id: 'temporaryPlots', entities: temporaryPlotEntities },
+  };
+};
+
+/**
  * Exported functions
  */
 const MapService = {
   getMapboxToken,
   getBoundingBox,
   getMapDataFromPlantingSite,
+  getMapDataFromObservation,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,
   extractPlantingSite,
