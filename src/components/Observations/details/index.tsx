@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -12,7 +12,7 @@ import { useAppSelector } from 'src/redux/store';
 import { searchObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
-import Search from 'src/components/Observations/search';
+import Search, { SearchInputProps } from 'src/components/Observations/search';
 import DetailsPage from 'src/components/Observations/common/DetailsPage';
 import ObservationDetailsRenderer from './ObservationDetailsRenderer';
 
@@ -25,7 +25,9 @@ const columns = (): TableColumnType[] => [
   { key: 'mortalityRate', name: strings.MORTALITY_RATE, type: 'number' },
 ];
 
-export default function ObservationDetails(): JSX.Element {
+export type ObservationDetailsProps = SearchInputProps;
+
+export default function ObservationDetails({ search, onSearch }: ObservationDetailsProps): JSX.Element {
   const { plantingSiteId, observationId } = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -33,7 +35,6 @@ export default function ObservationDetails(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const defaultTimeZone = useDefaultTimeZone();
-  const [search, setSearch] = useState<string>('');
 
   const urlSite = APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString());
 
@@ -61,7 +62,7 @@ export default function ObservationDetails(): JSX.Element {
         <Box margin={1}>TODO: add info cards and charts here</Box>
         <Box>
           <Card style={isMobile ? { borderRadius: 0, marginLeft: -3, marginRight: -3 } : {}}>
-            <Search value={search} onSearch={(val) => setSearch(val)} />
+            <Search search={search} onSearch={onSearch} />
             <Box marginTop={2}>
               <Table
                 id='observation-details-table'

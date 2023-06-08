@@ -3,13 +3,16 @@ import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-export type SearchProps = {
-  value: string;
-  onSearch: (value: string) => void;
+export type SearchInputProps = {
+  search: string;
+  onSearch: (search: string) => void;
+};
+
+export type SearchProps = SearchInputProps & {
   // TODO: add filters
 };
 
-export default function Search({ value, onSearch }: SearchProps): JSX.Element {
+export default function Search({ search, onSearch }: SearchProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
   return (
@@ -23,7 +26,7 @@ export default function Search({ value, onSearch }: SearchProps): JSX.Element {
             id='search'
             type='text'
             onChange={(val) => onSearch(val as string)}
-            value={value}
+            value={search}
             iconRight='cancel'
             onClickRightIcon={() => onSearch('')}
           />
