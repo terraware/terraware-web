@@ -5,20 +5,20 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 
-type PageFrameProps = {
+type DetailsPageProps = {
   crumbs: Crumb[];
   title: string;
   children: React.ReactNode;
 };
 
-export default function PageFrame({ crumbs, title, children }: PageFrameProps): JSX.Element {
+export default function DetailsPage({ crumbs, title, children }: DetailsPageProps): JSX.Element {
   const contentRef = useRef(null);
   const theme = useTheme();
 
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <BreadCrumbs crumbs={crumbs} hierarchical={false} />
+        <BreadCrumbs crumbs={crumbs} hierarchical={true} />
         <Grid container>
           <Typography
             sx={{
