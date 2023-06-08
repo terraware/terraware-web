@@ -60,33 +60,41 @@ export default function ObservationMapView({ observationsResults }: ObservationM
     'Monitoring Plots': strings.MONITORING_PLOTS,
   };
 
-  const legends = [
-    {
-      title: strings.BOUNDARIES,
-      items: [
-        {
-          label: strings.PLANTING_SITE,
-          borderColor: theme.palette.TwClrBaseGreen300 as string,
-          fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
-        },
-        {
-          label: strings.ZONES,
-          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-          fillColor: 'transparent',
-        },
-        {
-          label: strings.PLOTS_PERMANENT,
-          borderColor: theme.palette.TwClrBasePink300 as string,
-          fillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.2),
-        },
-        {
-          label: strings.PLOTS_TEMPORARY,
-          borderColor: theme.palette.TwClrBaseYellow300 as string,
-          fillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.2),
-        },
-      ],
-    },
-  ];
+  const legends = useMemo(
+    () => [
+      {
+        title: strings.BOUNDARIES,
+        items: [
+          {
+            label: strings.PLANTING_SITE,
+            borderColor: theme.palette.TwClrBaseGreen300 as string,
+            fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
+          },
+          {
+            label: strings.ZONES,
+            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+            fillColor: 'transparent',
+          },
+          {
+            label: strings.PLOTS_PERMANENT,
+            borderColor: theme.palette.TwClrBasePink300 as string,
+            fillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.2),
+          },
+          {
+            label: strings.PLOTS_TEMPORARY,
+            borderColor: theme.palette.TwClrBaseYellow300 as string,
+            fillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.2),
+          },
+        ],
+      },
+    ],
+    [
+      theme.palette.TwClrBaseGreen300,
+      theme.palette.TwClrBaseLightGreen300,
+      theme.palette.TwClrBasePink300,
+      theme.palette.TwClrBaseYellow300,
+    ]
+  );
 
   return (
     <Box display='flex' flexDirection='column'>
