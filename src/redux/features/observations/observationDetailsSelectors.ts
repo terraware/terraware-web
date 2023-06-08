@@ -15,7 +15,7 @@ export const searchObservationDetails = createCachedSelector(
     selectMergedPlantingSiteObservations(state, params.plantingSiteId, defaultTimeZone),
   (state: RootState, params: SearchParams, defaultTimeZone: string) => params,
   (observations, params) =>
-    searchResultZones(params.search, selectObservationDetails(params.observationId, observations), true)
+    searchResultZones(params.search, selectObservationDetails(params.observationId, observations))
 )(
   (state: RootState, params: SearchParams, defaultTimeZone: string) =>
     `${params.plantingSiteId}_${params.observationId}_${defaultTimeZone}_${params.search}`

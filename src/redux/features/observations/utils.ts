@@ -16,26 +16,23 @@ import { regexMatch } from 'src/utils/search';
 
 // utils
 
-export const searchResultZones = (search: string, observation?: ObservationResults, trimResults?: boolean) => {
+export const searchResultZones = (search: string, observation?: ObservationResults) => {
   if (!search.trim() || !observation) {
     return observation;
   }
-  if (trimResults) {
-    return {
-      ...observation,
-      plantingZones: observation.plantingZones.filter((zone: ObservationPlantingZoneResults) =>
-        matchZone(zone, search)
-      ),
-    };
-  }
-  return observation.plantingZones.some((zone: ObservationPlantingZoneResults) => matchZone(zone, search));
+  return {
+    ...observation,
+    plantingZones: observation.plantingZones.filter((zone: ObservationPlantingZoneResults) => matchZone(zone, search)),
+  };
 };
 
 export const searchZones = (search: string, observations?: ObservationResults[]) => {
   if (!search.trim()) {
     return observations;
   }
-  return observations?.filter((observation: ObservationResults) => searchResultZones(search, observation));
+  return observations?.filter((observation: ObservationResults) =>
+    observation.plantingZones.some((zone: ObservationPlantingZoneResults) => matchZone(zone, search))
+  );
 };
 
 const matchZone = (zone: ObservationPlantingZoneResults, search: string) => regexMatch(zone.plantingZoneName, search);
