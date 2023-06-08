@@ -65,7 +65,7 @@ export default function ObservationDetails(): JSX.Element {
             <Box marginTop={2}>
               <Table
                 id='observation-details-table'
-                columns={columns()}
+                columns={columns}
                 rows={details?.plantingZones ?? []}
                 orderBy='plantingZoneName'
                 Renderer={ObservationDetailsRenderer(Number(plantingSiteId), Number(observationId))}
