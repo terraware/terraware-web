@@ -111,6 +111,7 @@ BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,"Por favor, seleccionar al menos u
 BOOLEAN_FALSE,falso
 BOOLEAN_TRUE,verdadero
 BOTH_WITHDRAWS_DESCRIPTION,"Ha retirado semillas tanto por recuento como por peso. Como resultado, la aplicación ha calculado para usted la cantidad de semillas retiradas por peso."
+BOUNDARIES,Límites
 BOUNDARIES_AND_ZONES,Límites y zonas
 BUDGET_DOCUMENT_XLS,Documento presupuestario (.XLS)
 BUDGET_NARRATIVE_SUMMARY,Resumen narrativo del presupuesto
@@ -685,6 +686,8 @@ PLANTING_ZONES,Zonas de plantación
 PLANTS,Plantas
 PLANTS_CARD_DESCRIPTION,¡Han echado raíces! Vea todas sus plantas en un solo lugar.
 PLEASE_TRY_AGAIN,"Por favor, inténtelo de nuevo."
+PLOTS_PERMANENT,Parcelas fijas
+PLOTS_TEMPORARY,Parcelas temporales
 POUNDS,Libras
 PREEXISTING_SPECIES,Esta especie ya existe
 PREFERRED_WEIGHT_SYSTEM,Sistema de peso preferido
