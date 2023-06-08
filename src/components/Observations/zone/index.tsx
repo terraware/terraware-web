@@ -10,8 +10,13 @@ export default function ObservationPlantingZoneDetails(): JSX.Element {
     plantingZoneId: string;
   }>();
 
-  const urlSite = () => APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSiteId?.toString());
-  const urlDetails = () => urlSite().replace(':observationId', observationId?.toString());
+  const urlSite = () => APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString());
+
+  const urlDetails = () =>
+    APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSiteId?.toString()).replace(
+      ':observationId',
+      observationId?.toString()
+    );
 
   return (
     <PageFrame

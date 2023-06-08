@@ -11,10 +11,18 @@ export default function ObservationMonitoringPlotDetails(): JSX.Element {
     monitoringPlotId: string;
   }>();
 
-  const urlSite = () =>
-    APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', plantingSiteId?.toString());
-  const urlDetails = () => urlSite().replace(':observationId', observationId?.toString());
-  const urlZone = () => urlDetails().replace(':plantingZoneId', plantingZoneId?.toString());
+  const urlSite = () => APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString());
+
+  const urlDetails = () =>
+    APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSiteId?.toString()).replace(
+      ':observationId',
+      observationId?.toString()
+    );
+
+  const urlZone = () =>
+    APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', plantingSiteId?.toString())
+      .replace(':observationId', observationId?.toString())
+      .replace(':plantingZoneId', plantingZoneId?.toString());
 
   return (
     <PageFrame
