@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Box, Grid, useTheme } from '@mui/material';
 import { TableColumnType, Textfield } from '@terraware/web-components';
 import { SearchResponseElement } from 'src/types/Search';
@@ -7,7 +7,6 @@ import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { SearchSortOrder } from 'src/types/Search';
-import { useLocalization } from 'src/providers';
 
 interface PlantingSitesTableProps {
   results: SearchResponseElement[];
@@ -16,33 +15,26 @@ interface PlantingSitesTableProps {
   setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
 }
 
+const columns = (): TableColumnType[] => [
+  {
+    key: 'name',
+    name: strings.NAME,
+    type: 'string',
+  },
+  {
+    key: 'description',
+    name: strings.DESCRIPTION,
+    type: 'string',
+  },
+  { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
+  { key: 'numPlantingSubzones', name: strings.SUBZONES, type: 'string' },
+  { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
+];
+
 export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.Element {
   const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder } = props;
   const [isPresorted, setIsPresorted] = useState<boolean>(false);
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
-
-  const columns: TableColumnType[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            {
-              key: 'name',
-              name: strings.NAME,
-              type: 'string',
-            },
-            {
-              key: 'description',
-              name: strings.DESCRIPTION,
-              type: 'string',
-            },
-            { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
-            { key: 'numPlantingSubzones', name: strings.SUBZONES, type: 'string' },
-            { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
-          ]
-        : [],
-    [activeLocale]
-  );
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
     const isTimeZone = orderBy === 'timeZone';

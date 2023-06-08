@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -18,7 +18,7 @@ import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import { useLocalization, useTimeZones } from 'src/providers';
+import { useTimeZones } from 'src/providers';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -53,9 +53,14 @@ type SeedBanksListProps = {
   organization: Organization;
 };
 
+const columns = (): TableColumnType[] => [
+  { key: 'name', name: strings.NAME, type: 'string' },
+  { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+  { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
+];
+
 export default function SeedBanksList({ organization }: SeedBanksListProps): JSX.Element {
   const timeZones = useTimeZones();
-  const { activeLocale } = useLocalization();
   const defaultTimeZone = useDefaultTimeZone().get();
   const classes = useStyles();
   const theme = useTheme();
@@ -65,18 +70,6 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   const [results, setResults] = useState<Facility[]>([]);
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
-
-  const columns: TableColumnType[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            { key: 'name', name: strings.NAME, type: 'string' },
-            { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-            { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
-          ]
-        : [],
-    [activeLocale]
-  );
 
   const goToNewSeedBank = () => {
     const newSeedBankLocation = {

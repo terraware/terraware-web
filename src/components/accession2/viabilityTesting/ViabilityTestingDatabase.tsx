@@ -15,14 +15,14 @@ interface ViabilityTestingDatabaseProps {
   onSelectViabilityTest: (test: ViabilityTest) => void;
 }
 
-const columns: TableColumnType[] = [
+const columns = (): TableColumnType[] => [
   { key: 'id', name: '', type: 'number' },
   { key: 'startDate', name: '', type: 'string' },
   { key: 'testType', name: '', type: 'string' },
   { key: 'viabilityPercent', name: '', type: 'number' },
 ];
 
-const mobileColumns: TableColumnType[] = [
+const mobileColumns = (): TableColumnType[] => [
   { key: 'id', name: '', type: 'number' },
   { key: 'viabilityPercent', name: '', type: 'number' },
 ];

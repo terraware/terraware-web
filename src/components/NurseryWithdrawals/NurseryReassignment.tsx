@@ -16,7 +16,7 @@ import PageForm from 'src/components/common/PageForm';
 import ReassignmentRenderer, { Reassignment, SubzoneInfo } from './ReassignmentRenderer';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import Table from 'src/components/common/table';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
@@ -30,13 +30,22 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+const columns = (): TableColumnType[] => [
+  { key: 'species', name: strings.SPECIES, type: 'string' },
+  { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
+  { key: 'zoneName', name: strings.ZONE, type: 'string' },
+  { key: 'originalSubzone', name: strings.ORIGINAL_SUBZONE, type: 'string' },
+  { key: 'newSubzone', name: strings.NEW_SUBZONE, type: 'string' },
+  { key: 'reassign', name: strings.REASSIGN, type: 'string' },
+  { key: 'notes', name: strings.NOTES, type: 'string' },
+];
+
 export default function NurseryReassignment(): JSX.Element {
   const classes = useStyles();
   const query = useQuery();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
   const { selectedOrganization } = useOrganization();
-  const { activeLocale } = useLocalization();
   const theme = useTheme();
   const history = useHistory();
   const { isMobile } = useDeviceInfo();
@@ -50,22 +59,6 @@ export default function NurseryReassignment(): JSX.Element {
   const [reassignments, setReassignments] = useState<{ [subzoneId: string]: Reassignment }>({});
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
   const contentRef = useRef(null);
-
-  const columns: TableColumnType[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            { key: 'species', name: strings.SPECIES, type: 'string' },
-            { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
-            { key: 'zoneName', name: strings.ZONE, type: 'string' },
-            { key: 'originalSubzone', name: strings.ORIGINAL_SUBZONE, type: 'string' },
-            { key: 'newSubzone', name: strings.NEW_SUBZONE, type: 'string' },
-            { key: 'reassign', name: strings.REASSIGN, type: 'string' },
-            { key: 'notes', name: strings.NOTES, type: 'string' },
-          ]
-        : [],
-    [activeLocale]
-  );
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 

@@ -25,6 +25,11 @@ const storageLocationWith = (name: string, id: number) => ({
   activeAccessions: 0,
 });
 
+const columns = (): TableColumnType[] => [
+  { key: 'name', name: strings.NAME, type: 'string' },
+  { key: 'activeAccessions', name: strings.ACTIVE_ACCESSIONS, type: 'number' },
+];
+
 export default function StorageLocations({ seedBankId, onEdit }: StorageLocationsProps): JSX.Element | null {
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
@@ -34,17 +39,6 @@ export default function StorageLocations({ seedBankId, onEdit }: StorageLocation
   const [storageLocations, setStorageLocations] = useState<PartialStorageLocation[]>([]);
   const [openStorageLocationModal, setOpenStorageLocationModal] = useState<boolean>(false);
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [numberFormatter, activeLocale]);
-
-  const columns: TableColumnType[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            { key: 'name', name: strings.NAME, type: 'string' },
-            { key: 'activeAccessions', name: strings.ACTIVE_ACCESSIONS, type: 'number' },
-          ]
-        : [],
-    [activeLocale]
-  );
 
   useEffect(() => {
     const fetchStorageLocations = async () => {

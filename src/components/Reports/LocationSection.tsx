@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
 import { DatePicker, TableColumnType, Textfield } from '@terraware/web-components';
@@ -8,7 +8,7 @@ import { makeStyles } from '@mui/styles';
 import { ReportNursery, ReportPlantingSite, ReportSeedBank } from 'src/types/Report';
 import PlantingSiteSpeciesCellRenderer from './PlantingSitesSpeciesCellRenderer';
 import Table from '../common/table';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import { SpeciesService } from 'src/services';
 import { Species } from 'src/types/Species';
 
@@ -30,13 +30,31 @@ export type LocationSectionProps = {
   validate?: boolean;
 };
 
+const columns = (): TableColumnType[] => [
+  {
+    key: 'name',
+    name: strings.SPECIES,
+    type: 'string',
+  },
+  {
+    key: 'growthForm',
+    name: strings.GROWTH_FORM,
+    type: 'string',
+  },
+  {
+    key: 'totalPlanted',
+    name: strings.TOTAL_PLANTED_REQUIRED,
+    type: 'string',
+  },
+  { key: 'mortalityRateInField', name: strings.MORTALITY_RATE_IN_FIELD_REQUIRED, type: 'string' },
+];
+
 export default function LocationSection(props: LocationSectionProps): JSX.Element {
   const { editable, location, onUpdateLocation, onUpdateWorkers, locationType, validate } = props;
   const { isMobile, isTablet } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
-  const { activeLocale } = useLocalization();
 
   const isSeedBank = locationType === 'seedBank';
   const isNursery = locationType === 'nursery';
@@ -95,31 +113,6 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       setPlantingSiteSpecies(psSpecies);
     }
   }, [allSpecies, isPlantingSite, location]);
-
-  const columns: TableColumnType[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            {
-              key: 'name',
-              name: strings.SPECIES,
-              type: 'string',
-            },
-            {
-              key: 'growthForm',
-              name: strings.GROWTH_FORM,
-              type: 'string',
-            },
-            {
-              key: 'totalPlanted',
-              name: strings.TOTAL_PLANTED_REQUIRED,
-              type: 'string',
-            },
-            { key: 'mortalityRateInField', name: strings.MORTALITY_RATE_IN_FIELD_REQUIRED, type: 'string' },
-          ]
-        : [],
-    [activeLocale]
-  );
 
   const onEditPlantingSiteReport = (species: PlantingSiteSpecies, fromColumn?: string, value?: any) => {
     if (fromColumn) {
