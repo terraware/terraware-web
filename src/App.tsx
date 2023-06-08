@@ -3,7 +3,6 @@ import { CssBaseline, Slide, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import hexRgb from 'hex-rgb';
 import useStateLocation from './utils/useStateLocation';
 import { DEFAULT_SEED_SEARCH_FILTERS, DEFAULT_SEED_SEARCH_SORT_ORDER } from 'src/services/SeedBankService';
 import { SearchSortOrder, SearchCriteria } from 'src/types/Search';
@@ -64,6 +63,7 @@ import { useAppVersion } from './hooks/useAppVersion';
 import { ReportList, ReportView, ReportEdit } from './components/Reports';
 import isEnabled from 'src/features';
 import Observations from 'src/components/Observations';
+import { getRgbaFromHex } from 'src/utils/color';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -74,8 +74,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.TwClrBaseGray025,
     backgroundImage:
       'linear-gradient(180deg,' +
-      `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0, format: 'css' })} 0%,` +
-      `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`,
+      `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
+      `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`,
     backgroundAttachment: 'fixed',
     minHeight: '100vh',
     '& .navbar': {
@@ -84,8 +84,8 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundImage: (props: StyleProps) =>
         props.isDesktop
           ? 'linear-gradient(180deg,' +
-            `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0, format: 'css' })} 0%,` +
-            `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`
+            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
+            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`
           : null,
       backgroundAttachment: 'fixed',
       paddingRight: (props: StyleProps) => (props.isDesktop ? '8px' : undefined),
@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   navBarOpened: {
     backdropFilter: 'blur(8px)',
-    background: hexRgb(`${theme.palette.TwClrBgSecondary}`, { alpha: 0.8, format: 'css' }),
+    background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
     height: '100%',
     alignItems: 'center',
     position: 'fixed',
