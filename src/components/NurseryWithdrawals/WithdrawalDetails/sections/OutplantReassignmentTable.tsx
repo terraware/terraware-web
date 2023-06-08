@@ -4,7 +4,7 @@ import { Delivery } from 'src/types/Tracking';
 import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import Table from 'src/components/common/table';
-import { useLocalization, useUser } from 'src/providers';
+import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type OutplantReassignmentTableProps = {
@@ -14,6 +14,15 @@ type OutplantReassignmentTableProps = {
   withdrawalNotes?: string;
 };
 
+const columns = (): TableColumnType[] => [
+  { key: 'species', name: strings.SPECIES, type: 'string' },
+  { key: 'from_subzone', name: strings.FROM_SUBZONE, type: 'string' },
+  { key: 'to_subzone', name: strings.TO_SUBZONE, type: 'string' },
+  { key: 'original_qty', name: strings.ORIGINAL_QTY, type: 'string' },
+  { key: 'final_qty', name: strings.FINAL_QTY, type: 'string' },
+  { key: 'notes', name: strings.NOTES, type: 'string' },
+];
+
 export default function OutplantReassignmentTable({
   delivery,
   species,
@@ -21,26 +30,10 @@ export default function OutplantReassignmentTable({
   withdrawalNotes,
 }: OutplantReassignmentTableProps): JSX.Element {
   const { user } = useUser();
-  const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
-
-  const columns: TableColumnType[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            { key: 'species', name: strings.SPECIES, type: 'string' },
-            { key: 'from_subzone', name: strings.FROM_SUBZONE, type: 'string' },
-            { key: 'to_subzone', name: strings.TO_SUBZONE, type: 'string' },
-            { key: 'original_qty', name: strings.ORIGINAL_QTY, type: 'string' },
-            { key: 'final_qty', name: strings.FINAL_QTY, type: 'string' },
-            { key: 'notes', name: strings.NOTES, type: 'string' },
-          ]
-        : [],
-    [activeLocale]
-  );
 
   useEffect(() => {
     // get list of distinct species
