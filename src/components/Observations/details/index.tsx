@@ -58,7 +58,7 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <AggregatedPlantsStats {...(details || {})} />
+          <AggregatedPlantsStats {...(details ?? {})} />
         </Grid>
         <Grid item xs={12}>
           <Card style={isMobile ? { borderRadius: 0, marginLeft: -3, marginRight: -3 } : {}}>
