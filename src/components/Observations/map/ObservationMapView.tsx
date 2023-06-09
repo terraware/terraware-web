@@ -97,7 +97,7 @@ export default function ObservationMapView({ observationsResults }: ObservationM
   );
 
   return (
-    <Box display='flex' flexDirection='column'>
+    <Box display='flex' flexDirection='column' flexGrow={1}>
       <Box marginBottom={theme.spacing(2)}>
         <MapLegend legends={legends} />
       </Box>
