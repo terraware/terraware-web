@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -13,6 +13,7 @@ import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import Search, { SearchInputProps } from 'src/components/Observations/search';
 import DetailsPage from 'src/components/Observations/common/DetailsPage';
+import AggregatedPlantsStats from 'src/components/Observations/common/AggregatedPlantsStats';
 import ObservationDetailsRenderer from './ObservationDetailsRenderer';
 
 const columns = (): TableColumnType[] => [
@@ -55,9 +56,11 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
 
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
-      <Box display='flex' flexGrow={1} flexDirection='column'>
-        <Box margin={1}>TODO: add info cards and charts here</Box>
-        <Box>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <AggregatedPlantsStats {...(details || {})} />
+        </Grid>
+        <Grid item xs={12}>
           <Card style={isMobile ? { borderRadius: 0, marginLeft: -3, marginRight: -3 } : {}}>
             <Search search={search} onSearch={onSearch} />
             <Box marginTop={2}>
@@ -70,8 +73,8 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
               />
             </Box>
           </Card>
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
     </DetailsPage>
   );
 }
