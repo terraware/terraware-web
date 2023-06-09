@@ -73,12 +73,18 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (objectType === 'site') {
         return {
           fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
+          hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.4),
+          selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.6),
+          highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.6),
           lineColor: theme.palette.TwClrBaseGreen300 as string,
           lineWidth: 2,
         };
       } else if (objectType === 'zone') {
         return {
           fillColor: 'transparent',
+          hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseLightGreen300 as string, 0.4),
+          selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseLightGreen300 as string, 0.6),
+          highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseLightGreen300 as string, 0.2),
           lineColor: theme.palette.TwClrBaseLightGreen300 as string,
           lineWidth: 4,
         };
@@ -125,12 +131,13 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   useEffect(() => {
     const fetchPlantingSite = () => {
       const sources = new Array<MapSource>();
+      const isTopmostLayer = () => sources.length === 0;
       if (mapData.temporaryPlot && (layers === undefined || layers?.includes('Monitoring Plots'))) {
         sources.push({
           ...mapData.temporaryPlot,
           isInteractive: true,
           annotation: {
-            textField: 'fullName',
+            textField: 'name',
             textColor: theme.palette.TwClrBaseWhite as string,
             textSize: 12,
           },
@@ -142,7 +149,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           ...mapData.permanentPlot,
           isInteractive: true,
           annotation: {
-            textField: 'fullName',
+            textField: 'name',
             textColor: theme.palette.TwClrBaseWhite as string,
             textSize: 12,
           },
@@ -152,24 +159,42 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (mapData.subzone && (layers === undefined || layers?.includes('Sub-Zones'))) {
         sources.push({
           ...mapData.subzone,
-          isInteractive: true,
-          annotation: {
-            textField: 'fullName',
-            textColor: theme.palette.TwClrBaseWhite as string,
-            textSize: 16,
-          },
+          isInteractive: isTopmostLayer(),
+          annotation: isTopmostLayer()
+            ? {
+                textField: 'fullName',
+                textColor: theme.palette.TwClrBaseWhite as string,
+                textSize: 16,
+              }
+            : undefined,
           ...getRenderAttributes('subzone'),
         });
       }
       if (mapData.zone && (layers === undefined || layers?.includes('Zones'))) {
         sources.push({
           ...mapData.zone,
+          isInteractive: isTopmostLayer(),
+          annotation: isTopmostLayer()
+            ? {
+                textField: 'name',
+                textColor: theme.palette.TwClrBaseWhite as string,
+                textSize: 16,
+              }
+            : undefined,
           ...getRenderAttributes('zone'),
         });
       }
       if (mapData.site && (layers === undefined || layers?.includes('Planting Site'))) {
         sources.push({
           ...mapData.site,
+          isInteractive: isTopmostLayer(),
+          annotation: isTopmostLayer()
+            ? {
+                textField: 'name',
+                textColor: theme.palette.TwClrBaseWhite as string,
+                textSize: 16,
+              }
+            : undefined,
           ...getRenderAttributes('site'),
         });
       }
@@ -196,8 +221,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   const entityOptions: MapEntityOptions = useMemo(
     () => ({
-      highlight: subzoneEntity,
-      focus: zoneEntity,
+      highlight: [subzoneEntity],
+      focus: [zoneEntity],
     }),
     [subzoneEntity, zoneEntity]
   );

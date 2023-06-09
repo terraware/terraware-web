@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
-import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';
+import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer, MapGeometry } from 'src/types/Map';
 import { MapService } from 'src/services';
 
 /**
@@ -49,8 +49,8 @@ export default function Map(props: MapProps): JSX.Element {
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const [deferredHighlightEntity, setDeferredHighlightEntity] = useState<MapEntityId | undefined>();
-  const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId | undefined>();
+  const [deferredHighlightEntity, setDeferredHighlightEntity] = useState<MapEntityId[] | undefined>();
+  const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId[] | undefined>();
   const mapRef = useRef(null);
   const containerRef = useRef(null);
   const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
@@ -92,21 +92,23 @@ export default function Map(props: MapProps): JSX.Element {
     [onTokenExpired]
   );
 
-  const updateFeatureState = useCallback((featureVar: any, property: string, mapEntityId: MapEntityId) => {
+  const updateFeatureState = useCallback((featureVar: any, property: string, mapEntityId: MapEntityId[]) => {
     const map: any = mapRef && mapRef.current;
     if (!map) {
       return;
     }
-    const { id, sourceId } = mapEntityId;
-    // clear previous
-    if (featureVar[sourceId] && id !== featureVar[sourceId]) {
-      map.setFeatureState({ source: sourceId, id: featureVar[sourceId] }, { [property]: false });
-    }
-    // set new
-    if (id) {
-      map.setFeatureState({ source: sourceId, id }, { [property]: true });
-    }
-    featureVar[sourceId] = id;
+    mapEntityId.forEach((entity) => {
+      const { id, sourceId } = entity;
+      // clear previous
+      if (featureVar[sourceId] && id !== featureVar[sourceId]) {
+        map.setFeatureState({ source: sourceId, id: featureVar[sourceId] }, { [property]: false });
+      }
+      // set new
+      if (id) {
+        map.setFeatureState({ source: sourceId, id }, { [property]: true });
+      }
+      featureVar[sourceId] = id;
+    });
   }, []);
 
   const onMapClick = useCallback(
@@ -121,59 +123,103 @@ export default function Map(props: MapProps): JSX.Element {
           properties,
           sourceId,
         });
-        updateFeatureState(selectStateId, 'select', { sourceId, id });
+        updateFeatureState(selectStateId, 'select', [{ sourceId, id }]);
       }
     },
     [updateFeatureState, selectStateId]
   );
 
   const drawFocusTo = useCallback(
-    (mapEntity: MapEntityId) => {
+    (mapEntity: MapEntityId[]) => {
+      if (mapEntity.length <= 0) {
+        return;
+      }
       const map: any = mapRef?.current;
-      if (!map || !mapEntity.id || !mapEntity.sourceId) {
+      if (!map) {
         return;
       }
-      const foundSource = geoData && geoData.find((geo) => geo.id === mapEntity.sourceId);
-      if (!foundSource || !foundSource.data) {
-        return;
+      const coordinates: MapGeometry = [];
+      mapEntity.forEach((entity) => {
+        if (!entity.id || !entity.sourceId) {
+          return;
+        }
+        const foundSource = geoData && geoData.find((geo) => geo.id === entity.sourceId);
+        if (!foundSource || !foundSource.data) {
+          return;
+        }
+        const feature = foundSource.data.features.find((featureData: any) => featureData.id === entity.id);
+        if (!feature) {
+          return;
+        }
+        coordinates.push(feature.geometry.coordinates);
+      });
+      if (coordinates.length > 0) {
+        const bbox = MapService.getBoundingBox([coordinates]);
+        map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
       }
-      const feature = foundSource.data.features.find((featureData: any) => featureData.id === mapEntity.id);
-      if (!feature) {
-        return;
-      }
-      const coordinates = feature.geometry.coordinates;
-      const bbox = MapService.getBoundingBox([[coordinates]]);
-      map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
     },
     [geoData]
   );
 
-  const onLoad = () => {
+  useEffect(() => {
     const map: any = mapRef && mapRef.current;
     if (!map) {
       return;
     }
+    const { sources } = options;
+
     Object.keys(hoverStateId).forEach((key) => delete hoverStateId[key]);
     Object.keys(selectStateId).forEach((key) => delete selectStateId[key]);
     Object.keys(highlightStateId).forEach((key) => delete highlightStateId[key]);
 
-    const { sources } = options;
-    sources
+    const mouseMoveCallbacks = sources
       .filter((source) => source.isInteractive)
-      .forEach((source) => {
+      .map((source) => {
         const layerId = `${source.id}-fill`;
-        map.on('mousemove', layerId, (e: any) => {
-          if (!e.features.length || !e.features[0].properties) {
-            return;
-          }
-          const newId = e.features[0].id;
-          updateFeatureState(hoverStateId, 'hover', { sourceId: source.id, id: newId });
-        });
-        map.on('mouseleave', `${source.id}-fill`, () => {
-          updateFeatureState(hoverStateId, 'hover', { sourceId: source.id });
-        });
+        return {
+          [layerId]: (e: any) => {
+            if (!e.features.length || !e.features[0].properties) {
+              return;
+            }
+            const newId = e.features[0].id;
+            updateFeatureState(hoverStateId, 'hover', [{ sourceId: source.id, id: newId }]);
+          },
+        };
       });
 
+    const mouseLeaveCallbacks = sources
+      .filter((source) => source.isInteractive)
+      .map((source) => {
+        const layerId = `${source.id}-fill`;
+        return {
+          [layerId]: () => {
+            updateFeatureState(hoverStateId, 'hover', [{ sourceId: source.id }]);
+          },
+        };
+      });
+
+    mouseMoveCallbacks.forEach((cb) => {
+      const layerId = Object.keys(cb)[0];
+      map.on('mousemove', layerId, cb[layerId]);
+    });
+    mouseLeaveCallbacks.forEach((cb) => {
+      const layerId = Object.keys(cb)[0];
+      map.on('mouseleave', layerId, cb[layerId]);
+    });
+
+    return () => {
+      mouseMoveCallbacks.forEach((cb) => {
+        const layerId = Object.keys(cb)[0];
+        map.off('mousemove', layerId, cb[layerId]);
+      });
+      mouseLeaveCallbacks.forEach((cb) => {
+        const layerId = Object.keys(cb)[0];
+        map.off('mouseleave', layerId, cb[layerId]);
+      });
+    };
+  }, [options, highlightStateId, selectStateId, hoverStateId, updateFeatureState]);
+
+  const onLoad = () => {
     if (deferredHighlightEntity) {
       updateFeatureState(highlightStateId, 'highlight', deferredHighlightEntity);
       setDeferredHighlightEntity(undefined);
@@ -347,7 +393,7 @@ export default function Map(props: MapProps): JSX.Element {
               latitude={Number(popupInfo.lat)}
               onClose={() => {
                 setPopupInfo(null);
-                updateFeatureState(selectStateId, 'select', { sourceId: popupInfo.sourceId });
+                updateFeatureState(selectStateId, 'select', [{ sourceId: popupInfo.sourceId }]);
               }}
               style={popupRenderer.style}
               className={popupRenderer.className}

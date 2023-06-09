@@ -102,8 +102,8 @@ export type MapEntityId = {
  * map entity options
  */
 export type MapEntityOptions = {
-  highlight?: MapEntityId;
-  focus?: MapEntityId;
+  highlight?: MapEntityId[];
+  focus?: MapEntityId[];
 };
 
 /**

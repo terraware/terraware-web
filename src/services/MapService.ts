@@ -290,7 +290,7 @@ const getMapDataFromObservation = (observation: ObservationResults): MapData => 
           properties: {
             id: plot.monitoringPlotId,
             name: plot.monitoringPlotName,
-            type: 'permanentPlot',
+            type: 'temporaryPlot',
           },
           boundary: [plot.boundary.coordinates],
         }))
