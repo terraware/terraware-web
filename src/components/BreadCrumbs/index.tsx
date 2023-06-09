@@ -29,7 +29,7 @@ export default function BreadCrumbs({ hierarchical, crumbs }: BreadCrumbsProps):
   return (
     <Box display='inline-flex' alignItems='center'>
       {breadCrumbs.map((crumb: Crumb, index: number) => (
-        <Box key={index} display='inline-flex'>
+        <Box key={index} display='inline-flex' alignItems='center'>
           {index === 0 ? (
             <BackToLink id={`crumb_${index}`} to={crumb.to} name={crumb.name} />
           ) : (

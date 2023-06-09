@@ -11,10 +11,28 @@ import {
   ObservationSpeciesResultsPayload,
   ObservationSpeciesResults,
   ObservationMonitoringPlotResultsPayload,
+  ObservationMonitoringPlotResults,
 } from 'src/types/Observations';
 import { regexMatch } from 'src/utils/search';
 
 // utils
+
+export const searchResultPlots = (search: string, zone?: ObservationPlantingZoneResults) => {
+  if (!search.trim() || !zone) {
+    return zone;
+  }
+  return {
+    ...zone,
+    plantingSubzones: zone.plantingSubzones
+      .map((subzone: ObservationPlantingSubzoneResults) => ({
+        ...subzone,
+        monitoringPlots: subzone.monitoringPlots.filter((plot: ObservationMonitoringPlotResults) =>
+          regexMatch(plot.monitoringPlotName, search)
+        ),
+      }))
+      .filter((subzone: ObservationPlantingSubzoneResults) => subzone.monitoringPlots.length > 0),
+  };
+};
 
 export const searchResultZones = (search: string, observation?: ObservationResults) => {
   if (!search.trim() || !observation) {

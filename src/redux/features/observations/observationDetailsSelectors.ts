@@ -1,29 +1,38 @@
 import { createCachedSelector } from 're-reselect';
+import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from 'src/redux/rootReducer';
 import { ObservationResults } from 'src/types/Observations';
 import { selectMergedPlantingSiteObservations } from './observationsSelectors';
 import { searchResultZones } from './utils';
 
 // search observation details (search planting zone name only)
-export type SearchParams = {
+
+export type DetailsParams = {
   plantingSiteId: number;
   observationId: number;
+};
+
+export type SearchParams = {
   search: string;
 };
-export const searchObservationDetails = createCachedSelector(
-  (state: RootState, params: SearchParams, defaultTimeZone: string) =>
-    selectMergedPlantingSiteObservations(state, params.plantingSiteId, defaultTimeZone),
-  (state: RootState, params: SearchParams, defaultTimeZone: string) => params,
-  (observations, params) =>
-    searchResultZones(params.search, selectObservationDetails(params.observationId, observations))
-)(
-  (state: RootState, params: SearchParams, defaultTimeZone: string) =>
-    `${params.plantingSiteId}_${params.observationId}_${defaultTimeZone}_${params.search}`
+
+export type DetailsSearchParams = SearchParams & DetailsParams;
+
+export const selectObservationDetails = createSelector(
+  [
+    (state, params, defaultTimeZone) =>
+      selectMergedPlantingSiteObservations(state, params.plantingSiteId, defaultTimeZone),
+    (state, params, defaultTimeZone) => params,
+  ],
+  (observationsResults, params) =>
+    observationsResults?.find((observation: ObservationResults) => observation.observationId === params.observationId)
 );
 
-// utils
-const selectObservationDetails = (
-  observationId: number,
-  observations?: ObservationResults[]
-): ObservationResults | undefined =>
-  observations?.find((observation: ObservationResults) => observation.observationId === observationId);
+export const searchObservationDetails = createCachedSelector(
+  selectObservationDetails,
+  (state: RootState, params: DetailsSearchParams, defaultTimeZone: string) => params,
+  (observation, params) => searchResultZones(params.search, observation)
+)(
+  (state: RootState, params: DetailsSearchParams, defaultTimeZone: string) =>
+    `${params.plantingSiteId}_${params.observationId}_${defaultTimeZone}_${params.search}`
+);
