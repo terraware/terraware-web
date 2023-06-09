@@ -496,6 +496,8 @@ MONITORING_LABEL_STATE_OF_CHARGE,Estado de carga
 MONITORING_LABEL_SYSTEM_POWER,Potencia del sistema
 MONITORING_LABEL_TEMPERATURE,Temperatura
 MONITORING_LABEL_TEMPERATURE_THRESHOLDS,Umbrales de temperatura
+MONITORING_PLOT,Parcela de vigilancia
+MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia
 MONITORING_PLOTS,Control de parcelas
 MONTH_01,Enero
 MONTH_02,Febrero
@@ -664,6 +666,7 @@ PERIOD_LAST_24_HOURS,Últimas 24 horas
 PERIOD_LAST_30_DAYS,Últimos 30 días
 PERIOD_LAST_7_DAYS,Últimos 7 días
 PERLITE_VERMICULITE,Perlita/vermiculita
+PERMANENT,Permanente
 PERSON_ADDED,Se ha añadido una persona
 PHOTOS,Fotos
 PHOTOS_OUTPLANT_DESCRIPTION,Las replantaciones en el exterior requieren fotos.
@@ -1002,6 +1005,7 @@ TAKE_ME_THERE,Llévame allí
 TARGET_RH,Objetivo %RH
 TEMPERATURE_AND_HUMIDITY_SENSOR_DATA,Datos del sensor de temperatura y humedad
 TEMPLATES,Plantillas
+TEMPORARY,Temporal
 TEST,Prueba
 TEST_DATE_REQUIRED,Fecha de la prueba *
 TEST_METHOD,Método de prueba
