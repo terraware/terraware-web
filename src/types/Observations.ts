@@ -52,7 +52,7 @@ export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationM
 export type ObservationSpeciesResultsPayload = components['schemas']['ObservationSpeciesResultsPayload'];
 export type ObservationSpeciesResults = ObservationSpeciesResultsPayload & {
   speciesCommonName?: string;
-  speciesScientificName?: string;
+  speciesScientificName: string;
 };
 
 export const getStatus = (state: ObservationState): string => {

@@ -3,7 +3,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { PlantingSiteZone, PlantingSiteSubzone } from 'src/types/PlantingSite';
 import { cardTitleStyle } from './PlantingSiteDetails';
 import strings from 'src/strings';
-import DashboardChart from './DashboardChart';
+import BarChart from 'src/components/common/Chart/BarChart';
 import SubzoneSelector, { SubzoneInfo, ZoneInfo } from 'src/components/SubzoneSelector';
 
 export interface Props {
@@ -122,7 +122,7 @@ export default function SpeciesBySubzoneChart(props: Props): JSX.Element {
           />
         )}
         <Box sx={{ marginTop: 2 }}>
-          <DashboardChart chartId='speciesBySubzoneChart' chartLabels={labels} chartValues={values} minHeight='126px' />
+          <BarChart chartId='speciesBySubzoneChart' chartLabels={labels} chartValues={values} minHeight='126px' />
         </Box>
       </Box>
     </>

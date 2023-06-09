@@ -1,24 +1,18 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { ObservationSpeciesResults } from 'src/types/Observations';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Card from 'src/components/common/Card';
-
-export type SpeciesStats = {
-  totalDead: number;
-  totalExisting: number;
-  totalLive: number;
-  speciesName?: string;
-  speciesCommonName?: string;
-  speciesScientificName?: string;
-};
+import SpeciesTotalPlantsChart from './SpeciesTotalPlantsChart';
+import SpeciesMortalityRateChart from './SpeciesMortalityRateChart';
 
 export type AggregatedPlantsStatsProps = {
   totalPlants?: number;
   totalSpecies?: number;
   plantingDensity?: number;
   mortalityRate?: number;
-  species?: SpeciesStats[];
+  species?: ObservationSpeciesResults[];
 };
 
 export default function AggregatedPlantsStats({
@@ -29,7 +23,7 @@ export default function AggregatedPlantsStats({
   species,
 }: AggregatedPlantsStatsProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-
+  const theme = useTheme();
   const infoCardGridSize = isMobile ? 12 : 3;
   const chartGridSize = isMobile ? 12 : 6;
 
@@ -51,10 +45,36 @@ export default function AggregatedPlantsStats({
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={chartGridSize}>
-          <Card style={{ height: '240px' }}>add chart for {species?.length} species # plants</Card>
+          <Card style={{ height: '240px' }}>
+            <Box height='240px'>
+              <Typography
+                fontSize='14px'
+                lineHeight='20px'
+                fontWeight={400}
+                color={theme.palette.TwClrTxtSecondary}
+                marginBottom={2}
+              >
+                {strings.NUMBER_OF_PLANTS_BY_SPECIES}
+              </Typography>
+              <SpeciesTotalPlantsChart species={species} />
+            </Box>
+          </Card>
         </Grid>
         <Grid item xs={chartGridSize}>
-          <Card style={{ height: '240px' }}>add chart for {species?.length} species mortality rate</Card>
+          <Card style={{ height: '240px' }}>
+            <Box height='240px'>
+              <Typography
+                fontSize='14px'
+                lineHeight='20px'
+                fontWeight={400}
+                color={theme.palette.TwClrTxtSecondary}
+                marginBottom={1}
+              >
+                {strings.MORTALITY_RATE_BY_SPECIES}
+              </Typography>
+              <SpeciesMortalityRateChart species={species} />
+            </Box>
+          </Card>
         </Grid>
       </Grid>
     </Box>
