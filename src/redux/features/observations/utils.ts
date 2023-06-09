@@ -11,31 +11,46 @@ import {
   ObservationSpeciesResultsPayload,
   ObservationSpeciesResults,
   ObservationMonitoringPlotResultsPayload,
+  ObservationMonitoringPlotResults,
 } from 'src/types/Observations';
 import { regexMatch } from 'src/utils/search';
 
 // utils
 
-export const searchResultZones = (search: string, observation?: ObservationResults, trimResults?: boolean) => {
+export const searchResultPlots = (search: string, zone?: ObservationPlantingZoneResults) => {
+  if (!search.trim() || !zone) {
+    return zone;
+  }
+  return {
+    ...zone,
+    plantingSubzones: zone.plantingSubzones
+      .map((subzone: ObservationPlantingSubzoneResults) => ({
+        ...subzone,
+        monitoringPlots: subzone.monitoringPlots.filter((plot: ObservationMonitoringPlotResults) =>
+          regexMatch(plot.monitoringPlotName, search)
+        ),
+      }))
+      .filter((subzone: ObservationPlantingSubzoneResults) => subzone.monitoringPlots.length > 0),
+  };
+};
+
+export const searchResultZones = (search: string, observation?: ObservationResults) => {
   if (!search.trim() || !observation) {
     return observation;
   }
-  if (trimResults) {
-    return {
-      ...observation,
-      plantingZones: observation.plantingZones.filter((zone: ObservationPlantingZoneResults) =>
-        matchZone(zone, search)
-      ),
-    };
-  }
-  return observation.plantingZones.some((zone: ObservationPlantingZoneResults) => matchZone(zone, search));
+  return {
+    ...observation,
+    plantingZones: observation.plantingZones.filter((zone: ObservationPlantingZoneResults) => matchZone(zone, search)),
+  };
 };
 
 export const searchZones = (search: string, observations?: ObservationResults[]) => {
   if (!search.trim()) {
     return observations;
   }
-  return observations?.filter((observation: ObservationResults) => searchResultZones(search, observation));
+  return observations?.filter((observation: ObservationResults) =>
+    observation.plantingZones.some((zone: ObservationPlantingZoneResults) => matchZone(zone, search))
+  );
 };
 
 const matchZone = (zone: ObservationPlantingZoneResults, search: string) => regexMatch(zone.plantingZoneName, search);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
@@ -18,6 +18,7 @@ import ObservationsHome from './ObservationsHome';
 import ObservationDetails from './details';
 import ObservationPlantingZoneDetails from './zone';
 import ObservationMonitoringPlotDetails from './plot';
+import { SearchInputProps } from './search';
 
 /**
  * This page will route to the correct component based on url params
@@ -62,6 +63,20 @@ export default function Observations(): JSX.Element {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
+  return <ObservationsWrapper />;
+}
+
+const ObservationsWrapper = (): JSX.Element => {
+  const [search, setSearch] = useState<string>('');
+
+  const searchInputProps: SearchInputProps = useMemo(
+    () => ({
+      search,
+      onSearch: (value: string) => setSearch(value),
+    }),
+    [search]
+  );
+
   return (
     <Switch>
       <Route exact path={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS}>
@@ -71,14 +86,14 @@ export default function Observations(): JSX.Element {
         <ObservationPlantingZoneDetails />
       </Route>
       <Route exact path={APP_PATHS.OBSERVATION_DETAILS}>
-        <ObservationDetails />
+        <ObservationDetails {...searchInputProps} />
       </Route>
       <Route exact path={APP_PATHS.PLANTING_SITE_OBSERVATIONS}>
-        <ObservationsHome />
+        <ObservationsHome {...searchInputProps} />
       </Route>
       <Route path={'*'}>
-        <ObservationsHome />
+        <ObservationsHome {...searchInputProps} />
       </Route>
     </Switch>
   );
-}
+};

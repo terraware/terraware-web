@@ -1,35 +1,42 @@
 import { useParams } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
+import { Box } from '@mui/material';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useAppSelector } from 'src/redux/store';
+import { selectObservationMonitoringPlot } from 'src/redux/features/observations/observationMonitoringPlotSelectors';
 import DetailsPage from 'src/components/Observations/common/DetailsPage';
 
-export default function ObservationMonitoringPlotDetails(): JSX.Element {
+export default function ObservationMonitoringPlot(): JSX.Element {
   const { plantingSiteId, observationId, plantingZoneId, monitoringPlotId } = useParams<{
     plantingSiteId: string;
     observationId: string;
     plantingZoneId: string;
     monitoringPlotId: string;
   }>();
+  const defaultTimeZone = useDefaultTimeZone();
 
-  const urlSite = APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString());
-
-  const urlDetails = `/${observationId}`;
-
-  const urlZone = `/${plantingZoneId}`;
+  const monitoringPlot = useAppSelector((state) =>
+    selectObservationMonitoringPlot(
+      state,
+      {
+        plantingSiteId: Number(plantingSiteId),
+        observationId: Number(observationId),
+        plantingZoneId: Number(plantingZoneId),
+        monitoringPlotId: Number(monitoringPlotId),
+      },
+      defaultTimeZone.get()
+    )
+  );
 
   return (
     <DetailsPage
-      title='Observation Monitoring Plot Details placeholder title'
-      crumbs={[
-        { name: strings.OBSERVATIONS, to: urlSite },
-        { name: 'observation name placeholder', to: urlDetails },
-        { name: 'planting zone name placeholder', to: urlZone },
-      ]}
+      title={monitoringPlot?.monitoringPlotName ?? ''}
+      plantingSiteId={plantingSiteId}
+      observationId={observationId}
+      plantingZoneId={plantingZoneId}
     >
-      <div>
-        Observation details placeholder for planting site {plantingSiteId} observation {observationId} planting zone{' '}
-        {plantingZoneId} monitoring plot {monitoringPlotId}
-      </div>
+      <Box display='flex' flexGrow={1} flexDirection='column'>
+        <Box margin={1}>TODO: add info cards and charts here for monitoring plot {monitoringPlotId}</Box>
+      </Box>
     </DetailsPage>
   );
 }

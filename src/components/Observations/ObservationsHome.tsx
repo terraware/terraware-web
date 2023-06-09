@@ -11,8 +11,11 @@ import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent'
 import Card from 'src/components/common/Card';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import ObservationsDataView from './ObservationsDataView';
+import { SearchInputProps } from './search';
 
-export default function ObservationsHome(): JSX.Element {
+export type ObservationsHomeProps = SearchInputProps;
+
+export default function ObservationsHome(props: ObservationsHomeProps): JSX.Element {
   const history = useHistory();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
@@ -48,7 +51,7 @@ export default function ObservationsHome(): JSX.Element {
       {observationsResults === undefined ? (
         <CircularProgress sx={{ margin: 'auto' }} />
       ) : selectedPlantingSite && observationsResults?.length ? (
-        <ObservationsDataView selectedPlantingSiteId={selectedPlantingSite.id} />
+        <ObservationsDataView selectedPlantingSiteId={selectedPlantingSite.id} {...props} />
       ) : (
         <Card style={{ margin: 'auto' }}>
           <EmptyStateContent

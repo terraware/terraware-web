@@ -21,10 +21,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export type OrgObservationsListViewProps = {
-  observationsResults?: ObservationResults[];
-};
-
 const columns = (): TableColumnType[] => [
   {
     key: 'completedTime',
@@ -67,6 +63,10 @@ const columns = (): TableColumnType[] => [
     type: 'number',
   },
 ];
+
+export type OrgObservationsListViewProps = {
+  observationsResults?: ObservationResults[];
+};
 
 export default function OrgObservationsListView({ observationsResults }: OrgObservationsListViewProps): JSX.Element {
   const { activeLocale } = useLocalization();
