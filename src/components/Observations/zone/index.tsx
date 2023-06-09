@@ -1,16 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
-import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { getShortDate } from 'src/utils/dateFormatter';
-import { useLocalization } from 'src/providers';
 import { useAppSelector } from 'src/redux/store';
 import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
-import { selectObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import Search from 'src/components/Observations/search';
@@ -33,14 +29,9 @@ export default function ObservationPlantingZone(): JSX.Element {
     observationId: string;
     plantingZoneId: string;
   }>();
-  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const defaultTimeZone = useDefaultTimeZone();
   const [search, onSearch] = useState<string>('');
-
-  const urlSite = APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString());
-
-  const urlDetails = `/${observationId}`;
 
   const plantingZone = useAppSelector((state) =>
     searchObservationPlantingZone(
@@ -55,30 +46,11 @@ export default function ObservationPlantingZone(): JSX.Element {
     )
   );
 
-  const details = useAppSelector((state) =>
-    selectObservationDetails(
-      state,
-      {
-        plantingSiteId: Number(plantingSiteId),
-        observationId: Number(observationId),
-      },
-      defaultTimeZone.get()
-    )
-  );
-
-  const crumbName = useMemo(() => {
-    const plantingSiteName = details?.plantingSiteName ?? '';
-    const completionDate = details?.completedTime ? getShortDate(details.completedTime, activeLocale) : '';
-    return `${completionDate} (${plantingSiteName})`;
-  }, [activeLocale, details]);
-
   return (
     <DetailsPage
       title={plantingZone?.plantingZoneName ?? ''}
-      crumbs={[
-        { name: strings.OBSERVATIONS, to: urlSite },
-        { name: crumbName, to: urlDetails },
-      ]}
+      plantingSiteId={plantingSiteId}
+      observationId={observationId}
     >
       <Box display='flex' flexGrow={1} flexDirection='column'>
         <Box margin={1}>TODO: add info cards and charts here</Box>

@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
-import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -36,8 +35,6 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
   const { isMobile } = useDeviceInfo();
   const defaultTimeZone = useDefaultTimeZone();
 
-  const urlSite = APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString());
-
   const details = useAppSelector((state) =>
     searchObservationDetails(
       state,
@@ -57,7 +54,7 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
   }, [activeLocale, details]);
 
   return (
-    <DetailsPage title={title} crumbs={[{ name: strings.OBSERVATIONS, to: urlSite }]}>
+    <DetailsPage title={title} plantingSiteId={plantingSiteId}>
       <Box display='flex' flexGrow={1} flexDirection='column'>
         <Box margin={1}>TODO: add info cards and charts here</Box>
         <Box>
