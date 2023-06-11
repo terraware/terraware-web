@@ -136,6 +136,7 @@ export const mergeObservations = (
           species,
           site.timeZone ?? defaultTimeZone
         ),
+        species: mergeSpecies(observation.species, species),
       };
     });
 };
