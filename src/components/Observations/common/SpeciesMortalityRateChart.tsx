@@ -35,6 +35,7 @@ export default function SpeciesTotalPlantsChart({ species }: SpeciesTotalPlantsC
       chartLabels={mortalityRates.labels}
       chartValues={mortalityRates.values}
       barWidth={0}
+      minHeight='185px'
     />
   );
 }

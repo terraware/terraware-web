@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -23,7 +24,6 @@ export default function AggregatedPlantsStats({
   species,
 }: AggregatedPlantsStatsProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const theme = useTheme();
   const infoCardGridSize = isMobile ? 12 : 3;
   const chartGridSize = isMobile ? 12 : 6;
 
@@ -45,38 +45,42 @@ export default function AggregatedPlantsStats({
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={chartGridSize}>
-          <Card style={{ height: '240px' }}>
-            <Box height='240px'>
-              <Typography
-                fontSize='14px'
-                lineHeight='20px'
-                fontWeight={400}
-                color={theme.palette.TwClrTxtSecondary}
-                marginBottom={2}
-              >
-                {strings.NUMBER_OF_PLANTS_BY_SPECIES}
-              </Typography>
-              <SpeciesTotalPlantsChart species={species} />
-            </Box>
-          </Card>
+          <ChartWrapper title={strings.NUMBER_OF_PLANTS_BY_SPECIES}>
+            <SpeciesTotalPlantsChart species={species} />
+          </ChartWrapper>
         </Grid>
         <Grid item xs={chartGridSize}>
-          <Card style={{ height: '240px' }}>
-            <Box height='240px'>
-              <Typography
-                fontSize='14px'
-                lineHeight='20px'
-                fontWeight={400}
-                color={theme.palette.TwClrTxtSecondary}
-                marginBottom={1}
-              >
-                {strings.MORTALITY_RATE_BY_SPECIES}
-              </Typography>
-              <SpeciesMortalityRateChart species={species} />
-            </Box>
-          </Card>
+          <ChartWrapper title={strings.MORTALITY_RATE_BY_SPECIES}>
+            <SpeciesMortalityRateChart species={species} />
+          </ChartWrapper>
         </Grid>
       </Grid>
     </Box>
   );
 }
+
+type ChartWrapperType = {
+  title: string;
+  children: React.ReactNode;
+};
+
+const ChartWrapper = ({ title, children }: ChartWrapperType): JSX.Element => {
+  const theme = useTheme();
+
+  return (
+    <Card style={{ height: '240px', padding: 1 }}>
+      <Box height='185px' marginLeft={-0.5}>
+        <Typography
+          fontSize='14px'
+          lineHeight='20px'
+          fontWeight={400}
+          color={theme.palette.TwClrTxtSecondary}
+          margin={theme.spacing(2, 2, 2, 2.5)}
+        >
+          {title}
+        </Typography>
+        {children}
+      </Box>
+    </Card>
+  );
+};
