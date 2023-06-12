@@ -59,12 +59,12 @@ export default function AggregatedPlantsStats({
   );
 }
 
-type ChartWrapperType = {
+type ChartWrapperProps = {
   title: string;
   children: React.ReactNode;
 };
 
-const ChartWrapper = ({ title, children }: ChartWrapperType): JSX.Element => {
+const ChartWrapper = ({ title, children }: ChartWrapperProps): JSX.Element => {
   const theme = useTheme();
 
   return (
