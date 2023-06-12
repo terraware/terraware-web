@@ -8,9 +8,13 @@ export type MonitoringPlotParams = ZoneParams & {
 
 export const selectObservationMonitoringPlot = createSelector(
   [selectObservationPlantingZone, (state, params, defaultTimeZone) => params],
-  (observationPlantingZone, params) =>
+  (observationPlantingZone, params) => {
     observationPlantingZone?.plantingSubzones
-      .flatMap((subzone: ObservationPlantingSubzoneResults) => subzone.monitoringPlots)
+      .flatMap((subzone: ObservationPlantingSubzoneResults) => ({
+        ...subzone.monitoringPlots,
+        plantingZoneName: observationPlantingZone.plantingZoneName,
+        plantingSubzoneName: subzone.plantingSubzoneName,
+      }))
       .find(
         (monitoringPlot: ObservationMonitoringPlotResults) =>
           monitoringPlot.monitoringPlotId === params.monitoringPlotId

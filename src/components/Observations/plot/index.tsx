@@ -1,5 +1,9 @@
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
+import { Textfield } from '@terraware/web-components';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo;
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useAppSelector } from 'src/redux/store';
 import { selectObservationMonitoringPlot } from 'src/redux/features/observations/observationMonitoringPlotSelectors';
@@ -13,6 +17,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
     monitoringPlotId: string;
   }>();
   const defaultTimeZone = useDefaultTimeZone();
+  const { isMobile } = useDeviceInfo();
 
   const monitoringPlot = useAppSelector((state) =>
     selectObservationMonitoringPlot(
@@ -27,6 +32,23 @@ export default function ObservationMonitoringPlot(): JSX.Element {
     )
   );
 
+  const gridSize = isMobile ? 12 : 4;
+
+  const data: Record<string, any>[] = useMemo(() => [
+    { label: strings.DATE, value: monitoringPlot?.completedDate },
+    { label: strings.TIME, value: monitoringPlot?.completedTime },
+    { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
+    { label: strings.ZONE, value: monitoringPlot?.plantingZoneName },
+    { label: strings.SUBZONE, value: monitoringPlot?.plantingSubzoneName },
+    { label: strings.MONITORING_PLOT_TYPE, value: monitoringPlot ? (monitoringPlot.isPermanent ? strings.PERMANENT : strings.TEMPORARY) : '' },
+    { label: strings.PLANTS, value: monitoringPlot?.totalPlants },
+    { label: strings.SPECIES, value: monitoringPlot?.totalSpecies },
+    { label: strings.PLANTING_DENSITY, value: monitoringPlot?.plantingDensity },
+    { label: strings.MORTALITY_RATE, value: monitoringPlot?.mortalityRate },
+    { label: strings.NUMBER_OF_PHOTOS, value: monitoringPlot?.photos.length },
+    { label: strings.FIELD_NOTES, value: monitoringPlot?.notes, text: true },
+  ], [monitoringPlot]);
+
   return (
     <DetailsPage
       title={monitoringPlot?.monitoringPlotName ?? ''}
@@ -35,7 +57,8 @@ export default function ObservationMonitoringPlot(): JSX.Element {
       plantingZoneId={plantingZoneId}
     >
       <Box display='flex' flexGrow={1} flexDirection='column'>
-        <Box margin={1}>TODO: add info cards and charts here for monitoring plot {monitoringPlotId}</Box>
+        <Grid container>
+        </Grid>
       </Box>
     </DetailsPage>
   );

@@ -585,6 +585,7 @@ NOTES,Notes
 NOTIFICATIONS,Notifications
 NUMBER_OF_PACKETS,Number of Packets
 NUMBER_OF_PEOPLE,Number of People
+NUMBER_OF_PHOTOS,Number of Photos
 NUMBER_OF_PLANTS,Number of Plants
 NUMBER_OF_PLANTS_BY_SPECIES,Number of Plants by Species
 NUMBER_OF_PLANTS_BY_SUBZONE_AND_SPECIES,Number of Plants by Subzone and Species
@@ -621,6 +622,7 @@ OBSERVATIONS,Observations
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Observations are when you record data from a sample of monitoring plots using our mobile app in the field. This allows us to calculate mortality rates, and eventually carbon sequestration."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"You will be notified when it is time to take your observations (typically, the next time you end a planting season). After you've completed your first observations, you'll see the records here."
 OBSERVATIONS_EMPTY_STATE_TITLE,No Observations Yet
+OBSERVER,Observer
 ONBOARDING_ADMIN_TITLE,"Just a moment, let’s complete setup first"
 OPPORTUNITIES,Opportunities
 OPPORTUNITIES_INSTRUCTIONS,"This may include opportunities for project expansion, new markets, referrals, training to other organizations, etc. (One-quarter page maximum.)"
@@ -1013,6 +1015,7 @@ TEST_METHOD,Test Method
 TEST_METHOD_REQUIRED,Test Method *
 TEST_TYPE,Test Type
 TESTING_STAFF,Testing Staff
+TIME,Time
 TIME_PERIOD,Time Period
 TIME_ZONE,Time Zone
 TIME_ZONE_REQUIRED,Time Zone *

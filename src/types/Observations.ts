@@ -43,6 +43,7 @@ export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResult
 // monitoring plot level results
 export type ObservationMonitoringPlotResultsPayload = components['schemas']['ObservationMonitoringPlotResultsPayload'];
 export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsPayload & {
+  completedTimeRaw?: string;
   species: ObservationSpeciesResults[];
 };
 
