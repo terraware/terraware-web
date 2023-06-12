@@ -1,3 +1,4 @@
+e3204ac0 Fix 'invalid date time' display in observations tables (#1452)
 9cb1c9ff observations plants stats info cards + charts (#1450)
 bc5b01be SW-3733 Make Map Layers Dynamically Interactive (#1451)
 aece7c04 Add placeholder content for map view with 'All planting sites (#1448)
