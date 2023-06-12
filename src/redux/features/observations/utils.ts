@@ -192,7 +192,6 @@ const mergeSubzones = (
             return {
               ...monitoringPlot,
               species: mergeSpecies(monitoringPlot.species, species),
-              completedTimeRaw: monitoringPlot.completedTime,
               completedTime: monitoringPlot.completedTime
                 ? getDateDisplayValue(monitoringPlot.completedTime, timeZone)
                 : undefined,

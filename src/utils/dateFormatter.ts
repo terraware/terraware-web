@@ -7,6 +7,6 @@ export const getShortDate = (date: string, locale: string | undefined | null): s
   );
 
 export const getShortTime = (dateTime: string, locale: string | undefined | null, timeZone?: string): string =>
-  new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' }).format(
-    new Date(date)
-  ).toLowerCase();
+  new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' })
+    .format(new Date(dateTime))
+    .toLowerCase();
