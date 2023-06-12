@@ -131,7 +131,10 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   useEffect(() => {
     const fetchPlantingSite = () => {
       const sources = new Array<MapSource>();
-      const isTopmostLayer = () => sources.length === 0;
+
+      // The first layer added to sources will render on top of subsequent layers. We want to attach interactivity
+      // to this layer only.
+      const isFirstLayerAdded = () => sources.length === 0;
       if (mapData.temporaryPlot && (layers === undefined || layers?.includes('Monitoring Plots'))) {
         sources.push({
           ...mapData.temporaryPlot,
@@ -159,8 +162,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (mapData.subzone && (layers === undefined || layers?.includes('Sub-Zones'))) {
         sources.push({
           ...mapData.subzone,
-          isInteractive: isTopmostLayer(),
-          annotation: isTopmostLayer()
+          isInteractive: isFirstLayerAdded(),
+          annotation: isFirstLayerAdded()
             ? {
                 textField: 'fullName',
                 textColor: theme.palette.TwClrBaseWhite as string,
@@ -173,8 +176,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (mapData.zone && (layers === undefined || layers?.includes('Zones'))) {
         sources.push({
           ...mapData.zone,
-          isInteractive: isTopmostLayer(),
-          annotation: isTopmostLayer()
+          isInteractive: isFirstLayerAdded(),
+          annotation: isFirstLayerAdded()
             ? {
                 textField: 'name',
                 textColor: theme.palette.TwClrBaseWhite as string,
@@ -187,8 +190,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (mapData.site && (layers === undefined || layers?.includes('Planting Site'))) {
         sources.push({
           ...mapData.site,
-          isInteractive: isTopmostLayer(),
-          annotation: isTopmostLayer()
+          isInteractive: isFirstLayerAdded(),
+          annotation: isFirstLayerAdded()
             ? {
                 textField: 'name',
                 textColor: theme.palette.TwClrBaseWhite as string,
