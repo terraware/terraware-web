@@ -513,6 +513,7 @@ MONTH_11,Noviembre
 MONTH_12,Diciembre
 MORE_OPTIONS,Más opciones
 MORTALITY_RATE,Tasa de mortalidad
+MORTALITY_RATE_BY_SPECIES,Tasa de mortalidad por especie
 MORTALITY_RATE_IN_FIELD,Tasa de mortalidad en campo (%)
 MORTALITY_RATE_IN_FIELD_REQUIRED,Tasa de mortalidad en el campo (%) *
 MORTALITY_RATE_IN_NURSERY,Tasa de mortalidad en vivero (%)
