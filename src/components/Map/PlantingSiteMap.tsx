@@ -133,7 +133,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       const sources = new Array<MapSource>();
 
       // The first layer added to sources will render on top of subsequent layers. We want to attach interactivity
-      // to this layer only.
+      // and display annotations for this layer only.
       const isFirstLayerAdded = () => sources.length === 0;
       if (mapData.temporaryPlot && (layers === undefined || layers?.includes('Monitoring Plots'))) {
         sources.push({
