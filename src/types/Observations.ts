@@ -17,6 +17,7 @@ type Boundary = {
 export type ObservationResultsPayload = components['schemas']['ObservationResultsPayload'];
 export type ObservationResults = ObservationResultsPayload &
   Boundary & {
+    completedDate?: string;
     plantingSiteName: string;
     plantingZones: ObservationPlantingZoneResults[];
     species: ObservationSpeciesResults[];
@@ -26,6 +27,7 @@ export type ObservationResults = ObservationResultsPayload &
 export type ObservationPlantingZoneResultsPayload = components['schemas']['ObservationPlantingZoneResultsPayload'];
 export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPayload &
   Boundary & {
+    completedDate?: string;
     plantingZoneName: string;
     plantingSubzones: ObservationPlantingSubzoneResults[];
     species: ObservationSpeciesResults[];
@@ -43,6 +45,7 @@ export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResult
 // monitoring plot level results
 export type ObservationMonitoringPlotResultsPayload = components['schemas']['ObservationMonitoringPlotResultsPayload'];
 export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsPayload & {
+  completedDate?: string;
   species: ObservationSpeciesResults[];
 };
 

@@ -43,7 +43,7 @@ const OrgObservationsRenderer =
       return <CellRenderer {...props} value={getTruncatedNames(value as string)} className={classes.text} />;
     }
 
-    if (column.key === 'completedTime') {
+    if (column.key === 'completedDate') {
       return <CellRenderer {...props} value={createLinkToSiteObservation(getShortDate(value as string, locale))} />;
     }
 

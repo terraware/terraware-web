@@ -41,7 +41,7 @@ export default function DetailsPage({
         observationId: Number(observationId),
         plantingZoneId: Number(plantingZoneId),
       },
-      defaultTimeZone.get()
+      defaultTimeZone.get().id
     )
   );
 
@@ -52,7 +52,7 @@ export default function DetailsPage({
         plantingSiteId: Number(plantingSiteId),
         observationId: Number(observationId),
       },
-      defaultTimeZone.get()
+      defaultTimeZone.get().id
     )
   );
 
@@ -67,7 +67,7 @@ export default function DetailsPage({
 
       if (observationId) {
         const plantingSiteName = details?.plantingSiteName ?? '';
-        const completionDate = details?.completedTime ? getShortDate(details.completedTime, activeLocale) : '';
+        const completionDate = details?.completedDate ? getShortDate(details.completedDate, activeLocale) : '';
         const name = `${completionDate} (${plantingSiteName})`;
 
         data.push({

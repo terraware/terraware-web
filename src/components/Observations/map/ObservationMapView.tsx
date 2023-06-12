@@ -23,7 +23,7 @@ export default function ObservationMapView({ observationsResults, search }: Obse
 
   const observationsDates = useMemo(() => {
     return observationsResults
-      ?.map((obs) => obs.completedTime)
+      ?.map((obs) => obs.completedDate)
       ?.filter((time) => time)
       ?.map((time) => time!)
       ?.sort((a, b) => (Date.parse(a!) > Date.parse(b!) ? 1 : -1));
@@ -39,7 +39,7 @@ export default function ObservationMapView({ observationsResults, search }: Obse
   }, [observationsDates]);
 
   const selectedObservation = useMemo(
-    () => observationsResults?.find((obs) => obs.completedTime === selectedObservationDate),
+    () => observationsResults?.find((obs) => obs.completedDate === selectedObservationDate),
     [observationsResults, selectedObservationDate]
   );
 

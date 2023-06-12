@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 
 const columns = (): TableColumnType[] => [
   {
-    key: 'completedTime',
+    key: 'completedDate',
     name: strings.DATE,
     type: 'string',
   },
@@ -102,7 +102,7 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
         id='org-observations-table'
         columns={columns}
         rows={results}
-        orderBy='completionTime'
+        orderBy='completedDate'
         Renderer={OrgObservationsRenderer(theme, classes, activeLocale)}
       />
     </Box>
