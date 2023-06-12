@@ -3,10 +3,11 @@ import { ObservationSpeciesResults } from 'src/types/Observations';
 import BarChart from 'src/components/common/Chart/BarChart';
 
 export type SpeciesTotalPlantsChartProps = {
+  minHeight?: string;
   species?: ObservationSpeciesResults[];
 };
 
-export default function SpeciesTotalPlantsChart({ species }: SpeciesTotalPlantsChartProps): JSX.Element {
+export default function SpeciesTotalPlantsChart({ minHeight, species }: SpeciesTotalPlantsChartProps): JSX.Element {
   type Data = {
     labels: string[];
     values: number[];
@@ -35,7 +36,7 @@ export default function SpeciesTotalPlantsChart({ species }: SpeciesTotalPlantsC
       chartLabels={mortalityRates.labels}
       chartValues={mortalityRates.values}
       barWidth={0}
-      minHeight='170px'
+      minHeight={minHeight}
     />
   );
 }

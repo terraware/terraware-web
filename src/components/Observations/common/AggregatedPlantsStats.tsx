@@ -46,12 +46,12 @@ export default function AggregatedPlantsStats({
       <Grid container spacing={3}>
         <Grid item xs={chartGridSize}>
           <ChartWrapper title={strings.NUMBER_OF_PLANTS_BY_SPECIES}>
-            <SpeciesTotalPlantsChart species={species} />
+            <SpeciesTotalPlantsChart species={species} minHeight='170px' />
           </ChartWrapper>
         </Grid>
         <Grid item xs={chartGridSize}>
           <ChartWrapper title={strings.MORTALITY_RATE_BY_SPECIES}>
-            <SpeciesMortalityRateChart species={species} />
+            <SpeciesMortalityRateChart species={species} minHeight='170px' />
           </ChartWrapper>
         </Grid>
       </Grid>
