@@ -1,3 +1,4 @@
+51925c80 redo completedTime vs completedDate for observations in FE (#1454)
 26e48f2f Updated translations from Phrase (#1453)
 e3204ac0 Fix 'invalid date time' display in observations tables (#1452)
 9cb1c9ff observations plants stats info cards + charts (#1450)
