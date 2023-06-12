@@ -34,10 +34,12 @@ export default function ObservationMapView({ observationsResults }: ObservationM
     }
   }, [observationsDates]);
 
+  const [plantingSiteMapData, setPlantingSiteMapData] = useState<MapSourceBaseData | undefined>();
   const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
-    if (!selectedObservationDate) {
+    const selectedObservation = observationsResults?.find((obs) => obs.completedTime === selectedObservationDate);
+    if (!selectedObservationDate || !selectedObservation) {
       return {
-        site: undefined,
+        site: plantingSiteMapData,
         zone: undefined,
         subzone: undefined,
         permanentPlot: undefined,
@@ -45,10 +47,13 @@ export default function ObservationMapView({ observationsResults }: ObservationM
       };
     }
 
-    const selectedObservation = observationsResults?.find((obs) => obs.completedTime === selectedObservationDate)!;
-
     return MapService.getMapDataFromObservation(selectedObservation);
-  }, [selectedObservationDate, observationsResults]);
+  }, [selectedObservationDate, observationsResults, plantingSiteMapData]);
+  useEffect(() => {
+    if (!plantingSiteMapData && mapData.site) {
+      setPlantingSiteMapData(mapData.site);
+    }
+  }, [mapData, plantingSiteMapData]);
 
   const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(layerOptions);
@@ -120,8 +125,16 @@ export default function ObservationMapView({ observationsResults }: ObservationM
               />
             }
             bottomLeftMapControl={
-              observationsDates && <MapDateSelect dates={observationsDates} onChange={setSelectedObservationDate} />
+              observationsDates &&
+              observationsDates.length > 0 && (
+                <MapDateSelect dates={observationsDates} onChange={setSelectedObservationDate} />
+              )
             }
+            contextRenderer={{
+              render: (properties) => {
+                return <p>{`${properties.type} ${properties.id}: ${properties.name}`}</p>;
+              },
+            }}
           />
         )}
       </Box>
