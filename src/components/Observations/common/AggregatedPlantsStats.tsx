@@ -79,7 +79,7 @@ const ChartWrapper = ({ title, children }: ChartWrapperProps): JSX.Element => {
         >
           {title}
         </Typography>
-        <Box height='170px' display='flex' flexDirection='column'>
+        <Box height='170px' display='flex' flexDirection='column' margin={theme.spacing(0, 1)}>
           {children}
         </Box>
       </Box>
