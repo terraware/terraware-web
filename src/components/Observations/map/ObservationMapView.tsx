@@ -19,7 +19,7 @@ export default function ObservationMapView({ observationsResults }: ObservationM
 
   const observationsDates = useMemo(() => {
     return observationsResults
-      ?.map((obs) => obs.completedTime)
+      ?.map((obs) => obs.completedDate)
       ?.filter((time) => time)
       ?.map((time) => time!)
       ?.sort((a, b) => (Date.parse(a!) > Date.parse(b!) ? 1 : -1));
@@ -36,7 +36,7 @@ export default function ObservationMapView({ observationsResults }: ObservationM
 
   const [plantingSiteMapData, setPlantingSiteMapData] = useState<MapSourceBaseData | undefined>();
   const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
-    const selectedObservation = observationsResults?.find((obs) => obs.completedTime === selectedObservationDate);
+    const selectedObservation = observationsResults?.find((obs) => obs.completedDate === selectedObservationDate);
     if (!selectedObservationDate || !selectedObservation) {
       return {
         site: plantingSiteMapData,
