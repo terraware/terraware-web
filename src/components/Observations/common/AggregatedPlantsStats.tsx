@@ -69,7 +69,7 @@ const ChartWrapper = ({ title, children }: ChartWrapperProps): JSX.Element => {
 
   return (
     <Card style={{ height: '240px', padding: 1 }}>
-      <Box height='185px' marginLeft={-0.5}>
+      <Box height='220px' marginLeft={-0.5} display='flex' flexDirection='column'>
         <Typography
           fontSize='14px'
           lineHeight='20px'
@@ -79,7 +79,9 @@ const ChartWrapper = ({ title, children }: ChartWrapperProps): JSX.Element => {
         >
           {title}
         </Typography>
-        {children}
+        <Box height='170px' display='flex' flexDirection='column'>
+          {children}
+        </Box>
       </Box>
     </Card>
   );
