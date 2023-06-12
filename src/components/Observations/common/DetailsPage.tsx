@@ -67,7 +67,7 @@ export default function DetailsPage({
 
       if (observationId) {
         const plantingSiteName = details?.plantingSiteName ?? '';
-        const completionDate = details?.completedTime ? getShortDate(details.completedTime, activeLocale) : '';
+        const completionDate = details?.completedDate ? getShortDate(details.completedDate, activeLocale) : '';
         const name = `${completionDate} (${plantingSiteName})`;
 
         data.push({

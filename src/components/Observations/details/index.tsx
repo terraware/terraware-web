@@ -18,7 +18,7 @@ import ObservationDetailsRenderer from './ObservationDetailsRenderer';
 
 const columns = (): TableColumnType[] => [
   { key: 'plantingZoneName', name: strings.ZONE, type: 'string' },
-  { key: 'completedTime', name: strings.DATE, type: 'string' },
+  { key: 'completedDate', name: strings.DATE, type: 'string' },
   { key: 'totalPlants', name: strings.PLANTS, type: 'number' },
   { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
   { key: 'plantingDensity', name: strings.PLANTING_DENSITY, type: 'number' },
@@ -50,7 +50,7 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
 
   const title = useMemo(() => {
     const plantingSiteName = details?.plantingSiteName ?? '';
-    const completionDate = details?.completedTime ? getShortDate(details.completedTime, activeLocale) : '';
+    const completionDate = details?.completedDate ? getShortDate(details.completedDate, activeLocale) : '';
     return `${completionDate} (${plantingSiteName})`;
   }, [activeLocale, details]);
 
