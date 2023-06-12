@@ -128,7 +128,7 @@ export const mergeObservations = (
         ...observation,
         plantingSiteName: site.name,
         boundary: site.boundary,
-        completedTime: getDateDisplayValue(observation.completedTime!, site.timeZone),
+        completedDate: getDateDisplayValue(observation.completedTime!, site.timeZone),
         plantingZones: mergeZones(
           observation.plantingZones,
           zones,
@@ -159,7 +159,7 @@ const mergeZones = (
         ...zoneObservation,
         plantingZoneName: zone.name,
         boundary: zone.boundary,
-        completedTime: zoneObservation.completedTime
+        completedDate: zoneObservation.completedTime
           ? getDateDisplayValue(zoneObservation.completedTime, timeZone)
           : undefined,
         species: mergeSpecies(zoneObservation.species, species),
@@ -192,7 +192,7 @@ const mergeSubzones = (
             return {
               ...monitoringPlot,
               species: mergeSpecies(monitoringPlot.species, species),
-              completedTime: monitoringPlot.completedTime
+              completedDate: monitoringPlot.completedTime
                 ? getDateDisplayValue(monitoringPlot.completedTime, timeZone)
                 : undefined,
             };
