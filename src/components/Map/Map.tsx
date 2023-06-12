@@ -53,9 +53,9 @@ export default function Map(props: MapProps): JSX.Element {
   const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId[] | undefined>();
   const mapRef = useRef(null);
   const containerRef = useRef(null);
-  const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
-  const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
-  const highlightStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
+  const hoverStateId: { [key: string]: { [key: string]: number | undefined } } = useMemo(() => ({}), []);
+  const selectStateId: { [key: string]: { [key: string]: number | undefined } } = useMemo(() => ({}), []);
+  const highlightStateId: { [key: string]: { [key: string]: number | undefined } } = useMemo(() => ({}), []);
   const [firstVisible, setFirstVisible] = useState(false);
   const visible = useIsVisible(containerRef);
 
@@ -92,22 +92,39 @@ export default function Map(props: MapProps): JSX.Element {
     [onTokenExpired]
   );
 
+  const clearFeatureVar = (featureVar: any, property?: string) => {
+    const map: any = mapRef && mapRef.current;
+
+    Object.keys(featureVar).forEach((sourceId) => {
+      Object.keys(featureVar[sourceId]).forEach((id) => {
+        if (map && property) {
+          map.setFeatureState({ source: sourceId, id: featureVar[sourceId][id] }, { [property]: false });
+        }
+        delete featureVar[sourceId][id];
+      });
+      delete featureVar[sourceId];
+    });
+  };
+
   const updateFeatureState = useCallback((featureVar: any, property: string, mapEntityId: MapEntityId[]) => {
     const map: any = mapRef && mapRef.current;
     if (!map) {
       return;
     }
+
+    // clear previous features of this property
+    clearFeatureVar(featureVar, property);
+
+    // set new
     mapEntityId.forEach((entity) => {
       const { id, sourceId } = entity;
-      // clear previous
-      if (featureVar[sourceId] && id !== featureVar[sourceId]) {
-        map.setFeatureState({ source: sourceId, id: featureVar[sourceId] }, { [property]: false });
+      if (!featureVar[sourceId]) {
+        featureVar[sourceId] = {};
       }
-      // set new
       if (id) {
         map.setFeatureState({ source: sourceId, id }, { [property]: true });
+        featureVar[sourceId][id] = id;
       }
-      featureVar[sourceId] = id;
     });
   }, []);
 
@@ -168,9 +185,9 @@ export default function Map(props: MapProps): JSX.Element {
     }
     const { sources } = options;
 
-    Object.keys(hoverStateId).forEach((key) => delete hoverStateId[key]);
-    Object.keys(selectStateId).forEach((key) => delete selectStateId[key]);
-    Object.keys(highlightStateId).forEach((key) => delete highlightStateId[key]);
+    clearFeatureVar(hoverStateId);
+    clearFeatureVar(selectStateId);
+    clearFeatureVar(highlightStateId);
 
     const mouseMoveCallbacks = sources
       .filter((source) => source.isInteractive)

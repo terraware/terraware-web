@@ -42,10 +42,8 @@ export type PlantingSiteMapProps = {
   style?: object;
   // context on-click renderer
   contextRenderer?: MapPopupRenderer;
-  // selected subzone
-  selectedSubzoneId?: number;
-  // selected zone
-  selectedZoneId?: number;
+  highlightEntities?: MapEntityId[];
+  focusEntities?: MapEntityId[];
   // layers to be displayed on map
   layers?: MapLayer[];
   bottomLeftMapControl?: React.ReactNode;
@@ -57,8 +55,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     mapData,
     style,
     contextRenderer,
-    selectedSubzoneId,
-    selectedZoneId,
+    highlightEntities,
+    focusEntities,
     layers,
     bottomLeftMapControl,
     topRightMapControl,
@@ -215,19 +213,12 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     fetchPlantingSite();
   }, [mapData, snackbar, mapOptions, layers, theme.palette.TwClrBaseWhite, getRenderAttributes]);
 
-  const subzoneEntity: MapEntityId = useMemo(
-    () => ({ sourceId: 'subzones', id: selectedSubzoneId }),
-    [selectedSubzoneId]
-  );
-
-  const zoneEntity: MapEntityId = useMemo(() => ({ sourceId: 'zones', id: selectedZoneId }), [selectedZoneId]);
-
   const entityOptions: MapEntityOptions = useMemo(
     () => ({
-      highlight: [subzoneEntity],
-      focus: [zoneEntity],
+      highlight: highlightEntities,
+      focus: focusEntities,
     }),
-    [subzoneEntity, zoneEntity]
+    [highlightEntities, focusEntities]
   );
 
   if (!mapOptions) {

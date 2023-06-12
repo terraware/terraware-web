@@ -9,12 +9,16 @@ import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import strings from 'src/strings';
 import MapDateSelect from 'src/components/common/MapDateSelect';
 import { getRgbaFromHex } from 'src/utils/color';
+import { useAppSelector } from 'src/redux/store';
+import { searchObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
+import { SearchInputProps } from 'src/components/Observations/search';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-type ObservationMapViewProps = {
+type ObservationMapViewProps = SearchInputProps & {
   observationsResults?: ObservationResults[];
 };
 
-export default function ObservationMapView({ observationsResults }: ObservationMapViewProps): JSX.Element {
+export default function ObservationMapView({ observationsResults, search }: ObservationMapViewProps): JSX.Element {
   const theme = useTheme();
 
   const observationsDates = useMemo(() => {
@@ -34,9 +38,13 @@ export default function ObservationMapView({ observationsResults }: ObservationM
     }
   }, [observationsDates]);
 
+  const selectedObservation = useMemo(
+    () => observationsResults?.find((obs) => obs.completedTime === selectedObservationDate),
+    [observationsResults, selectedObservationDate]
+  );
+
   const [plantingSiteMapData, setPlantingSiteMapData] = useState<MapSourceBaseData | undefined>();
   const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
-    const selectedObservation = observationsResults?.find((obs) => obs.completedTime === selectedObservationDate);
     if (!selectedObservationDate || !selectedObservation) {
       return {
         site: plantingSiteMapData,
@@ -48,12 +56,30 @@ export default function ObservationMapView({ observationsResults }: ObservationM
     }
 
     return MapService.getMapDataFromObservation(selectedObservation);
-  }, [selectedObservationDate, observationsResults, plantingSiteMapData]);
+  }, [selectedObservation, selectedObservationDate, plantingSiteMapData]);
   useEffect(() => {
     if (!plantingSiteMapData && mapData.site) {
       setPlantingSiteMapData(mapData.site);
     }
   }, [mapData, plantingSiteMapData]);
+
+  const defaultTimeZone = useDefaultTimeZone();
+  const details = useAppSelector((state) =>
+    searchObservationDetails(
+      state,
+      {
+        plantingSiteId: Number(selectedObservation?.plantingSiteId ?? -1),
+        observationId: Number(selectedObservation?.observationId ?? -1),
+        search,
+      },
+      defaultTimeZone.get()
+    )
+  );
+
+  const searchZoneEntities = useMemo(
+    () => details?.plantingZones?.map((zone) => ({ sourceId: 'zones', id: zone.plantingZoneId })) ?? [],
+    [details]
+  );
 
   const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(layerOptions);
@@ -135,6 +161,12 @@ export default function ObservationMapView({ observationsResults }: ObservationM
                 return <p>{`${properties.type} ${properties.id}: ${properties.name}`}</p>;
               },
             }}
+            highlightEntities={search === '' ? [] : searchZoneEntities}
+            focusEntities={
+              search === '' || searchZoneEntities.length === 0
+                ? [{ sourceId: 'sites', id: selectedObservation?.plantingSiteId }]
+                : searchZoneEntities
+            }
           />
         )}
       </Box>

@@ -63,8 +63,8 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
           key={plantingSite?.id}
           style={MAP_STYLE}
           contextRenderer={contextRenderer}
-          selectedSubzoneId={selectedSubzoneId}
-          selectedZoneId={selectedZoneId}
+          highlightEntities={[{ sourceId: 'subzones', id: selectedSubzoneId }]}
+          focusEntities={[{ sourceId: 'zones', id: selectedZoneId }]}
         />
       ) : isMobile || !subzones ? null : (
         <GenericMap style={MAP_STYLE} />
