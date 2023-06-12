@@ -133,29 +133,36 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       // The first layer added to sources will render on top of subsequent layers. We want to attach interactivity
       // and display annotations for this layer only.
       const isFirstLayerAdded = () => sources.length === 0;
-      if (mapData.temporaryPlot && (layers === undefined || layers?.includes('Monitoring Plots'))) {
-        sources.push({
-          ...mapData.temporaryPlot,
-          isInteractive: true,
-          annotation: {
-            textField: 'name',
-            textColor: theme.palette.TwClrBaseWhite as string,
-            textSize: 12,
-          },
-          ...getRenderAttributes('temporaryPlot'),
-        });
-      }
-      if (mapData.permanentPlot && (layers === undefined || layers?.includes('Monitoring Plots'))) {
-        sources.push({
-          ...mapData.permanentPlot,
-          isInteractive: true,
-          annotation: {
-            textField: 'name',
-            textColor: theme.palette.TwClrBaseWhite as string,
-            textSize: 12,
-          },
-          ...getRenderAttributes('permanentPlot'),
-        });
+      if (layers === undefined || layers?.includes('Monitoring Plots')) {
+        const monitoringPlotsFirst = isFirstLayerAdded();
+        if (mapData.temporaryPlot) {
+          sources.push({
+            ...mapData.temporaryPlot,
+            isInteractive: monitoringPlotsFirst,
+            annotation: monitoringPlotsFirst
+              ? {
+                  textField: 'name',
+                  textColor: theme.palette.TwClrBaseWhite as string,
+                  textSize: 12,
+                }
+              : undefined,
+            ...getRenderAttributes('temporaryPlot'),
+          });
+        }
+        if (mapData.permanentPlot) {
+          sources.push({
+            ...mapData.permanentPlot,
+            isInteractive: monitoringPlotsFirst,
+            annotation: monitoringPlotsFirst
+              ? {
+                  textField: 'name',
+                  textColor: theme.palette.TwClrBaseWhite as string,
+                  textSize: 12,
+                }
+              : undefined,
+            ...getRenderAttributes('permanentPlot'),
+          });
+        }
       }
       if (mapData.subzone && (layers === undefined || layers?.includes('Sub-Zones'))) {
         sources.push({
