@@ -333,6 +333,10 @@ export interface paths {
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos": {
     post: operations["uploadPlotPhoto"];
   };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos/{fileId}": {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    get: operations["getPlotPhoto"];
+  };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}/release": {
     post: operations["releaseMonitoringPlot"];
   };
@@ -1990,6 +1994,7 @@ export interface components {
       /** Format: int64 */
       plantingSiteId: number;
       plantingZones: components["schemas"]["ObservationPlantingZoneResultsPayload"][];
+      species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /** Format: date */
       startDate: string;
       state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
@@ -2101,6 +2106,8 @@ export interface components {
       type: "Delivery" | "Reassignment From" | "Reassignment To";
     };
     PlantingSitePayload: {
+      /** @description Area of planting site in hectares. Only present if the site has planting zones. */
+      areaHa?: number;
       boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       /** Format: int64 */
@@ -2126,13 +2133,15 @@ export interface components {
       timeZone?: string;
     };
     PlantingSubzonePayload: {
+      /** @description Area of planting subzone in hectares. */
+      areaHa: number;
       boundary: components["schemas"]["MultiPolygon"];
       finishedPlanting: boolean;
       /**
        * Format: date-time
        * @description When the planting subzone was marked as finished planting.
        */
-      finishedTime?: string;
+      finishedPlantingTime?: string;
       fullName: string;
       /** Format: int64 */
       id: number;
@@ -2145,6 +2154,8 @@ export interface components {
       scientificName: string;
     };
     PlantingZonePayload: {
+      /** @description Area of planting zone in hectares. */
+      areaHa: number;
       boundary: components["schemas"]["MultiPolygon"];
       /** Format: int64 */
       id: number;
@@ -5285,6 +5296,8 @@ export interface operations {
       query: {
         organizationId?: number;
         plantingSiteId?: number;
+        /** Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
+        limit?: number;
       };
     };
     responses: {
@@ -5397,6 +5410,37 @@ export interface operations {
           /** Format: binary */
           file: string;
           payload: components["schemas"]["UploadPlotPhotoRequestPayload"];
+        };
+      };
+    };
+  };
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  getPlotPhoto: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+        fileId: number;
+      };
+      query: {
+        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: number;
+        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: number;
+      };
+    };
+    responses: {
+      /** The photo was successfully retrieved. */
+      200: {
+        content: {
+          "image/jpeg": string;
+          "image/png": string;
+        };
+      };
+      /** The plot observation does not exist, or does not have a photo with the requested ID. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

@@ -19,6 +19,7 @@ export type ObservationResults = ObservationResultsPayload &
   Boundary & {
     plantingSiteName: string;
     plantingZones: ObservationPlantingZoneResults[];
+    species: ObservationSpeciesResults[];
   };
 
 // zone level results -> contains a list of subzone level results

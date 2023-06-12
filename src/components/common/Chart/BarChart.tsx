@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Theme, useTheme } from '@mui/material';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
-import { useLocalization } from '../../providers';
-import { newChart } from '../common/Chart';
+import { useLocalization } from 'src/providers';
+import { newChart } from './';
 import { Chart } from 'chart.js';
 
 export interface StyleProps {
@@ -16,14 +16,15 @@ const useStyles = makeStyles<Theme, StyleProps>(() => ({
   },
 }));
 
-export interface DashboardChartProps {
+export interface BarChartProps {
   chartId: string;
   chartLabels?: string[];
   chartValues?: number[];
   minHeight?: string;
+  barWidth?: number;
 }
 
-export default function DashboardChart(props: DashboardChartProps): JSX.Element | null {
+export default function BarChart(props: BarChartProps): JSX.Element | null {
   const { chartLabels, chartValues } = props;
   const { activeLocale } = useLocalization();
   const [locale, setLocale] = useState<string | null>(null);
@@ -37,7 +38,7 @@ export default function DashboardChart(props: DashboardChartProps): JSX.Element 
   }
 
   return (
-    <DashboardChartContent
+    <BarChartContent
       {...props}
       locale={locale}
       chartLabels={chartLabels}
@@ -47,20 +48,24 @@ export default function DashboardChart(props: DashboardChartProps): JSX.Element 
   );
 }
 
-interface DashboardChartContentProps {
+interface BarChartContentProps {
   chartId: string;
   chartLabels: string[];
   chartValues: number[];
   minHeight?: string;
   locale: string;
+  barWidth?: number;
 }
 
-function DashboardChartContent(props: DashboardChartContentProps): JSX.Element {
+function BarChartContent(props: BarChartContentProps): JSX.Element {
   const { chartId, chartLabels, chartValues, minHeight, locale } = props;
   const classes = useStyles({ minHeight });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
   const theme = useTheme();
+
+  const barWidth = props.barWidth;
+  const barThickness = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
   useEffect(() => {
     const createChart = async () => {
@@ -79,7 +84,7 @@ function DashboardChartContent(props: DashboardChartContentProps): JSX.Element {
             datasets: [
               {
                 data: chartValues,
-                barThickness: 50, // number (pixels) or 'flex'
+                barThickness,
                 backgroundColor: colors,
                 minBarLength: 3,
               },

@@ -67,6 +67,7 @@ export default function OverviewItemCard({
             fontWeight: 500,
             justifyContent: isMobile ? 'space-between' : 'normal',
             lineHeight: '24px',
+            minHeight: '24px',
             width: '100%',
           }}
         >
