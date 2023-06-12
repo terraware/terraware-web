@@ -43,7 +43,7 @@ export default function ObservationPlantingZone(): JSX.Element {
         plantingZoneId: Number(plantingZoneId),
         search,
       },
-      defaultTimeZone.get()
+      defaultTimeZone.get().id
     )
   );
 
