@@ -41,7 +41,7 @@ export default function DetailsPage({
         observationId: Number(observationId),
         plantingZoneId: Number(plantingZoneId),
       },
-      defaultTimeZone.get()
+      defaultTimeZone.get().id
     )
   );
 
@@ -52,7 +52,7 @@ export default function DetailsPage({
         plantingSiteId: Number(plantingSiteId),
         observationId: Number(observationId),
       },
-      defaultTimeZone.get()
+      defaultTimeZone.get().id
     )
   );
 

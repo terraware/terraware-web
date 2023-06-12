@@ -44,7 +44,7 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
         observationId: Number(observationId),
         search,
       },
-      defaultTimeZone.get()
+      defaultTimeZone.get().id
     )
   );
 

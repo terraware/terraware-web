@@ -23,7 +23,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
         plantingZoneId: Number(plantingZoneId),
         monitoringPlotId: Number(monitoringPlotId),
       },
-      defaultTimeZone.get()
+      defaultTimeZone.get().id
     )
   );
 

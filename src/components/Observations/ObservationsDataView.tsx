@@ -18,7 +18,7 @@ export default function ObservationsDataView({
 }: ObservationsDataViewProps): JSX.Element {
   const defaultTimeZone = useDefaultTimeZone();
   const observationsResults = useAppSelector((state) =>
-    searchObservations(state, selectedPlantingSiteId, defaultTimeZone.get(), search)
+    searchObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, search)
   );
 
   return (
