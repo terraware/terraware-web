@@ -34,6 +34,7 @@ export default function ListMapView({ search, list, map, onView, initialView }: 
         flexDirection: 'column',
         flexGrow: 1,
       }}
+      flushMobile
     >
       <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center'>
         {search}

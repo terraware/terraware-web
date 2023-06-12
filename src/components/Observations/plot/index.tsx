@@ -95,7 +95,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
     >
       <Grid container>
         <Grid item xs={12}>
-          <Card>
+          <Card flushMobile>
             {title(strings.DETAILS, 1, 0)}
             <Grid container>
               {data.map((datum, index) => (
