@@ -51,17 +51,15 @@ export default function MonitoringPlotPhotos({
 
   return (
     <>
-      {photosModalOpened && (
-        <ViewPhotosDialog
-          photos={photoUrls.map((url) => ({ url }))}
-          open={photosModalOpened}
-          onClose={() => setPhotosModalOpened(false)}
-          initialSelectedSlide={selectedSlide}
-          nextButtonLabel={strings.NEXT}
-          prevButtonLabel={strings.PREVIOUS}
-          title={strings.PHOTOS}
-        />
-      )}
+      <ViewPhotosDialog
+        photos={photoUrls.map((url) => ({ url }))}
+        open={photosModalOpened}
+        onClose={() => setPhotosModalOpened(false)}
+        initialSelectedSlide={selectedSlide}
+        nextButtonLabel={strings.NEXT}
+        prevButtonLabel={strings.PREVIOUS}
+        title={strings.PHOTOS}
+      />
       <Box display='flex' flexWrap='wrap'>
         {photoUrls.map((photoUrl, index) => (
           <Box
