@@ -14,6 +14,7 @@ import Card from 'src/components/common/Card';
 import DetailsPage from 'src/components/Observations/common/DetailsPage';
 import SpeciesTotalPlantsChart from 'src/components/Observations/common/SpeciesTotalPlantsChart';
 import SpeciesMortalityRateChart from 'src/components/Observations/common/SpeciesMortalityRateChart';
+import MonitoringPlotPhotos from './MonitoringPlotPhotos';
 
 export default function ObservationMonitoringPlot(): JSX.Element {
   const { plantingSiteId, observationId, plantingZoneId, monitoringPlotId } = useParams<{
@@ -120,7 +121,11 @@ export default function ObservationMonitoringPlot(): JSX.Element {
               <SpeciesMortalityRateChart minHeight='360px' species={monitoringPlot?.species} />
             </Box>
             {title(strings.PHOTOS)}
-            TODO: Add photos
+            <MonitoringPlotPhotos
+              observationId={Number(observationId)}
+              monitoringPlotId={Number(monitoringPlotId)}
+              photos={monitoringPlot?.photos}
+            />
           </Card>
         </Grid>
       </Grid>
