@@ -28,8 +28,8 @@ docker_tags="${docker_image}:$commit_sha,${docker_image}:${TIER}"
 # Define secret names based on the tier
 echo "TIER=$TIER
 IS_CD=$IS_CD
-SSH_CONFIG_SECRET_NAME=${TIER}_SSH_CONFIG
 SSH_KEY_SECRET_NAME=${TIER}_SSH_KEY
+SSH_USER_SECRET_NAME=${TIER}_SSH_USER
 AWS_REGION_SECRET_NAME=${TIER}_AWS_REGION
 AWS_ROLE_SECRET_NAME=${TIER}_AWS_ROLE
 COMMIT_SHA=$commit_sha
