@@ -27,7 +27,7 @@ export default function BreadCrumbs({ hierarchical, crumbs }: BreadCrumbsProps):
         }, [] as Crumb[]);
 
   return (
-    <Box display='inline-flex' alignItems='center'>
+    <Box display='inline-flex' alignItems='center' flexWrap='wrap'>
       {breadCrumbs.map((crumb: Crumb, index: number) => (
         <Box key={index} display='inline-flex' alignItems='center'>
           {index === 0 ? (

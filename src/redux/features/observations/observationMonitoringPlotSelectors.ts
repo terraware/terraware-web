@@ -6,13 +6,21 @@ export type MonitoringPlotParams = ZoneParams & {
   monitoringPlotId: number;
 };
 
+export type PlotObservations = ObservationMonitoringPlotResults & {
+  plantingZoneName: string;
+  plantingSubzoneName: string;
+};
+
 export const selectObservationMonitoringPlot = createSelector(
   [selectObservationPlantingZone, (state, params, defaultTimeZone) => params],
   (observationPlantingZone, params) =>
     observationPlantingZone?.plantingSubzones
-      .flatMap((subzone: ObservationPlantingSubzoneResults) => subzone.monitoringPlots)
-      .find(
-        (monitoringPlot: ObservationMonitoringPlotResults) =>
-          monitoringPlot.monitoringPlotId === params.monitoringPlotId
+      .flatMap((subzone: ObservationPlantingSubzoneResults): PlotObservations[] =>
+        subzone.monitoringPlots.map((plot: ObservationMonitoringPlotResults) => ({
+          ...plot,
+          plantingZoneName: observationPlantingZone.plantingZoneName,
+          plantingSubzoneName: subzone.plantingSubzoneName,
+        }))
       )
+      .find((monitoringPlot: PlotObservations) => monitoringPlot.monitoringPlotId === params.monitoringPlotId)
 );
