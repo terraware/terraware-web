@@ -14,6 +14,7 @@ export type AggregatedPlantsStatsProps = {
   plantingDensity?: number;
   mortalityRate?: number;
   species?: ObservationSpeciesResults[];
+  isSite?: boolean;
 };
 
 export default function AggregatedPlantsStats({
@@ -22,15 +23,16 @@ export default function AggregatedPlantsStats({
   plantingDensity,
   mortalityRate,
   species,
+  isSite,
 }: AggregatedPlantsStatsProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const infoCardGridSize = isMobile ? 12 : 3;
   const chartGridSize = isMobile ? 12 : 6;
 
   const getData = () => [
-    { label: strings.PLANTS, value: totalPlants },
+    { label: strings.PLANTS, value: totalPlants, toolTip: isSite ? strings.PLANTS_MISSING_TOOLTIP : '' },
     { label: strings.SPECIES, value: totalSpecies },
-    { label: strings.PLANTING_DENSITY, value: plantingDensity },
+    { label: strings.PLANTING_DENSITY, value: plantingDensity, toolTip: strings.PLANTING_DENSITY_MISSING_TOOLTIP },
     { label: strings.MORTALITY_RATE, value: mortalityRate },
   ];
 
@@ -39,7 +41,12 @@ export default function AggregatedPlantsStats({
       <Grid container spacing={3} marginBottom={3}>
         {getData().map((data) => (
           <Grid item xs={infoCardGridSize} key={data.label}>
-            <OverviewItemCard isEditable={false} title={data.label} contents={data.value?.toString() ?? '--'} />
+            <OverviewItemCard
+              isEditable={false}
+              title={data.label}
+              contents={data.value?.toString() ?? null}
+              titleInfoTooltip={data.toolTip}
+            />
           </Grid>
         ))}
       </Grid>
