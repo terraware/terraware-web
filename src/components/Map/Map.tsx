@@ -17,6 +17,8 @@ const mapboxImpl: any = mapboxgl;
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
 
+type FeatureStateId = Record<string, Record<string, number | undefined>>;
+
 const navControlStyle = {
   marginRight: '5px',
   marginBottom: '20px',
@@ -53,9 +55,9 @@ export default function Map(props: MapProps): JSX.Element {
   const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId[] | undefined>();
   const mapRef = useRef(null);
   const containerRef = useRef(null);
-  const hoverStateId: { [key: string]: { [key: string]: number | undefined } } = useMemo(() => ({}), []);
-  const selectStateId: { [key: string]: { [key: string]: number | undefined } } = useMemo(() => ({}), []);
-  const highlightStateId: { [key: string]: { [key: string]: number | undefined } } = useMemo(() => ({}), []);
+  const hoverStateId: FeatureStateId = useMemo(() => ({}), []);
+  const selectStateId: FeatureStateId = useMemo(() => ({}), []);
+  const highlightStateId: FeatureStateId = useMemo(() => ({}), []);
   const [firstVisible, setFirstVisible] = useState(false);
   const visible = useIsVisible(containerRef);
 
@@ -100,7 +102,6 @@ export default function Map(props: MapProps): JSX.Element {
         if (map && property) {
           map.setFeatureState({ source: sourceId, id: featureVar[sourceId][id] }, { [property]: false });
         }
-        delete featureVar[sourceId][id];
       });
       delete featureVar[sourceId];
     });
