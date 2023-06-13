@@ -1,3 +1,4 @@
+0bf06add SW-3394 Deploy using Tailscale instead of bastion (#1459)
 8b91490a Display monitoring plot observation photos (#1458)
 272956c7 Updated translations from Phrase (#1457)
 8b17128b Observations monitoring plot view with data/charts but without photos (#1456)
