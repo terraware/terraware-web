@@ -55,14 +55,14 @@ export default function ObservationMonitoringPlot(): JSX.Element {
               activeLocale,
               plantingSite?.timeZone || defaultTimeZone.get().id
             )
-          : '',
+          : undefined,
       },
       { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
       { label: strings.ZONE, value: monitoringPlot?.plantingZoneName },
       { label: strings.SUBZONE, value: monitoringPlot?.plantingSubzoneName },
       {
         label: strings.MONITORING_PLOT_TYPE,
-        value: monitoringPlot ? (monitoringPlot.isPermanent ? strings.PERMANENT : strings.TEMPORARY) : '',
+        value: monitoringPlot ? (monitoringPlot.isPermanent ? strings.PERMANENT : strings.TEMPORARY) : undefined,
       },
       { label: strings.PLANTS, value: monitoringPlot?.totalPlants },
       { label: strings.SPECIES, value: monitoringPlot?.totalSpecies },
@@ -103,7 +103,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
                   <Textfield
                     id={`plot-observation-${index}`}
                     label={datum.label}
-                    value={datum.value}
+                    value={datum.value ?? '--'}
                     type={datum.text ? 'textarea' : 'text'}
                     preserveNewlines={true}
                     display={true}

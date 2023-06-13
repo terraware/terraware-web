@@ -39,7 +39,7 @@ export default function AggregatedPlantsStats({
       <Grid container spacing={3} marginBottom={3}>
         {getData().map((data) => (
           <Grid item xs={infoCardGridSize} key={data.label}>
-            <OverviewItemCard isEditable={false} title={data.label} contents={data.value?.toString() ?? null} />
+            <OverviewItemCard isEditable={false} title={data.label} contents={data.value?.toString() ?? '--'} />
           </Grid>
         ))}
       </Grid>
