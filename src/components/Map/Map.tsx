@@ -17,6 +17,8 @@ const mapboxImpl: any = mapboxgl;
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
 
+type FeatureStateId = Record<string, Record<string, number | undefined>>;
+
 const navControlStyle = {
   marginRight: '5px',
   marginBottom: '20px',
@@ -53,9 +55,9 @@ export default function Map(props: MapProps): JSX.Element {
   const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId[] | undefined>();
   const mapRef = useRef(null);
   const containerRef = useRef(null);
-  const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
-  const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
-  const highlightStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
+  const hoverStateId: FeatureStateId = useMemo(() => ({}), []);
+  const selectStateId: FeatureStateId = useMemo(() => ({}), []);
+  const highlightStateId: FeatureStateId = useMemo(() => ({}), []);
   const [firstVisible, setFirstVisible] = useState(false);
   const visible = useIsVisible(containerRef);
 
@@ -92,22 +94,38 @@ export default function Map(props: MapProps): JSX.Element {
     [onTokenExpired]
   );
 
+  const clearFeatureVar = (featureVar: any, property?: string) => {
+    const map: any = mapRef && mapRef.current;
+
+    Object.keys(featureVar).forEach((sourceId) => {
+      Object.keys(featureVar[sourceId]).forEach((id) => {
+        if (map && property) {
+          map.setFeatureState({ source: sourceId, id: featureVar[sourceId][id] }, { [property]: false });
+        }
+      });
+      delete featureVar[sourceId];
+    });
+  };
+
   const updateFeatureState = useCallback((featureVar: any, property: string, mapEntityId: MapEntityId[]) => {
     const map: any = mapRef && mapRef.current;
     if (!map) {
       return;
     }
+
+    // clear previous features of this property
+    clearFeatureVar(featureVar, property);
+
+    // set new
     mapEntityId.forEach((entity) => {
       const { id, sourceId } = entity;
-      // clear previous
-      if (featureVar[sourceId] && id !== featureVar[sourceId]) {
-        map.setFeatureState({ source: sourceId, id: featureVar[sourceId] }, { [property]: false });
+      if (!featureVar[sourceId]) {
+        featureVar[sourceId] = {};
       }
-      // set new
       if (id) {
         map.setFeatureState({ source: sourceId, id }, { [property]: true });
+        featureVar[sourceId][id] = id;
       }
-      featureVar[sourceId] = id;
     });
   }, []);
 
@@ -168,9 +186,9 @@ export default function Map(props: MapProps): JSX.Element {
     }
     const { sources } = options;
 
-    Object.keys(hoverStateId).forEach((key) => delete hoverStateId[key]);
-    Object.keys(selectStateId).forEach((key) => delete selectStateId[key]);
-    Object.keys(highlightStateId).forEach((key) => delete highlightStateId[key]);
+    clearFeatureVar(hoverStateId);
+    clearFeatureVar(selectStateId);
+    clearFeatureVar(highlightStateId);
 
     const mouseMoveCallbacks = sources
       .filter((source) => source.isInteractive)
@@ -323,26 +341,6 @@ export default function Map(props: MapProps): JSX.Element {
     }
   }, [options, setGeoData, token, popupRenderer]);
 
-  useEffect(() => {
-    if (entityOptions?.highlight) {
-      if (!mapRef || !mapRef.current) {
-        setDeferredHighlightEntity(entityOptions?.highlight);
-      } else {
-        updateFeatureState(highlightStateId, 'highlight', entityOptions?.highlight);
-      }
-    }
-  }, [entityOptions?.highlight, highlightStateId, updateFeatureState]);
-
-  useEffect(() => {
-    if (entityOptions?.focus) {
-      if (!mapRef || !mapRef.current) {
-        setDeferredFocusEntity(entityOptions?.focus);
-      } else {
-        drawFocusTo(entityOptions?.focus);
-      }
-    }
-  }, [drawFocusTo, entityOptions?.focus]);
-
   const mapSources = useMemo(() => {
     if (!geoData) {
       return null;
@@ -357,6 +355,26 @@ export default function Map(props: MapProps): JSX.Element {
 
     return sources;
   }, [geoData]);
+
+  useEffect(() => {
+    if (entityOptions?.highlight) {
+      if (!mapRef || !mapRef.current) {
+        setDeferredHighlightEntity(entityOptions?.highlight);
+      } else {
+        updateFeatureState(highlightStateId, 'highlight', entityOptions?.highlight);
+      }
+    }
+  }, [entityOptions?.highlight, highlightStateId, updateFeatureState, mapSources]);
+
+  useEffect(() => {
+    if (entityOptions?.focus) {
+      if (!mapRef || !mapRef.current) {
+        setDeferredFocusEntity(entityOptions?.focus);
+      } else {
+        drawFocusTo(entityOptions?.focus);
+      }
+    }
+  }, [drawFocusTo, entityOptions?.focus, geoData]);
 
   const hasEntities = options.sources?.some((source) => {
     return source.entities?.some((entity) => entity?.boundary?.length);

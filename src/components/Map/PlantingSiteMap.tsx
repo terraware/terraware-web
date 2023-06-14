@@ -42,10 +42,8 @@ export type PlantingSiteMapProps = {
   style?: object;
   // context on-click renderer
   contextRenderer?: MapPopupRenderer;
-  // selected subzone
-  selectedSubzoneId?: number;
-  // selected zone
-  selectedZoneId?: number;
+  highlightEntities?: MapEntityId[];
+  focusEntities?: MapEntityId[];
   // layers to be displayed on map
   layers?: MapLayer[];
   bottomLeftMapControl?: React.ReactNode;
@@ -57,8 +55,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     mapData,
     style,
     contextRenderer,
-    selectedSubzoneId,
-    selectedZoneId,
+    highlightEntities,
+    focusEntities,
     layers,
     bottomLeftMapControl,
     topRightMapControl,
@@ -135,29 +133,36 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       // The first layer added to sources will render on top of subsequent layers. We want to attach interactivity
       // and display annotations for this layer only.
       const isFirstLayerAdded = () => sources.length === 0;
-      if (mapData.temporaryPlot && (layers === undefined || layers?.includes('Monitoring Plots'))) {
-        sources.push({
-          ...mapData.temporaryPlot,
-          isInteractive: true,
-          annotation: {
-            textField: 'name',
-            textColor: theme.palette.TwClrBaseWhite as string,
-            textSize: 12,
-          },
-          ...getRenderAttributes('temporaryPlot'),
-        });
-      }
-      if (mapData.permanentPlot && (layers === undefined || layers?.includes('Monitoring Plots'))) {
-        sources.push({
-          ...mapData.permanentPlot,
-          isInteractive: true,
-          annotation: {
-            textField: 'name',
-            textColor: theme.palette.TwClrBaseWhite as string,
-            textSize: 12,
-          },
-          ...getRenderAttributes('permanentPlot'),
-        });
+      if (layers === undefined || layers?.includes('Monitoring Plots')) {
+        const monitoringPlotsFirst = isFirstLayerAdded();
+        if (mapData.temporaryPlot) {
+          sources.push({
+            ...mapData.temporaryPlot,
+            isInteractive: monitoringPlotsFirst,
+            annotation: monitoringPlotsFirst
+              ? {
+                  textField: 'name',
+                  textColor: theme.palette.TwClrBaseWhite as string,
+                  textSize: 12,
+                }
+              : undefined,
+            ...getRenderAttributes('temporaryPlot'),
+          });
+        }
+        if (mapData.permanentPlot) {
+          sources.push({
+            ...mapData.permanentPlot,
+            isInteractive: monitoringPlotsFirst,
+            annotation: monitoringPlotsFirst
+              ? {
+                  textField: 'name',
+                  textColor: theme.palette.TwClrBaseWhite as string,
+                  textSize: 12,
+                }
+              : undefined,
+            ...getRenderAttributes('permanentPlot'),
+          });
+        }
       }
       if (mapData.subzone && (layers === undefined || layers?.includes('Sub-Zones'))) {
         sources.push({
@@ -215,19 +220,12 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     fetchPlantingSite();
   }, [mapData, snackbar, mapOptions, layers, theme.palette.TwClrBaseWhite, getRenderAttributes]);
 
-  const subzoneEntity: MapEntityId = useMemo(
-    () => ({ sourceId: 'subzones', id: selectedSubzoneId }),
-    [selectedSubzoneId]
-  );
-
-  const zoneEntity: MapEntityId = useMemo(() => ({ sourceId: 'zones', id: selectedZoneId }), [selectedZoneId]);
-
   const entityOptions: MapEntityOptions = useMemo(
     () => ({
-      highlight: [subzoneEntity],
-      focus: [zoneEntity],
+      highlight: highlightEntities,
+      focus: focusEntities,
     }),
-    [subzoneEntity, zoneEntity]
+    [highlightEntities, focusEntities]
   );
 
   if (!mapOptions) {

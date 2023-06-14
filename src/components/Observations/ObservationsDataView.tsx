@@ -30,7 +30,7 @@ export default function ObservationsDataView({
         selectedPlantingSiteId === -1 ? (
           <AllPlantingSitesMapView />
         ) : (
-          <ObservationMapView observationsResults={observationsResults} />
+          <ObservationMapView observationsResults={observationsResults} search={search} onSearch={onSearch} />
         )
       }
     />
