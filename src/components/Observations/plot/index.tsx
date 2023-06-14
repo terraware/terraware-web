@@ -104,7 +104,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
                   <Textfield
                     id={`plot-observation-${index}`}
                     label={datum.label}
-                    value={datum.value ?? '--'}
+                    value={datum.value}
                     type={datum.text ? 'textarea' : 'text'}
                     preserveNewlines={true}
                     display={true}
