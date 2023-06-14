@@ -26,18 +26,18 @@ export default function AggregatedPlantsStats({
   const { isMobile } = useDeviceInfo();
   const infoCardGridSize = isMobile ? 12 : 3;
   const chartGridSize = isMobile ? 12 : 6;
-
+  console.log(totalPlants, plantingDensity);
   const getData = () => [
     {
       label: strings.PLANTS,
       value: totalPlants,
-      toolTip: totalPlants === undefined ? strings.PLANTS_MISSING_TOOLTIP : '',
+      toolTip: totalPlants === null ? strings.PLANTS_MISSING_TOOLTIP : '',
     },
     { label: strings.SPECIES, value: totalSpecies },
     {
       label: strings.PLANTING_DENSITY,
       value: plantingDensity,
-      toolTip: plantingDensity === undefined ? strings.PLANTING_DENSITY_MISSING_TOOLTIP : '',
+      toolTip: plantingDensity === null ? strings.PLANTING_DENSITY_MISSING_TOOLTIP : '',
     },
     { label: strings.MORTALITY_RATE, value: mortalityRate },
   ];
