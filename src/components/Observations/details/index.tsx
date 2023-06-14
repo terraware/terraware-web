@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
@@ -33,7 +32,6 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
     observationId: string;
   }>();
   const { activeLocale } = useLocalization();
-  const { isMobile } = useDeviceInfo();
   const defaultTimeZone = useDefaultTimeZone();
 
   const details = useAppSelector((state) =>
@@ -61,7 +59,7 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
           <AggregatedPlantsStats {...(details ?? {})} />
         </Grid>
         <Grid item xs={12}>
-          <Card style={isMobile ? { borderRadius: 0, marginLeft: -3, marginRight: -3 } : {}}>
+          <Card flushMobile>
             <Search search={search} onSearch={onSearch} />
             <Box marginTop={2}>
               <Table

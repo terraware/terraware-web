@@ -518,6 +518,7 @@ MORTALITY_RATE_IN_FIELD,Mortality Rate in Field (%)
 MORTALITY_RATE_IN_FIELD_REQUIRED,Mortality Rate in Field (%) *
 MORTALITY_RATE_IN_NURSERY,Mortality Rate in Nursery (%)
 MORTALITY_RATE_IN_NURSERY_REQUIRED,Mortality Rate in Nursery (%) *
+MORTALITY_RATE_PER_SPECIES,Mortality Rate per Species
 MORTALITY_RATE_PERCENT_REQUIRED,Mortality Rate (%) *
 MOSS,Moss
 MOST_RECENT_PERCENTAGE_VIABILITY,Most Recent % Viability
@@ -583,8 +584,10 @@ NOT_READY_QUANTITY_REQUIRED,Not Ready Quantity *
 NOTE_ANY_ISSUES,Does everything above look right? Note any issues.
 NOTES,Notes
 NOTIFICATIONS,Notifications
+NUMBER_OF_LIVE_PLANTS_PER_SPECIES,Number of Live Plants per Species
 NUMBER_OF_PACKETS,Number of Packets
 NUMBER_OF_PEOPLE,Number of People
+NUMBER_OF_PHOTOS,Number of Photos
 NUMBER_OF_PLANTS,Number of Plants
 NUMBER_OF_PLANTS_BY_SPECIES,Number of Plants by Species
 NUMBER_OF_PLANTS_BY_SUBZONE_AND_SPECIES,Number of Plants by Subzone and Species
@@ -621,6 +624,7 @@ OBSERVATIONS,Observations
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Observations are when you record data from a sample of monitoring plots using our mobile app in the field. This allows us to calculate mortality rates, and eventually carbon sequestration."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"You will be notified when it is time to take your observations (typically, the next time you end a planting season). After you've completed your first observations, you'll see the records here."
 OBSERVATIONS_EMPTY_STATE_TITLE,No Observations Yet
+OBSERVER,Observer
 ONBOARDING_ADMIN_TITLE,"Just a moment, let’s complete setup first"
 OPPORTUNITIES,Opportunities
 OPPORTUNITIES_INSTRUCTIONS,"This may include opportunities for project expansion, new markets, referrals, training to other organizations, etc. (One-quarter page maximum.)"
@@ -681,6 +685,7 @@ PLANT_ID,Plant ID
 PLANT_ID_TOOLTIP,It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.
 PLANT_LABEL,Plant
 PLANTING_DENSITY,Planting Density
+PLANTING_DENSITY_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the planting density."
 PLANTING_SITE,Planting Site
 PLANTING_SITE_TYPE,Planting Site Type
 PLANTING_SITE_WITH_MAP_HELP,"If you are a Terraformation partner or accelerator participant, please [contact us] to create a site with a map."
@@ -688,6 +693,7 @@ PLANTING_SITES,Planting Sites
 PLANTING_ZONE,Planting Zone
 PLANTING_ZONES,Planting Zones
 PLANTS,Plants
+PLANTS_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the total plants."
 PLANTS_CARD_DESCRIPTION,They’ve taken root! View all your plants in one place.
 PLEASE_TRY_AGAIN,Please try again.
 PLOTS_PERMANENT,Permanent Plots
@@ -1013,6 +1019,7 @@ TEST_METHOD,Test Method
 TEST_METHOD_REQUIRED,Test Method *
 TEST_TYPE,Test Type
 TESTING_STAFF,Testing Staff
+TIME,Time
 TIME_PERIOD,Time Period
 TIME_ZONE,Time Zone
 TIME_ZONE_REQUIRED,Time Zone *

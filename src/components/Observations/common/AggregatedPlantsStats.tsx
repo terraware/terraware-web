@@ -28,9 +28,17 @@ export default function AggregatedPlantsStats({
   const chartGridSize = isMobile ? 12 : 6;
 
   const getData = () => [
-    { label: strings.PLANTS, value: totalPlants },
+    {
+      label: strings.PLANTS,
+      value: totalPlants,
+      toolTip: totalPlants === null ? strings.PLANTS_MISSING_TOOLTIP : '',
+    },
     { label: strings.SPECIES, value: totalSpecies },
-    { label: strings.PLANTING_DENSITY, value: plantingDensity },
+    {
+      label: strings.PLANTING_DENSITY,
+      value: plantingDensity,
+      toolTip: plantingDensity === null ? strings.PLANTING_DENSITY_MISSING_TOOLTIP : '',
+    },
     { label: strings.MORTALITY_RATE, value: mortalityRate },
   ];
 
@@ -39,18 +47,23 @@ export default function AggregatedPlantsStats({
       <Grid container spacing={3} marginBottom={3}>
         {getData().map((data) => (
           <Grid item xs={infoCardGridSize} key={data.label}>
-            <OverviewItemCard isEditable={false} title={data.label} contents={data.value?.toString() ?? null} />
+            <OverviewItemCard
+              isEditable={false}
+              title={data.label}
+              contents={data.value?.toString() ?? null}
+              titleInfoTooltip={data.toolTip}
+            />
           </Grid>
         ))}
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={chartGridSize}>
-          <ChartWrapper title={strings.NUMBER_OF_PLANTS_BY_SPECIES}>
+          <ChartWrapper title={strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}>
             <SpeciesTotalPlantsChart species={species} minHeight='170px' />
           </ChartWrapper>
         </Grid>
         <Grid item xs={chartGridSize}>
-          <ChartWrapper title={strings.MORTALITY_RATE_BY_SPECIES}>
+          <ChartWrapper title={strings.MORTALITY_RATE_PER_SPECIES}>
             <SpeciesMortalityRateChart species={species} minHeight='170px' />
           </ChartWrapper>
         </Grid>
