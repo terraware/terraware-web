@@ -25,7 +25,9 @@ export const selectObservationDetails = createSelector(
     (state, params, defaultTimeZone) => params,
   ],
   (observationsResults, params) =>
-    observationsResults?.find((observation: ObservationResults) => observation.observationId === params.observationId)
+    observationsResults?.find(
+      (observation: ObservationResults) => observation.observationId === params.observationId
+    ) ?? null
 );
 
 export const searchObservationDetails = createCachedSelector(

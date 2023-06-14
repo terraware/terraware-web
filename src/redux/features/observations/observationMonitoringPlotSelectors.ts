@@ -22,5 +22,5 @@ export const selectObservationMonitoringPlot = createSelector(
           plantingSubzoneName: subzone.plantingSubzoneName,
         }))
       )
-      .find((monitoringPlot: PlotObservations) => monitoringPlot.monitoringPlotId === params.monitoringPlotId)
+      .find((monitoringPlot: PlotObservations) => monitoringPlot.monitoringPlotId === params.monitoringPlotId) ?? null
 );

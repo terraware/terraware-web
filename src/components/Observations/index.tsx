@@ -88,7 +88,7 @@ const ObservationsWrapper = (): JSX.Element => {
       <Route exact path={APP_PATHS.OBSERVATION_DETAILS}>
         <ObservationDetails {...searchInputProps} />
       </Route>
-      <Route exact path={APP_PATHS.PLANTING_SITE_OBSERVATIONS}>
+      <Route exact path={APP_PATHS.OBSERVATIONS_SITE}>
         <ObservationsHome {...searchInputProps} />
       </Route>
       <Route path={'*'}>

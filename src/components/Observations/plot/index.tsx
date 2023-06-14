@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getShortTime } from 'src/utils/dateFormatter';
@@ -24,6 +25,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
     monitoringPlotId: string;
   }>();
   const defaultTimeZone = useDefaultTimeZone();
+  const history = useHistory();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
@@ -86,6 +88,16 @@ export default function ObservationMonitoringPlot(): JSX.Element {
       {text}
     </Typography>
   );
+
+  useEffect(() => {
+    if (monitoringPlot === null) {
+      history.push(
+        APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', Number(plantingSiteId).toString())
+          .replace(':observationId', Number(observationId).toString())
+          .replace(':plantingZoneId', Number(plantingZoneId).toString())
+      );
+    }
+  }, [history, monitoringPlot, observationId, plantingZoneId, plantingSiteId]);
 
   return (
     <DetailsPage

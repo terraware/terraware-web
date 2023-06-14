@@ -35,7 +35,6 @@ export enum APP_PATHS {
   PEOPLE = '/people',
   PLANTS_DASHBOARD = '/plants/dashboard',
   PLANTING_SITE_DASHBOARD = '/plants/dashboard/:plantingSiteId',
-  PLANTING_SITE_OBSERVATIONS = '/observations/:plantingSiteId',
   REPORTS = '/reports',
   REPORTS_EDIT = '/reports/:reportId/edit',
   REPORTS_VIEW = '/reports/:reportId',
