@@ -31,7 +31,7 @@ export default function ObservationMapView({ observationsResults, search }: Obse
   useEffect(() => {
     if (observationsDates) {
       setSelectedObservationDate((currentDate) => {
-        if (!currentDate || !observationsDates.includes(currentDate)) {
+        if ((!currentDate || !observationsDates.includes(currentDate)) && observationsDates.length > 0) {
           return observationsDates[observationsDates.length - 1];
         } else {
           return currentDate;
