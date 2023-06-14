@@ -685,6 +685,7 @@ PLANT_ID,ID de la planta
 PLANT_ID_TOOLTIP,Es la identificación de una planta con fines de seguimiento o conservación. Lo ideal es que las semillas de una planta rastreada no se mezclen con otras de una misma accesión.
 PLANT_LABEL,Plantar
 PLANTING_DENSITY,Densidad de siembra
+PLANTING_DENSITY_MISSING_TOOLTIP,"Una vez que hayas marcado tu sitio de plantación como terminado y completado tus observaciones, podrás visualizar la densidad de la plantación."
 PLANTING_SITE,Lugar de plantación
 PLANTING_SITE_TYPE,Tipo de lugar de plantación
 PLANTING_SITE_WITH_MAP_HELP,"Si usted es un socio de Terraformation o un participante del acelerador, por favor [contáctenos] para crear un sitio con un mapa."
@@ -693,6 +694,7 @@ PLANTING_ZONE,Zona de plantación
 PLANTING_ZONES,Zonas de plantación
 PLANTS,Plantas
 PLANTS_CARD_DESCRIPTION,¡Han echado raíces! Vea todas sus plantas en un solo lugar.
+PLANTS_MISSING_TOOLTIP,"Cuando marques tu sitio de plantación como completado y hayas finalizado tus observaciones, serás capaz de ver el total de las plantas."
 PLEASE_TRY_AGAIN,"Por favor, inténtelo de nuevo."
 PLOTS_PERMANENT,Parcelas fijas
 PLOTS_TEMPORARY,Parcelas temporales
