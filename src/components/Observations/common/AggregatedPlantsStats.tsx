@@ -26,7 +26,7 @@ export default function AggregatedPlantsStats({
   const { isMobile } = useDeviceInfo();
   const infoCardGridSize = isMobile ? 12 : 3;
   const chartGridSize = isMobile ? 12 : 6;
-  console.log(totalPlants, plantingDensity);
+
   const getData = () => [
     {
       label: strings.PLANTS,
