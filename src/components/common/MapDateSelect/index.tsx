@@ -1,16 +1,17 @@
 import DateSlider from './DateSlider';
 import { Box, Typography, useTheme } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import { getShortDate } from 'src/utils/dateFormatter';
 
 type MapDateSelectProps = {
   dates: string[]; // date strings in the format 'YYYY-MM-DD'
-  onChange: (newDate: string) => void;
+  selectedDate: string;
+  onChange: (newDate?: string) => void;
 };
 
-export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): JSX.Element {
+export default function MapDateSelect({ dates, selectedDate, onChange }: MapDateSelectProps): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization().activeLocale;
 
@@ -31,17 +32,6 @@ export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): 
       return curr;
     });
   }, [dates]);
-
-  const latestDateIndex = useMemo(() => {
-    return dates.findIndex((d) => d === latestDate);
-  }, [dates, latestDate]);
-
-  const [selectedDate, setSelectedDate] = useState(latestDate);
-
-  const handleChange = (newDate: string) => {
-    setSelectedDate(newDate);
-    onChange(newDate);
-  };
 
   const getDateString = (date: string) => getShortDate(date, locale);
 
@@ -66,7 +56,7 @@ export default function MapDateSelect({ dates, onChange }: MapDateSelectProps): 
       )}
       {dates.length > 1 && (
         <>
-          <DateSlider dates={dates} onChange={handleChange} initialSelectionIndex={latestDateIndex} />
+          <DateSlider dates={dates} onChange={onChange} selection={selectedDate} />
           <Box display='flex' justifyContent='space-between'>
             {getDateLabel(earliestDate)}
             {getDateLabel(latestDate)}

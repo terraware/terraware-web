@@ -3,12 +3,12 @@ import { useMemo } from 'react';
 
 type DateSliderProps = {
   dates: string[]; // date strings in the format 'YYYY-MM-DD'
-  onChange: (newDate: string) => void;
-  initialSelectionIndex: number;
+  onChange: (newDate?: string) => void;
+  selection: string;
 };
 
 export default function DateSlider(props: DateSliderProps): JSX.Element {
-  const { dates, onChange, initialSelectionIndex } = props;
+  const { dates, onChange, selection } = props;
 
   const minTime = useMemo(() => {
     return Math.min(...dates.map((d) => Date.parse(d)));
@@ -33,12 +33,12 @@ export default function DateSlider(props: DateSliderProps): JSX.Element {
 
   return (
     <Slider
-      defaultValue={marks[initialSelectionIndex].value}
+      value={marks.find((m) => m.value === Date.parse(selection))?.value}
       min={minTime}
       max={maxTime}
       marks={marks}
       valueLabelDisplay='off'
-      onChange={(ts) => onChange(timestampForDate.get(ts) ?? dates[initialSelectionIndex])}
+      onChange={(ts) => onChange(timestampForDate.get(ts))}
     />
   );
 }

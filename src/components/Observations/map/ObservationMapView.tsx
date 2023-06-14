@@ -3,16 +3,14 @@ import { Box, useTheme } from '@mui/material';
 import MapLegend from 'src/components/common/MapLegend';
 import { PlantingSiteMap } from 'src/components/Map';
 import React, { useEffect, useMemo, useState } from 'react';
-import { MapObject, MapSourceBaseData } from 'src/types/Map';
+import { MapEntityId, MapObject, MapSourceBaseData } from 'src/types/Map';
 import { MapService } from 'src/services';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import strings from 'src/strings';
 import MapDateSelect from 'src/components/common/MapDateSelect';
 import { getRgbaFromHex } from 'src/utils/color';
-import { useAppSelector } from 'src/redux/store';
-import { searchObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
 import { SearchInputProps } from 'src/components/Observations/search';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { regexMatch } from 'src/utils/search';
 
 type ObservationMapViewProps = SearchInputProps & {
   observationsResults?: ObservationResults[];
@@ -32,7 +30,13 @@ export default function ObservationMapView({ observationsResults, search }: Obse
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
   useEffect(() => {
     if (observationsDates) {
-      setSelectedObservationDate(observationsDates[observationsDates.length - 1]);
+      setSelectedObservationDate((currentDate) => {
+        if (!currentDate || !observationsDates.includes(currentDate)) {
+          return observationsDates[observationsDates.length - 1];
+        } else {
+          return currentDate;
+        }
+      });
     } else {
       setSelectedObservationDate('');
     }
@@ -63,23 +67,14 @@ export default function ObservationMapView({ observationsResults, search }: Obse
     }
   }, [mapData, plantingSiteMapData]);
 
-  const defaultTimeZone = useDefaultTimeZone();
-  const details = useAppSelector((state) =>
-    searchObservationDetails(
-      state,
-      {
-        plantingSiteId: Number(selectedObservation?.plantingSiteId ?? -1),
-        observationId: Number(selectedObservation?.observationId ?? -1),
-        search,
-      },
-      defaultTimeZone.get()
-    )
-  );
-
-  const searchZoneEntities = useMemo(
-    () => details?.plantingZones?.map((zone) => ({ sourceId: 'zones', id: zone.plantingZoneId })) ?? [],
-    [details]
-  );
+  const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
+  useEffect(() => {
+    const entities = (observationsResults ?? [])
+      .flatMap((obs) => obs.plantingZones)
+      .filter((zone) => regexMatch(zone.plantingZoneName, search))
+      .map((zone) => ({ sourceId: 'zones', id: zone.plantingZoneId }));
+    setSearchZoneEntities(entities);
+  }, [observationsResults, search, selectedObservation]);
 
   const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(layerOptions);
@@ -153,7 +148,11 @@ export default function ObservationMapView({ observationsResults, search }: Obse
             bottomLeftMapControl={
               observationsDates &&
               observationsDates.length > 0 && (
-                <MapDateSelect dates={observationsDates} onChange={setSelectedObservationDate} />
+                <MapDateSelect
+                  dates={observationsDates}
+                  selectedDate={selectedObservationDate ?? ''}
+                  onChange={setSelectedObservationDate}
+                />
               )
             }
             contextRenderer={{
@@ -163,9 +162,11 @@ export default function ObservationMapView({ observationsResults, search }: Obse
             }}
             highlightEntities={search === '' ? [] : searchZoneEntities}
             focusEntities={
-              search === '' || searchZoneEntities.length === 0
+              search === '' && searchZoneEntities.length === 0
                 ? [{ sourceId: 'sites', id: selectedObservation?.plantingSiteId }]
-                : searchZoneEntities
+                : search !== ''
+                ? searchZoneEntities
+                : []
             }
           />
         )}

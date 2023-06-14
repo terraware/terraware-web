@@ -341,26 +341,6 @@ export default function Map(props: MapProps): JSX.Element {
     }
   }, [options, setGeoData, token, popupRenderer]);
 
-  useEffect(() => {
-    if (entityOptions?.highlight) {
-      if (!mapRef || !mapRef.current) {
-        setDeferredHighlightEntity(entityOptions?.highlight);
-      } else {
-        updateFeatureState(highlightStateId, 'highlight', entityOptions?.highlight);
-      }
-    }
-  }, [entityOptions?.highlight, highlightStateId, updateFeatureState]);
-
-  useEffect(() => {
-    if (entityOptions?.focus) {
-      if (!mapRef || !mapRef.current) {
-        setDeferredFocusEntity(entityOptions?.focus);
-      } else {
-        drawFocusTo(entityOptions?.focus);
-      }
-    }
-  }, [drawFocusTo, entityOptions?.focus]);
-
   const mapSources = useMemo(() => {
     if (!geoData) {
       return null;
@@ -375,6 +355,26 @@ export default function Map(props: MapProps): JSX.Element {
 
     return sources;
   }, [geoData]);
+
+  useEffect(() => {
+    if (entityOptions?.highlight) {
+      if (!mapRef || !mapRef.current) {
+        setDeferredHighlightEntity(entityOptions?.highlight);
+      } else {
+        updateFeatureState(highlightStateId, 'highlight', entityOptions?.highlight);
+      }
+    }
+  }, [entityOptions?.highlight, highlightStateId, updateFeatureState, mapSources]);
+
+  useEffect(() => {
+    if (entityOptions?.focus) {
+      if (!mapRef || !mapRef.current) {
+        setDeferredFocusEntity(entityOptions?.focus);
+      } else {
+        drawFocusTo(entityOptions?.focus);
+      }
+    }
+  }, [drawFocusTo, entityOptions?.focus, geoData]);
 
   const hasEntities = options.sources?.some((source) => {
     return source.entities?.some((entity) => entity?.boundary?.length);
