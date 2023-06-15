@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
+import { FieldOptionsMap } from 'src/types/Search';
 import strings from 'src/strings';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { getShortDate } from 'src/utils/dateFormatter';
@@ -10,7 +11,7 @@ import { useAppSelector } from 'src/redux/store';
 import { searchObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
-import Search, { SearchInputProps } from 'src/components/Observations/search';
+import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import DetailsPage from 'src/components/Observations/common/DetailsPage';
 import AggregatedPlantsStats from 'src/components/Observations/common/AggregatedPlantsStats';
 import ObservationDetailsRenderer from './ObservationDetailsRenderer';
@@ -24,9 +25,15 @@ const columns = (): TableColumnType[] => [
   { key: 'mortalityRate', name: strings.MORTALITY_RATE, type: 'number' },
 ];
 
-export type ObservationDetailsProps = SearchInputProps;
+export type ObservationDetailsProps = Omit<SearchProps, 'filterOptions'>;
 
-export default function ObservationDetails({ search, onSearch }: ObservationDetailsProps): JSX.Element {
+export default function ObservationDetails({
+  search,
+  onSearch,
+  filters,
+  setFilters,
+  filterColumns,
+}: ObservationDetailsProps): JSX.Element {
   const { plantingSiteId, observationId } = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -52,6 +59,16 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
     return `${completionDate} (${plantingSiteName})`;
   }, [activeLocale, details]);
 
+  const filterOptions = useMemo<FieldOptionsMap>(
+    () =>
+      activeLocale
+        ? {
+            zone: { partial: false, values: [] },
+          }
+        : { zone: { partial: false, values: [] } },
+    [activeLocale]
+  );
+
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
       <Grid container spacing={3}>
@@ -60,7 +77,14 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
         </Grid>
         <Grid item xs={12}>
           <Card flushMobile>
-            <Search search={search} onSearch={onSearch} />
+            <Search
+              search={search}
+              onSearch={onSearch}
+              filters={filters}
+              setFilters={(val) => setFilters(val)}
+              filterOptions={filterOptions}
+              filterColumns={filterColumns}
+            />
             <Box marginTop={2}>
               <Table
                 id='observation-details-table'

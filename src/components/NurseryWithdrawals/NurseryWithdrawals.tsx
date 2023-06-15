@@ -8,7 +8,7 @@ import TfMain from 'src/components/common/TfMain';
 import { makeStyles } from '@mui/styles';
 import { SortOrder, Tooltip } from '@terraware/web-components';
 import { NurseryWithdrawalService } from 'src/services';
-import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { FieldNodePayload, FieldOptionsMap, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import WithdrawalLogRenderer from './WithdrawalLogRenderer';
 import { APP_PATHS } from 'src/constants';
 import { useHistory } from 'react-router-dom';
@@ -19,7 +19,6 @@ import { Button, PillList } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
-import { FieldOptionsMap } from 'src/services/NurseryWithdrawalService';
 
 const useStyles = makeStyles((theme: Theme) => ({
   searchField: {

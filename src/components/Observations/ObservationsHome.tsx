@@ -9,11 +9,11 @@ import { selectPlantingSiteObservationsResults } from 'src/redux/features/observ
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import Card from 'src/components/common/Card';
+import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import ObservationsDataView from './ObservationsDataView';
-import { SearchInputProps } from './search';
 
-export type ObservationsHomeProps = SearchInputProps;
+export type ObservationsHomeProps = Omit<SearchProps, 'filterOptions'>;
 
 export default function ObservationsHome(props: ObservationsHomeProps): JSX.Element {
   const history = useHistory();
