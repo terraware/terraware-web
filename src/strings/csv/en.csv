@@ -620,6 +620,7 @@ NURSERY_MEDIA,Nursery Media
 NURSERY_MORTALITY_RATE,Nursery Mortality Rate
 NURSERY_REQUIRED,Nursery *
 NURSERY_TRANSFER,Nursery Transfer
+OBSERVATION_IN_PROGRESS,Observation in Progress
 OBSERVATIONS,Observations
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Observations are when you record data from a sample of monitoring plots using our mobile app in the field. This allows us to calculate mortality rates, and eventually carbon sequestration."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"You will be notified when it is time to take your observations (typically, the next time you end a planting season). After you've completed your first observations, you'll see the records here."
@@ -695,6 +696,7 @@ PLANTING_ZONES,Planting Zones
 PLANTS,Plants
 PLANTS_CARD_DESCRIPTION,They’ve taken root! View all your plants in one place.
 PLANTS_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the total plants."
+PLANTS_PER_HECTARE,plants/ha
 PLEASE_TRY_AGAIN,Please try again.
 PLOTS_PERMANENT,Permanent Plots
 PLOTS_TEMPORARY,Temporary Plots
