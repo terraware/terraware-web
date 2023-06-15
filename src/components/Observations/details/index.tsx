@@ -26,15 +26,13 @@ const columns = (): TableColumnType[] => [
   { key: 'mortalityRate', name: strings.MORTALITY_RATE, type: 'number' },
 ];
 
-export type ObservationDetailsProps = Omit<SearchProps, 'filterOptions'>;
+export type ObservationDetailsProps = SearchProps & {
+  setFilterOptions: (value: FieldOptionsMap) => void;
+};
 
-export default function ObservationDetails({
-  search,
-  onSearch,
-  filters,
-  setFilters,
-  filterColumns,
-}: ObservationDetailsProps): JSX.Element {
+export default function ObservationDetails(props: ObservationDetailsProps): JSX.Element {
+  const { setFilterOptions } = props;
+  const { ...searchProps }: SearchProps = props;
   const { plantingSiteId, observationId } = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -49,7 +47,7 @@ export default function ObservationDetails({
       {
         plantingSiteId: Number(plantingSiteId),
         observationId: Number(observationId),
-        search,
+        search: searchProps.search,
       },
       defaultTimeZone.get().id
     )
@@ -61,15 +59,11 @@ export default function ObservationDetails({
     return `${completionDate} (${plantingSiteName})`;
   }, [activeLocale, details]);
 
-  const filterOptions = useMemo<FieldOptionsMap>(
-    () =>
-      activeLocale
-        ? {
-            zone: { partial: false, values: [] },
-          }
-        : { zone: { partial: false, values: [] } },
-    [activeLocale]
-  );
+  useEffect(() => {
+    setFilterOptions({
+      zone: { partial: false, values: [] },
+    });
+  }, [setFilterOptions]);
 
   useEffect(() => {
     if (!details) {
@@ -85,14 +79,7 @@ export default function ObservationDetails({
         </Grid>
         <Grid item xs={12}>
           <Card flushMobile>
-            <Search
-              search={search}
-              onSearch={onSearch}
-              filters={filters}
-              setFilters={(val) => setFilters(val)}
-              filterOptions={filterOptions}
-              filterColumns={filterColumns}
-            />
+            <Search {...searchProps} />
             <Box marginTop={2}>
               <Table
                 id='observation-details-table'

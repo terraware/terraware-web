@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import strings from 'src/strings';
+import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
 import { useAppSelector } from 'src/redux/store';
@@ -13,7 +14,9 @@ import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import ObservationsDataView from './ObservationsDataView';
 
-export type ObservationsHomeProps = Omit<SearchProps, 'filterOptions'>;
+export type ObservationsHomeProps = SearchProps & {
+  setFilterOptions: (value: FieldOptionsMap) => void;
+};
 
 export default function ObservationsHome(props: ObservationsHomeProps): JSX.Element {
   const history = useHistory();

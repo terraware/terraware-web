@@ -12,7 +12,7 @@ import { searchObservationPlantingZone } from 'src/redux/features/observations/o
 import { FilterField } from 'src/components/common/FilterGroup';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
-import Search from 'src/components/common/SearchFiltersWrapper';
+import Search, { SearchFiltersProps } from 'src/components/common/SearchFiltersWrapper';
 import DetailsPage from 'src/components/Observations/common/DetailsPage';
 import AggregatedPlantsStats from 'src/components/Observations/common/AggregatedPlantsStats';
 import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
@@ -52,6 +52,16 @@ export default function ObservationPlantingZone(): JSX.Element {
           }
         : { plotType: { partial: false, values: [] } },
     [activeLocale]
+  );
+
+  const filtersProps = useMemo<SearchFiltersProps>(
+    () => ({
+      filters,
+      setFilters: (val: Record<string, any>) => setFilters(val),
+      filterOptions,
+      filterColumns,
+    }),
+    [filters, setFilters, filterOptions, filterColumns]
   );
 
   const plantingZone = useAppSelector((state) =>
@@ -95,14 +105,7 @@ export default function ObservationPlantingZone(): JSX.Element {
         </Grid>
         <Grid item xs={12}>
           <Card flushMobile>
-            <Search
-              search={search}
-              onSearch={(value: string) => onSearch(value)}
-              filters={filters}
-              setFilters={(val) => setFilters(val)}
-              filterOptions={filterOptions}
-              filterColumns={filterColumns}
-            />
+            <Search search={search} onSearch={(value: string) => onSearch(value)} filtersProps={filtersProps} />
             <Box marginTop={2}>
               <Table
                 id='observation-details-table'

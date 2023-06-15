@@ -30,16 +30,11 @@ export type SearchFiltersProps = {
   filterColumns: FilterField[];
 };
 
-export type SearchProps = SearchInputProps & SearchFiltersProps;
+export type SearchProps = SearchInputProps & {
+  filtersProps?: SearchFiltersProps;
+};
 
-export default function Search({
-  search,
-  onSearch,
-  filters,
-  setFilters,
-  filterOptions,
-  filterColumns,
-}: SearchProps): JSX.Element {
+export default function Search({ search, onSearch, filtersProps }: SearchProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -54,21 +49,23 @@ export default function Search({
 
   const filterPillData = useMemo(
     () =>
-      Object.keys(filters).map((key) => {
-        const removeFilter = (k: string) => {
-          const result = { ...filters };
-          delete result[k];
-          setFilters(result);
-        };
+      filtersProps
+        ? Object.keys(filtersProps.filters).map((key) => {
+            const removeFilter = (k: string) => {
+              const result = { ...filtersProps.filters };
+              delete result[k];
+              filtersProps.setFilters(result);
+            };
 
-        return {
-          id: key,
-          label: filterColumns.find((f) => key === f.name)?.label ?? '',
-          value: filters[key].values.join(', '),
-          onRemove: () => removeFilter(key),
-        };
-      }),
-    [filters, filterColumns, setFilters]
+            return {
+              id: key,
+              label: filtersProps.filterColumns.find((f) => key === f.name)?.label ?? '',
+              value: filtersProps.filters[key].values.join(', '),
+              onRemove: () => removeFilter(key),
+            };
+          })
+        : [],
+    [filtersProps]
   );
 
   return (
@@ -88,46 +85,52 @@ export default function Search({
               onClickRightIcon={() => onSearch('')}
             />
           </Box>
-          <Tooltip title={strings.FILTER}>
-            <Button
-              id='filter-observations-button'
-              onClick={(event) => event && handleFilterClick(event)}
-              type='passive'
-              priority='ghost'
-              icon='filter'
-            />
-          </Tooltip>
-          <Popover
-            id='observations-filter-popover'
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            onClose={handleFilterClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-            className={classes.popoverContainer}
-          >
-            <FilterGroup
-              initialFilters={filters}
-              fields={filterColumns}
-              values={filterOptions || {}}
-              onConfirm={(fs) => {
-                handleFilterClose();
-                setFilters(fs);
-              }}
-              onCancel={handleFilterClose}
-              noScroll={true}
-            />
-          </Popover>
+          {filtersProps && (
+            <>
+              <Tooltip title={strings.FILTER}>
+                <Button
+                  id='filter-observations-button'
+                  onClick={(event) => event && handleFilterClick(event)}
+                  type='passive'
+                  priority='ghost'
+                  icon='filter'
+                />
+              </Tooltip>
+              <Popover
+                id='observations-filter-popover'
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={handleFilterClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                className={classes.popoverContainer}
+              >
+                <FilterGroup
+                  initialFilters={filtersProps.filters}
+                  fields={filtersProps.filterColumns}
+                  values={filtersProps.filterOptions || {}}
+                  onConfirm={(fs) => {
+                    handleFilterClose();
+                    filtersProps.setFilters(fs);
+                  }}
+                  onCancel={handleFilterClose}
+                  noScroll={true}
+                />
+              </Popover>
+            </>
+          )}
         </Grid>
-        <Grid xs={12} display='flex' marginTop={1}>
-          <PillList data={filterPillData} />
-        </Grid>
+        {filterPillData.length > 0 && (
+          <Grid item xs={12} display='flex' marginTop={1}>
+            <PillList data={filterPillData} />
+          </Grid>
+        )}
       </Grid>
     </>
   );

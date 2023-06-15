@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
+import { FieldOptionsMap } from 'src/types/Search';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -72,21 +73,27 @@ const ObservationsWrapper = (): JSX.Element => {
   const { activeLocale } = useLocalization();
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
   const filterColumns = useMemo<FilterField[]>(
     () => (activeLocale ? [{ name: 'zone', label: strings.ZONE, type: 'multiple_selection' }] : []),
     [activeLocale]
   );
 
-  const searchProps: Omit<SearchProps, 'filterOptions'> = useMemo(
+  const setFilterOptionsCallback = useCallback((value: FieldOptionsMap) => setFilterOptions(value), []);
+
+  const searchProps = useMemo<SearchProps>(
     () => ({
       search,
       onSearch: (value: string) => setSearch(value),
-      filters,
-      setFilters: (value: Record<string, any>) => setFilters(value),
-      filterColumns,
+      filtersProps: {
+        filters,
+        setFilters: (value: Record<string, any>) => setFilters(value),
+        filterColumns,
+        filterOptions,
+      },
     }),
-    [filters, filterColumns, search]
+    [filters, filterColumns, filterOptions, search]
   );
 
   return (
@@ -98,13 +105,13 @@ const ObservationsWrapper = (): JSX.Element => {
         <ObservationPlantingZoneDetails />
       </Route>
       <Route exact path={APP_PATHS.OBSERVATION_DETAILS}>
-        <ObservationDetails {...searchProps} />
+        <ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} />
       </Route>
       <Route exact path={APP_PATHS.OBSERVATIONS_SITE}>
-        <ObservationsHome {...searchProps} />
+        <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
       </Route>
       <Route path={'*'}>
-        <ObservationsHome {...searchProps} />
+        <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
       </Route>
     </Switch>
   );
