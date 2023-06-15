@@ -150,7 +150,7 @@ export default function ObservationMapView({ observationsResults, search }: Obse
 
     return (
       <TooltipContents
-        observationInProgress={selectedObservation?.completedTime === undefined}
+        observationInProgress={selectedObservation?.state === 'InProgress'}
         title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
         numPlants={entity?.totalPlants}
         numSpecies={entity?.totalSpecies}
