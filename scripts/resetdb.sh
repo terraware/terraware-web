@@ -41,7 +41,12 @@ fi
 restore_dump dump/dump.sql
 
 yarn docker:start
-yarn wait-be
+if yarn wait-be; then
+    :
+else
+    docker-compose logs terraware-server
+    exit 1
+fi
 
 restore_dump dump/session.sql
 
