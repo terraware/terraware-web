@@ -17,7 +17,7 @@ import { regexMatch } from 'src/utils/search';
 
 // utils
 
-export const searchResultPlots = (search: string, zone: ObservationPlantingZoneResults | null) => {
+export const searchResultPlots = (search: string, zone?: ObservationPlantingZoneResults) => {
   if (!search.trim() || !zone) {
     return zone;
   }
@@ -34,7 +34,7 @@ export const searchResultPlots = (search: string, zone: ObservationPlantingZoneR
   };
 };
 
-export const searchResultZones = (search: string, observation: ObservationResults | null) => {
+export const searchResultZones = (search: string, observation?: ObservationResults) => {
   if (!search.trim() || !observation) {
     return observation;
   }

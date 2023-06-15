@@ -48,7 +48,7 @@ export default function ObservationPlantingZone(): JSX.Element {
   );
 
   useEffect(() => {
-    if (plantingZone === null) {
+    if (!plantingZone) {
       history.push(
         APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', Number(plantingSiteId).toString()).replace(
           ':observationId',

@@ -90,7 +90,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
   );
 
   useEffect(() => {
-    if (monitoringPlot === null) {
+    if (!monitoringPlot) {
       history.push(
         APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', Number(plantingSiteId).toString())
           .replace(':observationId', Number(observationId).toString())

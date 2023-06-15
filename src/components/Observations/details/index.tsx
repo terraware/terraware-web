@@ -55,7 +55,7 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
   }, [activeLocale, details]);
 
   useEffect(() => {
-    if (details === null) {
+    if (!details) {
       history.push(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', Number(plantingSiteId).toString()));
     }
   }, [details, history, plantingSiteId]);

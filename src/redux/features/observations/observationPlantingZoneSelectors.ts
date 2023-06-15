@@ -16,7 +16,7 @@ export const selectObservationPlantingZone = createSelector(
   (observationDetails, params) =>
     observationDetails?.plantingZones.find(
       (plantingZone: ObservationPlantingZoneResults) => plantingZone.plantingZoneId === params.plantingZoneId
-    ) ?? null
+    )
 );
 
 export const searchObservationPlantingZone = createCachedSelector(
