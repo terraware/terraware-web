@@ -24,10 +24,10 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
       ) : (
         <>
           <Typography fontSize='16px' fontWeight={400}>
-            {`${numPlants ?? strings.UNKNOWN} ${strings.PLANTS}`}
+            {`${strings.PLANTS}: ${numPlants ?? strings.UNKNOWN}`}
           </Typography>
           <Typography fontSize='16px' fontWeight={400}>
-            {`${numSpecies ?? strings.UNKNOWN} ${strings.SPECIES}`}
+            {`${strings.SPECIES}: ${numSpecies ?? strings.UNKNOWN}`}
           </Typography>
           <Typography fontSize='16px' fontWeight={400}>
             {`${strings.PLANTING_DENSITY}: ${plantingDensity ?? strings.UNKNOWN} ${strings.PLANTS_PER_HECTARE}`}

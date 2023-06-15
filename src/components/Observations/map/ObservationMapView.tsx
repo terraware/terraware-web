@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   popover: {
     '&.mapboxgl-popup': {
       maxWidth: '324px !important', // !important to override a default mapbox style
-      width: '324px',
     },
   },
 }));
