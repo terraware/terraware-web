@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import strings from 'src/strings';
+import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
 import { useAppSelector } from 'src/redux/store';
@@ -9,11 +10,13 @@ import { selectPlantingSiteObservationsResults } from 'src/redux/features/observ
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import Card from 'src/components/common/Card';
+import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import ObservationsDataView from './ObservationsDataView';
-import { SearchInputProps } from './search';
 
-export type ObservationsHomeProps = SearchInputProps;
+export type ObservationsHomeProps = SearchProps & {
+  setFilterOptions: (value: FieldOptionsMap) => void;
+};
 
 export default function ObservationsHome(props: ObservationsHomeProps): JSX.Element {
   const history = useHistory();

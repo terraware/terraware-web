@@ -9,7 +9,7 @@ export type ZoneParams = DetailsParams & {
   plantingZoneId: number;
 };
 
-export type ZoneSearchParams = SearchParams & ZoneParams;
+export type ZoneSearchParams = SearchParams & ZoneParams & { plotType?: boolean };
 
 export const selectObservationPlantingZone = createSelector(
   [selectObservationDetails, (state, params, defaultTimeZone) => params],
@@ -22,8 +22,8 @@ export const selectObservationPlantingZone = createSelector(
 export const searchObservationPlantingZone = createCachedSelector(
   selectObservationPlantingZone,
   (state: RootState, params: ZoneSearchParams, defaultTimeZone: string) => params,
-  (plantingZone, params) => searchResultPlots(params.search, plantingZone)
+  (plantingZone, params) => searchResultPlots(params.search, params.plotType, plantingZone)
 )(
   (state: RootState, params: ZoneSearchParams, defaultTimeZone: string) =>
-    `${params.plantingSiteId}_${params.observationId}_${params.plantingZoneId}_${defaultTimeZone}_${params.search}`
+    `${params.plantingSiteId}_${params.observationId}_${params.plantingZoneId}_${defaultTimeZone}_${params.search}_${params.plotType}`
 );

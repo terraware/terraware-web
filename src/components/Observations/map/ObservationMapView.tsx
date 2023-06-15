@@ -9,7 +9,7 @@ import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import strings from 'src/strings';
 import MapDateSelect from 'src/components/common/MapDateSelect';
 import { getRgbaFromHex } from 'src/utils/color';
-import { SearchInputProps } from 'src/components/Observations/search';
+import { SearchInputProps } from 'src/components/common/SearchFiltersWrapper';
 import { regexMatch } from 'src/utils/search';
 
 type ObservationMapViewProps = SearchInputProps & {

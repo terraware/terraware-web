@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
+import { FieldOptionsMap } from 'src/types/Search';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -11,7 +12,7 @@ import { useAppSelector } from 'src/redux/store';
 import { searchObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
-import Search, { SearchInputProps } from 'src/components/Observations/search';
+import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import DetailsPage from 'src/components/Observations/common/DetailsPage';
 import AggregatedPlantsStats from 'src/components/Observations/common/AggregatedPlantsStats';
 import ObservationDetailsRenderer from './ObservationDetailsRenderer';
@@ -25,9 +26,13 @@ const columns = (): TableColumnType[] => [
   { key: 'mortalityRate', name: strings.MORTALITY_RATE, type: 'number' },
 ];
 
-export type ObservationDetailsProps = SearchInputProps;
+export type ObservationDetailsProps = SearchProps & {
+  setFilterOptions: (value: FieldOptionsMap) => void;
+};
 
-export default function ObservationDetails({ search, onSearch }: ObservationDetailsProps): JSX.Element {
+export default function ObservationDetails(props: ObservationDetailsProps): JSX.Element {
+  const { setFilterOptions } = props;
+  const { ...searchProps }: SearchProps = props;
   const { plantingSiteId, observationId } = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -42,7 +47,7 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
       {
         plantingSiteId: Number(plantingSiteId),
         observationId: Number(observationId),
-        search,
+        search: searchProps.search,
       },
       defaultTimeZone.get().id
     )
@@ -53,6 +58,12 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
     const completionDate = details?.completedDate ? getShortDate(details.completedDate, activeLocale) : '';
     return `${completionDate} (${plantingSiteName})`;
   }, [activeLocale, details]);
+
+  useEffect(() => {
+    setFilterOptions({
+      zone: { partial: false, values: [] },
+    });
+  }, [setFilterOptions]);
 
   useEffect(() => {
     if (!details) {
@@ -68,7 +79,7 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
         </Grid>
         <Grid item xs={12}>
           <Card flushMobile>
-            <Search search={search} onSearch={onSearch} />
+            <Search {...searchProps} />
             <Box marginTop={2}>
               <Table
                 id='observation-details-table'

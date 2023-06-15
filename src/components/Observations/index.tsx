@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
+import { FieldOptionsMap } from 'src/types/Search';
+import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import useSnackbar from 'src/utils/useSnackbar';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
@@ -14,11 +16,12 @@ import {
 } from 'src/redux/features/observations/observationsSelectors';
 import { selectSpeciesError, selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSitesError, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { FilterField } from 'src/components/common/FilterGroup';
+import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import ObservationsHome from './ObservationsHome';
 import ObservationDetails from './details';
 import ObservationPlantingZoneDetails from './zone';
 import ObservationMonitoringPlotDetails from './plot';
-import { SearchInputProps } from './search';
 
 /**
  * This page will route to the correct component based on url params
@@ -67,14 +70,30 @@ export default function Observations(): JSX.Element {
 }
 
 const ObservationsWrapper = (): JSX.Element => {
+  const { activeLocale } = useLocalization();
   const [search, setSearch] = useState<string>('');
+  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
-  const searchInputProps: SearchInputProps = useMemo(
+  const filterColumns = useMemo<FilterField[]>(
+    () => (activeLocale ? [{ name: 'zone', label: strings.ZONE, type: 'multiple_selection' }] : []),
+    [activeLocale]
+  );
+
+  const setFilterOptionsCallback = useCallback((value: FieldOptionsMap) => setFilterOptions(value), []);
+
+  const searchProps = useMemo<SearchProps>(
     () => ({
       search,
       onSearch: (value: string) => setSearch(value),
+      filtersProps: {
+        filters,
+        setFilters: (value: Record<string, any>) => setFilters(value),
+        filterColumns,
+        filterOptions,
+      },
     }),
-    [search]
+    [filters, filterColumns, filterOptions, search]
   );
 
   return (
@@ -86,13 +105,13 @@ const ObservationsWrapper = (): JSX.Element => {
         <ObservationPlantingZoneDetails />
       </Route>
       <Route exact path={APP_PATHS.OBSERVATION_DETAILS}>
-        <ObservationDetails {...searchInputProps} />
+        <ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} />
       </Route>
       <Route exact path={APP_PATHS.OBSERVATIONS_SITE}>
-        <ObservationsHome {...searchInputProps} />
+        <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
       </Route>
       <Route path={'*'}>
-        <ObservationsHome {...searchInputProps} />
+        <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
       </Route>
     </Switch>
   );

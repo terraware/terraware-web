@@ -3,7 +3,7 @@ import HttpService, { Response } from './HttpService';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
 import SearchService, { SearchRequestPayload } from './SearchService';
-import { SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { FieldOptionsMap, SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import strings from 'src/strings';
 import PhotoService from './PhotoService';
 
@@ -33,7 +33,6 @@ export type NurseryWithdrawalData = {
 export type NurseryWithdrawalListPhotoIds = {
   photoIds?: { id: number }[];
 };
-export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };
 
 export type CreateNurseryWithdrawalRequestPayload =
   paths[typeof BATCH_WITHDRAWALS_ENDPOINT]['post']['requestBody']['content']['application/json'];

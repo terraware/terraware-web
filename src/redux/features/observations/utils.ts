@@ -17,8 +17,8 @@ import { regexMatch } from 'src/utils/search';
 
 // utils
 
-export const searchResultPlots = (search: string, zone?: ObservationPlantingZoneResults) => {
-  if (!search.trim() || !zone) {
+export const searchResultPlots = (search: string, plotType?: boolean, zone?: ObservationPlantingZoneResults) => {
+  if ((!search.trim() && plotType === undefined) || !zone) {
     return zone;
   }
   return {
@@ -26,8 +26,9 @@ export const searchResultPlots = (search: string, zone?: ObservationPlantingZone
     plantingSubzones: zone.plantingSubzones
       .map((subzone: ObservationPlantingSubzoneResults) => ({
         ...subzone,
-        monitoringPlots: subzone.monitoringPlots.filter((plot: ObservationMonitoringPlotResults) =>
-          regexMatch(plot.monitoringPlotName, search)
+        monitoringPlots: subzone.monitoringPlots.filter(
+          (plot: ObservationMonitoringPlotResults) =>
+            regexMatch(plot.monitoringPlotName, search) && (plotType === undefined || plot.isPermanent === plotType)
         ),
       }))
       .filter((subzone: ObservationPlantingSubzoneResults) => subzone.monitoringPlots.length > 0),
