@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -66,6 +66,12 @@ export default function ObservationPlantingZone(): JSX.Element {
       defaultTimeZone.get().id
     )
   );
+
+  useEffect(() => {
+    if (filters.plotType && plotTypeSearch !== undefined) {
+      filters.plotType.values = [plotTypeSearch ? strings.PERMANENT : strings.TEMPORARY];
+    }
+  }, [activeLocale, filters, plotTypeSearch]);
 
   return (
     <DetailsPage
