@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { getShortDate } from 'src/utils/dateFormatter';
@@ -33,6 +34,7 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
   }>();
   const { activeLocale } = useLocalization();
   const defaultTimeZone = useDefaultTimeZone();
+  const history = useHistory();
 
   const details = useAppSelector((state) =>
     searchObservationDetails(
@@ -51,6 +53,12 @@ export default function ObservationDetails({ search, onSearch }: ObservationDeta
     const completionDate = details?.completedDate ? getShortDate(details.completedDate, activeLocale) : '';
     return `${completionDate} (${plantingSiteName})`;
   }, [activeLocale, details]);
+
+  useEffect(() => {
+    if (!details) {
+      history.push(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', Number(plantingSiteId).toString()));
+    }
+  }, [details, history, plantingSiteId]);
 
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>

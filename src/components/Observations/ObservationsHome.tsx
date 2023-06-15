@@ -41,7 +41,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     <PlantsPrimaryPage
       title={strings.OBSERVATIONS}
       onSelect={onSelect}
-      pagePath={APP_PATHS.PLANTING_SITE_OBSERVATIONS}
+      pagePath={APP_PATHS.OBSERVATIONS_SITE}
       lastVisitedPreferenceName='plants.observations.lastVisitedPlantingSite'
       plantsSitePreferences={plantsSitePreferences}
       setPlantsSitePreferences={onPreferences}

@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useAppSelector } from 'src/redux/store';
@@ -30,6 +31,7 @@ export default function ObservationPlantingZone(): JSX.Element {
     plantingZoneId: string;
   }>();
   const defaultTimeZone = useDefaultTimeZone();
+  const history = useHistory();
   const [search, onSearch] = useState<string>('');
 
   const plantingZone = useAppSelector((state) =>
@@ -44,6 +46,17 @@ export default function ObservationPlantingZone(): JSX.Element {
       defaultTimeZone.get().id
     )
   );
+
+  useEffect(() => {
+    if (!plantingZone) {
+      history.push(
+        APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', Number(plantingSiteId).toString()).replace(
+          ':observationId',
+          Number(observationId).toString()
+        )
+      );
+    }
+  }, [history, observationId, plantingSiteId, plantingZone]);
 
   return (
     <DetailsPage
