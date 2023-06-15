@@ -2,7 +2,7 @@
 set -e
 
 restore_dump() {
-    if docker exec -i terraware-web_postgres_1 psql -d terraware -U postgres < "$1"; then
+    if docker-compose exec -T postgres psql -d terraware -U postgres < "$1"; then
         :
     else
         echo
@@ -34,7 +34,7 @@ if [ $attempts_remaining = 0 ]; then
     echo "No response from PostgreSQL."
     echo
 
-    docker logs terraware-web_postgres_1
+    docker-compose logs postgres
     exit 1
 fi
 
