@@ -36,7 +36,6 @@ export default function ObservationPlantingZone(): JSX.Element {
   const defaultTimeZone = useDefaultTimeZone();
   const [search, onSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
-  const [plotTypeSearch, setPlotTypeSearch] = useState<boolean | undefined>();
 
   const filterColumns = useMemo<FilterField[]>(
     () => (activeLocale ? [{ name: 'plotType', label: strings.MONITORING_PLOT_TYPE, type: 'single_selection' }] : []),
@@ -61,17 +60,15 @@ export default function ObservationPlantingZone(): JSX.Element {
         observationId: Number(observationId),
         plantingZoneId: Number(plantingZoneId),
         search,
-        plotType: plotTypeSearch,
+        plotType: filters.plotType === undefined ? undefined : filters.plotType.values[0] === strings.PERMANENT,
       },
       defaultTimeZone.get().id
     )
   );
 
   useEffect(() => {
-    if (filters.plotType && plotTypeSearch !== undefined) {
-      filters.plotType.values = [plotTypeSearch ? strings.PERMANENT : strings.TEMPORARY];
-    }
-  }, [activeLocale, filters, plotTypeSearch]);
+    setFilters({});
+  }, [activeLocale]);
 
   return (
     <DetailsPage
@@ -89,14 +86,7 @@ export default function ObservationPlantingZone(): JSX.Element {
               search={search}
               onSearch={(value: string) => onSearch(value)}
               filters={filters}
-              setFilters={(val) => {
-                setFilters(val);
-                if (val.plotType) {
-                  setPlotTypeSearch(val.plotType.values[0] === strings.PERMANENT);
-                } else {
-                  setPlotTypeSearch(undefined);
-                }
-              }}
+              setFilters={(val) => setFilters(val)}
               filterOptions={filterOptions}
               filterColumns={filterColumns}
             />

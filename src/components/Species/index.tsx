@@ -281,13 +281,16 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   }, [activeLocale]);
 
   const filterColumns = useMemo<FilterField[]>(
-    () => [
-      { name: 'growthForm', label: strings.GROWTH_FORM, type: 'multiple_selection' },
-      { name: 'conservationStatus', label: strings.CONSERVATION_STATUS, type: 'multiple_selection' },
-      { name: 'seedStorageBehavior', label: strings.SEED_STORAGE_BEHAVIOR, type: 'multiple_selection' },
-      { name: 'ecosystemTypes.ecosystemType', label: strings.ECOSYSTEM_TYPE, type: 'multiple_selection' },
-    ],
-    []
+    () =>
+      activeLocale
+        ? [
+            { name: 'growthForm', label: strings.GROWTH_FORM, type: 'multiple_selection' },
+            { name: 'conservationStatus', label: strings.CONSERVATION_STATUS, type: 'multiple_selection' },
+            { name: 'seedStorageBehavior', label: strings.SEED_STORAGE_BEHAVIOR, type: 'multiple_selection' },
+            { name: 'ecosystemTypes.ecosystemType', label: strings.ECOSYSTEM_TYPE, type: 'multiple_selection' },
+          ]
+        : [],
+    [activeLocale]
   );
 
   const [filters, setFilters] = useState<Record<string, any>>({});
