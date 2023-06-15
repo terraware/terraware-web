@@ -4,10 +4,10 @@ import strings from 'src/strings';
 type TooltipContentsProps = {
   title: string;
   observationInProgress: boolean;
-  numPlants: number;
-  numSpecies: number;
-  plantingDensity: number;
-  percentMortality: number;
+  numPlants?: number;
+  numSpecies?: number;
+  plantingDensity?: number;
+  percentMortality?: number;
 };
 
 export default function TooltipContents(props: TooltipContentsProps): JSX.Element {
@@ -23,12 +23,18 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
         <Typography>{strings.OBSERVATION_IN_PROGRESS}</Typography>
       ) : (
         <>
-          <Typography fontSize='16px' fontWeight={400}>{`${numPlants} ${strings.PLANTS}`}</Typography>
-          <Typography fontSize='16px' fontWeight={400}>{`${numSpecies} ${strings.SPECIES}`}</Typography>
           <Typography fontSize='16px' fontWeight={400}>
-            {`${strings.PLANTING_DENSITY} ${plantingDensity} ${strings.PLANTS_PER_HECTARE}`}
+            {`${numPlants ?? strings.UNKNOWN} ${strings.PLANTS}`}
           </Typography>
-          <Typography fontSize='16px' fontWeight={400}>{`${strings.MORTALITY_RATE} ${percentMortality}%`}</Typography>
+          <Typography fontSize='16px' fontWeight={400}>
+            {`${numSpecies ?? strings.UNKNOWN} ${strings.SPECIES}`}
+          </Typography>
+          <Typography fontSize='16px' fontWeight={400}>
+            {`${strings.PLANTING_DENSITY}: ${plantingDensity ?? strings.UNKNOWN} ${strings.PLANTS_PER_HECTARE}`}
+          </Typography>
+          <Typography fontSize='16px' fontWeight={400}>
+            {`${strings.MORTALITY_RATE}: ${percentMortality ?? strings.UNKNOWN}%`}
+          </Typography>
         </>
       )}
     </Box>

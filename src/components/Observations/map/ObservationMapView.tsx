@@ -137,7 +137,7 @@ export default function ObservationMapView({ observationsResults, search }: Obse
   const contextRenderer = (properties: MapSourceProperties): JSX.Element => {
     let entity: any;
     if (properties.type === 'site') {
-      entity = selectedObservation as any;
+      entity = selectedObservation;
     } else if (properties.type === 'zone') {
       entity = selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id);
     } else {
@@ -152,10 +152,10 @@ export default function ObservationMapView({ observationsResults, search }: Obse
       <TooltipContents
         observationInProgress={selectedObservation?.completedTime === undefined}
         title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
-        numPlants={entity?.totalPlants ?? 0}
-        numSpecies={entity?.totalSpecies ?? 0}
-        plantingDensity={entity?.plantingDensity ?? 0}
-        percentMortality={entity?.mortalityRate ?? 0}
+        numPlants={entity?.totalPlants}
+        numSpecies={entity?.totalSpecies}
+        plantingDensity={entity?.plantingDensity}
+        percentMortality={entity?.mortalityRate}
       />
     );
   };
