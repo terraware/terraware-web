@@ -1,0 +1,8 @@
+---
+version: '3.8'
+
+services:
+  local-https:
+    build: '.'
+    ports:
+      - '443:443'
