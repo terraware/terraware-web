@@ -211,11 +211,9 @@ export default function ObservationMapView({
             }}
             highlightEntities={hasSearchCriteria ? searchZoneEntities : []}
             focusEntities={
-              !hasSearchCriteria && searchZoneEntities.length === 0
+              !hasSearchCriteria || searchZoneEntities.length === 0
                 ? [{ sourceId: 'sites', id: selectedObservation?.plantingSiteId }]
-                : hasSearchCriteria
-                ? searchZoneEntities
-                : []
+                : searchZoneEntities
             }
           />
         )}
