@@ -133,6 +133,8 @@ export default function ObservationMapView({
     ]
   );
 
+  const hasSearchCriteria = search.trim() || filterZoneNames.length;
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <Box marginBottom={theme.spacing(2)}>
@@ -171,11 +173,11 @@ export default function ObservationMapView({
                 return <p>{`${properties.type} ${properties.id}: ${properties.name}`}</p>;
               },
             }}
-            highlightEntities={search === '' && !filterZoneNames.length ? [] : searchZoneEntities}
+            highlightEntities={hasSearchCriteria ? searchZoneEntities : []}
             focusEntities={
-              search === '' && searchZoneEntities.length === 0
+              !hasSearchCriteria && searchZoneEntities.length === 0
                 ? [{ sourceId: 'sites', id: selectedObservation?.plantingSiteId }]
-                : search !== '' || filterZoneNames.length
+                : hasSearchCriteria
                 ? searchZoneEntities
                 : []
             }
