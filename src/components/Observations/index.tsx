@@ -98,16 +98,16 @@ const ObservationsWrapper = (): JSX.Element => {
 
   return (
     <Switch>
-      <Route exact path={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS}>
+      <Route path={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS}>
         <ObservationMonitoringPlotDetails />
       </Route>
-      <Route exact path={APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS}>
+      <Route path={APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS}>
         <ObservationPlantingZoneDetails />
       </Route>
-      <Route exact path={APP_PATHS.OBSERVATION_DETAILS}>
+      <Route path={APP_PATHS.OBSERVATION_DETAILS}>
         <ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} />
       </Route>
-      <Route exact path={APP_PATHS.OBSERVATIONS_SITE}>
+      <Route path={APP_PATHS.OBSERVATIONS_SITE}>
         <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
       </Route>
       <Route path={'*'}>
