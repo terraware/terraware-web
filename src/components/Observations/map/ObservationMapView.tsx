@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ObservationResults } from 'src/types/Observations';
-import { Box, useTheme } from '@mui/material';
+import { Box, Theme, useTheme } from '@mui/material';
 import MapLegend from 'src/components/common/MapLegend';
 import { PlantingSiteMap } from 'src/components/Map';
-import { MapEntityId, MapObject, MapSourceBaseData } from 'src/types/Map';
+import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
 import { MapService } from 'src/services';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import strings from 'src/strings';
@@ -11,6 +11,16 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import { getRgbaFromHex } from 'src/utils/color';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { regexMatch } from 'src/utils/search';
+import TooltipContents from 'src/components/Observations/map/TooltipContents';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  popover: {
+    '&.mapboxgl-popup': {
+      maxWidth: '324px !important', // !important to override a default mapbox style
+    },
+  },
+}));
 
 type ObservationMapViewProps = SearchProps & {
   observationsResults?: ObservationResults[];
@@ -22,6 +32,7 @@ export default function ObservationMapView({
   filtersProps,
 }: ObservationMapViewProps): JSX.Element {
   const theme = useTheme();
+  const classes = useStyles();
 
   const observationsDates = useMemo(() => {
     return observationsResults
@@ -135,6 +146,32 @@ export default function ObservationMapView({
 
   const hasSearchCriteria = search.trim() || filterZoneNames.length;
 
+  const contextRenderer = (properties: MapSourceProperties): JSX.Element => {
+    let entity: any;
+    if (properties.type === 'site') {
+      entity = selectedObservation;
+    } else if (properties.type === 'zone') {
+      entity = selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id);
+    } else {
+      // monitoring plot
+      entity = selectedObservation?.plantingZones
+        ?.flatMap((z) => z.plantingSubzones)
+        ?.flatMap((sz) => sz.monitoringPlots)
+        ?.find((p) => p.monitoringPlotId === properties.id);
+    }
+
+    return (
+      <TooltipContents
+        observationInProgress={selectedObservation?.state === 'InProgress'}
+        title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
+        numPlants={entity?.totalPlants}
+        numSpecies={entity?.totalSpecies}
+        plantingDensity={entity?.plantingDensity}
+        percentMortality={entity?.mortalityRate}
+      />
+    );
+  };
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <Box marginBottom={theme.spacing(2)}>
@@ -169,9 +206,8 @@ export default function ObservationMapView({
               )
             }
             contextRenderer={{
-              render: (properties) => {
-                return <p>{`${properties.type} ${properties.id}: ${properties.name}`}</p>;
-              },
+              render: contextRenderer,
+              className: classes.popover,
             }}
             highlightEntities={hasSearchCriteria ? searchZoneEntities : []}
             focusEntities={
