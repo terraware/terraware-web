@@ -1,22 +1,26 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import { ObservationResults } from 'src/types/Observations';
 import { Box, useTheme } from '@mui/material';
 import MapLegend from 'src/components/common/MapLegend';
 import { PlantingSiteMap } from 'src/components/Map';
-import React, { useEffect, useMemo, useState } from 'react';
 import { MapEntityId, MapObject, MapSourceBaseData } from 'src/types/Map';
 import { MapService } from 'src/services';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import strings from 'src/strings';
 import MapDateSelect from 'src/components/common/MapDateSelect';
 import { getRgbaFromHex } from 'src/utils/color';
-import { SearchInputProps } from 'src/components/common/SearchFiltersWrapper';
+import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { regexMatch } from 'src/utils/search';
 
-type ObservationMapViewProps = SearchInputProps & {
+type ObservationMapViewProps = SearchProps & {
   observationsResults?: ObservationResults[];
 };
 
-export default function ObservationMapView({ observationsResults, search }: ObservationMapViewProps): JSX.Element {
+export default function ObservationMapView({
+  observationsResults,
+  search,
+  filtersProps,
+}: ObservationMapViewProps): JSX.Element {
   const theme = useTheme();
 
   const observationsDates = useMemo(() => {
@@ -61,20 +65,27 @@ export default function ObservationMapView({ observationsResults, search }: Obse
 
     return MapService.getMapDataFromObservation(selectedObservation);
   }, [selectedObservation, selectedObservationDate, plantingSiteMapData]);
+
   useEffect(() => {
     if (!plantingSiteMapData && mapData.site) {
       setPlantingSiteMapData(mapData.site);
     }
   }, [mapData, plantingSiteMapData]);
 
+  const filterZoneNames = useMemo(() => filtersProps?.filters.zone?.values ?? [], [filtersProps?.filters.zone?.values]);
+
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   useEffect(() => {
     const entities = (observationsResults ?? [])
       .flatMap((obs) => obs.plantingZones)
-      .filter((zone) => regexMatch(zone.plantingZoneName, search))
+      .filter(
+        (zone) =>
+          (!filterZoneNames.length || filterZoneNames.includes(zone.plantingZoneName)) &&
+          regexMatch(zone.plantingZoneName, search)
+      )
       .map((zone) => ({ sourceId: 'zones', id: zone.plantingZoneId }));
     setSearchZoneEntities(entities);
-  }, [observationsResults, search, selectedObservation]);
+  }, [observationsResults, search, selectedObservation, filterZoneNames]);
 
   const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(layerOptions);
@@ -160,11 +171,11 @@ export default function ObservationMapView({ observationsResults, search }: Obse
                 return <p>{`${properties.type} ${properties.id}: ${properties.name}`}</p>;
               },
             }}
-            highlightEntities={search === '' ? [] : searchZoneEntities}
+            highlightEntities={search === '' && !filterZoneNames.length ? [] : searchZoneEntities}
             focusEntities={
               search === '' && searchZoneEntities.length === 0
                 ? [{ sourceId: 'sites', id: selectedObservation?.plantingSiteId }]
-                : search !== ''
+                : search !== '' || filterZoneNames.length
                 ? searchZoneEntities
                 : []
             }

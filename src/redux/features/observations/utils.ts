@@ -35,22 +35,30 @@ export const searchResultPlots = (search: string, plotType?: boolean, zone?: Obs
   };
 };
 
-export const searchResultZones = (search: string, observation?: ObservationResults) => {
-  if (!search.trim() || !observation) {
+export const searchResultZones = (search: string, zoneNames: string[], observation?: ObservationResults) => {
+  if ((!search.trim() && !zoneNames.length) || !observation) {
     return observation;
   }
   return {
     ...observation,
-    plantingZones: observation.plantingZones.filter((zone: ObservationPlantingZoneResults) => matchZone(zone, search)),
+    plantingZones: observation.plantingZones.filter(
+      (zone: ObservationPlantingZoneResults) =>
+        (!zoneNames.length || zoneNames.includes(zone.plantingZoneName)) && matchZone(zone, search)
+    ),
   };
 };
 
-export const searchZones = (search: string, observations?: ObservationResults[]) => {
-  if (!search.trim()) {
+export const searchZones = (search: string, zoneNames: string[], observations?: ObservationResults[]) => {
+  if (!search.trim() && !zoneNames.length) {
     return observations;
   }
-  return observations?.filter((observation: ObservationResults) =>
-    observation.plantingZones.some((zone: ObservationPlantingZoneResults) => matchZone(zone, search))
+  return observations?.filter(
+    (observation: ObservationResults) =>
+      (!zoneNames.length ||
+        observation.plantingZones.some((zone: ObservationPlantingZoneResults) =>
+          zoneNames.includes(zone.plantingZoneName)
+        )) &&
+      observation.plantingZones.some((zone: ObservationPlantingZoneResults) => matchZone(zone, search))
   );
 };
 

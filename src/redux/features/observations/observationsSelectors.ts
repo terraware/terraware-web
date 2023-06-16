@@ -1,5 +1,6 @@
 import { createCachedSelector } from 're-reselect';
 import { createSelector } from '@reduxjs/toolkit';
+import { ObservationResults, ObservationPlantingZoneResults } from 'src/types/Observations';
 import { RootState } from 'src/redux/rootReducer';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
@@ -40,11 +41,25 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
 
 // search observations (search planting zone name only)
 export const searchObservations = createCachedSelector(
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) => search,
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =>
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string, zoneNames: string[]) => search,
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string, zoneNames: string[]) => zoneNames,
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string, zoneNames: string[]) =>
     selectMergedPlantingSiteObservations(state, plantingSiteId, defaultTimeZone),
   searchZones
 )(
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =>
-    `${plantingSiteId}_${defaultTimeZone}_${search}`
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string, zoneNames: string[]) =>
+    `${plantingSiteId}_${defaultTimeZone}_${search}_${Array.from(new Set(zoneNames)).toString()}`
 );
+
+// get zone names in observations
+export const selectObservationsZoneNames = createCachedSelector(
+  (state: RootState, plantingSiteId: number) => selectMergedPlantingSiteObservations(state, plantingSiteId, ''),
+  (observations) =>
+    Array.from(
+      new Set(
+        (observations ?? []).flatMap((observation: ObservationResults) =>
+          observation.plantingZones.map((plantingZone: ObservationPlantingZoneResults) => plantingZone.plantingZoneName)
+        )
+      )
+    )
+)((state: RootState, plantingSiteId: number) => plantingSiteId.toString());
