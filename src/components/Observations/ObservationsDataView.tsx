@@ -3,7 +3,11 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { FieldOptionsMap } from 'src/types/Search';
 import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
+import {
+  searchObservations,
+  selectObservationsZoneNames,
+  selectPlantingSiteObservations,
+} from 'src/redux/features/observations/observationsSelectors';
 import ListMapView from 'src/components/ListMapView';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import OrgObservationsListView from './org/OrgObservationsListView';
@@ -29,6 +33,13 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     )
   );
 
+  const upcomingObservations = useAppSelector((state) =>
+    selectPlantingSiteObservations(state, selectedPlantingSiteId, 'Upcoming')
+  );
+  const inProgressObservations = useAppSelector((state) =>
+    selectPlantingSiteObservations(state, selectedPlantingSiteId, 'InProgress')
+  );
+
   const zoneNames = useAppSelector((state) => selectObservationsZoneNames(state, selectedPlantingSiteId));
 
   useEffect(() => {
@@ -39,6 +50,20 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       },
     });
   }, [setFilterOptions, zoneNames]);
+
+  useEffect(() => {
+    if (upcomingObservations?.length) {
+      /**
+       * enable message notification showing upcoming notifications and app download prompt
+       */
+    } else {
+      if (!inProgressObservations?.length) {
+        /**
+         * enable message notification with app download prompt
+         */
+      }
+    }
+  }, [upcomingObservations, inProgressObservations]);
 
   return (
     <ListMapView

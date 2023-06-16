@@ -1,11 +1,19 @@
 import { createCachedSelector } from 're-reselect';
 import { createSelector } from '@reduxjs/toolkit';
-import { ObservationResults, ObservationPlantingZoneResults } from 'src/types/Observations';
+import {
+  ObservationState,
+  Observation,
+  ObservationResults,
+  ObservationPlantingZoneResults,
+} from 'src/types/Observations';
 import { RootState } from 'src/redux/rootReducer';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { mergeObservations, searchZones } from './utils';
 
+/**
+ * Observations results selectors below
+ */
 export const selectObservationsResults = (state: RootState) => state.observationsResults?.observations;
 export const selectObservationsResultsError = (state: RootState) => state.observationsResults?.error;
 
@@ -63,3 +71,32 @@ export const selectObservationsZoneNames = createCachedSelector(
       )
     )
 )((state: RootState, plantingSiteId: number) => plantingSiteId.toString());
+
+/**
+ * Add Observations related selectors below
+ */
+
+export const selectObservations = (state: RootState) => state.observations?.observations;
+export const selectObservationsError = (state: RootState) => state.observations?.error;
+
+// get an observation by id
+export const selectObservation = (state: RootState, plantingSiteId: number, observationId: number) =>
+  state.observations?.observations?.find(
+    (observation: Observation) => observation.id === observationId && observation.plantingSiteId === plantingSiteId
+  );
+
+// get observations specific to a planting site, by optional status
+export const selectPlantingSiteObservations = createCachedSelector(
+  (state: RootState, plantingSiteId: number, status?: ObservationState) => selectObservations(state),
+  (state: RootState, plantingSiteId: number, status?: ObservationState) => plantingSiteId,
+  (state: RootState, plantingSiteId: number, status?: ObservationState) => status,
+  (observations: Observation[] | undefined, plantingSiteId: number, status?: ObservationState) => {
+    const data =
+      plantingSiteId === -1
+        ? observations
+        : observations?.filter((observation: Observation) => observation.plantingSiteId === plantingSiteId);
+    const byStatus = status ? data?.filter((observation: Observation) => observation.state === status) : data;
+
+    return byStatus ?? [];
+  }
+)((state: RootState, plantingSiteId: number, status?: ObservationState) => `${plantingSiteId.toString()}_${status}`);

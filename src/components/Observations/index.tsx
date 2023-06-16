@@ -7,7 +7,7 @@ import { APP_PATHS } from 'src/constants';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import {
@@ -52,6 +52,7 @@ export default function Observations(): JSX.Element {
     if (species !== undefined && plantingSites !== undefined && !dispatched) {
       setDispatched(true);
       dispatch(requestObservationsResults(selectedOrganization.id));
+      dispatch(requestObservations(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id, species, plantingSites, dispatched]);
 
