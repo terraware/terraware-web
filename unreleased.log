@@ -1,3 +1,5 @@
+54f52506 SW-3766 Add status (rolled-up for site) columns in observations tables (site, zone) (#1469)
+7474749e Add zone-name filters for observations results, detail view and map view (#1466)
 02650d8f rename observations FE url routes to be more descriptive (#1467)
 0cf9b903 Updated translations from Phrase (#1468)
 78fd9655 SW-3753 Map Tooltip Data (#1465)
