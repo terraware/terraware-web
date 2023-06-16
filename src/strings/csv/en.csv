@@ -652,7 +652,7 @@ OUNCES,Ounces
 OUT_PLANTING,Out-planting
 OUTPLANT,Outplant
 OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Outplants require batches with seedlings that are ""ready."""
-OUTSTANDING,Outstanding,In the sense of Pending Unresolved or Remaining to be Done
+OUTSTANDING,Outstanding,In the sense of Pending or Unresolved
 OVER_WORD_LIMIT,Over word limit
 OVERDUE,Overdue
 OWNER,Owner
