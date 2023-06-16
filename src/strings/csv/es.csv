@@ -620,6 +620,7 @@ NURSERY_MEDIA,Medios del vivero
 NURSERY_MORTALITY_RATE,Tasa de mortalidad en el vivero
 NURSERY_REQUIRED,Vivero *
 NURSERY_TRANSFER,Traslado de vivero
+OBSERVATION_IN_PROGRESS,Observación en progreso
 OBSERVATIONS,Observaciones
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Las observaciones son cuando registra datos de una plantilla de parcelas de seguimiento usando nuestra aplicación móvil en el campo. Esto nos permite calcular las tasas de mortalidad, y eventualmente el secuestro de carbono."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"Recibirá una notificación cuando sea momento de llevar sus observaciones (por lo general, la próxima vez que termine una temporada de plantación). Después de completar sus primeras observaciones, verá los registros aquí."
@@ -695,6 +696,7 @@ PLANTING_ZONES,Zonas de plantación
 PLANTS,Plantas
 PLANTS_CARD_DESCRIPTION,¡Han echado raíces! Vea todas sus plantas en un solo lugar.
 PLANTS_MISSING_TOOLTIP,"Cuando marques tu sitio de plantación como completado y hayas finalizado tus observaciones, serás capaz de ver el total de las plantas."
+PLANTS_PER_HECTARE,plantas/ha
 PLEASE_TRY_AGAIN,"Por favor, inténtelo de nuevo."
 PLOTS_PERMANENT,Parcelas fijas
 PLOTS_TEMPORARY,Parcelas temporales
