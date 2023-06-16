@@ -99,7 +99,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <AggregatedPlantsStats {...(details ?? {})} />
+          <AggregatedPlantsStats {...(details ?? {})} isSite />
         </Grid>
         <Grid item xs={12}>
           <Card flushMobile>
