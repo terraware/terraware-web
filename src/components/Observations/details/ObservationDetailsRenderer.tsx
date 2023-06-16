@@ -1,5 +1,6 @@
 import React from 'react';
 import { APP_PATHS } from 'src/constants';
+import { MonitoringPlotStatus, getPlotStatus } from 'src/types/Observations';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
@@ -22,6 +23,10 @@ const ObservationDetailsRenderer =
 
     if (column.key === 'mortalityRate') {
       return <CellRenderer {...props} value={`${value}%`} />;
+    }
+
+    if (column.key === 'status') {
+      return <CellRenderer {...props} value={getPlotStatus(value as MonitoringPlotStatus)} />;
     }
 
     return <CellRenderer {...props} />;

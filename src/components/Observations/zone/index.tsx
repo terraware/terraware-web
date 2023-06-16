@@ -20,6 +20,7 @@ import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
 const columns = (): TableColumnType[] => [
   { key: 'monitoringPlotName', name: strings.MONITORING_PLOT, type: 'string' },
   { key: 'completedDate', name: strings.DATE, type: 'string' },
+  { key: 'status', name: strings.STATUS, type: 'string' },
   { key: 'isPermanent', name: strings.MONITORING_PLOT_TYPE, type: 'string' },
   { key: 'totalPlants', name: strings.PLANTS, type: 'number' },
   { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },

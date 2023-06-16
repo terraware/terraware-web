@@ -12,6 +12,7 @@ import {
   ObservationSpeciesResults,
   ObservationMonitoringPlotResultsPayload,
   ObservationMonitoringPlotResults,
+  MonitoringPlotStatus,
 } from 'src/types/Observations';
 import { regexMatch } from 'src/utils/search';
 
@@ -150,6 +151,12 @@ export const mergeObservations = (
     });
 };
 
+const StatusWeights: Record<MonitoringPlotStatus, number> = {
+  Completed: 1,
+  InProgress: 2,
+  Outstanding: 3,
+};
+
 // merge zone
 const mergeZones = (
   zoneObservations: ObservationPlantingZoneResultsPayload[],
@@ -164,6 +171,20 @@ const mergeZones = (
       const { plantingZoneId } = zoneObservation;
       const zone = zones[plantingZoneId];
 
+      const monitoringPlots: ObservationMonitoringPlotResultsPayload[] = zoneObservation.plantingSubzones.flatMap(
+        (subZone: ObservationPlantingSubzoneResultsPayload) => subZone.monitoringPlots
+      );
+      const status: MonitoringPlotStatus | undefined = monitoringPlots.reduce(
+        (acc: MonitoringPlotStatus | undefined, mp: ObservationMonitoringPlotResultsPayload) => {
+          if (!acc || StatusWeights[mp.status] > StatusWeights[acc]) {
+            return mp.status;
+          } else {
+            return acc;
+          }
+        },
+        undefined
+      );
+
       return {
         ...zoneObservation,
         plantingZoneName: zone.name,
@@ -173,6 +194,7 @@ const mergeZones = (
           : undefined,
         species: mergeSpecies(zoneObservation.species, species),
         plantingSubzones: mergeSubzones(zoneObservation.plantingSubzones, subzones, species, timeZone),
+        status,
       };
     });
 };

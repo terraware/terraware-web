@@ -31,6 +31,7 @@ export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPaylo
     plantingZoneName: string;
     plantingSubzones: ObservationPlantingSubzoneResults[];
     species: ObservationSpeciesResults[];
+    status?: MonitoringPlotStatus;
   };
 
 // subzone level results -> contains lists of both species level results and monitoring plot level results
@@ -44,6 +45,7 @@ export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResult
 
 // monitoring plot level results
 export type ObservationMonitoringPlotResultsPayload = components['schemas']['ObservationMonitoringPlotResultsPayload'];
+export type MonitoringPlotStatus = ObservationMonitoringPlotResultsPayload['status'];
 export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsPayload & {
   completedDate?: string;
   species: ObservationSpeciesResults[];
@@ -69,5 +71,18 @@ export const getStatus = (state: ObservationState): string => {
       return strings.OVERDUE;
     default:
       return strings.UPCOMING;
+  }
+};
+
+export const getPlotStatus = (status?: MonitoringPlotStatus): string => {
+  switch (status) {
+    case 'Completed':
+      return strings.COMPLETED;
+    case 'InProgress':
+      return strings.IN_PROGRESS;
+    case 'Outstanding':
+      return strings.OUTSTANDING;
+    default:
+      return '';
   }
 };
