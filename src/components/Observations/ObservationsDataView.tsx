@@ -3,7 +3,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { FieldOptionsMap } from 'src/types/Search';
 import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { searchObservations } from 'src/redux/features/observations/observationsSelectors';
+import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
 import ListMapView from 'src/components/ListMapView';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import OrgObservationsListView from './org/OrgObservationsListView';
@@ -20,14 +20,25 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   const defaultTimeZone = useDefaultTimeZone();
 
   const observationsResults = useAppSelector((state) =>
-    searchObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, searchProps.search)
+    searchObservations(
+      state,
+      selectedPlantingSiteId,
+      defaultTimeZone.get().id,
+      searchProps.search,
+      searchProps.filtersProps?.filters.zone?.values ?? []
+    )
   );
+
+  const zoneNames = useAppSelector((state) => selectObservationsZoneNames(state, selectedPlantingSiteId));
 
   useEffect(() => {
     setFilterOptions({
-      zone: { partial: false, values: [] },
+      zone: {
+        partial: false,
+        values: zoneNames,
+      },
     });
-  }, [setFilterOptions]);
+  }, [setFilterOptions, zoneNames]);
 
   return (
     <ListMapView
@@ -38,11 +49,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         selectedPlantingSiteId === -1 ? (
           <AllPlantingSitesMapView />
         ) : (
-          <ObservationMapView
-            observationsResults={observationsResults}
-            search={searchProps.search}
-            onSearch={searchProps.onSearch}
-          />
+          <ObservationMapView observationsResults={observationsResults} {...searchProps} />
         )
       }
     />

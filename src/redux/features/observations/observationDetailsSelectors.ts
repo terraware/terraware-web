@@ -1,7 +1,7 @@
 import { createCachedSelector } from 're-reselect';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from 'src/redux/rootReducer';
-import { ObservationResults } from 'src/types/Observations';
+import { ObservationResults, ObservationPlantingZoneResults } from 'src/types/Observations';
 import { selectMergedPlantingSiteObservations } from './observationsSelectors';
 import { searchResultZones } from './utils';
 
@@ -16,7 +16,10 @@ export type SearchParams = {
   search: string;
 };
 
-export type DetailsSearchParams = SearchParams & DetailsParams;
+export type DetailsSearchParams = SearchParams &
+  DetailsParams & {
+    zoneNames: string[];
+  };
 
 export const selectObservationDetails = createSelector(
   [
@@ -31,8 +34,23 @@ export const selectObservationDetails = createSelector(
 export const searchObservationDetails = createCachedSelector(
   selectObservationDetails,
   (state: RootState, params: DetailsSearchParams, defaultTimeZone: string) => params,
-  (observation, params) => searchResultZones(params.search, observation)
+  (observation, params) => searchResultZones(params.search, params.zoneNames, observation)
 )(
   (state: RootState, params: DetailsSearchParams, defaultTimeZone: string) =>
-    `${params.plantingSiteId}_${params.observationId}_${defaultTimeZone}_${params.search}`
+    `${params.plantingSiteId}_${params.observationId}_${defaultTimeZone}_${params.search}_${Array.from(
+      new Set(params.zoneNames)
+    ).toString()}`
 );
+
+// get zone names in observation result
+export const selectDetailsZoneNames = createCachedSelector(
+  (state: RootState, plantingSiteId: number, observationId: number) =>
+    selectObservationDetails(state, { plantingSiteId, observationId, search: '', zoneNames: [] }, ''),
+  (details) =>
+    Array.from(
+      new Set(
+        details?.plantingZones.map((plantingZone: ObservationPlantingZoneResults) => plantingZone.plantingZoneName) ??
+          []
+      )
+    )
+)((state: RootState, plantingSiteId: number, observationId: number) => `${plantingSiteId}_${observationId}`);

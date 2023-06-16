@@ -9,7 +9,10 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import { useAppSelector } from 'src/redux/store';
-import { searchObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
+import {
+  searchObservationDetails,
+  selectDetailsZoneNames,
+} from 'src/redux/features/observations/observationDetailsSelectors';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
@@ -48,9 +51,14 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         plantingSiteId: Number(plantingSiteId),
         observationId: Number(observationId),
         search: searchProps.search,
+        zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
       },
       defaultTimeZone.get().id
     )
+  );
+
+  const zoneNames = useAppSelector((state) =>
+    selectDetailsZoneNames(state, Number(plantingSiteId), Number(observationId))
   );
 
   const title = useMemo(() => {
@@ -61,15 +69,30 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   useEffect(() => {
     setFilterOptions({
-      zone: { partial: false, values: [] },
+      zone: {
+        partial: false,
+        values: zoneNames,
+      },
     });
-  }, [setFilterOptions]);
+  }, [setFilterOptions, zoneNames]);
 
   useEffect(() => {
     if (!details) {
       history.push(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', Number(plantingSiteId).toString()));
     }
   }, [details, history, plantingSiteId]);
+
+  useEffect(() => {
+    const initialZones = searchProps.filtersProps?.filters?.zone?.values ?? [];
+    const availableZones = initialZones.filter((name: string) => zoneNames.includes(name));
+
+    if (availableZones.length < initialZones.length) {
+      searchProps.filtersProps?.setFilters((previous: Record<string, any>) => ({
+        ...previous,
+        zone: { ...previous.zone, values: availableZones },
+      }));
+    }
+  }, [zoneNames, searchProps.filtersProps]);
 
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>

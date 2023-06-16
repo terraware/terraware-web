@@ -1,15 +1,15 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import { ObservationResults } from 'src/types/Observations';
 import { Box, Theme, useTheme } from '@mui/material';
 import MapLegend from 'src/components/common/MapLegend';
 import { PlantingSiteMap } from 'src/components/Map';
-import React, { useEffect, useMemo, useState } from 'react';
 import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
 import { MapService } from 'src/services';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import strings from 'src/strings';
 import MapDateSelect from 'src/components/common/MapDateSelect';
 import { getRgbaFromHex } from 'src/utils/color';
-import { SearchInputProps } from 'src/components/common/SearchFiltersWrapper';
+import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { regexMatch } from 'src/utils/search';
 import TooltipContents from 'src/components/Observations/map/TooltipContents';
 import { makeStyles } from '@mui/styles';
@@ -22,11 +22,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type ObservationMapViewProps = SearchInputProps & {
+type ObservationMapViewProps = SearchProps & {
   observationsResults?: ObservationResults[];
 };
 
-export default function ObservationMapView({ observationsResults, search }: ObservationMapViewProps): JSX.Element {
+export default function ObservationMapView({
+  observationsResults,
+  search,
+  filtersProps,
+}: ObservationMapViewProps): JSX.Element {
   const theme = useTheme();
   const classes = useStyles();
 
@@ -72,20 +76,27 @@ export default function ObservationMapView({ observationsResults, search }: Obse
 
     return MapService.getMapDataFromObservation(selectedObservation);
   }, [selectedObservation, selectedObservationDate, plantingSiteMapData]);
+
   useEffect(() => {
     if (!plantingSiteMapData && mapData.site) {
       setPlantingSiteMapData(mapData.site);
     }
   }, [mapData, plantingSiteMapData]);
 
+  const filterZoneNames = useMemo(() => filtersProps?.filters.zone?.values ?? [], [filtersProps?.filters.zone?.values]);
+
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   useEffect(() => {
     const entities = (observationsResults ?? [])
       .flatMap((obs) => obs.plantingZones)
-      .filter((zone) => regexMatch(zone.plantingZoneName, search))
+      .filter(
+        (zone) =>
+          (!filterZoneNames.length || filterZoneNames.includes(zone.plantingZoneName)) &&
+          regexMatch(zone.plantingZoneName, search)
+      )
       .map((zone) => ({ sourceId: 'zones', id: zone.plantingZoneId }));
     setSearchZoneEntities(entities);
-  }, [observationsResults, search, selectedObservation]);
+  }, [observationsResults, search, selectedObservation, filterZoneNames]);
 
   const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(layerOptions);
@@ -132,6 +143,8 @@ export default function ObservationMapView({ observationsResults, search }: Obse
       theme.palette.TwClrBaseYellow300,
     ]
   );
+
+  const hasSearchCriteria = search.trim() || filterZoneNames.length;
 
   const contextRenderer = (properties: MapSourceProperties): JSX.Element => {
     let entity: any;
@@ -196,11 +209,11 @@ export default function ObservationMapView({ observationsResults, search }: Obse
               render: contextRenderer,
               className: classes.popover,
             }}
-            highlightEntities={search === '' ? [] : searchZoneEntities}
+            highlightEntities={hasSearchCriteria ? searchZoneEntities : []}
             focusEntities={
-              search === '' && searchZoneEntities.length === 0
+              !hasSearchCriteria && searchZoneEntities.length === 0
                 ? [{ sourceId: 'sites', id: selectedObservation?.plantingSiteId }]
-                : search !== ''
+                : hasSearchCriteria
                 ? searchZoneEntities
                 : []
             }
