@@ -1,3 +1,4 @@
+4d723b5a Show tooltips for total plants and planting density even when there is data (#1470)
 047e3b75 SW-3689 Old vs New Plants Dashboard (#1477)
 00e16e76 SW-3748 redux to list observations (not results) (#1476)
 eaa7b6b3 SW-3763 Add HTTPS proxy for remote backends (#1475)
