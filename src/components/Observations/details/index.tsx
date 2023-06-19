@@ -82,24 +82,21 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [activeLocale, details]);
 
   const statusSummary = useMemo<ObservationStatusSummary | undefined>(() => {
-    if (observation && details) {
+    if (observation && details && Date.now() <= new Date(observation.endDate).getTime()) {
       const plots = details.plantingZones.flatMap((zone) =>
         zone.plantingSubzones.flatMap((subzone) => subzone.monitoringPlots)
       );
       const pendingPlots = plots.filter((plot) => !plot.completedTime).length;
+      const totalPlots = plots.length;
+      const observedPlots = totalPlots - pendingPlots;
 
-      if (pendingPlots > 0) {
-        const totalPlots = plots.length;
-        const observedPlots = totalPlots - pendingPlots;
-
-        return {
-          endDate: getLongDate(observation.endDate, activeLocale),
-          pendingPlots,
-          totalPlots,
-          observedPlots,
-          observedPlotsPercentage: +((observedPlots / totalPlots) * 100).toFixed(2),
-        };
-      }
+      return {
+        endDate: getLongDate(observation.endDate, activeLocale),
+        pendingPlots,
+        totalPlots,
+        observedPlots,
+        observedPlotsPercentage: +((observedPlots / totalPlots) * 100).toFixed(2),
+      };
     }
     return undefined;
   }, [activeLocale, details, observation]);
