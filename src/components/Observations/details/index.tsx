@@ -88,7 +88,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       );
       const pendingPlots = plots.filter((plot) => !plot.completedTime).length;
 
-      if (pendingPlots >= 0) {
+      if (pendingPlots > 0) {
         const totalPlots = plots.length;
         const observedPlots = totalPlots - pendingPlots;
 
