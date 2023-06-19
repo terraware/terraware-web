@@ -64,6 +64,7 @@ import { ReportList, ReportView, ReportEdit } from './components/Reports';
 import isEnabled from 'src/features';
 import Observations from 'src/components/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
+import PlantsDashboardV2 from 'src/components/PlantsV2';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -431,10 +432,10 @@ function AppContent() {
               <NewNursery />
             </Route>
             <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
-              <PlantsDashboard />
+              {trackingV2 ? <PlantsDashboardV2 /> : <PlantsDashboard />}
             </Route>
             <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
-              <PlantsDashboard />
+              {trackingV2 ? <PlantsDashboardV2 /> : <PlantsDashboard />}
             </Route>
             <Route path={APP_PATHS.NURSERIES_VIEW}>
               <NurseryDetails />
