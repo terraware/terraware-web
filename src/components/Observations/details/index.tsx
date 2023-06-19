@@ -13,6 +13,7 @@ import {
   searchObservationDetails,
   selectDetailsZoneNames,
 } from 'src/redux/features/observations/observationDetailsSelectors';
+import { selectObservation } from 'src/redux/features/observations/observationsSelectors';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
@@ -58,6 +59,10 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     )
   );
 
+  const observation = useAppSelector((state) =>
+    selectObservation(state, Number(plantingSiteId), Number(observationId))
+  );
+
   const zoneNames = useAppSelector((state) =>
     selectDetailsZoneNames(state, Number(plantingSiteId), Number(observationId))
   );
@@ -94,6 +99,14 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       }));
     }
   }, [zoneNames, searchProps.filtersProps]);
+
+  useEffect(() => {
+    if (observation) {
+      /**
+       * show info on due date and monitoring plot progress
+       */
+    }
+  }, [observation]);
 
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
