@@ -1,12 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
-import { TableColumnType } from '@terraware/web-components';
+import { Message, TableColumnType } from '@terraware/web-components';
 import { FieldOptionsMap } from 'src/types/Search';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { getShortDate } from 'src/utils/dateFormatter';
+import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import { useAppSelector } from 'src/redux/store';
 import {
@@ -30,6 +30,14 @@ const columns = (): TableColumnType[] => [
   { key: 'plantingDensity', name: strings.PLANTING_DENSITY, type: 'number' },
   { key: 'mortalityRate', name: strings.MORTALITY_RATE, type: 'number' },
 ];
+
+type ObservationStatusSummary = {
+  endDate: string;
+  pendingPlots: number;
+  totalPlots: number;
+  observedPlots: number;
+  observedPlotsPercentage: number;
+};
 
 export type ObservationDetailsProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
@@ -73,6 +81,26 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     return `${completionDate} (${plantingSiteName})`;
   }, [activeLocale, details]);
 
+  const statusSummary = useMemo<ObservationStatusSummary | undefined>(() => {
+    if (observation && details && Date.now() <= new Date(observation.endDate).getTime()) {
+      const plots = details.plantingZones.flatMap((zone) =>
+        zone.plantingSubzones.flatMap((subzone) => subzone.monitoringPlots)
+      );
+      const pendingPlots = plots.filter((plot) => !plot.completedTime).length;
+      const totalPlots = plots.length;
+      const observedPlots = totalPlots - pendingPlots;
+
+      return {
+        endDate: getLongDate(observation.endDate, activeLocale),
+        pendingPlots,
+        totalPlots,
+        observedPlots,
+        observedPlotsPercentage: +((observedPlots / totalPlots) * 100).toFixed(2),
+      };
+    }
+    return undefined;
+  }, [activeLocale, details, observation]);
+
   useEffect(() => {
     setFilterOptions({
       zone: {
@@ -100,16 +128,9 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [zoneNames, searchProps.filtersProps]);
 
-  useEffect(() => {
-    if (observation) {
-      /**
-       * show info on due date and monitoring plot progress
-       */
-    }
-  }, [observation]);
-
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
+      <ObservationStatusSummaryMessage statusSummary={statusSummary} />
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <AggregatedPlantsStats {...(details ?? {})} isSite />
@@ -132,3 +153,48 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     </DetailsPage>
   );
 }
+
+type ObservationStatusSummaryMessageProps = {
+  statusSummary?: ObservationStatusSummary;
+};
+
+const ObservationStatusSummaryMessage = ({
+  statusSummary,
+}: ObservationStatusSummaryMessageProps): JSX.Element | null => {
+  if (!statusSummary) {
+    return null;
+  }
+
+  return (
+    <Box marginBottom={3} display='flex' flexGrow={1}>
+      <Message
+        type='page'
+        priority='info'
+        title={strings.OBSERVATION_STATUS}
+        body={
+          <>
+            <Box marginBottom={3}>
+              {
+                strings.formatString(
+                  strings.OBSERVATIONS_REQUIRED_BY_DATE,
+                  statusSummary.pendingPlots.toString(),
+                  statusSummary.endDate
+                ) as string
+              }
+            </Box>
+            <Box>
+              {
+                strings.formatString(
+                  strings.OBSERVATIONS_COMPLETION_PERCENTAGE,
+                  statusSummary.observedPlots,
+                  statusSummary.totalPlots,
+                  statusSummary.observedPlotsPercentage
+                ) as string
+              }
+            </Box>
+          </>
+        }
+      />
+    </Box>
+  );
+};
