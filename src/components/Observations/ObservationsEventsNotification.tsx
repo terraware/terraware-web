@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Box } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 import strings from 'src/strings';
+import { SEED_COLLECTOR_APP_STORE_LINK, SEED_COLLECTOR_GOOGLE_PLAY_LINK } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { getLongDate } from 'src/utils/dateFormatter';
 
@@ -67,7 +68,7 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
             key='1'
             priority='secondary'
             type='passive'
-            onClick={() => openTab('https://apps.apple.com/us/app/terraware/id1568369900')}
+            onClick={() => openTab(SEED_COLLECTOR_APP_STORE_LINK)}
           />,
           <Button
             label={strings.DOWNLOAD_ON_GOOGLE_PLAY}
@@ -75,7 +76,7 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
             key='2'
             priority='secondary'
             type='passive'
-            onClick={() => openTab('https://play.google.com/store/apps/details?id=com.terraformation.seedcollector')}
+            onClick={() => openTab(SEED_COLLECTOR_GOOGLE_PLAY_LINK)}
           />,
         ]}
       />
