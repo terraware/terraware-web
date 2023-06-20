@@ -13,7 +13,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     contact_us: 'https://www.terraformation.com/contact-us/terraware-support-contact-us',
   },
   es: {
-    privacy_policy: 'https://www.terraformation.com/privacy-policy',
+    privacy_policy: 'https://www.terraformation.com/politica-de-privacidad',
     report_a_problem: 'https://www.terraformation.com/contact-us/soporte-terraware-informe-de-un-problema',
     request_a_feature: 'https://www.terraformation.com/contact-us/soporte-terraware-solicite-una-funcion',
     contact_us: 'https://www.terraformation.com/contact-us/soporte-terraware-contactenos',
