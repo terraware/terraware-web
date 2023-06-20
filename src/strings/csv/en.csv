@@ -622,6 +622,8 @@ NURSERY_MEDIA,Nursery Media
 NURSERY_MORTALITY_RATE,Nursery Mortality Rate
 NURSERY_REQUIRED,Nursery *
 NURSERY_TRANSFER,Nursery Transfer
+OBSERVATION_EVENTS_SCHEDULED,Observation event is scheduled for {0} for {1} and {2}.,"Example: Observation event is scheduled for June 1, 2023 for Site-A and Site-B."
+OBSERVATION_EVENT_SCHEDULED,Observation event is scheduled for {0} for {1}.,"Example: Observation event is scheduled for June 1, 2023 for Site-A."
 OBSERVATION_IN_PROGRESS,Observation in Progress
 OBSERVATION_STATUS,Observation Status
 OBSERVATION_STATUS_OUTSTANDING,Outstanding,In the sense of Pending or Unresolved

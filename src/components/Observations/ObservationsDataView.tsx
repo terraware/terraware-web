@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { FieldOptionsMap } from 'src/types/Search';
 import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -34,9 +34,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     )
   );
 
-  const upcomingObservations = useAppSelector((state) =>
-    selectPlantingSiteObservations(state, -1, 'Upcoming')
-  );
+  const upcomingObservations = useAppSelector((state) => selectPlantingSiteObservations(state, -1, 'Upcoming'));
 
   const zoneNames = useAppSelector((state) => selectObservationsZoneNames(state, selectedPlantingSiteId));
 
@@ -49,17 +47,17 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     });
   }, [setFilterOptions, zoneNames]);
 
-  const observationsEvents = useMemo(() => {
+  const observationsEvents = useMemo<ObservationEvent[]>(() => {
     if (!upcomingObservations) {
       return [];
     }
     const now = Date.now();
     // return observations that haven't passed
-    return upcomingObservations.filter(observation => now <= (new Date(observation.endDate)).getTime());
+    return upcomingObservations.filter((observation) => now <= new Date(observation.endDate).getTime());
   }, [upcomingObservations]);
 
   return (
-    <>
+    <Grid container>
       <ObservationsEventsNotification events={observationsEvents} />
       <ListMapView
         initialView='list'
@@ -73,7 +71,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
           )
         }
       />
-    </>
+    </Grid>
   );
 }
 
