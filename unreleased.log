@@ -1,3 +1,4 @@
+66b190b5 SW-3767 Show observation status summary message notification (#1478)
 928a7167 SW-3027 - Run unit tests and generate coverage as part of docs (#1471)
 4d723b5a Show tooltips for total plants and planting density even when there is data (#1470)
 047e3b75 SW-3689 Old vs New Plants Dashboard (#1477)
