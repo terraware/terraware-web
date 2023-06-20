@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { FieldOptionsMap } from 'src/types/Search';
 import { useAppSelector } from 'src/redux/store';
@@ -12,6 +12,7 @@ import ListMapView from 'src/components/ListMapView';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import OrgObservationsListView from './org/OrgObservationsListView';
 import ObservationMapView from './map/ObservationMapView';
+import ObservationsEventsNotification, { ObservationEvent } from './ObservationsEventsNotification';
 
 export type ObservationsDataViewProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
@@ -34,10 +35,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   );
 
   const upcomingObservations = useAppSelector((state) =>
-    selectPlantingSiteObservations(state, selectedPlantingSiteId, 'Upcoming')
-  );
-  const inProgressObservations = useAppSelector((state) =>
-    selectPlantingSiteObservations(state, selectedPlantingSiteId, 'InProgress')
+    selectPlantingSiteObservations(state, -1, 'Upcoming')
   );
 
   const zoneNames = useAppSelector((state) => selectObservationsZoneNames(state, selectedPlantingSiteId));
@@ -51,33 +49,31 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     });
   }, [setFilterOptions, zoneNames]);
 
-  useEffect(() => {
-    if (upcomingObservations?.length) {
-      /**
-       * enable message notification showing upcoming notifications and app download prompt
-       */
-    } else {
-      if (!inProgressObservations?.length) {
-        /**
-         * enable message notification with app download prompt
-         */
-      }
+  const observationsEvents = useMemo(() => {
+    if (!upcomingObservations) {
+      return [];
     }
-  }, [upcomingObservations, inProgressObservations]);
+    const now = Date.now();
+    // return observations that haven't passed
+    return upcomingObservations.filter(observation => now <= (new Date(observation.endDate)).getTime());
+  }, [upcomingObservations]);
 
   return (
-    <ListMapView
-      initialView='list'
-      search={<Search {...searchProps} />}
-      list={<OrgObservationsListView observationsResults={observationsResults} />}
-      map={
-        selectedPlantingSiteId === -1 ? (
-          <AllPlantingSitesMapView />
-        ) : (
-          <ObservationMapView observationsResults={observationsResults} {...searchProps} />
-        )
-      }
-    />
+    <>
+      <ObservationsEventsNotification events={observationsEvents} />
+      <ListMapView
+        initialView='list'
+        search={<Search {...searchProps} />}
+        list={<OrgObservationsListView observationsResults={observationsResults} />}
+        map={
+          selectedPlantingSiteId === -1 ? (
+            <AllPlantingSitesMapView />
+          ) : (
+            <ObservationMapView observationsResults={observationsResults} {...searchProps} />
+          )
+        }
+      />
+    </>
   );
 }
 
