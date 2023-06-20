@@ -624,10 +624,10 @@ OBSERVATION_IN_PROGRESS,Observation in Progress
 OBSERVATION_STATUS,Observation Status
 OBSERVATION_STATUS_OUTSTANDING,Outstanding,In the sense of Pending or Unresolved
 OBSERVATIONS,Observations
+OBSERVATIONS_COMPLETION_PERCENTAGE,Observations for {0} of {1} monitoring plots ({2}%) have been completed.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Observations are when you record data from a sample of monitoring plots using our mobile app in the field. This allows us to calculate mortality rates, and eventually carbon sequestration."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"You will be notified when it is time to take your observations (typically, the next time you end a planting season). After you've completed your first observations, you'll see the records here."
 OBSERVATIONS_EMPTY_STATE_TITLE,No Observations Yet
-OBSERVATIONS_COMPLETION_PERCENTAGE,Observations for {0} of {1} monitoring plots ({2}%) have been completed.,"Example: Observations for 5 of 10 monitoring plots (50%) have been completed."
 OBSERVATIONS_REQUIRED_BY_DATE,{0} monitoring plots require observation by {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
 OBSERVER,Observer
 ONBOARDING_ADMIN_TITLE,"Just a moment, let’s complete setup first"
@@ -656,6 +656,7 @@ OUNCES,Ounces
 OUT_PLANTING,Out-planting
 OUTPLANT,Outplant
 OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Outplants require batches with seedlings that are ""ready."""
+OUTSTANDING,Outstanding,In the sense of Pending or Unresolved
 OVER_WORD_LIMIT,Over word limit
 OVERDUE,Overdue
 OWNER,Owner
