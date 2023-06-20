@@ -622,6 +622,7 @@ NURSERY_REQUIRED,Vivero *
 NURSERY_TRANSFER,Traslado de vivero
 OBSERVATION_IN_PROGRESS,Observación en progreso
 OBSERVATION_STATUS,Estado de la observación
+OBSERVATION_STATUS_OUTSTANDING,Sobresaliente,In the sense of Pending or Unresolved
 OBSERVATIONS,Observaciones
 OBSERVATIONS_COMPLETION_PERCENTAGE,Las observaciones para {0} de {1} parcelas de monitoreo ({2}%) se han completado.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Las observaciones son cuando registra datos de una plantilla de parcelas de seguimiento usando nuestra aplicación móvil en el campo. Esto nos permite calcular las tasas de mortalidad, y eventualmente el secuestro de carbono."
