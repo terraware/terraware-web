@@ -130,36 +130,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
-      {statusSummary && (
-        <Box marginBottom={3} display='flex' flexGrow={1}>
-          <Message
-            type='page'
-            priority='info'
-            title={strings.OBSERVATION_STATUS}
-            body={
-              <>
-                <Box marginBottom={3}>
-                  {
-                    strings.formatString(
-                      strings.OBSERVATIONS_REQUIRED_BY_DATE,
-                      statusSummary.pendingPlots.toString(),
-                      statusSummary.endDate
-                    ) as string
-                  }
-                </Box>
-                {
-                  strings.formatString(
-                    strings.OBSERVATIONS_COMPLETION_PERCENTAGE,
-                    statusSummary.observedPlots,
-                    statusSummary.totalPlots,
-                    statusSummary.observedPlotsPercentage
-                  ) as string
-                }
-              </>
-            }
-          />
-        </Box>
-      )}
+      <ObservationStatusSummaryMessage statusSummary={statusSummary} />
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <AggregatedPlantsStats {...(details ?? {})} />
@@ -182,3 +153,48 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     </DetailsPage>
   );
 }
+
+type ObservationStatusSummaryMessageProps = {
+  statusSummary?: ObservationStatusSummary;
+};
+
+const ObservationStatusSummaryMessage = ({
+  statusSummary,
+}: ObservationStatusSummaryMessageProps): JSX.Element | null => {
+  if (!statusSummary) {
+    return null;
+  }
+
+  return (
+    <Box marginBottom={3} display='flex' flexGrow={1}>
+      <Message
+        type='page'
+        priority='info'
+        title={strings.OBSERVATION_STATUS}
+        body={
+          <>
+            <Box marginBottom={3}>
+              {
+                strings.formatString(
+                  strings.OBSERVATIONS_REQUIRED_BY_DATE,
+                  statusSummary.pendingPlots.toString(),
+                  statusSummary.endDate
+                ) as string
+              }
+            </Box>
+            <Box>
+              {
+                strings.formatString(
+                  strings.OBSERVATIONS_COMPLETION_PERCENTAGE,
+                  statusSummary.observedPlots,
+                  statusSummary.totalPlots,
+                  statusSummary.observedPlotsPercentage
+                ) as string
+              }
+            </Box>
+          </>
+        }
+      />
+    </Box>
+  );
+};
