@@ -17,7 +17,8 @@ export const useSupportedLocales = (): LocaleDetails[] => {
   const { isProduction } = useEnvironment();
 
   // this can be extended for languages in development
-  return useMemo(() => {
-    return !isProduction ? supportedLocales.filter((locale) => !locale.inDevelopment) : supportedLocales;
-  }, [isProduction]);
+  return useMemo(
+    () => (isProduction ? supportedLocales.filter((locale) => !locale.inDevelopment) : supportedLocales),
+    [isProduction]
+  );
 };
