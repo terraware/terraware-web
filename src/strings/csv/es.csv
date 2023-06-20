@@ -622,7 +622,7 @@ NURSERY_REQUIRED,Vivero *
 NURSERY_TRANSFER,Traslado de vivero
 OBSERVATION_IN_PROGRESS,Observación en progreso
 OBSERVATION_STATUS,Estado de la observación
-OBSERVATION_STATUS_OUTSTANDING,Sobresaliente,In the sense of Pending or Unresolved
+OBSERVATION_STATUS_OUTSTANDING,Sobresaliente,Remaining to be done
 OBSERVATIONS,Observaciones
 OBSERVATIONS_COMPLETION_PERCENTAGE,Las observaciones para {0} de {1} parcelas de monitoreo ({2}%) se han completado.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Las observaciones son cuando registra datos de una plantilla de parcelas de seguimiento usando nuestra aplicación móvil en el campo. Esto nos permite calcular las tasas de mortalidad, y eventualmente el secuestro de carbono."
@@ -656,7 +656,7 @@ OUNCES,Onzas
 OUT_PLANTING,Replantando en el exterior
 OUTPLANT,Replantar en el exterior
 OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Las replantaciones en el exterior requieren lotes con plántulas que estén ""listas""."
-OUTSTANDING,Destacado,In the sense of Pending or Unresolved
+OUTSTANDING,Destacado
 OVER_WORD_LIMIT,Sobre el límite de palabras
 OVERDUE,Atrasado
 OWNER,Propietario
@@ -1046,7 +1046,7 @@ TOOLTIP_ACCESSIONS_ID,"Un identificador único para una colección de semillas a
 TOOLTIP_ACCESSIONS_LOCATION,Lugar donde se procesan las semillas.
 TOOLTIP_ACCESSIONS_SUBLOCATION,Zona específica dentro del lugar donde las semillas son procesadas.
 TOOLTIP_COMMON_NAME,"El nombre por el que un organismo es conocido por el público general, en lugar de su nombre científico."
-TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todas las accesiones con los estados en espera de procesamiento, en procesamiento, en secado y en almacén."
+TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todos los muestreos con los siguientes estados: esperando ingreso, esperando procesamiento, procesando, secando y en almacenamiento."
 TOOLTIP_ECOSYSTEM_TYPE,"Unidades relativamente grandes de tierra o agua que contienen un conjunto diferenciado de comunidades naturales que comparten una gran mayoría de especies, dinámicas y condiciones medioambientales."
 TOOLTIP_GERMINATING_QUANTITY,En germinación indica que las plántulas aún no han brotado de las semillas. La cantidad en germinación no cuenta para la cantidad total.
 TOOLTIP_NOT_READY_QUANTITY,"Lo que determina que una planta figure como ""no lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación."
