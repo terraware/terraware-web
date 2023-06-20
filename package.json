@@ -12,7 +12,7 @@
     "@mui/lab": "^5.0.0-alpha.120",
     "@mui/material": "^5.11.9",
     "@mui/styled-engine-sc": "^5.12.0",
-    "@mui/styles": "^5.11.9",
+    "@mui/styles": "^5.13.2",
     "@reduxjs/toolkit": "^1.9.3",
     "@terraware/web-components": "^2.3.48",
     "@testing-library/jest-dom": "^5.11.4",
