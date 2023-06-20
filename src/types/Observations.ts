@@ -81,7 +81,7 @@ export const getPlotStatus = (status?: MonitoringPlotStatus): string => {
     case 'InProgress':
       return strings.IN_PROGRESS;
     case 'Outstanding':
-      return strings.OUTSTANDING;
+      return strings.OBSERVATION_STATUS_OUTSTANDING;
     default:
       return '';
   }
