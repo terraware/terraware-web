@@ -27,6 +27,10 @@ export interface LocaleDetails {
    * Webpack knows to split the strings modules out into separate downloadable artifacts.
    */
   loadModule: () => Promise<StringsModule>;
+  /**
+   * Whether this locale is in development and not ready for production.
+   */
+  inDevelopment?: boolean;
 }
 
 // By default, we have no strings to show, but react-localization requires there to be at least

@@ -1,5 +1,5 @@
 import { Dropdown, DropdownItem, PopoverMenu } from '@terraware/web-components';
-import { supportedLocales } from '../strings/locales';
+import { useSupportedLocales } from '../strings/locales';
 import { LocalizationContext } from '../providers/contexts';
 import { UserService } from 'src/services';
 import { useUser } from '../providers';
@@ -27,6 +27,7 @@ export default function LocaleSelector({
   localeSelected,
 }: LocaleSelectorProps): JSX.Element {
   const { user, reloadUser } = useUser();
+  const supportedLocales = useSupportedLocales();
   const localeItems: DropdownItem[] = supportedLocales.map((supportedLocale) => ({
     value: supportedLocale.id,
     label: supportedLocale.name,
