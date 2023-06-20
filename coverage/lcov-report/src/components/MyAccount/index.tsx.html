@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/151</span>
+                <span class='fraction'>0/150</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/111</span>
+                <span class='fraction'>0/109</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/145</span>
+                <span class='fraction'>0/144</span>
             </div>
         
             
@@ -583,11 +583,7 @@
 <a name='L518'></a><a href='#L518'>518</a>
 <a name='L519'></a><a href='#L519'>519</a>
 <a name='L520'></a><a href='#L520'>520</a>
-<a name='L521'></a><a href='#L521'>521</a>
-<a name='L522'></a><a href='#L522'>522</a>
-<a name='L523'></a><a href='#L523'>523</a>
-<a name='L524'></a><a href='#L524'>524</a>
-<a name='L525'></a><a href='#L525'>525</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L521'></a><a href='#L521'>521</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -630,7 +626,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -676,7 +671,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -998,7 +992,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1008,7 +1001,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1141,7 +1133,6 @@ import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
-import isEnabled from 'src/features';
 import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import LocaleSelector from '../LocaleSelector';
@@ -1217,7 +1208,6 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
   const { userPreferences, reloadUserPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
-  const localeSelectionEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Locale selection');</span>
   const { selectedLocale, setSelectedLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const timeZones = <span class="cstat-no" title="statement not covered" >useTimeZones();</span>
   const tz = <span class="cstat-no" title="statement not covered" >timeZones.find(<span class="fstat-no" title="function not covered" >(t</span>imeZone) =&gt; <span class="cstat-no" title="statement not covered" >timeZone.id === record.timeZone)</span> || getUTC(timeZones);</span>
@@ -1515,28 +1505,26 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
                 {strings.LANGUAGE_AND_REGION}
               &lt;/Typography&gt;
             &lt;/Grid&gt;
-            {localeSelectionEnabled &amp;&amp; (
-              &lt;Grid
-                item
-                xs={isMobile ? 12 : 4}
-                sx={{ '&amp;.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              &gt;
-                {edit ? (
-                  &lt;LocaleSelector
-                    onChangeLocale={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setLocaleSelected(newValue)}</span>
-                    localeSelected={localeSelected}
-                  /&gt;
-                ) : (
-                  &lt;TextField
-                    label={strings.LANGUAGE}
-                    id='locale'
-                    type='text'
-                    value={supportedLocales.find(<span class="fstat-no" title="function not covered" >(s</span>Locale) =&gt; <span class="cstat-no" title="statement not covered" >sLocale.id === selectedLocale)</span>?.name}
-                    display={true}
-                  /&gt;
-                )}
-              &lt;/Grid&gt;
-            )}
+            &lt;Grid
+              item
+              xs={isMobile ? 12 : 4}
+              sx={{ '&amp;.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+            &gt;
+              {edit ? (
+                &lt;LocaleSelector
+                  onChangeLocale={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setLocaleSelected(newValue)}</span>
+                  localeSelected={localeSelected}
+                /&gt;
+              ) : (
+                &lt;TextField
+                  label={strings.LANGUAGE}
+                  id='locale'
+                  type='text'
+                  value={supportedLocales.find(<span class="fstat-no" title="function not covered" >(s</span>Locale) =&gt; <span class="cstat-no" title="statement not covered" >sLocale.id === selectedLocale)</span>?.name}
+                  display={true}
+                /&gt;
+              )}
+            &lt;/Grid&gt;
             &lt;Grid
               item
               xs={isMobile ? 12 : 4}
@@ -1642,7 +1630,7 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-06-20T21:05:10.792Z
+                at 2023-06-20T22:48:31.546Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
