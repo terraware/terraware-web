@@ -621,10 +621,13 @@ NURSERY_MORTALITY_RATE,Tasa de mortalidad en el vivero
 NURSERY_REQUIRED,Vivero *
 NURSERY_TRANSFER,Traslado de vivero
 OBSERVATION_IN_PROGRESS,Observación en progreso
+OBSERVATION_STATUS,Estado de la observación
 OBSERVATIONS,Observaciones
+OBSERVATIONS_COMPLETION_PERCENTAGE,Las observaciones para {0} de {1} parcelas de monitoreo ({2}%) se han completado.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Las observaciones son cuando registra datos de una plantilla de parcelas de seguimiento usando nuestra aplicación móvil en el campo. Esto nos permite calcular las tasas de mortalidad, y eventualmente el secuestro de carbono."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"Recibirá una notificación cuando sea momento de llevar sus observaciones (por lo general, la próxima vez que termine una temporada de plantación). Después de completar sus primeras observaciones, verá los registros aquí."
 OBSERVATIONS_EMPTY_STATE_TITLE,Aún no hay observaciones
+OBSERVATIONS_REQUIRED_BY_DATE,Los parcelas de monitoreo de {0} requieren observación por {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
 OBSERVER,Observador
 ONBOARDING_ADMIN_TITLE,"Un momento, vamos a completar la configuración en primer lugar"
 OPPORTUNITIES,Oportunidades
@@ -652,6 +655,7 @@ OUNCES,Onzas
 OUT_PLANTING,Replantando en el exterior
 OUTPLANT,Replantar en el exterior
 OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Las replantaciones en el exterior requieren lotes con plántulas que estén ""listas""."
+OUTSTANDING,Destacado,In the sense of Pending or Unresolved
 OVER_WORD_LIMIT,Sobre el límite de palabras
 OVERDUE,Atrasado
 OWNER,Propietario
