@@ -28,7 +28,6 @@ import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
-import isEnabled from 'src/features';
 import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import LocaleSelector from '../LocaleSelector';
@@ -104,7 +103,6 @@ const MyAccountContent = ({
   const { userPreferences, reloadUserPreferences } = useUser();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
-  const localeSelectionEnabled = isEnabled('Locale selection');
   const { selectedLocale, setSelectedLocale } = useLocalization();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
@@ -402,28 +400,26 @@ const MyAccountContent = ({
                 {strings.LANGUAGE_AND_REGION}
               </Typography>
             </Grid>
-            {localeSelectionEnabled && (
-              <Grid
-                item
-                xs={isMobile ? 12 : 4}
-                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              >
-                {edit ? (
-                  <LocaleSelector
-                    onChangeLocale={(newValue) => setLocaleSelected(newValue)}
-                    localeSelected={localeSelected}
-                  />
-                ) : (
-                  <TextField
-                    label={strings.LANGUAGE}
-                    id='locale'
-                    type='text'
-                    value={supportedLocales.find((sLocale) => sLocale.id === selectedLocale)?.name}
-                    display={true}
-                  />
-                )}
-              </Grid>
-            )}
+            <Grid
+              item
+              xs={isMobile ? 12 : 4}
+              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+            >
+              {edit ? (
+                <LocaleSelector
+                  onChangeLocale={(newValue) => setLocaleSelected(newValue)}
+                  localeSelected={localeSelected}
+                />
+              ) : (
+                <TextField
+                  label={strings.LANGUAGE}
+                  id='locale'
+                  type='text'
+                  value={supportedLocales.find((sLocale) => sLocale.id === selectedLocale)?.name}
+                  display={true}
+                />
+              )}
+            </Grid>
             <Grid
               item
               xs={isMobile ? 12 : 4}
