@@ -1,4 +1,6 @@
 # THIS FILE GETS REMOVED AS PART OF THE CI BUILD!
 
 # Don't allow generated docs to be committed to the main branch.
+coverage
+coverage/*
 unreleased.log

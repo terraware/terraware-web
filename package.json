@@ -66,6 +66,7 @@
     "build-with-version": "export REACT_APP_TERRAWARE_FE_BUILD_VERSION=$(git rev-parse --short HEAD) && craco build",
     "build-version-file": "echo $(git rev-parse --short HEAD) > public/build-version.txt",
     "test": "TZ=America/Los_Angeles craco test",
+    "test-coverage": "TZ=America/Los_Angeles craco test --coverage --coverageDirectory='docs/coverage'",
     "eject": "craco eject",
     "generate-collateral": "yarn build-version-file && yarn generate-strings",
     "generate-strings": "node scripts/generate-strings.js",
