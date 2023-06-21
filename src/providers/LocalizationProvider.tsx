@@ -3,7 +3,7 @@ import { LocalizationContext } from './contexts';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import strings, { ILocalizedStringsMap } from 'src/strings';
 import { ProvidedLocalizationData, useUser } from '.';
-import { supportedLocales } from '../strings/locales';
+import { useSupportedLocales } from '../strings/locales';
 import { HttpService, LocationService } from 'src/services';
 
 export type LocalizationProviderProps = {
@@ -23,6 +23,7 @@ export default function LocalizationProvider({
 }: LocalizationProviderProps): JSX.Element | null {
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
   const { user } = useUser();
+  const supportedLocales = useSupportedLocales();
 
   useEffect(() => {
     if (user?.locale) {
@@ -76,7 +77,7 @@ export default function LocalizationProvider({
     };
 
     fetchStrings();
-  }, [selectedLocale, setActiveLocale]);
+  }, [selectedLocale, setActiveLocale, supportedLocales]);
 
   const context: ProvidedLocalizationData = {
     activeLocale,

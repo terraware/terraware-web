@@ -31,7 +31,7 @@ import { getUTC } from 'src/utils/useTimeZoneUtils';
 import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import LocaleSelector from '../LocaleSelector';
-import { supportedLocales } from 'src/strings/locales';
+import { useSupportedLocales } from 'src/strings/locales';
 import DeleteAccountModal from './DeleteAccountModal';
 
 type MyAccountProps = {
@@ -87,6 +87,7 @@ const MyAccountContent = ({
   reloadData,
 }: MyAccountContentProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
+  const supportedLocales = useSupportedLocales();
   const theme = useTheme();
   const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
