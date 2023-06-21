@@ -63,13 +63,13 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const classes = useStyles();
   const { open, onClose, initialSpecies } = props;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
-  const [scientificNameSearchTerm, setScientificNameSearchTerm] = useState<string>('');
+  const [userSearched, setUserSearched] = useState<boolean>(false);
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [optionsForName, setOptionsForName] = useState<string[]>();
   const [optionsForCommonName, setOptionsForCommonName] = useState<string[]>();
   const [newScientificName, setNewScientificName] = useState(false);
   // Debounce search term so that it only gives us latest value if searchTerm has not been updated within last 500ms.
-  const debouncedSearchTerm = useDebounce(scientificNameSearchTerm, 250);
+  const debouncedSearchTerm = useDebounce(record.scientificName, 250);
   const [showWarning, setShowWarning] = useState(false);
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
@@ -140,9 +140,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       }
     };
 
-    getOptionsForTyped();
-    getDetails();
-  }, [debouncedSearchTerm, setRecord]);
+    if (userSearched) {
+      getOptionsForTyped();
+      getDetails();
+    }
+  }, [debouncedSearchTerm, setRecord, userSearched]);
 
   const handleCancel = () => {
     onClose(false);
@@ -177,7 +179,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const onChangeScientificName = (value: string) => {
     setNameFormatError('');
     setNewScientificName(false);
-    setScientificNameSearchTerm(value);
+    if (!userSearched) {
+      setUserSearched(true);
+    }
     onChange('scientificName', value);
   };
 
