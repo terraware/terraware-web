@@ -95,9 +95,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
         column={column}
         value={
           <TextTruncated
-            stringList={((value ?? []) as EcosystemType[]).map(
-              (es) => ecosystemTypes().find((type) => type.value === es)?.label ?? ''
-            )}
+            stringList={(value ?? []) as string[]}
             maxLengthPx={100}
             listSeparator={strings.LIST_SEPARATOR_SECONDARY}
             moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}

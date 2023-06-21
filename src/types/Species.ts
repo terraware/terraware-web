@@ -123,13 +123,6 @@ export function getGrowthFormString(species: Species) {
   }
 }
 
-export const getEcosystemTypesString = (species: Species) => {
-  const result =
-    species.ecosystemTypes?.map((et) => ecosystemTypes().find((obj) => obj.label === et)?.value ?? '') ?? [];
-
-  return result.filter((str) => str !== '');
-};
-
 export type SpeciesWithScientificName = Species & {
   scientificName?: string;
 };
