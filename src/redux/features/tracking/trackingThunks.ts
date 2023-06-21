@@ -29,7 +29,7 @@ export const requestSitePopulation = (organizationId: number, siteId: number) =>
     } catch (e) {
       // should not happen, the response above captures any http request errors
       // tslint:disable-next-line: no-console
-      console.error('Error dispatching planting sites', e);
+      console.error('Error dispatching site population', e);
     }
   };
 };

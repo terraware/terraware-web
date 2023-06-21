@@ -6,7 +6,3 @@ export const selectPlantingSitesError = (state: RootState) => state.tracking?.er
 
 export const selectPlantingSite = (state: RootState, plantingSiteId: number) =>
   selectPlantingSites(state)?.find((site: PlantingSite) => site.id === plantingSiteId);
-
-export const selectSitePopulation = (state: RootState) => state.sitePopulation?.zones;
-
-export const selectSitePopulationError = (state: RootState) => state.sitePopulation?.error;
