@@ -1,3 +1,4 @@
+6d23cebd SW-3798 translate species growth-form and seed-storage-behavior (#1488)
 18eeaf12 SW-3761 Show upcoming observation event notification messages  (#1485)
 23a80069 SW-3795 react hook to export supported locales for the FE environment (prod vs non-prod) (#1487)
 8bf519f5 Updated translations from Phrase (#1483)
