@@ -123,23 +123,6 @@ export function getGrowthFormString(species: Species) {
   }
 }
 
-export function getSeedStorageBehaviorString(species: Species) {
-  if (species.seedStorageBehavior) {
-    switch (species.seedStorageBehavior) {
-      case 'Intermediate':
-        return strings.INTERMEDIATE;
-      case 'Orthodox':
-        return strings.ORTHODOX;
-      case 'Recalcitrant':
-        return strings.RECALCITRANT;
-      case 'Unknown':
-        return strings.UNKNOWN;
-    }
-  } else {
-    return undefined;
-  }
-}
-
 export const getEcosystemTypesString = (species: Species) => {
   const result =
     species.ecosystemTypes?.map((et) => ecosystemTypes().find((obj) => obj.label === et)?.value ?? '') ?? [];

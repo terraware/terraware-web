@@ -8,13 +8,7 @@ import { OrderPreserveableTable as Table } from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import speciesAtom from 'src/state/species';
 import strings from 'src/strings';
-import {
-  EcosystemType,
-  getEcosystemTypesString,
-  getGrowthFormString,
-  getSeedStorageBehaviorString,
-  Species,
-} from 'src/types/Species';
+import { EcosystemType, getEcosystemTypesString, Species } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
@@ -465,8 +459,8 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               scientificName: result.scientificName as string,
               commonName: result.commonName as string,
               familyName: result.familyName as string,
-              growthForm: getGrowthFormString(result as Species),
-              seedStorageBehavior: getSeedStorageBehaviorString(result as Species),
+              growthForm: result.growthForm as string,
+              seedStorageBehavior: result.seedStorageBehavior as string,
               ecosystemTypes: getEcosystemTypesString({
                 ...result,
                 ecosystemTypes: (result.ecosystemTypes as Record<string, EcosystemType>[])?.map((r) => r.ecosystemType),
