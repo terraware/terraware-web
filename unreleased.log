@@ -1,3 +1,4 @@
+6370b9a3 SW-3802 Render Translated Ecosystems in Species Table (#1489)
 6d23cebd SW-3798 translate species growth-form and seed-storage-behavior (#1488)
 18eeaf12 SW-3761 Show upcoming observation event notification messages  (#1485)
 23a80069 SW-3795 react hook to export supported locales for the FE environment (prod vs non-prod) (#1487)
