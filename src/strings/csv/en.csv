@@ -246,6 +246,8 @@ DOWNLOAD_CSV_TEMPLATE,Download a CSV template here.
 DOWNLOAD_FAILED,Download failed
 DOWNLOAD_FAILED_DESCRIPTION,The download has failed. Please email {0} so we can assist you.
 DOWNLOAD_IN_PROGRESS,Download in progress...
+DOWNLOAD_ON_APP_STORE,Download on the App Store
+DOWNLOAD_ON_GOOGLE_PLAY,Get it on Google Play
 DOWNLOAD_REPORT_DESCRIPTION,You are about to download this datatable as a report. This csv file can be found in your Downloads. Please name your report below.
 DOWNLOAD_THE_CSV_TEMPLATE,Download the CSV template.
 DRIED,Dried
@@ -620,15 +622,18 @@ NURSERY_MEDIA,Nursery Media
 NURSERY_MORTALITY_RATE,Nursery Mortality Rate
 NURSERY_REQUIRED,Nursery *
 NURSERY_TRANSFER,Nursery Transfer
+OBSERVATION_EVENT_SCHEDULED,Observation event is scheduled for {0} for {1}.,"Example: Observation event is scheduled for June 1, 2023 for Site-A."
 OBSERVATION_IN_PROGRESS,Observation in Progress
 OBSERVATION_STATUS,Observation Status
 OBSERVATION_STATUS_OUTSTANDING,Outstanding,Remaining to be done
 OBSERVATIONS,Observations
 OBSERVATIONS_COMPLETION_PERCENTAGE,Observations for {0} of {1} monitoring plots ({2}%) have been completed.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
+OBSERVATIONS_DOWNLOAD_APP,"To complete observations, download the Terraware app on the App Store or Google Play."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Observations are when you record data from a sample of monitoring plots using our mobile app in the field. This allows us to calculate mortality rates, and eventually carbon sequestration."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"You will be notified when it is time to take your observations (typically, the next time you end a planting season). After you've completed your first observations, you'll see the records here."
 OBSERVATIONS_EMPTY_STATE_TITLE,No Observations Yet
 OBSERVATIONS_REQUIRED_BY_DATE,{0} monitoring plots require observation by {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
+OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations with the Terraware App
 OBSERVER,Observer
 ONBOARDING_ADMIN_TITLE,"Just a moment, let’s complete setup first"
 OPPORTUNITIES,Opportunities

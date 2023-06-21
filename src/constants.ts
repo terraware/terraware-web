@@ -1,5 +1,9 @@
 export const API_PULL_INTERVAL = 60000;
 
+export const SEED_COLLECTOR_APP_STORE_LINK = 'https://apps.apple.com/us/app/terraware/id1568369900';
+export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =
+  'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
+
 export enum APP_PATHS {
   ACCESSIONS = '/accessions',
   ACCESSIONS2_NEW = '/accessions/new',
