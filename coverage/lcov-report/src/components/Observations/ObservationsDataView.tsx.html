@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -151,13 +151,8 @@
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -193,11 +188,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -212,19 +202,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,8 +239,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useMemo } from 'react';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { FieldOptionsMap } from 'src/types/Search';
 import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -265,6 +253,7 @@ import ListMapView from 'src/components/ListMapView';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import OrgObservationsListView from './org/OrgObservationsListView';
 import ObservationMapView from './map/ObservationMapView';
+import ObservationsEventsNotification, { ObservationEvent } from './ObservationsEventsNotification';
 &nbsp;
 export type ObservationsDataViewProps = SearchProps &amp; {
   setFilterOptions: (value: FieldOptionsMap) =&gt; void;
@@ -286,12 +275,7 @@ export default function <span class="fstat-no" title="function not covered" >Obs
     )
   );
 &nbsp;
-  const upcomingObservations = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    selectPlantingSiteObservations(state, selectedPlantingSiteId, 'Upcoming')</span>
-  );
-  const inProgressObservations = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    selectPlantingSiteObservations(state, selectedPlantingSiteId, 'InProgress')</span>
-  );
+  const upcomingObservations = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSiteObservations(state, -1, 'Upcoming'))</span>;</span>
 &nbsp;
   const zoneNames = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectObservationsZoneNames(state, selectedPlantingSiteId))</span>;</span>
 &nbsp;
@@ -304,33 +288,31 @@ export default function <span class="fstat-no" title="function not covered" >Obs
     });
   }, [setFilterOptions, zoneNames]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (upcomingObservations?.length) {</span>
-      /**
-       * enable message notification showing upcoming notifications and app download prompt
-       */
-    } else {
-<span class="cstat-no" title="statement not covered" >      if (!inProgressObservations?.length) {</span>
-        /**
-         * enable message notification with app download prompt
-         */
-      }
+  const observationsEvents = <span class="cstat-no" title="statement not covered" >useMemo&lt;ObservationEvent[]&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!upcomingObservations) {</span>
+<span class="cstat-no" title="statement not covered" >      return [];</span>
     }
-  }, [upcomingObservations, inProgressObservations]);
+    const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
+    // return observations that haven't passed
+<span class="cstat-no" title="statement not covered" >    return upcomingObservations.filter(<span class="fstat-no" title="function not covered" >(o</span>bservation) =&gt; <span class="cstat-no" title="statement not covered" >now &lt;= new Date(observation.endDate).getTime())</span>;</span>
+  }, [upcomingObservations]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;ListMapView
-      initialView='list'
-      search={&lt;Search {...searchProps} /&gt;}
-      list={&lt;OrgObservationsListView observationsResults={observationsResults} /&gt;}
-      map={
-        selectedPlantingSiteId === -1 ? (
-          &lt;AllPlantingSitesMapView /&gt;
-        ) : (
-          &lt;ObservationMapView observationsResults={observationsResults} {...searchProps} /&gt;
-        )
-      }
-    /&gt;
+    &lt;Grid container&gt;
+      &lt;ObservationsEventsNotification events={observationsEvents} /&gt;
+      &lt;ListMapView
+        initialView='list'
+        search={&lt;Search {...searchProps} /&gt;}
+        list={&lt;OrgObservationsListView observationsResults={observationsResults} /&gt;}
+        map={
+          selectedPlantingSiteId === -1 ? (
+            &lt;AllPlantingSitesMapView /&gt;
+          ) : (
+            &lt;ObservationMapView observationsResults={observationsResults} {...searchProps} /&gt;
+          )
+        }
+      /&gt;
+    &lt;/Grid&gt;
   );
 }
 &nbsp;
@@ -352,7 +334,7 @@ const AllPlantingSitesMapView = <span class="cstat-no" title="statement not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-06-21T00:09:19.834Z
+                at 2023-06-21T14:34:05.503Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
