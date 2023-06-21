@@ -63,6 +63,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const classes = useStyles();
   const { open, onClose, initialSpecies } = props;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
+  const [userSearched, setUserSearched] = useState<boolean>(false);
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [optionsForName, setOptionsForName] = useState<string[]>();
   const [optionsForCommonName, setOptionsForCommonName] = useState<string[]>();
@@ -120,15 +121,15 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
                 return {
                   ...previousRecord,
                   familyName: speciesDetails.familyName,
-                  endangered: speciesDetails.endangered,
+                  endangered: speciesDetails.endangered ?? previousRecord.endangered,
                   commonName: speciesDetails.commonNames[0].name,
                 };
               } else {
                 setOptionsForCommonName(speciesDetails?.commonNames?.map((cN) => cN.name));
                 return {
                   ...previousRecord,
-                  familyName: speciesDetails?.familyName,
-                  endangered: speciesDetails?.endangered,
+                  familyName: speciesDetails?.familyName ?? previousRecord.familyName,
+                  endangered: speciesDetails?.endangered ?? previousRecord.endangered,
                 };
               }
             });
@@ -139,9 +140,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       }
     };
 
-    getOptionsForTyped();
-    getDetails();
-  }, [debouncedSearchTerm, setRecord]);
+    if (userSearched) {
+      getOptionsForTyped();
+      getDetails();
+    }
+  }, [debouncedSearchTerm, setRecord, userSearched]);
 
   const handleCancel = () => {
     onClose(false);
@@ -176,6 +179,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const onChangeScientificName = (value: string) => {
     setNameFormatError('');
     setNewScientificName(false);
+    if (!userSearched) {
+      setUserSearched(true);
+    }
     onChange('scientificName', value);
   };
 

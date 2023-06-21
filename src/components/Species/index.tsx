@@ -715,7 +715,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         onClose={() => setDeleteSpeciesModalOpen(false)}
         onSubmit={deleteSelectedSpecies}
       />
-      <AddSpeciesModal open={editSpeciesModalOpen} onClose={onCloseEditSpeciesModal} initialSpecies={selectedSpecies} />
+      {editSpeciesModalOpen && (
+        <AddSpeciesModal
+          open={editSpeciesModalOpen}
+          onClose={onCloseEditSpeciesModal}
+          initialSpecies={selectedSpecies}
+        />
+      )}
       <ImportSpeciesModal
         open={importSpeciesModalOpen}
         onClose={onCloseImportSpeciesModal}
