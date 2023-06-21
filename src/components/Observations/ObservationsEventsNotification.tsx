@@ -23,24 +23,16 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
     const dateEvents: Record<string, string[]> = {};
 
     events.forEach((event) => {
-      const startDate = getLongDate(event.startDate, activeLocale);
-      dateEvents[startDate] = [...(dateEvents[startDate] ?? []), event.plantingSiteName];
+      dateEvents[event.startDate] = [...(dateEvents[event.startDate] ?? []), event.plantingSiteName];
     });
 
-    return Object.keys(dateEvents).map((key) => {
-      const date = key;
-      const sites = dateEvents[key];
-      if (sites.length === 1) {
-        return strings.formatString(strings.OBSERVATION_EVENT_SCHEDULED, date, sites[0]);
-      } else {
-        return strings.formatString(
-          strings.OBSERVATION_EVENTS_SCHEDULED,
-          date,
-          sites.slice(0, sites.length - 1).join(', '),
-          sites.slice(-1)[0]
-        );
-      }
-    });
+    return Object.keys(dateEvents)
+      .sort()
+      .map((key) => {
+        const date = getLongDate(key, activeLocale);
+        const sites = dateEvents[key];
+        return strings.formatString(strings.OBSERVATION_EVENT_SCHEDULED, date, sites.join(', '));
+      });
   }, [activeLocale, events]);
 
   return (
