@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PlantingSite } from 'src/types/Tracking';
+import { PlantingSiteZone } from 'src/types/PlantingSite';
 
 // Define a type for the slice state
 type Data = {
@@ -25,3 +26,26 @@ export const trackingSlice = createSlice({
 export const { setPlantingSitesAction } = trackingSlice.actions;
 
 export const trackingReducer = trackingSlice.reducer;
+
+type SitePopulationData = {
+  error?: string;
+  zones?: PlantingSiteZone[];
+};
+
+const initialSitePopulationState: SitePopulationData = {};
+
+export const sitePopulationSlice = createSlice({
+  name: 'sitePopulationSlice',
+  initialState: initialSitePopulationState,
+  reducers: {
+    setSitePopulationAction: (state, action: PayloadAction<SitePopulationData>) => {
+      const data: SitePopulationData = action.payload;
+      state.error = data.error;
+      state.zones = data.zones;
+    },
+  },
+});
+
+export const { setSitePopulationAction } = sitePopulationSlice.actions;
+
+export const sitePopulationReducer = sitePopulationSlice.reducer;
