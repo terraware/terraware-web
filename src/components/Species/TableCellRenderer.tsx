@@ -1,7 +1,7 @@
 import { ClickAwayListener, IconButton, Theme, Tooltip } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
-import { EcosystemType, ecosystemTypes, SpeciesProblemElement } from 'src/types/Species';
+import { SpeciesProblemElement } from 'src/types/Species';
 import Icon from '../common/icon/Icon';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
@@ -95,9 +95,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
         column={column}
         value={
           <TextTruncated
-            stringList={((value ?? []) as EcosystemType[]).map(
-              (es) => ecosystemTypes().find((type) => type.value === es)?.label ?? ''
-            )}
+            stringList={(value ?? []) as string[]}
             maxLengthPx={100}
             listSeparator={strings.LIST_SEPARATOR_SECONDARY}
             moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
