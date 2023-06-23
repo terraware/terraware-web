@@ -8,7 +8,7 @@ type OverviewItemCardProps = {
   hideEditIcon?: boolean;
   onClick?: () => void;
   handleEdit?: () => void;
-  title: string;
+  title?: string;
   titleInfoTooltip?: React.ReactNode;
   contents: JSX.Element | string | null;
   className?: string;
@@ -48,16 +48,18 @@ export default function OverviewItemCard({
           flexBasis: 'fit-content',
         }}
       >
-        <Typography
-          sx={{
-            color: theme.palette.TwClrTxtSecondary,
-            fontSize: '14px',
-            fontWeight: 400,
-            marginBottom: theme.spacing(1),
-          }}
-        >
-          {title} {titleInfoTooltip && <IconTooltip title={titleInfoTooltip} />}
-        </Typography>
+        {title && (
+          <Typography
+            sx={{
+              color: theme.palette.TwClrTxtSecondary,
+              fontSize: '14px',
+              fontWeight: 400,
+              marginBottom: theme.spacing(1),
+            }}
+          >
+            {title} {titleInfoTooltip && <IconTooltip title={titleInfoTooltip} />}
+          </Typography>
+        )}
         <Box
           sx={{
             alignItems: isMobile ? 'flex-start' : 'center',
