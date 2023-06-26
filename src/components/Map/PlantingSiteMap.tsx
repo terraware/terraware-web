@@ -17,6 +17,13 @@ import { MapLayer } from 'src/components/common/MapLayerSelect';
 import { makeStyles } from '@mui/styles';
 import { getRgbaFromHex } from 'src/utils/color';
 
+const mapImages = [
+  {
+    name: 'mortality-rate-indicator',
+    url: '/assets/mortality-rate-indicator.png',
+  },
+];
+
 const useStyles = makeStyles((theme: Theme) => ({
   bottomLeftControl: {
     height: 'max-content',
@@ -48,6 +55,7 @@ export type PlantingSiteMapProps = {
   layers?: MapLayer[];
   bottomLeftMapControl?: React.ReactNode;
   topRightMapControl?: React.ReactNode;
+  showMortalityRateFill?: boolean;
 };
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
@@ -60,6 +68,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     layers,
     bottomLeftMapControl,
     topRightMapControl,
+    showMortalityRateFill,
   } = props;
   const theme = useTheme();
   const classes = useStyles();
@@ -189,6 +198,19 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 textSize: 16,
               }
             : undefined,
+          patternFill: showMortalityRateFill
+            ? {
+                imageName: 'mortality-rate-indicator',
+                opacityExpression: [
+                  'case',
+                  ['>', ['get', 'mortalityRate'], 0.5],
+                  0.7,
+                  ['>', ['get', 'mortalityRate'], 0.25],
+                  0.5,
+                  0.3,
+                ],
+              }
+            : undefined,
           ...getRenderAttributes('zone'),
         });
       }
@@ -218,7 +240,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     };
 
     fetchPlantingSite();
-  }, [mapData, snackbar, mapOptions, layers, theme.palette.TwClrBaseWhite, getRenderAttributes]);
+  }, [mapData, snackbar, mapOptions, layers, theme.palette.TwClrBaseWhite, getRenderAttributes, showMortalityRateFill]);
 
   const entityOptions: MapEntityOptions = useMemo(
     () => ({
@@ -238,7 +260,13 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1, position: 'relative', minHeight: '436px' }}>
-      <GenericMap options={mapOptions} contextRenderer={contextRenderer} style={style} entityOptions={entityOptions} />
+      <GenericMap
+        options={mapOptions}
+        contextRenderer={contextRenderer}
+        style={style}
+        entityOptions={entityOptions}
+        mapImages={mapImages}
+      />
       {topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
       {bottomLeftMapControl && <div className={classes.bottomLeftControl}>{bottomLeftMapControl}</div>}
     </Box>
