@@ -170,8 +170,7 @@ COMPLETED,Completed
 COMPROMISED_SEEDS,Compromised Seeds
 CONNECT_FAILED,Connect failed
 CONNECTED,Connected
-CONSERV_STATUS,Conserv. Status
-CONSERVATION_STATUS,Conservation Status
+CONSERVATION_CATEGORY,IUCN Conservation Category
 CONTACT_US,Contact Us
 CONTACT_US_DESCRIPTION,Have a question or would like to get in touch with someone from our team? We’re always happy to answer questions and help make sure you are getting the most out of Terraware! You can reach us using this form or by emailing {0}
 CONTACT_US_TO_RESOLVE_ISSUE,Please contact us to resolve this issue.
@@ -303,7 +302,6 @@ END,End
 END_DATE,End Date
 END_DRYING_REMINDER,End-Drying Reminder
 END_DRYING_REMINDER_OFF,End-drying Reminder Off
-ENDANGERED,Endangered
 ENTER_SIX_DIGIT_KEY,Enter 6-digit key
 ENVIRONMENTAL_NOTES,Environmental Notes
 ENVIRONMENTAL_NOTES_PLACEHOLDER,"Important notes about landscape, climate, and environmental conditions"
@@ -425,6 +423,15 @@ INVENTORY_IMPORT_COMPLETE,Inventory data import complete!
 INVENTORY_ONBOARDING_NURSERIES_MSG,Define nurseries assigned to seedlings inventory
 INVENTORY_ONBOARDING_SPECIES_MSG,Define a list of species used in your seedlings inventory
 ISSUE,Issue
+IUCN_EXTINCT,Extinct (EX),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_EXTINCT_IN_THE_WILD,Extinct in the Wild (EW),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_CRITICALLY_ENDANGERED,Critically Endangered (CR),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_ENDANGERED,Endangered (EN),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_VULNERABLE,Vulnerable (VU),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_NEAR_THREATENED,Near Threatened (NT),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_LEAST_CONCERN,Least Concern (LC),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_DATA_DEFICIENT,Data Deficient (DD),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_NOT_EVALUATED,Not Evaluated (NE),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 KEEP_ORIGINAL,Keep Original
 KEY_BELONGS_TO_ANOTHER_SEED_BANK,Key is associated with another seed bank.
 KEY_LESSONS,Key Lessons Learned
@@ -446,8 +453,6 @@ LATITUDE_LONGITUDE,"Latitude, Longitude"
 LB,lb
 LB_POUNDS,lb (pounds)
 LEARN_MORE,Learn more
-LEARN_MORE_CONSERVATION_STATUS_ENDANGERED,Species that are rare and whose wild populations have a high risk of extinction; see also any local definitions.
-LEARN_MORE_CONSERVATION_STATUS_RARE,"Species with limited wild population sizes, often found in isolated geographical locations; may meet criteria for endangered or threatened status but have not yet been legally listed or assessed."
 LEARN_MORE_GROWTH_FORM_FERN,"A non-flowering vascular plant that reproduces by spores, in the plant division Pteridophyta."
 LEARN_MORE_GROWTH_FORM_FORB,"A herbaceous (non-woody) plant that is NOT a graminoid (grass, sedge, or rush)."
 LEARN_MORE_GROWTH_FORM_FUNGUS,"Usually a eukaryotic organism (non-plant) that is heterotrophic (cannot produce its own food), grows in filaments (hyphae), and produces spores."
@@ -744,7 +749,6 @@ PV_SYSTEM,PV system
 QUANTIFY,Quantify
 QUANTITY,Quantity
 RARE,Rare
-RARE_ENDANGERED,"Rare, Endangered"
 REACH_OUT_TO_ADMIN_TITLE,Please reach out to an administrator from your organization.
 READY,Ready
 READY_QUANTITY,Ready Quantity
@@ -1057,9 +1061,10 @@ TOOLTIP_GERMINATING_QUANTITY,Germinating indicates that seedlings have not yet e
 TOOLTIP_NOT_READY_QUANTITY,What determines a plant as “not ready” is up to your team and is often species specific. For example: size of plant or amount of time acclimated.
 TOOLTIP_READY_QUANTITY,What determines a plant as “ready” is up to your team and is often species specific. For example: size of plant or amount of time acclimated.
 TOOLTIP_SCIENTIFIC_NAME,The binomial Latin name (genus + species) currently accepted in the botanical literature.
-TOOLTIP_SPECIES_CONSERVATION_STATUS,"A species' risk of extinction, usually a legal designation or a Red List assessment."
+TOOLTIP_SPECIES_CONSERVATION_CATEGORY,"IUCN Red List conservation category."
 TOOLTIP_SPECIES_FAMILY,The scientific name of the plant family currently accepted in the botanical literature.
 TOOLTIP_SPECIES_GROWTH_FORM,A structural category consisting of individuals or species of the same general habit of growth but not necessarily related.
+TOOLTIP_SPECIES_RARE,"Species with limited wild population sizes, often found in isolated geographical locations; may meet criteria for endangered or threatened status but have not yet been legally listed or assessed."
 TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage.
 TOOLTIP_TIME_ZONE_MY_ACCOUNT,We use time zones to display notifications in your local time. Select the time zone that applies to you.
 TOOLTIP_TIME_ZONE_NURSERY,We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to this nursery. All work done in this nursery will use this time zone.

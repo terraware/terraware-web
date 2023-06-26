@@ -170,8 +170,6 @@ COMPLETED,Completado
 COMPROMISED_SEEDS,Semillas comprometidas
 CONNECT_FAILED,La conexión ha fallado
 CONNECTED,Conectado
-CONSERV_STATUS,Estado de conservación
-CONSERVATION_STATUS,Estado de conservación
 CONTACT_US,Contáctenos
 CONTACT_US_DESCRIPTION,¿Tiene una pregunta o desea ponerse en contacto con un miembro de nuestro equipo? ¡Siempre estamos dispuestos a responder sus preguntas y a asegurarnos de que pueda sacarle provecho a Terraware! Puede ponerse en contacto con nosotros con este formulario o enviando un correo electrónico a {0}
 CONTACT_US_TO_RESOLVE_ISSUE,Contáctenos para resolver este problema.
@@ -303,7 +301,6 @@ END,Fin
 END_DATE,Fecha de finalización
 END_DRYING_REMINDER,Recordatorio de final de secado
 END_DRYING_REMINDER_OFF,Recordatorio de final de secado desactivado
-ENDANGERED,En peligro de extinción
 ENTER_SIX_DIGIT_KEY,Introduzca la clave de 6 dígitos
 ENVIRONMENTAL_NOTES,Notas medioambientales
 ENVIRONMENTAL_NOTES_PLACEHOLDER,"Notas importantes sobre el paisaje, el clima y las condiciones ambientales"
@@ -446,8 +443,6 @@ LATITUDE_LONGITUDE,"Latitud, longitud"
 LB,lb
 LB_POUNDS,lb (libras)
 LEARN_MORE,Más información
-LEARN_MORE_CONSERVATION_STATUS_ENDANGERED,Especies poco comunes y cuyas poblaciones silvestres corren un alto riesgo de extinción; consulte también las definiciones locales.
-LEARN_MORE_CONSERVATION_STATUS_RARE,"Especies con poblaciones silvestres de tamaño limitado, que a menudo se encuentran en lugares geográficos aislados; pueden cumplir los criterios de situación en peligro o bajo amenaza pero aún no se han incluido o evaluado legalmente."
 LEARN_MORE_GROWTH_FORM_FERN,"Planta vascular que no florece y se reproduce mediante esporas, que pertenece al grupo de plantas de las pteridofitas."
 LEARN_MORE_GROWTH_FORM_FORB,"Planta herbácea (no leñosa) que NO es una gramínea (césped, juncia o junco)."
 LEARN_MORE_GROWTH_FORM_FUNGUS,"Usualmente, un organismo eucariota (no vegetal) que es heterótrofo (que no puede producir su propio alimento), que crece en filamentos (hifas) y que produce esporas."
@@ -1057,7 +1052,6 @@ TOOLTIP_GERMINATING_QUANTITY,En germinación indica que las plántulas aún no h
 TOOLTIP_NOT_READY_QUANTITY,"Lo que determina que una planta figure como ""no lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación."
 TOOLTIP_READY_QUANTITY,"Lo que determina que una planta figure como ""lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación."
 TOOLTIP_SCIENTIFIC_NAME,El nombre latino binomial (género + especie) aceptado en la actualidad en la bibliografía botánica.
-TOOLTIP_SPECIES_CONSERVATION_STATUS,"Riesgo de extinción de una especie, normalmente una designación legal o una valoración de la Lista Roja."
 TOOLTIP_SPECIES_FAMILY,El nombre científico de la familia de la planta aceptado en la actualidad en la bibliografía botánica.
 TOOLTIP_SPECIES_GROWTH_FORM,Una categoría estructural compuesta por individuos o especies del mismo hábito general de crecimiento pero no necesariamente relacionados.
 TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,La capacidad de las semillas para sobrevivir a la desecación y a las temperaturas hasta los niveles necesarios para el almacenamiento ex situ (fuera del sitio).
