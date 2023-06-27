@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1687891941490" clover="3.2.0">
-  <project timestamp="1687891941490" name="All files">
-    <metrics statements="10810" coveredstatements="359" conditionals="6796" coveredconditionals="90" methods="3325" coveredmethods="77" elements="20931" coveredelements="526" complexity="0" loc="10810" ncloc="10810" packages="100" files="440" classes="440"/>
+<coverage generated="1687895985758" clover="3.2.0">
+  <project timestamp="1687895985758" name="All files">
+    <metrics statements="10823" coveredstatements="359" conditionals="6788" coveredconditionals="90" methods="3328" coveredmethods="77" elements="20939" coveredelements="526" complexity="0" loc="10823" ncloc="10823" packages="100" files="440" classes="440"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -6509,9 +6509,9 @@
       </file>
     </package>
     <package name="src.components.Species">
-      <metrics statements="439" coveredstatements="0" conditionals="256" coveredconditionals="0" methods="125" coveredmethods="0"/>
+      <metrics statements="440" coveredstatements="0" conditionals="256" coveredconditionals="0" methods="125" coveredmethods="0"/>
       <file name="AddSpeciesModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Species/AddSpeciesModal.tsx">
-        <metrics statements="93" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="31" coveredmethods="0"/>
+        <metrics statements="94" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="31" coveredmethods="0"/>
         <line num="33" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
@@ -6524,87 +6524,88 @@
         <line num="68" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
         <line num="76" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="88" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="92" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
         <line num="96" count="0" type="stmt"/>
         <line num="97" count="0" type="stmt"/>
         <line num="98" count="0" type="stmt"/>
         <line num="99" count="0" type="stmt"/>
-        <line num="100" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="100" count="0" type="stmt"/>
         <line num="101" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="108" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="109" count="0" type="stmt"/>
-        <line num="111" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="112" count="0" type="stmt"/>
+        <line num="102" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="109" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="113" count="0" type="stmt"/>
         <line num="114" count="0" type="stmt"/>
-        <line num="115" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="115" count="0" type="stmt"/>
         <line num="116" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="117" count="0" type="stmt"/>
+        <line num="117" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="118" count="0" type="stmt"/>
         <line num="119" count="0" type="stmt"/>
-        <line num="120" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="121" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="122" count="0" type="stmt"/>
         <line num="129" count="0" type="stmt"/>
-        <line num="138" count="0" type="stmt"/>
-        <line num="143" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="144" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
+        <line num="144" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="145" count="0" type="stmt"/>
-        <line num="149" count="0" type="stmt"/>
+        <line num="146" count="0" type="stmt"/>
         <line num="150" count="0" type="stmt"/>
-        <line num="153" count="0" type="stmt"/>
-        <line num="154" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="155" count="0" type="stmt"/>
-        <line num="157" count="0" type="stmt"/>
-        <line num="158" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="159" count="0" type="stmt"/>
-        <line num="161" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="162" count="0" type="stmt"/>
-        <line num="168" count="0" type="stmt"/>
-        <line num="169" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="170" count="0" type="stmt"/>
-        <line num="172" count="0" type="stmt"/>
-        <line num="173" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="174" count="0" type="stmt"/>
-        <line num="179" count="0" type="stmt"/>
+        <line num="151" count="0" type="stmt"/>
+        <line num="154" count="0" type="stmt"/>
+        <line num="155" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="156" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="159" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="160" count="0" type="stmt"/>
+        <line num="162" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="163" count="0" type="stmt"/>
+        <line num="169" count="0" type="stmt"/>
+        <line num="170" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="171" count="0" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="174" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="175" count="0" type="stmt"/>
         <line num="180" count="0" type="stmt"/>
         <line num="181" count="0" type="stmt"/>
-        <line num="182" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="183" count="0" type="stmt"/>
-        <line num="185" count="0" type="stmt"/>
-        <line num="188" count="0" type="stmt"/>
-        <line num="224" count="0" type="stmt"/>
-        <line num="237" count="0" type="stmt"/>
+        <line num="182" count="0" type="stmt"/>
+        <line num="183" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="184" count="0" type="stmt"/>
+        <line num="186" count="0" type="stmt"/>
+        <line num="189" count="0" type="stmt"/>
+        <line num="225" count="0" type="stmt"/>
         <line num="238" count="0" type="stmt"/>
-        <line num="246" count="0" type="stmt"/>
-        <line num="260" count="0" type="stmt"/>
-        <line num="273" count="0" type="stmt"/>
-        <line num="283" count="0" type="stmt"/>
-        <line num="292" count="0" type="stmt"/>
-        <line num="304" count="0" type="stmt"/>
-        <line num="318" count="0" type="stmt"/>
-        <line num="330" count="0" type="stmt"/>
-        <line num="357" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="358" count="0" type="stmt"/>
+        <line num="239" count="0" type="stmt"/>
+        <line num="247" count="0" type="stmt"/>
+        <line num="261" count="0" type="stmt"/>
+        <line num="274" count="0" type="stmt"/>
+        <line num="284" count="0" type="stmt"/>
+        <line num="293" count="0" type="stmt"/>
+        <line num="305" count="0" type="stmt"/>
+        <line num="319" count="0" type="stmt"/>
+        <line num="331" count="0" type="stmt"/>
+        <line num="358" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="359" count="0" type="stmt"/>
-        <line num="362" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="364" count="0" type="stmt"/>
+        <line num="360" count="0" type="stmt"/>
+        <line num="363" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="365" count="0" type="stmt"/>
+        <line num="366" count="0" type="stmt"/>
       </file>
       <file name="CheckDataModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Species/CheckDataModal.tsx">
         <metrics statements="41" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="11" coveredmethods="0"/>
@@ -7015,29 +7016,34 @@
       </file>
     </package>
     <package name="src.components.TooltipLearnMoreModal">
-      <metrics statements="20" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="9" coveredmethods="0"/>
+      <metrics statements="25" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="11" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/TooltipLearnMoreModal/index.tsx">
-        <metrics statements="20" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="9" coveredmethods="0"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
+        <metrics statements="25" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="11" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
-        <line num="98" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
         <line num="99" count="0" type="stmt"/>
-        <line num="112" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
         <line num="113" count="0" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
         <line num="124" count="0" type="stmt"/>
-        <line num="157" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
         <line num="158" count="0" type="stmt"/>
-        <line num="175" count="0" type="stmt"/>
+        <line num="159" count="0" type="stmt"/>
         <line num="176" count="0" type="stmt"/>
+        <line num="177" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.TopBar">
@@ -12030,7 +12036,7 @@
       </file>
     </package>
     <package name="src.types">
-      <metrics statements="65" coveredstatements="4" conditionals="62" coveredconditionals="0" methods="20" coveredmethods="0"/>
+      <metrics statements="72" coveredstatements="4" conditionals="52" coveredconditionals="0" methods="21" coveredmethods="0"/>
       <file name="Accession.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Accession.ts">
         <metrics statements="17" coveredstatements="3" conditionals="6" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="10" count="1" type="stmt"/>
@@ -12133,22 +12139,29 @@
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
       <file name="Species.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Species.ts">
-        <metrics statements="15" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="109" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="110" count="0" type="cond" truecount="0" falsecount="8"/>
-        <line num="112" count="0" type="stmt"/>
-        <line num="114" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="120" count="0" type="stmt"/>
-        <line num="122" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="126" count="0" type="stmt"/>
-        <line num="129" count="0" type="stmt"/>
+        <metrics statements="22" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="131" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="132" count="0" type="cond" truecount="0" falsecount="13"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="138" count="0" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="142" count="0" type="stmt"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="146" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="154" count="0" type="stmt"/>
+        <line num="156" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="161" count="0" type="stmt"/>
       </file>
       <file name="TimeZones.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/TimeZones.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
