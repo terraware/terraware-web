@@ -463,15 +463,21 @@ LEARN_MORE_GROWTH_FORM_FERN,"Planta vascular que no florece y se reproduce media
 LEARN_MORE_GROWTH_FORM_FORB,"Planta herbácea (no leñosa) que NO es una gramínea (césped, juncia o junco)."
 LEARN_MORE_GROWTH_FORM_FUNGUS,"Usualmente, un organismo eucariota (no vegetal) que es heterótrofo (que no puede producir su propio alimento), que crece en filamentos (hifas) y que produce esporas."
 LEARN_MORE_GROWTH_FORM_GRAMINOID,"Planta herbácea (no leñosa) cuya morfología se asemeja a la del césped, es decir culmos alargados con hojas largas en forma de cuchilla, de la familia del césped, la juncia o el junco."
+LEARN_MORE_GROWTH_FORM_LIANA,"Una planta trepadora que se encuentra a menudo en bosques tropicales, que cuelga de los árboles."
 LEARN_MORE_GROWTH_FORM_LICHEN,"Un grupo de hongo y alga, en el cual el hongo es el elemento dominante, debido a su forma de talo y su cuerpo fructífero."
 LEARN_MORE_GROWTH_FORM_MOSS,"Una planta no vascular y sin flores, típicamente con forma de masas o alfombrillas verdes y densas, a menudo en lugares húmedos o sombreados."
+LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS,Una planta que puede crecer en más de una forma.
 LEARN_MORE_GROWTH_FORM_SHRUB,Planta leñosa que es más pequeña que un árbol y posee varios tallos principales que nacen en el suelo o cerca de él.
+LEARN_MORE_GROWTH_FORM_SHRUB_TREE,Una planta que puede estar en forma de arbusto o árbol.
+LEARN_MORE_GROWTH_FORM_SUBSHRUB,Un arbusto enano que usualmente solo es leñoso en la base.
 LEARN_MORE_GROWTH_FORM_TREE,"Planta leñosa perenne, que suele tener un solo tallo o tronco que crece hasta una altura considerable y posee ramas laterales a cierta distancia del suelo."
+LEARN_MORE_GROWTH_FORM_VINE,Una planta trepadora o colgante con un tallo leñoso.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Las semillas exhiben un comportamiento intermedio entre las semillas ortodoxas y las recalcitrantes; pueden soportar la desecación parcial, soportar temperaturas frías pero no de congelación o tener una vida breve, independientemente de las condiciones de almacenamiento."
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Las semillas toleran los niveles de desecación necesarios para ser almacenadas congeladas (contenido de humedad de 5-8 %) y unas temperaturas de -20 °C o inferiores.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Las semillas no toleran los niveles de desecación necesarios para su conservación ex situ (fuera del sitio).
 LEAVE_AND_SAVE,Salir y guardar
 LEAVE_ORGANIZATION,Salir de la organización
+LIANA,Liana,A type of plant.
 LICHEN,Liquen
 LIGHT,Luz
 LIST,Lista
@@ -536,6 +542,7 @@ MORTALITY_RATE_PERCENT_REQUIRED,Tasa de mortalidad (%) *
 MOSS,Musgo
 MOST_RECENT_PERCENTAGE_VIABILITY,Porcentaje de viabilidad más reciente
 MOVE,Mover
+MULTIPLE_FORMS,Múltiples formas,"Describes a plant that can grow in more than one form, e.g., both a shrub and a forb."
 MY_ACCOUNT,Mi cuenta
 MY_ACCOUNT_DESC,Gestione la información de su cuenta.
 MY_ACCOUNT_NOTIFICATIONS_DESC,Las notificaciones le avisan cuando hay actualizaciones importantes sobre sus organizaciones. Las recibirá por correo electrónico.
@@ -955,6 +962,7 @@ SET_UP_YOUR_SENSOR_KIT,Configure su kit de sensor
 SET_UP_YOUR_SENSOR_KIT_MSG,"Si su banco de semillas fue construido por Terraformation, entonces está equipado con un kit de sensores con el que puede monitorear cosas como la temperatura y la humedad del banco de semillas, de forma remota. Para configurar el kit, tendrá que conectar su banco de semillas a la aplicación web de Terraware. Esto podría tardarse unos 30 minutos."
 SETTINGS,Ajustes
 SHRUB,Arbusto
+SHRUB_TREE,Arbusto/Árbol
 SILVOPASTURE,Sistema selvopastoril
 SITE,Sitio
 SITE_DETAIL,Detalle del sitio
@@ -1017,6 +1025,7 @@ SUBMITTED_BY,Enviado por
 SUBSET_COUNT,Recuento de subconjuntos
 SUBSET_WEIGHT,Peso del subconjunto de semillas
 SUBSET_WEIGHT_ERROR,El peso del subconjunto debe ser inferior al peso de las semillas
+SUBSHRUB,Subarbusto
 SUBSTRATE,Sustrato
 SUBTITLE_GET_STARTED,"Para empezar, cree ahora su organización. También podrá configurar y gestionar información sobre personas y especies."
 SUBZONE,Subzona
@@ -1182,6 +1191,7 @@ VIABILITY_TREATMENT,Tratamiento de viabilidad
 VIEW,Ver
 VIEW_ACCESSION,Ver adhesión
 VIEW_SITES_ZONES_SUBZONES,"Ver Sitios, Zonas y Subzonas en el mapa."
+VINE,Enredadera,A type of plant.
 WAITING_TO_DOWNLOAD,Esperando para descargar...
 WATTS_VALUE,{0}W
 WEIGHT_GRAMS,Peso (g)
