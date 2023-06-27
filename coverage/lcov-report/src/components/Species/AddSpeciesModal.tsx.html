@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/93</span>
             </div>
         
             
@@ -436,22 +436,7 @@
 <a name='L371'></a><a href='#L371'>371</a>
 <a name='L372'></a><a href='#L372'>372</a>
 <a name='L373'></a><a href='#L373'>373</a>
-<a name='L374'></a><a href='#L374'>374</a>
-<a name='L375'></a><a href='#L375'>375</a>
-<a name='L376'></a><a href='#L376'>376</a>
-<a name='L377'></a><a href='#L377'>377</a>
-<a name='L378'></a><a href='#L378'>378</a>
-<a name='L379'></a><a href='#L379'>379</a>
-<a name='L380'></a><a href='#L380'>380</a>
-<a name='L381'></a><a href='#L381'>381</a>
-<a name='L382'></a><a href='#L382'>382</a>
-<a name='L383'></a><a href='#L383'>383</a>
-<a name='L384'></a><a href='#L384'>384</a>
-<a name='L385'></a><a href='#L385'>385</a>
-<a name='L386'></a><a href='#L386'>386</a>
-<a name='L387'></a><a href='#L387'>387</a>
-<a name='L388'></a><a href='#L388'>388</a>
-<a name='L389'></a><a href='#L389'>389</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L374'></a><a href='#L374'>374</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -723,24 +708,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -842,10 +812,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Dropdown, IconTooltip, MultiSelect } from '@terraware/web-components';
+import { Dropdown, MultiSelect } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import {
+  conservationCategories,
   EcosystemType,
   ecosystemTypes,
   growthForms,
@@ -862,7 +833,6 @@ import DialogBox from '../common/DialogBox/DialogBox';
 import Select from '../common/Select/Select';
 import TextField from '../common/Textfield/Textfield';
 import TooltipLearnMoreModal, {
-  LearnMoreModalContentConservationStatus,
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,
   LearnMoreLink,
@@ -962,15 +932,15 @@ export default function <span class="fstat-no" title="function not covered" >Add
 <span class="cstat-no" title="statement not covered" >                return {</span>
                   ...previousRecord,
                   familyName: speciesDetails.familyName,
-                  endangered: speciesDetails.endangered ?? previousRecord.endangered,
                   commonName: speciesDetails.commonNames[0].name,
+                  conservationCategory: speciesDetails.conservationCategory ?? previousRecord.conservationCategory,
                 };
               } else {
 <span class="cstat-no" title="statement not covered" >                setOptionsForCommonName(speciesDetails?.commonNames?.map(<span class="fstat-no" title="function not covered" >(c</span>N) =&gt; <span class="cstat-no" title="statement not covered" >cN.name)</span>);</span>
 <span class="cstat-no" title="statement not covered" >                return {</span>
                   ...previousRecord,
+                  conservationCategory: speciesDetails?.conservationCategory ?? previousRecord.conservationCategory,
                   familyName: speciesDetails?.familyName ?? previousRecord.familyName,
-                  endangered: speciesDetails?.endangered ?? previousRecord.endangered,
                 };
               }
             });
@@ -1106,35 +1076,20 @@ export default function <span class="fstat-no" title="function not covered" >Add
           /&gt;
         &lt;/Grid&gt;
         &lt;Grid item xs={12}&gt;
-          &lt;span&gt;
-            {strings.CONSERVATION_STATUS}
-            &lt;IconTooltip
-              title={
-                &lt;&gt;
-                  {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}
-                  &lt;LearnMoreLink
-                    onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >                      openTooltipLearnMoreModal({</span>
-                        title: strings.CONSERVATION_STATUS,
-                        content: &lt;LearnMoreModalContentConservationStatus /&gt;,
-                      })
-                    }
-                  /&gt;
-                &lt;/&gt;
-              }
-            /&gt;
-          &lt;/span&gt;
-          &lt;Checkbox
-            id='Endangered'
-            name='conservationStatus'
-            label={strings.ENDANGERED}
-            onChange={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onChange('endangered', !record.endangered)}</span>
-            value={record.endangered}
-            className={classes.blockCheckbox}
+          &lt;Dropdown
+            id='conservationCategory'
+            label={strings.CONSERVATION_CATEGORY}
+            aria-label={strings.CONSERVATION_CATEGORY}
+            fullWidth={true}
+            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >onChange('conservationCategory', value)}</span>
+            placeholder={strings.SELECT}
+            options={conservationCategories()}
+            selectedValue={record.conservationCategory}
+            tooltipTitle={strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY}
           /&gt;
           &lt;Checkbox
             id='Rare'
-            name='conservationStatus'
+            name='rare'
             label={strings.RARE}
             onChange={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onChange('rare', !record.rare)}</span>
             value={record.rare}
@@ -1234,7 +1189,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-06-26T21:44:20.547Z
+                at 2023-06-27T17:36:21.578Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

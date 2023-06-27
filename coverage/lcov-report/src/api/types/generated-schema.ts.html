@@ -6096,7 +6096,65 @@
 <a name='L6031'></a><a href='#L6031'>6031</a>
 <a name='L6032'></a><a href='#L6032'>6032</a>
 <a name='L6033'></a><a href='#L6033'>6033</a>
-<a name='L6034'></a><a href='#L6034'>6034</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L6034'></a><a href='#L6034'>6034</a>
+<a name='L6035'></a><a href='#L6035'>6035</a>
+<a name='L6036'></a><a href='#L6036'>6036</a>
+<a name='L6037'></a><a href='#L6037'>6037</a>
+<a name='L6038'></a><a href='#L6038'>6038</a>
+<a name='L6039'></a><a href='#L6039'>6039</a>
+<a name='L6040'></a><a href='#L6040'>6040</a>
+<a name='L6041'></a><a href='#L6041'>6041</a>
+<a name='L6042'></a><a href='#L6042'>6042</a>
+<a name='L6043'></a><a href='#L6043'>6043</a>
+<a name='L6044'></a><a href='#L6044'>6044</a>
+<a name='L6045'></a><a href='#L6045'>6045</a>
+<a name='L6046'></a><a href='#L6046'>6046</a>
+<a name='L6047'></a><a href='#L6047'>6047</a>
+<a name='L6048'></a><a href='#L6048'>6048</a>
+<a name='L6049'></a><a href='#L6049'>6049</a>
+<a name='L6050'></a><a href='#L6050'>6050</a>
+<a name='L6051'></a><a href='#L6051'>6051</a>
+<a name='L6052'></a><a href='#L6052'>6052</a>
+<a name='L6053'></a><a href='#L6053'>6053</a>
+<a name='L6054'></a><a href='#L6054'>6054</a>
+<a name='L6055'></a><a href='#L6055'>6055</a>
+<a name='L6056'></a><a href='#L6056'>6056</a>
+<a name='L6057'></a><a href='#L6057'>6057</a>
+<a name='L6058'></a><a href='#L6058'>6058</a>
+<a name='L6059'></a><a href='#L6059'>6059</a>
+<a name='L6060'></a><a href='#L6060'>6060</a>
+<a name='L6061'></a><a href='#L6061'>6061</a>
+<a name='L6062'></a><a href='#L6062'>6062</a>
+<a name='L6063'></a><a href='#L6063'>6063</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -14520,8 +14578,17 @@ export interface components {
     SpeciesLookupDetailsResponsePayload: {
       /** @description List of known common names for the species, if any. */
       commonNames?: components["schemas"]["SpeciesLookupCommonNamePayload"][];
-      /** @description True if the species is known to be endangered, false if the species is known to not be endangered. This value will not be present if the server's taxonomic database doesn't indicate whether or not the species is endangered. */
-      endangered?: boolean;
+      /** @description IUCN Red List conservation category code. */
+      conservationCategory?:
+        | "CR"
+        | "DD"
+        | "EN"
+        | "EW"
+        | "EX"
+        | "LC"
+        | "NE"
+        | "NT"
+        | "VU";
       familyName: string;
       /** @description If this is not the accepted name for the species, the type of problem the name has. Currently, this will always be "Name Is Synonym". */
       problemType?: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
@@ -14545,6 +14612,17 @@ export interface components {
     };
     SpeciesRequestPayload: {
       commonName?: string;
+      /** @description IUCN Red List conservation category code. */
+      conservationCategory?:
+        | "CR"
+        | "DD"
+        | "EN"
+        | "EW"
+        | "EX"
+        | "LC"
+        | "NE"
+        | "NT"
+        | "VU";
       ecosystemTypes?: (
         | "Boreal forests/Taiga"
         | "Deserts and xeric shrublands"
@@ -14561,7 +14639,6 @@ export interface components {
         | "Tropical and subtropical moist broad leaf forests"
         | "Tundra"
       )[];
-      endangered?: boolean;
       familyName?: string;
       growthForm?:
         | "Tree"
@@ -14587,6 +14664,17 @@ export interface components {
     };
     SpeciesResponseElement: {
       commonName?: string;
+      /** @description IUCN Red List conservation category code. */
+      conservationCategory?:
+        | "CR"
+        | "DD"
+        | "EN"
+        | "EW"
+        | "EX"
+        | "LC"
+        | "NE"
+        | "NT"
+        | "VU";
       ecosystemTypes?: (
         | "Boreal forests/Taiga"
         | "Deserts and xeric shrublands"
@@ -14603,7 +14691,6 @@ export interface components {
         | "Tropical and subtropical moist broad leaf forests"
         | "Tundra"
       )[];
-      endangered?: boolean;
       familyName?: string;
       growthForm?:
         | "Tree"
@@ -18169,7 +18256,7 @@ export interface external {}
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-06-26T21:44:20.547Z
+                at 2023-06-27T17:36:21.578Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
