@@ -299,6 +299,7 @@ EMAIL_ALREADY_EXISTS,This email already exists.
 EMAIL_REQUIRED,Email *
 EMPTY_SEEDS,Empty Seeds
 END,End
+ENDANGERED,Endangered
 END_DATE,End Date
 END_DRYING_REMINDER,End-Drying Reminder
 END_DRYING_REMINDER_OFF,End-drying Reminder Off
@@ -616,6 +617,7 @@ NUMBER_OF_SEEDS_TESTED,# Seeds Tested
 NUMBER_OF_SEEDS_TESTED_REQUIRED,# Seeds Tested *
 NUMBER_OF_SEEDS_WITHDRAWN,Seeds Withdrawn
 NUMBER_OF_SPECIES,Number Of Species
+NUMBER_OF_SPECIES_PLANTED_CARD_TITLE,"How many species have I reported to plant?"
 NUMBER_PLANTS_COLLECTED_FROM,Number of plants collected from
 NURSERIES,Nurseries
 NURSERY,Nursery

@@ -5,6 +5,10 @@ import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 import { useLocalization } from 'src/providers';
 import { newChart } from './';
 import { Chart } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
+import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
+
+Chart.register(annotationPlugin);
 
 export interface StyleProps {
   minHeight?: string;
@@ -26,6 +30,8 @@ export interface BarChartProps {
   minHeight?: string;
   maxWidth?: string;
   barWidth?: number;
+  barAnnotations?: AnnotationPluginOptions;
+  yLimits?: { min?: number; max?: number };
 }
 
 export default function BarChart(props: BarChartProps): JSX.Element | null {
@@ -61,16 +67,28 @@ interface BarChartContentProps {
   maxWidth?: string;
   locale: string;
   barWidth?: number;
+  barAnnotations?: AnnotationPluginOptions;
+  yLimits?: { min?: number; max?: number };
 }
 
 function BarChartContent(props: BarChartContentProps): JSX.Element {
-  const { chartId, chartLabels, chartValues, customTooltipTitles, minHeight, maxWidth, locale } = props;
+  const {
+    chartId,
+    chartLabels,
+    chartValues,
+    customTooltipTitles,
+    minHeight,
+    maxWidth,
+    locale,
+    barWidth,
+    barAnnotations,
+    yLimits,
+  } = props;
   const classes = useStyles({ minHeight, maxWidth });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
   const theme = useTheme();
 
-  const barWidth = props.barWidth;
   const barThickness = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
   useEffect(() => {
@@ -106,6 +124,7 @@ function BarChartContent(props: BarChartContentProps): JSX.Element {
               },
             },
             plugins: {
+              annotation: barAnnotations,
               legend: {
                 display: false,
               },
@@ -125,6 +144,8 @@ function BarChartContent(props: BarChartContentProps): JSX.Element {
                 ticks: {
                   precision: 0,
                 },
+                min: yLimits?.min,
+                max: yLimits?.max,
               },
             },
           },
