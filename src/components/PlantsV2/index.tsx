@@ -10,6 +10,7 @@ import { useOrganization } from 'src/providers';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
+import PlantsReportedPerSpeciesCard from 'src/components/PlantsV2/components/PlantsReportedPerSpeciesCard';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const theme = useTheme();
@@ -31,7 +32,7 @@ export default function PlantsDashboardV2(): JSX.Element {
   }, [dispatch, org, selectedPlantingSite]);
 
   const sectionHeader = (title: string) => (
-    <Grid item xs={12} marginBottom={theme.spacing(3)}>
+    <Grid item xs={12}>
       <Typography fontSize='20px' fontWeight={600}>
         {title}
       </Typography>
@@ -43,6 +44,9 @@ export default function PlantsDashboardV2(): JSX.Element {
       {sectionHeader(strings.TOTAL_PLANTS_AND_SPECIES)}
       <Grid item xs={isMobile ? 12 : 4}>
         <TotalReportedPlantsCard plantingSiteId={selectedPlantingSite?.id} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 4}>
+        <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSite?.id} />
       </Grid>
     </>
   );
@@ -56,10 +60,8 @@ export default function PlantsDashboardV2(): JSX.Element {
       plantsSitePreferences={plantsDashboardPreferences}
       setPlantsSitePreferences={onPreferences}
     >
-      <Grid container>
-        <Grid item xs={12}>
-          {renderTotalPlantsAndSpecies()}
-        </Grid>
+      <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
+        {renderTotalPlantsAndSpecies()}
       </Grid>
     </PlantsPrimaryPage>
   );

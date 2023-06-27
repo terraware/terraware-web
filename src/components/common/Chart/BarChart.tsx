@@ -8,11 +8,13 @@ import { Chart } from 'chart.js';
 
 export interface StyleProps {
   minHeight?: string;
+  maxWidth?: string;
 }
 
 const useStyles = makeStyles<Theme, StyleProps>(() => ({
   chart: {
     minHeight: (props) => props.minHeight ?? '200px',
+    maxWidth: (props) => props.maxWidth ?? undefined,
   },
 }));
 
@@ -21,6 +23,7 @@ export interface BarChartProps {
   chartLabels?: string[];
   chartValues?: number[];
   minHeight?: string;
+  maxWidth?: string;
   barWidth?: number;
 }
 
@@ -53,13 +56,14 @@ interface BarChartContentProps {
   chartLabels: string[];
   chartValues: number[];
   minHeight?: string;
+  maxWidth?: string;
   locale: string;
   barWidth?: number;
 }
 
 function BarChartContent(props: BarChartContentProps): JSX.Element {
-  const { chartId, chartLabels, chartValues, minHeight, locale } = props;
-  const classes = useStyles({ minHeight });
+  const { chartId, chartLabels, chartValues, minHeight, maxWidth, locale } = props;
+  const classes = useStyles({ minHeight, maxWidth });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
   const theme = useTheme();
