@@ -822,6 +822,7 @@ REPORT_TOTAL_VOLUNTEERS_INFO,Please list the total number of volunteers engaged 
 REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO,Of the total workers listed above how many total are women?
 REPORT_VIEW_ANNUAL,View Annual Report
 REPORT_VIEW_QUARTERLY,View Quarterly Report
+REPORTED_PLANTS_PER_SPECIES_CARD_TITLE,"What is the reported number of plants planted per species?"
 REPORTS,Reports
 REQUEST_FEATURE,Request Feature
 REQUIRED,Required

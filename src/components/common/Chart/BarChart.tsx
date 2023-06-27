@@ -8,11 +8,13 @@ import { Chart } from 'chart.js';
 
 export interface StyleProps {
   minHeight?: string;
+  maxWidth?: string;
 }
 
 const useStyles = makeStyles<Theme, StyleProps>(() => ({
   chart: {
     minHeight: (props) => props.minHeight ?? '200px',
+    maxWidth: (props) => props.maxWidth ?? undefined,
   },
 }));
 
@@ -20,7 +22,9 @@ export interface BarChartProps {
   chartId: string;
   chartLabels?: string[];
   chartValues?: number[];
+  customTooltipTitles?: string[];
   minHeight?: string;
+  maxWidth?: string;
   barWidth?: number;
 }
 
@@ -52,14 +56,16 @@ interface BarChartContentProps {
   chartId: string;
   chartLabels: string[];
   chartValues: number[];
+  customTooltipTitles?: string[];
   minHeight?: string;
+  maxWidth?: string;
   locale: string;
   barWidth?: number;
 }
 
 function BarChartContent(props: BarChartContentProps): JSX.Element {
-  const { chartId, chartLabels, chartValues, minHeight, locale } = props;
-  const classes = useStyles({ minHeight });
+  const { chartId, chartLabels, chartValues, customTooltipTitles, minHeight, maxWidth, locale } = props;
+  const classes = useStyles({ minHeight, maxWidth });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
   const theme = useTheme();
@@ -105,6 +111,13 @@ function BarChartContent(props: BarChartContentProps): JSX.Element {
               },
               tooltip: {
                 displayColors: false,
+                callbacks: {
+                  title: customTooltipTitles
+                    ? ([context]) => {
+                        return customTooltipTitles[context.dataIndex];
+                      }
+                    : undefined,
+                },
               },
             },
             scales: {
