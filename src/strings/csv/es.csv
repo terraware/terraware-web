@@ -828,6 +828,7 @@ REPORT_TOTAL_VOLUNTEERS_INFO,"Indique el número total de voluntarios que han pa
 REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO,"Del total de trabajadores indicados, ¿cuántas mujeres hay en total?"
 REPORT_VIEW_ANNUAL,Ver informe anual
 REPORT_VIEW_QUARTERLY,Ver informe trimestral
+REPORTED_PLANTS_PER_SPECIES_CARD_TITLE,¿Qué cantidad de plantas sembradas por especie se reportó?
 REPORTS,Informes
 REQUEST_FEATURE,Solicitar característica
 REQUIRED,Obligatorio

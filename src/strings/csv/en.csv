@@ -463,15 +463,21 @@ LEARN_MORE_GROWTH_FORM_FERN,"A non-flowering vascular plant that reproduces by s
 LEARN_MORE_GROWTH_FORM_FORB,"A herbaceous (non-woody) plant that is NOT a graminoid (grass, sedge, or rush)."
 LEARN_MORE_GROWTH_FORM_FUNGUS,"Usually a eukaryotic organism (non-plant) that is heterotrophic (cannot produce its own food), grows in filaments (hyphae), and produces spores."
 LEARN_MORE_GROWTH_FORM_GRAMINOID,"A herbaceous (non-woody) plant with a grass-like morphology, that is elongated culms with long, blade-like leaves, in the grass, sedge, or rush family."
+LEARN_MORE_GROWTH_FORM_LIANA,"A climbing plant, often found in tropical rainforests, that hangs from trees."
 LEARN_MORE_GROWTH_FORM_LICHEN,"A symbiotic cluster of fungus and alga, fungus being the dominant partner, lending to its thallus shape and fruiting body."
 LEARN_MORE_GROWTH_FORM_MOSS,"A non-vascular flowerless plant typically formed as dense green clumps or mats, often in damp or shady locations."
+LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS,A plant that can grow in more than one form.
 LEARN_MORE_GROWTH_FORM_SHRUB,A woody plant which is smaller than a tree and has several main stems arising at or near the ground.
+LEARN_MORE_GROWTH_FORM_SHRUB_TREE,A plant that can be in the form of either a shrub or a tree.
+LEARN_MORE_GROWTH_FORM_SUBSHRUB,"A dwarf shrub, usually only woody at its base."
 LEARN_MORE_GROWTH_FORM_TREE,"A woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground."
+LEARN_MORE_GROWTH_FORM_VINE,A climbing or trailing plant with a woody stem.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Seeds are between orthodox and recalcitrant seeds in their behavior; may include tolerating partial desiccation, tolerating cool but not freezing temperatures, or being short-lived regardless of storage conditions."
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Seeds tolerate levels of desiccation required for frozen storage (5-8% moisture content) and temperatures of -20°C or lower.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Seeds do not tolerate levels of desiccation required for ex situ (off-site) conservation.
 LEAVE_AND_SAVE,Leave and Save
 LEAVE_ORGANIZATION,Leave Organization
+LIANA,Liana,A type of plant.
 LICHEN,Lichen
 LIGHT,Light
 LIST,List
@@ -536,6 +542,7 @@ MORTALITY_RATE_PERCENT_REQUIRED,Mortality Rate (%) *
 MOSS,Moss
 MOST_RECENT_PERCENTAGE_VIABILITY,Most Recent % Viability
 MOVE,Move
+MULTIPLE_FORMS,Multiple Forms,"Describes a plant that can grow in more than one form, e.g., both a shrub and a forb."
 MY_ACCOUNT,My Account
 MY_ACCOUNT_DESC,Manage your account information.
 MY_ACCOUNT_NOTIFICATIONS_DESC,Notifications alert you when there are important updates about your organizations. You will receive them through email.
@@ -955,6 +962,7 @@ SET_UP_YOUR_SENSOR_KIT,Set Up Your Sensor Kit
 SET_UP_YOUR_SENSOR_KIT_MSG,"If your seed bank was built by Terraformation, it is equipped with a sensor kit that you can remotely monitor things like the seed bank's temperature and humidity. To set this up, you'll need to connect your seed bank to the Terraware web app. This may take up to 30 minutes."
 SETTINGS,Settings
 SHRUB,Shrub
+SHRUB_TREE,Shrub/Tree
 SILVOPASTURE,Silvopasture
 SITE,Site
 SITE_DETAIL,Site Detail
@@ -1017,6 +1025,7 @@ SUBMITTED_BY,Submitted By
 SUBSET_COUNT,Subset Count
 SUBSET_WEIGHT,Weight of Seed Subset
 SUBSET_WEIGHT_ERROR,Subset weight should be less than seed weight
+SUBSHRUB,Subshrub
 SUBSTRATE,Substrate
 SUBTITLE_GET_STARTED,"To get started, please create your organization now. You'll also be able to set up and manage information on people and species."
 SUBZONE,Subzone
@@ -1182,6 +1191,7 @@ VIABILITY_TREATMENT,Viability Treatment
 VIEW,View
 VIEW_ACCESSION,View accession
 VIEW_SITES_ZONES_SUBZONES,"View Sites, Zones, and Subzones on a map."
+VINE,Vine,A type of plant.
 WAITING_TO_DOWNLOAD,Waiting to download...
 WATTS_VALUE,{0}W
 WEIGHT_GRAMS,Weight (g)
