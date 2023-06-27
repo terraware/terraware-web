@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import { MapService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
-import Map from './Map';
+import Map, { MapImage } from './Map';
 import { MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';
 
 const DUMMY_MAP_OPTIONS: MapOptions = {
@@ -19,6 +19,7 @@ type GenericMapProps = {
   style?: object;
   bannerMessage?: string;
   entityOptions?: MapEntityOptions;
+  mapImages?: MapImage[];
 };
 
 export default function GenericMap({
@@ -27,6 +28,7 @@ export default function GenericMap({
   style,
   bannerMessage,
   entityOptions,
+  mapImages,
 }: GenericMapProps): JSX.Element | null {
   const snackbar = useSnackbar();
   const [token, setToken] = useState<string>();
@@ -79,6 +81,7 @@ export default function GenericMap({
         popupRenderer={contextRenderer}
         bannerMessage={bannerMessage}
         entityOptions={entityOptions}
+        mapImages={mapImages}
       />
     </Box>
   );

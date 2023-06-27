@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
+import ReactMapGL, { AttributionControl, Layer, MapRef, NavigationControl, Popup, Source } from 'react-map-gl';
 import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer, MapGeometry } from 'src/types/Map';
 import { MapService } from 'src/services';
 
@@ -12,12 +12,18 @@ import { MapService } from 'src/services';
 import mapboxgl from 'mapbox-gl';
 import MapBanner from './MapBanner';
 import { useIsVisible } from 'src/hooks/useIsVisible';
+import useSnackbar from 'src/utils/useSnackbar';
 const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
 
 type FeatureStateId = Record<string, Record<string, number | undefined>>;
+
+export type MapImage = {
+  name: string;
+  url: string;
+};
 
 const navControlStyle = {
   marginRight: '5px',
@@ -44,22 +50,25 @@ export type MapProps = {
   bannerMessage?: string;
   // entity options
   entityOptions?: MapEntityOptions;
+  mapImages?: MapImage[];
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, entityOptions } = props;
+  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, entityOptions, mapImages } =
+    props;
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [deferredHighlightEntity, setDeferredHighlightEntity] = useState<MapEntityId[] | undefined>();
   const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId[] | undefined>();
-  const mapRef = useRef(null);
+  const mapRef = useRef<MapRef | null>(null);
   const containerRef = useRef(null);
   const hoverStateId: FeatureStateId = useMemo(() => ({}), []);
   const selectStateId: FeatureStateId = useMemo(() => ({}), []);
   const highlightStateId: FeatureStateId = useMemo(() => ({}), []);
   const [firstVisible, setFirstVisible] = useState(false);
   const visible = useIsVisible(containerRef);
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
@@ -67,6 +76,29 @@ export default function Map(props: MapProps): JSX.Element {
     // is improperly resized when it first becomes visible.
     setFirstVisible((fv) => fv || visible);
   }, [visible]);
+
+  const mapRefCb = useCallback(
+    (map: MapRef | null) => {
+      if (map !== null) {
+        mapRef.current = map;
+
+        // Load all needed map images here
+        // It is done in the callbackRef to ensure the images are available quickly enough for the map layers to use
+        // See https://github.com/visgl/react-map-gl/issues/1118#issuecomment-1139976172
+        mapImages?.forEach(({ name, url }) => {
+          if (!map.hasImage(name)) {
+            map.loadImage(url, (error, image) => {
+              if (error || !image) {
+                snackbar.toastError(error?.message ?? 'Error loading map image.');
+              }
+              map.addImage(name, image!, { sdf: true });
+            });
+          }
+        });
+      }
+    },
+    [mapImages, snackbar]
+  );
 
   const getFillColor = (source: MapSource, type: 'highlight' | 'select' | 'hover' | 'default') => {
     switch (type) {
@@ -332,6 +364,16 @@ export default function Map(props: MapProps): JSX.Element {
                 },
               }
             : null,
+          patternFill: source.patternFill
+            ? {
+                id: `${source.id}-pattern`,
+                type: 'fill',
+                paint: {
+                  'fill-pattern': source.patternFill.imageName,
+                  'fill-opacity': source.patternFill.opacityExpression ?? 1.0,
+                },
+              }
+            : null,
         };
       })
       .filter((g) => g);
@@ -347,6 +389,7 @@ export default function Map(props: MapProps): JSX.Element {
     }
     const sources = (geoData as any[]).map((geo: any) => (
       <Source type='geojson' key={geo.id} data={geo.data} id={geo.id}>
+        {geo.patternFill && <Layer {...geo.patternFill} />}
         {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
         {geo.layerOutline && <Layer {...geo.layerOutline} />}
         {geo.layer && <Layer {...geo.layer} />}
@@ -398,7 +441,7 @@ export default function Map(props: MapProps): JSX.Element {
           style={style}
           attributionControl={false}
           onLoad={onLoad}
-          ref={mapRef}
+          ref={mapRefCb}
           onRender={(event) => event.target.resize()}
         >
           {mapSources}

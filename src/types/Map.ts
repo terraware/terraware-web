@@ -44,6 +44,11 @@ export type MapAnnotation = {
   textColor: string;
 };
 
+export type MapPatternFill = {
+  imageName: string;
+  opacityExpression?: any[];
+};
+
 /**
  * A renderable map entity
  * eg. site, zone, subzone
@@ -69,6 +74,7 @@ export type MapSource = MapSourceBaseData & {
   highlightFillColor?: string;
   hoverFillColor?: string;
   selectFillColor?: string;
+  patternFill?: MapPatternFill;
 };
 
 export type MapBoundingBox = {
