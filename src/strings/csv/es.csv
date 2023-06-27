@@ -170,6 +170,9 @@ COMPLETED,Completado
 COMPROMISED_SEEDS,Semillas comprometidas
 CONNECT_FAILED,La conexión ha fallado
 CONNECTED,Conectado
+CONSERV_STATUS,Estado de conservación
+CONSERVATION_CATEGORY,Categoría de conservación de la IUCN
+CONSERVATION_STATUS,Estado de conservación
 CONTACT_US,Contáctenos
 CONTACT_US_DESCRIPTION,¿Tiene una pregunta o desea ponerse en contacto con un miembro de nuestro equipo? ¡Siempre estamos dispuestos a responder sus preguntas y a asegurarnos de que pueda sacarle provecho a Terraware! Puede ponerse en contacto con nosotros con este formulario o enviando un correo electrónico a {0}
 CONTACT_US_TO_RESOLVE_ISSUE,Contáctenos para resolver este problema.
@@ -301,6 +304,7 @@ END,Fin
 END_DATE,Fecha de finalización
 END_DRYING_REMINDER,Recordatorio de final de secado
 END_DRYING_REMINDER_OFF,Recordatorio de final de secado desactivado
+ENDANGERED,En peligro de extinción
 ENTER_SIX_DIGIT_KEY,Introduzca la clave de 6 dígitos
 ENVIRONMENTAL_NOTES,Notas medioambientales
 ENVIRONMENTAL_NOTES_PLACEHOLDER,"Notas importantes sobre el paisaje, el clima y las condiciones ambientales"
@@ -383,6 +387,7 @@ GRAMS,Gramos
 GROWTH_FORM,Forma de crecimiento
 HISTORY,Historia
 HOME,Inicio
+HOW_MANY_PLANTS_CARD_TITLE,¿Cuantas plantas he reportado para plantar?
 ID,Identificación
 IF_APPLICABLE,(si aplica)
 IF_APPLIES,Solo si aplica
@@ -422,6 +427,15 @@ INVENTORY_IMPORT_COMPLETE,¡Importación de datos del inventario finalizada!
 INVENTORY_ONBOARDING_NURSERIES_MSG,Defina los viveros asignados al inventario de plántulas
 INVENTORY_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de plántulas
 ISSUE,Problema
+IUCN_CRITICALLY_ENDANGERED,En peligro crítico (CR),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_DATA_DEFICIENT,Datos insuficientes (DD),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_ENDANGERED,En peligro (EN),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_EXTINCT,Extinta (EX),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_EXTINCT_IN_THE_WILD,Extinta en estado silvestre (EW),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_LEAST_CONCERN,Preocupación baja (LC),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_NEAR_THREATENED,Casi amenazada (NT),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_NOT_EVALUATED,No evaluada (NE),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_VULNERABLE,Vulnerable (VU),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 KEEP_ORIGINAL,Conservar original
 KEY_BELONGS_TO_ANOTHER_SEED_BANK,La clave está asociada a otro banco de semillas.
 KEY_LESSONS,Lecciones clave aprendidas
@@ -443,6 +457,8 @@ LATITUDE_LONGITUDE,"Latitud, longitud"
 LB,lb
 LB_POUNDS,lb (libras)
 LEARN_MORE,Más información
+LEARN_MORE_CONSERVATION_STATUS_ENDANGERED,Especies poco comunes y cuyas poblaciones silvestres corren un alto riesgo de extinción; consulte también las definiciones locales.
+LEARN_MORE_CONSERVATION_STATUS_RARE,"Especies con poblaciones silvestres de tamaño limitado, que a menudo se encuentran en lugares geográficos aislados; pueden cumplir los criterios de situación en peligro o bajo amenaza pero aún no se han incluido o evaluado legalmente."
 LEARN_MORE_GROWTH_FORM_FERN,"Planta vascular que no florece y se reproduce mediante esporas, que pertenece al grupo de plantas de las pteridofitas."
 LEARN_MORE_GROWTH_FORM_FORB,"Planta herbácea (no leñosa) que NO es una gramínea (césped, juncia o junco)."
 LEARN_MORE_GROWTH_FORM_FUNGUS,"Usualmente, un organismo eucariota (no vegetal) que es heterótrofo (que no puede producir su propio alimento), que crece en filamentos (hifas) y que produce esporas."
@@ -812,6 +828,7 @@ REPORT_TOTAL_VOLUNTEERS_INFO,"Indique el número total de voluntarios que han pa
 REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO,"Del total de trabajadores indicados, ¿cuántas mujeres hay en total?"
 REPORT_VIEW_ANNUAL,Ver informe anual
 REPORT_VIEW_QUARTERLY,Ver informe trimestral
+REPORTED_PLANTS_PER_SPECIES_CARD_TITLE,¿Qué cantidad de plantas sembradas por especie se reportó?
 REPORTS,Informes
 REQUEST_FEATURE,Solicitar característica
 REQUIRED,Obligatorio
@@ -956,7 +973,7 @@ SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, i
 SOMETHING_WENT_WRONG_TITLE,Algo no salió como se esperaba...
 SOWN,Sembrado
 SPECIES,Especie
-SPECIES_CARD_DESCRIPTION,Ver la especie referenciada en sus entradas de Semilla y Planta.
+SPECIES_CARD_DESCRIPTION,Vea la especie referenciada en sus entradas de Semilla y Planta.
 SPECIES_DATA_NOT_AVAILABLE,Los datos de la especie no están disponibles
 SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes."
 SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.
@@ -1052,8 +1069,11 @@ TOOLTIP_GERMINATING_QUANTITY,En germinación indica que las plántulas aún no h
 TOOLTIP_NOT_READY_QUANTITY,"Lo que determina que una planta figure como ""no lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación."
 TOOLTIP_READY_QUANTITY,"Lo que determina que una planta figure como ""lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación."
 TOOLTIP_SCIENTIFIC_NAME,El nombre latino binomial (género + especie) aceptado en la actualidad en la bibliografía botánica.
+TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Categoría de conservación de la Lista Roja de la IUCN
+TOOLTIP_SPECIES_CONSERVATION_STATUS,"Riesgo de extinción de una especie, normalmente una designación legal o una valoración de la Lista Roja."
 TOOLTIP_SPECIES_FAMILY,El nombre científico de la familia de la planta aceptado en la actualidad en la bibliografía botánica.
 TOOLTIP_SPECIES_GROWTH_FORM,Una categoría estructural compuesta por individuos o especies del mismo hábito general de crecimiento pero no necesariamente relacionados.
+TOOLTIP_SPECIES_RARE,"Especies de poblaciones en estado silvestre de tamaño limitado, con frecuencia encontradas en ubicaciones geográficas aisladas; pueden cumplir con los criterios de las clasificaciones ""en peligro"" o ""amenazada"", pero todavía no han sido agregadas o evaluadas legalmente."
 TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,La capacidad de las semillas para sobrevivir a la desecación y a las temperaturas hasta los niveles necesarios para el almacenamiento ex situ (fuera del sitio).
 TOOLTIP_TIME_ZONE_MY_ACCOUNT,Usamos zonas horarias para mostrar las notificaciones en su hora local. Seleccione la zona horaria que le corresponda.
 TOOLTIP_TIME_ZONE_NURSERY,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este vivero. Todo el trabajo realizado en este vivero usará esta zona horaria.
@@ -1090,6 +1110,7 @@ TOTAL_PLANTED,Total sembrado
 TOTAL_PLANTED_AREA_HA,Superficie total sembrada (Ha) *
 TOTAL_PLANTED_REQUIRED,Plantados en total *
 TOTAL_PLANTING_SITE_AREA_HA,Superficie total de la zona de siembra (Ha) *
+TOTAL_PLANTS_AND_SPECIES,Plantas y especies totales
 TOTAL_PLANTS_PLANTED,Total de plantas sembradas *
 TOTAL_PLANTS_PLANTED_HELPER_TEXT,"Especies no clasificadas como ""árboles"" en la lista de especies."
 TOTAL_QUANTITY,Cantidad total
