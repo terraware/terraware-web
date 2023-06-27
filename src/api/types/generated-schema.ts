@@ -2476,7 +2476,10 @@ export interface components {
         | "Orthodox"
         | "Recalcitrant"
         | "Intermediate"
-        | "Unknown";
+        | "Unknown"
+        | "Likely Orthodox"
+        | "Likely Recalcitrant"
+        | "Likely Intermediate";
     };
     SpeciesResponseElement: {
       commonName?: string;
@@ -2531,7 +2534,10 @@ export interface components {
         | "Orthodox"
         | "Recalcitrant"
         | "Intermediate"
-        | "Unknown";
+        | "Unknown"
+        | "Likely Orthodox"
+        | "Likely Recalcitrant"
+        | "Likely Intermediate";
     };
     SpeciesSummaryNurseryPayload: {
       /** Format: int64 */

@@ -468,6 +468,7 @@ LEARN_MORE_GROWTH_FORM_SUBSHRUB,"A dwarf shrub, usually only woody at its base."
 LEARN_MORE_GROWTH_FORM_TREE,"A woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground."
 LEARN_MORE_GROWTH_FORM_VINE,A climbing or trailing plant with a woody stem.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Seeds are between orthodox and recalcitrant seeds in their behavior; may include tolerating partial desiccation, tolerating cool but not freezing temperatures, or being short-lived regardless of storage conditions."
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"Seeds are believed to have a behavior, but this has not yet been scientifically confirmed."
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Seeds tolerate levels of desiccation required for frozen storage (5-8% moisture content) and temperatures of -20°C or lower.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Seeds do not tolerate levels of desiccation required for ex situ (off-site) conservation.
 LEAVE_AND_SAVE,Leave and Save
@@ -475,6 +476,9 @@ LEAVE_ORGANIZATION,Leave Organization
 LIANA,Liana,A type of plant.
 LICHEN,Lichen
 LIGHT,Light
+LIKELY_INTERMEDIATE,Likely Intermediate,"Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Intermediate."
+LIKELY_ORTHODOX,Likely Orthodox,"Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox."
+LIKELY_RECALCITRANT,Likely Recalcitrant,"Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant."
 LIST,List
 LOADING,Loading...
 LOCATION,Location

@@ -107,6 +107,12 @@ export const LearnMoreModalContentSeedStorageBehavior = (): JSX.Element => (
     <p>
       <strong>{strings.RECALCITRANT}:</strong> {strings.LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT}
     </p>
+    <p>
+      <strong>
+        {strings.LIKELY_INTERMEDIATE} / {strings.LIKELY_ORTHODOX} / {strings.LIKELY_RECALCITRANT}:
+      </strong>
+      {' ' + strings.LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY}
+    </p>
   </>
 );
 
