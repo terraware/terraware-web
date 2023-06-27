@@ -622,7 +622,7 @@ NURSERY_MEDIA,Medios del vivero
 NURSERY_MORTALITY_RATE,Tasa de mortalidad en el vivero
 NURSERY_REQUIRED,Vivero *
 NURSERY_TRANSFER,Traslado de vivero
-OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para  {0} para {1},"Example: Observation event is scheduled for June 1, 2023 for Site-A."
+OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para {0} para el/los lugar(es) de plantación: {1},"Example: Observation event is scheduled for June 1, 2023 for planting site(s): Site-A, Site-B"
 OBSERVATION_IN_PROGRESS,Observación en progreso
 OBSERVATION_STATUS,Estado de la observación
 OBSERVATION_STATUS_OUTSTANDING,Sobresaliente,Remaining to be done
