@@ -6,7 +6,7 @@ export type Species = {
   commonName?: string;
   conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
   familyName?: string;
-  growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern' | 'Fungus' | 'Lichen' | 'Moss';
+  growthForm?: GrowthForm;
   scientificName: string;
   rare?: boolean;
   seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
@@ -30,6 +30,21 @@ export type EcosystemType =
   | 'Tropical and subtropical moist broad leaf forests'
   | 'Tundra';
 
+export type GrowthForm =
+  | 'Tree'
+  | 'Shrub'
+  | 'Forb'
+  | 'Graminoid'
+  | 'Fern'
+  | 'Fungus'
+  | 'Lichen'
+  | 'Moss'
+  | 'Vine'
+  | 'Liana'
+  | 'Shrub/Tree'
+  | 'Subshrub'
+  | 'Multiple Forms';
+
 export type SpeciesProblemElement = {
   id: number;
   field: 'Scientific Name';
@@ -52,17 +67,24 @@ export function conservationCategories() {
   ];
 }
 
-export function growthForms(useLocalizedValues = false) {
+export function growthForms(activeLocale: string | null) {
+  const collator = new Intl.Collator(activeLocale || undefined);
+
   return [
-    { label: strings.TREE, value: useLocalizedValues ? strings.TREE : 'Tree' },
-    { label: strings.SHRUB, value: useLocalizedValues ? strings.SHRUB : 'Shrub' },
-    { label: strings.FORB, value: useLocalizedValues ? strings.FORB : 'Forb' },
-    { label: strings.GRAMINOID, value: useLocalizedValues ? strings.GRAMINOID : 'Graminoid' },
-    { label: strings.FERN, value: useLocalizedValues ? strings.FERN : 'Fern' },
-    { label: strings.FUNGUS, value: useLocalizedValues ? strings.FUNGUS : 'Fungus' },
-    { label: strings.LICHEN, value: useLocalizedValues ? strings.LICHEN : 'Lichen' },
-    { label: strings.MOSS, value: useLocalizedValues ? strings.MOSS : 'Moss' },
-  ];
+    { label: strings.FERN, value: 'Fern' },
+    { label: strings.FORB, value: 'Forb' },
+    { label: strings.FUNGUS, value: 'Fungus' },
+    { label: strings.GRAMINOID, value: 'Graminoid' },
+    { label: strings.LIANA, value: 'Liana' },
+    { label: strings.LICHEN, value: 'Lichen' },
+    { label: strings.MOSS, value: 'Moss' },
+    { label: strings.MULTIPLE_FORMS, value: 'Multiple Forms' },
+    { label: strings.SHRUB, value: 'Shrub' },
+    { label: strings.SHRUB_TREE, value: 'Shrub/Tree' },
+    { label: strings.SUBSHRUB, value: 'Subshrub' },
+    { label: strings.TREE, value: 'Tree' },
+    { label: strings.VINE, value: 'Vine' },
+  ].sort((a, b) => collator.compare(a.label, b.label));
 }
 
 export function storageBehaviors(useLocalizedValues = false) {
@@ -116,14 +138,24 @@ export function getGrowthFormString(species: Species) {
         return strings.FUNGUS;
       case 'Graminoid':
         return strings.GRAMINOID;
+      case 'Liana':
+        return strings.LIANA;
       case 'Lichen':
         return strings.LICHEN;
       case 'Moss':
         return strings.MOSS;
+      case 'Multiple Forms':
+        return strings.MULTIPLE_FORMS;
       case 'Shrub':
         return strings.SHRUB;
+      case 'Shrub/Tree':
+        return strings.SHRUB_TREE;
+      case 'Subshrub':
+        return strings.SUBSHRUB;
       case 'Tree':
         return strings.TREE;
+      case 'Vine':
+        return strings.VINE;
     }
   } else {
     return undefined;

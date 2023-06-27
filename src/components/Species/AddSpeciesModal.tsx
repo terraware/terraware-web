@@ -27,7 +27,7 @@ import TooltipLearnMoreModal, {
   LearnMoreLink,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -58,6 +58,7 @@ function initSpecies(species?: Species): Species {
 }
 
 export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Element {
+  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization.id;
   const classes = useStyles();
@@ -290,7 +291,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             id='growthForm'
             selectedValue={record.growthForm}
             onChange={(value) => onChange('growthForm', value)}
-            options={growthForms()}
+            options={growthForms(activeLocale)}
             label={strings.GROWTH_FORM}
             aria-label={strings.GROWTH_FORM}
             placeholder={strings.SELECT}
