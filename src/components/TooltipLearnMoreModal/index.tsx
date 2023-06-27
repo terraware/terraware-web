@@ -87,12 +87,10 @@ export const LearnMoreModalContentGrowthForm = (): JSX.Element => {
     [strings.MULTIPLE_FORMS, strings.LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS],
   ]
     .sort((a, b) => collator.compare(a[0], b[0]))
-    .map((x) => (
-      <>
-        <p>
-          <strong>{x[0]}:</strong> {x[1]}
-        </p>
-      </>
+    .map(([name, description], index) => (
+      <p key={`growthForm-${index}`}>
+        <strong>{name}:</strong> {description}
+      </p>
     ));
 
   return <>{elements}</>;
