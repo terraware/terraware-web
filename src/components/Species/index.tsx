@@ -27,7 +27,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import { isContributor } from 'src/utils/organization';
 import TooltipLearnMoreModal, {
-  LearnMoreModalContentConservationStatus,
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,
   LearnMoreLink,
@@ -37,7 +36,6 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { DropdownItem, SortOrder } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
-import { isTrue } from 'src/utils/boolean';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { SpeciesService } from 'src/services';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -109,14 +107,25 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type SpeciesSearchResultRow = Omit<Species, 'growthForm' | 'seedStorageBehavior' | 'ecosystemTypes'> & {
-  conservationStatus?: string;
+type SpeciesSearchResultRow = Omit<
+  Species,
+  'growthForm' | 'seedStorageBehavior' | 'ecosystemTypes' | 'conservationCategory' | 'rare'
+> & {
+  conservationCategory?: string;
   growthForm?: string;
+  rare?: string;
   seedStorageBehavior?: string;
   ecosystemTypes?: string[];
 };
 
-const BE_SORTED_FIELDS = ['scientificName', 'commonName', 'familyName', 'growthForm', 'seedStorageBehavior'];
+const BE_SORTED_FIELDS = [
+  'scientificName',
+  'commonName',
+  'conservationCategory',
+  'familyName',
+  'growthForm',
+  'seedStorageBehavior',
+];
 
 export default function SpeciesList({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -158,21 +167,6 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   };
   const handleTooltipLearnMoreModalClose = () => {
     setTooltipLearnMoreModalOpen(false);
-  };
-
-  const getConservationStatusString = (result: { [key: string]: unknown }) => {
-    const endangered = isTrue(result.endangered);
-    const rare = isTrue(result.rare);
-
-    if (endangered && rare) {
-      return strings.RARE_ENDANGERED;
-    } else if (endangered) {
-      return strings.ENDANGERED;
-    } else if (rare) {
-      return strings.RARE;
-    } else {
-      return '';
-    }
   };
 
   const columns: TableColumnType[] = React.useMemo(() => {
@@ -219,22 +213,16 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         ),
       },
       {
-        key: 'conservationStatus',
-        name: strings.CONSERVATION_STATUS,
+        key: 'conservationCategory',
+        name: strings.CONSERVATION_CATEGORY,
         type: 'string',
-        tooltipTitle: (
-          <>
-            {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}
-            <LearnMoreLink
-              onClick={() =>
-                openTooltipLearnMoreModal({
-                  title: strings.CONSERVATION_STATUS,
-                  content: <LearnMoreModalContentConservationStatus />,
-                })
-              }
-            />
-          </>
-        ),
+        tooltipTitle: strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY,
+      },
+      {
+        key: 'rare',
+        name: strings.RARE,
+        type: 'boolean',
+        tooltipTitle: strings.TOOLTIP_SPECIES_RARE,
       },
       {
         key: 'seedStorageBehavior',
@@ -279,7 +267,8 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       activeLocale
         ? [
             { name: 'growthForm', label: strings.GROWTH_FORM, type: 'multiple_selection' },
-            { name: 'conservationStatus', label: strings.CONSERVATION_STATUS, type: 'multiple_selection' },
+            { name: 'conservationCategory', label: strings.CONSERVATION_CATEGORY, type: 'multiple_selection' },
+            { name: 'rare', label: strings.RARE, type: 'multiple_selection' },
             { name: 'seedStorageBehavior', label: strings.SEED_STORAGE_BEHAVIOR, type: 'multiple_selection' },
             { name: 'ecosystemTypes.ecosystemType', label: strings.ECOSYSTEM_TYPE, type: 'multiple_selection' },
           ]
@@ -294,7 +283,14 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     const getApiSearchResults = async () => {
       const searchParams: SearchRequestPayload = {
         prefix: 'species',
-        fields: ['id', 'growthForm', 'seedStorageBehavior', 'ecosystemTypes.ecosystemType'],
+        fields: [
+          'id',
+          'growthForm',
+          'seedStorageBehavior',
+          'ecosystemTypes.ecosystemType',
+          'conservationCategory',
+          'rare',
+        ],
         search: {
           operation: 'and',
           children: [
@@ -327,7 +323,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
           return innerAcc;
         }, acc);
       }, {}) as FieldOptionsMap;
-      result.conservationStatus = { partial: false, values: [strings.RARE, strings.ENDANGERED] };
+      result.rare = { partial: false, values: [strings.YES, strings.NO] };
       setFilterOptions(result);
     };
     getApiSearchResults();
@@ -351,7 +347,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
       prefix: 'species',
-      fields: [...BE_SORTED_FIELDS, 'id', 'endangered', 'rare', 'ecosystemTypes.ecosystemType', 'organization_id'],
+      fields: [...BE_SORTED_FIELDS, 'id', 'rare', 'ecosystemTypes.ecosystemType', 'organization_id'],
       search: {
         operation: 'and',
         children: [
@@ -401,33 +397,28 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       });
     }
 
-    if (filters.conservationStatus) {
-      const conservationStatusFilter: FieldNodePayload[] = [];
-      const values = filters.conservationStatus.values as string[];
-      if (values.find((s) => s === strings.RARE)) {
-        const newNode: FieldNodePayload = {
-          operation: 'field',
-          field: 'rare',
-          type: 'Exact',
-          values: [strings.BOOLEAN_TRUE],
-        };
-        conservationStatusFilter.push(newNode);
+    if (filters.rare) {
+      const searchValues: (string | null)[] = [];
+      const selectedValues = filters.rare.values as string[];
+      if (selectedValues.find((s) => s === strings.YES)) {
+        searchValues.push(strings.BOOLEAN_TRUE);
       }
-      if (values.find((s) => s === strings.ENDANGERED)) {
-        const newNode: FieldNodePayload = {
-          operation: 'field',
-          field: 'endangered',
-          type: 'Exact',
-          values: [strings.BOOLEAN_TRUE],
-        };
-        conservationStatusFilter.push(newNode);
+      if (selectedValues.find((s) => s === strings.NO)) {
+        searchValues.push(strings.BOOLEAN_FALSE);
+        searchValues.push(null);
       }
-      params.search.children.push({
-        operation: 'or',
-        children: conservationStatusFilter,
-      });
+      const newNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'rare',
+        type: 'Exact',
+        values: searchValues,
+      };
+      params.search.children.push(newNode);
     }
 
+    if (filters.conservationCategory) {
+      params.search.children.push(filters.conservationCategory);
+    }
     if (filters.growthForm) {
       params.search.children.push(filters.growthForm);
     }
@@ -462,9 +453,8 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               growthForm: result.growthForm as string,
               seedStorageBehavior: result.seedStorageBehavior as string,
               ecosystemTypes: (result.ecosystemTypes as any[])?.map((et) => et.ecosystemType) as string[],
-              rare: isTrue(result.rare),
-              endangered: isTrue(result.endangered),
-              conservationStatus: getConservationStatusString(result),
+              rare: result.rare === strings.BOOLEAN_TRUE ? 'true' : 'false',
+              conservationCategory: result.conservationCategory as string,
             });
           });
 
@@ -652,15 +642,22 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
 
   const getFilterPillData = (): PillListItem<string>[] => {
     const result = [];
-    if (filters.conservationStatus) {
+    if (filters.conservationCategory) {
       result.push({
-        id: 'conservationStatus',
-        label: strings.CONSERVATION_STATUS,
-        value: filters.conservationStatus.values?.join(', ') ?? '',
-        onRemove: () => onRemoveFilter('conservationStatus'),
+        id: 'conservationCategory',
+        label: strings.CONSERVATION_CATEGORY,
+        value: filters.conservationCategory.values?.join(', ') ?? '',
+        onRemove: () => onRemoveFilter('conservationCategory'),
       });
     }
-
+    if (filters.rare) {
+      result.push({
+        id: 'rare',
+        label: strings.RARE,
+        value: filters.rare.values?.join(', ') ?? '',
+        onRemove: () => onRemoveFilter('rare'),
+      });
+    }
     if (filters.growthForm) {
       result.push({
         id: 'growthForm',

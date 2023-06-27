@@ -1,10 +1,11 @@
 import { Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Dropdown, IconTooltip, MultiSelect } from '@terraware/web-components';
+import { Dropdown, MultiSelect } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import {
+  conservationCategories,
   EcosystemType,
   ecosystemTypes,
   growthForms,
@@ -21,7 +22,6 @@ import DialogBox from '../common/DialogBox/DialogBox';
 import Select from '../common/Select/Select';
 import TextField from '../common/Textfield/Textfield';
 import TooltipLearnMoreModal, {
-  LearnMoreModalContentConservationStatus,
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,
   LearnMoreLink,
@@ -121,15 +121,15 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
                 return {
                   ...previousRecord,
                   familyName: speciesDetails.familyName,
-                  endangered: speciesDetails.endangered ?? previousRecord.endangered,
                   commonName: speciesDetails.commonNames[0].name,
+                  conservationCategory: speciesDetails.conservationCategory ?? previousRecord.conservationCategory,
                 };
               } else {
                 setOptionsForCommonName(speciesDetails?.commonNames?.map((cN) => cN.name));
                 return {
                   ...previousRecord,
+                  conservationCategory: speciesDetails?.conservationCategory ?? previousRecord.conservationCategory,
                   familyName: speciesDetails?.familyName ?? previousRecord.familyName,
-                  endangered: speciesDetails?.endangered ?? previousRecord.endangered,
                 };
               }
             });
@@ -265,35 +265,20 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           />
         </Grid>
         <Grid item xs={12}>
-          <span>
-            {strings.CONSERVATION_STATUS}
-            <IconTooltip
-              title={
-                <>
-                  {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}
-                  <LearnMoreLink
-                    onClick={() =>
-                      openTooltipLearnMoreModal({
-                        title: strings.CONSERVATION_STATUS,
-                        content: <LearnMoreModalContentConservationStatus />,
-                      })
-                    }
-                  />
-                </>
-              }
-            />
-          </span>
-          <Checkbox
-            id='Endangered'
-            name='conservationStatus'
-            label={strings.ENDANGERED}
-            onChange={() => onChange('endangered', !record.endangered)}
-            value={record.endangered}
-            className={classes.blockCheckbox}
+          <Dropdown
+            id='conservationCategory'
+            label={strings.CONSERVATION_CATEGORY}
+            aria-label={strings.CONSERVATION_CATEGORY}
+            fullWidth={true}
+            onChange={(value: string) => onChange('conservationCategory', value)}
+            placeholder={strings.SELECT}
+            options={conservationCategories()}
+            selectedValue={record.conservationCategory}
+            tooltipTitle={strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY}
           />
           <Checkbox
             id='Rare'
-            name='conservationStatus'
+            name='rare'
             label={strings.RARE}
             onChange={() => onChange('rare', !record.rare)}
             value={record.rare}

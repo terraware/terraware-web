@@ -95,17 +95,6 @@ export const LearnMoreModalContentGrowthForm = (): JSX.Element => (
   </>
 );
 
-export const LearnMoreModalContentConservationStatus = (): JSX.Element => (
-  <>
-    <p>
-      <strong>{strings.ENDANGERED}:</strong> {strings.LEARN_MORE_CONSERVATION_STATUS_ENDANGERED}
-    </p>
-    <p>
-      <strong>{strings.RARE}:</strong> {strings.LEARN_MORE_CONSERVATION_STATUS_RARE}
-    </p>
-  </>
-);
-
 export const LearnMoreModalContentSeedStorageBehavior = (): JSX.Element => (
   <>
     <p>

@@ -2389,8 +2389,17 @@ export interface components {
     SpeciesLookupDetailsResponsePayload: {
       /** @description List of known common names for the species, if any. */
       commonNames?: components["schemas"]["SpeciesLookupCommonNamePayload"][];
-      /** @description True if the species is known to be endangered, false if the species is known to not be endangered. This value will not be present if the server's taxonomic database doesn't indicate whether or not the species is endangered. */
-      endangered?: boolean;
+      /** @description IUCN Red List conservation category code. */
+      conservationCategory?:
+        | "CR"
+        | "DD"
+        | "EN"
+        | "EW"
+        | "EX"
+        | "LC"
+        | "NE"
+        | "NT"
+        | "VU";
       familyName: string;
       /** @description If this is not the accepted name for the species, the type of problem the name has. Currently, this will always be "Name Is Synonym". */
       problemType?: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
@@ -2414,6 +2423,17 @@ export interface components {
     };
     SpeciesRequestPayload: {
       commonName?: string;
+      /** @description IUCN Red List conservation category code. */
+      conservationCategory?:
+        | "CR"
+        | "DD"
+        | "EN"
+        | "EW"
+        | "EX"
+        | "LC"
+        | "NE"
+        | "NT"
+        | "VU";
       ecosystemTypes?: (
         | "Boreal forests/Taiga"
         | "Deserts and xeric shrublands"
@@ -2430,7 +2450,6 @@ export interface components {
         | "Tropical and subtropical moist broad leaf forests"
         | "Tundra"
       )[];
-      endangered?: boolean;
       familyName?: string;
       growthForm?:
         | "Tree"
@@ -2456,6 +2475,17 @@ export interface components {
     };
     SpeciesResponseElement: {
       commonName?: string;
+      /** @description IUCN Red List conservation category code. */
+      conservationCategory?:
+        | "CR"
+        | "DD"
+        | "EN"
+        | "EW"
+        | "EX"
+        | "LC"
+        | "NE"
+        | "NT"
+        | "VU";
       ecosystemTypes?: (
         | "Boreal forests/Taiga"
         | "Deserts and xeric shrublands"
@@ -2472,7 +2502,6 @@ export interface components {
         | "Tropical and subtropical moist broad leaf forests"
         | "Tundra"
       )[];
-      endangered?: boolean;
       familyName?: string;
       growthForm?:
         | "Tree"

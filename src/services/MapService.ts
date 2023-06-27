@@ -249,6 +249,7 @@ const getMapDataFromObservation = (observation: ObservationResults): MapData => 
       id: zone.plantingZoneId,
       name: zone.plantingZoneName,
       type: 'zone',
+      mortalityRate: zone.mortalityRate,
     },
     boundary: getPolygons(zone.boundary),
   }));

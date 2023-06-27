@@ -71,7 +71,7 @@ const createSpecies = async (species: Omit<Species, 'id'>, organizationId: numbe
   const entity: CreateSpeciesRequestPayload = {
     ecosystemTypes: species.ecosystemTypes,
     commonName: species.commonName,
-    endangered: species.endangered,
+    conservationCategory: species.conservationCategory,
     familyName: species.familyName,
     growthForm: species.growthForm,
     organizationId,
@@ -113,7 +113,7 @@ const updateSpecies = async (species: Species, organizationId: number): Promise<
   const entity: UpdateSpeciesRequestPayload = {
     ecosystemTypes: species.ecosystemTypes,
     commonName: species.commonName,
-    endangered: species.endangered,
+    conservationCategory: species.conservationCategory,
     familyName: species.familyName,
     growthForm: species.growthForm,
     organizationId,
