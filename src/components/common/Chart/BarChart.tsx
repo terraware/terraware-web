@@ -22,6 +22,7 @@ export interface BarChartProps {
   chartId: string;
   chartLabels?: string[];
   chartValues?: number[];
+  customTooltipTitles?: string[];
   minHeight?: string;
   maxWidth?: string;
   barWidth?: number;
@@ -55,6 +56,7 @@ interface BarChartContentProps {
   chartId: string;
   chartLabels: string[];
   chartValues: number[];
+  customTooltipTitles?: string[];
   minHeight?: string;
   maxWidth?: string;
   locale: string;
@@ -62,7 +64,7 @@ interface BarChartContentProps {
 }
 
 function BarChartContent(props: BarChartContentProps): JSX.Element {
-  const { chartId, chartLabels, chartValues, minHeight, maxWidth, locale } = props;
+  const { chartId, chartLabels, chartValues, customTooltipTitles, minHeight, maxWidth, locale } = props;
   const classes = useStyles({ minHeight, maxWidth });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
@@ -109,6 +111,13 @@ function BarChartContent(props: BarChartContentProps): JSX.Element {
               },
               tooltip: {
                 displayColors: false,
+                callbacks: {
+                  title: customTooltipTitles
+                    ? ([context]) => {
+                        return customTooltipTitles[context.dataIndex];
+                      }
+                    : undefined,
+                },
               },
             },
             scales: {

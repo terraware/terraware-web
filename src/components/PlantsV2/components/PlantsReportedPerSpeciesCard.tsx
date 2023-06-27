@@ -6,6 +6,16 @@ import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
 import BarChart from 'src/components/common/Chart/BarChart';
 
+const MAX_SPECIES_NAME_LENGTH = 20;
+
+const truncateToLength = (s: string, length: number): string => {
+  if (s.length <= length) {
+    return s;
+  }
+
+  return s.slice(0, length - 3) + '...';
+};
+
 type PlantsReportedPerSpeciesCardProps = {
   plantingSiteId?: number;
 };
@@ -17,6 +27,7 @@ export default function PlantsReportedPerSpeciesCard({
   const populationSelector = useAppSelector((state) => selectSitePopulation(state));
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
+  const [tooltipTitles, setTooltipTitles] = useState<string[]>();
   useEffect(() => {
     if (populationSelector) {
       const speciesQuantities: Record<string, number> = {};
@@ -35,11 +46,13 @@ export default function PlantsReportedPerSpeciesCard({
           })
         )
       );
-      setLabels(Object.keys(speciesQuantities));
+      setLabels(Object.keys(speciesQuantities).map((name) => truncateToLength(name, MAX_SPECIES_NAME_LENGTH)));
       setValues(Object.values(speciesQuantities));
+      setTooltipTitles(Object.keys(speciesQuantities));
     } else {
       setLabels([]);
       setValues([]);
+      setTooltipTitles([]);
     }
   }, [populationSelector]);
 
@@ -52,7 +65,13 @@ export default function PlantsReportedPerSpeciesCard({
             {strings.REPORTED_PLANTS_PER_SPECIES_CARD_TITLE}
           </Typography>
           <Box>
-            <BarChart chartId='plantsBySpecies' chartLabels={labels} chartValues={values} maxWidth='100%' />
+            <BarChart
+              chartId='plantsBySpecies'
+              chartLabels={labels}
+              chartValues={values}
+              customTooltipTitles={tooltipTitles}
+              maxWidth='100%'
+            />
           </Box>
         </Box>
       }
