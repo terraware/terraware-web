@@ -118,7 +118,14 @@ type SpeciesSearchResultRow = Omit<
   ecosystemTypes?: string[];
 };
 
-const BE_SORTED_FIELDS = ['scientificName', 'commonName', 'familyName', 'growthForm', 'seedStorageBehavior'];
+const BE_SORTED_FIELDS = [
+  'scientificName',
+  'commonName',
+  'conservationCategory',
+  'familyName',
+  'growthForm',
+  'seedStorageBehavior',
+];
 
 export default function SpeciesList({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -340,14 +347,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
       prefix: 'species',
-      fields: [
-        ...BE_SORTED_FIELDS,
-        'id',
-        'conservationCategory',
-        'rare',
-        'ecosystemTypes.ecosystemType',
-        'organization_id',
-      ],
+      fields: [...BE_SORTED_FIELDS, 'id', 'rare', 'ecosystemTypes.ecosystemType', 'organization_id'],
       search: {
         operation: 'and',
         children: [
