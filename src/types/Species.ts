@@ -4,7 +4,7 @@ import strings from 'src/strings';
 export type Species = {
   id: number;
   commonName?: string;
-  endangered?: boolean;
+  conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
   familyName?: string;
   growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern' | 'Fungus' | 'Lichen' | 'Moss';
   scientificName: string;
@@ -38,6 +38,20 @@ export type SpeciesProblemElement = {
   suggestedValue?: string;
 };
 
+export function conservationCategories() {
+  return [
+    { label: strings.IUCN_EXTINCT, value: 'EX' },
+    { label: strings.IUCN_EXTINCT_IN_THE_WILD, value: 'EW' },
+    { label: strings.IUCN_CRITICALLY_ENDANGERED, value: 'CR' },
+    { label: strings.IUCN_ENDANGERED, value: 'EN' },
+    { label: strings.IUCN_VULNERABLE, value: 'VU' },
+    { label: strings.IUCN_NEAR_THREATENED, value: 'NT' },
+    { label: strings.IUCN_LEAST_CONCERN, value: 'LC' },
+    { label: strings.IUCN_DATA_DEFICIENT, value: 'DD' },
+    { label: strings.IUCN_NOT_EVALUATED, value: 'NE' },
+  ];
+}
+
 export function growthForms(useLocalizedValues = false) {
   return [
     { label: strings.TREE, value: useLocalizedValues ? strings.TREE : 'Tree' },
@@ -57,13 +71,6 @@ export function storageBehaviors(useLocalizedValues = false) {
     { label: strings.RECALCITRANT, value: useLocalizedValues ? strings.RECALCITRANT : 'Recalcitrant' },
     { label: strings.INTERMEDIATE, value: useLocalizedValues ? strings.INTERMEDIATE : 'Intermediate' },
     { label: strings.UNKNOWN, value: useLocalizedValues ? strings.UNKNOWN : 'Unknown' },
-  ];
-}
-
-export function conservationStatuses() {
-  return [
-    { label: strings.RARE, value: 'Rare' },
-    { label: strings.ENDANGERED, value: 'Endangered' },
   ];
 }
 
