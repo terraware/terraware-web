@@ -2459,7 +2459,12 @@ export interface components {
         | "Fern"
         | "Fungus"
         | "Lichen"
-        | "Moss";
+        | "Moss"
+        | "Vine"
+        | "Liana"
+        | "Shrub/Tree"
+        | "Subshrub"
+        | "Multiple Forms";
       /**
        * Format: int64
        * @description Which organization's species list to update.
@@ -2511,7 +2516,12 @@ export interface components {
         | "Fern"
         | "Fungus"
         | "Lichen"
-        | "Moss";
+        | "Moss"
+        | "Vine"
+        | "Liana"
+        | "Shrub/Tree"
+        | "Subshrub"
+        | "Multiple Forms";
       /** Format: int64 */
       id: number;
       problems?: components["schemas"]["SpeciesProblemElement"][];
