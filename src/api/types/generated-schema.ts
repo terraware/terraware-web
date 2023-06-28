@@ -245,9 +245,6 @@ export interface paths {
   "/api/v1/seedbank/values": {
     post: operations["listFieldValues"];
   };
-  "/api/v1/seedbank/values/all": {
-    post: operations["listAllFieldValues"];
-  };
   "/api/v1/species": {
     get: operations["listSpecies"];
     post: operations["createSpecies"];
@@ -1666,17 +1663,6 @@ export interface components {
     } & {
       coordinates: unknown;
       type: unknown;
-    };
-    ListAllFieldValuesRequestPayload: {
-      fields: string[];
-      /** Format: int64 */
-      organizationId: number;
-    };
-    ListAllFieldValuesResponsePayload: {
-      results: {
-        [key: string]: components["schemas"]["AllFieldValuesPayload"];
-      };
-      status: components["schemas"]["SuccessOrError"];
     };
     ListAssignedPlotsResponsePayload: {
       plots: components["schemas"]["AssignedPlotPayload"][];
@@ -4831,21 +4817,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ListFieldValuesRequestPayload"];
-      };
-    };
-  };
-  listAllFieldValues: {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListAllFieldValuesResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
       };
     };
   };

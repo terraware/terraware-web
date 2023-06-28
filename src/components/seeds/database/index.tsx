@@ -4,11 +4,7 @@ import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
-import SeedBankService, {
-  DEFAULT_SEED_SEARCH_FILTERS,
-  AllFieldValuesMap,
-  FieldValuesMap,
-} from 'src/services/SeedBankService';
+import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
 import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/types/Search';
 import Button from 'src/components/common/button/Button';
 import { BaseTable as Table } from 'src/components/common/table';
@@ -194,7 +190,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
    * keys: all single and multi select search fields.
    * values: all the existing values that the field has in the database, for all accessions.
    */
-  const [fieldOptions, setFieldOptions] = useState<AllFieldValuesMap | null>();
+  const [fieldOptions, setFieldOptions] = useState<FieldValuesMap | null>();
   /*
    * availableFieldOptions is a list of records
    * keys: all single and multi select search fields.
@@ -444,7 +440,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        const allValues = await SeedBankService.getAllFieldValues(singleAndMultiChoiceFields, selectedOrganization.id);
+        const allValues = await SeedBankService.searchFieldValues(
+          singleAndMultiChoiceFields,
+          {},
+          selectedOrganization.id
+        );
 
         if (activeRequests) {
           setFieldOptions(allValues);
