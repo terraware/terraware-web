@@ -11,6 +11,8 @@ import { requestObservationsResults } from 'src/redux/features/observations/obse
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
 import PlantsReportedPerSpeciesCard from 'src/components/PlantsV2/components/PlantsReportedPerSpeciesCard';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import NumberOfSpeciesPlantedCard from 'src/components/PlantsV2/components/NumberOfSpeciesPlantedCard';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -28,6 +30,7 @@ export default function PlantsDashboardV2(): JSX.Element {
   useEffect(() => {
     dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSite?.id ?? -1));
     dispatch(requestObservationsResults(org.selectedOrganization.id));
+    dispatch(requestSpecies(org.selectedOrganization.id));
   }, [dispatch, org, selectedPlantingSite]);
 
   const sectionHeader = (title: string) => (
@@ -46,6 +49,9 @@ export default function PlantsDashboardV2(): JSX.Element {
       </Grid>
       <Grid item xs={isMobile ? 12 : 4}>
         <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSite?.id} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 4}>
+        <NumberOfSpeciesPlantedCard plantingSiteId={selectedPlantingSite?.id} />
       </Grid>
     </>
   );

@@ -58,11 +58,13 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
             {strings.HOW_MANY_PLANTS_CARD_TITLE}
           </Typography>
           <Box display='flex' alignItems='flex-end' flexWrap='wrap' marginBottom={theme.spacing(3)}>
-            <Typography fontSize={numberFontSize(totalPlants)} lineHeight={1}>
+            <Typography fontSize={numberFontSize(totalPlants)} fontWeight={600} lineHeight={1}>
               {totalPlants}
             </Typography>
             &nbsp;
-            <Typography fontSize='24px'>{strings.PLANTS}</Typography>
+            <Typography fontSize='24px' fontWeight={600}>
+              {strings.PLANTS}
+            </Typography>
           </Box>
         </Box>
       }
