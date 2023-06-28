@@ -9,7 +9,7 @@ export type Species = {
   growthForm?: GrowthForm;
   scientificName: string;
   rare?: boolean;
-  seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
+  seedStorageBehavior?: SeedStorageBehavior;
   problems?: SpeciesProblemElement[];
   ecosystemTypes?: EcosystemType[];
 };
@@ -44,6 +44,15 @@ export type GrowthForm =
   | 'Shrub/Tree'
   | 'Subshrub'
   | 'Multiple Forms';
+
+export type SeedStorageBehavior =
+  | 'Intermediate'
+  | 'Likely Intermediate'
+  | 'Likely Orthodox'
+  | 'Likely Recalcitrant'
+  | 'Orthodox'
+  | 'Recalcitrant'
+  | 'Unknown';
 
 export type SpeciesProblemElement = {
   id: number;
@@ -92,6 +101,15 @@ export function storageBehaviors(useLocalizedValues = false) {
     { label: strings.ORTHODOX, value: useLocalizedValues ? strings.ORTHODOX : 'Orthodox' },
     { label: strings.RECALCITRANT, value: useLocalizedValues ? strings.RECALCITRANT : 'Recalcitrant' },
     { label: strings.INTERMEDIATE, value: useLocalizedValues ? strings.INTERMEDIATE : 'Intermediate' },
+    { label: strings.LIKELY_ORTHODOX, value: useLocalizedValues ? strings.LIKELY_ORTHODOX : 'Likely Orthodox' },
+    {
+      label: strings.LIKELY_RECALCITRANT,
+      value: useLocalizedValues ? strings.LIKELY_RECALCITRANT : 'Likely Recalcitrant',
+    },
+    {
+      label: strings.LIKELY_INTERMEDIATE,
+      value: useLocalizedValues ? strings.LIKELY_INTERMEDIATE : 'Likely Intermediate',
+    },
     { label: strings.UNKNOWN, value: useLocalizedValues ? strings.UNKNOWN : 'Unknown' },
   ];
 }
