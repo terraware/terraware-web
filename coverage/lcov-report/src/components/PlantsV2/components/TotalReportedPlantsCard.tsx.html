@@ -32,21 +32,21 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -127,14 +127,7 @@
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,20 +144,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,6 +170,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -222,20 +208,11 @@ export default function <span class="fstat-no" title="function not covered" >Tot
   const [totalPlants, setTotalPlants] = <span class="cstat-no" title="statement not covered" >useState(0);</span>
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (populationSelector) {</span>
-      const sum =
-<span class="cstat-no" title="statement not covered" >        populationSelector?.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc1, zone) =&gt; {</span>
-          const sum1 = <span class="cstat-no" title="statement not covered" >Number(</span>
-            zone.plantingSubzones?.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc2, sz) =&gt; {
-              const sum2 = <span class="cstat-no" title="statement not covered" >Number(</span>
-                sz.populations?.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc3, pop) =&gt; {
-<span class="cstat-no" title="statement not covered" >                  return acc3 + pop.totalPlants;</span>
-                }, 0)
-              );
-<span class="cstat-no" title="statement not covered" >              return acc2 + (isNaN(sum2) ? 0 : sum2);</span>
-            }, 0)
-          );
-<span class="cstat-no" title="statement not covered" >          return acc1 + (isNaN(sum1) ? 0 : sum1);</span>
-        }, 0) ?? 0;
+      const populations = <span class="cstat-no" title="statement not covered" >populationSelector</span>
+        .flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.plantingSubzones)</span>
+        .flatMap(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; <span class="cstat-no" title="statement not covered" >sz.populations)</span>
+        .filter(<span class="fstat-no" title="function not covered" >(p</span>op) =&gt; <span class="cstat-no" title="statement not covered" >pop !== undefined)</span>;
+      const sum = <span class="cstat-no" title="statement not covered" >populations.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, pop) =&gt; <span class="cstat-no" title="statement not covered" >+pop.totalPlants + acc,</span> 0);</span>
 <span class="cstat-no" title="statement not covered" >      setTotalPlants(sum);</span>
     }
   }, [populationSelector]);
@@ -265,11 +242,13 @@ export default function <span class="fstat-no" title="function not covered" >Tot
             {strings.HOW_MANY_PLANTS_CARD_TITLE}
           &lt;/Typography&gt;
           &lt;Box display='flex' alignItems='flex-end' flexWrap='wrap' marginBottom={theme.spacing(3)}&gt;
-            &lt;Typography fontSize={numberFontSize(totalPlants)} lineHeight={1}&gt;
+            &lt;Typography fontSize={numberFontSize(totalPlants)} fontWeight={600} lineHeight={1}&gt;
               {totalPlants}
             &lt;/Typography&gt;
             &amp;nbsp;
-            &lt;Typography fontSize='24px'&gt;{strings.PLANTS}&lt;/Typography&gt;
+            &lt;Typography fontSize='24px' fontWeight={600}&gt;
+              {strings.PLANTS}
+            &lt;/Typography&gt;
           &lt;/Box&gt;
         &lt;/Box&gt;
       }
@@ -283,7 +262,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-06-28T19:00:09.705Z
+                at 2023-06-28T19:09:58.493Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
