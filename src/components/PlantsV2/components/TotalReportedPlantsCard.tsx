@@ -15,20 +15,11 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
   const [totalPlants, setTotalPlants] = useState(0);
   useEffect(() => {
     if (populationSelector) {
-      const sum =
-        populationSelector?.reduce((acc1, zone) => {
-          const sum1 = Number(
-            zone.plantingSubzones?.reduce((acc2, sz) => {
-              const sum2 = Number(
-                sz.populations?.reduce((acc3, pop) => {
-                  return acc3 + pop.totalPlants;
-                }, 0)
-              );
-              return acc2 + (isNaN(sum2) ? 0 : sum2);
-            }, 0)
-          );
-          return acc1 + (isNaN(sum1) ? 0 : sum1);
-        }, 0) ?? 0;
+      const populations = populationSelector
+        .flatMap((zone) => zone.plantingSubzones)
+        .flatMap((sz) => sz.populations)
+        .filter((pop) => pop !== undefined);
+      const sum = populations.reduce((acc, pop) => +pop.totalPlants + acc, 0);
       setTotalPlants(sum);
     }
   }, [populationSelector]);
