@@ -473,6 +473,7 @@ LEARN_MORE_GROWTH_FORM_SUBSHRUB,Un arbusto enano que usualmente solo es leñoso 
 LEARN_MORE_GROWTH_FORM_TREE,"Planta leñosa perenne, que suele tener un solo tallo o tronco que crece hasta una altura considerable y posee ramas laterales a cierta distancia del suelo."
 LEARN_MORE_GROWTH_FORM_VINE,Una planta trepadora o colgante con un tallo leñoso.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Las semillas exhiben un comportamiento intermedio entre las semillas ortodoxas y las recalcitrantes; pueden soportar la desecación parcial, soportar temperaturas frías pero no de congelación o tener una vida breve, independientemente de las condiciones de almacenamiento."
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"Se cree que las semillas poseen un comportamiento, pero esto aún no ha sido confirmado científicamente."
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Las semillas toleran los niveles de desecación necesarios para ser almacenadas congeladas (contenido de humedad de 5-8 %) y unas temperaturas de -20 °C o inferiores.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Las semillas no toleran los niveles de desecación necesarios para su conservación ex situ (fuera del sitio).
 LEAVE_AND_SAVE,Salir y guardar
@@ -480,6 +481,9 @@ LEAVE_ORGANIZATION,Salir de la organización
 LIANA,Liana,A type of plant.
 LICHEN,Liquen
 LIGHT,Luz
+LIKELY_INTERMEDIATE,Posiblemente intermedia,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Intermediate.
+LIKELY_ORTHODOX,Posiblemente ortodoxa,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
+LIKELY_RECALCITRANT,Posiblemente recalcitrante,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
 LIST,Lista
 LOADING,Cargando...
 LOCATION,Lugar
@@ -628,6 +632,7 @@ NUMBER_OF_SEEDS_TESTED,# Semillas Analizadas
 NUMBER_OF_SEEDS_TESTED_REQUIRED,# Semillas Analizadas *
 NUMBER_OF_SEEDS_WITHDRAWN,Semillas Retiradas
 NUMBER_OF_SPECIES,Número de especies
+NUMBER_OF_SPECIES_PLANTED_CARD_TITLE,¿Cuántas especies he informado para plantar?
 NUMBER_PLANTS_COLLECTED_FROM,Número de plantas recogidas de
 NURSERIES,Viveros
 NURSERY,Vivero
@@ -837,7 +842,7 @@ REPORT_VIEW_ANNUAL,Ver informe anual
 REPORT_VIEW_QUARTERLY,Ver informe trimestral
 REPORTED_PLANTS_PER_SPECIES_CARD_TITLE,¿Qué cantidad de plantas sembradas por especie se reportó?
 REPORTS,Informes
-REQUEST_FEATURE,Solicitar característica
+REQUEST_FEATURE,Solicitar funcionalidad
 REQUIRED,Obligatorio
 REQUIRED_FIELD,Campo obligatorio
 REQUIRED_VALUE_AND_UNITS_FIELD,Valor y unidades requeridas
@@ -890,7 +895,7 @@ SDG_17,17. Alianzas para los Objetivos
 SEARCH,Búsqueda
 SEARCH_BY_NAME_OR_FAMILY,Búsqueda por nombre o familia...
 SEARCH_OR_SELECT,Busque o Seleccione
-SEE_ALL_ACCESSIONS,Ver todos los accesorios
+SEE_ALL_ACCESSIONS,Ver todos las accesiones
 SEE_ENTRIES,Ver entradas
 SEED,Semilla
 SEED_BAGS,Sacos de semillas
@@ -1058,7 +1063,7 @@ TIME_ZONE,Zona horaria
 TIME_ZONE_REQUIRED,Zona horaria *
 TIME_ZONE_SELECTED,Zona horaria: {0}
 TITLE_REPORT_PROBLEM,Informar de un problema
-TITLE_REQUEST_FEATURE,Solicitar una característica
+TITLE_REQUEST_FEATURE,Solicitar una funcionalidad
 TITLE_TEST_APP,Pruebe nuestra aplicación móvil
 TITLE_WELCOME,Bienvenido a Terraware
 TO,Para
