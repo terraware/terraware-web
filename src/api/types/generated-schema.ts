@@ -470,6 +470,8 @@ export interface components {
       estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       /** Format: int64 */
       facilityId: number;
+      /** @description If true, plants from this accession's seeds were delivered to a planting site. */
+      hasDeliveries?: boolean;
       /**
        * Format: int64
        * @description Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users.

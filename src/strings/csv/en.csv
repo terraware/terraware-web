@@ -1074,6 +1074,7 @@ TO_SUBZONE,To: Subzone
 TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE,The place where seeds were collected. It is recommended to name these referencing stable landmarks or features that do not change.
 TOOLTIP_ACCESSIONS_ADD_PLANT_ID,The unique identifier given to a plant for tracking or conservation purposes. Ideally seeds from a plant with a plant ID are kept separate from other plants (not pooled together) in collections and accessions.
 TOOLTIP_ACCESSIONS_COLLECTION_SOURCE,The type of plant population where seeds are collected.
+TOOLTIP_ACCESSIONS_HAS_DELIVERIES,This accession's species cannot be changed because plants from its seeds have been planted at a planting site.
 TOOLTIP_ACCESSIONS_ID,"A unique identifier for a seed collection accepted into a seed bank. Any collection from a new species, location, and/or date would typically become a new accession in the seed bank."
 TOOLTIP_ACCESSIONS_LOCATION,Place where seeds are being processed.
 TOOLTIP_ACCESSIONS_SUBLOCATION,Specific area within the place where seeds are being processed.
