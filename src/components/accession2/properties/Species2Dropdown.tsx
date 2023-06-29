@@ -15,13 +15,14 @@ interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
   setRecord: React.Dispatch<React.SetStateAction<T>>;
   disabled?: boolean;
   validate?: boolean;
+  tooltipTitle?: string;
 }
 
 export default function Species2Dropdown<T extends AccessionPostRequestBody>(
   props: SpeciesDropdownProps<T>
 ): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { speciesId, record, setRecord, disabled, validate } = props;
+  const { speciesId, record, setRecord, disabled, validate, tooltipTitle } = props;
   const [speciesList, setSpeciesList] = useState<Species[]>([]);
   const [selectedValue, setSelectedValue] = useState<Species>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
@@ -112,6 +113,7 @@ export default function Species2Dropdown<T extends AccessionPostRequestBody>(
           fullWidth={true}
           editable={true}
           errorText={validate && !record.speciesId ? strings.REQUIRED_FIELD : ''}
+          tooltipTitle={tooltipTitle}
         />
       </Grid>
     </>
