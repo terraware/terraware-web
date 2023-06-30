@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1688145954138" clover="3.2.0">
-  <project timestamp="1688145954138" name="All files">
-    <metrics statements="10855" coveredstatements="359" conditionals="6822" coveredconditionals="90" methods="3338" coveredmethods="77" elements="21015" coveredelements="526" complexity="0" loc="10855" ncloc="10855" packages="100" files="441" classes="441"/>
+<coverage generated="1688148664281" clover="3.2.0">
+  <project timestamp="1688148664281" name="All files">
+    <metrics statements="10902" coveredstatements="359" conditionals="6865" coveredconditionals="90" methods="3350" coveredmethods="77" elements="21117" coveredelements="526" complexity="0" loc="10902" ncloc="10902" packages="100" files="442" classes="442"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2531,17 +2531,17 @@
         <line num="177" count="0" type="stmt"/>
         <line num="190" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="191" count="0" type="stmt"/>
-        <line num="217" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="218" count="0" type="stmt"/>
-        <line num="232" count="0" type="stmt"/>
-        <line num="237" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="238" count="0" type="stmt"/>
-        <line num="242" count="0" type="stmt"/>
-        <line num="245" count="0" type="stmt"/>
-        <line num="246" count="0" type="stmt"/>
-        <line num="253" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="254" count="0" type="stmt"/>
-        <line num="261" count="0" type="stmt"/>
+        <line num="219" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="220" count="0" type="stmt"/>
+        <line num="234" count="0" type="stmt"/>
+        <line num="239" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="240" count="0" type="stmt"/>
+        <line num="244" count="0" type="stmt"/>
+        <line num="247" count="0" type="stmt"/>
+        <line num="248" count="0" type="stmt"/>
+        <line num="255" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="256" count="0" type="stmt"/>
+        <line num="263" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/index.tsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -5479,30 +5479,49 @@
       </file>
     </package>
     <package name="src.components.PlantsV2">
-      <metrics statements="17" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <metrics statements="36" coveredstatements="0" conditionals="27" coveredconditionals="0" methods="11" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/index.tsx">
-        <metrics statements="17" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
+        <metrics statements="36" coveredstatements="0" conditionals="27" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
-        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="44" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="98" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="100" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.PlantsV2.components">
-      <metrics statements="94" coveredstatements="0" conditionals="48" coveredconditionals="0" methods="27" coveredmethods="0"/>
+      <metrics statements="122" coveredstatements="0" conditionals="68" coveredconditionals="0" methods="34" coveredmethods="0"/>
       <file name="NumberOfSpeciesPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/NumberOfSpeciesPlantedCard.tsx">
         <metrics statements="41" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -5605,6 +5624,37 @@
         <line num="37" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
+      </file>
+      <file name="ZoneLevelDataMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/ZoneLevelDataMap.tsx">
+        <metrics statements="28" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="81" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="92" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="93" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="96" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.RegionSelector">
@@ -9557,16 +9607,16 @@
       </file>
     </package>
     <package name="src.components.common.MapLegend">
-      <metrics statements="7" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <metrics statements="7" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="4" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/MapLegend/index.tsx">
-        <metrics statements="7" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
+        <metrics statements="7" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.common.Navbar">
