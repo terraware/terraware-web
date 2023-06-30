@@ -384,6 +384,7 @@ GOT_IT,¡Entendido!
 GPS_COORDINATES,Coordenadas GPS
 GRAMINOID,Gramínea
 GRAMS,Gramos
+GREATER_THAN_FIFTY_PERCENT,> 50%
 GROWTH_FORM,Forma de crecimiento
 HISTORY,Historia
 HOME,Inicio
@@ -478,6 +479,7 @@ LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Las semillas toleran los niveles de de
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Las semillas no toleran los niveles de desecación necesarios para su conservación ex situ (fuera del sitio).
 LEAVE_AND_SAVE,Salir y guardar
 LEAVE_ORGANIZATION,Salir de la organización
+LESS_THAN_TWENTY_FIVE_PERCENT,< 25%
 LIANA,Liana,A type of plant.
 LICHEN,Liquen
 LIGHT,Luz
@@ -1156,6 +1158,7 @@ TREE,Árbol
 TRUNCATED_TEXT_MORE_LINK,más
 TRY_AGAIN,Intente otra vez
 TURN_ON_END_DRYING_REMINDER,Activar recordatorio de final de secado
+TWENTY_FIVE_TO_FIFTY_PERCENT,De 25% a 50%
 TYPE,Escriba...
 TYPE_TO_SEARCH,Escriba para buscar...
 UNABLE_TO_ADD_PERSON,No se puede añadir una persona
@@ -1243,5 +1246,8 @@ WORKERS_VOLUNTEERS,Voluntarios *
 YES,Sí
 ZERO,Cero
 ZONE,Zona
+ZONE_LEVEL_DATA,Datos del nivel de zona
+ZONE_LEVEL_DATA_MAP_TITLE,¿Qué aspecto tiene el área de plantación según lo que reportamos que se ha plantado?
+ZONE_LEVEL_DATA_MAP_TITLE_WITH_OBSERVATION,¿Qué aspecto tiene el área de plantación a partir de {0}?
 ZONE_REQUIRED,Zona *
 ZONES,Zonas
