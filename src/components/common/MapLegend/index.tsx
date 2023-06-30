@@ -5,9 +5,12 @@ type MapLegendItem = {
   borderColor: string;
   fillColor: string;
   label: string;
+  fillPatternUrl?: string;
+  opacity?: number;
+  height?: string;
 };
 
-type MapLegendGroup = {
+export type MapLegendGroup = {
   title: string;
   items: MapLegendItem[];
 };
@@ -44,7 +47,7 @@ export default function MapLegend({ legends }: MapLegendProps): JSX.Element {
           </Grid>
           {legend.items.map((item) => (
             <Grid item xs={isMobile ? 4 : 1} key={`${legend.title}-${item.label}`}>
-              <LabeledSwatch borderColor={item.borderColor} fillColor={item.fillColor} label={item.label} />
+              <LabeledSwatch {...item} />
             </Grid>
           ))}
         </Grid>
@@ -55,7 +58,14 @@ export default function MapLegend({ legends }: MapLegendProps): JSX.Element {
 
 type LabeledSwatchProps = MapLegendItem;
 
-function LabeledSwatch({ borderColor, fillColor, label }: LabeledSwatchProps): JSX.Element {
+function LabeledSwatch({
+  borderColor,
+  fillColor,
+  label,
+  fillPatternUrl,
+  opacity,
+  height,
+}: LabeledSwatchProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -64,7 +74,10 @@ function LabeledSwatch({ borderColor, fillColor, label }: LabeledSwatchProps): J
         sx={{
           border: `2px solid ${borderColor}`,
           backgroundColor: fillColor,
-          height: '8px',
+          backgroundImage: fillPatternUrl ? `url("${fillPatternUrl}")` : undefined,
+          backgroundRepeat: 'repeat',
+          opacity,
+          height: height ? height : '8px',
           width: '24px',
           marginRight: theme.spacing(1),
         }}

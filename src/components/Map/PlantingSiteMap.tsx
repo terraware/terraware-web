@@ -203,6 +203,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 imageName: 'mortality-rate-indicator',
                 opacityExpression: [
                   'case',
+                  ['==', ['get', 'mortalityRate'], null],
+                  0.0,
                   ['>', ['get', 'mortalityRate'], 0.5],
                   0.7,
                   ['>', ['get', 'mortalityRate'], 0.25],
