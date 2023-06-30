@@ -106,6 +106,10 @@ export default function ZoneLevelDataMap({ plantingSiteId, observation }: ZoneLe
     return baseMap;
   }, [plantingSite, observation]);
 
+  const focusEntities = useMemo(() => {
+    return [{ sourceId: 'sites', id: plantingSiteId }];
+  }, [plantingSiteId]);
+
   return (
     <Box
       sx={{
@@ -132,6 +136,7 @@ export default function ZoneLevelDataMap({ plantingSiteId, observation }: ZoneLe
           style={{ borderRadius: '24px' }}
           layers={['Planting Site', 'Zones']}
           showMortalityRateFill={!!observation}
+          focusEntities={focusEntities}
         />
       ) : (
         <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
