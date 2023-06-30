@@ -1,22 +1,26 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { Grid, Typography } from '@mui/material';
-import { useAppDispatch } from 'src/redux/store';
-import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestPlantingSites, requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
 import { useOrganization } from 'src/providers';
-import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
 import PlantsReportedPerSpeciesCard from 'src/components/PlantsV2/components/PlantsReportedPerSpeciesCard';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import NumberOfSpeciesPlantedCard from 'src/components/PlantsV2/components/NumberOfSpeciesPlantedCard';
+import ZoneLevelDataMap from './components/ZoneLevelDataMap';
+import { searchObservations } from 'src/redux/features/observations/observationsSelectors';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
   const { isMobile } = useDeviceInfo();
+  const defaultTimeZone = useDefaultTimeZone();
   const dispatch = useAppDispatch();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
@@ -27,10 +31,35 @@ export default function PlantsDashboardV2(): JSX.Element {
     [setPlantsDashboardPreferences]
   );
 
+  const observationsResults = useAppSelector((state) =>
+    searchObservations(state, selectedPlantingSite?.id ?? -1, defaultTimeZone.get().id, '', [])
+  );
+
+  const latestObservation = useMemo(() => {
+    if (!observationsResults || observationsResults.length === 0) {
+      return undefined;
+    }
+    const result = observationsResults.reduce((prev, curr) => {
+      if (!prev.completedTime) {
+        return curr;
+      }
+      if (!curr.completedTime || prev.completedTime.localeCompare(curr.completedTime) > 0) {
+        return prev;
+      }
+      return curr;
+    });
+    return result.completedTime ? result : undefined;
+  }, [observationsResults]);
+
   useEffect(() => {
-    dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSite?.id ?? -1));
+    dispatch(requestPlantingSites(org.selectedOrganization.id));
+    dispatch(requestObservations(org.selectedOrganization.id));
     dispatch(requestObservationsResults(org.selectedOrganization.id));
     dispatch(requestSpecies(org.selectedOrganization.id));
+  }, [dispatch, org]);
+
+  useEffect(() => {
+    dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSite?.id ?? -1));
   }, [dispatch, org, selectedPlantingSite]);
 
   const sectionHeader = (title: string) => (
@@ -56,6 +85,18 @@ export default function PlantsDashboardV2(): JSX.Element {
     </>
   );
 
+  const renderZoneLevelData = () => (
+    <>
+      {sectionHeader(strings.ZONE_LEVEL_DATA)}
+      <Grid item xs={12}>
+        <ZoneLevelDataMap plantingSiteId={selectedPlantingSite?.id} observation={latestObservation} />
+      </Grid>
+    </>
+  );
+
+  const hasPolygons =
+    !!selectedPlantingSite && !!selectedPlantingSite.boundary && selectedPlantingSite.boundary.coordinates?.length > 0;
+
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
@@ -67,6 +108,7 @@ export default function PlantsDashboardV2(): JSX.Element {
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}
+        {hasPolygons && renderZoneLevelData()}
       </Grid>
     </PlantsPrimaryPage>
   );
