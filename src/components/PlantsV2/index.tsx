@@ -16,6 +16,7 @@ import NumberOfSpeciesPlantedCard from 'src/components/PlantsV2/components/Numbe
 import ZoneLevelDataMap from './components/ZoneLevelDataMap';
 import { searchObservations } from 'src/redux/features/observations/observationsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -70,6 +71,15 @@ export default function PlantsDashboardV2(): JSX.Element {
     </Grid>
   );
 
+  const renderMortalityRate = () => (
+    <>
+      {sectionHeader(strings.MORTALITY_RATE)}
+      <Grid item xs={isMobile ? 12 : 3}>
+        <TotalMortalityRateCard observation={latestObservation} />
+      </Grid>
+    </>
+  );
+
   const renderTotalPlantsAndSpecies = () => (
     <>
       {sectionHeader(strings.TOTAL_PLANTS_AND_SPECIES)}
@@ -107,6 +117,7 @@ export default function PlantsDashboardV2(): JSX.Element {
       setPlantsSitePreferences={onPreferences}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
+        {renderMortalityRate()}
         {renderTotalPlantsAndSpecies()}
         {hasPolygons && renderZoneLevelData()}
       </Grid>
