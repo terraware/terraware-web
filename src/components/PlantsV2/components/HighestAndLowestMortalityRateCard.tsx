@@ -68,22 +68,30 @@ export default function TotalMortalityRateCard({ observation }: HighestAndLowest
           <Typography fontSize='12px' fontWeight={400}>
             {strings.HIGHEST}
           </Typography>
-          <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(2)}>
-            {highestPlantingZone?.plantingZoneName}
-          </Typography>
-          <Typography fontSize='24px' fontWeight={600}>
-            {highestMortalityRate + '%'}
-          </Typography>
+          {highestPlantingZone && (
+            <>
+              <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(2)}>
+                {highestPlantingZone.plantingZoneName}
+              </Typography>
+              <Typography fontSize='24px' fontWeight={600}>
+                {highestMortalityRate + '%'}
+              </Typography>
+            </>
+          )}
           <Divider sx={{ marginY: theme.spacing(2) }} />
           <Typography fontSize='12px' fontWeight={400}>
             {strings.LOWEST}
           </Typography>
-          <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(2)}>
-            {lowestPlantingZone?.plantingZoneName}
-          </Typography>
-          <Typography fontSize='24px' fontWeight={600}>
-            {lowestMortalityRate + '%'}
-          </Typography>
+          {lowestPlantingZone && (
+            <>
+              <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(2)}>
+                {lowestPlantingZone.plantingZoneName}
+              </Typography>
+              <Typography fontSize='24px' fontWeight={600}>
+                {lowestMortalityRate + '%'}
+              </Typography>
+            </>
+          )}
         </Box>
       }
     />
