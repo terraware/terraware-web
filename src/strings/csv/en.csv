@@ -386,6 +386,8 @@ GRAMINOID,Graminoid
 GRAMS,Grams
 GREATER_THAN_FIFTY_PERCENT,> 50%
 GROWTH_FORM,Growth Form
+HIGHEST,Highest
+HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,Which zones have the highest and lowest mortality rate?
 HISTORY,History
 HOME,Home
 HOW_MANY_PLANTS_CARD_TITLE,How many plants have I reported to plant?
@@ -494,6 +496,7 @@ LOCATIONS,Locations
 LOCKED,Locked
 LOG_OUT,Log Out
 LOSS_RATE,Loss Rate
+LOWEST,Lowest
 MANAGER,Manager
 MANAGER_INFO,"A manager can do the above as well as edit data entries for seeds and manage outplant withdrawals, planting sites and species."
 MAP,Map
