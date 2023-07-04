@@ -25,15 +25,12 @@ export default function TotalMortalityRateCard({ observation }: TotalMortalityRa
               observation?.completedTime ? getShortDate(observation.completedTime, locale.activeLocale) : ''
             )}
           </Typography>
-          <Box display='flex' alignItems='flex-end' flexWrap='wrap' marginBottom={theme.spacing(3)}>
-            <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
-              {(observation?.mortalityRate ?? '0') + '%'}
-            </Typography>
-            &nbsp;
-            <Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}>
-              {strings.MORTALITY_RATE_CLARIFICATION}
-            </Typography>
-          </Box>
+          <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
+            {(observation?.mortalityRate ?? '0') + '%'}
+          </Typography>
+          <Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}>
+            {strings.MORTALITY_RATE_CLARIFICATION}
+          </Typography>
         </Box>
       }
     />
