@@ -17,6 +17,7 @@ import ZoneLevelDataMap from './components/ZoneLevelDataMap';
 import { searchObservations } from 'src/redux/features/observations/observationsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
+import HighestAndLowestMortalityRateCard from './components/HighestAndLowestMortalityRateCard';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -76,6 +77,9 @@ export default function PlantsDashboardV2(): JSX.Element {
       {sectionHeader(strings.MORTALITY_RATE)}
       <Grid item xs={isMobile ? 12 : 3}>
         <TotalMortalityRateCard observation={latestObservation} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 3}>
+        <HighestAndLowestMortalityRateCard observation={latestObservation} />
       </Grid>
     </>
   );
