@@ -14,6 +14,7 @@ import PlantsReportedPerSpeciesCard from './components/PlantsReportedPerSpeciesC
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard';
 import PlantingSiteProgressCard from './components/PlantingSiteProgressCard';
+import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
 import ZoneLevelDataMap from './components/ZoneLevelDataMap';
 import { searchObservations } from 'src/redux/features/observations/observationsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -126,6 +127,11 @@ export default function PlantsDashboardV2(): JSX.Element {
       {!sitePlantingComplete && (
         <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
           <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      )}
+      {!sitePlantingComplete && (
+        <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
+          <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
         </Grid>
       )}
     </>
