@@ -108,7 +108,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       if (ctx) {
         const colors = generateTerrawareRandomColors(theme, chartLabels?.length || 0);
         chartRef.current = await newChart(locale, ctx, {
-          type: type,
+          type,
           data: {
             labels: chartLabels,
             datasets: [
