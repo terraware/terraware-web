@@ -21,6 +21,7 @@ export default function LiveDeadPlantsPerSpeciesCard({ observation }: LiveDeadPl
       value: string;
     }[]
   >();
+  const [showChart, setShowChart] = useState(false);
   useEffect(() => {
     if (observation) {
       const speciesNames = observation.species.map((sp) => ({
@@ -37,7 +38,8 @@ export default function LiveDeadPlantsPerSpeciesCard({ observation }: LiveDeadPl
       const selectedObservationSpecies = observation?.species.find(
         (sp) => sp.speciesId?.toString() === selectedSpecies
       );
-      if (selectedObservationSpecies) {
+      if (selectedObservationSpecies && selectedObservationSpecies.mortalityRate) {
+        setShowChart(true);
         const totalPlants = selectedObservationSpecies.totalPlants;
         const dead = (selectedObservationSpecies.mortalityRate * totalPlants) / 100;
         const live = totalPlants - dead;
@@ -63,15 +65,11 @@ export default function LiveDeadPlantsPerSpeciesCard({ observation }: LiveDeadPl
             options={allSpecies}
             selectedValue={selectedSpecies}
           />
-          <Box marginTop={theme.spacing(3)}>
-            <PieChart
-              chartId='liveDeadplantsBySpecies'
-              chartLabels={labels}
-              chartValues={values}
-              maxWidth='100%'
-              showLegend={true}
-            />
-          </Box>
+          {showChart && (
+            <Box marginTop={theme.spacing(3)}>
+              <PieChart chartId='liveDeadplantsBySpecies' chartLabels={labels} chartValues={values} maxWidth='100%' />
+            </Box>
+          )}
         </Box>
       }
     />

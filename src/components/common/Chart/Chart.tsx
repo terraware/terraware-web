@@ -23,7 +23,7 @@ const useStyles = makeStyles<Theme, StyleProps>(() => ({
 }));
 
 export interface ChartProps {
-  type?: keyof ChartTypeRegistry;
+  type: keyof ChartTypeRegistry;
   chartId: string;
   chartLabels?: string[];
   chartValues?: number[];
@@ -61,7 +61,7 @@ export default function Chart(props: ChartProps): JSX.Element | null {
 }
 
 interface ChartContentProps {
-  type?: keyof ChartTypeRegistry;
+  type: keyof ChartTypeRegistry;
   chartId: string;
   chartLabels: string[];
   chartValues: number[];
@@ -108,7 +108,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       if (ctx) {
         const colors = generateTerrawareRandomColors(theme, chartLabels?.length || 0);
         chartRef.current = await newChart(locale, ctx, {
-          type: type || 'bar',
+          type: type,
           data: {
             labels: chartLabels,
             datasets: [

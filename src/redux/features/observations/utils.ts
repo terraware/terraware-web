@@ -242,7 +242,6 @@ const mergeSpecies = (
     .map(
       (speciesObservation: ObservationSpeciesResultsPayload): ObservationSpeciesResults => ({
         ...speciesObservation,
-        mortalityRate: speciesObservation.mortalityRate || 0,
         speciesCommonName: species[speciesObservation.speciesId ?? -1].commonName,
         speciesScientificName: species[speciesObservation.speciesId ?? -1].scientificName,
       })
