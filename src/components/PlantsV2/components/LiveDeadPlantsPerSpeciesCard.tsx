@@ -39,7 +39,7 @@ export default function LiveDeadPlantsPerSpeciesCard({ observation }: LiveDeadPl
       );
       if (selectedObservationSpecies) {
         const totalPlants = selectedObservationSpecies.totalPlants;
-        const dead = selectedObservationSpecies.mortalityRate || (0 * totalPlants) / 100;
+        const dead = ((selectedObservationSpecies.mortalityRate || 0) * totalPlants) / 100;
         const live = totalPlants - dead;
         setValues([live, dead]);
       }
