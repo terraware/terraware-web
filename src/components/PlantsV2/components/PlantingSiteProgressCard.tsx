@@ -6,12 +6,12 @@ import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 
 type PlantingSiteProgressCardProps = {
-  plantingSiteId?: number;
+  plantingSiteId: number;
 };
 
 export default function PlantingSiteProgressCard({ plantingSiteId }: PlantingSiteProgressCardProps): JSX.Element {
   const theme = useTheme();
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId ?? -1));
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
   const totalArea = plantingSite?.areaHa ?? 0;
   const totalPlantedArea = useMemo(() => {
