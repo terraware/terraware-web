@@ -539,6 +539,8 @@ MONTH_12,December
 MORE_OPTIONS,More Options
 MORTALITY_RATE,Mortality Rate
 MORTALITY_RATE_BY_SPECIES,Mortality Rate by Species
+MORTALITY_RATE_CARD_TITLE,What is my mortality rate as of {0}?
+MORTALITY_RATE_CLARIFICATION,This is the total percentage of your plantings that have died across all species and zones, calculated from your latest observations.
 MORTALITY_RATE_IN_FIELD,Mortality Rate in Field (%)
 MORTALITY_RATE_IN_FIELD_REQUIRED,Mortality Rate in Field (%) *
 MORTALITY_RATE_IN_NURSERY,Mortality Rate in Nursery (%)

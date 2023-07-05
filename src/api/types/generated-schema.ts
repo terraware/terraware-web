@@ -245,6 +245,9 @@ export interface paths {
   "/api/v1/seedbank/values": {
     post: operations["listFieldValues"];
   };
+  "/api/v1/seedbank/values/all": {
+    post: operations["listAllFieldValues"];
+  };
   "/api/v1/species": {
     get: operations["listSpecies"];
     post: operations["createSpecies"];
@@ -347,6 +350,9 @@ export interface paths {
   "/api/v1/tracking/sites/{id}": {
     get: operations["getPlantingSite"];
     put: operations["updatePlantingSite"];
+  };
+  "/api/v1/tracking/sites/{id}/reportedPlants": {
+    get: operations["getPlantingSiteReportedPlants"];
   };
   "/api/v1/tracking/subzones/{id}": {
     put: operations["updatePlantingSubzone"];
@@ -471,7 +477,7 @@ export interface components {
       /** Format: int64 */
       facilityId: number;
       /** @description If true, plants from this accession's seeds were delivered to a planting site. */
-      hasDeliveries?: boolean;
+      hasDeliveries: boolean;
       /**
        * Format: int64
        * @description Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users.
@@ -1357,6 +1363,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       user: components["schemas"]["OrganizationUserPayload"];
     };
+    GetPlantingSiteReportedPlantsResponsePayload: {
+      site: components["schemas"]["PlantingSiteReportedPlantsPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetPlantingSiteResponsePayload: {
       site: components["schemas"]["PlantingSitePayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -1666,6 +1676,17 @@ export interface components {
       coordinates: unknown;
       type: unknown;
     };
+    ListAllFieldValuesRequestPayload: {
+      fields: string[];
+      /** Format: int64 */
+      organizationId: number;
+    };
+    ListAllFieldValuesResponsePayload: {
+      results: {
+        [key: string]: components["schemas"]["AllFieldValuesPayload"];
+      };
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListAssignedPlotsResponsePayload: {
       plots: components["schemas"]["AssignedPlotPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -1893,15 +1914,23 @@ export interface components {
       claimedByUserId?: number;
       /** Format: date-time */
       completedTime?: string;
+      /** @description True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
       isPermanent: boolean;
       /** Format: int64 */
       monitoringPlotId: number;
+      /** @description Full name of this monitoring plot, including zone and subzone prefixes. */
       monitoringPlotName: string;
-      /** Format: int32 */
-      mortalityRate: number;
+      /**
+       * Format: int32
+       * @description If this is a permanent monitoring plot in this observation, percentage of plants of all species that were dead.
+       */
+      mortalityRate?: number;
       notes?: string;
       photos: components["schemas"]["ObservationMonitoringPlotPhotoPayload"][];
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description Number of live plants per hectare.
+       */
       plantingDensity: number;
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       status: "Outstanding" | "InProgress" | "Completed";
@@ -1945,21 +1974,33 @@ export interface components {
       plantingSubzoneId: number;
     };
     ObservationPlantingZoneResultsPayload: {
+      /** @description Area of this planting zone in hectares. */
       areaHa: number;
       /** Format: date-time */
       completedTime?: string;
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description Estimated number of plants in planting zone based on estimated planting density and planting zone area. Only present if all the subzones in the zone have been marked as having completed planting.
+       */
+      estimatedPlants?: number;
+      /**
+       * Format: int32
+       * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
+       */
       mortalityRate: number;
       /**
        * Format: int32
-       * @description Estimated planting density for the zone, based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as finished planting.
+       * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
        */
       plantingDensity?: number;
       plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
       /** Format: int64 */
       plantingZoneId: number;
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
+       */
       totalPlants: number;
       /**
        * Format: int32
@@ -1970,13 +2011,21 @@ export interface components {
     ObservationResultsPayload: {
       /** Format: date-time */
       completedTime?: string;
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as having completed planting.
+       */
+      estimatedPlants?: number;
+      /**
+       * Format: int32
+       * @description Percentage of plants of all species that were dead in this site's permanent monitoring plots.
+       */
       mortalityRate: number;
       /** Format: int64 */
       observationId: number;
       /**
        * Format: int32
-       * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as finished planting.
+       * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as having completed planting.
        */
       plantingDensity?: number;
       /** Format: int64 */
@@ -1986,27 +2035,23 @@ export interface components {
       /** Format: date */
       startDate: string;
       state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
-      /**
-       * Format: int32
-       * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as finished planting.
-       */
-      totalPlants?: number;
       /** Format: int32 */
       totalSpecies: number;
     };
     ObservationSpeciesResultsPayload: {
       certainty: "Known" | "Other" | "Unknown";
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description Percentage of plants in permanent monitoring plots that are dead. If there are no permanent monitoring plots (or if this is a plot-level result for a temporary monitoring plot) this will be null.
+       */
       mortalityRate?: number;
-      /** Format: int64 */
+      /**
+       * Format: int64
+       * @description If certainty is Known, the ID of the species. Null if certainty is Other or Unknown.
+       */
       speciesId?: number;
+      /** @description If certainty is Other, the user-supplied name of the species. Null if certainty is Known or Unknown. */
       speciesName?: string;
-      /** Format: int32 */
-      totalDead: number;
-      /** Format: int32 */
-      totalExisting: number;
-      /** Format: int32 */
-      totalLive: number;
       /**
        * Format: int32
        * @description Total number of live and existing plants of this species.
@@ -2120,20 +2165,31 @@ export interface components {
        */
       timeZone?: string;
     };
+    PlantingSiteReportedPlantsPayload: {
+      /** Format: int64 */
+      id: number;
+      plantingZones: components["schemas"]["PlantingZoneReportedPlantsPayload"][];
+      /** Format: int32 */
+      plantsSinceLastObservation: number;
+      /** Format: int32 */
+      progressPercent?: number;
+      /** Format: int32 */
+      totalPlants: number;
+    };
     PlantingSubzonePayload: {
       /** @description Area of planting subzone in hectares. */
       areaHa: number;
       boundary: components["schemas"]["MultiPolygon"];
-      finishedPlanting: boolean;
-      /**
-       * Format: date-time
-       * @description When the planting subzone was marked as finished planting.
-       */
-      finishedPlantingTime?: string;
       fullName: string;
       /** Format: int64 */
       id: number;
       name: string;
+      plantingCompleted: boolean;
+      /**
+       * Format: date-time
+       * @description When planting of the planting subzone was marked as completed.
+       */
+      plantingCompletedTime?: string;
     };
     PlantingSubzoneSpeciesPayload: {
       commonName?: string;
@@ -2150,6 +2206,16 @@ export interface components {
       name: string;
       plantingSubzones: components["schemas"]["PlantingSubzonePayload"][];
       targetPlantingDensity: number;
+    };
+    PlantingZoneReportedPlantsPayload: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int32 */
+      plantsSinceLastObservation: number;
+      /** Format: int32 */
+      progressPercent: number;
+      /** Format: int32 */
+      totalPlants: number;
     };
     Point: components["schemas"]["Geometry"] & {
       /**
@@ -2869,7 +2935,7 @@ export interface components {
       timeZone?: string;
     };
     UpdatePlantingSubzoneRequestPayload: {
-      finishedPlanting: boolean;
+      plantingCompleted: boolean;
     };
     UpdateReportPhotoRequestPayload: {
       caption?: string;
@@ -4828,6 +4894,21 @@ export interface operations {
       };
     };
   };
+  listAllFieldValues: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAllFieldValuesResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
+      };
+    };
+  };
   listSpecies: {
     parameters: {
       query: {
@@ -5567,6 +5648,21 @@ export interface operations {
       };
     };
   };
+  getPlantingSiteReportedPlants: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetPlantingSiteReportedPlantsResponsePayload"];
+        };
+      };
+    };
+  };
   updatePlantingSubzone: {
     parameters: {
       path: {
@@ -6035,6 +6131,12 @@ export interface operations {
       };
       /** The specified accession doesn't exist. */
       404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** One of the requested changes couldn't be made because the accession is in a state that doesn't allow the change. */
+      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
