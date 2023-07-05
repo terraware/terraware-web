@@ -33,6 +33,7 @@ export interface BarChartProps {
   barWidth?: number;
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
+  showLegend?: boolean;
 }
 
 export default function BarChart(props: BarChartProps): JSX.Element | null {
@@ -71,6 +72,7 @@ interface BarChartContentProps {
   barWidth?: number;
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
+  showLegend?: boolean;
 }
 
 function BarChartContent(props: BarChartContentProps): JSX.Element {
@@ -86,6 +88,7 @@ function BarChartContent(props: BarChartContentProps): JSX.Element {
     barWidth,
     barAnnotations,
     yLimits,
+    showLegend,
   } = props;
   const classes = useStyles({ minHeight, maxWidth });
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -129,7 +132,7 @@ function BarChartContent(props: BarChartContentProps): JSX.Element {
             plugins: {
               annotation: barAnnotations,
               legend: {
-                display: false,
+                display: showLegend,
               },
               tooltip: {
                 displayColors: false,

@@ -70,6 +70,7 @@ export default function LiveDeadPlantsPerSpeciesCard({ observation }: LiveDeadPl
               chartLabels={labels}
               chartValues={values}
               maxWidth='100%'
+              showLegend={true}
             />
           </Box>
         </Box>
