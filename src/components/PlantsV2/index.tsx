@@ -19,6 +19,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
 import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
 import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
+import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -84,6 +85,9 @@ export default function PlantsDashboardV2(): JSX.Element {
       </Grid>
       <Grid item xs={isMobile ? 12 : 3}>
         <HighestAndLowestMortalityRateSpeciesCard observation={latestObservation} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 3}>
+        <LiveDeadPlantsPerSpeciesCard observation={latestObservation} />
       </Grid>
     </>
   );

@@ -4,7 +4,7 @@ import { Theme, useTheme } from '@mui/material';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 import { useLocalization } from 'src/providers';
 import { newChart } from './';
-import { Chart } from 'chart.js';
+import { Chart, ChartTypeRegistry } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
 
@@ -23,6 +23,7 @@ const useStyles = makeStyles<Theme, StyleProps>(() => ({
 }));
 
 export interface BarChartProps {
+  type?: keyof ChartTypeRegistry;
   chartId: string;
   chartLabels?: string[];
   chartValues?: number[];
@@ -35,7 +36,7 @@ export interface BarChartProps {
 }
 
 export default function BarChart(props: BarChartProps): JSX.Element | null {
-  const { chartLabels, chartValues } = props;
+  const { chartLabels, chartValues, type } = props;
   const { activeLocale } = useLocalization();
   const [locale, setLocale] = useState<string | null>(null);
 
@@ -59,6 +60,7 @@ export default function BarChart(props: BarChartProps): JSX.Element | null {
 }
 
 interface BarChartContentProps {
+  type?: keyof ChartTypeRegistry;
   chartId: string;
   chartLabels: string[];
   chartValues: number[];
@@ -73,6 +75,7 @@ interface BarChartContentProps {
 
 function BarChartContent(props: BarChartContentProps): JSX.Element {
   const {
+    type,
     chartId,
     chartLabels,
     chartValues,
@@ -102,7 +105,7 @@ function BarChartContent(props: BarChartContentProps): JSX.Element {
       if (ctx) {
         const colors = generateTerrawareRandomColors(theme, chartLabels?.length || 0);
         chartRef.current = await newChart(locale, ctx, {
-          type: 'bar',
+          type: type || 'bar',
           data: {
             labels: chartLabels,
             datasets: [
