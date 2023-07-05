@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/providers/DataTypes.ts</title>
+    <title>Code coverage report for src/components/PlantsV2/components/TotalMoratlityRateCard.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/providers</a> DataTypes.ts</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/PlantsV2/components</a> TotalMoratlityRateCard.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -101,12 +101,7 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a>
-<a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -119,15 +114,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -150,48 +140,43 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import { User } from 'src/types/User';
-import { Organization } from '../types/Organization';
-import { TimeZoneDescription } from '../types/TimeZones';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import strings from 'src/strings';
+import { Box, Typography, useTheme } from '@mui/material';
+import { getShortDate } from 'src/utils/dateFormatter';
+import { ObservationResults } from 'src/types/Observations';
+import { useLocalization } from 'src/providers';
 &nbsp;
-export type PreferencesType = { [key: string]: unknown };
-&nbsp;
-export type ProvidedUserData = {
-  user?: User;
-  reloadUser: () =&gt; void;
-  bootstrapped: boolean;
-  userPreferences: PreferencesType;
-  reloadUserPreferences: () =&gt; void;
-  updateUserPreferences: (preferences: PreferencesType) =&gt; Promise&lt;boolean&gt;;
+type TotalMortalityRateCardProps = {
+  observation?: ObservationResults;
 };
 &nbsp;
-export type ProvidedOrganizationData = {
-  selectedOrganization: Organization;
-  setSelectedOrganization: React.Dispatch&lt;React.SetStateAction&lt;Organization | undefined&gt;&gt;;
-  organizations: Organization[];
-  orgPreferences: PreferencesType;
-  reloadOrganizations: (selectedOrgId?: number) =&gt; void;
-  reloadOrgPreferences: () =&gt; void;
-  bootstrapped: boolean;
-  orgPreferenceForId: number;
-};
+export default function <span class="fstat-no" title="function not covered" >TotalMortalityRateCard(</span>{ observation }: TotalMortalityRateCardProps): JSX.Element {
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const locale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
-export type ProvidedLocalizationData = {
-  /**
-   * Which locale's strings are currently available from the "strings" module. This is usually what
-   * you'll want to use if you need to reference the user's current locale.
-   */
-  activeLocale: string | null;
-  /**
-   * Which locale has been selected in the locale selector. Strings for this locale may not be
-   * available yet if the user has just changed locales or if the page is still loading; only use
-   * this if you don't need to look up anything from the "strings" module.
-   */
-  selectedLocale: string;
-  setSelectedLocale: (locale: string) =&gt; void;
-  supportedTimeZones: TimeZoneDescription[];
-  bootstrapped: boolean;
-};
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;OverviewItemCard
+      isEditable={false}
+      contents={
+        &lt;Box display='flex' flexDirection='column'&gt;
+          &lt;Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}&gt;
+            {strings.formatString(
+              strings.MORTALITY_RATE_CARD_TITLE,
+              observation?.completedTime ? getShortDate(observation.completedTime, locale.activeLocale) : ''
+            )}
+          &lt;/Typography&gt;
+          &lt;Typography fontSize='84px' fontWeight={600} lineHeight={1}&gt;
+            {(observation?.mortalityRate ?? '0') + '%'}
+          &lt;/Typography&gt;
+          &lt;Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}&gt;
+            {strings.MORTALITY_RATE_CLARIFICATION}
+          &lt;/Typography&gt;
+        &lt;/Box&gt;
+      }
+    /&gt;
+  );
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -201,14 +186,14 @@ export type ProvidedLocalizationData = {
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
                 at 2023-07-05T14:15:36.944Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
     </body>
 </html>
     
