@@ -36,7 +36,7 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
   }, [activeLocale, events]);
 
   return (
-    <Box marginBottom={3} display='flex' flexGrow={1}>
+    <Box marginBottom={3} display='flex' flexDirection='column' width='100%'>
       <Message
         type='page'
         priority='info'
