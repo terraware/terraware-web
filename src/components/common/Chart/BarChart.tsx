@@ -36,7 +36,7 @@ export interface BarChartProps {
 }
 
 export default function BarChart(props: BarChartProps): JSX.Element | null {
-  const { chartLabels, chartValues, type } = props;
+  const { chartLabels, chartValues } = props;
   const { activeLocale } = useLocalization();
   const [locale, setLocale] = useState<string | null>(null);
 

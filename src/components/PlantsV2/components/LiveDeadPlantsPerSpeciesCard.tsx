@@ -7,7 +7,6 @@ import { ObservationResults } from 'src/types/Observations';
 import { Dropdown } from '@terraware/web-components';
 
 type LiveDeadPlantsPerSpeciesCardProps = {
-  plantingSiteId?: number;
   observation?: ObservationResults;
 };
 
