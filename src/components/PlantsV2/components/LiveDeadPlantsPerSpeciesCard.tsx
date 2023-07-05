@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
-import BarChart from 'src/components/common/Chart/BarChart';
 import { ObservationResults } from 'src/types/Observations';
 import { Dropdown } from '@terraware/web-components';
+import PieChart from 'src/components/common/Chart/PieChart';
 
 type LiveDeadPlantsPerSpeciesCardProps = {
   observation?: ObservationResults;
@@ -39,7 +39,7 @@ export default function LiveDeadPlantsPerSpeciesCard({ observation }: LiveDeadPl
       );
       if (selectedObservationSpecies) {
         const totalPlants = selectedObservationSpecies.totalPlants;
-        const dead = ((selectedObservationSpecies.mortalityRate || 0) * totalPlants) / 100;
+        const dead = (selectedObservationSpecies.mortalityRate * totalPlants) / 100;
         const live = totalPlants - dead;
         setValues([live, dead]);
       }
@@ -64,8 +64,7 @@ export default function LiveDeadPlantsPerSpeciesCard({ observation }: LiveDeadPl
             selectedValue={selectedSpecies}
           />
           <Box marginTop={theme.spacing(3)}>
-            <BarChart
-              type='pie'
+            <PieChart
               chartId='liveDeadplantsBySpecies'
               chartLabels={labels}
               chartValues={values}

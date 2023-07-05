@@ -56,7 +56,8 @@ export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationM
 
 // species related observation statistics
 export type ObservationSpeciesResultsPayload = components['schemas']['ObservationSpeciesResultsPayload'];
-export type ObservationSpeciesResults = ObservationSpeciesResultsPayload & {
+export type ObservationSpeciesResults = Omit<ObservationSpeciesResultsPayload, 'moralityRate'> & {
+  mortalityRate: number;
   speciesCommonName?: string;
   speciesScientificName: string;
 };
