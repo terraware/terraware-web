@@ -539,6 +539,8 @@ MONTH_12,Diciembre
 MORE_OPTIONS,Más opciones
 MORTALITY_RATE,Tasa de mortalidad
 MORTALITY_RATE_BY_SPECIES,Tasa de mortalidad por especie
+MORTALITY_RATE_CARD_TITLE,¿Cuál es mi índice de mortalidad hasta el {0}?
+MORTALITY_RATE_CLARIFICATION,Este es el porcentaje total de sus plantaciones que han muerto en todas las especies y zonas., calculated from your latest observations.
 MORTALITY_RATE_IN_FIELD,Tasa de mortalidad en campo (%)
 MORTALITY_RATE_IN_FIELD_REQUIRED,Tasa de mortalidad en el campo (%) *
 MORTALITY_RATE_IN_NURSERY,Tasa de mortalidad en vivero (%)
