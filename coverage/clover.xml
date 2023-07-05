@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1688566537288" clover="3.2.0">
-  <project timestamp="1688566537288" name="All files">
-    <metrics statements="10907" coveredstatements="359" conditionals="6871" coveredconditionals="90" methods="3352" coveredmethods="77" elements="21130" coveredelements="526" complexity="0" loc="10907" ncloc="10907" packages="100" files="443" classes="443"/>
+<coverage generated="1688587477840" clover="3.2.0">
+  <project timestamp="1688587477840" name="All files">
+    <metrics statements="10907" coveredstatements="359" conditionals="6885" coveredconditionals="90" methods="3352" coveredmethods="77" elements="21144" coveredelements="526" complexity="0" loc="10907" ncloc="10907" packages="100" files="443" classes="443"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -4266,24 +4266,24 @@
       <metrics statements="82" coveredstatements="0" conditionals="39" coveredconditionals="0" methods="31" coveredmethods="0"/>
       <file name="ObservationsDataView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/ObservationsDataView.tsx">
         <metrics statements="18" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="8" coveredmethods="0"/>
-        <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
       </file>
       <file name="ObservationsEventsNotification.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/ObservationsEventsNotification.tsx">
         <metrics statements="14" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="8" coveredmethods="0"/>
@@ -4360,7 +4360,7 @@
       </file>
     </package>
     <package name="src.components.Observations.common">
-      <metrics statements="50" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="14" coveredmethods="0"/>
+      <metrics statements="50" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="14" coveredmethods="0"/>
       <file name="AggregatedPlantsStats.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/common/AggregatedPlantsStats.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="28" count="0" type="stmt"/>
@@ -4398,12 +4398,12 @@
         <line num="90" count="0" type="stmt"/>
       </file>
       <file name="SpeciesMortalityRateChart.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/common/SpeciesMortalityRateChart.tsx">
-        <metrics statements="11" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="11" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
-        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="23" count="0" type="cond" truecount="0" falsecount="3"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
@@ -4425,9 +4425,9 @@
       </file>
     </package>
     <package name="src.components.Observations.details">
-      <metrics statements="54" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="19" coveredmethods="0"/>
+      <metrics statements="54" coveredstatements="0" conditionals="33" coveredconditionals="0" methods="19" coveredmethods="0"/>
       <file name="ObservationDetailsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/details/ObservationDetailsRenderer.tsx">
-        <metrics statements="13" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="13" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
@@ -4437,7 +4437,7 @@
         <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="21" count="0" type="stmt"/>
         <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="25" count="0" type="stmt"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="29" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
@@ -4554,7 +4554,7 @@
       </file>
     </package>
     <package name="src.components.Observations.org">
-      <metrics statements="32" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="12" coveredmethods="0"/>
+      <metrics statements="32" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="12" coveredmethods="0"/>
       <file name="OrgObservationsListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/org/OrgObservationsListView.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -4572,7 +4572,7 @@
         <line num="99" count="0" type="stmt"/>
       </file>
       <file name="OrgObservationsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/org/OrgObservationsRenderer.tsx">
-        <metrics statements="19" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="19" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
@@ -4590,7 +4590,7 @@
         <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="51" count="0" type="stmt"/>
         <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="55" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="58" count="0" type="stmt"/>
       </file>
     </package>
@@ -4629,9 +4629,9 @@
       </file>
     </package>
     <package name="src.components.Observations.zone">
-      <metrics statements="39" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="14" coveredmethods="0"/>
+      <metrics statements="39" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="14" coveredmethods="0"/>
       <file name="ObservationPlantingZoneRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/zone/ObservationPlantingZoneRenderer.tsx">
-        <metrics statements="15" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
@@ -4641,7 +4641,7 @@
         <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="23" count="0" type="stmt"/>
         <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="27" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="31" count="0" type="stmt"/>
         <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
