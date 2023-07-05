@@ -659,6 +659,7 @@ OBSERVATIONS_DOWNLOAD_APP,"To complete observations, download the Terraware app 
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Observations are when you record data from a sample of monitoring plots using our mobile app in the field. This allows us to calculate mortality rates, and eventually carbon sequestration."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"You will be notified when it is time to take your observations (typically, the next time you end a planting season). After you've completed your first observations, you'll see the records here."
 OBSERVATIONS_EMPTY_STATE_TITLE,No Observations Yet
+OBSERVATIONS_MAP_VIEW_PROMPT,"In order to access map view, please select a single planting site."
 OBSERVATIONS_REQUIRED_BY_DATE,{0} monitoring plots require observation by {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations with the Terraware App
 OBSERVER,Observer

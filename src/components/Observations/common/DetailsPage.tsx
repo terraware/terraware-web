@@ -72,13 +72,13 @@ export default function DetailsPage({
 
         data.push({
           name,
-          to: `/${observationId}`,
+          to: `/results/${observationId}`,
         });
 
         if (plantingZoneId) {
           data.push({
             name: plantingZone?.plantingZoneName ?? '',
-            to: `/${plantingZoneId}`,
+            to: `/zone/${plantingZoneId}`,
           });
         }
       }

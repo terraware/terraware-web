@@ -16,10 +16,10 @@ export default function SpeciesTotalPlantsChart({ minHeight, species }: SpeciesT
   const mortalityRates = useMemo((): Data => {
     const data: Data = { labels: [], values: [] };
 
-    species?.forEach((specie) => {
-      const { speciesCommonName, speciesName, speciesScientificName, mortalityRate } = specie;
+    species?.forEach((speciesData) => {
+      const { speciesCommonName, speciesName, speciesScientificName, mortalityRate } = speciesData;
 
-      if (mortalityRate !== undefined) {
+      if (mortalityRate !== undefined && mortalityRate !== null) {
         const label: string = speciesName ?? speciesCommonName ?? speciesScientificName;
         const value: number = mortalityRate;
         data.labels.push(label);
