@@ -20,6 +20,7 @@ import { PlantingSiteId } from 'src/services/TrackingService';
 import Card from 'src/components/common/Card';
 import isEnabled from 'src/features';
 import { getMonth } from 'src/utils/dateFormatter';
+import { useLocalization } from 'src/providers';
 
 type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
@@ -27,6 +28,7 @@ type CreatePlantingSiteProps = {
 
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { reloadPlantingSites } = props;
@@ -200,7 +202,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                             label={strings.PLANTING_SEASON_START}
                             id='planting-season-start'
                             type='text'
-                            value={getMonth(selectedPlantingSite?.plantingSeasonStartMonth)}
+                            value={getMonth(selectedPlantingSite?.plantingSeasonStartMonth, activeLocale)}
                             display={true}
                           />
                         </Grid>
@@ -209,7 +211,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                             label={strings.PLANTING_SEASON_END}
                             id='planting-season-end'
                             type='text'
-                            value={getMonth(selectedPlantingSite?.plantingSeasonEndMonth)}
+                            value={getMonth(selectedPlantingSite?.plantingSeasonEndMonth, activeLocale)}
                             display={true}
                           />
                         </Grid>

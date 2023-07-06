@@ -1,5 +1,3 @@
-import strings from 'src/strings';
-
 /**
  * Returns <Month> <Year> (eg. July 2023) from yyyy-mm-dd format
  */
@@ -22,12 +20,7 @@ export const getShortTime = (dateTime: string, locale: string | undefined | null
     .toLowerCase();
 
 // return string version for a month from number, eg. 1 -> January
-export const getMonth = (month?: number): string => {
-  const monthNumber = month?.toLocaleString('en-US', {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  });
-
-  const stringsMap = strings as any;
-  return stringsMap[`MONTH_${monthNumber}`] ?? '';
-};
+export const getMonth = (month: number | undefined | null, locale: string | undefined | null): string =>
+  month
+    ? new Intl.DateTimeFormat(locale || 'en-US', { month: 'long' }).format(new Date(Date.UTC(1969, month, 1, 0, 0, 0)))
+    : '';

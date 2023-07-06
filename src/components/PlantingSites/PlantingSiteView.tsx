@@ -17,6 +17,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import Card from 'src/components/common/Card';
 import isEnabled from 'src/features';
 import { getMonth } from 'src/utils/dateFormatter';
+import { useLocalization } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function PlantingSiteView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const { activeLocale } = useLocalization();
   const classes = useStyles();
   const theme = useTheme();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
@@ -116,7 +118,7 @@ export default function PlantingSiteView(): JSX.Element {
                   label={strings.PLANTING_SEASON_START}
                   id='planting-season-start'
                   type='text'
-                  value={getMonth(plantingSite?.plantingSeasonStartMonth)}
+                  value={getMonth(plantingSite?.plantingSeasonStartMonth, activeLocale)}
                   display={true}
                 />
               </Grid>
@@ -125,7 +127,7 @@ export default function PlantingSiteView(): JSX.Element {
                   label={strings.PLANTING_SEASON_END}
                   id='planting-season-end'
                   type='text'
-                  value={getMonth(plantingSite?.plantingSeasonEndMonth)}
+                  value={getMonth(plantingSite?.plantingSeasonEndMonth, activeLocale)}
                   display={true}
                 />
               </Grid>
