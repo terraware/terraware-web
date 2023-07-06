@@ -740,8 +740,6 @@ PLANTING_PROGRESS_DESCRIPTION_2,"Once your entire planting site has been marked 
 PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,What is my planting progress per zone?
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,This is your zone’s planting progress calculated from what has been reported in your nursery withdrawals.
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Once a zone has been marked as complete for planting and you’ve completed your observations, you’ll be able to view that zone’s planting density."
-PLANTING_SEASON_END,Planting Season End
-PLANTING_SEASON_START,Planting Season Start
 PLANTING_SITE,Planting Site
 PLANTING_SITE_TYPE,Planting Site Type
 PLANTING_SITE_WITH_MAP_HELP,"If you are a Terraformation partner or accelerator participant, please [contact us] to create a site with a map."
