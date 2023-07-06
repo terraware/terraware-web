@@ -38,7 +38,7 @@ export default function LiveDeadPlantsPerSpeciesCard({ observation }: LiveDeadPl
       const selectedObservationSpecies = observation?.species.find(
         (sp) => sp.speciesId?.toString() === selectedSpecies
       );
-      if (selectedObservationSpecies && selectedObservationSpecies.mortalityRate) {
+      if (selectedObservationSpecies && selectedObservationSpecies.mortalityRate !== undefined) {
         setShowChart(true);
         const totalPlants = selectedObservationSpecies.totalPlants;
         const dead = (selectedObservationSpecies.mortalityRate * totalPlants) / 100;
