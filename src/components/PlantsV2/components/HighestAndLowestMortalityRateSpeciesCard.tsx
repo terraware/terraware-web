@@ -20,9 +20,9 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
   let highestSpecies = '';
 
   observation?.species.forEach((sp) => {
-    if (sp.mortalityRate && sp.mortalityRate > highestMortalityRate) {
+    if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate >= highestMortalityRate) {
       highestMortalityRate = sp.mortalityRate;
-      highestSpecies = species?.find((iSpecies) => iSpecies.id === sp.speciesId)?.scientificName || '';
+      highestSpecies = species?.find((iSpecies) => iSpecies.id === sp.speciesId)?.scientificName ?? '';
     }
   });
 
@@ -30,9 +30,9 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
   let lowestSpecies = '';
 
   observation?.species.forEach((sp) => {
-    if (sp.mortalityRate && sp.mortalityRate < lowestMortalityRate) {
+    if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate <= lowestMortalityRate) {
       lowestMortalityRate = sp.mortalityRate;
-      lowestSpecies = species?.find((iSpecies) => iSpecies.id === sp.speciesId)?.scientificName || '';
+      lowestSpecies = species?.find((iSpecies) => iSpecies.id === sp.speciesId)?.scientificName ?? '';
     }
   });
 

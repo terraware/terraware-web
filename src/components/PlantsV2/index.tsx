@@ -22,6 +22,7 @@ import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulation
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
 import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
+import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -87,6 +88,9 @@ export default function PlantsDashboardV2(): JSX.Element {
       </Grid>
       <Grid item xs={isMobile ? 12 : 3}>
         <HighestAndLowestMortalityRateSpeciesCard observation={latestObservation} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 3}>
+        <LiveDeadPlantsPerSpeciesCard observation={latestObservation} />
       </Grid>
     </>
   );
