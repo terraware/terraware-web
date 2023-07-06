@@ -10,13 +10,16 @@ import { useOrganization } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
-import PlantsReportedPerSpeciesCard from 'src/components/PlantsV2/components/PlantsReportedPerSpeciesCard';
+import PlantsReportedPerSpeciesCard from './components/PlantsReportedPerSpeciesCard';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import NumberOfSpeciesPlantedCard from 'src/components/PlantsV2/components/NumberOfSpeciesPlantedCard';
+import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard';
+import PlantingSiteProgressCard from './components/PlantingSiteProgressCard';
 import ZoneLevelDataMap from './components/ZoneLevelDataMap';
 import { searchObservations } from 'src/redux/features/observations/observationsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
+import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
 import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
 
@@ -25,17 +28,17 @@ export default function PlantsDashboardV2(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const defaultTimeZone = useDefaultTimeZone();
   const dispatch = useAppDispatch();
-  const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState(-1);
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
 
-  const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
+  const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
     (preferences: Record<string, unknown>) => setPlantsDashboardPreferences(preferences),
     [setPlantsDashboardPreferences]
   );
 
   const observationsResults = useAppSelector((state) =>
-    searchObservations(state, selectedPlantingSite?.id ?? -1, defaultTimeZone.get().id, '', [])
+    searchObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, '', [])
   );
 
   const latestObservation = useMemo(() => {
@@ -62,8 +65,8 @@ export default function PlantsDashboardV2(): JSX.Element {
   }, [dispatch, org]);
 
   useEffect(() => {
-    dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSite?.id ?? -1));
-  }, [dispatch, org, selectedPlantingSite]);
+    dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSiteId));
+  }, [dispatch, org, selectedPlantingSiteId]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -92,14 +95,47 @@ export default function PlantsDashboardV2(): JSX.Element {
     <>
       {sectionHeader(strings.TOTAL_PLANTS_AND_SPECIES)}
       <Grid item xs={isMobile ? 12 : 4}>
-        <TotalReportedPlantsCard plantingSiteId={selectedPlantingSite?.id} />
+        <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 4}>
-        <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSite?.id} />
+        <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 4}>
-        <NumberOfSpeciesPlantedCard plantingSiteId={selectedPlantingSite?.id} />
+        <NumberOfSpeciesPlantedCard plantingSiteId={selectedPlantingSiteId} />
       </Grid>
+    </>
+  );
+
+  const hasObservations = !!latestObservation;
+
+  const populationResults = useAppSelector((state) => selectSitePopulation(state));
+  const hasReportedPlants = useMemo(() => {
+    const population =
+      populationResults
+        ?.flatMap((zone) => zone.plantingSubzones)
+        ?.flatMap((sz) => sz.populations)
+        ?.filter((pop) => pop !== undefined)
+        ?.reduce((acc, pop) => +pop.totalPlants + acc, 0) ?? 0;
+    return population > 0;
+  }, [populationResults]);
+
+  const plantingSiteResult = useAppSelector((state) => selectPlantingSite(state, selectedPlantingSiteId));
+  const sitePlantingComplete = useMemo(() => {
+    return (
+      plantingSiteResult?.plantingZones
+        ?.flatMap((zone) => zone.plantingSubzones)
+        ?.every((sz) => sz.plantingCompleted) ?? false
+    );
+  }, [plantingSiteResult]);
+
+  const renderPlantingProgressAndDensity = () => (
+    <>
+      {sectionHeader(sitePlantingComplete ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY)}
+      {!sitePlantingComplete && (
+        <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
+          <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      )}
     </>
   );
 
@@ -107,13 +143,13 @@ export default function PlantsDashboardV2(): JSX.Element {
     <>
       {sectionHeader(strings.ZONE_LEVEL_DATA)}
       <Grid item xs={12}>
-        <ZoneLevelDataMap plantingSiteId={selectedPlantingSite?.id} observation={latestObservation} />
+        <ZoneLevelDataMap plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
       </Grid>
     </>
   );
 
   const hasPolygons =
-    !!selectedPlantingSite && !!selectedPlantingSite.boundary && selectedPlantingSite.boundary.coordinates?.length > 0;
+    !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0;
 
   return (
     <PlantsPrimaryPage
@@ -127,6 +163,7 @@ export default function PlantsDashboardV2(): JSX.Element {
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderMortalityRate()}
         {renderTotalPlantsAndSpecies()}
+        {hasReportedPlants && renderPlantingProgressAndDensity()}
         {hasPolygons && renderZoneLevelData()}
       </Grid>
     </PlantsPrimaryPage>
