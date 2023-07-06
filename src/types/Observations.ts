@@ -15,7 +15,7 @@ type Boundary = {
 // expanded information on an observation including observed results down to monitoring plot level detail
 // requires navigating a tree of zone results -> subzone results -> ( species results | monitoring plot results )
 export type ObservationResultsPayload = components['schemas']['ObservationResultsPayload'];
-export type ObservationResults = ObservationResultsPayload &
+export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
   Boundary & {
     completedDate?: string;
     plantingSiteName: string;

@@ -1,7 +1,7 @@
 import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
 import Chart from './Chart';
 
-export interface BarChartProps {
+export interface PieChartProps {
   chartId: string;
   chartLabels?: string[];
   chartValues?: number[];
@@ -14,6 +14,6 @@ export interface BarChartProps {
   showLegend?: boolean;
 }
 
-export default function BarChart(props: BarChartProps): JSX.Element | null {
-  return <Chart {...props} type='bar' />;
+export default function PieChart(props: PieChartProps): JSX.Element | null {
+  return <Chart {...props} type='pie' showLegend={true} />;
 }
