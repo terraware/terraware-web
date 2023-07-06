@@ -490,6 +490,8 @@ LIKELY_INTERMEDIATE,Likely Intermediate,Option to indicate that a species' seed 
 LIKELY_ORTHODOX,Likely Orthodox,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
 LIKELY_RECALCITRANT,Likely Recalcitrant,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
 LIST,List
+LIVE,Live
+LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,How many live and dead plants are there per species?
 LOADING,Loading...
 LOCATION,Location
 LOCATION_REQUIRED,Location *
@@ -729,6 +731,10 @@ PLANT_ID_TOOLTIP,It’s the ID of a plant for tracking or conservation purpose. 
 PLANT_LABEL,Plant
 PLANTING_DENSITY,Planting Density
 PLANTING_DENSITY_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the planting density."
+PLANTING_PROGRESS_AND_DENSITY,Planting Progress and Density
+PLANTING_PROGRESS_CARD_TITLE,What is my site planting progress?
+PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress calculated from what has been reported in your nursery withdrawals.
+PLANTING_PROGRESS_DESCRIPTION_2,"Once your entire planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view your site’s planting density."
 PLANTING_SITE,Planting Site
 PLANTING_SITE_TYPE,Planting Site Type
 PLANTING_SITE_WITH_MAP_HELP,"If you are a Terraformation partner or accelerator participant, please [contact us] to create a site with a map."
