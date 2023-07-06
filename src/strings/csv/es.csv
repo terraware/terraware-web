@@ -490,6 +490,8 @@ LIKELY_INTERMEDIATE,Posiblemente intermedia,Option to indicate that a species' s
 LIKELY_ORTHODOX,Posiblemente ortodoxa,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
 LIKELY_RECALCITRANT,Posiblemente recalcitrante,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
 LIST,Lista
+LIVE,Directo
+LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,¿Cuántas plantas vivas y muertas hay por especie?
 LOADING,Cargando...
 LOCATION,Lugar
 LOCATION_REQUIRED,Lugar *
@@ -729,6 +731,10 @@ PLANT_ID_TOOLTIP,Es la identificación de una planta con fines de seguimiento o 
 PLANT_LABEL,Plantar
 PLANTING_DENSITY,Densidad de siembra
 PLANTING_DENSITY_MISSING_TOOLTIP,"Una vez que hayas marcado tu sitio de plantación como terminado y completado tus observaciones, podrás visualizar la densidad de la plantación."
+PLANTING_PROGRESS_AND_DENSITY,Progreso y densidad de plantación
+PLANTING_PROGRESS_CARD_TITLE,¿Cuál es el progreso de mi plantación?
+PLANTING_PROGRESS_DESCRIPTION_1,Se trata del progreso de plantación de tu centro calculado a partir de lo que se ha notificado en las retiradas de tu vivero.
+PLANTING_PROGRESS_DESCRIPTION_2,"Una vez que todo el lugar de plantación se haya marcado como completo para la plantación y hayas completado tus observaciones, podrás ver la densidad de plantación de tu centro."
 PLANTING_SITE,Lugar de plantación
 PLANTING_SITE_TYPE,Tipo de lugar de plantación
 PLANTING_SITE_WITH_MAP_HELP,"Si usted es un socio de Terraformation o un participante del acelerador, por favor [contáctenos] para crear un sitio con un mapa."
