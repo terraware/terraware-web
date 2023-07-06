@@ -5,10 +5,9 @@ import BarChart from 'src/components/common/Chart/BarChart';
 import React, { useEffect, useState } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { truncate } from 'src/utils/text';
 
 const MAX_ZONE_NAME_LENGTH = 20;
-
-const truncate = (s: string, len: number): string => (s.length <= len ? s : s.slice(0, len - 3) + '...');
 
 type PlantingProgressPerZoneCardProps = {
   plantingSiteId: number;
@@ -52,7 +51,7 @@ export default function PlantingProgressPerZoneCard({ plantingSiteId }: Planting
           </Typography>
           <Box marginBottom={theme.spacing(1.5)}>
             <BarChart
-              chartId='plantsBySpecies'
+              chartId='plantingProgressByZone'
               chartLabels={labels}
               chartValues={values}
               customTooltipTitles={tooltipTitles}
