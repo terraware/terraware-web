@@ -123,7 +123,8 @@ function ChartContent(props: ChartContentProps): JSX.Element {
 
       const ctx = canvasRef?.current?.getContext('2d');
       if (ctx) {
-        const colors = elementColor ?? generateTerrawareRandomColors(theme, chartData?.labels?.length || chartLabels?.length || 0);
+        const colors =
+          elementColor ?? generateTerrawareRandomColors(theme, chartData?.labels?.length || chartLabels?.length || 0);
         chartRef.current = await newChart(locale, ctx, {
           type,
           data: chartData
@@ -136,7 +137,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                   backgroundColor: ds.color ?? colors,
                   minBarLength: 3,
                   stack: index.toString(),
-                }))
+                })),
               }
             : {
                 labels: chartLabels,
