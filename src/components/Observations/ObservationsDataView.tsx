@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -57,7 +58,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   }, [upcomingObservations]);
 
   return (
-    <Grid container>
+    <Grid container display='flex' flexDirection='column'>
       <ObservationsEventsNotification events={observationsEvents} />
       <ListMapView
         initialView='list'
@@ -81,7 +82,7 @@ const AllPlantingSitesMapView = (): JSX.Element => {
   return (
     <Box textAlign='center' marginTop={6}>
       <Typography fontSize='18px' fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
-        Placeholder: Select a single planting site to view data
+        {strings.OBSERVATIONS_MAP_VIEW_PROMPT}
       </Typography>
     </Box>
   );

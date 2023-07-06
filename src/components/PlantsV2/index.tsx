@@ -21,6 +21,8 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
+import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -80,6 +82,12 @@ export default function PlantsDashboardV2(): JSX.Element {
       {sectionHeader(strings.MORTALITY_RATE)}
       <Grid item xs={isMobile ? 12 : 3}>
         <TotalMortalityRateCard observation={latestObservation} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 3}>
+        <HighestAndLowestMortalityRateZonesCard observation={latestObservation} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 3}>
+        <HighestAndLowestMortalityRateSpeciesCard observation={latestObservation} />
       </Grid>
     </>
   );
