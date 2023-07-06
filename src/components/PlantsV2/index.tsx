@@ -170,7 +170,7 @@ export default function PlantsDashboardV2(): JSX.Element {
         latestObservation?.completedTime
           ? (strings.formatString(
               strings.DASHBOARD_HEADER_TEXT,
-              <b>{strings.formatString(strings.SAMPLE_OF, 2000)}</b>,
+              <b>2000</b>,
               <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
             ) as string)
           : undefined
