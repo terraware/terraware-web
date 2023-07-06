@@ -30,6 +30,7 @@ export interface BarChartProps {
   minHeight?: string;
   maxWidth?: string;
   barWidth?: number;
+  barColor?: string;
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
 }
@@ -67,6 +68,7 @@ interface BarChartContentProps {
   maxWidth?: string;
   locale: string;
   barWidth?: number;
+  barColor?: string;
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
 }
@@ -81,6 +83,7 @@ function BarChartContent(props: BarChartContentProps): JSX.Element {
     maxWidth,
     locale,
     barWidth,
+    barColor,
     barAnnotations,
     yLimits,
   } = props;
@@ -100,7 +103,7 @@ function BarChartContent(props: BarChartContentProps): JSX.Element {
 
       const ctx = canvasRef?.current?.getContext('2d');
       if (ctx) {
-        const colors = generateTerrawareRandomColors(theme, chartLabels?.length || 0);
+        const colors = barColor ?? generateTerrawareRandomColors(theme, chartLabels?.length || 0);
         chartRef.current = await newChart(locale, ctx, {
           type: 'bar',
           data: {
