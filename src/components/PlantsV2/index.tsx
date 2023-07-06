@@ -6,7 +6,7 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { Grid, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSites, requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
@@ -24,6 +24,7 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
 import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
 import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
+import { getShortDate } from 'src/utils/dateFormatter';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -32,6 +33,7 @@ export default function PlantsDashboardV2(): JSX.Element {
   const dispatch = useAppDispatch();
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState(-1);
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
+  const locale = useLocalization();
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
@@ -164,6 +166,15 @@ export default function PlantsDashboardV2(): JSX.Element {
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
+      text={
+        latestObservation?.completedTime
+          ? (strings.formatString(
+              strings.DASHBOARD_HEADER_TEXT,
+              <b>{strings.formatString(strings.SAMPLE_OF, 2000)}</b>,
+              <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
+            ) as string)
+          : undefined
+      }
       onSelect={onSelect}
       pagePath={APP_PATHS.PLANTING_SITE_DASHBOARD}
       lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'

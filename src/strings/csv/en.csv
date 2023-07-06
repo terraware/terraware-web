@@ -199,6 +199,7 @@ CUSTOMIZE_TABLE_COLUMNS,Customize table columns
 CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Select columns you want to add. Deselect columns you want to remove.
 CUT_TEST,Cut Test
 DASHBOARD,Dashboard
+DASHBOARD_HEADER_TEXT,The data on this dashboard is based on a {0} from the {1} observation.
 DASHBOARD_MESSAGE,Your seeds dashboard will automatically populate with data as you add accessions.
 DASHBOARD_MESSAGE_TITLE,Add Accessions to See Data
 DATA_CHECK_COMPLETED,Database check complete. No errors were found!
@@ -876,6 +877,7 @@ ROLES_INFO,Select a role for this person.
 ROWS_SELECTED,{0} selected
 RUN_A_DATABASE_CHECK,Run a Database Check
 S_SEED_COUNT,seed count
+SAMPLE_OF,sample of {0} hectares
 SAND,Sand
 SAND_PETRI_DISH,Sand Petri Dish
 SAVE,Save
