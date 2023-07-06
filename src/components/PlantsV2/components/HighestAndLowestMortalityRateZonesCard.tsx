@@ -18,7 +18,7 @@ export default function TotalMortalityRateCard({ observation }: HighestAndLowest
   let highestMortalityRate = 0;
   let highestZoneId: number;
   observation?.plantingZones.forEach((zone) => {
-    if (zone.mortalityRate !== undefined && zone.mortalityRate != null && zone.mortalityRate >= highestMortalityRate) {
+    if (zone.mortalityRate !== undefined && zone.mortalityRate !== null && zone.mortalityRate >= highestMortalityRate) {
       highestMortalityRate = zone.mortalityRate;
       highestZoneId = zone.plantingZoneId;
     }
@@ -27,7 +27,7 @@ export default function TotalMortalityRateCard({ observation }: HighestAndLowest
   let lowestMortalityRate = 100;
   let lowestZoneId: number;
   observation?.plantingZones.forEach((zone) => {
-    if (zone.mortalityRate !== undefined && zone.mortalityRate != null && zone.mortalityRate <= lowestMortalityRate) {
+    if (zone.mortalityRate !== undefined && zone.mortalityRate !== null && zone.mortalityRate <= lowestMortalityRate) {
       lowestMortalityRate = zone.mortalityRate;
       lowestZoneId = zone.plantingZoneId;
     }
