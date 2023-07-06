@@ -22,7 +22,7 @@ const ObservationDetailsRenderer =
     }
 
     if (column.key === 'mortalityRate') {
-      return <CellRenderer {...props} value={`${value}%`} />;
+      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value}%` : ''} />;
     }
 
     if (column.key === 'status') {
