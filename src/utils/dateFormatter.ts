@@ -18,3 +18,9 @@ export const getShortTime = (dateTime: string, locale: string | undefined | null
   new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' })
     .format(new Date(dateTime))
     .toLowerCase();
+
+// return string version for a month from number, eg. 1 -> January
+export const getMonth = (month: number | undefined | null, locale: string | undefined | null): string =>
+  month
+    ? new Intl.DateTimeFormat(locale || 'en-US', { month: 'long' }).format(new Date(Date.UTC(1969, month, 1, 0, 0, 0)))
+    : '';

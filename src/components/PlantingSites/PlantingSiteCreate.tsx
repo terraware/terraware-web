@@ -17,6 +17,10 @@ import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import { PlantingSiteId } from 'src/services/TrackingService';
+import Card from 'src/components/common/Card';
+import isEnabled from 'src/features';
+import { getMonth } from 'src/utils/dateFormatter';
+import { useLocalization } from 'src/providers';
 
 type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
@@ -24,6 +28,7 @@ type CreatePlantingSiteProps = {
 
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { reloadPlantingSites } = props;
@@ -33,6 +38,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const [nameError, setNameError] = useState('');
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [loaded, setLoaded] = useState(false);
+  const trackingV2 = isEnabled('TrackingV2');
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
@@ -135,7 +141,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         onCancel={() => goToPlantingSite(record.id)}
         onSave={savePlantingSite}
       >
-        <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
           {loaded && (
             <>
               <Grid
@@ -161,13 +167,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                   </Typography>
                 </Box>
                 <PageSnackbar />
-                <Box
-                  sx={{
-                    backgroundColor: theme.palette.TwClrBg,
-                    borderRadius: '32px',
-                    padding: theme.spacing(3),
-                  }}
-                >
+                <Card flushMobile>
                   <Grid container spacing={3} flexGrow={0}>
                     <Grid item xs={gridSize()}>
                       <TextField
@@ -195,10 +195,36 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                         tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
                       />
                     </Grid>
+                    {trackingV2 && selectedPlantingSite && (
+                      <>
+                        <Grid item xs={gridSize()} marginTop={isMobile ? 1 : 0}>
+                          <TextField
+                            label={strings.PLANTING_SEASON_START}
+                            id='planting-season-start'
+                            type='text'
+                            value={getMonth(selectedPlantingSite?.plantingSeasonStartMonth, activeLocale)}
+                            display={true}
+                          />
+                        </Grid>
+                        <Grid item xs={gridSize()}>
+                          <TextField
+                            label={strings.PLANTING_SEASON_END}
+                            id='planting-season-end'
+                            type='text'
+                            value={getMonth(selectedPlantingSite?.plantingSeasonEndMonth, activeLocale)}
+                            display={true}
+                          />
+                        </Grid>
+                      </>
+                    )}
                   </Grid>
-                </Box>
+                  {record?.boundary && (
+                    <Grid item xs={12}>
+                      <BoundariesAndZones plantingSite={record} />
+                    </Grid>
+                  )}
+                </Card>
               </Grid>
-              {record?.boundary && <BoundariesAndZones plantingSite={record} />}
             </>
           )}
         </Container>

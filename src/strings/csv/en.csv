@@ -731,6 +731,8 @@ PLANT_ID_TOOLTIP,It’s the ID of a plant for tracking or conservation purpose. 
 PLANT_LABEL,Plant
 PLANTING_DENSITY,Planting Density
 PLANTING_DENSITY_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the planting density."
+PLANTING_SEASON_END,Planting Season End
+PLANTING_SEASON_START,Planting Season Start
 PLANTING_PROGRESS_AND_DENSITY,Planting Progress and Density
 PLANTING_PROGRESS_CARD_TITLE,What is my site planting progress?
 PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress calculated from what has been reported in your nursery withdrawals.
