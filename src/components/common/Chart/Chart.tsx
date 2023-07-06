@@ -10,6 +10,17 @@ import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options
 
 ChartJS.register(annotationPlugin);
 
+type ChartDataset = {
+  color?: string;
+  values: number[];
+  label?: string;
+};
+
+export type ChartData = {
+  labels: string[];
+  datasets: ChartDataset[];
+};
+
 export interface StyleProps {
   minHeight?: string;
   maxWidth?: string;
@@ -27,6 +38,7 @@ export interface ChartProps {
   chartId: string;
   chartLabels?: string[];
   chartValues?: number[];
+  chartData?: ChartData;
   customTooltipTitles?: string[];
   minHeight?: string;
   maxWidth?: string;
@@ -66,6 +78,7 @@ interface ChartContentProps {
   chartId: string;
   chartLabels: string[];
   chartValues: number[];
+  chartData?: ChartData;
   customTooltipTitles?: string[];
   minHeight?: string;
   maxWidth?: string;
@@ -83,6 +96,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     chartId,
     chartLabels,
     chartValues,
+    chartData,
     customTooltipTitles,
     minHeight,
     maxWidth,
@@ -109,20 +123,32 @@ function ChartContent(props: ChartContentProps): JSX.Element {
 
       const ctx = canvasRef?.current?.getContext('2d');
       if (ctx) {
-        const colors = elementColor ?? generateTerrawareRandomColors(theme, chartLabels?.length || 0);
+        const colors = elementColor ?? generateTerrawareRandomColors(theme, chartData?.labels?.length || chartLabels?.length || 0);
         chartRef.current = await newChart(locale, ctx, {
           type,
-          data: {
-            labels: chartLabels,
-            datasets: [
-              {
-                data: chartValues,
-                barThickness,
-                backgroundColor: colors,
-                minBarLength: 3,
+          data: chartData
+            ? {
+                labels: chartData.labels,
+                datasets: chartData.datasets.map((ds, index) => ({
+                  label: ds.label,
+                  data: ds.values,
+                  barThickness,
+                  backgroundColor: ds.color ?? colors,
+                  minBarLength: 3,
+                  stack: index.toString(),
+                }))
+              }
+            : {
+                labels: chartLabels,
+                datasets: [
+                  {
+                    data: chartValues,
+                    barThickness,
+                    backgroundColor: colors,
+                    minBarLength: 3,
+                  },
+                ],
               },
-            ],
-          },
           options: {
             maintainAspectRatio: false,
             layout: {
