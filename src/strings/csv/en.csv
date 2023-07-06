@@ -467,7 +467,7 @@ LEARN_MORE_GROWTH_FORM_FERN,"A non-flowering vascular plant that reproduces by s
 LEARN_MORE_GROWTH_FORM_FORB,"A herbaceous (non-woody) plant that is NOT a graminoid (grass, sedge, or rush)."
 LEARN_MORE_GROWTH_FORM_FUNGUS,"Usually a eukaryotic organism (non-plant) that is heterotrophic (cannot produce its own food), grows in filaments (hyphae), and produces spores."
 LEARN_MORE_GROWTH_FORM_GRAMINOID,"A herbaceous (non-woody) plant with a grass-like morphology, that is elongated culms with long, blade-like leaves, in the grass, sedge, or rush family."
-LEARN_MORE_GROWTH_FORM_LIANA,"A climbing plant, often found in tropical rainforests, that hangs from trees."
+LEARN_MORE_GROWTH_FORM_LIANA,"A vine/climbing plant with woody stems reaching >10m length."
 LEARN_MORE_GROWTH_FORM_LICHEN,"A symbiotic cluster of fungus and alga, fungus being the dominant partner, lending to its thallus shape and fruiting body."
 LEARN_MORE_GROWTH_FORM_MOSS,"A non-vascular flowerless plant typically formed as dense green clumps or mats, often in damp or shady locations."
 LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS,A plant that can grow in more than one form.
@@ -475,9 +475,9 @@ LEARN_MORE_GROWTH_FORM_SHRUB,A woody plant which is smaller than a tree and has 
 LEARN_MORE_GROWTH_FORM_SHRUB_TREE,A plant that can be in the form of either a shrub or a tree.
 LEARN_MORE_GROWTH_FORM_SUBSHRUB,"A dwarf shrub, usually only woody at its base."
 LEARN_MORE_GROWTH_FORM_TREE,"A woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground."
-LEARN_MORE_GROWTH_FORM_VINE,A climbing or trailing plant with a woody stem.
+LEARN_MORE_GROWTH_FORM_VINE,"Any plant with long, flexible, climbing stems (term often used for herbaceous climbers)"
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Seeds are between orthodox and recalcitrant seeds in their behavior; may include tolerating partial desiccation, tolerating cool but not freezing temperatures, or being short-lived regardless of storage conditions."
-LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"Seeds are believed to have a behavior, but this has not yet been scientifically confirmed."
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"Scientific evidence suggests this seed storage behavior, but further research is needed to confirm."
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Seeds tolerate levels of desiccation required for frozen storage (5-8% moisture content) and temperatures of -20°C or lower.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Seeds do not tolerate levels of desiccation required for ex situ (off-site) conservation.
 LEAVE_AND_SAVE,Leave and Save
