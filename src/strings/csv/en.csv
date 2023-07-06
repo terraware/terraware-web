@@ -490,7 +490,7 @@ LIKELY_INTERMEDIATE,Likely Intermediate,Option to indicate that a species' seed 
 LIKELY_ORTHODOX,Likely Orthodox,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
 LIKELY_RECALCITRANT,Likely Recalcitrant,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
 LIST,List
-LIVE,Live,
+LIVE,Live
 LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,How many live and dead plants are there per species?
 LOADING,Loading...
 LOCATION,Location

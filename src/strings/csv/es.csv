@@ -386,6 +386,9 @@ GRAMINOID,Gramínea
 GRAMS,Gramos
 GREATER_THAN_FIFTY_PERCENT,> 50%
 GROWTH_FORM,Forma de crecimiento
+HIGHEST,Más alta
+HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,¿Qué zonas tienen la tasa de mortalidad más alta y más baja?
+HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,¿Qué especie tiene la tasa de mortalidad más alta y cuál la más baja?
 HISTORY,Historia
 HOME,Inicio
 HOW_MANY_PLANTS_CARD_TITLE,¿Cuantas plantas he reportado para plantar?
@@ -487,6 +490,8 @@ LIKELY_INTERMEDIATE,Posiblemente intermedia,Option to indicate that a species' s
 LIKELY_ORTHODOX,Posiblemente ortodoxa,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
 LIKELY_RECALCITRANT,Posiblemente recalcitrante,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
 LIST,Lista
+LIVE,Directo
+LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,¿Cuántas plantas vivas y muertas hay por especie?
 LOADING,Cargando...
 LOCATION,Lugar
 LOCATION_REQUIRED,Lugar *
@@ -494,6 +499,7 @@ LOCATIONS,Lugares
 LOCKED,Bloqueado
 LOG_OUT,Cerrar sesión
 LOSS_RATE,Tasa de pérdidas
+LOWEST,Más baja
 MANAGER,Gestor
 MANAGER_INFO,"Un administrador puede hacer lo anterior, además de editar la entradas de datos para semillas y gestionar los retiros de plantas en campo, sitios de plantación y especies."
 MAP,Mapa
@@ -539,6 +545,8 @@ MONTH_12,Diciembre
 MORE_OPTIONS,Más opciones
 MORTALITY_RATE,Tasa de mortalidad
 MORTALITY_RATE_BY_SPECIES,Tasa de mortalidad por especie
+MORTALITY_RATE_CARD_TITLE,¿Cuál es mi índice de mortalidad hasta el {0}?
+MORTALITY_RATE_CLARIFICATION,Este es el porcentaje total de sus plantaciones que han muerto en todas las especies y zonas., calculated from your latest observations.
 MORTALITY_RATE_IN_FIELD,Tasa de mortalidad en campo (%)
 MORTALITY_RATE_IN_FIELD_REQUIRED,Tasa de mortalidad en el campo (%) *
 MORTALITY_RATE_IN_NURSERY,Tasa de mortalidad en vivero (%)
@@ -650,13 +658,14 @@ NURSERY_TRANSFER,Traslado de vivero
 OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para {0} para el/los lugar(es) de plantación: {1},"Example: Observation event is scheduled for June 1, 2023 for planting site(s): Site-A, Site-B"
 OBSERVATION_IN_PROGRESS,Observación en progreso
 OBSERVATION_STATUS,Estado de la observación
-OBSERVATION_STATUS_OUTSTANDING,Sobresaliente,Remaining to be done
+OBSERVATION_STATUS_OUTSTANDING,Pendiente,Remaining to be done
 OBSERVATIONS,Observaciones
 OBSERVATIONS_COMPLETION_PERCENTAGE,Las observaciones para {0} de {1} parcelas de monitoreo ({2}%) se han completado.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
 OBSERVATIONS_DOWNLOAD_APP,"Para completar las observaciones, descargue la aplicación de Terraware en App Store o Google Play"
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Las observaciones son cuando registra datos de una plantilla de parcelas de seguimiento usando nuestra aplicación móvil en el campo. Esto nos permite calcular las tasas de mortalidad, y eventualmente el secuestro de carbono."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"Recibirá una notificación cuando sea momento de llevar sus observaciones (por lo general, la próxima vez que termine una temporada de plantación). Después de completar sus primeras observaciones, verá los registros aquí."
 OBSERVATIONS_EMPTY_STATE_TITLE,Aún no hay observaciones
+OBSERVATIONS_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, por favor selecciona un solo sitio de plantación."
 OBSERVATIONS_REQUIRED_BY_DATE,Los parcelas de monitoreo de {0} requieren observación por {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observaciones con la aplicación Terraware
 OBSERVER,Observador
@@ -722,6 +731,10 @@ PLANT_ID_TOOLTIP,Es la identificación de una planta con fines de seguimiento o 
 PLANT_LABEL,Plantar
 PLANTING_DENSITY,Densidad de siembra
 PLANTING_DENSITY_MISSING_TOOLTIP,"Una vez que hayas marcado tu sitio de plantación como terminado y completado tus observaciones, podrás visualizar la densidad de la plantación."
+PLANTING_PROGRESS_AND_DENSITY,Progreso y densidad de plantación
+PLANTING_PROGRESS_CARD_TITLE,¿Cuál es el progreso de mi plantación?
+PLANTING_PROGRESS_DESCRIPTION_1,Se trata del progreso de plantación de tu centro calculado a partir de lo que se ha notificado en las retiradas de tu vivero.
+PLANTING_PROGRESS_DESCRIPTION_2,"Una vez que todo el lugar de plantación se haya marcado como completo para la plantación y hayas completado tus observaciones, podrás ver la densidad de plantación de tu centro."
 PLANTING_SITE,Lugar de plantación
 PLANTING_SITE_TYPE,Tipo de lugar de plantación
 PLANTING_SITE_WITH_MAP_HELP,"Si usted es un socio de Terraformation o un participante del acelerador, por favor [contáctenos] para crear un sitio con un mapa."
