@@ -66,7 +66,7 @@ export default function PlantsReportedPerSpeciesCard({
           </Typography>
           <Box>
             <BarChart
-              bgColor={theme.palette.TwClrBasePurple300}
+              elementColor={theme.palette.TwClrBasePurple300}
               chartId='plantsBySpecies'
               chartLabels={labels}
               chartValues={values}

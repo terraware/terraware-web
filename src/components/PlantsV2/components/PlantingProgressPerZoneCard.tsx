@@ -51,7 +51,7 @@ export default function PlantingProgressPerZoneCard({ plantingSiteId }: Planting
           </Typography>
           <Box marginBottom={theme.spacing(1.5)}>
             <BarChart
-              bgColor={theme.palette.TwClrBgBrand}
+              elementColor={theme.palette.TwClrBgBrand}
               chartId='plantingProgressByZone'
               chartLabels={labels}
               chartValues={values}
