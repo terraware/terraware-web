@@ -9,6 +9,7 @@ export interface BarChartProps {
   minHeight?: string;
   maxWidth?: string;
   barWidth?: number;
+  elementColor?: string;
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
   showLegend?: boolean;

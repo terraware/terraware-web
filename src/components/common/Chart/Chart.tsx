@@ -31,6 +31,7 @@ export interface ChartProps {
   minHeight?: string;
   maxWidth?: string;
   barWidth?: number;
+  elementColor?: string;
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
   showLegend?: boolean;
@@ -70,6 +71,7 @@ interface ChartContentProps {
   maxWidth?: string;
   locale: string;
   barWidth?: number;
+  elementColor?: string;
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
   showLegend?: boolean;
@@ -86,6 +88,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     maxWidth,
     locale,
     barWidth,
+    elementColor,
     barAnnotations,
     yLimits,
     showLegend,
@@ -106,7 +109,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
 
       const ctx = canvasRef?.current?.getContext('2d');
       if (ctx) {
-        const colors = generateTerrawareRandomColors(theme, chartLabels?.length || 0);
+        const colors = elementColor ?? generateTerrawareRandomColors(theme, chartLabels?.length || 0);
         chartRef.current = await newChart(locale, ctx, {
           type,
           data: {
