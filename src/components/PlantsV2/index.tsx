@@ -163,6 +163,18 @@ export default function PlantsDashboardV2(): JSX.Element {
   const hasPolygons =
     !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0;
 
+  const getObservationHectares = () => {
+    let observationMonitoringPlots = 0;
+    latestObservation?.plantingZones.forEach((pz) => {
+      pz.plantingSubzones.forEach((psz) => {
+        observationMonitoringPlots += psz.monitoringPlots.length;
+      });
+    });
+    const monitoringPlotHa = 0.0625;
+    const totalHa = observationMonitoringPlots * monitoringPlotHa;
+    return totalHa;
+  };
+
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
@@ -170,7 +182,7 @@ export default function PlantsDashboardV2(): JSX.Element {
         latestObservation?.completedTime
           ? (strings.formatString(
               strings.DASHBOARD_HEADER_TEXT,
-              <b>2000</b>,
+              <b>{getObservationHectares()}</b>,
               <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
             ) as string)
           : undefined
