@@ -28,19 +28,18 @@ export default function SpeciesTotalPlantsChart({ minHeight, species }: SpeciesT
     return data;
   }, [species]);
 
+  const chartData = useMemo(() => {
+    return {
+      labels: totals.labels,
+      datasets: [
+        {
+          values: totals.values,
+        },
+      ],
+    };
+  }, [totals]);
+
   return (
-    <BarChart
-      chartId='observationsTotalPlantsBySpecies'
-      chartData={{
-        labels: totals.labels,
-        datasets: [
-          {
-            values: totals.values,
-          },
-        ],
-      }}
-      barWidth={0}
-      minHeight={minHeight}
-    />
+    <BarChart chartId='observationsTotalPlantsBySpecies' chartData={chartData} barWidth={0} minHeight={minHeight} />
   );
 }
