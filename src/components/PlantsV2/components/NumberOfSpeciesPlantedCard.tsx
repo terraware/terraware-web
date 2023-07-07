@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
@@ -60,6 +60,21 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
     }
   }, [populationSelector, speciesSelector]);
 
+  const chartData = useMemo(() => {
+    if (!labels?.length || !values?.length) {
+      return undefined;
+    }
+
+    return {
+      labels: labels ?? [],
+      datasets: [
+        {
+          values: values ?? [],
+        },
+      ],
+    };
+  }, [labels, values]);
+
   const getBarAnnotations = useCallback(() => {
     if (!values || !labels) {
       return undefined;
@@ -101,9 +116,8 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
           </Box>
           <Box>
             <BarChart
-              chartId='plantsBySpecies'
-              chartLabels={labels}
-              chartValues={values}
+              chartId='speciesByCategory'
+              chartData={chartData}
               maxWidth='100%'
               minHeight='100px'
               barAnnotations={getBarAnnotations()}

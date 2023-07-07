@@ -2,7 +2,7 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import BarChart from 'src/components/common/Chart/BarChart';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { truncate } from 'src/utils/text';
@@ -41,6 +41,21 @@ export default function PlantingProgressPerZoneCard({ plantingSiteId }: Planting
     }
   }, [plantingSite]);
 
+  const chartData = useMemo(() => {
+    if (!labels?.length || !values?.length) {
+      return undefined;
+    }
+
+    return {
+      labels: labels ?? [],
+      datasets: [
+        {
+          values: values ?? [],
+        },
+      ],
+    };
+  }, [labels, values]);
+
   return (
     <OverviewItemCard
       isEditable={false}
@@ -53,8 +68,7 @@ export default function PlantingProgressPerZoneCard({ plantingSiteId }: Planting
             <BarChart
               elementColor={theme.palette.TwClrBgBrand}
               chartId='plantingProgressByZone'
-              chartLabels={labels}
-              chartValues={values}
+              chartData={chartData}
               customTooltipTitles={tooltipTitles}
               maxWidth='100%'
               yLimits={{ min: 0, max: 100 }}

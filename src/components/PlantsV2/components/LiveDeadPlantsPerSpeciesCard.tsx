@@ -71,7 +71,18 @@ export default function LiveDeadPlantsPerSpeciesCard({ observation }: LiveDeadPl
           />
           {showChart && (
             <Box marginTop={theme.spacing(3)}>
-              <PieChart chartId='liveDeadplantsBySpecies' chartLabels={labels} chartValues={values} maxWidth='100%' />
+              <PieChart
+                chartId='liveDeadplantsBySpecies'
+                chartData={{
+                  labels: labels ?? [],
+                  datasets: [
+                    {
+                      values: values ?? [],
+                    },
+                  ],
+                }}
+                maxWidth='100%'
+              />
             </Box>
           )}
         </Box>
