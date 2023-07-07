@@ -30,16 +30,17 @@ export default function SpeciesTotalPlantsChart({ minHeight, species }: SpeciesT
     return data;
   }, [species]);
 
-  const chartData = useMemo(() => {
-    return {
+  const chartData = useMemo(
+    () => ({
       labels: mortalityRates.labels,
       datasets: [
         {
           values: mortalityRates.values,
         },
       ],
-    };
-  }, [mortalityRates]);
+    }),
+    [mortalityRates]
+  );
 
   return (
     <BarChart chartId='observationsMortalityRateBySpecies' chartData={chartData} barWidth={0} minHeight={minHeight} />
