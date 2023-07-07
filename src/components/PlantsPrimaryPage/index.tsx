@@ -9,6 +9,7 @@ import PlantsPrimaryPageView from './PlantsPrimaryPageView';
 
 export type PlantsPrimaryPageProps = {
   title: string;
+  text?: string;
   children: React.ReactNode; // primary content for this page
   onSelect: (plantingSite: PlantingSite) => void; // planting site selected, id of -1 refers to All
   pagePath: string;
@@ -29,6 +30,7 @@ const allSitesOption = (organizationId: number): PlantingSite => ({
 
 export default function PlantsPrimaryPage({
   title,
+  text,
   children,
   onSelect,
   pagePath,
@@ -127,6 +129,7 @@ export default function PlantsPrimaryPage({
   return (
     <PlantsPrimaryPageView
       title={title}
+      text={text}
       children={children}
       plantingSites={plantingSites}
       selectedPlantingSiteId={selectedPlantingSite?.id}
