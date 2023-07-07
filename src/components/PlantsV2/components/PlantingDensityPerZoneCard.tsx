@@ -7,6 +7,8 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import BarChart from 'src/components/common/Chart/BarChart';
 import { ObservationResults } from 'src/types/Observations';
+import { getShortDate } from 'src/utils/dateFormatter';
+import { useLocalization } from 'src/providers';
 
 const MAX_ZONE_NAME_LENGTH = 20;
 
@@ -20,6 +22,7 @@ export default function PlantingDensityPerZoneCard({
   observation,
 }: PlantingDensityPerZoneCardProps): JSX.Element {
   const theme = useTheme();
+  const locale = useLocalization();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [labels, setLabels] = useState<string[]>();
   const [targets, setTargets] = useState<(number | undefined)[]>();
@@ -81,7 +84,12 @@ export default function PlantingDensityPerZoneCard({
       contents={
         <Box display='flex' flexDirection='column'>
           <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(3)}>
-            {strings.PLANTING_DENSITY_PER_ZONE_CARD_TITLE}
+            {observation
+              ? strings.formatString(
+                  strings.PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,
+                  getShortDate(observation?.completedTime!, locale.activeLocale)
+                )
+              : strings.PLANTING_DENSITY_PER_ZONE_CARD_TITLE}
           </Typography>
           <Box marginBottom={theme.spacing(1.5)}>
             <BarChart
