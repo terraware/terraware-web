@@ -387,6 +387,10 @@ GRAMINOID,Graminoid
 GRAMS,Grams
 GREATER_THAN_FIFTY_PERCENT,> 50%
 GROWTH_FORM,Growth Form
+HECTARES,Hectares
+HECTARES_PLANTED_CARD_TITLE,How much of my site has been planted as of {0}?
+HECTARES_PLANTED_DESCRIPTION_1,This is the number of hectares that have been planted in based off the sub-zones you chose when out-planting.
+HECTARES_PLANTED_DESCRIPTION_2,"For observations, we only assign monitoring plots that we know are a part of these sub-zones."
 HIGHEST,Highest
 HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,Which zones have the highest and lowest mortality rate?
 HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,Which species have the highest and lowest mortality rate?
@@ -710,6 +714,7 @@ PENDING,Pending
 PEOPLE,People
 PEOPLE_CARD_DESCRIPTION,We can’t do it alone! Add people to your Organization and assign them roles.
 PEOPLE_DESCRIPTION,Manage the people in Terraware.
+PERCENTAGE_OF_SITE_PLANTED,{0}% of Site
 PERCENTAGE_VALUE,{0}%
 PERCENTAGE_VIABILITY,% Viability
 PERIOD_LAST_12_HOURS,Last 12 hours
@@ -1068,6 +1073,7 @@ SUMMARY_OF_PROGRESS_REQUIRED,Summary of Progress *
 SUSTAINABLE_DEVELOPMENT_GOALS,Sustainable Development Goals
 SUSTAINABLE_TIMBER,Sustainable Timber
 TAKE_ME_THERE,Take Me There
+TARGET_HECTARES_PLANTED,Target: {0} Hectares
 TARGET_RH,Target %RH
 TEMPERATURE_AND_HUMIDITY_SENSOR_DATA,Temperature & Humidity Sensor Data
 TEMPLATES,Templates
