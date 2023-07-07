@@ -26,6 +26,7 @@ import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLow
 import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
 import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
 import { getShortDate } from 'src/utils/dateFormatter';
+import HectaresPlantedCard from './components/HectaresPlantedCard';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -142,6 +143,11 @@ export default function PlantsDashboardV2(): JSX.Element {
       {!sitePlantingComplete && (
         <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
           <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      )}
+      {!sitePlantingComplete && (
+        <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
+          <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
         </Grid>
       )}
       {!sitePlantingComplete && (
