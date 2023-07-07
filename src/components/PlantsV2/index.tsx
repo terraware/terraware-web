@@ -164,14 +164,11 @@ export default function PlantsDashboardV2(): JSX.Element {
     !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0;
 
   const getObservationHectares = () => {
-    let observationMonitoringPlots = 0;
-    latestObservation?.plantingZones.forEach((pz) => {
-      pz.plantingSubzones.forEach((psz) => {
-        observationMonitoringPlots += psz.monitoringPlots.length;
-      });
-    });
+    const numMonitoringPlots =
+      latestObservation?.plantingZones.flatMap((pz) => pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots))
+        ?.length ?? 0;
     const monitoringPlotHa = 0.0625;
-    const totalHa = observationMonitoringPlots * monitoringPlotHa;
+    const totalHa = numMonitoringPlots * monitoringPlotHa;
     return totalHa;
   };
 
