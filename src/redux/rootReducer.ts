@@ -1,6 +1,10 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 import { appVersionReducer } from './features/appVersion/appVersionSlice';
-import { observationsReducer, observationsResultsReducer } from './features/observations/observationsSlice';
+import {
+  observationsReducer,
+  observationsResultsReducer,
+  plantingSiteObservationsResultsReducer,
+} from './features/observations/observationsSlice';
 import { speciesReducer } from './features/species/speciesSlice';
 import { trackingReducer, sitePopulationReducer } from './features/tracking/trackingSlice';
 
@@ -12,6 +16,7 @@ export const reducers = {
   species: speciesReducer,
   tracking: trackingReducer,
   sitePopulation: sitePopulationReducer,
+  plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,
 };
 const combinedReducers = combineReducers(reducers);
 
