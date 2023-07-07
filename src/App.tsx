@@ -44,8 +44,6 @@ import Inventory from './components/Inventory';
 import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
-import { CreatePlantingSite, PlantingSitesList } from './components/PlantingSites';
-import PlantingSiteView from './components/PlantingSites/PlantingSiteView';
 import {
   BatchBulkWithdrawWrapperComponent,
   SpeciesBulkWithdrawWrapperComponent,
@@ -65,6 +63,7 @@ import isEnabled from 'src/features';
 import Observations from 'src/components/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
 import PlantsDashboardV2 from 'src/components/PlantsV2';
+import PlantingSites from 'src/components/PlantingSites';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -458,17 +457,8 @@ function AppContent() {
             <Route path={APP_PATHS.BATCH_WITHDRAW}>
               <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
             </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITES_NEW}>
-              <CreatePlantingSite reloadPlantingSites={reloadTracking} />
-            </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
-              <CreatePlantingSite reloadPlantingSites={reloadTracking} />
-            </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITES}>
-              <PlantingSitesList />
-            </Route>
-            <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
-              <PlantingSiteView />
+            <Route path={APP_PATHS.PLANTING_SITES}>
+              <PlantingSites reloadTracking={reloadTracking} />
             </Route>
             <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
               <NurseryWithdrawals />
