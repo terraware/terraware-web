@@ -1,5 +1,5 @@
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { Box, LinearProgress, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
