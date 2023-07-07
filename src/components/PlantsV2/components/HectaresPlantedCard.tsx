@@ -7,6 +7,7 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
+import ProgressChart from 'src/components/common/Chart/ProgressChart';
 
 type HectaresPlantedCardProps = {
   plantingSiteId: number;
@@ -58,17 +59,7 @@ export default function HectaresPlantedCard({ plantingSiteId, observation }: Hec
           >
             {strings.formatString(strings.PERCENTAGE_OF_SITE_PLANTED, percentagePlanted)}
           </Typography>
-          <LinearProgress
-            variant='determinate'
-            value={totalPlantedArea}
-            valueBuffer={totalArea}
-            sx={{
-              height: '32px',
-              borderRadius: '4px',
-              backgroundColor: theme.palette.TwClrBaseGray100,
-              '& span': { backgroundColor: theme.palette.TwClrBgBrand },
-            }}
-          />
+          <ProgressChart value={totalPlantedArea} target={totalArea} />
           <Typography
             fontSize='16px'
             fontWeight={600}
