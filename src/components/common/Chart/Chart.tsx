@@ -121,7 +121,6 @@ function ChartContent(props: ChartContentProps): JSX.Element {
               barThickness,
               backgroundColor: ds.color ?? colors,
               minBarLength: 3,
-              stack: index.toString(),
             })),
           },
           options: {
