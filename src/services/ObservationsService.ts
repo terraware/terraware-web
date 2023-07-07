@@ -31,12 +31,12 @@ const httpObservations = HttpService.root(OBSERVATIONS_ENDPOINT);
 
 /**
  * List all observations results
+ * 'full=false' is looking ahead, we will have abridged data soon
  */
 const listObservationsResults = async (
   organizationId: number,
-  plantingSiteId?: number
+  full?: boolean
 ): Promise<ObservationsResultsData & Response> => {
-  const params: Record<string, string> = plantingSiteId ? { plantingSiteId: plantingSiteId.toString() } : {};
   const response: ObservationsResultsData & Response = await httpObservationsResults.get<
     ObservationsResultsResponsePayload,
     ObservationsResultsData
@@ -44,7 +44,7 @@ const listObservationsResults = async (
     {
       params: {
         organizationId: organizationId.toString(),
-        ...params,
+        full: (full || false).toString(),
       },
     },
     (data) => ({ observations: data?.observations ?? [] })
