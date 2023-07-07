@@ -24,6 +24,7 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
 import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
 import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
+import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
 import { getShortDate } from 'src/utils/dateFormatter';
 
 export default function PlantsDashboardV2(): JSX.Element {
@@ -148,6 +149,9 @@ export default function PlantsDashboardV2(): JSX.Element {
           <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
         </Grid>
       )}
+      <Grid item xs={isMobile ? 12 : hasObservations ? (sitePlantingComplete ? 4 : 6) : 4}>
+        <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+      </Grid>
     </>
   );
 
