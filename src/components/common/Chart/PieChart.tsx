@@ -1,10 +1,9 @@
 import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
-import Chart from './Chart';
+import Chart, { ChartData } from './Chart';
 
 export interface PieChartProps {
   chartId: string;
-  chartLabels?: string[];
-  chartValues?: number[];
+  chartData?: ChartData;
   customTooltipTitles?: string[];
   minHeight?: string;
   maxWidth?: string;

@@ -102,8 +102,14 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
           <Box>
             <BarChart
               chartId='plantsBySpecies'
-              chartLabels={labels}
-              chartValues={values}
+              chartData={{
+                labels: labels ?? [],
+                datasets: [
+                  {
+                    values: values ?? [],
+                  },
+                ],
+              }}
               maxWidth='100%'
               minHeight='100px'
               barAnnotations={getBarAnnotations()}

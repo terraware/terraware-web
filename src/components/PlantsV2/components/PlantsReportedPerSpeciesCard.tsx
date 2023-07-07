@@ -68,8 +68,14 @@ export default function PlantsReportedPerSpeciesCard({
             <BarChart
               elementColor={theme.palette.TwClrBasePurple300}
               chartId='plantsBySpecies'
-              chartLabels={labels}
-              chartValues={values}
+              chartData={{
+                labels: labels ?? [],
+                datasets: [
+                  {
+                    values: values ?? [],
+                  },
+                ],
+              }}
               customTooltipTitles={tooltipTitles}
               maxWidth='100%'
             />

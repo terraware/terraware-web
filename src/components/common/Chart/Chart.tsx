@@ -13,6 +13,7 @@ ChartJS.register(annotationPlugin);
 type ChartDataset = {
   color?: string;
   values: number[];
+  // Dataset label which will appear in legends and tooltips
   label?: string;
 };
 
@@ -36,8 +37,6 @@ const useStyles = makeStyles<Theme, StyleProps>(() => ({
 export interface ChartProps {
   type: keyof ChartTypeRegistry;
   chartId: string;
-  chartLabels?: string[];
-  chartValues?: number[];
   chartData?: ChartData;
   customTooltipTitles?: string[];
   minHeight?: string;
@@ -50,7 +49,7 @@ export interface ChartProps {
 }
 
 export default function Chart(props: ChartProps): JSX.Element | null {
-  const { chartLabels, chartValues } = props;
+  const { chartData } = props;
   const { activeLocale } = useLocalization();
   const [locale, setLocale] = useState<string | null>(null);
 
@@ -58,27 +57,17 @@ export default function Chart(props: ChartProps): JSX.Element | null {
     setLocale(activeLocale);
   }, [activeLocale]);
 
-  if (!locale || !chartLabels || !chartValues) {
+  if (!locale || !chartData?.labels) {
     return null;
   }
 
-  return (
-    <ChartContent
-      {...props}
-      locale={locale}
-      chartLabels={chartLabels}
-      chartValues={chartValues}
-      key={`${locale}_${chartLabels.length}_${chartValues.length}`}
-    />
-  );
+  return <ChartContent {...props} chartData={chartData} locale={locale} />;
 }
 
 interface ChartContentProps {
   type: keyof ChartTypeRegistry;
   chartId: string;
-  chartLabels: string[];
-  chartValues: number[];
-  chartData?: ChartData;
+  chartData: ChartData;
   customTooltipTitles?: string[];
   minHeight?: string;
   maxWidth?: string;
@@ -94,8 +83,6 @@ function ChartContent(props: ChartContentProps): JSX.Element {
   const {
     type,
     chartId,
-    chartLabels,
-    chartValues,
     chartData,
     customTooltipTitles,
     minHeight,
@@ -123,33 +110,20 @@ function ChartContent(props: ChartContentProps): JSX.Element {
 
       const ctx = canvasRef?.current?.getContext('2d');
       if (ctx) {
-        const colors =
-          elementColor ?? generateTerrawareRandomColors(theme, chartData?.labels?.length || chartLabels?.length || 0);
+        const colors = elementColor ?? generateTerrawareRandomColors(theme, chartData?.labels?.length || 0);
         chartRef.current = await newChart(locale, ctx, {
           type,
-          data: chartData
-            ? {
-                labels: chartData.labels,
-                datasets: chartData.datasets.map((ds, index) => ({
-                  label: ds.label,
-                  data: ds.values,
-                  barThickness,
-                  backgroundColor: ds.color ?? colors,
-                  minBarLength: 3,
-                  stack: index.toString(),
-                })),
-              }
-            : {
-                labels: chartLabels,
-                datasets: [
-                  {
-                    data: chartValues,
-                    barThickness,
-                    backgroundColor: colors,
-                    minBarLength: 3,
-                  },
-                ],
-              },
+          data: {
+            labels: chartData.labels,
+            datasets: chartData.datasets.map((ds, index) => ({
+              label: ds.label,
+              data: ds.values,
+              barThickness,
+              backgroundColor: ds.color ?? colors,
+              minBarLength: 3,
+              stack: index.toString(),
+            })),
+          },
           options: {
             maintainAspectRatio: false,
             layout: {
@@ -194,7 +168,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     };
     createChart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chartLabels, chartValues, locale]);
+  }, [chartData, locale]);
 
   return <canvas id={chartId} ref={canvasRef} className={classes.chart} />;
 }

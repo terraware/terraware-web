@@ -53,8 +53,14 @@ export default function PlantingProgressPerZoneCard({ plantingSiteId }: Planting
             <BarChart
               elementColor={theme.palette.TwClrBgBrand}
               chartId='plantingProgressByZone'
-              chartLabels={labels}
-              chartValues={values}
+              chartData={{
+                labels: labels ?? [],
+                datasets: [
+                  {
+                    values: values ?? [],
+                  },
+                ],
+              }}
               customTooltipTitles={tooltipTitles}
               maxWidth='100%'
               yLimits={{ min: 0, max: 100 }}
