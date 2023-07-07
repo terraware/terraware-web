@@ -467,7 +467,7 @@ LEARN_MORE_GROWTH_FORM_FERN,"A non-flowering vascular plant that reproduces by s
 LEARN_MORE_GROWTH_FORM_FORB,"A herbaceous (non-woody) plant that is NOT a graminoid (grass, sedge, or rush)."
 LEARN_MORE_GROWTH_FORM_FUNGUS,"Usually a eukaryotic organism (non-plant) that is heterotrophic (cannot produce its own food), grows in filaments (hyphae), and produces spores."
 LEARN_MORE_GROWTH_FORM_GRAMINOID,"A herbaceous (non-woody) plant with a grass-like morphology, that is elongated culms with long, blade-like leaves, in the grass, sedge, or rush family."
-LEARN_MORE_GROWTH_FORM_LIANA,"A vine/climbing plant with woody stems reaching >10m length."
+LEARN_MORE_GROWTH_FORM_LIANA,A vine/climbing plant with woody stems reaching >10m length.
 LEARN_MORE_GROWTH_FORM_LICHEN,"A symbiotic cluster of fungus and alga, fungus being the dominant partner, lending to its thallus shape and fruiting body."
 LEARN_MORE_GROWTH_FORM_MOSS,"A non-vascular flowerless plant typically formed as dense green clumps or mats, often in damp or shady locations."
 LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS,A plant that can grow in more than one form.
@@ -731,8 +731,6 @@ PLANT_ID_TOOLTIP,It’s the ID of a plant for tracking or conservation purpose. 
 PLANT_LABEL,Plant
 PLANTING_DENSITY,Planting Density
 PLANTING_DENSITY_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the planting density."
-PLANTING_SEASON_END,Planting Season End
-PLANTING_SEASON_START,Planting Season Start
 PLANTING_PROGRESS_AND_DENSITY,Planting Progress and Density
 PLANTING_PROGRESS_CARD_TITLE,What is my site planting progress?
 PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress calculated from what has been reported in your nursery withdrawals.
@@ -740,6 +738,8 @@ PLANTING_PROGRESS_DESCRIPTION_2,"Once your entire planting site has been marked 
 PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,What is my planting progress per zone?
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,This is your zone’s planting progress calculated from what has been reported in your nursery withdrawals.
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Once a zone has been marked as complete for planting and you’ve completed your observations, you’ll be able to view that zone’s planting density."
+PLANTING_SEASON_END,Planting Season End
+PLANTING_SEASON_START,Planting Season Start
 PLANTING_SITE,Planting Site
 PLANTING_SITE_TYPE,Planting Site Type
 PLANTING_SITE_WITH_MAP_HELP,"If you are a Terraformation partner or accelerator participant, please [contact us] to create a site with a map."
