@@ -12,7 +12,7 @@ ChartJS.register(annotationPlugin);
 
 type ChartDataset = {
   color?: string;
-  values: number[];
+  values: (number | undefined)[];
   // Dataset label which will appear in legends and tooltips
   label?: string;
 };
