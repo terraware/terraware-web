@@ -48,3 +48,26 @@ export const observationsSlice = createSlice({
 
 export const { setObservationsAction } = observationsSlice.actions;
 export const observationsReducer = observationsSlice.reducer;
+
+type PlantingSitePayload = {
+  plantingSiteId: number;
+  data: ResultsData;
+};
+
+type PlantingSiteData = Record<number, ResultsData>;
+
+const plantingSiteInitialResultsState: PlantingSiteData = {};
+
+export const plantingSiteObservationsResultsSlice = createSlice({
+  name: 'plantingSiteObservationsResultsSlice',
+  initialState: plantingSiteInitialResultsState,
+  reducers: {
+    setPlantingSiteObservationsResultsAction: (state, action: PayloadAction<PlantingSitePayload>) => {
+      const data: ResultsData = action.payload.data;
+      state[action.payload.plantingSiteId] = data;
+    },
+  },
+});
+
+export const { setPlantingSiteObservationsResultsAction } = plantingSiteObservationsResultsSlice.actions;
+export const plantingSiteObservationsResultsReducer = plantingSiteObservationsResultsSlice.reducer;

@@ -6,7 +6,7 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { Grid, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSites, requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
@@ -24,7 +24,8 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
 import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
 import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
-import PlantingDensityPerZoneCard from 'src/components/PlantsV2/components/PlantingDensityPerZoneCard';
+import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
+import { getShortDate } from 'src/utils/dateFormatter';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -33,6 +34,7 @@ export default function PlantsDashboardV2(): JSX.Element {
   const dispatch = useAppDispatch();
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState(-1);
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
+  const locale = useLocalization();
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
@@ -165,9 +167,27 @@ export default function PlantsDashboardV2(): JSX.Element {
   const hasPolygons =
     !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0;
 
+  const getObservationHectares = () => {
+    const numMonitoringPlots =
+      latestObservation?.plantingZones.flatMap((pz) => pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots))
+        ?.length ?? 0;
+    const monitoringPlotHa = 0.0625;
+    const totalHa = numMonitoringPlots * monitoringPlotHa;
+    return totalHa;
+  };
+
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
+      text={
+        latestObservation?.completedTime
+          ? (strings.formatString(
+              strings.DASHBOARD_HEADER_TEXT,
+              <b>{getObservationHectares()}</b>,
+              <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
+            ) as string)
+          : undefined
+      }
       onSelect={onSelect}
       pagePath={APP_PATHS.PLANTING_SITE_DASHBOARD}
       lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
