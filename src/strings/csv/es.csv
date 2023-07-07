@@ -386,6 +386,9 @@ GRAMINOID,Gramínea
 GRAMS,Gramos
 GREATER_THAN_FIFTY_PERCENT,> 50%
 GROWTH_FORM,Forma de crecimiento
+HIGHEST,Más alta
+HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,¿Qué zonas tienen la tasa de mortalidad más alta y más baja?
+HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,¿Qué especie tiene la tasa de mortalidad más alta y cuál la más baja?
 HISTORY,Historia
 HOME,Inicio
 HOW_MANY_PLANTS_CARD_TITLE,¿Cuantas plantas he reportado para plantar?
@@ -464,7 +467,7 @@ LEARN_MORE_GROWTH_FORM_FERN,"Planta vascular que no florece y se reproduce media
 LEARN_MORE_GROWTH_FORM_FORB,"Planta herbácea (no leñosa) que NO es una gramínea (césped, juncia o junco)."
 LEARN_MORE_GROWTH_FORM_FUNGUS,"Usualmente, un organismo eucariota (no vegetal) que es heterótrofo (que no puede producir su propio alimento), que crece en filamentos (hifas) y que produce esporas."
 LEARN_MORE_GROWTH_FORM_GRAMINOID,"Planta herbácea (no leñosa) cuya morfología se asemeja a la del césped, es decir culmos alargados con hojas largas en forma de cuchilla, de la familia del césped, la juncia o el junco."
-LEARN_MORE_GROWTH_FORM_LIANA,"Una planta trepadora que se encuentra a menudo en bosques tropicales, que cuelga de los árboles."
+LEARN_MORE_GROWTH_FORM_LIANA,Una vid/planta trepadora con tallos leñosos alcanzando >10 m de longitud.
 LEARN_MORE_GROWTH_FORM_LICHEN,"Un grupo de hongo y alga, en el cual el hongo es el elemento dominante, debido a su forma de talo y su cuerpo fructífero."
 LEARN_MORE_GROWTH_FORM_MOSS,"Una planta no vascular y sin flores, típicamente con forma de masas o alfombrillas verdes y densas, a menudo en lugares húmedos o sombreados."
 LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS,Una planta que puede crecer en más de una forma.
@@ -472,9 +475,9 @@ LEARN_MORE_GROWTH_FORM_SHRUB,Planta leñosa que es más pequeña que un árbol y
 LEARN_MORE_GROWTH_FORM_SHRUB_TREE,Una planta que puede estar en forma de arbusto o árbol.
 LEARN_MORE_GROWTH_FORM_SUBSHRUB,Un arbusto enano que usualmente solo es leñoso en la base.
 LEARN_MORE_GROWTH_FORM_TREE,"Planta leñosa perenne, que suele tener un solo tallo o tronco que crece hasta una altura considerable y posee ramas laterales a cierta distancia del suelo."
-LEARN_MORE_GROWTH_FORM_VINE,Una planta trepadora o colgante con un tallo leñoso.
+LEARN_MORE_GROWTH_FORM_VINE,"Cualquier planta con tallos largos, flexibles, trepadores (término que suele usarse para trepadoras herbáceas)"
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Las semillas exhiben un comportamiento intermedio entre las semillas ortodoxas y las recalcitrantes; pueden soportar la desecación parcial, soportar temperaturas frías pero no de congelación o tener una vida breve, independientemente de las condiciones de almacenamiento."
-LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"Se cree que las semillas poseen un comportamiento, pero esto aún no ha sido confirmado científicamente."
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"La evidencia científica sugiere este comportamiento de almacenamiento de semillas, pero se necesita más investigación para confirmar."
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Las semillas toleran los niveles de desecación necesarios para ser almacenadas congeladas (contenido de humedad de 5-8 %) y unas temperaturas de -20 °C o inferiores.
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Las semillas no toleran los niveles de desecación necesarios para su conservación ex situ (fuera del sitio).
 LEAVE_AND_SAVE,Salir y guardar
@@ -487,6 +490,8 @@ LIKELY_INTERMEDIATE,Posiblemente intermedia,Option to indicate that a species' s
 LIKELY_ORTHODOX,Posiblemente ortodoxa,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
 LIKELY_RECALCITRANT,Posiblemente recalcitrante,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
 LIST,Lista
+LIVE,Directo
+LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,¿Cuántas plantas vivas y muertas hay por especie?
 LOADING,Cargando...
 LOCATION,Lugar
 LOCATION_REQUIRED,Lugar *
@@ -494,6 +499,7 @@ LOCATIONS,Lugares
 LOCKED,Bloqueado
 LOG_OUT,Cerrar sesión
 LOSS_RATE,Tasa de pérdidas
+LOWEST,Más baja
 MANAGER,Gestor
 MANAGER_INFO,"Un administrador puede hacer lo anterior, además de editar la entradas de datos para semillas y gestionar los retiros de plantas en campo, sitios de plantación y especies."
 MAP,Mapa
@@ -539,6 +545,8 @@ MONTH_12,Diciembre
 MORE_OPTIONS,Más opciones
 MORTALITY_RATE,Tasa de mortalidad
 MORTALITY_RATE_BY_SPECIES,Tasa de mortalidad por especie
+MORTALITY_RATE_CARD_TITLE,¿Cuál es mi índice de mortalidad hasta el {0}?
+MORTALITY_RATE_CLARIFICATION,Este es el porcentaje total de sus plantaciones que han muerto en todas las especies y zonas., calculated from your latest observations.
 MORTALITY_RATE_IN_FIELD,Tasa de mortalidad en campo (%)
 MORTALITY_RATE_IN_FIELD_REQUIRED,Tasa de mortalidad en el campo (%) *
 MORTALITY_RATE_IN_NURSERY,Tasa de mortalidad en vivero (%)
@@ -650,13 +658,14 @@ NURSERY_TRANSFER,Traslado de vivero
 OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para {0} para el/los lugar(es) de plantación: {1},"Example: Observation event is scheduled for June 1, 2023 for planting site(s): Site-A, Site-B"
 OBSERVATION_IN_PROGRESS,Observación en progreso
 OBSERVATION_STATUS,Estado de la observación
-OBSERVATION_STATUS_OUTSTANDING,Sobresaliente,Remaining to be done
+OBSERVATION_STATUS_OUTSTANDING,Pendiente,Remaining to be done
 OBSERVATIONS,Observaciones
 OBSERVATIONS_COMPLETION_PERCENTAGE,Las observaciones para {0} de {1} parcelas de monitoreo ({2}%) se han completado.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
 OBSERVATIONS_DOWNLOAD_APP,"Para completar las observaciones, descargue la aplicación de Terraware en App Store o Google Play"
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Las observaciones son cuando registra datos de una plantilla de parcelas de seguimiento usando nuestra aplicación móvil en el campo. Esto nos permite calcular las tasas de mortalidad, y eventualmente el secuestro de carbono."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"Recibirá una notificación cuando sea momento de llevar sus observaciones (por lo general, la próxima vez que termine una temporada de plantación). Después de completar sus primeras observaciones, verá los registros aquí."
 OBSERVATIONS_EMPTY_STATE_TITLE,Aún no hay observaciones
+OBSERVATIONS_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, por favor selecciona un solo sitio de plantación."
 OBSERVATIONS_REQUIRED_BY_DATE,Los parcelas de monitoreo de {0} requieren observación por {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observaciones con la aplicación Terraware
 OBSERVER,Observador
@@ -722,6 +731,15 @@ PLANT_ID_TOOLTIP,Es la identificación de una planta con fines de seguimiento o 
 PLANT_LABEL,Plantar
 PLANTING_DENSITY,Densidad de siembra
 PLANTING_DENSITY_MISSING_TOOLTIP,"Una vez que hayas marcado tu sitio de plantación como terminado y completado tus observaciones, podrás visualizar la densidad de la plantación."
+PLANTING_PROGRESS_AND_DENSITY,Progreso y densidad de plantación
+PLANTING_PROGRESS_CARD_TITLE,¿Cuál es el progreso de mi plantación?
+PLANTING_PROGRESS_DESCRIPTION_1,Se trata del progreso de plantación de tu centro calculado a partir de lo que se ha notificado en las retiradas de tu vivero.
+PLANTING_PROGRESS_DESCRIPTION_2,"Una vez que todo el lugar de plantación se haya marcado como completo para la plantación y hayas completado tus observaciones, podrás ver la densidad de plantación de tu centro."
+PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,¿Cuál es mi progreso de plantación por zona?
+PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,Este es el progreso de plantación de su zona calculado por lo que se ha reportado en los retiros de su vivero.
+PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Cuando una zona se haya marcado como completa para plantación y usted haya completado sus observaciones, podrá ver la densidad de plantación de dicha zona."
+PLANTING_SEASON_END,Término de temporada de plantación
+PLANTING_SEASON_START,Inicio de temporada de plantación
 PLANTING_SITE,Lugar de plantación
 PLANTING_SITE_TYPE,Tipo de lugar de plantación
 PLANTING_SITE_WITH_MAP_HELP,"Si usted es un socio de Terraformation o un participante del acelerador, por favor [contáctenos] para crear un sitio con un mapa."

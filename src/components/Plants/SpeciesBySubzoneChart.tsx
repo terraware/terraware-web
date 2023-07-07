@@ -122,7 +122,18 @@ export default function SpeciesBySubzoneChart(props: Props): JSX.Element {
           />
         )}
         <Box sx={{ marginTop: 2 }}>
-          <BarChart chartId='speciesBySubzoneChart' chartLabels={labels} chartValues={values} minHeight='126px' />
+          <BarChart
+            chartId='speciesBySubzoneChart'
+            chartData={{
+              labels: labels ?? [],
+              datasets: [
+                {
+                  values: values ?? [],
+                },
+              ],
+            }}
+            minHeight='126px'
+          />
         </Box>
       </Box>
     </>

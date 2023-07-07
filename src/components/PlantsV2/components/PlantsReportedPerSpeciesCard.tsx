@@ -1,20 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
 import BarChart from 'src/components/common/Chart/BarChart';
+import { truncate } from 'src/utils/text';
 
 const MAX_SPECIES_NAME_LENGTH = 20;
-
-const truncateToLength = (s: string, length: number): string => {
-  if (s.length <= length) {
-    return s;
-  }
-
-  return s.slice(0, length - 3) + '...';
-};
 
 type PlantsReportedPerSpeciesCardProps = {
   plantingSiteId?: number;
@@ -46,7 +39,7 @@ export default function PlantsReportedPerSpeciesCard({
           })
         )
       );
-      setLabels(Object.keys(speciesQuantities).map((name) => truncateToLength(name, MAX_SPECIES_NAME_LENGTH)));
+      setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
       setValues(Object.values(speciesQuantities));
       setTooltipTitles(Object.keys(speciesQuantities));
     } else {
@@ -55,6 +48,21 @@ export default function PlantsReportedPerSpeciesCard({
       setTooltipTitles([]);
     }
   }, [populationSelector]);
+
+  const chartData = useMemo(() => {
+    if (!labels?.length || !values?.length) {
+      return undefined;
+    }
+
+    return {
+      labels: labels ?? [],
+      datasets: [
+        {
+          values: values ?? [],
+        },
+      ],
+    };
+  }, [labels, values]);
 
   return (
     <OverviewItemCard
@@ -68,8 +76,7 @@ export default function PlantsReportedPerSpeciesCard({
             <BarChart
               elementColor={theme.palette.TwClrBasePurple300}
               chartId='plantsBySpecies'
-              chartLabels={labels}
-              chartValues={values}
+              chartData={chartData}
               customTooltipTitles={tooltipTitles}
               maxWidth='100%'
             />
