@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -162,7 +162,10 @@
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
 <a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -185,28 +188,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -214,6 +195,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -273,6 +279,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 &nbsp;
 export type PlantsPrimaryPageViewProps = {
   title: string;
+  text?: string; // optional text to show at the bottom of the header
   children: React.ReactNode; // primary content for this page
   plantingSites: PlantingSite[] | undefined;
   selectedPlantingSiteId?: number;
@@ -282,6 +289,7 @@ export type PlantsPrimaryPageViewProps = {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >PlantsPrimaryPageView(</span>{
   title,
+  text,
   children,
   plantingSites,
   selectedPlantingSiteId,
@@ -315,39 +323,40 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain backgroundImageVisible={isEmptyState}&gt;
       &lt;PageHeaderWrapper nextElement={contentRef.current}&gt;
-        &lt;Grid
-          item
-          xs={12}
-          display={isMobile ? 'block' : 'flex'}
-          paddingLeft={theme.spacing(3)}
-          marginBottom={theme.spacing(4)}
-        &gt;
-          &lt;Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}&gt;{title}&lt;/Typography&gt;
-          {plantingSites.length &gt; 0 &amp;&amp; (
-            &lt;&gt;
-              {!isMobile &amp;&amp; (
-                &lt;Box
-                  sx={{
-                    margin: theme.spacing(0, 2),
-                    width: '1px',
-                    height: '32px',
-                    backgroundColor: theme.palette.TwClrBgTertiary,
-                  }}
-                /&gt;
-              )}
-              &lt;Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}&gt;
-                &lt;Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}&gt;
-                  {strings.PLANTING_SITE}
-                &lt;/Typography&gt;
-                &lt;Dropdown
-                  placeholder={strings.SELECT}
-                  id='planting-site-selector'
-                  onChange={onChangePlantingSite}
-                  options={options}
-                  selectedValue={selectedPlantingSiteId}
-                /&gt;
-              &lt;/Box&gt;
-            &lt;/&gt;
+        &lt;Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}&gt;
+          &lt;Grid item xs={12} display={isMobile ? 'block' : 'flex'}&gt;
+            &lt;Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}&gt;{title}&lt;/Typography&gt;
+            {plantingSites.length &gt; 0 &amp;&amp; (
+              &lt;&gt;
+                {!isMobile &amp;&amp; (
+                  &lt;Box
+                    sx={{
+                      margin: theme.spacing(0, 2),
+                      width: '1px',
+                      height: '32px',
+                      backgroundColor: theme.palette.TwClrBgTertiary,
+                    }}
+                  /&gt;
+                )}
+                &lt;Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}&gt;
+                  &lt;Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}&gt;
+                    {strings.PLANTING_SITE}
+                  &lt;/Typography&gt;
+                  &lt;Dropdown
+                    placeholder={strings.SELECT}
+                    id='planting-site-selector'
+                    onChange={onChangePlantingSite}
+                    options={options}
+                    selectedValue={selectedPlantingSiteId}
+                  /&gt;
+                &lt;/Box&gt;
+              &lt;/&gt;
+            )}
+          &lt;/Grid&gt;
+          {text &amp;&amp; (
+            &lt;Typography fontSize='14px' marginTop={theme.spacing(1)}&gt;
+              {text}
+            &lt;/Typography&gt;
           )}
         &lt;/Grid&gt;
       &lt;/PageHeaderWrapper&gt;
@@ -367,7 +376,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-07T19:14:39.197Z
+                at 2023-07-07T19:23:13.837Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
