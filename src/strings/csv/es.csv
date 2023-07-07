@@ -199,6 +199,7 @@ CUSTOMIZE_TABLE_COLUMNS,Personalizar las columnas de la tabla
 CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Seleccione las columnas que desee añadir. Deseleccione las columnas que desee eliminar.
 CUT_TEST,Prueba de corte
 DASHBOARD,Panel de control
+DASHBOARD_HEADER_TEXT,Los datos de este cuadro de mando se basan en una muestra de {0} hectáreas de la{1} observación., {1} date of the last observation in short format (e.g. July 2023)
 DASHBOARD_MESSAGE,Su panel de semillas se llenará automáticamente de datos a medida que añada accesiones.
 DASHBOARD_MESSAGE_TITLE,Añada accesiones para ver los datos
 DATA_CHECK_COMPLETED,Se ha completado la comprobación de la base de datos. No se ha encontrado ningún error.

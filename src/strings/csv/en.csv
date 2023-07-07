@@ -738,8 +738,8 @@ PLANT_LABEL,Plant
 PLANTING_DENSITY,Planting Density
 PLANTING_DENSITY_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the planting density."
 PLANTING_DENSITY_PER_ZONE_CARD_TITLE,What is my target planting density per zone?
-PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,What is my target planting density and planting density as of {0} per zone?
 PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"This is your zone’s target planting density which you’ve provided. If you’d like to change the target planting densities, please reach out to Terraformation."
+PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,What is my target planting density and planting density as of {0} per zone?
 PLANTING_PROGRESS_AND_DENSITY,Planting Progress and Density
 PLANTING_PROGRESS_CARD_TITLE,What is my site planting progress?
 PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress calculated from what has been reported in your nursery withdrawals.
