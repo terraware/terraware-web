@@ -31,7 +31,7 @@ import { getUTC } from 'src/utils/useTimeZoneUtils';
 import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import LocaleSelector from '../LocaleSelector';
-import { useSupportedLocales } from 'src/strings/locales';
+import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
 import DeleteAccountModal from './DeleteAccountModal';
 
 type MyAccountProps = {
@@ -416,7 +416,7 @@ const MyAccountContent = ({
                   label={strings.LANGUAGE}
                   id='locale'
                   type='text'
-                  value={supportedLocales.find((sLocale) => sLocale.id === selectedLocale)?.name}
+                  value={findLocaleDetails(supportedLocales, selectedLocale).name}
                   display={true}
                 />
               )}

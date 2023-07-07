@@ -8,6 +8,7 @@ export type User = {
   emailNotificationsEnabled?: boolean;
   timeZone?: string;
   locale?: string;
+  countryCode?: string;
 };
 
 export type OrganizationUser = {
