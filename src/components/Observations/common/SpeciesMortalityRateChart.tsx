@@ -32,7 +32,7 @@ export default function SpeciesTotalPlantsChart({ minHeight, species }: SpeciesT
 
   return (
     <BarChart
-      chartId='observationsTotalPlantsBySpecies'
+      chartId='observationsMortalityRateBySpecies'
       chartData={{
         labels: mortalityRates.labels,
         datasets: [

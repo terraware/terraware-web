@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
@@ -56,6 +56,21 @@ export default function PlantsReportedPerSpeciesCard({
     }
   }, [populationSelector]);
 
+  const chartData = useMemo(() => {
+    if (!labels?.length || !values?.length) {
+      return undefined;
+    }
+
+    return {
+      labels: labels ?? [],
+      datasets: [
+        {
+          values: values ?? [],
+        },
+      ],
+    };
+  }, [labels, values]);
+
   return (
     <OverviewItemCard
       isEditable={false}
@@ -68,14 +83,7 @@ export default function PlantsReportedPerSpeciesCard({
             <BarChart
               elementColor={theme.palette.TwClrBasePurple300}
               chartId='plantsBySpecies'
-              chartData={{
-                labels: labels ?? [],
-                datasets: [
-                  {
-                    values: values ?? [],
-                  },
-                ],
-              }}
+              chartData={chartData}
               customTooltipTitles={tooltipTitles}
               maxWidth='100%'
             />
