@@ -192,20 +192,23 @@ export default function PlantsDashboardV2(): JSX.Element {
     return totalHa;
   };
 
+  const getDashboardSubhead = () => {
+    if (selectedPlantingSiteId === -1) {
+      return strings.FIRST_ADD_PLANTING_SITE;
+    }
+    if (latestObservation?.completedTime) {
+      return strings.formatString(
+        strings.DASHBOARD_HEADER_TEXT,
+        <b>{getObservationHectares()}</b>,
+        <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
+      ) as string;
+    }
+  };
+
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
-      text={
-        selectedPlantingSiteId !== -1
-          ? latestObservation?.completedTime
-            ? (strings.formatString(
-                strings.DASHBOARD_HEADER_TEXT,
-                <b>{getObservationHectares()}</b>,
-                <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
-              ) as string)
-            : undefined
-          : strings.FIRST_ADD_PLANTING_SITE
-      }
+      text={getDashboardSubhead()}
       onSelect={onSelect}
       pagePath={APP_PATHS.PLANTING_SITE_DASHBOARD}
       lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
