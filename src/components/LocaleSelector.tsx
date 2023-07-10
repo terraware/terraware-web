@@ -1,5 +1,5 @@
 import { Dropdown, DropdownItem, PopoverMenu } from '@terraware/web-components';
-import { useSupportedLocales } from '../strings/locales';
+import { findLocaleDetails, useSupportedLocales } from '../strings/locales';
 import { LocalizationContext } from '../providers/contexts';
 import { UserService } from 'src/services';
 import { useUser } from '../providers';
@@ -53,13 +53,15 @@ export default function LocaleSelector({
           }
         };
 
+        const localeDetails = findLocaleDetails(supportedLocales, localeSelected || selectedLocale);
+
         return (
           <>
             {transparent ? (
               <PopoverMenu
                 anchor={
                   <span className={classes.selected}>
-                    {localeItems.find((iLocale) => iLocale.value === selectedLocale)?.label}
+                    {localeItems.find((iLocale) => iLocale.value === localeDetails.id)?.label}
                   </span>
                 }
                 menuSections={[localeItems]}
@@ -70,7 +72,7 @@ export default function LocaleSelector({
                 <Dropdown
                   label={strings.LANGUAGE}
                   onChange={onChangeLocale}
-                  selectedValue={localeSelected}
+                  selectedValue={localeDetails.id}
                   options={localeItems}
                 />
               )

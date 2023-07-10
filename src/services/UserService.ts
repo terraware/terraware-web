@@ -57,6 +57,7 @@ const getUser = async (): Promise<UserResponse> => {
           emailNotificationsEnabled: data.user.emailNotificationsEnabled,
           timeZone: data.user.timeZone,
           locale: data.user.locale,
+          countryCode: data.user.countryCode,
         }
       : undefined,
   }));
@@ -77,6 +78,7 @@ const updateUser = async (user: User, options: UpdateOptions = {}): Promise<Resp
     lastName: user.lastName || '',
     timeZone: user.timeZone,
     locale: user.locale,
+    countryCode: user.countryCode,
   };
   if (user.emailNotificationsEnabled !== undefined) {
     entity.emailNotificationsEnabled = user.emailNotificationsEnabled;
