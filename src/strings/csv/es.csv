@@ -337,6 +337,7 @@ FILTER,Filtrar
 FILTERS,Filtros
 FINAL_QTY,Cantidad final
 FINISH,Finalizar
+FIRST_ADD_PLANTING_SITE,"Para ver el tablero, primero debe añadir un sitio de plantación."
 FIRST_NAME,Nombre
 FIX_HIGHLIGHTED_FIELDS,Corrija los campos resaltados a continuación.
 FLORA,Flora
@@ -378,6 +379,7 @@ GO_TO,Ir a {0}
 GO_TO_DASHBOARD,Ir al panel de control
 GO_TO_DATABASE,Ir a la base de datos
 GO_TO_NURSERIES,Ir a los viveros
+GO_TO_PLANTING_SITES,Ir a Sitios de plantación
 GO_TO_PROFILE,Ir al perfil
 GO_TO_SEED_BANKS,Ir a los bancos de semilla
 GO_TO_SPECIES,Ir a las especies
@@ -601,6 +603,8 @@ NO_NOTIFICATIONS,No hay notificaciones que mostrar.
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de que pueda añadir y administrar su inventario de viveros, deberá tener un vivero y especies dentro de Terraware. Solo los administradores pueden añadir viveros y especies, así que comuníquese con el suyo para obtener ayuda."
 NO_PAST_DATES,No se admiten fechas pasadas.
 NO_PEOPLE_IN_ORG,No hay personas en la organización.
+NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.
+NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero."
 NO_PLANTS,No hay plantas.
 NO_REASSIGNMENTS,No hay reasignaciones.
 NO_REASSIGNMENTS_TEXT,Seleccione una nueva subzona con cantidad en al menos una fila de lotes de plántulas.
