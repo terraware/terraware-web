@@ -34,6 +34,11 @@ jobs:
       - name: Set Environment
         run: ./.github/scripts/set-environment.sh
 
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
@@ -128,11 +133,6 @@ jobs:
         with:
           aws-region: ${{ secrets[env.AWS_REGION_SECRET_NAME] }}
           role-to-assume: ${{ secrets[env.AWS_ROLE_SECRET_NAME] }}
-
-      - name: Connect to Tailscale
-        uses: tailscale/github-action@v1
-        with:
-          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
 
       - name: Deploy
         if: env.IS_CD == 'true'
