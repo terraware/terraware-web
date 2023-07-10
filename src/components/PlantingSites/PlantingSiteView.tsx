@@ -3,14 +3,13 @@ import { Typography, Grid, Theme, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { TrackingService } from 'src/services';
 import { APP_PATHS } from 'src/constants';
 import { useHistory, useParams } from 'react-router-dom';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { useEffect, useState } from 'react';
+import { useAppSelector } from 'src/redux/store';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import PageSnackbar from '../PageSnackbar';
 import { makeStyles } from '@mui/styles';
-import { PlantingSite } from 'src/types/Tracking';
 import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones';
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -34,21 +33,10 @@ export default function PlantingSiteView(): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const [plantingSite, setPlantingSite] = useState<PlantingSite>();
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
   const history = useHistory();
   const tz = useLocationTimeZone().get(plantingSite);
   const trackingV2 = isEnabled('TrackingV2');
-
-  useEffect(() => {
-    const loadPlantingSite = async () => {
-      const response = await TrackingService.getPlantingSite(Number.parseInt(plantingSiteId, 10));
-      if (response.requestSucceeded) {
-        setPlantingSite(response.site);
-      }
-    };
-
-    loadPlantingSite();
-  }, [plantingSiteId]);
 
   const gridSize = () => {
     if (isMobile) {

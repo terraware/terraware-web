@@ -27,8 +27,11 @@ import TopBarContent from 'src/components/TopBar/TopBarContent';
 import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { FacilityType } from 'src/types/Facility';
-import MyAccount from './components/MyAccount';
 import { Species } from './types/Species';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import MyAccount from './components/MyAccount';
 import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
 import NewSeedBank from './components/NewSeedBank';
@@ -50,7 +53,7 @@ import {
 } from './components/Inventory/withdraw';
 import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
-import { SpeciesService, TrackingService } from 'src/services';
+import { SpeciesService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { defaultSelectedOrg } from 'src/providers/contexts';
@@ -169,10 +172,11 @@ function AppContent() {
 
   const history = useHistory();
   const [species, setSpecies] = useState<Species[]>([]);
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
+  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
   const trackingV2 = isEnabled('TrackingV2');
+  const dispatch = useAppDispatch();
 
   const setDefaults = useCallback(() => {
     if (!isPlaceholderOrg(selectedOrganization.id)) {
@@ -196,16 +200,13 @@ function AppContent() {
   }, [selectedOrganization]);
 
   const reloadTracking = useCallback(() => {
-    const populatePlantingSites = async () => {
+    const populatePlantingSites = () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        const response = await TrackingService.listPlantingSites(selectedOrganization.id, true);
-        if (response.requestSucceeded) {
-          setPlantingSites(response.sites || []);
-        }
+        dispatch(requestPlantingSites(selectedOrganization.id));
       }
     };
     populatePlantingSites();
-  }, [selectedOrganization]);
+  }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
     setDefaults();
@@ -221,7 +222,7 @@ function AppContent() {
 
   useEffect(() => {
     const subzones: Record<number, string> = {};
-    for (const plantingSite of plantingSites) {
+    for (const plantingSite of plantingSites ?? []) {
       for (const plantingZone of plantingSite.plantingZones ?? []) {
         for (const subzone of plantingZone.plantingSubzones ?? []) {
           subzones[subzone.id] = subzone.name;
@@ -262,7 +263,7 @@ function AppContent() {
 
   const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType('Nursery');
 
-  const selectedOrgHasPlantingSites = (): boolean => plantingSites.length > 0;
+  const selectedOrgHasPlantingSites = (): boolean => plantingSites !== undefined && plantingSites.length > 0;
 
   const getSeedBanksView = (): JSX.Element => {
     if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasSeedBanks()) {
