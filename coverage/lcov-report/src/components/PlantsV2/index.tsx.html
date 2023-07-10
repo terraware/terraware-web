@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
@@ -274,7 +274,19 @@
 <a name='L209'></a><a href='#L209'>209</a>
 <a name='L210'></a><a href='#L210'>210</a>
 <a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -437,6 +449,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -459,6 +478,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -627,13 +651,18 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   const renderPlantingProgressAndDensity = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; (</span>
 <span class="cstat-no" title="statement not covered" >    &lt;&gt;</span>
       {sectionHeader(sitePlantingComplete ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY)}
+      {sitePlantingComplete &amp;&amp; (
+        &lt;Grid item xs={isMobile ? 12 : 4}&gt;
+          &lt;PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} /&gt;
+        &lt;/Grid&gt;
+      )}
       {!sitePlantingComplete &amp;&amp; (
         &lt;Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}&gt;
           &lt;PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} /&gt;
         &lt;/Grid&gt;
       )}
-      {!sitePlantingComplete &amp;&amp; (
-        &lt;Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}&gt;
+      {hasObservations &amp;&amp; (
+        &lt;Grid item xs={isMobile ? 12 : sitePlantingComplete ? 4 : 6}&gt;
           &lt;HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} /&gt;
         &lt;/Grid&gt;
       )}
@@ -642,9 +671,11 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           &lt;PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} /&gt;
         &lt;/Grid&gt;
       )}
-      &lt;Grid item xs={isMobile ? 12 : hasObservations ? (sitePlantingComplete ? 4 : 6) : 4}&gt;
-        &lt;PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} /&gt;
-      &lt;/Grid&gt;
+      {!sitePlantingComplete &amp;&amp; (
+        &lt;Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}&gt;
+          &lt;PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} /&gt;
+        &lt;/Grid&gt;
+      )}
     &lt;/&gt;
   );
 &nbsp;
@@ -688,9 +719,14 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       setPlantsSitePreferences={onPreferences}
     &gt;
       &lt;Grid container spacing={3} alignItems='flex-start' height='fit-content'&gt;
-        {renderMortalityRate()}
-        {renderTotalPlantsAndSpecies()}
-        {hasReportedPlants &amp;&amp; renderPlantingProgressAndDensity()}
+        {!hasObservations &amp;&amp; renderTotalPlantsAndSpecies()}
+        {hasReportedPlants &amp;&amp; (
+          &lt;&gt;
+            {renderPlantingProgressAndDensity()}
+            {hasObservations &amp;&amp; renderMortalityRate()}
+          &lt;/&gt;
+        )}
+        {hasObservations &amp;&amp; renderTotalPlantsAndSpecies()}
         {hasPolygons &amp;&amp; renderZoneLevelData()}
       &lt;/Grid&gt;
     &lt;/PlantsPrimaryPage&gt;
@@ -703,7 +739,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-10T16:07:19.193Z
+                at 2023-07-10T16:34:44.254Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

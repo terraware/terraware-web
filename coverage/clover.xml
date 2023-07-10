@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1689005239537" clover="3.2.0">
-  <project timestamp="1689005239538" name="All files">
-    <metrics statements="11110" coveredstatements="359" conditionals="7069" coveredconditionals="90" methods="3426" coveredmethods="77" elements="21605" coveredelements="526" complexity="0" loc="11110" ncloc="11110" packages="100" files="456" classes="456"/>
+<coverage generated="1689006884616" clover="3.2.0">
+  <project timestamp="1689006884616" name="All files">
+    <metrics statements="11110" coveredstatements="359" conditionals="7079" coveredconditionals="90" methods="3426" coveredmethods="77" elements="21615" coveredelements="526" complexity="0" loc="11110" ncloc="11110" packages="100" files="456" classes="456"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5502,9 +5502,9 @@
       </file>
     </package>
     <package name="src.components.PlantsV2">
-      <metrics statements="60" coveredstatements="0" conditionals="67" coveredconditionals="0" methods="26" coveredmethods="0"/>
+      <metrics statements="60" coveredstatements="0" conditionals="77" coveredconditionals="0" methods="26" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/index.tsx">
-        <metrics statements="60" coveredstatements="0" conditionals="67" coveredconditionals="0" methods="26" coveredmethods="0"/>
+        <metrics statements="60" coveredstatements="0" conditionals="77" coveredconditionals="0" methods="26" coveredmethods="0"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
@@ -5556,15 +5556,15 @@
         <line num="136" count="0" type="stmt"/>
         <line num="140" count="0" type="stmt"/>
         <line num="141" count="0" type="stmt"/>
-        <line num="164" count="0" type="stmt"/>
-        <line num="165" count="0" type="stmt"/>
-        <line num="174" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="176" count="0" type="stmt"/>
-        <line num="178" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="180" count="0" type="stmt"/>
-        <line num="181" count="0" type="stmt"/>
-        <line num="182" count="0" type="stmt"/>
-        <line num="185" count="0" type="stmt"/>
+        <line num="171" count="0" type="stmt"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="181" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="185" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="187" count="0" type="stmt"/>
+        <line num="188" count="0" type="stmt"/>
+        <line num="189" count="0" type="stmt"/>
+        <line num="192" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.PlantsV2.components">
