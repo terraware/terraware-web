@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSites, requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -27,6 +27,8 @@ import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesC
 import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
 import { getShortDate } from 'src/utils/dateFormatter';
 import HectaresPlantedCard from './components/HectaresPlantedCard';
+import EmptyMessage from '../common/EmptyMessage';
+import { useHistory } from 'react-router-dom';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -36,6 +38,7 @@ export default function PlantsDashboardV2(): JSX.Element {
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState(-1);
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const locale = useLocalization();
+  const history = useHistory();
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
@@ -189,35 +192,51 @@ export default function PlantsDashboardV2(): JSX.Element {
     return totalHa;
   };
 
+  const getDashboardSubhead = () => {
+    if (selectedPlantingSiteId === -1) {
+      return strings.FIRST_ADD_PLANTING_SITE;
+    }
+    if (latestObservation?.completedTime) {
+      return strings.formatString(
+        strings.DASHBOARD_HEADER_TEXT,
+        <b>{getObservationHectares()}</b>,
+        <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
+      ) as string;
+    }
+  };
+
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
-      text={
-        latestObservation?.completedTime
-          ? (strings.formatString(
-              strings.DASHBOARD_HEADER_TEXT,
-              <b>{getObservationHectares()}</b>,
-              <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
-            ) as string)
-          : undefined
-      }
+      text={getDashboardSubhead()}
       onSelect={onSelect}
       pagePath={APP_PATHS.PLANTING_SITE_DASHBOARD}
       lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
       plantsSitePreferences={plantsDashboardPreferences}
       setPlantsSitePreferences={onPreferences}
     >
-      <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
-        {!hasObservations && renderTotalPlantsAndSpecies()}
-        {hasReportedPlants && (
-          <>
-            {renderPlantingProgressAndDensity()}
-            {hasObservations && renderMortalityRate()}
-          </>
-        )}
-        {hasObservations && renderTotalPlantsAndSpecies()}
-        {hasPolygons && renderZoneLevelData()}
-      </Grid>
+      {selectedPlantingSiteId !== -1 ? (
+        <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
+          {!hasObservations && renderTotalPlantsAndSpecies()}
+          {hasReportedPlants && (
+            <>
+              {renderPlantingProgressAndDensity()}
+              {hasObservations && renderMortalityRate()}
+            </>
+          )}
+          {hasObservations && renderTotalPlantsAndSpecies()}
+          {hasPolygons && renderZoneLevelData()}
+        </Grid>
+      ) : (
+        <Box sx={{ margin: '0 auto', maxWidth: '800px', padding: '48px', width: isMobile ? 'auto' : '800px' }}>
+          <EmptyMessage
+            title={strings.NO_PLANTING_SITES_TITLE}
+            text={strings.NO_PLANTING_SITES_DESCRIPTION}
+            buttonText={strings.GO_TO_PLANTING_SITES}
+            onClick={() => history.push(APP_PATHS.PLANTING_SITES)}
+          />
+        </Box>
+      )}
     </PlantsPrimaryPage>
   );
 }

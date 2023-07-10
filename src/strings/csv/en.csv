@@ -337,6 +337,7 @@ FILTER,Filter
 FILTERS,Filters
 FINAL_QTY,Final Qty
 FINISH,Finish
+FIRST_ADD_PLANTING_SITE,"To view the dashboard, you first need to add a planting site."
 FIRST_NAME,First Name
 FIX_HIGHLIGHTED_FIELDS,Fix the highlighted fields below.
 FLORA,Flora
@@ -378,6 +379,7 @@ GO_TO,Go to {0}
 GO_TO_DASHBOARD,Go to Dashboard
 GO_TO_DATABASE,Go to Database
 GO_TO_NURSERIES,Go to Nurseries
+GO_TO_PLANTING_SITES,Go to Planting Sites
 GO_TO_PROFILE,Go to Profile
 GO_TO_SEED_BANKS,Go to Seed Banks
 GO_TO_SPECIES,Go to Species
@@ -601,6 +603,8 @@ NO_NOTIFICATIONS,No notifications to show.
 NO_NURSERIES_NON_ADMIN_MSG,"Before you can add and manage your nursery inventory, you’ll need to have a nursery and species within Terraware. Only admins can add nurseries and species, so please reach out to yours for assistance."
 NO_PAST_DATES,No past dates allowed
 NO_PEOPLE_IN_ORG,No People in Organization
+NO_PLANTING_SITES_TITLE,"Just a moment, let’s add a planting site first."
+NO_PLANTING_SITES_DESCRIPTION,Start by adding a planting site. Adding a planting site will allow you to track where seedlings go after they leave the nursery.
 NO_PLANTS,No Plants
 NO_REASSIGNMENTS,No Reassignments
 NO_REASSIGNMENTS_TEXT,Select a new subzone with quantity in at least one seedlings batch row.
