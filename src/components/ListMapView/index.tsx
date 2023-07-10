@@ -14,9 +14,10 @@ export type ListMapViewProps = {
   map: React.ReactNode;
   initialView: View;
   onView?: (view: View) => void;
+  style?: Record<string, string | number>;
 };
 
-export default function ListMapView({ search, list, map, onView, initialView }: ListMapViewProps): JSX.Element {
+export default function ListMapView({ search, list, map, onView, style, initialView }: ListMapViewProps): JSX.Element {
   const [view, setView] = useState<View>(initialView);
   const theme = useTheme();
 
@@ -33,6 +34,7 @@ export default function ListMapView({ search, list, map, onView, initialView }: 
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 1,
+        ...style,
       }}
       flushMobile
     >
