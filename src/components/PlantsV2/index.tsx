@@ -140,13 +140,18 @@ export default function PlantsDashboardV2(): JSX.Element {
   const renderPlantingProgressAndDensity = () => (
     <>
       {sectionHeader(sitePlantingComplete ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY)}
+      {sitePlantingComplete && (
+        <Grid item xs={isMobile ? 12 : 4}>
+          <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+        </Grid>
+      )}
       {!sitePlantingComplete && (
         <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
           <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
         </Grid>
       )}
-      {!sitePlantingComplete && (
-        <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
+      {hasObservations && (
+        <Grid item xs={isMobile ? 12 : sitePlantingComplete ? 4 : 6}>
           <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
         </Grid>
       )}
@@ -155,9 +160,11 @@ export default function PlantsDashboardV2(): JSX.Element {
           <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
         </Grid>
       )}
-      <Grid item xs={isMobile ? 12 : hasObservations ? (sitePlantingComplete ? 4 : 6) : 4}>
-        <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
-      </Grid>
+      {!sitePlantingComplete && (
+        <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
+          <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+        </Grid>
+      )}
     </>
   );
 
@@ -201,9 +208,14 @@ export default function PlantsDashboardV2(): JSX.Element {
       setPlantsSitePreferences={onPreferences}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
-        {renderMortalityRate()}
-        {renderTotalPlantsAndSpecies()}
-        {hasReportedPlants && renderPlantingProgressAndDensity()}
+        {!hasObservations && renderTotalPlantsAndSpecies()}
+        {hasReportedPlants && (
+          <>
+            {renderPlantingProgressAndDensity()}
+            {hasObservations && renderMortalityRate()}
+          </>
+        )}
+        {hasObservations && renderTotalPlantsAndSpecies()}
         {hasPolygons && renderZoneLevelData()}
       </Grid>
     </PlantsPrimaryPage>
