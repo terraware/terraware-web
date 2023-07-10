@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import TfMain from 'src/components/common/TfMain';
 import { Typography, Box, Container, Grid, useTheme } from '@mui/material';
 import strings from 'src/strings';
@@ -9,7 +10,8 @@ import { APP_PATHS } from 'src/constants';
 import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { useEffect, useState } from 'react';
+import { useAppSelector } from 'src/redux/store';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import PageSnackbar from '../PageSnackbar';
 import { PlantingSite } from 'src/types/Tracking';
 import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones';
@@ -36,9 +38,9 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const history = useHistory();
   const snackbar = useSnackbar();
   const [nameError, setNameError] = useState('');
-  const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [loaded, setLoaded] = useState(false);
   const trackingV2 = isEnabled('TrackingV2');
+  const selectedPlantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
@@ -46,22 +48,11 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     organizationId: selectedOrganization.id,
   });
 
-  useEffect(() => {
-    const fetchPlantingSite = async () => {
-      if (plantingSiteId) {
-        const serverResponse = await TrackingService.getPlantingSite(Number.parseInt(plantingSiteId, 10));
-        if (serverResponse.requestSucceeded) {
-          setSelectedPlantingSite(serverResponse.site);
-          setLoaded(true);
-        }
-      } else {
-        setLoaded(true);
-      }
-    };
-
-    fetchPlantingSite();
-  }, [plantingSiteId, selectedOrganization]);
   const [record, setRecord, onChange] = useForm<PlantingSite>(defaultPlantingSite());
+
+  useEffect(() => {
+    setLoaded(true);
+  }, [selectedPlantingSite]);
 
   useEffect(() => {
     setRecord({
