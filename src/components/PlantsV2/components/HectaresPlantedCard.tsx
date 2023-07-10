@@ -44,7 +44,7 @@ export default function HectaresPlantedCard({ plantingSiteId, observation }: Hec
           </Typography>
           <Box display={'flex'} alignItems='baseline'>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
-              {totalPlantedArea}
+              {Math.round(totalPlantedArea)}
             </Typography>
             <Typography fontSize='24px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
               {strings.HECTARES}
