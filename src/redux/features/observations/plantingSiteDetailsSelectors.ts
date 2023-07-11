@@ -84,6 +84,7 @@ export const selectPlantingSiteZones = createSelector(
      * Additional data: 
      *  zone-> completedTime, plantingCompleted (in addition to existing fields in PlantingZone)
      *  subzone-> union of monitoring plots across observation results (in addition to existing fields in PlantingSubzone)
+     */
     return (
       plantingSite?.plantingZones?.map(
         (zone): ZoneObservationsAggregation => ({
