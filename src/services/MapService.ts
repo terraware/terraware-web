@@ -6,6 +6,9 @@ import {
   ObservationPlantingSubzoneResults,
   ObservationPlantingZoneResults,
   ObservationResults,
+  PlantingSiteAggregation,
+  SubzoneAggregation,
+  ZoneAggregation,
 } from 'src/types/Observations';
 
 /**
@@ -308,6 +311,52 @@ const getMapDataFromObservation = (observation: ObservationResults): MapData => 
 };
 
 /**
+ * Extract Planting Site, Zones, Subzones and monitoring plots from planting site aggregated data,
+ * which is a hybrid of planting site and observation results.
+ */
+const getMapDataFromAggregation = (plantingSite: PlantingSiteAggregation): MapData => {
+  const permanentPlotEntities = plantingSite.plantingZones.flatMap((zone: ZoneAggregation) =>
+    zone.plantingSubzones.flatMap((sz: SubzoneAggregation) =>
+      sz.monitoringPlots
+        .filter((plot) => plot.isPermanent)
+        .map((plot) => ({
+          id: plot.monitoringPlotId,
+          properties: {
+            id: plot.monitoringPlotId,
+            name: plot.monitoringPlotName,
+            type: 'permanentPlot',
+          },
+          boundary: [plot.boundary.coordinates],
+        }))
+    )
+  );
+
+  const temporaryPlotEntities = plantingSite.plantingZones.flatMap((zone: ZoneAggregation) =>
+    zone.plantingSubzones.flatMap((sz: SubzoneAggregation) =>
+      sz.monitoringPlots
+        .filter((plot) => !plot.isPermanent)
+        .map((plot) => ({
+          id: plot.monitoringPlotId,
+          properties: {
+            id: plot.monitoringPlotId,
+            name: plot.monitoringPlotName,
+            type: 'temporaryPlot',
+          },
+          boundary: [plot.boundary.coordinates],
+        }))
+    )
+  );
+
+  return {
+    site: extractPlantingSite(plantingSite),
+    zone: extractPlantingZones(plantingSite),
+    subzone: extractSubzones(plantingSite),
+    permanentPlot: { id: 'permanentPlots', entities: permanentPlotEntities },
+    temporaryPlot: { id: 'temporaryPlots', entities: temporaryPlotEntities },
+  };
+};
+
+/**
  * Exported functions
  */
 const MapService = {
@@ -315,6 +364,7 @@ const MapService = {
   getBoundingBox,
   getMapDataFromPlantingSite,
   getMapDataFromObservation,
+  getMapDataFromAggregation,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,
   extractPlantingSite,
