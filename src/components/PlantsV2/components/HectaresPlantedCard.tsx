@@ -8,6 +8,7 @@ import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 
 type HectaresPlantedCardProps = {
   plantingSiteId: number;
@@ -44,7 +45,7 @@ export default function HectaresPlantedCard({ plantingSiteId, observation }: Hec
           </Typography>
           <Box display={'flex'} alignItems='baseline'>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
-              {Math.round(totalPlantedArea)}
+              <FormattedNumber value={Math.round(totalPlantedArea) || 0} />
             </Typography>
             <Typography fontSize='24px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
               {strings.HECTARES}
@@ -69,7 +70,7 @@ export default function HectaresPlantedCard({ plantingSiteId, observation }: Hec
             textAlign='right'
             color={theme.palette.TwClrBaseBlue500}
           >
-            {strings.formatString(strings.TARGET_HECTARES_PLANTED, totalArea)}
+            {strings.formatString(strings.TARGET_HECTARES_PLANTED, <FormattedNumber value={totalArea || 0} />)}
           </Typography>
           <Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}>
             {strings.HECTARES_PLANTED_DESCRIPTION_1}

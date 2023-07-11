@@ -29,6 +29,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import HectaresPlantedCard from './components/HectaresPlantedCard';
 import EmptyMessage from '../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
+import FormattedNumber from '../common/FormattedNumber';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -199,7 +200,9 @@ export default function PlantsDashboardV2(): JSX.Element {
     if (latestObservation?.completedTime) {
       return strings.formatString(
         strings.DASHBOARD_HEADER_TEXT,
-        <b>{getObservationHectares()}</b>,
+        <b>
+          <FormattedNumber value={getObservationHectares()} />
+        </b>,
         <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
       ) as string;
     }

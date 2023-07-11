@@ -4,6 +4,7 @@ import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 
 type TotalReportedPlantsCardProps = {
   plantingSiteId?: number;
@@ -50,7 +51,7 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
           </Typography>
           <Box display='flex' alignItems='flex-end' flexWrap='wrap' marginBottom={theme.spacing(3)}>
             <Typography fontSize={numberFontSize(totalPlants)} fontWeight={600} lineHeight={1}>
-              {totalPlants}
+              <FormattedNumber value={totalPlants} />
             </Typography>
             &nbsp;
             <Typography fontSize='24px' fontWeight={600}>
