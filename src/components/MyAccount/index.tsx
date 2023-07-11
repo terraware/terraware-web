@@ -1,7 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, DropdownItem } from '@terraware/web-components';
-import { OrganizationUserService, OrganizationService, PreferencesService, UserService } from 'src/services';
+import {
+  OrganizationUserService,
+  OrganizationService,
+  PreferencesService,
+  UserService,
+  LocationService,
+} from 'src/services';
 import Table from 'src/components/common/table';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { TableColumnType } from 'src/components/common/table/types';
@@ -33,6 +39,9 @@ import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import LocaleSelector from '../LocaleSelector';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
 import DeleteAccountModal from './DeleteAccountModal';
+import { Country } from 'src/types/Country';
+import { getCountryByCode } from 'src/utils/country';
+import RegionSelector from 'src/components/RegionSelector';
 
 type MyAccountProps = {
   organizations?: Organization[];
@@ -104,7 +113,8 @@ const MyAccountContent = ({
   const { userPreferences, reloadUserPreferences } = useUser();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
-  const { selectedLocale, setSelectedLocale } = useLocalization();
+  const { activeLocale, selectedLocale, setSelectedLocale } = useLocalization();
+  const [countries, setCountries] = useState<Country[]>();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
   const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState(
@@ -113,6 +123,7 @@ const MyAccountContent = ({
   const loadedStringsForLocale = useLocalization().activeLocale;
 
   const [localeSelected, setLocaleSelected] = useState(selectedLocale);
+  const [countryCodeSelected, setCountryCodeSelected] = useState(user?.countryCode);
 
   useEffect(() => {
     setLocaleSelected(selectedLocale);
@@ -132,7 +143,23 @@ const MyAccountContent = ({
 
   useEffect(() => {
     setRecord(user);
-  }, [user, setRecord]);
+    if (!countryCodeSelected) {
+      setCountryCodeSelected(user.countryCode);
+    }
+  }, [user, setRecord, countryCodeSelected, setCountryCodeSelected]);
+
+  useEffect(() => {
+    if (activeLocale) {
+      const populateCountries = async () => {
+        const response = await LocationService.getCountries();
+        if (response) {
+          setCountries(response);
+        }
+      };
+
+      populateCountries();
+    }
+  }, [activeLocale]);
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -211,7 +238,11 @@ const MyAccountContent = ({
   const saveProfileChanges = async () => {
     // Save the currently-selected locale, even if it differs from the locale in the profile data we
     // fetched from the server.
-    const updateUserResponse = await UserService.updateUser({ ...record, locale: localeSelected });
+    const updateUserResponse = await UserService.updateUser({
+      ...record,
+      countryCode: countryCodeSelected,
+      locale: localeSelected,
+    });
     return updateUserResponse;
   };
 
@@ -403,7 +434,7 @@ const MyAccountContent = ({
             </Grid>
             <Grid
               item
-              xs={isMobile ? 12 : 4}
+              xs={isMobile ? 12 : 3}
               sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
             >
               {edit ? (
@@ -423,7 +454,31 @@ const MyAccountContent = ({
             </Grid>
             <Grid
               item
-              xs={isMobile ? 12 : 4}
+              xs={isMobile ? 12 : 3}
+              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+            >
+              {edit ? (
+                <RegionSelector
+                  selectedCountryCode={countryCodeSelected}
+                  onChangeCountryCode={setCountryCodeSelected}
+                  horizontalLayout
+                  hideCountrySubdivisions={true}
+                  countryLabel={strings.COUNTRY}
+                  countryTooltip={strings.TOOLTIP_COUNTRY_MY_ACCOUNT}
+                />
+              ) : (
+                <TextField
+                  label={strings.COUNTRY}
+                  id='country'
+                  type='text'
+                  value={countries && user.countryCode ? getCountryByCode(countries, user.countryCode)?.name : ''}
+                  display={true}
+                />
+              )}
+            </Grid>
+            <Grid
+              item
+              xs={isMobile ? 12 : 3}
               sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
             >
               {edit ? (
@@ -441,7 +496,7 @@ const MyAccountContent = ({
                 />
               )}
             </Grid>
-            <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+            <Grid item xs={isMobile ? 12 : 3} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
               {edit ? (
                 <TimeZoneSelector
                   onTimeZoneSelected={onTimeZoneChange}
