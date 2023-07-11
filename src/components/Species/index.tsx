@@ -127,6 +127,18 @@ const BE_SORTED_FIELDS = [
   'seedStorageBehavior',
 ];
 
+// These need to be in the same order as in the import template.
+const CSV_FIELDS = [
+  'scientificName',
+  'commonName',
+  'familyName',
+  'conservationCategory',
+  'rare',
+  'growthForm',
+  'seedStorageBehavior',
+  'ecosystemTypes.ecosystemType',
+];
+
 export default function SpeciesList({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
@@ -195,24 +207,6 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY,
       },
       {
-        key: 'growthForm',
-        name: strings.GROWTH_FORM,
-        type: 'string',
-        tooltipTitle: (
-          <>
-            {strings.TOOLTIP_SPECIES_GROWTH_FORM}
-            <LearnMoreLink
-              onClick={() =>
-                openTooltipLearnMoreModal({
-                  title: strings.GROWTH_FORM,
-                  content: <LearnMoreModalContentGrowthForm />,
-                })
-              }
-            />
-          </>
-        ),
-      },
-      {
         key: 'conservationCategory',
         name: strings.CONSERVATION_CATEGORY,
         type: 'string',
@@ -234,6 +228,24 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         name: strings.RARE,
         type: 'boolean',
         tooltipTitle: strings.TOOLTIP_SPECIES_RARE,
+      },
+      {
+        key: 'growthForm',
+        name: strings.GROWTH_FORM,
+        type: 'string',
+        tooltipTitle: (
+          <>
+            {strings.TOOLTIP_SPECIES_GROWTH_FORM}
+            <LearnMoreLink
+              onClick={() =>
+                openTooltipLearnMoreModal({
+                  title: strings.GROWTH_FORM,
+                  content: <LearnMoreModalContentGrowthForm />,
+                })
+              }
+            />
+          </>
+        ),
       },
       {
         key: 'seedStorageBehavior',
@@ -558,6 +570,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     if (!params.search.children.length) {
       params.search = null;
     }
+    params.fields = CSV_FIELDS;
     const apiResponse = await SearchService.searchCsv(params);
 
     if (apiResponse !== null) {
