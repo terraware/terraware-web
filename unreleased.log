@@ -1,3 +1,4 @@
+fb8b3155 SW-3874 Localize all numeric displays in charts (#1540)
 2650b5b4 Refactor planting-sites fetch to use redux + initial map/list view in planting sites details page (#1537)
 1c4c9fea SW-3868 Handle locales with country codes (#1530)
 8852bb7a SW-3684 Empty state when no planting sites (#1536)
