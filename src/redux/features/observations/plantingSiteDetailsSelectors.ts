@@ -18,8 +18,7 @@ export const selectPlantingSiteObservationsResultsError = (state: RootState, pla
   state.plantingSiteObservationsResults?.[plantingSiteId]?.error;
 
 /**
- * TODO: Add selectors that provide aggregated information across observations results for a planting site
- * Example: total number of monitoring plots (de-duped across results)
+ * Aggregate monitoring plots and last observed times across observation results for a planting site
  */
 export const selectPlantingSiteZones = createSelector(
   [
