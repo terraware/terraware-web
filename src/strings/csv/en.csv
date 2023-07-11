@@ -719,6 +719,7 @@ PEOPLE,People
 PEOPLE_CARD_DESCRIPTION,We can’t do it alone! Add people to your Organization and assign them roles.
 PEOPLE_DESCRIPTION,Manage the people in Terraware.
 PERCENTAGE_OF_SITE_PLANTED,{0}% of Site
+PERCENTAGE_OF_TARGET_PLANTING_DENSITY,{0}% of Target
 PERCENTAGE_VALUE,{0}%
 PERCENTAGE_VIABILITY,% Viability
 PERIOD_LAST_12_HOURS,Last 12 hours
@@ -740,6 +741,9 @@ PLANT_ID,Plant ID
 PLANT_ID_TOOLTIP,It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.
 PLANT_LABEL,Plant
 PLANTING_DENSITY,Planting Density
+PLANTING_DENSITY_CARD_TITLE,What is my planting density as of {0}?
+PLANTING_DENSITY_DESCRIPTION,This is your planting density calculated from your latest observations.
+PLANTING_DENSITY_UPDATE_DESCRIPTION,Since then you have reported new plantings that suggest a planting density of {0} plants/Ha.
 PLANTING_DENSITY_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the planting density."
 PLANTING_DENSITY_PER_ZONE_CARD_TITLE,What is my target planting density per zone?
 PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"This is your zone’s target planting density which you’ve provided. If you’d like to change the target planting densities, please reach out to Terraformation."
@@ -1082,6 +1086,7 @@ SUSTAINABLE_TIMBER,Sustainable Timber
 TAKE_ME_THERE,Take Me There
 TARGET_HECTARES_PLANTED,Target: {0} Hectares
 TARGET_PLANTING_DENSITY,Target Planting Density
+TARGET_DENSITY_PLANTS_PER_HECTARE,Target: {0} Plants/ha
 TARGET_RH,Target %RH
 TEMPERATURE_AND_HUMIDITY_SENSOR_DATA,Temperature & Humidity Sensor Data
 TEMPLATES,Templates

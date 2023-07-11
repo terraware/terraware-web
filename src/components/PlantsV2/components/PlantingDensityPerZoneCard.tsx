@@ -25,18 +25,18 @@ export default function PlantingDensityPerZoneCard({
   const locale = useLocalization();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [labels, setLabels] = useState<string[]>();
-  const [targets, setTargets] = useState<(number | undefined)[]>();
-  const [actuals, setActuals] = useState<(number | undefined)[]>();
+  const [targets, setTargets] = useState<(number | null)[]>();
+  const [actuals, setActuals] = useState<(number | null)[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
 
   useEffect(() => {
     if (plantingSite) {
-      const zoneDensities: Record<string, (number | undefined)[]> = {};
+      const zoneDensities: Record<string, (number | null)[]> = {};
       plantingSite.plantingZones?.forEach((zone) => {
         zoneDensities[zone.name] = [zone.targetPlantingDensity];
         if (observation) {
           const zoneFromObs = observation.plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
-          zoneDensities[zone.name].push(zoneFromObs?.plantingDensity);
+          zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);
         }
       });
       setLabels(Object.keys(zoneDensities).map((name) => truncate(name, MAX_ZONE_NAME_LENGTH)));
