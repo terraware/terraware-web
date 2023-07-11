@@ -4,7 +4,6 @@ import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
-import { useLocalization } from 'src/providers';
 import { useNumberParser } from 'src/utils/useNumber';
 
 type TotalReportedPlantsCardProps = {
@@ -13,8 +12,7 @@ type TotalReportedPlantsCardProps = {
 
 export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReportedPlantsCardProps): JSX.Element {
   const theme = useTheme();
-  const locale = useLocalization();
-  const parse = useNumberParser(locale.activeLocale ?? 'en-US');
+  const parse = useNumberParser();
   const populationSelector = useAppSelector((state) => selectSitePopulation(state));
   const [totalPlants, setTotalPlants] = useState(0);
   useEffect(() => {

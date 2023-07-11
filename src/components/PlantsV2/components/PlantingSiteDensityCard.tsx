@@ -26,7 +26,7 @@ export default function PlantingSiteDensityCard({
     selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [])
   );
   const locale = useLocalization();
-  const parse = useNumberParser(locale.activeLocale ?? 'en-US');
+  const parse = useNumberParser();
 
   const weightedSum =
     plantingSite?.plantingZones?.map((z) => z.targetPlantingDensity * z.areaHa)?.reduce((a, b) => a + b) ?? 0;

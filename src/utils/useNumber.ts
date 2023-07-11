@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useLocalization } from 'src/providers';
 
 const getLocaleToUse = (locale?: string) => (locale === 'gx' ? 'fr' : locale || 'en');
 
@@ -21,7 +22,9 @@ export const useNumberFormatter = (): any => {
  * Parser
  * ref: https://observablehq.com/@mbostock/localized-number-parsing
  */
-export const useNumberParser = (locale?: string): any => {
+export const useNumberParser = (): any => {
+  const locale = useLocalization().activeLocale ?? 'en-US';
+
   const parser = useMemo(() => {
     const parts = new Intl.NumberFormat(locale).formatToParts(12345.6);
     const numerals = new Intl.NumberFormat(locale, { useGrouping: false }).format(9876543210).split('').reverse();

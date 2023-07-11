@@ -42,7 +42,7 @@ export default function PlantsDashboardV2(): JSX.Element {
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const locale = useLocalization();
   const history = useHistory();
-  const parse = useNumberParser(locale.activeLocale ?? 'en-US');
+  const parse = useNumberParser();
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(

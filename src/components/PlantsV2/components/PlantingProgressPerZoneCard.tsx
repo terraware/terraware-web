@@ -6,7 +6,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { truncate } from 'src/utils/text';
-import { useLocalization } from 'src/providers';
 import { useNumberParser } from 'src/utils/useNumber';
 
 const MAX_ZONE_NAME_LENGTH = 20;
@@ -17,8 +16,7 @@ type PlantingProgressPerZoneCardProps = {
 
 export default function PlantingProgressPerZoneCard({ plantingSiteId }: PlantingProgressPerZoneCardProps): JSX.Element {
   const theme = useTheme();
-  const locale = useLocalization();
-  const parse = useNumberParser(locale.activeLocale ?? 'en-US');
+  const parse = useNumberParser();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();

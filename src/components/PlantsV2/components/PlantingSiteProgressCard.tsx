@@ -4,7 +4,6 @@ import strings from 'src/strings';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useLocalization } from 'src/providers';
 import { useNumberParser } from 'src/utils/useNumber';
 
 type PlantingSiteProgressCardProps = {
@@ -13,8 +12,7 @@ type PlantingSiteProgressCardProps = {
 
 export default function PlantingSiteProgressCard({ plantingSiteId }: PlantingSiteProgressCardProps): JSX.Element {
   const theme = useTheme();
-  const locale = useLocalization();
-  const parse = useNumberParser(locale.activeLocale ?? 'en-US');
+  const parse = useNumberParser();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
   const totalArea = plantingSite?.areaHa ?? 0;
