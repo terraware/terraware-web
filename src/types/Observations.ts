@@ -1,5 +1,5 @@
 import { components } from 'src/api/types/generated-schema';
-import { MultiPolygon } from './Tracking';
+import { PlantingZone, PlantingSubzone, MultiPolygon } from './Tracking';
 import strings from 'src/strings';
 
 // basic information on a single observation (excluding observation results)
@@ -85,4 +85,20 @@ export const getPlotStatus = (status?: MonitoringPlotStatus): string => {
     default:
       return '';
   }
+};
+
+export type ObservationsAggregation = {
+  subzones: Record<number, Set<number>>;
+  plots: Record<number, ObservationMonitoringPlotResultsPayload>;
+  completedTime?: string;
+};
+
+export type SubzoneObservationsAggregation = PlantingSubzone & {
+  monitoringPlots: ObservationMonitoringPlotResultsPayload[];
+};
+
+export type ZoneObservationsAggregation = Omit<PlantingZone, 'plantingSubzones'> & {
+  completedTime?: string;
+  plantingCompleted: boolean;
+  plantingSubzones: SubzoneObservationsAggregation[];
 };

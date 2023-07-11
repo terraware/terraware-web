@@ -464,6 +464,7 @@ LANGUAGE,Language
 LANGUAGE_AND_REGION,Language and Region
 LAST_EDITED_BY,Last Edited By
 LAST_NAME,Last Name
+LAST_OBSERVED,Last Observed
 LATITUDE_LONGITUDE,"Latitude, Longitude"
 LB,lb
 LB_POUNDS,lb (pounds)
@@ -739,6 +740,8 @@ PLANT_DETAIL,Plant Detail
 PLANT_ID,Plant ID
 PLANT_ID_TOOLTIP,It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.
 PLANT_LABEL,Plant
+PLANTING_COMPLETE,Planting Complete?
+PLANTING_COMPLETE_TOOLTIP,Go to Seedlings > Withdrawals to update the planting complete status.
 PLANTING_DENSITY,Planting Density
 PLANTING_DENSITY_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the planting density."
 PLANTING_DENSITY_PER_ZONE_CARD_TITLE,What is my target planting density per zone?
@@ -1082,6 +1085,7 @@ SUSTAINABLE_TIMBER,Sustainable Timber
 TAKE_ME_THERE,Take Me There
 TARGET_HECTARES_PLANTED,Target: {0} Hectares
 TARGET_PLANTING_DENSITY,Target Planting Density
+TARGET_PLANTING_DENSITY_TOOLTIP,Target planting density for zone (plants per hectare).
 TARGET_RH,Target %RH
 TEMPERATURE_AND_HUMIDITY_SENSOR_DATA,Temperature & Humidity Sensor Data
 TEMPLATES,Templates
