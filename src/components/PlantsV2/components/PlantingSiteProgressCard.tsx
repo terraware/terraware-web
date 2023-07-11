@@ -4,12 +4,17 @@ import strings from 'src/strings';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { NumericFormatter } from 'src/types/Number';
 
 type PlantingSiteProgressCardProps = {
   plantingSiteId: number;
+  numericFormatter: NumericFormatter;
 };
 
-export default function PlantingSiteProgressCard({ plantingSiteId }: PlantingSiteProgressCardProps): JSX.Element {
+export default function PlantingSiteProgressCard({
+  plantingSiteId,
+  numericFormatter,
+}: PlantingSiteProgressCardProps): JSX.Element {
   const theme = useTheme();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
@@ -31,7 +36,9 @@ export default function PlantingSiteProgressCard({ plantingSiteId }: PlantingSit
             {strings.PLANTING_PROGRESS_CARD_TITLE}
           </Typography>
           <Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
-            {totalArea > 0 ? `${Math.round((100 * totalPlantedArea) / totalArea)}%` : '0%'}
+            {totalArea > 0
+              ? `${numericFormatter.format(Math.round((100 * totalPlantedArea) / totalArea) || 0)}%`
+              : '0%'}
           </Typography>
           <Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}>
             {strings.PLANTING_PROGRESS_DESCRIPTION_1}

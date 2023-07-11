@@ -1,16 +1,20 @@
-import React from 'react';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { ObservationResults } from 'src/types/Observations';
 import { useLocalization } from 'src/providers';
+import { NumericFormatter } from 'src/types/Number';
 
 type TotalMortalityRateCardProps = {
   observation?: ObservationResults;
+  numericFormatter: NumericFormatter;
 };
 
-export default function TotalMortalityRateCard({ observation }: TotalMortalityRateCardProps): JSX.Element {
+export default function TotalMortalityRateCard({
+  observation,
+  numericFormatter,
+}: TotalMortalityRateCardProps): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization();
 
@@ -26,7 +30,7 @@ export default function TotalMortalityRateCard({ observation }: TotalMortalityRa
             )}
           </Typography>
           <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
-            {(observation?.mortalityRate ?? '0') + '%'}
+            {(observation?.mortalityRate ? numericFormatter.format(observation?.mortalityRate) : '0') + '%'}
           </Typography>
           <Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}>
             {strings.MORTALITY_RATE_CLARIFICATION}

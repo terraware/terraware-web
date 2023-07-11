@@ -6,8 +6,11 @@ const getLocaleToUse = (locale?: string) => (locale === 'gx' ? 'fr' : locale || 
  * formatter
  */
 export const useNumberFormatter = (): any => {
-  const formatter = (locale?: string): any => {
-    const localeToUse = getLocaleToUse(locale);
+  const formatter = (locale?: string, countryCode?: string): any => {
+    let localeToUse = getLocaleToUse(locale);
+    if (countryCode) {
+      localeToUse = `${localeToUse}-${countryCode}`;
+    }
     const intlFormat = new Intl.NumberFormat(localeToUse);
     const format = (num: number) => intlFormat.format(num);
 
