@@ -461,7 +461,6 @@ const MyAccountContent = ({
                 <RegionSelector
                   selectedCountryCode={countryCodeSelected}
                   onChangeCountryCode={setCountryCodeSelected}
-                  horizontalLayout
                   hideCountrySubdivisions={true}
                   countryLabel={strings.COUNTRY}
                   countryTooltip={strings.TOOLTIP_COUNTRY_MY_ACCOUNT}
