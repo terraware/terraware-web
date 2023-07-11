@@ -9,6 +9,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import { selectPlantingsDateRange } from 'src/redux/features/Plantings/plantingsSelectors';
+import { useNumberParser } from 'src/utils/useNumber';
 
 type PlantingSiteDensityCardProps = {
   plantingSiteId: number;
@@ -25,13 +26,14 @@ export default function PlantingSiteDensityCard({
     selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [])
   );
   const locale = useLocalization();
+  const parse = useNumberParser(locale.activeLocale ?? 'en-US');
 
   const weightedSum =
     plantingSite?.plantingZones?.map((z) => z.targetPlantingDensity * z.areaHa)?.reduce((a, b) => a + b) ?? 0;
   const targetPlantingDensity = plantingSite?.areaHa ? weightedSum / plantingSite.areaHa : 0;
   const plantingDensity = observation?.plantingDensity ?? 0;
   const percentageOfTargetDensity = (100 * plantingDensity) / targetPlantingDensity;
-  const numPlantedSinceObs = plantingsSinceObservation.reduce((prev, curr) => +curr.numPlants + prev, 0);
+  const numPlantedSinceObs = plantingsSinceObservation.reduce((prev, curr) => parse(curr.numPlants) + prev, 0);
   const newDensityEstimate = plantingSite?.areaHa
     ? plantingDensity + numPlantedSinceObs / plantingSite.areaHa
     : plantingDensity;

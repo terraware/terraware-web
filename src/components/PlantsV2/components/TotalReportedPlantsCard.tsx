@@ -4,6 +4,8 @@ import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
+import { useLocalization } from 'src/providers';
+import { useNumberParser } from 'src/utils/useNumber';
 
 type TotalReportedPlantsCardProps = {
   plantingSiteId?: number;
@@ -11,6 +13,8 @@ type TotalReportedPlantsCardProps = {
 
 export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReportedPlantsCardProps): JSX.Element {
   const theme = useTheme();
+  const locale = useLocalization();
+  const parse = useNumberParser(locale.activeLocale ?? 'en-US');
   const populationSelector = useAppSelector((state) => selectSitePopulation(state));
   const [totalPlants, setTotalPlants] = useState(0);
   useEffect(() => {
@@ -19,10 +23,10 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
         .flatMap((zone) => zone.plantingSubzones)
         .flatMap((sz) => sz.populations)
         .filter((pop) => pop !== undefined);
-      const sum = populations.reduce((acc, pop) => +pop.totalPlants + acc, 0);
+      const sum = populations.reduce((acc, pop) => parse(pop.totalPlants) + acc, 0);
       setTotalPlants(sum);
     }
-  }, [populationSelector]);
+  }, [populationSelector, parse]);
 
   const numberFontSize = (n: number): string => {
     if (n < 1000) {

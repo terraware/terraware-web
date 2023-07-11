@@ -6,6 +6,8 @@ import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
 import BarChart from 'src/components/common/Chart/BarChart';
 import { truncate } from 'src/utils/text';
+import { useLocalization } from 'src/providers';
+import { useNumberParser } from 'src/utils/useNumber';
 
 const MAX_SPECIES_NAME_LENGTH = 20;
 
@@ -17,6 +19,8 @@ export default function PlantsReportedPerSpeciesCard({
   plantingSiteId,
 }: PlantsReportedPerSpeciesCardProps): JSX.Element {
   const theme = useTheme();
+  const locale = useLocalization();
+  const parse = useNumberParser(locale.activeLocale ?? 'en-US');
   const populationSelector = useAppSelector((state) => selectSitePopulation(state));
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
@@ -27,7 +31,7 @@ export default function PlantsReportedPerSpeciesCard({
       populationSelector?.forEach((zone) =>
         zone.plantingSubzones?.forEach((subzone) =>
           subzone.populations?.forEach((population) => {
-            const numPlants = Number(population.totalPlants);
+            const numPlants = parse(population.totalPlants);
             if (isNaN(numPlants)) {
               return;
             }
@@ -47,7 +51,7 @@ export default function PlantsReportedPerSpeciesCard({
       setValues([]);
       setTooltipTitles([]);
     }
-  }, [populationSelector]);
+  }, [populationSelector, parse]);
 
   const chartData = useMemo(() => {
     if (!labels?.length || !values?.length) {

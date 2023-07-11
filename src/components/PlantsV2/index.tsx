@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
-import { formatRFC3339 } from 'date-fns';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
@@ -31,9 +30,8 @@ import HectaresPlantedCard from './components/HectaresPlantedCard';
 import EmptyMessage from '../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
 import PlantingSiteDensityCard from 'src/components/PlantsV2/components/PlantingSiteDensityCard';
-import PlantingsService from 'src/services/PlantingsService';
-import { latest } from 'immer/dist/utils/common';
 import { requestPlantings } from 'src/redux/features/Plantings/plantingsThunks';
+import { useNumberParser } from 'src/utils/useNumber';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -44,6 +42,7 @@ export default function PlantsDashboardV2(): JSX.Element {
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const locale = useLocalization();
   const history = useHistory();
+  const parse = useNumberParser(locale.activeLocale ?? 'en-US');
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
@@ -133,9 +132,9 @@ export default function PlantsDashboardV2(): JSX.Element {
         ?.flatMap((zone) => zone.plantingSubzones)
         ?.flatMap((sz) => sz.populations)
         ?.filter((pop) => pop !== undefined)
-        ?.reduce((acc, pop) => +pop.totalPlants + acc, 0) ?? 0;
+        ?.reduce((acc, pop) => parse(pop.totalPlants) + acc, 0) ?? 0;
     return population > 0;
-  }, [populationResults]);
+  }, [populationResults, parse]);
 
   const plantingSiteResult = useAppSelector((state) => selectPlantingSite(state, selectedPlantingSiteId));
   const sitePlantingComplete = useMemo(() => {
