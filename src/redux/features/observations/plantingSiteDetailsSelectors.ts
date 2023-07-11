@@ -1,10 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from 'src/redux/rootReducer';
-import {
-  ObservationMonitoringPlotResultsPayload,
-  ObservationsAggregation,
-  ZoneObservationsAggregation,
-} from 'src/types/Observations';
+import { ObservationMonitoringPlotResultsPayload, Aggregation, ZoneAggregation } from 'src/types/Observations';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { isAfter } from 'src/utils/dateUtils';
 import { regexMatch } from 'src/utils/search';
@@ -30,7 +26,7 @@ export const selectPlantingSiteZones = createSelector(
      * Aggregate unique monitoring plots across results and keep those zones/subzones data with latest completed times
      */
 
-    const zones: Record<number, ObservationsAggregation> = {};
+    const zones: Record<number, Aggregation> = {};
     /**
      * Iterate through all the planting zones in the observations results to book-keep subzones and monitoring plots for the zone
      */
@@ -87,7 +83,7 @@ export const selectPlantingSiteZones = createSelector(
      */
     return (
       plantingSite?.plantingZones?.map(
-        (zone): ZoneObservationsAggregation => ({
+        (zone): ZoneAggregation => ({
           ...zone,
           // get completed time from book-keeping
           completedTime: zones[zone.id]?.completedTime,

@@ -87,18 +87,18 @@ export const getPlotStatus = (status?: MonitoringPlotStatus): string => {
   }
 };
 
-export type ObservationsAggregation = {
+export type Aggregation = {
   subzones: Record<number, Set<number>>;
   plots: Record<number, ObservationMonitoringPlotResultsPayload>;
   completedTime?: string;
 };
 
-export type SubzoneObservationsAggregation = PlantingSubzone & {
+export type SubzoneAggregation = PlantingSubzone & {
   monitoringPlots: ObservationMonitoringPlotResultsPayload[];
 };
 
-export type ZoneObservationsAggregation = Omit<PlantingZone, 'plantingSubzones'> & {
+export type ZoneAggregation = Omit<PlantingZone, 'plantingSubzones'> & {
   completedTime?: string;
   plantingCompleted: boolean;
-  plantingSubzones: SubzoneObservationsAggregation[];
+  plantingSubzones: SubzoneAggregation[];
 };

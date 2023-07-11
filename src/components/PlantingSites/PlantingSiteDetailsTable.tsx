@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
-import { SubzoneObservationsAggregation, ZoneObservationsAggregation } from 'src/types/Observations';
+import { SubzoneAggregation, ZoneAggregation } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -18,7 +18,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
  */
 
 type PlantingSiteDetailsTableProps = {
-  data: ZoneObservationsAggregation[];
+  data: ZoneAggregation[];
   plantingSite: PlantingSite;
 };
 
@@ -114,9 +114,7 @@ const DetailsRenderer =
     }
 
     if (column.key === 'monitoringPlots') {
-      const numMonitoringPlots = row.plantingSubzones.flatMap(
-        (sz: SubzoneObservationsAggregation) => sz.monitoringPlots
-      ).length;
+      const numMonitoringPlots = row.plantingSubzones.flatMap((sz: SubzoneAggregation) => sz.monitoringPlots).length;
       return (
         <CellRenderer {...props} value={numMonitoringPlots > 0 ? numMonitoringPlots : ''} className={classes.text} />
       );
