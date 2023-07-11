@@ -4,16 +4,14 @@ import { Box, Divider, Typography, useTheme } from '@mui/material';
 import { ObservationResults } from 'src/types/Observations';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useAppSelector } from 'src/redux/store';
-import { NumericFormatter } from 'src/types/Number';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 
 type HighestAndLowestMortalityRateSpeciesCardProps = {
   observation?: ObservationResults;
-  numericFormatter: NumericFormatter;
 };
 
 export default function HighestAndLowestMortalityRateSpeciesCard({
   observation,
-  numericFormatter,
 }: HighestAndLowestMortalityRateSpeciesCardProps): JSX.Element {
   const theme = useTheme();
   const species = useAppSelector(selectSpecies);
@@ -55,7 +53,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
                 {highestSpecies}
               </Typography>
               <Typography fontSize='24px' fontWeight={600}>
-                {numericFormatter.format(highestMortalityRate || 0) + '%'}
+                <FormattedNumber value={highestMortalityRate || 0} />%
               </Typography>
             </>
           )}
@@ -69,7 +67,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
                 {lowestSpecies}
               </Typography>
               <Typography fontSize='24px' fontWeight={600}>
-                {numericFormatter.format(lowestMortalityRate || 0) + '%'}
+                <FormattedNumber value={lowestMortalityRate || 0} />%
               </Typography>
             </>
           )}

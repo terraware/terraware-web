@@ -4,17 +4,13 @@ import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
-import { NumericFormatter } from 'src/types/Number';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 
 type TotalReportedPlantsCardProps = {
   plantingSiteId?: number;
-  numericFormater: NumericFormatter;
 };
 
-export default function TotalReportedPlantsCard({
-  plantingSiteId,
-  numericFormater,
-}: TotalReportedPlantsCardProps): JSX.Element {
+export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReportedPlantsCardProps): JSX.Element {
   const theme = useTheme();
   const populationSelector = useAppSelector((state) => selectSitePopulation(state));
   const [totalPlants, setTotalPlants] = useState(0);
@@ -55,7 +51,7 @@ export default function TotalReportedPlantsCard({
           </Typography>
           <Box display='flex' alignItems='flex-end' flexWrap='wrap' marginBottom={theme.spacing(3)}>
             <Typography fontSize={numberFontSize(totalPlants)} fontWeight={600} lineHeight={1}>
-              {totalPlants ? numericFormater.format(totalPlants) : ''}
+              <FormattedNumber value={totalPlants} />
             </Typography>
             &nbsp;
             <Typography fontSize='24px' fontWeight={600}>

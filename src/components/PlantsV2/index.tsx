@@ -6,7 +6,7 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { Box, Grid, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSites, requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
@@ -29,7 +29,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import HectaresPlantedCard from './components/HectaresPlantedCard';
 import EmptyMessage from '../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import FormattedNumber from '../common/FormattedNumber';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -40,12 +40,6 @@ export default function PlantsDashboardV2(): JSX.Element {
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const locale = useLocalization();
   const history = useHistory();
-  const numberFormatter = useNumberFormatter();
-  const user = useUser().user;
-  const numericFormatter = useMemo(
-    () => numberFormatter(user?.locale, user?.countryCode),
-    [user?.locale, numberFormatter, user?.countryCode]
-  );
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
@@ -96,13 +90,13 @@ export default function PlantsDashboardV2(): JSX.Element {
     <>
       {sectionHeader(strings.MORTALITY_RATE)}
       <Grid item xs={isMobile ? 12 : 3}>
-        <TotalMortalityRateCard observation={latestObservation} numericFormatter={numericFormatter} />
+        <TotalMortalityRateCard observation={latestObservation} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 3}>
-        <HighestAndLowestMortalityRateZonesCard observation={latestObservation} numericFormatter={numericFormatter} />
+        <HighestAndLowestMortalityRateZonesCard observation={latestObservation} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 3}>
-        <HighestAndLowestMortalityRateSpeciesCard observation={latestObservation} numericFormatter={numericFormatter} />
+        <HighestAndLowestMortalityRateSpeciesCard observation={latestObservation} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 3}>
         <LiveDeadPlantsPerSpeciesCard observation={latestObservation} />
@@ -114,7 +108,7 @@ export default function PlantsDashboardV2(): JSX.Element {
     <>
       {sectionHeader(strings.TOTAL_PLANTS_AND_SPECIES)}
       <Grid item xs={isMobile ? 12 : 4}>
-        <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} numericFormater={numericFormatter} />
+        <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 4}>
         <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
@@ -157,16 +151,12 @@ export default function PlantsDashboardV2(): JSX.Element {
       )}
       {!sitePlantingComplete && (
         <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
-          <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} numericFormatter={numericFormatter} />
+          <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
         </Grid>
       )}
       {hasObservations && (
         <Grid item xs={isMobile ? 12 : sitePlantingComplete ? 4 : 6}>
-          <HectaresPlantedCard
-            plantingSiteId={selectedPlantingSiteId}
-            observation={latestObservation}
-            numericFormatter={numericFormatter}
-          />
+          <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
         </Grid>
       )}
       {!sitePlantingComplete && (
@@ -210,7 +200,9 @@ export default function PlantsDashboardV2(): JSX.Element {
     if (latestObservation?.completedTime) {
       return strings.formatString(
         strings.DASHBOARD_HEADER_TEXT,
-        <b>{numericFormatter.format(getObservationHectares())}</b>,
+        <b>
+          <FormattedNumber value={getObservationHectares()} />
+        </b>,
         <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
       ) as string;
     }

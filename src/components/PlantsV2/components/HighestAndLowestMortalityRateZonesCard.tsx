@@ -5,17 +5,13 @@ import { ObservationResults } from 'src/types/Observations';
 import { useAppSelector } from 'src/redux/store';
 import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { NumericFormatter } from 'src/types/Number';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 
 type HighestAndLowestMortalityRateCardProps = {
   observation?: ObservationResults;
-  numericFormatter: NumericFormatter;
 };
 
-export default function TotalMortalityRateCard({
-  observation,
-  numericFormatter,
-}: HighestAndLowestMortalityRateCardProps): JSX.Element {
+export default function TotalMortalityRateCard({ observation }: HighestAndLowestMortalityRateCardProps): JSX.Element {
   const theme = useTheme();
   const defaultTimeZone = useDefaultTimeZone();
 
@@ -78,7 +74,7 @@ export default function TotalMortalityRateCard({
                 {highestPlantingZone.plantingZoneName}
               </Typography>
               <Typography fontSize='24px' fontWeight={600}>
-                {numericFormatter.format(highestMortalityRate || 0) + '%'}
+                <FormattedNumber value={highestMortalityRate || 0} />%
               </Typography>
             </>
           )}
@@ -92,7 +88,7 @@ export default function TotalMortalityRateCard({
                 {lowestPlantingZone.plantingZoneName}
               </Typography>
               <Typography fontSize='24px' fontWeight={600}>
-                {numericFormatter.format(lowestMortalityRate || 0) + '%'}
+                <FormattedNumber value={lowestMortalityRate || 0} />%
               </Typography>
             </>
           )}

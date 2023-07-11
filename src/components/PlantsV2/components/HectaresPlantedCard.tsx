@@ -8,19 +8,14 @@ import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
-import { NumericFormatter } from 'src/types/Number';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 
 type HectaresPlantedCardProps = {
   plantingSiteId: number;
   observation?: ObservationResults;
-  numericFormatter: NumericFormatter;
 };
 
-export default function HectaresPlantedCard({
-  plantingSiteId,
-  observation,
-  numericFormatter,
-}: HectaresPlantedCardProps): JSX.Element {
+export default function HectaresPlantedCard({ plantingSiteId, observation }: HectaresPlantedCardProps): JSX.Element {
   const theme = useTheme();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const locale = useLocalization();
@@ -50,7 +45,7 @@ export default function HectaresPlantedCard({
           </Typography>
           <Box display={'flex'} alignItems='baseline'>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
-              {numericFormatter.format(Math.round(totalPlantedArea) || 0)}
+              <FormattedNumber value={Math.round(totalPlantedArea) || 0} />
             </Typography>
             <Typography fontSize='24px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
               {strings.HECTARES}
@@ -75,7 +70,7 @@ export default function HectaresPlantedCard({
             textAlign='right'
             color={theme.palette.TwClrBaseBlue500}
           >
-            {strings.formatString(strings.TARGET_HECTARES_PLANTED, numericFormatter.format(totalArea || 0))}
+            {strings.formatString(strings.TARGET_HECTARES_PLANTED, <FormattedNumber value={totalArea || 0} />)}
           </Typography>
           <Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}>
             {strings.HECTARES_PLANTED_DESCRIPTION_1}
