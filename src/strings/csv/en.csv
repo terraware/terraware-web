@@ -728,6 +728,7 @@ PERIOD_LAST_30_DAYS,Last 30 days
 PERIOD_LAST_7_DAYS,Last 7 days
 PERLITE_VERMICULITE,Perlite/Vermiculite
 PERMANENT,Permanent
+PERMANENT_PLOTS,Permanent Plots
 PERSON_ADDED,Person Added
 PHOTOS,Photos
 PHOTOS_OUTPLANT_DESCRIPTION,Outplant withdrawals require photos.
@@ -1090,6 +1091,7 @@ TARGET_RH,Target %RH
 TEMPERATURE_AND_HUMIDITY_SENSOR_DATA,Temperature & Humidity Sensor Data
 TEMPLATES,Templates
 TEMPORARY,Temporary
+TEMPORARY_PLOTS,Temporary Plots
 TEST,Test
 TEST_DATE_REQUIRED,Test Date *
 TEST_METHOD,Test Method
