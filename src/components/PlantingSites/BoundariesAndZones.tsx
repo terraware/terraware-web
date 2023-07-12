@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Typography, Box } from '@mui/material';
-import { theme } from '@terraware/web-components';
+import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { PlantingSite, PlantingZone } from 'src/types/Tracking';
 import { MapEntityId } from 'src/types/Map';
@@ -28,6 +27,7 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
   const [search, setSearch] = useState<string>('');
   const trackingV2 = isEnabled('TrackingV2');
   const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
 
   const data = useAppSelector((state) => searchPlantingSiteZones(state, plantingSite.id, view === 'map' ? '' : search));
 
@@ -48,7 +48,7 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
       </Box>
       {plantingSite.boundary && trackingV2 && (
         <ListMapView
-          style={{ padding: isMobile ? 3 : 0 }}
+          style={{ padding: isMobile ? theme.spacing(0, 3, 3) : 0 }}
           initialView='map'
           onView={(newView) => setView(newView)}
           search={<Search {...searchProps} />}
