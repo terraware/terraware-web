@@ -25,11 +25,11 @@ export default function PlantingSites({ reloadTracking }: PlantingSitesProps): J
       <Route path={APP_PATHS.PLANTING_SITES_NEW}>
         <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
       </Route>
-      <Route exact path={APP_PATHS.PLANTING_SITES}>
-        <PlantingSitesList />
+      <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
+        <PlantingSitesWrapper reloadTracking={reloadTracking} />
       </Route>
       <Route path={'*'}>
-        <PlantingSitesWrapper reloadTracking={reloadTracking} />
+        <PlantingSitesList />
       </Route>
     </Switch>
   );
@@ -65,9 +65,6 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
       </Route>
       <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
         <PlantingSiteView />
-      </Route>
-      <Route path={'*'}>
-        <PlantingSitesList />
       </Route>
     </Switch>
   );
