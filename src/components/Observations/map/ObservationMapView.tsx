@@ -1,14 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ObservationResults } from 'src/types/Observations';
-import { Box, Theme, useTheme } from '@mui/material';
-import MapLegend from 'src/components/common/MapLegend';
+import { Box, Theme } from '@mui/material';
+import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
 import { MapService } from 'src/services';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import strings from 'src/strings';
 import MapDateSelect from 'src/components/common/MapDateSelect';
-import { getRgbaFromHex } from 'src/utils/color';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { regexMatch } from 'src/utils/search';
 import TooltipContents from 'src/components/Observations/map/TooltipContents';
@@ -31,7 +30,6 @@ export default function ObservationMapView({
   search,
   filtersProps,
 }: ObservationMapViewProps): JSX.Element {
-  const theme = useTheme();
   const classes = useStyles();
 
   const observationsDates = useMemo(() => {
@@ -108,42 +106,6 @@ export default function ObservationMapView({
     'Monitoring Plots': strings.MONITORING_PLOTS,
   };
 
-  const legends = useMemo(
-    () => [
-      {
-        title: strings.BOUNDARIES,
-        items: [
-          {
-            label: strings.PLANTING_SITE,
-            borderColor: theme.palette.TwClrBaseGreen300 as string,
-            fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
-          },
-          {
-            label: strings.ZONES,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
-          },
-          {
-            label: strings.PLOTS_PERMANENT,
-            borderColor: theme.palette.TwClrBasePink300 as string,
-            fillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.2),
-          },
-          {
-            label: strings.PLOTS_TEMPORARY,
-            borderColor: theme.palette.TwClrBaseYellow300 as string,
-            fillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.2),
-          },
-        ],
-      },
-    ],
-    [
-      theme.palette.TwClrBaseGreen300,
-      theme.palette.TwClrBaseLightGreen300,
-      theme.palette.TwClrBasePink300,
-      theme.palette.TwClrBaseYellow300,
-    ]
-  );
-
   const hasSearchCriteria = search.trim() || filterZoneNames.length;
 
   const contextRenderer = (properties: MapSourceProperties): JSX.Element => {
@@ -174,9 +136,7 @@ export default function ObservationMapView({
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <Box marginBottom={theme.spacing(2)}>
-        <MapLegend legends={legends} />
-      </Box>
+      <PlantingSiteMapLegend options={['site', 'zone', 'permanentPlot', 'temporaryPlot']} />
       <Box display='flex' sx={{ flexGrow: 1 }}>
         {mapData.site && (
           <PlantingSiteMap
