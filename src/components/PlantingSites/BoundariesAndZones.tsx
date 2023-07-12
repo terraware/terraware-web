@@ -4,7 +4,6 @@ import { theme } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { ZoneAggregation } from 'src/types/Observations';
-import { getRgbaFromHex } from 'src/utils/color';
 import { useAppSelector } from 'src/redux/store';
 import { PlantingSiteMap } from '../Map';
 import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
@@ -12,7 +11,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import { MapService } from 'src/services';
 import isEnabled from 'src/features';
-import MapLegend from 'src/components/common/MapLegend';
+import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import ListMapView from 'src/components/ListMapView';
 import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
@@ -116,51 +115,13 @@ function PlantingSiteMapView({ plantingSite, data }: PlantingSiteMapViewProps): 
     'Monitoring Plots': strings.MONITORING_PLOTS,
   };
 
-  const legends = useMemo(
-    () => [
-      {
-        title: strings.BOUNDARIES,
-        items: [
-          {
-            label: strings.PLANTING_SITE,
-            borderColor: theme.palette.TwClrBaseGreen300 as string,
-            fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
-          },
-          {
-            label: strings.ZONES,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
-          },
-          {
-            label: strings.SUBZONES,
-            borderColor: theme.palette.TwClrBaseBlue300 as string,
-            fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
-          },
-          {
-            label: strings.PLOTS_PERMANENT,
-            borderColor: theme.palette.TwClrBasePink300 as string,
-            fillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.2),
-          },
-          {
-            label: strings.PLOTS_TEMPORARY,
-            borderColor: theme.palette.TwClrBaseYellow300 as string,
-            fillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.2),
-          },
-        ],
-      },
-    ],
-    []
-  );
-
   if (!plantingSite.boundary) {
     return null;
   }
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <Box marginBottom={theme.spacing(2)} display='flex' flexDirection='column'>
-        <MapLegend legends={legends} />
-      </Box>
+      <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot']} />
       <PlantingSiteMap
         mapData={MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data })}
         style={{ borderRadius: '24px' }}
