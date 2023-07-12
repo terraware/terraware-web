@@ -26,9 +26,9 @@ export default function PlantingProgressPerZoneCard({ plantingSiteId }: Planting
       plantingSite.plantingZones?.forEach((zone) => {
         let completedPlantingArea = 0;
         zone.plantingSubzones.forEach((sz) => {
-          completedPlantingArea += sz.plantingCompleted ? sz.areaHa : 0;
+          completedPlantingArea += sz.plantingCompleted ? +sz.areaHa : 0;
         });
-        const percentProgress = Math.round((100 * completedPlantingArea) / zone.areaHa);
+        const percentProgress = Math.round((100 * completedPlantingArea) / +zone.areaHa);
         zoneProgress[zone.name] = percentProgress;
       });
       setLabels(Object.keys(zoneProgress).map((name) => truncate(name, MAX_ZONE_NAME_LENGTH)));

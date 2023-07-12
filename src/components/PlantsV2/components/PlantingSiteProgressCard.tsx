@@ -19,7 +19,7 @@ export default function PlantingSiteProgressCard({ plantingSiteId }: PlantingSit
     return (
       plantingSite?.plantingZones
         ?.flatMap((zone) => zone.plantingSubzones)
-        ?.reduce((prev, curr) => (curr.plantingCompleted ? curr.areaHa + prev : prev), 0) ?? 0
+        ?.reduce((prev, curr) => (curr.plantingCompleted ? +curr.areaHa + prev : prev), 0) ?? 0
     );
   }, [plantingSite]);
 

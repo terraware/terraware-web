@@ -29,7 +29,7 @@ export default function PlantingSiteDensityCard({
   const targetPlantingDensity = useMemo(() => {
     const weightedSum =
       plantingSite?.plantingZones?.map((z) => z.targetPlantingDensity * z.areaHa)?.reduce((a, b) => a + b) ?? 0;
-    return plantingSite?.areaHa ? weightedSum / plantingSite.areaHa : 0;
+    return plantingSite?.areaHa ? weightedSum / +plantingSite.areaHa : 0;
   }, [plantingSite]);
 
   const plantingDensity = observation?.plantingDensity ?? 0;
