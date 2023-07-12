@@ -104,7 +104,7 @@ export default function PlantingSiteZoneView(): JSX.Element {
   );
 
   return (
-    <Page crumbs={crumbs} title={plantingZone?.plantingSubzones[0]?.name ?? ''}>
+    <Page crumbs={crumbs} title={plantingZone?.plantingSubzones[0]?.fullName ?? ''}>
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <Search {...searchProps} />
         <Box>

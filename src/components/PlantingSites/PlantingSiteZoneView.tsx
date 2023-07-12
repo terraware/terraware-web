@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
 
 const columns = (): TableColumnType[] => [
   {
-    key: 'name',
+    key: 'fullName',
     name: strings.SUBZONE,
     type: 'string',
   },
@@ -94,7 +94,7 @@ export default function PlantingSiteZoneView(): JSX.Element {
             id='planting-site-zone-details-table'
             columns={columns}
             rows={plantingZone?.plantingSubzones ?? []}
-            orderBy='name'
+            orderBy='fullName'
             Renderer={DetailsRenderer(classes, Number(plantingSiteId), Number(zoneId))}
           />
         </Box>
@@ -116,10 +116,10 @@ const DetailsRenderer =
       const url = APP_PATHS.PLANTING_SITES_SUBZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':zoneId', zoneId.toString())
         .replace(':subzoneId', row.id.toString());
-      return <Link to={url}>{row.name as React.ReactNode}</Link>;
+      return <Link to={url}>{row.fullName as React.ReactNode}</Link>;
     };
 
-    if (column.key === 'name') {
+    if (column.key === 'fullName') {
       return <CellRenderer {...props} value={createLinkToSubzone()} className={classes.text} />;
     }
 
