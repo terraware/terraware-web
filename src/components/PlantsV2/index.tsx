@@ -31,7 +31,6 @@ import EmptyMessage from '../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
 import PlantingSiteDensityCard from 'src/components/PlantsV2/components/PlantingSiteDensityCard';
 import { requestPlantings } from 'src/redux/features/Plantings/plantingsThunks';
-import { useNumberParser } from 'src/utils/useNumber';
 import FormattedNumber from '../common/FormattedNumber';
 
 export default function PlantsDashboardV2(): JSX.Element {
@@ -43,7 +42,6 @@ export default function PlantsDashboardV2(): JSX.Element {
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const locale = useLocalization();
   const history = useHistory();
-  const parse = useNumberParser();
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
@@ -133,9 +131,9 @@ export default function PlantsDashboardV2(): JSX.Element {
         ?.flatMap((zone) => zone.plantingSubzones)
         ?.flatMap((sz) => sz.populations)
         ?.filter((pop) => pop !== undefined)
-        ?.reduce((acc, pop) => parse(pop.totalPlants) + acc, 0) ?? 0;
+        ?.reduce((acc, pop) => +pop['totalPlants(raw)'] + acc, 0) ?? 0;
     return population > 0;
-  }, [populationResults, parse]);
+  }, [populationResults]);
 
   const plantingSiteResult = useAppSelector((state) => selectPlantingSite(state, selectedPlantingSiteId));
   const sitePlantingComplete = useMemo(() => {

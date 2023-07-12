@@ -18,7 +18,7 @@ const listPlantings = async (
       'delivery.plantings.delivery.withdrawal_id',
       'delivery.plantings.species.id',
       'delivery.plantings.createdTime',
-      'delivery.plantings.numPlants',
+      'delivery.plantings.numPlants(raw)',
       'delivery.plantings.type',
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),

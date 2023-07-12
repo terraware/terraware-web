@@ -5,7 +5,7 @@ type PlantingSearchData = {
   id: string;
   createdTime: string;
   delivery: { withdrawal_id: string };
-  numPlants: string;
+  'numPlants(raw)': string;
   plantingSite: { id: string };
   plantingSubzone: { id: string };
   species: { id: string };

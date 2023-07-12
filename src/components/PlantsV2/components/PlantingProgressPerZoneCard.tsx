@@ -6,7 +6,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { truncate } from 'src/utils/text';
-import { useNumberParser } from 'src/utils/useNumber';
 
 const MAX_ZONE_NAME_LENGTH = 20;
 
@@ -16,7 +15,6 @@ type PlantingProgressPerZoneCardProps = {
 
 export default function PlantingProgressPerZoneCard({ plantingSiteId }: PlantingProgressPerZoneCardProps): JSX.Element {
   const theme = useTheme();
-  const parse = useNumberParser();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
@@ -28,9 +26,9 @@ export default function PlantingProgressPerZoneCard({ plantingSiteId }: Planting
       plantingSite.plantingZones?.forEach((zone) => {
         let completedPlantingArea = 0;
         zone.plantingSubzones.forEach((sz) => {
-          completedPlantingArea += sz.plantingCompleted ? parse(sz.areaHa) : 0;
+          completedPlantingArea += sz.plantingCompleted ? sz.areaHa : 0;
         });
-        const percentProgress = Math.round((100 * completedPlantingArea) / parse(zone.areaHa));
+        const percentProgress = Math.round((100 * completedPlantingArea) / zone.areaHa);
         zoneProgress[zone.name] = percentProgress;
       });
       setLabels(Object.keys(zoneProgress).map((name) => truncate(name, MAX_ZONE_NAME_LENGTH)));
@@ -41,7 +39,7 @@ export default function PlantingProgressPerZoneCard({ plantingSiteId }: Planting
       setValues([]);
       setTooltipTitles([]);
     }
-  }, [plantingSite, parse]);
+  }, [plantingSite]);
 
   const chartData = useMemo(() => {
     if (!labels?.length || !values?.length) {

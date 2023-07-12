@@ -1,7 +1,7 @@
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { ObservationResults } from 'src/types/Observations';
@@ -9,7 +9,6 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import { selectPlantingsDateRange } from 'src/redux/features/Plantings/plantingsSelectors';
-import { useNumberParser } from 'src/utils/useNumber';
 
 type PlantingSiteDensityCardProps = {
   plantingSiteId: number;
@@ -26,14 +25,20 @@ export default function PlantingSiteDensityCard({
     selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [])
   );
   const locale = useLocalization();
-  const parse = useNumberParser();
 
-  const weightedSum =
-    plantingSite?.plantingZones?.map((z) => z.targetPlantingDensity * z.areaHa)?.reduce((a, b) => a + b) ?? 0;
-  const targetPlantingDensity = plantingSite?.areaHa ? weightedSum / plantingSite.areaHa : 0;
+  const targetPlantingDensity = useMemo(() => {
+    const weightedSum =
+      plantingSite?.plantingZones?.map((z) => z.targetPlantingDensity * z.areaHa)?.reduce((a, b) => a + b) ?? 0;
+    return plantingSite?.areaHa ? weightedSum / plantingSite.areaHa : 0;
+  }, [plantingSite]);
+
   const plantingDensity = observation?.plantingDensity ?? 0;
   const percentageOfTargetDensity = (100 * plantingDensity) / targetPlantingDensity;
-  const numPlantedSinceObs = plantingsSinceObservation.reduce((prev, curr) => parse(curr.numPlants) + prev, 0);
+
+  const numPlantedSinceObs = useMemo(() => {
+    return plantingsSinceObservation.reduce((prev, curr) => +curr['numPlants(raw)'] + prev, 0);
+  }, [plantingsSinceObservation]);
+
   const newDensityEstimate = plantingSite?.areaHa
     ? plantingDensity + numPlantedSinceObs / plantingSite.areaHa
     : plantingDensity;

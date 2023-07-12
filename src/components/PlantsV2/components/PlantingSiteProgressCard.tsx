@@ -4,7 +4,6 @@ import strings from 'src/strings';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useNumberParser } from 'src/utils/useNumber';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 
 type PlantingSiteProgressCardProps = {
@@ -13,7 +12,6 @@ type PlantingSiteProgressCardProps = {
 
 export default function PlantingSiteProgressCard({ plantingSiteId }: PlantingSiteProgressCardProps): JSX.Element {
   const theme = useTheme();
-  const parse = useNumberParser();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
   const totalArea = plantingSite?.areaHa ?? 0;
@@ -21,9 +19,9 @@ export default function PlantingSiteProgressCard({ plantingSiteId }: PlantingSit
     return (
       plantingSite?.plantingZones
         ?.flatMap((zone) => zone.plantingSubzones)
-        ?.reduce((prev, curr) => (curr.plantingCompleted ? parse(curr.areaHa) + prev : prev), 0) ?? 0
+        ?.reduce((prev, curr) => (curr.plantingCompleted ? curr.areaHa + prev : prev), 0) ?? 0
     );
-  }, [plantingSite, parse]);
+  }, [plantingSite]);
 
   return (
     <OverviewItemCard
