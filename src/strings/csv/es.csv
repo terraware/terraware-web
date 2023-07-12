@@ -720,6 +720,7 @@ PEOPLE,Personas
 PEOPLE_CARD_DESCRIPTION,¡No podemos hacerlo solos! Añada personas a su organización y asígneles funciones.
 PEOPLE_DESCRIPTION,Gestione a las personas en Terraware.
 PERCENTAGE_OF_SITE_PLANTED,{0}% del sitio
+PERCENTAGE_OF_TARGET_PLANTING_DENSITY,{0}% del Objetivo
 PERCENTAGE_VALUE,{0}%
 PERCENTAGE_VIABILITY,% viabilidad
 PERIOD_LAST_12_HOURS,Últimas 12 horas
@@ -744,10 +745,13 @@ PLANT_LABEL,Plantar
 PLANTING_COMPLETE,¿Plantación completa?
 PLANTING_COMPLETE_TOOLTIP,Ve a Plántulas > Retiros para actualizar el estado de finalización de la plantación.
 PLANTING_DENSITY,Densidad de siembra
+PLANTING_DENSITY_CARD_TITLE,¿Cuál es mi densidad de plantación desde el {0}?
+PLANTING_DENSITY_DESCRIPTION,Esta es la densidad de su plantación calculada a partir de sus observaciones más recientes.
 PLANTING_DENSITY_MISSING_TOOLTIP,"Una vez que hayas marcado tu sitio de plantación como terminado y completado tus observaciones, podrás visualizar la densidad de la plantación."
 PLANTING_DENSITY_PER_ZONE_CARD_TITLE,¿Cuál es mi densidad de plantación objetivo por zona?
 PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"Esta es su densidad de plantación objetivo para la zona que ha proporcionado. Si desea modificar esta densidad, póngase en contacto con Terraformation."
 PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,¿Cuál es mi densidad de plantación objetivo y la densidad de plantación por zona para el {0}?
+PLANTING_DENSITY_UPDATE_DESCRIPTION,"Desde entonces, ha reportado plantaciones nuevas que sugieren una densidad de plantación de {0} plantas/Ha."
 PLANTING_PROGRESS_AND_DENSITY,Progreso y densidad de plantación
 PLANTING_PROGRESS_CARD_TITLE,¿Cuál es el progreso de mi plantación?
 PLANTING_PROGRESS_DESCRIPTION_1,Se trata del progreso de plantación de tu centro calculado a partir de lo que se ha notificado en las retiradas de tu vivero.
@@ -1084,6 +1088,7 @@ SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *
 SUSTAINABLE_DEVELOPMENT_GOALS,Objetivos de Desarrollo Sostenible
 SUSTAINABLE_TIMBER,Madera sostenible
 TAKE_ME_THERE,Llévame allí
+TARGET_DENSITY_PLANTS_PER_HECTARE,Objetivo: {0} plantas/ha
 TARGET_HECTARES_PLANTED,Objetivo: {0} hectáreas
 TARGET_PLANTING_DENSITY,Densidad de plantación objetivo
 TARGET_PLANTING_DENSITY_TOOLTIP,Densidad de plantación objetivo para la zona (plantas por hectárea).
