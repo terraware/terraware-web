@@ -12,7 +12,7 @@ ChartJS.register(annotationPlugin);
 
 type ChartDataset = {
   color?: string;
-  values: (number | undefined)[];
+  values: (number | null)[];
   // Dataset label which will appear in legends and tooltips
   label?: string;
 };
@@ -96,78 +96,90 @@ function ChartContent(props: ChartContentProps): JSX.Element {
   } = props;
   const classes = useStyles({ minHeight, maxWidth });
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const chartRef = useRef<ChartJS | null>(null);
+  const [chart, setChart] = useState<ChartJS | null>(null);
   const theme = useTheme();
 
-  const barThickness = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
+  const barThickness: number | 'flex' | undefined = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
   useEffect(() => {
     const createChart = async () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
-        chartRef.current = null;
+      if (chart) {
+        chart.destroy();
       }
 
       const ctx = canvasRef?.current?.getContext('2d');
       if (ctx) {
-        const colors = elementColor ?? generateTerrawareRandomColors(theme, chartData?.labels?.length || 0);
-        chartRef.current = await newChart(locale, ctx, {
-          type,
-          data: {
-            labels: chartData.labels,
-            datasets: chartData.datasets.map((ds, index) => ({
-              label: ds.label,
-              data: ds.values,
-              barThickness,
-              backgroundColor: ds.color ?? colors,
-              minBarLength: 3,
-            })),
-          },
-          options: {
-            maintainAspectRatio: false,
-            layout: {
-              padding: {
-                left: 0,
-                right: 0,
-                top: 10,
-              },
+        setChart(
+          await newChart(locale, ctx, {
+            type,
+            data: {
+              labels: [],
+              datasets: [],
             },
-            plugins: {
-              annotation: barAnnotations,
-              legend: {
-                display: !!showLegend,
+            options: {
+              maintainAspectRatio: false,
+              layout: {
+                padding: {
+                  left: 0,
+                  right: 0,
+                  top: 10,
+                },
               },
-              tooltip: {
-                displayColors: false,
-                callbacks: {
-                  title: customTooltipTitles
-                    ? ([context]) => {
-                        return customTooltipTitles[context.dataIndex];
-                      }
-                    : undefined,
+              scales: {
+                y: {
+                  ticks: {
+                    precision: 0,
+                  },
+                  min: yLimits?.min,
+                  max: yLimits?.max,
                 },
               },
             },
-            scales: {
-              y: {
-                ticks: {
-                  precision: 0,
-                },
-                min: yLimits?.min,
-                max: yLimits?.max,
-              },
-            },
-          },
-        });
+          })
+        );
         // when component unmounts
         return () => {
-          chartRef.current?.destroy();
+          chart?.destroy();
         };
       }
     };
     createChart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chartData, locale]);
+  }, [locale]);
+
+  useEffect(() => {
+    const colors = elementColor ?? generateTerrawareRandomColors(theme, chartData?.labels?.length || 0);
+    const newLabels = chartData.labels;
+    const newDatasets = chartData.datasets.map((ds) => ({
+      label: ds.label,
+      data: ds.values,
+      barThickness,
+      backgroundColor: ds.color ?? colors,
+      minBarLength: 3,
+    }));
+    const newPlugins = {
+      annotation: barAnnotations,
+      legend: {
+        display: !!showLegend,
+      },
+      tooltip: {
+        displayColors: false,
+        callbacks: {
+          title: customTooltipTitles
+            ? ([context]: any) => {
+                return customTooltipTitles[context.dataIndex];
+              }
+            : undefined,
+        },
+      },
+    };
+    if (chart) {
+      chart.data.labels = newLabels;
+      chart.data.datasets = newDatasets;
+      chart.options.plugins = newPlugins;
+      chart.update();
+    }
+  }, [chart, chartData, showLegend, barAnnotations, customTooltipTitles, barThickness, elementColor, theme]);
 
   return <canvas id={chartId} ref={canvasRef} className={classes.chart} />;
 }

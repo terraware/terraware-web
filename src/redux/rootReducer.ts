@@ -5,6 +5,7 @@ import {
   observationsResultsReducer,
   plantingSiteObservationsResultsReducer,
 } from './features/observations/observationsSlice';
+import { plantingsReducer } from './features/Plantings/plantingsSlice';
 import { speciesReducer } from './features/species/speciesSlice';
 import { trackingReducer, sitePopulationReducer } from './features/tracking/trackingSlice';
 
@@ -13,6 +14,7 @@ export const reducers = {
   appVersion: appVersionReducer,
   observationsResults: observationsResultsReducer,
   observations: observationsReducer,
+  plantings: plantingsReducer,
   species: speciesReducer,
   tracking: trackingReducer,
   sitePopulation: sitePopulationReducer,

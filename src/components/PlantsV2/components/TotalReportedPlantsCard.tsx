@@ -20,7 +20,7 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
         .flatMap((zone) => zone.plantingSubzones)
         .flatMap((sz) => sz.populations)
         .filter((pop) => pop !== undefined);
-      const sum = populations.reduce((acc, pop) => +pop.totalPlants + acc, 0);
+      const sum = populations.reduce((acc, pop) => +pop['totalPlants(raw)'] + acc, 0);
       setTotalPlants(sum);
     }
   }, [populationSelector]);

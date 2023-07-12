@@ -67,7 +67,7 @@ export default function SpeciesBySubzoneChart(props: Props): JSX.Element {
   useEffect(() => {
     if (selectedSubzone) {
       setLabels(selectedSubzone?.populations?.map((population) => population.species_scientificName));
-      setValues(selectedSubzone?.populations?.map((population) => population.totalPlants));
+      setValues(selectedSubzone?.populations?.map((population) => population['totalPlants(raw)']));
       setSelectedSubzoneId(Number(selectedSubzone.id));
     } else {
       setLabels([]);

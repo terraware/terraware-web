@@ -27,7 +27,7 @@ export default function PlantsReportedPerSpeciesCard({
       populationSelector?.forEach((zone) =>
         zone.plantingSubzones?.forEach((subzone) =>
           subzone.populations?.forEach((population) => {
-            const numPlants = Number(population.totalPlants);
+            const numPlants = +population['totalPlants(raw)'];
             if (isNaN(numPlants)) {
               return;
             }

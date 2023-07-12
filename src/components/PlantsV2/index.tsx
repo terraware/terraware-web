@@ -29,6 +29,8 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import HectaresPlantedCard from './components/HectaresPlantedCard';
 import EmptyMessage from '../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
+import PlantingSiteDensityCard from 'src/components/PlantsV2/components/PlantingSiteDensityCard';
+import { requestPlantings } from 'src/redux/features/Plantings/plantingsThunks';
 import FormattedNumber from '../common/FormattedNumber';
 
 export default function PlantsDashboardV2(): JSX.Element {
@@ -76,6 +78,7 @@ export default function PlantsDashboardV2(): JSX.Element {
 
   useEffect(() => {
     dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSiteId));
+    dispatch(requestPlantings(org.selectedOrganization.id, selectedPlantingSiteId));
   }, [dispatch, org, selectedPlantingSiteId]);
 
   const sectionHeader = (title: string) => (
@@ -128,7 +131,7 @@ export default function PlantsDashboardV2(): JSX.Element {
         ?.flatMap((zone) => zone.plantingSubzones)
         ?.flatMap((sz) => sz.populations)
         ?.filter((pop) => pop !== undefined)
-        ?.reduce((acc, pop) => +pop.totalPlants + acc, 0) ?? 0;
+        ?.reduce((acc, pop) => +pop['totalPlants(raw)'] + acc, 0) ?? 0;
     return population > 0;
   }, [populationResults]);
 
@@ -145,9 +148,14 @@ export default function PlantsDashboardV2(): JSX.Element {
     <>
       {sectionHeader(sitePlantingComplete ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY)}
       {sitePlantingComplete && (
-        <Grid item xs={isMobile ? 12 : 4}>
-          <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
-        </Grid>
+        <>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+          </Grid>
+        </>
       )}
       {!sitePlantingComplete && (
         <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
