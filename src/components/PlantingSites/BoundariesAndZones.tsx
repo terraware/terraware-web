@@ -29,7 +29,9 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const data = useAppSelector((state) => searchPlantingSiteZones(state, plantingSite.id, view === 'map' ? '' : search));
+  const data = useAppSelector((state) =>
+    searchPlantingSiteZones(state, plantingSite.id, view === 'map' ? '' : search.trim())
+  );
 
   const searchProps = useMemo<SearchProps>(
     () => ({

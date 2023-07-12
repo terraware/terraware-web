@@ -1,9 +1,134 @@
-import TfMain from 'src/components/common/TfMain';
+import { useMemo, useState } from 'react';
+import { makeStyles } from '@mui/styles';
+import { Box } from '@mui/material';
+import { useHistory, useParams } from 'react-router-dom';
+import { TableColumnType } from '@terraware/web-components';
+import strings from 'src/strings';
+import { APP_PATHS } from 'src/constants';
+import { useAppSelector } from 'src/redux/store';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { searchPlantingSiteSubzones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
+import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import { RendererProps } from 'src/components/common/table/types';
+import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
+import Table from 'src/components/common/table';
+import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import { Page, Crumb } from 'src/components/BreadCrumbs';
 
-export default function PlantingSiteZoneView() {
+const useStyles = makeStyles(() => ({
+  text: {
+    fontSize: '14px',
+    '& > p': {
+      fontSize: '14px',
+    },
+  },
+}));
+
+const columns = (): TableColumnType[] => [
+  {
+    key: 'name',
+    name: strings.SUBZONE,
+    type: 'string',
+  },
+  {
+    key: 'plantingCompleted',
+    name: strings.PLANTING_COMPLETE,
+    tooltipTitle: strings.PLANTING_COMPLETE_TOOLTIP,
+    type: 'boolean',
+  },
+  {
+    key: 'monitoringPlots',
+    name: strings.MONITORING_PLOTS,
+    type: 'number',
+  },
+];
+
+export default function PlantingSiteZoneView(): JSX.Element {
+  const [search, setSearch] = useState<string>('');
+  const classes = useStyles();
+  const history = useHistory();
+  const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
+
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
+  const plantingZone = useAppSelector((state) =>
+    searchPlantingSiteSubzones(state, Number(plantingSiteId), Number(zoneId), '')
+  );
+
+  const searchProps = useMemo<SearchProps>(
+    () => ({
+      search,
+      onSearch: (value: string) => setSearch(value),
+    }),
+    [search]
+  );
+
+  if (!plantingSite) {
+    history.push(APP_PATHS.PLANTING_SITES);
+  }
+
+  if (!plantingZone) {
+    history.push(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
+  }
+
+  const crumbs: Crumb[] = useMemo(
+    () => [
+      {
+        name: strings.PLANTING_SITES,
+        to: APP_PATHS.PLANTING_SITES,
+      },
+      {
+        name: plantingSite?.name ?? '',
+        to: `/${plantingSiteId}`,
+      },
+    ],
+    [plantingSiteId, plantingSite?.name]
+  );
+
   return (
-    <TfMain>
-      <h3>Placeholder: planting site zone view</h3>
-    </TfMain>
+    <Page crumbs={crumbs} title={plantingZone?.name ?? ''}>
+      <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <Search {...searchProps} />
+        <Box>
+          <Table
+            id='planting-site-zone-details-table'
+            columns={columns}
+            rows={plantingZone?.plantingSubzones ?? []}
+            orderBy='name'
+            Renderer={DetailsRenderer(classes, Number(plantingSiteId), Number(zoneId))}
+          />
+        </Box>
+      </Card>
+    </Page>
   );
 }
+
+const DetailsRenderer =
+  (classes: any, plantingSiteId: number, zoneId: number) =>
+  (props: RendererProps<TableRowType>): JSX.Element => {
+    const { column, row } = props;
+
+    const createLinkToSubzone = () => {
+      if (row.monitoringPlots.length === 0) {
+        // don't link if there are no monitoring plots to show in the details view
+        return row.name;
+      }
+      const url = APP_PATHS.PLANTING_SITES_SUBZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString())
+        .replace(':zoneId', zoneId.toString())
+        .replace(':subzoneId', row.id.toString());
+      return <Link to={url}>{row.name as React.ReactNode}</Link>;
+    };
+
+    if (column.key === 'name') {
+      return <CellRenderer {...props} value={createLinkToSubzone()} className={classes.text} />;
+    }
+
+    if (column.key === 'monitoringPlots') {
+      const numMonitoringPlots = row.monitoringPlots.length;
+      return (
+        <CellRenderer {...props} value={numMonitoringPlots > 0 ? numMonitoringPlots : ''} className={classes.text} />
+      );
+    }
+
+    return <CellRenderer {...props} />;
+  };

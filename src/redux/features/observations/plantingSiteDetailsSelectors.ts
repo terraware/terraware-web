@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from 'src/redux/rootReducer';
-import { ObservationMonitoringPlotResultsPayload, Aggregation, ZoneAggregation } from 'src/types/Observations';
+import { Aggregation, ZoneAggregation } from 'src/types/Observations';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { isAfter } from 'src/utils/dateUtils';
 import { regexMatch } from 'src/utils/search';
@@ -94,15 +94,9 @@ export const selectPlantingSiteZones = createSelector(
           plantingSubzones: zone.plantingSubzones.map((sz) => ({
             ...sz,
             // generate monitoring plots from book-keeping data
-            monitoringPlots: zone.plantingSubzones
-              .filter((plantingSubzone) => !!zones[zone.id]?.subzones[plantingSubzone.id])
-              .reduce((acc, plantingSubzone) => {
-                const monitoringPlots =
-                  Array.from(zones[zone.id].subzones[plantingSubzone.id] ?? [])
-                    ?.map((plotId) => zones[zone.id].plots[plotId])
-                    .filter((plot) => !!plot) ?? [];
-                return monitoringPlots.length ? [...acc, ...monitoringPlots] : acc;
-              }, [] as ObservationMonitoringPlotResultsPayload[]),
+            monitoringPlots: Array.from(zones[zone.id]?.subzones[sz.id] ?? [])
+              .map((plotId) => zones[zone.id].plots[plotId])
+              .filter((plot) => !!plot),
           })),
         })
       ) ?? []
@@ -111,9 +105,87 @@ export const selectPlantingSiteZones = createSelector(
 );
 
 /**
- * Search by name
+ * Select a single planting zone by id
+ */
+export const selectPlantingZone = createSelector(
+  [
+    (state: RootState, plantingSiteId: number, zoneId: number) => selectPlantingSiteZones(state, plantingSiteId),
+    (state: RootState, plantingSiteId: number, zoneId: number) => zoneId,
+  ],
+  (results, zoneId) => results?.find((z) => z.id === zoneId)
+);
+
+/**
+ * Select a single planting subzone by id
+ */
+export const selectPlantingSubzone = createSelector(
+  [
+    (state: RootState, plantingSiteId: number, zoneId: number, subzoneId: number) =>
+      selectPlantingZone(state, plantingSiteId, zoneId),
+    (state: RootState, plantingSiteId: number, zoneId: number, subzoneId: number) => subzoneId,
+  ],
+  (zone, subzoneId) => {
+    const subzone = zone?.plantingSubzones.find((sz) => sz.id === subzoneId);
+    if (subzone) {
+      return {
+        ...zone,
+        plantingSubzones: [subzone],
+      };
+    } else {
+      return undefined;
+    }
+  }
+);
+
+/**
+ * Search zones by name
  */
 export const searchPlantingSiteZones = (state: RootState, plantingSiteId: number, query: string) => {
   const data = selectPlantingSiteZones(state, plantingSiteId);
-  return (query.trim() ? data?.filter((datum) => regexMatch(datum.name, query)) : data) ?? [];
+  return (query ? data?.filter((datum) => regexMatch(datum.name, query)) : data) ?? [];
+};
+
+/**
+ * Search subzones by name
+ */
+export const searchPlantingSiteSubzones = (state: RootState, plantingSiteId: number, zoneId: number, query: string) => {
+  const data = selectPlantingZone(state, plantingSiteId, zoneId);
+
+  if (!query || !data) {
+    return data;
+  }
+
+  return {
+    ...data,
+    plantingSubzones: data.plantingSubzones.filter((sz) => regexMatch(sz.name, query)),
+  };
+};
+
+/**
+ * Search monitoring plots by name
+ */
+export const searchPlantingSiteMonitoringPlots = (
+  state: RootState,
+  plantingSiteId: number,
+  zoneId: number,
+  subzoneId: number,
+  query: string
+) => {
+  const data = selectPlantingSubzone(state, plantingSiteId, zoneId, subzoneId);
+
+  if (!query || !data) {
+    return data;
+  }
+
+  const subzone = data.plantingSubzones[0];
+
+  return {
+    ...data,
+    plantingSubzones: [
+      {
+        ...subzone,
+        monitoringPlots: subzone.monitoringPlots.filter((plot) => regexMatch(plot.monitoringPlotName, query)),
+      },
+    ],
+  };
 };
