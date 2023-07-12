@@ -1113,6 +1113,7 @@ TOOLTIP_ACCESSIONS_ID,"Un identificador único para una colección de semillas a
 TOOLTIP_ACCESSIONS_LOCATION,Lugar donde se procesan las semillas.
 TOOLTIP_ACCESSIONS_SUBLOCATION,Zona específica dentro del lugar donde las semillas son procesadas.
 TOOLTIP_COMMON_NAME,"El nombre por el que un organismo es conocido por el público general, en lugar de su nombre científico."
+TOOLTIP_COUNTRY_MY_ACCOUNT,Su país afecta cómo mostramos los números y demás información.
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todos los muestreos con los siguientes estados: esperando ingreso, esperando procesamiento, procesando, secando y en almacenamiento."
 TOOLTIP_ECOSYSTEM_TYPE,"Unidades relativamente grandes de tierra o agua que contienen un conjunto diferenciado de comunidades naturales que comparten una gran mayoría de especies, dinámicas y condiciones medioambientales."
 TOOLTIP_GERMINATING_QUANTITY,En germinación indica que las plántulas aún no han brotado de las semillas. La cantidad en germinación no cuenta para la cantidad total.
