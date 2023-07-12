@@ -1,4 +1,3 @@
-import React from 'react';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
@@ -6,6 +5,7 @@ import { ObservationResults } from 'src/types/Observations';
 import { useAppSelector } from 'src/redux/store';
 import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 
 type HighestAndLowestMortalityRateCardProps = {
   observation?: ObservationResults;
@@ -74,7 +74,7 @@ export default function TotalMortalityRateCard({ observation }: HighestAndLowest
                 {highestPlantingZone.plantingZoneName}
               </Typography>
               <Typography fontSize='24px' fontWeight={600}>
-                {highestMortalityRate + '%'}
+                <FormattedNumber value={highestMortalityRate || 0} />%
               </Typography>
             </>
           )}
@@ -88,7 +88,7 @@ export default function TotalMortalityRateCard({ observation }: HighestAndLowest
                 {lowestPlantingZone.plantingZoneName}
               </Typography>
               <Typography fontSize='24px' fontWeight={600}>
-                {lowestMortalityRate + '%'}
+                <FormattedNumber value={lowestMortalityRate || 0} />%
               </Typography>
             </>
           )}

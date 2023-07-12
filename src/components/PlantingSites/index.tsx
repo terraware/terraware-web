@@ -1,8 +1,11 @@
-import { useState } from 'react';
-import { CircularProgress } from '@mui/material';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useOrganization } from 'src/providers';
+import { useAppDispatch } from 'src/redux/store';
+import { requestPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import PlantingSiteCreate from './PlantingSiteCreate';
 import PlantingSitesList from './PlantingSitesList';
 import PlantingSiteView from './PlantingSiteView';
@@ -16,27 +19,34 @@ export type PlantingSitesProps = {
   reloadTracking: () => void;
 };
 
-export default function PlantingSites(props: PlantingSitesProps): JSX.Element {
-  const [initializingData] = useState<boolean>(false);
-
-  /**
-   * TODO: intialize data
-   */
-
-  // show spinner while initializing data
-  if (initializingData) {
-    return <CircularProgress sx={{ margin: 'auto' }} />;
-  }
-
-  return <PlantingSitesWrapper {...props} />;
+export default function PlantingSites({ reloadTracking }: PlantingSitesProps): JSX.Element {
+  return (
+    <Switch>
+      <Route path={APP_PATHS.PLANTING_SITES_NEW}>
+        <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
+      </Route>
+      <Route exact path={APP_PATHS.PLANTING_SITES}>
+        <PlantingSitesList />
+      </Route>
+      <Route path={'*'}>
+        <PlantingSitesWrapper reloadTracking={reloadTracking} />
+      </Route>
+    </Switch>
+  );
 }
 
-const PlantingSitesWrapper = ({ reloadTracking }: PlantingSitesProps): JSX.Element => {
+export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
+  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
+  const dispatch = useAppDispatch();
   const trackingV2 = isEnabled('TrackingV2');
 
-  /**
-   * TODO: handle the various options
-   */
+  useEffect(() => {
+    const siteId = Number(plantingSiteId);
+    if (!isNaN(siteId) && trackingV2) {
+      dispatch(requestPlantingSiteObservationsResults(selectedOrganization.id, siteId));
+    }
+  }, [dispatch, selectedOrganization.id, plantingSiteId, trackingV2]);
 
   return (
     <Switch>
@@ -50,9 +60,6 @@ const PlantingSitesWrapper = ({ reloadTracking }: PlantingSitesProps): JSX.Eleme
           <PlantingSiteZoneView />
         </Route>
       )}
-      <Route path={APP_PATHS.PLANTING_SITES_NEW}>
-        <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
-      </Route>
       <Route path={APP_PATHS.PLANTING_SITES_EDIT}>
         <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
       </Route>
@@ -64,4 +71,4 @@ const PlantingSitesWrapper = ({ reloadTracking }: PlantingSitesProps): JSX.Eleme
       </Route>
     </Switch>
   );
-};
+}

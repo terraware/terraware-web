@@ -2952,6 +2952,7 @@ export interface components {
       preferences: { [key: string]: unknown };
     };
     UpdateUserRequestPayload: {
+      countryCode?: string;
       /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." If null, leave the existing value as-is. */
       emailNotificationsEnabled?: boolean;
       firstName: string;
@@ -3066,6 +3067,7 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     UserProfilePayload: {
+      countryCode?: string;
       email: string;
       /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
       emailNotificationsEnabled: boolean;

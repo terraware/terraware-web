@@ -32,6 +32,7 @@ import { useHistory } from 'react-router-dom';
 import PlantingSiteDensityCard from 'src/components/PlantsV2/components/PlantingSiteDensityCard';
 import { requestPlantings } from 'src/redux/features/Plantings/plantingsThunks';
 import { useNumberParser } from 'src/utils/useNumber';
+import FormattedNumber from '../common/FormattedNumber';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -209,7 +210,9 @@ export default function PlantsDashboardV2(): JSX.Element {
     if (latestObservation?.completedTime) {
       return strings.formatString(
         strings.DASHBOARD_HEADER_TEXT,
-        <b>{getObservationHectares()}</b>,
+        <b>
+          <FormattedNumber value={getObservationHectares()} />
+        </b>,
         <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
       ) as string;
     }

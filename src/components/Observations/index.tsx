@@ -9,7 +9,6 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import {
   selectObservationsResultsError,
   selectObservationsResults,
@@ -45,7 +44,6 @@ export default function Observations(): JSX.Element {
 
   useEffect(() => {
     dispatch(requestSpecies(selectedOrganization.id));
-    dispatch(requestPlantingSites(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
