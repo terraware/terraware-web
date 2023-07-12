@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
-import { Typography, Box } from '@mui/material';
-import { theme } from '@terraware/web-components';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
+import { PlantingSite, PlantingZone } from 'src/types/Tracking';
+import { MapEntityId } from 'src/types/Map';
 import { ZoneAggregation } from 'src/types/Observations';
 import { useAppSelector } from 'src/redux/store';
+import { regexMatch } from 'src/utils/search';
 import { PlantingSiteMap } from '../Map';
 import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -13,6 +14,7 @@ import { MapService } from 'src/services';
 import isEnabled from 'src/features';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import { View } from 'src/components/common/ListMapSelector';
 import ListMapView from 'src/components/ListMapView';
 import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
 
@@ -21,11 +23,13 @@ type BoundariesAndZonesProps = {
 };
 
 export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesProps): JSX.Element {
+  const [view, setView] = useState<View>('map');
   const [search, setSearch] = useState<string>('');
   const trackingV2 = isEnabled('TrackingV2');
   const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
 
-  const data = useAppSelector((state) => searchPlantingSiteZones(state, plantingSite.id, search));
+  const data = useAppSelector((state) => searchPlantingSiteZones(state, plantingSite.id, view === 'map' ? '' : search));
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -44,11 +48,12 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
       </Box>
       {plantingSite.boundary && trackingV2 && (
         <ListMapView
-          style={{ padding: isMobile ? 3 : 0 }}
+          style={{ padding: isMobile ? theme.spacing(0, 3, 3) : 0 }}
           initialView='map'
+          onView={(newView) => setView(newView)}
           search={<Search {...searchProps} />}
           list={<PlantingSiteDetailsTable data={data} plantingSite={plantingSite} />}
-          map={<PlantingSiteMapView plantingSite={plantingSite} data={data} />}
+          map={<PlantingSiteMapView plantingSite={plantingSite} data={data} search={search.trim()} />}
         />
       )}
       {plantingSite.boundary && !trackingV2 && <PlantingSiteMapViewV1 plantingSite={plantingSite} />}
@@ -102,9 +107,11 @@ function PlantingSiteMapViewV1({ plantingSite }: BoundariesAndZonesProps): JSX.E
 type PlantingSiteMapViewProps = {
   plantingSite: PlantingSite;
   data: ZoneAggregation[];
+  search: string;
 };
 
-function PlantingSiteMapView({ plantingSite, data }: PlantingSiteMapViewProps): JSX.Element | null {
+function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapViewProps): JSX.Element | null {
+  const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
 
@@ -115,6 +122,17 @@ function PlantingSiteMapView({ plantingSite, data }: PlantingSiteMapViewProps): 
     'Monitoring Plots': strings.MONITORING_PLOTS,
   };
 
+  useEffect(() => {
+    if (!search) {
+      setSearchZoneEntities([]);
+    } else {
+      const entities = data
+        .filter((zone: PlantingZone) => regexMatch(zone.name, search))
+        .map((zone) => ({ sourceId: 'zones', id: zone.id }));
+      setSearchZoneEntities(entities);
+    }
+  }, [data, search]);
+
   if (!plantingSite.boundary) {
     return null;
   }
@@ -123,9 +141,12 @@ function PlantingSiteMapView({ plantingSite, data }: PlantingSiteMapViewProps): 
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot']} />
       <PlantingSiteMap
+        minHeight={0}
         mapData={MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data })}
         style={{ borderRadius: '24px' }}
         layers={includedLayers}
+        highlightEntities={searchZoneEntities}
+        focusEntities={searchZoneEntities.length ? searchZoneEntities : [{ sourceId: 'sites', id: plantingSite.id }]}
         topRightMapControl={
           <MapLayerSelect
             initialSelection={includedLayers}

@@ -75,7 +75,7 @@ export default function PlantingSiteView(): JSX.Element {
         </Grid>
       </Grid>
 
-      <Card flushMobile>
+      <Card flushMobile style={{ flexGrow: plantingSite?.boundary ? 1 : 0, display: 'flex', flexDirection: 'column' }}>
         <Grid container>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
             <TextField label={strings.NAME} id='name' type='text' value={plantingSite?.name} display={true} />
@@ -121,12 +121,14 @@ export default function PlantingSiteView(): JSX.Element {
               </Grid>
             </>
           )}
-          {plantingSite?.boundary && (
-            <Grid item xs={12}>
+        </Grid>
+        {plantingSite?.boundary && (
+          <Grid container flexGrow={1}>
+            <Grid item xs={12} display='flex'>
               <BoundariesAndZones plantingSite={plantingSite} />
             </Grid>
-          )}
-        </Grid>
+          </Grid>
+        )}
       </Card>
     </TfMain>
   );

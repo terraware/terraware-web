@@ -158,7 +158,10 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                   </Typography>
                 </Box>
                 <PageSnackbar />
-                <Card flushMobile>
+                <Card
+                  flushMobile
+                  style={{ flexGrow: record?.boundary ? 1 : 0, display: 'flex', flexDirection: 'column' }}
+                >
                   <Grid container spacing={3} flexGrow={0}>
                     <Grid item xs={gridSize()}>
                       <TextField
@@ -210,8 +213,10 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                     )}
                   </Grid>
                   {record?.boundary && (
-                    <Grid item xs={12}>
-                      <BoundariesAndZones plantingSite={record} />
+                    <Grid container flexGrow={1}>
+                      <Grid item xs={12} display='flex'>
+                        <BoundariesAndZones plantingSite={record} />
+                      </Grid>
                     </Grid>
                   )}
                 </Card>
