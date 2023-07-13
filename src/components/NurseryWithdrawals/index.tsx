@@ -1,7 +1,7 @@
 import isEnabled from 'src/features';
 import NurseryReassignment from './NurseryReassignment';
-import NurseryWithdrawalsV1 from './NurseryWithdrawalsV1';
-import NurseryWithdrawalsV2 from './NurseryWithdrawals';
+import NurseryWithdrawalsBase from './NurseryWithdrawals';
+import NurseryPlantingsAndWithdrawals from './NurseryPlantingsAndWithdrawals';
 import NurseryWithdrawalsDetails from './NurseryWithdrawalsDetails';
 
 /**
@@ -11,10 +11,10 @@ export default function NurseryWithdrawals(): JSX.Element {
   const trackingV2 = isEnabled('TrackingV2');
 
   if (trackingV2) {
-    return <NurseryWithdrawalsV2 />;
+    return <NurseryPlantingsAndWithdrawals />;
   }
 
-  return <NurseryWithdrawalsV1 />;
+  return <NurseryWithdrawalsBase />;
 }
 
 export { NurseryReassignment, NurseryWithdrawals, NurseryWithdrawalsDetails };
