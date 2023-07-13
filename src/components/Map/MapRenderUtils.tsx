@@ -3,7 +3,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { MapPopupRenderer, MapSourceProperties } from 'src/types/Map';
 import strings from 'src/strings';
 
-export const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(() => ({
   popup: {
     '& > .mapboxgl-popup-content': {
       borderRadius: '8px',
