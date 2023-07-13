@@ -71,6 +71,7 @@ export function MapTooltip({ title, properties }: MapTooltipProps): JSX.Element 
     fontWeight: 400,
     fontSize: '16px',
     color: theme.palette.TwClrBaseBlack as string,
+    whiteSpace: 'pre',
   };
 
   const keyStyle = {
