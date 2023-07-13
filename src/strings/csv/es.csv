@@ -399,6 +399,9 @@ HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,¿Qué especie tiene la tas
 HISTORY,Historia
 HOME,Inicio
 HOW_MANY_PLANTS_CARD_TITLE,¿Cuantas plantas he reportado para plantar?
+HOW_MANY_PLANTS_CARD_TITLE_W_OBS,¿Cuántas plantas hay en el sitio desde {0}?
+HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION,Este es el número total de plantas con base en el tamaño del sitio y la densidad de plantación según sus últimas observaciones.
+HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION_2,"Desde entonces, ha reportado la plantación de {0} plantas. Esto es un {1} % más que el total de plantas desde la fecha de observación."
 ID,Identificación
 IF_APPLICABLE,(si aplica)
 IF_APPLIES,Solo si aplica
