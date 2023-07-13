@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1689286404711" clover="3.2.0">
-  <project timestamp="1689286404711" name="All files">
-    <metrics statements="11456" coveredstatements="361" conditionals="7346" coveredconditionals="90" methods="3558" coveredmethods="77" elements="22360" coveredelements="528" complexity="0" loc="11456" ncloc="11456" packages="101" files="466" classes="466"/>
+<coverage generated="1689287648065" clover="3.2.0">
+  <project timestamp="1689287648065" name="All files">
+    <metrics statements="11461" coveredstatements="361" conditionals="7348" coveredconditionals="90" methods="3560" coveredmethods="77" elements="22369" coveredelements="528" complexity="0" loc="11461" ncloc="11461" packages="101" files="467" classes="467"/>
     <package name="src">
       <metrics statements="210" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3823,7 +3823,11 @@
       </file>
     </package>
     <package name="src.components.NurseryWithdrawals">
-      <metrics statements="288" coveredstatements="0" conditionals="149" coveredconditionals="0" methods="75" coveredmethods="0"/>
+      <metrics statements="293" coveredstatements="0" conditionals="151" coveredconditionals="0" methods="77" coveredmethods="0"/>
+      <file name="NurseryPlantingsAndWithdrawals.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/NurseryPlantingsAndWithdrawals.tsx">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
+      </file>
       <file name="NurseryReassignment.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/NurseryReassignment.tsx">
         <metrics statements="98" coveredstatements="0" conditionals="49" coveredconditionals="0" methods="28" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
@@ -4128,7 +4132,11 @@
         <line num="106" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/index.tsx">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.NurseryWithdrawals.WithdrawalDetails">
