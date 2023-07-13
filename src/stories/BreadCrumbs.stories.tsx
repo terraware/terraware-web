@@ -1,8 +1,12 @@
 import { Story } from '@storybook/react';
-import BreadCrumbs, { BreadCrumbsProps } from 'src/components/BreadCrumbs';
+import BreadCrumbs, { BreadCrumbsProps, Page, PageProps } from 'src/components/BreadCrumbs';
 
 const BreadCrumbsTemplate: Story<BreadCrumbsProps> = (args: BreadCrumbsProps) => {
   return <BreadCrumbs {...args} />;
+};
+
+const PageTemplate: Story<PageProps> = (args: PageProps) => {
+  return <Page {...args} />;
 };
 
 export default {
@@ -53,4 +57,21 @@ NonHierarchicalCrumbs.args = {
       to: '/xyz/house',
     },
   ],
+};
+
+export const PageWithCrumbs = PageTemplate.bind({});
+
+PageWithCrumbs.args = {
+  crumbs: [
+    {
+      name: 'root',
+      to: '/root',
+    },
+    {
+      name: 'child',
+      to: '/child',
+    },
+  ],
+  title: 'hello world',
+  children: 'Test page',
 };

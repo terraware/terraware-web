@@ -1,10 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { makeStyles } from '@mui/styles';
 import { Box, Typography, useTheme } from '@mui/material';
+import getDateDisplayValue from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
 import { PlantingSite, PlantingZone } from 'src/types/Tracking';
-import { MapEntityId } from 'src/types/Map';
+import { MapEntityId, MapSourceProperties } from 'src/types/Map';
 import { ZoneAggregation } from 'src/types/Observations';
 import { useAppSelector } from 'src/redux/store';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { regexMatch } from 'src/utils/search';
 import { PlantingSiteMap } from '../Map';
 import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
@@ -17,6 +20,17 @@ import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper'
 import { View } from 'src/components/common/ListMapSelector';
 import ListMapView from 'src/components/ListMapView';
 import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
+import { TooltipProperty, MapTooltip } from 'src/components/Map/MapRenderUtils';
+
+export const useMapTooltipStyles = makeStyles(() => ({
+  popup: {
+    '& > .mapboxgl-popup-content': {
+      borderRadius: '8px',
+      padding: '10px',
+      minWidth: '260px',
+    },
+  },
+}));
 
 type BoundariesAndZonesProps = {
   plantingSite: PlantingSite;
@@ -29,7 +43,9 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const data = useAppSelector((state) => searchPlantingSiteZones(state, plantingSite.id, view === 'map' ? '' : search));
+  const data = useAppSelector((state) =>
+    searchPlantingSiteZones(state, plantingSite.id, view === 'map' ? '' : search.trim())
+  );
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -111,9 +127,12 @@ type PlantingSiteMapViewProps = {
 };
 
 function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapViewProps): JSX.Element | null {
+  const classes = useMapTooltipStyles();
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
+  const defaultTimeZone = useDefaultTimeZone();
+  const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
 
   const layerOptionLabels: Record<MapLayer, string> = {
     'Planting Site': strings.PLANTING_SITE,
@@ -141,12 +160,15 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot']} />
       <PlantingSiteMap
-        minHeight={0}
         mapData={MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data })}
         style={{ borderRadius: '24px' }}
         layers={includedLayers}
         highlightEntities={searchZoneEntities}
         focusEntities={searchZoneEntities.length ? searchZoneEntities : [{ sourceId: 'sites', id: plantingSite.id }]}
+        contextRenderer={{
+          render: contextRenderer(plantingSite, data, timeZone),
+          className: classes.popup,
+        }}
         topRightMapControl={
           <MapLayerSelect
             initialSelection={includedLayers}
@@ -163,3 +185,55 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     </Box>
   );
 }
+
+const contextRenderer =
+  (site: PlantingSite, data: ZoneAggregation[], timeZone: string) =>
+  (entity: MapSourceProperties): JSX.Element => {
+    let properties: TooltipProperty[] = [];
+    let title: string | undefined;
+    if (entity.type === 'site') {
+      title = site.name;
+      properties = [
+        { key: strings.ZONES, value: data.length },
+        { key: strings.SUBZONES, value: data.flatMap((z) => z.plantingSubzones).length },
+        {
+          key: strings.MONITORING_PLOTS,
+          value: data.flatMap((z) => z.plantingSubzones).flatMap((sz) => sz.monitoringPlots).length,
+        },
+      ];
+    } else if (entity.type === 'zone') {
+      const zone = data.find((z) => z.id === entity.id);
+      title = zone?.name;
+      properties = [
+        { key: strings.SUBZONES, value: zone?.plantingSubzones.length ?? 0 },
+        {
+          key: strings.MONITORING_PLOTS,
+          value: zone?.plantingSubzones.flatMap((sz) => sz.monitoringPlots).length ?? 0,
+        },
+        {
+          key: strings.LAST_OBSERVED,
+          value: zone?.completedTime ? getDateDisplayValue(zone.completedTime, timeZone) : '',
+        },
+      ];
+    } else if (entity.type === 'subzone') {
+      const subzone = data.flatMap((z) => z.plantingSubzones).find((sz) => sz.id === entity.id);
+      title = subzone?.fullName;
+      properties = [{ key: strings.MONITORING_PLOTS, value: subzone?.monitoringPlots.length ?? 0 }];
+    } else {
+      // monitoring plot
+      const plot = data
+        .flatMap((z) => z.plantingSubzones)
+        .flatMap((sz) => sz.monitoringPlots)
+        .find((mp) => mp.monitoringPlotId === entity.id);
+      title = plot?.monitoringPlotName;
+      properties = [
+        { key: strings.PLOT_TYPE, value: plot ? (plot.isPermanent ? strings.PERMANENT : strings.TEMPORARY) : '' },
+        {
+          key: strings.LAST_OBSERVED,
+          value: plot?.completedTime ? getDateDisplayValue(plot.completedTime, timeZone) : '',
+        },
+      ];
+    }
+
+    return <MapTooltip title={title} properties={properties} />;
+  };

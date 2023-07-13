@@ -1,6 +1,10 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import React, { useRef } from 'react';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import BackToLink from 'src/components/common/BackToLink';
 import Link from 'src/components/common/Link';
+import TfMain from 'src/components/common/TfMain';
+import PageSnackbar from 'src/components/PageSnackbar';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 
 export type Crumb = {
   name: string; // name of crumb
@@ -45,5 +49,47 @@ export default function BreadCrumbs({ hierarchical, crumbs }: BreadCrumbsProps):
         </Box>
       ))}
     </Box>
+  );
+}
+
+export type PageProps = {
+  crumbs: Crumb[];
+  title: string;
+  children: React.ReactNode;
+};
+
+/**
+ * A generic page structure with bread crumbs, title, header wrapper and instantiated children.
+ */
+export function Page({ crumbs, title, children }: PageProps): JSX.Element {
+  const contentRef = useRef(null);
+  const theme = useTheme();
+
+  return (
+    <TfMain>
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <BreadCrumbs crumbs={crumbs} hierarchical={true} />
+        <Grid container>
+          <Typography
+            sx={{
+              marginTop: theme.spacing(3),
+              marginBottom: theme.spacing(4),
+              paddingLeft: theme.spacing(3),
+              fontSize: '20px',
+              fontWeight: 600,
+              color: theme.palette.TwClrBaseGray800,
+            }}
+          >
+            {title}
+          </Typography>
+          <Grid item xs={12}>
+            <PageSnackbar />
+          </Grid>
+        </Grid>
+      </PageHeaderWrapper>
+      <Grid container ref={contentRef}>
+        {children}
+      </Grid>
+    </TfMain>
   );
 }

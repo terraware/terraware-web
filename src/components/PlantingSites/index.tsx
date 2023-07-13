@@ -1,11 +1,17 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
-import { useAppDispatch } from 'src/redux/store';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import {
+  selectPlantingSiteObservationsResults,
+  selectPlantingSiteObservationsResultsError,
+} from 'src/redux/features/observations/plantingSiteDetailsSelectors';
+import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
 import PlantingSiteCreate from './PlantingSiteCreate';
 import PlantingSitesList from './PlantingSitesList';
 import PlantingSiteView from './PlantingSiteView';
@@ -41,12 +47,30 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
   const dispatch = useAppDispatch();
   const trackingV2 = isEnabled('TrackingV2');
 
+  const observationsResults = useAppSelector((state) =>
+    selectPlantingSiteObservationsResults(state, Number(plantingSiteId))
+  );
+  const observationsResultsError = useAppSelector((state) =>
+    selectPlantingSiteObservationsResultsError(state, Number(plantingSiteId))
+  );
+
+  const plantingSites = useAppSelector(selectPlantingSites);
+  const plantingSitesError = useAppSelector(selectPlantingSitesError);
+
   useEffect(() => {
     const siteId = Number(plantingSiteId);
     if (!isNaN(siteId) && trackingV2) {
       dispatch(requestPlantingSiteObservationsResults(selectedOrganization.id, siteId));
     }
   }, [dispatch, selectedOrganization.id, plantingSiteId, trackingV2]);
+
+  // show spinner while initializing data
+  if (
+    (observationsResults === undefined && !observationsResultsError) ||
+    (plantingSites === undefined && !plantingSitesError)
+  ) {
+    return <CircularProgress sx={{ margin: 'auto' }} />;
+  }
 
   return (
     <Switch>

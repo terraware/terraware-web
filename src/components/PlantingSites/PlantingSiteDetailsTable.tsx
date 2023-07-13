@@ -10,7 +10,6 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
 import Table from 'src/components/common/table';
-import { useLocalization } from 'src/providers';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 /**
@@ -67,7 +66,6 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function PlantingSiteDetailsTable({ data, plantingSite }: PlantingSiteDetailsTableProps): JSX.Element {
-  const { activeLocale } = useLocalization();
   const classes = useStyles();
   const defaultTimeZone = useDefaultTimeZone();
 
@@ -80,14 +78,14 @@ export default function PlantingSiteDetailsTable({ data, plantingSite }: Plantin
         columns={columns}
         rows={data}
         orderBy='name'
-        Renderer={DetailsRenderer(classes, activeLocale, timeZone, plantingSite.id)}
+        Renderer={DetailsRenderer(classes, timeZone, plantingSite.id)}
       />
     </Box>
   );
 }
 
 const DetailsRenderer =
-  (classes: any, locale: string | undefined | null, timeZone: string, plantingSiteId: number) =>
+  (classes: any, timeZone: string, plantingSiteId: number) =>
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
