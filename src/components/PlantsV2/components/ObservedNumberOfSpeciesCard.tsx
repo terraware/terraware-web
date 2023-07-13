@@ -60,7 +60,7 @@ export default function ObservedNumberOfSpeciesCard({ observation }: ObservedNum
             </Typography>
             &nbsp;
             <Typography fontSize='24px' fontWeight={600}>
-              {strings.PLANTS}
+              {strings.SPECIES}
             </Typography>
           </Box>
           <Typography fontSize='12px' fontWeight={400}>
