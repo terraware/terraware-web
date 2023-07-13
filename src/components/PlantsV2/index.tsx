@@ -32,6 +32,7 @@ import { useHistory } from 'react-router-dom';
 import PlantingSiteDensityCard from 'src/components/PlantsV2/components/PlantingSiteDensityCard';
 import { requestPlantings } from 'src/redux/features/Plantings/plantingsThunks';
 import FormattedNumber from '../common/FormattedNumber';
+import ObservedNumberOfSpeciesCard from 'src/components/PlantsV2/components/ObservedNumberOfSpeciesCard';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -113,9 +114,15 @@ export default function PlantsDashboardV2(): JSX.Element {
       <Grid item xs={isMobile ? 12 : 4}>
         <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
       </Grid>
-      <Grid item xs={isMobile ? 12 : 4}>
-        <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
-      </Grid>
+      {hasObservations ? (
+        <Grid item xs={isMobile ? 12 : 4}>
+          <ObservedNumberOfSpeciesCard observation={latestObservation} />
+        </Grid>
+      ) : (
+        <Grid item xs={isMobile ? 12 : 4}>
+          <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      )}
       <Grid item xs={isMobile ? 12 : 4}>
         <NumberOfSpeciesPlantedCard plantingSiteId={selectedPlantingSiteId} />
       </Grid>
