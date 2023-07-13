@@ -56,7 +56,6 @@ export type PlantingSiteMapProps = {
   bottomLeftMapControl?: React.ReactNode;
   topRightMapControl?: React.ReactNode;
   showMortalityRateFill?: boolean;
-  minHeight?: number;
 };
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
@@ -70,7 +69,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     bottomLeftMapControl,
     topRightMapControl,
     showMortalityRateFill,
-    minHeight,
   } = props;
   const theme = useTheme();
   const classes = useStyles();
@@ -263,7 +261,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   }
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, position: 'relative', minHeight: `${minHeight ?? 436}px` }}>
+    <Box sx={{ display: 'flex', flexGrow: 1, position: 'relative', minHeight: '436px' }}>
       <GenericMap
         options={mapOptions}
         contextRenderer={contextRenderer}

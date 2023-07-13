@@ -143,7 +143,6 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot']} />
       <PlantingSiteMap
-        minHeight={0}
         mapData={MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data })}
         style={{ borderRadius: '24px' }}
         layers={includedLayers}
