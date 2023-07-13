@@ -678,6 +678,9 @@ OBSERVATIONS_EMPTY_STATE_TITLE,No Observations Yet
 OBSERVATIONS_MAP_VIEW_PROMPT,"In order to access map view, please select a single planting site."
 OBSERVATIONS_REQUIRED_BY_DATE,{0} monitoring plots require observation by {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations with the Terraware App
+OBSERVED_PLANTS_CARD_DESCRIPTION_1,This is the total number of species found in your latest observations.
+OBSERVED_PLANTS_CARD_DESCRIPTION_2,"You have reported to plant {0} species total. The difference in these numbers may be because not all the species you planted were found in the monitoring plots, or because you have planted more species since your last observations."
+OBSERVED_PLANTS_CARD_TITLE,How many species are on the site as of {0}?
 OBSERVER,Observer
 ONBOARDING_ADMIN_TITLE,"Just a moment, let’s complete setup first"
 OPPORTUNITIES,Opportunities
