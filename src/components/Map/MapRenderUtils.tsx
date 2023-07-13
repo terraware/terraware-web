@@ -3,7 +3,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { MapPopupRenderer, MapSourceProperties } from 'src/types/Map';
 import strings from 'src/strings';
 
-const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles(() => ({
   popup: {
     '& > .mapboxgl-popup-content': {
       borderRadius: '8px',
@@ -25,19 +25,6 @@ export function useSpeciesPlantsRenderer(subzonesWithPlants: any): MapPopupRende
     color: theme.palette.TwClrBaseBlack as string,
   };
 
-  const quantityStyle = {
-    ...textStyle,
-    textAlign: 'right',
-    marginRight: theme.spacing(1),
-  };
-
-  const speciesStyle = {
-    ...textStyle,
-    textAlign: 'left',
-    marginLeft: theme.spacing(1),
-    overflowWrap: 'anywhere',
-  };
-
   return {
     className: classes.popup,
     render: (data: MapSourceProperties): JSX.Element => {
@@ -53,21 +40,73 @@ export function useSpeciesPlantsRenderer(subzonesWithPlants: any): MapPopupRende
       }
 
       return (
-        <table>
-          <tbody>
-            {populations.map((population: any, index: number) => (
-              <tr key={index}>
-                <td>
-                  <Typography sx={quantityStyle}>{population.totalPlants}</Typography>
-                </td>
-                <td>
-                  <Typography sx={speciesStyle}>{population.species_scientificName}</Typography>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <MapTooltip
+          properties={populations.map((population: any) => ({
+            key: population.totalPlants,
+            value: population.species_scientificName,
+          }))}
+        />
       );
     },
   };
+}
+
+/**
+ * Generic tooltip renderer
+ */
+export type TooltipProperty = {
+  key: string;
+  value: string | number;
+};
+
+export type MapTooltipProps = {
+  title?: string;
+  properties: TooltipProperty[];
+};
+
+export function MapTooltip({ title, properties }: MapTooltipProps): JSX.Element {
+  const theme = useTheme();
+
+  const textStyle = {
+    fontWeight: 400,
+    fontSize: '16px',
+    color: theme.palette.TwClrBaseBlack as string,
+  };
+
+  const keyStyle = {
+    ...textStyle,
+    textAlign: 'right',
+    marginRight: theme.spacing(1),
+  };
+
+  const valueStyle = {
+    ...textStyle,
+    textAlign: 'left',
+    marginLeft: theme.spacing(1),
+    overflowWrap: 'anywhere',
+  };
+
+  return (
+    <>
+      {title && (
+        <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(2)} textAlign='center'>
+          {title}
+        </Typography>
+      )}
+      <table>
+        <tbody>
+          {properties.map((prop: TooltipProperty, index: number) => (
+            <tr key={index}>
+              <td>
+                <Typography sx={keyStyle}>{prop.key}</Typography>
+              </td>
+              <td>
+                <Typography sx={valueStyle}>{prop.value}</Typography>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
 }
