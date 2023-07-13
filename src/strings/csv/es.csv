@@ -778,6 +778,7 @@ PLANTS_CARD_DESCRIPTION,¡Han echado raíces! Vea todas sus plantas en un solo l
 PLANTS_MISSING_TOOLTIP,"Cuando marques tu sitio de plantación como completado y hayas finalizado tus observaciones, serás capaz de ver el total de las plantas."
 PLANTS_PER_HECTARE,plantas/ha
 PLEASE_TRY_AGAIN,"Por favor, inténtelo de nuevo."
+PLOT_TYPE,Tipo de terreno
 PLOTS_PERMANENT,Parcelas fijas
 PLOTS_TEMPORARY,Parcelas temporales
 POUNDS,Libras
