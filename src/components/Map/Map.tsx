@@ -219,8 +219,11 @@ export default function Map(props: MapProps): JSX.Element {
     const { sources } = options;
 
     clearFeatureVar(hoverStateId);
-    clearFeatureVar(selectStateId);
     clearFeatureVar(highlightStateId);
+    if (!popupInfo) {
+      // don't clear select state if popup is open
+      clearFeatureVar(selectStateId);
+    }
 
     const mouseMoveCallbacks = sources
       .filter((source) => source.isInteractive)
@@ -267,7 +270,7 @@ export default function Map(props: MapProps): JSX.Element {
         map.off('mouseleave', layerId, cb[layerId]);
       });
     };
-  }, [options, highlightStateId, selectStateId, hoverStateId, updateFeatureState]);
+  }, [options, highlightStateId, selectStateId, hoverStateId, popupInfo, updateFeatureState]);
 
   const onLoad = () => {
     if (deferredHighlightEntity) {
