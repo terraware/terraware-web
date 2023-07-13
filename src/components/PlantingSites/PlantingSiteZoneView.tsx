@@ -111,7 +111,7 @@ const DetailsRenderer =
     const createLinkToSubzone = () => {
       if (row.monitoringPlots.length === 0) {
         // don't link if there are no monitoring plots to show in the details view
-        return row.name;
+        return row.fullName;
       }
       const url = APP_PATHS.PLANTING_SITES_SUBZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':zoneId', zoneId.toString())

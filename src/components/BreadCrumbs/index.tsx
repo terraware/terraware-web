@@ -52,7 +52,7 @@ export default function BreadCrumbs({ hierarchical, crumbs }: BreadCrumbsProps):
   );
 }
 
-type PageProps = {
+export type PageProps = {
   crumbs: Crumb[];
   title: string;
   children: React.ReactNode;
