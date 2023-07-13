@@ -241,9 +241,5 @@ const contextRenderer =
       ];
     }
 
-    return (
-      <Box display='flex' flexDirection='column'>
-        <MapTooltip title={title} properties={properties} />
-      </Box>
-    );
+    return <MapTooltip title={title} properties={properties} />;
   };
