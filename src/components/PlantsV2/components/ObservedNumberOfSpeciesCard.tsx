@@ -20,11 +20,7 @@ export default function ObservedNumberOfSpeciesCard({ observation }: ObservedNum
   const [numReportedSpecies, setNumReportedSpecies] = useState(0);
   const [numObservedSpecies, setNumObservedSpecies] = useState(0);
   useEffect(() => {
-    const results = new Set<number>();
-    const species = observation.species.map((s) => s.speciesId).filter((sid) => sid !== undefined);
-    species.forEach((s) => results.add(s!));
-
-    setNumObservedSpecies(results.size);
+    setNumObservedSpecies(observation.species.length);
   }, [observation]);
 
   useEffect(() => {
