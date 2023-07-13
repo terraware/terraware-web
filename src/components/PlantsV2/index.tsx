@@ -111,7 +111,7 @@ export default function PlantsDashboardV2(): JSX.Element {
     <>
       {sectionHeader(strings.TOTAL_PLANTS_AND_SPECIES)}
       <Grid item xs={isMobile ? 12 : 4}>
-        <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} />
+        <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 4}>
         <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
