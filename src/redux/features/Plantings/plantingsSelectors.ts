@@ -1,8 +1,19 @@
 import { RootState } from 'src/redux/rootReducer';
-import { selectPlantingSite } from '../tracking/trackingSelectors';
+import { selectPlantingSites } from '../tracking/trackingSelectors';
 import { createSelector } from '@reduxjs/toolkit';
+import { PlantingSearchData } from './plantingsSlice';
 
 export const selectPlantings = (state: RootState) => state.plantings?.plantings;
+
+export const selectTotalPlantsBySubzone = (state: RootState) => {
+  const plantingsBySubzone: Record<number, { totalPlants: number }> = {};
+  state.plantings?.plantings?.forEach((planting) => {
+    if (!plantingsBySubzone[Number(planting.plantingSubzone.id)]) {
+      plantingsBySubzone[Number(planting.plantingSubzone.id)] = { totalPlants: planting.totalPlants };
+    }
+  });
+  return plantingsBySubzone;
+};
 
 export const selectPlantingsDateRange = (state: RootState, dateRange: string[]) =>
   selectPlantings(state)?.filter((planting) => {
@@ -13,22 +24,20 @@ export const selectPlantingsDateRange = (state: RootState, dateRange: string[]) 
   }) ?? [];
 
 export const selectPlantingProgressSubzones = createSelector(
-  [
-    (state: RootState, plantingSiteId: number) => selectPlantingSite(state, plantingSiteId),
-    (state: RootState, plantingSiteId: number) => selectPlantings(state),
-  ],
-  (plantingSite, allPlantings) => {
-    plantingSite?.plantingZones?.flatMap((zone) => {
-      return zone.plantingSubzones.map((sz) => {
-        return {
-          subzoneName: sz.fullName,
-          plantingComplete: sz.plantingCompleted,
-          plantingSite: plantingSite.name,
-          zone: zone.name,
-          targetPlantingDensity: zone.targetPlantingDensity,
-          totalSeedlingsSent: allPlantings?.find((planting) => planting.plantingSubzone.id === sz.id.toString())
-            ?.totalPlants,
-        };
+  [(state: RootState) => selectPlantingSites(state), (state: RootState) => selectTotalPlantsBySubzone(state)],
+  (plantingSites, plantingsBySubzone) => {
+    plantingSites?.flatMap((ps) => {
+      ps.plantingZones?.flatMap((zone) => {
+        return zone.plantingSubzones.map((sz) => {
+          return {
+            subzoneName: sz.fullName,
+            plantingComplete: sz.plantingCompleted,
+            plantingSite: ps.name,
+            zone: zone.name,
+            targetPlantingDensity: zone.targetPlantingDensity,
+            totalSeedlingsSent: plantingsBySubzone[sz.id].totalPlants,
+          };
+        });
       });
     });
   }

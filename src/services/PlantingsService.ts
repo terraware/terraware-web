@@ -1,8 +1,5 @@
 import { SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import SearchService, { SearchRequestPayload } from 'src/services/SearchService';
-import HttpService, { Response } from './HttpService';
-import { paths } from 'src/api/types/generated-schema';
-import { PlantingSiteReportedPlants } from 'src/types/PlantingSite';
 
 /**
  * List nursery withdrawals

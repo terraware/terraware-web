@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlantingSiteReportedPlants } from 'src/types/PlantingSite';
 
 // Define a type for the slice state
-type PlantingSearchData = {
+export type PlantingSearchData = {
   id: string;
   createdTime: string;
   delivery: { withdrawal_id: string };
