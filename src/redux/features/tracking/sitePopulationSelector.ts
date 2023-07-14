@@ -1,11 +1,11 @@
 import { RootState } from 'src/redux/rootReducer';
-import { createCachedSelector } from 're-reselect';
+import { createSelector } from '@reduxjs/toolkit';
 
 export const selectSitePopulation = (state: RootState) => state.sitePopulation?.zones;
 
 export const selectSitePopulationError = (state: RootState) => state.sitePopulation?.error;
 
-export const selectZonePopulationStats = createCachedSelector(
+export const selectZonePopulationStats = createSelector(
   (state: RootState) => selectSitePopulation(state),
   (zones) => {
     const zoneStats: Record<number, { name: string; reportedPlants: number; reportedSpecies: number }> = {};
@@ -23,4 +23,4 @@ export const selectZonePopulationStats = createCachedSelector(
     });
     return zoneStats;
   }
-)(() => 'zonePopulationStats');
+);
