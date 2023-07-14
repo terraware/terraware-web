@@ -758,6 +758,7 @@ PLANTING_DENSITY_PER_ZONE_CARD_TITLE,What is my target planting density per zone
 PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"This is your zone’s target planting density which you’ve provided. If you’d like to change the target planting densities, please reach out to Terraformation."
 PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,What is my target planting density and planting density as of {0} per zone?
 PLANTING_DENSITY_UPDATE_DESCRIPTION,Since then you have reported new plantings that suggest a planting density of {0} plants/Ha.
+PLANTING_PROGRESS,Planting Progress
 PLANTING_PROGRESS_AND_DENSITY,Planting Progress and Density
 PLANTING_PROGRESS_CARD_TITLE,What is my site planting progress?
 PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress calculated from what has been reported in your nursery withdrawals.
@@ -1284,6 +1285,7 @@ WITHDRAWAL,Withdrawal
 WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Enter a quantity in at least one seedlings batch row.
 WITHDRAWAL_DESCRIPTION,All the details about withdrawal of the seeds.
 WITHDRAWAL_DETAILS,Withdrawal Details
+WITHDRAWAL_HISTORY,Withdrawal History
 WITHDRAWAL_LOG,Withdrawal Log
 WITHDRAWN,Withdrawn
 WITHDRAWN_BY,Withdrawn By
