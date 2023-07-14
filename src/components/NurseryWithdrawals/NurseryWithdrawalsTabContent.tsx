@@ -15,7 +15,7 @@ export default function PlantingProgress(): JSX.Element {
           color: theme.palette.TwClrTxt,
         }}
       >
-        {strings.PLANTING_PROGRESS}
+        {strings.WITHDRAWAL_HISTORY}
       </Typography>
       <NurseryWithdrawalsTable />
     </Card>
