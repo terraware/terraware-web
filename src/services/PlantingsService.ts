@@ -20,7 +20,7 @@ const listPlantings = async (
       'delivery.plantings.createdTime',
       'delivery.plantings.numPlants(raw)',
       'delivery.plantings.type',
-      'delivery.plantings.totalPlants',
+      'delivery.plantings.plantingSubzone.totalPlants',
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder] : [{ field: 'delivery.plantings.id', direction: 'Ascending' }],

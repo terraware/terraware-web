@@ -1,14 +1,17 @@
 import { RootState } from 'src/redux/rootReducer';
 import { selectPlantingSites } from '../tracking/trackingSelectors';
 import { createSelector } from '@reduxjs/toolkit';
-import { PlantingSearchData } from './plantingsSlice';
 
 export const selectPlantings = (state: RootState) => state.plantings?.plantings;
 
 export const selectTotalPlantsBySubzone = (state: RootState) => {
   const plantingsBySubzone: Record<number, { totalPlants: number }> = {};
   state.plantings?.plantings?.forEach((planting) => {
-    if (!plantingsBySubzone[Number(planting.plantingSubzone.id)]) {
+    if (plantingsBySubzone[Number(planting.plantingSubzone.id)]) {
+      plantingsBySubzone[Number(planting.plantingSubzone.id)] = {
+        totalPlants: plantingsBySubzone[Number(planting.plantingSubzone.id)].totalPlants + planting.totalPlants,
+      };
+    } else {
       plantingsBySubzone[Number(planting.plantingSubzone.id)] = { totalPlants: planting.totalPlants };
     }
   });
@@ -27,7 +30,7 @@ export const selectPlantingProgressSubzones = createSelector(
   [(state: RootState) => selectPlantingSites(state), (state: RootState) => selectTotalPlantsBySubzone(state)],
   (plantingSites, plantingsBySubzone) => {
     plantingSites?.flatMap((ps) => {
-      ps.plantingZones?.flatMap((zone) => {
+      return ps.plantingZones?.flatMap((zone) => {
         return zone.plantingSubzones.map((sz) => {
           return {
             subzoneName: sz.fullName,
