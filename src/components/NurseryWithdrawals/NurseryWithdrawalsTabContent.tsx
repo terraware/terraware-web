@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import Card from 'src/components/common/Card';
 import NurseryWithdrawalsTable from './NurseryWithdrawalsTable';
 
-export default function PlantingProgress(): JSX.Element {
+export default function NurseryWithdrawalsTabContent(): JSX.Element {
   const theme = useTheme();
 
   return (
