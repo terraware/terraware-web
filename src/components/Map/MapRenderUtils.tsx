@@ -90,7 +90,7 @@ export function MapTooltip({ title, properties }: MapTooltipProps): JSX.Element 
   return (
     <>
       {title && (
-        <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(2)} textAlign='center'>
+        <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(2)} textAlign='left'>
           {title}
         </Typography>
       )}
