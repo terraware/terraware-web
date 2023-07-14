@@ -2191,6 +2191,14 @@ export interface components {
        */
       plantingCompletedTime?: string;
     };
+    PlantingSubzoneReportedPlantsPayload: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int32 */
+      plantsSinceLastObservation: number;
+      /** Format: int32 */
+      totalPlants: number;
+    };
     PlantingSubzoneSpeciesPayload: {
       commonName?: string;
       /** Format: int64 */
@@ -2210,6 +2218,7 @@ export interface components {
     PlantingZoneReportedPlantsPayload: {
       /** Format: int64 */
       id: number;
+      plantingSubzones: components["schemas"]["PlantingSubzoneReportedPlantsPayload"][];
       /** Format: int32 */
       plantsSinceLastObservation: number;
       /** Format: int32 */
@@ -2952,6 +2961,10 @@ export interface components {
       preferences: { [key: string]: unknown };
     };
     UpdateUserRequestPayload: {
+      /**
+       * @description Two-letter code of the user's country.
+       * @example US
+       */
       countryCode?: string;
       /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." If null, leave the existing value as-is. */
       emailNotificationsEnabled?: boolean;
@@ -3067,6 +3080,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     UserProfilePayload: {
+      /**
+       * @description Two-letter code of the user's country.
+       * @example US
+       */
       countryCode?: string;
       email: string;
       /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */

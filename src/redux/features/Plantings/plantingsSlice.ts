@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PlantingSiteReportedPlants } from 'src/types/PlantingSite';
 
 // Define a type for the slice state
 type PlantingSearchData = {
@@ -33,3 +34,27 @@ export const plantingsSlice = createSlice({
 export const { setPlantingsAction } = plantingsSlice.actions;
 
 export const plantingsReducer = plantingsSlice.reducer;
+
+// Define a type for the slice state
+type PlantingSiteData = {
+  error?: string;
+  site?: PlantingSiteReportedPlants;
+};
+
+// Define the initial state
+const initialPlantingSiteState: PlantingSiteData = {};
+
+export const plantingSiteReportedPlantsSlice = createSlice({
+  name: 'plantingSiteReportedPlantsSlice',
+  initialState: initialPlantingSiteState,
+  reducers: {
+    setPlantingSiteReportedPlantsAction: (state, action: PayloadAction<PlantingSiteData>) => {
+      const data: PlantingSiteData = action.payload;
+      state.error = data.error;
+      state.site = data.site;
+    },
+  },
+});
+
+export const { setPlantingSiteReportedPlantsAction } = plantingSiteReportedPlantsSlice.actions;
+export const plantingSiteReportedPlantsReducer = plantingSiteReportedPlantsSlice.reducer;

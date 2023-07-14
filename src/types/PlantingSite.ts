@@ -1,3 +1,5 @@
+import { components } from 'src/api/types/generated-schema';
+
 export type Population = {
   species_scientificName: string;
   totalPlants: number;
@@ -15,3 +17,5 @@ export type PlantingSiteZone = {
   name: string;
   plantingSubzones: PlantingSiteSubzone[];
 };
+
+export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];
