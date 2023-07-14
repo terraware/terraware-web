@@ -10,6 +10,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { mergeObservations, searchZones } from './utils';
+import { isAfter } from 'src/utils/dateUtils';
 
 /**
  * Observations results selectors below
@@ -110,10 +111,7 @@ export const selectLatestObservation = createCachedSelector(
       return undefined;
     }
     const result = observationsResults.reduce((prev, curr) => {
-      if (!prev.completedTime) {
-        return curr;
-      }
-      if (!curr.completedTime || prev.completedTime.localeCompare(curr.completedTime) > 0) {
+      if (isAfter(prev.completedDate, curr.completedDate)) {
         return prev;
       }
       return curr;
