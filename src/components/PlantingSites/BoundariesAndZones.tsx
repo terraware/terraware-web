@@ -27,7 +27,8 @@ export const useMapTooltipStyles = makeStyles(() => ({
     '& > .mapboxgl-popup-content': {
       borderRadius: '8px',
       padding: '10px',
-      minWidth: '260px',
+      width: 'fit-content',
+      maxWidth: '350px',
     },
   },
 }));
@@ -205,6 +206,8 @@ const contextRenderer =
       const zone = data.find((z) => z.id === entity.id);
       title = zone?.name;
       properties = [
+        { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
+        { key: strings.PLANTING_COMPLETE, value: zone?.plantingCompleted ? strings.YES : strings.NO },
         { key: strings.SUBZONES, value: zone?.plantingSubzones.length ?? 0 },
         {
           key: strings.MONITORING_PLOTS,
@@ -218,7 +221,10 @@ const contextRenderer =
     } else if (entity.type === 'subzone') {
       const subzone = data.flatMap((z) => z.plantingSubzones).find((sz) => sz.id === entity.id);
       title = subzone?.fullName;
-      properties = [{ key: strings.MONITORING_PLOTS, value: subzone?.monitoringPlots.length ?? 0 }];
+      properties = [
+        { key: strings.PLANTING_COMPLETE, value: subzone?.plantingCompleted ? strings.YES : strings.NO },
+        { key: strings.MONITORING_PLOTS, value: subzone?.monitoringPlots.length ?? 0 },
+      ];
     } else {
       // monitoring plot
       const plot = data

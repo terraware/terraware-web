@@ -176,6 +176,7 @@ const getTotalPlantsInZones = async (organizationId: number, siteId: number): Pr
       'plantingSubzones.populations.species_scientificName',
       'plantingSubzones.populations.species_organization_id',
       'plantingSubzones.populations.totalPlants(raw)',
+      'plantingSubzones.populations.totalPlants',
       'id',
       'name',
     ],

@@ -71,17 +71,18 @@ export function MapTooltip({ title, properties }: MapTooltipProps): JSX.Element 
     fontWeight: 400,
     fontSize: '16px',
     color: theme.palette.TwClrBaseBlack as string,
+    whiteSpace: 'pre',
+    textAlign: 'left',
   };
 
   const keyStyle = {
     ...textStyle,
-    textAlign: 'right',
     marginRight: theme.spacing(1),
+    overflowWrap: 'anywhere',
   };
 
   const valueStyle = {
     ...textStyle,
-    textAlign: 'left',
     marginLeft: theme.spacing(1),
     overflowWrap: 'anywhere',
   };
@@ -89,7 +90,7 @@ export function MapTooltip({ title, properties }: MapTooltipProps): JSX.Element 
   return (
     <>
       {title && (
-        <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(2)} textAlign='center'>
+        <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(2)} textAlign='left'>
           {title}
         </Typography>
       )}
