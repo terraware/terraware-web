@@ -6,23 +6,24 @@ import { truncate } from 'src/utils/text';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import BarChart from 'src/components/common/Chart/BarChart';
-import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
 const MAX_ZONE_NAME_LENGTH = 20;
 
 type PlantingDensityPerZoneCardProps = {
   plantingSiteId: number;
-  observation?: ObservationResults;
 };
 
-export default function PlantingDensityPerZoneCard({
-  plantingSiteId,
-  observation,
-}: PlantingDensityPerZoneCardProps): JSX.Element {
+export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingDensityPerZoneCardProps): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization();
+  const defaultTimeZone = useDefaultTimeZone();
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
+  );
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [labels, setLabels] = useState<string[]>();
   const [targets, setTargets] = useState<(number | null)[]>();

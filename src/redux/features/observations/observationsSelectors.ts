@@ -100,3 +100,24 @@ export const selectPlantingSiteObservations = createCachedSelector(
     return byStatus ?? [];
   }
 )((state: RootState, plantingSiteId: number, status?: ObservationState) => `${plantingSiteId.toString()}_${status}`);
+
+// get the latest observation for a planting site
+export const selectLatestObservation = createCachedSelector(
+  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
+    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', []),
+  (observationsResults: ObservationResults[] | undefined) => {
+    if (!observationsResults || observationsResults.length === 0) {
+      return undefined;
+    }
+    const result = observationsResults.reduce((prev, curr) => {
+      if (!prev.completedTime) {
+        return curr;
+      }
+      if (!curr.completedTime || prev.completedTime.localeCompare(curr.completedTime) > 0) {
+        return prev;
+      }
+      return curr;
+    });
+    return result.completedTime ? result : undefined;
+  }
+)((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);

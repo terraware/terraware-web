@@ -4,21 +4,25 @@ import strings from 'src/strings';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
 type HectaresPlantedCardProps = {
   plantingSiteId: number;
-  observation?: ObservationResults;
 };
 
-export default function HectaresPlantedCard({ plantingSiteId, observation }: HectaresPlantedCardProps): JSX.Element {
+export default function HectaresPlantedCard({ plantingSiteId }: HectaresPlantedCardProps): JSX.Element {
   const theme = useTheme();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const locale = useLocalization();
+  const defaultTimeZone = useDefaultTimeZone();
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
+  );
 
   const totalArea = plantingSite?.areaHa ?? 0;
   const totalPlantedArea = useMemo(() => {

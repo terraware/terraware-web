@@ -8,19 +8,26 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
 type ObservedNumberOfSpeciesCardProps = {
-  observation: ObservationResults;
+  plantingSiteId: number;
 };
 
-export default function ObservedNumberOfSpeciesCard({ observation }: ObservedNumberOfSpeciesCardProps): JSX.Element {
+export default function ObservedNumberOfSpeciesCard({ plantingSiteId }: ObservedNumberOfSpeciesCardProps): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization();
+  const defaultTimeZone = useDefaultTimeZone();
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
+  );
+
   const populationSelector = useAppSelector((state) => selectSitePopulation(state));
   const [numReportedSpecies, setNumReportedSpecies] = useState(0);
   const [numObservedSpecies, setNumObservedSpecies] = useState(0);
   useEffect(() => {
-    setNumObservedSpecies(observation.species.length);
+    setNumObservedSpecies(observation?.species?.length ?? 0);
   }, [observation]);
 
   useEffect(() => {

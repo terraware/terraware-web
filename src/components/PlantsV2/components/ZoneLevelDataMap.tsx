@@ -7,13 +7,14 @@ import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite, selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapService } from 'src/services';
-import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import { MapSourceProperties } from 'src/types/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import { makeStyles } from '@mui/styles';
 import { selectZonePopulationStats } from 'src/redux/features/tracking/sitePopulationSelector';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
 export const useStyles = makeStyles(() => ({
   popup: {
@@ -28,16 +29,19 @@ export const useStyles = makeStyles(() => ({
 
 type ZoneLevelDataMapProps = {
   plantingSiteId: number;
-  observation?: ObservationResults;
 };
 
-export default function ZoneLevelDataMap({ plantingSiteId, observation }: ZoneLevelDataMapProps): JSX.Element {
+export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapProps): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization();
+  const defaultTimeZone = useDefaultTimeZone();
   const classes = useStyles();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const zoneProgress = useAppSelector((state) => selectZoneProgress(state, plantingSiteId));
   const zoneStats = useAppSelector(selectZonePopulationStats);
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
+  );
 
   const [legends, setLegends] = useState<MapLegendGroup[]>([]);
   useEffect(() => {

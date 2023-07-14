@@ -16,7 +16,7 @@ import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard'
 import PlantingSiteProgressCard from './components/PlantingSiteProgressCard';
 import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
 import ZoneLevelDataMap from './components/ZoneLevelDataMap';
-import { searchObservations } from 'src/redux/features/observations/observationsSelectors';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
@@ -37,7 +37,6 @@ import ObservedNumberOfSpeciesCard from 'src/components/PlantsV2/components/Obse
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
   const { isMobile } = useDeviceInfo();
-  const defaultTimeZone = useDefaultTimeZone();
   const dispatch = useAppDispatch();
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState(-1);
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
@@ -50,25 +49,10 @@ export default function PlantsDashboardV2(): JSX.Element {
     [setPlantsDashboardPreferences]
   );
 
-  const observationsResults = useAppSelector((state) =>
-    searchObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, '', [])
+  const defaultTimeZone = useDefaultTimeZone();
+  const latestObservation = useAppSelector((state) =>
+    selectLatestObservation(state, selectedPlantingSiteId, defaultTimeZone.get().id)
   );
-
-  const latestObservation = useMemo(() => {
-    if (!observationsResults || observationsResults.length === 0) {
-      return undefined;
-    }
-    const result = observationsResults.reduce((prev, curr) => {
-      if (!prev.completedTime) {
-        return curr;
-      }
-      if (!curr.completedTime || prev.completedTime.localeCompare(curr.completedTime) > 0) {
-        return prev;
-      }
-      return curr;
-    });
-    return result.completedTime ? result : undefined;
-  }, [observationsResults]);
 
   useEffect(() => {
     dispatch(requestPlantingSites(org.selectedOrganization.id));
@@ -94,16 +78,16 @@ export default function PlantsDashboardV2(): JSX.Element {
     <>
       {sectionHeader(strings.MORTALITY_RATE)}
       <Grid item xs={isMobile ? 12 : 3}>
-        <TotalMortalityRateCard observation={latestObservation} />
+        <TotalMortalityRateCard plantingSiteId={selectedPlantingSiteId} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 3}>
-        <HighestAndLowestMortalityRateZonesCard observation={latestObservation} />
+        <HighestAndLowestMortalityRateZonesCard plantingSiteId={selectedPlantingSiteId} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 3}>
-        <HighestAndLowestMortalityRateSpeciesCard observation={latestObservation} />
+        <HighestAndLowestMortalityRateSpeciesCard plantingSiteId={selectedPlantingSiteId} />
       </Grid>
       <Grid item xs={isMobile ? 12 : 3}>
-        <LiveDeadPlantsPerSpeciesCard observation={latestObservation} />
+        <LiveDeadPlantsPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
       </Grid>
     </>
   );
@@ -112,11 +96,11 @@ export default function PlantsDashboardV2(): JSX.Element {
     <>
       {sectionHeader(strings.TOTAL_PLANTS_AND_SPECIES)}
       <Grid item xs={isMobile ? 12 : 4}>
-        <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+        <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} />
       </Grid>
       {hasObservations ? (
         <Grid item xs={isMobile ? 12 : 4}>
-          <ObservedNumberOfSpeciesCard observation={latestObservation} />
+          <ObservedNumberOfSpeciesCard plantingSiteId={selectedPlantingSiteId} />
         </Grid>
       ) : (
         <Grid item xs={isMobile ? 12 : 4}>
@@ -157,10 +141,10 @@ export default function PlantsDashboardV2(): JSX.Element {
       {sitePlantingComplete && (
         <>
           <Grid item xs={isMobile ? 12 : 4}>
-            <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+            <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} />
           </Grid>
           <Grid item xs={isMobile ? 12 : 4}>
-            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
           </Grid>
         </>
       )}
@@ -171,7 +155,7 @@ export default function PlantsDashboardV2(): JSX.Element {
       )}
       {hasObservations && (
         <Grid item xs={isMobile ? 12 : sitePlantingComplete ? 4 : 6}>
-          <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+          <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} />
         </Grid>
       )}
       {!sitePlantingComplete && (
@@ -181,7 +165,7 @@ export default function PlantsDashboardV2(): JSX.Element {
       )}
       {!sitePlantingComplete && (
         <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
-          <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+          <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
         </Grid>
       )}
     </>
@@ -191,7 +175,7 @@ export default function PlantsDashboardV2(): JSX.Element {
     <>
       {sectionHeader(strings.ZONE_LEVEL_DATA)}
       <Grid item xs={12}>
-        <ZoneLevelDataMap plantingSiteId={selectedPlantingSiteId} observation={latestObservation} />
+        <ZoneLevelDataMap plantingSiteId={selectedPlantingSiteId} />
       </Grid>
     </>
   );

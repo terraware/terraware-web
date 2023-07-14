@@ -1,20 +1,25 @@
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
-import { ObservationResults } from 'src/types/Observations';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useAppSelector } from 'src/redux/store';
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
 type HighestAndLowestMortalityRateSpeciesCardProps = {
-  observation?: ObservationResults;
+  plantingSiteId: number;
 };
 
 export default function HighestAndLowestMortalityRateSpeciesCard({
-  observation,
+  plantingSiteId,
 }: HighestAndLowestMortalityRateSpeciesCardProps): JSX.Element {
   const theme = useTheme();
   const species = useAppSelector(selectSpecies);
+  const defaultTimeZone = useDefaultTimeZone();
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
+  );
 
   let highestMortalityRate = 0;
   let highestSpecies = '';

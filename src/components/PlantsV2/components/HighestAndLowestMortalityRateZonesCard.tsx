@@ -1,19 +1,24 @@
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
-import { ObservationResults } from 'src/types/Observations';
 import { useAppSelector } from 'src/redux/store';
 import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
 type HighestAndLowestMortalityRateCardProps = {
-  observation?: ObservationResults;
+  plantingSiteId: number;
 };
 
-export default function TotalMortalityRateCard({ observation }: HighestAndLowestMortalityRateCardProps): JSX.Element {
+export default function TotalMortalityRateCard({
+  plantingSiteId,
+}: HighestAndLowestMortalityRateCardProps): JSX.Element {
   const theme = useTheme();
   const defaultTimeZone = useDefaultTimeZone();
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
+  );
 
   let highestMortalityRate = 0;
   let highestZoneId: number;
