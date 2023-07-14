@@ -503,6 +503,8 @@ LIKELY_RECALCITRANT,Posiblemente recalcitrante,Option to indicate that a species
 LIST,Lista
 LIVE,Directo
 LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,¿Cuántas plantas vivas y muertas hay por especie?
+LIVE_PLANTS,Plantas vivas
+LIVE_SPECIES,Especies vivas
 LOADING,Cargando...
 LOCATION,Lugar
 LOCATION_REQUIRED,Lugar *
@@ -758,6 +760,7 @@ PLANTING_DENSITY_PER_ZONE_CARD_TITLE,¿Cuál es mi densidad de plantación objet
 PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"Esta es su densidad de plantación objetivo para la zona que ha proporcionado. Si desea modificar esta densidad, póngase en contacto con Terraformation."
 PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,¿Cuál es mi densidad de plantación objetivo y la densidad de plantación por zona para el {0}?
 PLANTING_DENSITY_UPDATE_DESCRIPTION,"Desde entonces, ha reportado plantaciones nuevas que sugieren una densidad de plantación de {0} plantas/Ha."
+PLANTING_PROGRESS,Avance de plantación
 PLANTING_PROGRESS_AND_DENSITY,Progreso y densidad de plantación
 PLANTING_PROGRESS_CARD_TITLE,¿Cuál es el progreso de mi plantación?
 PLANTING_PROGRESS_DESCRIPTION_1,Se trata del progreso de plantación de tu centro calculado a partir de lo que se ha notificado en las retiradas de tu vivero.
