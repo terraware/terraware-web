@@ -19,3 +19,12 @@ export type PlantingSiteZone = {
 };
 
 export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];
+
+export type PlantingProgressSubzone = {
+  subzoneName: string;
+  plantingComplete: boolean;
+  plantingSite: string;
+  zone: string;
+  targetPlantingDensity: number;
+  totalSeedlingsSent?: number;
+};

@@ -23,6 +23,7 @@ const listPlantings = async (
       'delivery.plantings.createdTime',
       'delivery.plantings.numPlants(raw)',
       'delivery.plantings.type',
+      'delivery.plantings.totalPlants',
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder] : [{ field: 'delivery.plantings.id', direction: 'Ascending' }],
@@ -32,44 +33,11 @@ const listPlantings = async (
   return await SearchService.search(searchParams);
 };
 
-const PLANTING_SITE_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/reportedPlants';
-
-type PlantingSiteReportedPlantsResponsePayload =
-  paths[typeof PLANTING_SITE_REPORTED_PLANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-/**
- * exported response type
- */
-export type PlantingSiteReportedPlantData = {
-  site?: PlantingSiteReportedPlants;
-};
-
-const httpPlantingSiteReportedPlants = HttpService.root(PLANTING_SITE_REPORTED_PLANTS_ENDPOINT);
-
-const listPlantingSiteReportedPlants = async (
-  plantingSiteId: number
-): Promise<PlantingSiteReportedPlantData & Response> => {
-  const response: PlantingSiteReportedPlantData & Response = await httpPlantingSiteReportedPlants.get<
-    PlantingSiteReportedPlantsResponsePayload,
-    PlantingSiteReportedPlantData
-  >(
-    {
-      params: {
-        plantingSiteId: plantingSiteId.toString(),
-      },
-    },
-    (data) => ({ site: data?.site })
-  );
-
-  return response;
-};
-
 /**
  * Exported functions
  */
 const PlantingsService = {
   listPlantings,
-  listPlantingSiteReportedPlants,
 };
 
 export default PlantingsService;

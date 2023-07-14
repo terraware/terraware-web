@@ -12,15 +12,12 @@ export const selectPlantingsDateRange = (state: RootState, dateRange: string[]) 
     return planting.createdTime > dateRange[0] && (dateRange.length < 2 || planting.createdTime < dateRange[1]);
   }) ?? [];
 
-export const selectPlantingSiteReportedPlants = (state: RootState, plantingSiteId: number) =>
-  state.plantingSiteReportedPlants;
-
 export const selectPlantingProgressSubzones = createSelector(
   [
     (state: RootState, plantingSiteId: number) => selectPlantingSite(state, plantingSiteId),
-    (state: RootState, plantingSiteId: number) => selectPlantingSiteReportedPlants(state, plantingSiteId),
+    (state: RootState, plantingSiteId: number) => selectPlantings(state),
   ],
-  (plantingSite, plantingSiteReportedPlants) => {
+  (plantingSite, allPlantings) => {
     plantingSite?.plantingZones?.flatMap((zone) => {
       return zone.plantingSubzones.map((sz) => {
         return {
@@ -29,9 +26,8 @@ export const selectPlantingProgressSubzones = createSelector(
           plantingSite: plantingSite.name,
           zone: zone.name,
           targetPlantingDensity: zone.targetPlantingDensity,
-          totalSeedlingsSent: plantingSiteReportedPlants.site?.plantingZones
-            .find((reportedZone) => reportedZone.id === zone.id)
-            ?.plantingSubzones.find((reportedSubzone) => reportedSubzone.id === sz.id)?.totalPlants,
+          totalSeedlingsSent: allPlantings?.find((planting) => planting.plantingSubzone.id === sz.id.toString())
+            ?.totalPlants,
         };
       });
     });

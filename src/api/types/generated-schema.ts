@@ -2191,14 +2191,6 @@ export interface components {
        */
       plantingCompletedTime?: string;
     };
-    PlantingSubzoneReportedPlantsPayload: {
-      /** Format: int64 */
-      id: number;
-      /** Format: int32 */
-      plantsSinceLastObservation: number;
-      /** Format: int32 */
-      totalPlants: number;
-    };
     PlantingSubzoneSpeciesPayload: {
       commonName?: string;
       /** Format: int64 */
@@ -2218,7 +2210,6 @@ export interface components {
     PlantingZoneReportedPlantsPayload: {
       /** Format: int64 */
       id: number;
-      plantingSubzones: components["schemas"]["PlantingSubzoneReportedPlantsPayload"][];
       /** Format: int32 */
       plantsSinceLastObservation: number;
       /** Format: int32 */
