@@ -503,6 +503,8 @@ LIKELY_RECALCITRANT,Likely Recalcitrant,Option to indicate that a species' seed 
 LIST,List
 LIVE,Live
 LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,How many live and dead plants are there per species?
+LIVE_PLANTS,Live Plants
+LIVE_SPECIES,Live Species
 LOADING,Loading...
 LOCATION,Location
 LOCATION_REQUIRED,Location *
@@ -631,6 +633,7 @@ NOT_READY_QUANTITY_REQUIRED,Not Ready Quantity *
 NOTE_ANY_ISSUES,Does everything above look right? Note any issues.
 NOTES,Notes
 NOTIFICATIONS,Notifications
+NUMBER_OF_LIVE_PLANTS,
 NUMBER_OF_LIVE_PLANTS_PER_SPECIES,Number of Live Plants per Species
 NUMBER_OF_PACKETS,Number of Packets
 NUMBER_OF_PEOPLE,Number of People
@@ -758,6 +761,7 @@ PLANTING_DENSITY_PER_ZONE_CARD_TITLE,What is my target planting density per zone
 PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"This is your zone’s target planting density which you’ve provided. If you’d like to change the target planting densities, please reach out to Terraformation."
 PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,What is my target planting density and planting density as of {0} per zone?
 PLANTING_DENSITY_UPDATE_DESCRIPTION,Since then you have reported new plantings that suggest a planting density of {0} plants/Ha.
+PLANTING_PROGRESS,Planting Progress
 PLANTING_PROGRESS_AND_DENSITY,Planting Progress and Density
 PLANTING_PROGRESS_CARD_TITLE,What is my site planting progress?
 PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress calculated from what has been reported in your nursery withdrawals.
