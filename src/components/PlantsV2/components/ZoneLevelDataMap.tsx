@@ -1,28 +1,43 @@
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import { getRgbaFromHex } from 'src/utils/color';
 import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSite, selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapService } from 'src/services';
-import { PlantingSite } from 'src/types/Tracking';
 import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
+import { MapSourceProperties } from 'src/types/Map';
+import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
+import { makeStyles } from '@mui/styles';
+import { selectZonePopulationStats } from 'src/redux/features/tracking/sitePopulationSelector';
+
+export const useStyles = makeStyles(() => ({
+  popup: {
+    '& > .mapboxgl-popup-content': {
+      borderRadius: '8px',
+      padding: '10px',
+      width: 'fit-content',
+      maxWidth: '350px',
+    },
+  },
+}));
 
 type ZoneLevelDataMapProps = {
-  plantingSiteId?: number;
+  plantingSiteId: number;
   observation?: ObservationResults;
 };
 
 export default function ZoneLevelDataMap({ plantingSiteId, observation }: ZoneLevelDataMapProps): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization();
-  const plantingSite: PlantingSite | undefined = useAppSelector((state) =>
-    selectPlantingSite(state, plantingSiteId ?? -1)
-  );
+  const classes = useStyles();
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const zoneProgress = useAppSelector((state) => selectZoneProgress(state, plantingSiteId));
+  const zoneStats = useAppSelector(selectZonePopulationStats);
 
   const [legends, setLegends] = useState<MapLegendGroup[]>([]);
   useEffect(() => {
@@ -110,6 +125,45 @@ export default function ZoneLevelDataMap({ plantingSiteId, observation }: ZoneLe
     return [{ sourceId: 'sites', id: plantingSiteId }];
   }, [plantingSiteId]);
 
+  const getContextRenderer = useCallback(
+    () =>
+      (entity: MapSourceProperties): JSX.Element => {
+        let properties: TooltipProperty[] = [];
+        const zoneObservation = observation?.plantingZones?.find((z) => z.plantingZoneId === entity.id);
+        if (!zoneStats[entity.id]?.reportedPlants) {
+          properties = [{ key: strings.NO_PLANTS, value: '' }];
+        } else if (zoneProgress[entity.id] && zoneStats[entity.id]) {
+          if (zoneObservation) {
+            properties = [
+              { key: strings.MORTALITY_RATE, value: `${zoneObservation!.mortalityRate}%` },
+              {
+                key: strings.TARGET_PLANTING_DENSITY,
+                value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
+              },
+              { key: strings.PLANTING_PROGRESS, value: `${zoneProgress[entity.id].progress}%` },
+              { key: strings.PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
+              { key: strings.LIVE_PLANTS, value: `${zoneObservation!.totalPlants} ${strings.PLANTS}` },
+              { key: strings.SPECIES, value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}` },
+              { key: strings.LIVE_SPECIES, value: `${zoneObservation!.totalSpecies} ${strings.SPECIES}` },
+            ];
+          } else {
+            properties = [
+              {
+                key: strings.TARGET_PLANTING_DENSITY,
+                value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
+              },
+              { key: strings.PLANTING_PROGRESS, value: `${zoneProgress[entity.id].progress}%` },
+              { key: strings.PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
+              { key: strings.SPECIES, value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}` },
+            ];
+          }
+        }
+
+        return <MapTooltip title={entity.name} properties={properties} />;
+      },
+    [observation, zoneProgress, zoneStats]
+  );
+
   return (
     <Box
       sx={{
@@ -137,6 +191,10 @@ export default function ZoneLevelDataMap({ plantingSiteId, observation }: ZoneLe
           layers={['Planting Site', 'Zones']}
           showMortalityRateFill={!!observation}
           focusEntities={focusEntities}
+          contextRenderer={{
+            render: getContextRenderer(),
+            className: classes.popup,
+          }}
         />
       ) : (
         <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
