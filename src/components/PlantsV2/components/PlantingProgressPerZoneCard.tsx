@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import BarChart from 'src/components/common/Chart/BarChart';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite, selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
+import { selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
 import { truncate } from 'src/utils/text';
 
 const MAX_ZONE_NAME_LENGTH = 20;
