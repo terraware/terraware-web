@@ -13,6 +13,7 @@ export default function NurseryWithdrawalsTabContent(): JSX.Element {
           fontSize: '20px',
           fontWeight: 600,
           color: theme.palette.TwClrTxt,
+          marginBottom: theme.spacing(2),
         }}
       >
         {strings.WITHDRAWAL_HISTORY}

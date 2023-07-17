@@ -8,7 +8,6 @@ import strings from 'src/strings';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
-import Card from 'src/components/common/Card';
 import PlantingProgress from './PlantingProgressTabContent';
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 
@@ -37,14 +36,12 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
             <PageSnackbar />
           </Grid>
           <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1}>
-            <Card flushMobile style={{ minWidth: 'fit-content' }}>
-              <Tabs
-                tabs={[
-                  { label: strings.PLANTING_PROGRESS, children: <PlantingProgress /> },
-                  { label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
-                ]}
-              />
-            </Card>
+            <Tabs
+              tabs={[
+                { label: strings.PLANTING_PROGRESS, children: <PlantingProgress /> },
+                { label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
+              ]}
+            />
           </Box>
         </Grid>
       </Box>

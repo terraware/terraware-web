@@ -761,6 +761,7 @@ PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"This is your zone’s target planting den
 PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,What is my target planting density and planting density as of {0} per zone?
 PLANTING_DENSITY_UPDATE_DESCRIPTION,Since then you have reported new plantings that suggest a planting density of {0} plants/Ha.
 PLANTING_PROGRESS,Planting Progress
+PLANTING_PROGRESS_TABLE_DESCRIPTION,Use the checkboxes next to each subzone to mark areas where planting has been completed. Planting density will be calculated once planting has been completed for each zone.
 PLANTING_PROGRESS_AND_DENSITY,Planting Progress and Density
 PLANTING_PROGRESS_CARD_TITLE,What is my site planting progress?
 PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress calculated from what has been reported in your nursery withdrawals.
