@@ -7,7 +7,7 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
-import { selectPlantingsDateRange } from 'src/redux/features/Plantings/plantingsSelectors';
+import { selectPlantingsDateRange } from 'src/redux/features/plantings/plantingsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 

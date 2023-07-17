@@ -30,7 +30,7 @@ import HectaresPlantedCard from './components/HectaresPlantedCard';
 import EmptyMessage from '../common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
 import PlantingSiteDensityCard from 'src/components/PlantsV2/components/PlantingSiteDensityCard';
-import { requestPlantings } from 'src/redux/features/Plantings/plantingsThunks';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import FormattedNumber from '../common/FormattedNumber';
 import ObservedNumberOfSpeciesCard from 'src/components/PlantsV2/components/ObservedNumberOfSpeciesCard';
 
