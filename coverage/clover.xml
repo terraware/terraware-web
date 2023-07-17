@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1689617891060" clover="3.2.0">
-  <project timestamp="1689617891060" name="All files">
-    <metrics statements="11541" coveredstatements="361" conditionals="7364" coveredconditionals="90" methods="3600" coveredmethods="77" elements="22505" coveredelements="528" complexity="0" loc="11541" ncloc="11541" packages="101" files="470" classes="470"/>
+<coverage generated="1689618358879" clover="3.2.0">
+  <project timestamp="1689618358879" name="All files">
+    <metrics statements="11556" coveredstatements="361" conditionals="7368" coveredconditionals="90" methods="3607" coveredmethods="77" elements="22531" coveredelements="528" complexity="0" loc="11556" ncloc="11556" packages="101" files="472" classes="472"/>
     <package name="src">
       <metrics statements="210" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3823,12 +3823,12 @@
       </file>
     </package>
     <package name="src.components.NurseryWithdrawals">
-      <metrics statements="300" coveredstatements="0" conditionals="151" coveredconditionals="0" methods="80" coveredmethods="0"/>
+      <metrics statements="315" coveredstatements="0" conditionals="155" coveredconditionals="0" methods="87" coveredmethods="0"/>
       <file name="NurseryPlantingsAndWithdrawals.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/NurseryPlantingsAndWithdrawals.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
       </file>
       <file name="NurseryReassignment.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/NurseryReassignment.tsx">
         <metrics statements="98" coveredstatements="0" conditionals="49" coveredconditionals="0" methods="28" coveredmethods="0"/>
@@ -4071,10 +4071,31 @@
         <line num="253" count="0" type="stmt"/>
         <line num="275" count="0" type="stmt"/>
       </file>
+      <file name="PlantingProgressList.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/PlantingProgressList.tsx">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="2" count="0" type="stmt"/>
+      </file>
+      <file name="PlantingProgressMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/PlantingProgressMap.tsx">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="2" count="0" type="stmt"/>
+      </file>
       <file name="PlantingProgressTabContent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/PlantingProgressTabContent.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
+        <metrics statements="15" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
       </file>
       <file name="ReassignmentRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/ReassignmentRenderer.tsx">
         <metrics statements="38" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="11" coveredmethods="0"/>
