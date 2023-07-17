@@ -62,7 +62,9 @@ export default function PlantsDashboardV2(): JSX.Element {
   }, [dispatch, org.selectedOrganization.id]);
 
   useEffect(() => {
-    dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSiteId));
+    if (selectedPlantingSiteId !== -1) {
+      dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSiteId));
+    }
   }, [dispatch, org.selectedOrganization.id, selectedPlantingSiteId]);
 
   const sectionHeader = (title: string) => (
