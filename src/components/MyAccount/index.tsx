@@ -441,6 +441,7 @@ const MyAccountContent = ({
                 <LocaleSelector
                   onChangeLocale={(newValue) => setLocaleSelected(newValue)}
                   localeSelected={localeSelected}
+                  fullWidth={true}
                 />
               ) : (
                 <TextField
@@ -484,6 +485,7 @@ const MyAccountContent = ({
                 <WeightSystemSelector
                   onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
                   selectedWeightSystem={preferredWeightSystemSelected}
+                  fullWidth={true}
                 />
               ) : (
                 <TextField

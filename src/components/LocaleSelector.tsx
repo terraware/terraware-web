@@ -11,6 +11,7 @@ type LocaleSelectorProps = {
   transparent?: boolean;
   onChangeLocale?: (newValue: string) => void;
   localeSelected?: string;
+  fullWidth?: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -25,6 +26,7 @@ export default function LocaleSelector({
   transparent,
   onChangeLocale,
   localeSelected,
+  fullWidth,
 }: LocaleSelectorProps): JSX.Element {
   const { user, reloadUser } = useUser();
   const supportedLocales = useSupportedLocales();
@@ -74,6 +76,7 @@ export default function LocaleSelector({
                   onChange={onChangeLocale}
                   selectedValue={localeDetails.id}
                   options={localeItems}
+                  fullWidth={fullWidth}
                 />
               )
             )}
