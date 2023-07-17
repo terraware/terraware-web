@@ -5,23 +5,25 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { ObservationResults } from 'src/types/Observations';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import { selectPlantingsDateRange } from 'src/redux/features/Plantings/plantingsSelectors';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
 type TotalReportedPlantsCardProps = {
   plantingSiteId: number;
-  observation?: ObservationResults;
 };
 
-export default function TotalReportedPlantsCard({
-  plantingSiteId,
-  observation,
-}: TotalReportedPlantsCardProps): JSX.Element {
+export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReportedPlantsCardProps): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization();
+  const defaultTimeZone = useDefaultTimeZone();
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
+  );
+
   const populationSelector = useAppSelector((state) => selectSitePopulation(state));
   const [totalPlants, setTotalPlants] = useState(0);
   useEffect(() => {

@@ -2,16 +2,25 @@ import React, { useEffect, useState } from 'react';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
-import { ObservationResults } from 'src/types/Observations';
 import { Dropdown } from '@terraware/web-components';
 import PieChart from 'src/components/common/Chart/PieChart';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useAppSelector } from 'src/redux/store';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
 type LiveDeadPlantsPerSpeciesCardProps = {
-  observation?: ObservationResults;
+  plantingSiteId: number;
 };
 
-export default function LiveDeadPlantsPerSpeciesCard({ observation }: LiveDeadPlantsPerSpeciesCardProps): JSX.Element {
+export default function LiveDeadPlantsPerSpeciesCard({
+  plantingSiteId,
+}: LiveDeadPlantsPerSpeciesCardProps): JSX.Element {
   const theme = useTheme();
+  const defaultTimeZone = useDefaultTimeZone();
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
+  );
+
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [selectedSpecies, setSelectedSpecies] = useState<string>();

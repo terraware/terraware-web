@@ -2,17 +2,23 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { ObservationResults } from 'src/types/Observations';
 import { useLocalization } from 'src/providers';
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useAppSelector } from 'src/redux/store';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
 type TotalMortalityRateCardProps = {
-  observation?: ObservationResults;
+  plantingSiteId: number;
 };
 
-export default function TotalMortalityRateCard({ observation }: TotalMortalityRateCardProps): JSX.Element {
+export default function TotalMortalityRateCard({ plantingSiteId }: TotalMortalityRateCardProps): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization();
+  const defaultTimeZone = useDefaultTimeZone();
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
+  );
 
   return (
     <OverviewItemCard

@@ -4,22 +4,23 @@ import strings from 'src/strings';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import { selectPlantingsDateRange } from 'src/redux/features/Plantings/plantingsSelectors';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
 type PlantingSiteDensityCardProps = {
   plantingSiteId: number;
-  observation?: ObservationResults;
 };
 
-export default function PlantingSiteDensityCard({
-  plantingSiteId,
-  observation,
-}: PlantingSiteDensityCardProps): JSX.Element {
+export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSiteDensityCardProps): JSX.Element {
   const theme = useTheme();
+  const defaultTimeZone = useDefaultTimeZone();
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
+  );
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const plantingsSinceObservation = useAppSelector((state) =>
     selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [])
