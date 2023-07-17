@@ -48,7 +48,7 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
   }, [plantingSite, observation]);
 
   const plantingsSinceObservation = useAppSelector((state) =>
-    selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [])
+    selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [], plantingSiteId)
   );
   const numPlantedSinceObs = useMemo(() => {
     return plantingsSinceObservation.reduce((prev, curr) => +curr['numPlants(raw)'] + prev, 0);

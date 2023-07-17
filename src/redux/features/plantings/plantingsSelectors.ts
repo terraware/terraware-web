@@ -5,6 +5,11 @@ import { PlantingSearchData } from './plantingsSlice';
 
 export const selectPlantings = (state: RootState) => state.plantings?.plantings;
 
+export const selectPlantingsForSite = createSelector(
+  [(state: RootState, id: number) => state.plantings?.plantings, (state: RootState, id: number) => id],
+  (plantings, id) => (plantings ?? []).filter((planting) => planting.plantingSite.id.toString() === id.toString())
+);
+
 export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
   return plantings?.reduce((plantingsBySubzone: { [key: string]: number }, planting) => {
     const subzoneId = planting.plantingSubzone.id;
@@ -29,8 +34,8 @@ export const getTotalPlantsBySite = (plantings: PlantingSearchData[]) => {
   }, {});
 };
 
-export const selectPlantingsDateRange = (state: RootState, dateRange: string[]) =>
-  selectPlantings(state)?.filter((planting) => {
+export const selectPlantingsDateRange = (state: RootState, dateRange: string[], plantingSiteId: number) =>
+  selectPlantingsForSite(state, plantingSiteId)?.filter((planting) => {
     if (!dateRange || dateRange.length === 0) {
       return true;
     }

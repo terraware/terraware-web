@@ -23,7 +23,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
   );
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const plantingsSinceObservation = useAppSelector((state) =>
-    selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [])
+    selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [], plantingSiteId)
   );
   const locale = useLocalization();
 
