@@ -39,12 +39,12 @@ const listPlantings = async (
   return await SearchService.search(searchParams);
 };
 
-const updatePlantingSubzone = async (subzoneId: number, completed: boolean): Promise<Response> => {
+const updatePlantingCompleted = async (subzoneId: number, plantingCompleted: boolean): Promise<Response> => {
   return await httpPlantingSubzone.put({
     urlReplacements: {
       '{id}': subzoneId.toString(),
     },
-    entity: { plantingCompleted: completed } as PlantingSubzonePutRequestBody,
+    entity: { plantingCompleted } as PlantingSubzonePutRequestBody,
   });
 };
 
@@ -53,7 +53,7 @@ const updatePlantingSubzone = async (subzoneId: number, completed: boolean): Pro
  */
 const PlantingsService = {
   listPlantings,
-  updatePlantingSubzone,
+  updatePlantingCompleted,
 };
 
 export default PlantingsService;
