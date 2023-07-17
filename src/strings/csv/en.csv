@@ -1287,7 +1287,9 @@ WITHDRAWAL,Withdrawal
 WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Enter a quantity in at least one seedlings batch row.
 WITHDRAWAL_DESCRIPTION,All the details about withdrawal of the seeds.
 WITHDRAWAL_DETAILS,Withdrawal Details
+WITHDRAWAL_HISTORY,Withdrawal History
 WITHDRAWAL_LOG,Withdrawal Log
+WITHDRAWALS,Withdrawals
 WITHDRAWN,Withdrawn
 WITHDRAWN_BY,Withdrawn By
 WITHDRAWN_DATE,Withdrawn Date
