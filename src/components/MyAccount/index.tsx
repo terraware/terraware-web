@@ -532,44 +532,38 @@ const MyAccountContent = ({
                 onChange={(value) => onChange('emailNotificationsEnabled', value)}
               />
             </Grid>
-            <Grid item xs={12} />
-            {organizations && organizations.length > 0 ? (
-              <>
-                <Grid item xs={12}>
-                  <Typography fontSize='20px' fontWeight={600}>
-                    {strings.ORGANIZATIONS}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <div>
-                    <Grid container spacing={4}>
-                      <Grid item xs={12}>
-                        {organizations && (
-                          <Table
-                            id='organizations-table'
-                            columns={columns}
-                            rows={personOrganizations}
-                            orderBy='name'
-                            selectedRows={selectedRows}
-                            setSelectedRows={setSelectedRows}
-                            showCheckbox={edit}
-                            showTopBar={edit}
-                            topBarButtons={[
-                              {
-                                buttonType: 'destructive',
-                                buttonText: strings.REMOVE,
-                                onButtonClick: removeSelectedOrgs,
-                              },
-                            ]}
-                          />
-                        )}
-                      </Grid>
-                    </Grid>
-                  </div>
-                </Grid>
-              </>
-            ) : null}
           </Grid>
+          {organizations && organizations.length > 0 ? (
+            <Grid container spacing={4}>
+              <Grid item xs={12} />
+              <Grid item xs={12}>
+                <Typography fontSize='20px' fontWeight={600}>
+                  {strings.ORGANIZATIONS}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                {organizations && (
+                  <Table
+                    id='organizations-table'
+                    columns={columns}
+                    rows={personOrganizations}
+                    orderBy='name'
+                    selectedRows={selectedRows}
+                    setSelectedRows={setSelectedRows}
+                    showCheckbox={edit}
+                    showTopBar={edit}
+                    topBarButtons={[
+                      {
+                        buttonType: 'destructive',
+                        buttonText: strings.REMOVE,
+                        onButtonClick: removeSelectedOrgs,
+                      },
+                    ]}
+                  />
+                )}
+              </Grid>
+            </Grid>
+          ) : null}
         </Box>
       </PageForm>
     </TfMain>
