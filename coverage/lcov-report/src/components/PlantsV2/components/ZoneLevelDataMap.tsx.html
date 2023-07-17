@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
@@ -269,24 +269,12 @@
 <a name='L204'></a><a href='#L204'>204</a>
 <a name='L205'></a><a href='#L205'>205</a>
 <a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -304,11 +292,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -484,13 +492,14 @@ import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite, selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapService } from 'src/services';
-import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import { MapSourceProperties } from 'src/types/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import { makeStyles } from '@mui/styles';
 import { selectZonePopulationStats } from 'src/redux/features/tracking/sitePopulationSelector';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 &nbsp;
 export const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   popup: {
@@ -505,16 +514,19 @@ export const useStyles = <span class="cstat-no" title="statement not covered" >m
 &nbsp;
 type ZoneLevelDataMapProps = {
   plantingSiteId: number;
-  observation?: ObservationResults;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >ZoneLevelDataMap(</span>{ plantingSiteId, observation }: ZoneLevelDataMapProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >ZoneLevelDataMap(</span>{ plantingSiteId }: ZoneLevelDataMapProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const locale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
   const zoneProgress = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectZoneProgress(state, plantingSiteId))</span>;</span>
   const zoneStats = <span class="cstat-no" title="statement not covered" >useAppSelector(selectZonePopulationStats);</span>
+  const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
+  );
 &nbsp;
   const [legends, setLegends] = <span class="cstat-no" title="statement not covered" >useState&lt;MapLegendGroup[]&gt;([]);</span>
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -688,7 +700,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-14T22:11:03.697Z
+                at 2023-07-17T13:44:05.704Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

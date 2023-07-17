@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/89</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -307,23 +307,7 @@
 <a name='L242'></a><a href='#L242'>242</a>
 <a name='L243'></a><a href='#L243'>243</a>
 <a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a>
-<a name='L247'></a><a href='#L247'>247</a>
-<a name='L248'></a><a href='#L248'>248</a>
-<a name='L249'></a><a href='#L249'>249</a>
-<a name='L250'></a><a href='#L250'>250</a>
-<a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a>
-<a name='L253'></a><a href='#L253'>253</a>
-<a name='L254'></a><a href='#L254'>254</a>
-<a name='L255'></a><a href='#L255'>255</a>
-<a name='L256'></a><a href='#L256'>256</a>
-<a name='L257'></a><a href='#L257'>257</a>
-<a name='L258'></a><a href='#L258'>258</a>
-<a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a>
-<a name='L261'></a><a href='#L261'>261</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L245'></a><a href='#L245'>245</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -367,7 +351,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -377,21 +360,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -601,7 +569,7 @@ import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard'
 import PlantingSiteProgressCard from './components/PlantingSiteProgressCard';
 import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
 import ZoneLevelDataMap from './components/ZoneLevelDataMap';
-import { searchObservations } from 'src/redux/features/observations/observationsSelectors';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
@@ -622,7 +590,6 @@ import ObservedNumberOfSpeciesCard from 'src/components/PlantsV2/components/Obse
 export default function <span class="fstat-no" title="function not covered" >PlantsDashboardV2(</span>): JSX.Element {
   const org = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = <span class="cstat-no" title="statement not covered" >useState(-1);</span>
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;string, unknown&gt;&gt;();</span>
@@ -635,25 +602,10 @@ export default function <span class="fstat-no" title="function not covered" >Pla
     [setPlantsDashboardPreferences]
   );
 &nbsp;
-  const observationsResults = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    searchObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, '', [])</span>
+  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
+  const latestObservation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, selectedPlantingSiteId, defaultTimeZone.get().id)</span>
   );
-&nbsp;
-  const latestObservation = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!observationsResults || observationsResults.length === 0) {</span>
-<span class="cstat-no" title="statement not covered" >      return undefined;</span>
-    }
-    const result = <span class="cstat-no" title="statement not covered" >observationsResults.reduce(<span class="fstat-no" title="function not covered" >(p</span>rev, curr) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (!prev.completedTime) {</span>
-<span class="cstat-no" title="statement not covered" >        return curr;</span>
-      }
-<span class="cstat-no" title="statement not covered" >      if (!curr.completedTime || prev.completedTime.localeCompare(curr.completedTime) &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >        return prev;</span>
-      }
-<span class="cstat-no" title="statement not covered" >      return curr;</span>
-    });
-<span class="cstat-no" title="statement not covered" >    return result.completedTime ? result : undefined;</span>
-  }, [observationsResults]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    dispatch(requestPlantingSites(org.selectedOrganization.id));</span>
@@ -679,16 +631,16 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >    &lt;&gt;</span>
       {sectionHeader(strings.MORTALITY_RATE)}
       &lt;Grid item xs={isMobile ? 12 : 3}&gt;
-        &lt;TotalMortalityRateCard observation={latestObservation} /&gt;
+        &lt;TotalMortalityRateCard plantingSiteId={selectedPlantingSiteId} /&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={isMobile ? 12 : 3}&gt;
-        &lt;HighestAndLowestMortalityRateZonesCard observation={latestObservation} /&gt;
+        &lt;HighestAndLowestMortalityRateZonesCard plantingSiteId={selectedPlantingSiteId} /&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={isMobile ? 12 : 3}&gt;
-        &lt;HighestAndLowestMortalityRateSpeciesCard observation={latestObservation} /&gt;
+        &lt;HighestAndLowestMortalityRateSpeciesCard plantingSiteId={selectedPlantingSiteId} /&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={isMobile ? 12 : 3}&gt;
-        &lt;LiveDeadPlantsPerSpeciesCard observation={latestObservation} /&gt;
+        &lt;LiveDeadPlantsPerSpeciesCard plantingSiteId={selectedPlantingSiteId} /&gt;
       &lt;/Grid&gt;
     &lt;/&gt;
   );
@@ -697,11 +649,11 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >    &lt;&gt;</span>
       {sectionHeader(strings.TOTAL_PLANTS_AND_SPECIES)}
       &lt;Grid item xs={isMobile ? 12 : 4}&gt;
-        &lt;TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} /&gt;
+        &lt;TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} /&gt;
       &lt;/Grid&gt;
       {hasObservations ? (
         &lt;Grid item xs={isMobile ? 12 : 4}&gt;
-          &lt;ObservedNumberOfSpeciesCard observation={latestObservation} /&gt;
+          &lt;ObservedNumberOfSpeciesCard plantingSiteId={selectedPlantingSiteId} /&gt;
         &lt;/Grid&gt;
       ) : (
         &lt;Grid item xs={isMobile ? 12 : 4}&gt;
@@ -742,10 +694,10 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       {sitePlantingComplete &amp;&amp; (
         &lt;&gt;
           &lt;Grid item xs={isMobile ? 12 : 4}&gt;
-            &lt;PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} /&gt;
+            &lt;PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} /&gt;
           &lt;/Grid&gt;
           &lt;Grid item xs={isMobile ? 12 : 4}&gt;
-            &lt;PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} /&gt;
+            &lt;PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} /&gt;
           &lt;/Grid&gt;
         &lt;/&gt;
       )}
@@ -756,7 +708,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       )}
       {hasObservations &amp;&amp; (
         &lt;Grid item xs={isMobile ? 12 : sitePlantingComplete ? 4 : 6}&gt;
-          &lt;HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} /&gt;
+          &lt;HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} /&gt;
         &lt;/Grid&gt;
       )}
       {!sitePlantingComplete &amp;&amp; (
@@ -766,7 +718,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       )}
       {!sitePlantingComplete &amp;&amp; (
         &lt;Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}&gt;
-          &lt;PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} observation={latestObservation} /&gt;
+          &lt;PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} /&gt;
         &lt;/Grid&gt;
       )}
     &lt;/&gt;
@@ -776,7 +728,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >    &lt;&gt;</span>
       {sectionHeader(strings.ZONE_LEVEL_DATA)}
       &lt;Grid item xs={12}&gt;
-        &lt;ZoneLevelDataMap plantingSiteId={selectedPlantingSiteId} observation={latestObservation} /&gt;
+        &lt;ZoneLevelDataMap plantingSiteId={selectedPlantingSiteId} /&gt;
       &lt;/Grid&gt;
     &lt;/&gt;
   );
@@ -850,7 +802,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-14T22:11:03.697Z
+                at 2023-07-17T13:44:05.704Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

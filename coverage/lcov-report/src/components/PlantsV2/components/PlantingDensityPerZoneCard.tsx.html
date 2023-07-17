@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -175,19 +175,10 @@
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
 <a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,7 +190,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -295,23 +297,24 @@ import { truncate } from 'src/utils/text';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import BarChart from 'src/components/common/Chart/BarChart';
-import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 &nbsp;
 const MAX_ZONE_NAME_LENGTH = <span class="cstat-no" title="statement not covered" >20;</span>
 &nbsp;
 type PlantingDensityPerZoneCardProps = {
   plantingSiteId: number;
-  observation?: ObservationResults;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantingDensityPerZoneCard(</span>{
-  plantingSiteId,
-  observation,
-}: PlantingDensityPerZoneCardProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >PlantingDensityPerZoneCard(</span>{ plantingSiteId }: PlantingDensityPerZoneCardProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const locale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
+  const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
+  );
   const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
   const [labels, setLabels] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
   const [targets, setTargets] = <span class="cstat-no" title="statement not covered" >useState&lt;(number | null)[]&gt;();</span>
@@ -406,7 +409,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-14T22:11:03.697Z
+                at 2023-07-17T13:44:05.704Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
