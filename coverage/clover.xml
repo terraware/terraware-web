@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1689605432259" clover="3.2.0">
-  <project timestamp="1689605432259" name="All files">
-    <metrics statements="11541" coveredstatements="361" conditionals="7362" coveredconditionals="90" methods="3600" coveredmethods="77" elements="22503" coveredelements="528" complexity="0" loc="11541" ncloc="11541" packages="101" files="470" classes="470"/>
+<coverage generated="1689617511786" clover="3.2.0">
+  <project timestamp="1689617511786" name="All files">
+    <metrics statements="11541" coveredstatements="361" conditionals="7364" coveredconditionals="90" methods="3600" coveredmethods="77" elements="22505" coveredelements="528" complexity="0" loc="11541" ncloc="11541" packages="101" files="470" classes="470"/>
     <package name="src">
       <metrics statements="210" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -516,24 +516,24 @@
       </file>
       <file name="LocaleSelector.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/LocaleSelector.tsx">
         <metrics statements="18" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="49" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
       </file>
       <file name="LocationTimeZoneSelector.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/LocationTimeZoneSelector.tsx">
         <metrics statements="29" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>
@@ -973,9 +973,9 @@
       </file>
       <file name="WeightSystemSelector.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/WeightSystemSelector.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.BreadCrumbs">
@@ -3594,9 +3594,9 @@
         <line num="407" count="0" type="stmt"/>
         <line num="417" count="0" type="stmt"/>
         <line num="442" count="0" type="stmt"/>
-        <line num="485" count="0" type="stmt"/>
-        <line num="493" count="0" type="stmt"/>
-        <line num="530" count="0" type="stmt"/>
+        <line num="486" count="0" type="stmt"/>
+        <line num="495" count="0" type="stmt"/>
+        <line num="532" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.NewNursery">
@@ -6126,9 +6126,9 @@
       </file>
     </package>
     <package name="src.components.RegionSelector">
-      <metrics statements="46" coveredstatements="0" conditionals="53" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <metrics statements="46" coveredstatements="0" conditionals="55" coveredconditionals="0" methods="17" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/RegionSelector/index.tsx">
-        <metrics statements="46" coveredstatements="0" conditionals="53" coveredconditionals="0" methods="17" coveredmethods="0"/>
+        <metrics statements="46" coveredstatements="0" conditionals="55" coveredconditionals="0" methods="17" coveredmethods="0"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>

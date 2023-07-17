@@ -634,11 +634,7 @@
 <a name='L569'></a><a href='#L569'>569</a>
 <a name='L570'></a><a href='#L570'>570</a>
 <a name='L571'></a><a href='#L571'>571</a>
-<a name='L572'></a><a href='#L572'>572</a>
-<a name='L573'></a><a href='#L573'>573</a>
-<a name='L574'></a><a href='#L574'>574</a>
-<a name='L575'></a><a href='#L575'>575</a>
-<a name='L576'></a><a href='#L576'>576</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L572'></a><a href='#L572'>572</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1122,7 +1118,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1168,12 +1166,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1656,6 +1648,7 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
                 &lt;LocaleSelector
                   onChangeLocale={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setLocaleSelected(newValue)}</span>
                   localeSelected={localeSelected}
+                  fullWidth={true}
                 /&gt;
               ) : (
                 &lt;TextField
@@ -1699,6 +1692,7 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
                 &lt;WeightSystemSelector
                   onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setPreferredWeightSystemSelected(newValue)}</span>
                   selectedWeightSystem={preferredWeightSystemSelected}
+                  fullWidth={true}
                 /&gt;
               ) : (
                 &lt;TextField
@@ -1745,44 +1739,38 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
                 onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('emailNotificationsEnabled', value)}</span>
               /&gt;
             &lt;/Grid&gt;
-            &lt;Grid item xs={12} /&gt;
-            {organizations &amp;&amp; organizations.length &gt; 0 ? (
-              &lt;&gt;
-                &lt;Grid item xs={12}&gt;
-                  &lt;Typography fontSize='20px' fontWeight={600}&gt;
-                    {strings.ORGANIZATIONS}
-                  &lt;/Typography&gt;
-                &lt;/Grid&gt;
-                &lt;Grid item xs={12}&gt;
-                  &lt;div&gt;
-                    &lt;Grid container spacing={4}&gt;
-                      &lt;Grid item xs={12}&gt;
-                        {organizations &amp;&amp; (
-                          &lt;Table
-                            id='organizations-table'
-                            columns={columns}
-                            rows={personOrganizations}
-                            orderBy='name'
-                            selectedRows={selectedRows}
-                            setSelectedRows={setSelectedRows}
-                            showCheckbox={edit}
-                            showTopBar={edit}
-                            topBarButtons={[
-                              {
-                                buttonType: 'destructive',
-                                buttonText: strings.REMOVE,
-                                onButtonClick: removeSelectedOrgs,
-                              },
-                            ]}
-                          /&gt;
-                        )}
-                      &lt;/Grid&gt;
-                    &lt;/Grid&gt;
-                  &lt;/div&gt;
-                &lt;/Grid&gt;
-              &lt;/&gt;
-            ) : null}
           &lt;/Grid&gt;
+          {organizations &amp;&amp; organizations.length &gt; 0 ? (
+            &lt;Grid container spacing={4}&gt;
+              &lt;Grid item xs={12} /&gt;
+              &lt;Grid item xs={12}&gt;
+                &lt;Typography fontSize='20px' fontWeight={600}&gt;
+                  {strings.ORGANIZATIONS}
+                &lt;/Typography&gt;
+              &lt;/Grid&gt;
+              &lt;Grid item xs={12}&gt;
+                {organizations &amp;&amp; (
+                  &lt;Table
+                    id='organizations-table'
+                    columns={columns}
+                    rows={personOrganizations}
+                    orderBy='name'
+                    selectedRows={selectedRows}
+                    setSelectedRows={setSelectedRows}
+                    showCheckbox={edit}
+                    showTopBar={edit}
+                    topBarButtons={[
+                      {
+                        buttonType: 'destructive',
+                        buttonText: strings.REMOVE,
+                        onButtonClick: removeSelectedOrgs,
+                      },
+                    ]}
+                  /&gt;
+                )}
+              &lt;/Grid&gt;
+            &lt;/Grid&gt;
+          ) : null}
         &lt;/Box&gt;
       &lt;/PageForm&gt;
     &lt;/TfMain&gt;
@@ -1795,7 +1783,7 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-17T14:50:31.904Z
+                at 2023-07-17T18:11:51.240Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
