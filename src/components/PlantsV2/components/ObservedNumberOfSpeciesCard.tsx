@@ -5,7 +5,6 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { ObservationResults } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
