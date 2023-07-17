@@ -1287,7 +1287,9 @@ WITHDRAWAL,Retirada
 WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Ingresar una cantidad en al menos una hilera de lote de plantas de semillero.
 WITHDRAWAL_DESCRIPTION,Todos los detalles acerca de la extracción de las semillas.
 WITHDRAWAL_DETAILS,Detalles de extracción
+WITHDRAWAL_HISTORY,Historial de retiros
 WITHDRAWAL_LOG,Registro de extracción
+WITHDRAWALS,Retiros
 WITHDRAWN,Retirada
 WITHDRAWN_BY,Extraída por
 WITHDRAWN_DATE,Fecha de extracción
