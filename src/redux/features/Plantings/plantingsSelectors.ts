@@ -55,10 +55,3 @@ export const selectPlantingProgressSubzones = createSelector(
 // selector for single site
 export const getReportedPlantsForSite = (state: RootState, siteId: number) =>
   selectPlantingProgressSubzones(state)?.find((report) => report.siteId === siteId);
-
-// selector for search and filtering
-export const searchReportedPlants = (state: RootState, siteIds: string[], query: string) => {
-  selectPlantingProgressSubzones(state)?.filter((report) => {
-    return !!siteIds.find((siteId) => siteId === report.siteId.toString());
-  });
-};
