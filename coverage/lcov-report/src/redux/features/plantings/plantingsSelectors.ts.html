@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -134,12 +134,22 @@
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -212,6 +222,11 @@ import { PlantingSearchData } from './plantingsSlice';
 &nbsp;
 export const selectPlantings = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.plantings?.plantings;</span></span>
 &nbsp;
+export const selectPlantingsForSite = <span class="cstat-no" title="statement not covered" >createSelector(</span>
+  [<span class="fstat-no" title="function not covered" >(s</span>tate: RootState, id: number) =&gt; <span class="cstat-no" title="statement not covered" >state.plantings?.plantings,</span> <span class="fstat-no" title="function not covered" >(s</span>tate: RootState, id: number) =&gt; <span class="cstat-no" title="statement not covered" >id]</span>,
+<span class="fstat-no" title="function not covered" >  (p</span>lantings, id) =&gt; <span class="cstat-no" title="statement not covered" >(plantings ?? []).filter(<span class="fstat-no" title="function not covered" >(p</span>lanting) =&gt; <span class="cstat-no" title="statement not covered" >planting.plantingSite.id.toString() === id.toString())</span></span>
+);
+&nbsp;
 export const getTotalPlantsBySubzone = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>lantings: PlantingSearchData[]) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return plantings?.reduce(<span class="fstat-no" title="function not covered" >(p</span>lantingsBySubzone: { [key: string]: number }, planting) =&gt; {</span>
     const subzoneId = <span class="cstat-no" title="statement not covered" >planting.plantingSubzone.id;</span>
@@ -236,8 +251,8 @@ export const getTotalPlantsBySite = <span class="cstat-no" title="statement not 
   }, {});
 };
 &nbsp;
-export const selectPlantingsDateRange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, dateRange: string[]) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  selectPlantings(state)?.filter(<span class="fstat-no" title="function not covered" >(p</span>lanting) =&gt; {</span>
+export const selectPlantingsDateRange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, dateRange: string[], plantingSiteId: number) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  selectPlantingsForSite(state, plantingSiteId)?.filter(<span class="fstat-no" title="function not covered" >(p</span>lanting) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!dateRange || dateRange.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return true;</span>
     }
@@ -283,7 +298,7 @@ export const getReportedPlantsForSite = <span class="cstat-no" title="statement 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-17T20:58:09.266Z
+                at 2023-07-17T23:10:06.778Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
