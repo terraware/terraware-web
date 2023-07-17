@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1689618358879" clover="3.2.0">
-  <project timestamp="1689618358879" name="All files">
-    <metrics statements="11556" coveredstatements="361" conditionals="7368" coveredconditionals="90" methods="3607" coveredmethods="77" elements="22531" coveredelements="528" complexity="0" loc="11556" ncloc="11556" packages="101" files="472" classes="472"/>
+<coverage generated="1689626175987" clover="3.2.0">
+  <project timestamp="1689626175987" name="All files">
+    <metrics statements="11564" coveredstatements="361" conditionals="7370" coveredconditionals="90" methods="3609" coveredmethods="77" elements="22543" coveredelements="528" complexity="0" loc="11564" ncloc="11564" packages="101" files="472" classes="472"/>
     <package name="src">
       <metrics statements="210" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11118,9 +11118,9 @@
       </file>
     </package>
     <package name="src.redux.features.Plantings">
-      <metrics statements="36" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <metrics statements="44" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="19" coveredmethods="0"/>
       <file name="plantingsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/Plantings/plantingsSelectors.ts">
-        <metrics statements="23" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="13" coveredmethods="0"/>
+        <metrics statements="31" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="15" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -11130,20 +11130,28 @@
         <line num="14" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="22" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
       </file>
       <file name="plantingsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/Plantings/plantingsSlice.ts">
         <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
