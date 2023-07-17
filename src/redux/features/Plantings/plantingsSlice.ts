@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Define a type for the slice state
-type PlantingSearchData = {
+export type PlantingSearchData = {
   id: string;
   createdTime: string;
   delivery: { withdrawal_id: string };
@@ -10,6 +10,7 @@ type PlantingSearchData = {
   plantingSubzone: { id: string };
   species: { id: string };
   type: string;
+  totalPlants: number;
 };
 
 type Data = {
