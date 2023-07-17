@@ -28,7 +28,7 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
             <Grid container spacing={3} sx={{ paddingLeft: theme.spacing(3), paddingBottom: theme.spacing(4) }}>
               <Grid item xs={8}>
                 <Typography sx={{ marginTop: 0, marginBottom: 0, fontSize: '24px', fontWeight: 600 }}>
-                  {strings.WITHDRAWAL_LOG}
+                  {strings.WITHDRAWALS}
                 </Typography>
               </Grid>
             </Grid>
