@@ -1,10 +1,13 @@
 /**
  * Nursery plantings and withdrawals
  */
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
 import strings from 'src/strings';
+import { useOrganization } from 'src/providers';
+import { useAppDispatch } from 'src/redux/store';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
@@ -12,12 +15,18 @@ import PlantingProgress from './PlantingProgressTabContent';
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 
 export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const contentRef = useRef(null);
+  const dispatch = useAppDispatch();
 
   /**
    * TODO: initialize data, url params etc.
    */
+  useEffect(() => {
+    dispatch(requestPlantings(selectedOrganization.id));
+    // TODO: dispatch withdrawals if needed
+  }, [dispatch, selectedOrganization.id]);
 
   return (
     <TfMain>
