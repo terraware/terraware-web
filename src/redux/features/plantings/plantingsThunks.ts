@@ -3,18 +3,10 @@ import { PlantingsService } from 'src/services';
 import { RootState } from 'src/redux/rootReducer';
 import { setPlantingsAction } from './plantingsSlice';
 
-export const requestPlantings = (organizationId: number, plantingSiteId: number) => {
+export const requestPlantings = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
-      const response = await PlantingsService.listPlantings(organizationId, [
-        {
-          field: 'delivery.plantings.plantingSite.id',
-          values: [plantingSiteId.toString()],
-          type: 'Exact',
-          operation: 'field',
-        },
-      ]);
-
+      const response = await PlantingsService.listPlantings(organizationId, []);
       const plantings = response?.flatMap((r) => (r as any).delivery.plantings);
       dispatch(setPlantingsAction({ plantings }));
     } catch (e) {

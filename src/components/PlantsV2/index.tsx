@@ -5,7 +5,7 @@ import { APP_PATHS } from 'src/constants';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { Box, Grid, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { requestPlantingSites, requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
+import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -55,16 +55,15 @@ export default function PlantsDashboardV2(): JSX.Element {
   );
 
   useEffect(() => {
-    dispatch(requestPlantingSites(org.selectedOrganization.id));
     dispatch(requestObservations(org.selectedOrganization.id));
     dispatch(requestObservationsResults(org.selectedOrganization.id));
     dispatch(requestSpecies(org.selectedOrganization.id));
-  }, [dispatch, org]);
+    dispatch(requestPlantings(org.selectedOrganization.id));
+  }, [dispatch, org.selectedOrganization.id]);
 
   useEffect(() => {
     dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSiteId));
-    dispatch(requestPlantings(org.selectedOrganization.id, selectedPlantingSiteId));
-  }, [dispatch, org, selectedPlantingSiteId]);
+  }, [dispatch, org.selectedOrganization.id, selectedPlantingSiteId]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
