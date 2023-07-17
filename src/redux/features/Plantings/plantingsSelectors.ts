@@ -6,18 +6,15 @@ import { PlantingSearchData } from './plantingsSlice';
 export const selectPlantings = (state: RootState) => state.plantings?.plantings;
 
 export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
-  const plantingsBySubzone: Record<number, { totalPlants: number }> = {};
-  plantings?.forEach((planting) => {
-    const subzoneId = Number(planting.plantingSubzone.id);
+  return plantings?.reduce((plantingsBySubzone: { [key: string]: number }, planting) => {
+    const subzoneId = planting.plantingSubzone.id;
     if (plantingsBySubzone[subzoneId]) {
-      plantingsBySubzone[subzoneId] = {
-        totalPlants: plantingsBySubzone[subzoneId].totalPlants + planting.totalPlants,
-      };
+      plantingsBySubzone[subzoneId] = plantingsBySubzone[subzoneId] + planting.totalPlants;
     } else {
-      plantingsBySubzone[subzoneId] = { totalPlants: planting.totalPlants };
+      plantingsBySubzone[subzoneId] = planting.totalPlants;
     }
-  });
-  return plantingsBySubzone;
+    return plantingsBySubzone;
+  }, {});
 };
 
 export const selectPlantingsDateRange = (state: RootState, dateRange: string[]) =>
@@ -45,7 +42,7 @@ export const selectPlantingProgressSubzones = createSelector(
                 plantingSite: ps.name,
                 zone: zone.name,
                 targetPlantingDensity: zone.targetPlantingDensity,
-                totalSeedlingsSent: plantingsBySubzone[sz.id].totalPlants,
+                totalSeedlingsSent: plantingsBySubzone[sz.id],
               };
             });
           }),
@@ -60,7 +57,7 @@ export const getReportedPlantsForSite = (state: RootState, siteId: number) =>
   selectPlantingProgressSubzones(state)?.find((report) => report.siteId === siteId);
 
 // selector for search and filtering
-const searchReportedPlants = (state: RootState, siteIds: string[], query: string) => {
+export const searchReportedPlants = (state: RootState, siteIds: string[], query: string) => {
   selectPlantingProgressSubzones(state)?.filter((report) => {
     return !!siteIds.find((siteId) => siteId === report.siteId.toString());
   });
