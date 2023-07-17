@@ -17,6 +17,18 @@ export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
   }, {});
 };
 
+export const getTotalPlantsBySite = (plantings: PlantingSearchData[]) => {
+  return plantings?.reduce((totalPlantsBySite: { [key: string]: number }, planting) => {
+    const plantingSiteId = planting.plantingSite.id;
+    if (totalPlantsBySite[plantingSiteId]) {
+      totalPlantsBySite[plantingSiteId] = totalPlantsBySite[plantingSiteId] + planting.totalPlants;
+    } else {
+      totalPlantsBySite[plantingSiteId] = planting.totalPlants;
+    }
+    return totalPlantsBySite;
+  }, {});
+};
+
 export const selectPlantingsDateRange = (state: RootState, dateRange: string[]) =>
   selectPlantings(state)?.filter((planting) => {
     if (!dateRange || dateRange.length === 0) {
@@ -30,6 +42,7 @@ export const selectPlantingProgressSubzones = createSelector(
   (plantingSites, plantings) => {
     if (plantings) {
       const plantingsBySubzone = getTotalPlantsBySubzone(plantings);
+      const totalPlantsBySite = getTotalPlantsBySite(plantings);
       return plantingSites?.map((ps) => {
         return {
           siteId: ps.id,
@@ -46,6 +59,7 @@ export const selectPlantingProgressSubzones = createSelector(
               };
             });
           }),
+          totalPlants: totalPlantsBySite[ps.id],
         };
       });
     }
