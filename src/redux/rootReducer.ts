@@ -5,7 +5,7 @@ import {
   observationsResultsReducer,
   plantingSiteObservationsResultsReducer,
 } from './features/observations/observationsSlice';
-import { plantingsReducer } from './features/Plantings/plantingsSlice';
+import { plantingsReducer } from './features/plantings/plantingsSlice';
 import { speciesReducer } from './features/species/speciesSlice';
 import { trackingReducer, sitePopulationReducer } from './features/tracking/trackingSlice';
 

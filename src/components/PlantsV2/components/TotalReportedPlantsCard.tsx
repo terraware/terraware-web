@@ -8,7 +8,7 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
-import { selectPlantingsDateRange } from 'src/redux/features/Plantings/plantingsSelectors';
+import { selectPlantingsDateRange } from 'src/redux/features/plantings/plantingsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
