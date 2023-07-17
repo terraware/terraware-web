@@ -109,7 +109,7 @@ export default function RegionSelector({
   return (
     <>
       {countries && (
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid item xs={gridSize()} paddingBottom={isMobile ? 0 : theme.spacing(4)}>
           <Dropdown
             id='countryCode'
             placeholder={strings.SELECT}
