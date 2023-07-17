@@ -768,6 +768,7 @@ PLANTING_PROGRESS_DESCRIPTION_2,"Una vez que todo el lugar de plantación se hay
 PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,¿Cuál es mi progreso de plantación por zona?
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,Este es el progreso de plantación de su zona calculado por lo que se ha reportado en los retiros de su vivero.
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Cuando una zona se haya marcado como completa para plantación y usted haya completado sus observaciones, podrá ver la densidad de plantación de dicha zona."
+PLANTING_PROGRESS_TABLE_DESCRIPTION,Utiliza las casillas de verificación junto a cada subzona para marcar las áreas donde se ha completado la plantación. La densidad de plantación se calculará una vez que se haya completado la plantación en cada zona.
 PLANTING_SEASON_END,Término de temporada de plantación
 PLANTING_SEASON_START,Inicio de temporada de plantación
 PLANTING_SITE,Lugar de plantación
