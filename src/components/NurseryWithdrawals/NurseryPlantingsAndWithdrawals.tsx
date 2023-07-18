@@ -25,7 +25,6 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
   const location = useStateLocation();
   const contentRef = useRef(null);
   const dispatch = useAppDispatch();
-
   const tab = query.get('tab') || strings.PLANTING_PROGRESS;
 
   const [activeTab, setActiveTab] = useState<string>(tab);
