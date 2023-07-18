@@ -99,3 +99,6 @@ export const searchPlantingProgress = createSelector(
       }, [] as any[]);
   }
 );
+
+export const selectUpdatePlantingCompleted = (state: RootState, requestId: string) =>
+  (state.updatePlantingCompleted as any)[requestId];
