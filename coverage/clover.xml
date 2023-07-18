@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1689705345499" clover="3.2.0">
-  <project timestamp="1689705345499" name="All files">
-    <metrics statements="11609" coveredstatements="361" conditionals="7397" coveredconditionals="90" methods="3625" coveredmethods="77" elements="22631" coveredelements="528" complexity="0" loc="11609" ncloc="11609" packages="101" files="473" classes="473"/>
+<coverage generated="1689711695695" clover="3.2.0">
+  <project timestamp="1689711695695" name="All files">
+    <metrics statements="11626" coveredstatements="361" conditionals="7401" coveredconditionals="90" methods="3631" coveredmethods="77" elements="22658" coveredelements="528" complexity="0" loc="11626" ncloc="11626" packages="101" files="474" classes="474"/>
     <package name="src">
       <metrics statements="210" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11144,11 +11144,11 @@
       <file name="rootReducer.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/rootReducer.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
       </file>
       <file name="store.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/store.ts">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -11469,9 +11469,17 @@
       </file>
     </package>
     <package name="src.redux.features.plantings">
-      <metrics statements="47" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="23" coveredmethods="0"/>
+      <metrics statements="64" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="29" coveredmethods="0"/>
+      <file name="plantingsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsAsyncThunks.ts">
+        <metrics statements="5" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
+      </file>
       <file name="plantingsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsSelectors.ts">
-        <metrics statements="34" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="19" coveredmethods="0"/>
+        <metrics statements="36" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="20" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -11506,15 +11514,27 @@
         <line num="57" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
         <line num="76" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
       </file>
       <file name="plantingsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsSlice.ts">
-        <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
+        <metrics statements="16" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
       </file>
       <file name="plantingsThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsThunks.ts">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -12221,11 +12241,11 @@
       <file name="PlantingsService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/PlantingsService.ts">
         <metrics statements="8" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
       </file>
