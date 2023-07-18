@@ -5,7 +5,7 @@ import {
   observationsResultsReducer,
   plantingSiteObservationsResultsReducer,
 } from './features/observations/observationsSlice';
-import { plantingsReducer } from './features/plantings/plantingsSlice';
+import { plantingsReducer, updatePlantingCompletedReducer } from './features/plantings/plantingsSlice';
 import { speciesReducer } from './features/species/speciesSlice';
 import { trackingReducer, sitePopulationReducer } from './features/tracking/trackingSlice';
 
@@ -19,6 +19,7 @@ export const reducers = {
   tracking: trackingReducer,
   sitePopulation: sitePopulationReducer,
   plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,
+  updatePlantingCompleted: updatePlantingCompletedReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

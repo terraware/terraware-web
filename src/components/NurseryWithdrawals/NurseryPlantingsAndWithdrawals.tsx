@@ -1,24 +1,28 @@
 /**
  * Nursery plantings and withdrawals
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Tabs } from '@terraware/web-components';
+import { BusySpinner, Tabs } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useOrganization } from 'src/providers';
-import { useAppDispatch } from 'src/redux/store';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestPlantings, requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsThunks';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import PlantingProgress from './PlantingProgressTabContent';
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
+import { selectUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsSelectors';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const contentRef = useRef(null);
   const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState<string>('');
+  const snackbar = useSnackbar();
 
   /**
    * TODO: initialize data, url params etc.
@@ -27,6 +31,23 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
     dispatch(requestPlantings(selectedOrganization.id));
     // TODO: dispatch withdrawals if needed
   }, [dispatch, selectedOrganization.id]);
+
+  useEffect(() => {
+    const request = dispatch(requestUpdatePlantingCompleted({ subzoneId: 27, planting: { plantingCompleted: true } }));
+    setRequestId(request.requestId);
+  }, [dispatch]);
+
+  const selector = useAppSelector((state) => selectUpdatePlantingCompleted(state, requestId));
+
+  useEffect(() => {
+    if (selector) {
+      if (selector.status === 'success') {
+        dispatch(requestPlantings(selectedOrganization.id));
+      } else if (selector.status === 'error') {
+        snackbar.pageError(strings.GENERIC_ERROR);
+      }
+    }
+  }, [selector, dispatch, selectedOrganization.id, snackbar]);
 
   return (
     <TfMain>
@@ -52,6 +73,7 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
               ]}
             />
           </Box>
+          <Box>{selector?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
         </Grid>
       </Box>
     </TfMain>

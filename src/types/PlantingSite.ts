@@ -28,3 +28,5 @@ export type PlantingProgressSubzone = {
   targetPlantingDensity: number;
   totalSeedlingsSent?: number;
 };
+
+export type UpdatePlantingSubzonePayload = components['schemas']['UpdatePlantingSubzoneRequestPayload'];
