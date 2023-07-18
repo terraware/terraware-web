@@ -1,10 +1,13 @@
 /**
  * Nursery plantings and withdrawals
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
 import strings from 'src/strings';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { useOrganization } from 'src/providers';
 import { useAppDispatch } from 'src/redux/store';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
@@ -17,16 +20,31 @@ import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
+  const query = useQuery();
+  const history = useHistory();
+  const location = useStateLocation();
   const contentRef = useRef(null);
   const dispatch = useAppDispatch();
+  const tab = query.get('tab') || strings.PLANTING_PROGRESS;
 
-  /**
-   * TODO: initialize data, url params etc.
-   */
+  const [activeTab, setActiveTab] = useState<string>(tab);
+
+  const onTabChange = useCallback(
+    (newTab: string) => {
+      query.set('tab', newTab);
+      history.push(getLocation(location.pathname, location, query.toString()));
+    },
+    [query, history, location]
+  );
+
   useEffect(() => {
     dispatch(requestPlantings(selectedOrganization.id));
-    // TODO: dispatch withdrawals if needed
+    // TODO: dispatch request for planting site totals
   }, [dispatch, selectedOrganization.id]);
+
+  useEffect(() => {
+    setActiveTab(tab);
+  }, [tab]);
 
   return (
     <TfMain>
@@ -46,6 +64,8 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
           </Grid>
           <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1}>
             <Tabs
+              activeTab={activeTab}
+              onTabChange={onTabChange}
               tabs={[
                 { label: strings.PLANTING_PROGRESS, children: <PlantingProgress /> },
                 { label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
