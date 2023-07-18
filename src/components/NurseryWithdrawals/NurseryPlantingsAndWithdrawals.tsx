@@ -1,10 +1,13 @@
 /**
  * Nursery plantings and withdrawals
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Tabs } from '@terraware/web-components';
 import strings from 'src/strings';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { useOrganization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantings, requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsThunks';
@@ -19,17 +22,29 @@ import useSnackbar from 'src/utils/useSnackbar';
 export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
+  const query = useQuery();
+  const history = useHistory();
+  const location = useStateLocation();
   const contentRef = useRef(null);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const snackbar = useSnackbar();
 
-  /**
-   * TODO: initialize data, url params etc.
-   */
+  const tab = query.get('tab') || strings.PLANTING_PROGRESS;
+
+  const [activeTab, setActiveTab] = useState<string>(tab);
+
+  const onTabChange = useCallback(
+    (newTab: string) => {
+      query.set('tab', newTab);
+      history.push(getLocation(location.pathname, location, query.toString()));
+    },
+    [query, history, location]
+  );
+
   useEffect(() => {
     dispatch(requestPlantings(selectedOrganization.id));
-    // TODO: dispatch withdrawals if needed
+    // TODO: dispatch request for planting site totals
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
@@ -49,6 +64,10 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
     }
   }, [selector, dispatch, selectedOrganization.id, snackbar]);
 
+  useEffect(() => {
+    setActiveTab(tab);
+  }, [tab]);
+
   return (
     <TfMain>
       <Box sx={{ paddingLeft: theme.spacing(3) }}>
@@ -67,6 +86,8 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
           </Grid>
           <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1}>
             <Tabs
+              activeTab={activeTab}
+              onTabChange={onTabChange}
               tabs={[
                 { label: strings.PLANTING_PROGRESS, children: <PlantingProgress /> },
                 { label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },

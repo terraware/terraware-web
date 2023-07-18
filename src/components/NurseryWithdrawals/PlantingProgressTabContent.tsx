@@ -10,6 +10,10 @@ import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import PlantingProgressList from './PlantingProgressList';
 import PlantingProgressMap from './PlantingProgressMap';
+import { View } from 'src/components/common/ListMapSelector';
+import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
+
+const initialView: View = 'list';
 
 export default function PlantingProgress(): JSX.Element {
   const theme = useTheme();
@@ -18,6 +22,8 @@ export default function PlantingProgress(): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
+  const [activeView, setActiveView] = useState<View>(initialView);
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>(-1);
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
@@ -54,15 +60,37 @@ export default function PlantingProgress(): JSX.Element {
         {strings.PLANTING_PROGRESS}
       </Typography>
       <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}>
-        {strings.PLANTING_PROGRESS_TABLE_DESCRIPTION}
+        {activeView === 'list'
+          ? strings.PLANTING_PROGRESS_TABLE_DESCRIPTION
+          : strings.PLANTING_PROGRESS_MAP_DESCRIPTION}
       </Typography>
       <ListMapView
         style={{ padding: isMobile ? theme.spacing(3) : theme.spacing(3, 0, 0) }}
-        initialView='list'
-        search={<Search {...searchProps} />}
+        initialView={initialView}
+        onView={setActiveView}
+        search={<SearchComponent view={activeView} onChangePlantingSite={setSelectedPlantingSiteId} {...searchProps} />}
         list={<PlantingProgressList />}
-        map={<PlantingProgressMap />}
+        map={<PlantingProgressMap plantingSiteId={selectedPlantingSiteId} />}
       />
     </Card>
+  );
+}
+
+type SearchComponentProps = SearchProps & {
+  view: View;
+  onChangePlantingSite: (newSiteId: number) => void;
+};
+
+function SearchComponent(props: SearchComponentProps): JSX.Element {
+  const { search, onSearch, filtersProps, view, onChangePlantingSite } = props;
+  return (
+    <>
+      <div style={{ display: view === 'list' ? 'flex' : 'none' }}>
+        <Search search={search} onSearch={onSearch} filtersProps={filtersProps} />
+      </div>
+      <div style={{ display: view === 'map' ? 'flex' : 'none' }}>
+        <PlantingSiteSelector onChange={onChangePlantingSite} />
+      </div>
+    </>
   );
 }
