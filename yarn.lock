@@ -3940,10 +3940,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.3.51":
-  version "2.3.51"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.51.tgz#19d239794ae95c1e39ad652994a1628bcaae3a6c"
-  integrity sha512-LQFIkadJevru+sc7hnXLOrRxYs2RMhOytX27+b46UWun5kZ0+oJzVMUbekzs53+es0bAnKnRLhoTbOG7k6f65g==
+"@terraware/web-components@^2.3.52":
+  version "2.3.52"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.52.tgz#a7fa0e384947e36e50dfb882fa9c7fb33346a1a4"
+  integrity sha512-/FJgQGjDAnejSkWloKXozkWlcEbW/bgL1Clra6Rfp4CDioxxCcf0V9f3rx6InMJAwLvekdyQE4kHwErgrYNUcQ==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
