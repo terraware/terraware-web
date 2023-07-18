@@ -71,10 +71,6 @@ export const selectPlantingProgress = createSelector(
   }
 );
 
-// selector for single site
-export const selectPlantingProgressForSite = (state: RootState, siteId: number) =>
-  selectPlantingProgress(state)?.find((report) => report.siteId === siteId);
-
 // selector to search plantings
 export const searchPlantingProgress = createSelector(
   [
