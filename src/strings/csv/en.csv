@@ -602,6 +602,7 @@ NO_BATCHES_TO_WITHDRAW_FROM,There are no batches with withdrawable quantities.
 NO_DATA_YET,No data yet
 NO_FUTURE_DATES,No future dates allowed
 NO_INVENTORY_DESCRIPTION,"It looks like you haven’t added inventory yet. You can either import data from a CSV file, or add inventory using our inventory form."
+NO_MAP_DATA,No map data.
 NO_MOBILE_SUPPORT_DESC,Please access terraware.io on a desktop device.
 NO_MOBILE_SUPPORT_TITLE,Terraware web doesn’t support mobile yet.
 NO_NEGATIVE_NUMBERS,No negative numbers allowed
@@ -765,6 +766,7 @@ PLANTING_PROGRESS_AND_DENSITY,Planting Progress and Density
 PLANTING_PROGRESS_CARD_TITLE,What is my site planting progress?
 PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress calculated from what has been reported in your nursery withdrawals.
 PLANTING_PROGRESS_DESCRIPTION_2,"Once your entire planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view your site’s planting density."
+PLANTING_PROGRESS_MAP_DESCRIPTION,Click on each subzone to mark areas where planting has been completed. Planting density will be calculated once planting has been completed for each zone.
 PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,What is my planting progress per zone?
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,This is your zone’s planting progress calculated from what has been reported in your nursery withdrawals.
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Once a zone has been marked as complete for planting and you’ve completed your observations, you’ll be able to view that zone’s planting density."

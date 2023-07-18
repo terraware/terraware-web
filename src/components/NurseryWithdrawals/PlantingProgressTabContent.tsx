@@ -60,7 +60,9 @@ export default function PlantingProgress(): JSX.Element {
         {strings.PLANTING_PROGRESS}
       </Typography>
       <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}>
-        {strings.PLANTING_PROGRESS_TABLE_DESCRIPTION}
+        {activeView === 'list'
+          ? strings.PLANTING_PROGRESS_TABLE_DESCRIPTION
+          : strings.PLANTING_PROGRESS_MAP_DESCRIPTION}
       </Typography>
       <ListMapView
         style={{ padding: isMobile ? theme.spacing(3) : theme.spacing(3, 0, 0) }}
