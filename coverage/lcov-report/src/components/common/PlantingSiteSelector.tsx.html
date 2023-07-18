@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Map/MapBanner.tsx</title>
+    <title>Code coverage report for src/components/common/PlantingSiteSelector.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Map</a> MapBanner.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/common</a> PlantingSiteSelector.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -99,23 +99,15 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,48 +120,80 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
-import { Box } from '@mui/material';
-import { Message } from '@terraware/web-components';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dropdown } from '@terraware/web-components';
+import { useAppSelector } from 'src/redux/store';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import strings from 'src/strings';
 &nbsp;
-type MapBannerProps = {
-  message: string;
+type PlantingSiteSelectorProps = {
+  onChange: (plantingSiteId: number) =&gt; void;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >MapBanner(</span>{ message }: MapBannerProps): JSX.Element | null {
-  const [showMessage, setShowMessage] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
+export default function <span class="fstat-no" title="function not covered" >PlantingSiteSelector(</span>{ onChange }: PlantingSiteSelectorProps): JSX.Element {
+  // assume `requestPlantingSites` thunk has been dispatched by consumer
+  const plantingSites = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = <span class="cstat-no" title="statement not covered" >useState&lt;number | undefined&gt;();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (showMessage) {</span>
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;Box
-        sx={{
-          position: 'absolute',
-          zIndex: 2,
-          top: '16px',
-          left: '50%',
-          transform: 'translate(-50%, 0)',
-        }}
-      &gt;
-        &lt;Message
-          type='page'
-          title={''}
-          priority={'info'}
-          body={message}
-          showCloseButton={true}
-          onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowMessage(false)}</span>
-        /&gt;
-      &lt;/Box&gt;
-    );
-  } else {
-<span class="cstat-no" title="statement not covered" >    return null;</span>
-  }
+  const options = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >plantingSites?.map(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: site.name, value: site.id })</span>) ?? [],</span>
+    [plantingSites]
+  );
+&nbsp;
+  const updateSelection = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (n</span>ewValue: any) =&gt; {
+      const id = <span class="cstat-no" title="statement not covered" >Number(newValue);</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedPlantingSiteId(isNaN(id) ? -1 : id);</span>
+<span class="cstat-no" title="statement not covered" >      onChange(isNaN(id) ? -1 : id);</span>
+    },
+    [onChange]
+  );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (plantingSites &amp;&amp; (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {</span>
+<span class="cstat-no" title="statement not covered" >      updateSelection(plantingSites[0]?.id);</span>
+    }
+  }, [plantingSites, selectedPlantingSiteId, updateSelection]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;Dropdown
+      placeholder={strings.SELECT}
+      onChange={updateSelection}
+      options={options}
+      selectedValue={selectedPlantingSiteId}
+    /&gt;
+  );
 }
 &nbsp;</pre></td></tr></table></pre>
 

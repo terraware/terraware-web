@@ -1,3 +1,4 @@
+c01f84694 SW-3903 Add Planting Site Selector for Map View (#1572)
 9ff481cb2 Refactor plantings redux to fetch all plantings (#1571)
 d5f2e8423 SW-3891 Service for marking planting as complete/incomplete (#1568)
 cc44a76ce Updated translations from Phrase (#1570)
