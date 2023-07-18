@@ -24,7 +24,7 @@ export default function PlantingSiteSelector({ onChange }: PlantingSiteSelectorP
       setSelectedPlantingSiteId(isNaN(id) ? -1 : id);
       onChange(isNaN(id) ? -1 : id);
     },
-    [onChange, setSelectedPlantingSiteId]
+    [onChange]
   );
 
   useEffect(() => {
