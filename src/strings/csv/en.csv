@@ -602,7 +602,6 @@ NO_BATCHES_TO_WITHDRAW_FROM,There are no batches with withdrawable quantities.
 NO_DATA_YET,No data yet
 NO_FUTURE_DATES,No future dates allowed
 NO_INVENTORY_DESCRIPTION,"It looks like you haven’t added inventory yet. You can either import data from a CSV file, or add inventory using our inventory form."
-NO_MAP_DATA,No map data.
 NO_MOBILE_SUPPORT_DESC,Please access terraware.io on a desktop device.
 NO_MOBILE_SUPPORT_TITLE,Terraware web doesn’t support mobile yet.
 NO_NEGATIVE_NUMBERS,No negative numbers allowed
