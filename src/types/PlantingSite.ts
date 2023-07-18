@@ -22,7 +22,7 @@ export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteRepo
 
 export type PlantingProgressSubzone = {
   subzoneName: string;
-  plantingComplete: boolean;
+  plantingCompleted: boolean;
   plantingSite: string;
   zone: string;
   targetPlantingDensity: number;
