@@ -1190,6 +1190,7 @@ TOTAL_PLANTS_PLANTED_HELPER_TEXT,Species not classified as “trees” in the sp
 TOTAL_QUANTITY,Total Quantity
 TOTAL_READY_QUANTITY,Total Ready Quantity
 TOTAL_SEED_COUNT,Total Seed Count
+TOTAL_SEEDLINGS_SENT,Total Seedlings Sent
 TOTAL_SEEDS_COUNT_ESTIMATION,Total Seeds Count Estimation
 TOTAL_SEEDS_GERMINATED,Total Seeds Germinated
 TOTAL_SEEDS_GERMINATED_ERROR,Germinated amount should not be more than tested amount.

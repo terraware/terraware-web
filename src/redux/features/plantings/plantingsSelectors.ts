@@ -59,7 +59,7 @@ export const selectPlantingProgress = createSelector(
                 subzoneName: sz.fullName,
                 plantingCompleted: sz.plantingCompleted,
                 plantingSite: ps.name,
-                zone: zone.name,
+                zoneName: zone.name,
                 targetPlantingDensity: zone.targetPlantingDensity,
                 totalSeedlingsSent: plantingsBySubzone[sz.id],
               }))
@@ -79,8 +79,8 @@ export const searchPlantingProgress = createSelector(
     (state: RootState, query: string, plantingCompleted?: boolean) => plantingCompleted,
   ],
   (plantingProgress, query, plantingCompleted) => {
-    return (plantingProgress ?? [])
-      .filter((planting) => planting.totalPlants > 0)
+    return plantingProgress
+      ?.filter((planting) => planting.totalPlants > 0)
       .reduce((acc, curr) => {
         const { siteId, siteName, totalPlants, reported } = curr;
         if (reported && reported.length > 0) {
@@ -93,7 +93,7 @@ export const searchPlantingProgress = createSelector(
             }
           });
         } else if (!query && plantingCompleted === undefined) {
-          acc.push({ siteId, siteName, totalPlants });
+          acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants });
         }
         return acc;
       }, [] as any[]);
