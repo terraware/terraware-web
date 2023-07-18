@@ -13,11 +13,15 @@ export const selectPlantingsForSite = createSelector(
 
 export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
   return plantings?.reduce((plantingsBySubzone: { [key: string]: number }, planting) => {
+    if (!planting.plantingSubzone) {
+      return plantingsBySubzone;
+    }
     const subzoneId = planting.plantingSubzone.id;
+    const totalPlants = Number(planting.plantingSubzone['totalPlants(raw)']);
     if (plantingsBySubzone[subzoneId]) {
-      plantingsBySubzone[subzoneId] = plantingsBySubzone[subzoneId] + planting.totalPlants;
+      plantingsBySubzone[subzoneId] = plantingsBySubzone[subzoneId] + totalPlants;
     } else {
-      plantingsBySubzone[subzoneId] = planting.totalPlants;
+      plantingsBySubzone[subzoneId] = totalPlants;
     }
     return plantingsBySubzone;
   }, {});
@@ -25,12 +29,7 @@ export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
 
 export const getTotalPlantsBySite = (plantings: PlantingSearchData[]) => {
   return plantings?.reduce((totalPlantsBySite: { [key: string]: number }, planting) => {
-    const plantingSiteId = planting.plantingSite.id;
-    if (totalPlantsBySite[plantingSiteId]) {
-      totalPlantsBySite[plantingSiteId] = totalPlantsBySite[plantingSiteId] + planting.totalPlants;
-    } else {
-      totalPlantsBySite[plantingSiteId] = planting.totalPlants;
-    }
+    totalPlantsBySite[planting.plantingSite.id] = 5; // TODO: fix this selector
     return totalPlantsBySite;
   }, {});
 };
@@ -53,18 +52,18 @@ export const selectPlantingProgress = createSelector(
         return {
           siteId: ps.id,
           siteName: ps.name,
-          reported: ps.plantingZones?.flatMap((zone) => {
-            return zone.plantingSubzones.map((sz) => {
-              return {
+          reported: ps.plantingZones?.flatMap((zone) =>
+            zone.plantingSubzones
+              .filter((sz) => plantingsBySubzone[sz.id])
+              .map((sz) => ({
                 subzoneName: sz.fullName,
                 plantingCompleted: sz.plantingCompleted,
                 plantingSite: ps.name,
                 zone: zone.name,
                 targetPlantingDensity: zone.targetPlantingDensity,
                 totalSeedlingsSent: plantingsBySubzone[sz.id],
-              };
-            });
-          }),
+              }))
+          ),
           totalPlants: totalPlantsBySite[ps.id],
         };
       });
@@ -77,7 +76,7 @@ export const selectPlantingProgressForSite = (state: RootState, siteId: number) 
   selectPlantingProgress(state)?.find((report) => report.siteId === siteId);
 
 // selector to search plantings
-export const searchPlantingProgres = createSelector(
+export const searchPlantingProgress = createSelector(
   [
     (state: RootState, query: string, plantingCompleted?: boolean) => selectPlantingProgress(state),
     (state: RootState, query: string, plantingCompleted?: boolean) => query,
