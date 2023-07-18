@@ -1,7 +1,8 @@
 import { RootState } from 'src/redux/rootReducer';
-import { selectPlantingSites } from '../tracking/trackingSelectors';
+import { selectSearchPlantingSites } from '../tracking/trackingSelectors';
 import { createSelector } from '@reduxjs/toolkit';
 import { PlantingSearchData } from './plantingsSlice';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 export const selectPlantings = (state: RootState) => state.plantings?.plantings;
 
@@ -22,13 +23,13 @@ export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
   }, {});
 };
 
-export const getTotalPlantsBySite = (plantings: PlantingSearchData[]) => {
-  return plantings?.reduce((totalPlantsBySite: { [key: string]: number }, planting) => {
-    const plantingSiteId = planting.plantingSite.id;
+export const getTotalPlantsBySite = (plantingsSites: PlantingSiteSearchResult[]) => {
+  return plantingsSites?.reduce((totalPlantsBySite: { [key: string]: number }, plantingSite) => {
+    const plantingSiteId = plantingSite.id;
     if (totalPlantsBySite[plantingSiteId]) {
-      totalPlantsBySite[plantingSiteId] = totalPlantsBySite[plantingSiteId] + planting.totalPlants;
+      totalPlantsBySite[plantingSiteId] = totalPlantsBySite[plantingSiteId] + plantingSite['totalPlants(raw)'];
     } else {
-      totalPlantsBySite[plantingSiteId] = planting.totalPlants;
+      totalPlantsBySite[plantingSiteId] = plantingSite['totalPlants(raw)'];
     }
     return totalPlantsBySite;
   }, {});
@@ -43,11 +44,11 @@ export const selectPlantingsDateRange = (state: RootState, dateRange: string[], 
   }) ?? [];
 
 export const selectPlantingProgressSubzones = createSelector(
-  [(state: RootState) => selectPlantingSites(state), (state: RootState) => selectPlantings(state)],
+  [(state: RootState) => selectSearchPlantingSites(state), (state: RootState) => selectPlantings(state)],
   (plantingSites, plantings) => {
-    if (plantings) {
+    if (plantingSites && plantings) {
       const plantingsBySubzone = getTotalPlantsBySubzone(plantings);
-      const totalPlantsBySite = getTotalPlantsBySite(plantings);
+      const totalPlantsBySite = getTotalPlantsBySite(plantingSites);
       return plantingSites?.map((ps) => {
         return {
           siteId: ps.id,
