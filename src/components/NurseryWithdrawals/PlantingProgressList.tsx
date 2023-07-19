@@ -15,6 +15,7 @@ import Table from 'src/components/common/table';
 import Link from 'src/components/common/Link';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -91,6 +92,7 @@ export default function PlantingProgressList({
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     if (data && hasZones === undefined) {
@@ -101,14 +103,16 @@ export default function PlantingProgressList({
   useEffect(() => {
     if (updatePlantingResult?.status === 'success') {
       reloadTracking();
+    } else if (updatePlantingResult?.status === 'error') {
+      snackbar.pageError(strings.GENERIC_ERROR);
     }
-  }, [updatePlantingResult, reloadTracking]);
+  }, [updatePlantingResult, reloadTracking, snackbar]);
 
   if (!data || hasZones === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
-  const setPlantingComplete = (complete: boolean) => {
+  const setPlantingCompleted = (complete: boolean) => {
     const subzoneIds = selectedRows.map((row) => row.subzoneId);
     const request = dispatch(
       requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })
@@ -126,14 +130,14 @@ export default function PlantingProgressList({
       topBarButtons.push({
         buttonType: 'passive',
         buttonText: strings.UNDO_PLANTING_COMPLETE,
-        onButtonClick: () => setPlantingComplete(false),
+        onButtonClick: () => setPlantingCompleted(false),
         disabled: !areAllCompleted,
       });
 
       topBarButtons.push({
         buttonType: 'passive',
         buttonText: strings.SET_PLANTING_COMPLETE,
-        onButtonClick: () => setPlantingComplete(true),
+        onButtonClick: () => setPlantingCompleted(true),
         disabled: !areAllIncompleted,
       });
     }
