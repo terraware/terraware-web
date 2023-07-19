@@ -40,21 +40,6 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   const updateStatus = useAppSelector((state) => selectUpdatePlantingCompleted(state, requestId));
   const snackbar = useSnackbar();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [lastPlantingSiteId, setLastPlantingSiteId] = useState<number | undefined>();
-  const [focusEntities, setFocusEntities] = useState<{ sourceId: string; id: number }[]>();
-  useEffect(() => {
-    // set focus entities to the planting site if the planting site id has changed
-    setLastPlantingSiteId((last) => {
-      if (plantingSiteId !== last) {
-        setFocusEntities([{ sourceId: 'sites', id: plantingSiteId }]);
-      } else {
-        setFocusEntities([]);
-      }
-      return plantingSiteId;
-    });
-  }, [plantingSiteId, plantingSite]);
-
   useEffect(() => {
     if (plantingSite?.boundary) {
       setMapData(MapService.getMapDataFromPlantingSite(plantingSite));
@@ -109,7 +94,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   return mapData ? (
     <PlantingSiteMap
       mapData={mapData}
-      focusEntities={focusEntities}
+      focusEntities={[{ sourceId: 'sites', id: plantingSiteId }]}
       contextRenderer={{
         render: (properties: MapSourceProperties) => (
           <PlantingProgressMapDialog
