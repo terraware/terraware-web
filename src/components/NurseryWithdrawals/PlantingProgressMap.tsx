@@ -61,7 +61,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
 
   useEffect(() => {
     dispatch(requestSitePopulation(org.selectedOrganization.id, plantingSiteId));
-  }, [dispatch, org, plantingSiteId]);
+  }, [dispatch, org.selectedOrganization.id, plantingSiteId]);
 
   useEffect(() => {
     if (updateStatus) {
@@ -102,7 +102,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
             name={properties.fullName}
             plantingComplete={subzonesComplete[properties.id]}
             onUpdatePlantingComplete={updatePlantingComplete}
-            disableUpdateButton={dispatching}
+            busy={dispatching}
           />
         ),
         className: classes.popup,

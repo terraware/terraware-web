@@ -7,6 +7,7 @@ import { useAppSelector } from 'src/redux/store';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { makeStyles } from '@mui/styles';
 import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) => ({
   speciesList: {
@@ -26,7 +27,7 @@ type PlantingProgressMapDialogProps = {
   name: string;
   plantingComplete: boolean;
   onUpdatePlantingComplete: (id: number, val: boolean) => void;
-  disableUpdateButton: boolean;
+  busy: boolean;
 };
 
 export default function PlantingProgressMapDialog({
@@ -34,7 +35,7 @@ export default function PlantingProgressMapDialog({
   name,
   plantingComplete,
   onUpdatePlantingComplete,
-  disableUpdateButton,
+  busy,
 }: PlantingProgressMapDialogProps): JSX.Element {
   const theme = useTheme();
   const classes = useStyles();
@@ -44,8 +45,13 @@ export default function PlantingProgressMapDialog({
   }, [species]);
 
   const getWithdrawalHistoryLink = () => {
-    // TODO: update link with correct destination, i.e. withdrawal history page filtered to this subzone
-    return <Link className={classes.withdrawalHistoryLink}>{strings.SEE_WITHDRAWAL_HISTORY}</Link>;
+    const filterParam = `subzoneName=${encodeURIComponent(name)}`;
+    const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=${strings.WITHDRAWAL_HISTORY}&${filterParam}`;
+    return (
+      <Link className={classes.withdrawalHistoryLink} to={url}>
+        {strings.SEE_WITHDRAWAL_HISTORY}
+      </Link>
+    );
   };
 
   return (
@@ -92,7 +98,7 @@ export default function PlantingProgressMapDialog({
           onClick={() => onUpdatePlantingComplete(id, !plantingComplete)}
           label={plantingComplete ? strings.UNDO_PLANTING_COMPLETE : strings.SET_PLANTING_COMPLETE}
           type={plantingComplete ? 'passive' : 'productive'}
-          disabled={disableUpdateButton}
+          disabled={busy}
         />
       </Box>
     </Box>
