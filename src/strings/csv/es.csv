@@ -1190,6 +1190,7 @@ TOTAL_PLANTS_PLANTED_HELPER_TEXT,"Especies no clasificadas como ""árboles"" en 
 TOTAL_QUANTITY,Cantidad total
 TOTAL_READY_QUANTITY,Cantidad total disponible
 TOTAL_SEED_COUNT,Recuento total de semillas
+TOTAL_SEEDLINGS_SENT,Total de plántulas enviadas
 TOTAL_SEEDS_COUNT_ESTIMATION,Estimación del recuento total de semillas
 TOTAL_SEEDS_GERMINATED,Total de semillas germinadas
 TOTAL_SEEDS_GERMINATED_ERROR,La cantidad germinada no debe ser superior a la cantidad analizada.
