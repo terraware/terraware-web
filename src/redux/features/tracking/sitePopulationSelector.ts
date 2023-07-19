@@ -1,5 +1,6 @@
 import { RootState } from 'src/redux/rootReducer';
 import { createSelector } from '@reduxjs/toolkit';
+import { createCachedSelector } from 're-reselect';
 
 export const selectSitePopulation = (state: RootState) => state.sitePopulation?.zones;
 
@@ -24,3 +25,30 @@ export const selectZonePopulationStats = createSelector(
     return zoneStats;
   }
 );
+
+export const selectSubzonePopulations = createCachedSelector(
+  (state: RootState, subzoneId: number) => selectSitePopulation(state),
+  (state: RootState, subzoneId: number) => subzoneId,
+  (zones, subzoneId) => {
+    return zones
+      ?.flatMap((zone) => zone.plantingSubzones)
+      ?.filter((sz) => subzoneId === +sz.id)
+      ?.flatMap((sz) => sz.populations)
+      ?.filter((pop) => pop);
+  }
+)((state: RootState, subzoneId: number) => `subzone-${subzoneId}-populations`);
+
+export const selectSubzoneSpeciesPopulations = createCachedSelector(
+  (state: RootState, subzoneId: number) => selectSubzonePopulations(state, subzoneId),
+  (populations) => {
+    const species: Record<string, number> = {};
+    populations?.forEach((pop) => {
+      if (species[pop.species_scientificName]) {
+        species[pop.species_scientificName] += +pop['totalPlants(raw)'];
+      } else {
+        species[pop.species_scientificName] = +pop['totalPlants(raw)'];
+      }
+    });
+    return species;
+  }
+)((state: RootState, subzoneId: number) => `subzone-${subzoneId}-species-populations`);

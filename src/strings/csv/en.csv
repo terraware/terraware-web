@@ -950,6 +950,7 @@ SEARCH_BY_NAME_OR_FAMILY,Search by name or family...
 SEARCH_OR_SELECT,Search or Select...
 SEE_ALL_ACCESSIONS,See All Accessions
 SEE_ENTRIES,See Entries
+SEE_WITHDRAWAL_HISTORY,See Withdrawal History
 SEED,Seed
 SEED_BAGS,Seed Bags
 SEED_BANK,Seed Bank
@@ -972,6 +973,7 @@ SEEDLING_BATCH_DETAILS,Seedling Batch Details
 SEEDLINGS,Seedlings
 SEEDLINGS_BATCHES,Seedlings Batches
 SEEDLINGS_PLURAL,seedlings
+SEEDLINGS_SENT,Seedlings Sent
 SEEDLINGS_SINGULAR,seedling
 SEEDS,Seeds
 SEEDS_GERMINATED,Seeds Germinated
@@ -1015,6 +1017,7 @@ SENSOR_SCAN_TIMEOUT_ERROR,"Only {0}/{1} sensors were found. Please make sure all
 SENSORS_FOUND,{0}/{1} sensors found...
 SENT_TO_NURSERY,Sent to Nursery!
 SERVER_ERROR,Server Error
+SET_PLANTING_COMPLETE,Planting Complete
 SET_UP,Set Up
 SET_UP_YOUR_SENSOR_KIT,Set Up Your Sensor Kit
 SET_UP_YOUR_SENSOR_KIT_MSG,"If your seed bank was built by Terraformation, it is equipped with a sensor kit that you can remotely monitor things like the seed bank's temperature and humidity. To set this up, you'll need to connect your seed bank to the Terraware web app. This may take up to 30 minutes."
@@ -1221,6 +1224,7 @@ TYPE_TO_SEARCH,Type to search...
 UNABLE_TO_ADD_PERSON,Unable to Add Person
 UNABLE_TO_CONNECT_TO_SENSOR_KIT,We were unable to connect to your sensor kit. Sometimes this is because it is not connected to power or internet. Please email {0} so we can assist you.
 UNABLE_TO_LOAD_NOTIFICATIONS,Unable to load notifications. Try again later.
+UNDO_PLANTING_COMPLETE,Undo Planting Complete
 UNDO_SEND_TO_NURSERY,Undo Send to Nursery
 UNEXPECTED_ERROR,An unexpected error occurred.
 UNITS,Units
