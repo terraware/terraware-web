@@ -38,14 +38,14 @@ export const plantingSitesSearchResultsSlice = createSlice({
   name: 'plantingSitesResultsSlice',
   initialState: initialSearchState,
   reducers: {
-    setSearchPlantingSitesAction: (state, action: PayloadAction<SearchData>) => {
+    setPlantingSitesSearchResultsAction: (state, action: PayloadAction<SearchData>) => {
       const data: SearchData = action.payload;
       state.sites = data.sites;
     },
   },
 });
 
-export const { setSearchPlantingSitesAction } = plantingSitesSearchResultsSlice.actions;
+export const { setPlantingSitesSearchResultsAction } = plantingSitesSearchResultsSlice.actions;
 
 export const plantingSitesSearchResultsReducer = plantingSitesSearchResultsSlice.reducer;
 

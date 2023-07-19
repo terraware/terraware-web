@@ -1,5 +1,5 @@
 import { RootState } from 'src/redux/rootReducer';
-import { selectSearchResultsPlantingSites } from '../tracking/trackingSelectors';
+import { selectPlantingSites, selectPlantingSitesSearchResults } from '../tracking/trackingSelectors';
 import { regexMatch } from 'src/utils/search';
 import { createSelector } from '@reduxjs/toolkit';
 import { PlantingSearchData } from './plantingsSlice';
@@ -49,11 +49,15 @@ export const selectPlantingsDateRange = (state: RootState, dateRange: string[], 
   }) ?? [];
 
 export const selectPlantingProgress = createSelector(
-  [(state: RootState) => selectSearchResultsPlantingSites(state), (state: RootState) => selectPlantings(state)],
-  (plantingSites, plantings) => {
-    if (plantingSites && plantings) {
+  [
+    (state: RootState) => selectPlantingSitesSearchResults(state),
+    (state: RootState) => selectPlantingSites(state),
+    (state: RootState) => selectPlantings(state),
+  ],
+  (plantingSitesSearchResults, plantingSites, plantings) => {
+    if (plantingSitesSearchResults && plantings) {
       const plantingsBySubzone = getTotalPlantsBySubzone(plantings);
-      const totalPlantsBySite = getTotalPlantsBySite(plantingSites);
+      const totalPlantsBySite = getTotalPlantsBySite(plantingSitesSearchResults);
       return plantingSites?.map((ps) => {
         return {
           siteId: ps.id,

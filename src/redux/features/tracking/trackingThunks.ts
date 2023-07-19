@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { SearchService, TrackingService } from 'src/services';
 import { RootState } from 'src/redux/rootReducer';
-import { setPlantingSitesAction, setSearchPlantingSitesAction, setSitePopulationAction } from './trackingSlice';
+import { setPlantingSitesAction, setPlantingSitesSearchResultsAction, setSitePopulationAction } from './trackingSlice';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 export const requestPlantingSites = (organizationId: number) => {
@@ -35,12 +35,12 @@ export const requestSitePopulation = (organizationId: number, siteId: number) =>
   };
 };
 
-export const requestSearchPlantingSites = (organizationId: number) => {
+export const requestPlantingSitesSearchResults = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response: PlantingSiteSearchResult[] | null = await SearchService.searchPlantingSites(organizationId);
       if (response) {
-        dispatch(setSearchPlantingSitesAction({ sites: response }));
+        dispatch(setPlantingSitesSearchResultsAction({ sites: response }));
       }
     } catch (e) {
       // should not happen, the response above captures any http request errors
