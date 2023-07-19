@@ -76,13 +76,13 @@ const columnsWithZones = (): TableColumnType[] => [
 export type PlantingProgressListProps = {
   search: string;
   plantingCompleted?: boolean;
-  refreshPlantings: () => void;
+  reloadTracking: () => void;
 };
 
 export default function PlantingProgressList({
   search,
   plantingCompleted,
-  refreshPlantings,
+  reloadTracking,
 }: PlantingProgressListProps): JSX.Element {
   const [hasZones, setHasZones] = useState<boolean | undefined>();
   const classes = useStyles();
@@ -101,10 +101,10 @@ export default function PlantingProgressList({
   useEffect(() => {
     if (selector) {
       if (selector.status === 'success') {
-        refreshPlantings();
+        reloadTracking();
       }
     }
-  }, [selector, refreshPlantings]);
+  }, [selector, reloadTracking]);
 
   if (!data || hasZones === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;

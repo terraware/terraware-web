@@ -18,7 +18,11 @@ import PlantingProgress from './PlantingProgressTabContent';
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
 
-export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
+type NurseryWithdrawalsProps = {
+  reloadTracking: () => void;
+};
+
+export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const query = useQuery();
@@ -47,11 +51,6 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
     setActiveTab(tab);
   }, [tab]);
 
-  const refreshPlantings = () => {
-    dispatch(requestPlantings(selectedOrganization.id));
-    dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
-  };
-
   return (
     <TfMain>
       <Box sx={{ paddingLeft: theme.spacing(3) }}>
@@ -75,7 +74,7 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
               tabs={[
                 {
                   label: strings.PLANTING_PROGRESS,
-                  children: <PlantingProgress refreshPlantings={refreshPlantings} />,
+                  children: <PlantingProgress reloadTracking={reloadTracking} />,
                 },
                 { label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
               ]}
