@@ -118,9 +118,5 @@ const DetailsRenderer =
       return <CellRenderer {...props} value={createLinkToWithdrawals()} className={classes.text} />;
     }
 
-    if (column.key === 'plantingCompleted') {
-      return <CellRenderer {...props} value={row.value?.toString()} className={classes.text} />;
-    }
-
     return <CellRenderer {...props} className={classes.text} />;
   };
