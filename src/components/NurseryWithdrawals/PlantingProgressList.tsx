@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Box, CircularProgress } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -73,19 +74,24 @@ export type PlantingProgressListProps = {
 };
 
 export default function PlantingProgressList({ search, plantingCompleted }: PlantingProgressListProps): JSX.Element {
+  const [hasZones, setHasZones] = useState<boolean | undefined>();
   const classes = useStyles();
-  const data = useAppSelector((state: any) => searchPlantingProgress(state, search, plantingCompleted));
+  const data = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), plantingCompleted));
 
-  const hasZones = data?.some((d) => d.subzoneName);
+  useEffect(() => {
+    if (data && hasZones === undefined) {
+      setHasZones(data.some((d) => d.subzoneName));
+    }
+  }, [data, hasZones]);
 
-  if (!data) {
+  if (!data || hasZones === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
   return (
     <Box>
       <Table
-        id='plantings-progress-table'
+        id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
         columns={hasZones ? columnsWithZones : columnsWithoutZones}
         rows={data}
         orderBy={hasZones ? 'subzoneName' : 'siteName'}
