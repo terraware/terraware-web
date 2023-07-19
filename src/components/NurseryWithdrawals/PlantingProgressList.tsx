@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Box, CircularProgress } from '@mui/material';
-import { TableColumnType } from '@terraware/web-components';
+import { BusySpinner, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import { useAppSelector } from 'src/redux/store';
-import { searchPlantingProgress } from 'src/redux/features/plantings/plantingsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import {
+  searchPlantingProgress,
+  selectUpdatePlantingsCompleted,
+} from 'src/redux/features/plantings/plantingsSelectors';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import Table from 'src/components/common/table';
 import Link from 'src/components/common/Link';
+import { TopBarButton } from '@terraware/web-components/components/table';
+import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -71,12 +76,21 @@ const columnsWithZones = (): TableColumnType[] => [
 export type PlantingProgressListProps = {
   search: string;
   plantingCompleted?: boolean;
+  refreshPlantings: () => void;
 };
 
-export default function PlantingProgressList({ search, plantingCompleted }: PlantingProgressListProps): JSX.Element {
+export default function PlantingProgressList({
+  search,
+  plantingCompleted,
+  refreshPlantings,
+}: PlantingProgressListProps): JSX.Element {
   const [hasZones, setHasZones] = useState<boolean | undefined>();
   const classes = useStyles();
   const data = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), plantingCompleted));
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState<string>('');
+  const selector = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
 
   useEffect(() => {
     if (data && hasZones === undefined) {
@@ -84,18 +98,69 @@ export default function PlantingProgressList({ search, plantingCompleted }: Plan
     }
   }, [data, hasZones]);
 
+  useEffect(() => {
+    if (selector) {
+      if (selector.status === 'success') {
+        refreshPlantings();
+      }
+    }
+  }, [selector, refreshPlantings]);
+
   if (!data || hasZones === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
+  const undoPlantingComplete = () => {
+    const subzoneIds = selectedRows.map((row) => row.subzoneId);
+    const request = dispatch(requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: false } }));
+    setRequestId(request.requestId);
+  };
+
+  const setPlantingComplete = () => {
+    const subzoneIds = selectedRows.map((row) => row.subzoneId);
+    const request = dispatch(requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: true } }));
+    setRequestId(request.requestId);
+  };
+
+  const getTopBarButtons = () => {
+    const topBarButtons: TopBarButton[] = [];
+
+    if (selectedRows.length) {
+      const areAllIncompleted = selectedRows.every((row) => row.plantingCompleted === false);
+      const areAllCompleted = selectedRows.every((row) => row.plantingCompleted === true);
+
+      topBarButtons.push({
+        buttonType: 'passive',
+        buttonText: strings.UNDO_PLANTING_COMPLETE,
+        onButtonClick: () => undoPlantingComplete(),
+        disabled: !areAllCompleted,
+      });
+
+      topBarButtons.push({
+        buttonType: 'passive',
+        buttonText: strings.SET_PLANTING_COMPLETE,
+        onButtonClick: () => setPlantingComplete(),
+        disabled: !areAllIncompleted,
+      });
+    }
+    return topBarButtons;
+  };
+
   return (
     <Box>
+      <Box>{selector?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
       <Table
         id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
         columns={hasZones ? columnsWithZones : columnsWithoutZones}
         rows={data}
         orderBy={hasZones ? 'subzoneName' : 'siteName'}
         Renderer={DetailsRenderer(classes)}
+        selectedRows={selectedRows}
+        setSelectedRows={setSelectedRows}
+        showCheckbox={true}
+        isClickable={() => false}
+        showTopBar={true}
+        topBarButtons={getTopBarButtons()}
       />
     </Box>
   );

@@ -47,6 +47,11 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
     setActiveTab(tab);
   }, [tab]);
 
+  const refreshPlantings = () => {
+    dispatch(requestPlantings(selectedOrganization.id));
+    dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
+  };
+
   return (
     <TfMain>
       <Box sx={{ paddingLeft: theme.spacing(3) }}>
@@ -68,7 +73,10 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
               activeTab={activeTab}
               onTabChange={onTabChange}
               tabs={[
-                { label: strings.PLANTING_PROGRESS, children: <PlantingProgress /> },
+                {
+                  label: strings.PLANTING_PROGRESS,
+                  children: <PlantingProgress refreshPlantings={refreshPlantings} />,
+                },
                 { label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
               ]}
             />

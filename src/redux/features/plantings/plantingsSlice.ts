@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { requestUpdatePlantingCompleted } from './plantingsAsyncThunks';
+import { requestUpdatePlantingCompleted, requestUpdatePlantingsCompleted } from './plantingsAsyncThunks';
 
 // Define a type for the slice state
 export type PlantingSearchData = {
@@ -58,7 +58,29 @@ export const updatePlantingCompletedSlice = createSlice({
   },
 });
 
+export const updatePlantingsCompletedSlice = createSlice({
+  name: 'updatePlantingsCompleted',
+  initialState: initialUpdateState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(requestUpdatePlantingsCompleted.pending, (state, action) => {
+        const requestId = action.meta.requestId;
+        state[requestId] = { status: 'pending' };
+      })
+      .addCase(requestUpdatePlantingsCompleted.fulfilled, (state, action) => {
+        const requestId = action.meta.requestId;
+        state[requestId] = { status: 'success' };
+      })
+      .addCase(requestUpdatePlantingsCompleted.rejected, (state, action) => {
+        const requestId = action.meta.requestId;
+        state[requestId] = { status: 'error' };
+      });
+  },
+});
+
 export const { setPlantingsAction } = plantingsSlice.actions;
 export const plantingsReducer = plantingsSlice.reducer;
 
 export const updatePlantingCompletedReducer = updatePlantingCompletedSlice.reducer;
+export const updatePlantingsCompletedReducer = updatePlantingsCompletedSlice.reducer;
