@@ -77,7 +77,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         render: (properties: MapSourceProperties) => (
           <PlantingProgressMapDialog
             id={properties.id}
-            name={properties.name}
+            name={properties.fullName}
             plantingComplete={subzonesComplete[properties.id]}
           />
         ),
