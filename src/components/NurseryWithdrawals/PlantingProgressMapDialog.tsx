@@ -1,17 +1,12 @@
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import strings from 'src/strings';
 import { selectSubzoneSpeciesPopulations } from 'src/redux/features/tracking/sitePopulationSelector';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { makeStyles } from '@mui/styles';
 import Link from 'src/components/common/Link';
-import { requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
-import { selectUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsSelectors';
-import useSnackbar from 'src/utils/useSnackbar';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
-import { useOrganization } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   speciesList: {
@@ -30,51 +25,23 @@ type PlantingProgressMapDialogProps = {
   id: number;
   name: string;
   plantingComplete: boolean;
+  onUpdatePlantingComplete: (id: number, val: boolean) => void;
+  disableUpdateButton: boolean;
 };
 
 export default function PlantingProgressMapDialog({
   id,
   name,
   plantingComplete,
+  onUpdatePlantingComplete,
+  disableUpdateButton,
 }: PlantingProgressMapDialogProps): JSX.Element {
   const theme = useTheme();
   const classes = useStyles();
-  const dispatch = useAppDispatch();
-  const org = useOrganization();
   const species = useAppSelector((state) => selectSubzoneSpeciesPopulations(state, id));
   const totalPlants = useMemo(() => {
     return Object.values(species).reduce((prev, curr) => prev + curr, 0);
   }, [species]);
-  const [dispatching, setDispatching] = useState(false);
-  const [requestId, setRequestId] = useState<string>('');
-  const updateStatus = useAppSelector((state) => selectUpdatePlantingCompleted(state, requestId));
-  const snackbar = useSnackbar();
-
-  useEffect(() => {
-    if (updateStatus) {
-      if (updateStatus.status === 'error') {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      } else if (updateStatus.status === 'success') {
-        // refresh planting site data to get new completed state for subzone
-        dispatch(requestPlantingSites(org.selectedOrganization.id));
-        setDispatching(false);
-      }
-    }
-  }, [updateStatus, dispatch, snackbar, org.selectedOrganization.id]);
-
-  const updatePlantingComplete = useCallback(() => {
-    // TODO: warn if undoing planting complete will erase statistics
-    const request = dispatch(
-      requestUpdatePlantingCompleted({
-        subzoneId: id,
-        planting: {
-          plantingCompleted: !plantingComplete,
-        },
-      })
-    );
-    setRequestId(request.requestId);
-    setDispatching(true);
-  }, [dispatch, id, plantingComplete]);
 
   const getWithdrawalHistoryLink = () => {
     // TODO: update link with correct destination, i.e. withdrawal history page filtered to this subzone
@@ -122,10 +89,10 @@ export default function PlantingProgressMapDialog({
         }}
       >
         <Button
-          onClick={updatePlantingComplete}
+          onClick={() => onUpdatePlantingComplete(id, !plantingComplete)}
           label={plantingComplete ? strings.UNDO_PLANTING_COMPLETE : strings.SET_PLANTING_COMPLETE}
           type={plantingComplete ? 'passive' : 'productive'}
-          disabled={dispatching}
+          disabled={disableUpdateButton}
         />
       </Box>
     </Box>

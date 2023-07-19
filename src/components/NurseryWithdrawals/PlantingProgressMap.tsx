@@ -2,13 +2,17 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { MapService } from 'src/services';
 import { MapData, MapSourceProperties } from 'src/types/Map';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { PlantingSiteMap } from 'src/components/Map';
 import { Typography, useTheme } from '@mui/material';
 import PlantingProgressMapDialog from 'src/components/NurseryWithdrawals/PlantingProgressMapDialog';
 import { makeStyles } from '@mui/styles';
-import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
+import { requestPlantingSites, requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
 import { useOrganization } from 'src/providers';
+import { selectUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsSelectors';
+import strings from 'src/strings';
+import { requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export const useStyles = makeStyles(() => ({
   popup: {
@@ -31,6 +35,10 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   const org = useOrganization();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [mapData, setMapData] = useState<MapData | undefined>();
+  const [dispatching, setDispatching] = useState(false);
+  const [requestId, setRequestId] = useState<string>('');
+  const updateStatus = useAppSelector((state) => selectUpdatePlantingCompleted(state, requestId));
+  const snackbar = useSnackbar();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [lastPlantingSiteId, setLastPlantingSiteId] = useState<number | undefined>();
@@ -53,6 +61,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
     } else {
       setMapData(undefined);
     }
+    setDispatching(false);
   }, [plantingSite]);
 
   const subzonesComplete: Record<number, boolean> = useMemo(() => {
@@ -69,6 +78,34 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
     dispatch(requestSitePopulation(org.selectedOrganization.id, plantingSiteId));
   }, [dispatch, org, plantingSiteId]);
 
+  useEffect(() => {
+    if (updateStatus) {
+      if (updateStatus.status === 'error') {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      } else if (updateStatus.status === 'success') {
+        // refresh planting site data to get new completed state for subzone
+        dispatch(requestPlantingSites(org.selectedOrganization.id));
+      }
+    }
+  }, [updateStatus, dispatch, snackbar, org.selectedOrganization.id]);
+
+  const updatePlantingComplete = useCallback(
+    (id: number, val: boolean) => {
+      // TODO: warn if undoing planting complete will erase statistics
+      const request = dispatch(
+        requestUpdatePlantingCompleted({
+          subzoneId: id,
+          planting: {
+            plantingCompleted: val,
+          },
+        })
+      );
+      setRequestId(request.requestId);
+      setDispatching(true);
+    },
+    [dispatch]
+  );
+
   return mapData ? (
     <PlantingSiteMap
       mapData={mapData}
@@ -79,6 +116,8 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
             id={properties.id}
             name={properties.fullName}
             plantingComplete={subzonesComplete[properties.id]}
+            onUpdatePlantingComplete={updatePlantingComplete}
+            disableUpdateButton={dispatching}
           />
         ),
         className: classes.popup,
