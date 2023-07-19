@@ -24,7 +24,7 @@ export type PlantingProgressSubzone = {
   subzoneName: string;
   plantingCompleted: boolean;
   plantingSite: string;
-  zone: string;
+  zoneName: string;
   targetPlantingDensity: number;
   totalSeedlingsSent?: number;
 };
