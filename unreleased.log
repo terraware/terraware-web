@@ -1,3 +1,4 @@
+f3a829933 SW-3909 Fix search and rendering of boolean in planting progress table (#1582)
 377cba0a5 SW-3938 Redux for getting plantingSites using search (#1578)
 e48afd747 Updated translations from Phrase (#1581)
 370314fad SW-3895-table Add plantings progress table (#1579)

@@ -240,6 +240,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -269,8 +271,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -351,25 +351,27 @@ export const selectPlantingProgress = <span class="cstat-no" title="statement no
 <span class="cstat-no" title="statement not covered" >    if (plantingSitesSearchResults &amp;&amp; plantings) {</span>
       const plantingsBySubzone = <span class="cstat-no" title="statement not covered" >getTotalPlantsBySubzone(plantings);</span>
       const totalPlantsBySite = <span class="cstat-no" title="statement not covered" >getTotalPlantsBySite(plantingSitesSearchResults);</span>
-<span class="cstat-no" title="statement not covered" >      return plantingSites?.map(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        return {</span>
-          siteId: ps.id,
-          siteName: ps.name,
-          reported: ps.plantingZones?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt;
-<span class="cstat-no" title="statement not covered" >            zone.plantingSubzones</span>
-              .filter(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; <span class="cstat-no" title="statement not covered" >plantingsBySubzone[sz.id])</span>
-              .map(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-                subzoneName: sz.fullName,
-                plantingCompleted: sz.plantingCompleted,
-                plantingSite: ps.name,
-                zoneName: zone.name,
-                targetPlantingDensity: zone.targetPlantingDensity,
-                totalSeedlingsSent: plantingsBySubzone[sz.id],
-              }))
-          ),
-          totalPlants: totalPlantsBySite[ps.id],
-        };
-      });
+<span class="cstat-no" title="statement not covered" >      return plantingSites</span>
+        ?.filter(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; <span class="cstat-no" title="statement not covered" >totalPlantsBySite[ps.id])</span>
+        .map(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; {
+<span class="cstat-no" title="statement not covered" >          return {</span>
+            siteId: ps.id,
+            siteName: ps.name,
+            reported: ps.plantingZones?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt;
+<span class="cstat-no" title="statement not covered" >              zone.plantingSubzones</span>
+                .filter(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; <span class="cstat-no" title="statement not covered" >plantingsBySubzone[sz.id])</span>
+                .map(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+                  subzoneName: sz.fullName,
+                  plantingCompleted: sz.plantingCompleted,
+                  plantingSite: ps.name,
+                  zoneName: zone.name,
+                  targetPlantingDensity: zone.targetPlantingDensity,
+                  totalSeedlingsSent: plantingsBySubzone[sz.id],
+                }))
+            ),
+            totalPlants: totalPlantsBySite[ps.id],
+          };
+        });
     }
   }
 );
@@ -382,24 +384,22 @@ export const searchPlantingProgress = <span class="cstat-no" title="statement no
 <span class="fstat-no" title="function not covered" >    (s</span>tate: RootState, query: string, plantingCompleted?: boolean) =&gt; <span class="cstat-no" title="statement not covered" >plantingCompleted,</span>
   ],
 <span class="fstat-no" title="function not covered" >  (p</span>lantingProgress, query, plantingCompleted) =&gt; {
-<span class="cstat-no" title="statement not covered" >    return plantingProgress</span>
-      ?.filter(<span class="fstat-no" title="function not covered" >(p</span>lanting) =&gt; <span class="cstat-no" title="statement not covered" >planting.totalPlants &gt; 0)</span>
-      .reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; {
-        const { siteId, siteName, totalPlants, reported } = <span class="cstat-no" title="statement not covered" >curr;</span>
-<span class="cstat-no" title="statement not covered" >        if (reported &amp;&amp; reported.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >          reported?.forEach(<span class="fstat-no" title="function not covered" >(p</span>rogress) =&gt; {</span>
-            const matchesQuery = <span class="cstat-no" title="statement not covered" >!query || regexMatch(progress.subzoneName, query);</span>
-            const matchesPlantingCompleted =
-<span class="cstat-no" title="statement not covered" >              plantingCompleted === undefined || progress.plantingCompleted === plantingCompleted;</span>
-<span class="cstat-no" title="statement not covered" >            if (matchesQuery &amp;&amp; matchesPlantingCompleted) {</span>
-<span class="cstat-no" title="statement not covered" >              acc.push({ siteId, siteName, totalPlants, ...progress });</span>
-            }
-          });
-        } else <span class="cstat-no" title="statement not covered" >if (!query &amp;&amp; plantingCompleted === undefined) {</span>
-<span class="cstat-no" title="statement not covered" >          acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants });</span>
-        }
-<span class="cstat-no" title="statement not covered" >        return acc;</span>
-      }, [] as any[]);
+<span class="cstat-no" title="statement not covered" >    return plantingProgress?.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; {</span>
+      const { siteId, siteName, totalPlants, reported } = <span class="cstat-no" title="statement not covered" >curr;</span>
+<span class="cstat-no" title="statement not covered" >      if (reported &amp;&amp; reported.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >        reported?.forEach(<span class="fstat-no" title="function not covered" >(p</span>rogress) =&gt; {</span>
+          const matchesQuery = <span class="cstat-no" title="statement not covered" >!query || regexMatch(progress.subzoneName, query);</span>
+          const matchesPlantingCompleted =
+<span class="cstat-no" title="statement not covered" >            plantingCompleted === undefined || progress.plantingCompleted === plantingCompleted;</span>
+<span class="cstat-no" title="statement not covered" >          if (matchesQuery &amp;&amp; matchesPlantingCompleted) {</span>
+<span class="cstat-no" title="statement not covered" >            acc.push({ siteId, siteName, totalPlants, ...progress });</span>
+          }
+        });
+      } else <span class="cstat-no" title="statement not covered" >if (plantingCompleted === undefined &amp;&amp; regexMatch(siteName, query)) {</span>
+<span class="cstat-no" title="statement not covered" >        acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants });</span>
+      }
+<span class="cstat-no" title="statement not covered" >      return acc;</span>
+    }, [] as any[]);
   }
 );
 &nbsp;
@@ -412,7 +412,7 @@ export const selectUpdatePlantingCompleted = <span class="cstat-no" title="state
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-19T16:11:58.342Z
+                at 2023-07-19T18:30:24.330Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
