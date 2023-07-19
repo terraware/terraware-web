@@ -45,6 +45,12 @@ export default function PlantingProgress(): JSX.Element {
     [filters, filterColumns, filterOptions, search]
   );
 
+  const plantingCompleted = useMemo<boolean | undefined>(() => {
+    if (activeLocale && filters.plantingCompleted?.values?.length > 0) {
+      return filters.plantingCompleted.values[0] === strings.YES;
+    }
+  }, [filters, activeLocale]);
+
   useEffect(() => {
     setFilterOptions({
       plantingCompleted: {
@@ -69,7 +75,7 @@ export default function PlantingProgress(): JSX.Element {
         initialView={initialView}
         onView={setActiveView}
         search={<SearchComponent view={activeView} onChangePlantingSite={setSelectedPlantingSiteId} {...searchProps} />}
-        list={<PlantingProgressList />}
+        list={<PlantingProgressList search={search} plantingCompleted={plantingCompleted} />}
         map={<PlantingProgressMap plantingSiteId={selectedPlantingSiteId} />}
       />
     </Card>

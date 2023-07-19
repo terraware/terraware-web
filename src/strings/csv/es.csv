@@ -765,6 +765,7 @@ PLANTING_PROGRESS_AND_DENSITY,Progreso y densidad de plantación
 PLANTING_PROGRESS_CARD_TITLE,¿Cuál es el progreso de mi plantación?
 PLANTING_PROGRESS_DESCRIPTION_1,Se trata del progreso de plantación de tu centro calculado a partir de lo que se ha notificado en las retiradas de tu vivero.
 PLANTING_PROGRESS_DESCRIPTION_2,"Una vez que todo el lugar de plantación se haya marcado como completo para la plantación y hayas completado tus observaciones, podrás ver la densidad de plantación de tu centro."
+PLANTING_PROGRESS_MAP_DESCRIPTION,Haga clic en cada subzona para marcar las áreas en las que se completó la plantación. La densidad de plantación se calculará una vez que se haya completado la plantación de cada zona.
 PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,¿Cuál es mi progreso de plantación por zona?
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,Este es el progreso de plantación de su zona calculado por lo que se ha reportado en los retiros de su vivero.
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Cuando una zona se haya marcado como completa para plantación y usted haya completado sus observaciones, podrá ver la densidad de plantación de dicha zona."
