@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1689718171670" clover="3.2.0">
-  <project timestamp="1689718171670" name="All files">
-    <metrics statements="11642" coveredstatements="361" conditionals="7419" coveredconditionals="90" methods="3638" coveredmethods="77" elements="22699" coveredelements="528" complexity="0" loc="11642" ncloc="11642" packages="101" files="474" classes="474"/>
+<coverage generated="1689774799873" clover="3.2.0">
+  <project timestamp="1689774799873" name="All files">
+    <metrics statements="11662" coveredstatements="361" conditionals="7431" coveredconditionals="90" methods="3646" coveredmethods="77" elements="22739" coveredelements="528" complexity="0" loc="11662" ncloc="11662" packages="101" files="474" classes="474"/>
     <package name="src">
       <metrics statements="210" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3823,7 +3823,7 @@
       </file>
     </package>
     <package name="src.components.NurseryWithdrawals">
-      <metrics statements="342" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="94" coveredmethods="0"/>
+      <metrics statements="362" coveredstatements="0" conditionals="181" coveredconditionals="0" methods="102" coveredmethods="0"/>
       <file name="NurseryPlantingsAndWithdrawals.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/NurseryPlantingsAndWithdrawals.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
@@ -4086,9 +4086,26 @@
         <line num="275" count="0" type="stmt"/>
       </file>
       <file name="PlantingProgressList.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/PlantingProgressList.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="6" count="0" type="stmt"/>
+        <metrics statements="19" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="81" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="111" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
       </file>
       <file name="PlantingProgressMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/PlantingProgressMap.tsx">
         <metrics statements="8" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -4102,7 +4119,7 @@
         <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="PlantingProgressTabContent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/PlantingProgressTabContent.tsx">
-        <metrics statements="20" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="23" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
@@ -4119,10 +4136,13 @@
         <line num="37" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="86" count="0" type="stmt"/>
+        <line num="49" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
       </file>
       <file name="ReassignmentRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/ReassignmentRenderer.tsx">
         <metrics statements="38" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="11" coveredmethods="0"/>
@@ -11470,7 +11490,7 @@
       </file>
     </package>
     <package name="src.redux.features.plantings">
-      <metrics statements="79" coveredstatements="0" conditionals="39" coveredconditionals="0" methods="35" coveredmethods="0"/>
+      <metrics statements="79" coveredstatements="0" conditionals="37" coveredconditionals="0" methods="35" coveredmethods="0"/>
       <file name="plantingsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsAsyncThunks.ts">
         <metrics statements="5" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
@@ -11480,7 +11500,7 @@
         <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="plantingsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsSelectors.ts">
-        <metrics statements="51" coveredstatements="0" conditionals="35" coveredconditionals="0" methods="26" coveredmethods="0"/>
+        <metrics statements="51" coveredstatements="0" conditionals="33" coveredconditionals="0" methods="26" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
@@ -11518,7 +11538,7 @@
         <line num="77" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
-        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="82" count="0" type="stmt"/>
         <line num="83" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="86" count="0" type="cond" truecount="0" falsecount="4"/>
