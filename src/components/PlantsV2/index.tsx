@@ -19,7 +19,7 @@ import ZoneLevelDataMap from './components/ZoneLevelDataMap';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
-import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
+import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
 import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
@@ -116,7 +116,7 @@ export default function PlantsDashboardV2(): JSX.Element {
 
   const hasObservations = !!latestObservation;
 
-  const populationResults = useAppSelector((state) => selectSitePopulation(state));
+  const populationResults = useAppSelector((state) => selectSitePopulationZones(state));
   const hasReportedPlants = useMemo(() => {
     const population =
       populationResults

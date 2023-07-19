@@ -452,7 +452,7 @@ export default function Map(props: MapProps): JSX.Element {
           <AttributionControl compact={true} style={{ marginRight: '5px' }} />
           {popupInfo && popupRenderer && (
             <Popup
-              anchor='top'
+              anchor={popupRenderer.anchor ?? 'top'}
               longitude={Number(popupInfo.lng)}
               latitude={Number(popupInfo.lat)}
               onClose={() => {

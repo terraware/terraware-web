@@ -1,5 +1,7 @@
 // flattened info for shapes relating to planting site data
 
+import mapboxgl from 'mapbox-gl';
+
 export type MapGeometry = number[][][][];
 
 /**
@@ -94,6 +96,7 @@ export type MapPopupRenderer = {
   render: (properties: MapSourceProperties) => JSX.Element;
   style?: object;
   className?: string;
+  anchor?: mapboxgl.Anchor;
 };
 
 /**
