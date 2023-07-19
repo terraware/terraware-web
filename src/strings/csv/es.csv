@@ -950,6 +950,7 @@ SEARCH_BY_NAME_OR_FAMILY,Búsqueda por nombre o familia...
 SEARCH_OR_SELECT,Busque o Seleccione
 SEE_ALL_ACCESSIONS,Ver todos las accesiones
 SEE_ENTRIES,Ver entradas
+SEE_WITHDRAWAL_HISTORY,Ver historial de retirada
 SEED,Semilla
 SEED_BAGS,Sacos de semillas
 SEED_BANK,Banco de semillas
@@ -972,6 +973,7 @@ SEEDLING_BATCH_DETAILS,Detalles lote de plántula
 SEEDLINGS,Plántulas
 SEEDLINGS_BATCHES,Lotes de plántulas
 SEEDLINGS_PLURAL,plántulas
+SEEDLINGS_SENT,Plántulas enviadas
 SEEDLINGS_SINGULAR,plántula
 SEEDS,Semillas
 SEEDS_GERMINATED,Semillas germinadas
@@ -1015,6 +1017,7 @@ SENSOR_SCAN_TIMEOUT_ERROR,"Solo se encontró {0}/{1} sensor(es). Asegúrese de q
 SENSORS_FOUND,{0}/{1} sensores encontrados...
 SENT_TO_NURSERY,¡Enviado al vivero!
 SERVER_ERROR,Error de servidor
+SET_PLANTING_COMPLETE,Plantación completa
 SET_UP,Configurar
 SET_UP_YOUR_SENSOR_KIT,Configure su kit de sensor
 SET_UP_YOUR_SENSOR_KIT_MSG,"Si su banco de semillas fue construido por Terraformation, entonces está equipado con un kit de sensores con el que puede monitorear cosas como la temperatura y la humedad del banco de semillas, de forma remota. Para configurar el kit, tendrá que conectar su banco de semillas a la aplicación web de Terraware. Esto podría tardarse unos 30 minutos."
@@ -1222,6 +1225,7 @@ TYPE_TO_SEARCH,Escriba para buscar...
 UNABLE_TO_ADD_PERSON,No se puede añadir una persona
 UNABLE_TO_CONNECT_TO_SENSOR_KIT,No hemos podido conectar con su kit de sensores. En ocasiones esto se debe a que no está conectado al suministro eléctrico o a Internet. Envíe un correo electrónico a {0} para que podamos ayudarle.
 UNABLE_TO_LOAD_NOTIFICATIONS,No se han podido cargar las notificaciones. Vuelva a intentarlo más tarde.
+UNDO_PLANTING_COMPLETE,Deshacer plantación completa
 UNDO_SEND_TO_NURSERY,Deshacer Enviar a la Guardería
 UNEXPECTED_ERROR,Ha ocurrido un error inesperado.
 UNITS,Unidades
