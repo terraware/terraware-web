@@ -3,7 +3,7 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
-import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
+import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import BarChart from 'src/components/common/Chart/BarChart';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 
@@ -13,7 +13,7 @@ type NumberOfSpeciesPlantedCardProps = {
 
 export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfSpeciesPlantedCardProps): JSX.Element {
   const theme = useTheme();
-  const populationSelector = useAppSelector((state) => selectSitePopulation(state));
+  const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
   const speciesSelector = useAppSelector((state) => selectSpecies(state));
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const [labels, setLabels] = useState<string[]>();

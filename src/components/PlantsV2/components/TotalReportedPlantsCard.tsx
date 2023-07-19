@@ -3,7 +3,7 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
-import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
+import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { getShortDate } from 'src/utils/dateFormatter';
@@ -24,7 +24,7 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
 
-  const populationSelector = useAppSelector((state) => selectSitePopulation(state));
+  const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
   const [totalPlants, setTotalPlants] = useState(0);
   useEffect(() => {
     if (populationSelector) {

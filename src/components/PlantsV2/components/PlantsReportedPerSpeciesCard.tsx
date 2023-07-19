@@ -3,7 +3,7 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
-import { selectSitePopulation } from 'src/redux/features/tracking/sitePopulationSelector';
+import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import BarChart from 'src/components/common/Chart/BarChart';
 import { truncate } from 'src/utils/text';
 
@@ -17,7 +17,7 @@ export default function PlantsReportedPerSpeciesCard({
   plantingSiteId,
 }: PlantsReportedPerSpeciesCardProps): JSX.Element {
   const theme = useTheme();
-  const populationSelector = useAppSelector((state) => selectSitePopulation(state));
+  const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();

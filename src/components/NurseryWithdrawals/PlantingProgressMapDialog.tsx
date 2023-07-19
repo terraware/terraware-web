@@ -54,12 +54,13 @@ export default function PlantingProgressMapDialog({
     if (updateStatus) {
       if (updateStatus.status === 'error') {
         snackbar.toastError(strings.GENERIC_ERROR);
+      } else if (updateStatus.status === 'success') {
+        // refresh planting site data to get new completed state for subzone
+        dispatch(requestPlantingSites(org.selectedOrganization.id));
+        setDispatching(false);
       }
-      // refresh planting site data to get new completed state for subzone
-      dispatch(requestPlantingSites(org.selectedOrganization.id));
-      setDispatching(false);
     }
-  }, [updateStatus, dispatch, snackbar, org]);
+  }, [updateStatus, dispatch, snackbar, org.selectedOrganization.id]);
 
   const updatePlantingComplete = useCallback(() => {
     // TODO: warn if undoing planting complete will erase statistics
