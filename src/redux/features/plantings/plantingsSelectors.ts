@@ -58,25 +58,27 @@ export const selectPlantingProgress = createSelector(
     if (plantingSitesSearchResults && plantings) {
       const plantingsBySubzone = getTotalPlantsBySubzone(plantings);
       const totalPlantsBySite = getTotalPlantsBySite(plantingSitesSearchResults);
-      return plantingSites?.map((ps) => {
-        return {
-          siteId: ps.id,
-          siteName: ps.name,
-          reported: ps.plantingZones?.flatMap((zone) =>
-            zone.plantingSubzones
-              .filter((sz) => plantingsBySubzone[sz.id])
-              .map((sz) => ({
-                subzoneName: sz.fullName,
-                plantingCompleted: sz.plantingCompleted,
-                plantingSite: ps.name,
-                zoneName: zone.name,
-                targetPlantingDensity: zone.targetPlantingDensity,
-                totalSeedlingsSent: plantingsBySubzone[sz.id],
-              }))
-          ),
-          totalPlants: totalPlantsBySite[ps.id],
-        };
-      });
+      return plantingSites
+        ?.filter((ps) => totalPlantsBySite[ps.id])
+        .map((ps) => {
+          return {
+            siteId: ps.id,
+            siteName: ps.name,
+            reported: ps.plantingZones?.flatMap((zone) =>
+              zone.plantingSubzones
+                .filter((sz) => plantingsBySubzone[sz.id])
+                .map((sz) => ({
+                  subzoneName: sz.fullName,
+                  plantingCompleted: sz.plantingCompleted,
+                  plantingSite: ps.name,
+                  zoneName: zone.name,
+                  targetPlantingDensity: zone.targetPlantingDensity,
+                  totalSeedlingsSent: plantingsBySubzone[sz.id],
+                }))
+            ),
+            totalPlants: totalPlantsBySite[ps.id],
+          };
+        });
     }
   }
 );
@@ -89,24 +91,22 @@ export const searchPlantingProgress = createSelector(
     (state: RootState, query: string, plantingCompleted?: boolean) => plantingCompleted,
   ],
   (plantingProgress, query, plantingCompleted) => {
-    return plantingProgress
-      ?.filter((planting) => planting.totalPlants > 0)
-      .reduce((acc, curr) => {
-        const { siteId, siteName, totalPlants, reported } = curr;
-        if (reported && reported.length > 0) {
-          reported?.forEach((progress) => {
-            const matchesQuery = !query || regexMatch(progress.subzoneName, query);
-            const matchesPlantingCompleted =
-              plantingCompleted === undefined || progress.plantingCompleted === plantingCompleted;
-            if (matchesQuery && matchesPlantingCompleted) {
-              acc.push({ siteId, siteName, totalPlants, ...progress });
-            }
-          });
-        } else if (!query && plantingCompleted === undefined) {
-          acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants });
-        }
-        return acc;
-      }, [] as any[]);
+    return plantingProgress?.reduce((acc, curr) => {
+      const { siteId, siteName, totalPlants, reported } = curr;
+      if (reported && reported.length > 0) {
+        reported?.forEach((progress) => {
+          const matchesQuery = !query || regexMatch(progress.subzoneName, query);
+          const matchesPlantingCompleted =
+            plantingCompleted === undefined || progress.plantingCompleted === plantingCompleted;
+          if (matchesQuery && matchesPlantingCompleted) {
+            acc.push({ siteId, siteName, totalPlants, ...progress });
+          }
+        });
+      } else if (plantingCompleted === undefined && regexMatch(siteName, query)) {
+        acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants });
+      }
+      return acc;
+    }, [] as any[]);
   }
 );
 
