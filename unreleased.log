@@ -1,3 +1,4 @@
+377cba0a5 SW-3938 Redux for getting plantingSites using search (#1578)
 e48afd747 Updated translations from Phrase (#1581)
 370314fad SW-3895-table Add plantings progress table (#1579)
 f98173850 Add redux selector to search planting progress (#1577)
