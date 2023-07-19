@@ -16,6 +16,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import PlantingProgress from './PlantingProgressTabContent';
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
+import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
 
 export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -39,7 +40,7 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
 
   useEffect(() => {
     dispatch(requestPlantings(selectedOrganization.id));
-    // TODO: dispatch request for planting site totals
+    dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {

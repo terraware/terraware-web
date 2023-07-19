@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlantingSite } from 'src/types/Tracking';
+import { PlantingSite, PlantingSiteSearchResult } from 'src/types/Tracking';
 import { PlantingSiteZone } from 'src/types/PlantingSite';
 
 // Define a type for the slice state
@@ -24,8 +24,30 @@ export const trackingSlice = createSlice({
 });
 
 export const { setPlantingSitesAction } = trackingSlice.actions;
-
 export const trackingReducer = trackingSlice.reducer;
+
+// Define a type for the search slice state
+type SearchData = {
+  sites?: PlantingSiteSearchResult[];
+};
+
+// Define the initial state for search
+const initialSearchState: SearchData = {};
+
+export const plantingSitesSearchResultsSlice = createSlice({
+  name: 'plantingSitesResultsSlice',
+  initialState: initialSearchState,
+  reducers: {
+    setPlantingSitesSearchResultsAction: (state, action: PayloadAction<SearchData>) => {
+      const data: SearchData = action.payload;
+      state.sites = data.sites;
+    },
+  },
+});
+
+export const { setPlantingSitesSearchResultsAction } = plantingSitesSearchResultsSlice.actions;
+
+export const plantingSitesSearchResultsReducer = plantingSitesSearchResultsSlice.reducer;
 
 type SitePopulationData = {
   error?: string;
