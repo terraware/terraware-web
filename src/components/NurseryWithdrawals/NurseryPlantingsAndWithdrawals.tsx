@@ -8,7 +8,7 @@ import { Tabs } from '@terraware/web-components';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useAppDispatch } from 'src/redux/store';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -19,6 +19,7 @@ import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
 
 export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
+  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const query = useQuery();
@@ -44,8 +45,10 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    setActiveTab(tab);
-  }, [tab]);
+    if (activeLocale) {
+      setActiveTab(tab);
+    }
+  }, [tab, activeLocale]);
 
   return (
     <TfMain>
