@@ -7,7 +7,11 @@ import {
 } from './features/observations/observationsSlice';
 import { plantingsReducer, updatePlantingCompletedReducer } from './features/plantings/plantingsSlice';
 import { speciesReducer } from './features/species/speciesSlice';
-import { trackingReducer, sitePopulationReducer, plantingSitesResultsReducer } from './features/tracking/trackingSlice';
+import {
+  trackingReducer,
+  sitePopulationReducer,
+  plantingSitesSearchResultsReducer,
+} from './features/tracking/trackingSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -20,7 +24,7 @@ export const reducers = {
   sitePopulation: sitePopulationReducer,
   plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,
   updatePlantingCompleted: updatePlantingCompletedReducer,
-  plantingSitesResults: plantingSitesResultsReducer,
+  plantingSitesSearchResults: plantingSitesSearchResultsReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

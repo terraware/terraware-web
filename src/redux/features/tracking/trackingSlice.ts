@@ -34,7 +34,7 @@ type SearchData = {
 // Define the initial state for search
 const initialSearchState: SearchData = {};
 
-export const plantingSitesResultsSlice = createSlice({
+export const plantingSitesSearchResultsSlice = createSlice({
   name: 'plantingSitesResultsSlice',
   initialState: initialSearchState,
   reducers: {
@@ -45,9 +45,9 @@ export const plantingSitesResultsSlice = createSlice({
   },
 });
 
-export const { setSearchPlantingSitesAction } = plantingSitesResultsSlice.actions;
+export const { setSearchPlantingSitesAction } = plantingSitesSearchResultsSlice.actions;
 
-export const plantingSitesResultsReducer = plantingSitesResultsSlice.reducer;
+export const plantingSitesSearchResultsReducer = plantingSitesSearchResultsSlice.reducer;
 
 type SitePopulationData = {
   error?: string;

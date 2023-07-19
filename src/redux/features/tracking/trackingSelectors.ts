@@ -4,7 +4,7 @@ import { createCachedSelector } from 're-reselect';
 
 export const selectPlantingSites = (state: RootState) => state.tracking?.plantingSites;
 
-export const selectSearchPlantingSites = (state: RootState) => state.plantingSitesResults.sites;
+export const selectSearchResultsPlantingSites = (state: RootState) => state.plantingSitesSearchResults.sites;
 
 export const selectPlantingSitesError = (state: RootState) => state.tracking?.error;
 
