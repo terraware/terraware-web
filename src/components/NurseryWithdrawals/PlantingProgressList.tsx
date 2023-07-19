@@ -90,7 +90,7 @@ export default function PlantingProgressList({
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
-  const selector = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
+  const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
 
   useEffect(() => {
     if (data && hasZones === undefined) {
@@ -99,26 +99,20 @@ export default function PlantingProgressList({
   }, [data, hasZones]);
 
   useEffect(() => {
-    if (selector) {
-      if (selector.status === 'success') {
-        reloadTracking();
-      }
+    if (updatePlantingResult?.status === 'success') {
+      reloadTracking();
     }
-  }, [selector, reloadTracking]);
+  }, [updatePlantingResult, reloadTracking]);
 
   if (!data || hasZones === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
-  const undoPlantingComplete = () => {
+  const setPlantingComplete = (complete: boolean) => {
     const subzoneIds = selectedRows.map((row) => row.subzoneId);
-    const request = dispatch(requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: false } }));
-    setRequestId(request.requestId);
-  };
-
-  const setPlantingComplete = () => {
-    const subzoneIds = selectedRows.map((row) => row.subzoneId);
-    const request = dispatch(requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: true } }));
+    const request = dispatch(
+      requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })
+    );
     setRequestId(request.requestId);
   };
 
@@ -132,14 +126,14 @@ export default function PlantingProgressList({
       topBarButtons.push({
         buttonType: 'passive',
         buttonText: strings.UNDO_PLANTING_COMPLETE,
-        onButtonClick: () => undoPlantingComplete(),
+        onButtonClick: () => setPlantingComplete(false),
         disabled: !areAllCompleted,
       });
 
       topBarButtons.push({
         buttonType: 'passive',
         buttonText: strings.SET_PLANTING_COMPLETE,
-        onButtonClick: () => setPlantingComplete(),
+        onButtonClick: () => setPlantingComplete(true),
         disabled: !areAllIncompleted,
       });
     }
@@ -148,7 +142,7 @@ export default function PlantingProgressList({
 
   return (
     <Box>
-      <Box>{selector?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
+      <Box>{updatePlantingResult?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
       <Table
         id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
         columns={hasZones ? columnsWithZones : columnsWithoutZones}
