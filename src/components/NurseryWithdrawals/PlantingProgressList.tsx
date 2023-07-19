@@ -91,7 +91,7 @@ export default function PlantingProgressList({ search, plantingCompleted }: Plan
   return (
     <Box>
       <Table
-        id={`plantings-progress-table-${hasZones}`}
+        id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
         columns={hasZones ? columnsWithZones : columnsWithoutZones}
         rows={data}
         orderBy={hasZones ? 'subzoneName' : 'siteName'}
