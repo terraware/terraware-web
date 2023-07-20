@@ -18,7 +18,11 @@ import PlantingProgress from './PlantingProgressTabContent';
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
 
-export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
+type NurseryWithdrawalsProps = {
+  reloadTracking: () => void;
+};
+
+export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -71,7 +75,11 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
               activeTab={activeTab}
               onTabChange={onTabChange}
               tabs={[
-                { id: 'planting_progress', label: strings.PLANTING_PROGRESS, children: <PlantingProgress /> },
+                {
+                  id: 'planting_progress',
+                  label: strings.PLANTING_PROGRESS,
+                  children: <PlantingProgress reloadTracking={reloadTracking} />,
+                },
                 { id: 'withdrawal_history', label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
               ]}
             />

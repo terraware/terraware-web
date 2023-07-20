@@ -15,7 +15,11 @@ import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 
 const initialView: View = 'list';
 
-export default function PlantingProgress(): JSX.Element {
+type PlantingProgressProps = {
+  reloadTracking: () => void;
+};
+
+export default function PlantingProgress({ reloadTracking }: PlantingProgressProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
@@ -75,7 +79,9 @@ export default function PlantingProgress(): JSX.Element {
         initialView={initialView}
         onView={setActiveView}
         search={<SearchComponent view={activeView} onChangePlantingSite={setSelectedPlantingSiteId} {...searchProps} />}
-        list={<PlantingProgressList search={search} plantingCompleted={plantingCompleted} />}
+        list={
+          <PlantingProgressList search={search} plantingCompleted={plantingCompleted} reloadTracking={reloadTracking} />
+        }
         map={<PlantingProgressMap plantingSiteId={selectedPlantingSiteId} />}
       />
     </Card>

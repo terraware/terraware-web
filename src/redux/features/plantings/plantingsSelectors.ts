@@ -68,6 +68,7 @@ export const selectPlantingProgress = createSelector(
               zone.plantingSubzones
                 .filter((sz) => plantingsBySubzone[sz.id])
                 .map((sz) => ({
+                  subzoneId: sz.id,
                   subzoneName: sz.fullName,
                   plantingCompleted: sz.plantingCompleted,
                   plantingSite: ps.name,
@@ -112,3 +113,6 @@ export const searchPlantingProgress = createSelector(
 
 export const selectUpdatePlantingCompleted = (state: RootState, requestId: string) =>
   (state.updatePlantingCompleted as any)[requestId];
+
+export const selectUpdatePlantingsCompleted = (state: RootState, requestId: string) =>
+  (state.updatePlantingsCompleted as any)[requestId];
