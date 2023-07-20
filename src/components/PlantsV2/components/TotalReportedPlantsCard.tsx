@@ -46,7 +46,7 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
     }
   }, [plantingSite, observation]);
 
-  const siteReportedPlants = useAppSelector(selectSiteReportedPlants);
+  const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
   const numPlantedSinceObs = siteReportedPlants?.plantsSinceLastObservation ?? 0;
   const percentDiff = estimatedTotalPlants ? (100 * numPlantedSinceObs) / estimatedTotalPlants : 0;
 

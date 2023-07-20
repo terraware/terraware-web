@@ -32,7 +32,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
   const plantingDensity = observation?.plantingDensity ?? 0;
   const percentageOfTargetDensity = (100 * plantingDensity) / targetPlantingDensity;
 
-  const siteReportedPlants = useAppSelector(selectSiteReportedPlants);
+  const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
   const numPlantedSinceObs = siteReportedPlants?.plantsSinceLastObservation ?? 0;
 
   const newDensityEstimate = plantingSite?.areaHa

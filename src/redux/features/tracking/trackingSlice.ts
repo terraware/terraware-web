@@ -77,9 +77,10 @@ export const sitePopulationReducer = sitePopulationSlice.reducer;
 type SiteReportedPlantsData = {
   error?: string;
   site?: PlantingSiteReportedPlants;
+  plantingSiteId: number;
 };
 
-const initialSiteReportedPlantsState: SiteReportedPlantsData = {};
+const initialSiteReportedPlantsState: Record<number, SiteReportedPlantsData> = {};
 
 export const siteReportedPlantsSlice = createSlice({
   name: 'siteReportedPlantsSlice',
@@ -87,8 +88,11 @@ export const siteReportedPlantsSlice = createSlice({
   reducers: {
     setSiteReportedPlantsAction: (state, action: PayloadAction<SiteReportedPlantsData>) => {
       const data: SiteReportedPlantsData = action.payload;
-      state.error = data.error;
-      state.site = data.site;
+      state[data.plantingSiteId] = {
+        error: data.error,
+        site: data.site,
+        plantingSiteId: data.plantingSiteId,
+      };
     },
   },
 });
