@@ -1,7 +1,12 @@
 import { Dispatch } from 'redux';
 import { SearchService, TrackingService } from 'src/services';
 import { RootState } from 'src/redux/rootReducer';
-import { setPlantingSitesAction, setPlantingSitesSearchResultsAction, setSitePopulationAction } from './trackingSlice';
+import {
+  setPlantingSitesAction,
+  setPlantingSitesSearchResultsAction,
+  setSitePopulationAction,
+  setSiteReportedPlantsAction,
+} from './trackingSlice';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 export const requestPlantingSites = (organizationId: number) => {
@@ -46,6 +51,20 @@ export const requestPlantingSitesSearchResults = (organizationId: number) => {
       // should not happen, the response above captures any http request errors
       // tslint:disable-next-line: no-console
       console.error('Error dispatching planting sites', e);
+    }
+  };
+};
+
+export const requestSiteReportedPlants = (plantingSiteId: number) => {
+  return async (dispatch: Dispatch, _getState: () => RootState) => {
+    try {
+      const response = await TrackingService.getReportedPlants(plantingSiteId);
+      const { error, site } = response;
+      dispatch(setSiteReportedPlantsAction({ error, site }));
+    } catch (e) {
+      // should not happen, the response above captures any http request errors
+      // tslint:disable-next-line: no-console
+      console.error('Error dispatching site reported plants request', e);
     }
   };
 };

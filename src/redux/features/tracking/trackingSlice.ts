@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlantingSite, PlantingSiteSearchResult } from 'src/types/Tracking';
+import { PlantingSite, PlantingSiteReportedPlants, PlantingSiteSearchResult } from 'src/types/Tracking';
 import { PlantingSiteZone } from 'src/types/PlantingSite';
 
 // Define a type for the slice state
@@ -49,6 +49,7 @@ export const { setPlantingSitesSearchResultsAction } = plantingSitesSearchResult
 
 export const plantingSitesSearchResultsReducer = plantingSitesSearchResultsSlice.reducer;
 
+// Planting Site Population Data Slice
 type SitePopulationData = {
   error?: string;
   zones?: PlantingSiteZone[];
@@ -71,3 +72,27 @@ export const sitePopulationSlice = createSlice({
 export const { setSitePopulationAction } = sitePopulationSlice.actions;
 
 export const sitePopulationReducer = sitePopulationSlice.reducer;
+
+// Planting Site Reported Plants Slice
+type SiteReportedPlantsData = {
+  error?: string;
+  site?: PlantingSiteReportedPlants;
+};
+
+const initialSiteReportedPlantsState: SiteReportedPlantsData = {};
+
+export const siteReportedPlantsSlice = createSlice({
+  name: 'siteReportedPlantsSlice',
+  initialState: initialSiteReportedPlantsState,
+  reducers: {
+    setSiteReportedPlantsAction: (state, action: PayloadAction<SiteReportedPlantsData>) => {
+      const data: SiteReportedPlantsData = action.payload;
+      state.error = data.error;
+      state.site = data.site;
+    },
+  },
+});
+
+export const { setSiteReportedPlantsAction } = siteReportedPlantsSlice.actions;
+
+export const siteReportedPlantsReducer = siteReportedPlantsSlice.reducer;
