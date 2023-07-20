@@ -60,7 +60,7 @@ export const requestSiteReportedPlants = (plantingSiteId: number) => {
     try {
       const response = await TrackingService.getReportedPlants(plantingSiteId);
       const { error, site } = response;
-      dispatch(setSiteReportedPlantsAction({ error, site, plantingSiteId }));
+      dispatch(setSiteReportedPlantsAction({ plantingSiteId, data: { error, site } }));
     } catch (e) {
       // should not happen, the response above captures any http request errors
       // tslint:disable-next-line: no-console
