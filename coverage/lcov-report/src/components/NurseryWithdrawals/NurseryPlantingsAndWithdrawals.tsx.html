@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -150,7 +150,11 @@
 <a name='L85'></a><a href='#L85'>85</a>
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,27 +187,31 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -247,7 +255,7 @@ import { Tabs } from '@terraware/web-components';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useAppDispatch } from 'src/redux/store';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -262,6 +270,7 @@ type NurseryWithdrawalsProps = {
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >NurseryPlantingsAndWithdrawals(</span>{ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
+  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
@@ -269,7 +278,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const tab = <span class="cstat-no" title="statement not covered" >query.get('tab') || strings.PLANTING_PROGRESS;</span>
+  const tab = <span class="cstat-no" title="statement not covered" >query.get('tab') || 'planting_progress';</span>
 &nbsp;
   const [activeTab, setActiveTab] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;(tab);</span>
 &nbsp;
@@ -287,8 +296,10 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   }, [dispatch, selectedOrganization.id]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setActiveTab(tab);</span>
-  }, [tab]);
+<span class="cstat-no" title="statement not covered" >    if (activeLocale) {</span>
+<span class="cstat-no" title="statement not covered" >      setActiveTab(tab);</span>
+    }
+  }, [tab, activeLocale]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain&gt;
@@ -312,10 +323,11 @@ export default function <span class="fstat-no" title="function not covered" >Nur
               onTabChange={onTabChange}
               tabs={[
                 {
+                  id: 'planting_progress',
                   label: strings.PLANTING_PROGRESS,
                   children: &lt;PlantingProgress reloadTracking={reloadTracking} /&gt;,
                 },
-                { label: strings.WITHDRAWAL_HISTORY, children: &lt;NurseryWithdrawals /&gt; },
+                { id: 'withdrawal_history', label: strings.WITHDRAWAL_HISTORY, children: &lt;NurseryWithdrawals /&gt; },
               ]}
             /&gt;
           &lt;/Box&gt;
@@ -331,7 +343,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-20T13:54:15.821Z
+                at 2023-07-20T15:35:38.832Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
