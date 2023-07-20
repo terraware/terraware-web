@@ -72,6 +72,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             { name: 'purpose', label: strings.PURPOSE, type: 'multiple_selection' },
             { name: 'facility_name', label: strings.FROM_NURSERY, type: 'multiple_selection' },
             { name: 'destinationName', label: strings.DESTINATION, type: 'multiple_selection' },
+            { name: 'plantingSubzoneNames', label: strings.SUBZONE, type: 'multiple_selection' },
             {
               name: 'batchWithdrawals.batch_species_scientificName',
               label: strings.SPECIES,
