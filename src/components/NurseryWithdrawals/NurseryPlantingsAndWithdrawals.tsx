@@ -27,7 +27,7 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
   const location = useStateLocation();
   const contentRef = useRef(null);
   const dispatch = useAppDispatch();
-  const tab = query.get('tab') || strings.PLANTING_PROGRESS;
+  const tab = query.get('tab') || 'planting_progress';
 
   const [activeTab, setActiveTab] = useState<string>(tab);
 
@@ -71,8 +71,8 @@ export default function NurseryPlantingsAndWithdrawals(): JSX.Element {
               activeTab={activeTab}
               onTabChange={onTabChange}
               tabs={[
-                { label: strings.PLANTING_PROGRESS, children: <PlantingProgress /> },
-                { label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
+                { id: 'planting_progress', label: strings.PLANTING_PROGRESS, children: <PlantingProgress /> },
+                { id: 'withdrawal_history', label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
               ]}
             />
           </Box>
