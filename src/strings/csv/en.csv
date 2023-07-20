@@ -224,7 +224,7 @@ DELETE_ORGANIZATION_MSG,Are you sure you want to delete {0}?
 DELETE_SEEDLINGS_BATCHES,Delete Seedlings Batches
 DELETE_SEEDLINGS_BATCHES_MSG,Are you sure you want to delete the seedlings batches?
 DELETE_SPECIES,Delete Species
-DELETE_STATISTICS,Delete Statistics,
+DELETE_STATISTICS,Delete Statistics
 DELETE_VIABILITY_TEST,Delete Viability Test
 DELETE_VIABILITY_TEST_MESSAGE,You’re about to delete viability test {0}.
 DELETED_SPECIES,<deleted species>

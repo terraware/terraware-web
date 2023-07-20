@@ -165,9 +165,7 @@ export default function PlantingProgressList({
         <StatsWarninigDialog
           open={showWarningModal}
           onClose={() => setShowWarningModal(false)}
-          onSubmit={() => {
-            onModalSubmit();
-          }}
+          onSubmit={onModalSubmit}
         />
       )}
       <Box>{updatePlantingResult?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
