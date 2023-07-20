@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -159,13 +159,7 @@
 <a name='L94'></a><a href='#L94'>94</a>
 <a name='L95'></a><a href='#L95'>95</a>
 <a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,9 +183,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,7 +195,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -270,11 +260,10 @@ import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
-import { selectPlantingsDateRange } from 'src/redux/features/plantings/plantingsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 &nbsp;
@@ -289,9 +278,6 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
   );
   const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
-  const plantingsSinceObservation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [], plantingSiteId)</span>
-  );
   const locale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
   const targetPlantingDensity = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -303,9 +289,8 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   const plantingDensity = <span class="cstat-no" title="statement not covered" >observation?.plantingDensity ?? 0;</span>
   const percentageOfTargetDensity = <span class="cstat-no" title="statement not covered" >(100 * plantingDensity) / targetPlantingDensity;</span>
 &nbsp;
-  const numPlantedSinceObs = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return plantingsSinceObservation.reduce(<span class="fstat-no" title="function not covered" >(p</span>rev, curr) =&gt; <span class="cstat-no" title="statement not covered" >+curr['numPlants(raw)'] + prev,</span> 0);</span>
-  }, [plantingsSinceObservation]);
+  const siteReportedPlants = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectSiteReportedPlants(state, plantingSiteId))</span>;</span>
+  const numPlantedSinceObs = <span class="cstat-no" title="statement not covered" >siteReportedPlants?.plantsSinceLastObservation ?? 0;</span>
 &nbsp;
   const newDensityEstimate = <span class="cstat-no" title="statement not covered" >plantingSite?.areaHa</span>
     ? plantingDensity + numPlantedSinceObs / plantingSite.areaHa
@@ -373,7 +358,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-20T20:34:09.249Z
+                at 2023-07-20T21:01:41.257Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
