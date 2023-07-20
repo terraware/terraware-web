@@ -116,18 +116,19 @@ export default function PlantingProgressList({
 
   const onModalSubmit = () => {
     setShowWarningModal(false);
-    setPlantingCompleted(false, true);
+    setPlantingCompleted(false);
   };
 
-  const setPlantingCompleted = (complete: boolean, skipModal?: boolean) => {
-    if (!complete && !skipModal) {
-      const haveStatistics = true;
-      if (haveStatistics) {
-        setShowWarningModal(true);
-        return;
-      }
+  const validateUndoPlantingComplete = () => {
+    const haveStatistics = true;
+    if (haveStatistics) {
+      setShowWarningModal(true);
+      return;
     }
+    setPlantingCompleted(false);
+  };
 
+  const setPlantingCompleted = (complete: boolean) => {
     const subzoneIds = selectedRows.map((row) => row.subzoneId);
     const request = dispatch(
       requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })
@@ -145,7 +146,7 @@ export default function PlantingProgressList({
       topBarButtons.push({
         buttonType: 'passive',
         buttonText: strings.UNDO_PLANTING_COMPLETE,
-        onButtonClick: () => setPlantingCompleted(false),
+        onButtonClick: () => validateUndoPlantingComplete(),
         disabled: !areAllCompleted,
       });
 
