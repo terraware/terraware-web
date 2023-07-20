@@ -1,14 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
-import { selectPlantingsDateRange } from 'src/redux/features/plantings/plantingsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
@@ -47,12 +46,8 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
     }
   }, [plantingSite, observation]);
 
-  const plantingsSinceObservation = useAppSelector((state) =>
-    selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [], plantingSiteId)
-  );
-  const numPlantedSinceObs = useMemo(() => {
-    return plantingsSinceObservation.reduce((prev, curr) => +curr['numPlants(raw)'] + prev, 0);
-  }, [plantingsSinceObservation]);
+  const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
+  const numPlantedSinceObs = siteReportedPlants?.plantsSinceLastObservation ?? 0;
   const percentDiff = estimatedTotalPlants ? (100 * numPlantedSinceObs) / estimatedTotalPlants : 0;
 
   const numberFontSize = (n: number): string => {
@@ -104,7 +99,7 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
               <Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}>
                 {strings.HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION}
               </Typography>
-              {numPlantedSinceObs && (
+              {numPlantedSinceObs > 0 ? (
                 <Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}>
                   {strings.formatString(
                     strings.HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION_2,
@@ -112,7 +107,7 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
                     Math.round(percentDiff)
                   )}
                 </Typography>
-              )}
+              ) : null}
             </>
           )}
         </Box>

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlantingSite, PlantingSiteSearchResult } from 'src/types/Tracking';
+import { PlantingSite, PlantingSiteReportedPlants, PlantingSiteSearchResult } from 'src/types/Tracking';
 import { PlantingSiteZone } from 'src/types/PlantingSite';
 
 // Define a type for the slice state
@@ -49,6 +49,7 @@ export const { setPlantingSitesSearchResultsAction } = plantingSitesSearchResult
 
 export const plantingSitesSearchResultsReducer = plantingSitesSearchResultsSlice.reducer;
 
+// Planting Site Population Data Slice
 type SitePopulationData = {
   error?: string;
   zones?: PlantingSiteZone[];
@@ -71,3 +72,31 @@ export const sitePopulationSlice = createSlice({
 export const { setSitePopulationAction } = sitePopulationSlice.actions;
 
 export const sitePopulationReducer = sitePopulationSlice.reducer;
+
+// Planting Site Reported Plants Slice
+type SiteReportedPlantsData = {
+  error?: string;
+  site?: PlantingSiteReportedPlants;
+};
+
+type SiteReportedPlantsPayload = {
+  plantingSiteId: number;
+  data: SiteReportedPlantsData;
+};
+
+const initialSiteReportedPlantsState: Record<number, SiteReportedPlantsData> = {};
+
+export const siteReportedPlantsSlice = createSlice({
+  name: 'siteReportedPlantsSlice',
+  initialState: initialSiteReportedPlantsState,
+  reducers: {
+    setSiteReportedPlantsAction: (state, action: PayloadAction<SiteReportedPlantsPayload>) => {
+      const payload: SiteReportedPlantsPayload = action.payload;
+      state[payload.plantingSiteId] = payload.data;
+    },
+  },
+});
+
+export const { setSiteReportedPlantsAction } = siteReportedPlantsSlice.actions;
+
+export const siteReportedPlantsReducer = siteReportedPlantsSlice.reducer;

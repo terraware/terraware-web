@@ -3,11 +3,10 @@ import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
-import { selectPlantingsDateRange } from 'src/redux/features/plantings/plantingsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 
@@ -22,9 +21,6 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
-  const plantingsSinceObservation = useAppSelector((state) =>
-    selectPlantingsDateRange(state, observation?.completedDate ? [observation?.completedDate] : [], plantingSiteId)
-  );
   const locale = useLocalization();
 
   const targetPlantingDensity = useMemo(() => {
@@ -36,9 +32,8 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
   const plantingDensity = observation?.plantingDensity ?? 0;
   const percentageOfTargetDensity = (100 * plantingDensity) / targetPlantingDensity;
 
-  const numPlantedSinceObs = useMemo(() => {
-    return plantingsSinceObservation.reduce((prev, curr) => +curr['numPlants(raw)'] + prev, 0);
-  }, [plantingsSinceObservation]);
+  const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
+  const numPlantedSinceObs = siteReportedPlants?.plantsSinceLastObservation ?? 0;
 
   const newDensityEstimate = plantingSite?.areaHa
     ? plantingDensity + numPlantedSinceObs / plantingSite.areaHa

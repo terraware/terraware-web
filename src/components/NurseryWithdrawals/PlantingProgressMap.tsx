@@ -5,7 +5,7 @@ import { MapData, MapSourceProperties } from 'src/types/Map';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { PlantingSiteMap } from 'src/components/Map';
 import { Typography, useTheme } from '@mui/material';
-import PlantingProgressMapDialog from 'src/components/NurseryWithdrawals/PlantingProgressMapDialog';
+import PlantingProgressMapDialog from './PlantingProgressMapDialog';
 import { makeStyles } from '@mui/styles';
 import { requestPlantingSites, requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
 import { useOrganization } from 'src/providers';

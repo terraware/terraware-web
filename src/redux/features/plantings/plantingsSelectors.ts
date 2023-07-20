@@ -40,14 +40,6 @@ export const getTotalPlantsBySite = (plantingsSites: PlantingSiteSearchResult[])
   }, {});
 };
 
-export const selectPlantingsDateRange = (state: RootState, dateRange: string[], plantingSiteId: number) =>
-  selectPlantingsForSite(state, plantingSiteId)?.filter((planting) => {
-    if (!dateRange || dateRange.length === 0) {
-      return true;
-    }
-    return planting.createdTime > dateRange[0] && (dateRange.length < 2 || planting.createdTime < dateRange[1]);
-  }) ?? [];
-
 export const selectPlantingProgress = createSelector(
   [
     (state: RootState) => selectPlantingSitesSearchResults(state),

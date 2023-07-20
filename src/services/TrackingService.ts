@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
-import { Delivery, PlantingSite } from 'src/types/Tracking';
+import { Delivery, PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 import { PlantingSiteZone, Population } from 'src/types/PlantingSite';
 import SearchService from './SearchService';
 import { SearchCriteria } from 'src/types/Search';
@@ -13,6 +13,7 @@ const PLANTING_SITES_ENDPOINT = '/api/v1/tracking/sites';
 const PLANTING_SITE_ENDPOINT = '/api/v1/tracking/sites/{id}';
 const DELIVERY_ENDPOINT = '/api/v1/tracking/deliveries/{id}';
 const REASSIGN_ENDPOINT = '/api/v1/tracking/deliveries/{id}/reassign';
+const REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/reportedPlants';
 
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -22,6 +23,9 @@ type GetPlantingSiteResponsePayload =
 
 type GetDeliveryResponsePayload =
   paths[typeof DELIVERY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type PlantingSiteReportedPlantsPayload =
+  paths[typeof REPORTED_PLANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * exported type
@@ -49,6 +53,10 @@ export type PlantingSitePutRequestBody =
 
 export type ReassignPostRequestBody =
   paths[typeof REASSIGN_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
+export type SiteReportedPlantsData = {
+  site?: PlantingSiteReportedPlants;
+};
 
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
 const httpPlantingSite = HttpService.root(PLANTING_SITE_ENDPOINT);
@@ -198,6 +206,25 @@ const getTotalPlantsInSite = async (organizationId: number, siteId: number): Pro
 };
 
 /**
+ * Get Reported Plants by Planting Site
+ */
+const getReportedPlants = async (plantingSiteId: number): Promise<SiteReportedPlantsData & Response> => {
+  const response: SiteReportedPlantsData & Response = await HttpService.root(REPORTED_PLANTS_ENDPOINT).get<
+    PlantingSiteReportedPlantsPayload,
+    SiteReportedPlantsData
+  >(
+    {
+      urlReplacements: {
+        '{id}': plantingSiteId.toString(),
+      },
+    },
+    (data) => ({ site: data?.site })
+  );
+
+  return response;
+};
+
+/**
  * Exported functions
  */
 const TrackingService = {
@@ -209,6 +236,7 @@ const TrackingService = {
   reassignPlantings,
   getTotalPlantsInZones,
   getTotalPlantsInSite,
+  getReportedPlants,
 };
 
 export default TrackingService;

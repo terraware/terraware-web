@@ -15,6 +15,7 @@ import {
   trackingReducer,
   sitePopulationReducer,
   plantingSitesSearchResultsReducer,
+  siteReportedPlantsReducer,
 } from './features/tracking/trackingSlice';
 
 // assembly of app reducers
@@ -30,6 +31,7 @@ export const reducers = {
   updatePlantingCompleted: updatePlantingCompletedReducer,
   updatePlantingsCompleted: updatePlantingsCompletedReducer,
   plantingSitesSearchResults: plantingSitesSearchResultsReducer,
+  siteReportedPlantsResults: siteReportedPlantsReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

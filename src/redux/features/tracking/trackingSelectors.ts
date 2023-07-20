@@ -11,6 +11,12 @@ export const selectPlantingSitesError = (state: RootState) => state.tracking?.er
 export const selectPlantingSite = (state: RootState, plantingSiteId: number) =>
   selectPlantingSites(state)?.find((site: PlantingSite) => site.id === plantingSiteId);
 
+export const selectSiteReportedPlants = (state: RootState, plantingSiteId: number) =>
+  state.siteReportedPlantsResults[plantingSiteId]?.site;
+
+export const selectSiteReportedPlantsError = (state: RootState, plantingSiteId: number) =>
+  state.siteReportedPlantsResults[plantingSiteId]?.error;
+
 export const selectZoneProgress = createCachedSelector(
   (state: RootState, plantingSiteId: number) => selectPlantingSite(state, plantingSiteId),
   (plantingSite) => {

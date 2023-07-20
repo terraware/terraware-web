@@ -5,7 +5,7 @@ import { APP_PATHS } from 'src/constants';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { Box, Grid, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
+import { requestSitePopulation, requestSiteReportedPlants } from 'src/redux/features/tracking/trackingThunks';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -64,6 +64,7 @@ export default function PlantsDashboardV2(): JSX.Element {
   useEffect(() => {
     if (selectedPlantingSiteId !== -1) {
       dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSiteId));
+      dispatch(requestSiteReportedPlants(selectedPlantingSiteId));
     }
   }, [dispatch, org.selectedOrganization.id, selectedPlantingSiteId]);
 
