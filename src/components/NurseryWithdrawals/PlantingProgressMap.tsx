@@ -48,6 +48,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         setFocusEntities([{ sourceId: 'sites', id: plantingSite?.id }]);
       } else {
         setMapData(undefined);
+        setFocusEntities([]);
       }
     }
     setDispatching(false);
