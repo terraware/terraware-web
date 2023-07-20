@@ -16,6 +16,7 @@ import Link from 'src/components/common/Link';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
+import StatsWarninigDialog from './StatsWarningModal';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -93,6 +94,7 @@ export default function PlantingProgressList({
   const [requestId, setRequestId] = useState<string>('');
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
   const snackbar = useSnackbar();
+  const [showWarningModal, setShowWarningModal] = useState(false);
 
   useEffect(() => {
     if (data && hasZones === undefined) {
@@ -112,7 +114,20 @@ export default function PlantingProgressList({
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
-  const setPlantingCompleted = (complete: boolean) => {
+  const onModalSubmit = () => {
+    setShowWarningModal(false);
+    setPlantingCompleted(false, true);
+  };
+
+  const setPlantingCompleted = (complete: boolean, skipModal?: boolean) => {
+    if (!complete && !skipModal) {
+      const haveStatistics = true;
+      if (haveStatistics) {
+        setShowWarningModal(true);
+        return;
+      }
+    }
+
     const subzoneIds = selectedRows.map((row) => row.subzoneId);
     const request = dispatch(
       requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })
@@ -146,6 +161,15 @@ export default function PlantingProgressList({
 
   return (
     <Box>
+      {showWarningModal && (
+        <StatsWarninigDialog
+          open={showWarningModal}
+          onClose={() => setShowWarningModal(false)}
+          onSubmit={() => {
+            onModalSubmit();
+          }}
+        />
+      )}
       <Box>{updatePlantingResult?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
       <Table
         id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
