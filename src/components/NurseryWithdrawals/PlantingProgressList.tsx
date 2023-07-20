@@ -104,7 +104,7 @@ export default function PlantingProgressList({
     if (updatePlantingResult?.status === 'success') {
       reloadTracking();
     } else if (updatePlantingResult?.status === 'error') {
-      snackbar.pageError(strings.GENERIC_ERROR);
+      snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [updatePlantingResult, reloadTracking, snackbar]);
 
