@@ -8,7 +8,7 @@ import { Tabs } from '@terraware/web-components';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useAppDispatch } from 'src/redux/store';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -23,6 +23,7 @@ type NurseryWithdrawalsProps = {
 };
 
 export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
+  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const query = useQuery();
@@ -30,7 +31,7 @@ export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: Nurse
   const location = useStateLocation();
   const contentRef = useRef(null);
   const dispatch = useAppDispatch();
-  const tab = query.get('tab') || strings.PLANTING_PROGRESS;
+  const tab = query.get('tab') || 'planting_progress';
 
   const [activeTab, setActiveTab] = useState<string>(tab);
 
@@ -48,8 +49,10 @@ export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: Nurse
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    setActiveTab(tab);
-  }, [tab]);
+    if (activeLocale) {
+      setActiveTab(tab);
+    }
+  }, [tab, activeLocale]);
 
   return (
     <TfMain>
@@ -73,10 +76,11 @@ export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: Nurse
               onTabChange={onTabChange}
               tabs={[
                 {
+                  id: 'planting_progress',
                   label: strings.PLANTING_PROGRESS,
                   children: <PlantingProgress reloadTracking={reloadTracking} />,
                 },
-                { label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
+                { id: 'withdrawal_history', label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
               ]}
             />
           </Box>

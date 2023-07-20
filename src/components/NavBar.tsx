@@ -116,7 +116,7 @@ export default function NavBar({
 
     const withdrawalLogMenu = (
       <NavItem
-        label={strings.WITHDRAWAL_LOG}
+        label={trackingV2 ? strings.WITHDRAWALS : strings.WITHDRAWAL_LOG}
         selected={!!isWithdrawalLogRoute || !!isReassignmentRoute}
         onClick={() => {
           closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
