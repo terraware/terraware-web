@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1689886901689" clover="3.2.0">
-  <project timestamp="1689886901689" name="All files">
-    <metrics statements="11836" coveredstatements="362" conditionals="7478" coveredconditionals="90" methods="3714" coveredmethods="77" elements="23028" coveredelements="529" complexity="0" loc="11836" ncloc="11836" packages="101" files="476" classes="476"/>
+<coverage generated="1689892566124" clover="3.2.0">
+  <project timestamp="1689892566124" name="All files">
+    <metrics statements="11841" coveredstatements="362" conditionals="7482" coveredconditionals="90" methods="3714" coveredmethods="77" elements="23037" coveredelements="529" complexity="0" loc="11841" ncloc="11841" packages="101" files="476" classes="476"/>
     <package name="src">
       <metrics statements="210" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3823,7 +3823,7 @@
       </file>
     </package>
     <package name="src.components.NurseryWithdrawals">
-      <metrics statements="448" coveredstatements="0" conditionals="213" coveredconditionals="0" methods="134" coveredmethods="0"/>
+      <metrics statements="453" coveredstatements="0" conditionals="217" coveredconditionals="0" methods="134" coveredmethods="0"/>
       <file name="NurseryPlantingsAndWithdrawals.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/NurseryPlantingsAndWithdrawals.tsx">
         <metrics statements="20" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
@@ -4150,7 +4150,7 @@
         <line num="207" count="0" type="stmt"/>
       </file>
       <file name="PlantingProgressMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/PlantingProgressMap.tsx">
-        <metrics statements="36" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="41" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
@@ -4162,31 +4162,36 @@
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="45" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="72" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="77" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="100" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="100" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="106" count="0" type="stmt"/>
       </file>
       <file name="PlantingProgressMapDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/NurseryWithdrawals/PlantingProgressMapDialog.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="8" coveredmethods="0"/>
