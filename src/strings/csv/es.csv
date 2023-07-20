@@ -224,6 +224,7 @@ DELETE_ORGANIZATION_MSG,¿Está seguro de que deseas borrar {0}?
 DELETE_SEEDLINGS_BATCHES,Borrar Lotes de Plántulas
 DELETE_SEEDLINGS_BATCHES_MSG,¿Está seguro de que desea eliminar los lotes de plántulas?
 DELETE_SPECIES,Borrar Especie
+DELETE_STATISTICS,Eliminar estadísticas
 DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad
 DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0}.
 DELETED_SPECIES,<deleted species>
@@ -1066,6 +1067,8 @@ STARTING_ON,Inicia en
 STATE,Estado
 STATE_PROVINCE_REGION,Estado/Provincia/Región
 STATE_REQUIRED,Estado *
+STATS_WARNING_DESCRIPTION_1,Las estadísticas de observación se han calculado después de marcar esta subzona como de plantación completa.
+STATS_WARNING_DESCRIPTION_2,Deshacer el estado de plantación completa borrará esas estadísticas. ¿Está seguro de que desea eliminarlas?
 STATUS,Estado
 STORAGE,Almacenamiento
 STORAGE_DESCRIPTION,Todos los detalles sobre el almacenamiento de las semillas.

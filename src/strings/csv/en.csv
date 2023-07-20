@@ -752,7 +752,6 @@ PLANT_ID,Plant ID
 PLANT_ID_TOOLTIP,It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.
 PLANT_LABEL,Plant
 PLANTING_COMPLETE,Planting Complete?
-SET_PLANTING_COMPLETE,Planting Complete
 PLANTING_COMPLETE_TOOLTIP,Go to Seedlings > Withdrawals to update the planting complete status.
 PLANTING_DENSITY,Planting Density
 PLANTING_DENSITY_CARD_TITLE,What is my planting density as of {0}?
