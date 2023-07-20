@@ -224,6 +224,7 @@ DELETE_ORGANIZATION_MSG,Are you sure you want to delete {0}?
 DELETE_SEEDLINGS_BATCHES,Delete Seedlings Batches
 DELETE_SEEDLINGS_BATCHES_MSG,Are you sure you want to delete the seedlings batches?
 DELETE_SPECIES,Delete Species
+DELETE_STATISTICS,Delete Statistics
 DELETE_VIABILITY_TEST,Delete Viability Test
 DELETE_VIABILITY_TEST_MESSAGE,You’re about to delete viability test {0}.
 DELETED_SPECIES,<deleted species>
@@ -1067,6 +1068,8 @@ STARTING_ON,Starting On
 STATE,State
 STATE_PROVINCE_REGION,State/Province/Region
 STATE_REQUIRED,State *
+STATS_WARNING_DESCRIPTION_1,Observation statistics have been calculated after this subzone had been marked as planting complete.
+STATS_WARNING_DESCRIPTION_2,Undoing the planting complete status will delete those statistics. Are you sure you want to undo?
 STATUS,Status
 STORAGE,Storage
 STORAGE_DESCRIPTION,All the details about storing the seeds.

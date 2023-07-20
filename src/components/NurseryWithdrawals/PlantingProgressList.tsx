@@ -16,6 +16,7 @@ import Link from 'src/components/common/Link';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
+import StatsWarninigDialog from './StatsWarningModal';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -93,6 +94,7 @@ export default function PlantingProgressList({
   const [requestId, setRequestId] = useState<string>('');
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
   const snackbar = useSnackbar();
+  const [showWarningModal, setShowWarningModal] = useState(false);
 
   useEffect(() => {
     if (data && hasZones === undefined) {
@@ -112,6 +114,20 @@ export default function PlantingProgressList({
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
+  const onModalSubmit = () => {
+    setShowWarningModal(false);
+    setPlantingCompleted(false);
+  };
+
+  const validateUndoPlantingComplete = () => {
+    const haveStatistics = true;
+    if (haveStatistics) {
+      setShowWarningModal(true);
+      return;
+    }
+    setPlantingCompleted(false);
+  };
+
   const setPlantingCompleted = (complete: boolean) => {
     const subzoneIds = selectedRows.map((row) => row.subzoneId);
     const request = dispatch(
@@ -130,7 +146,7 @@ export default function PlantingProgressList({
       topBarButtons.push({
         buttonType: 'passive',
         buttonText: strings.UNDO_PLANTING_COMPLETE,
-        onButtonClick: () => setPlantingCompleted(false),
+        onButtonClick: () => validateUndoPlantingComplete(),
         disabled: !areAllCompleted,
       });
 
@@ -146,6 +162,13 @@ export default function PlantingProgressList({
 
   return (
     <Box>
+      {showWarningModal && (
+        <StatsWarninigDialog
+          open={showWarningModal}
+          onClose={() => setShowWarningModal(false)}
+          onSubmit={onModalSubmit}
+        />
+      )}
       <Box>{updatePlantingResult?.status === 'pending' && <BusySpinner withSkrim={true} />}</Box>
       <Table
         id={hasZones ? 'plantings-progress-table-with-zones' : 'plantings-progress-table-without-zones'}
