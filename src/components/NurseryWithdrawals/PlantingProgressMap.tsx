@@ -38,16 +38,21 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   const [dispatching, setDispatching] = useState(false);
   const [requestId, setRequestId] = useState<string>('');
   const updateStatus = useAppSelector((state) => selectUpdatePlantingCompleted(state, requestId));
+  const [focusEntities, setFocusEntities] = useState<{ sourceId: string; id: number }[]>([]);
   const snackbar = useSnackbar();
 
   useEffect(() => {
-    if (plantingSite?.boundary) {
-      setMapData(MapService.getMapDataFromPlantingSite(plantingSite));
-    } else {
-      setMapData(undefined);
+    if (!mapData?.site?.entities || plantingSite?.id !== mapData.site.entities[0]?.id) {
+      if (plantingSite?.boundary) {
+        setMapData(MapService.getMapDataFromPlantingSite(plantingSite));
+        setFocusEntities([{ sourceId: 'sites', id: plantingSite?.id }]);
+      } else {
+        setMapData(undefined);
+        setFocusEntities([]);
+      }
     }
     setDispatching(false);
-  }, [plantingSite]);
+  }, [plantingSite, mapData?.site?.entities]);
 
   const subzonesComplete: Record<number, boolean> = useMemo(() => {
     const result: Record<number, boolean> = {};
@@ -86,6 +91,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         })
       );
       setRequestId(request.requestId);
+      setFocusEntities([]);
       setDispatching(true);
     },
     [dispatch]
@@ -94,7 +100,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   return mapData ? (
     <PlantingSiteMap
       mapData={mapData}
-      focusEntities={[{ sourceId: 'sites', id: plantingSiteId }]}
+      focusEntities={focusEntities}
       contextRenderer={{
         render: (properties: MapSourceProperties) => (
           <PlantingProgressMapDialog
