@@ -4,6 +4,7 @@ import { regexMatch } from 'src/utils/search';
 import { createSelector } from '@reduxjs/toolkit';
 import { PlantingSearchData } from './plantingsSlice';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
+import { selectLatestObservation } from '../observations/observationsSelectors';
 
 export const selectPlantings = (state: RootState) => state.plantings?.plantings;
 
@@ -73,6 +74,7 @@ export const selectPlantingProgress = createSelector(
                   plantingCompleted: sz.plantingCompleted,
                   plantingSite: ps.name,
                   zoneName: zone.name,
+                  zoneId: zone.id,
                   targetPlantingDensity: zone.targetPlantingDensity,
                   totalSeedlingsSent: plantingsBySubzone[sz.id],
                 }))
@@ -116,3 +118,25 @@ export const selectUpdatePlantingCompleted = (state: RootState, requestId: strin
 
 export const selectUpdatePlantingsCompleted = (state: RootState, requestId: string) =>
   (state.updatePlantingsCompleted as any)[requestId];
+
+export const selectZonesHaveStatistics = createSelector(
+  [
+    (state: RootState, zoneIds?: number[]) => selectLatestObservation(state, -1),
+    (state: RootState, zoneIds?: number[]) => zoneIds,
+  ],
+  (latestObservations, zoneIds) => {
+    let subzonesHaveStats = false;
+    zoneIds?.forEach((zoneId) => {
+      // if one subzone has stats, then we return true and don't need to continue
+      if (!subzonesHaveStats) {
+        const plantingZoneFound = latestObservations?.plantingZones.find(
+          (plantingZone) => plantingZone.plantingZoneId === zoneId
+        );
+        if (plantingZoneFound && plantingZoneFound.estimatedPlants) {
+          subzonesHaveStats = true;
+        }
+      }
+    });
+    return subzonesHaveStats;
+  }
+);

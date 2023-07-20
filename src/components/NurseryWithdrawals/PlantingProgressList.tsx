@@ -17,6 +17,7 @@ import { TopBarButton } from '@terraware/web-components/components/table';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
 import StatsWarninigDialog from './StatsWarningModal';
+import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -92,7 +93,9 @@ export default function PlantingProgressList({
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
+  const [selectedZoneIds, setSelectedZoneIds] = useState<number[]>();
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
+  const subzonesStatisticsResult = useAppSelector((state) => selectZonesHaveStatistics(state, selectedZoneIds));
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);
 
@@ -101,6 +104,12 @@ export default function PlantingProgressList({
       setHasZones(data.some((d) => d.subzoneName));
     }
   }, [data, hasZones]);
+
+  useEffect(() => {
+    if (selectedRows) {
+      setSelectedZoneIds(selectedRows.map((row) => row.zoneId));
+    }
+  }, [selectedRows]);
 
   useEffect(() => {
     if (updatePlantingResult?.status === 'success') {
@@ -120,7 +129,7 @@ export default function PlantingProgressList({
   };
 
   const validateUndoPlantingComplete = () => {
-    const haveStatistics = true;
+    const haveStatistics = subzonesStatisticsResult;
     if (haveStatistics) {
       setShowWarningModal(true);
       return;
