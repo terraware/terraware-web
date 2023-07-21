@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { MapService } from 'src/services';
 import { MapData, MapSourceProperties } from 'src/types/Map';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { PlantingSiteMap } from 'src/components/Map';
 import { Typography, useTheme } from '@mui/material';
 import PlantingProgressMapDialog from './PlantingProgressMapDialog';
@@ -94,7 +94,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   }, [updateStatus, dispatch, snackbar, org.selectedOrganization.id]);
 
   const [confirmDeleteCb, setConfirmDeleteCb] = useState<() => void>(() => () => null);
-  const completeUpdate = (id: number, val: boolean) => () => {
+  const completeUpdate = useCallback((id: number, val: boolean) => () => {
     const request = dispatch(
       requestUpdatePlantingCompleted({
         subzoneId: id,
@@ -107,16 +107,16 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
     setFocusEntities([]);
     setConfirmDeleteCb(() => () => null);
     setDispatching(true);
-  };
+  }, [dispatch]);
 
-  const updatePlantingComplete = (id: number, val: boolean) => {
+  const updatePlantingComplete = useCallback((id: number, val: boolean) => {
     if (!selectedZoneHasStats) {
       completeUpdate(id, val)();
     } else {
       setConfirmDeleteCb(() => completeUpdate(id, val));
       setStatsWarningDialogOpen(true);
     }
-  };
+  }, [selectedZoneHasStats, completeUpdate]);
 
   const onOpenMapDialog = (id: number) => {
     const selectedZone = plantingSite?.plantingZones?.find((zone) =>
