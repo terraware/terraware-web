@@ -63,6 +63,11 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
     }
   }, [filters, activeLocale]);
 
+  const reloadTrackingAndObservations = () => {
+    reloadTracking();
+    dispatch(requestObservationsResults(selectedOrganization.id));
+  };
+
   useEffect(() => {
     setFilterOptions({
       plantingCompleted: {
@@ -88,7 +93,11 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
         onView={setActiveView}
         search={<SearchComponent view={activeView} onChangePlantingSite={setSelectedPlantingSiteId} {...searchProps} />}
         list={
-          <PlantingProgressList search={search} plantingCompleted={plantingCompleted} reloadTracking={reloadTracking} />
+          <PlantingProgressList
+            search={search}
+            plantingCompleted={plantingCompleted}
+            reloadTracking={reloadTrackingAndObservations}
+          />
         }
         map={<PlantingProgressMap plantingSiteId={selectedPlantingSiteId} />}
       />

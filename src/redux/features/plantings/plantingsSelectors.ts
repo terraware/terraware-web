@@ -121,16 +121,16 @@ export const selectUpdatePlantingsCompleted = (state: RootState, requestId: stri
 
 export const selectZonesHaveStatistics = createSelector(
   [
-    (state: RootState, zoneIdsBySiteId?: Record<number, number[]>, defaultTimeZoneId?: string) => state,
-    (state: RootState, zoneIdsBySiteId?: Record<number, number[]>, defaultTimeZoneId?: string) => zoneIdsBySiteId,
-    (state: RootState, zoneIdsBySiteId?: Record<number, number[]>, defaultTimeZoneId?: string) => defaultTimeZoneId,
+    (state: RootState, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) => state,
+    (state: RootState, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) => zoneIdsBySiteId,
+    (state: RootState, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) => defaultTimeZoneId,
   ],
   (state, zoneIdsBySiteId, defaultTimeZoneId) => {
     if (zoneIdsBySiteId && defaultTimeZoneId) {
       const zonesHaveStatistics = Object.keys(zoneIdsBySiteId).some((siteId) => {
         const siteIdSelected = Number(siteId);
         const latestObservations = selectLatestObservation(state, siteIdSelected, defaultTimeZoneId);
-        return zoneIdsBySiteId[siteIdSelected].some((zoneId) => {
+        return Array.from(zoneIdsBySiteId[siteIdSelected]).some((zoneId) => {
           return latestObservations?.plantingZones.some(
             (plantingZone) =>
               plantingZone.plantingZoneId === zoneId &&
