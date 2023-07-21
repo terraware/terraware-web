@@ -916,6 +916,7 @@ SAVE,Save
 SAVE_ACCESSION_ERROR,An error occurred when saving the accession.
 SAVE_AND_NEXT,Save and Next
 SAVE_CHANGES,Save Changes
+SAVED,Saved
 SAVING,Saving...
 SCARIFY,Scarify
 SCHEDULE_DATE_INFO,Schedule a date by selecting a future date.
@@ -1093,6 +1094,8 @@ SUBSHRUB,Subshrub
 SUBSTRATE,Substrate
 SUBTITLE_GET_STARTED,"To get started, please create your organization now. You'll also be able to set up and manage information on people and species."
 SUBZONE,Subzone
+SUBZONE_PLANTING_COMPLETED_SUCCESS,Subzone marked as planting complete.
+SUBZONE_PLANTING_INCOMPLETED_SUCCESS,Subzone marked as planting incomplete.
 SUBZONE_REQUIRED,Subzone *
 SUBZONES,Subzones
 SUCCESS_STORIES,Success Stories
