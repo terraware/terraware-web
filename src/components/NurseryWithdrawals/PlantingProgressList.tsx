@@ -136,10 +136,6 @@ export default function PlantingProgressList({
     }
   }, [updatePlantingResult, reloadTracking, snackbar, dispatch, selectedOrganization.id]);
 
-  useEffect(() => {
-    dispatch(requestObservationsResults(selectedOrganization.id));
-  }, [dispatch, selectedOrganization.id]);
-
   if (!data || hasZones === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }

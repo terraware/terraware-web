@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { FieldOptionsMap } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Card from 'src/components/common/Card';
@@ -12,6 +12,8 @@ import PlantingProgressList from './PlantingProgressList';
 import PlantingProgressMap from './PlantingProgressMap';
 import { View } from 'src/components/common/ListMapSelector';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
+import { useAppDispatch } from 'src/redux/store';
+import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 
 const initialView: View = 'list';
 
@@ -28,6 +30,12 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [activeView, setActiveView] = useState<View>(initialView);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>(-1);
+  const dispatch = useAppDispatch();
+  const { selectedOrganization } = useOrganization();
+
+  useEffect(() => {
+    dispatch(requestObservationsResults(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
