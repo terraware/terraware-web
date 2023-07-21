@@ -118,12 +118,12 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
     }
   }, [selectedZoneHasStats, completeUpdate]);
 
-  const onOpenMapDialog = (id: number) => {
+  const onOpenMapDialog = useCallback((id: number) => {
     const selectedZone = plantingSite?.plantingZones?.find((zone) =>
       zone.plantingSubzones.map((sz) => sz.id).includes(id)
     );
     setZoneIdSelected(selectedZone?.id ?? -1);
-  };
+  }, [plantingSite]);
 
   return mapData ? (
     <>
