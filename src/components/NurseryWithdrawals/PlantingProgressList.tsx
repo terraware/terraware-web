@@ -18,6 +18,9 @@ import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/pl
 import useSnackbar from 'src/utils/useSnackbar';
 import StatsWarninigDialog from './StatsWarningModal';
 import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
+import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { useOrganization } from 'src/providers';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -92,12 +95,16 @@ export default function PlantingProgressList({
   const data = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), plantingCompleted));
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
+  const defaultTimeZone = useDefaultTimeZone();
   const [requestId, setRequestId] = useState<string>('');
-  const [selectedZoneIds, setSelectedZoneIds] = useState<number[]>();
+  const [selectedZoneIdsBySiteId, setSelectedZoneIdsBySiteId] = useState<Record<number, number[]>>();
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
-  const subzonesStatisticsResult = useAppSelector((state) => selectZonesHaveStatistics(state, selectedZoneIds));
+  const subzonesStatisticsResult = useAppSelector((state) =>
+    selectZonesHaveStatistics(state, selectedZoneIdsBySiteId, defaultTimeZone.get().id)
+  );
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);
+  const { selectedOrganization } = useOrganization();
 
   useEffect(() => {
     if (data && hasZones === undefined) {
@@ -107,17 +114,31 @@ export default function PlantingProgressList({
 
   useEffect(() => {
     if (selectedRows) {
-      setSelectedZoneIds(selectedRows.map((row) => row.zoneId));
+      const zoneIds = selectedRows.reduce((selectedZoneIdsBySiteIdObj: Record<number, number[]>, row) => {
+        const siteId = row.siteId;
+        if (selectedZoneIdsBySiteIdObj[siteId]) {
+          selectedZoneIdsBySiteIdObj[siteId].push(row.zoneId);
+        } else {
+          selectedZoneIdsBySiteIdObj[siteId] = [row.zoneId];
+        }
+        return selectedZoneIdsBySiteIdObj;
+      }, {});
+      setSelectedZoneIdsBySiteId(zoneIds);
     }
   }, [selectedRows]);
 
   useEffect(() => {
     if (updatePlantingResult?.status === 'success') {
       reloadTracking();
+      dispatch(requestObservationsResults(selectedOrganization.id));
     } else if (updatePlantingResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [updatePlantingResult, reloadTracking, snackbar]);
+  }, [updatePlantingResult, reloadTracking, snackbar, dispatch, selectedOrganization.id]);
+
+  useEffect(() => {
+    dispatch(requestObservationsResults(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
 
   if (!data || hasZones === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
@@ -129,8 +150,7 @@ export default function PlantingProgressList({
   };
 
   const validateUndoPlantingComplete = () => {
-    const haveStatistics = subzonesStatisticsResult;
-    if (haveStatistics) {
+    if (subzonesStatisticsResult) {
       setShowWarningModal(true);
       return;
     }

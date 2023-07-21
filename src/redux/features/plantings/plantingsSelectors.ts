@@ -121,22 +121,26 @@ export const selectUpdatePlantingsCompleted = (state: RootState, requestId: stri
 
 export const selectZonesHaveStatistics = createSelector(
   [
-    (state: RootState, zoneIds?: number[]) => selectLatestObservation(state, -1),
-    (state: RootState, zoneIds?: number[]) => zoneIds,
+    (state: RootState, zoneIdsBySiteId?: Record<number, number[]>, defaultTimeZoneId?: string) => state,
+    (state: RootState, zoneIdsBySiteId?: Record<number, number[]>, defaultTimeZoneId?: string) => zoneIdsBySiteId,
+    (state: RootState, zoneIdsBySiteId?: Record<number, number[]>, defaultTimeZoneId?: string) => defaultTimeZoneId,
   ],
-  (latestObservations, zoneIds) => {
-    let subzonesHaveStats = false;
-    zoneIds?.forEach((zoneId) => {
-      // if one subzone has stats, then we return true and don't need to continue
-      if (!subzonesHaveStats) {
-        const plantingZoneFound = latestObservations?.plantingZones.find(
-          (plantingZone) => plantingZone.plantingZoneId === zoneId
-        );
-        if (plantingZoneFound && plantingZoneFound.estimatedPlants) {
-          subzonesHaveStats = true;
-        }
-      }
-    });
-    return subzonesHaveStats;
+  (state, zoneIdsBySiteId, defaultTimeZoneId) => {
+    if (zoneIdsBySiteId && defaultTimeZoneId) {
+      const zonesHaveStatistics = Object.keys(zoneIdsBySiteId).some((siteId) => {
+        const siteIdSelected = Number(siteId);
+        const latestObservations = selectLatestObservation(state, siteIdSelected, defaultTimeZoneId);
+        return zoneIdsBySiteId[siteIdSelected].some((zoneId) => {
+          return latestObservations?.plantingZones.some(
+            (plantingZone) =>
+              plantingZone.plantingZoneId === zoneId &&
+              plantingZone.estimatedPlants !== null &&
+              plantingZone.estimatedPlants !== undefined
+          );
+        });
+      });
+
+      return zonesHaveStatistics;
+    }
   }
 );
