@@ -94,36 +94,45 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   }, [updateStatus, dispatch, snackbar, org.selectedOrganization.id]);
 
   const [confirmDeleteCb, setConfirmDeleteCb] = useState<() => void>(() => () => null);
-  const completeUpdate = useCallback((id: number, val: boolean) => () => {
-    const request = dispatch(
-      requestUpdatePlantingCompleted({
-        subzoneId: id,
-        planting: {
-          plantingCompleted: val,
-        },
-      })
-    );
-    setRequestId(request.requestId);
-    setFocusEntities([]);
-    setConfirmDeleteCb(() => () => null);
-    setDispatching(true);
-  }, [dispatch]);
+  const completeUpdate = useCallback(
+    (id: number, val: boolean) => () => {
+      const request = dispatch(
+        requestUpdatePlantingCompleted({
+          subzoneId: id,
+          planting: {
+            plantingCompleted: val,
+          },
+        })
+      );
+      setRequestId(request.requestId);
+      setFocusEntities([]);
+      setConfirmDeleteCb(() => () => null);
+      setDispatching(true);
+    },
+    [dispatch]
+  );
 
-  const updatePlantingComplete = useCallback((id: number, val: boolean) => {
-    if (!selectedZoneHasStats) {
-      completeUpdate(id, val)();
-    } else {
-      setConfirmDeleteCb(() => completeUpdate(id, val));
-      setStatsWarningDialogOpen(true);
-    }
-  }, [selectedZoneHasStats, completeUpdate]);
+  const updatePlantingComplete = useCallback(
+    (id: number, val: boolean) => {
+      if (!selectedZoneHasStats) {
+        completeUpdate(id, val)();
+      } else {
+        setConfirmDeleteCb(() => completeUpdate(id, val));
+        setStatsWarningDialogOpen(true);
+      }
+    },
+    [selectedZoneHasStats, completeUpdate]
+  );
 
-  const onOpenMapDialog = useCallback((id: number) => {
-    const selectedZone = plantingSite?.plantingZones?.find((zone) =>
-      zone.plantingSubzones.map((sz) => sz.id).includes(id)
-    );
-    setZoneIdSelected(selectedZone?.id ?? -1);
-  }, [plantingSite]);
+  const onOpenMapDialog = useCallback(
+    (id: number) => {
+      const selectedZone = plantingSite?.plantingZones?.find((zone) =>
+        zone.plantingSubzones.map((sz) => sz.id).includes(id)
+      );
+      setZoneIdSelected(selectedZone?.id ?? -1);
+    },
+    [plantingSite]
+  );
 
   return mapData ? (
     <>
