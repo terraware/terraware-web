@@ -17,6 +17,8 @@ import { TopBarButton } from '@terraware/web-components/components/table';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
 import StatsWarninigDialog from './StatsWarningModal';
+import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -91,8 +93,13 @@ export default function PlantingProgressList({
   const data = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), plantingCompleted));
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
+  const defaultTimeZone = useDefaultTimeZone();
   const [requestId, setRequestId] = useState<string>('');
+  const [selectedZoneIdsBySiteId, setSelectedZoneIdsBySiteId] = useState<Record<number, Set<number>>>();
   const updatePlantingResult = useAppSelector((state) => selectUpdatePlantingsCompleted(state, requestId));
+  const subzonesStatisticsResult = useAppSelector((state) =>
+    selectZonesHaveStatistics(state, selectedZoneIdsBySiteId, defaultTimeZone.get().id)
+  );
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);
 
@@ -101,6 +108,21 @@ export default function PlantingProgressList({
       setHasZones(data.some((d) => d.subzoneName));
     }
   }, [data, hasZones]);
+
+  useEffect(() => {
+    if (selectedRows) {
+      const zoneIds = selectedRows.reduce((selectedZoneIdsBySiteIdObj: Record<number, Set<number>>, row) => {
+        const siteId = row.siteId;
+        if (selectedZoneIdsBySiteIdObj[siteId]) {
+          selectedZoneIdsBySiteIdObj[siteId].add(row.zoneId);
+        } else {
+          selectedZoneIdsBySiteIdObj[siteId] = new Set([row.zoneId]);
+        }
+        return selectedZoneIdsBySiteIdObj;
+      }, {});
+      setSelectedZoneIdsBySiteId(zoneIds);
+    }
+  }, [selectedRows]);
 
   useEffect(() => {
     if (updatePlantingResult?.status === 'success') {
@@ -120,8 +142,7 @@ export default function PlantingProgressList({
   };
 
   const validateUndoPlantingComplete = () => {
-    const haveStatistics = true;
-    if (haveStatistics) {
+    if (subzonesStatisticsResult) {
       setShowWarningModal(true);
       return;
     }
