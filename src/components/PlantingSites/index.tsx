@@ -66,7 +66,7 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
 
   // show spinner while initializing data
   if (
-    (observationsResults === undefined && !observationsResultsError) ||
+    (trackingV2 && observationsResults === undefined && !observationsResultsError) ||
     (plantingSites === undefined && !plantingSitesError)
   ) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
