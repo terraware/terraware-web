@@ -102,6 +102,7 @@ export default function PlantingProgressList({
   );
   const snackbar = useSnackbar();
   const [showWarningModal, setShowWarningModal] = useState(false);
+  const [markingAsComplete, setMarkingAsComplete] = useState(false);
 
   useEffect(() => {
     if (data && hasZones === undefined) {
@@ -127,10 +128,17 @@ export default function PlantingProgressList({
   useEffect(() => {
     if (updatePlantingResult?.status === 'success') {
       reloadTracking();
+      setRequestId('');
+      if (markingAsComplete) {
+        snackbar.toastSuccess(strings.SUBZONE_PLANTING_COMPLETED_SUCCESS, strings.SAVED);
+      } else {
+        snackbar.toastSuccess(strings.SUBZONE_PLANTING_UNCOMPLETED_SUCCESS, strings.SAVED);
+      }
     } else if (updatePlantingResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
+      setRequestId('');
     }
-  }, [updatePlantingResult, reloadTracking, snackbar]);
+  }, [updatePlantingResult, reloadTracking, snackbar, markingAsComplete]);
 
   if (!data || hasZones === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
@@ -154,6 +162,7 @@ export default function PlantingProgressList({
     const request = dispatch(
       requestUpdatePlantingsCompleted({ subzoneIds, planting: { plantingCompleted: complete } })
     );
+    setMarkingAsComplete(complete);
     setRequestId(request.requestId);
   };
 
