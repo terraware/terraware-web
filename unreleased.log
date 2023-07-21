@@ -1,6 +1,2 @@
-ccb506d8b SW-3898 Create selectZonesHaveStatistics selector (#1591)
-688ed28b5 SW-3953 Show planting site details page when tracking-v2 is disabled (#1594)
-ea3d3aa07 Updated translations from Phrase (#1592)
-cd8d0c69f SW-3942 Prevent Zoom to Site on Marking Subzones Complete (#1593)
-69d7382e3 SW-3950 Use Site Reported Plants Endpoint (#1589)
-be8154272 SW-3900 Add subzone filter to nursery withdrawals table (#1590)
+3fdf3fb6e SW-3951 Show withdrawals filtered to the query/params (#1595)
+254a8708b SW-3960 Show Success planting complete snackbar (#1596)
