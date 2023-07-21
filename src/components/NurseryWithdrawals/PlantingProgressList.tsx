@@ -132,7 +132,7 @@ export default function PlantingProgressList({
       if (markingAsComplete) {
         snackbar.toastSuccess(strings.SUBZONE_PLANTING_COMPLETED_SUCCESS, strings.SAVED);
       } else {
-        snackbar.toastSuccess(strings.SUBZONE_PLANTING_INCOMPLETED_SUCCESS, strings.SAVED);
+        snackbar.toastSuccess(strings.SUBZONE_PLANTING_UNCOMPLETED_SUCCESS, strings.SAVED);
       }
     } else if (updatePlantingResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
