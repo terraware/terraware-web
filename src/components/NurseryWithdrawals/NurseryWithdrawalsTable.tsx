@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Grid, Popover, Theme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import strings from 'src/strings';
 import { makeStyles } from '@mui/styles';
 import { SortOrder, Tooltip } from '@terraware/web-components';
+import strings from 'src/strings';
+import { APP_PATHS } from 'src/constants';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { NurseryWithdrawalService } from 'src/services';
 import { FieldNodePayload, FieldOptionsMap, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import WithdrawalLogRenderer from './WithdrawalLogRenderer';
-import { APP_PATHS } from 'src/constants';
-import { useHistory } from 'react-router-dom';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -45,12 +47,16 @@ const columns = (): TableColumnType[] => [
 export default function NurseryWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
+  const query = useQuery();
+  const history = useHistory();
+  const location = useStateLocation();
   const classes = useStyles();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
-  const history = useHistory();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [filters, setFilters] = useState<Record<string, any>>({});
+  const subzoneParam = query.get('subzoneName');
+  const siteParam = query.get('siteName');
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -175,7 +181,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       };
       finalSearchValueChildren.push(filterValueNodes);
     }
-
     return finalSearchValueChildren;
   }, [filters, debouncedSearchTerm]);
 
@@ -194,6 +199,38 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       }
     }
   }, [getSearchChildren, selectedOrganization, searchSortOrder]);
+
+  useEffect(() => {
+    if (siteParam) {
+      query.delete('siteName');
+      history.replace(getLocation(location.pathname, location, query.toString()));
+      setFilters((curr) => ({
+        ...curr,
+        destinationName: {
+          field: 'destinationName',
+          operation: 'field',
+          type: 'Exact',
+          values: [siteParam],
+        },
+      }));
+    }
+  }, [siteParam, query, history, location]);
+
+  useEffect(() => {
+    if (subzoneParam) {
+      query.delete('subzoneName');
+      history.replace(getLocation(location.pathname, location, query.toString()));
+      setFilters((curr) => ({
+        ...curr,
+        plantingSubzoneNames: {
+          field: 'plantingSubzoneNames',
+          operation: 'field',
+          type: 'Exact',
+          values: [subzoneParam],
+        },
+      }));
+    }
+  }, [subzoneParam, query, history, location]);
 
   useEffect(() => {
     onApplyFilters();

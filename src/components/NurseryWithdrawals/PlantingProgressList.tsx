@@ -217,7 +217,7 @@ const DetailsRenderer =
       const filterParam = row.subzoneName
         ? `subzoneName=${encodeURIComponent(row.subzoneName)}`
         : `siteName=${encodeURIComponent(row.siteName)}`;
-      const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=${strings.WITHDRAWAL_HISTORY}&${filterParam}`;
+      const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
       return <Link to={url}>{row.totalSeedlingsSent as React.ReactNode}</Link>;
     };
 
