@@ -46,7 +46,6 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const dispatch = useAppDispatch();
   const trackingV2 = isEnabled('TrackingV2');
-
   const observationsResults = useAppSelector((state) =>
     selectPlantingSiteObservationsResults(state, Number(plantingSiteId))
   );
@@ -66,7 +65,7 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
 
   // show spinner while initializing data
   if (
-    (observationsResults === undefined && !observationsResultsError) ||
+    (trackingV2 && observationsResults === undefined && !observationsResultsError) ||
     (plantingSites === undefined && !plantingSitesError)
   ) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
