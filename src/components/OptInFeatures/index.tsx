@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Textfield } from '@terraware/web-components';
 import { Box, LinearProgress, Switch, Stack, Grid, useTheme } from '@mui/material';
 import { PreferencesService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -8,11 +9,70 @@ import { Feature, OPT_IN_FEATURES } from 'src/features';
 import TfMain from 'src/components/common/TfMain';
 import { getRgbaFromHex } from 'src/utils/color';
 
+import { distance } from '@turf/turf';
+
 type OptInFeaturesProps = {
   refresh?: () => void;
 };
 
-export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Element {
+export default function KB(props: OptInFeaturesProps): JSX.Element {
+  const [geojson, setgeojson] = useState<string>('');
+  const [dist, setdist] = useState<string[]>([]);
+  
+  useEffect(() => {
+    if (geojson) {
+      try {
+        const json = JSON.parse(geojson);
+        const distinmeters: string[] = [];
+        json.coordinates.forEach((polygon: any) => {
+          polygon.forEach((coord: any, i: number) => {
+            if (i > 0) {
+              const from = polygon[i-1];
+              const to = coord;
+              distinmeters.push(distance(from, to, { units: 'meters' }).toFixed(2));
+            }
+          });
+        });
+        setdist(distinmeters);
+      } catch(e: any) {
+        console.log(e);
+        setdist(e?.message);
+      }
+    }
+  }, [geojson]);
+
+  const onUpdate = (val: any) => {
+    setgeojson(val as string);
+  };
+
+  return (
+    <Grid container spacing={2} padding={3}>
+      <Grid item xs={12}>
+        <Textfield
+          id='turf'
+          type='textarea'
+          label='geojson'
+          onChange={onUpdate}
+          value={geojson}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <Textfield
+          id='turf1'
+          type='textarea'
+          label='distance in meters between points'
+          value={''}
+          display={true}
+        />
+        {dist.map((d,i) => (
+          <p key={i}>{d}</p>
+        ))}
+      </Grid>
+    </Grid>
+  );
+}
+
+export function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [preferences, setPreferences] = useState<{ [key: string]: boolean }>();
