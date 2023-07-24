@@ -8,7 +8,6 @@ import BarChart from 'src/components/common/Chart/BarChart';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
-import { useSupportedLocales } from 'src/strings/locales';
 
 type NumberOfSpeciesPlantedCardProps = {
   plantingSiteId?: number;
@@ -23,11 +22,7 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
   const [values, setValues] = useState<number[]>();
   const user = useUser().user;
   const numberFormatter = useNumberFormatter();
-  const supportedLocales = useSupportedLocales();
-  const numericFormatter = useMemo(
-    () => numberFormatter(user?.locale, supportedLocales),
-    [user?.locale, numberFormatter, supportedLocales]
-  );
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
 
   useEffect(() => {
     if (populationSelector) {
