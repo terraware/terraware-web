@@ -96,7 +96,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
             <BarChart
               showLegend={!!observation}
               elementColor={theme.palette.TwClrBgBrand}
-              barWidth={0}
+              barWidth={observation && actuals?.length ? 0 : undefined}
               chartId='plantingDensityByZone'
               chartData={chartData}
               customTooltipTitles={tooltipTitles}
