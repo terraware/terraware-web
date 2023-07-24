@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1690207249322" clover="3.2.0">
-  <project timestamp="1690207249322" name="All files">
-    <metrics statements="11893" coveredstatements="362" conditionals="7500" coveredconditionals="90" methods="3730" coveredmethods="77" elements="23123" coveredelements="529" complexity="0" loc="11893" ncloc="11893" packages="101" files="476" classes="476"/>
+<coverage generated="1690212919365" clover="3.2.0">
+  <project timestamp="1690212919365" name="All files">
+    <metrics statements="11894" coveredstatements="362" conditionals="7500" coveredconditionals="90" methods="3730" coveredmethods="77" elements="23124" coveredelements="529" complexity="0" loc="11894" ncloc="11894" packages="101" files="476" classes="476"/>
     <package name="src">
       <metrics statements="210" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5944,7 +5944,7 @@
       </file>
     </package>
     <package name="src.components.PlantsV2.components">
-      <metrics statements="335" coveredstatements="0" conditionals="237" coveredconditionals="0" methods="111" coveredmethods="0"/>
+      <metrics statements="336" coveredstatements="0" conditionals="237" coveredconditionals="0" methods="111" coveredmethods="0"/>
       <file name="HectaresPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/HectaresPlantedCard.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -6036,7 +6036,7 @@
         <line num="76" count="0" type="stmt"/>
       </file>
       <file name="NumberOfSpeciesPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/NumberOfSpeciesPlantedCard.tsx">
-        <metrics statements="45" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="46" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
@@ -6067,21 +6067,22 @@
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="62" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="64" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="79" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
       </file>
       <file name="ObservedNumberOfSpeciesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/ObservedNumberOfSpeciesCard.tsx">
         <metrics statements="22" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="10" coveredmethods="0"/>
