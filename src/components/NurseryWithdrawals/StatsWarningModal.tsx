@@ -3,14 +3,20 @@ import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
 import { Typography, useTheme } from '@mui/material';
 
+type CompleteUpdateProps = {
+  id: number;
+  val: boolean;
+};
+
 export interface StatsWarninigDialogProps {
   open: boolean;
+  completeUpdateProps?: { id: number; val: boolean };
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (completeUpdateProps?: CompleteUpdateProps) => void;
 }
 
 export default function StatsWarninigDialog(props: StatsWarninigDialogProps): JSX.Element {
-  const { onClose, open, onSubmit } = props;
+  const { onClose, open, completeUpdateProps, onSubmit } = props;
   const theme = useTheme();
 
   return (
@@ -28,7 +34,13 @@ export default function StatsWarninigDialog(props: StatsWarninigDialogProps): JS
           priority='secondary'
           key='button-1'
         />,
-        <Button id='confirm' onClick={onSubmit} label={strings.DELETE_STATISTICS} key='button-2' type='destructive' />,
+        <Button
+          id='confirm'
+          onClick={() => onSubmit(completeUpdateProps)}
+          label={strings.DELETE_STATISTICS}
+          key='button-2'
+          type='destructive'
+        />,
       ]}
       skrim={true}
     >
