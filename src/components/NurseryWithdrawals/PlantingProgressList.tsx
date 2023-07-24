@@ -16,7 +16,7 @@ import Link from 'src/components/common/Link';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
-import StatsWarningDialog from './StatsWarningModal';
+import StatsWarninigDialog from './StatsWarningModal';
 import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -193,7 +193,7 @@ export default function PlantingProgressList({
   return (
     <Box>
       {showWarningModal && (
-        <StatsWarningDialog
+        <StatsWarninigDialog
           open={showWarningModal}
           onClose={() => setShowWarningModal(false)}
           onSubmit={onModalSubmit}

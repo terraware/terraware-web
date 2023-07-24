@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -63,10 +63,10 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
     }
   }, [filters, activeLocale]);
 
-  const reloadTrackingAndObservations = useCallback(() => {
+  const reloadTrackingAndObservations = () => {
     reloadTracking();
     dispatch(requestObservationsResults(selectedOrganization.id));
-  }, [selectedOrganization.id, dispatch, reloadTracking]);
+  };
 
   useEffect(() => {
     setFilterOptions({
@@ -99,9 +99,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
             reloadTracking={reloadTrackingAndObservations}
           />
         }
-        map={
-          <PlantingProgressMap plantingSiteId={selectedPlantingSiteId} reloadTracking={reloadTrackingAndObservations} />
-        }
+        map={<PlantingProgressMap plantingSiteId={selectedPlantingSiteId} />}
       />
     </Card>
   );
