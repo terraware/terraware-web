@@ -603,6 +603,7 @@ NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.
 NO_DATA_YET,Aún no hay datos.
 NO_FUTURE_DATES,No se admiten fechas futuras.
 NO_INVENTORY_DESCRIPTION,Parece que aún no ha añadido inventario. Puede importar datos desde un archivo CSV o añadir inventario mediante nuestro formulario de inventario.
+NO_MAP_DATA,No hay datos cartográficos que mostrar para este lugar de plantación.
 NO_MOBILE_SUPPORT_DESC,Acceda a terraware.io desde un dispositivo de escritorio.
 NO_MOBILE_SUPPORT_TITLE,La página web de Terraware aún no es compatible con dispositivos móviles.
 NO_NEGATIVE_NUMBERS,No se admiten números negativos.
