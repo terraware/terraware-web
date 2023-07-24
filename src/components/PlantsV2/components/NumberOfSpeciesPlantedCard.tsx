@@ -6,6 +6,9 @@ import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import BarChart from 'src/components/common/Chart/BarChart';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { useUser } from 'src/providers';
+import { useNumberFormatter } from 'src/utils/useNumber';
+import { useSupportedLocales } from 'src/strings/locales';
 
 type NumberOfSpeciesPlantedCardProps = {
   plantingSiteId?: number;
@@ -18,6 +21,14 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
+  const user = useUser().user;
+  const numberFormatter = useNumberFormatter();
+  const supportedLocales = useSupportedLocales();
+  const numericFormatter = useMemo(
+    () => numberFormatter(user?.locale, supportedLocales),
+    [user?.locale, numberFormatter, supportedLocales]
+  );
+
   useEffect(() => {
     if (populationSelector) {
       const speciesNames: string[] = [];
@@ -88,7 +99,7 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
     values?.forEach((v, index) => {
       annotations.push({
         type: 'label',
-        content: [`${v}%`],
+        content: [`${numericFormatter.format(v)}%`],
         position: {
           x: 'center',
           y: v > 75 ? 'center' : 'end',

@@ -116,8 +116,8 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
       }}
     />
   ) : (
-    <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}>
-      No map data (placeholder).
+    <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt} textAlign='center'>
+      {strings.NO_MAP_DATA}
     </Typography>
   );
 }
