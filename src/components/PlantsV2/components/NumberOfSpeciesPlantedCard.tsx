@@ -110,7 +110,7 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
     });
 
     return { annotations };
-  }, [values, labels]);
+  }, [values, labels, numericFormatter]);
 
   return (
     <OverviewItemCard
