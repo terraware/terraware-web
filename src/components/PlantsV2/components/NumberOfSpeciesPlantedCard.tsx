@@ -53,7 +53,11 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
       const speciesCount = speciesNames.length;
       setTotalSpecies(speciesCount);
       setLabels(Object.keys(speciesByCategory));
-      setValues(Object.values(speciesByCategory).map((cat) => (speciesCount > 0 ? (cat * 100) / speciesCount : 0)));
+      setValues(
+        Object.values(speciesByCategory).map((cat) =>
+          speciesCount > 0 ? Number(((cat * 100) / speciesCount).toFixed(2)) : 0
+        )
+      );
     } else {
       setLabels([]);
       setValues([]);
