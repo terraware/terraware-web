@@ -3,7 +3,7 @@ import { LocaleDetails } from '.';
 import useEnvironment from 'src/utils/useEnvironment';
 
 /** Supported locales in the order they should appear in the locale selector. */
-const supportedLocales: LocaleDetails[] = [
+export const supportedLocales: LocaleDetails[] = [
   { id: 'en', name: 'English', loadModule: () => import('./strings-en') },
   { id: 'es', name: 'Español', loadModule: () => import('./strings-es') },
   { id: 'gx', name: 'Gibberish', loadModule: () => import('./strings-gx'), inDevelopment: true },
