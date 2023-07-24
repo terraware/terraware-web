@@ -1,6 +1,6 @@
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import strings from 'src/strings';
 import { selectSubzoneSpeciesPopulations } from 'src/redux/features/tracking/sitePopulationSelector';
 import { useAppSelector } from 'src/redux/store';
@@ -27,6 +27,7 @@ type PlantingProgressMapDialogProps = {
   name: string;
   plantingComplete: boolean;
   onUpdatePlantingComplete: (id: number, val: boolean) => void;
+  onOpen?: (id: number) => void;
   busy: boolean;
 };
 
@@ -35,6 +36,7 @@ export default function PlantingProgressMapDialog({
   name,
   plantingComplete,
   onUpdatePlantingComplete,
+  onOpen,
   busy,
 }: PlantingProgressMapDialogProps): JSX.Element {
   const theme = useTheme();
@@ -43,6 +45,12 @@ export default function PlantingProgressMapDialog({
   const totalPlants = useMemo(() => {
     return Object.values(species).reduce((prev, curr) => prev + curr, 0);
   }, [species]);
+
+  useEffect(() => {
+    if (onOpen) {
+      onOpen(id);
+    }
+  }, [onOpen, id]);
 
   const getWithdrawalHistoryLink = () => {
     const filterParam = `subzoneName=${encodeURIComponent(name)}`;
