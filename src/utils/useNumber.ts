@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { LocaleDetails } from 'src/strings';
 import { findLocaleDetails, supportedLocales } from 'src/strings/locales';
 
 const getLocaleToUse = (locale?: string) => (locale === 'gx' ? 'fr' : locale || 'en');
@@ -8,11 +7,10 @@ const getLocaleToUse = (locale?: string) => (locale === 'gx' ? 'fr' : locale || 
  * formatter
  */
 export const useNumberFormatter = (): any => {
-  const formatter = (locale?: string, supportedLocalesParam?: LocaleDetails[]): any => {
-    const locales = supportedLocalesParam || supportedLocales;
+  const formatter = (locale?: string): any => {
     let localeToUse = getLocaleToUse(locale);
-    if (locale && locales) {
-      const localeDetails = findLocaleDetails(locales, locale);
+    if (locale && supportedLocales) {
+      const localeDetails = findLocaleDetails(supportedLocales, locale);
       localeToUse = localeDetails.id;
     }
     const intlFormat = new Intl.NumberFormat(localeToUse);
