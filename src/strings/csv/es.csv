@@ -916,6 +916,7 @@ SAVE,Salvar
 SAVE_ACCESSION_ERROR,Un error ocurrió al salvar la accesión
 SAVE_AND_NEXT,Salve y Continúe
 SAVE_CHANGES,Salvar los cambios
+SAVED,Guardado
 SAVING,Salvando...
 SCARIFY,Escarificar
 SCHEDULE_DATE_INFO,Programe una fecha seleccionando una fecha futura.
@@ -1093,6 +1094,8 @@ SUBSHRUB,Subarbusto
 SUBSTRATE,Sustrato
 SUBTITLE_GET_STARTED,"Para empezar, cree ahora su organización. También podrá configurar y gestionar información sobre personas y especies."
 SUBZONE,Subzona
+SUBZONE_PLANTING_COMPLETED_SUCCESS,Subzona(s) marcada(s) como plantación completa.
+SUBZONE_PLANTING_UNCOMPLETED_SUCCESS,Subzona(s) marcada(s) como plantación incompleta.
 SUBZONE_REQUIRED,Subzona *
 SUBZONES,Subzonas
 SUCCESS_STORIES,Casos de éxito
