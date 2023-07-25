@@ -11,7 +11,15 @@ export const getFacilitiesByType = (organization: Organization, type: FacilityTy
 };
 
 export const getAllSeedBanks = (organization: Organization): Facility[] => {
-  return getFacilitiesByType(organization, 'Seed Bank');
+  return getFacilitiesByType(organization, 'Seed Bank').sort((a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  });
 };
 
 export const getSeedBank = (organization: Organization, facilityId: number): Facility | undefined => {
@@ -27,7 +35,15 @@ export const isContributor = (roleHolder: Organization | OrganizationUser | unde
 };
 
 export const getAllNurseries = (organization: Organization): Facility[] => {
-  return getFacilitiesByType(organization, 'Nursery');
+  return getFacilitiesByType(organization, 'Nursery').sort((a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  });
 };
 
 export const getNurseryById = (organization: Organization, id: number): Facility => {

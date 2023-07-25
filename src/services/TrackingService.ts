@@ -75,7 +75,17 @@ const listPlantingSites = async (organizationId: number, full?: boolean): Promis
         full: (full || false).toString(),
       },
     },
-    (data) => ({ sites: data?.sites })
+    (data) => ({
+      sites: data?.sites.sort((a, b) => {
+        if (a.name < b.name) {
+          return -1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
+        return 0;
+      }),
+    })
   );
 
   return response;
