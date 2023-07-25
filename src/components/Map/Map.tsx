@@ -426,6 +426,9 @@ export default function Map(props: MapProps): JSX.Element {
     return source.entities?.some((entity) => entity?.boundary?.length);
   });
 
+  // keep track of map being destroyed, this is not bound by react event loop
+  let destroying = false;
+
   return (
     <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }} ref={containerRef}>
       {bannerMessage && <MapBanner message={bannerMessage} />}
@@ -444,6 +447,9 @@ export default function Map(props: MapProps): JSX.Element {
           style={style}
           attributionControl={false}
           onLoad={onLoad}
+          onRemove={() => {
+            destroying = true;
+          }}
           ref={mapRefCb}
           onRender={(event) => event.target.resize()}
         >
@@ -456,6 +462,9 @@ export default function Map(props: MapProps): JSX.Element {
               longitude={Number(popupInfo.lng)}
               latitude={Number(popupInfo.lat)}
               onClose={() => {
+                if (destroying) {
+                  return; // otherwise errors out updating feature state while map is being destroyed
+                }
                 setPopupInfo(null);
                 updateFeatureState(selectStateId, 'select', [{ sourceId: popupInfo.sourceId }]);
               }}
