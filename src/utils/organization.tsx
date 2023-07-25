@@ -2,24 +2,18 @@ import { Facility, FacilityType } from 'src/types/Facility';
 import { HighOrganizationRolesValues, Organization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 
-export const getFacilitiesByType = (organization: Organization, type: FacilityType) => {
+export const getFacilitiesByType = (organization: Organization, type: FacilityType, locale?: string) => {
   let facilitiesByType: Facility[] = [];
   if (organization && organization.facilities) {
-    facilitiesByType = organization?.facilities?.filter((facility) => facility.type === type);
+    facilitiesByType = organization?.facilities
+      ?.filter((facility) => facility.type === type)
+      .sort((a, b) => a.name.localeCompare(b.name, locale));
   }
   return facilitiesByType;
 };
 
 export const getAllSeedBanks = (organization: Organization): Facility[] => {
-  return getFacilitiesByType(organization, 'Seed Bank').sort((a, b) => {
-    if (a.name < b.name) {
-      return -1;
-    }
-    if (a.name > b.name) {
-      return 1;
-    }
-    return 0;
-  });
+  return getFacilitiesByType(organization, 'Seed Bank');
 };
 
 export const getSeedBank = (organization: Organization, facilityId: number): Facility | undefined => {
@@ -35,15 +29,7 @@ export const isContributor = (roleHolder: Organization | OrganizationUser | unde
 };
 
 export const getAllNurseries = (organization: Organization): Facility[] => {
-  return getFacilitiesByType(organization, 'Nursery').sort((a, b) => {
-    if (a.name < b.name) {
-      return -1;
-    }
-    if (a.name > b.name) {
-      return 1;
-    }
-    return 0;
-  });
+  return getFacilitiesByType(organization, 'Nursery');
 };
 
 export const getNurseryById = (organization: Organization, id: number): Facility => {

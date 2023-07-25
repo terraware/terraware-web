@@ -117,13 +117,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (plantingSites) {
       return;
     }
-    const response = await TrackingService.listPlantingSites(selectedOrganization.id, true);
+    const response = await TrackingService.listPlantingSites(selectedOrganization.id, true, user?.locale);
     if (response.requestSucceeded && response.sites) {
       setPlantingSites(response.sites);
     } else {
       snackbar.toastError();
     }
-  }, [selectedOrganization, plantingSites, snackbar]);
+  }, [selectedOrganization, plantingSites, snackbar, user?.locale]);
 
   const updatePurpose = useCallback(
     (value: string) => {

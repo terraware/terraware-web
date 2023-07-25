@@ -64,7 +64,11 @@ const httpPlantingSite = HttpService.root(PLANTING_SITE_ENDPOINT);
 /**
  * List all planting sites
  */
-const listPlantingSites = async (organizationId: number, full?: boolean): Promise<PlantingSitesData & Response> => {
+const listPlantingSites = async (
+  organizationId: number,
+  full?: boolean,
+  locale?: string
+): Promise<PlantingSitesData & Response> => {
   const response: PlantingSitesData & Response = await httpPlantingSites.get<
     ListPlantingSitesResponsePayload,
     PlantingSitesData
@@ -76,15 +80,7 @@ const listPlantingSites = async (organizationId: number, full?: boolean): Promis
       },
     },
     (data) => ({
-      sites: data?.sites.sort((a, b) => {
-        if (a.name < b.name) {
-          return -1;
-        }
-        if (a.name > b.name) {
-          return 1;
-        }
-        return 0;
-      }),
+      sites: data?.sites.sort((a, b) => a.name.localeCompare(b.name, locale)),
     })
   );
 

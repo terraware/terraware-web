@@ -177,6 +177,7 @@ function AppContent() {
   const [showNavBar, setShowNavBar] = useState(true);
   const trackingV2 = isEnabled('TrackingV2');
   const dispatch = useAppDispatch();
+  const { user } = useUser();
 
   const setDefaults = useCallback(() => {
     if (!isPlaceholderOrg(selectedOrganization.id)) {
@@ -202,11 +203,11 @@ function AppContent() {
   const reloadTracking = useCallback(() => {
     const populatePlantingSites = () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        dispatch(requestPlantingSites(selectedOrganization.id));
+        dispatch(requestPlantingSites(selectedOrganization.id, user?.locale));
       }
     };
     populatePlantingSites();
-  }, [dispatch, selectedOrganization.id]);
+  }, [dispatch, selectedOrganization.id, user?.locale]);
 
   useEffect(() => {
     setDefaults();
