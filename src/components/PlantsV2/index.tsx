@@ -143,7 +143,7 @@ export default function PlantsDashboardV2(): JSX.Element {
       {sitePlantingComplete && (
         <>
           <Grid item xs={isMobile ? 12 : 4}>
-            <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} />
+            {hasObservations && <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} />}
           </Grid>
           <Grid item xs={isMobile ? 12 : 4}>
             <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
