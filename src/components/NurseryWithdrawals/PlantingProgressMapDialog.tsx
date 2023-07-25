@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type PlantingProgressMapDialogProps = {
   id: number;
-  name: string;
+  subzoneName: string;
   siteName: string;
   plantingComplete: boolean;
   onUpdatePlantingComplete: (id: number, val: boolean) => void;
@@ -34,7 +34,7 @@ type PlantingProgressMapDialogProps = {
 
 export default function PlantingProgressMapDialog({
   id,
-  name,
+  subzoneName,
   siteName,
   plantingComplete,
   onUpdatePlantingComplete,
@@ -55,7 +55,7 @@ export default function PlantingProgressMapDialog({
   }, [onOpen, id]);
 
   const getWithdrawalHistoryLink = () => {
-    const filterParam = `subzoneName=${encodeURIComponent(name)}&siteName=${encodeURIComponent(siteName)}`;
+    const filterParam = `subzoneName=${encodeURIComponent(subzoneName)}&siteName=${encodeURIComponent(siteName)}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
     return (
       <Link className={classes.withdrawalHistoryLink} to={url}>
@@ -76,7 +76,7 @@ export default function PlantingProgressMapDialog({
         }}
       >
         <Typography fontSize='16px' fontWeight={600}>
-          {name}
+          {subzoneName}
         </Typography>
         <Typography fontSize='16px' fontWeight={400}>
           <FormattedNumber value={totalPlants} />

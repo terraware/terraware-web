@@ -152,7 +152,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
             return (
               <PlantingProgressMapDialog
                 id={properties.id}
-                name={properties.fullName}
+                subzoneName={properties.fullName}
                 siteName={plantingSite?.name || ''}
                 plantingComplete={subzonesComplete[properties.id]}
                 onUpdatePlantingComplete={updatePlantingComplete}
