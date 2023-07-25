@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1690231603290" clover="3.2.0">
-  <project timestamp="1690231603290" name="All files">
-    <metrics statements="11921" coveredstatements="362" conditionals="7510" coveredconditionals="90" methods="3745" coveredmethods="77" elements="23176" coveredelements="529" complexity="0" loc="11921" ncloc="11921" packages="101" files="476" classes="476"/>
+<coverage generated="1690296143128" clover="3.2.0">
+  <project timestamp="1690296143128" name="All files">
+    <metrics statements="11921" coveredstatements="362" conditionals="7512" coveredconditionals="90" methods="3745" coveredmethods="77" elements="23178" coveredelements="529" complexity="0" loc="11921" ncloc="11921" packages="101" files="476" classes="476"/>
     <package name="src">
       <metrics statements="210" coveredstatements="0" conditionals="167" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5903,9 +5903,9 @@
       </file>
     </package>
     <package name="src.components.PlantsV2">
-      <metrics statements="59" coveredstatements="0" conditionals="79" coveredconditionals="0" methods="26" coveredmethods="0"/>
+      <metrics statements="59" coveredstatements="0" conditionals="81" coveredconditionals="0" methods="26" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/index.tsx">
-        <metrics statements="59" coveredstatements="0" conditionals="79" coveredconditionals="0" methods="26" coveredmethods="0"/>
+        <metrics statements="59" coveredstatements="0" conditionals="81" coveredconditionals="0" methods="26" coveredmethods="0"/>
         <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>

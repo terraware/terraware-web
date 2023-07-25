@@ -1,3 +1,4 @@
+7d20fb4cf SW-3967 site planting density is shown even when no observations have occurred (#1609)
 ba7562f78 SW-3956 Bar width should be consistent (#1605)
 96bc515c1 Move reload tracking into a useCallback (#1604)
 5f8555e27 SW-3908 Warn When Undoing Planting Complete will Delete Stats (#1597)
