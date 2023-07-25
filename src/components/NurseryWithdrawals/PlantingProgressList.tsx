@@ -224,7 +224,7 @@ const DetailsRenderer =
 
     const createLinkToWithdrawals = () => {
       const filterParam = row.subzoneName
-        ? `subzoneName=${encodeURIComponent(row.subzoneName)}`
+        ? `subzoneName=${encodeURIComponent(row.subzoneName)}&siteName=${encodeURIComponent(row.siteName)}`
         : `siteName=${encodeURIComponent(row.siteName)}`;
       const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
       return <Link to={url}>{row.totalSeedlingsSent as React.ReactNode}</Link>;
