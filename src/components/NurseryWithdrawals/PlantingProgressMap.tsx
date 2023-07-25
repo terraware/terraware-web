@@ -148,16 +148,19 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         mapData={mapData}
         focusEntities={focusEntities}
         contextRenderer={{
-          render: (properties: MapSourceProperties) => (
-            <PlantingProgressMapDialog
-              id={properties.id}
-              name={properties.fullName}
-              plantingComplete={subzonesComplete[properties.id]}
-              onUpdatePlantingComplete={updatePlantingComplete}
-              onOpen={onOpenMapDialog}
-              busy={dispatching}
-            />
-          ),
+          render: (properties: MapSourceProperties) => {
+            return (
+              <PlantingProgressMapDialog
+                id={properties.id}
+                name={properties.fullName}
+                siteName={plantingSite?.name || ''}
+                plantingComplete={subzonesComplete[properties.id]}
+                onUpdatePlantingComplete={updatePlantingComplete}
+                onOpen={onOpenMapDialog}
+                busy={dispatching}
+              />
+            );
+          },
           className: classes.popup,
           anchor: 'bottom',
         }}
