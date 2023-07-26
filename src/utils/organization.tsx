@@ -2,10 +2,12 @@ import { Facility, FacilityType } from 'src/types/Facility';
 import { HighOrganizationRolesValues, Organization } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 
-export const getFacilitiesByType = (organization: Organization, type: FacilityType) => {
+export const getFacilitiesByType = (organization: Organization, type: FacilityType, locale?: string) => {
   let facilitiesByType: Facility[] = [];
   if (organization && organization.facilities) {
-    facilitiesByType = organization?.facilities?.filter((facility) => facility.type === type);
+    facilitiesByType = organization?.facilities
+      ?.filter((facility) => facility.type === type)
+      .sort((a, b) => a.name.localeCompare(b.name, locale));
   }
   return facilitiesByType;
 };
