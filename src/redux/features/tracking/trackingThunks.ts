@@ -9,7 +9,7 @@ import {
 } from './trackingSlice';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
-export const requestPlantingSites = (organizationId: number, locale?: string) => {
+export const requestPlantingSites = (organizationId: number, locale?: string | null) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response = await TrackingService.listPlantingSites(organizationId, true, locale);

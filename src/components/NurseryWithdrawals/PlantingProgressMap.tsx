@@ -88,7 +88,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         snackbar.toastError(strings.GENERIC_ERROR);
       } else if (updateStatus.status === 'success') {
         // refresh planting site and observations data
-        dispatch(requestPlantingSites(org.selectedOrganization.id, activeLocale || undefined));
+        dispatch(requestPlantingSites(org.selectedOrganization.id, activeLocale));
         dispatch(requestObservationsResults(org.selectedOrganization.id));
       }
     }

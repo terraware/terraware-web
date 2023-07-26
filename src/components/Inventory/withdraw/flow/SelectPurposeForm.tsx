@@ -118,7 +118,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (plantingSites) {
       return;
     }
-    const response = await TrackingService.listPlantingSites(selectedOrganization.id, true, activeLocale || undefined);
+    const response = await TrackingService.listPlantingSites(selectedOrganization.id, true, activeLocale);
     if (response.requestSucceeded && response.sites) {
       setPlantingSites(response.sites);
     } else {

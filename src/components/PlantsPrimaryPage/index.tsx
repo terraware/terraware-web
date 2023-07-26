@@ -64,7 +64,7 @@ export default function PlantsPrimaryPage({
         const serverResponse = await TrackingService.listPlantingSites(
           selectedOrganization.id,
           undefined,
-          activeLocale || undefined
+          activeLocale
         );
         if (serverResponse.requestSucceeded) {
           plantingSitesList = serverResponse.sites;
