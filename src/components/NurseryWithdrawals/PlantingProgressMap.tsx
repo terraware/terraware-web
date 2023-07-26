@@ -8,7 +8,7 @@ import { Typography, useTheme } from '@mui/material';
 import PlantingProgressMapDialog from './PlantingProgressMapDialog';
 import { makeStyles } from '@mui/styles';
 import { requestPlantingSites, requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
-import { useOrganization, useUser } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import {
   selectUpdatePlantingCompleted,
   selectZonesHaveStatistics,
@@ -47,7 +47,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   const updateStatus = useAppSelector((state) => selectUpdatePlantingCompleted(state, requestId));
   const [focusEntities, setFocusEntities] = useState<{ sourceId: string; id: number }[]>([]);
   const snackbar = useSnackbar();
-  const { user } = useUser();
+  const { activeLocale } = useLocalization();
 
   const [zoneIdSelected, setZoneIdSelected] = useState<number>(-1);
   const selectedZoneHasStats = useAppSelector((state) =>
@@ -88,11 +88,11 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         snackbar.toastError(strings.GENERIC_ERROR);
       } else if (updateStatus.status === 'success') {
         // refresh planting site and observations data
-        dispatch(requestPlantingSites(org.selectedOrganization.id, user?.locale));
+        dispatch(requestPlantingSites(org.selectedOrganization.id, activeLocale || undefined));
         dispatch(requestObservationsResults(org.selectedOrganization.id));
       }
     }
-  }, [updateStatus, dispatch, snackbar, org.selectedOrganization.id, user?.locale]);
+  }, [updateStatus, dispatch, snackbar, org.selectedOrganization.id, activeLocale]);
 
   const [confirmDeleteCb, setConfirmDeleteCb] = useState<() => void>(() => () => null);
   const completeUpdate = useCallback(

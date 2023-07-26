@@ -4,7 +4,7 @@ import { PlantingSite } from 'src/types/Tracking';
 import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService, TrackingService } from 'src/services';
-import { useOrganization, useUser } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import PlantsPrimaryPageView from './PlantsPrimaryPageView';
 
 export type PlantsPrimaryPageProps = {
@@ -47,7 +47,7 @@ export default function PlantsPrimaryPage({
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const snackbar = useSnackbar();
-  const { user } = useUser();
+  const { activeLocale } = useLocalization();
 
   useEffect(() => {
     if (plantsSitePreferences) {
@@ -64,7 +64,7 @@ export default function PlantsPrimaryPage({
         const serverResponse = await TrackingService.listPlantingSites(
           selectedOrganization.id,
           undefined,
-          user?.locale
+          activeLocale || undefined
         );
         if (serverResponse.requestSucceeded) {
           plantingSitesList = serverResponse.sites;
@@ -80,7 +80,7 @@ export default function PlantsPrimaryPage({
       setPlantingSites(plantingSitesList);
     };
     populatePlantingSites();
-  }, [selectedOrganization.id, snackbar, allowAllAsSiteSelection, plantingSitesData, user?.locale]);
+  }, [selectedOrganization.id, snackbar, allowAllAsSiteSelection, plantingSitesData, activeLocale]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
