@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Button, useTheme } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, MapRef, NavigationControl, Popup, Source } from 'react-map-gl';
 import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer, MapGeometry } from 'src/types/Map';
@@ -13,6 +13,7 @@ import mapboxgl from 'mapbox-gl';
 import MapBanner from './MapBanner';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import useSnackbar from 'src/utils/useSnackbar';
+import { Icon } from '@terraware/web-components';
 const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -69,6 +70,7 @@ export default function Map(props: MapProps): JSX.Element {
   const [firstVisible, setFirstVisible] = useState(false);
   const visible = useIsVisible(containerRef);
   const snackbar = useSnackbar();
+  const theme = useTheme();
 
   useEffect(() => {
     // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
@@ -210,6 +212,11 @@ export default function Map(props: MapProps): JSX.Element {
     },
     [geoData]
   );
+
+  const zoomToFit = () => {
+    const map: any = mapRef?.current;
+    map.fitBounds([options.bbox.lowerLeft, options.bbox.upperRight], { padding: 20 });
+  };
 
   useEffect(() => {
     const map: any = mapRef && mapRef.current;
@@ -456,6 +463,21 @@ export default function Map(props: MapProps): JSX.Element {
           {mapSources}
           <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
           <AttributionControl compact={true} style={{ marginRight: '5px' }} />
+          <Box
+            style={{
+              width: 27,
+              backgroundColor: `${theme.palette.TwClrBaseWhite}`,
+              position: 'absolute',
+              bottom: '30%',
+              right: '5px',
+              zIndex: 10,
+              borderRadius: '4px',
+            }}
+          >
+            <button style={{ background: 'none', border: 'none', cursor: 'pointer' }} onClick={zoomToFit}>
+              <Icon name='close' />
+            </button>
+          </Box>
           {popupInfo && popupRenderer && (
             <Popup
               anchor={popupRenderer.anchor ?? 'top'}
