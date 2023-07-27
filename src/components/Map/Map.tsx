@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box, Button, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, MapRef, NavigationControl, Popup, Source } from 'react-map-gl';
 import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer, MapGeometry } from 'src/types/Map';
