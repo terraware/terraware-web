@@ -215,7 +215,7 @@ export default function Map(props: MapProps): JSX.Element {
 
   const zoomToFit = () => {
     const map: any = mapRef?.current;
-    map.fitBounds([options.bbox.lowerLeft, options.bbox.upperRight], { padding: 20 });
+    map?.fitBounds([options.bbox.lowerLeft, options.bbox.upperRight], { padding: 20 });
   };
 
   useEffect(() => {
@@ -465,17 +465,23 @@ export default function Map(props: MapProps): JSX.Element {
           <AttributionControl compact={true} style={{ marginRight: '5px' }} />
           <Box
             style={{
-              width: 27,
+              width: 28,
+              height: 28,
               backgroundColor: `${theme.palette.TwClrBaseWhite}`,
               position: 'absolute',
-              bottom: '30%',
+              bottom: '120px',
               right: '5px',
               zIndex: 10,
               borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            <button style={{ background: 'none', border: 'none', cursor: 'pointer' }} onClick={zoomToFit}>
-              <Icon name='close' />
+            <button
+              style={{ background: 'none', border: 'none', cursor: 'pointer', height: '18px' }}
+              onClick={zoomToFit}
+            >
+              <Icon name='iconFullScreen' />
             </button>
           </Box>
           {popupInfo && popupRenderer && (
