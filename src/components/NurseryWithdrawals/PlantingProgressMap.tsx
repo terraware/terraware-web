@@ -112,7 +112,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
 
   const updatePlantingComplete = useCallback(
     (id: number, val: boolean) => {
-      if (!selectedZoneHasStats) {
+      if (val === true || !selectedZoneHasStats) {
         completeUpdate(id, val);
       } else {
         setStatsWarningDialogProps({ id, val });
