@@ -1,3 +1,4 @@
+daed96275 SW-3845 Add "zoom to fit" button to maps (#1614)
 27bacbbd5 SW-3969 Seed bank, Nursery, and Planting Sites selection lists should be alphabetized (#1610)
 eb83e86e3 SW-3959 Fix map errors when navigating away while a popup is open (#1612)
 ae92e228a SW-3961 Fix SerializableStateInvariantMiddleware warning in app (#1611)
