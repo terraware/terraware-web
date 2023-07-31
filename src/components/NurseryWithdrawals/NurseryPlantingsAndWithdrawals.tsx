@@ -4,6 +4,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Tabs } from '@terraware/web-components';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
@@ -18,11 +19,30 @@ import PlantingProgress from './PlantingProgressTabContent';
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
 
+const useStyles = makeStyles(() => ({
+  tabs: {
+    '& .MuiTabPanel-root[hidden]': {
+      flexGrow: 0,
+    },
+    '& .MuiTabPanel-root': {
+      display: 'flex',
+      flexDirection: 'column',
+      flexGrow: 1,
+    },
+    '& >.MuiBox-root': {
+      display: 'flex',
+      flexDirection: 'column',
+      flexGrow: 1,
+    },
+  },
+}));
+
 type NurseryWithdrawalsProps = {
   reloadTracking: () => void;
 };
 
 export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
+  const classes = useStyles();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -56,8 +76,8 @@ export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: Nurse
 
   return (
     <TfMain>
-      <Box sx={{ paddingLeft: theme.spacing(3) }}>
-        <Grid container spacing={3} sx={{ marginTop: 0 }}>
+      <Box sx={{ paddingLeft: theme.spacing(3) }} display='flex' flexDirection='column' flexGrow={1}>
+        <Grid container spacing={3} sx={{ marginTop: 0 }} display='flex' flexDirection='column' flexGrow={1}>
           <PageHeaderWrapper nextElement={contentRef.current}>
             <Grid container spacing={3} sx={{ paddingLeft: theme.spacing(3), paddingBottom: theme.spacing(4) }}>
               <Grid item xs={8}>
@@ -70,7 +90,7 @@ export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: Nurse
           <Grid item xs={12}>
             <PageSnackbar />
           </Grid>
-          <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1}>
+          <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
             <Tabs
               activeTab={activeTab}
               onTabChange={onTabChange}

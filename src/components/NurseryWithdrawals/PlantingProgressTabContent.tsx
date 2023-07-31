@@ -78,7 +78,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
   }, [activeLocale]);
 
   return (
-    <Card flushMobile>
+    <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
         {strings.PLANTING_PROGRESS}
       </Typography>
