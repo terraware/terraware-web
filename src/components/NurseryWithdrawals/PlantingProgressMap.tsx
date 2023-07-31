@@ -47,6 +47,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
   const [requestId, setRequestId] = useState<string>('');
   const updateStatus = useAppSelector((state) => selectUpdatePlantingCompleted(state, requestId));
   const [focusEntities, setFocusEntities] = useState<{ sourceId: string; id: number }[]>([]);
+
   const [zoneIdSelected, setZoneIdSelected] = useState<number>(-1);
   const [statsWarningDialogProps, setStatsWarningDialogProps] = useState<{ id: number; val: boolean } | undefined>();
 
@@ -90,10 +91,10 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
         reloadTracking();
       }
     }
-  }, [updateStatus, dispatch, snackbar, org.selectedOrganization.id, reloadTracking]);
+  }, [updateStatus, snackbar, reloadTracking]);
 
   const completeUpdate = useCallback(
-    (id: number, val: boolean) => () => {
+    (id: number, val: boolean) => {
       const request = dispatch(
         requestUpdatePlantingCompleted({
           subzoneId: id,
@@ -112,7 +113,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
   const updatePlantingComplete = useCallback(
     (id: number, val: boolean) => {
       if (!selectedZoneHasStats) {
-        completeUpdate(id, val)();
+        completeUpdate(id, val);
       } else {
         setStatsWarningDialogProps({ id, val });
         const selectedZone = plantingSite?.plantingZones?.find((zone) =>
@@ -133,7 +134,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
         onSubmit={(completeUpdateProps) => {
           setStatsWarningDialogProps(undefined);
           if (completeUpdateProps) {
-            completeUpdate(completeUpdateProps.id, completeUpdateProps.val)();
+            completeUpdate(completeUpdateProps.id, completeUpdateProps.val);
           }
         }}
       />

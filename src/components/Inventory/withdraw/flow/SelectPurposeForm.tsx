@@ -26,7 +26,7 @@ import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import SubzoneSelector, { SubzoneInfo, ZoneInfo } from 'src/components/SubzoneSelector';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useUser } from 'src/providers';
@@ -88,6 +88,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [speciesMap, setSpeciesMap] = useState<{ [key: string]: string }>({});
   const tz = useLocationTimeZone().get(selectedNursery);
   const [timeZone, setTimeZone] = useState(tz.id);
+  const { activeLocale } = useLocalization();
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
@@ -117,13 +118,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (plantingSites) {
       return;
     }
-    const response = await TrackingService.listPlantingSites(selectedOrganization.id, true);
+    const response = await TrackingService.listPlantingSites(selectedOrganization.id, true, activeLocale);
     if (response.requestSucceeded && response.sites) {
       setPlantingSites(response.sites);
     } else {
       snackbar.toastError();
     }
-  }, [selectedOrganization, plantingSites, snackbar]);
+  }, [selectedOrganization, plantingSites, snackbar, activeLocale]);
 
   const updatePurpose = useCallback(
     (value: string) => {
