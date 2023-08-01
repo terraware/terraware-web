@@ -4,6 +4,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box, Grid, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Tabs } from '@terraware/web-components';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
@@ -17,6 +18,24 @@ import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
 import { PlantingSite } from 'src/types/Tracking';
 
+const useStyles = makeStyles(() => ({
+  tabs: {
+    '& .MuiTabPanel-root[hidden]': {
+      flexGrow: 0,
+    },
+    '& .MuiTabPanel-root': {
+      display: 'flex',
+      flexDirection: 'column',
+      flexGrow: 1,
+    },
+    '& >.MuiBox-root': {
+      display: 'flex',
+      flexDirection: 'column',
+      flexGrow: 1,
+    },
+  },
+}));
+
 type NurseryWithdrawalsProps = {
   reloadTracking: () => void;
   selectedPlantingSite: PlantingSite;
@@ -26,6 +45,7 @@ export default function NurseryPlantingsAndWithdrawals({
   reloadTracking,
   selectedPlantingSite,
 }: NurseryWithdrawalsProps): JSX.Element {
+  const classes = useStyles();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -58,12 +78,12 @@ export default function NurseryPlantingsAndWithdrawals({
   }, [tab, activeLocale]);
 
   return (
-    <Box sx={{ paddingLeft: theme.spacing(3) }}>
-      <Grid container spacing={3} sx={{ marginTop: 0 }}>
+    <Box sx={{ paddingLeft: theme.spacing(3) }} display='flex' flexDirection='column' flexGrow={1}>
+      <Grid container spacing={3} sx={{ marginTop: 0 }} display='flex' flexDirection='column' flexGrow={1}>
         <Grid item xs={12}>
           <PageSnackbar />
         </Grid>
-        <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1}>
+        <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
           <Tabs
             activeTab={activeTab}
             onTabChange={onTabChange}

@@ -67,7 +67,8 @@ export default function Map(props: MapProps): JSX.Element {
   const hoverStateId: FeatureStateId = useMemo(() => ({}), []);
   const selectStateId: FeatureStateId = useMemo(() => ({}), []);
   const highlightStateId: FeatureStateId = useMemo(() => ({}), []);
-  const [firstVisible, setFirstVisible] = useState(false);
+  const [firstVisible, setFirstVisible] = useState<boolean>(false);
+  const [resized, setResized] = useState<boolean>(false);
   const visible = useIsVisible(containerRef);
   const snackbar = useSnackbar();
   const theme = useTheme();
@@ -458,7 +459,12 @@ export default function Map(props: MapProps): JSX.Element {
             destroying = true;
           }}
           ref={mapRefCb}
-          onRender={(event) => event.target.resize()}
+          onRender={(event) => {
+            if (!resized) {
+              setResized(true);
+              event.target.resize();
+            }
+          }}
         >
           {mapSources}
           <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
