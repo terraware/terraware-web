@@ -81,11 +81,13 @@ export const selectPlantingProgress = createSelector(
 // selector to search plantings
 export const searchPlantingProgress = createSelector(
   [
-    (state: RootState, query: string, plantingCompleted?: boolean) => selectPlantingProgress(state),
-    (state: RootState, query: string, plantingCompleted?: boolean) => query,
-    (state: RootState, query: string, plantingCompleted?: boolean) => plantingCompleted,
+    (state: RootState, query: string, plantingCompleted?: boolean, plantingSiteId?: number) =>
+      selectPlantingProgress(state),
+    (state: RootState, query: string, plantingCompleted?: boolean, plantingSiteId?: number) => query,
+    (state: RootState, query: string, plantingCompleted?: boolean, plantingSiteId?: number) => plantingCompleted,
+    (state: RootState, query: string, plantingCompleted?: boolean, plantingSiteId?: number) => plantingSiteId,
   ],
-  (plantingProgress, query, plantingCompleted) => {
+  (plantingProgress, query, plantingCompleted, plantingSiteId) => {
     return plantingProgress?.reduce((acc, curr) => {
       const { siteId, siteName, totalPlants, reported } = curr;
       if (reported && reported.length > 0) {
@@ -93,7 +95,9 @@ export const searchPlantingProgress = createSelector(
           const matchesQuery = !query || regexMatch(progress.subzoneName, query);
           const matchesPlantingCompleted =
             plantingCompleted === undefined || progress.plantingCompleted === plantingCompleted;
-          if (matchesQuery && matchesPlantingCompleted) {
+          const matchesPlantingSite =
+            plantingSiteId === undefined || plantingSiteId === -1 || siteId === plantingSiteId;
+          if (matchesQuery && matchesPlantingCompleted && matchesPlantingSite) {
             acc.push({ siteId, siteName, totalPlants, ...progress });
           }
         });

@@ -11,7 +11,6 @@ import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper'
 import PlantingProgressList from './PlantingProgressList';
 import PlantingProgressMap from './PlantingProgressMap';
 import { View } from 'src/components/common/ListMapSelector';
-import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { useAppDispatch } from 'src/redux/store';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 
@@ -19,9 +18,13 @@ const initialView: View = 'list';
 
 type PlantingProgressProps = {
   reloadTracking: () => void;
+  selectedPlantingSiteId: number;
 };
 
-export default function PlantingProgress({ reloadTracking }: PlantingProgressProps): JSX.Element {
+export default function PlantingProgress({
+  reloadTracking,
+  selectedPlantingSiteId,
+}: PlantingProgressProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
@@ -29,7 +32,6 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [activeView, setActiveView] = useState<View>(initialView);
-  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>(-1);
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
 
@@ -91,12 +93,13 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
         style={{ padding: isMobile ? theme.spacing(3) : theme.spacing(3, 0, 0) }}
         initialView={initialView}
         onView={setActiveView}
-        search={<SearchComponent view={activeView} onChangePlantingSite={setSelectedPlantingSiteId} {...searchProps} />}
+        search={<SearchComponent view={activeView} {...searchProps} />}
         list={
           <PlantingProgressList
             search={search}
             plantingCompleted={plantingCompleted}
             reloadTracking={reloadTrackingAndObservations}
+            plantingSiteId={selectedPlantingSiteId}
           />
         }
         map={<PlantingProgressMap plantingSiteId={selectedPlantingSiteId} />}
@@ -107,18 +110,14 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
 
 type SearchComponentProps = SearchProps & {
   view: View;
-  onChangePlantingSite: (newSiteId: number) => void;
 };
 
 function SearchComponent(props: SearchComponentProps): JSX.Element {
-  const { search, onSearch, filtersProps, view, onChangePlantingSite } = props;
+  const { search, onSearch, filtersProps, view } = props;
   return (
     <>
       <div style={{ display: view === 'list' ? 'flex' : 'none' }}>
         <Search search={search} onSearch={onSearch} filtersProps={filtersProps} />
-      </div>
-      <div style={{ display: view === 'map' ? 'flex' : 'none' }}>
-        <PlantingSiteSelector onChange={onChangePlantingSite} />
       </div>
     </>
   );

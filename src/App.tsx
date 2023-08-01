@@ -465,6 +465,9 @@ function AppContent() {
             <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
               <NurseryWithdrawals reloadTracking={reloadTracking} />
             </Route>
+            <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_V2}>
+              <NurseryWithdrawals reloadTracking={reloadTracking} />
+            </Route>
             <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
               <NurseryWithdrawalsDetails species={species} plantingSubzoneNames={plantingSubzoneNames} />
             </Route>

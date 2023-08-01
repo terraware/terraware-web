@@ -18,6 +18,7 @@ import { Button, PillList } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+import { PlantingSite } from 'src/types/Tracking';
 
 const useStyles = makeStyles((theme: Theme) => ({
   searchField: {
@@ -44,7 +45,11 @@ const columns = (): TableColumnType[] => [
   { key: 'hasReassignments', name: '', type: 'string' },
 ];
 
-export default function NurseryWithdrawalsTable(): JSX.Element {
+type NurseryWithdrawalsTableProps = {
+  selectedPlantingSite?: PlantingSite;
+};
+
+export default function NurseryWithdrawalsTable({ selectedPlantingSite }: NurseryWithdrawalsTableProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const query = useQuery();
@@ -136,14 +141,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       };
       searchValueChildren.push(fromNurseryNode);
 
-      const destinationNurseryNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'destinationName',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
-      };
-      searchValueChildren.push(destinationNurseryNode);
-
       const speciesNameNode: FieldNodePayload = {
         operation: 'field',
         field: 'batchWithdrawals.batch_species_scientificName',
@@ -151,6 +148,26 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         values: [debouncedSearchTerm],
       };
       searchValueChildren.push(speciesNameNode);
+
+      if (!selectedPlantingSite) {
+        const destinationNurseryNode: FieldNodePayload = {
+          operation: 'field',
+          field: 'destinationName',
+          type: 'Fuzzy',
+          values: [debouncedSearchTerm],
+        };
+        searchValueChildren.push(destinationNurseryNode);
+      }
+    }
+
+    if (selectedPlantingSite && selectedPlantingSite.id !== -1) {
+      const destinationNurseryNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'destinationName',
+        type: 'Fuzzy',
+        values: [selectedPlantingSite.name],
+      };
+      searchValueChildren.push(destinationNurseryNode);
     }
 
     const filterValueChildren: FieldNodePayload[] = [...Object.values(filters)];
@@ -182,7 +199,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       finalSearchValueChildren.push(filterValueNodes);
     }
     return finalSearchValueChildren;
-  }, [filters, debouncedSearchTerm]);
+  }, [filters, debouncedSearchTerm, selectedPlantingSite]);
 
   const onApplyFilters = useCallback(async () => {
     const searchChildren: FieldNodePayload[] = getSearchChildren();

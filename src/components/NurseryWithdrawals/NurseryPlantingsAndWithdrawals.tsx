@@ -3,7 +3,7 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
@@ -12,17 +12,20 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { useAppDispatch } from 'src/redux/store';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import PageSnackbar from 'src/components/PageSnackbar';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import TfMain from 'src/components/common/TfMain';
 import PlantingProgress from './PlantingProgressTabContent';
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
+import { PlantingSite } from 'src/types/Tracking';
 
 type NurseryWithdrawalsProps = {
   reloadTracking: () => void;
+  selectedPlantingSite: PlantingSite;
 };
 
-export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
+export default function NurseryPlantingsAndWithdrawals({
+  reloadTracking,
+  selectedPlantingSite,
+}: NurseryWithdrawalsProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -55,37 +58,32 @@ export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: Nurse
   }, [tab, activeLocale]);
 
   return (
-    <TfMain>
-      <Box sx={{ paddingLeft: theme.spacing(3) }}>
-        <Grid container spacing={3} sx={{ marginTop: 0 }}>
-          <PageHeaderWrapper nextElement={contentRef.current}>
-            <Grid container spacing={3} sx={{ paddingLeft: theme.spacing(3), paddingBottom: theme.spacing(4) }}>
-              <Grid item xs={8}>
-                <Typography sx={{ marginTop: 0, marginBottom: 0, fontSize: '24px', fontWeight: 600 }}>
-                  {strings.WITHDRAWALS}
-                </Typography>
-              </Grid>
-            </Grid>
-          </PageHeaderWrapper>
-          <Grid item xs={12}>
-            <PageSnackbar />
-          </Grid>
-          <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1}>
-            <Tabs
-              activeTab={activeTab}
-              onTabChange={onTabChange}
-              tabs={[
-                {
-                  id: 'planting_progress',
-                  label: strings.PLANTING_PROGRESS,
-                  children: <PlantingProgress reloadTracking={reloadTracking} />,
-                },
-                { id: 'withdrawal_history', label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
-              ]}
-            />
-          </Box>
+    <Box sx={{ paddingLeft: theme.spacing(3) }}>
+      <Grid container spacing={3} sx={{ marginTop: 0 }}>
+        <Grid item xs={12}>
+          <PageSnackbar />
         </Grid>
-      </Box>
-    </TfMain>
+        <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1}>
+          <Tabs
+            activeTab={activeTab}
+            onTabChange={onTabChange}
+            tabs={[
+              {
+                id: 'planting_progress',
+                label: strings.PLANTING_PROGRESS,
+                children: (
+                  <PlantingProgress reloadTracking={reloadTracking} selectedPlantingSiteId={selectedPlantingSite.id} />
+                ),
+              },
+              {
+                id: 'withdrawal_history',
+                label: strings.WITHDRAWAL_HISTORY,
+                children: <NurseryWithdrawals selectedPlantingSite={selectedPlantingSite} />,
+              },
+            ]}
+          />
+        </Box>
+      </Grid>
+    </Box>
   );
 }
