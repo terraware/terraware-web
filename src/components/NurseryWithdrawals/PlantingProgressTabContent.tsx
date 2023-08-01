@@ -99,7 +99,9 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
             reloadTracking={reloadTrackingAndObservations}
           />
         }
-        map={<PlantingProgressMap plantingSiteId={selectedPlantingSiteId} />}
+        map={
+          <PlantingProgressMap plantingSiteId={selectedPlantingSiteId} reloadTracking={reloadTrackingAndObservations} />
+        }
       />
     </Card>
   );
