@@ -1,9 +1,9 @@
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 
 type PlantingSiteProgressCardProps = {
@@ -12,16 +12,7 @@ type PlantingSiteProgressCardProps = {
 
 export default function PlantingSiteProgressCard({ plantingSiteId }: PlantingSiteProgressCardProps): JSX.Element {
   const theme = useTheme();
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
-
-  const totalArea = plantingSite?.areaHa ?? 0;
-  const totalPlantedArea = useMemo(() => {
-    return (
-      plantingSite?.plantingZones
-        ?.flatMap((zone) => zone.plantingSubzones)
-        ?.reduce((prev, curr) => (curr.plantingCompleted ? +curr.areaHa + prev : prev), 0) ?? 0
-    );
-  }, [plantingSite]);
+  const reportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
 
   return (
     <OverviewItemCard
@@ -32,7 +23,7 @@ export default function PlantingSiteProgressCard({ plantingSiteId }: PlantingSit
             {strings.PLANTING_PROGRESS_CARD_TITLE}
           </Typography>
           <Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
-            {totalArea > 0 ? <FormattedNumber value={Math.round((100 * totalPlantedArea) / totalArea) || 0} /> : '0'}%
+            <FormattedNumber value={reportedPlants?.progressPercent ?? 0} />%
           </Typography>
           <Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}>
             {strings.PLANTING_PROGRESS_DESCRIPTION_1}
