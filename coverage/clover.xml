@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1690848862433" clover="3.2.0">
-  <project timestamp="1690848862433" name="All files">
-    <metrics statements="11933" coveredstatements="362" conditionals="7522" coveredconditionals="90" methods="3743" coveredmethods="77" elements="23198" coveredelements="529" complexity="0" loc="11933" ncloc="11933" packages="101" files="476" classes="476"/>
+<coverage generated="1690906228273" clover="3.2.0">
+  <project timestamp="1690906228273" name="All files">
+    <metrics statements="11933" coveredstatements="362" conditionals="7524" coveredconditionals="90" methods="3743" coveredmethods="77" elements="23200" coveredelements="529" complexity="0" loc="11933" ncloc="11933" packages="101" files="476" classes="476"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="169" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5977,7 +5977,7 @@
       </file>
     </package>
     <package name="src.components.PlantsV2.components">
-      <metrics statements="339" coveredstatements="0" conditionals="241" coveredconditionals="0" methods="112" coveredmethods="0"/>
+      <metrics statements="339" coveredstatements="0" conditionals="243" coveredconditionals="0" methods="112" coveredmethods="0"/>
       <file name="HectaresPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/HectaresPlantedCard.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -6231,7 +6231,7 @@
         <line num="26" count="0" type="stmt"/>
       </file>
       <file name="PlantsReportedPerSpeciesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/PlantsReportedPerSpeciesCard.tsx">
-        <metrics statements="29" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="29" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
@@ -6259,8 +6259,8 @@
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="54" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
       </file>
       <file name="TotalMoratlityRateCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/TotalMoratlityRateCard.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
