@@ -51,7 +51,14 @@ export default function PlantsReportedPerSpeciesCard({
 
   const chartData = useMemo(() => {
     if (!labels?.length || !values?.length) {
-      return undefined;
+      return {
+        labels: [],
+        datasets: [
+          {
+            values: [],
+          },
+        ],
+      };
     }
 
     return {
@@ -79,6 +86,8 @@ export default function PlantsReportedPerSpeciesCard({
               chartData={chartData}
               customTooltipTitles={tooltipTitles}
               maxWidth='100%'
+              minHeight='127px'
+              yLimits={!values?.length ? { min: 0, max: 200 } : undefined}
             />
           </Box>
         </Box>
