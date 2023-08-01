@@ -6,6 +6,7 @@ import { makeStyles } from '@mui/styles';
 import { SortOrder, Tooltip } from '@terraware/web-components';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { NurseryWithdrawalService } from 'src/services';
@@ -62,6 +63,7 @@ export default function NurseryWithdrawalsTable({ selectedPlantingSite }: Nurser
   const [filters, setFilters] = useState<Record<string, any>>({});
   const subzoneParam = query.get('subzoneName');
   const siteParam = query.get('siteName');
+  const trackingV2 = isEnabled('TrackingV2');
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -76,33 +78,40 @@ export default function NurseryWithdrawalsTable({ selectedPlantingSite }: Nurser
     direction: 'Descending',
   } as SearchSortOrder);
 
-  const filterColumns = useMemo<FilterField[]>(
-    () =>
-      activeLocale
-        ? [
-            { name: 'purpose', label: strings.PURPOSE, type: 'multiple_selection' },
-            { name: 'facility_name', label: strings.FROM_NURSERY, type: 'multiple_selection' },
-            { name: 'destinationName', label: strings.DESTINATION, type: 'multiple_selection' },
-            { name: 'plantingSubzoneNames', label: strings.SUBZONE, type: 'multiple_selection' },
-            {
-              name: 'batchWithdrawals.batch_species_scientificName',
-              label: strings.SPECIES,
-              type: 'multiple_selection',
-            },
-            { name: 'withdrawnDate', label: strings.WITHDRAWN_DATE, type: 'date_range' },
-          ]
-        : [],
-    [activeLocale]
-  );
+  const filterColumns = useMemo<FilterField[]>(() => {
+    const destination: FilterField[] = trackingV2
+      ? []
+      : [{ name: 'destinationName', label: strings.DESTINATION, type: 'multiple_selection' }];
+
+    return activeLocale
+      ? [
+          { name: 'purpose', label: strings.PURPOSE, type: 'multiple_selection' },
+          { name: 'facility_name', label: strings.FROM_NURSERY, type: 'multiple_selection' },
+          ...destination,
+          { name: 'plantingSubzoneNames', label: strings.SUBZONE, type: 'multiple_selection' },
+          {
+            name: 'batchWithdrawals.batch_species_scientificName',
+            label: strings.SPECIES,
+            type: 'multiple_selection',
+          },
+          { name: 'withdrawnDate', label: strings.WITHDRAWN_DATE, type: 'date_range' },
+        ]
+      : [];
+  }, [activeLocale, trackingV2]);
 
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
   useEffect(() => {
     const getApiSearchResults = async () => {
-      setFilterOptions(await NurseryWithdrawalService.getFilterOptions(selectedOrganization.id));
+      setFilterOptions(
+        await NurseryWithdrawalService.getFilterOptions(
+          selectedOrganization.id,
+          selectedPlantingSite?.id && selectedPlantingSite.id !== -1 ? selectedPlantingSite?.name : undefined
+        )
+      );
     };
     getApiSearchResults();
-  }, [selectedOrganization]);
+  }, [selectedOrganization.id, selectedPlantingSite?.id, selectedPlantingSite?.name]);
 
   const filterPillData = useMemo(
     () =>
@@ -164,7 +173,7 @@ export default function NurseryWithdrawalsTable({ selectedPlantingSite }: Nurser
       const destinationNurseryNode: FieldNodePayload = {
         operation: 'field',
         field: 'destinationName',
-        type: 'Fuzzy',
+        type: 'Exact',
         values: [selectedPlantingSite.name],
       };
       searchValueChildren.push(destinationNurseryNode);
