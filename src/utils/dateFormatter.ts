@@ -1,3 +1,5 @@
+import strings from 'src/strings';
+
 /**
  * Returns <Month> <Year> (eg. July 2023) from yyyy-mm-dd format
  */
@@ -20,7 +22,42 @@ export const getShortTime = (dateTime: string, locale: string | undefined | null
     .toLowerCase();
 
 // return string version for a month from number, eg. 1 -> January
-export const getMonth = (month: number | undefined | null, locale: string | undefined | null): string =>
-  month
-    ? new Intl.DateTimeFormat(locale || 'en-US', { month: 'long' }).format(new Date(Date.UTC(1969, month, 1, 0, 0, 0)))
-    : '';
+export const getMonth = (month: number | undefined | null, locale: string | undefined | null): string => {
+  if (!month || !locale) {
+    return '';
+  }
+
+  // avoid generating the key like so
+  // return strings[`MONTH_${month.toString().padStart(2, '0')}`];
+  // which won't catch missing key issues
+
+  // use an exhaustive switch instead
+  switch (month) {
+    case 1:
+      return strings.MONTH_01;
+    case 2:
+      return strings.MONTH_02;
+    case 3:
+      return strings.MONTH_03;
+    case 4:
+      return strings.MONTH_04;
+    case 5:
+      return strings.MONTH_05;
+    case 6:
+      return strings.MONTH_06;
+    case 7:
+      return strings.MONTH_07;
+    case 8:
+      return strings.MONTH_08;
+    case 9:
+      return strings.MONTH_09;
+    case 10:
+      return strings.MONTH_10;
+    case 11:
+      return strings.MONTH_11;
+    case 12:
+      return strings.MONTH_12;
+    default:
+      return '';
+  }
+};
