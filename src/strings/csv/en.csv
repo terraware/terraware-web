@@ -682,7 +682,6 @@ OBSERVATIONS_DOWNLOAD_APP,"To complete observations, download the Terraware app 
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Observations are when you record data from a sample of monitoring plots using our mobile app in the field. This allows us to calculate mortality rates, and eventually carbon sequestration."
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"You will be notified when it is time to take your observations (typically, the next time you end a planting season). After you've completed your first observations, you'll see the records here."
 OBSERVATIONS_EMPTY_STATE_TITLE,No Observations Yet
-OBSERVATIONS_MAP_VIEW_PROMPT,"In order to access map view, please select a single planting site."
 OBSERVATIONS_REQUIRED_BY_DATE,{0} monitoring plots require observation by {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations with the Terraware App
 OBSERVED_PLANTS_CARD_DESCRIPTION_1,This is the total number of species found in your latest observations.
@@ -775,6 +774,7 @@ PLANTING_PROGRESS_TABLE_DESCRIPTION,Use the checkboxes next to each subzone to m
 PLANTING_SEASON_END,Planting Season End
 PLANTING_SEASON_START,Planting Season Start
 PLANTING_SITE,Planting Site
+PLANTING_SITE_MAP_VIEW_PROMPT,"In order to access map view, please select a single planting site."
 PLANTING_SITE_TYPE,Planting Site Type
 PLANTING_SITE_WITH_MAP_HELP,"If you are a Terraformation partner or accelerator participant, please [contact us] to create a site with a map."
 PLANTING_SITES,Planting Sites

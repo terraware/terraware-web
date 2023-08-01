@@ -46,7 +46,6 @@ export default function NurseryWithdrawals({ reloadTracking }: NurseryWithdrawal
         {selectedPlantingSite && (
           <NurseryPlantingsAndWithdrawals reloadTracking={reloadTracking} selectedPlantingSite={selectedPlantingSite} />
         )}
-        ;
       </PlantsPrimaryPage>
     );
   }
