@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1690918542836" clover="3.2.0">
-  <project timestamp="1690918542836" name="All files">
-    <metrics statements="11933" coveredstatements="362" conditionals="7524" coveredconditionals="90" methods="3743" coveredmethods="77" elements="23200" coveredelements="529" complexity="0" loc="11933" ncloc="11933" packages="101" files="476" classes="476"/>
+<coverage generated="1690920981471" clover="3.2.0">
+  <project timestamp="1690920981472" name="All files">
+    <metrics statements="11926" coveredstatements="362" conditionals="7516" coveredconditionals="90" methods="3741" coveredmethods="77" elements="23183" coveredelements="529" complexity="0" loc="11926" ncloc="11926" packages="101" files="476" classes="476"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="169" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5977,7 +5977,7 @@
       </file>
     </package>
     <package name="src.components.PlantsV2.components">
-      <metrics statements="339" coveredstatements="0" conditionals="243" coveredconditionals="0" methods="112" coveredmethods="0"/>
+      <metrics statements="334" coveredstatements="0" conditionals="235" coveredconditionals="0" methods="109" coveredmethods="0"/>
       <file name="HectaresPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/HectaresPlantedCard.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -6220,15 +6220,10 @@
         <line num="42" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteProgressCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/PlantingSiteProgressCard.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
-        <line num="17" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="26" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
       </file>
       <file name="PlantsReportedPerSpeciesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/PlantsReportedPerSpeciesCard.tsx">
         <metrics statements="29" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="8" coveredmethods="0"/>
@@ -11814,7 +11809,7 @@
       </file>
     </package>
     <package name="src.redux.features.tracking">
-      <metrics statements="108" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="43" coveredmethods="0"/>
+      <metrics statements="106" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="44" coveredmethods="0"/>
       <file name="sitePopulationSelector.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/tracking/sitePopulationSelector.ts">
         <metrics statements="33" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
@@ -11852,7 +11847,7 @@
         <line num="54" count="0" type="stmt"/>
       </file>
       <file name="trackingSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/tracking/trackingSelectors.ts">
-        <metrics statements="20" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="18" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -11864,15 +11859,13 @@
         <line num="18" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
       </file>
       <file name="trackingSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/tracking/trackingSlice.ts">
         <metrics statements="26" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
