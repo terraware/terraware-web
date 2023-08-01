@@ -76,7 +76,15 @@ export default function NurseryPlantingsAndWithdrawals({
 
   return (
     <Box sx={{ paddingLeft: 3 }} display='flex' flexDirection='column' flexGrow={1}>
-      <Grid container spacing={3} sx={{ marginTop: 0 }} display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
+      <Grid
+        container
+        spacing={3}
+        sx={{ marginTop: 0 }}
+        display='flex'
+        flexDirection='column'
+        flexGrow={1}
+        className={classes.tabs}
+      >
         <Tabs
           activeTab={activeTab}
           onTabChange={onTabChange}

@@ -59,7 +59,7 @@ export enum APP_PATHS {
   PLANTING_SITES_ZONE_VIEW = '/planting-sites/:plantingSiteId/zone/:zoneId',
   PLANTING_SITES_SUBZONE_VIEW = '/planting-sites/:plantingSiteId/zone/:zoneId/subzone/:subzoneId',
   NURSERY_WITHDRAWALS = '/nursery/withdrawals',
-  NURSERY_WITHDRAWALS_V2 = '/nursery/withdrawals2/:plantingSiteId',
-  NURSERY_WITHDRAWALS_DETAILS = '/nursery/withdrawals/:withdrawalId',
+  NURSERY_WITHDRAWALS_DETAILS = '/nursery/withdrawals/details/:withdrawalId',
+  NURSERY_SITE_WITHDRAWALS = '/nursery/withdrawals/:plantingSiteId',
   NURSERY_REASSIGNMENT = '/nursery/reassignment/:deliveryId',
 }
