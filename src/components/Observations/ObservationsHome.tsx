@@ -56,7 +56,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       ) : selectedPlantingSite && observationsResults?.length ? (
         <ObservationsDataView selectedPlantingSiteId={selectedPlantingSite.id} {...props} />
       ) : (
-        <Card style={{ margin: 'auto' }}>
+        <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
           <EmptyStateContent
             title={strings.OBSERVATIONS_EMPTY_STATE_TITLE}
             subtitle={[strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]}
