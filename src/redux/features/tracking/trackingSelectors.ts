@@ -19,14 +19,11 @@ export const selectSiteReportedPlantsError = (state: RootState, plantingSiteId: 
 
 export const selectZoneProgress = createCachedSelector(
   (state: RootState, plantingSiteId: number) => selectPlantingSite(state, plantingSiteId),
-  (plantingSite) => {
+  (state: RootState, plantingSiteId: number) => selectSiteReportedPlants(state, plantingSiteId),
+  (plantingSite, reportedPlants) => {
     const zoneProgress: Record<number, { name: string; progress: number; targetDensity: number }> = {};
     plantingSite?.plantingZones?.forEach((zone) => {
-      let completedPlantingArea = 0;
-      zone.plantingSubzones.forEach((sz) => {
-        completedPlantingArea += sz.plantingCompleted ? +sz.areaHa : 0;
-      });
-      const percentProgress = Math.round((100 * completedPlantingArea) / +zone.areaHa);
+      const percentProgress = reportedPlants?.plantingZones?.find((z) => z.id === zone.id)?.progressPercent ?? 0;
       zoneProgress[zone.id] = { name: zone.name, progress: percentProgress, targetDensity: zone.targetPlantingDensity };
     });
     return zoneProgress;
