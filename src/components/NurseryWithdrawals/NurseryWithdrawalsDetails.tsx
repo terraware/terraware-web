@@ -4,6 +4,7 @@ import { Box, Tab, Theme, Typography, useTheme } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
 import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
+import isEnabled from 'src/features';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { useEffect, useRef, useState } from 'react';
@@ -76,6 +77,9 @@ export default function NurseryWithdrawalsDetails({
   const [withdrawalSummary, setWithdrawalSummary] = useState<WithdrawalSummary | undefined>(undefined);
   const [delivery, setDelivery] = useState<Delivery | undefined>(undefined);
   const [batches, setBatches] = useState<Batch[] | undefined>(undefined);
+
+  const trackingV2 = isEnabled('TrackingV2');
+
   useEffect(() => {
     const updateWithdrawal = async () => {
       const withdrawalResponse = await NurseryWithdrawalService.getNurseryWithdrawal(Number(withdrawalId));
@@ -166,7 +170,7 @@ export default function NurseryWithdrawalsDetails({
               id='back'
               to={APP_PATHS.NURSERY_WITHDRAWALS}
               className={classes.backToWithdrawals}
-              name={strings.WITHDRAWAL_LOG}
+              name={trackingV2 ? strings.WITHDRAWALS : strings.WITHDRAWAL_LOG}
             />
           </Box>
           <Box

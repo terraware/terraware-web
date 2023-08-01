@@ -9,6 +9,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import TfMain from 'src/components/common/TfMain';
 import TitleDescription from 'src/components/common/TitleDescription';
 import Card from 'src/components/common/Card';
@@ -59,6 +60,7 @@ export default function NurseryReassignment(): JSX.Element {
   const [reassignments, setReassignments] = useState<{ [subzoneId: string]: Reassignment }>({});
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
   const contentRef = useRef(null);
+  const trackingV2 = isEnabled('TrackingV2');
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
@@ -224,7 +226,7 @@ export default function NurseryReassignment(): JSX.Element {
             id='back'
             to={APP_PATHS.NURSERY_WITHDRAWALS}
             className={classes.backToWithdrawals}
-            name={strings.WITHDRAWAL_LOG}
+            name={trackingV2 ? strings.WITHDRAWALS : strings.WITHDRAWAL_LOG}
           />
         </Box>
         <Box marginTop={theme.spacing(3)}>

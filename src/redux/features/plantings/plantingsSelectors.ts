@@ -90,14 +90,16 @@ export const searchPlantingProgress = createSelector(
   (plantingProgress, query, plantingCompleted, plantingSiteId) => {
     return plantingProgress?.reduce((acc, curr) => {
       const { siteId, siteName, totalPlants, reported } = curr;
+      const matchesPlantingSite = plantingSiteId === undefined || plantingSiteId === -1 || siteId === plantingSiteId;
+      if (!matchesPlantingSite) {
+        return acc;
+      }
       if (reported && reported.length > 0) {
         reported?.forEach((progress) => {
           const matchesQuery = !query || regexMatch(progress.subzoneName, query);
           const matchesPlantingCompleted =
             plantingCompleted === undefined || progress.plantingCompleted === plantingCompleted;
-          const matchesPlantingSite =
-            plantingSiteId === undefined || plantingSiteId === -1 || siteId === plantingSiteId;
-          if (matchesQuery && matchesPlantingCompleted && matchesPlantingSite) {
+          if (matchesQuery && matchesPlantingCompleted) {
             acc.push({ siteId, siteName, totalPlants, ...progress });
           }
         });

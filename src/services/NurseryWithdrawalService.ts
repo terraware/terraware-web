@@ -174,7 +174,7 @@ const getWithdrawalPhotosList = async (withdrawalId: number): Promise<Response &
 /**
  * Get Filter Options
  */
-const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap> => {
+const getFilterOptions = async (organizationId: number, plantingSiteName?: string): Promise<FieldOptionsMap> => {
   const searchParams: SearchRequestPayload = {
     prefix: 'nurseryWithdrawals',
     fields: [
@@ -185,7 +185,19 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
       'plantingSubzoneNames',
       'batchWithdrawals.batch_species_scientificName',
     ],
-    search: SearchService.convertToSearchNodePayload({}, organizationId),
+    search: SearchService.convertToSearchNodePayload(
+      plantingSiteName
+        ? [
+            {
+              operation: 'field',
+              field: 'destinationName',
+              type: 'Exact',
+              values: [plantingSiteName],
+            },
+          ]
+        : [],
+      organizationId
+    ),
     sortOrder: [{ field: 'id', direction: 'Ascending' }],
     count: 1000,
   };

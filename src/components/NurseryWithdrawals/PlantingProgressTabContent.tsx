@@ -117,10 +117,8 @@ type SearchComponentProps = SearchProps & {
 function SearchComponent(props: SearchComponentProps): JSX.Element {
   const { search, onSearch, filtersProps, view } = props;
   return (
-    <>
-      <div style={{ display: view === 'list' ? 'flex' : 'none' }}>
-        <Search search={search} onSearch={onSearch} filtersProps={filtersProps} />
-      </div>
-    </>
+    <div style={{ display: 'flex' }}>
+      {view === 'list' && <Search search={search} onSearch={onSearch} filtersProps={filtersProps} />}
+    </div>
   );
 }
