@@ -1,3 +1,4 @@
+ac0b4a4e1 SW-3908 Changes to PR 1597 (warning dialog on update planting complete on map) (#1613)
 bc0cdd0c3 SW-3957 Fix odd zoom-to-fit behavior on map when switching between list and map views (#1615)
 daed96275 SW-3845 Add "zoom to fit" button to maps (#1614)
 27bacbbd5 SW-3969 Seed bank, Nursery, and Planting Sites selection lists should be alphabetized (#1610)

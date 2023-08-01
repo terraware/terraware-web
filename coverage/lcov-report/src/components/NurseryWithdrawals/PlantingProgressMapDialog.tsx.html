@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -171,15 +171,7 @@
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a>
-<a name='L117'></a><a href='#L117'>117</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -220,19 +212,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -297,7 +281,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import strings from 'src/strings';
 import { selectSubzoneSpeciesPopulations } from 'src/redux/features/tracking/sitePopulationSelector';
 import { useAppSelector } from 'src/redux/store';
@@ -325,7 +309,6 @@ type PlantingProgressMapDialogProps = {
   siteName: string;
   plantingComplete: boolean;
   onUpdatePlantingComplete: (id: number, val: boolean) =&gt; void;
-  onOpen?: (id: number) =&gt; void;
   busy: boolean;
 };
 &nbsp;
@@ -335,7 +318,6 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   siteName,
   plantingComplete,
   onUpdatePlantingComplete,
-  onOpen,
   busy,
 }: PlantingProgressMapDialogProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -344,12 +326,6 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   const totalPlants = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return Object.values(species).reduce(<span class="fstat-no" title="function not covered" >(p</span>rev, curr) =&gt; <span class="cstat-no" title="statement not covered" >prev + curr,</span> 0);</span>
   }, [species]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (onOpen) {</span>
-<span class="cstat-no" title="statement not covered" >      onOpen(id);</span>
-    }
-  }, [onOpen, id]);
 &nbsp;
   const getWithdrawalHistoryLink = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const filterParam = <span class="cstat-no" title="statement not covered" >`subzoneName=${encodeURIComponent(subzoneName)}&amp;siteName=${encodeURIComponent(siteName)}`;</span>
@@ -418,7 +394,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-31T22:35:06.104Z
+                at 2023-08-01T00:14:22.073Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
