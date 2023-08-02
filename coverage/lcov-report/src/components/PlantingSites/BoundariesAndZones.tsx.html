@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/68</span>
             </div>
         
             
@@ -308,7 +308,21 @@
 <a name='L243'></a><a href='#L243'>243</a>
 <a name='L244'></a><a href='#L244'>244</a>
 <a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -443,7 +457,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -461,6 +474,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -685,7 +713,6 @@ type PlantingSiteMapViewProps = {
 function <span class="fstat-no" title="function not covered" >PlantingSiteMapView(</span>{ plantingSite, data, search }: PlantingSiteMapViewProps): JSX.Element | null {
   const classes = <span class="cstat-no" title="statement not covered" >useMapTooltipStyles();</span>
   const [searchZoneEntities, setSearchZoneEntities] = <span class="cstat-no" title="statement not covered" >useState&lt;MapEntityId[]&gt;([]);</span>
-  const layerOptions: MapLayer[] = <span class="cstat-no" title="statement not covered" >['Planting Site', 'Zones', 'Sub-Zones', 'Monitoring Plots'];</span>
   const [includedLayers, setIncludedLayers] = <span class="cstat-no" title="statement not covered" >useState&lt;MapLayer[]&gt;(['Planting Site', 'Zones', 'Monitoring Plots']);</span>
   const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
   const timeZone = <span class="cstat-no" title="statement not covered" >plantingSite.timeZone ?? defaultTimeZone.get().id;</span>
@@ -708,6 +735,21 @@ function <span class="fstat-no" title="function not covered" >PlantingSiteMapVie
     }
   }, [data, search]);
 &nbsp;
+  const mapData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data });</span>
+  }, [plantingSite, data]);
+&nbsp;
+  const layerOptions: MapLayer[] = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const result: MapLayer[] = <span class="cstat-no" title="statement not covered" >['Planting Site', 'Zones', 'Sub-Zones'];</span>
+<span class="cstat-no" title="statement not covered" >    if (</span>
+      (mapData.permanentPlot?.entities &amp;&amp; mapData.permanentPlot.entities.length &gt; 0) ||
+      (mapData.temporaryPlot?.entities &amp;&amp; mapData.temporaryPlot.entities.length &gt; 0)
+    ) {
+<span class="cstat-no" title="statement not covered" >      result.push('Monitoring Plots');</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return result;</span>
+  }, [mapData]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!plantingSite.boundary) {</span>
 <span class="cstat-no" title="statement not covered" >    return null;</span>
   }
@@ -716,7 +758,7 @@ function <span class="fstat-no" title="function not covered" >PlantingSiteMapVie
     &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
       &lt;PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot']} /&gt;
       &lt;PlantingSiteMap
-        mapData={MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data })}
+        mapData={mapData}
         style={{ borderRadius: '24px' }}
         layers={includedLayers}
         highlightEntities={searchZoneEntities}
@@ -805,7 +847,7 @@ const contextRenderer =
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-02T16:13:55.055Z
+                at 2023-08-02T17:47:46.602Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
