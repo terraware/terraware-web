@@ -775,6 +775,7 @@ PLANTING_PROGRESS_TABLE_DESCRIPTION,Utiliza las casillas de verificación junto 
 PLANTING_SEASON_END,Término de temporada de plantación
 PLANTING_SEASON_START,Inicio de temporada de plantación
 PLANTING_SITE,Lugar de plantación
+PLANTING_SITE_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, seleccione un solo lugar de siembra."
 PLANTING_SITE_TYPE,Tipo de lugar de plantación
 PLANTING_SITE_WITH_MAP_HELP,"Si usted es un socio de Terraformation o un participante del acelerador, por favor [contáctenos] para crear un sitio con un mapa."
 PLANTING_SITES,Sitios de plantación
