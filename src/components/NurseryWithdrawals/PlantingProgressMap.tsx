@@ -158,8 +158,8 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
       />
     </>
   ) : (
-    <Typography fontSize='18px' fontWeight={500} color={theme.palette.TwClrTxtSecondary} textAlign='center'>
-      {plantingSiteId === -1 ? strings.PLANTING_SITE_MAP_VIEW_PROMPT : strings.NO_MAP_DATA}
+    <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt} textAlign='center'>
+      {strings.NO_MAP_DATA}
     </Typography>
   );
 }
