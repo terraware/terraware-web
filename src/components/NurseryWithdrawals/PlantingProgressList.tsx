@@ -19,6 +19,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import StatsWarningDialog from './StatsWarningModal';
 import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -231,7 +232,11 @@ const DetailsRenderer =
         ? `subzoneName=${encodeURIComponent(row.subzoneName)}&siteName=${encodeURIComponent(row.siteName)}`
         : `siteName=${encodeURIComponent(row.siteName)}`;
       const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
-      return <Link to={url}>{row.totalSeedlingsSent as React.ReactNode}</Link>;
+      return (
+        <Link to={url}>
+          <FormattedNumber value={row.totalSeedlingsSent} />
+        </Link>
+      );
     };
 
     if (column.key === 'totalSeedlingsSent') {

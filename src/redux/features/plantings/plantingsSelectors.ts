@@ -19,12 +19,7 @@ export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
       return plantingsBySubzone;
     }
     const subzoneId = planting.plantingSubzone.id;
-    const totalPlants = Number(planting.plantingSubzone['totalPlants(raw)']);
-    if (plantingsBySubzone[subzoneId]) {
-      plantingsBySubzone[subzoneId] = plantingsBySubzone[subzoneId] + totalPlants;
-    } else {
-      plantingsBySubzone[subzoneId] = totalPlants;
-    }
+    plantingsBySubzone[subzoneId] = planting.plantingSubzone['totalPlants(raw)'];
     return plantingsBySubzone;
   }, {});
 };
@@ -32,11 +27,7 @@ export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
 export const getTotalPlantsBySite = (plantingsSites: PlantingSiteSearchResult[]) => {
   return plantingsSites?.reduce((totalPlantsBySite: { [key: string]: number }, plantingSite) => {
     const plantingSiteId = plantingSite.id;
-    if (totalPlantsBySite[plantingSiteId]) {
-      totalPlantsBySite[plantingSiteId] = totalPlantsBySite[plantingSiteId] + plantingSite['totalPlants(raw)'];
-    } else {
-      totalPlantsBySite[plantingSiteId] = plantingSite['totalPlants(raw)'];
-    }
+    totalPlantsBySite[plantingSiteId] = plantingSite['totalPlants(raw)'];
     return totalPlantsBySite;
   }, {});
 };

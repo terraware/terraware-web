@@ -1,7 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
-import { SearchNodePayload, SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { SearchNodePayload, SearchCriteria, SearchResponseElement } from 'src/types/Search';
 import HttpService from './HttpService';
-import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 /**
  * Service for user related functionality
@@ -60,60 +59,6 @@ async function search(entity: SearchRequestPayload): Promise<SearchResponseEleme
   }
 }
 
-type SearchFieldType = {
-  operation: string;
-  children: {
-    operation: string;
-    field: string;
-    type: string;
-    values: string[];
-  }[];
-};
-
-async function searchPlantingSites(
-  organizationId: number,
-  searchField?: SearchFieldType,
-  sortOrder?: SearchSortOrder
-): Promise<PlantingSiteSearchResult[] | null> {
-  const defaultSortOder = {
-    field: 'name',
-    direction: 'Ascending',
-  } as SearchSortOrder;
-
-  const params = {
-    fields: [
-      'boundary',
-      'id',
-      'name',
-      'numPlantingZones',
-      'numPlantingSubzones',
-      'description',
-      'timeZone',
-      'totalPlants(raw)',
-    ],
-    prefix: 'plantingSites',
-    sortOrder: [sortOrder || defaultSortOder],
-    search: {
-      operation: 'and',
-      children: [
-        {
-          field: 'organization_id',
-          operation: 'field',
-          values: [organizationId],
-        },
-      ],
-    },
-    count: 0,
-  };
-
-  if (searchField) {
-    const children: any = params.search.children;
-    children.push(searchField);
-  }
-
-  return (await search(params)) as PlantingSiteSearchResult[];
-}
-
 async function searchCsv(entity: SearchRequestPayload): Promise<any> {
   const headers = {
     accept: 'text/csv',
@@ -133,7 +78,6 @@ const SearchService = {
   convertToSearchNodePayload,
   search,
   searchCsv,
-  searchPlantingSites,
 };
 
 export default SearchService;
