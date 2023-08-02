@@ -144,7 +144,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       const isFirstLayerAdded = () => sources.length === 0;
       if (layers === undefined || layers?.includes('Monitoring Plots')) {
         const monitoringPlotsFirst = isFirstLayerAdded();
-        if (mapData.temporaryPlot) {
+        if (mapData.temporaryPlot && mapData.temporaryPlot.entities.length > 0) {
           sources.push({
             ...mapData.temporaryPlot,
             isInteractive: monitoringPlotsFirst,
@@ -158,7 +158,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             ...getRenderAttributes('temporaryPlot'),
           });
         }
-        if (mapData.permanentPlot) {
+        if (mapData.permanentPlot && mapData.permanentPlot.entities.length > 0) {
           sources.push({
             ...mapData.permanentPlot,
             isInteractive: monitoringPlotsFirst,
