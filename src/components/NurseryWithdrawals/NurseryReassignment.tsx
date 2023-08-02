@@ -132,7 +132,11 @@ export default function NurseryReassignment(): JSX.Element {
 
   const goToWithdrawals = () => {
     const withdrawalId = query.has('fromWithdrawal') ? delivery?.withdrawalId : undefined;
-    history.push({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
+    const search = trackingV2 && !withdrawalId ? 'tab=withdrawal_history' : '';
+    const pathname = withdrawalId
+      ? APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(':withdrawalId', withdrawalId.toString())
+      : APP_PATHS.NURSERY_WITHDRAWALS;
+    history.push({ pathname, search });
   };
 
   const reassign = async () => {
