@@ -20,11 +20,7 @@ export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
     }
     const subzoneId = planting.plantingSubzone.id;
     const totalPlants = Number(planting.plantingSubzone['totalPlants(raw)']);
-    if (plantingsBySubzone[subzoneId]) {
-      plantingsBySubzone[subzoneId] = plantingsBySubzone[subzoneId] + totalPlants;
-    } else {
-      plantingsBySubzone[subzoneId] = totalPlants;
-    }
+    plantingsBySubzone[subzoneId] = totalPlants;
     return plantingsBySubzone;
   }, {});
 };
