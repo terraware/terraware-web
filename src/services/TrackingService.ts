@@ -249,7 +249,7 @@ async function searchPlantingSites(
   searchField?: SearchFieldType,
   sortOrder?: SearchSortOrder
 ): Promise<PlantingSiteSearchResult[] | null> {
-  const defaultSortOder = {
+  const defaultSortOrder = {
     field: 'name',
     direction: 'Ascending',
   } as SearchSortOrder;
@@ -266,7 +266,7 @@ async function searchPlantingSites(
       'totalPlants(raw)',
     ],
     prefix: 'plantingSites',
-    sortOrder: [sortOrder || defaultSortOder],
+    sortOrder: [sortOrder || defaultSortOrder],
     search: {
       operation: 'and',
       children: [
