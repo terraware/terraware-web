@@ -146,7 +146,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
             <PlantingProgressMapDialog
               id={properties.id}
               subzoneName={properties.fullName}
-              siteName={plantingSite?.name || ''}
+              siteId={plantingSite?.id || -1}
               plantingComplete={subzonesComplete[properties.id]}
               onUpdatePlantingComplete={updatePlantingComplete}
               busy={dispatching}

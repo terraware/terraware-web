@@ -228,10 +228,9 @@ const DetailsRenderer =
     const { column, row } = props;
 
     const createLinkToWithdrawals = () => {
-      const filterParam = row.subzoneName
-        ? `subzoneName=${encodeURIComponent(row.subzoneName)}&siteName=${encodeURIComponent(row.siteName)}`
-        : `siteName=${encodeURIComponent(row.siteName)}`;
-      const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
+      const siteUrl = APP_PATHS.NURSERY_SITE_WITHDRAWALS.replace(':plantingSiteId', row.siteId.toString());
+      const filterParam = row.subzoneName ? `&subzoneName=${encodeURIComponent(row.subzoneName)}` : '';
+      const url = `${siteUrl}?tab=withdrawal_history${filterParam}`;
       return (
         <Link to={url}>
           <FormattedNumber value={row.totalSeedlingsSent} />

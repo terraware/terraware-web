@@ -62,7 +62,6 @@ export default function NurseryWithdrawalsTable({ selectedPlantingSite }: Nurser
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [filters, setFilters] = useState<Record<string, any>>({});
   const subzoneParam = query.get('subzoneName');
-  const siteParam = query.get('siteName');
   const trackingV2 = isEnabled('TrackingV2');
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -221,7 +220,7 @@ export default function NurseryWithdrawalsTable({ selectedPlantingSite }: Nurser
     );
     if (apiSearchResults) {
       if (getRequestId('searchWithdrawals') === requestId) {
-        if (selectedPlantingSite?.name) {
+        if (selectedPlantingSite?.id !== -1 && selectedPlantingSite?.name) {
           // Workaround to get Exact matches on destination name
           setSearchResults(apiSearchResults.filter((result) => result.destinationName === selectedPlantingSite.name));
         } else {
@@ -229,23 +228,7 @@ export default function NurseryWithdrawalsTable({ selectedPlantingSite }: Nurser
         }
       }
     }
-  }, [getSearchChildren, selectedOrganization, searchSortOrder, selectedPlantingSite?.name]);
-
-  useEffect(() => {
-    if (siteParam) {
-      query.delete('siteName');
-      history.replace(getLocation(location.pathname, location, query.toString()));
-      setFilters((curr) => ({
-        ...curr,
-        destinationName: {
-          field: 'destinationName',
-          operation: 'field',
-          type: 'Exact',
-          values: [siteParam],
-        },
-      }));
-    }
-  }, [siteParam, query, history, location]);
+  }, [getSearchChildren, selectedOrganization, searchSortOrder, selectedPlantingSite?.id, selectedPlantingSite?.name]);
 
   useEffect(() => {
     if (subzoneParam) {
