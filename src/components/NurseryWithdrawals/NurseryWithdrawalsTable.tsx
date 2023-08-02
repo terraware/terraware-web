@@ -139,8 +139,10 @@ export default function NurseryWithdrawalsTable({ selectedPlantingSite }: Nurser
   };
 
   const getSearchChildren = useCallback(() => {
+    const filterValueChildren: FieldNodePayload[] = [...Object.values(filters)];
     const finalSearchValueChildren: FieldNodePayload[] = [];
     const searchValueChildren: FieldNodePayload[] = [];
+
     if (debouncedSearchTerm) {
       const fromNurseryNode: FieldNodePayload = {
         operation: 'field',
@@ -170,16 +172,14 @@ export default function NurseryWithdrawalsTable({ selectedPlantingSite }: Nurser
     }
 
     if (selectedPlantingSite && selectedPlantingSite.id !== -1) {
-      const destinationNurseryNode: FieldNodePayload = {
+      const destinationSiteNode: FieldNodePayload = {
         operation: 'field',
         field: 'destinationName',
         type: 'Exact',
         values: [selectedPlantingSite.name],
       };
-      searchValueChildren.push(destinationNurseryNode);
+      filterValueChildren.push(destinationSiteNode);
     }
-
-    const filterValueChildren: FieldNodePayload[] = [...Object.values(filters)];
 
     if (searchValueChildren.length) {
       const searchValueNodes: FieldNodePayload = {
@@ -221,10 +221,15 @@ export default function NurseryWithdrawalsTable({ selectedPlantingSite }: Nurser
     );
     if (apiSearchResults) {
       if (getRequestId('searchWithdrawals') === requestId) {
-        setSearchResults(apiSearchResults);
+        if (selectedPlantingSite?.name) {
+          // Workaround to get Exact matches on destination name
+          setSearchResults(apiSearchResults.filter((result) => result.destinationName === selectedPlantingSite.name));
+        } else {
+          setSearchResults(apiSearchResults);
+        }
       }
     }
-  }, [getSearchChildren, selectedOrganization, searchSortOrder]);
+  }, [getSearchChildren, selectedOrganization, searchSortOrder, selectedPlantingSite?.name]);
 
   useEffect(() => {
     if (siteParam) {
