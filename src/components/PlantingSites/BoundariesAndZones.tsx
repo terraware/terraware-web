@@ -130,7 +130,6 @@ type PlantingSiteMapViewProps = {
 function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapViewProps): JSX.Element | null {
   const classes = useMapTooltipStyles();
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
-  const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones', 'Monitoring Plots'];
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
@@ -153,6 +152,21 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     }
   }, [data, search]);
 
+  const mapData = useMemo(() => {
+    return MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data });
+  }, [plantingSite, data]);
+
+  const layerOptions: MapLayer[] = useMemo(() => {
+    const result: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones'];
+    if (
+      (mapData.permanentPlot?.entities && mapData.permanentPlot.entities.length > 0) ||
+      (mapData.temporaryPlot?.entities && mapData.temporaryPlot.entities.length > 0)
+    ) {
+      result.push('Monitoring Plots');
+    }
+    return result;
+  }, [mapData]);
+
   if (!plantingSite.boundary) {
     return null;
   }
@@ -161,7 +175,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot']} />
       <PlantingSiteMap
-        mapData={MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data })}
+        mapData={mapData}
         style={{ borderRadius: '24px' }}
         layers={includedLayers}
         highlightEntities={searchZoneEntities}
