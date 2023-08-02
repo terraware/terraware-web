@@ -52,7 +52,7 @@ import {
   SpeciesBulkWithdrawWrapperComponent,
 } from './components/Inventory/withdraw';
 import PlantsDashboard from './components/Plants';
-import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
+import { NurseryWithdrawals, NurseryReassignment } from './components/NurseryWithdrawals';
 import { SpeciesService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
@@ -462,11 +462,12 @@ function AppContent() {
             <Route path={APP_PATHS.PLANTING_SITES}>
               <PlantingSites reloadTracking={reloadTracking} />
             </Route>
-            <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
-              <NurseryWithdrawals reloadTracking={reloadTracking} />
-            </Route>
-            <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-              <NurseryWithdrawalsDetails species={species} plantingSubzoneNames={plantingSubzoneNames} />
+            <Route path={APP_PATHS.NURSERY_WITHDRAWALS}>
+              <NurseryWithdrawals
+                reloadTracking={reloadTracking}
+                species={species}
+                plantingSubzoneNames={plantingSubzoneNames}
+              />
             </Route>
             <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
               <NurseryReassignment />

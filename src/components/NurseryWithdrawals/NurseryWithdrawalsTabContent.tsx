@@ -2,8 +2,15 @@ import { Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import Card from 'src/components/common/Card';
 import NurseryWithdrawalsTable from './NurseryWithdrawalsTable';
+import { PlantingSite } from 'src/types/Tracking';
 
-export default function NurseryWithdrawalsTabContent(): JSX.Element {
+type NurseryWithdrawalsTabContentProps = {
+  selectedPlantingSite: PlantingSite;
+};
+
+export default function NurseryWithdrawalsTabContent({
+  selectedPlantingSite,
+}: NurseryWithdrawalsTabContentProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -18,7 +25,7 @@ export default function NurseryWithdrawalsTabContent(): JSX.Element {
       >
         {strings.WITHDRAWAL_HISTORY}
       </Typography>
-      <NurseryWithdrawalsTable />
+      <NurseryWithdrawalsTable selectedPlantingSite={selectedPlantingSite} />
     </Card>
   );
 }

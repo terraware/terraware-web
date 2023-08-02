@@ -20,6 +20,7 @@ export type PlantsPrimaryPageProps = {
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
   // this is to allow redux based components to pass in already selected data
   plantingSitesData?: PlantingSite[];
+  query?: string;
 };
 
 const allSitesOption = (organizationId: number): PlantingSite => ({
@@ -40,6 +41,7 @@ export default function PlantsPrimaryPage({
   allowAllAsSiteSelection,
   isEmptyState,
   plantingSitesData,
+  query,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -85,10 +87,10 @@ export default function PlantsPrimaryPage({
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
       if (site) {
-        history.push(pagePath.replace(':plantingSiteId', site.id.toString()));
+        history.push({ pathname: pagePath.replace(':plantingSiteId', site.id.toString()), search: query });
       }
     },
-    [history, pagePath]
+    [history, pagePath, query]
   );
 
   useEffect(() => {
