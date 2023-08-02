@@ -286,6 +286,7 @@ export default function NurseryWithdrawalsTable({ selectedPlantingSite }: Nurser
           type='text'
           className={classes.searchField}
           iconRight='cancel'
+          onClickRightIcon={() => setSearchValue('')}
           value={searchValue}
           onChange={(value) => setSearchValue(value as string)}
         />
