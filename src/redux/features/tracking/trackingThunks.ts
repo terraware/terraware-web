@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { SearchService, TrackingService } from 'src/services';
+import { TrackingService } from 'src/services';
 import { RootState } from 'src/redux/rootReducer';
 import {
   setPlantingSitesAction,
@@ -43,7 +43,7 @@ export const requestSitePopulation = (organizationId: number, siteId: number) =>
 export const requestPlantingSitesSearchResults = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
-      const response: PlantingSiteSearchResult[] | null = await SearchService.searchPlantingSites(organizationId);
+      const response: PlantingSiteSearchResult[] | null = await TrackingService.searchPlantingSites(organizationId);
       if (response) {
         dispatch(setPlantingSitesSearchResultsAction({ sites: response }));
       }

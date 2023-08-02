@@ -8,7 +8,7 @@ export type PlantingSearchData = {
   delivery: { withdrawal_id: string };
   'numPlants(raw)': string;
   plantingSite: { id: string };
-  plantingSubzone?: { id: string; 'totalPlants(raw)': number };
+  plantingSubzone?: { id: string; totalPlants: string };
   species: { id: string };
   type: string;
 };

@@ -3,7 +3,8 @@ import HttpService, { Response } from './HttpService';
 import { Delivery, PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 import { PlantingSiteZone, Population } from 'src/types/PlantingSite';
 import SearchService from './SearchService';
-import { SearchCriteria } from 'src/types/Search';
+import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 /**
  * Tracking related services
@@ -26,6 +27,16 @@ type GetDeliveryResponsePayload =
 
 type PlantingSiteReportedPlantsPayload =
   paths[typeof REPORTED_PLANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type SearchFieldType = {
+  operation: string;
+  children: {
+    operation: string;
+    field: string;
+    type: string;
+    values: string[];
+  }[];
+};
 
 /**
  * exported type
@@ -231,6 +242,53 @@ const getReportedPlants = async (plantingSiteId: number): Promise<SiteReportedPl
 };
 
 /**
+ * Search planting sites
+ */
+async function searchPlantingSites(
+  organizationId: number,
+  searchField?: SearchFieldType,
+  sortOrder?: SearchSortOrder
+): Promise<PlantingSiteSearchResult[] | null> {
+  const defaultSortOder = {
+    field: 'name',
+    direction: 'Ascending',
+  } as SearchSortOrder;
+
+  const params = {
+    fields: [
+      'boundary',
+      'id',
+      'name',
+      'numPlantingZones',
+      'numPlantingSubzones',
+      'description',
+      'timeZone',
+      'totalPlants',
+    ],
+    prefix: 'plantingSites',
+    sortOrder: [sortOrder || defaultSortOder],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          field: 'organization_id',
+          operation: 'field',
+          values: [organizationId],
+        },
+      ],
+    },
+    count: 0,
+  };
+
+  if (searchField) {
+    const children: any = params.search.children;
+    children.push(searchField);
+  }
+
+  return (await SearchService.search(params)) as PlantingSiteSearchResult[];
+}
+
+/**
  * Exported functions
  */
 const TrackingService = {
@@ -243,6 +301,7 @@ const TrackingService = {
   getTotalPlantsInZones,
   getTotalPlantsInSite,
   getReportedPlants,
+  searchPlantingSites,
 };
 
 export default TrackingService;
