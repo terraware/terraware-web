@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
@@ -198,16 +198,7 @@
 <a name='L133'></a><a href='#L133'>133</a>
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,11 +221,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -242,10 +228,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -372,12 +354,7 @@ export const getTotalPlantsBySubzone = <span class="cstat-no" title="statement n
 <span class="cstat-no" title="statement not covered" >      return plantingsBySubzone;</span>
     }
     const subzoneId = <span class="cstat-no" title="statement not covered" >planting.plantingSubzone.id;</span>
-    const totalPlants = <span class="cstat-no" title="statement not covered" >Number(planting.plantingSubzone['totalPlants(raw)']);</span>
-<span class="cstat-no" title="statement not covered" >    if (plantingsBySubzone[subzoneId]) {</span>
-<span class="cstat-no" title="statement not covered" >      plantingsBySubzone[subzoneId] = plantingsBySubzone[subzoneId] + totalPlants;</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      plantingsBySubzone[subzoneId] = totalPlants;</span>
-    }
+<span class="cstat-no" title="statement not covered" >    plantingsBySubzone[subzoneId] = planting.plantingSubzone['totalPlants(raw)'];</span>
 <span class="cstat-no" title="statement not covered" >    return plantingsBySubzone;</span>
   }, {});
 };
@@ -385,11 +362,7 @@ export const getTotalPlantsBySubzone = <span class="cstat-no" title="statement n
 export const getTotalPlantsBySite = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>lantingsSites: PlantingSiteSearchResult[]) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return plantingsSites?.reduce(<span class="fstat-no" title="function not covered" >(t</span>otalPlantsBySite: { [key: string]: number }, plantingSite) =&gt; {</span>
     const plantingSiteId = <span class="cstat-no" title="statement not covered" >plantingSite.id;</span>
-<span class="cstat-no" title="statement not covered" >    if (totalPlantsBySite[plantingSiteId]) {</span>
-<span class="cstat-no" title="statement not covered" >      totalPlantsBySite[plantingSiteId] = totalPlantsBySite[plantingSiteId] + plantingSite['totalPlants(raw)'];</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      totalPlantsBySite[plantingSiteId] = plantingSite['totalPlants(raw)'];</span>
-    }
+<span class="cstat-no" title="statement not covered" >    totalPlantsBySite[plantingSiteId] = plantingSite['totalPlants(raw)'];</span>
 <span class="cstat-no" title="statement not covered" >    return totalPlantsBySite;</span>
   }, {});
 };
@@ -502,7 +475,7 @@ export const selectZonesHaveStatistics = <span class="cstat-no" title="statement
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-02T15:59:33.444Z
+                at 2023-08-02T16:13:55.055Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
