@@ -21,7 +21,7 @@ const listPlantings = async (
       'delivery.plantings.id',
       'delivery.plantings.plantingSite.id',
       'delivery.plantings.plantingSubzone.id',
-      'delivery.plantings.plantingSubzone.totalPlants',
+      'delivery.plantings.plantingSubzone.totalPlants(raw)',
       'delivery.plantings.delivery.withdrawal_id',
       'delivery.plantings.species.id',
       'delivery.plantings.createdTime',

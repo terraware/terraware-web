@@ -10,7 +10,7 @@ export type PlantingSiteSearchResult = {
   name: string;
   numPlantingZones: number;
   numPlantingSubzones: number;
-  totalPlants: string;
+  'totalPlants(raw)': number;
 };
 
 // geometry and types of geometries
