@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Species/ImportSpeciesModal.tsx</title>
+    <title>Code coverage report for src/components/NurseryWithdrawals/NurserySiteWithdrawals.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Species</a> ImportSpeciesModal.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/NurseryWithdrawals</a> NurserySiteWithdrawals.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
-                <span class="quiet">Functions</span>
+                <span class="quiet">Branches</span>
                 <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/3</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -105,7 +105,11 @@
 <a name='L40'></a><a href='#L40'>40</a>
 <a name='L41'></a><a href='#L41'>41</a>
 <a name='L42'></a><a href='#L42'>42</a>
-<a name='L43'></a><a href='#L43'>43</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,20 +121,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -147,46 +155,50 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import { SpeciesService } from 'src/services';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useState } from 'react';
 import strings from 'src/strings';
-import ImportModal from '../common/ImportModal';
+import { APP_PATHS } from 'src/constants';
+import { PlantingSite } from 'src/types/Tracking';
+import { useAppSelector } from 'src/redux/store';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import useQuery from 'src/utils/useQuery';
+import NurseryPlantingsAndWithdrawals from './NurseryPlantingsAndWithdrawals';
+import PlantsPrimaryPage from '../PlantsPrimaryPage';
 &nbsp;
-export type ImportSpeciesModalProps = {
-  open: boolean;
-  onClose: (saved: boolean, snackbarMessage?: string) =&gt; void;
-  onError?: (snackbarMessage: string) =&gt; void;
-  setCheckDataModalOpen?: React.Dispatch&lt;React.SetStateAction&lt;boolean&gt;&gt;;
+/**
+ * Primary route management for nursery withdrawals.
+ */
+type NurserySiteWithdrawalsProps = {
+  reloadTracking: () =&gt; void;
 };
 &nbsp;
-export const downloadCsvTemplate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-  const apiResponse = <span class="cstat-no" title="statement not covered" >await SpeciesService.downloadSpeciesTemplate();</span>
-  const csvContent = <span class="cstat-no" title="statement not covered" >'data:text/csv;charset=utf-8,' + apiResponse.template;</span>
-  const encodedUri = <span class="cstat-no" title="statement not covered" >encodeURI(csvContent);</span>
-  const link = <span class="cstat-no" title="statement not covered" >document.createElement('a');</span>
-<span class="cstat-no" title="statement not covered" >  link.setAttribute('href', encodedUri);</span>
-<span class="cstat-no" title="statement not covered" >  link.setAttribute('download', `template.csv`);</span>
-<span class="cstat-no" title="statement not covered" >  link.click();</span>
-};
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >ImportSpeciesModal(</span>props: ImportSpeciesModalProps): JSX.Element {
-  const { open, onClose } = <span class="cstat-no" title="statement not covered" >props;</span>
+export default function <span class="fstat-no" title="function not covered" >NurserySiteWithdrawals(</span>{ reloadTracking }: NurserySiteWithdrawalsProps): JSX.Element {
+  const [selectedPlantingSite, setSelectedPlantingSite] = <span class="cstat-no" title="statement not covered" >useState&lt;PlantingSite&gt;();</span>
+  const [plantsSitePreferences, setPlantsSitePreferences] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;string, unknown&gt;&gt;();</span>
+  const plantingSites = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
+  const onSelect = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(s</span>ite: PlantingSite) =&gt; <span class="cstat-no" title="statement not covered" >setSelectedPlantingSite(site),</span> [setSelectedPlantingSite]);</span>
+  const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
+  const onPreferences = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (p</span>references: Record&lt;string, unknown&gt;) =&gt; <span class="cstat-no" title="statement not covered" >setPlantsSitePreferences(preferences),</span>
+    [setPlantsSitePreferences]
+  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;ImportModal
-      onClose={onClose}
-      open={open}
-      title={strings.IMPORT_SPECIES}
-      resolveApi={SpeciesService.resolveSpeciesUpload}
-      uploaderTitle={strings.IMPORT_SPECIES_LIST}
-      uploaderDescription={strings.IMPORT_SPECIES_LIST_DESC}
-      uploadApi={SpeciesService.uploadSpecies}
-      templateApi={SpeciesService.downloadSpeciesTemplate}
-      statusApi={SpeciesService.getSpeciesUploadStatus}
-      importCompleteLabel={strings.SPECIES_IMPORT_COMPLETE}
-      importingLabel={strings.IMPORTING_SPECIES}
-      duplicatedLabel={strings.DUPLICATED_SPECIES}
-    /&gt;
+    &lt;PlantsPrimaryPage
+      title={strings.WITHDRAWALS}
+      onSelect={onSelect}
+      pagePath={APP_PATHS.NURSERY_SITE_WITHDRAWALS}
+      lastVisitedPreferenceName='seedlings.withdrawals.lastVisitedPlantingSite'
+      plantsSitePreferences={plantsSitePreferences}
+      setPlantsSitePreferences={onPreferences}
+      allowAllAsSiteSelection={true}
+      isEmptyState={!plantingSites?.length}
+      query={query.toString()}
+    &gt;
+      {selectedPlantingSite &amp;&amp; (
+        &lt;NurseryPlantingsAndWithdrawals reloadTracking={reloadTracking} selectedPlantingSite={selectedPlantingSite} /&gt;
+      )}
+    &lt;/PlantsPrimaryPage&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>

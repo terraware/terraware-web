@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/72</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -201,7 +201,13 @@
 <a name='L136'></a><a href='#L136'>136</a>
 <a name='L137'></a><a href='#L137'>137</a>
 <a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -284,6 +290,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -291,6 +299,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -422,13 +434,19 @@ export const selectPlantingProgress = <span class="cstat-no" title="statement no
 // selector to search plantings
 export const searchPlantingProgress = <span class="cstat-no" title="statement not covered" >createSelector(</span>
   [
-<span class="fstat-no" title="function not covered" >    (s</span>tate: RootState, query: string, plantingCompleted?: boolean) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingProgress(state),</span>
-<span class="fstat-no" title="function not covered" >    (s</span>tate: RootState, query: string, plantingCompleted?: boolean) =&gt; <span class="cstat-no" title="statement not covered" >query,</span>
-<span class="fstat-no" title="function not covered" >    (s</span>tate: RootState, query: string, plantingCompleted?: boolean) =&gt; <span class="cstat-no" title="statement not covered" >plantingCompleted,</span>
+<span class="fstat-no" title="function not covered" >    (s</span>tate: RootState, query: string, plantingCompleted?: boolean, plantingSiteId?: number) =&gt;
+<span class="cstat-no" title="statement not covered" >      selectPlantingProgress(state),</span>
+<span class="fstat-no" title="function not covered" >    (s</span>tate: RootState, query: string, plantingCompleted?: boolean, plantingSiteId?: number) =&gt; <span class="cstat-no" title="statement not covered" >query,</span>
+<span class="fstat-no" title="function not covered" >    (s</span>tate: RootState, query: string, plantingCompleted?: boolean, plantingSiteId?: number) =&gt; <span class="cstat-no" title="statement not covered" >plantingCompleted,</span>
+<span class="fstat-no" title="function not covered" >    (s</span>tate: RootState, query: string, plantingCompleted?: boolean, plantingSiteId?: number) =&gt; <span class="cstat-no" title="statement not covered" >plantingSiteId,</span>
   ],
-<span class="fstat-no" title="function not covered" >  (p</span>lantingProgress, query, plantingCompleted) =&gt; {
+<span class="fstat-no" title="function not covered" >  (p</span>lantingProgress, query, plantingCompleted, plantingSiteId) =&gt; {
 <span class="cstat-no" title="statement not covered" >    return plantingProgress?.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; {</span>
       const { siteId, siteName, totalPlants, reported } = <span class="cstat-no" title="statement not covered" >curr;</span>
+      const matchesPlantingSite = <span class="cstat-no" title="statement not covered" >plantingSiteId === undefined || plantingSiteId === -1 || siteId === plantingSiteId;</span>
+<span class="cstat-no" title="statement not covered" >      if (!matchesPlantingSite) {</span>
+<span class="cstat-no" title="statement not covered" >        return acc;</span>
+      }
 <span class="cstat-no" title="statement not covered" >      if (reported &amp;&amp; reported.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >        reported?.forEach(<span class="fstat-no" title="function not covered" >(p</span>rogress) =&gt; {</span>
           const matchesQuery = <span class="cstat-no" title="statement not covered" >!query || regexMatch(progress.subzoneName, query);</span>
@@ -484,7 +502,7 @@ export const selectZonesHaveStatistics = <span class="cstat-no" title="statement
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-01T20:16:20.885Z
+                at 2023-08-02T15:08:13.614Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
