@@ -82,7 +82,7 @@ const AllPlantingSitesMapView = (): JSX.Element => {
   return (
     <Box textAlign='center' marginTop={6}>
       <Typography fontSize='18px' fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
-        {strings.PLANTING_SITE_MAP_VIEW_PROMPT}
+        {strings.OBSERVATIONS_MAP_VIEW_PROMPT}
       </Typography>
     </Box>
   );
