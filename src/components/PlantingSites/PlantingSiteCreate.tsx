@@ -23,6 +23,7 @@ import Card from 'src/components/common/Card';
 import isEnabled from 'src/features';
 import { getMonth } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
+import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
 
 type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
@@ -212,11 +213,16 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                       </>
                     )}
                   </Grid>
-                  {record?.boundary && (
+                  {record?.boundary && record?.plantingZones && (
                     <Grid container flexGrow={1}>
                       <Grid item xs={12} display='flex'>
                         <BoundariesAndZones plantingSite={record} />
                       </Grid>
+                    </Grid>
+                  )}
+                  {record?.boundary && !record.plantingZones && (
+                    <Grid item xs={12}>
+                      <SimplePlantingSite plantingSite={record} />
                     </Grid>
                   )}
                 </Card>
