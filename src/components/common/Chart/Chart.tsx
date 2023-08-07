@@ -126,12 +126,16 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                 },
               },
               scales: {
+                x: {
+                  display: type === 'pie' ? false : undefined,
+                },
                 y: {
                   ticks: {
                     precision: 0,
                   },
                   min: yLimits?.min,
                   max: yLimits?.max,
+                  display: type === 'pie' ? false : undefined,
                 },
               },
             },
