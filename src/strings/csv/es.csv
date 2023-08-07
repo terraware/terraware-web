@@ -1032,6 +1032,7 @@ SILVOPASTURE,Sistema selvopastoril
 SITE,Sitio
 SITE_DETAIL,Detalle del sitio
 SITE_LOCATION,Ubicación del sitio
+SITE_MAP,Mapa del sitio
 SNACKBAR_MSG_CHANGES_SAVED,Los cambios acaban de ser guardados.
 SNACKBAR_MSG_NEW_SPECIES_ADDED,La nueva especie acaba de ser añadida.
 SNACKBAR_MSG_PLANT_DELETED,La planta acaba de ser borrada.
