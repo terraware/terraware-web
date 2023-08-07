@@ -12,8 +12,9 @@ import PlantingProgressList from './PlantingProgressList';
 import PlantingProgressMap from './PlantingProgressMap';
 import { View } from 'src/components/common/ListMapSelector';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
-import { useAppDispatch } from 'src/redux/store';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
 
 const initialView: View = 'list';
 
@@ -39,7 +40,12 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
-      activeLocale ? [{ name: 'plantingCompleted', label: strings.PLANTING_COMPLETE, type: 'single_selection' }] : [],
+      activeLocale
+        ? [
+            { name: 'plantingCompleted', label: strings.PLANTING_COMPLETE, type: 'single_selection' },
+            { name: 'siteName', label: strings.PLANTING_SITE, type: 'single_selection' },
+          ]
+        : [],
     [activeLocale]
   );
 
@@ -63,10 +69,18 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
     }
   }, [filters, activeLocale]);
 
+  const siteName = useMemo<string | undefined>(() => {
+    if (filters.siteName?.values?.length > 0) {
+      return filters.siteName.values[0];
+    }
+  }, [filters]);
+
   const reloadTrackingAndObservations = useCallback(() => {
     reloadTracking();
     dispatch(requestObservationsResults(selectedOrganization.id));
   }, [selectedOrganization.id, dispatch, reloadTracking]);
+
+  const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));
 
   useEffect(() => {
     setFilterOptions({
@@ -74,8 +88,12 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
         partial: false,
         values: [strings.YES, strings.NO],
       },
+      siteName: {
+        partial: false,
+        values: plantingSitesNames ? plantingSitesNames : [],
+      },
     });
-  }, [activeLocale]);
+  }, [activeLocale, plantingSitesNames]);
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
@@ -97,6 +115,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
             search={search}
             plantingCompleted={plantingCompleted}
             reloadTracking={reloadTrackingAndObservations}
+            siteName={siteName}
           />
         }
         map={

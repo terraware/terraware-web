@@ -82,16 +82,20 @@ export type PlantingProgressListProps = {
   search: string;
   plantingCompleted?: boolean;
   reloadTracking: () => void;
+  siteName?: string;
 };
 
 export default function PlantingProgressList({
   search,
   plantingCompleted,
   reloadTracking,
+  siteName,
 }: PlantingProgressListProps): JSX.Element {
   const [hasZones, setHasZones] = useState<boolean | undefined>();
   const classes = useStyles();
-  const data = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), plantingCompleted));
+  const data = useAppSelector((state: any) =>
+    searchPlantingProgress(state, search.trim(), plantingCompleted, siteName)
+  );
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
   const defaultTimeZone = useDefaultTimeZone();
