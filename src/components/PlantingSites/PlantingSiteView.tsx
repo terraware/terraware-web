@@ -17,6 +17,7 @@ import Card from 'src/components/common/Card';
 import isEnabled from 'src/features';
 import { getMonth } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
+import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -122,11 +123,16 @@ export default function PlantingSiteView(): JSX.Element {
             </>
           )}
         </Grid>
-        {plantingSite?.boundary && (
+        {plantingSite?.boundary && plantingSite.plantingZones && (
           <Grid container flexGrow={1}>
             <Grid item xs={12} display='flex'>
               <BoundariesAndZones plantingSite={plantingSite} />
             </Grid>
+          </Grid>
+        )}
+        {plantingSite?.boundary && !plantingSite.plantingZones && (
+          <Grid item xs={12}>
+            <SimplePlantingSite plantingSite={plantingSite} />
           </Grid>
         )}
       </Card>

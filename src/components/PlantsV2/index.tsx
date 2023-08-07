@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestSitePopulation, requestSiteReportedPlants } from 'src/redux/features/tracking/trackingThunks';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -33,6 +33,7 @@ import PlantingSiteDensityCard from 'src/components/PlantsV2/components/Planting
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import FormattedNumber from '../common/FormattedNumber';
 import ObservedNumberOfSpeciesCard from 'src/components/PlantsV2/components/ObservedNumberOfSpeciesCard';
+import SimplePlantingSiteMap from 'src/components/PlantsV2/components/SimplePlantingSiteMap';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -42,6 +43,7 @@ export default function PlantsDashboardV2(): JSX.Element {
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const locale = useLocalization();
   const history = useHistory();
+  const theme = useTheme();
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
@@ -182,8 +184,29 @@ export default function PlantsDashboardV2(): JSX.Element {
     </>
   );
 
+  const renderSimpleSiteMap = () => (
+    <>
+      {sectionHeader(strings.SITE_MAP)}
+      <Grid item xs={12}>
+        <Box
+          sx={{
+            background: theme.palette.TwClrBg,
+            borderRadius: '24px',
+            padding: theme.spacing(3),
+            gap: theme.spacing(3),
+          }}
+        >
+          <SimplePlantingSiteMap plantingSiteId={selectedPlantingSiteId} />
+        </Box>
+      </Grid>
+    </>
+  );
+
   const hasPolygons =
     !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0;
+
+  const hasPlantingZones =
+    !!plantingSiteResult && !!plantingSiteResult.plantingZones && plantingSiteResult.plantingZones.length > 0;
 
   const getObservationHectares = () => {
     const numMonitoringPlots =
@@ -229,7 +252,8 @@ export default function PlantsDashboardV2(): JSX.Element {
             </>
           )}
           {hasObservations && renderTotalPlantsAndSpecies()}
-          {hasPolygons && renderZoneLevelData()}
+          {hasPlantingZones && renderZoneLevelData()}
+          {hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
         </Grid>
       ) : (
         <Box sx={{ margin: '0 auto', maxWidth: '800px', padding: '48px', width: isMobile ? 'auto' : '800px' }}>
