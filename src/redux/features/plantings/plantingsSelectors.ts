@@ -90,7 +90,10 @@ export const searchPlantingProgress = createSelector(
             acc.push({ siteId, siteName, totalPlants, ...progress });
           }
         });
-      } else if (plantingCompleted === undefined && regexMatch(siteName, query)) {
+      } else if (
+        plantingCompleted === undefined &&
+        (siteNameSelected ? siteNameSelected === siteName : regexMatch(siteName, query))
+      ) {
         acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants });
       }
       return acc;
