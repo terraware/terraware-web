@@ -7,8 +7,6 @@ import { PlantingSiteMap } from 'src/components/Map';
 import { Typography, useTheme } from '@mui/material';
 import PlantingProgressMapDialog from './PlantingProgressMapDialog';
 import { makeStyles } from '@mui/styles';
-import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
-import { useOrganization } from 'src/providers';
 import {
   selectUpdatePlantingCompleted,
   selectZonesHaveStatistics,
@@ -39,7 +37,6 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const org = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [mapData, setMapData] = useState<MapData | undefined>();
@@ -77,10 +74,6 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
       });
     return result;
   }, [plantingSite]);
-
-  useEffect(() => {
-    dispatch(requestSitePopulation(org.selectedOrganization.id, plantingSiteId));
-  }, [dispatch, org.selectedOrganization.id, plantingSiteId]);
 
   useEffect(() => {
     if (updateStatus) {

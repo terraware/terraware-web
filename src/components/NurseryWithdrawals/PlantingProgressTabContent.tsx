@@ -15,6 +15,7 @@ import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
+import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
 
 const initialView: View = 'list';
 
@@ -36,7 +37,8 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
 
   useEffect(() => {
     dispatch(requestObservationsResults(selectedOrganization.id));
-  }, [dispatch, selectedOrganization.id]);
+    dispatch(requestSitePopulation(selectedOrganization.id, selectedPlantingSiteId));
+  }, [dispatch, selectedOrganization.id, selectedPlantingSiteId]);
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
@@ -78,7 +80,8 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
   const reloadTrackingAndObservations = useCallback(() => {
     reloadTracking();
     dispatch(requestObservationsResults(selectedOrganization.id));
-  }, [selectedOrganization.id, dispatch, reloadTracking]);
+    dispatch(requestSitePopulation(selectedOrganization.id, selectedPlantingSiteId));
+  }, [selectedOrganization.id, selectedPlantingSiteId, dispatch, reloadTracking]);
 
   const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));
 
