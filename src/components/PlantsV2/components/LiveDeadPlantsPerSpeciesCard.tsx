@@ -38,6 +38,9 @@ export default function LiveDeadPlantsPerSpeciesCard({
         value: sp.speciesId?.toString() || '',
       }));
       setAllSpecies(speciesNames);
+      if (speciesNames.length > 0) {
+        setSelectedSpecies(speciesNames[0].value);
+      }
     }
   }, [observation]);
 
