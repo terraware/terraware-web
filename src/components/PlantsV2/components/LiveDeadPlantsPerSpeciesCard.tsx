@@ -57,7 +57,7 @@ export default function LiveDeadPlantsPerSpeciesCard({
       ) {
         setShowChart(true);
         const totalPlants = selectedObservationSpecies.totalPlants;
-        const dead = (selectedObservationSpecies.mortalityRate * totalPlants) / 100;
+        const dead = Math.round((selectedObservationSpecies.mortalityRate * totalPlants) / 100);
         const live = totalPlants - dead;
         setValues([live, dead]);
       }
