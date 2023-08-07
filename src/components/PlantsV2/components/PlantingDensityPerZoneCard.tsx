@@ -65,7 +65,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
       },
     ];
 
-    if (observation && actuals?.length) {
+    if (observation && actuals?.length && !actuals?.every((val) => val === null)) {
       datasets.push({
         label: strings.PLANTING_DENSITY,
         values: actuals,
