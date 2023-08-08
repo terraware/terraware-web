@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, MONITORING_PLOT_HA } from 'src/constants';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -212,8 +212,7 @@ export default function PlantsDashboardV2(): JSX.Element {
     const numMonitoringPlots =
       latestObservation?.plantingZones.flatMap((pz) => pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots))
         ?.length ?? 0;
-    const monitoringPlotHa = 0.0625;
-    const totalHa = numMonitoringPlots * monitoringPlotHa;
+    const totalHa = numMonitoringPlots * MONITORING_PLOT_HA;
     return totalHa;
   };
 

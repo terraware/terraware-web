@@ -1,5 +1,6 @@
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { Box, Typography, useTheme } from '@mui/material';
+import { MONITORING_PLOT_HA } from 'src/constants';
 import strings from 'src/strings';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
@@ -25,13 +26,26 @@ export default function HectaresPlantedCard({ plantingSiteId }: HectaresPlantedC
   );
 
   const totalArea = plantingSite?.areaHa ?? 0;
+
+  const plantingProgressArea = useMemo(
+    () =>
+      observation?.plantingZones
+        ?.flatMap((zone) => zone.plantingSubzones)
+        ?.reduce(
+          (prev, curr) => ({ ...prev, [curr.plantingSubzoneId]: curr.monitoringPlots.length * MONITORING_PLOT_HA }),
+          {} as Record<number, number>
+        ) ?? {},
+    [observation]
+  );
+
   const totalPlantedArea = useMemo(() => {
     return (
       plantingSite?.plantingZones
         ?.flatMap((zone) => zone.plantingSubzones)
-        ?.reduce((prev, curr) => (curr.plantingCompleted ? +curr.areaHa + prev : prev), 0) ?? 0
+        ?.reduce((prev, curr) => (curr.plantingCompleted ? (plantingProgressArea[curr.id] ?? 0) + prev : prev), 0) ?? 0
     );
-  }, [plantingSite]);
+  }, [plantingSite, plantingProgressArea]);
+
   const percentagePlanted = totalArea > 0 ? Math.round((totalPlantedArea / totalArea) * 100) : 0;
 
   return (
