@@ -195,10 +195,17 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     );
     if (apiSearchResults) {
       if (getRequestId('searchWithdrawals') === requestId) {
-        setSearchResults(apiSearchResults);
+        const destinationFilter = filters.destinationName?.values ?? [];
+        if (destinationFilter.length) {
+          setSearchResults(
+            apiSearchResults.filter((result) => destinationFilter.indexOf(result.destinationName) !== -1)
+          );
+        } else {
+          setSearchResults(apiSearchResults);
+        }
       }
     }
-  }, [getSearchChildren, selectedOrganization, searchSortOrder]);
+  }, [getSearchChildren, selectedOrganization, searchSortOrder, filters]);
 
   useEffect(() => {
     if (siteParam) {
