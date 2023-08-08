@@ -52,10 +52,7 @@ export default function LiveDeadPlantsPerSpeciesCard({
       );
       if (
         selectedObservationSpecies &&
-        selectedObservationSpecies.cumulativeDead !== undefined &&
-        selectedObservationSpecies.cumulativeDead !== null &&
-        selectedObservationSpecies.permanentLive !== undefined &&
-        selectedObservationSpecies.permanentLive !== null
+        (selectedObservationSpecies.cumulativeDead !== 0 || selectedObservationSpecies.permanentLive !== 0)
       ) {
         setShowChart(true);
         const dead = selectedObservationSpecies.cumulativeDead;
