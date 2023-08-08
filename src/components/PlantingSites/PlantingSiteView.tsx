@@ -131,10 +131,8 @@ export default function PlantingSiteView(): JSX.Element {
           </Grid>
         )}
         {plantingSite?.boundary && !plantingSite.plantingZones && (
-          <Grid container flexGrow={1}>
-            <Grid item xs={12} display='flex'>
-              <SimplePlantingSite plantingSite={plantingSite} />
-            </Grid>
+          <Grid item xs={12}>
+            <SimplePlantingSite plantingSite={plantingSite} />
           </Grid>
         )}
       </Card>
