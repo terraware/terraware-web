@@ -1,18 +1,6 @@
-import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
-import Chart, { ChartData } from './Chart';
+import Chart, { BaseChartProps } from './Chart';
 
-export interface BarChartProps {
-  chartId: string;
-  chartData?: ChartData;
-  customTooltipTitles?: string[];
-  minHeight?: string;
-  maxWidth?: string;
-  barWidth?: number;
-  elementColor?: string;
-  barAnnotations?: AnnotationPluginOptions;
-  yLimits?: { min?: number; max?: number };
-  showLegend?: boolean;
-}
+export type BarChartProps = BaseChartProps;
 
 export default function BarChart(props: BarChartProps): JSX.Element | null {
   return <Chart {...props} type='bar' />;

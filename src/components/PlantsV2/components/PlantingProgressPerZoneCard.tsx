@@ -57,6 +57,7 @@ export default function PlantingProgressPerZoneCard({ plantingSiteId }: Planting
               customTooltipTitles={tooltipTitles}
               maxWidth='100%'
               yLimits={{ min: 0, max: 100 }}
+              yAxisLabel='%'
             />
           </Box>
           <Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}>

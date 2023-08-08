@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Theme, useTheme } from '@mui/material';
+import { WithRequired } from 'src/types/utils';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 import { useLocalization } from 'src/providers';
 import { newChart } from '.';
@@ -34,8 +35,7 @@ const useStyles = makeStyles<Theme, StyleProps>(() => ({
   },
 }));
 
-export interface ChartProps {
-  type: keyof ChartTypeRegistry;
+export type BaseChartProps = {
   chartId: string;
   chartData?: ChartData;
   customTooltipTitles?: string[];
@@ -46,7 +46,13 @@ export interface ChartProps {
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
   showLegend?: boolean;
-}
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+};
+
+export type ChartProps = BaseChartProps & {
+  type: keyof ChartTypeRegistry;
+};
 
 export default function Chart(props: ChartProps): JSX.Element | null {
   const { chartData } = props;
@@ -64,20 +70,9 @@ export default function Chart(props: ChartProps): JSX.Element | null {
   return <ChartContent {...props} chartData={chartData} locale={locale} />;
 }
 
-interface ChartContentProps {
-  type: keyof ChartTypeRegistry;
-  chartId: string;
-  chartData: ChartData;
-  customTooltipTitles?: string[];
-  minHeight?: string;
-  maxWidth?: string;
+type ChartContentProps = WithRequired<ChartProps, 'chartData'> & {
   locale: string;
-  barWidth?: number;
-  elementColor?: string;
-  barAnnotations?: AnnotationPluginOptions;
-  yLimits?: { min?: number; max?: number };
-  showLegend?: boolean;
-}
+};
 
 function ChartContent(props: ChartContentProps): JSX.Element {
   const {
@@ -93,6 +88,8 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     barAnnotations,
     yLimits,
     showLegend,
+    xAxisLabel,
+    yAxisLabel,
   } = props;
   const classes = useStyles({ minHeight, maxWidth });
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -102,6 +99,19 @@ function ChartContent(props: ChartContentProps): JSX.Element {
   const barThickness: number | 'flex' | undefined = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
   useEffect(() => {
+    const getAxisLabelProps = (label?: string) => {
+      if (!label) {
+        return {};
+      }
+      return {
+        title: {
+          display: true,
+          align: 'center',
+          text: label,
+        },
+      };
+    };
+
     const createChart = async () => {
       if (chart) {
         chart.destroy();
@@ -128,6 +138,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
               scales: {
                 x: {
                   display: type === 'pie' ? false : undefined,
+                  ...getAxisLabelProps(xAxisLabel),
                 },
                 y: {
                   ticks: {
@@ -136,6 +147,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                   min: yLimits?.min,
                   max: yLimits?.max,
                   display: type === 'pie' ? false : undefined,
+                  ...getAxisLabelProps(yAxisLabel),
                 },
               },
             },
