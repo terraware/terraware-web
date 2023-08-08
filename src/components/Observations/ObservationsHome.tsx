@@ -1,18 +1,22 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
 import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import {
+  selectPlantingSiteObservations,
+  selectPlantingSiteObservationsResults,
+} from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import Card from 'src/components/common/Card';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import ObservationsDataView from './ObservationsDataView';
+import ObservationsEventsNotification, { ObservationEvent } from './ObservationsEventsNotification';
 
 export type ObservationsHomeProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
@@ -26,6 +30,18 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const observationsResults = useAppSelector((state) =>
     selectPlantingSiteObservationsResults(state, selectedPlantingSite?.id)
   );
+
+  // get upcoming observations for notifications
+  const upcomingObservations = useAppSelector((state) => selectPlantingSiteObservations(state, -1, 'Upcoming'));
+
+  const observationsEvents = useMemo<ObservationEvent[]>(() => {
+    if (!upcomingObservations) {
+      return [];
+    }
+    const now = Date.now();
+    // return observations that haven't passed
+    return upcomingObservations.filter((observation) => now <= new Date(observation.endDate).getTime());
+  }, [upcomingObservations]);
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
 
@@ -51,18 +67,21 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       allowAllAsSiteSelection={true}
       isEmptyState={!plantingSites?.length || !observationsResults?.length}
     >
-      {observationsResults === undefined ? (
-        <CircularProgress sx={{ margin: 'auto' }} />
-      ) : selectedPlantingSite && observationsResults?.length ? (
-        <ObservationsDataView selectedPlantingSiteId={selectedPlantingSite.id} {...props} />
-      ) : (
-        <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
-          <EmptyStateContent
-            title={strings.OBSERVATIONS_EMPTY_STATE_TITLE}
-            subtitle={[strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]}
-          />
-        </Card>
-      )}
+      <Grid container display='flex' flexDirection='column'>
+        <ObservationsEventsNotification events={observationsEvents} />
+        {observationsResults === undefined ? (
+          <CircularProgress sx={{ margin: 'auto' }} />
+        ) : selectedPlantingSite && observationsResults?.length ? (
+          <ObservationsDataView selectedPlantingSiteId={selectedPlantingSite.id} {...props} />
+        ) : (
+          <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
+            <EmptyStateContent
+              title={strings.OBSERVATIONS_EMPTY_STATE_TITLE}
+              subtitle={[strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]}
+            />
+          </Card>
+        )}
+      </Grid>
     </PlantsPrimaryPage>
   );
 }
