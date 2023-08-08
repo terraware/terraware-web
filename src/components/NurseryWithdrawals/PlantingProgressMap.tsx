@@ -79,7 +79,9 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
   }, [plantingSite]);
 
   useEffect(() => {
-    dispatch(requestSitePopulation(org.selectedOrganization.id, plantingSiteId));
+    if (plantingSiteId !== -1) {
+      dispatch(requestSitePopulation(org.selectedOrganization.id, plantingSiteId));
+    }
   }, [dispatch, org.selectedOrganization.id, plantingSiteId]);
 
   useEffect(() => {
