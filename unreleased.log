@@ -1,3 +1,4 @@
+0281710ba SW-3932 Extract Mapbox token fetching into hook (#1636)
 2284ecd17 SW-4020 Whole Numbers for Live/Dead Plants per Species (#1635)
 2837b72f8 SW-4019 Remove Axes on Pie Chart (#1633)
 b05364fce SW-4017 Auto-Select First Species for Live/Dead Plants Chart (#1632)

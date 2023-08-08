@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1691441992406" clover="3.2.0">
-  <project timestamp="1691441992406" name="All files">
-    <metrics statements="11970" coveredstatements="362" conditionals="7571" coveredconditionals="90" methods="3756" coveredmethods="77" elements="23297" coveredelements="529" complexity="0" loc="11970" ncloc="11970" packages="101" files="478" classes="478"/>
+<coverage generated="1691508260448" clover="3.2.0">
+  <project timestamp="1691508260448" name="All files">
+    <metrics statements="11972" coveredstatements="362" conditionals="7571" coveredconditionals="90" methods="3757" coveredmethods="77" elements="23300" coveredelements="529" complexity="0" loc="11972" ncloc="11972" packages="101" files="479" classes="479"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="169" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2286,32 +2286,14 @@
       </file>
     </package>
     <package name="src.components.Map">
-      <metrics statements="262" coveredstatements="0" conditionals="192" coveredconditionals="0" methods="73" coveredmethods="0"/>
+      <metrics statements="244" coveredstatements="0" conditionals="188" coveredconditionals="0" methods="69" coveredmethods="0"/>
       <file name="GenericMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/GenericMap.tsx">
-        <metrics statements="23" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
+        <metrics statements="5" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
       </file>
       <file name="Map.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/Map.tsx">
         <metrics statements="175" coveredstatements="0" conditionals="123" coveredconditionals="0" methods="53" coveredmethods="0"/>
@@ -13404,7 +13386,7 @@
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="228" coveredstatements="7" conditionals="125" coveredconditionals="0" methods="87" coveredmethods="0"/>
+      <metrics statements="248" coveredstatements="7" conditionals="129" coveredconditionals="0" methods="92" coveredmethods="0"/>
       <file name="boolean.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/boolean.ts">
         <metrics statements="1" coveredstatements="0" conditionals="3" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="8" count="0" type="cond" truecount="0" falsecount="3"/>
@@ -13589,6 +13571,29 @@
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
+      </file>
+      <file name="useMapboxToken.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/useMapboxToken.ts">
+        <metrics statements="20" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
       </file>
       <file name="useNumber.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/useNumber.ts">
         <metrics statements="11" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
