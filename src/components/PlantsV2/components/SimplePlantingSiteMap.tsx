@@ -21,7 +21,9 @@ export default function SimplePlantingSiteMap({ plantingSiteId }: SimplePlanting
   }, [plantingSite]);
 
   if (plantingSite?.boundary) {
-    return <PlantingSiteMap mapData={mapData!} style={{ borderRadius: '24px' }} layers={['Planting Site']} />;
+    return (
+      <PlantingSiteMap mapData={mapData!} style={{ width: '100%', borderRadius: '24px' }} layers={['Planting Site']} />
+    );
   } else {
     return (
       <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
