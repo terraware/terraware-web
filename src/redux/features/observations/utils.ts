@@ -246,9 +246,11 @@ const mergeSpecies = (
       (speciesObservation: ObservationSpeciesResultsPayload): ObservationSpeciesResults => ({
         ...speciesObservation,
         speciesCommonName: speciesObservation.speciesId
-          ? species[speciesObservation.speciesId].commonName
+          ? species[speciesObservation.speciesId].commonName ?? ''
           : speciesObservation.speciesName,
-        speciesScientificName: speciesObservation.speciesId ? species[speciesObservation.speciesId].scientificName : '',
+        speciesScientificName: speciesObservation.speciesId
+          ? species[speciesObservation.speciesId].scientificName ?? ''
+          : '',
       })
     );
 };
