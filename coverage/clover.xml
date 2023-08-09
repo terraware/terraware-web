@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1691610485664" clover="3.2.0">
-  <project timestamp="1691610485664" name="All files">
-    <metrics statements="11981" coveredstatements="362" conditionals="7583" coveredconditionals="90" methods="3760" coveredmethods="77" elements="23324" coveredelements="529" complexity="0" loc="11981" ncloc="11981" packages="101" files="480" classes="480"/>
+<coverage generated="1691613219441" clover="3.2.0">
+  <project timestamp="1691613219441" name="All files">
+    <metrics statements="11981" coveredstatements="362" conditionals="7579" coveredconditionals="90" methods="3760" coveredmethods="77" elements="23320" coveredelements="529" complexity="0" loc="11981" ncloc="11981" packages="101" files="480" classes="480"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="169" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11394,7 +11394,7 @@
       </file>
     </package>
     <package name="src.redux.features.observations">
-      <metrics statements="255" coveredstatements="0" conditionals="111" coveredconditionals="0" methods="135" coveredmethods="0"/>
+      <metrics statements="255" coveredstatements="0" conditionals="107" coveredconditionals="0" methods="135" coveredmethods="0"/>
       <file name="observationDetailsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/observations/observationDetailsSelectors.ts">
         <metrics statements="13" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="24" count="0" type="stmt"/>
@@ -11597,7 +11597,7 @@
         <line num="187" count="0" type="stmt"/>
       </file>
       <file name="utils.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/observations/utils.ts">
-        <metrics statements="75" coveredstatements="0" conditionals="55" coveredconditionals="0" methods="38" coveredmethods="0"/>
+        <metrics statements="75" coveredstatements="0" conditionals="51" coveredconditionals="0" methods="38" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="23" count="0" type="stmt"/>
@@ -11671,8 +11671,8 @@
         <line num="223" count="0" type="stmt"/>
         <line num="236" count="0" type="stmt"/>
         <line num="240" count="0" type="stmt"/>
-        <line num="243" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="246" count="0" type="stmt"/>
+        <line num="241" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="243" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.plantings">

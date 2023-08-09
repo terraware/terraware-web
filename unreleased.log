@@ -1,3 +1,4 @@
+86ad843e3 Revert "SW-4034 Show other/can't-tell species in observations bar charts (#1646)" (#1648)
 826de25a8 Updated translations from Phrase (#1634)
 3543343fb SW-4047 Show total plants in observations table (#1644)
 cbe6d558e SW-4042 Use a linear fit to bounds in map (no zoom out and in) (#1645)
