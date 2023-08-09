@@ -34,6 +34,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   // get upcoming observations for notifications
   const upcomingObservations = useAppSelector((state) => selectPlantingSiteObservations(state, -1, 'Upcoming'));
 
+  // observation events are to be displayed for empty states and data view states
   const observationsEvents = useMemo<ObservationEvent[]>(() => {
     if (!upcomingObservations) {
       return [];
