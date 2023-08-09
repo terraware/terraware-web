@@ -208,7 +208,7 @@ export default function Map(props: MapProps): JSX.Element {
       });
       if (coordinates.length > 0) {
         const bbox = MapService.getBoundingBox([coordinates]);
-        map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
+        map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20, linear: true });
       }
     },
     [geoData]
@@ -216,7 +216,7 @@ export default function Map(props: MapProps): JSX.Element {
 
   const zoomToFit = () => {
     const map: any = mapRef?.current;
-    map?.fitBounds([options.bbox.lowerLeft, options.bbox.upperRight], { padding: 20 });
+    map?.fitBounds([options.bbox.lowerLeft, options.bbox.upperRight], { padding: 20, linear: true });
   };
 
   useEffect(() => {
@@ -447,7 +447,7 @@ export default function Map(props: MapProps): JSX.Element {
           mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true'
           initialViewState={{
             bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
-            fitBoundsOptions: hasEntities ? { padding: 20 } : undefined,
+            fitBoundsOptions: hasEntities ? { padding: 20, linear: true } : undefined,
           }}
           interactiveLayerIds={layerIds}
           onError={onMapError}

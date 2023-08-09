@@ -1,21 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { useLocalization } from 'src/providers';
 import { FieldOptionsMap } from 'src/types/Search';
 import { ObservationState } from 'src/types/Observations';
 import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import {
-  searchObservations,
-  selectObservationsZoneNames,
-  selectPlantingSiteObservations,
-} from 'src/redux/features/observations/observationsSelectors';
+import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
 import ListMapView from 'src/components/ListMapView';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import OrgObservationsListView from './org/OrgObservationsListView';
 import ObservationMapView from './map/ObservationMapView';
-import ObservationsEventsNotification, { ObservationEvent } from './ObservationsEventsNotification';
 
 export type ObservationsDataViewProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
@@ -39,8 +34,6 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       status
     )
   );
-
-  const upcomingObservations = useAppSelector((state) => selectPlantingSiteObservations(state, -1, 'Upcoming'));
 
   const zoneNames = useAppSelector((state) => selectObservationsZoneNames(state, selectedPlantingSiteId, status));
 
@@ -81,31 +74,19 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     }
   }, [searchProps.filtersProps?.filters.status]);
 
-  const observationsEvents = useMemo<ObservationEvent[]>(() => {
-    if (!upcomingObservations) {
-      return [];
-    }
-    const now = Date.now();
-    // return observations that haven't passed
-    return upcomingObservations.filter((observation) => now <= new Date(observation.endDate).getTime());
-  }, [upcomingObservations]);
-
   return (
-    <Grid container display='flex' flexDirection='column'>
-      <ObservationsEventsNotification events={observationsEvents} />
-      <ListMapView
-        initialView='list'
-        search={<Search {...searchProps} />}
-        list={<OrgObservationsListView observationsResults={observationsResults} />}
-        map={
-          selectedPlantingSiteId === -1 ? (
-            <AllPlantingSitesMapView />
-          ) : (
-            <ObservationMapView observationsResults={observationsResults} {...searchProps} />
-          )
-        }
-      />
-    </Grid>
+    <ListMapView
+      initialView='list'
+      search={<Search {...searchProps} />}
+      list={<OrgObservationsListView observationsResults={observationsResults} />}
+      map={
+        selectedPlantingSiteId === -1 ? (
+          <AllPlantingSitesMapView />
+        ) : (
+          <ObservationMapView observationsResults={observationsResults} {...searchProps} />
+        )
+      }
+    />
   );
 }
 

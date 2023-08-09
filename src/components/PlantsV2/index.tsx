@@ -141,36 +141,50 @@ export default function PlantsDashboardV2(): JSX.Element {
 
   const renderPlantingProgressAndDensity = () => (
     <>
-      {sectionHeader(sitePlantingComplete ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY)}
-      {sitePlantingComplete && (
+      {sectionHeader(
+        sitePlantingComplete && hasObservations ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY
+      )}
+      {!hasObservations && (
         <>
           <Grid item xs={isMobile ? 12 : 4}>
-            {hasObservations && <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} />}
+            <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
           </Grid>
           <Grid item xs={isMobile ? 12 : 4}>
             <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
           </Grid>
         </>
       )}
-      {!sitePlantingComplete && (
-        <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
-          <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
-        </Grid>
+      {hasObservations && !sitePlantingComplete && (
+        <>
+          <Grid item xs={isMobile ? 12 : 6}>
+            <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 6}>
+            <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 6}>
+            <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 6}>
+            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+        </>
       )}
-      {hasObservations && (
-        <Grid item xs={isMobile ? 12 : sitePlantingComplete ? 4 : 6}>
-          <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} />
-        </Grid>
-      )}
-      {!sitePlantingComplete && (
-        <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
-          <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
-        </Grid>
-      )}
-      {!sitePlantingComplete && (
-        <Grid item xs={isMobile ? 12 : hasObservations ? 6 : 4}>
-          <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
-        </Grid>
+      {hasObservations && sitePlantingComplete && (
+        <>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+        </>
       )}
     </>
   );

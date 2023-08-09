@@ -1,5 +1,6 @@
 import { LinearProgress, useTheme } from '@mui/material';
-type ProgressChartProps = {
+
+export type ProgressChartProps = {
   value: number;
   target: number;
 };
