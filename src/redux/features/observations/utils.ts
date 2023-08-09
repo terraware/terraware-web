@@ -138,7 +138,8 @@ export const mergeObservations = (
         ...observation,
         plantingSiteName: site.name,
         boundary: site.boundary,
-        completedDate: getDateDisplayValue(observation.completedTime!, site.timeZone),
+        completedDate: observation.completedTime ? getDateDisplayValue(observation.completedTime, site.timeZone) : '',
+        startDate: getDateDisplayValue(observation.startDate, site.timeZone),
         plantingZones: mergeZones(
           observation.plantingZones,
           zones,

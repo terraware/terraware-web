@@ -1,5 +1,4 @@
 import { createCachedSelector } from 're-reselect';
-import { createSelector } from '@reduxjs/toolkit';
 import {
   ObservationState,
   Observation,
@@ -18,24 +17,33 @@ import { isAfter } from 'src/utils/dateUtils';
 export const selectObservationsResults = (state: RootState) => state.observationsResults?.observations;
 export const selectObservationsResultsError = (state: RootState) => state.observationsResults?.error;
 
-export const selectCompletedObservationsResults = createSelector(selectObservationsResults, (observationsResults) =>
-  observationsResults?.filter((observationResults) => !!observationResults.completedTime)
-);
-
-export const selectPlantingSiteObservationsResults = createSelector(
-  [selectCompletedObservationsResults, (state, plantingSiteId) => plantingSiteId],
-  (observationsResults, plantingSiteId) =>
-    plantingSiteId === -1
-      ? observationsResults
-      : observationsResults?.filter((observationResults) => observationResults.plantingSiteId === plantingSiteId)
-);
+export const selectPlantingSiteObservationsResults = createCachedSelector(
+  (state: RootState, plantingSiteId: number, status?: ObservationState[]) => selectObservationsResults(state),
+  (state: RootState, plantingSiteId: number, status?: ObservationState[]) => plantingSiteId,
+  (state: RootState, plantingSiteId: number, status?: ObservationState[]) => status,
+  (observationsResults, plantingSiteId, status) => {
+    if (plantingSiteId === -1 && !status?.length) {
+      // default to completed if no status is selected
+      return observationsResults?.filter((result) => result.state === 'Completed');
+    }
+    return observationsResults?.filter((observationResults) => {
+      const matchesSite = plantingSiteId === -1 || observationResults.plantingSiteId === plantingSiteId;
+      const matchesState =
+        (!status?.length && observationResults.state === 'Completed') ||
+        status?.indexOf(observationResults.state) !== -1;
+      return matchesSite && matchesState;
+    });
+  }
+)((state, plantingSiteId: number, status?: ObservationState[]) => `${plantingSiteId}_${status?.join(',')}`);
 
 export const selectMergedPlantingSiteObservations = createCachedSelector(
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string) =>
-    selectPlantingSiteObservationsResults(state, plantingSiteId),
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string) => selectPlantingSites(state),
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string) => selectSpecies(state),
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string) => defaultTimeZone,
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
+    selectPlantingSiteObservationsResults(state, plantingSiteId, status),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
+    selectPlantingSites(state),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
+    selectSpecies(state),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) => defaultTimeZone,
 
   // here we have the responses from first three selectors
   // merge the results so observations results have names and boundaries and time zones applied
@@ -46,23 +54,54 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
 
     return mergeObservations(observations, defaultTimeZone, plantingSites, species);
   }
-)((state: RootState, plantingSiteId: number, defaultTimeZone: string) => `${plantingSiteId}_${defaultTimeZone}`); // planting site id / default time zone is the key for the cache
+)(
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
+    `${plantingSiteId}_${defaultTimeZone}_${status?.join(',')}`
+);
 
 // search observations (search planting zone name only)
 export const searchObservations = createCachedSelector(
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string, zoneNames: string[]) => search,
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string, zoneNames: string[]) => zoneNames,
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string, zoneNames: string[]) =>
-    selectMergedPlantingSiteObservations(state, plantingSiteId, defaultTimeZone),
+  (
+    state: RootState,
+    plantingSiteId: number,
+    defaultTimeZone: string,
+    search: string,
+    zoneNames: string[],
+    status?: ObservationState[]
+  ) => search,
+  (
+    state: RootState,
+    plantingSiteId: number,
+    defaultTimeZone: string,
+    search: string,
+    zoneNames: string[],
+    status?: ObservationState[]
+  ) => zoneNames,
+  (
+    state: RootState,
+    plantingSiteId: number,
+    defaultTimeZone: string,
+    search: string,
+    zoneNames: string[],
+    status?: ObservationState[]
+  ) => selectMergedPlantingSiteObservations(state, plantingSiteId, defaultTimeZone, status),
   searchZones
 )(
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string, zoneNames: string[]) =>
-    `${plantingSiteId}_${defaultTimeZone}_${search}_${Array.from(new Set(zoneNames)).toString()}`
+  (
+    state: RootState,
+    plantingSiteId: number,
+    defaultTimeZone: string,
+    search: string,
+    zoneNames: string[],
+    status?: ObservationState[]
+  ) =>
+    `${plantingSiteId}_${defaultTimeZone}_${search}_${Array.from(new Set(zoneNames)).toString()}_${status?.join(',')}`
 );
 
 // get zone names in observations
 export const selectObservationsZoneNames = createCachedSelector(
-  (state: RootState, plantingSiteId: number) => selectMergedPlantingSiteObservations(state, plantingSiteId, ''),
+  (state: RootState, plantingSiteId: number, status?: ObservationState[]) =>
+    selectMergedPlantingSiteObservations(state, plantingSiteId, '', status),
   (observations) =>
     Array.from(
       new Set(
@@ -71,7 +110,10 @@ export const selectObservationsZoneNames = createCachedSelector(
         )
       )
     )
-)((state: RootState, plantingSiteId: number) => plantingSiteId.toString());
+)(
+  (state: RootState, plantingSiteId: number, status?: ObservationState[]) =>
+    `${plantingSiteId.toString()}_${status?.join(',')}`
+);
 
 /**
  * Add Observations related selectors below

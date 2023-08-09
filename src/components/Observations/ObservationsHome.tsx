@@ -24,7 +24,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
   const plantingSites = useAppSelector(selectPlantingSites);
   const observationsResults = useAppSelector((state) =>
-    selectPlantingSiteObservationsResults(state, selectedPlantingSite?.id)
+    selectPlantingSiteObservationsResults(state, selectedPlantingSite?.id ?? -1, ['Completed', 'InProgress', 'Overdue'])
   );
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);

@@ -33,8 +33,9 @@ export default function ObservationMapView({
   const classes = useStyles();
 
   const observationsDates = useMemo(() => {
-    return observationsResults
-      ?.map((obs) => obs.completedDate)
+    const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
+
+    return Array.from(uniqueDates)
       ?.filter((time) => time)
       ?.map((time) => time!)
       ?.sort((a, b) => (Date.parse(a!) > Date.parse(b!) ? 1 : -1));
@@ -56,7 +57,11 @@ export default function ObservationMapView({
   }, [observationsDates]);
 
   const selectedObservation = useMemo(
-    () => observationsResults?.find((obs) => obs.completedDate === selectedObservationDate),
+    () =>
+      observationsResults?.find((obs) => {
+        const dateToCheck = obs.state === 'Completed' ? obs.completedDate : obs.startDate;
+        return dateToCheck === selectedObservationDate;
+      }),
     [observationsResults, selectedObservationDate]
   );
 
@@ -124,7 +129,7 @@ export default function ObservationMapView({
 
     return (
       <TooltipContents
-        observationInProgress={selectedObservation?.state === 'InProgress'}
+        observationState={selectedObservation?.state}
         title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
         numPlants={entity?.totalPlants}
         numSpecies={entity?.totalSpecies}

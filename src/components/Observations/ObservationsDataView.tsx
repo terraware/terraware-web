@@ -1,7 +1,9 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 import { FieldOptionsMap } from 'src/types/Search';
+import { ObservationState } from 'src/types/Observations';
 import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import {
@@ -24,6 +26,8 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   const { selectedPlantingSiteId, setFilterOptions } = props;
   const { ...searchProps }: SearchProps = props;
   const defaultTimeZone = useDefaultTimeZone();
+  const { activeLocale } = useLocalization();
+  const [status, setStatus] = useState<ObservationState[]>([]);
 
   const observationsResults = useAppSelector((state) =>
     searchObservations(
@@ -31,22 +35,51 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       selectedPlantingSiteId,
       defaultTimeZone.get().id,
       searchProps.search,
-      searchProps.filtersProps?.filters.zone?.values ?? []
+      searchProps.filtersProps?.filters.zone?.values ?? [],
+      status
     )
   );
 
   const upcomingObservations = useAppSelector((state) => selectPlantingSiteObservations(state, -1, 'Upcoming'));
 
-  const zoneNames = useAppSelector((state) => selectObservationsZoneNames(state, selectedPlantingSiteId));
+  const zoneNames = useAppSelector((state) => selectObservationsZoneNames(state, selectedPlantingSiteId, status));
 
   useEffect(() => {
-    setFilterOptions({
-      zone: {
-        partial: false,
-        values: zoneNames,
-      },
-    });
-  }, [setFilterOptions, zoneNames]);
+    if (activeLocale) {
+      setFilterOptions({
+        zone: {
+          partial: false,
+          values: zoneNames,
+        },
+        status: {
+          partial: false,
+          values: [strings.COMPLETED, strings.IN_PROGRESS, strings.OVERDUE],
+        },
+      });
+    }
+  }, [setFilterOptions, zoneNames, activeLocale]);
+
+  useEffect(() => {
+    const values = searchProps.filtersProps?.filters.status?.values ?? [];
+    const mappedValues = values.reduce((acc: ObservationState[], curr: string) => {
+      let mappedValue;
+      if (curr === strings.COMPLETED) {
+        mappedValue = 'Completed';
+      } else if (curr === strings.IN_PROGRESS) {
+        mappedValue = 'InProgress';
+      } else if (curr === strings.OVERDUE) {
+        mappedValue = 'Overdue';
+      }
+      return mappedValue ? [...acc, mappedValue] : acc;
+    }, [] as ObservationState[]);
+
+    if (mappedValues.length) {
+      setStatus(mappedValues);
+    } else {
+      // if user clears filter, get specific statuses, we don't want to see Upcoming
+      setStatus(['Completed', 'InProgress', 'Overdue']);
+    }
+  }, [searchProps.filtersProps?.filters.status]);
 
   const observationsEvents = useMemo<ObservationEvent[]>(() => {
     if (!upcomingObservations) {
