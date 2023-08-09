@@ -4,6 +4,7 @@ import strings from 'src/strings';
 import { useLocalization } from 'src/providers';
 import { FieldOptionsMap } from 'src/types/Search';
 import { ObservationState } from 'src/types/Observations';
+import { PlantingSite } from 'src/types/Tracking';
 import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
@@ -15,10 +16,11 @@ import ObservationMapView from './map/ObservationMapView';
 export type ObservationsDataViewProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
   selectedPlantingSiteId: number;
+  selectedPlantingSite?: PlantingSite;
 };
 
 export default function ObservationsDataView(props: ObservationsDataViewProps): JSX.Element {
-  const { selectedPlantingSiteId, setFilterOptions } = props;
+  const { selectedPlantingSiteId, selectedPlantingSite, setFilterOptions } = props;
   const { ...searchProps }: SearchProps = props;
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
@@ -80,10 +82,14 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       search={<Search {...searchProps} />}
       list={<OrgObservationsListView observationsResults={observationsResults} />}
       map={
-        selectedPlantingSiteId === -1 ? (
-          <AllPlantingSitesMapView />
+        selectedPlantingSite ? (
+          <ObservationMapView
+            observationsResults={observationsResults}
+            selectedPlantingSite={selectedPlantingSite}
+            {...searchProps}
+          />
         ) : (
-          <ObservationMapView observationsResults={observationsResults} {...searchProps} />
+          <AllPlantingSitesMapView />
         )
       }
     />

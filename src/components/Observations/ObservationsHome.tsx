@@ -73,7 +73,11 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
         {observationsResults === undefined ? (
           <CircularProgress sx={{ margin: 'auto' }} />
         ) : selectedPlantingSite && observationsResults?.length ? (
-          <ObservationsDataView selectedPlantingSiteId={selectedPlantingSite.id} {...props} />
+          <ObservationsDataView
+            selectedPlantingSiteId={selectedPlantingSite.id}
+            selectedPlantingSite={selectedPlantingSite}
+            {...props}
+          />
         ) : (
           <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
             <EmptyStateContent

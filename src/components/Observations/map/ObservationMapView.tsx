@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ObservationResults } from 'src/types/Observations';
 import { Box, Theme } from '@mui/material';
+import { PlantingSite } from 'src/types/Tracking';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
@@ -23,12 +24,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type ObservationMapViewProps = SearchProps & {
   observationsResults?: ObservationResults[];
+  selectedPlantingSite: PlantingSite;
 };
 
 export default function ObservationMapView({
   observationsResults,
   search,
   filtersProps,
+  selectedPlantingSite,
 }: ObservationMapViewProps): JSX.Element {
   const classes = useStyles();
 
@@ -65,7 +68,11 @@ export default function ObservationMapView({
     [observationsResults, selectedObservationDate]
   );
 
-  const [plantingSiteMapData, setPlantingSiteMapData] = useState<MapSourceBaseData | undefined>();
+  const plantingSiteMapData: MapSourceBaseData | undefined = useMemo(
+    () => MapService.getMapDataFromPlantingSite(selectedPlantingSite)?.site,
+    [selectedPlantingSite]
+  );
+
   const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
     if (!selectedObservationDate || !selectedObservation) {
       return {
@@ -79,12 +86,6 @@ export default function ObservationMapView({
 
     return MapService.getMapDataFromObservation(selectedObservation);
   }, [selectedObservation, selectedObservationDate, plantingSiteMapData]);
-
-  useEffect(() => {
-    if (!plantingSiteMapData && mapData.site) {
-      setPlantingSiteMapData(mapData.site);
-    }
-  }, [mapData, plantingSiteMapData]);
 
   const filterZoneNames = useMemo(() => filtersProps?.filters.zone?.values ?? [], [filtersProps?.filters.zone?.values]);
 
