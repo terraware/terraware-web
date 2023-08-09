@@ -82,7 +82,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       search={<Search {...searchProps} />}
       list={<OrgObservationsListView observationsResults={observationsResults} />}
       map={
-        selectedPlantingSite ? (
+        selectedPlantingSite && selectedPlantingSiteId !== -1 ? (
           <ObservationMapView
             observationsResults={observationsResults}
             selectedPlantingSite={selectedPlantingSite}
