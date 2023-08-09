@@ -101,6 +101,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
               chartData={chartData}
               customTooltipTitles={tooltipTitles}
               maxWidth='100%'
+              yAxisLabel={strings.PLANTS_PER_HECTARE}
             />
           </Box>
           <Typography fontSize='12px' fontWeight={400}>
