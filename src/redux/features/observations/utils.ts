@@ -241,17 +241,14 @@ const mergeSpecies = (
   return speciesObservations
     .filter(
       (speciesObservation: ObservationSpeciesResultsPayload) =>
-        speciesObservation.speciesId || speciesObservation.speciesName
+        species[speciesObservation.speciesId ?? -1] || speciesObservation.speciesName
     )
     .map(
       (speciesObservation: ObservationSpeciesResultsPayload): ObservationSpeciesResults => ({
         ...speciesObservation,
-        speciesCommonName: speciesObservation.speciesId
-          ? species[speciesObservation.speciesId].commonName ?? ''
-          : speciesObservation.speciesName,
-        speciesScientificName: speciesObservation.speciesId
-          ? species[speciesObservation.speciesId].scientificName ?? ''
-          : '',
+        speciesCommonName:
+          species[speciesObservation.speciesId ?? -1]?.commonName ?? speciesObservation.speciesName ?? '',
+        speciesScientificName: species[speciesObservation.speciesId ?? -1]?.scientificName ?? '',
       })
     );
 };
