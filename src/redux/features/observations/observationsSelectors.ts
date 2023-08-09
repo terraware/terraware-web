@@ -30,7 +30,7 @@ export const selectPlantingSiteObservationsResults = createCachedSelector(
       const matchesSite = plantingSiteId === -1 || observationResults.plantingSiteId === plantingSiteId;
       const matchesState =
         (!status?.length && observationResults.state === 'Completed') ||
-        status?.indexOf(observationResults.state) !== -1;
+        (status && status.indexOf(observationResults.state) !== -1);
       return matchesSite && matchesState;
     });
   }
