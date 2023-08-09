@@ -674,6 +674,7 @@ NURSERY_REQUIRED,Vivero *
 NURSERY_TRANSFER,Traslado de vivero
 OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para {0} para el/los lugar(es) de plantación: {1},"Example: Observation event is scheduled for June 1, 2023 for planting site(s): Site-A, Site-B"
 OBSERVATION_IN_PROGRESS,Observación en progreso
+OBSERVATION_OVERDUE,Observación con atraso
 OBSERVATION_STATUS,Estado de la observación
 OBSERVATION_STATUS_OUTSTANDING,Pendiente,Remaining to be done
 OBSERVATIONS,Observaciones
