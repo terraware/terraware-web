@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1691621821877" clover="3.2.0">
-  <project timestamp="1691621821877" name="All files">
-    <metrics statements="12010" coveredstatements="362" conditionals="7622" coveredconditionals="90" methods="3766" coveredmethods="77" elements="23398" coveredelements="529" complexity="0" loc="12010" ncloc="12010" packages="101" files="480" classes="480"/>
+<coverage generated="1691623441337" clover="3.2.0">
+  <project timestamp="1691623441337" name="All files">
+    <metrics statements="12010" coveredstatements="362" conditionals="7624" coveredconditionals="90" methods="3766" coveredmethods="77" elements="23400" coveredelements="529" complexity="0" loc="12010" ncloc="12010" packages="101" files="480" classes="480"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="169" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -6009,7 +6009,7 @@
       </file>
     </package>
     <package name="src.components.PlantsV2.components">
-      <metrics statements="343" coveredstatements="0" conditionals="242" coveredconditionals="0" methods="113" coveredmethods="0"/>
+      <metrics statements="343" coveredstatements="0" conditionals="244" coveredconditionals="0" methods="113" coveredmethods="0"/>
       <file name="HectaresPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/HectaresPlantedCard.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -6102,7 +6102,7 @@
         <line num="77" count="0" type="stmt"/>
       </file>
       <file name="NumberOfSpeciesPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsV2/components/NumberOfSpeciesPlantedCard.tsx">
-        <metrics statements="49" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="13" coveredmethods="0"/>
+        <metrics statements="49" coveredstatements="0" conditionals="38" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
@@ -6126,7 +6126,7 @@
         <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="47" count="0" type="stmt"/>
         <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="50" count="0" type="stmt"/>
