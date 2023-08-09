@@ -79,7 +79,10 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
       (observationsResults ?? []).map((observation: ObservationResults) => {
         return {
           ...observation,
-          totalPlants: observation.plantingZones.reduce((acc, curr) => curr.totalPlants + acc, 0),
+          totalPlants:
+            observation.state === 'Completed'
+              ? observation.plantingZones.reduce((acc, curr) => curr.totalPlants + acc, 0)
+              : 0,
           plantingZones: observation.plantingZones
             .map((zone: ObservationPlantingZoneResults) => zone.plantingZoneName)
             .join('\r'),
