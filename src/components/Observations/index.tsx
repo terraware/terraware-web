@@ -74,10 +74,16 @@ const ObservationsWrapper = (): JSX.Element => {
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
-  const filterColumns = useMemo<FilterField[]>(
-    () => (activeLocale ? [{ name: 'zone', label: strings.ZONE, type: 'multiple_selection' }] : []),
-    [activeLocale]
-  );
+  const filterColumns = useMemo<FilterField[]>(() => {
+    if (activeLocale) {
+      return [
+        { name: 'zone', label: strings.ZONE, type: 'multiple_selection' },
+        { name: 'status', label: strings.STATUS, type: 'multiple_selection' },
+      ];
+    } else {
+      return [];
+    }
+  }, [activeLocale]);
 
   const setFilterOptionsCallback = useCallback((value: FieldOptionsMap) => setFilterOptions(value), []);
 
@@ -94,6 +100,21 @@ const ObservationsWrapper = (): JSX.Element => {
     }),
     [filters, filterColumns, filterOptions, search]
   );
+
+  // reset status filter values to default on locale change
+  useEffect(() => {
+    if (activeLocale) {
+      setFilters((prev) => ({
+        ...prev,
+        status: {
+          field: 'status',
+          operation: 'field',
+          type: 'Exact',
+          values: [strings.COMPLETED],
+        },
+      }));
+    }
+  }, [activeLocale]);
 
   return (
     <Switch>

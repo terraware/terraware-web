@@ -138,7 +138,8 @@ export const mergeObservations = (
         ...observation,
         plantingSiteName: site.name,
         boundary: site.boundary,
-        completedDate: getDateDisplayValue(observation.completedTime!, site.timeZone),
+        completedDate: observation.completedTime ? getDateDisplayValue(observation.completedTime, site.timeZone) : '',
+        startDate: getDateDisplayValue(observation.startDate, site.timeZone),
         plantingZones: mergeZones(
           observation.plantingZones,
           zones,
@@ -238,12 +239,16 @@ const mergeSpecies = (
   species: Record<number, SpeciesValue>
 ): ObservationSpeciesResults[] => {
   return speciesObservations
-    .filter((speciesObservation: ObservationSpeciesResultsPayload) => species[speciesObservation.speciesId ?? -1])
+    .filter(
+      (speciesObservation: ObservationSpeciesResultsPayload) =>
+        species[speciesObservation.speciesId ?? -1] || speciesObservation.speciesName
+    )
     .map(
       (speciesObservation: ObservationSpeciesResultsPayload): ObservationSpeciesResults => ({
         ...speciesObservation,
-        speciesCommonName: species[speciesObservation.speciesId ?? -1].commonName,
-        speciesScientificName: species[speciesObservation.speciesId ?? -1].scientificName,
+        speciesCommonName:
+          species[speciesObservation.speciesId ?? -1]?.commonName ?? speciesObservation.speciesName ?? '',
+        speciesScientificName: species[speciesObservation.speciesId ?? -1]?.scientificName ?? '',
       })
     );
 };

@@ -44,7 +44,8 @@ const OrgObservationsRenderer =
     }
 
     if (column.key === 'completedDate') {
-      return <CellRenderer {...props} value={createLinkToSiteObservation(getShortDate(value as string, locale))} />;
+      const dateValue: string = (value as string) || (row.startDate as string);
+      return <CellRenderer {...props} value={createLinkToSiteObservation(getShortDate(dateValue, locale))} />;
     }
 
     if (column.key === 'state') {

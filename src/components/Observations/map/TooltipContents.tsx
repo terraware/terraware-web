@@ -1,9 +1,10 @@
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
+import { ObservationState } from 'src/types/Observations';
 
 type TooltipContentsProps = {
   title: string;
-  observationInProgress: boolean;
+  observationState?: ObservationState;
   numPlants?: number;
   numSpecies?: number;
   plantingDensity?: number;
@@ -11,8 +12,11 @@ type TooltipContentsProps = {
 };
 
 export default function TooltipContents(props: TooltipContentsProps): JSX.Element {
-  const { title, observationInProgress, numPlants, numSpecies, plantingDensity, percentMortality } = props;
+  const { title, observationState, numPlants, numSpecies, plantingDensity, percentMortality } = props;
   const theme = useTheme();
+
+  const observationInProgress = observationState === 'InProgress';
+  const observationOverdue = observationState === 'Overdue';
 
   return (
     <Box display='flex' flexDirection='column' padding={theme.spacing(1)}>
@@ -21,6 +25,8 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
       </Typography>
       {observationInProgress ? (
         <Typography>{strings.OBSERVATION_IN_PROGRESS}</Typography>
+      ) : observationOverdue ? (
+        <Typography>{strings.OBSERVATION_OVERDUE}</Typography>
       ) : (
         <>
           <Typography fontSize='16px' fontWeight={400}>
