@@ -43,7 +43,7 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
             if (species) {
               let endangered = false;
               let rare = false;
-              if (species.conservationCategory === 'EN') {
+              if (species.conservationCategory === 'EN' || species.conservationCategory === 'CR') {
                 endangered = true;
               }
               if (species.rare) {
