@@ -113,6 +113,7 @@ export interface paths {
     delete: operations["deleteBatch"];
   };
   "/api/v1/nursery/batches/{id}/quantities": {
+    /** This should not be used to record withdrawals; use the withdrawal API for that. */
     put: operations["updateBatchQuantities"];
   };
   "/api/v1/nursery/species/{speciesId}/summary": {
@@ -156,6 +157,20 @@ export interface paths {
     put: operations["updateOrganizationUser"];
     /** Does not remove any data created by the user. */
     delete: operations["deleteOrganizationUser"];
+  };
+  "/api/v1/projects": {
+    get: operations["listProjects"];
+    post: operations["createProject"];
+  };
+  "/api/v1/projects/{id}": {
+    get: operations["getProject"];
+    put: operations["updateProject"];
+    /** Any accessions, seedling batches, or planting sites that were assigned to the project will no longer be assigned to any project. */
+    delete: operations["deleteProject"];
+  };
+  "/api/v1/projects/{id}/assign": {
+    /** Overwrites any existing project assignments. */
+    post: operations["assignProject"];
   };
   "/api/v1/reports": {
     get: operations["listReports"];
@@ -202,6 +217,7 @@ export interface paths {
     delete: operations["deleteReportPhoto"];
   };
   "/api/v1/search": {
+    /** If a sublist field has multiple values, they are separated with line breaks in the exported file. */
     post: operations["search_1"];
   };
   "/api/v1/seedbank/accessions/{id}": {
@@ -309,6 +325,7 @@ export interface paths {
     post: operations["reassignDelivery"];
   };
   "/api/v1/tracking/mapbox/token": {
+    /** Mapbox API tokens are short-lived; when a token expires, request a new one. */
     get: operations["getMapboxToken"];
   };
   "/api/v1/tracking/observations": {
@@ -341,23 +358,28 @@ export interface paths {
     post: operations["releaseMonitoringPlot"];
   };
   "/api/v1/tracking/observations/{observationId}/results": {
+    /** Some information is only available once all plots have been completed. */
     get: operations["getObservationResults"];
   };
   "/api/v1/tracking/sites": {
+    /** The list can optionally contain information about planting zones and subzones. */
     get: operations["listPlantingSites"];
     post: operations["createPlantingSite"];
   };
   "/api/v1/tracking/sites/{id}": {
+    /** Includes information about the site's planting zones and subzones. */
     get: operations["getPlantingSite"];
     put: operations["updatePlantingSite"];
   };
   "/api/v1/tracking/sites/{id}/reportedPlants": {
+    /** The totals are based on nursery withdrawals. */
     get: operations["getPlantingSiteReportedPlants"];
   };
   "/api/v1/tracking/subzones/{id}": {
     put: operations["updatePlantingSubzone"];
   };
   "/api/v1/tracking/subzones/{id}/species": {
+    /** The list is based on nursery withdrawals. */
     get: operations["listPlantingSubzoneSpecies"];
   };
   "/api/v1/users/me": {
@@ -498,6 +520,8 @@ export interface components {
        * @description Estimated number of plants the seeds were collected from.
        */
       plantsCollectedFrom?: number;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       receivedDate?: string;
       /** @description Number or weight of seeds remaining for withdrawal and testing. May be calculated by the server after withdrawals. */
@@ -568,6 +592,11 @@ export interface components {
       socialImpact?: string;
       successStories?: string;
       sustainableDevelopmentGoals: components["schemas"]["GoalProgressPayloadV1"][];
+    };
+    AssignProjectRequestPayload: {
+      accessionIds?: number[];
+      batchIds?: number[];
+      plantingSiteIds?: number[];
     };
     AssignedPlotPayload: {
       boundary: components["schemas"]["Geometry"];
@@ -642,6 +671,8 @@ export interface components {
       /** Format: int32 */
       notReadyQuantity: number;
       notes?: string;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       readyByDate?: string;
       /** Format: int32 */
@@ -724,6 +755,8 @@ export interface components {
        * @description Estimated number of plants the seeds were collected from.
        */
       plantsCollectedFrom?: number;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       receivedDate?: string;
       source?: "Web" | "Seed Collector App" | "File Import";
@@ -774,6 +807,8 @@ export interface components {
       /** Format: int32 */
       notReadyQuantity: number;
       notes?: string;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       readyByDate?: string;
       /** Format: int32 */
@@ -971,6 +1006,8 @@ export interface components {
        * @description What month this site's planting season starts. 1=January.
        */
       plantingSeasonStartMonth?: number;
+      /** Format: int64 */
+      projectId?: number;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -978,6 +1015,17 @@ export interface components {
       timeZone?: string;
     };
     CreatePlantingSiteResponsePayload: {
+      /** Format: int64 */
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateProjectRequestPayload: {
+      description?: string;
+      name: string;
+      /** Format: int64 */
+      organizationId: number;
+    };
+    CreateProjectResponsePayload: {
       /** Format: int64 */
       id: number;
       status: components["schemas"]["SuccessOrError"];
@@ -1398,6 +1446,10 @@ export interface components {
       totalTreesPlanted?: number;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
+    GetProjectResponsePayload: {
+      project: components["schemas"]["ProjectPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetReportPayload: {
       /** Format: int64 */
       id: number;
@@ -1765,6 +1817,10 @@ export interface components {
       species: components["schemas"]["PlantingSubzoneSpeciesPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListProjectsResponsePayload: {
+      projects: components["schemas"]["ProjectPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListReportFilesResponseElement: {
       filename: string;
       /** Format: int64 */
@@ -2042,9 +2098,19 @@ export interface components {
       certainty: "Known" | "Other" | "Unknown";
       /**
        * Format: int32
+       * @description Number of dead plants observed in permanent monitoring plots in all observations including this one. 0 if this is a plot-level result for a temporary monitoring plot.
+       */
+      cumulativeDead: number;
+      /**
+       * Format: int32
        * @description Percentage of plants in permanent monitoring plots that are dead. If there are no permanent monitoring plots (or if this is a plot-level result for a temporary monitoring plot) this will be null.
        */
       mortalityRate?: number;
+      /**
+       * Format: int32
+       * @description Number of live plants observed in permanent plots in this observation, not including existing plants. 0 if ths is a plot-level result for a temporary monitoring plot.
+       */
+      permanentLive: number;
       /**
        * Format: int64
        * @description If certainty is Known, the ID of the species. Null if certainty is Other or Unknown.
@@ -2159,6 +2225,8 @@ export interface components {
        */
       plantingSeasonStartMonth?: number;
       plantingZones?: components["schemas"]["PlantingZonePayload"][];
+      /** Format: int64 */
+      projectId?: number;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -2234,6 +2302,14 @@ export interface components {
     } & {
       coordinates: unknown;
       type: unknown;
+    };
+    ProjectPayload: {
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /** Format: int64 */
+      organizationId: number;
     };
     PutNurseryV1: {
       /** Format: date */
@@ -2758,6 +2834,8 @@ export interface components {
        * @description Estimated number of plants the seeds were collected from.
        */
       plantsCollectedFrom?: number;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       receivedDate?: string;
       /** @description Quantity of seeds remaining in the accession. If this is different than the existing value, it is considered a new observation, and the new value will override any previously-calculated remaining quantities. */
@@ -2810,6 +2888,8 @@ export interface components {
     };
     UpdateBatchRequestPayload: {
       notes?: string;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       readyByDate?: string;
       /** Format: int32 */
@@ -2928,6 +3008,8 @@ export interface components {
        * @description What month this site's planting season starts. 1=January.
        */
       plantingSeasonStartMonth?: number;
+      /** Format: int64 */
+      projectId?: number;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -2936,6 +3018,10 @@ export interface components {
     };
     UpdatePlantingSubzoneRequestPayload: {
       plantingCompleted: boolean;
+    };
+    UpdateProjectRequestPayload: {
+      description?: string;
+      name: string;
     };
     UpdateReportPhotoRequestPayload: {
       caption?: string;
@@ -3244,7 +3330,9 @@ export interface operations {
   getDeviceManagers: {
     parameters: {
       query: {
+        /** Search for device managers with this sensor kit ID. Either this or facilityId must be specified. */
         sensorKitId?: string;
+        /** Search for device managers associated with this facility. Either this or sensorKitId must be specified. */
         facilityId?: number;
       };
     };
@@ -3889,6 +3977,7 @@ export interface operations {
       };
     };
   };
+  /** This should not be used to record withdrawals; use the withdrawal API for that. */
   updateBatchQuantities: {
     parameters: {
       path: {
@@ -4263,6 +4352,109 @@ export interface operations {
       };
     };
   };
+  listProjects: {
+    parameters: {
+      query: {
+        /** If specified, list projects in this organization. If absent, list projects in all the user's organizations. */
+        organizationId?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListProjectsResponsePayload"];
+        };
+      };
+    };
+  };
+  createProject: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateProjectResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateProjectRequestPayload"];
+      };
+    };
+  };
+  getProject: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectResponsePayload"];
+        };
+      };
+    };
+  };
+  updateProject: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProjectRequestPayload"];
+      };
+    };
+  };
+  /** Any accessions, seedling batches, or planting sites that were assigned to the project will no longer be assigned to any project. */
+  deleteProject: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Overwrites any existing project assignments. */
+  assignProject: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AssignProjectRequestPayload"];
+      };
+    };
+  };
   listReports: {
     parameters: {
       query: {
@@ -4575,6 +4767,7 @@ export interface operations {
       };
     };
   };
+  /** If a sublist field has multiple values, they are separated with line breaks in the exported file. */
   search_1: {
     responses: {
       /** OK */
@@ -4848,10 +5041,16 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The storage location contains accessions. Move them to a different storage location first. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5360,6 +5559,7 @@ export interface operations {
       };
     };
   };
+  /** Mapbox API tokens are short-lived; when a token expires, request a new one. */
   getMapboxToken: {
     responses: {
       /** The requested operation succeeded. */
@@ -5576,6 +5776,7 @@ export interface operations {
       };
     };
   };
+  /** Some information is only available once all plots have been completed. */
   getObservationResults: {
     parameters: {
       path: {
@@ -5591,6 +5792,7 @@ export interface operations {
       };
     };
   };
+  /** The list can optionally contain information about planting zones and subzones. */
   listPlantingSites: {
     parameters: {
       query: {
@@ -5623,6 +5825,7 @@ export interface operations {
       };
     };
   };
+  /** Includes information about the site's planting zones and subzones. */
   getPlantingSite: {
     parameters: {
       path: {
@@ -5658,6 +5861,7 @@ export interface operations {
       };
     };
   };
+  /** The totals are based on nursery withdrawals. */
   getPlantingSiteReportedPlants: {
     parameters: {
       path: {
@@ -5693,6 +5897,7 @@ export interface operations {
       };
     };
   };
+  /** The list is based on nursery withdrawals. */
   listPlantingSubzoneSpecies: {
     parameters: {
       path: {

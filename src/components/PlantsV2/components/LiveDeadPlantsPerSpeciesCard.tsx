@@ -52,13 +52,11 @@ export default function LiveDeadPlantsPerSpeciesCard({
       );
       if (
         selectedObservationSpecies &&
-        selectedObservationSpecies.mortalityRate !== undefined &&
-        selectedObservationSpecies.mortalityRate !== null
+        (selectedObservationSpecies.cumulativeDead !== 0 || selectedObservationSpecies.permanentLive !== 0)
       ) {
         setShowChart(true);
-        const totalPlants = selectedObservationSpecies.totalPlants;
-        const dead = Math.round((selectedObservationSpecies.mortalityRate * totalPlants) / 100);
-        const live = totalPlants - dead;
+        const dead = selectedObservationSpecies.cumulativeDead;
+        const live = selectedObservationSpecies.permanentLive;
         setValues([live, dead]);
       }
     } else {
