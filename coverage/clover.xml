@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1691623441337" clover="3.2.0">
-  <project timestamp="1691623441337" name="All files">
+<coverage generated="1691678654695" clover="3.2.0">
+  <project timestamp="1691678654695" name="All files">
     <metrics statements="12010" coveredstatements="362" conditionals="7624" coveredconditionals="90" methods="3766" coveredmethods="77" elements="23400" coveredelements="529" complexity="0" loc="12010" ncloc="12010" packages="101" files="480" classes="480"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="169" coveredconditionals="0" methods="67" coveredmethods="0"/>
@@ -4651,7 +4651,7 @@
       </file>
     </package>
     <package name="src.components.Observations.common">
-      <metrics statements="52" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="16" coveredmethods="0"/>
+      <metrics statements="52" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="16" coveredmethods="0"/>
       <file name="AggregatedPlantsStats.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/common/AggregatedPlantsStats.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="28" count="0" type="stmt"/>
@@ -4687,13 +4687,13 @@
         <line num="84" count="0" type="stmt"/>
       </file>
       <file name="SpeciesMortalityRateChart.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/common/SpeciesMortalityRateChart.tsx">
-        <metrics statements="13" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="13" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="22" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="23" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
@@ -4703,12 +4703,12 @@
         <line num="45" count="0" type="stmt"/>
       </file>
       <file name="SpeciesTotalPlantsChart.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/common/SpeciesTotalPlantsChart.tsx">
-        <metrics statements="11" coveredstatements="0" conditionals="3" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="11" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
-        <line num="22" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
@@ -5872,9 +5872,9 @@
       </file>
     </package>
     <package name="src.components.PlantsPrimaryPage">
-      <metrics statements="59" coveredstatements="0" conditionals="50" coveredconditionals="0" methods="14" coveredmethods="0"/>
+      <metrics statements="59" coveredstatements="0" conditionals="48" coveredconditionals="0" methods="14" coveredmethods="0"/>
       <file name="PlantsPrimaryPageView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantsPrimaryPage/PlantsPrimaryPageView.tsx">
-        <metrics statements="12" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="12" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>

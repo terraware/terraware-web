@@ -1,3 +1,5 @@
+8064adc2a SW-4022 Adjust padding and alignment for site selector in plants primary page (#1652)
+96968ba66 SW-4051 Use scientific names where available in the observation details species charts (#1649)
 dfd5e448f SW-4052 Include critically endangered species in endangered tally bar chart (plants v2 dashboard) (#1650)
 2ed5d4597 Updated translations from Phrase (#1651)
 bd822cf7f SW-4045 Add support for InProgress and Overdue observations in the Observations page (#1647)
