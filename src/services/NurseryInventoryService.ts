@@ -131,22 +131,52 @@ const searchInventory = async ({
   facilityIds,
   query,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
-  const params: SearchNodePayload = {
-    prefix: 'inventories',
-    fields: [...BE_SORTED_FIELDS, 'species_commonName', 'totalQuantity(raw)'],
-    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          values: [organizationId],
-        },
+  let params: SearchNodePayload;
+  const forSpecificFacilities = !!facilityIds && !!facilityIds.length;
+  if (forSpecificFacilities) {
+    params = {
+      prefix: 'inventories.facilityInventories',
+      fields: [
+        'species_id',
+        'species_scientificName',
+        'species_commonName',
+        'facility_name',
+        'germinatingQuantity(raw)',
+        'readyQuantity(raw)',
+        'notReadyQuantity(raw)',
+        'totalQuantity(raw)',
       ],
-    },
-    count: 0,
-  };
+      sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
+      search: {
+        operation: 'and',
+        children: [
+          {
+            operation: 'field',
+            field: 'organization_id',
+            values: [organizationId],
+          },
+        ],
+      },
+      count: 0,
+    };
+  } else {
+    params = {
+      prefix: 'inventories',
+      fields: [...BE_SORTED_FIELDS, 'species_commonName', 'totalQuantity(raw)'],
+      sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
+      search: {
+        operation: 'and',
+        children: [
+          {
+            operation: 'field',
+            field: 'organization_id',
+            values: [organizationId],
+          },
+        ],
+      },
+      count: 0,
+    };
+  }
 
   const searchValueChildren: FieldNodePayload[] = [];
 
@@ -169,7 +199,7 @@ const searchInventory = async ({
 
     const facilityNameNode: FieldNodePayload = {
       operation: 'field',
-      field: 'facilityInventories.facility_name',
+      field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
       type: 'Fuzzy',
       values: [query],
     };
@@ -178,10 +208,10 @@ const searchInventory = async ({
 
   let nurseryFilter: FieldNodePayload;
 
-  if (facilityIds && facilityIds.length > 0) {
+  if (forSpecificFacilities) {
     nurseryFilter = {
       operation: 'field',
-      field: 'facilityInventories.facility_id',
+      field: 'facility_id',
       type: 'Exact',
       values: facilityIds.map((id) => id.toString()),
     };
