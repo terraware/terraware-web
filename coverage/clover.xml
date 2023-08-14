@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1691678654695" clover="3.2.0">
-  <project timestamp="1691678654695" name="All files">
-    <metrics statements="12010" coveredstatements="362" conditionals="7624" coveredconditionals="90" methods="3766" coveredmethods="77" elements="23400" coveredelements="529" complexity="0" loc="12010" ncloc="12010" packages="101" files="480" classes="480"/>
+<coverage generated="1692041131613" clover="3.2.0">
+  <project timestamp="1692041131613" name="All files">
+    <metrics statements="12010" coveredstatements="362" conditionals="7624" coveredconditionals="90" methods="3767" coveredmethods="77" elements="23401" coveredelements="529" complexity="0" loc="12010" ncloc="12010" packages="101" files="480" classes="480"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="169" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8332,7 +8332,7 @@
       </file>
     </package>
     <package name="src.components.accession2.properties">
-      <metrics statements="234" coveredstatements="0" conditionals="154" coveredconditionals="0" methods="94" coveredmethods="0"/>
+      <metrics statements="234" coveredstatements="0" conditionals="154" coveredconditionals="0" methods="95" coveredmethods="0"/>
       <file name="Accession2Address.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/accession2/properties/Accession2Address.tsx">
         <metrics statements="52" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="18" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
@@ -8546,7 +8546,7 @@
         <line num="68" count="0" type="stmt"/>
       </file>
       <file name="Species2Dropdown.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/accession2/properties/Species2Dropdown.tsx">
-        <metrics statements="35" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="35" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
