@@ -40,7 +40,7 @@ export default function Species2Dropdown<T extends AccessionPostRequestBody>(
             );
           })
         : response.species;
-      setSpeciesList(speciesToUse);
+      setSpeciesList(speciesToUse.sort((a, b) => a.scientificName.localeCompare(b.scientificName)));
     }
   }, [selectedOrganization, debouncedSearchTerm]);
 
