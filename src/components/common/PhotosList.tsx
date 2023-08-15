@@ -11,7 +11,7 @@ type StyleProps = {
 
 const useStyles = makeStyles(() => ({
   thumbnail: {
-    objectFit: 'cover',
+    objectFit: 'contain',
     display: 'flex',
     width: (props: StyleProps) => (props.isMobile ? '105px' : '220px'),
     height: '120px',
