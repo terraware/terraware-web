@@ -33,8 +33,16 @@ export default function TotalMortalityRateCard({
   let lowestZoneId: number;
   observation?.plantingZones.forEach((zone) => {
     if (zone.mortalityRate !== undefined && zone.mortalityRate !== null && zone.mortalityRate <= lowestMortalityRate) {
-      lowestMortalityRate = zone.mortalityRate;
-      lowestZoneId = zone.plantingZoneId;
+      // if the mortality rate is 0, check that the plots are not all temporary plots (in which case we won't consider this zone)
+      if (
+        zone.mortalityRate !== 0 ||
+        zone.plantingSubzones.some((plantingSubzone) =>
+          plantingSubzone.monitoringPlots.some((plot) => plot.isPermanent)
+        )
+      ) {
+        lowestMortalityRate = zone.mortalityRate;
+        lowestZoneId = zone.plantingZoneId;
+      }
     }
   });
 
