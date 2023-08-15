@@ -2,7 +2,7 @@ import { createCachedSelector } from 're-reselect';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from 'src/redux/rootReducer';
 import { ObservationResults, ObservationPlantingZoneResults } from 'src/types/Observations';
-import { selectMergedPlantingSiteObservations } from './observationsSelectors';
+import { selectMergedPlantingSiteObservations, ALL_STATES } from './observationsSelectors';
 import { searchResultZones } from './utils';
 
 // search observation details (search planting zone name only)
@@ -24,7 +24,7 @@ export type DetailsSearchParams = SearchParams &
 export const selectObservationDetails = createSelector(
   [
     (state, params, defaultTimeZone) =>
-      selectMergedPlantingSiteObservations(state, params.plantingSiteId, defaultTimeZone),
+      selectMergedPlantingSiteObservations(state, params.plantingSiteId, defaultTimeZone, ALL_STATES),
     (state, params, defaultTimeZone) => params,
   ],
   (observationsResults, params) =>

@@ -55,7 +55,7 @@ export default function PlantsPrimaryPageView({
     <TfMain backgroundImageVisible={isEmptyState}>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>
-          <Grid item xs={12} display={isMobile ? 'block' : 'flex'}>
+          <Grid item xs={12} display={isMobile ? 'block' : 'flex'} alignItems='center'>
             <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>
             {plantingSites.length > 0 && (
               <>
@@ -69,7 +69,7 @@ export default function PlantsPrimaryPageView({
                     }}
                   />
                 )}
-                <Box display='flex' alignItems='center' paddingTop={isMobile ? 2 : 0}>
+                <Box display='flex' alignItems='center' padding={theme.spacing(2, 0)}>
                   <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
                     {strings.PLANTING_SITE}
                   </Typography>

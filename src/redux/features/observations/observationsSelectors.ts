@@ -11,6 +11,8 @@ import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelecto
 import { mergeObservations, searchZones } from './utils';
 import { isAfter } from 'src/utils/dateUtils';
 
+export const ALL_STATES: ObservationState[] = ['Completed', 'Overdue', 'InProgress'];
+
 /**
  * Observations results selectors below
  */
