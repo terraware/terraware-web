@@ -17,9 +17,8 @@ export default function SpeciesTotalPlantsChart({ minHeight, species }: SpeciesT
     const data: Data = { labels: [], values: [] };
 
     species?.forEach((speciesData) => {
-      const { speciesCommonName, speciesName, speciesScientificName, totalPlants } = speciesData;
-
-      const label: string = speciesName || speciesScientificName || speciesCommonName || '';
+      const { speciesName, speciesScientificName, totalPlants } = speciesData;
+      const label: string = speciesScientificName || speciesName || '';
 
       data.labels.push(label);
       data.values.push(totalPlants);
