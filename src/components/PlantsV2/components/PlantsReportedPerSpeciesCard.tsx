@@ -88,6 +88,7 @@ export default function PlantsReportedPerSpeciesCard({
               maxWidth='100%'
               minHeight='127px'
               yLimits={!values?.length ? { min: 0, max: 200 } : undefined}
+              barWidth={0}
             />
           </Box>
         </Box>
