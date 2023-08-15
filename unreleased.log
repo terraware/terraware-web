@@ -1,1 +1,3 @@
+48ee508dd SW-4074 Don't show mortality information for temporary plots (#1658)
+33a5c8720 SW-4060 Fix issue where observations without a completed time were not clickable (#1655)
 2d68bd056 SW-4056 Nursery inventory add species dropdown should be alphabetized (#1653)
