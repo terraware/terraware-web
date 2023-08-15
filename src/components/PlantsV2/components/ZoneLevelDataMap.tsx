@@ -145,10 +145,10 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
                 value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
               },
               { key: strings.PLANTING_PROGRESS, value: `${zoneProgress[entity.id].progress}%` },
-              { key: strings.PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
-              { key: strings.LIVE_PLANTS, value: `${zoneObservation!.totalPlants} ${strings.PLANTS}` },
-              { key: strings.SPECIES, value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}` },
-              { key: strings.LIVE_SPECIES, value: `${zoneObservation!.totalSpecies} ${strings.SPECIES}` },
+              { key: strings.RECORDED_PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
+              { key: strings.OBSERVED_PLANTS, value: `${zoneObservation!.totalPlants} ${strings.PLANTS}` },
+              { key: strings.RECORDED_SPECIES, value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}` },
+              { key: strings.OBSERVED_SPECIES, value: `${zoneObservation!.totalSpecies} ${strings.SPECIES}` },
             ];
           } else {
             properties = [
@@ -157,8 +157,8 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
                 value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
               },
               { key: strings.PLANTING_PROGRESS, value: `${zoneProgress[entity.id].progress}%` },
-              { key: strings.PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
-              { key: strings.SPECIES, value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}` },
+              { key: strings.RECORDED_PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
+              { key: strings.RECORDED_SPECIES, value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}` },
             ];
           }
         }
