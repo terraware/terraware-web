@@ -18,6 +18,10 @@ export const ALL_STATES: ObservationState[] = ['Completed', 'Overdue', 'InProgre
  */
 export const selectObservationsResults = (state: RootState) => state.observationsResults?.observations;
 export const selectObservationsResultsError = (state: RootState) => state.observationsResults?.error;
+export const selectHasObservationsResults = (state: RootState) => {
+  const results = selectObservationsResults(state);
+  return results !== undefined && results.filter((result) => result.state !== 'Upcoming').length > 0;
+};
 
 export const selectPlantingSiteObservationsResults = createCachedSelector(
   (state: RootState, plantingSiteId: number, status?: ObservationState[]) => selectObservationsResults(state),
