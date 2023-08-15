@@ -95,7 +95,7 @@ export default function TotalMortalityRateCard({
           <Typography fontSize='12px' fontWeight={400}>
             {strings.LOWEST}
           </Typography>
-          {lowestPlantingZone && lowestPlantingZone.plantingZoneId !== highestPlantingZone?.plantingZoneId && (
+          {lowestPlantingZone && (
             <>
               <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(2)}>
                 {lowestPlantingZone.plantingZoneName}

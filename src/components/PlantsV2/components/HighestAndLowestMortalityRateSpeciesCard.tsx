@@ -64,7 +64,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
           <Typography fontSize='12px' fontWeight={400}>
             {strings.LOWEST}
           </Typography>
-          {lowestSpecies && lowestSpecies !== highestSpecies && (
+          {lowestSpecies && (
             <>
               <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(2)}>
                 {lowestSpecies}
