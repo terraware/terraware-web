@@ -81,18 +81,17 @@ export default function PlantsReportedPerSpeciesCard({
             {strings.REPORTED_PLANTS_PER_SPECIES_CARD_TITLE}
           </Typography>
           <Box>
-            {values !== undefined && (
-              <BarChart
-                elementColor={theme.palette.TwClrBasePurple300}
-                chartId='plantsBySpecies'
-                chartData={chartData}
-                customTooltipTitles={tooltipTitles}
-                maxWidth='100%'
-                minHeight='127px'
-                yLimits={!values.length ? { min: 0, max: 200 } : undefined}
-                barWidth={0}
-              />
-            )}
+            <BarChart
+              key={values?.length}
+              elementColor={theme.palette.TwClrBasePurple300}
+              chartId='plantsBySpecies'
+              chartData={chartData}
+              customTooltipTitles={tooltipTitles}
+              maxWidth='100%'
+              minHeight='127px'
+              yLimits={!values?.length ? { min: 0, max: 200 } : undefined}
+              barWidth={0}
+            />
           </Box>
         </Box>
       }
