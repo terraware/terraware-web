@@ -70,7 +70,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
       { label: strings.PLANTS, value: monitoringPlot?.totalPlants },
       { label: strings.SPECIES, value: monitoringPlot?.totalSpecies },
       { label: strings.PLANTING_DENSITY, value: monitoringPlot?.plantingDensity },
-      { label: strings.MORTALITY_RATE, value: monitoringPlot?.mortalityRate },
+      ...(monitoringPlot?.isPermanent ? [{ label: strings.MORTALITY_RATE, value: monitoringPlot?.mortalityRate }] : []),
       { label: strings.NUMBER_OF_PHOTOS, value: monitoringPlot?.photos.length },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes, text: true },
     ],
@@ -128,10 +128,14 @@ export default function ObservationMonitoringPlot(): JSX.Element {
             <Box height='360px'>
               <SpeciesTotalPlantsChart minHeight='360px' species={monitoringPlot?.species} />
             </Box>
-            {title(strings.MORTALITY_RATE_PER_SPECIES)}
-            <Box height='360px'>
-              <SpeciesMortalityRateChart minHeight='360px' species={monitoringPlot?.species} />
-            </Box>
+            {monitoringPlot?.isPermanent && (
+              <>
+                {title(strings.MORTALITY_RATE_PER_SPECIES)}
+                <Box height='360px'>
+                  <SpeciesMortalityRateChart minHeight='360px' species={monitoringPlot?.species} />
+                </Box>
+              </>
+            )}
             {title(strings.PHOTOS)}
             <MonitoringPlotPhotos
               observationId={Number(observationId)}
