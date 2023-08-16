@@ -392,17 +392,17 @@ GREATER_THAN_FIFTY_PERCENT,> 50%
 GROWTH_FORM,Growth Form
 HECTARES,Hectares
 HECTARES_PLANTED_CARD_TITLE,How much of my site has been planted as of {0}?
-HECTARES_PLANTED_DESCRIPTION_1,This is the number of hectares that have been planted in based off the sub-zones you chose when out-planting.
+HECTARES_PLANTED_DESCRIPTION_1,This is the number of hectares that have been planted based on the sub-zones you chose when out-planting.
 HECTARES_PLANTED_DESCRIPTION_2,"For observations, we only assign monitoring plots that we know are a part of these sub-zones."
 HIGHEST,Highest
-HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,Which zones have the highest and lowest mortality rate?
-HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,Which species have the highest and lowest mortality rate?
+HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,Which zones have the highest and lowest mortality rates?
+HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,Which species have the highest and lowest mortality rates?
 HISTORY,History
 HOME,Home
-HOW_MANY_PLANTS_CARD_TITLE,How many plants have I reported to plant?
+HOW_MANY_PLANTS_CARD_TITLE,How many plants have I reported planting?
 HOW_MANY_PLANTS_CARD_TITLE_W_OBS,How many plants are on the site as of {0}?
 HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION,This is your total number of plants based on the site size and planting density from your latest observations.
-HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION_2,"Since then, you have reported to plant {0} plants. This is {1}% greater than your total number of plants as of the observation date."
+HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION_2,"Since then, you have reported planting {0} plants. This is {1}% greater than your total number of plants as of the observation date."
 ID,ID
 IF_APPLICABLE,(if applicable)
 IF_APPLIES,Only if it applies
@@ -559,7 +559,7 @@ MONTH_12,December
 MORE_OPTIONS,More Options
 MORTALITY_RATE,Mortality Rate
 MORTALITY_RATE_BY_SPECIES,Mortality Rate by Species
-MORTALITY_RATE_CARD_TITLE,What is my mortality rate as of {0}?
+MORTALITY_RATE_CARD_TITLE,What is my plant mortality rate as of {0}?
 MORTALITY_RATE_CLARIFICATION,This is the total percentage of your plantings that have died across all species and zones, calculated from your latest observations.
 MORTALITY_RATE_IN_FIELD,Mortality Rate in Field (%)
 MORTALITY_RATE_IN_FIELD_REQUIRED,Mortality Rate in Field (%) *
@@ -659,7 +659,7 @@ NUMBER_OF_SEEDS_TESTED,# Seeds Tested
 NUMBER_OF_SEEDS_TESTED_REQUIRED,# Seeds Tested *
 NUMBER_OF_SEEDS_WITHDRAWN,Seeds Withdrawn
 NUMBER_OF_SPECIES,Number Of Species
-NUMBER_OF_SPECIES_PLANTED_CARD_TITLE,How many species have I reported to plant?
+NUMBER_OF_SPECIES_PLANTED_CARD_TITLE,How many species have I reported planting?
 NUMBER_PLANTS_COLLECTED_FROM,Number of plants collected from
 NURSERIES,Nurseries
 NURSERY,Nursery
@@ -688,7 +688,7 @@ OBSERVATIONS_REQUIRED_BY_DATE,{0} monitoring plots require observation by {1}.,"
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations with the Terraware App
 OBSERVED_PLANTS,Observed Plants
 OBSERVED_PLANTS_CARD_DESCRIPTION_1,This is the total number of species found in your latest observations.
-OBSERVED_PLANTS_CARD_DESCRIPTION_2,"You have reported to plant {0} species total. The difference in these numbers may be because not all the species you planted were found in the monitoring plots, or because you have planted more species since your last observations."
+OBSERVED_PLANTS_CARD_DESCRIPTION_2,"You have reported planting {0} species total. The difference in these numbers may be because not all the species you planted were found in the monitoring plots, or because you have planted more species since your last observations."
 OBSERVED_PLANTS_CARD_TITLE,How many species are on the site as of {0}?
 OBSERVED_SPECIES,Observed Species
 OBSERVER,Observer
@@ -756,19 +756,19 @@ PLANT_ID,Plant ID
 PLANT_ID_TOOLTIP,It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.
 PLANT_LABEL,Plant
 PLANTING_COMPLETE,Planting Complete?
-PLANTING_COMPLETE_TOOLTIP,Go to Seedlings > Withdrawals to update the planting complete status.
+PLANTING_COMPLETE_TOOLTIP,Go to Seedlings > Withdrawals to update the Planting Complete status.
 PLANTING_DENSITY,Planting Density
 PLANTING_DENSITY_CARD_TITLE,What is my planting density as of {0}?
-PLANTING_DENSITY_DESCRIPTION,This is your planting density calculated from your latest observations.
+PLANTING_DENSITY_DESCRIPTION,This is your planting density as calculated from your latest observations.
 PLANTING_DENSITY_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the planting density."
 PLANTING_DENSITY_PER_ZONE_CARD_TITLE,What is my target planting density per zone?
 PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"This is your zone’s target planting density which you’ve provided. If you’d like to change the target planting densities, please reach out to Terraformation."
 PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,What is my target planting density and planting density as of {0} per zone?
-PLANTING_DENSITY_UPDATE_DESCRIPTION,Since then you have reported new plantings that suggest a planting density of {0} plants/Ha.
+PLANTING_DENSITY_UPDATE_DESCRIPTION,Since then you have reported new plantings that suggest a planting density of {0} plants/ha.
 PLANTING_PROGRESS,Planting Progress
 PLANTING_PROGRESS_AND_DENSITY,Planting Progress and Density
 PLANTING_PROGRESS_CARD_TITLE,What is my site planting progress?
-PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress calculated from what has been reported in your nursery withdrawals.
+PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress as calculated from what has been reported in your nursery withdrawals.
 PLANTING_PROGRESS_DESCRIPTION_2,"Once your entire planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view your site’s planting density."
 PLANTING_PROGRESS_MAP_DESCRIPTION,Click on each subzone to mark areas where planting has been completed. Planting density will be calculated once planting has been completed for each zone.
 PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,What is my planting progress per zone?
@@ -1076,8 +1076,8 @@ STARTING_ON,Starting On
 STATE,State
 STATE_PROVINCE_REGION,State/Province/Region
 STATE_REQUIRED,State *
-STATS_WARNING_DESCRIPTION_1,Observation statistics have been calculated after this subzone had been marked as planting complete.
-STATS_WARNING_DESCRIPTION_2,Undoing the planting complete status will delete those statistics. Are you sure you want to undo?
+STATS_WARNING_DESCRIPTION_1,Observation statistics were calculated after this subzone was marked as Planting Complete.
+STATS_WARNING_DESCRIPTION_2,Undoing the Planting Complete status will delete those statistics. Are you sure you want to undo?
 STATUS,Status
 STORAGE,Storage
 STORAGE_DESCRIPTION,All the details about storing the seeds.
@@ -1102,8 +1102,8 @@ SUBSHRUB,Subshrub
 SUBSTRATE,Substrate
 SUBTITLE_GET_STARTED,"To get started, please create your organization now. You'll also be able to set up and manage information on people and species."
 SUBZONE,Subzone
-SUBZONE_PLANTING_COMPLETED_SUCCESS,Subzone(s) marked as planting complete.
-SUBZONE_PLANTING_UNCOMPLETED_SUCCESS,Subzone(s) marked as planting uncomplete.
+SUBZONE_PLANTING_COMPLETED_SUCCESS,Subzone(s) marked as Planting Complete.
+SUBZONE_PLANTING_UNCOMPLETED_SUCCESS,Subzone(s) marked as Planting Incomplete.
 SUBZONE_REQUIRED,Subzone *
 SUBZONES,Subzones
 SUCCESS_STORIES,Success Stories
@@ -1154,7 +1154,7 @@ TOOLTIP_ACCESSIONS_LOCATION,Place where seeds are being processed.
 TOOLTIP_ACCESSIONS_SUBLOCATION,Specific area within the place where seeds are being processed.
 TOOLTIP_COMMON_NAME,"The name an organism is known by to the general public, rather than its scientific name."
 TOOLTIP_COUNTRY_MY_ACCOUNT,Your country affects how we display numbers and other information.
-TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"This number represents all accessions with the statuses awaiting check in, awaiting processing, processing, drying, and in storage."
+TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"This number represents all accessions with the statuses Awaiting Check In, Awaiting Processing, Processing, Drying, and In Storage."
 TOOLTIP_ECOSYSTEM_TYPE,"Relatively large units of land or water containing a distinct assemblage of natural communities sharing a large majority of species, dynamics, and environmental conditions."
 TOOLTIP_GERMINATING_QUANTITY,Germinating indicates that seedlings have not yet emerged from seeds. Germinating quantity does not count toward the total quantity.
 TOOLTIP_NOT_READY_QUANTITY,What determines a plant as “not ready” is up to your team and is often species specific. For example: size of plant or amount of time acclimated.
