@@ -1,3 +1,4 @@
+f68f57289 SW-4050 Fix overlapping bars in reported plants by species chart (#1664)
 c9001f700 SW-4062 Update terminology on plant dashboard map pop-up (#1663)
 faa7605fe SW-4072 Observations details table backgrounds should extend to scrolled region (#1661)
 b98a24586 SW-4073 Show total plants in observations details page regardless of planting complete state (#1660)
