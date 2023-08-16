@@ -105,7 +105,7 @@ export default function ObservationPlantingZone(): JSX.Element {
           <AggregatedPlantsStats {...(plantingZone ?? {})} />
         </Grid>
         <Grid item xs={12}>
-          <Card flushMobile>
+          <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, minWidth: 'fit-content' }}>
             <Search search={search} onSearch={(value: string) => onSearch(value)} filtersProps={filtersProps} />
             <Box marginTop={2}>
               <Table

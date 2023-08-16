@@ -31,6 +31,7 @@ import { Species } from './types/Species';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import MyAccount from './components/MyAccount';
 import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
@@ -172,6 +173,7 @@ function AppContent() {
 
   const history = useHistory();
   const [species, setSpecies] = useState<Species[]>([]);
+  const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
@@ -290,7 +292,7 @@ function AppContent() {
       (location.pathname.startsWith(APP_PATHS.INVENTORY) && (!selectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||
       (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
       (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
-      location.pathname.startsWith(APP_PATHS.OBSERVATIONS) ||
+      (location.pathname.startsWith(APP_PATHS.OBSERVATIONS) && !hasObservationsResults) ||
       (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites())
     ) {
       return true;
