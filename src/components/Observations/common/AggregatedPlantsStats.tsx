@@ -14,7 +14,6 @@ export type AggregatedPlantsStatsProps = {
   plantingDensity?: number;
   mortalityRate?: number;
   species?: ObservationSpeciesResults[];
-  isSite?: boolean;
 };
 
 export default function AggregatedPlantsStats({
@@ -23,18 +22,13 @@ export default function AggregatedPlantsStats({
   plantingDensity,
   mortalityRate,
   species,
-  isSite,
 }: AggregatedPlantsStatsProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const infoCardGridSize = isMobile ? 12 : 3;
   const chartGridSize = isMobile ? 12 : 6;
 
   const getData = () => [
-    {
-      label: strings.PLANTS,
-      value: totalPlants,
-      toolTip: isSite ? strings.PLANTS_MISSING_TOOLTIP : '',
-    },
+    { label: strings.PLANTS, value: totalPlants },
     { label: strings.SPECIES, value: totalSpecies },
     {
       label: strings.PLANTING_DENSITY,

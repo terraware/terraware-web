@@ -133,10 +133,10 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       <ObservationStatusSummaryMessage statusSummary={statusSummary} />
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <AggregatedPlantsStats {...(details ?? {})} isSite />
+          <AggregatedPlantsStats {...(details ?? {})} />
         </Grid>
         <Grid item xs={12}>
-          <Card flushMobile>
+          <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, minWidth: 'fit-content' }}>
             <Search {...searchProps} />
             <Box marginTop={2}>
               <Table

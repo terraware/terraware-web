@@ -148,6 +148,7 @@ export const mergeObservations = (
           site.timeZone ?? defaultTimeZone
         ),
         species: mergeSpecies(observation.species, species),
+        totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
       };
     });
 };
