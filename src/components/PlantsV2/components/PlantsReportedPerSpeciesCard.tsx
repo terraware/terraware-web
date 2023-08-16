@@ -82,7 +82,7 @@ export default function PlantsReportedPerSpeciesCard({
           </Typography>
           <Box>
             <BarChart
-              key={values?.length}
+              key={`${plantingSiteId}_${values?.length}`}
               elementColor={theme.palette.TwClrBasePurple300}
               chartId='plantsBySpecies'
               chartData={chartData}
