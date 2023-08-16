@@ -47,10 +47,10 @@ export default function ObservationMonitoringPlot(): JSX.Element {
 
   const gridSize = isMobile ? 12 : 4;
 
-  const handleMissingData = (num?: number) => (!monitoringPlot?.completedTime && !num ? '' : num);
+  const data: Record<string, any>[] = useMemo(() => {
+    const handleMissingData = (num?: number) => (!monitoringPlot?.completedTime && !num ? '' : num);
 
-  const data: Record<string, any>[] = useMemo(
-    () => [
+    return [
       { label: strings.DATE, value: monitoringPlot?.completedDate },
       {
         label: strings.TIME,
@@ -77,9 +77,8 @@ export default function ObservationMonitoringPlot(): JSX.Element {
         : []),
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlot?.photos.length) },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes, text: true },
-    ],
-    [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]
-  );
+    ];
+  }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]);
 
   const title = (text: string, marginTop?: number, marginBottom?: number) => (
     <Typography
