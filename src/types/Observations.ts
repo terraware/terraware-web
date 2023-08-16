@@ -21,6 +21,7 @@ export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
     plantingSiteName: string;
     plantingZones: ObservationPlantingZoneResults[];
     species: ObservationSpeciesResults[];
+    totalPlants: number;
   };
 
 // zone level results -> contains a list of subzone level results
