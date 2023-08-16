@@ -1329,3 +1329,5 @@ ZONE_LEVEL_DATA_MAP_TITLE,What does the planting site look like based on what we
 ZONE_LEVEL_DATA_MAP_TITLE_WITH_OBSERVATION,What does the planting site look like as of {0}?
 ZONE_REQUIRED,Zone *
 ZONES,Zones
+SINGLE_ZONE_MORTALITY_RATE_MESSAGE,"You have only 1 zone with a mortality rate right now. Once there are more, the zone with the lowest mortality rate will appear."
+SINGLE_SPECIES_MORTALITY_RATE_MESSAGE,"You have only 1 species with a mortality rate right now. Once there are more, the species with the lowest mortality rate will appear."
