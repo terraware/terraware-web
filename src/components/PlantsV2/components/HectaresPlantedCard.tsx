@@ -79,7 +79,7 @@ export default function HectaresPlantedCard({ plantingSiteId }: HectaresPlantedC
           <Link fontSize='12px' to={APP_PATHS.NURSERY_WITHDRAWALS}>
             {strings.HECTARES_PLANTED_DESCRIPTION_2_LINK}
           </Link>
-          <Typography fontSize='12px' fontWeight='bold' marginBottom={theme.spacing(1.5)}>
+          <Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}>
             {numPlantingComplete === numZones && numZones
               ? strings.formatString(strings.HECTARES_PLANTED_DESCRIPTION_3_COMPLETE, numZones)
               : strings.formatString(strings.HECTARES_PLANTED_DESCRIPTION_3_INCOMPLETE, numPlantingComplete, numZones)}
