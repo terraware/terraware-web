@@ -104,15 +104,13 @@ const ObservationsWrapper = (): JSX.Element => {
   // reset status filter values to default on locale change
   useEffect(() => {
     if (activeLocale) {
-      setFilters((prev) => ({
-        ...prev,
-        status: {
-          field: 'status',
-          operation: 'field',
-          type: 'Exact',
-          values: [strings.COMPLETED],
-        },
-      }));
+      setFilters((prev: Record<string, any>) => {
+        const newFilters: Record<string, any> = {};
+        if (prev.zone) {
+          newFilters.zone = prev.zone;
+        }
+        return newFilters;
+      });
     }
   }, [activeLocale]);
 
