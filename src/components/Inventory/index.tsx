@@ -166,8 +166,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
 
     let updatedResult: InventoryResultWithFacilityNames[] | undefined = [];
     if (filters.facilityIds && filters.facilityIds.length) {
-      const nextResults: InventoryResultWithFacilityNames[] = [];
-      apiSearchResults?.reduce((acc, result) => {
+      const nextResults = apiSearchResults?.reduce((acc, result) => {
         const resultTyped = result as FacilityInventoryResult;
         const indexFound = acc.findIndex((res) => res.species_id === resultTyped.species_id);
 
@@ -203,10 +202,10 @@ export default function Inventory(props: InventoryProps): JSX.Element {
           acc.push(transformedResult);
         }
         return acc;
-      }, nextResults);
+      }, [] as InventoryResultWithFacilityNames[]);
 
       // format results
-      updatedResult = nextResults.map((uR) => {
+      updatedResult = nextResults?.map((uR) => {
         return {
           ...uR,
           germinatingQuantity: numericFormatter.format(uR.germinatingQuantity),
