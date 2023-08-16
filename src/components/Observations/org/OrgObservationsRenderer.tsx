@@ -11,6 +11,8 @@ import strings from 'src/strings';
 
 const COLUMN_WIDTH = 250;
 
+const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
+
 const OrgObservationsRenderer =
   (theme: Theme, classes: any, locale: string | undefined | null) =>
   (props: RendererProps<TableRowType>): JSX.Element => {
@@ -38,6 +40,11 @@ const OrgObservationsRenderer =
       );
       return <Link to={url}>{date as React.ReactNode}</Link>;
     };
+
+    // don't render data if we don't have data
+    if (!row.completedTime && value === 0 && NO_DATA_FIELDS.indexOf(column.key) !== -1) {
+      return <CellRenderer {...props} value={''} />;
+    }
 
     if (column.key === 'plantingZones' || column.key === 'plantingSubzones') {
       return <CellRenderer {...props} value={getTruncatedNames(value as string)} className={classes.text} />;
