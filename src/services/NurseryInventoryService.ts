@@ -24,6 +24,19 @@ export const BE_SORTED_FIELDS = [
   'totalQuantity',
 ];
 
+export const INVENTORY_FIELDS = [...BE_SORTED_FIELDS, 'species_commonName', 'totalQuantity(raw)'];
+
+export const FACILITY_SPECIFIC_FIELDS = [
+  'species_id',
+  'species_scientificName',
+  'species_commonName',
+  'facility_name',
+  'germinatingQuantity(raw)',
+  'readyQuantity(raw)',
+  'notReadyQuantity(raw)',
+  'totalQuantity(raw)',
+];
+
 /**
  * exported types
  */
@@ -133,50 +146,22 @@ const searchInventory = async ({
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
   let params: SearchNodePayload;
   const forSpecificFacilities = !!facilityIds && !!facilityIds.length;
-  if (forSpecificFacilities) {
-    params = {
-      prefix: 'inventories.facilityInventories',
-      fields: [
-        'species_id',
-        'species_scientificName',
-        'species_commonName',
-        'facility_name',
-        'germinatingQuantity(raw)',
-        'readyQuantity(raw)',
-        'notReadyQuantity(raw)',
-        'totalQuantity(raw)',
+  params = {
+    prefix: forSpecificFacilities ? 'inventories.facilityInventories' : 'inventories',
+    fields: forSpecificFacilities ? FACILITY_SPECIFIC_FIELDS : INVENTORY_FIELDS,
+    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'organization_id',
+          values: [organizationId],
+        },
       ],
-      sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
-      search: {
-        operation: 'and',
-        children: [
-          {
-            operation: 'field',
-            field: 'organization_id',
-            values: [organizationId],
-          },
-        ],
-      },
-      count: 0,
-    };
-  } else {
-    params = {
-      prefix: 'inventories',
-      fields: [...BE_SORTED_FIELDS, 'species_commonName', 'totalQuantity(raw)'],
-      sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
-      search: {
-        operation: 'and',
-        children: [
-          {
-            operation: 'field',
-            field: 'organization_id',
-            values: [organizationId],
-          },
-        ],
-      },
-      count: 0,
-    };
-  }
+    },
+    count: 0,
+  };
 
   const searchValueChildren: FieldNodePayload[] = [];
 

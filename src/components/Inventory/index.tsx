@@ -167,13 +167,13 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     let updatedResult: InventoryResultWithFacilityNames[] | undefined = [];
     if (filters.facilityIds && filters.facilityIds.length) {
       const nextResults: InventoryResultWithFacilityNames[] = [];
-      apiSearchResults?.forEach((result) => {
+      apiSearchResults?.reduce((acc, result) => {
         const resultTyped = result as FacilityInventoryResult;
-        const indexFound = nextResults.findIndex((res) => res.species_id === resultTyped.species_id);
+        const indexFound = acc.findIndex((res) => res.species_id === resultTyped.species_id);
 
         if (indexFound !== undefined && indexFound !== -1) {
-          const existingSpecies = nextResults[indexFound];
-          nextResults[indexFound] = {
+          const existingSpecies = acc[indexFound];
+          acc[indexFound] = {
             ...existingSpecies,
             germinatingQuantity: (
               Number(existingSpecies.germinatingQuantity) + Number(resultTyped['germinatingQuantity(raw)'])
@@ -200,19 +200,20 @@ export default function Inventory(props: InventoryProps): JSX.Element {
             facilityInventories: resultTyped.facility_name,
           };
 
-          nextResults.push(transformedResult);
-
-          // format results
-          updatedResult = nextResults.map((uR) => {
-            return {
-              ...uR,
-              germinatingQuantity: numericFormatter.format(uR.germinatingQuantity),
-              notReadyQuantity: numericFormatter.format(uR.notReadyQuantity),
-              readyQuantity: numericFormatter.format(uR.readyQuantity),
-              totalQuantity: numericFormatter.format(uR.totalQuantity),
-            };
-          });
+          acc.push(transformedResult);
         }
+        return acc;
+      }, nextResults);
+
+      // format results
+      updatedResult = nextResults.map((uR) => {
+        return {
+          ...uR,
+          germinatingQuantity: numericFormatter.format(uR.germinatingQuantity),
+          notReadyQuantity: numericFormatter.format(uR.notReadyQuantity),
+          readyQuantity: numericFormatter.format(uR.readyQuantity),
+          totalQuantity: numericFormatter.format(uR.totalQuantity),
+        };
       });
     } else {
       updatedResult = apiSearchResults?.map((result) => {
