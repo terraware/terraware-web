@@ -21,6 +21,7 @@ export default function PlantsReportedPerSpeciesCard({
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
+
   useEffect(() => {
     if (populationSelector) {
       const speciesQuantities: Record<string, number> = {};
@@ -81,6 +82,7 @@ export default function PlantsReportedPerSpeciesCard({
           </Typography>
           <Box>
             <BarChart
+              key={`${plantingSiteId}_${values?.length}`}
               elementColor={theme.palette.TwClrBasePurple300}
               chartId='plantsBySpecies'
               chartData={chartData}
@@ -88,6 +90,7 @@ export default function PlantsReportedPerSpeciesCard({
               maxWidth='100%'
               minHeight='127px'
               yLimits={!values?.length ? { min: 0, max: 200 } : undefined}
+              barWidth={0}
             />
           </Box>
         </Box>
