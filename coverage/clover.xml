@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692209942206" clover="3.2.0">
-  <project timestamp="1692209942207" name="All files">
-    <metrics statements="12034" coveredstatements="362" conditionals="7639" coveredconditionals="90" methods="3773" coveredmethods="77" elements="23446" coveredelements="529" complexity="0" loc="12034" ncloc="12034" packages="101" files="480" classes="480"/>
+<coverage generated="1692211359821" clover="3.2.0">
+  <project timestamp="1692211359821" name="All files">
+    <metrics statements="12038" coveredstatements="362" conditionals="7641" coveredconditionals="90" methods="3773" coveredmethods="77" elements="23452" coveredelements="529" complexity="0" loc="12038" ncloc="12038" packages="101" files="480" classes="480"/>
     <package name="src">
       <metrics statements="212" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -4551,7 +4551,7 @@
       </file>
     </package>
     <package name="src.components.Observations">
-      <metrics statements="102" coveredstatements="0" conditionals="59" coveredconditionals="0" methods="35" coveredmethods="0"/>
+      <metrics statements="106" coveredstatements="0" conditionals="61" coveredconditionals="0" methods="35" coveredmethods="0"/>
       <file name="ObservationsDataView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/ObservationsDataView.tsx">
         <metrics statements="28" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
@@ -4623,7 +4623,7 @@
         <line num="60" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/index.tsx">
-        <metrics statements="41" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="45" coveredstatements="0" conditionals="23" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
@@ -4664,7 +4664,11 @@
         <line num="105" count="0" type="stmt"/>
         <line num="106" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="107" count="0" type="stmt"/>
-        <line num="119" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="109" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.Observations.common">
