@@ -686,9 +686,11 @@ OBSERVATIONS_EMPTY_STATE_TITLE,Aún no hay observaciones
 OBSERVATIONS_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, por favor selecciona un solo sitio de plantación."
 OBSERVATIONS_REQUIRED_BY_DATE,Los parcelas de monitoreo de {0} requieren observación por {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observaciones con la aplicación Terraware
+OBSERVED_PLANTS,Plantas observadas
 OBSERVED_PLANTS_CARD_DESCRIPTION_1,Este es el número total de especies halladas en sus observaciones más recientes.
 OBSERVED_PLANTS_CARD_DESCRIPTION_2,"Usted ha reportado que plantó un total de {0} especies. La diferencia en estas cantidades puede deberse a que no todas las especies que usted plantó se hallaron en las parcelas de seguimiento, o porque ha plantado más especies desde sus últimas observaciones."
 OBSERVED_PLANTS_CARD_TITLE,¿Cuántas especies se encuentran en el sitio desde el {0}?
+OBSERVED_SPECIES,Especies observadas
 OBSERVER,Observador
 ONBOARDING_ADMIN_TITLE,"Un momento, vamos a completar la configuración en primer lugar"
 OPPORTUNITIES,Oportunidades
@@ -839,6 +841,8 @@ RECEIVED_DATE,Fecha de recepción
 RECEIVED_ON,Recibido/a el
 RECEIVING_DATE_REQUIRED,Fecha de recepción *
 RECEIVING_NURSERY_REQUIRED,Vivero de recepción *
+RECORDED_PLANTS,Plantas registradas
+RECORDED_SPECIES,Especies registradas
 RECORDING_DATE,Fecha de registro
 RECORDING_DATE_ERROR,Debe ser posterior a la fecha de inicio
 REFRESH,Actualizar
