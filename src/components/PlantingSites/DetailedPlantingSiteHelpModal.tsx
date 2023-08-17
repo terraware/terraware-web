@@ -5,12 +5,12 @@ import { Button, DialogBox } from '@terraware/web-components';
 import TextWithLink from '../common/TextWithLink';
 import { useDocLinks } from 'src/docLinks';
 
-export type PlantingSiteWithMapHelpModalProps = {
+export type DetailedPlantingSiteHelpModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
-export default function PlantingSiteWithMapHelpModal(props: PlantingSiteWithMapHelpModalProps): JSX.Element {
+export default function DetailedPlantingSiteHelpModal(props: DetailedPlantingSiteHelpModalProps): JSX.Element {
   const { open, onClose } = props;
   const docLinks = useDocLinks();
 
@@ -24,7 +24,7 @@ export default function PlantingSiteWithMapHelpModal(props: PlantingSiteWithMapH
       middleButtons={[<Button onClick={onClose} id='done' label={strings.DONE} key='button-1' />]}
     >
       <Typography>
-        <TextWithLink href={docLinks.contact_us} text={strings.PLANTING_SITE_WITH_MAP_HELP} />
+        <TextWithLink href={docLinks.contact_us} text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
       </Typography>
     </DialogBox>
   );

@@ -1,6 +1,6 @@
 import PlantingSiteSelectTypeModal from './PlantingSiteSelectTypeModal';
 import { APP_PATHS } from 'src/constants';
-import PlantingSiteWithMapHelpModal from './PlantingSiteWithMapHelpModal';
+import DetailedPlantingSiteHelpModal from 'src/components/PlantingSites/DetailedPlantingSiteHelpModal';
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -42,7 +42,7 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
           onClose();
         }}
       />
-      <PlantingSiteWithMapHelpModal
+      <DetailedPlantingSiteHelpModal
         open={plantingSiteTypeHelpModalOpen}
         onClose={() => {
           setPlantingSiteTypeHelpModalOpen(false);
