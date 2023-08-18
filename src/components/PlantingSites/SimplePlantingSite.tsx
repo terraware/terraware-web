@@ -12,12 +12,12 @@ export default function SimplePlantingSite({ plantingSite }: SimplePlantingSiteP
 
   return (
     <>
-      <Box padding={theme.spacing(3, 0, 0, 0)}>
+      <Box display='flex' flexDirection='column' width='100%' padding={theme.spacing(3, 0, 0, 0)}>
         <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
           {strings.SITE_MAP}
         </Typography>
+        {plantingSite.boundary && <SimplePlantingSiteMap plantingSiteId={plantingSite.id} />}
       </Box>
-      {plantingSite.boundary && <SimplePlantingSiteMap plantingSiteId={plantingSite.id} />}
     </>
   );
 }
