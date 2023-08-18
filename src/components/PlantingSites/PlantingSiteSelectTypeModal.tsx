@@ -20,23 +20,23 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
   const { open, onNext, onClose } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const [withMap, setWithMap] = useState<boolean | null>(null);
+  const [detailed, setDetailed] = useState<boolean | null>(null);
 
   const handleClose = () => {
-    setWithMap(null);
+    setDetailed(null);
     onClose();
   };
 
   const handleNext = () => {
-    onNext(withMap === false);
+    onNext(detailed === false);
     handleClose();
   };
 
   const handleTypeChange = (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
-    if (value === 'withMap') {
-      setWithMap(true);
+    if (value === 'detailed') {
+      setDetailed(true);
     } else {
-      setWithMap(false);
+      setDetailed(false);
     }
   };
 
@@ -57,7 +57,7 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
           className={classes.buttonSpacing}
           key='button-1'
         />,
-        <Button onClick={handleNext} id='next' label={strings.NEXT} key='button-2' disabled={withMap === null} />,
+        <Button onClick={handleNext} id='next' label={strings.NEXT} key='button-2' disabled={detailed === null} />,
       ]}
     >
       <Typography marginBottom={theme.spacing(3)} justifyContent='center'>
@@ -74,8 +74,8 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
         {strings.PLANTING_SITE_TYPE}
       </Typography>
       <RadioGroup defaultValue={null} name='radio-buttons-group' onChange={handleTypeChange}>
-        <FormControlLabel value='withMap' control={<Radio />} label={strings.WITH_MAP} />
-        <FormControlLabel value='withoutMap' control={<Radio />} label={strings.WITHOUT_MAP} />
+        <FormControlLabel value='simple' control={<Radio />} label={strings.PLANTING_SITE_TYPE_SIMPLE} />
+        <FormControlLabel value='detailed' control={<Radio />} label={strings.PLANTING_SITE_TYPE_DETAILED} />
       </RadioGroup>
     </DialogBox>
   );

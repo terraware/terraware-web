@@ -778,9 +778,11 @@ PLANTING_PROGRESS_TABLE_DESCRIPTION,Use the checkboxes next to each subzone to m
 PLANTING_SEASON_END,Planting Season End
 PLANTING_SEASON_START,Planting Season Start
 PLANTING_SITE,Planting Site
+PLANTING_SITE_CREATE_DETAILED_HELP,"If you are a Terraformation partner or accelerator participant, please [contact us] to create a detailed planting site."
 PLANTING_SITE_MAP_VIEW_PROMPT,"In order to access map view, please select a single planting site."
 PLANTING_SITE_TYPE,Planting Site Type
-PLANTING_SITE_WITH_MAP_HELP,"If you are a Terraformation partner or accelerator participant, please [contact us] to create a site with a map."
+PLANTING_SITE_TYPE_DETAILED,Detailed
+PLANTING_SITE_TYPE_SIMPLE,Simple
 PLANTING_SITES,Planting Sites
 PLANTING_ZONE,Planting Zone
 PLANTING_ZONES,Planting Zones
@@ -995,8 +997,8 @@ SELECT_BATCHES,Select Batches
 SELECT_BUTTON,Select
 SELECT_PLANTING_SITE_TYPE,Select Planting Site Type
 SELECT_PLANTING_SITE_TYPE_DESCRIPTION_1,Please select which type of planting site to add.
-SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2,Sites with maps allow you to track the location of plants within the site and perform live/dead monitoring. Sites without maps allow you to track how many and which species of plants have been planted on the site.
-SELECT_PLANTING_SITE_TYPE_DESCRIPTION_3,"Please note that if you create a site without a map, you won’t be able to add a map to it later on."
+SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2,Detailed sites allow you to track the location of plants within the site and perform live/dead monitoring. Simple sites allow you to track how many and which species of plants have been planted on the site.
+SELECT_PLANTING_SITE_TYPE_DESCRIPTION_3,"Please note that if you create a simple site, you won’t be able to change it to a detailed site later on."
 SELECT_SEED_BANK,Select Seed Bank
 SELECT_SEED_BANK_INFO,Accessions require a seed bank storage location. Please select a seed bank.
 SEND_TO_NURSERY,Send to Nursery
