@@ -1,7 +1,7 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName = 'Show Production View' | 'TrackingV2';
+export type FeatureName = 'Show Production View' | 'TrackingV2' | 'Simple Map Editor';
 
 export type Feature = {
   name: FeatureName;
@@ -43,6 +43,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     allowInternalProduction: false,
     description: ['Show Tracking V2 features'],
     disclosure: ['This is WIP.'],
+  },
+  {
+    name: 'Simple Map Editor',
+    preferenceName: 'enableSimpleMapEditor',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Allow editing the boundaries of simple planting sites.'],
+    disclosure: ['Planting sites with planting zones and subzones are not user-editable.'],
   },
 ];
 

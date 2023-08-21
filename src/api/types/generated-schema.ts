@@ -992,6 +992,7 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     CreatePlantingSiteRequestPayload: {
+      boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       name: string;
       /** Format: int64 */
@@ -2996,6 +2997,8 @@ export interface components {
       role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     UpdatePlantingSiteRequestPayload: {
+      /** @description Site boundary. Ignored if this is a detailed planting site. */
+      boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       name: string;
       /**
