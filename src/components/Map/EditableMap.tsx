@@ -17,7 +17,7 @@ export type EditableMapProps = {
 const polygonIcon = <button className='mapbox-gl-draw_polygon mapbox-gl-draw_ctrl-draw-btn' />;
 const trashIcon = <button className='mapbox-gl-draw_trash mapbox-gl-draw_ctrl-draw-btn' />;
 
-function instructionsForMode(mode: MapEditorMode | null): JSX.Element | JSX.Element[] | null {
+function instructionsForMode(mode: MapEditorMode | null): JSX.Element[] {
   let instructions: string = '';
 
   if (mode === 'ReplacingBoundary') {
