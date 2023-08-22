@@ -136,6 +136,14 @@ export default function PlantsDashboardV2(): JSX.Element {
     return (
       plantingSiteResult?.plantingZones
         ?.flatMap((zone) => zone.plantingSubzones)
+        ?.every((sz) => sz.plantingCompleted) ?? false
+    );
+  }, [plantingSiteResult]);
+
+  const hasObservationsSinceSitePlantingComplete = useMemo(() => {
+    return (
+      plantingSiteResult?.plantingZones
+        ?.flatMap((zone) => zone.plantingSubzones)
         ?.every((sz) => sz.plantingCompleted && isAfter(latestObservation?.completedTime, sz.plantingCompletedTime)) ??
       false
     );
@@ -144,7 +152,7 @@ export default function PlantsDashboardV2(): JSX.Element {
   const renderPlantingProgressAndDensity = () => (
     <>
       {sectionHeader(
-        sitePlantingComplete && hasObservations ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY
+        hasObservationsSinceSitePlantingComplete ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY
       )}
       {!hasObservations && (
         <>
@@ -178,7 +186,11 @@ export default function PlantsDashboardV2(): JSX.Element {
       {hasObservations && sitePlantingComplete && (
         <>
           <Grid item xs={isMobile ? 12 : 4}>
-            <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} />
+            {hasObservationsSinceSitePlantingComplete ? (
+              <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} />
+            ) : (
+              <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+            )}
           </Grid>
           <Grid item xs={isMobile ? 12 : 4}>
             <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
