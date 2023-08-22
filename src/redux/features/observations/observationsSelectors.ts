@@ -9,7 +9,6 @@ import { RootState } from 'src/redux/rootReducer';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { mergeObservations, searchZones } from './utils';
-import { isAfter } from 'src/utils/dateUtils';
 
 export const ALL_STATES: ObservationState[] = ['Completed', 'Overdue', 'InProgress'];
 
@@ -23,6 +22,10 @@ export const selectHasObservationsResults = (state: RootState) => {
   return results !== undefined && results.filter((result) => result.state !== 'Upcoming').length > 0;
 };
 
+/**
+ * Select observations results, filtered down by planting site and/or observation state.
+ * Preserves order of results.
+ */
 export const selectPlantingSiteObservationsResults = createCachedSelector(
   (state: RootState, plantingSiteId: number, status?: ObservationState[]) => selectObservationsResults(state),
   (state: RootState, plantingSiteId: number, status?: ObservationState[]) => plantingSiteId,
@@ -42,6 +45,10 @@ export const selectPlantingSiteObservationsResults = createCachedSelector(
   }
 )((state, plantingSiteId: number, status?: ObservationState[]) => `${plantingSiteId}_${status?.join(',')}`);
 
+/**
+ * Merge named entity information with observation results.
+ * Preserves order of results.
+ */
 export const selectMergedPlantingSiteObservations = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
     selectPlantingSiteObservationsResults(state, plantingSiteId, status),
@@ -65,7 +72,10 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
     `${plantingSiteId}_${defaultTimeZone}_${status?.join(',')}`
 );
 
-// search observations (search planting zone name only)
+/**
+ * Search observations (search planting zone name only at this time).
+ * Preserves order of results.
+ */
 export const searchObservations = createCachedSelector(
   (
     state: RootState,
@@ -154,16 +164,7 @@ export const selectPlantingSiteObservations = createCachedSelector(
 export const selectLatestObservation = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
     searchObservations(state, plantingSiteId, defaultTimeZoneId, '', []),
-  (observationsResults: ObservationResults[] | undefined) => {
-    if (!observationsResults || observationsResults.length === 0) {
-      return undefined;
-    }
-    const result = observationsResults.reduce((prev, curr) => {
-      if (isAfter(prev.completedTime, curr.completedTime)) {
-        return prev;
-      }
-      return curr;
-    });
-    return result.completedTime ? result : undefined;
-  }
+  (observationsResults: ObservationResults[] | undefined) =>
+    // the order of results (as returned by the server) are in reverse completed-time order, most recent completed will show up first
+    observationsResults?.filter((result: ObservationResults) => result.completedTime)?.[0]
 )((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
