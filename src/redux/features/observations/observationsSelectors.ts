@@ -159,7 +159,7 @@ export const selectLatestObservation = createCachedSelector(
       return undefined;
     }
     const result = observationsResults.reduce((prev, curr) => {
-      if (isAfter(prev.completedDate, curr.completedDate)) {
+      if (isAfter(prev.completedTime, curr.completedTime)) {
         return prev;
       }
       return curr;
