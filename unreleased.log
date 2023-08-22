@@ -1,3 +1,4 @@
+d36fdbee3 SW-4057 Species list sorting order does not match sort indicator arrow on load (#1676)
 10cd9ab04 SW-4043 New copy for tooltip on withdrawals page (#1674)
 83aa2420b SW-4023 Update planted area card text and footer changes (#1669)
 f36fb8c12 SW-4049 Fix map zoom into boundary when switching site in observations page (#1670)
