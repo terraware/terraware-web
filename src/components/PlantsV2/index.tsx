@@ -34,6 +34,7 @@ import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import FormattedNumber from '../common/FormattedNumber';
 import ObservedNumberOfSpeciesCard from 'src/components/PlantsV2/components/ObservedNumberOfSpeciesCard';
 import SimplePlantingSiteMap from 'src/components/PlantsV2/components/SimplePlantingSiteMap';
+import { isAfter } from 'src/utils/dateUtils';
 
 export default function PlantsDashboardV2(): JSX.Element {
   const org = useOrganization();
@@ -135,9 +136,10 @@ export default function PlantsDashboardV2(): JSX.Element {
     return (
       plantingSiteResult?.plantingZones
         ?.flatMap((zone) => zone.plantingSubzones)
-        ?.every((sz) => sz.plantingCompleted) ?? false
+        ?.every((sz) => sz.plantingCompleted && isAfter(latestObservation?.completedTime, sz.plantingCompletedTime)) ??
+      false
     );
-  }, [plantingSiteResult]);
+  }, [plantingSiteResult, latestObservation?.completedTime]);
 
   const renderPlantingProgressAndDensity = () => (
     <>
