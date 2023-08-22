@@ -166,7 +166,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const { activeLocale } = useLocalization();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
     field: 'scientificName',
-    direction: 'Descending',
+    direction: 'Ascending',
   } as SearchSortOrder);
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
