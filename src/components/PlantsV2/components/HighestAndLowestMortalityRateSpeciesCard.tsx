@@ -1,7 +1,6 @@
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useAppSelector } from 'src/redux/store';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -15,7 +14,6 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
   plantingSiteId,
 }: HighestAndLowestMortalityRateSpeciesCardProps): JSX.Element {
   const theme = useTheme();
-  const species = useAppSelector(selectSpecies);
   const defaultTimeZone = useDefaultTimeZone();
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
@@ -27,7 +25,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
   observation?.species.forEach((sp) => {
     if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate >= highestMortalityRate) {
       highestMortalityRate = sp.mortalityRate;
-      highestSpecies = species?.find((iSpecies) => iSpecies.id === sp.speciesId)?.scientificName ?? '';
+      highestSpecies = sp.speciesScientificName || sp.speciesName || '';
     }
   });
 
@@ -37,7 +35,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
   observation?.species.forEach((sp) => {
     if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate <= lowestMortalityRate) {
       lowestMortalityRate = sp.mortalityRate;
-      lowestSpecies = species?.find((iSpecies) => iSpecies.id === sp.speciesId)?.scientificName ?? '';
+      lowestSpecies = sp.speciesScientificName || sp.speciesName || '';
     }
   });
 
@@ -60,14 +58,25 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
               <Typography fontSize='24px' fontWeight={600}>
                 <FormattedNumber value={highestMortalityRate || 0} />%
               </Typography>
+              {(!lowestSpecies || lowestSpecies === highestSpecies) && (
+                <Typography
+                  fontWeight={400}
+                  fontSize='12px'
+                  lineHeight='16px'
+                  color={theme.palette.gray[800]}
+                  marginTop={2}
+                >
+                  {strings.SINGLE_SPECIES_MORTALITY_RATE_MESSAGE}
+                </Typography>
+              )}
             </>
           )}
-          <Divider sx={{ marginY: theme.spacing(2) }} />
-          <Typography fontSize='12px' fontWeight={400}>
-            {strings.LOWEST}
-          </Typography>
-          {lowestSpecies && (
+          {lowestSpecies && lowestSpecies !== highestSpecies && (
             <>
+              <Divider sx={{ marginY: theme.spacing(2) }} />
+              <Typography fontSize='12px' fontWeight={400}>
+                {strings.LOWEST}
+              </Typography>
               <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(2)}>
                 {lowestSpecies}
               </Typography>
