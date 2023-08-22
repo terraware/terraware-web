@@ -1,15 +1,13 @@
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
+import { APP_PATHS } from 'src/constants';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { getShortDate } from 'src/utils/dateFormatter';
-import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import Link from 'src/components/common/Link';
 
 type HectaresPlantedCardProps = {
   plantingSiteId: number;
@@ -18,11 +16,6 @@ type HectaresPlantedCardProps = {
 export default function HectaresPlantedCard({ plantingSiteId }: HectaresPlantedCardProps): JSX.Element {
   const theme = useTheme();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
-  const locale = useLocalization();
-  const defaultTimeZone = useDefaultTimeZone();
-  const observation = useAppSelector((state) =>
-    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
-  );
 
   const totalArea = plantingSite?.areaHa ?? 0;
   const totalPlantedArea = useMemo(() => {
@@ -34,18 +27,19 @@ export default function HectaresPlantedCard({ plantingSiteId }: HectaresPlantedC
   }, [plantingSite]);
   const percentagePlanted = totalArea > 0 ? Math.round((totalPlantedArea / totalArea) * 100) : 0;
 
+  const numPlantingComplete =
+    plantingSite?.plantingZones
+      ?.flatMap((zone) => zone.plantingSubzones)
+      ?.filter((subzone) => subzone.plantingCompleted).length ?? 0;
+  const numZones = plantingSite?.plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length ?? 0;
+
   return (
     <OverviewItemCard
       isEditable={false}
       contents={
         <Box display='flex' flexDirection='column'>
           <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
-            {observation?.completedTime
-              ? strings.formatString(
-                  strings.HECTARES_PLANTED_CARD_TITLE,
-                  getShortDate(observation.completedTime, locale.activeLocale)
-                )
-              : ''}
+            {strings.HECTARES_PLANTED_CARD_TITLE}
           </Typography>
           <Box display={'flex'} alignItems='baseline'>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
@@ -79,9 +73,21 @@ export default function HectaresPlantedCard({ plantingSiteId }: HectaresPlantedC
           <Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}>
             {strings.HECTARES_PLANTED_DESCRIPTION_1}
           </Typography>
-          <Typography fontSize='12px' fontWeight={400}>
+          <Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}>
             {strings.HECTARES_PLANTED_DESCRIPTION_2}
+            &nbsp;
+            {numPlantingComplete === numZones && numZones
+              ? strings.formatString(strings.HECTARES_PLANTED_DESCRIPTION_3_COMPLETE, numZones)
+              : strings.formatString(strings.HECTARES_PLANTED_DESCRIPTION_3_INCOMPLETE, numPlantingComplete, numZones)}
           </Typography>
+          <Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}>
+            {strings.HECTARES_PLANTED_DESCRIPTION_4}
+          </Typography>
+          <Link to={APP_PATHS.NURSERY_WITHDRAWALS}>
+            <Typography fontSize='14px' fontWeight={500}>
+              {strings.HECTARES_PLANTED_DESCRIPTION_LINK}
+            </Typography>
+          </Link>
         </Box>
       }
     />

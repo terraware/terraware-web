@@ -391,9 +391,13 @@ GRAMS,Grams
 GREATER_THAN_FIFTY_PERCENT,> 50%
 GROWTH_FORM,Growth Form
 HECTARES,Hectares
-HECTARES_PLANTED_CARD_TITLE,How much of my site has been planted as of {0}?
-HECTARES_PLANTED_DESCRIPTION_1,This is the number of hectares that have been planted based on the sub-zones you chose when out-planting.
-HECTARES_PLANTED_DESCRIPTION_2,"For observations, we only assign monitoring plots that we know are a part of these sub-zones."
+HECTARES_PLANTED_CARD_TITLE,"How much of my site has been marked as ""Planting Complete""?"
+HECTARES_PLANTED_DESCRIPTION_1,"This is the total area and percentage of the site that has been marked as ""Planting Complete""."
+HECTARES_PLANTED_DESCRIPTION_2,"You can mark subzones within your site as ""Planting Complete"" under the Withdrawals page."
+HECTARES_PLANTED_DESCRIPTION_3_INCOMPLETE,"Currently, {0} out of {1} subzones are marked as such.","Example: Currently, 2 out of 12 subzones are marked as such."
+HECTARES_PLANTED_DESCRIPTION_3_COMPLETE,"Currently, all {0} subzones are marked as such.","Example: Currently, all 12 subzones are marked as such."
+HECTARES_PLANTED_DESCRIPTION_4,"For observations, we only assign monitoring plots that we know are a part of these subzones."
+HECTARES_PLANTED_DESCRIPTION_LINK,Go to Withdrawals
 HIGHEST,Highest
 HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,Which zones have the highest and lowest mortality rates?
 HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,Which species have the highest and lowest mortality rates?
