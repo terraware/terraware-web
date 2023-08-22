@@ -144,7 +144,9 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             properties = [
               {
                 key: strings.MORTALITY_RATE,
-                value: zoneObservation.hasObservedPermanentPlots ? `${zoneObservation!.mortalityRate}%` : '',
+                value: zoneObservation.hasObservedPermanentPlots
+                  ? `${zoneObservation!.mortalityRate}%`
+                  : strings.UNKNOWN,
               },
               {
                 key: strings.TARGET_PLANTING_DENSITY,
