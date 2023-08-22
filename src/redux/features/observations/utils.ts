@@ -134,21 +134,24 @@ export const mergeObservations = (
       const { plantingSiteId } = observation;
       const site = sites[plantingSiteId];
 
+      const mergedZones = mergeZones(
+        observation.plantingZones,
+        zones,
+        subzones,
+        species,
+        site.timeZone ?? defaultTimeZone
+      );
+
       return {
         ...observation,
         plantingSiteName: site.name,
         boundary: site.boundary,
         completedDate: observation.completedTime ? getDateDisplayValue(observation.completedTime, site.timeZone) : '',
         startDate: getDateDisplayValue(observation.startDate, site.timeZone),
-        plantingZones: mergeZones(
-          observation.plantingZones,
-          zones,
-          subzones,
-          species,
-          site.timeZone ?? defaultTimeZone
-        ),
+        plantingZones: mergedZones,
         species: mergeSpecies(observation.species, species),
         totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
+        hasObservedPermanentPlots: mergedZones.some((zone) => zone.hasObservedPermanentPlots),
       };
     });
 };
@@ -197,6 +200,9 @@ const mergeZones = (
         species: mergeSpecies(zoneObservation.species, species),
         plantingSubzones: mergeSubzones(zoneObservation.plantingSubzones, subzones, species, timeZone),
         status,
+        hasObservedPermanentPlots: zoneObservation.plantingSubzones.some((plantingSubzone) =>
+          plantingSubzone.monitoringPlots.some((plot) => plot.isPermanent && plot.completedTime)
+        ),
       };
     });
 };

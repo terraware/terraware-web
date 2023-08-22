@@ -255,6 +255,7 @@ const getMapDataFromObservation = (observation: ObservationResults): MapData => 
       name: zone.plantingZoneName,
       type: 'zone',
       mortalityRate: zone.mortalityRate,
+      hasObservedPermanentPlots: zone.hasObservedPermanentPlots,
     },
     boundary: getPolygons(zone.boundary),
   }));

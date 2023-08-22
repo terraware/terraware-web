@@ -15,6 +15,7 @@ import { makeStyles } from '@mui/styles';
 import { selectZonePopulationStats } from 'src/redux/features/tracking/sitePopulationSelector';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { ObservationResults, ObservationPlantingZoneResults } from 'src/types/Observations';
 
 export const useStyles = makeStyles(() => ({
   popup: {
@@ -39,7 +40,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const zoneProgress = useAppSelector((state) => selectZoneProgress(state, plantingSiteId));
   const zoneStats = useAppSelector(selectZonePopulationStats);
-  const observation = useAppSelector((state) =>
+  const observation: ObservationResults | undefined = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
 
@@ -133,13 +134,18 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     () =>
       (entity: MapSourceProperties): JSX.Element => {
         let properties: TooltipProperty[] = [];
-        const zoneObservation = observation?.plantingZones?.find((z) => z.plantingZoneId === entity.id);
+        const zoneObservation: ObservationPlantingZoneResults | undefined = observation?.plantingZones?.find(
+          (z: ObservationPlantingZoneResults) => z.plantingZoneId === entity.id
+        );
         if (!zoneStats[entity.id]?.reportedPlants) {
           properties = [{ key: strings.NO_PLANTS, value: '' }];
         } else if (zoneProgress[entity.id] && zoneStats[entity.id]) {
           if (zoneObservation) {
             properties = [
-              { key: strings.MORTALITY_RATE, value: `${zoneObservation!.mortalityRate}%` },
+              {
+                key: strings.MORTALITY_RATE,
+                value: zoneObservation.hasObservedPermanentPlots ? `${zoneObservation!.mortalityRate}%` : '',
+              },
               {
                 key: strings.TARGET_PLANTING_DENSITY,
                 value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
