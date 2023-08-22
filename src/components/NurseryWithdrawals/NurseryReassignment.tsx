@@ -222,7 +222,7 @@ export default function NurseryReassignment(): JSX.Element {
         <Box>
           <BackToLink
             id='back'
-            to={APP_PATHS.NURSERY_WITHDRAWALS}
+            to={`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history`}
             className={classes.backToWithdrawals}
             name={strings.WITHDRAWAL_LOG}
           />

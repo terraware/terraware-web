@@ -5,16 +5,14 @@ import { ViewPhotosDialog } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-type StyleProps = {
-  isMobile: boolean;
-};
-
 const useStyles = makeStyles(() => ({
   thumbnail: {
+    margin: 'auto auto',
     objectFit: 'contain',
     display: 'flex',
-    width: (props: StyleProps) => (props.isMobile ? '105px' : '220px'),
-    height: '120px',
+    maxWidth: '120px',
+    maxHeight: '120px',
+    cursor: 'pointer',
   },
 }));
 
@@ -28,7 +26,7 @@ export default function PhotosList({ photoUrls, initialSlide }: PhotosListProps)
   const [selectedSlide, setSelectedSlide] = useState<number>(initialSlide ?? 0);
   const [photosModalOpened, setPhotosModalOpened] = useState<boolean>(false);
   const theme = useTheme();
-  const classes = useStyles({ isMobile });
+  const classes = useStyles();
 
   return (
     <>
@@ -41,15 +39,17 @@ export default function PhotosList({ photoUrls, initialSlide }: PhotosListProps)
         prevButtonLabel={strings.PREVIOUS}
         title={strings.PHOTOS}
       />
-      <Box display='flex' flexWrap='wrap'>
+      <Box display='flex' flexDirection='row' flexWrap='wrap' marginBottom={2}>
         {photoUrls.map((photoUrl, index) => (
           <Box
             key={index}
-            marginRight={theme.spacing(isMobile ? 2 : 3)}
-            marginTop={theme.spacing(2)}
-            width={isMobile ? '105px' : '220px'}
-            height='120px'
-            sx={{ cursor: 'pointer' }}
+            display='flex'
+            position='relative'
+            height={122}
+            width={122}
+            marginRight={isMobile ? 2 : 3}
+            marginTop={1}
+            border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
           >
             <img
               className={classes.thumbnail}
