@@ -1,3 +1,7 @@
+83aa2420b SW-4023 Update planted area card text and footer changes (#1669)
+f36fb8c12 SW-4049 Fix map zoom into boundary when switching site in observations page (#1670)
+90050f6b8 SW-4079 Don't show the default 0's for observations that were not recorded (#1668)
+4c55c2313 SW-4064 Fix mortality rate display issues in plants dashboard (#1662)
 6f3b33a53 SW-3932 Editable boundaries for simple planting sites (#1659)
 e58d52ac8 SW-3932 Use simple/detailed site types in dialog (#1673)
 2e44aa6a1 SW-3932 Expand simple planting site map (#1671)

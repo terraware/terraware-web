@@ -25,21 +25,21 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -152,9 +152,13 @@
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,11 +176,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -188,7 +187,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -244,15 +256,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
+import { APP_PATHS } from 'src/constants';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { getShortDate } from 'src/utils/dateFormatter';
-import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import Link from 'src/components/common/Link';
 &nbsp;
 type HectaresPlantedCardProps = {
   plantingSiteId: number;
@@ -261,11 +271,6 @@ type HectaresPlantedCardProps = {
 export default function <span class="fstat-no" title="function not covered" >HectaresPlantedCard(</span>{ plantingSiteId }: HectaresPlantedCardProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
-  const locale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
-  const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
-  );
 &nbsp;
   const totalArea = <span class="cstat-no" title="statement not covered" >plantingSite?.areaHa ?? 0;</span>
   const totalPlantedArea = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -277,18 +282,19 @@ export default function <span class="fstat-no" title="function not covered" >Hec
   }, [plantingSite]);
   const percentagePlanted = <span class="cstat-no" title="statement not covered" >totalArea &gt; 0 ? Math.round((totalPlantedArea / totalArea) * 100) : 0;</span>
 &nbsp;
+  const numPlantingComplete =
+<span class="cstat-no" title="statement not covered" >    plantingSite?.plantingZones</span>
+      ?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.plantingSubzones)</span>
+      ?.filter(<span class="fstat-no" title="function not covered" >(s</span>ubzone) =&gt; <span class="cstat-no" title="statement not covered" >subzone.plantingCompleted)</span>.length ?? 0;
+  const numZones = <span class="cstat-no" title="statement not covered" >plantingSite?.plantingZones?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.plantingSubzones)</span>?.length ?? 0;</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;OverviewItemCard
       isEditable={false}
       contents={
         &lt;Box display='flex' flexDirection='column'&gt;
           &lt;Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}&gt;
-            {observation?.completedTime
-              ? strings.formatString(
-                  strings.HECTARES_PLANTED_CARD_TITLE,
-                  getShortDate(observation.completedTime, locale.activeLocale)
-                )
-              : ''}
+            {strings.HECTARES_PLANTED_CARD_TITLE}
           &lt;/Typography&gt;
           &lt;Box display={'flex'} alignItems='baseline'&gt;
             &lt;Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}&gt;
@@ -322,9 +328,21 @@ export default function <span class="fstat-no" title="function not covered" >Hec
           &lt;Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}&gt;
             {strings.HECTARES_PLANTED_DESCRIPTION_1}
           &lt;/Typography&gt;
-          &lt;Typography fontSize='12px' fontWeight={400}&gt;
+          &lt;Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}&gt;
             {strings.HECTARES_PLANTED_DESCRIPTION_2}
+            &amp;nbsp;
+            {numPlantingComplete === numZones &amp;&amp; numZones
+              ? strings.formatString(strings.HECTARES_PLANTED_DESCRIPTION_3_COMPLETE, numZones)
+              : strings.formatString(strings.HECTARES_PLANTED_DESCRIPTION_3_INCOMPLETE, numPlantingComplete, numZones)}
           &lt;/Typography&gt;
+          &lt;Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}&gt;
+            {strings.HECTARES_PLANTED_DESCRIPTION_4}
+          &lt;/Typography&gt;
+          &lt;Link to={APP_PATHS.NURSERY_WITHDRAWALS}&gt;
+            &lt;Typography fontSize='14px' fontWeight={500}&gt;
+              {strings.HECTARES_PLANTED_DESCRIPTION_LINK}
+            &lt;/Typography&gt;
+          &lt;/Link&gt;
         &lt;/Box&gt;
       }
     /&gt;
@@ -337,7 +355,7 @@ export default function <span class="fstat-no" title="function not covered" >Hec
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-21T20:33:32.543Z
+                at 2023-08-22T15:27:26.946Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

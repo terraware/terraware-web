@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -213,7 +213,10 @@
 <a name='L148'></a><a href='#L148'>148</a>
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -264,6 +267,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -412,8 +418,10 @@ export default function <span class="fstat-no" title="function not covered" >Obs
 &nbsp;
   const gridSize = <span class="cstat-no" title="statement not covered" >isMobile ? 12 : 4;</span>
 &nbsp;
-  const data: Record&lt;string, any&gt;[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+  const data: Record&lt;string, any&gt;[] = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const handleMissingData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>um?: number) =&gt; (<span class="cstat-no" title="statement not covered" >!monitoringPlot?.completedTime &amp;&amp; !num ? '' : num)</span>;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return [</span>
       { label: strings.DATE, value: monitoringPlot?.completedDate },
       {
         label: strings.TIME,
@@ -432,15 +440,16 @@ export default function <span class="fstat-no" title="function not covered" >Obs
         label: strings.MONITORING_PLOT_TYPE,
         value: monitoringPlot ? (monitoringPlot.isPermanent ? strings.PERMANENT : strings.TEMPORARY) : undefined,
       },
-      { label: strings.PLANTS, value: monitoringPlot?.totalPlants },
-      { label: strings.SPECIES, value: monitoringPlot?.totalSpecies },
-      { label: strings.PLANTING_DENSITY, value: monitoringPlot?.plantingDensity },
-      ...(monitoringPlot?.isPermanent ? [{ label: strings.MORTALITY_RATE, value: monitoringPlot?.mortalityRate }] : []),
-      { label: strings.NUMBER_OF_PHOTOS, value: monitoringPlot?.photos.length },
+      { label: strings.PLANTS, value: handleMissingData(monitoringPlot?.totalPlants) },
+      { label: strings.SPECIES, value: handleMissingData(monitoringPlot?.totalSpecies) },
+      { label: strings.PLANTING_DENSITY, value: handleMissingData(monitoringPlot?.plantingDensity) },
+      ...(monitoringPlot?.isPermanent
+        ? [{ label: strings.MORTALITY_RATE, value: handleMissingData(monitoringPlot?.mortalityRate) }]
+        : []),
+      { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlot?.photos.length) },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes, text: true },
-    ],
-    [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]
-  );
+    ];
+  }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]);
 &nbsp;
   const title = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>ext: string, marginTop?: number, marginBottom?: number) =&gt; (</span>
 <span class="cstat-no" title="statement not covered" >    &lt;Typography</span>
@@ -520,7 +529,7 @@ export default function <span class="fstat-no" title="function not covered" >Obs
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-21T20:33:32.543Z
+                at 2023-08-22T15:27:26.946Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
