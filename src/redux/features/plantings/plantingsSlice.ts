@@ -9,7 +9,12 @@ export type PlantingSearchData = {
   'numPlants(raw)': string;
   plantingSite: { id: string };
   plantingSubzone?: { id: string; 'totalPlants(raw)': number };
-  species: { id: string };
+  species: {
+    id: string;
+    scientificName: string;
+    rare?: string;
+    conservationCategory?: string;
+  };
   type: string;
 };
 
