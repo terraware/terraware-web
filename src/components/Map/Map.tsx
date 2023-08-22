@@ -208,7 +208,10 @@ export default function Map(props: MapProps): JSX.Element {
       });
       if (coordinates.length > 0) {
         const bbox = MapService.getBoundingBox([coordinates]);
-        map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20, linear: true });
+        // this is a hack to allow zooming to geometry while data is being updated, otherwise the zoom was not taking effect
+        setTimeout(() => {
+          map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20, linear: true });
+        }, 0);
       }
     },
     [geoData]
