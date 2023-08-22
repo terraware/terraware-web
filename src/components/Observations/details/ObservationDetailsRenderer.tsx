@@ -5,6 +5,8 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
 
+const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
+
 const ObservationDetailsRenderer =
   (plantingSiteId: number, observationId: number) =>
   (props: RendererProps<TableRowType>): JSX.Element => {
@@ -16,6 +18,11 @@ const ObservationDetailsRenderer =
         .replace(':plantingZoneId', row.plantingZoneId.toString());
       return <Link to={url}>{name as React.ReactNode}</Link>;
     };
+
+    // don't render data if we don't have data
+    if (!row.completedTime && value === 0 && NO_DATA_FIELDS.indexOf(column.key) !== -1) {
+      return <CellRenderer {...props} value={''} />;
+    }
 
     if (column.key === 'plantingZoneName') {
       return <CellRenderer {...props} value={createLinkToPlantingZoneObservation(value as string)} />;

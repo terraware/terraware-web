@@ -47,8 +47,10 @@ export default function ObservationMonitoringPlot(): JSX.Element {
 
   const gridSize = isMobile ? 12 : 4;
 
-  const data: Record<string, any>[] = useMemo(
-    () => [
+  const data: Record<string, any>[] = useMemo(() => {
+    const handleMissingData = (num?: number) => (!monitoringPlot?.completedTime && !num ? '' : num);
+
+    return [
       { label: strings.DATE, value: monitoringPlot?.completedDate },
       {
         label: strings.TIME,
@@ -67,15 +69,16 @@ export default function ObservationMonitoringPlot(): JSX.Element {
         label: strings.MONITORING_PLOT_TYPE,
         value: monitoringPlot ? (monitoringPlot.isPermanent ? strings.PERMANENT : strings.TEMPORARY) : undefined,
       },
-      { label: strings.PLANTS, value: monitoringPlot?.totalPlants },
-      { label: strings.SPECIES, value: monitoringPlot?.totalSpecies },
-      { label: strings.PLANTING_DENSITY, value: monitoringPlot?.plantingDensity },
-      ...(monitoringPlot?.isPermanent ? [{ label: strings.MORTALITY_RATE, value: monitoringPlot?.mortalityRate }] : []),
-      { label: strings.NUMBER_OF_PHOTOS, value: monitoringPlot?.photos.length },
+      { label: strings.PLANTS, value: handleMissingData(monitoringPlot?.totalPlants) },
+      { label: strings.SPECIES, value: handleMissingData(monitoringPlot?.totalSpecies) },
+      { label: strings.PLANTING_DENSITY, value: handleMissingData(monitoringPlot?.plantingDensity) },
+      ...(monitoringPlot?.isPermanent
+        ? [{ label: strings.MORTALITY_RATE, value: handleMissingData(monitoringPlot?.mortalityRate) }]
+        : []),
+      { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlot?.photos.length) },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes, text: true },
-    ],
-    [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]
-  );
+    ];
+  }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]);
 
   const title = (text: string, marginTop?: number, marginBottom?: number) => (
     <Typography
