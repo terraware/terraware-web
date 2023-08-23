@@ -61,6 +61,7 @@ type FacilityName = {
 type InventoryResult = {
   species_id: string;
   species_scientificName: string;
+  species_commonName?: string;
   germinatingQuantity: string;
   notReadyQuantity: string;
   readyQuantity: string;
@@ -74,6 +75,7 @@ type FacilityInventoryResult = {
   facility_name: string;
   species_id: string;
   species_scientificName: string;
+  species_commonName?: string;
   'germinatingQuantity(raw)': string;
   'readyQuantity(raw)': string;
   'notReadyQuantity(raw)': string;
@@ -192,6 +194,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
           const transformedResult: InventoryResultWithFacilityNames = {
             species_id: resultTyped.species_id,
             species_scientificName: resultTyped.species_scientificName,
+            species_commonName: resultTyped.species_commonName,
             germinatingQuantity: resultTyped['germinatingQuantity(raw)'],
             notReadyQuantity: resultTyped['notReadyQuantity(raw)'],
             readyQuantity: resultTyped['readyQuantity(raw)'],
