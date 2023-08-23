@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -138,15 +138,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,6 +174,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -206,16 +206,13 @@ import { ViewPhotosDialog } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
-type StyleProps = {
-  isMobile: boolean;
-};
-&nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   thumbnail: {
+    margin: 'auto auto',
     objectFit: 'contain',
     display: 'flex',
-    width: <span class="fstat-no" title="function not covered" >(p</span>rops: StyleProps) =&gt; (<span class="cstat-no" title="statement not covered" >props.isMobile ? '105px' : '220px')</span>,
-    height: '120px',
+    maxWidth: '120px',
+    maxHeight: '120px',
   },
 }));
 &nbsp;
@@ -229,7 +226,7 @@ export default function <span class="fstat-no" title="function not covered" >Pho
   const [selectedSlide, setSelectedSlide] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(initialSlide ?? 0);</span>
   const [photosModalOpened, setPhotosModalOpened] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles({ isMobile });</span>
+  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
@@ -242,14 +239,17 @@ export default function <span class="fstat-no" title="function not covered" >Pho
         prevButtonLabel={strings.PREVIOUS}
         title={strings.PHOTOS}
       /&gt;
-      &lt;Box display='flex' flexWrap='wrap'&gt;
+      &lt;Box display='flex' flexDirection='row' flexWrap='wrap' marginBottom={2}&gt;
         {photoUrls.map(<span class="fstat-no" title="function not covered" >(p</span>hotoUrl, index) =&gt; (
 <span class="cstat-no" title="statement not covered" >          &lt;Box</span>
             key={index}
-            marginRight={theme.spacing(isMobile ? 2 : 3)}
-            marginTop={theme.spacing(2)}
-            width={isMobile ? '105px' : '220px'}
-            height='120px'
+            display='flex'
+            position='relative'
+            height={122}
+            width={122}
+            marginRight={isMobile ? 2 : 3}
+            marginTop={1}
+            border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
             sx={{ cursor: 'pointer' }}
           &gt;
             &lt;img
@@ -274,7 +274,7 @@ export default function <span class="fstat-no" title="function not covered" >Pho
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-23T14:46:07.098Z
+                at 2023-08-23T15:02:05.325Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
