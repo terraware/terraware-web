@@ -1,9 +1,9 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import strings from 'src/strings';
 import { useEffect, useState } from 'react';
 import { NurseryWithdrawalService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
-import { ViewPhotosDialog } from '@terraware/web-components';
+import PhotosList from 'src/components/common/PhotosList';
 
 const NURSERY_WITHDRAWAL_PHOTO_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}';
 
@@ -12,11 +12,8 @@ type PhotosSectionProps = {
 };
 
 export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Element {
-  const theme = useTheme();
   const snackbar = useSnackbar();
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
-  const [photosModalOpened, setPhotosModalOpened] = useState(false);
-  const [selectedSlide, setSelectedSlide] = useState(0);
 
   useEffect(() => {
     const getPhotos = async () => {
@@ -45,38 +42,11 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
 
   return (
     <>
-      <ViewPhotosDialog
-        photos={photoUrls.map((url) => ({ url }))}
-        open={photosModalOpened}
-        onClose={() => setPhotosModalOpened(false)}
-        initialSelectedSlide={selectedSlide}
-        nextButtonLabel={strings.NEXT}
-        prevButtonLabel={strings.PREVIOUS}
-        title={strings.PHOTOS}
-      />
       <Typography fontSize='20px' fontWeight={600}>
         {strings.PHOTOS}
       </Typography>
       <Box display='flex' flexWrap='wrap'>
-        {photoUrls.map((photoUrl, index) => (
-          <Box
-            key={index}
-            marginRight={theme.spacing(3)}
-            marginTop={theme.spacing(2)}
-            maxWidth='500px'
-            overflow='hidden'
-            sx={{ cursor: 'pointer' }}
-          >
-            <img
-              src={`${photoUrl}?maxHeight=250`}
-              alt={`${index}`}
-              onClick={() => {
-                setSelectedSlide(index);
-                setPhotosModalOpened(true);
-              }}
-            />
-          </Box>
-        ))}
+        <PhotosList photoUrls={photoUrls} />
       </Box>
     </>
   );

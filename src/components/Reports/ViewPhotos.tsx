@@ -6,6 +6,7 @@ import { Button, ViewPhotosDialog } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
 import { ReportPhoto } from 'src/types/Report';
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type PhotosSectionProps = {
   reportId: number;
@@ -22,6 +23,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     right: -10,
     backgroundColor: theme.palette.TwClrBgDanger,
   },
+  thumbnail: {
+    margin: 'auto auto',
+    objectFit: 'contain',
+    display: 'flex',
+    maxWidth: '120px',
+    maxHeight: '120px',
+  },
 }));
 
 export default function ViewPhotos({ reportId, onPhotoRemove, editable }: PhotosSectionProps): JSX.Element {
@@ -31,6 +39,7 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
   const [photosModalOpened, setPhotosModalOpened] = useState(false);
   const [selectedSlide, setSelectedSlide] = useState(0);
   const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const getPhotos = async () => {
@@ -80,16 +89,18 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
         prevButtonLabel={strings.PREVIOUS}
         title={strings.PHOTOS}
       />
-      <Box display='flex' flexWrap='wrap'>
+      <Box display='flex' flexWrap='wrap' flexDirection='row'>
         {photos.map((photo, index) => (
           <Box
             key={index}
+            display='flex'
             position='relative'
-            marginRight={theme.spacing(3)}
-            marginTop={theme.spacing(2)}
-            maxWidth='400px'
-            sx={{ cursor: 'pointer' }}
+            height={122}
+            width={122}
+            marginRight={isMobile ? 2 : 3}
+            marginTop={1}
             border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+            sx={{ cursor: 'pointer' }}
           >
             {editable && (
               <Button
@@ -100,7 +111,8 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
               />
             )}
             <img
-              src={`${photo.url}?maxHeight=122&maxWidth=122`}
+              className={classes.thumbnail}
+              src={`${photo.url}?maxHeight=120&maxWidth=120`}
               alt={`${index}`}
               onClick={() => {
                 setSelectedSlide(index);

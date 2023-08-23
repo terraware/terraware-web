@@ -22,6 +22,7 @@ import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import { makeStyles } from '@mui/styles';
 import BackToLink from 'src/components/common/BackToLink';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backToWithdrawals: {
@@ -59,6 +60,7 @@ export default function NurseryReassignment(): JSX.Element {
   const [reassignments, setReassignments] = useState<{ [subzoneId: string]: Reassignment }>({});
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
   const contentRef = useRef(null);
+  const trackingV2 = isEnabled('TrackingV2');
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
@@ -222,7 +224,7 @@ export default function NurseryReassignment(): JSX.Element {
         <Box>
           <BackToLink
             id='back'
-            to={APP_PATHS.NURSERY_WITHDRAWALS}
+            to={trackingV2 ? `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history` : APP_PATHS.NURSERY_WITHDRAWALS}
             className={classes.backToWithdrawals}
             name={strings.WITHDRAWAL_LOG}
           />
