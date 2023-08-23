@@ -5,7 +5,11 @@ import { APP_PATHS } from 'src/constants';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { requestSitePopulation, requestSiteReportedPlants } from 'src/redux/features/tracking/trackingThunks';
+import {
+  requestSitePopulation,
+  requestSiteReportedPlants,
+  requestPlantingSitesSearchResults,
+} from 'src/redux/features/tracking/trackingThunks';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -62,6 +66,7 @@ export default function PlantsDashboardV2(): JSX.Element {
     dispatch(requestObservationsResults(org.selectedOrganization.id));
     dispatch(requestSpecies(org.selectedOrganization.id));
     dispatch(requestPlantings(org.selectedOrganization.id));
+    dispatch(requestPlantingSitesSearchResults(org.selectedOrganization.id));
   }, [dispatch, org.selectedOrganization.id]);
 
   useEffect(() => {

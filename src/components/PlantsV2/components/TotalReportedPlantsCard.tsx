@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
@@ -16,8 +17,41 @@ type TotalReportedPlantsCardProps = {
 };
 
 export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReportedPlantsCardProps): JSX.Element {
-  const theme = useTheme();
-  const locale = useLocalization();
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
+
+  if (!plantingSite?.plantingZones?.length) {
+    return <SiteWithoutZonesCard siteReportedPlants={siteReportedPlants} />;
+  } else {
+    return (
+      <SiteWithZonesCard
+        siteReportedPlants={siteReportedPlants}
+        plantingSiteId={plantingSiteId}
+        plantingSite={plantingSite}
+      />
+    );
+  }
+}
+
+type SiteWithoutZonesCardProps = {
+  siteReportedPlants?: PlantingSiteReportedPlants;
+};
+
+const SiteWithoutZonesCard = ({ siteReportedPlants }: SiteWithoutZonesCardProps): JSX.Element => {
+  return <CardData totalPlants={siteReportedPlants?.totalPlants ?? 0} />;
+};
+
+type SiteWithZonesCardProps = {
+  plantingSiteId: number;
+  plantingSite?: PlantingSite;
+  siteReportedPlants?: PlantingSiteReportedPlants;
+};
+
+const SiteWithZonesCard = ({
+  plantingSiteId,
+  plantingSite,
+  siteReportedPlants,
+}: SiteWithZonesCardProps): JSX.Element => {
   const defaultTimeZone = useDefaultTimeZone();
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
@@ -36,7 +70,6 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
     }
   }, [populationSelector]);
 
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [estimatedTotalPlants, setEstimatedTotalPlants] = useState<number | undefined>();
   useEffect(() => {
     if (observation?.plantingDensity && plantingSite?.areaHa) {
@@ -46,9 +79,34 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
     }
   }, [plantingSite, observation]);
 
-  const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
   const numPlantedSinceObs = siteReportedPlants?.plantsSinceLastObservation ?? 0;
   const percentDiff = estimatedTotalPlants ? (100 * numPlantedSinceObs) / estimatedTotalPlants : 0;
+
+  const estimated = useMemo(
+    () => ({
+      totalPlants: estimatedTotalPlants,
+      numPlantedSinceObs,
+      percentDiff,
+    }),
+    [estimatedTotalPlants, numPlantedSinceObs, percentDiff]
+  );
+
+  return <CardData completedTime={observation?.completedTime} estimated={estimated} totalPlants={totalPlants} />;
+};
+
+type CardDataProps = {
+  completedTime?: string;
+  totalPlants: number;
+  estimated?: {
+    totalPlants?: number;
+    numPlantedSinceObs: number;
+    percentDiff: number;
+  };
+};
+
+const CardData = ({ completedTime, estimated, totalPlants }: CardDataProps): JSX.Element => {
+  const theme = useTheme();
+  const locale = useLocalization();
 
   const numberFontSize = (n: number): string => {
     if (n < 1000) {
@@ -72,17 +130,17 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
       contents={
         <Box display='flex' flexDirection='column'>
           <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
-            {observation?.completedTime
+            {completedTime
               ? strings.formatString(
                   strings.HOW_MANY_PLANTS_CARD_TITLE_W_OBS,
-                  getShortDate(observation.completedTime, locale.activeLocale)
+                  getShortDate(completedTime, locale.activeLocale)
                 )
               : strings.HOW_MANY_PLANTS_CARD_TITLE}
           </Typography>
           <Box display='flex' alignItems='flex-end' flexWrap='wrap' marginBottom={theme.spacing(3)}>
-            {estimatedTotalPlants !== undefined ? (
-              <Typography fontSize={numberFontSize(estimatedTotalPlants)} fontWeight={600} lineHeight={1}>
-                <FormattedNumber value={Math.round(estimatedTotalPlants)} />
+            {estimated?.totalPlants !== undefined ? (
+              <Typography fontSize={numberFontSize(estimated.totalPlants)} fontWeight={600} lineHeight={1}>
+                <FormattedNumber value={Math.round(estimated.totalPlants)} />
               </Typography>
             ) : (
               <Typography fontSize={numberFontSize(totalPlants)} fontWeight={600} lineHeight={1}>
@@ -94,17 +152,17 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
               {strings.PLANTS}
             </Typography>
           </Box>
-          {estimatedTotalPlants !== undefined && (
+          {estimated?.totalPlants !== undefined && (
             <>
               <Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}>
                 {strings.HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION}
               </Typography>
-              {numPlantedSinceObs > 0 ? (
+              {estimated.numPlantedSinceObs > 0 ? (
                 <Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}>
                   {strings.formatString(
                     strings.HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION_2,
-                    numPlantedSinceObs,
-                    Math.round(percentDiff)
+                    estimated.numPlantedSinceObs!,
+                    Math.round(estimated.percentDiff!)
                   )}
                 </Typography>
               ) : null}
@@ -114,4 +172,4 @@ export default function TotalReportedPlantsCard({ plantingSiteId }: TotalReporte
       }
     />
   );
-}
+};

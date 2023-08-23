@@ -4,25 +4,79 @@ import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import BarChart from 'src/components/common/Chart/BarChart';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type NumberOfSpeciesPlantedCardProps = {
-  plantingSiteId?: number;
+  plantingSiteId: number;
 };
 
 export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfSpeciesPlantedCardProps): JSX.Element {
-  const theme = useTheme();
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+
+  if (!plantingSite?.plantingZones?.length) {
+    return <SiteWithoutZonesCard plantingSiteId={plantingSiteId} />;
+  } else {
+    return <SiteWithZonesCard plantingSiteId={plantingSiteId} />;
+  }
+}
+
+const SiteWithoutZonesCard = ({ plantingSiteId }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
+  const [totalSpecies, setTotalSpecies] = useState<number>();
+  const [labels, setLabels] = useState<string[]>();
+  const [values, setValues] = useState<number[]>();
+
+  const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
+
+  useEffect(() => {
+    const speciesNames: Set<string> = new Set();
+    const speciesByCategory: Record<string, number> = {
+      [strings.RARE]: 0,
+      [strings.ENDANGERED]: 0,
+      [strings.OTHER]: 0,
+    };
+
+    plantings.forEach((planting) => {
+      const { rare, conservationCategory, scientificName } = planting.species;
+      let endangered = false;
+      let isRare = false;
+
+      if (conservationCategory === 'EN' || conservationCategory === 'CR') {
+        endangered = true;
+      }
+      if (rare === 'true') {
+        isRare = true;
+      }
+
+      speciesByCategory[strings.RARE] += isRare ? 1 : 0;
+      speciesByCategory[strings.ENDANGERED] += endangered ? 1 : 0;
+      speciesByCategory[strings.OTHER] += !(rare || endangered) ? 1 : 0;
+      speciesNames.add(scientificName);
+    });
+
+    const speciesCount = speciesNames.size;
+    setTotalSpecies(speciesCount);
+    setLabels(Object.keys(speciesByCategory));
+    setValues(
+      Object.values(speciesByCategory).map((cat) =>
+        speciesCount > 0 ? Number(((cat * 100) / speciesCount).toFixed(2)) : 0
+      )
+    );
+  }, [plantings]);
+
+  return <ChartData labels={labels} values={values} totalSpecies={totalSpecies} />;
+};
+
+const SiteWithZonesCard = ({ plantingSiteId }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
   const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
   const speciesSelector = useAppSelector((state) => selectSpecies(state));
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
-  const user = useUser().user;
-  const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
 
   useEffect(() => {
     if (populationSelector) {
@@ -69,6 +123,21 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
       setValues([]);
     }
   }, [populationSelector, speciesSelector]);
+
+  return <ChartData labels={labels} values={values} totalSpecies={totalSpecies} />;
+};
+
+type ChartDataProps = {
+  labels?: string[];
+  values?: number[];
+  totalSpecies?: number;
+};
+
+const ChartData = ({ labels, values, totalSpecies }: ChartDataProps): JSX.Element => {
+  const theme = useTheme();
+  const user = useUser().user;
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
 
   const chartData = useMemo(() => {
     if (!labels?.length || !values?.length) {
@@ -138,4 +207,4 @@ export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfS
       }
     />
   );
-}
+};
