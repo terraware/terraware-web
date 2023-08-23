@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/80</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/76</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
@@ -318,7 +318,13 @@
 <a name='L253'></a><a href='#L253'>253</a>
 <a name='L254'></a><a href='#L254'>254</a>
 <a name='L255'></a><a href='#L255'>255</a>
-<a name='L256'></a><a href='#L256'>256</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -462,12 +468,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -516,6 +525,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -709,21 +721,24 @@ export const mergeObservations = <span class="cstat-no" title="statement not cov
       const { plantingSiteId } = <span class="cstat-no" title="statement not covered" >observation;</span>
       const site = <span class="cstat-no" title="statement not covered" >sites[plantingSiteId];</span>
 &nbsp;
+      const mergedZones = <span class="cstat-no" title="statement not covered" >mergeZones(</span>
+        observation.plantingZones,
+        zones,
+        subzones,
+        species,
+        site.timeZone ?? defaultTimeZone
+      );
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      return {</span>
         ...observation,
         plantingSiteName: site.name,
         boundary: site.boundary,
         completedDate: observation.completedTime ? getDateDisplayValue(observation.completedTime, site.timeZone) : '',
         startDate: getDateDisplayValue(observation.startDate, site.timeZone),
-        plantingZones: mergeZones(
-          observation.plantingZones,
-          zones,
-          subzones,
-          species,
-          site.timeZone ?? defaultTimeZone
-        ),
+        plantingZones: mergedZones,
         species: mergeSpecies(observation.species, species),
         totalPlants: observation.plantingZones.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; <span class="cstat-no" title="statement not covered" >acc + curr.totalPlants,</span> 0),
+        hasObservedPermanentPlots: mergedZones.some(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.hasObservedPermanentPlots)</span>,
       };
     });
 };
@@ -772,6 +787,9 @@ const mergeZones = <span class="cstat-no" title="statement not covered" ><span c
         species: mergeSpecies(zoneObservation.species, species),
         plantingSubzones: mergeSubzones(zoneObservation.plantingSubzones, subzones, species, timeZone),
         status,
+        hasObservedPermanentPlots: zoneObservation.plantingSubzones.some(<span class="fstat-no" title="function not covered" >(p</span>lantingSubzone) =&gt;
+<span class="cstat-no" title="statement not covered" >          plantingSubzone.monitoringPlots.some(<span class="fstat-no" title="function not covered" >(p</span>lot) =&gt; <span class="cstat-no" title="statement not covered" >plot.isPermanent &amp;&amp; plot.completedTime)</span></span>
+        ),
       };
     });
 };
@@ -835,7 +853,7 @@ const mergeSpecies = <span class="cstat-no" title="statement not covered" ><span
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-22T20:01:13.250Z
+                at 2023-08-23T00:19:08.066Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
