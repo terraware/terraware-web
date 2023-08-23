@@ -1,3 +1,6 @@
+d38c6317e SW-4087 Add support for sites-without-zones in plants dashboard (#1675)
+01114c874 SW-4096 Use latest observations data in plants dashboard (#1678)
+94e5107af SW-4093 Account for planting completed time in plants dashboard (#1679)
 7f7a652d6 Show species common name in inventory search (#1672)
 32a7b27b1 SW-4092 Show mortality rate only when there are observed permanent plots (#1677)
 d36fdbee3 SW-4057 Species list sorting order does not match sort indicator arrow on load (#1676)
