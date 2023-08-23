@@ -29,7 +29,12 @@ const ObservationDetailsRenderer =
     }
 
     if (column.key === 'mortalityRate') {
-      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value}%` : ''} />;
+      return (
+        <CellRenderer
+          {...props}
+          value={value !== undefined && value !== null && row.hasObservedPermanentPlots ? `${value}%` : ''}
+        />
+      );
     }
 
     if (column.key === 'status') {

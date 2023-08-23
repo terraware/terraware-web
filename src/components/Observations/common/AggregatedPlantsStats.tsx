@@ -15,6 +15,7 @@ export type AggregatedPlantsStatsProps = {
   plantingDensity?: number;
   mortalityRate?: number;
   species?: ObservationSpeciesResults[];
+  hasObservedPermanentPlots?: boolean;
 };
 
 export default function AggregatedPlantsStats({
@@ -24,6 +25,7 @@ export default function AggregatedPlantsStats({
   plantingDensity,
   mortalityRate,
   species,
+  hasObservedPermanentPlots,
 }: AggregatedPlantsStatsProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const infoCardGridSize = isMobile ? 12 : 3;
@@ -39,7 +41,7 @@ export default function AggregatedPlantsStats({
       value: plantingDensity,
       toolTip: strings.PLANTING_DENSITY_MISSING_TOOLTIP,
     },
-    { label: strings.MORTALITY_RATE, value: handleMissingData(mortalityRate) },
+    { label: strings.MORTALITY_RATE, value: hasObservedPermanentPlots ? handleMissingData(mortalityRate) : '' },
   ];
 
   return (

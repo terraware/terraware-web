@@ -22,6 +22,7 @@ export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
     plantingZones: ObservationPlantingZoneResults[];
     species: ObservationSpeciesResults[];
     totalPlants: number;
+    hasObservedPermanentPlots: boolean;
   };
 
 // zone level results -> contains a list of subzone level results
@@ -33,6 +34,7 @@ export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPaylo
     plantingSubzones: ObservationPlantingSubzoneResults[];
     species: ObservationSpeciesResults[];
     status?: MonitoringPlotStatus;
+    hasObservedPermanentPlots: boolean;
   };
 
 // subzone level results -> contains lists of both species level results and monitoring plot level results

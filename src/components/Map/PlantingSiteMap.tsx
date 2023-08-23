@@ -205,6 +205,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                   'case',
                   ['==', ['get', 'mortalityRate'], null],
                   0.0,
+                  ['==', ['get', 'hasObservedPermanentPlots'], false],
+                  0.0,
                   ['>', ['get', 'mortalityRate'], 50],
                   0.7,
                   ['>', ['get', 'mortalityRate'], 25],
