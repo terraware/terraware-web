@@ -24,6 +24,7 @@ import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
 import { isTrue } from 'src/utils/boolean';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backToWithdrawals: {
@@ -64,6 +65,7 @@ export default function NurseryWithdrawalsDetails({
   const contentRef = useRef(null);
   const snackbar = useSnackbar();
   const { OUTPLANT } = NurseryWithdrawalPurposes;
+  const trackingV2 = isEnabled('TrackingV2');
 
   const query = useQuery();
   const history = useHistory();
@@ -164,7 +166,9 @@ export default function NurseryWithdrawalsDetails({
           <Box>
             <BackToLink
               id='back'
-              to={`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history`}
+              to={
+                trackingV2 ? `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history` : APP_PATHS.NURSERY_WITHDRAWALS
+              }
               className={classes.backToWithdrawals}
               name={strings.WITHDRAWAL_LOG}
             />

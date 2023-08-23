@@ -100,6 +100,7 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
             marginRight={isMobile ? 2 : 3}
             marginTop={1}
             border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+            sx={{ cursor: 'pointer' }}
           >
             {editable && (
               <Button

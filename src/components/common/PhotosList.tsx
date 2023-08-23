@@ -12,7 +12,6 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     maxWidth: '120px',
     maxHeight: '120px',
-    cursor: 'pointer',
   },
 }));
 
@@ -50,6 +49,7 @@ export default function PhotosList({ photoUrls, initialSlide }: PhotosListProps)
             marginRight={isMobile ? 2 : 3}
             marginTop={1}
             border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+            sx={{ cursor: 'pointer' }}
           >
             <img
               className={classes.thumbnail}
