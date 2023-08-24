@@ -13,7 +13,7 @@ export default function ProgressChart({ value, target }: ProgressChartProps): JS
   return (
     <LinearProgress
       variant='determinate'
-      value={percentage}
+      value={percentage < 100 ? percentage : 100}
       valueBuffer={100}
       sx={{
         height: '32px',
