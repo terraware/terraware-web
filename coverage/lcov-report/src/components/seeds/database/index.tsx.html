@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/222</span>
+                <span class='fraction'>0/229</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/148</span>
+                <span class='fraction'>0/150</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/216</span>
+                <span class='fraction'>0/223</span>
             </div>
         
             
@@ -825,7 +825,24 @@
 <a name='L760'></a><a href='#L760'>760</a>
 <a name='L761'></a><a href='#L761'>761</a>
 <a name='L762'></a><a href='#L762'>762</a>
-<a name='L763'></a><a href='#L763'>763</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L763'></a><a href='#L763'>763</a>
+<a name='L764'></a><a href='#L764'>764</a>
+<a name='L765'></a><a href='#L765'>765</a>
+<a name='L766'></a><a href='#L766'>766</a>
+<a name='L767'></a><a href='#L767'>767</a>
+<a name='L768'></a><a href='#L768'>768</a>
+<a name='L769'></a><a href='#L769'>769</a>
+<a name='L770'></a><a href='#L770'>770</a>
+<a name='L771'></a><a href='#L771'>771</a>
+<a name='L772'></a><a href='#L772'>772</a>
+<a name='L773'></a><a href='#L773'>773</a>
+<a name='L774'></a><a href='#L774'>774</a>
+<a name='L775'></a><a href='#L775'>775</a>
+<a name='L776'></a><a href='#L776'>776</a>
+<a name='L777'></a><a href='#L777'>777</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1032,6 +1049,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1043,9 +1074,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1623,10 +1651,13 @@ import { DropdownItem, Message } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
-import useSnackbar from 'src/utils/useSnackbar';
+import useSnackbar, { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectMessage } from 'src/redux/features/message/messageSelectors';
+import { sendMessage } from 'src/redux/features/message/messageSlice';
 &nbsp;
 interface StyleProps {
   isMobile: boolean;
@@ -1794,6 +1825,20 @@ export default function <span class="fstat-no" title="function not covered" >Dat
   const [showDefaultSystemSnackbar, setShowDefaultSystemSnackbar] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const { userPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
+  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
+&nbsp;
+  const closeMessageSelector = <span class="cstat-no" title="statement not covered" >useAppSelector(selectMessage(`seeds.${SNACKBAR_PAGE_CLOSE_KEY}.ackWeightSystem`));</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const updatePreferences = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });</span>
+<span class="cstat-no" title="statement not covered" >      reloadUserPreferences();</span>
+    };
+<span class="cstat-no" title="statement not covered" >    if (closeMessageSelector) {</span>
+<span class="cstat-no" title="statement not covered" >      dispatch(sendMessage({ key: `seeds.${SNACKBAR_PAGE_CLOSE_KEY}.dismissPageMessage`, data: undefined }));</span>
+<span class="cstat-no" title="statement not covered" >      updatePreferences();</span>
+    }
+  }, [closeMessageSelector, dispatch, reloadUserPreferences]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const showSnackbar = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1805,12 +1850,9 @@ export default function <span class="fstat-no" title="function not covered" >Dat
         '',
         {
           label: strings.GOT_IT,
-          apply: <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
-<span class="cstat-no" title="statement not covered" >            await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });</span>
-<span class="cstat-no" title="statement not covered" >            reloadUserPreferences();</span>
-          },
-        },
-        'user'
+          key: 'ackWeightSystem',
+          payload: Date.now(),
+        }
       );
     };
 <span class="cstat-no" title="statement not covered" >    if (showDefaultSystemSnackbar) {</span>
@@ -2356,7 +2398,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-24T19:51:04.904Z
+                at 2023-08-25T20:50:55.346Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
