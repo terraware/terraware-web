@@ -23,10 +23,6 @@ export const HighOrganizationRolesValues = ['Admin', 'Owner'];
 // which could contain a user with a manger role.
 export type OrganizationRole = HighOrganizationRoles | 'Contributor' | 'Manager';
 
-export interface SelectedOrgInfo {
-  selectedFacility?: Facility;
-}
-
 export function roleName(role: OrganizationRole) {
   switch (role) {
     case 'Admin':

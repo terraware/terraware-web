@@ -20,8 +20,6 @@ import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
 import { Facility } from 'src/types/Facility';
 import { stateName } from 'src/types/Accession';
-import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
-import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
@@ -181,7 +179,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
-  const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsDatabaseSelectedOrgInfo);
+  const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
   const contentRef = useRef(null);
   const searchedLocaleRef = useRef<string | null>(activeLocale);
 
@@ -535,10 +533,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
     history.push(newAccessionLocation);
   };
 
-  const onSeedBankForImportSelected = (selectedFacility: Facility | undefined) => {
+  const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {
     setSelectSeedBankForImportModalOpen(false);
-    if (selectedFacility) {
-      setSelectedOrgInfo({ ...selectedOrgInfo, selectedFacility });
+    if (selectedFacilityOnModal) {
+      setSelectedFacility(selectedFacilityOnModal);
       setOpenImportModal(true);
     }
   };
@@ -605,11 +603,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   return (
     <>
-      {selectedOrgInfo.selectedFacility && (
+      {selectedFacility && (
         <ImportAccessionsModal
           open={openImportModal}
           onClose={() => setOpenImportModal(false)}
-          facility={selectedOrgInfo.selectedFacility}
+          facility={selectedFacility}
           reloadData={reloadData}
         />
       )}
@@ -633,7 +631,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
           <PageHeader
             title=''
             subtitle={strings.ACCESSIONS_DATABASE_DESCRIPTION}
-            allowAll={true}
             page={strings.ACCESSIONS}
             parentPage={strings.SEEDS}
             rightComponent={
