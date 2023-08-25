@@ -65,7 +65,6 @@ export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Elemen
 
   const sendCloseMessage = () => {
     if (snackbar?.onCloseMessage) {
-      console.log('entra a sendCloseMessage en pagesnackbar.tsx con key=', pageKey);
       dispatch(
         sendMessage({
           key: `${pageKey}.${SNACKBAR_PAGE_CLOSE_KEY}.${snackbar.onCloseMessage.key}`,

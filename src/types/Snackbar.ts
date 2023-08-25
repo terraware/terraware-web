@@ -1,6 +1,6 @@
 export type Priority = 'info' | 'critical' | 'warning' | 'success';
 export type Title = string | string[] | undefined;
-export type Message = string | Array<string | JSX.Element>;
+export type Message = string | (string | JSX.Element)[];
 export type OnCloseMessage = {
   key?: string;
   label?: string;
