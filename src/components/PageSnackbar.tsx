@@ -1,11 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Snackbar } from '@mui/material';
+import { Snackbar as SnackbarUI } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useRecoilState } from 'recoil';
-import { snackbarAtoms, PageSnackbar as PageSnackbarType } from 'src/state/snackbar';
 import { Message, Button } from '@terraware/web-components';
-import DetectAppVersion from 'src/components/common/DetectAppVersion';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { Snackbar } from 'src/types/Snackbar';
+import { selectSnackbar } from 'src/redux/features/snackbar/snackbarSelectors';
+import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
+import { sendMessage } from 'src/redux/features/message/messageSlice';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+import { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
+
+interface StyleProps {
+  isMobile?: boolean;
+}
 
 const useStyles = makeStyles(() => ({
   mainSnackbar: {
@@ -15,139 +23,116 @@ const useStyles = makeStyles(() => ({
     '&.MuiSnackbar-root': {
       position: 'relative',
       margin: '32px 0px',
+      left: (props: StyleProps) => (props.isMobile ? '0px' : '50%'),
+      transform: (props: StyleProps) => (props.isMobile ? 'translateX(0)' : 'translateX(-50%)'),
       zIndex: 0,
     },
   },
 }));
 
-const clearedData = { msg: '', title: undefined, onCloseCallback: undefined };
+export type PageSnackbarProps = {
+  pageKey?: string;
+};
 
-export default function PageSnackbarMessage(): JSX.Element {
+export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Element {
   const { pathname } = useLocation();
+  const dispatch = useAppDispatch();
+  const [originalPathname] = useState<string>(pathname);
+  const [snackbar, setSnackbar] = useState<Snackbar | null>();
   const [routeChanged, setRouteChanged] = useState<boolean>(false);
-  const [pageSnackbar, setPageSnackbar] = useRecoilState(snackbarAtoms.page);
-  const [orgSnackbar, setOrgSnackbar] = useRecoilState(snackbarAtoms.org);
-  const [userSnackbar, setUserSnackbar] = useRecoilState(snackbarAtoms.user);
+  const snackbarData = useAppSelector(selectSnackbar('page'));
 
-  const clearSnackbar = (snackbar: PageSnackbarType, clearMessage?: () => void) => {
-    if (clearMessage) {
-      clearMessage();
-    }
-    if (snackbar?.onCloseCallback) {
-      try {
-        snackbar?.onCloseCallback.apply();
-      } catch (e) {
-        // swallow exception for now, expect client code to handle issues with callbacks
-      }
-    }
-  };
+  const handleClose = useCallback(() => {
+    dispatch(clearSnackbar({ type: 'page' }));
+  }, [dispatch]);
 
-  const handleClose = (snackbar: PageSnackbarType, event?: any, eventType?: string, clearMessage?: () => void) => {
-    if (snackbar) {
-      if (!snackbar.onCloseCallback || eventType !== 'clickaway') {
-        clearSnackbar(snackbar, clearMessage);
-      }
-    }
-  };
-
-  const clearPageMessage = useCallback(() => {
-    if (!pageSnackbar.msg) {
-      return;
-    }
-    setPageSnackbar({ ...pageSnackbar, ...clearedData });
-  }, [setPageSnackbar, pageSnackbar]);
-
-  const clearUserMessage = useCallback(() => {
-    if (!userSnackbar.msg) {
-      return;
-    }
-    setUserSnackbar({ ...userSnackbar, ...clearedData });
-  }, [setUserSnackbar, userSnackbar]);
-
-  const clearOrgMessage = useCallback(() => {
-    if (!orgSnackbar.msg) {
-      return;
-    }
-    setOrgSnackbar({ ...orgSnackbar, ...clearedData });
-  }, [setOrgSnackbar, orgSnackbar]);
+  useEffect(() => {
+    setSnackbar(snackbarData ? { ...snackbarData } : null);
+  }, [snackbarData]);
 
   useEffect(() => {
     if (routeChanged) {
       setRouteChanged(false);
-      clearPageMessage();
-      clearUserMessage();
-      clearOrgMessage();
+      handleClose();
     }
-  }, [routeChanged, clearPageMessage, clearUserMessage, clearOrgMessage]);
+  }, [routeChanged, handleClose]);
 
   useEffect(() => {
-    setRouteChanged(!!pathname);
-  }, [pathname]);
+    if (!!pathname) {
+      setRouteChanged(true);
+    }
+  }, [pathname, originalPathname]);
+
+  const sendCloseMessage = () => {
+    if (snackbar?.onCloseMessage) {
+      console.log('entra a sendCloseMessage en pagesnackbar.tsx con key=', pageKey);
+      dispatch(
+        sendMessage({
+          key: `${pageKey}.${SNACKBAR_PAGE_CLOSE_KEY}.${snackbar.onCloseMessage.key}`,
+          data: snackbar.onCloseMessage.payload,
+        })
+      );
+    }
+  };
+
+  const handleMessageClose = (event?: any, eventType?: string) => {
+    if (eventType !== 'clickaway') {
+      sendCloseMessage();
+      handleClose();
+    }
+  };
 
   return (
     <>
-      <DetectAppVersion />
-      <SnackbarMessage
-        id='user-page-snackbar'
-        snack={userSnackbar}
-        onClose={(event?: any, eventType?: string) => handleClose(userSnackbar, event, eventType, clearUserMessage)}
-      />
-      <SnackbarMessage
-        id='org-page-snackbar'
-        snack={orgSnackbar}
-        onClose={(event?: any, eventType?: string) => handleClose(orgSnackbar, event, eventType, clearOrgMessage)}
-      />
-      <SnackbarMessage
-        id='page-snackbar'
-        snack={pageSnackbar}
-        onClose={(event?: any, eventType?: string) => handleClose(pageSnackbar, event, eventType, clearPageMessage)}
-      />
+      <SnackbarMessage snack={snackbar} onClose={handleMessageClose} />
     </>
   );
 }
 
 type SnackbarMessageProps = {
-  id: string;
-  snack: PageSnackbarType;
+  snack: Snackbar | null | undefined;
   onClose: (event?: any, eventType?: string) => void;
 };
 
-function SnackbarMessage({ id, snack, onClose }: SnackbarMessageProps): JSX.Element {
-  const classes = useStyles();
+function SnackbarMessage({ snack, onClose }: SnackbarMessageProps): JSX.Element {
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
 
   return (
-    <Snackbar
+    <SnackbarUI
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      open={Boolean(snack.msg)}
+      open={!!snack}
       onClose={onClose}
       autoHideDuration={null}
-      id={id}
+      id='page-snackbar'
       className={classes.mainSnackbar}
     >
       <div>
-        <Message
-          type='page'
-          title={snack.title}
-          body={snack.msg}
-          priority={snack.priority}
-          showCloseButton={true}
-          onClose={onClose}
-          pageButtons={
-            snack?.onCloseCallback?.label
-              ? [
-                  <Button
-                    label={snack.onCloseCallback.label}
-                    onClick={onClose}
-                    size='small'
-                    key={'1'}
-                    priority='secondary'
-                    type='passive'
-                  />,
-                ]
-              : []
-          }
-        />
+        {snack && (
+          <Message
+            type='page'
+            title={snack.title}
+            body={snack.msg}
+            priority={snack.priority}
+            showCloseButton={true}
+            onClose={onClose}
+            pageButtons={
+              snack?.onCloseMessage?.label
+                ? [
+                    <Button
+                      label={snack.onCloseMessage.label}
+                      onClick={onClose}
+                      size='small'
+                      key={'1'}
+                      priority='secondary'
+                      type='passive'
+                    />,
+                  ]
+                : []
+            }
+          />
+        )}
       </div>
-    </Snackbar>
+    </SnackbarUI>
   );
 }
