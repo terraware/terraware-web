@@ -1,10 +1,13 @@
-import { Snackbar } from '@mui/material';
+import { Snackbar as SnackbarUI } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useRecoilState } from 'recoil';
-import snackbarAtom from 'src/state/snackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Message } from '@terraware/web-components';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useEffect, useState } from 'react';
+import { selectSnackbar } from 'src/redux/features/snackbar/snackbarSelectors';
+import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
+import { Snackbar } from 'src/types/Snackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainSnackbar: {
@@ -20,31 +23,33 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function ToastSnackbarMessage(): JSX.Element {
+export default function ToastSnackbar(): JSX.Element {
   const classes = useStyles();
-
-  const [snackbar, setSnackbar] = useRecoilState(snackbarAtom);
-
   const { isMobile } = useDeviceInfo();
+  const dispatch = useAppDispatch();
+  const [snackbar, setSnackbar] = useState<Snackbar | null>();
+  const snackbarData = useAppSelector(selectSnackbar('toast'));
 
   const handleClose = () => {
-    if (snackbar) {
-      setSnackbar({ ...snackbar, msg: '', title: undefined });
-    }
+    dispatch(clearSnackbar({ type: 'toast' }));
   };
 
+  useEffect(() => {
+    setSnackbar(snackbarData ? { ...snackbarData } : null);
+  }, [snackbarData]);
+
   return (
-    <Snackbar
+    <SnackbarUI
       anchorOrigin={{ vertical: isMobile ? 'bottom' : 'top', horizontal: 'center' }}
-      open={Boolean(snackbar.msg)}
+      open={Boolean(!!snackbar)}
       onClose={handleClose}
       autoHideDuration={5000}
       id='snackbar'
       className={classes.mainSnackbar}
     >
       <div className={classes.toastContainer}>
-        <Message type='toast' title={snackbar.title} body={snackbar.msg} priority={snackbar.priority} />
+        {snackbar && <Message type='toast' title={snackbar.title} body={snackbar.msg} priority={snackbar.priority} />}
       </div>
-    </Snackbar>
+    </SnackbarUI>
   );
 }

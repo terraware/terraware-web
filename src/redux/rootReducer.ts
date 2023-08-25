@@ -17,6 +17,8 @@ import {
   plantingSitesSearchResultsReducer,
   siteReportedPlantsReducer,
 } from './features/tracking/trackingSlice';
+import { snackbarReducer } from './features/snackbar/snackbarSlice';
+import { messageReducer } from './features/message/messageSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -32,6 +34,8 @@ export const reducers = {
   updatePlantingsCompleted: updatePlantingsCompletedReducer,
   plantingSitesSearchResults: plantingSitesSearchResultsReducer,
   siteReportedPlantsResults: siteReportedPlantsReducer,
+  snackbar: snackbarReducer,
+  message: messageReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

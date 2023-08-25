@@ -121,7 +121,7 @@ export default function PageHeader({
                 </Typography>
               )}
             </Box>
-            <PageSnackbar />
+            <PageSnackbar pageKey='seeds' />
             {children}
           </div>
         </Grid>

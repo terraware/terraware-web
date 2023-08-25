@@ -34,10 +34,13 @@ import { DropdownItem, Message } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
-import useSnackbar from 'src/utils/useSnackbar';
+import useSnackbar, { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectMessage } from 'src/redux/features/message/messageSelectors';
+import { sendMessage } from 'src/redux/features/message/messageSlice';
 
 interface StyleProps {
   isMobile: boolean;
@@ -205,6 +208,20 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [showDefaultSystemSnackbar, setShowDefaultSystemSnackbar] = useState(false);
   const { userPreferences } = useUser();
   const snackbar = useSnackbar();
+  const dispatch = useAppDispatch();
+
+  const closeMessageSelector = useAppSelector(selectMessage(`seeds.${SNACKBAR_PAGE_CLOSE_KEY}.ackWeightSystem`));
+
+  useEffect(() => {
+    const updatePreferences = async () => {
+      await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });
+      reloadUserPreferences();
+    };
+    if (closeMessageSelector) {
+      dispatch(sendMessage({ key: `seeds.${SNACKBAR_PAGE_CLOSE_KEY}.dismissPageMessage`, data: undefined }));
+      updatePreferences();
+    }
+  }, [closeMessageSelector, dispatch, reloadUserPreferences]);
 
   useEffect(() => {
     const showSnackbar = () => {
@@ -216,12 +233,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
         '',
         {
           label: strings.GOT_IT,
-          apply: async () => {
-            await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });
-            reloadUserPreferences();
-          },
-        },
-        'user'
+          key: 'ackWeightSystem',
+          payload: Date.now(),
+        }
       );
     };
     if (showDefaultSystemSnackbar) {
