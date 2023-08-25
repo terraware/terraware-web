@@ -1,12 +1,10 @@
 import { Container, Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { OrderPreserveableTable as Table } from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
-import speciesAtom from 'src/state/species';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
@@ -40,6 +38,9 @@ import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { SpeciesService } from 'src/services';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import _ from 'lodash';
+import useQuery from 'src/utils/useQuery';
+import { useHistory } from 'react-router';
+import { APP_PATHS } from 'src/constants';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -149,10 +150,11 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const snackbar = useSnackbar();
-  const [speciesState, setSpeciesState] = useRecoilState(speciesAtom);
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
+  const query = useQuery();
+  const history = useHistory();
 
   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -498,11 +500,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   }, [columns, setSelectedColumns, activeLocale]);
 
   useEffect(() => {
-    if (speciesState?.checkData) {
-      setSpeciesState({ checkData: false });
+    const shouldCheckData = query.get('checkData');
+    if (shouldCheckData) {
+      query.delete('checkData');
       setCheckDataModalOpen(true);
+      history.replace({ pathname: APP_PATHS.SPECIES, search: query.toString() });
     }
-  }, [setCheckDataModalOpen, speciesState, setSpeciesState]);
+  }, [query, setCheckDataModalOpen, history]);
 
   useEffect(() => {
     onApplyFilters();

@@ -5,10 +5,8 @@ import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import AddSpeciesModal from '../Species/AddSpeciesModal';
-import { useSetRecoilState } from 'recoil';
 import ImportSpeciesModal, { downloadCsvTemplate } from '../Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
-import speciesAtom from 'src/state/species';
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -74,7 +72,6 @@ export default function EmptyStatePage({
   const classes = useStyles({ isMobile });
   const history = useHistory();
   const snackbar = useSnackbar();
-  const setSpeciesState = useSetRecoilState(speciesAtom);
 
   const goToNewLocation = () => {
     const newLocation = {
@@ -234,8 +231,7 @@ export default function EmptyStatePage({
       if (reloadData) {
         reloadData();
       }
-      setSpeciesState({ checkData: true });
-      history.push(APP_PATHS.SPECIES);
+      history.push({ pathname: APP_PATHS.SPECIES, search: '?checkData=true' });
     }
     setAddSpeciesModalOpened(false);
     if (snackbarMessage) {
@@ -248,8 +244,7 @@ export default function EmptyStatePage({
       if (reloadData) {
         reloadData();
       }
-      setSpeciesState({ checkData: true });
-      history.push(APP_PATHS.SPECIES);
+      history.push({ pathname: APP_PATHS.SPECIES, search: '?checkData=true' });
     }
     setImportSpeciesModalOpened(false);
     if (snackbarMessage) {
