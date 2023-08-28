@@ -3,15 +3,14 @@ import { User } from 'src/types/User';
 import { PreferencesService, UserService } from 'src/services';
 import { UserContext } from './contexts';
 import { PreferencesType, ProvidedUserData } from './DataTypes';
-import { useRecoilState } from 'recoil';
-import userAtom from 'src/state/user';
+import { store } from 'src/redux/store';
+import { updateGtmInstrumented } from 'src/redux/features/user/userSlice';
 
 export type UserProviderProps = {
   children?: React.ReactNode;
 };
 
 export default function UserProvider({ children }: UserProviderProps): JSX.Element {
-  const [userState, setUserState] = useRecoilState(userAtom);
   const [user, setUser] = useState<User>();
   const [userPreferences, setUserPreferences] = useState<PreferencesType>();
 
@@ -40,8 +39,8 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
 
       if (response.requestSucceeded) {
         setUser(response.user!);
-        if (response.user && !userState?.gtmInstrumented && (window as any).INIT_GTAG) {
-          setUserState({ gtmInstrumented: true });
+        if (response.user && !store.getState().user?.gtmInstrumented && (window as any).INIT_GTAG) {
+          store.dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
 
           // Put the language in the "lang" attribute of the <html> tag before initializing Google
           // Analytics because the cookie consent UI code will look there to determine which
@@ -61,7 +60,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     };
 
     populateUser();
-  }, [setUser, setUserState, userState?.gtmInstrumented]);
+  }, [setUser]);
 
   const [userData, setUserData] = useState<ProvidedUserData>({
     reloadUser,
