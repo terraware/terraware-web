@@ -561,10 +561,10 @@ function AppContent() {
 
 export default function App(): JSX.Element {
   return (
-    <AppBootstrap>
-      <Provider store={store}>
+    <Provider store={store}>
+      <AppBootstrap>
         <AppContent />
-      </Provider>
-    </AppBootstrap>
+      </AppBootstrap>
+    </Provider>
   );
 }
