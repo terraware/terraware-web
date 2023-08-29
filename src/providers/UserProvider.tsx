@@ -43,7 +43,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       if (response.requestSucceeded) {
         setUser(response.user!);
         if (response.user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {
-          dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
+          await dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
 
           // Put the language in the "lang" attribute of the <html> tag before initializing Google
           // Analytics because the cookie consent UI code will look there to determine which
