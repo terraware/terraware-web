@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import AppError from './AppError';
 import reportWebVitals from './reportWebVitals';
-import { RecoilRoot } from 'recoil';
 import strings from './strings';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import theme from './theme';
@@ -13,24 +12,22 @@ import { ThemeProvider } from '@mui/material';
 
 ReactDOM.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <React.Suspense fallback={strings.LOADING}>
-        <Router>
-          <Switch>
-            <Route path={APP_PATHS.ERROR}>
-              <ThemeProvider theme={theme}>
-                <AppError />
-              </ThemeProvider>
-            </Route>
-            <Route path={'*'}>
-              <ThemeProvider theme={theme}>
-                <App />
-              </ThemeProvider>
-            </Route>
-          </Switch>
-        </Router>
-      </React.Suspense>
-    </RecoilRoot>
+    <React.Suspense fallback={strings.LOADING}>
+      <Router>
+        <Switch>
+          <Route path={APP_PATHS.ERROR}>
+            <ThemeProvider theme={theme}>
+              <AppError />
+            </ThemeProvider>
+          </Route>
+          <Route path={'*'}>
+            <ThemeProvider theme={theme}>
+              <App />
+            </ThemeProvider>
+          </Route>
+        </Switch>
+      </Router>
+    </React.Suspense>
   </React.StrictMode>,
   document.getElementById('root')
 );
