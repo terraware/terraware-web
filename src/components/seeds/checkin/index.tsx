@@ -3,13 +3,11 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
-import { useRecoilState } from 'recoil';
 import { SeedBankService } from 'src/services';
 import { SearchResponseElement } from 'src/types/Search';
 import Button from 'src/components/common/button/Button';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
@@ -55,8 +53,6 @@ export default function CheckIn(): JSX.Element {
   const history = useHistory();
   const location = useStateLocation();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(checkInSelectedOrgInfo);
   const contentRef = useRef(null);
 
   useEffect(() => {
@@ -109,7 +105,6 @@ export default function CheckIn(): JSX.Element {
           subtitle={getSubtitle()}
           back={true}
           backUrl={APP_PATHS.ACCESSIONS}
-          onChangeSelectedOrgInfo={(newValues) => setSelectedOrgInfo(newValues)}
         />
       </PageHeaderWrapper>
       <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
