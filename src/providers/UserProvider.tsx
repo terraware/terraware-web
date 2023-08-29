@@ -3,7 +3,7 @@ import { User } from 'src/types/User';
 import { PreferencesService, UserService } from 'src/services';
 import { UserContext } from './contexts';
 import { PreferencesType, ProvidedUserData } from './DataTypes';
-import { store, useAppSelector } from 'src/redux/store';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 
@@ -15,6 +15,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   const [user, setUser] = useState<User>();
   const [userPreferences, setUserPreferences] = useState<PreferencesType>();
   const userAnalyticsState = useAppSelector(selectUserAnalytics);
+  const dispatch = useAppDispatch();
 
   const updateUserPreferences = useCallback(async (preferences: PreferencesType) => {
     const response = await PreferencesService.updateUserPreferences(preferences);
@@ -42,7 +43,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       if (response.requestSucceeded) {
         setUser(response.user!);
         if (response.user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {
-          store.dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
+          dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
 
           // Put the language in the "lang" attribute of the <html> tag before initializing Google
           // Analytics because the cookie consent UI code will look there to determine which
@@ -62,7 +63,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     };
 
     populateUser();
-  }, [setUser, userAnalyticsState?.gtmInstrumented]);
+  }, [setUser, userAnalyticsState?.gtmInstrumented, dispatch]);
 
   const [userData, setUserData] = useState<ProvidedUserData>({
     reloadUser,
