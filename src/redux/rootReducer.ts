@@ -19,6 +19,7 @@ import {
 } from './features/tracking/trackingSlice';
 import { snackbarReducer } from './features/snackbar/snackbarSlice';
 import { messageReducer } from './features/message/messageSlice';
+import { userAnalyticsReducer } from './features/user/userAnalyticsSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -36,6 +37,7 @@ export const reducers = {
   siteReportedPlantsResults: siteReportedPlantsReducer,
   snackbar: snackbarReducer,
   message: messageReducer,
+  userAnalytics: userAnalyticsReducer,
 };
 const combinedReducers = combineReducers(reducers);
 
