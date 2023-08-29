@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -158,7 +158,9 @@
 <a name='L93'></a><a href='#L93'>93</a>
 <a name='L94'></a><a href='#L94'>94</a>
 <a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -171,6 +173,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -258,17 +262,19 @@ import { User } from 'src/types/User';
 import { PreferencesService, UserService } from 'src/services';
 import { UserContext } from './contexts';
 import { PreferencesType, ProvidedUserData } from './DataTypes';
-import { useRecoilState } from 'recoil';
-import userAtom from 'src/state/user';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
+import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 &nbsp;
 export type UserProviderProps = {
   children?: React.ReactNode;
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >UserProvider(</span>{ children }: UserProviderProps): JSX.Element {
-  const [userState, setUserState] = <span class="cstat-no" title="statement not covered" >useRecoilState(userAtom);</span>
   const [user, setUser] = <span class="cstat-no" title="statement not covered" >useState&lt;User&gt;();</span>
   const [userPreferences, setUserPreferences] = <span class="cstat-no" title="statement not covered" >useState&lt;PreferencesType&gt;();</span>
+  const userAnalyticsState = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUserAnalytics);</span>
+  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
 &nbsp;
   const updateUserPreferences = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync (preferences: PreferencesType) =&gt; {</span>
     const response = <span class="cstat-no" title="statement not covered" >await PreferencesService.updateUserPreferences(preferences);</span>
@@ -295,8 +301,8 @@ export default function <span class="fstat-no" title="function not covered" >Use
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (response.requestSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >        setUser(response.user!);</span>
-<span class="cstat-no" title="statement not covered" >        if (response.user &amp;&amp; !userState?.gtmInstrumented &amp;&amp; (window as any).INIT_GTAG) {</span>
-<span class="cstat-no" title="statement not covered" >          setUserState({ gtmInstrumented: true });</span>
+<span class="cstat-no" title="statement not covered" >        if (response.user &amp;&amp; !userAnalyticsState?.gtmInstrumented &amp;&amp; (window as any).INIT_GTAG) {</span>
+<span class="cstat-no" title="statement not covered" >          await dispatch(updateGtmInstrumented({ gtmInstrumented: true }));</span>
 &nbsp;
           // Put the language in the "lang" attribute of the &lt;html&gt; tag before initializing Google
           // Analytics because the cookie consent UI code will look there to determine which
@@ -316,7 +322,7 @@ export default function <span class="fstat-no" title="function not covered" >Use
     };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    populateUser();</span>
-  }, [setUser, setUserState, userState?.gtmInstrumented]);
+  }, [setUser, userAnalyticsState?.gtmInstrumented, dispatch]);
 &nbsp;
   const [userData, setUserData] = <span class="cstat-no" title="statement not covered" >useState&lt;ProvidedUserData&gt;({</span>
     reloadUser,
@@ -355,7 +361,7 @@ export default function <span class="fstat-no" title="function not covered" >Use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-29T18:07:45.522Z
+                at 2023-08-29T19:59:50.887Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
