@@ -500,7 +500,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   }, [columns, setSelectedColumns, activeLocale]);
 
   useEffect(() => {
-    const shouldCheckData = query.get('checkData');
+    const shouldCheckData = query.has('checkData');
     if (shouldCheckData) {
       query.delete('checkData');
       setCheckDataModalOpen(true);

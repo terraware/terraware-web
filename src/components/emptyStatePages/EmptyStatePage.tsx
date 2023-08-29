@@ -231,7 +231,7 @@ export default function EmptyStatePage({
       if (reloadData) {
         reloadData();
       }
-      history.push({ pathname: APP_PATHS.SPECIES, search: '?checkData=true' });
+      history.push({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
     }
     setAddSpeciesModalOpened(false);
     if (snackbarMessage) {
@@ -244,7 +244,7 @@ export default function EmptyStatePage({
       if (reloadData) {
         reloadData();
       }
-      history.push({ pathname: APP_PATHS.SPECIES, search: '?checkData=true' });
+      history.push({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
     }
     setImportSpeciesModalOpened(false);
     if (snackbarMessage) {
