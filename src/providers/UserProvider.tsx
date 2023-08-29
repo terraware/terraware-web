@@ -4,8 +4,8 @@ import { PreferencesService, UserService } from 'src/services';
 import { UserContext } from './contexts';
 import { PreferencesType, ProvidedUserData } from './DataTypes';
 import { store, useAppSelector } from 'src/redux/store';
-import { updateGtmInstrumented } from 'src/redux/features/user/userSlice';
-import { selectUser } from 'src/redux/features/user/userSelectors';
+import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
+import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 
 export type UserProviderProps = {
   children?: React.ReactNode;
@@ -14,7 +14,7 @@ export type UserProviderProps = {
 export default function UserProvider({ children }: UserProviderProps): JSX.Element {
   const [user, setUser] = useState<User>();
   const [userPreferences, setUserPreferences] = useState<PreferencesType>();
-  const userState = useAppSelector(selectUser);
+  const userAnalyticsState = useAppSelector(selectUserAnalytics);
 
   const updateUserPreferences = useCallback(async (preferences: PreferencesType) => {
     const response = await PreferencesService.updateUserPreferences(preferences);
@@ -41,7 +41,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
 
       if (response.requestSucceeded) {
         setUser(response.user!);
-        if (response.user && !userState?.gtmInstrumented && (window as any).INIT_GTAG) {
+        if (response.user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {
           store.dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
 
           // Put the language in the "lang" attribute of the <html> tag before initializing Google
@@ -62,7 +62,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     };
 
     populateUser();
-  }, [setUser, userState?.gtmInstrumented]);
+  }, [setUser, userAnalyticsState?.gtmInstrumented]);
 
   const [userData, setUserData] = useState<ProvidedUserData>({
     reloadUser,
