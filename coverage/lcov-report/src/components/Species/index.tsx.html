@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/244</span>
+                <span class='fraction'>0/247</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/238</span>
+                <span class='fraction'>0/241</span>
             </div>
         
             
@@ -967,7 +967,11 @@
 <a name='L902'></a><a href='#L902'>902</a>
 <a name='L903'></a><a href='#L903'>903</a>
 <a name='L904'></a><a href='#L904'>904</a>
-<a name='L905'></a><a href='#L905'>905</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L905'></a><a href='#L905'>905</a>
+<a name='L906'></a><a href='#L906'>906</a>
+<a name='L907'></a><a href='#L907'>907</a>
+<a name='L908'></a><a href='#L908'>908</a>
+<a name='L909'></a><a href='#L909'>909</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1015,6 +1019,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1109,6 +1114,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1466,6 +1472,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1874,12 +1882,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Container, Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { OrderPreserveableTable as Table } from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
-import speciesAtom from 'src/state/species';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
@@ -1913,6 +1919,9 @@ import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { SpeciesService } from 'src/services';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import _ from 'lodash';
+import useQuery from 'src/utils/useQuery';
+import { useHistory } from 'react-router';
+import { APP_PATHS } from 'src/constants';
 &nbsp;
 type SpeciesListProps = {
   reloadData: () =&gt; void;
@@ -2022,10 +2031,11 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [checkDataModalOpen, setCheckDataModalOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-  const [speciesState, setSpeciesState] = <span class="cstat-no" title="statement not covered" >useRecoilState(speciesAtom);</span>
   const [searchValue, setSearchValue] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const debouncedSearchTerm = <span class="cstat-no" title="statement not covered" >useDebounce(searchValue, 250);</span>
   const [results, setResults] = <span class="cstat-no" title="statement not covered" >useState&lt;SpeciesSearchResultRow[]&gt;();</span>
+  const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
+  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
 &nbsp;
   const [filterAnchorEl, setFilterAnchorEl] = <span class="cstat-no" title="statement not covered" >useState&lt;null | HTMLElement&gt;(null);</span>
   const handleFilterClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent: React.MouseEvent&lt;HTMLElement&gt;) =&gt; {</span>
@@ -2371,11 +2381,13 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   }, [columns, setSelectedColumns, activeLocale]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (speciesState?.checkData) {</span>
-<span class="cstat-no" title="statement not covered" >      setSpeciesState({ checkData: false });</span>
+    const shouldCheckData = <span class="cstat-no" title="statement not covered" >query.has('checkData');</span>
+<span class="cstat-no" title="statement not covered" >    if (shouldCheckData) {</span>
+<span class="cstat-no" title="statement not covered" >      query.delete('checkData');</span>
 <span class="cstat-no" title="statement not covered" >      setCheckDataModalOpen(true);</span>
+<span class="cstat-no" title="statement not covered" >      history.replace({ pathname: APP_PATHS.SPECIES, search: query.toString() });</span>
     }
-  }, [setCheckDataModalOpen, speciesState, setSpeciesState]);
+  }, [query, setCheckDataModalOpen, history]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    onApplyFilters();</span>
@@ -2782,7 +2794,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-29T17:11:38.497Z
+                at 2023-08-29T18:07:45.522Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
