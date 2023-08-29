@@ -836,10 +836,7 @@
 <a name='L771'></a><a href='#L771'>771</a>
 <a name='L772'></a><a href='#L772'>772</a>
 <a name='L773'></a><a href='#L773'>773</a>
-<a name='L774'></a><a href='#L774'>774</a>
-<a name='L775'></a><a href='#L775'>775</a>
-<a name='L776'></a><a href='#L776'>776</a>
-<a name='L777'></a><a href='#L777'>777</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L774'></a><a href='#L774'>774</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -885,8 +882,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1464,7 +1459,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1637,8 +1631,6 @@ import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
 import { Facility } from 'src/types/Facility';
 import { stateName } from 'src/types/Accession';
-import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
-import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
@@ -1801,7 +1793,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
   const [editColumnsModalOpen, setEditColumnsModalOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [reportModalOpen, setReportModalOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [pendingAccessions, setPendingAccessions] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchResponseElement[] | null&gt;();</span>
-  const [selectedOrgInfo, setSelectedOrgInfo] = <span class="cstat-no" title="statement not covered" >useRecoilState(seedsDatabaseSelectedOrgInfo);</span>
+  const [selectedFacility, setSelectedFacility] = <span class="cstat-no" title="statement not covered" >useState&lt;Facility | undefined&gt;();</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const searchedLocaleRef = <span class="cstat-no" title="statement not covered" >useRef&lt;string | null&gt;(activeLocale);</span>
 &nbsp;
@@ -2166,10 +2158,10 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 <span class="cstat-no" title="statement not covered" >    history.push(newAccessionLocation);</span>
   };
 &nbsp;
-  const onSeedBankForImportSelected = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>electedFacility: Facility | undefined) =&gt; {</span>
+  const onSeedBankForImportSelected = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>electedFacilityOnModal: Facility | undefined) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectSeedBankForImportModalOpen(false);</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedFacility) {</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedOrgInfo({ ...selectedOrgInfo, selectedFacility });</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedFacilityOnModal) {</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedFacility(selectedFacilityOnModal);</span>
 <span class="cstat-no" title="statement not covered" >      setOpenImportModal(true);</span>
     }
   };
@@ -2236,11 +2228,11 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
-      {selectedOrgInfo.selectedFacility &amp;&amp; (
+      {selectedFacility &amp;&amp; (
         &lt;ImportAccessionsModal
           open={openImportModal}
           onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setOpenImportModal(false)}</span>
-          facility={selectedOrgInfo.selectedFacility}
+          facility={selectedFacility}
           reloadData={reloadData}
         /&gt;
       )}
@@ -2264,7 +2256,6 @@ export default function <span class="fstat-no" title="function not covered" >Dat
           &lt;PageHeader
             title=''
             subtitle={strings.ACCESSIONS_DATABASE_DESCRIPTION}
-            allowAll={true}
             page={strings.ACCESSIONS}
             parentPage={strings.SEEDS}
             rightComponent={
@@ -2398,7 +2389,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-25T20:50:55.346Z
+                at 2023-08-29T17:11:38.497Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

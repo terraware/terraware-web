@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -279,14 +279,7 @@
 <a name='L214'></a><a href='#L214'>214</a>
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
-<a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a>
-<a name='L219'></a><a href='#L219'>219</a>
-<a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L217'></a><a href='#L217'>217</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -341,8 +334,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -395,7 +386,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -510,13 +500,11 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
-import { useRecoilState } from 'recoil';
 import { SeedBankService } from 'src/services';
 import { SearchResponseElement } from 'src/types/Search';
 import Button from 'src/components/common/button/Button';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { checkInSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
 import PageHeader from '../PageHeader';
@@ -562,8 +550,6 @@ export default function <span class="fstat-no" title="function not covered" >Che
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const [pendingAccessions, setPendingAccessions] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchResponseElement[] | null&gt;();</span>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [selectedOrgInfo, setSelectedOrgInfo] = <span class="cstat-no" title="statement not covered" >useRecoilState(checkInSelectedOrgInfo);</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -616,7 +602,6 @@ export default function <span class="fstat-no" title="function not covered" >Che
           subtitle={getSubtitle()}
           back={true}
           backUrl={APP_PATHS.ACCESSIONS}
-          onChangeSelectedOrgInfo={<span class="fstat-no" title="function not covered" >(n</span>ewValues) =&gt; <span class="cstat-no" title="statement not covered" >setSelectedOrgInfo(newValues)}</span>
         /&gt;
       &lt;/PageHeaderWrapper&gt;
       &lt;Container ref={contentRef} maxWidth={false} className={classes.mainContainer}&gt;
@@ -733,7 +718,7 @@ export default function <span class="fstat-no" title="function not covered" >Che
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-25T20:50:55.346Z
+                at 2023-08-29T17:11:38.497Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
