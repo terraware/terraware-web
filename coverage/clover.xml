@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1693339191479" clover="3.2.0">
-  <project timestamp="1693339191480" name="All files">
+<coverage generated="1693406700771" clover="3.2.0">
+  <project timestamp="1693406700771" name="All files">
     <metrics statements="12241" coveredstatements="362" conditionals="7793" coveredconditionals="90" methods="3829" coveredmethods="77" elements="23863" coveredelements="529" complexity="0" loc="12241" ncloc="12241" packages="103" files="486" classes="486"/>
     <package name="src">
       <metrics statements="212" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="67" coveredmethods="0"/>
@@ -199,8 +199,8 @@
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
       </file>
       <file name="reportWebVitals.js" path="/home/runner/work/terraware-web/terraware-web/src/reportWebVitals.js">
         <metrics statements="8" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>

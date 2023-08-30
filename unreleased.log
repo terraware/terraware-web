@@ -1,3 +1,5 @@
+f985552a8 SW-3740 Remove Recoil dependency (#1687)
+d0f09553d Add renovate.json (#1689)
 0ccaf6646 SW-3740 Remove recoil usage from user provider (#1686)
 70b344f54 SW-3740 Remove recoil usage from species list page (#1683)
 4adb53273 SW-3740 Remove recoil usage from database (#1685)
