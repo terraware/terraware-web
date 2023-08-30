@@ -4,20 +4,10 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, { AttributionControl, Layer, MapRef, NavigationControl, Popup, Source } from 'react-map-gl';
 import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer, MapGeometry } from 'src/types/Map';
 import { MapService } from 'src/services';
-
-/**
- * The following is needed to deal with a mapbox bug
- * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
- */
-import mapboxgl from 'mapbox-gl';
 import MapBanner from './MapBanner';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Icon } from '@terraware/web-components';
-const mapboxImpl: any = mapboxgl;
-// @tslint
-// eslint-disable-next-line import/no-webpack-loader-syntax
-mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
 
 type FeatureStateId = Record<string, Record<string, number | undefined>>;
 
