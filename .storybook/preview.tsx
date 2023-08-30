@@ -1,9 +1,7 @@
 import type { Preview } from '@storybook/react';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material';
 import { MemoryRouter } from 'react-router';
-import { RecoilRoot } from 'recoil';
 import { Provider } from 'react-redux';
-import { store } from 'src/redux/store';
 
 const preview: Preview = {
   parameters: {
@@ -38,11 +36,9 @@ export const decorators = [
         >
           <StyledEngineProvider injectFirst>
             <MemoryRouter initialEntries={['/']}>
-              <RecoilRoot>
-                <Provider store={store}>
-                  <Story />
-                </Provider>
-              </RecoilRoot>
+              <Provider store={store}>
+                <Story />
+              </Provider>
             </MemoryRouter>
           </StyledEngineProvider>
         </LocalizationProvider>
