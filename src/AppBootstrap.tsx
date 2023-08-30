@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, StyledEngineProvider, Theme } from '@mui/material';
+import { Box, CircularProgress, StyledEngineProvider, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
   useUser,
@@ -9,6 +9,18 @@ import {
   OrganizationProvider,
   UserProvider,
 } from 'src/providers';
+import ReactMapGL from 'react-map-gl';
+import useMapboxToken from 'src/utils/useMapboxToken';
+
+/**
+ * The following is needed to deal with a mapbox bug
+ * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
+ */
+import mapboxgl from 'mapbox-gl';
+const mapboxImpl: any = mapboxgl;
+// @tslint
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
 
 const useStyles = makeStyles((theme: Theme) => ({
   spinner: {
@@ -51,7 +63,12 @@ function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
     );
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <Collateral />
+      {children}
+    </>
+  );
 }
 
 export type AppBootstrapProps = {
@@ -77,3 +94,29 @@ export default function AppBootstrap({ children }: AppBootstrapProps): JSX.Eleme
     </UserProvider>
   );
 }
+
+// trigger collateral loads, without showing components
+const Collateral = (): JSX.Element => (
+  <Box sx={{ left: -10000, position: 'absolute', display: 'hidden' }}>
+    <MapCollateral />
+  </Box>
+);
+
+// force loading mapbox collateral
+const MapCollateral = (): JSX.Element | null => {
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const { token } = useMapboxToken();
+
+  useEffect(() => {
+    if (token && !loaded) {
+      setTimeout(() => setLoaded(true), 0);
+    }
+  }, [loaded, token]);
+
+  if (token && !loaded) {
+    return <ReactMapGL mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true' mapboxAccessToken={token} />;
+  }
+
+  // don't show map after an initial load
+  return null;
+};

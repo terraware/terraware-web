@@ -69,16 +69,6 @@ import { getRgbaFromHex } from 'src/utils/color';
 import PlantsDashboardV2 from 'src/components/PlantsV2';
 import PlantingSites from 'src/components/PlantingSites';
 
-/**
- * The following is needed to deal with a mapbox bug
- * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
- */
-import mapboxgl from 'mapbox-gl';
-const mapboxImpl: any = mapboxgl;
-// @tslint
-// eslint-disable-next-line import/no-webpack-loader-syntax
-mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
-
 interface StyleProps {
   isDesktop?: boolean;
 }
