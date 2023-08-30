@@ -1,0 +1,1345 @@
+key_name,en,comment
+ACCEPT,Accept
+ACCESSION,Accession
+ACCESSION_BY_STATUS,Accession by Status
+ACCESSION_CHECKED_IN,Accession checked in!
+ACCESSION_DETAIL,Accession Detail
+ACCESSION_DETAILS,Accession Details
+ACCESSION_HISTORY,Accession History
+ACCESSION_ID,Accession ID
+ACCESSION_NUMBER_CHECKED_IN,Accession {0} was successfully checked in!
+ACCESSION_SAVED,Accession saved
+ACCESSIONS,Accessions
+ACCESSIONS_CARD_DESCRIPTION,Collect seeds and then record and view your accessions. Seed accessions can be viewed and analyzed by seed bank.
+ACCESSIONS_DATABASE_DESCRIPTION,Manage your accessions in Terraware.
+ACCESSIONS_IMPORT_COMPLETE,Accessions data import complete!
+ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,Define storage locations assigned to seed accessions
+ACCESSIONS_ONBOARDING_SPECIES_MSG,Define a list of species used in your seed inventory
+ACCESSIONS_TO_BE_CHECKED_IN,There are {0} accessions to check in.
+ACCOUNT,Account,User access to website or application typically by entering a username and password (noun)
+ACTIVE_ACCESSIONS,Active Accessions
+ACTIVE_INACTIVE,Active/Inactive
+ADD,Add
+ADD_A_NURSERY,Add a Nursery
+ADD_A_PLANTING_SITE,Add a Planting Site
+ADD_A_PLANTING_SITE_SUBTITLE,Where do your plants take root? Set up your planting site so you can keep track of your plants’ progress.
+ADD_A_SEED_BANK,Add a Seed Bank
+ADD_A_SPECIES,Add a Species
+ADD_A_VIABILITY_TEST,Add a Viability Test
+ADD_A_VIABILITY_TESTING,Add a Viability Testing
+ADD_ADDRESS,Add Address
+ADD_AN_ACCESSION,Add an Accession
+ADD_BATCH,Add Batch
+ADD_CONTRIBUTORS,Add Contributors
+ADD_GPS_COORDINATES,Add GPS Coordinates
+ADD_INVENTORY,Add Inventory
+ADD_INVENTORY_DESCRIPTION,"Add inventory from a new source. To add inventory from an existing seed accession, go to Accessions and withdraw from an accession entry."
+ADD_INVENTORY_MANUALLY_DESCRIPTION,"Enter species, quantities, and other relevant information using our inventory form."
+ADD_MANUALLY,Add Manually
+ADD_NEW,Add New
+ADD_NOTES,Add Notes
+ADD_NURSERIES,Add Nurseries
+ADD_NURSERY,Add Nursery
+ADD_NURSERY_SUBTITLE,How do you manage your seedlings? Set up your nursery so you can keep track of your seedlings’ growth.
+ADD_OBSERVATION,Add Observation
+ADD_ORGANIZATION,Add Organization
+ADD_PEOPLE_MESSAGE,To add people to this organization go to People.
+ADD_PERSON,Add Person
+ADD_PERSON_DESC,Fill out this page to add a person to the organization.
+ADD_PERSON_GENERAL_DESC,Enter the person’s information below.
+ADD_PHOTOS,Add Photos
+ADD_PHOTOS_DESCRIPTION,Take a photo (or photos) of the batches that will be planted at the selected subzone. Be sure to include the entire withdrawal in the photo(s).
+ADD_PHOTOS_DESCRIPTION_OPTIONAL,Take an optional photo (or photos) of the batches.
+ADD_PHOTOS_REQUIRED,Add Photos *
+ADD_PHOTOS_REQUIRED_OUTPLANT,Photos are required for Outplant withdrawals.
+ADD_PLANT_SITE_DESCRIPTION,Add Plant and Site Description
+ADD_PLANTING_SITE,Add Planting Site
+ADD_QUANTITY,Add Quantity
+ADD_SEED_BANK,Add Seed Bank
+ADD_SEED_BANK_SUBTITLE,How do you process and store your seeds? Set up your seed bank so you can keep track of where your seeds are stored.
+ADD_SEED_BANKS,Add Seed Banks
+ADD_SEEDLING_BATCH,Add Seedling Batch
+ADD_SPECIES,Add Species
+ADD_SPECIES_MANUALLY_DESCRIPTION,"Enter scientific name and other optional fields manually, one species at a time."
+ADD_SUB_LOCATION,Add Sub-Location
+ADD_TEST,Add Test
+ADD_VIABILITY,Add Viability
+ADD_VIABILITY_TEST,Add Viability Test
+ADDITIONAL_NURSERY_NOTES,Additional Nursery Notes
+ADDITIONAL_PLANTING_SITES_NOTES,Additional Planting Site Notes
+ADMIN,Admin
+ADMIN_INFO,"An admin can do the above as well as edit the organization profile, manage users in the organization, and manage seed banks."
+AGAR,Agar
+AGAR_PETRI_DISH,Agar Petri Dish
+AGE,Age
+AGE_MONTHS,Age (month)
+AGE_VALUE_1_MONTH,1 Month
+AGE_VALUE_LESS_THAN_1_MONTH,<1 Month
+AGE_VALUE_MONTHS,{0} Months
+AGE_YEARS,Age (yr)
+AGROFORESTRY,Agroforestry
+ALERTS,Alerts
+ALL,All
+ALL_SEEDS_WITHDRAWN_MSG,"As all seeds have been withdrawn, new withdrawals are disabled, the accession's stage has been set to Withdrawn, and the accession itself marked as Inactive"
+ALL_SENSORS_FOUND,All sensors found.
+ALREADY_INVITED_PERSON_ERROR,It looks like you have already added or invited this person. Please enter a unique email address or go to the existing person’s profile.
+AMOUNT_REMAINING,Amount ({0} remaining)
+APPLY,Apply
+APPLY_FILTERS,Apply Filters
+APPLY_RESULT,Apply Result
+APPLY_RESULT_QUESTION,Do you want to apply this result to the accession?
+ARE_YOU_SURE,Are you sure?
+AS_OF,As of
+ASSIGN,Assign
+ASSIGN_NEW_OWNER,Assign New Owner
+ASSIGN_NEW_OWNER_DESC,"In order to remove the current owner, you must assign a new owner."
+AUTOCALCULATED,(Auto-calculated)
+AVAILABLE,available
+AWAITING_CHECK_IN,Awaiting Check-In
+AWAITING_PROCESSING,Awaiting Processing
+BACK,Back
+BACK_OF_SEED_BANK,Back of Seed Bank
+BACK_TO_TERRAWARE,Back to Terraware
+BAG_ID,Bag ID
+BAG_IDS,Bag IDs
+BATCH_WITHDRAW_SUCCESS,{0} {1} for a total of {2} {3} withdrawn.
+BATCHES_PLURAL,batches
+BATCHES_SINGULAR,batch
+BEST_MONTHS_FOR_OBSERVATIONS,Best Months for Observations
+BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS,These would be the seasons when it makes the most sense from the standpoint of your team’s capacity and also takes into account environmental factors such as the absence of snow and ability to easily identify planting survival. Please select all months that apply.
+BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,Please select at least one month.
+BOOLEAN_FALSE,false
+BOOLEAN_TRUE,true
+BOTH_WITHDRAWS_DESCRIPTION,"You have withdrawn seeds by both count and weight. As a result, the app has calculated the amount of seeds withdrawn for you by weight."
+BOUNDARIES,Boundaries
+BOUNDARIES_AND_ZONES,Boundaries and Zones
+BUDGET_DOCUMENT_XLS,Budget Document (.XLS)
+BUDGET_NARRATIVE_SUMMARY,Budget Narrative Summary
+BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS,"Provide a high level narrative of your budget-to-actuals, noting any major discrepancies and listing any contributors. (One-half page maximum.)"
+BUDGET_NARRATIVE_SUMMARY_REQUIRED,Budget Narrative Summary *
+CANCEL,Cancel
+CANCEL_DATA_CHECK,Cancel Data Check
+CANCEL_IMPORT,Cancel Import
+CANNOT_EDIT,Cannot Edit
+CANNOT_REMOVE,Cannot Remove
+CANNOT_REMOVE_DELETE_MSG,You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?
+CANNOT_REMOVE_MSG,You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?
+CATALYTIC_CHECKBOX,Terraformation’s support has been catalytic in securing additional funding or partnerships for our work.
+CATALYTIC_DETAIL,Catalytic Funding
+CATALYTIC_DETAIL_INSTRUCTIONS,Please state whether Terraformation’s support has been catalytic in securing additional funding or partnerships for your work. Provide detail where possible. (One-quarter page maximum.)
+CHALLENGES,Challenges and Setbacks
+CHALLENGES_INSTRUCTIONS,"Terraformation believes that the learnings from challenges and failures are often where the greatest growth happens, and sharing these challenges can have a positive global benefit. Please list any challenges or setbacks you experienced during the reporting period. What is the impact of these challenges, and what are the ways in which these setbacks can be overcome in the current project? What would you want to do differently in a future project? (One page maximum.)"
+CHALLENGES_REQUIRED,Challenges and Setbacks *
+CHANGE_DEFAULT_WEIGHT_SYSTEM,You can change your default weight system from {0}
+CHANGE_GERMINATING_STATUS,Change Germinating Status
+CHANGE_NOT_READY_STATUS,Change Not Ready Status
+CHANGE_TO,Change to {0}
+CHANGES_SAVED,Changes Saved!
+CHECK_BACK_LATER,Please check back later.
+CHECK_DATA,Check Data
+CHECK_DATA_DESCRIPTION,"You can run a database check to compare your species information with what’s stored in the GBIF Database. This will flag entries if the scientific name of your species is spelled wrong, or is missing from the database. This could take a few minutes, and you can’t cancel it once it starts."
+CHECK_DATE,Check Date
+CHECK_DATE_REQUIRED,Check Date *
+CHECK_IN,Check In
+CHECK_IN_MESSAGE,{0} new accessions should have been dropped off at the seed bank. Please verify their arrival and check them in.
+CHECKED_IN,Checked In!
+CHECKIN_ACCESSIONS,Check In Accessions
+CHECKING_DATA,"Running database check. Please wait, this may take a few minutes..."
+CHECKING_IN,Checking In...
+CHEMICAL,Chemical
+CHOOSE_FILE,Choose File...
+CITY,City
+CLEAR,Clear
+CLEAR_FILTERS,Clear Filters
+CLOSE,Close
+COLLECTED_DATE,Collected Date
+COLLECTED_FROM,Collected from
+COLLECTED_ON,Collected On
+COLLECTING_DATE_REQUIRED,Collecting Date *
+COLLECTING_LOCATION,Collecting Location
+COLLECTING_SITE,Collecting Site
+COLLECTION_DATE,Collection Date
+COLLECTION_DATE_REQUIRED,Collection Date *
+COLLECTION_SITE,Collection Site
+COLLECTION_SOURCE,Collection Source
+COLLECTOR,Collector
+COLLECTORS,Collectors
+COMMON_NAME,Common Name
+COMPLETE,Complete
+COMPLETED,Completed
+COMPROMISED_SEEDS,Compromised Seeds
+CONNECT_FAILED,Connect failed
+CONNECTED,Connected
+CONSERV_STATUS,Conserv. Status
+CONSERVATION_CATEGORY,IUCN Conservation Category
+CONSERVATION_STATUS,Conservation Status
+CONTACT_US,Contact Us
+CONTACT_US_DESCRIPTION,Have a question or would like to get in touch with someone from our team? We’re always happy to answer questions and help make sure you are getting the most out of Terraware! You can reach us using this form or by emailing {0}
+CONTACT_US_TO_RESOLVE_ISSUE,Please contact us to resolve this issue.
+CONTRIBUTOR,Contributor
+CONTRIBUTOR_INFO,"A contributor can add data entries for seeds, manage nursery inventory except outplant withdrawals, view withdrawals, manage nursery reassignments and visualize a planting site’s plantings on a geographical map."
+CONTRIBUTORS,Contributors
+CONVERTED_VALUE_INFO,This value is auto-calculated for informational purposes.
+COUNT,Count
+COUNTRY,Country
+COUNTRY_REQUIRED,Country *
+CREATE,Create
+CREATE_ACCESSION,Create Accession
+CREATE_ENTRY,Create Entry
+CREATE_NEW_ORGANIZATION,Create New Organization
+CREATE_NEW_SPECIES,Create New Species
+CREATE_ORGANIZATION,Create Organization
+CREATE_SPECIES_LIST,Create Species List
+CREATE_TEST,Create Test
+CT,ct
+CULTIVATED,Cultivated
+CULTIVATED_EX_SITU,Cultivated (Ex Situ)
+CULTIVATED_EX_SITU_DESCRIPTION,"Plants that have been grown in a nursery, seed production area, or other propagation facility."
+CUSTOMIZE_TABLE_COLUMNS,Customize table columns
+CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Select columns you want to add. Deselect columns you want to remove.
+CUT_TEST,Cut Test
+DASHBOARD,Dashboard
+DASHBOARD_HEADER_TEXT,The data on this dashboard is based on a sample of {0} hectares from the {1} observation., {1} date of the last observation in short format (e.g. July 2023)
+DASHBOARD_MESSAGE,Your seeds dashboard will automatically populate with data as you add accessions.
+DASHBOARD_MESSAGE_TITLE,Add Accessions to See Data
+DATA_CHECK_COMPLETED,Database check complete. No errors were found!
+DATA_CHECK_WITH_PROBLEMS,Database check complete. {0} potential errors were found.
+DATA_IMPORT_FAILED,Data import failed
+DATE,Date
+DATE_ADDED,Date Added
+DATE_ADDED_REQUIRED,Date Added *
+DATE_SUBMITTED,Date Submitted
+DEAD,Dead
+DEFAULT_LANGUAGE_SELECTED,Default language: {0}
+DEGREES_CELSIUS_VALUE,{0}ºC
+DELETE,Delete
+DELETE_ACCESSION,Delete Accession
+DELETE_ACCESSION_MESSAGE,You’re about to delete accession {0}.
+DELETE_ACCOUNT,Delete Account
+DELETE_ACCOUNT_CONFIRMATION,Are you sure you want to delete your account? This cannot be undone.
+DELETE_ACCOUNT_ERROR,There was an error deleting your account.
+DELETE_CONFIRMATION_MODAL_MAIN_TEXT,"Are you sure you want to delete your selected species? This will delete them from your list, but you’ll keep all data attached to existing entries."
+DELETE_ORGANIZATION,Delete Organization
+DELETE_ORGANIZATION_MSG,Are you sure you want to delete {0}?
+DELETE_SEEDLINGS_BATCHES,Delete Seedlings Batches
+DELETE_SEEDLINGS_BATCHES_MSG,Are you sure you want to delete the seedlings batches?
+DELETE_SPECIES,Delete Species
+DELETE_STATISTICS,Delete Statistics
+DELETE_VIABILITY_TEST,Delete Viability Test
+DELETE_VIABILITY_TEST_MESSAGE,You’re about to delete viability test {0}.
+DELETED_SPECIES,<deleted species>
+DESCRIPTION,Description
+DESCRIPTION_NOTES,Description/Notes
+DESCRIPTION_ORGANIZATION,"Your organization may include people, and species."
+DESCRIPTION_PEOPLE,Invite those who contribute to the organization’s success.
+DESCRIPTION_REPORT_PROBLEM,"If you’re having trouble using Terraware, please report any issues you’re having and we’ll make it right. Please mention this build version {0}."
+DESCRIPTION_REQUEST_FEATURE,We’re always working to improve your Terraware experience and welcome your feedback on our products.
+DESCRIPTION_REQUIRED,Description *
+DESCRIPTION_SPECIES,Manage species that you collect or plant.
+DESCRIPTION_TEST_APP,"Be the first to try our new, field-tested mobile app and let us know what you think."
+DESTINATION,Destination
+DESTINATION_REQUIRED,Destination *
+DETAILS,Details
+DIRECTION_OR_DESCRIPTION,Direction or Description
+DONE,Done
+DOWNLOAD,Download
+DOWNLOAD_AS_REPORT,Download as Report
+DOWNLOAD_COMPLETE,Download complete
+DOWNLOAD_CSV_TEMPLATE,Download a CSV template here.
+DOWNLOAD_FAILED,Download failed
+DOWNLOAD_FAILED_DESCRIPTION,The download has failed. Please email {0} so we can assist you.
+DOWNLOAD_IN_PROGRESS,Download in progress...
+DOWNLOAD_ON_APP_STORE,Download on the App Store
+DOWNLOAD_ON_GOOGLE_PLAY,Get it on Google Play
+DOWNLOAD_REPORT_DESCRIPTION,You are about to download this datatable as a report. This csv file can be found in your Downloads. Please name your report below.
+DOWNLOAD_THE_CSV_TEMPLATE,Download the CSV template.
+DRIED,Dried
+DRY_CABINET,Dry Cabinet
+DRYING,Drying
+DRYING_END_DATE,Estimated Drying End Date
+DRYING_RACKS,Drying Racks
+DRYING_START_DATE,Drying Start Date
+DUPLICATE_SPECIES_FOUND,Duplicate species found.
+DUPLICATED_ACCESSION_NUMBER,We found {0} duplicated accession numbers:
+DUPLICATED_INVENTORY,We found {0} duplicated inventory:
+DUPLICATED_SPECIES,We found {0} duplicated species:
+ECOSYSTEM_BOREAL_FOREST_TAIGA,Boreal forests/Taiga
+ECOSYSTEM_DESERT_XERIC_SHRUBLAND,Deserts and xeric shrublands
+ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA,Flooded grasslands and savannas
+ECOSYSTEM_MANGROVE,Mangroves
+ECOSYSTEM_MEDITERRANEAN_FOREST,"Mediterranean forests, woodlands and scrubs"
+ECOSYSTEM_MONTANE_GRASSLAND_SHRUBLAND,Montane grasslands and shrublands
+ECOSYSTEM_TEMPERATE_BROADLEAF_MIXED_FOREST,Temperate broad leaf and mixed forests
+ECOSYSTEM_TEMPERATE_CONIFEROUS_FOREST,Temperate coniferous forest
+ECOSYSTEM_TEMPERATE_GRASSLAND_SAVANNA_SHRUBLAND,"Temperate grasslands, savannas and shrublands"
+ECOSYSTEM_TROPICAL_CONIFEROUS_FOREST,Tropical and subtropical coniferous forests
+ECOSYSTEM_TROPICAL_DRY_BROADLEAF_FOREST,Tropical and subtropical dry broad leaf forests
+ECOSYSTEM_TROPICAL_GRASSLAND_SAVANNA_SHRUBLAND,"Tropical and subtropical grasslands, savannas and shrublands"
+ECOSYSTEM_TROPICAL_MOIST_BROADLEAF_FOREST,Tropical and subtropical moist broad leaf forests
+ECOSYSTEM_TUNDRA,Tundra
+ECOSYSTEM_TYPE,Ecosystem Type
+EDIT,Edit
+EDIT_ACCESSION,Edit Accession
+EDIT_ACCESSION_DETAIL,Edit Accession Detail
+EDIT_ACCOUNT,Edit Account
+EDIT_LOCATION,Edit Location
+EDIT_NUMBER_OF_GERMINATED_SEEDS,Edit Number of Germinated Seeds
+EDIT_NURSERY,Edit Nursery
+EDIT_ORGANIZATION,Edit Organization
+EDIT_PERSON,Edit Person
+EDIT_PLANTING_SITE,Edit Planting Site
+EDIT_QUANTITY,Edit Quantity
+EDIT_QUANTITY_DISABLED,"Currently, you may only input a quantity when the status is ""Drying"" or “In Storage.”"
+EDIT_SEED_BANK,Edit Seed Bank
+EDIT_SPECIES,Edit Species
+EDIT_SPECIES_MODAL_ANSWER_NO,"No, Only Apply Here"
+EDIT_SPECIES_MODAL_ANSWER_YES,"Yes, Apply To All"
+EDIT_SPECIES_MODAL_QUESTION,Would you like to apply this edit to all accessions with this species?
+EDIT_STATUS,Edit Status
+EDIT_VIABILITY,Edit Viability
+EDIT_VIABILITY_TEST,Edit Viability Test
+EMAIL,Email
+EMAIL_ALREADY_EXISTS,This email already exists.
+EMAIL_REQUIRED,Email *
+EMPTY_SEEDS,Empty Seeds
+END,End
+END_DATE,End Date
+END_DRYING_REMINDER,End-Drying Reminder
+END_DRYING_REMINDER_OFF,End-drying Reminder Off
+ENDANGERED,Endangered
+ENTER_SIX_DIGIT_KEY,Enter 6-digit key
+ENVIRONMENTAL_NOTES,Environmental Notes
+ENVIRONMENTAL_NOTES_PLACEHOLDER,"Important notes about landscape, climate, and environmental conditions"
+EST_READY_DATE,Est. Ready Date
+ESTIMATED_DRYING_END_DATE,Estimated Drying End Date
+ESTIMATED_READY_DATE,Estimated Ready Date
+ESTIMATED_SEEDS_INCOMING,Estimated Seeds Incoming
+EXISTING_SPECIES_MSG,“{0}” is already in your species list.
+EXPORT,Export
+EXPORT_RECORDS,Export Records
+FACILITY,Facility
+FACILITY_BUILD_COMPLETION_DATE,Build Completion Date
+FACILITY_BUILD_COMPLETION_DATE_INVALID,Must be between build start and operation start dates.
+FACILITY_BUILD_COMPLETION_DATE_REQUIRED,Build Completion Date *
+FACILITY_BUILD_START_DATE,Build Start Date
+FACILITY_BUILD_START_DATE_INVALID,Must be on or before build completed date and operation start dates.
+FACILITY_BUILD_START_DATE_REQUIRED,Build Start Date *
+FACILITY_OPERATION_START_DATE,Operation Start Date
+FACILITY_OPERATION_START_DATE_INVALID,Must be on or after build start and build completed dates.
+FACILITY_OPERATION_START_DATE_REQUIRED,Operation Start Date *
+FAMILY,Family
+FERN,Fern
+FIELD_NOTES,Field Notes
+FIELD_NOTES_PLACEHOLDER,"Important notes about seeds, fruits, or plants"
+FILE_SELECTED,File Selected
+FILL_OUT_ALL_FIELDS,Please fill out all required fields.
+FILLED_SEEDS,Filled Seeds
+FILTER,Filter
+FILTERS,Filters
+FINAL_QTY,Final Qty
+FINISH,Finish
+FIRST_ADD_PLANTING_SITE,"To view the dashboard, you first need to add a planting site."
+FIRST_NAME,First Name
+FIX_HIGHLIGHTED_FIELDS,Fix the highlighted fields below.
+FLORA,Flora
+FOOTNOTE_WAIT_FOR_INVITATION_1,Not interested in creating your own organization or expecting an invitation?
+FOOTNOTE_WAIT_FOR_INVITATION_2,Don’t worry. You’ll receive an email when your admin adds you to the organization.
+FOR_LAB_AND_NURSERY_GERMINATION,For Lab and Nursery Germination
+FOR_LAB_GERMINATION,For Lab Germination
+FOR_NURSERY_GERMINATION,For Nursery Germination
+FORB,Forb
+FOUNDER_ID,Founder ID
+FREEZER,Freezer
+FREEZER_1,Freezer 1
+FREEZER_2,Freezer 2
+FREEZER_3,Freezer 3
+FRESH,Fresh
+FRESH_SEEDS,Fresh Seeds
+FRIDGE,Fridge
+FROM,From
+FROM_NURSERY,From: Nursery
+FROM_NURSERY_REQUIRED,From: Nursery *
+FROM_SUBZONE,From: Subzone
+FRONT_OF_SEED_BANK,Front of Seed Bank
+FUNGUS,Fungus
+G,g
+G_GRAMS,g (grams)
+GA3,GA3
+GENERAL,General
+GENERIC_ERROR,An error occurred
+GEOLOCATIONS,Geolocations
+GERMINATED,Germinated
+GERMINATING,Germinating
+GERMINATING_QUANTITY,Germinating Quantity
+GERMINATING_QUANTITY_REQUIRED,Germinating Quantity *
+GERMINATION_TESTED_BY,Germination Tested By
+GET_ACCESSION_ERROR,An error occurred when getting the accession.
+GET_COUNT,Get Count
+GET_STARTED,Get Started
+GO_TO,Go to {0}
+GO_TO_DASHBOARD,Go to Dashboard
+GO_TO_DATABASE,Go to Database
+GO_TO_NURSERIES,Go to Nurseries
+GO_TO_PLANTING_SITES,Go to Planting Sites
+GO_TO_PROFILE,Go to Profile
+GO_TO_SEED_BANKS,Go to Seed Banks
+GO_TO_SPECIES,Go to Species
+GOT_IT,Got It!
+GPS_COORDINATES,GPS Coordinates
+GRAMINOID,Graminoid
+GRAMS,Grams
+GREATER_THAN_FIFTY_PERCENT,> 50%
+GROWTH_FORM,Growth Form
+HECTARES,Hectares
+HECTARES_PLANTED_CARD_TITLE,"How much of my site has been marked as ""Planting Complete""?"
+HECTARES_PLANTED_DESCRIPTION_1,"This is the total area and percentage of the site that has been marked as ""Planting Complete""."
+HECTARES_PLANTED_DESCRIPTION_2,"You can mark subzones within your site as ""Planting Complete"" under the Withdrawals page."
+HECTARES_PLANTED_DESCRIPTION_3_INCOMPLETE,"Currently, {0} out of {1} subzones are marked as such.","Example: Currently, 2 out of 12 subzones are marked as such."
+HECTARES_PLANTED_DESCRIPTION_3_COMPLETE,"Currently, all {0} subzones are marked as such.","Example: Currently, all 12 subzones are marked as such."
+HECTARES_PLANTED_DESCRIPTION_4,"For observations, we only assign monitoring plots that we know are a part of these subzones."
+HECTARES_PLANTED_DESCRIPTION_LINK,Go to Withdrawals
+HIGHEST,Highest
+HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,Which zones have the highest and lowest mortality rates?
+HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,Which species have the highest and lowest mortality rates?
+HISTORY,History
+HOME,Home
+HOW_MANY_PLANTS_CARD_TITLE,How many plants have I reported planting?
+HOW_MANY_PLANTS_CARD_TITLE_W_OBS,How many plants are on the site as of {0}?
+HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION,This is your total number of plants based on the site size and planting density from your latest observations.
+HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION_2,"Since then, you have reported planting {0} plants. This is {1}% greater than your total number of plants as of the observation date."
+ID,ID
+IF_APPLICABLE,(if applicable)
+IF_APPLIES,Only if it applies
+IGNORE,Ignore
+IMPERIAL,Imperial
+IMPERIAL_OZ_LB,"Imperial (oz, lb)"
+IMPORT,Import
+IMPORT_ACCESSIONS,Import Accessions
+IMPORT_ACCESSIONS_ALT_TITLE,Already have a seed accession database?
+IMPORT_ACCESSIONS_DESC,Browse or drag and drop a CSV with accessions.
+IMPORT_ACCESSIONS_WITH_TEMPLATE,Import accessions using our CSV template.
+IMPORT_DATA,Import Data
+IMPORT_INVENTORY,Import Inventory
+IMPORT_INVENTORY_ALT_TITLE,Already have an inventory database?
+IMPORT_INVENTORY_DESC,Browse or drag and drop a CSV with inventory data.
+IMPORT_INVENTORY_DESCRIPTION,"Upload a CSV with species, quantities, and other fields."
+IMPORT_INVENTORY_WITH_TEMPLATE,Import inventory using our CSV template.
+IMPORT_SPECIES,Import Species
+IMPORT_SPECIES_DESCRIPTION,Upload a CSV with scientific names and other optional fields.
+IMPORT_SPECIES_LIST,Import Species List
+IMPORT_SPECIES_LIST_DESC,Browse or drag and drop a CSV with scientific names and other optional fields.
+IMPORTING_ACCESSIONS,Importing accessions... this may take a few minutes.
+IMPORTING_INVENTORY,Importing inventory...this may take a few minutes.
+IMPORTING_SPECIES,Importing species...this may take a few minutes.
+IN_PROGRESS,In Progress
+IN_STORAGE,In Storage
+INCLUDE_EMPTY_FIELDS,Include empty fields
+INCORRECT_EMAIL_FORMAT,Incorrect email format.
+INITIAL_SEEDS,Initial Seeds
+INTERMEDIATE,Intermediate
+INVALID_DATE,Invalid date
+INVALID_EDITOR,This report is being edited by another user
+INVALID_VALUE,Invalid Value
+INVENTORY,Inventory
+INVENTORY_DATA,Inventory Data
+INVENTORY_IMPORT_COMPLETE,Inventory data import complete!
+INVENTORY_ONBOARDING_NURSERIES_MSG,Define nurseries assigned to seedlings inventory
+INVENTORY_ONBOARDING_SPECIES_MSG,Define a list of species used in your seedlings inventory
+ISSUE,Issue
+IUCN_CRITICALLY_ENDANGERED,Critically Endangered (CR),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_DATA_DEFICIENT,Data Deficient (DD),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_ENDANGERED,Endangered (EN),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_EXTINCT,Extinct (EX),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_EXTINCT_IN_THE_WILD,Extinct in the Wild (EW),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_LEAST_CONCERN,Least Concern (LC),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_NEAR_THREATENED,Near Threatened (NT),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_NOT_EVALUATED,Not Evaluated (NE),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+IUCN_VULNERABLE,Vulnerable (VU),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+KEEP_ORIGINAL,Keep Original
+KEY_BELONGS_TO_ANOTHER_SEED_BANK,Key is associated with another seed bank.
+KEY_LESSONS,Key Lessons Learned
+KEY_LESSONS_INSTRUCTIONS,"Provide details of key lessons learned during the project reporting period, including both positive and negative unintended consequences if applicable. (One-half page maximum.)"
+KEY_LESSONS_REQUIRED,Key Lessons Learned *
+KEY_WAS_NOT_RECOGNIZED,Key was not recognized.
+KG,kg
+KG_KILOGRAMS,kg (kilograms)
+KILOGRAMS,Kilograms
+LAB,Lab
+LAB_DESCRIPTION,All the details about lab viability tests conducted on the seeds.
+LAB_GERMINATION,Lab Germination
+LANDOWNER,Landowner
+LANGUAGE,Language
+LANGUAGE_AND_REGION,Language and Region
+LAST_EDITED_BY,Last Edited By
+LAST_NAME,Last Name
+LAST_OBSERVED,Last Observed
+LATITUDE_LONGITUDE,"Latitude, Longitude"
+LB,lb
+LB_POUNDS,lb (pounds)
+LEARN_MORE,Learn more
+LEARN_MORE_CONSERVATION_STATUS_ENDANGERED,Species that are rare and whose wild populations have a high risk of extinction; see also any local definitions.
+LEARN_MORE_CONSERVATION_STATUS_RARE,"Species with limited wild population sizes, often found in isolated geographical locations; may meet criteria for endangered or threatened status but have not yet been legally listed or assessed."
+LEARN_MORE_GROWTH_FORM_FERN,"A non-flowering vascular plant that reproduces by spores, in the plant division Pteridophyta."
+LEARN_MORE_GROWTH_FORM_FORB,"A herbaceous (non-woody) plant that is NOT a graminoid (grass, sedge, or rush)."
+LEARN_MORE_GROWTH_FORM_FUNGUS,"Usually a eukaryotic organism (non-plant) that is heterotrophic (cannot produce its own food), grows in filaments (hyphae), and produces spores."
+LEARN_MORE_GROWTH_FORM_GRAMINOID,"A herbaceous (non-woody) plant with a grass-like morphology, that is elongated culms with long, blade-like leaves, in the grass, sedge, or rush family."
+LEARN_MORE_GROWTH_FORM_LIANA,A vine/climbing plant with woody stems reaching >10m length.
+LEARN_MORE_GROWTH_FORM_LICHEN,"A symbiotic cluster of fungus and alga, fungus being the dominant partner, lending to its thallus shape and fruiting body."
+LEARN_MORE_GROWTH_FORM_MOSS,"A non-vascular flowerless plant typically formed as dense green clumps or mats, often in damp or shady locations."
+LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS,A plant that can grow in more than one form.
+LEARN_MORE_GROWTH_FORM_SHRUB,A woody plant which is smaller than a tree and has several main stems arising at or near the ground.
+LEARN_MORE_GROWTH_FORM_SHRUB_TREE,A plant that can be in the form of either a shrub or a tree.
+LEARN_MORE_GROWTH_FORM_SUBSHRUB,"A dwarf shrub, usually only woody at its base."
+LEARN_MORE_GROWTH_FORM_TREE,"A woody perennial plant, typically having a single stem or trunk growing to a considerable height and bearing lateral branches at some distance from the ground."
+LEARN_MORE_GROWTH_FORM_VINE,"Any plant with long, flexible, climbing stems (term often used for herbaceous climbers)"
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Seeds are between orthodox and recalcitrant seeds in their behavior; may include tolerating partial desiccation, tolerating cool but not freezing temperatures, or being short-lived regardless of storage conditions."
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"Scientific evidence suggests this seed storage behavior, but further research is needed to confirm."
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Seeds tolerate levels of desiccation required for frozen storage (5-8% moisture content) and temperatures of -20°C or lower.
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Seeds do not tolerate levels of desiccation required for ex situ (off-site) conservation.
+LEAVE_AND_SAVE,Leave and Save
+LEAVE_ORGANIZATION,Leave Organization
+LESS_THAN_TWENTY_FIVE_PERCENT,< 25%
+LIANA,Liana,A type of plant.
+LICHEN,Lichen
+LIGHT,Light
+LIKELY_INTERMEDIATE,Likely Intermediate,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Intermediate.
+LIKELY_ORTHODOX,Likely Orthodox,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
+LIKELY_RECALCITRANT,Likely Recalcitrant,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
+LIST,List
+LIVE,Live
+LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,How many live and dead plants are there per species?
+LIVE_PLANTS,Live Plants
+LIVE_SPECIES,Live Species
+LOADING,Loading...
+LOCATION,Location
+LOCATION_REQUIRED,Location *
+LOCATIONS,Locations
+LOCKED,Locked
+LOG_OUT,Log Out
+LOSS_RATE,Loss Rate
+LOWEST,Lowest
+MANAGER,Manager
+MANAGER_INFO,"A manager can do the above as well as edit data entries for seeds and manage outplant withdrawals, planting sites and species."
+MAP,Map
+MAP_EDITOR_DRAWING_ADDITIONAL_FEATURE,"Add points to your new boundary by clicking on the map. To finish drawing, complete the boundary by either double-clicking or by clicking on the starting point again. The original boundary will be replaced by the new one when you finish drawing."
+MAP_EDITOR_DRAWING_FIRST_FEATURE,"Add points to your boundary by clicking on the map. To finish drawing, complete the boundary by either double-clicking or by clicking on the starting point again."
+MAP_EDITOR_EDITING_FEATURE,"Click and drag a corner of the boundary to adjust its position. Click the midpoint between two corners to add another one. To remove a corner, click on it and then click the {trash} button. When finished, click outside the boundary."
+MAP_EDITOR_NO_FEATURES,"Start drawing the boundary of your planting site. When finished, click on the starting point or double-click to complete the boundary."
+MAP_EDITOR_NO_SELECTION,"Click on your planting site's boundary if you want to adjust its position or its shape. To replace the boundary with a new one, click the {polygon} button.",{polygon} will be replaced with a symbol.
+MAP_EDITOR_SELECTED_FEATURE,"Hold the mouse button down and drag the boundary to adjust its position. To start adjusting its shape, click on it again. To remove it, click the {trash} button.",{trash} will be replaced with a symbol.
+MARK_ALL_AS_READ,Mark All As Read
+MARK_AS_COMPLETE,Mark as Complete
+MARK_AS_READ,Mark As Read
+MARK_AS_UNREAD,Mark As Unread
+MAX,Max
+MEDIA_MIX,Media Mix
+METRIC,Metric
+METRIC_G_KG_MG,"Metric (g, kg, mg)"
+MG,mg
+MG_MILLIGRAMS,mg (milligrams)
+MIDDLE_OF_SEED_BANK,Middle of Seed Bank
+MILLIGRAMS,Milligrams
+MIN,Min
+MISSING_SUBSET_WEIGHT_ERROR_NURSERY,You must enter in a subset weight in order to withdraw to a nursery. This can be done by editing the quantity of this accession.
+MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,You must enter in a subset weight in order to create a viability test. This can be done by editing the quantity of this accession.
+MONITORING,Monitoring
+MONITORING_CARD_DESCRIPTION,Add seed banks to your organization and then monitor things like temperature and humidity through their sensor kits.
+MONITORING_DATE_FORMAT,MMM d h:mmaaa
+MONITORING_LABEL_HUMIDITY,Humidity
+MONITORING_LABEL_HUMIDITY_THRESHOLDS,Humidity Thresholds
+MONITORING_LABEL_STATE_OF_CHARGE,State of Charge
+MONITORING_LABEL_SYSTEM_POWER,System Power
+MONITORING_LABEL_TEMPERATURE,Temperature
+MONITORING_LABEL_TEMPERATURE_THRESHOLDS,Temperature Thresholds
+MONITORING_PLOT,Monitoring Plot
+MONITORING_PLOT_TYPE,Monitoring Plot Type
+MONITORING_PLOTS,Monitoring Plots
+MONTH_01,January
+MONTH_02,February
+MONTH_03,March
+MONTH_04,April
+MONTH_05,May
+MONTH_06,June
+MONTH_07,July
+MONTH_08,August
+MONTH_09,September
+MONTH_10,October
+MONTH_11,November
+MONTH_12,December
+MORE_OPTIONS,More Options
+MORTALITY_RATE,Mortality Rate
+MORTALITY_RATE_BY_SPECIES,Mortality Rate by Species
+MORTALITY_RATE_CARD_TITLE,What is my plant mortality rate as of {0}?
+MORTALITY_RATE_CLARIFICATION,This is the total percentage of your plantings that have died across all species and zones, calculated from your latest observations.
+MORTALITY_RATE_IN_FIELD,Mortality Rate in Field (%)
+MORTALITY_RATE_IN_FIELD_REQUIRED,Mortality Rate in Field (%) *
+MORTALITY_RATE_IN_NURSERY,Mortality Rate in Nursery (%)
+MORTALITY_RATE_IN_NURSERY_REQUIRED,Mortality Rate in Nursery (%) *
+MORTALITY_RATE_PER_SPECIES,Mortality Rate per Species
+MORTALITY_RATE_PERCENT_REQUIRED,Mortality Rate (%) *
+MOSS,Moss
+MOST_RECENT_PERCENTAGE_VIABILITY,Most Recent % Viability
+MOVE,Move
+MULTIPLE_FORMS,Multiple Forms,"Describes a plant that can grow in more than one form, e.g., both a shrub and a forb."
+MY_ACCOUNT,My Account
+MY_ACCOUNT_DESC,Manage your account information.
+MY_ACCOUNT_NOTIFICATIONS_DESC,Notifications alert you when there are important updates about your organizations. You will receive them through email.
+NAME,Name
+NAME_REQUIRED,Name *
+NAME_UNKNOWN,(name unknown)
+NATIVE_FOREST_RESTORATION,Native Forest Restoration
+NEW,New
+NEW_ACCESSION,Add Accession
+NEW_ACCESSION_DESCRIPTION,An accession number will be generated once you create the accession.
+NEW_ACCESSION_INFO,"Information like Seed Bags, Photos and Geolocations can only be added via the Seed Collector Android app. All the other information about processing, drying, storage and withdrawals can be added after first creating the accession."
+NEW_APP_VERSION,Please refresh to use the latest version of Terraware.
+NEW_APP_VERSION_MOBILE,Refresh for the latest Terraware version.
+NEW_ENTRY,New Entry
+NEW_SPECIES,New Species
+NEW_SUBZONE,New Subzone
+NEW_TEST,New Test
+NEW_WITHDRAWAL,New Withdrawal
+NEXT,Next
+NEXT_ARROW,Next >
+NEXT_PROCESSING_AND_DRYING,Next: Processing & Drying
+NEXT_STEPS,Next Steps
+NEXT_STEPS_INSTRUCTIONS,Summarize the next phases in your project. (One-quarter page maximum.)
+NEXT_STEPS_REQUIRED,Next Steps *
+NEXT_STORING,Next: Storing
+NEXT_WITHDRAWAL,Next: Withdrawal
+NICE,Nice!
+NO,No
+NO_BATCHES_TO_WITHDRAW_FROM,There are no batches with withdrawable quantities.
+NO_DATA_YET,No data yet
+NO_FUTURE_DATES,No future dates allowed
+NO_INVENTORY_DESCRIPTION,"It looks like you haven’t added inventory yet. You can either import data from a CSV file, or add inventory using our inventory form."
+NO_MAP_DATA,No map data to show for this planting site.
+NO_MOBILE_SUPPORT_DESC,Please access terraware.io on a desktop device.
+NO_MOBILE_SUPPORT_TITLE,Terraware web doesn’t support mobile yet.
+NO_NEGATIVE_NUMBERS,No negative numbers allowed
+NO_NOTIFICATIONS,No notifications to show.
+NO_NURSERIES_NON_ADMIN_MSG,"Before you can add and manage your nursery inventory, you’ll need to have a nursery and species within Terraware. Only admins can add nurseries and species, so please reach out to yours for assistance."
+NO_PAST_DATES,No past dates allowed
+NO_PEOPLE_IN_ORG,No People in Organization
+NO_PLANTING_SITES_DESCRIPTION,Start by adding a planting site. Adding a planting site will allow you to track where seedlings go after they leave the nursery.
+NO_PLANTING_SITES_TITLE,"Just a moment, let’s add a planting site first."
+NO_PLANTS,No Plants
+NO_REASSIGNMENTS,No Reassignments
+NO_REASSIGNMENTS_TEXT,Select a new subzone with quantity in at least one seedlings batch row.
+NO_SEEDBANKS_ADMIN_MSG,Start by adding a seed bank. You’ll then be able to access and create new accessions.
+NO_SEEDBANKS_ADMIN_TITLE,"Just a moment, let’s add a seed bank first."
+NO_SEEDBANKS_MONITORING_ADMIN_MSG,"Start by adding a seed bank. If your seed bank was built by Terraformation, you’ll then be able to monitor things like the seed bank's temperature and humidity."
+NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG,"Before you can begin remotely monitoring things like temperature and humidity through a seed bank’s sensor kit, you’ll need to add a seed bank within Terraware. Only admins can add seed banks, so please reach out to yours for assistance."
+NO_SEEDBANKS_NON_ADMIN_MSG,"Before you can add and manage your accessions, you’ll need to have a seed bank and species within Terraware. Only admins can add seed banks and species, so please reach out to yours for assistance."
+NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG,"If your seed bank was built by Terraformation, it is equipped with a sensor kit that you can remotely monitor things like the seed bank's temperature and humidity. Your seed bank either does not have a sensor kit, or it has not yet been set up by your administrator."
+NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_DESCRIPTION,"There are no batches selected with seedlings that are ""ready."" Select another withdraw purpose or cancel and select a different batch."
+NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_TITLE,No Seedlings Available to Outplant
+NO_SPECIES_CONTRIBUTOR_MSG,"There are no species in your species list yet. Only admins can add species, so please reach out to yours for assistance."
+NO_SPECIES_DESCRIPTION,"It looks like you haven’t added any species yet. Having a master species list helps streamline your organization’s seed and plant data entry. You can either add species manually and individually, or import data from a CSV."
+NO_SUB_LOCATIONS,Edit this seed bank to add sub-locations.
+NONE,None
+NOT_CONNECTED,Not Connected
+NOT_READY,Not Ready
+NOT_READY_QUANTITY,Not Ready Quantity
+NOT_READY_QUANTITY_REQUIRED,Not Ready Quantity *
+NOTE_ANY_ISSUES,Does everything above look right? Note any issues.
+NOTES,Notes
+NOTIFICATIONS,Notifications
+NUMBER_OF_LIVE_PLANTS_PER_SPECIES,Number of Live Plants per Species
+NUMBER_OF_PACKETS,Number of Packets
+NUMBER_OF_PEOPLE,Number of People
+NUMBER_OF_PHOTOS,Number of Photos
+NUMBER_OF_PLANTS,Number of Plants
+NUMBER_OF_PLANTS_BY_SPECIES,Number of Plants by Species
+NUMBER_OF_PLANTS_BY_SUBZONE_AND_SPECIES,Number of Plants by Subzone and Species
+NUMBER_OF_SEEDS_COMPROMISED,# Seeds Compromised
+NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Seeds Compromised *
+NUMBER_OF_SEEDS_COMPROMISED_V2,# Seeds Compromised
+NUMBER_OF_SEEDS_EMPTY,# Seeds Empty
+NUMBER_OF_SEEDS_EMPTY_REQUIRED,# Seeds Empty *
+NUMBER_OF_SEEDS_EMPTY_V2,# Seeds Empty
+NUMBER_OF_SEEDS_FILLED,# Seeds Filled
+NUMBER_OF_SEEDS_FILLED_REQUIRED,# Seeds Filled *
+NUMBER_OF_SEEDS_FILLED_V2,# Seeds Filled
+NUMBER_OF_SEEDS_GERMINATED,# Seeds Germinated
+NUMBER_OF_SEEDS_GERMINATED_REQUIRED,# Seeds Germinated *
+NUMBER_OF_SEEDS_IN_SUBSET,# of Seeds in Subset
+NUMBER_OF_SEEDS_SOWN,Number of Seeds Sown
+NUMBER_OF_SEEDS_TESTED,# Seeds Tested
+NUMBER_OF_SEEDS_TESTED_REQUIRED,# Seeds Tested *
+NUMBER_OF_SEEDS_WITHDRAWN,Seeds Withdrawn
+NUMBER_OF_SPECIES,Number Of Species
+NUMBER_OF_SPECIES_PLANTED_CARD_TITLE,How many species have I reported planting?
+NUMBER_PLANTS_COLLECTED_FROM,Number of plants collected from
+NURSERIES,Nurseries
+NURSERY,Nursery
+NURSERY_ADDED,Nursery Added
+NURSERY_CAPACITY,Nursery Capacity
+NURSERY_CAPACITY_REQUIRED,Nursery Capacity *
+NURSERY_DESCRIPTION,All the details about nursery viability tests conducted on the seeds.
+NURSERY_GERMINATION,Nursery Germination
+NURSERY_MEDIA,Nursery Media
+NURSERY_MORTALITY_RATE,Nursery Mortality Rate
+NURSERY_REQUIRED,Nursery *
+NURSERY_TRANSFER,Nursery Transfer
+OBSERVATION_EVENT_SCHEDULED,Observation event is scheduled for {0} for planting site(s): {1},"Example: Observation event is scheduled for June 1, 2023 for planting site(s): Site-A, Site-B"
+OBSERVATION_IN_PROGRESS,Observation in Progress
+OBSERVATION_OVERDUE,Observation Overdue
+OBSERVATION_STATUS,Observation Status
+OBSERVATION_STATUS_OUTSTANDING,Outstanding,Remaining to be done
+OBSERVATIONS,Observations
+OBSERVATIONS_COMPLETION_PERCENTAGE,Observations for {0} of {1} monitoring plots ({2}%) have been completed.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
+OBSERVATIONS_DOWNLOAD_APP,"To complete observations, download the Terraware app on the App Store or Google Play."
+OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Observations are when you record data from a sample of monitoring plots using our mobile app in the field. This allows us to calculate mortality rates, and eventually carbon sequestration."
+OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"You will be notified when it is time to take your observations (typically, the next time you end a planting season). After you've completed your first observations, you'll see the records here."
+OBSERVATIONS_EMPTY_STATE_TITLE,No Observations Yet
+OBSERVATIONS_MAP_VIEW_PROMPT,"In order to access map view, please select a single planting site."
+OBSERVATIONS_REQUIRED_BY_DATE,{0} monitoring plots require observation by {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
+OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations with the Terraware App
+OBSERVED_PLANTS,Observed Plants
+OBSERVED_PLANTS_CARD_DESCRIPTION_1,This is the total number of species found in your latest observations.
+OBSERVED_PLANTS_CARD_DESCRIPTION_2,"You have reported planting {0} species total. The difference in these numbers may be because not all the species you planted were found in the monitoring plots, or because you have planted more species since your last observations."
+OBSERVED_PLANTS_CARD_TITLE,How many species are on the site as of {0}?
+OBSERVED_SPECIES,Observed Species
+OBSERVER,Observer
+ONBOARDING_ADMIN_TITLE,"Just a moment, let’s complete setup first"
+OPPORTUNITIES,Opportunities
+OPPORTUNITIES_INSTRUCTIONS,"This may include opportunities for project expansion, new markets, referrals, training to other organizations, etc. (One-quarter page maximum.)"
+OPPORTUNITIES_REQUIRED,Opportunities *
+OPT_IN,Opt-In Features
+OR,OR
+OR_SEED_WEIGHT,or Seed Weight
+ORG_NOTIFICATION_ACTION,"To change the preference, go to [""Settings > Organization""]"
+ORGANIZATION,Organization
+ORGANIZATION_CREATE_FAILED,Unable to create organization.
+ORGANIZATION_CREATED_MSG,You can access the organizations you’re in by clicking the user profile menu in the top right corner.
+ORGANIZATION_CREATED_MSG_DESKTOP,You can access the organizations you’re in by clicking the arrow in the top left corner next to the logo.
+ORGANIZATION_CREATED_TITLE,You have created {0}!
+ORGANIZATION_DATA_NOT_AVAILABLE,Organization Data Not Available
+ORGANIZATION_DESC,Manage your organization.
+ORGANIZATION_NAME,Organization Name
+ORGANIZATION_NAME_REQUIRED,Organization Name *
+ORGANIZATIONS,Organizations
+ORIGINAL_QTY,Original Qty
+ORIGINAL_SUBZONE,Original Subzone
+ORTHODOX,Orthodox
+OTHER,Other
+OUNCES,Ounces
+OUT_PLANTING,Out-planting
+OUTPLANT,Outplant
+OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Outplants require batches with seedlings that are ""ready."""
+OUTSTANDING,Outstanding
+OVER_WORD_LIMIT,Over word limit
+OVERDUE,Overdue
+OWNER,Owner
+OZ,oz
+OZ_OUNCES,oz (ounces)
+PAGINATION_FOOTER,{0} to {1} of {2}
+PAGINATION_FOOTER_EMPTY,0 of 0
+PAPER,Paper
+PAPER_PETRI_DISH,Paper Petri Dish
+PENDING,Pending
+PEOPLE,People
+PEOPLE_CARD_DESCRIPTION,We can’t do it alone! Add people to your Organization and assign them roles.
+PEOPLE_DESCRIPTION,Manage the people in Terraware.
+PERCENTAGE_OF_SITE_PLANTED,{0}% of Site
+PERCENTAGE_OF_TARGET_PLANTING_DENSITY,{0}% of Target
+PERCENTAGE_VALUE,{0}%
+PERCENTAGE_VIABILITY,% Viability
+PERIOD_LAST_12_HOURS,Last 12 hours
+PERIOD_LAST_24_HOURS,Last 24 hours
+PERIOD_LAST_30_DAYS,Last 30 days
+PERIOD_LAST_7_DAYS,Last 7 days
+PERLITE_VERMICULITE,Perlite/Vermiculite
+PERMANENT,Permanent
+PERMANENT_PLOTS,Permanent Plots
+PERSON_ADDED,Person Added
+PHOTOS,Photos
+PHOTOS_OUTPLANT_DESCRIPTION,Outplant withdrawals require photos.
+PHOTOS_REQUIRED,Photos Required
+PHOTOS_TO_UPLOAD,Photos to Upload
+PHOTOS_TO_UPLOAD_LIMIT,(Limit of {0} more)
+PLANT,plant
+PLANT_DESCRIPTION,Plant Description
+PLANT_DETAIL,Plant Detail
+PLANT_ID,Plant ID
+PLANT_ID_TOOLTIP,It’s the ID of a plant for tracking or conservation purpose. Ideally seeds from a tracked plant do not mix with others in a same accession.
+PLANT_LABEL,Plant
+PLANTING_COMPLETE,Planting Complete?
+PLANTING_COMPLETE_TOOLTIP,Have you completed all of your planting in this subzone?
+PLANTING_DENSITY,Planting Density
+PLANTING_DENSITY_CARD_TITLE,What is my planting density as of {0}?
+PLANTING_DENSITY_DESCRIPTION,This is your planting density as calculated from your latest observations.
+PLANTING_DENSITY_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the planting density."
+PLANTING_DENSITY_PER_ZONE_CARD_TITLE,What is my target planting density per zone?
+PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"This is your zone’s target planting density which you’ve provided. If you’d like to change the target planting densities, please reach out to Terraformation."
+PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,What is my target planting density and planting density as of {0} per zone?
+PLANTING_DENSITY_UPDATE_DESCRIPTION,Since then you have reported new plantings that suggest a planting density of {0} plants/ha.
+PLANTING_PROGRESS,Planting Progress
+PLANTING_PROGRESS_AND_DENSITY,Planting Progress and Density
+PLANTING_PROGRESS_CARD_TITLE,What is my site planting progress?
+PLANTING_PROGRESS_DESCRIPTION_1,This is your site’s planting progress as calculated from what has been reported in your nursery withdrawals.
+PLANTING_PROGRESS_DESCRIPTION_2,"Once your entire planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view your site’s planting density."
+PLANTING_PROGRESS_MAP_DESCRIPTION,Click on each subzone to mark areas where planting has been completed. Planting density will be calculated once planting has been completed for each zone.
+PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,What is my planting progress per zone?
+PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,This is your zone’s planting progress calculated from what has been reported in your nursery withdrawals.
+PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Once a zone has been marked as complete for planting and you’ve completed your observations, you’ll be able to view that zone’s planting density."
+PLANTING_PROGRESS_TABLE_DESCRIPTION,Use the checkboxes next to each subzone to mark areas where planting has been completed. Planting density will be calculated once planting has been completed for each zone.
+PLANTING_SEASON_END,Planting Season End
+PLANTING_SEASON_START,Planting Season Start
+PLANTING_SITE,Planting Site
+PLANTING_SITE_CREATE_DETAILED_HELP,"If you are a Terraformation partner or accelerator participant, please [contact us] to create a detailed planting site."
+PLANTING_SITE_MAP_VIEW_PROMPT,"In order to access map view, please select a single planting site."
+PLANTING_SITE_TYPE,Planting Site Type
+PLANTING_SITE_TYPE_DETAILED,Detailed
+PLANTING_SITE_TYPE_SIMPLE,Simple
+PLANTING_SITES,Planting Sites
+PLANTING_ZONE,Planting Zone
+PLANTING_ZONES,Planting Zones
+PLANTS,Plants
+PLANTS_CARD_DESCRIPTION,They’ve taken root! View all your plants in one place.
+PLANTS_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the total plants."
+PLANTS_PER_HECTARE,plants/ha
+PLEASE_TRY_AGAIN,Please try again.
+PLOT_TYPE,Plot Type
+PLOTS_PERMANENT,Permanent Plots
+PLOTS_TEMPORARY,Temporary Plots
+POUNDS,Pounds
+PREEXISTING_SPECIES,This species already exists
+PREFERRED_WEIGHT_SYSTEM,Preferred Weight System
+PREVIOUS, Previous
+PREVIOUS_ARROW,< Previous
+PRIVACY_POLICY,Privacy Policy
+PROBLEMS,Problems
+PROBLEMS_WITH_ENTRIES,There was a problem with some entries on this form.
+PROCESSED,Processed
+PROCESSED_AND_DRIED_BY,Processed & Dried By
+PROCESSING,Processing
+PROCESSING_AND_DRYING,Processing & Drying
+PROCESSING_AND_DRYING_DESCRIPTION,All the details about processing and drying the seeds.
+PROCESSING_AND_DRYING_INFO,"By adding information about processing/drying and saving changes, you will be automatically changing this accession’s stage from Pending to either Processing, Processed, Drying, or Dried, depending on the information you fill in."
+PROCESSING_METHOD,Processing Method
+PROCESSING_START_DATE,Processing Start Date
+PROCESSING_STATUS_REQUIRED,Processing Status *
+PROJECT_IMPACT,Project Impact
+PROJECT_IMPACT_INSTRUCTIONS,"Provide the details of your impact during the reporting period, including key accomplishments and progress toward meeting stated goals and key milestones. In addition to forestry goals, please include jobs created (full-time, part-time, and seasonal), using specific figures disaggregated by gender. (Approximately one page.)"
+PROJECT_IMPACT_REQUIRED,Project Impact *
+PROJECT_INFORMATION,Project Information
+PROJECT_NOTES,Additional Project Information Notes
+PROJECT_PHOTOS,Project Photos (max. 30)
+PROJECT_SUMMARY,Project Summary
+PROJECT_SUMMARY_INSTRUCTIONS,Provide a short narrative description of the progress since your previous report. This summary should be written for a general audience and be suitable for publication. (Under 100 words.)
+PROJECT_SUMMARY_REQUIRED,Project Summary *
+PURPOSE,Purpose
+PURPOSE_REQUIRED,Purpose *
+PV_BATTERY,PV Battery
+PV_BATTERY_CHARGE,PV Battery Charge
+PV_SYSTEM,PV system
+QUANTIFY,Quantify
+QUANTITY,Quantity
+RARE,Rare
+RARE_ENDANGERED,"Rare, Endangered"
+REACH_OUT_TO_ADMIN_TITLE,Please reach out to an administrator from your organization.
+READY,Ready
+READY_QUANTITY,Ready Quantity
+READY_QUANTITY_REQUIRED,Ready Quantity *
+REASSIGN,Reassign
+REASSIGN_SEEDLINGS,Reassign Seedlings
+REASSIGN_SEEDLINGS_DESCRIPTION,"Enter the new subzone, new quantity, and notes for the species you want to reassign seedlings for. The seedlings for rows you leave empty will not be reassigned."
+REASSIGNMENT,Reassignment
+RECALCITRANT,Recalcitrant
+RECEIVE_EMAIL_NOTIFICATIONS,Receive Email Notifications
+RECEIVED_DATE,Received Date
+RECEIVED_ON,Received On
+RECEIVING_DATE_REQUIRED,Receiving Date *
+RECEIVING_NURSERY_REQUIRED,Receiving Nursery *
+RECORDED_PLANTS,Recorded Plants
+RECORDED_SPECIES,Recorded Species
+RECORDING_DATE,Recording Date
+RECORDING_DATE_ERROR,This should be later than Start Date
+REFRESH,Refresh
+REFRESH_DATA,Refresh Data
+REFRIGERATOR_1,Refrigerator 1
+REFRIGERATOR_2,Refrigerator 2
+REFRIGERATOR_3,Refrigerator 3
+REINTRODUCED,Reintroduced
+REINTRODUCED_DESCRIPTION,"Plants that have been transplanted from a nursery, greenhouse, or other location to a restoration site."
+REMAINING,Remaining
+REMAINING_UNITS,Remaining Units
+REMINDER_DATE,Reminder Date
+REMOVE,Remove
+REMOVE_AND_SAVE,Remove & Save
+REMOVE_ONLY_ONE_ORG_AT_A_TIME,You may only remove yourself from one organization at a time.
+REMOVE_PEOPLE,Remove People
+REMOVE_PEOPLE_DESC,Are you sure you want to remove these people? Removing these people means they won’t have access to your organization’s data anymore.
+REMOVE_PERSON,Remove Person
+REMOVE_PERSON_DESC,Are you sure you want to remove {0}? Removing {0} means they won’t have access to your organization’s data anymore.
+REMOVED_PEOPLE_WARNING_DESC,The people you’ve removed include
+REMOVING_ORG_WARNING,Removing yourself from {0} means you won’t have access to this organization’s data anymore. Are you sure you want to save your changes?
+REPLACE,Replace
+REPLACE_FILE,Replace File...
+REPORT,Report
+REPORT_ANNUAL_DETAILS_TITLE,Additional Project Details (Annual Report)
+REPORT_BACK_WARNING,Please use form controls at bottom of page.
+REPORT_CONCURRENT_EDITOR,Concurrent Editor
+REPORT_CONCURRENT_EDITOR_WARNING_1,There is someone else editing this report ({0}).
+REPORT_CONCURRENT_EDITOR_WARNING_2,"By continuing to edit this report, their changes will be discarded. Are you sure you want to continue?"
+REPORT_CONFIRM_SUBMIT,Are you sure you wish to submit this report? This action cannot be undone.
+REPORT_COULD_NOT_EDIT,Could not edit report
+REPORT_COULD_NOT_OPEN,Could not open report
+REPORT_COULD_NOT_SAVE,Could not save report
+REPORT_COULD_NOT_SUBMIT,Could not submit report
+REPORT_COULD_NOT_UNLOCK,Could not unlock report
+REPORT_EDIT,Edit Report
+REPORT_MORTALITY_RATE_INFO,If known please list the death rates of all planted trees and other plants as a percentage. If unknown please enter 0.
+REPORT_NAME,Report Name
+REPORT_NO_NURSERIES,No nurseries included in report.
+REPORT_NO_PLANTING_SITES,No planting sites included in report.
+REPORT_NO_SEEDBANKS,No seed banks included in report.
+REPORT_NURSERY_CAPACITY_INFO,Please list the total number of plants that the nursery can hold using best estimates.
+REPORT_PROBLEM,Report Problem
+REPORT_SAVE_AND_CLOSE,Save and Close
+REPORT_SEEDBANK_BUILD_COMPLETION_DATE,Seed Bank Build Completion Date *
+REPORT_SEEDBANK_BUILD_START_DATE,Seed Bank Build Start Date *
+REPORT_SEEDBANK_OPERATION_START_DATE,Seed Bank Operation Start Date *
+REPORT_SUBMIT,Submit Report
+REPORT_SUMMARY_OF_PROGRESS_INFO,Give a brief summary of progress including advancement toward meeting restoration targets as well as social and community benefits in the project.
+REPORT_TOTAL_NON_TREES_PLANTED_INFO,Please include all other plants planted that are affiliated with the Terraformation project; do not include trees in this figure.
+REPORT_TOTAL_PAID_WORKERS_INFO,Please list the total number of full-time or part-time paid workers engaged in planting in this project.
+REPORT_TOTAL_PLANTED_AREA_INFO,Please list the total number of hectares already planted during the current lifespan of this project.
+REPORT_TOTAL_PLANTING_SITE_AREA_INFO,Please list your total project area in hectares. If your project with Terraformation does not include land dedicated to restoration enter 0.
+REPORT_TOTAL_TREES_PLANTED_INFO,Please include all trees planted that are affiliated with the Terraformation project; do not include non-trees such as shrubs in this figure.
+REPORT_TOTAL_VOLUNTEERS_INFO,Please list the total number of volunteers engaged in planting in this project. If none write 0.
+REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO,Of the total workers listed above how many total are women?
+REPORT_VIEW_ANNUAL,View Annual Report
+REPORT_VIEW_QUARTERLY,View Quarterly Report
+REPORTED_PLANTS_PER_SPECIES_CARD_TITLE,What is the reported number of plants planted per species?
+REPORTS,Reports
+REQUEST_FEATURE,Request Feature
+REQUIRED,Required
+REQUIRED_FIELD,Required field
+REQUIRED_VALUE_AND_UNITS_FIELD,Value and units required
+RESET,Reset
+REVIEW_ERRORS,Review Errors
+REVIEW_YOUR_ACCOUNT_SETTING,Review your account setting
+REVIEW_YOUR_ORGANIZATION_SETTING,Review your organization setting
+ROLE,Role
+ROLE_REQUIRED,Role *
+ROLES_INFO,Select a role for this person.
+ROWS_SELECTED,{0} selected
+RUN_A_DATABASE_CHECK,Run a Database Check
+S_SEED_COUNT,seed count
+SAND,Sand
+SAND_PETRI_DISH,Sand Petri Dish
+SAVE,Save
+SAVE_ACCESSION_ERROR,An error occurred when saving the accession.
+SAVE_AND_NEXT,Save and Next
+SAVE_CHANGES,Save Changes
+SAVED,Saved
+SAVING,Saving...
+SCARIFY,Scarify
+SCHEDULE_DATE_INFO,Schedule a date by selecting a future date.
+SCHEDULE_DATE_TO_MOVE,Schedule Date to Move from Racks to Dry Cabinets
+SCHEDULE_WITHDRAWAL,Schedule Withdrawal
+SCHEDULED,(Scheduled)
+SCHEDULED_FOR,Scheduled for
+SCHEDULED_FOR_TESTING,Scheduled for Testing
+SCHEDULED_SEEDS,{0} Seeds
+SCHEDULING_FOR,Scheduling for: {0}
+SCIENTIFIC_NAME,Scientific Name
+SCIENTIFIC_NAME_NOT_FOUND,"“{0}” was not found in our database, but you can still add it."
+SCIENTIFIC_NAME_REQUIRED,Scientific Name *
+SDG_01,1. No Poverty
+SDG_02,2. Zero Hunger
+SDG_03,3. Good Health and Well-Being
+SDG_04,4. Quality Education
+SDG_05,5. Gender Equality
+SDG_06,6. Clean Water and Sanitation
+SDG_07,7. Affordable and Clean Energy
+SDG_08,8. Decent Work and Economic Growth
+SDG_09,"9. Industry, Innovation, and Infrastructure"
+SDG_10,10. Reduced Inequalities
+SDG_11,11. Sustainable Cities and Communities
+SDG_12,12. Responsible Consumption and Production
+SDG_13,13. Climate Action
+SDG_14,14. Life Below Water
+SDG_15,15. Life on Land
+SDG_16,"16. Peace, Justice, and Strong Institutions."
+SDG_17,17. Partnerships for the Goals
+SEARCH,Search
+SEARCH_BY_NAME_OR_FAMILY,Search by name or family...
+SEARCH_OR_SELECT,Search or Select...
+SEE_ALL_ACCESSIONS,See All Accessions
+SEE_ENTRIES,See Entries
+SEE_WITHDRAWAL_HISTORY,See Withdrawal History
+SEED,Seed
+SEED_BAGS,Seed Bags
+SEED_BANK,Seed Bank
+SEED_BANK_ADDED,Seed Bank added.
+SEED_BANK_INTERNET,Seed Bank Internet
+SEED_BANK_NOTES,Additional Seed Bank Notes
+SEED_BANKS,Seed Banks
+SEED_BANKS_CARD_DESCRIPTION,How do you process and store your seeds? Add seed banks to your organization.
+SEED_COLLECTION,Seed Collection
+SEED_COLLECTION_DESCRIPTION,"All the details about the species, date collected, collectors and the site location."
+SEED_COLLECTION_DETAIL,Seed Details
+SEED_COLLECTION_DETAIL_DESC,Enter this accession’s seed information below.
+SEED_COUNT,Seed Count
+SEED_DASHBOARD,Seed Dashboard
+SEED_STORAGE_BEHAVIOR,Seed Storage Behavior
+SEED_TYPE,Seed Type
+SEED_WEIGHT,Seed Weight
+SEEDLING_BATCH,Seedling Batch
+SEEDLING_BATCH_DETAILS,Seedling Batch Details
+SEEDLINGS,Seedlings
+SEEDLINGS_BATCHES,Seedlings Batches
+SEEDLINGS_PLURAL,seedlings
+SEEDLINGS_SENT,Seedlings Sent
+SEEDLINGS_SINGULAR,seedling
+SEEDS,Seeds
+SEEDS_GERMINATED,Seeds Germinated
+SEEDS_GERMINATED_LC,seeds germinated
+SEEDS_REMAINING,Seeds Remaining
+SEEDS_SOWN,Seeds Sown
+SEEDS_UNITS,Units Quantity of Seeds
+SELECT,Select...
+SELECT_BATCHES,Select Batches
+SELECT_BUTTON,Select
+SELECT_PLANTING_SITE_TYPE,Select Planting Site Type
+SELECT_PLANTING_SITE_TYPE_DESCRIPTION_1,Please select which type of planting site to add.
+SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2,Detailed sites allow you to track the location of plants within the site and perform live/dead monitoring. Simple sites allow you to track how many and which species of plants have been planted on the site.
+SELECT_PLANTING_SITE_TYPE_DESCRIPTION_3,"Please note that if you create a simple site, you won’t be able to change it to a detailed site later on."
+SELECT_SEED_BANK,Select Seed Bank
+SELECT_SEED_BANK_INFO,Accessions require a seed bank storage location. Please select a seed bank.
+SEND_TO_NURSERY,Send to Nursery
+SENDING,Sending...
+SENSOR_KIT,Sensor Kit
+SENSOR_KIT_HAS_BEEN_SET_UP,Sensor Kit has been set up. Go to the {0} page to see them.
+SENSOR_KIT_ID_PLACEHOLDER,XXXXXX
+SENSOR_KIT_READY_TO_SET_UP,"If you have a Terraformation seed bank, its sensor kit is ready to be set up. Take me to the {0} page to set it up."
+SENSOR_KIT_SET_UP_COMPLETE,Setup Complete!
+SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION,You will now be able to view solar battery charge and sensor data in your sensor monitoring dashboard.
+SENSOR_KIT_SET_UP_DESCRIPTION,"If your seed bank has a sensor kit, let's set it up below."
+SENSOR_KIT_SET_UP_DETECT_SENSORS,Detect Sensors
+SENSOR_KIT_SET_UP_DETECT_SENSORS_DESCRIPTION,"To power on sensors, remove the paper tabs blocking the batteries. When sensors are powered on and within range, they'll be detected by the device manager automatically."
+SENSOR_KIT_SET_UP_DEVICE_MANAGER,Install Device Manager Update
+SENSOR_KIT_SET_UP_DEVICE_MANAGER_DESCRIPTION,"To detect your sensors, the device manager in your sensor kit needs to download the latest code; this may take up to 20 minutes. The download starts the moment your sensor kit is connected to the internet, so this step might alread be complete."
+SENSOR_KIT_SET_UP_PV_SYSTEM,Select PV System
+SENSOR_KIT_SET_UP_PV_SYSTEM_DESCRIPTION,Our seed banks support multiple types of PV systems; select which one you have so that we can accurately display battery charge.
+SENSOR_KIT_SET_UP_SENSOR_KIT_ID,Enter Sensor Kit ID
+SENSOR_KIT_SET_UP_SENSOR_KIT_ID_DESCRIPTION,Find your sensor kit ID on the outside of your sensor kit. This will connect the Device Manager inside the kit to our database.
+SENSOR_KIT_SET_UP_SENSOR_LOCATIONS,Assign Sensor Locations
+SENSOR_KIT_SET_UP_SENSOR_LOCATIONS_DESCRIPTION,Your sensor kit includes 14 temperature/humidity sensors. Please put one sensor in each location. Select which sensor you put in each location using the dropdown.
+SENSOR_KIT_SET_UP_TIME,This may take up to 30 minutes.
+SENSOR_KIT_SET_UP_TITLE,Let's Set Up Your Sensor Kit!
+SENSOR_LOCATION_ERROR,Each location much have one sensor assigned to it.
+SENSOR_SCAN_TIMEOUT,Sensor Scan Timeout
+SENSOR_SCAN_TIMEOUT_ERROR,"Only {0}/{1} sensors were found. Please make sure all sensors are powered on and within range, then try again. If this problem persists, you might have broken sensors; if you think that's the case, email us at {2}."
+SENSORS_FOUND,{0}/{1} sensors found...
+SENT_TO_NURSERY,Sent to Nursery!
+SERVER_ERROR,Server Error
+SET_PLANTING_COMPLETE,Planting Complete
+SET_UP,Set Up
+SET_UP_YOUR_SENSOR_KIT,Set Up Your Sensor Kit
+SET_UP_YOUR_SENSOR_KIT_MSG,"If your seed bank was built by Terraformation, it is equipped with a sensor kit that you can remotely monitor things like the seed bank's temperature and humidity. To set this up, you'll need to connect your seed bank to the Terraware web app. This may take up to 30 minutes."
+SETTINGS,Settings
+SHRUB,Shrub
+SHRUB_TREE,Shrub/Tree
+SILVOPASTURE,Silvopasture
+SITE,Site
+SITE_DETAIL,Site Detail
+SITE_LOCATION,Site Location
+SITE_MAP,Site Map
+SNACKBAR_MSG_CHANGES_SAVED,Changes saved just now.
+SNACKBAR_MSG_NEW_SPECIES_ADDED,New species added just now.
+SNACKBAR_MSG_PLANT_DELETED,Plant deleted just now.
+SNACKBAR_MSG_SPECIES_DELETED,Species deleted just now.
+SOAK,Soak
+SOCIAL_IMPACT,Social Impact and Community Benefits
+SOCIAL_IMPACT_INSTRUCTIONS,"List the direct benefits of the project to the local community. Specific benefits may include the impact on livelihoods; community education and training; access to safe water; support to youth, women, and/or minority groups; and other socioeconomic and community benefits of the project. Please include the specific indicators you are using to measure community impact and the results you have monitored over time. (One-half page maximum.)"
+SOCIAL_IMPACT_REQUIRED,Social Impact and Community Benefits *
+SOIL,Soil
+SOMETHING_WENT_WRONG,Something went wrong.
+SOMETHING_WENT_WRONG_MESSAGE,"If you’re having trouble using Terraware, please report any issues you’re having and we’ll make it right."
+SOMETHING_WENT_WRONG_TITLE,Something went wrong...
+SOWN,Sown
+SPECIES,Species
+SPECIES_CARD_DESCRIPTION,View the Species that are referenced by your Seed and Plant entries.
+SPECIES_DATA_NOT_AVAILABLE,Species Data Not Available
+SPECIES_DESCRIPTION,"Manage your organization’s species list for planning, operation and reporting."
+SPECIES_EMPTY_MSG_BODY,Enter species that you collect or plant now to simplify your experience when you’re out in the field.
+SPECIES_ERROR_SEARCH,Couldn't load species list for search
+SPECIES_IMPORT_COMPLETE,Species data import complete!
+SPECIES_NAME,Species Name
+SPECIES_PROBLEM_NAME_IS_SYNONYM,Name Is Synonym
+SPECIES_PROBLEM_NAME_MISSPELLED,Name Misspelled
+SPECIES_PROBLEM_NAME_NOT_FOUND,Name Not Found
+SPECIES_REQUIRED,Species *
+SPECIES_SELECTED,Species Selected
+STAFF,Staff
+STAFF_RESPONSIBLE,Staff Responsible
+STAGE,Stage
+START,Start
+START_DATE,Start Date
+START_DATE_REQUIRED,Start Date *
+START_SET_UP,Start Setup
+START_TESTING,Start Testing
+STARTING_ON,Starting On
+STATE,State
+STATE_PROVINCE_REGION,State/Province/Region
+STATE_REQUIRED,State *
+STATS_WARNING_DESCRIPTION_1,Observation statistics were calculated after this subzone was marked as Planting Complete.
+STATS_WARNING_DESCRIPTION_2,Undoing the Planting Complete status will delete those statistics. Are you sure you want to undo?
+STATUS,Status
+STORAGE,Storage
+STORAGE_DESCRIPTION,All the details about storing the seeds.
+STORAGE_INFO,"By adding information about storage and saving changes, you will be automatically changing this accession’s stage from Pending to Stored."
+STORAGE_LOCATION,Storage Location
+STORED,Stored
+STORED_BY,Stored By
+STORED_SEEDS,Stored Seeds
+STORING,Storing
+STORING_START_DATE,Storing Start Date
+STRATIFICATION,Stratification
+SUB_LOCATION,Sub-Location
+SUB_LOCATION_DETAILS,Sub-Location Details
+SUB_LOCATION_EXISTS,This sub-location already exists
+SUB_LOCATIONS,Sub-Locations
+SUBMITTED,Submitted
+SUBMITTED_BY,Submitted By
+SUBSET_COUNT,Subset Count
+SUBSET_WEIGHT,Weight of Seed Subset
+SUBSET_WEIGHT_ERROR,Subset weight should be less than seed weight
+SUBSHRUB,Subshrub
+SUBSTRATE,Substrate
+SUBTITLE_GET_STARTED,"To get started, please create your organization now. You'll also be able to set up and manage information on people and species."
+SUBZONE,Subzone
+SUBZONE_PLANTING_COMPLETED_SUCCESS,Subzone(s) marked as Planting Complete.
+SUBZONE_PLANTING_UNCOMPLETED_SUCCESS,Subzone(s) marked as Planting Incomplete.
+SUBZONE_REQUIRED,Subzone *
+SUBZONES,Subzones
+SUCCESS_STORIES,Success Stories
+SUCCESS_STORIES_INSTRUCTIONS,Provide a concise narrative of one to two personalized success stories. (One-half page maximum.)
+SUCCESS_STORIES_REQUIRED,Success Stories *
+SUGGESTION,Suggestion
+SUMMARY,Summary
+SUMMARY_OF_PROGRESS,Summary of Progress
+SUMMARY_OF_PROGRESS_DESCRIPTION,Give a brief summary of this project.
+SUMMARY_OF_PROGRESS_REQUIRED,Summary of Progress *
+SUSTAINABLE_DEVELOPMENT_GOALS,Sustainable Development Goals
+SUSTAINABLE_TIMBER,Sustainable Timber
+TAKE_ME_THERE,Take Me There
+TARGET_DENSITY_PLANTS_PER_HECTARE,Target: {0} Plants/ha
+TARGET_HECTARES_PLANTED,Target: {0} Hectares
+TARGET_PLANTING_DENSITY,Target Planting Density
+TARGET_PLANTING_DENSITY_TOOLTIP,Target planting density for zone (plants per hectare).
+TARGET_RH,Target %RH
+TEMPERATURE_AND_HUMIDITY_SENSOR_DATA,Temperature & Humidity Sensor Data
+TEMPLATES,Templates
+TEMPORARY,Temporary
+TEMPORARY_PLOTS,Temporary Plots
+TEST,Test
+TEST_DATE_REQUIRED,Test Date *
+TEST_METHOD,Test Method
+TEST_METHOD_REQUIRED,Test Method *
+TEST_TYPE,Test Type
+TESTING_STAFF,Testing Staff
+TIME,Time
+TIME_PERIOD,Time Period
+TIME_ZONE,Time Zone
+TIME_ZONE_REQUIRED,Time Zone *
+TIME_ZONE_SELECTED,Time zone: {0}
+TITLE_REPORT_PROBLEM,Report a Problem
+TITLE_REQUEST_FEATURE,Request a Feature
+TITLE_TEST_APP,Test our Mobile App
+TITLE_WELCOME,Welcome to Terraware
+TO,To
+TO_NURSERY_REQUIRED,To: Nursery *
+TO_PLANTING_SITE_REQUIRED,To: Planting Site *
+TO_SUBZONE,To: Subzone
+TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE,The place where seeds were collected. It is recommended to name these referencing stable landmarks or features that do not change.
+TOOLTIP_ACCESSIONS_ADD_PLANT_ID,The unique identifier given to a plant for tracking or conservation purposes. Ideally seeds from a plant with a plant ID are kept separate from other plants (not pooled together) in collections and accessions.
+TOOLTIP_ACCESSIONS_COLLECTION_SOURCE,The type of plant population where seeds are collected.
+TOOLTIP_ACCESSIONS_HAS_DELIVERIES,This accession's species cannot be changed because plants from its seeds have been planted at a planting site.
+TOOLTIP_ACCESSIONS_ID,"A unique identifier for a seed collection accepted into a seed bank. Any collection from a new species, location, and/or date would typically become a new accession in the seed bank."
+TOOLTIP_ACCESSIONS_LOCATION,Place where seeds are being processed.
+TOOLTIP_ACCESSIONS_SUBLOCATION,Specific area within the place where seeds are being processed.
+TOOLTIP_COMMON_NAME,"The name an organism is known by to the general public, rather than its scientific name."
+TOOLTIP_COUNTRY_MY_ACCOUNT,Your country affects how we display numbers and other information.
+TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"This number represents all accessions with the statuses Awaiting Check In, Awaiting Processing, Processing, Drying, and In Storage."
+TOOLTIP_ECOSYSTEM_TYPE,"Relatively large units of land or water containing a distinct assemblage of natural communities sharing a large majority of species, dynamics, and environmental conditions."
+TOOLTIP_GERMINATING_QUANTITY,Germinating indicates that seedlings have not yet emerged from seeds. Germinating quantity does not count toward the total quantity.
+TOOLTIP_NOT_READY_QUANTITY,What determines a plant as “not ready” is up to your team and is often species specific. For example: size of plant or amount of time acclimated.
+TOOLTIP_READY_QUANTITY,What determines a plant as “ready” is up to your team and is often species specific. For example: size of plant or amount of time acclimated.
+TOOLTIP_SCIENTIFIC_NAME,The binomial Latin name (genus + species) currently accepted in the botanical literature.
+TOOLTIP_SPECIES_CONSERVATION_CATEGORY,IUCN Red List conservation category.
+TOOLTIP_SPECIES_CONSERVATION_STATUS,"A species' risk of extinction, usually a legal designation or a Red List assessment."
+TOOLTIP_SPECIES_FAMILY,The scientific name of the plant family currently accepted in the botanical literature.
+TOOLTIP_SPECIES_GROWTH_FORM,A structural category consisting of individuals or species of the same general habit of growth but not necessarily related.
+TOOLTIP_SPECIES_RARE,"Species with limited wild population sizes, often found in isolated geographical locations; may meet criteria for endangered or threatened status but have not yet been legally listed or assessed."
+TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,The capacity of seeds to survive desiccation and temperatures to levels necessary for ex site (off site) storage.
+TOOLTIP_TIME_ZONE_MY_ACCOUNT,We use time zones to display notifications in your local time. Select the time zone that applies to you.
+TOOLTIP_TIME_ZONE_NURSERY,We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to this nursery. All work done in this nursery will use this time zone.
+TOOLTIP_TIME_ZONE_ORGANIZATION,"We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to your organization as a whole. You can select time zones for your seed banks, nurseries, and planting sites in each of their settings pages."
+TOOLTIP_TIME_ZONE_PLANTING_SITE,We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to this specific planting site. All work done in this planting site will use this time zone.
+TOOLTIP_TIME_ZONE_SEEDBANK,We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to this seed bank. All work done in this seed bank will use this time zone.
+TOOLTIP_TOTAL_QUANTITY,Total quantity is the sum of the not ready and ready quantities.
+TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,A dish that contains a growth medium of solidified agar.
+TOOLTIP_VIABILITY_TEST_CHEMICAL,Treating seeds with a plant growth hormone or other chemical to break physiological dormancy.
+TOOLTIP_VIABILITY_TEST_FRESH,Seeds which were recently collected and have not been stored in the seed bank; recommended to establish a baseline of viability for a new accession.
+TOOLTIP_VIABILITY_TEST_MEDIA_MIX,A mix of substances through which roots grow and extract water and nutrients; may contain any of the media below.
+TOOLTIP_VIABILITY_TEST_MOSS,"A small non-flowering, non-vascular plant which can be sterilized and used as a growth medium with high moisture retaining capacity."
+TOOLTIP_VIABILITY_TEST_NURSERY_MEDIA,"A substance through which roots grow and extract water and nutrients in a pot, tray, or other nursery container."
+TOOLTIP_VIABILITY_TEST_PAPER_PETRI_DISH,A dish that contains a growth medium of germination paper.
+TOOLTIP_VIABILITY_TEST_PERLITE_VERMICULITE,Lightweight sand substitutes for soilless potting mixes which are often used to improve aeration and texture in potting soil and garden soil mixtures.
+TOOLTIP_VIABILITY_TEST_SAND,"A loose granular substance resulting from the erosion of siliceous and other rocks and forming a major constituent of beaches, riverbeds, the seabed, and deserts."
+TOOLTIP_VIABILITY_TEST_SAND_PETRI_DISH,A dish that contains a growth medium of sand.
+TOOLTIP_VIABILITY_TEST_SCARIFY,"Weakening, opening, or otherwise altering the seed coat to make it permeable to water, to break physical dormancy."
+TOOLTIP_VIABILITY_TEST_SEED_TYPE,Condition of seeds to be tested for viability.
+TOOLTIP_VIABILITY_TEST_SOAK,"A process of imbibing a seed by immersing the seed in water, to break physical dormancy."
+TOOLTIP_VIABILITY_TEST_SOIL,"A black or dark brown material typically consisting of a mixture of organic remains, clay, and rock particles."
+TOOLTIP_VIABILITY_TEST_STORED,Seeds which have been stored for any length of time; recommended to monitor viability over time in order to use seeds before viability is lost in storage.
+TOOLTIP_VIABILITY_TEST_STRATIFICATION,"A process of exposing seeds to alternating temperatures, simulating natural conditions that seeds would experience, to break physiological dormancy."
+TOOLTIP_VIABILITY_TEST_SUBSTRATE,"The surface or material that an organism lives, grows, or obtains its nourishment from."
+TOOLTIP_VIABILITY_TEST_TREATMENT,"The biological, physical and chemical agents and techniques used to break dormancy and/or speed germination."
+TOTAL,Total
+TOTAL_ACTIVE_ACCESSIONS,Total Active Accessions
+TOTAL_ESTIMATED_PERCENTAGE_VIABILITY,Total Estimated % Viability
+TOTAL_ESTIMATED_VIABILITY,Total Estimated Viability
+TOTAL_NUMBER_OF_PLANTS,Total Number of Plants
+TOTAL_NUMBER_OF_PLANTS_PROPAGATED,Total Number of Plants Propagated
+TOTAL_OF_SEEDS_GERMINATED,Total of Seeds Germinated
+TOTAL_PLANTED,Total Planted
+TOTAL_PLANTED_AREA_HA,Total Planted Area (Ha) *
+TOTAL_PLANTED_REQUIRED,Total Planted *
+TOTAL_PLANTING_SITE_AREA_HA,Total Planting Site Area (Ha) *
+TOTAL_PLANTS_AND_SPECIES,Total Plants and Species
+TOTAL_PLANTS_PLANTED,Total Plants Planted *
+TOTAL_PLANTS_PLANTED_HELPER_TEXT,Species not classified as “trees” in the species list.
+TOTAL_QUANTITY,Total Quantity
+TOTAL_READY_QUANTITY,Total Ready Quantity
+TOTAL_SEED_COUNT,Total Seed Count
+TOTAL_SEEDLINGS_SENT,Total Seedlings Sent
+TOTAL_SEEDS_COUNT_ESTIMATION,Total Seeds Count Estimation
+TOTAL_SEEDS_GERMINATED,Total Seeds Germinated
+TOTAL_SEEDS_GERMINATED_ERROR,Germinated amount should not be more than tested amount.
+TOTAL_SEEDS_STORED,Total Number of Seeds Stored
+TOTAL_SEEDS_TESTED,Total Seeds Tested
+TOTAL_SEEDS_TESTED_ERROR,Seeds tested should not be more than remaining seeds
+TOTAL_TREES_PLANTED,Total Trees Planted *
+TOTAL_TREES_PLANTED_HELPER_TEXT,Species classified as “trees” in the species list.
+TOTAL_WEIGHT,Total Weight
+TOTAL_WEIGHT_OF_SEEDS,Total Weight of Seeds
+TOTAL_WITHDRAW,Total Withdraw
+TOTAL_WITHDRAWN,Total Withdrawn
+TOTAL_WITHDRAWN_COUNT,Total Withdrawn (seeds)
+TOTAL_WITHDRAWN_WEIGHT_GRAMS,Total Withdrawn (g)
+TOTAL_WITHDRAWN_WEIGHT_KILOGRAMS,Total Withdrawn (kg)
+TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,Total Withdrawn (mg)
+TOTAL_WITHDRAWN_WEIGHT_OUNCES,Total Withdrawn (oz)
+TOTAL_WITHDRAWN_WEIGHT_POUNDS,Total Withdrawn (lb)
+TOTAL_WITHDRAWN_WEIGHT_QUANTITY,Total Withdrawn Weight
+TOTAL_WITHDRAWN_WEIGHT_UNITS,Total Withdrawn Weight Units
+TREATMENT,Treatment
+TREE,Tree
+TRUNCATED_TEXT_MORE_LINK,more
+TRY_AGAIN,Try Again
+TURN_ON_END_DRYING_REMINDER,Turn on End-drying Reminder
+TWENTY_FIVE_TO_FIFTY_PERCENT,25% to 50%
+TYPE,Type...
+TYPE_TO_SEARCH,Type to search...
+UNABLE_TO_ADD_PERSON,Unable to Add Person
+UNABLE_TO_CONNECT_TO_SENSOR_KIT,We were unable to connect to your sensor kit. Sometimes this is because it is not connected to power or internet. Please email {0} so we can assist you.
+UNABLE_TO_LOAD_NOTIFICATIONS,Unable to load notifications. Try again later.
+UNDO_PLANTING_COMPLETE,Undo Planting Complete
+UNDO_SEND_TO_NURSERY,Undo Send to Nursery
+UNEXPECTED_ERROR,An unexpected error occurred.
+UNITS,Units
+UNITS_INITIALIZED_MESSAGE,Your Weight System was updated to {0}. You can edit this setting from {1}.
+UNKNOWN,Unknown
+UNSPECIFIED,Unspecified
+UNSURE,Unsure
+UPCOMING,Upcoming
+UPDATE_STATUS_WARNING,You‘re about to update the status
+UPLOAD_PHOTO,Upload Photo...
+UPLOAD_PHOTO_DESCRIPTION,"Browse or drag and drop a file (JPG, PNG)."
+UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Browse files (JPG, PNG)."
+UPLOAD_PHOTOS,Upload Photo(s)
+USE_ORGANIZATION_TIME_ZONE,Use organization's time zone
+USED_UP,Used Up
+USER_NOTIFICATION_ACTION,"To change your preferences, go to [“My Account”]"
+VALUE_CANT_EXCEED_100,Value can’t exceed 100%
+VIABILITY,Viability
+VIABILITY_RATE,Viability Rate
+VIABILITY_RESULT,Viability Result
+VIABILITY_START_DATE,Viability Start Date
+VIABILITY_SUBSTRATE,Viability Substrate
+VIABILITY_TEST,Viability Test
+VIABILITY_TEST_NUMBER,Viability Test (#{0})
+VIABILITY_TEST_START_DATE_ERROR,This should not be before the date when seeds were collected
+VIABILITY_TEST_TYPE,Viability Test Type
+VIABILITY_TEST_TYPES,Viability Test Types
+VIABILITY_TEST_TYPES_INFO,Selecting either one will unlock a new option on the sidebar after you save the changes.
+VIABILITY_TESTING,Viability Testing
+VIABILITY_TESTING_EMPTY_MESSAGE,"Viability Testing helps you track seed quality. You can conduct a nursery or lab germination test, or perform a cut test."
+VIABILITY_TESTING_SECTION_TOOLTIP,"Each test will be listed separately, which may cause an accession to appear more than once in the table."
+VIABILITY_TESTS,Viability Tests
+VIABILITY_TREATMENT,Viability Treatment
+VIEW,View
+VIEW_ACCESSION,View accession
+VIEW_SITES_ZONES_SUBZONES,"View Sites, Zones, and Subzones on a map."
+VINE,Vine,A type of plant.
+WAITING_TO_DOWNLOAD,Waiting to download...
+WATTS_VALUE,{0}W
+WEIGHT_GRAMS,Weight (g)
+WEIGHT_KILOGRAMS,Weight (kg)
+WEIGHT_MILLIGRAMS,Weight (mg)
+WEIGHT_OUNCES,Weight (oz)
+WEIGHT_POUNDS,Weight (lb)
+WEIGHT_SYSTEM_SELECTED,Weight system: {0}
+WEIGHT_TO_COUNT_CALCULATOR,Weight to Count Calculator
+WEIGHT_UNITS,Weight Units
+WELCOME,Welcome!
+WELCOME_MSG,Welcome and happy seeding!
+WELCOME_PERSON,"Welcome, {0}!"
+WILD,Wild
+WILD_IN_SITU,Wild (In Situ)
+WILD_IN_SITU_DESCRIPTION,Plants that occur naturally in wild areas and were not planted by people.
+WITH_MAP,With Map
+WITHDRAW,Withdraw
+WITHDRAW_ALL,Withdraw all
+WITHDRAW_DATE_REQUIRED,Withdraw Date *
+WITHDRAW_FROM_BATCHES,Withdraw from Batches
+WITHDRAW_INSTRUCTIONS,Select a withdrawal purpose and enter the quantities from each batch to withdraw.
+WITHDRAW_QUANTITY,Withdraw Quantity
+WITHDRAW_QUANTITY_REQUIRED,Withdraw Quantity *
+WITHDRAW_REMAINING_SEEDS,Withdraw All Remaining Seeds
+WITHDRAW_SEEDLINGS,Withdraw Seedlings
+WITHDRAW_SEEDS,Withdraw Seeds
+WITHDRAWAL,Withdrawal
+WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Enter a quantity in at least one seedlings batch row.
+WITHDRAWAL_DESCRIPTION,All the details about withdrawal of the seeds.
+WITHDRAWAL_DETAILS,Withdrawal Details
+WITHDRAWAL_HISTORY,Withdrawal History
+WITHDRAWAL_LOG,Withdrawal Log
+WITHDRAWALS,Withdrawals
+WITHDRAWN,Withdrawn
+WITHDRAWN_BY,Withdrawn By
+WITHDRAWN_DATE,Withdrawn Date
+WITHDRAWN_ON,Withdrawn On
+WITHDRAWN_QUANTITY_ERROR,Exceeds remaining quantity
+WITHOUT_MAP,Without Map
+WORDS,Words
+WORKERS_PAID_ENGAGED,Total Number of Paid Workers Engaged *
+WORKERS_PAID_FEMALE,Female Paid Workers *
+WORKERS_VOLUNTEERS,Volunteers *
+YES,Yes
+ZERO,zero
+ZONE,Zone
+ZONE_LEVEL_DATA,Zone Level Data
+ZONE_LEVEL_DATA_MAP_TITLE,What does the planting site look like based on what we reported to have planted?
+ZONE_LEVEL_DATA_MAP_TITLE_WITH_OBSERVATION,What does the planting site look like as of {0}?
+ZONE_REQUIRED,Zone *
+ZONES,Zones
+SINGLE_ZONE_MORTALITY_RATE_MESSAGE,"You have only 1 zone with a mortality rate right now. Once there are more, the zone with the lowest mortality rate will appear."
+SINGLE_SPECIES_MORTALITY_RATE_MESSAGE,"You have only 1 species with a mortality rate right now. Once there are more, the species with the lowest mortality rate will appear."

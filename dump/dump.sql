@@ -3665,6 +3665,9 @@ COPY public.growth_forms (id, name) FROM stdin;
 3	Forb
 4	Graminoid
 5	Fern
+6	Fungus
+7	Lichen
+8	Moss
 \.
 
 

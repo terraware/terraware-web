@@ -58,6 +58,9 @@ jobs:
       - name: Check that code is formatted
         run: yarn prettier --check .
 
+      - name: Generate strings
+        run: yarn generate-strings
+
       - name: Run linter
         run: yarn lint
 
@@ -71,10 +74,9 @@ jobs:
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
         run: yarn server:reset
         env:
-          KEYCLOAK_AUTH_SERVER_URL: http://dummy/
-          KEYCLOAK_CREDENTIALS_SECRET: dummy
-          KEYCLOAK_REALM: dummy
-          KEYCLOAK_RESOURCE: dummy
+          SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
+          SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
+          SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
 
       - name: Run end-to-end cypress tests
         # Skip tests on main and releases because of Cypress hanging bug
@@ -127,11 +129,18 @@ jobs:
           aws-region: ${{ secrets[env.AWS_REGION_SECRET_NAME] }}
           role-to-assume: ${{ secrets[env.AWS_ROLE_SECRET_NAME] }}
 
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}
+          tags: tag:github
+
       - name: Deploy
         if: env.IS_CD == 'true'
         env:
-          SSH_CONFIG: ${{ secrets[env.SSH_CONFIG_SECRET_NAME] }}
           SSH_KEY: ${{ secrets[env.SSH_KEY_SECRET_NAME] }}
+          SSH_USER: ${{ secrets[env.SSH_USER_SECRET_NAME] }}
         run: ./.github/scripts/deploy.sh
 
       - name: Jira Login

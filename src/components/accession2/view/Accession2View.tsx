@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DateTime } from 'luxon';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { useTheme, Box, Link as LinkMUI, Menu, Tab, Theme, Typography, Grid, MenuItem } from '@mui/material';
+import { useTheme, Box, Link as LinkMUI, Tab, Theme, Typography, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Icon, Tooltip } from '@terraware/web-components';
+import { Button, DropdownItem, Icon } from '@terraware/web-components';
 import { useHistory, useParams } from 'react-router-dom';
 import { Accession } from 'src/types/Accession';
 import { AccessionService, FacilityService } from 'src/services';
@@ -40,6 +40,7 @@ import { stateName } from 'src/types/Accession';
 import { getUnitName, isUnitInPreferredSystem } from 'src/units';
 import ConvertedValue from 'src/components/ConvertedValue';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -96,8 +97,6 @@ export default function Accession2View(): JSX.Element {
   const [openViabilityModal, setOpenViabilityModal] = useState(false);
   const [openNewViabilityTest, setOpenNewViabilityTest] = useState(false);
   const [openViewViabilityTestModal, setOpenViewViabilityTestModal] = useState(false);
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const openActionMenu = Boolean(actionMenuAnchorEl);
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState<string | null>(null);
   const [dryingRelativeDate, setDryingRelativeDate] = useState<string | null>(null);
@@ -339,31 +338,17 @@ export default function Accession2View(): JSX.Element {
     return null;
   };
 
-  const renderActionMenuButton = () => {
-    return (
-      <>
-        <Tooltip title={strings.MORE_OPTIONS}>
-          <Button
-            className={classes.actionMenuButton}
-            onClick={(ev) => ev && setActionMenuAnchorEl(ev.currentTarget)}
-            icon='menuVertical'
-            priority='secondary'
-            size='small'
-          />
-        </Tooltip>
-        <Menu anchorEl={actionMenuAnchorEl} open={openActionMenu} onClose={() => setActionMenuAnchorEl(null)}>
-          <MenuItem
-            onClick={() => {
-              setActionMenuAnchorEl(null);
-              setOpenDeleteAccession(true);
-            }}
-          >
-            {strings.DELETE}
-          </MenuItem>
-        </Menu>
-      </>
-    );
-  };
+  const renderActionMenuButton = () => (
+    <OptionsMenu
+      size='small'
+      onOptionItemClick={(item: DropdownItem) => {
+        if (item.value === 'delete-accession') {
+          setOpenDeleteAccession(true);
+        }
+      }}
+      optionItems={[{ label: strings.DELETE, value: 'delete-accession', type: 'destructive' }]}
+    />
+  );
 
   const tabHeaderProps = {
     borderBottom: 1,
@@ -562,7 +547,7 @@ export default function Accession2View(): JSX.Element {
           <Grid item xs={getOverviewGridSize(1)}>
             <OverviewItemCard
               isEditable={!(isAwaitingCheckin || !userCanEdit)}
-              onClick={() => setOpenEditStateModal(true)}
+              handleEdit={() => setOpenEditStateModal(true)}
               title={strings.STATUS}
               contents={
                 <Typography
@@ -590,7 +575,7 @@ export default function Accession2View(): JSX.Element {
           <Grid item xs={getOverviewGridSize(1)}>
             <OverviewItemCard
               isEditable={userCanEdit}
-              onClick={() => setOpenEditLocationModal(true)}
+              handleEdit={() => setOpenEditLocationModal(true)}
               title={strings.LOCATION}
               contents={
                 <Box>
@@ -605,7 +590,7 @@ export default function Accession2View(): JSX.Element {
           <Grid item xs={getOverviewGridSize(1)}>
             <OverviewItemCard
               isEditable={userCanEdit}
-              onClick={() => setOpenEndDryingReminderModal(true)}
+              handleEdit={() => setOpenEndDryingReminderModal(true)}
               title={strings.END_DRYING_REMINDER}
               contents={
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -619,8 +604,8 @@ export default function Accession2View(): JSX.Element {
         <Grid item xs={getOverviewGridSize(1)}>
           <OverviewItemCard
             isEditable={quantityEditable}
+            handleEdit={() => setOpenQuantityModal(true)}
             hideEditIcon={accession?.remainingQuantity?.quantity === undefined && !isMobile}
-            onClick={() => setOpenQuantityModal(true)}
             title={strings.QUANTITY}
             titleInfoTooltip={!quantityEditable && strings.EDIT_QUANTITY_DISABLED}
             contents={
@@ -653,9 +638,9 @@ export default function Accession2View(): JSX.Element {
         <Grid item xs={getOverviewGridSize(2)}>
           <OverviewItemCard
             isEditable={viabilityEditable}
-            hideEditIcon={!accession?.viabilityPercent?.toString() && !isMobile}
+            handleEdit={() => setOpenViabilityModal(true)}
+            hideEditIcon={!accession?.viabilityPercent?.toString()}
             title={strings.VIABILITY}
-            onClick={() => setOpenViabilityModal(true)}
             contents={
               accession?.viabilityPercent?.toString() ? (
                 `${accession?.viabilityPercent}%`

@@ -108,8 +108,10 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
         <Species2Dropdown
           speciesId={record.speciesId}
           record={record}
+          disabled={record.hasDeliveries}
           setRecord={setRecord}
           validate={validateFields}
+          tooltipTitle={record.hasDeliveries ? strings.TOOLTIP_ACCESSIONS_HAS_DELIVERIES : undefined}
         />
         <CollectedReceivedDate2
           onChange={onChange}

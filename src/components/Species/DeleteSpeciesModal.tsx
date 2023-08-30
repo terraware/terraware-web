@@ -1,16 +1,7 @@
-import { makeStyles } from '@mui/styles';
 import React from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
-import { Theme } from '@mui/material';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContent: {
-    color: theme.palette.TwClrTxt,
-    fontSize: '16px',
-  },
-}));
 
 export interface DeleteSpeciesDialogProps {
   open: boolean;
@@ -19,7 +10,6 @@ export interface DeleteSpeciesDialogProps {
 }
 
 export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JSX.Element {
-  const classes = useStyles();
   const { onClose, open, onSubmit } = props;
 
   return (
@@ -40,8 +30,7 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
         <Button label={strings.DELETE} type='destructive' onClick={onSubmit} size='medium' key='button-2' />,
       ]}
       skrim={true}
-    >
-      <p className={classes.mainContent}>{strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT}</p>
-    </DialogBox>
+      message={strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT}
+    />
   );
 }

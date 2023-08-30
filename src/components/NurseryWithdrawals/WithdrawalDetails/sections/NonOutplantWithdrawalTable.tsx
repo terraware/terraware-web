@@ -22,6 +22,13 @@ type NonOutplantWithdrawalTableProps = {
   batches?: Batch[];
 };
 
+const columns = (): TableColumnType[] => [
+  { key: 'name', name: strings.SPECIES, type: 'string' },
+  { key: 'notReady', name: strings.NOT_READY, type: 'number' },
+  { key: 'ready', name: strings.READY, type: 'number' },
+  { key: 'total', name: strings.TOTAL, type: 'number' },
+];
+
 export default function NonOutplantWithdrawalTable({
   species,
   withdrawal,
@@ -32,12 +39,6 @@ export default function NonOutplantWithdrawalTable({
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   const [rowData, setRowData] = useState<SpeciesWithdrawal[]>([]);
-  const columns: TableColumnType[] = [
-    { key: 'name', name: strings.SPECIES, type: 'string' },
-    { key: 'notReady', name: strings.NOT_READY, type: 'number' },
-    { key: 'ready', name: strings.READY, type: 'number' },
-    { key: 'total', name: strings.TOTAL, type: 'number' },
-  ];
 
   useEffect(() => {
     // get map of batch id to species id - for correlation

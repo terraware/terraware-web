@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { SearchService } from 'src/services';
+import { TrackingService } from 'src/services';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
@@ -40,31 +40,13 @@ export default function PlantingSitesList(): JSX.Element {
             { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
           ],
         }
-      : null;
+      : undefined;
+    const apiSearchResults = await TrackingService.searchPlantingSites(
+      selectedOrganization.id,
+      searchField,
+      searchSortOrder
+    );
 
-    const params = {
-      fields: ['boundary', 'id', 'name', 'numPlantingZones', 'numPlots', 'description', 'timeZone'],
-      prefix: 'plantingSites',
-      sortOrder: [searchSortOrder],
-      search: {
-        operation: 'and',
-        children: [
-          {
-            field: 'organization_id',
-            operation: 'field',
-            values: [selectedOrganization.id],
-          },
-        ],
-      },
-      count: 0,
-    };
-
-    if (searchField) {
-      const children: any = params.search.children;
-      children.push(searchField);
-    }
-
-    const apiSearchResults = await SearchService.search(params);
     const transformedResults = apiSearchResults?.map((result) => setTimeZone(result, timeZones, defaultTimeZone));
     if (!debouncedSearchTerm) {
       setPlantingSites(transformedResults);

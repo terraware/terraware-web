@@ -1,9 +1,10 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
-import { Delivery, PlantingSite } from 'src/types/Tracking';
+import { Delivery, PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 import { PlantingSiteZone, Population } from 'src/types/PlantingSite';
 import SearchService from './SearchService';
-import { SearchCriteria } from 'src/types/Search';
+import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 /**
  * Tracking related services
@@ -13,6 +14,7 @@ const PLANTING_SITES_ENDPOINT = '/api/v1/tracking/sites';
 const PLANTING_SITE_ENDPOINT = '/api/v1/tracking/sites/{id}';
 const DELIVERY_ENDPOINT = '/api/v1/tracking/deliveries/{id}';
 const REASSIGN_ENDPOINT = '/api/v1/tracking/deliveries/{id}/reassign';
+const REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/reportedPlants';
 
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -22,6 +24,19 @@ type GetPlantingSiteResponsePayload =
 
 type GetDeliveryResponsePayload =
   paths[typeof DELIVERY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type PlantingSiteReportedPlantsPayload =
+  paths[typeof REPORTED_PLANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type SearchFieldType = {
+  operation: string;
+  children: {
+    operation: string;
+    field: string;
+    type: string;
+    values: string[];
+  }[];
+};
 
 /**
  * exported type
@@ -50,13 +65,21 @@ export type PlantingSitePutRequestBody =
 export type ReassignPostRequestBody =
   paths[typeof REASSIGN_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
+export type SiteReportedPlantsData = {
+  site?: PlantingSiteReportedPlants;
+};
+
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
 const httpPlantingSite = HttpService.root(PLANTING_SITE_ENDPOINT);
 
 /**
  * List all planting sites
  */
-const listPlantingSites = async (organizationId: number, full?: boolean): Promise<PlantingSitesData & Response> => {
+const listPlantingSites = async (
+  organizationId: number,
+  full?: boolean,
+  locale?: string | null
+): Promise<PlantingSitesData & Response> => {
   const response: PlantingSitesData & Response = await httpPlantingSites.get<
     ListPlantingSitesResponsePayload,
     PlantingSitesData
@@ -67,7 +90,9 @@ const listPlantingSites = async (organizationId: number, full?: boolean): Promis
         full: (full || false).toString(),
       },
     },
-    (data) => ({ sites: data?.sites })
+    (data) => ({
+      sites: data?.sites.sort((a, b) => a.name.localeCompare(b.name, locale || undefined)),
+    })
   );
 
   return response;
@@ -86,7 +111,7 @@ const createPlantingSite = async (plantingSite: PlantingSitePostRequestBody): Pr
 };
 
 /**
- * Get a planting site by id, also returns associated planting zones -> plots
+ * Get a planting site by id, also returns associated planting zones -> planting subzones
  */
 const getPlantingSite = async (siteId: number): Promise<PlantingSiteData & Response> => {
   const response: PlantingSiteData & Response = await httpPlantingSite.get<
@@ -171,11 +196,12 @@ const getTotalPlantsInZones = async (organizationId: number, siteId: number): Pr
   return (await SearchService.search({
     prefix: 'plantingSites.plantingZones',
     fields: [
-      'plots.id',
-      'plots.fullName',
-      'plots.populations.species_scientificName',
-      'plots.populations.species_organization_id',
-      'plots.populations.totalPlants',
+      'plantingSubzones.id',
+      'plantingSubzones.fullName',
+      'plantingSubzones.populations.species_scientificName',
+      'plantingSubzones.populations.species_organization_id',
+      'plantingSubzones.populations.totalPlants(raw)',
+      'plantingSubzones.populations.totalPlants',
       'id',
       'name',
     ],
@@ -197,6 +223,72 @@ const getTotalPlantsInSite = async (organizationId: number, siteId: number): Pro
 };
 
 /**
+ * Get Reported Plants by Planting Site
+ */
+const getReportedPlants = async (plantingSiteId: number): Promise<SiteReportedPlantsData & Response> => {
+  const response: SiteReportedPlantsData & Response = await HttpService.root(REPORTED_PLANTS_ENDPOINT).get<
+    PlantingSiteReportedPlantsPayload,
+    SiteReportedPlantsData
+  >(
+    {
+      urlReplacements: {
+        '{id}': plantingSiteId.toString(),
+      },
+    },
+    (data) => ({ site: data?.site })
+  );
+
+  return response;
+};
+
+/**
+ * Search planting sites
+ */
+async function searchPlantingSites(
+  organizationId: number,
+  searchField?: SearchFieldType,
+  sortOrder?: SearchSortOrder
+): Promise<PlantingSiteSearchResult[] | null> {
+  const defaultSortOrder = {
+    field: 'name',
+    direction: 'Ascending',
+  } as SearchSortOrder;
+
+  const params = {
+    fields: [
+      'boundary',
+      'id',
+      'name',
+      'numPlantingZones',
+      'numPlantingSubzones',
+      'description',
+      'timeZone',
+      'totalPlants(raw)',
+    ],
+    prefix: 'plantingSites',
+    sortOrder: [sortOrder || defaultSortOrder],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          field: 'organization_id',
+          operation: 'field',
+          values: [organizationId],
+        },
+      ],
+    },
+    count: 0,
+  };
+
+  if (searchField) {
+    const children: any = params.search.children;
+    children.push(searchField);
+  }
+
+  return (await SearchService.search(params)) as PlantingSiteSearchResult[];
+}
+
+/**
  * Exported functions
  */
 const TrackingService = {
@@ -208,6 +300,8 @@ const TrackingService = {
   reassignPlantings,
   getTotalPlantsInZones,
   getTotalPlantsInSite,
+  getReportedPlants,
+  searchPlantingSites,
 };
 
 export default TrackingService;

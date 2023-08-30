@@ -1,32 +1,48 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid } from '@mui/material';
-import { Icon, Textfield } from '@terraware/web-components';
+import { BusySpinner, Icon, Textfield } from '@terraware/web-components';
 import { ModalValuesType } from './BatchesCellRenderer';
-import { Batch } from 'src/types/Batch';
 import { NurseryBatchService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
+import { useUser } from 'src/providers';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 export interface ChangeQuantityModalProps {
-  open: boolean;
   onClose: () => void;
   modalValues: ModalValuesType;
-  row: Batch;
+  row: any;
   reload?: () => void;
 }
 
 export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JSX.Element {
-  const { onClose, open, modalValues, row, reload } = props;
+  const { onClose, modalValues, row, reload } = props;
   const { type } = modalValues;
+  const [saving, setSaving] = useState<boolean>(false);
   const [movedValue, setMovedValue] = useState<number | undefined>();
-  const [record, setRecord] = useForm(row);
+  const [validate, setValidate] = useState<boolean>(false);
+  const [record, setRecord] = useForm({
+    ...row,
+    germinatingQuantity: +row['germinatingQuantity(raw)'],
+    notReadyQuantity: +row['notReadyQuantity(raw)'],
+    readyQuantity: +row['readyQuantity(raw)'],
+  });
   const snackbar = useSnackbar();
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
 
   const onSubmit = async () => {
+    setValidate(true);
+    if (movedValue === undefined) {
+      return;
+    }
+    setSaving(true);
     const response = await NurseryBatchService.updateBatchQuantities({ ...record, version: row.version });
+    setSaving(false);
     if (response.requestSucceeded) {
       if (reload) {
         reload();
@@ -44,14 +60,16 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
       if (type === 'germinating') {
         setRecord({
           ...row,
-          germinatingQuantity: +row.germinatingQuantity - valueNumber,
-          notReadyQuantity: +row.notReadyQuantity + +valueNumber,
+          germinatingQuantity: +row['germinatingQuantity(raw)'] - valueNumber,
+          notReadyQuantity: +row['notReadyQuantity(raw)'] + +valueNumber,
+          readyQuantity: +row['readyQuantity(raw)'],
         });
       } else {
         setRecord({
           ...row,
-          notReadyQuantity: +row.notReadyQuantity - valueNumber,
-          readyQuantity: +row.readyQuantity + +valueNumber,
+          germinatingQuantity: +row['germinatingQuantity(raw)'],
+          notReadyQuantity: +row['notReadyQuantity(raw)'] - valueNumber,
+          readyQuantity: +row['readyQuantity(raw)'] + +valueNumber,
         });
       }
     } else {
@@ -69,7 +87,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
   return (
     <DialogBox
       onClose={onCloseHandler}
-      open={open}
+      open={true}
       title={type === 'germinating' ? strings.CHANGE_GERMINATING_STATUS : strings.CHANGE_NOT_READY_STATUS}
       size='medium'
       middleButtons={[
@@ -93,9 +111,12 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
       ]}
     >
       <Grid>
+        {saving && <BusySpinner withSkrim={true} />}
         <Grid item xs={11} textAlign='left' display='flex'>
           <Textfield
-            value={type === 'germinating' ? record.germinatingQuantity : record.notReadyQuantity}
+            value={numericFormatter.format(
+              type === 'germinating' ? record.germinatingQuantity : record.notReadyQuantity
+            )}
             display={true}
             label={type === 'germinating' ? strings.GERMINATING : strings.NOT_READY}
             id={'previousValue'}
@@ -109,13 +130,14 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
               id={'movedValue'}
               type={'number'}
               onChange={(value) => onChangeMovedValue(value)}
+              errorText={validate && movedValue === undefined ? strings.REQUIRED_FIELD : ''}
             />
           </Box>
           <Box paddingLeft={1} paddingRight={3} paddingTop={4}>
             <Icon name='iconArrowRight' />
           </Box>
           <Textfield
-            value={type === 'germinating' ? record.notReadyQuantity : record.readyQuantity}
+            value={numericFormatter.format(type === 'germinating' ? record.notReadyQuantity : record.readyQuantity)}
             display={true}
             label={type === 'germinating' ? strings.NOT_READY : strings.READY}
             id={'changedValue'}

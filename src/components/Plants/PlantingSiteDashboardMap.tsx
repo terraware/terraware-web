@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { PlantingSite } from 'src/types/Tracking';
-import { TrackingService } from 'src/services';
+import { MapService, TrackingService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
-import { PlantingSitePlot } from 'src/types/PlantingSite';
+import { PlantingSiteSubzone } from 'src/types/PlantingSite';
 import { GenericMap, PlantingSiteMap, useSpeciesPlantsRenderer } from 'src/components/Map';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -12,28 +12,28 @@ const MAP_STYLE = {
 };
 
 type PlantingSiteDashboardMapProps = {
-  plots?: PlantingSitePlot[];
-  selectedPlotId?: number;
+  subzones?: PlantingSiteSubzone[];
+  selectedSubzoneId?: number;
   selectedZoneId?: number;
   siteId?: number;
 };
 
 export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMapProps): JSX.Element {
-  const { plots, selectedPlotId, selectedZoneId, siteId } = props;
+  const { subzones, selectedSubzoneId, selectedZoneId, siteId } = props;
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
   const [plantingSite, setPlantingSite] = useState<PlantingSite>();
 
-  const plotsMap = useMemo(() => {
-    if (!plots) {
+  const subzonesMap = useMemo(() => {
+    if (!subzones) {
       return {};
     }
 
-    return plots.reduce((accumulator: any, plot) => {
-      accumulator[plot.id.toString()] = plot.populations;
+    return subzones.reduce((accumulator: any, subzone) => {
+      accumulator[subzone.id.toString()] = subzone.populations;
       return accumulator;
     }, {});
-  }, [plots]);
+  }, [subzones]);
 
   useEffect(() => {
     if (!siteId) {
@@ -52,21 +52,21 @@ export default function PlantingSiteDashboardMap(props: PlantingSiteDashboardMap
     fetchPlantingSite();
   }, [siteId, snackbar]);
 
-  const contextRenderer = useSpeciesPlantsRenderer(plotsMap);
+  const contextRenderer = useSpeciesPlantsRenderer(subzonesMap);
   const hasPolygons = plantingSite && plantingSite.boundary && plantingSite.boundary.coordinates?.length > 0;
 
   return (
     <Box display='flex' height='100%'>
       {hasPolygons ? (
         <PlantingSiteMap
-          plantingSite={plantingSite}
+          mapData={MapService.getMapDataFromPlantingSite(plantingSite)}
           key={plantingSite?.id}
           style={MAP_STYLE}
           contextRenderer={contextRenderer}
-          selectedPlotId={selectedPlotId}
-          selectedZoneId={selectedZoneId}
+          highlightEntities={[{ sourceId: 'subzones', id: selectedSubzoneId }]}
+          focusEntities={[{ sourceId: 'zones', id: selectedZoneId }]}
         />
-      ) : isMobile || !plots ? null : (
+      ) : isMobile || !subzones ? null : (
         <GenericMap style={MAP_STYLE} />
       )}
     </Box>

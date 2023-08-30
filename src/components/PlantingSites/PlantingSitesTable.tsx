@@ -15,25 +15,26 @@ interface PlantingSitesTableProps {
   setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
 }
 
+const columns = (): TableColumnType[] => [
+  {
+    key: 'name',
+    name: strings.NAME,
+    type: 'string',
+  },
+  {
+    key: 'description',
+    name: strings.DESCRIPTION,
+    type: 'string',
+  },
+  { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
+  { key: 'numPlantingSubzones', name: strings.SUBZONES, type: 'string' },
+  { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
+];
+
 export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.Element {
   const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder } = props;
   const [isPresorted, setIsPresorted] = useState<boolean>(false);
   const theme = useTheme();
-  const columns: TableColumnType[] = [
-    {
-      key: 'name',
-      name: strings.NAME,
-      type: 'string',
-    },
-    {
-      key: 'description',
-      name: strings.DESCRIPTION,
-      type: 'string',
-    },
-    { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
-    { key: 'numPlots', name: strings.PLOTS, type: 'string' },
-    { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
-  ];
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
     const isTimeZone = orderBy === 'timeZone';

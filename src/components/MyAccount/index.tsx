@@ -1,8 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { OrganizationUserService, OrganizationService, PreferencesService, UserService } from 'src/services';
-import Button from 'src/components/common/button/Button';
+import { Button, DropdownItem } from '@terraware/web-components';
+import {
+  OrganizationUserService,
+  OrganizationService,
+  PreferencesService,
+  UserService,
+  LocationService,
+} from 'src/services';
 import Table from 'src/components/common/table';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
@@ -27,11 +34,14 @@ import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
-import isEnabled from 'src/features';
 import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import LocaleSelector from '../LocaleSelector';
-import { supportedLocales } from 'src/strings/locales';
+import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
+import DeleteAccountModal from './DeleteAccountModal';
+import { Country } from 'src/types/Country';
+import { getCountryByCode } from 'src/utils/country';
+import RegionSelector from 'src/components/RegionSelector';
 
 type MyAccountProps = {
   organizations?: Organization[];
@@ -71,6 +81,13 @@ function addRoleNames(organizations: Organization[]): PersonOrganization[] {
   return organizations.map(addRoleName);
 }
 
+const columns = (): TableColumnType[] => [
+  { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
+  { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+  { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
+  { key: 'roleName', name: strings.ROLE, type: 'string' },
+];
+
 const MyAccountContent = ({
   user,
   organizations,
@@ -79,11 +96,13 @@ const MyAccountContent = ({
   reloadData,
 }: MyAccountContentProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
+  const supportedLocales = useSupportedLocales();
   const theme = useTheme();
   const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
   const history = useHistory();
   const [record, setRecord, onChange] = useForm<User>(user);
+  const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState<boolean>(false);
   const [removedOrg, setRemovedOrg] = useState<Organization>();
   const [leaveOrganizationModalOpened, setLeaveOrganizationModalOpened] = useState(false);
   const [assignNewOwnerModalOpened, setAssignNewOwnerModalOpened] = useState(false);
@@ -94,21 +113,17 @@ const MyAccountContent = ({
   const { userPreferences, reloadUserPreferences } = useUser();
   const snackbar = useSnackbar();
   const contentRef = useRef(null);
-  const localeSelectionEnabled = isEnabled('Locale selection');
-  const { selectedLocale } = useLocalization();
+  const { activeLocale, selectedLocale, setSelectedLocale } = useLocalization();
+  const [countries, setCountries] = useState<Country[]>();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
   const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState(
     (userPreferences?.preferredWeightSystem as string) || 'metric'
   );
   const loadedStringsForLocale = useLocalization().activeLocale;
-  const columns: TableColumnType[] = [
-    { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
-    { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-    { key: 'totalUsers', name: strings.PEOPLE, type: 'string' },
-    { key: 'roleName', name: strings.ROLE, type: 'string' },
-  ];
+
   const [localeSelected, setLocaleSelected] = useState(selectedLocale);
+  const [countryCodeSelected, setCountryCodeSelected] = useState(user?.countryCode);
 
   useEffect(() => {
     setLocaleSelected(selectedLocale);
@@ -128,7 +143,23 @@ const MyAccountContent = ({
 
   useEffect(() => {
     setRecord(user);
-  }, [user, setRecord]);
+    if (!countryCodeSelected) {
+      setCountryCodeSelected(user.countryCode);
+    }
+  }, [user, setRecord, countryCodeSelected, setCountryCodeSelected]);
+
+  useEffect(() => {
+    if (activeLocale) {
+      const populateCountries = async () => {
+        const response = await LocationService.getCountries();
+        if (response) {
+          setCountries(response);
+        }
+      };
+
+      populateCountries();
+    }
+  }, [activeLocale]);
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -190,11 +221,14 @@ const MyAccountContent = ({
       await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
       reloadUserPreferences();
 
+      const lastLocale = selectedLocale;
+      setSelectedLocale(localeSelected);
       const updateUserResponse = await saveProfileChanges();
       if (updateUserResponse.requestSucceeded) {
         reloadUser();
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
+        setSelectedLocale(lastLocale);
         snackbar.toastError();
       }
       history.push(APP_PATHS.MY_ACCOUNT);
@@ -204,7 +238,11 @@ const MyAccountContent = ({
   const saveProfileChanges = async () => {
     // Save the currently-selected locale, even if it differs from the locale in the profile data we
     // fetched from the server.
-    const updateUserResponse = await UserService.updateUser({ ...record, locale: localeSelected });
+    const updateUserResponse = await UserService.updateUser({
+      ...record,
+      countryCode: countryCodeSelected,
+      locale: localeSelected,
+    });
     return updateUserResponse;
   };
 
@@ -272,6 +310,12 @@ const MyAccountContent = ({
     }
   };
 
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    if (optionItem.value === 'delete-account') {
+      setOpenDeleteAccountModal(true);
+    }
+  };
+
   return (
     <TfMain>
       <PageForm
@@ -320,14 +364,21 @@ const MyAccountContent = ({
           >
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
             {!edit && (
-              <Button
-                id='edit-account'
-                icon='iconEdit'
-                label={isMobile ? '' : strings.EDIT_ACCOUNT}
-                onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
-                size='medium'
-                priority='primary'
-              />
+              <Box display='flex' height='fit-content'>
+                {openDeleteAccountModal && <DeleteAccountModal onCancel={() => setOpenDeleteAccountModal(false)} />}
+                <Button
+                  id='edit-account'
+                  icon='iconEdit'
+                  label={isMobile ? '' : strings.EDIT_ACCOUNT}
+                  onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
+                  size='medium'
+                  priority='primary'
+                />
+                <OptionsMenu
+                  onOptionItemClick={onOptionItemClick}
+                  optionItems={[{ label: strings.DELETE_ACCOUNT, value: 'delete-account', type: 'destructive' }]}
+                />
+              </Box>
             )}
           </Box>
         </PageHeaderWrapper>
@@ -381,37 +432,60 @@ const MyAccountContent = ({
                 {strings.LANGUAGE_AND_REGION}
               </Typography>
             </Grid>
-            {localeSelectionEnabled && (
-              <Grid
-                item
-                xs={isMobile ? 12 : 4}
-                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              >
-                {edit ? (
-                  <LocaleSelector
-                    onChangeLocale={(newValue) => setLocaleSelected(newValue)}
-                    localeSelected={localeSelected}
-                  />
-                ) : (
-                  <TextField
-                    label={strings.LANGUAGE}
-                    id='locale'
-                    type='text'
-                    value={supportedLocales.find((sLocale) => sLocale.id === selectedLocale)?.name}
-                    display={true}
-                  />
-                )}
-              </Grid>
-            )}
             <Grid
               item
-              xs={isMobile ? 12 : 4}
+              xs={isMobile ? 12 : 3}
+              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+            >
+              {edit ? (
+                <LocaleSelector
+                  onChangeLocale={(newValue) => setLocaleSelected(newValue)}
+                  localeSelected={localeSelected}
+                  fullWidth={true}
+                />
+              ) : (
+                <TextField
+                  label={strings.LANGUAGE}
+                  id='locale'
+                  type='text'
+                  value={findLocaleDetails(supportedLocales, selectedLocale).name}
+                  display={true}
+                />
+              )}
+            </Grid>
+            <Grid
+              item
+              xs={isMobile ? 12 : 3}
+              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+            >
+              {edit ? (
+                <RegionSelector
+                  selectedCountryCode={countryCodeSelected}
+                  onChangeCountryCode={setCountryCodeSelected}
+                  hideCountrySubdivisions={true}
+                  countryLabel={strings.COUNTRY}
+                  countryTooltip={strings.TOOLTIP_COUNTRY_MY_ACCOUNT}
+                />
+              ) : (
+                <TextField
+                  label={strings.COUNTRY}
+                  id='country'
+                  type='text'
+                  value={countries && user.countryCode ? getCountryByCode(countries, user.countryCode)?.name : ''}
+                  display={true}
+                />
+              )}
+            </Grid>
+            <Grid
+              item
+              xs={isMobile ? 12 : 3}
               sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
             >
               {edit ? (
                 <WeightSystemSelector
                   onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
                   selectedWeightSystem={preferredWeightSystemSelected}
+                  fullWidth={true}
                 />
               ) : (
                 <TextField
@@ -423,7 +497,7 @@ const MyAccountContent = ({
                 />
               )}
             </Grid>
-            <Grid item xs={isMobile ? 12 : 4} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+            <Grid item xs={isMobile ? 12 : 3} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
               {edit ? (
                 <TimeZoneSelector
                   onTimeZoneSelected={onTimeZoneChange}
@@ -458,44 +532,38 @@ const MyAccountContent = ({
                 onChange={(value) => onChange('emailNotificationsEnabled', value)}
               />
             </Grid>
-            <Grid item xs={12} />
-            {organizations && organizations.length > 0 ? (
-              <>
-                <Grid item xs={12}>
-                  <Typography fontSize='20px' fontWeight={600}>
-                    {strings.ORGANIZATIONS}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <div>
-                    <Grid container spacing={4}>
-                      <Grid item xs={12}>
-                        {organizations && (
-                          <Table
-                            id='organizations-table'
-                            columns={columns}
-                            rows={personOrganizations}
-                            orderBy='name'
-                            selectedRows={selectedRows}
-                            setSelectedRows={setSelectedRows}
-                            showCheckbox={edit}
-                            showTopBar={edit}
-                            topBarButtons={[
-                              {
-                                buttonType: 'destructive',
-                                buttonText: strings.REMOVE,
-                                onButtonClick: removeSelectedOrgs,
-                              },
-                            ]}
-                          />
-                        )}
-                      </Grid>
-                    </Grid>
-                  </div>
-                </Grid>
-              </>
-            ) : null}
           </Grid>
+          {organizations && organizations.length > 0 ? (
+            <Grid container spacing={4}>
+              <Grid item xs={12} />
+              <Grid item xs={12}>
+                <Typography fontSize='20px' fontWeight={600}>
+                  {strings.ORGANIZATIONS}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                {organizations && (
+                  <Table
+                    id='organizations-table'
+                    columns={columns}
+                    rows={personOrganizations}
+                    orderBy='name'
+                    selectedRows={selectedRows}
+                    setSelectedRows={setSelectedRows}
+                    showCheckbox={edit}
+                    showTopBar={edit}
+                    topBarButtons={[
+                      {
+                        buttonType: 'destructive',
+                        buttonText: strings.REMOVE,
+                        onButtonClick: removeSelectedOrgs,
+                      },
+                    ]}
+                  />
+                )}
+              </Grid>
+            </Grid>
+          ) : null}
         </Box>
       </PageForm>
     </TfMain>

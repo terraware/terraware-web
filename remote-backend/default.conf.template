@@ -1,0 +1,15 @@
+server {
+    listen       443 ssl http2 default_server;
+    server_name  localhost;
+
+    ssl_certificate /etc/ssl/certs/self-signed.crt;
+    ssl_certificate_key /etc/ssl/private/self-signed.key;
+
+    # Allow large photo uploads. The default maximum request size is 1MB.
+    client_max_body_size 50M;
+
+    location / {
+        proxy_pass ${SERVER_URL};
+        proxy_set_header Host $http_host;
+    }
+}

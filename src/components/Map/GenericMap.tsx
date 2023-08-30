@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
 import { Box, CircularProgress } from '@mui/material';
-import { MapService } from 'src/services';
-import useSnackbar from 'src/utils/useSnackbar';
-import Map from './Map';
+import Map, { MapImage } from './Map';
 import { MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';
+import useMapboxToken from 'src/utils/useMapboxToken';
 
 const DUMMY_MAP_OPTIONS: MapOptions = {
   bbox: {
@@ -19,6 +17,7 @@ type GenericMapProps = {
   style?: object;
   bannerMessage?: string;
   entityOptions?: MapEntityOptions;
+  mapImages?: MapImage[];
 };
 
 export default function GenericMap({
@@ -27,38 +26,9 @@ export default function GenericMap({
   style,
   bannerMessage,
   entityOptions,
+  mapImages,
 }: GenericMapProps): JSX.Element | null {
-  const snackbar = useSnackbar();
-  const [token, setToken] = useState<string>();
-  const [mapId, setMapId] = useState<string>();
-  const [tokenPromise, setTokenPromise] = useState<Promise<void>>();
-
-  // fetch token
-  const fetchMapboxToken = useCallback(async () => {
-    const response = await MapService.getMapboxToken();
-    if (response.requestSucceeded) {
-      setToken(response.token);
-      setMapId(Date.now().toString());
-    } else {
-      snackbar.toastError();
-    }
-  }, [snackbar]);
-
-  const refreshToken = useCallback(() => {
-    const promise = fetchMapboxToken();
-    setTokenPromise(promise);
-  }, [fetchMapboxToken]);
-
-  const getToken = useCallback(() => {
-    if (tokenPromise) {
-      return;
-    }
-    refreshToken();
-  }, [tokenPromise, refreshToken]);
-
-  useEffect(() => {
-    getToken();
-  }, [getToken]);
+  const { token, mapId, refreshToken } = useMapboxToken();
 
   if (!token) {
     return (
@@ -79,6 +49,7 @@ export default function GenericMap({
         popupRenderer={contextRenderer}
         bannerMessage={bannerMessage}
         entityOptions={entityOptions}
+        mapImages={mapImages}
       />
     </Box>
   );

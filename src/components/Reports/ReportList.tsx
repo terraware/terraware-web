@@ -1,7 +1,7 @@
+import React, { useEffect, useRef, useState } from 'react';
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import Table from 'src/components/common/table';
-import React, { useEffect, useRef, useState } from 'react';
 import TfMain from 'src/components/common/TfMain';
 import ReportService from 'src/services/ReportService';
 import strings from 'src/strings';
@@ -10,19 +10,19 @@ import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import ReportsCellRenderer from './TableCellRenderer';
 import { useOrganization } from 'src/providers';
 
+const columns = (): TableColumnType[] => [
+  { key: 'name', name: strings.REPORT, type: 'string' },
+  { key: 'status', name: strings.STATUS, type: 'string' },
+  { key: 'modifiedByName', name: strings.LAST_EDITED_BY, type: 'string' },
+  { key: 'submittedByName', name: strings.SUBMITTED_BY, type: 'string' },
+  { key: 'submittedTime', name: strings.DATE_SUBMITTED, type: 'string' },
+];
+
 export default function ReportList(): JSX.Element {
   const contentRef = useRef(null);
   const [results, setResults] = useState<ListReport[]>([]);
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-
-  const columns: TableColumnType[] = [
-    { key: 'name', name: strings.REPORT, type: 'string' },
-    { key: 'status', name: strings.STATUS, type: 'string' },
-    { key: 'modifiedByName', name: strings.LAST_EDITED_BY, type: 'string' },
-    { key: 'submittedByName', name: strings.SUBMITTED_BY, type: 'string' },
-    { key: 'submittedTime', name: strings.DATE_SUBMITTED, type: 'string' },
-  ];
 
   useEffect(() => {
     const refreshSearch = async () => {

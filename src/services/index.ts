@@ -8,8 +8,10 @@ import NotificationsService from './NotificationsService';
 import NurseryBatchService from './NurseryBatchService';
 import NurseryInventoryService from './NurseryInventoryService';
 import NurseryWithdrawalService from './NurseryWithdrawalService';
+import ObservationsService from './ObservationsService';
 import OrganizationUserService from './OrganizationUserService';
 import OrganizationService from './OrganizationService';
+import PlantingsService from './PlantingsService';
 import PreferencesService from './PreferencesService';
 import SearchService from './SearchService';
 import SeedBankService from './SeedBankService';
@@ -32,8 +34,10 @@ export {
   NurseryBatchService,
   NurseryInventoryService,
   NurseryWithdrawalService,
+  ObservationsService,
   OrganizationService,
   OrganizationUserService,
+  PlantingsService,
   PreferencesService,
   SearchService,
   SeedBankService,

@@ -1,15 +1,7 @@
-import { makeStyles } from '@mui/styles';
 import React from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-
-const useStyles = makeStyles(() => ({
-  mainContent: {
-    color: '#3A4445',
-    fontSize: '16px',
-  },
-}));
 
 export interface DeleteBatchesModalProps {
   open: boolean;
@@ -18,7 +10,6 @@ export interface DeleteBatchesModalProps {
 }
 
 export default function DeleteBatchesModal(props: DeleteBatchesModalProps): JSX.Element {
-  const classes = useStyles();
   const { onClose, open, onSubmit } = props;
 
   return (
@@ -48,8 +39,7 @@ export default function DeleteBatchesModal(props: DeleteBatchesModalProps): JSX.
         />,
       ]}
       skrim={true}
-    >
-      <p className={classes.mainContent}>{strings.DELETE_SEEDLINGS_BATCHES_MSG}</p>
-    </DialogBox>
+      message={strings.DELETE_SEEDLINGS_BATCHES_MSG}
+    />
   );
 }

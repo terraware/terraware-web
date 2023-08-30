@@ -1,11 +1,12 @@
 import { Box, Theme, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import useSnackbar from 'src/utils/useSnackbar';
-import ViewPhotosModal from 'src/components/common/ViewPhotosModal';
 import ReportService, { REPORT_PHOTO_ENDPOINT } from 'src/services/ReportService';
-import { Button } from '@terraware/web-components';
+import { Button, ViewPhotosDialog } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
 import { ReportPhoto } from 'src/types/Report';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type PhotosSectionProps = {
   reportId: number;
@@ -18,17 +19,16 @@ type ReportPhotoWithUrl = ReportPhoto & { url: string };
 const useStyles = makeStyles((theme: Theme) => ({
   removePhoto: {
     position: 'absolute',
-    width: theme.spacing(3),
-    height: theme.spacing(3),
     top: -10,
     right: -10,
-    paddingBottom: 0,
     backgroundColor: theme.palette.TwClrBgDanger,
-    '& > svg': {
-      position: 'relative',
-      top: '-4px',
-      right: '4px',
-    },
+  },
+  thumbnail: {
+    margin: 'auto auto',
+    objectFit: 'contain',
+    display: 'flex',
+    maxWidth: '120px',
+    maxHeight: '120px',
   },
 }));
 
@@ -39,6 +39,7 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
   const [photosModalOpened, setPhotosModalOpened] = useState(false);
   const [selectedSlide, setSelectedSlide] = useState(0);
   const classes = useStyles();
+  const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const getPhotos = async () => {
@@ -79,22 +80,27 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
 
   return (
     <>
-      <ViewPhotosModal
-        photosUrls={photos.map((photo) => photo.url)}
+      <ViewPhotosDialog
+        photos={photos.map((photo) => ({ url: photo.url }))}
         open={photosModalOpened}
         onClose={closeHandler}
-        selectedSlide={selectedSlide}
+        initialSelectedSlide={selectedSlide}
+        nextButtonLabel={strings.NEXT}
+        prevButtonLabel={strings.PREVIOUS}
+        title={strings.PHOTOS}
       />
-      <Box display='flex' flexWrap='wrap'>
+      <Box display='flex' flexWrap='wrap' flexDirection='row'>
         {photos.map((photo, index) => (
           <Box
             key={index}
+            display='flex'
             position='relative'
-            marginRight={theme.spacing(3)}
-            marginTop={theme.spacing(2)}
-            maxWidth='400px'
-            sx={{ cursor: 'pointer' }}
+            height={122}
+            width={122}
+            marginRight={isMobile ? 2 : 3}
+            marginTop={1}
             border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+            sx={{ cursor: 'pointer' }}
           >
             {editable && (
               <Button
@@ -105,7 +111,8 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
               />
             )}
             <img
-              src={`${photo.url}?maxHeight=122&maxWidth=122`}
+              className={classes.thumbnail}
+              src={`${photo.url}?maxHeight=120&maxWidth=120`}
               alt={`${index}`}
               onClick={() => {
                 setSelectedSlide(index);

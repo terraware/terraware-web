@@ -9,13 +9,19 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 
 type OutplantWithdrawalTableProps = {
   species: Species[];
-  plotNames: Record<number, string>;
+  subzoneNames: Record<number, string>;
   delivery?: Delivery;
 };
 
+const columns = (): TableColumnType[] => [
+  { key: 'species', name: strings.SPECIES, type: 'string' },
+  { key: 'to_subzone', name: strings.TO_SUBZONE, type: 'string' },
+  { key: 'quantity', name: strings.QUANTITY, type: 'string' },
+];
+
 export default function OutplantWithdrawalTable({
   species,
-  plotNames,
+  subzoneNames,
   delivery,
 }: OutplantWithdrawalTableProps): JSX.Element {
   const { user } = useUser();
@@ -23,11 +29,6 @@ export default function OutplantWithdrawalTable({
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
-  const columns: TableColumnType[] = [
-    { key: 'species', name: strings.SPECIES, type: 'string' },
-    { key: 'to_plot', name: strings.TO_PLOT, type: 'string' },
-    { key: 'quantity', name: strings.QUANTITY, type: 'string' },
-  ];
 
   useEffect(() => {
     // get list of distinct species
@@ -36,35 +37,35 @@ export default function OutplantWithdrawalTable({
         (acc, pl) => (acc.includes(pl.speciesId) ? acc : [...acc, pl.speciesId]),
         []
       ) ?? [];
-    const speciesPlotMap: Record<number, Record<number, number>> = {};
+    const speciesSubzoneMap: Record<number, Record<number, number>> = {};
     const rows: { [p: string]: unknown }[] = [];
     for (const sp of speciesList) {
-      // for each species add the number of plants in each plot for delivery type plantings
-      speciesPlotMap[sp] = {};
+      // for each species add the number of plants in each subzone for delivery type plantings
+      speciesSubzoneMap[sp] = {};
       delivery?.plantings
         ?.filter((pl) => pl.speciesId === sp && pl.type === 'Delivery')
         .forEach((pl) => {
-          const plot = pl.plotId ?? -1;
-          if (!speciesPlotMap[sp][plot]) {
-            speciesPlotMap[sp][plot] = pl.numPlants;
+          const subzone = pl.plantingSubzoneId ?? -1;
+          if (!speciesSubzoneMap[sp][subzone]) {
+            speciesSubzoneMap[sp][subzone] = pl.numPlants;
             return;
           }
-          speciesPlotMap[sp][plot] += pl.numPlants;
+          speciesSubzoneMap[sp][subzone] += pl.numPlants;
         });
 
       // transform into table rows
-      for (const plotKey of Object.keys(speciesPlotMap[sp])) {
-        const plot = Number(plotKey);
+      for (const subzoneKey of Object.keys(speciesSubzoneMap[sp])) {
+        const subzone = Number(subzoneKey);
         rows.push({
           species: species?.find((x) => x?.id === sp)?.scientificName ?? '',
-          to_plot: plot > -1 ? plotNames[plot] ?? plot?.toString() : '',
-          quantity: numericFormatter.format(speciesPlotMap[sp][plot]),
+          to_subzone: subzone > -1 ? subzoneNames[subzone] ?? subzone?.toString() : '',
+          quantity: numericFormatter.format(speciesSubzoneMap[sp][subzone]),
         });
       }
     }
 
     setRowData(rows);
-  }, [delivery, species, plotNames, numericFormatter]);
+  }, [delivery, species, subzoneNames, numericFormatter]);
 
   return <Table id='outplant-withdrawal-table' columns={columns} rows={rowData} orderBy={'name'} />;
 }

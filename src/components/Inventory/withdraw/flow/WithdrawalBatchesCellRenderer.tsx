@@ -18,10 +18,15 @@ const useStyles = makeStyles(() => ({
     },
   },
   input: {
-    maxWidth: '88px',
+    maxWidth: '108px',
 
     '& label': {
       whiteSpace: 'break-spaces',
+    },
+  },
+  cell: {
+    '&.MuiTableCell-root': {
+      height: '76px',
     },
   },
 }));
@@ -89,7 +94,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         column={column}
         value={createLinkToBatchDetail(value)}
         row={row}
-        className={classes.text}
+        className={`${classes.text} ${classes.cell}`}
       />
     );
   }
@@ -101,7 +106,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         column={column}
         value={createQuantityInput('readyQuantityWithdrawn', 'readyQuantity')}
         row={row}
-        className={classes.text}
+        className={`${classes.text} ${classes.cell}`}
       />
     );
   }
@@ -113,7 +118,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         column={column}
         value={createQuantityInput('notReadyQuantityWithdrawn', 'notReadyQuantity')}
         row={row}
-        className={classes.text}
+        className={`${classes.text} ${classes.cell}`}
       />
     );
   }
@@ -141,7 +146,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         column={column}
         value={createReadyOutplantInput(value)}
         row={row}
-        className={classes.text}
+        className={`${classes.text} ${classes.cell}`}
       />
     );
   }

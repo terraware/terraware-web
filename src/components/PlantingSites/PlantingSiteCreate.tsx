@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import TfMain from 'src/components/common/TfMain';
 import { Typography, Box, Container, Grid, useTheme } from '@mui/material';
 import strings from 'src/strings';
@@ -9,52 +10,61 @@ import { APP_PATHS } from 'src/constants';
 import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { useEffect, useState } from 'react';
+import { useAppSelector } from 'src/redux/store';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import PageSnackbar from '../PageSnackbar';
 import { PlantingSite } from 'src/types/Tracking';
-import BoundariesAndPlots from './BoundariesAndPlots';
+import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import { PlantingSiteId } from 'src/services/TrackingService';
+import Card from 'src/components/common/Card';
+import isEnabled from 'src/features';
+import { getMonth } from 'src/utils/dateFormatter';
+import { useLocalization } from 'src/providers';
+import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';
+import { makeStyles } from '@mui/styles';
+import { MultiPolygon } from 'geojson';
+import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
 
 type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
 };
 
+const useStyles = makeStyles(() => ({
+  form: {
+    display: 'flex',
+    flexGrow: 1,
+  },
+}));
+
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const classes = useStyles();
   const { reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const snackbar = useSnackbar();
   const [nameError, setNameError] = useState('');
-  const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [loaded, setLoaded] = useState(false);
+  const trackingV2 = isEnabled('TrackingV2');
+  const selectedPlantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
     name: '',
+    organizationId: selectedOrganization.id,
   });
 
-  useEffect(() => {
-    const fetchPlantingSite = async () => {
-      if (plantingSiteId) {
-        const serverResponse = await TrackingService.getPlantingSite(Number.parseInt(plantingSiteId, 10));
-        if (serverResponse.requestSucceeded) {
-          setSelectedPlantingSite(serverResponse.site);
-          setLoaded(true);
-        }
-      } else {
-        setLoaded(true);
-      }
-    };
-
-    fetchPlantingSite();
-  }, [plantingSiteId, selectedOrganization]);
   const [record, setRecord, onChange] = useForm<PlantingSite>(defaultPlantingSite());
+
+  useEffect(() => {
+    setLoaded(true);
+  }, [selectedPlantingSite]);
 
   useEffect(() => {
     setRecord({
@@ -64,8 +74,9 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       boundary: selectedPlantingSite?.boundary,
       plantingZones: selectedPlantingSite?.plantingZones,
       timeZone: selectedPlantingSite?.timeZone,
+      organizationId: selectedOrganization.id,
     });
-  }, [selectedPlantingSite, setRecord]);
+  }, [selectedPlantingSite, setRecord, selectedOrganization.id]);
 
   const goToPlantingSite = (id?: number) => {
     const plantingSitesLocation = {
@@ -86,8 +97,9 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       const newPlantingSite: PlantingSitePostRequestBody = {
         name: record.name,
         description: record.description,
-        organizationId: selectedOrganization.id,
+        organizationId: record.organizationId,
         timeZone: record.timeZone,
+        boundary: record.boundary,
       };
       response = await TrackingService.createPlantingSite(newPlantingSite);
       id = (response as PlantingSiteId).id;
@@ -96,6 +108,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         name: record.name,
         description: record.description,
         timeZone: record.timeZone,
+        boundary: record.boundary,
       };
       response = await TrackingService.updatePlantingSite(record.id, updatedPlantingSite);
     }
@@ -118,6 +131,15 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     });
   };
 
+  const onBoundaryChanged = (newBoundary: MultiPolygon | null) => {
+    setRecord((previousRecord: PlantingSite): PlantingSite => {
+      return {
+        ...previousRecord,
+        boundary: (newBoundary as any) || undefined,
+      };
+    });
+  };
+
   const gridSize = () => {
     if (isMobile) {
       return 12;
@@ -132,14 +154,15 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         saveID='saveCreatePlantingSite'
         onCancel={() => goToPlantingSite(record.id)}
         onSave={savePlantingSite}
+        className={classes.form}
       >
-        <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
           {loaded && (
             <>
               <Grid
                 container
                 spacing={3}
-                flexGrow={0}
+                flexGrow={1}
                 display='flex'
                 flexDirection='column'
                 marginTop={theme.spacing(3)}
@@ -159,14 +182,8 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                   </Typography>
                 </Box>
                 <PageSnackbar />
-                <Box
-                  sx={{
-                    backgroundColor: theme.palette.TwClrBg,
-                    borderRadius: '32px',
-                    padding: theme.spacing(3),
-                  }}
-                >
-                  <Grid container spacing={3} flexGrow={0}>
+                <Card flushMobile style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                  <Grid container display='flex' spacing={3} flexGrow={0}>
                     <Grid item xs={gridSize()}>
                       <TextField
                         id='name'
@@ -193,10 +210,42 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                         tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
                       />
                     </Grid>
+                    {trackingV2 && selectedPlantingSite && (
+                      <>
+                        <Grid item xs={gridSize()} marginTop={isMobile ? 1 : 0}>
+                          <TextField
+                            label={strings.PLANTING_SEASON_START}
+                            id='planting-season-start'
+                            type='text'
+                            value={getMonth(selectedPlantingSite?.plantingSeasonStartMonth, activeLocale)}
+                            display={true}
+                          />
+                        </Grid>
+                        <Grid item xs={gridSize()}>
+                          <TextField
+                            label={strings.PLANTING_SEASON_END}
+                            id='planting-season-end'
+                            type='text'
+                            value={getMonth(selectedPlantingSite?.plantingSeasonEndMonth, activeLocale)}
+                            display={true}
+                          />
+                        </Grid>
+                      </>
+                    )}
                   </Grid>
-                </Box>
+                  <Grid container flexGrow={1}>
+                    <Grid item xs={12} display='flex'>
+                      {record?.plantingZones ? (
+                        <BoundariesAndZones plantingSite={record} />
+                      ) : isEnabled('Simple Map Editor') ? (
+                        <PlantingSiteMapEditor onBoundaryChanged={onBoundaryChanged} plantingSite={record} />
+                      ) : (
+                        record.boundary && <SimplePlantingSite plantingSite={record} />
+                      )}
+                    </Grid>
+                  </Grid>
+                </Card>
               </Grid>
-              {record?.boundary && <BoundariesAndPlots plantingSite={record} />}
             </>
           )}
         </Container>

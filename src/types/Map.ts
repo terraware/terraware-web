@@ -1,5 +1,7 @@
 // flattened info for shapes relating to planting site data
 
+import mapboxgl from 'mapbox-gl';
+
 export type MapGeometry = number[][][][];
 
 /**
@@ -44,9 +46,14 @@ export type MapAnnotation = {
   textColor: string;
 };
 
+export type MapPatternFill = {
+  imageName: string;
+  opacityExpression?: any[];
+};
+
 /**
  * A renderable map entity
- * eg. site, zone, plot
+ * eg. site, zone, subzone
  */
 export type MapEntity = {
   properties: MapSourceProperties;
@@ -69,6 +76,7 @@ export type MapSource = MapSourceBaseData & {
   highlightFillColor?: string;
   hoverFillColor?: string;
   selectFillColor?: string;
+  patternFill?: MapPatternFill;
 };
 
 export type MapBoundingBox = {
@@ -88,6 +96,7 @@ export type MapPopupRenderer = {
   render: (properties: MapSourceProperties) => JSX.Element;
   style?: object;
   className?: string;
+  anchor?: mapboxgl.Anchor;
 };
 
 /**
@@ -95,13 +104,23 @@ export type MapPopupRenderer = {
  */
 export type MapEntityId = {
   id?: number; // id of entity, undefined for unknown
-  sourceId: string; // source type of entity 'plot', 'zone', 'site', etc.
+  sourceId: string; // source type of entity 'subzone', 'zone', 'site', etc.
 };
 
 /**
  * map entity options
  */
 export type MapEntityOptions = {
-  highlight?: MapEntityId;
-  focus?: MapEntityId;
+  highlight?: MapEntityId[];
+  focus?: MapEntityId[];
 };
+
+/**
+ * Types of objects that can be added to MapData
+ */
+export type MapObject = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot';
+
+/**
+ * Sources for a map
+ */
+export type MapData = Record<MapObject, MapSourceBaseData | undefined>;

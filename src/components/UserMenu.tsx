@@ -1,29 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from '../../src/strings';
-import Icon from './common/icon/Icon';
-import { APP_PATHS, TERRAFORMATION_PRIVACY_POLICY } from 'src/constants';
-import { IconButton, Theme } from '@mui/material';
+import { APP_PATHS } from 'src/constants';
+import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useEnvironment from 'src/utils/useEnvironment';
-import PopoverMenu from './common/PopoverMenu';
-import { DropdownItem } from '@terraware/web-components';
+import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 import { useUser } from 'src/providers';
+import { useDocLinks } from 'src/docLinks';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  iconContainer: {
-    height: '48px',
-    borderRadius: '16px',
-    padding: theme.spacing(1.5, 2),
-  },
-  icon: {
-    width: '32px',
-    height: '32px',
-  },
-  chevronDown: {
-    marginLeft: '8px',
-    fill: theme.palette.TwClrIcn,
-  },
   userName: {
     fontSize: '16px',
     paddingLeft: '8px',
@@ -34,19 +20,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 type UserMenuProps = {
   hasOrganizations?: boolean;
 };
+
 export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Element {
   const classes = useStyles();
   const { user } = useUser();
   const { isProduction } = useEnvironment();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const history = useHistory();
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const docLinks = useDocLinks();
 
   const onHandleLogout = () => {
     window.location.href = `/sso/logout`;
@@ -55,17 +35,14 @@ export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Eleme
   const onItemClick = (selectedItem: DropdownItem) => {
     switch (selectedItem.value) {
       case 'privacyPolicy': {
-        handleClose();
-        window.open(TERRAFORMATION_PRIVACY_POLICY, '_blank');
+        window.open(docLinks.privacy_policy, '_blank');
         break;
       }
       case 'logOut': {
-        handleClose();
         onHandleLogout();
         break;
       }
       default: {
-        handleClose();
         history.push(selectedItem.value);
         break;
       }
@@ -87,19 +64,14 @@ export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Eleme
   };
 
   return (
-    <div>
-      <IconButton onClick={handleClick} size='small' className={classes.iconContainer}>
+    <PopoverMenu
+      anchor={
         <span className={classes.userName}>
           {user?.firstName} {user?.lastName}
         </span>
-        <Icon name='chevronDown' size='medium' className={classes.chevronDown} />
-      </IconButton>
-      <PopoverMenu
-        sections={[getMenuItems()]}
-        handleClick={onItemClick}
-        anchorElement={anchorEl}
-        setAnchorElement={setAnchorEl}
-      />
-    </div>
+      }
+      menuSections={[getMenuItems()]}
+      onClick={onItemClick}
+    />
   );
 }

@@ -18,7 +18,7 @@ import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import { useTimeZones } from 'src/providers/hooks';
+import { useTimeZones } from 'src/providers';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -53,6 +53,12 @@ type SeedBanksListProps = {
   organization: Organization;
 };
 
+const columns = (): TableColumnType[] => [
+  { key: 'name', name: strings.NAME, type: 'string' },
+  { key: 'description', name: strings.DESCRIPTION, type: 'string' },
+  { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
+];
+
 export default function SeedBanksList({ organization }: SeedBanksListProps): JSX.Element {
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
@@ -64,11 +70,6 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   const [results, setResults] = useState<Facility[]>([]);
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
-  const columns: TableColumnType[] = [
-    { key: 'name', name: strings.NAME, type: 'string' },
-    { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-    { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
-  ];
 
   const goToNewSeedBank = () => {
     const newSeedBankLocation = {

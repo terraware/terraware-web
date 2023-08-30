@@ -5,6 +5,7 @@ import React from 'react';
 import strings from 'src/strings';
 import Button from '../common/button/Button';
 import DialogBox from '../common/DialogBox/DialogBox';
+import { useLocalization } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spacing: {
@@ -66,36 +67,34 @@ export const LearnMoreLink = (props: { onClick: () => void }): JSX.Element => {
   );
 };
 
-export const LearnMoreModalContentGrowthForm = (): JSX.Element => (
-  <>
-    <p>
-      <strong>{strings.FERN}:</strong> {strings.LEARN_MORE_GROWTH_FORM_FERN}
-    </p>
-    <p>
-      <strong>{strings.GRAMINOID}:</strong> {strings.LEARN_MORE_GROWTH_FORM_GRAMINOID}
-    </p>
-    <p>
-      <strong>{strings.FORB}:</strong> {strings.LEARN_MORE_GROWTH_FORM_FORB}
-    </p>
-    <p>
-      <strong>{strings.SHRUB}:</strong> {strings.LEARN_MORE_GROWTH_FORM_SHRUB}
-    </p>
-    <p>
-      <strong>{strings.TREE}:</strong> {strings.LEARN_MORE_GROWTH_FORM_TREE}
-    </p>
-  </>
-);
+export const LearnMoreModalContentGrowthForm = (): JSX.Element => {
+  const { activeLocale } = useLocalization();
+  const collator = new Intl.Collator(activeLocale || undefined);
 
-export const LearnMoreModalContentConservationStatus = (): JSX.Element => (
-  <>
-    <p>
-      <strong>{strings.ENDANGERED}:</strong> {strings.LEARN_MORE_CONSERVATION_STATUS_ENDANGERED}
-    </p>
-    <p>
-      <strong>{strings.RARE}:</strong> {strings.LEARN_MORE_CONSERVATION_STATUS_RARE}
-    </p>
-  </>
-);
+  const elements: JSX.Element[] = [
+    [strings.FERN, strings.LEARN_MORE_GROWTH_FORM_FERN],
+    [strings.GRAMINOID, strings.LEARN_MORE_GROWTH_FORM_GRAMINOID],
+    [strings.FORB, strings.LEARN_MORE_GROWTH_FORM_FORB],
+    [strings.SHRUB, strings.LEARN_MORE_GROWTH_FORM_SHRUB],
+    [strings.TREE, strings.LEARN_MORE_GROWTH_FORM_TREE],
+    [strings.FUNGUS, strings.LEARN_MORE_GROWTH_FORM_FUNGUS],
+    [strings.LICHEN, strings.LEARN_MORE_GROWTH_FORM_LICHEN],
+    [strings.MOSS, strings.LEARN_MORE_GROWTH_FORM_MOSS],
+    [strings.VINE, strings.LEARN_MORE_GROWTH_FORM_VINE],
+    [strings.LIANA, strings.LEARN_MORE_GROWTH_FORM_LIANA],
+    [strings.SHRUB_TREE, strings.LEARN_MORE_GROWTH_FORM_SHRUB_TREE],
+    [strings.SUBSHRUB, strings.LEARN_MORE_GROWTH_FORM_SUBSHRUB],
+    [strings.MULTIPLE_FORMS, strings.LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS],
+  ]
+    .sort((a, b) => collator.compare(a[0], b[0]))
+    .map(([name, description], index) => (
+      <p key={`growthForm-${index}`}>
+        <strong>{name}:</strong> {description}
+      </p>
+    ));
+
+  return <>{elements}</>;
+};
 
 export const LearnMoreModalContentSeedStorageBehavior = (): JSX.Element => (
   <>
@@ -107,6 +106,12 @@ export const LearnMoreModalContentSeedStorageBehavior = (): JSX.Element => (
     </p>
     <p>
       <strong>{strings.RECALCITRANT}:</strong> {strings.LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT}
+    </p>
+    <p>
+      <strong>
+        {strings.LIKELY_INTERMEDIATE} / {strings.LIKELY_ORTHODOX} / {strings.LIKELY_RECALCITRANT}:
+      </strong>
+      {' ' + strings.LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY}
     </p>
   </>
 );

@@ -4,12 +4,12 @@ import strings from 'src/strings';
 export type Species = {
   id: number;
   commonName?: string;
-  endangered?: boolean;
+  conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
   familyName?: string;
-  growthForm?: 'Tree' | 'Shrub' | 'Forb' | 'Graminoid' | 'Fern';
+  growthForm?: GrowthForm;
   scientificName: string;
   rare?: boolean;
-  seedStorageBehavior?: 'Orthodox' | 'Recalcitrant' | 'Intermediate' | 'Unknown';
+  seedStorageBehavior?: SeedStorageBehavior;
   problems?: SpeciesProblemElement[];
   ecosystemTypes?: EcosystemType[];
 };
@@ -30,6 +30,30 @@ export type EcosystemType =
   | 'Tropical and subtropical moist broad leaf forests'
   | 'Tundra';
 
+export type GrowthForm =
+  | 'Tree'
+  | 'Shrub'
+  | 'Forb'
+  | 'Graminoid'
+  | 'Fern'
+  | 'Fungus'
+  | 'Lichen'
+  | 'Moss'
+  | 'Vine'
+  | 'Liana'
+  | 'Shrub/Tree'
+  | 'Subshrub'
+  | 'Multiple Forms';
+
+export type SeedStorageBehavior =
+  | 'Intermediate'
+  | 'Likely Intermediate'
+  | 'Likely Orthodox'
+  | 'Likely Recalcitrant'
+  | 'Orthodox'
+  | 'Recalcitrant'
+  | 'Unknown';
+
 export type SpeciesProblemElement = {
   id: number;
   field: 'Scientific Name';
@@ -38,14 +62,38 @@ export type SpeciesProblemElement = {
   suggestedValue?: string;
 };
 
-export function growthForms(useLocalizedValues = false) {
+export function conservationCategories() {
   return [
-    { label: strings.TREE, value: useLocalizedValues ? strings.TREE : 'Tree' },
-    { label: strings.SHRUB, value: useLocalizedValues ? strings.SHRUB : 'Shrub' },
-    { label: strings.FORB, value: useLocalizedValues ? strings.FORB : 'Forb' },
-    { label: strings.GRAMINOID, value: useLocalizedValues ? strings.GRAMINOID : 'Graminoid' },
-    { label: strings.FERN, value: useLocalizedValues ? strings.FERN : 'Fern' },
+    { label: strings.IUCN_EXTINCT, value: 'EX' },
+    { label: strings.IUCN_EXTINCT_IN_THE_WILD, value: 'EW' },
+    { label: strings.IUCN_CRITICALLY_ENDANGERED, value: 'CR' },
+    { label: strings.IUCN_ENDANGERED, value: 'EN' },
+    { label: strings.IUCN_VULNERABLE, value: 'VU' },
+    { label: strings.IUCN_NEAR_THREATENED, value: 'NT' },
+    { label: strings.IUCN_LEAST_CONCERN, value: 'LC' },
+    { label: strings.IUCN_DATA_DEFICIENT, value: 'DD' },
+    { label: strings.IUCN_NOT_EVALUATED, value: 'NE' },
   ];
+}
+
+export function growthForms(activeLocale: string | null) {
+  const collator = new Intl.Collator(activeLocale || undefined);
+
+  return [
+    { label: strings.FERN, value: 'Fern' },
+    { label: strings.FORB, value: 'Forb' },
+    { label: strings.FUNGUS, value: 'Fungus' },
+    { label: strings.GRAMINOID, value: 'Graminoid' },
+    { label: strings.LIANA, value: 'Liana' },
+    { label: strings.LICHEN, value: 'Lichen' },
+    { label: strings.MOSS, value: 'Moss' },
+    { label: strings.MULTIPLE_FORMS, value: 'Multiple Forms' },
+    { label: strings.SHRUB, value: 'Shrub' },
+    { label: strings.SHRUB_TREE, value: 'Shrub/Tree' },
+    { label: strings.SUBSHRUB, value: 'Subshrub' },
+    { label: strings.TREE, value: 'Tree' },
+    { label: strings.VINE, value: 'Vine' },
+  ].sort((a, b) => collator.compare(a.label, b.label));
 }
 
 export function storageBehaviors(useLocalizedValues = false) {
@@ -53,14 +101,16 @@ export function storageBehaviors(useLocalizedValues = false) {
     { label: strings.ORTHODOX, value: useLocalizedValues ? strings.ORTHODOX : 'Orthodox' },
     { label: strings.RECALCITRANT, value: useLocalizedValues ? strings.RECALCITRANT : 'Recalcitrant' },
     { label: strings.INTERMEDIATE, value: useLocalizedValues ? strings.INTERMEDIATE : 'Intermediate' },
+    { label: strings.LIKELY_ORTHODOX, value: useLocalizedValues ? strings.LIKELY_ORTHODOX : 'Likely Orthodox' },
+    {
+      label: strings.LIKELY_RECALCITRANT,
+      value: useLocalizedValues ? strings.LIKELY_RECALCITRANT : 'Likely Recalcitrant',
+    },
+    {
+      label: strings.LIKELY_INTERMEDIATE,
+      value: useLocalizedValues ? strings.LIKELY_INTERMEDIATE : 'Likely Intermediate',
+    },
     { label: strings.UNKNOWN, value: useLocalizedValues ? strings.UNKNOWN : 'Unknown' },
-  ];
-}
-
-export function conservationStatuses() {
-  return [
-    { label: strings.RARE, value: 'Rare' },
-    { label: strings.ENDANGERED, value: 'Endangered' },
   ];
 }
 
@@ -102,41 +152,33 @@ export function getGrowthFormString(species: Species) {
         return strings.FERN;
       case 'Forb':
         return strings.FORB;
+      case 'Fungus':
+        return strings.FUNGUS;
       case 'Graminoid':
         return strings.GRAMINOID;
+      case 'Liana':
+        return strings.LIANA;
+      case 'Lichen':
+        return strings.LICHEN;
+      case 'Moss':
+        return strings.MOSS;
+      case 'Multiple Forms':
+        return strings.MULTIPLE_FORMS;
       case 'Shrub':
         return strings.SHRUB;
+      case 'Shrub/Tree':
+        return strings.SHRUB_TREE;
+      case 'Subshrub':
+        return strings.SUBSHRUB;
       case 'Tree':
         return strings.TREE;
+      case 'Vine':
+        return strings.VINE;
     }
   } else {
     return undefined;
   }
 }
-
-export function getSeedStorageBehaviorString(species: Species) {
-  if (species.seedStorageBehavior) {
-    switch (species.seedStorageBehavior) {
-      case 'Intermediate':
-        return strings.INTERMEDIATE;
-      case 'Orthodox':
-        return strings.ORTHODOX;
-      case 'Recalcitrant':
-        return strings.RECALCITRANT;
-      case 'Unknown':
-        return strings.UNKNOWN;
-    }
-  } else {
-    return undefined;
-  }
-}
-
-export const getEcosystemTypesString = (species: Species) => {
-  const result =
-    species.ecosystemTypes?.map((et) => ecosystemTypes().find((obj) => obj.label === et)?.value ?? '') ?? [];
-
-  return result.filter((str) => str !== '');
-};
 
 export type SpeciesWithScientificName = Species & {
   scientificName?: string;

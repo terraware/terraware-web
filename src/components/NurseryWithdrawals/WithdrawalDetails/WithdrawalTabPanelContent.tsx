@@ -10,7 +10,7 @@ import WithdrawalOverview from './WithdrawalOverview';
 
 type WithdrawalTabPanelContentProps = {
   species: Species[];
-  plotNames: Record<number, string>;
+  plantingSubzoneNames: Record<number, string>;
   withdrawal?: NurseryWithdrawal;
   withdrawalSummary?: WithdrawalSummary;
   delivery?: Delivery;
@@ -19,7 +19,7 @@ type WithdrawalTabPanelContentProps = {
 
 export default function WithdrawalTabPanelContent({
   species,
-  plotNames,
+  plantingSubzoneNames,
   withdrawal,
   withdrawalSummary,
   delivery,
@@ -33,7 +33,7 @@ export default function WithdrawalTabPanelContent({
       </Typography>
       <WithdrawalOverview withdrawal={withdrawal} withdrawalSummary={withdrawalSummary} />
       <Box marginTop={theme.spacing(3)}>
-        <OutplantWithdrawalTable species={species} plotNames={plotNames} delivery={delivery} />
+        <OutplantWithdrawalTable species={species} subzoneNames={plantingSubzoneNames} delivery={delivery} />
       </Box>
       <Box marginTop={theme.spacing(3)}>
         <Photos withdrawalId={withdrawal?.id} />

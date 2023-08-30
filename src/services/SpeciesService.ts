@@ -1,5 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
+import HttpService, { Response, ServerData } from './HttpService';
 import { Species, SpeciesDetails } from 'src/types/Species';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 
@@ -54,7 +54,8 @@ type UpdateSpeciesRequestPayload =
 type SpeciesResponsePayload = paths[typeof SPECIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type SpeciesIdResponsePayload =
   paths[typeof SPECIES_ID_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-type SpeciesDetailsResponsePayload = { speciesDetails: SpeciesDetails; status?: 'ok' | 'error' };
+type SpeciesDetailsResponsePayload =
+  paths[typeof SPECIES_DETAILS_ENDPOINT]['get']['responses'][200]['content']['application/json'] & ServerData;
 type SpeciesNamesResponsePayload =
   paths[typeof SPECIES_NAMES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
@@ -70,7 +71,7 @@ const createSpecies = async (species: Omit<Species, 'id'>, organizationId: numbe
   const entity: CreateSpeciesRequestPayload = {
     ecosystemTypes: species.ecosystemTypes,
     commonName: species.commonName,
-    endangered: species.endangered,
+    conservationCategory: species.conservationCategory,
     familyName: species.familyName,
     growthForm: species.growthForm,
     organizationId,
@@ -112,7 +113,7 @@ const updateSpecies = async (species: Species, organizationId: number): Promise<
   const entity: UpdateSpeciesRequestPayload = {
     ecosystemTypes: species.ecosystemTypes,
     commonName: species.commonName,
-    endangered: species.endangered,
+    conservationCategory: species.conservationCategory,
     familyName: species.familyName,
     growthForm: species.growthForm,
     organizationId,
@@ -215,7 +216,7 @@ const resolveSpeciesUpload = async (uploadId: number, overwriteExisting: boolean
     urlReplacements: {
       '{uploadId}': uploadId.toString(),
     },
-    params: { overwriteExisting: overwriteExisting.toString() },
+    entity: { overwriteExisting: overwriteExisting.toString() },
   });
 };
 
@@ -253,7 +254,7 @@ const getSpeciesDetails = async (scientificName: string): Promise<SpeciesDetails
     {
       params,
     },
-    (data) => ({ speciesDetails: data?.speciesDetails })
+    (data) => ({ speciesDetails: data })
   );
 
   return response;

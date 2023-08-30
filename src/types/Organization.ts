@@ -12,6 +12,7 @@ export type Organization = {
   createdTime?: string;
   totalUsers: number;
   timeZone?: string;
+  canSubmitReports?: boolean;
 };
 
 export type HighOrganizationRoles = 'Admin' | 'Owner';
@@ -21,10 +22,6 @@ export const HighOrganizationRolesValues = ['Admin', 'Owner'];
 // Manager role included here so we don't get type issues with the server response,
 // which could contain a user with a manger role.
 export type OrganizationRole = HighOrganizationRoles | 'Contributor' | 'Manager';
-
-export interface SelectedOrgInfo {
-  selectedFacility?: Facility;
-}
 
 export function roleName(role: OrganizationRole) {
   switch (role) {

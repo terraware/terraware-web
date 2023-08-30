@@ -2,11 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Grid, useTheme } from '@mui/material';
 import { PlantingSite } from 'src/types/Tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import SpeciesByPlotChart from './SpeciesByPlotChart';
+import { BusySpinner } from '@terraware/web-components';
+import SpeciesBySubzoneChart from 'src/components/Plants/SpeciesBySubzoneChart';
 import TotalCount from './TotalCount';
 import PlantingSiteDashboardMap from './PlantingSiteDashboardMap';
 import PlantBySpeciesChart from './PlantBySpeciesChart';
-import BusySpinner from 'src/components/common/BusySpinner';
 import { useOrganization } from 'src/providers';
 import { Population, PlantingSiteZone } from 'src/types/PlantingSite';
 import { TrackingService } from 'src/services';
@@ -33,7 +33,7 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
   const [plantsBySpecies, setPlantsBySpecies] = useState<{ [key: string]: number }>();
   const [zonesWithPlants, setZonesWithPlants] = useState<PlantingSiteZone[]>();
   const [hasZones, setHasZones] = useState<boolean>(false);
-  const [selectedPlotId, setSelectedPlotId] = useState<number | undefined>();
+  const [selectedSubzoneId, setSelectedSubzoneId] = useState<number | undefined>();
   const [selectedZoneId, setSelectedZoneId] = useState<number | undefined>();
 
   const widgetCardStyle = {
@@ -60,13 +60,13 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
 
         if (serverResponse) {
           const validZones = serverResponse
-            .filter((zone) => zone.plots?.some((plot) => plot?.populations?.length > 0))
+            .filter((zone) => zone.plantingSubzones?.some((subzone) => subzone?.populations?.length > 0))
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((zone) => {
-              const plots = zone?.plots
-                ?.filter((plot) => plot?.populations?.length > 0)
+              const subzones = zone?.plantingSubzones
+                ?.filter((subzone) => subzone?.populations?.length > 0)
                 .sort((a, b) => a.fullName.localeCompare(b.fullName));
-              return { ...zone, plots };
+              return { ...zone, subzones };
             });
 
           setZonesWithPlants(validZones);
@@ -109,19 +109,19 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
     populateTotals();
   }, [plantingSite, selectedOrganization]);
 
-  const plotsWithPlants = useMemo(() => {
+  const subzonesWithPlants = useMemo(() => {
     if (!zonesWithPlants) {
       return [];
     }
-    return zonesWithPlants.flatMap((zone) => zone.plots);
+    return zonesWithPlants.flatMap((zone) => zone.plantingSubzones);
   }, [zonesWithPlants]);
 
   if (fetchingPlants || fetchingZones) {
     return <BusySpinner />;
   }
 
-  // if we have a site without zones/plots,
-  // show information relevant to site (skip zone/plot related cards)
+  // if we have a site without zones/subzones,
+  // show information relevant to site (skip zone/subzone related cards)
   if (plantingSite && !hasZones) {
     return (
       <Grid container display='flex' flexGrow={1}>
@@ -143,9 +143,9 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
     <Grid container display='flex' flexGrow={1}>
       <Grid item xs={isMobile ? 12 : 8} sx={mapCardStyle}>
         <PlantingSiteDashboardMap
-          plots={plotsWithPlants}
+          subzones={subzonesWithPlants}
           siteId={plantingSite?.id}
-          selectedPlotId={selectedPlotId}
+          selectedSubzoneId={selectedSubzoneId}
           selectedZoneId={selectedZoneId}
         />
       </Grid>
@@ -158,12 +158,12 @@ export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JS
         </Box>
         {(!plantingSite || hasZones) && (
           <Box sx={{ ...widgetCardStyle, minHeight: '240px' }}>
-            <SpeciesByPlotChart
+            <SpeciesBySubzoneChart
               siteId={plantingSite?.id}
               zones={zonesWithPlants}
               plantsDashboardPreferences={plantsDashboardPreferences}
               setPlantsDashboardPreferences={setPlantsDashboardPreferences}
-              setSelectedPlotId={(id?: number) => setSelectedPlotId(id)}
+              setSelectedSubzoneId={(id?: number) => setSelectedSubzoneId(id)}
               setSelectedZoneId={(id?: number) => setSelectedZoneId(id)}
             />
           </Box>

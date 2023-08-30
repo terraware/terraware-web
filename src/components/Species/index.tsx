@@ -1,27 +1,19 @@
-import { Box, Container, Grid, Popover, Theme } from '@mui/material';
+import { Container, Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
 import Button from 'src/components/common/button/Button';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import Table from 'src/components/common/table';
+import { OrderPreserveableTable as Table } from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
-import speciesAtom from 'src/state/species';
 import strings from 'src/strings';
-import {
-  EcosystemType,
-  getEcosystemTypesString,
-  getGrowthFormString,
-  getSeedStorageBehaviorString,
-  Species,
-} from 'src/types/Species';
+import { Species } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../common/Textfield/Textfield';
 import SearchService, { SearchRequestPayload } from 'src/services/SearchService';
-import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { FieldNodePayload, FieldOptionsMap, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
 import ImportSpeciesModal from './ImportSpeciesModal';
@@ -33,21 +25,22 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import { isContributor } from 'src/utils/organization';
 import TooltipLearnMoreModal, {
-  LearnMoreModalContentConservationStatus,
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,
   LearnMoreLink,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import PopoverMenu from '../common/PopoverMenu';
 import { DropdownItem, SortOrder } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
-import { isTrue } from 'src/utils/boolean';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
-import { FieldOptionsMap } from 'src/services/NurseryWithdrawalService';
 import { SpeciesService } from 'src/services';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import _ from 'lodash';
+import useQuery from 'src/utils/useQuery';
+import { useHistory } from 'react-router';
+import { APP_PATHS } from 'src/constants';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -94,7 +87,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   searchBar: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: '16px',
+  },
+  pillList: {
+    display: 'flex',
+    alightItems: 'center',
+    marginTop: '16px',
   },
   icon: {
     fill: theme.palette.TwClrIcnSecondary,
@@ -106,19 +103,42 @@ const useStyles = makeStyles((theme: Theme) => ({
     '& .MuiPaper-root': {
       border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
       borderRadius: '8px',
-      width: '320px',
+      width: '480px',
     },
   },
 }));
 
-type SpeciesSearchResultRow = Omit<Species, 'growthForm' | 'seedStorageBehavior' | 'ecosystemTypes'> & {
-  conservationStatus?: string;
+type SpeciesSearchResultRow = Omit<
+  Species,
+  'growthForm' | 'seedStorageBehavior' | 'ecosystemTypes' | 'conservationCategory' | 'rare'
+> & {
+  conservationCategory?: string;
   growthForm?: string;
+  rare?: string;
   seedStorageBehavior?: string;
   ecosystemTypes?: string[];
 };
 
-const BE_SORTED_FIELDS = ['scientificName', 'commonName', 'familyName', 'growthForm', 'seedStorageBehavior'];
+const BE_SORTED_FIELDS = [
+  'scientificName',
+  'commonName',
+  'conservationCategory',
+  'familyName',
+  'growthForm',
+  'seedStorageBehavior',
+];
+
+// These need to be in the same order as in the import template.
+const CSV_FIELDS = [
+  'scientificName',
+  'commonName',
+  'familyName',
+  'conservationCategory',
+  'rare',
+  'growthForm',
+  'seedStorageBehavior',
+  'ecosystemTypes.ecosystemType',
+];
 
 export default function SpeciesList({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -130,10 +150,11 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const snackbar = useSnackbar();
-  const [speciesState, setSpeciesState] = useRecoilState(speciesAtom);
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
+  const query = useQuery();
+  const history = useHistory();
 
   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -147,7 +168,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const { activeLocale } = useLocalization();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
     field: 'scientificName',
-    direction: 'Descending',
+    direction: 'Ascending',
   } as SearchSortOrder);
 
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
@@ -160,21 +181,6 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   };
   const handleTooltipLearnMoreModalClose = () => {
     setTooltipLearnMoreModalOpen(false);
-  };
-
-  const getConservationStatusString = (result: { [key: string]: unknown }) => {
-    const endangered = isTrue(result.endangered);
-    const rare = isTrue(result.rare);
-
-    if (endangered && rare) {
-      return strings.RARE_ENDANGERED;
-    } else if (endangered) {
-      return strings.ENDANGERED;
-    } else if (rare) {
-      return strings.RARE;
-    } else {
-      return '';
-    }
   };
 
   const columns: TableColumnType[] = React.useMemo(() => {
@@ -203,6 +209,29 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY,
       },
       {
+        key: 'conservationCategory',
+        name: strings.CONSERVATION_CATEGORY,
+        type: 'string',
+        tooltipTitle: (
+          <>
+            {`${strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY} `}
+            <a
+              target='_blank'
+              rel='noopener noreferrer'
+              href='https://www.iucnredlist.org/resources/categories-and-criteria'
+            >
+              {strings.LEARN_MORE}
+            </a>
+          </>
+        ),
+      },
+      {
+        key: 'rare',
+        name: strings.RARE,
+        type: 'boolean',
+        tooltipTitle: strings.TOOLTIP_SPECIES_RARE,
+      },
+      {
         key: 'growthForm',
         name: strings.GROWTH_FORM,
         type: 'string',
@@ -214,24 +243,6 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
                 openTooltipLearnMoreModal({
                   title: strings.GROWTH_FORM,
                   content: <LearnMoreModalContentGrowthForm />,
-                })
-              }
-            />
-          </>
-        ),
-      },
-      {
-        key: 'conservationStatus',
-        name: strings.CONSERVATION_STATUS,
-        type: 'string',
-        tooltipTitle: (
-          <>
-            {strings.TOOLTIP_SPECIES_CONSERVATION_STATUS}
-            <LearnMoreLink
-              onClick={() =>
-                openTooltipLearnMoreModal({
-                  title: strings.CONSERVATION_STATUS,
-                  content: <LearnMoreModalContentConservationStatus />,
                 })
               }
             />
@@ -277,13 +288,17 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   }, [activeLocale]);
 
   const filterColumns = useMemo<FilterField[]>(
-    () => [
-      { name: 'growthForm', label: strings.GROWTH_FORM, type: 'multiple_selection' },
-      { name: 'conservationStatus', label: strings.CONSERVATION_STATUS, type: 'multiple_selection' },
-      { name: 'seedStorageBehavior', label: strings.SEED_STORAGE_BEHAVIOR, type: 'multiple_selection' },
-      { name: 'ecosystemTypes.ecosystemType', label: strings.ECOSYSTEM_TYPE, type: 'multiple_selection' },
-    ],
-    []
+    () =>
+      activeLocale
+        ? [
+            { name: 'growthForm', label: strings.GROWTH_FORM, type: 'multiple_selection' },
+            { name: 'conservationCategory', label: strings.CONSERVATION_CATEGORY, type: 'multiple_selection' },
+            { name: 'rare', label: strings.RARE, type: 'multiple_selection' },
+            { name: 'seedStorageBehavior', label: strings.SEED_STORAGE_BEHAVIOR, type: 'multiple_selection' },
+            { name: 'ecosystemTypes.ecosystemType', label: strings.ECOSYSTEM_TYPE, type: 'multiple_selection' },
+          ]
+        : [],
+    [activeLocale]
   );
 
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -293,7 +308,14 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     const getApiSearchResults = async () => {
       const searchParams: SearchRequestPayload = {
         prefix: 'species',
-        fields: ['id', 'growthForm', 'seedStorageBehavior', 'ecosystemTypes.ecosystemType'],
+        fields: [
+          'id',
+          'growthForm',
+          'seedStorageBehavior',
+          'ecosystemTypes.ecosystemType',
+          'conservationCategory',
+          'rare',
+        ],
         search: {
           operation: 'and',
           children: [
@@ -326,7 +348,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
           return innerAcc;
         }, acc);
       }, {}) as FieldOptionsMap;
-      result.conservationStatus = { partial: false, values: [strings.RARE, strings.ENDANGERED] };
+      result.rare = { partial: false, values: [strings.YES, strings.NO] };
       setFilterOptions(result);
     };
     getApiSearchResults();
@@ -350,7 +372,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const getParams = useCallback(() => {
     const params: SearchNodePayload = {
       prefix: 'species',
-      fields: [...BE_SORTED_FIELDS, 'id', 'endangered', 'rare', 'ecosystemTypes.ecosystemType', 'organization_id'],
+      fields: [...BE_SORTED_FIELDS, 'id', 'rare', 'ecosystemTypes.ecosystemType', 'organization_id'],
       search: {
         operation: 'and',
         children: [
@@ -379,6 +401,14 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       };
       searchValueChildren.push(nameNode);
 
+      const commonNameNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'commonName',
+        type: 'Fuzzy',
+        values: [debouncedSearchTerm],
+      };
+      searchValueChildren.push(commonNameNode);
+
       const familyNode: FieldNodePayload = {
         operation: 'field',
         field: 'familyName',
@@ -392,33 +422,28 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       });
     }
 
-    if (filters.conservationStatus) {
-      const conservationStatusFilter: FieldNodePayload[] = [];
-      const values = filters.conservationStatus.values as string[];
-      if (values.find((s) => s === strings.RARE)) {
-        const newNode: FieldNodePayload = {
-          operation: 'field',
-          field: 'rare',
-          type: 'Exact',
-          values: [strings.BOOLEAN_TRUE],
-        };
-        conservationStatusFilter.push(newNode);
+    if (filters.rare) {
+      const searchValues: (string | null)[] = [];
+      const selectedValues = filters.rare.values as string[];
+      if (selectedValues.find((s) => s === strings.YES)) {
+        searchValues.push(strings.BOOLEAN_TRUE);
       }
-      if (values.find((s) => s === strings.ENDANGERED)) {
-        const newNode: FieldNodePayload = {
-          operation: 'field',
-          field: 'endangered',
-          type: 'Exact',
-          values: [strings.BOOLEAN_TRUE],
-        };
-        conservationStatusFilter.push(newNode);
+      if (selectedValues.find((s) => s === strings.NO)) {
+        searchValues.push(strings.BOOLEAN_FALSE);
+        searchValues.push(null);
       }
-      params.search.children.push({
-        operation: 'or',
-        children: conservationStatusFilter,
-      });
+      const newNode: FieldNodePayload = {
+        operation: 'field',
+        field: 'rare',
+        type: 'Exact',
+        values: searchValues,
+      };
+      params.search.children.push(newNode);
     }
 
+    if (filters.conservationCategory) {
+      params.search.children.push(filters.conservationCategory);
+    }
     if (filters.growthForm) {
       params.search.children.push(filters.growthForm);
     }
@@ -450,15 +475,11 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               scientificName: result.scientificName as string,
               commonName: result.commonName as string,
               familyName: result.familyName as string,
-              growthForm: getGrowthFormString(result as Species),
-              seedStorageBehavior: getSeedStorageBehaviorString(result as Species),
-              ecosystemTypes: getEcosystemTypesString({
-                ...result,
-                ecosystemTypes: (result.ecosystemTypes as Record<string, EcosystemType>[])?.map((r) => r.ecosystemType),
-              } as Species),
-              rare: isTrue(result.rare),
-              endangered: isTrue(result.endangered),
-              conservationStatus: getConservationStatusString(result),
+              growthForm: result.growthForm as string,
+              seedStorageBehavior: result.seedStorageBehavior as string,
+              ecosystemTypes: (result.ecosystemTypes as any[])?.map((et) => et.ecosystemType) as string[],
+              rare: result.rare === strings.BOOLEAN_TRUE ? 'true' : 'false',
+              conservationCategory: result.conservationCategory as string,
             });
           });
 
@@ -479,11 +500,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   }, [columns, setSelectedColumns, activeLocale]);
 
   useEffect(() => {
-    if (speciesState?.checkData) {
-      setSpeciesState({ checkData: false });
+    const shouldCheckData = query.has('checkData');
+    if (shouldCheckData) {
+      query.delete('checkData');
       setCheckDataModalOpen(true);
+      history.replace({ pathname: APP_PATHS.SPECIES, search: query.toString() });
     }
-  }, [setCheckDataModalOpen, speciesState, setSpeciesState]);
+  }, [query, setCheckDataModalOpen, history]);
 
   useEffect(() => {
     onApplyFilters();
@@ -551,6 +574,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     if (!params.search.children.length) {
       params.search = null;
     }
+    params.fields = CSV_FIELDS;
     const apiResponse = await SearchService.searchCsv(params);
 
     if (apiResponse !== null) {
@@ -614,7 +638,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       if (hasErrors?.length) {
         newColumns = [problemsColumn, ...columns];
       }
-      if (selectedColumns[0].key !== newColumns[0].key) {
+      if (!_.isEqual(selectedColumns, newColumns)) {
         setSelectedColumns(newColumns);
       }
       setHandleProblemsColumn(false);
@@ -631,45 +655,37 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     columns,
   ]);
 
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLElement | null>(null);
-
-  const handleClickActionMenuButton = (event: React.MouseEvent<HTMLElement>) => {
-    setActionMenuAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseActionMenu = () => {
-    setActionMenuAnchorEl(null);
-  };
-
-  const onItemClick = (selectedItem: DropdownItem) => {
-    switch (selectedItem.value) {
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    switch (optionItem.value) {
       case 'checkData': {
-        handleCloseActionMenu();
         onCheckData();
         break;
       }
       case 'import': {
-        handleCloseActionMenu();
         onImportSpecies();
         break;
-      }
-      default: {
-        handleCloseActionMenu();
       }
     }
   };
 
   const getFilterPillData = (): PillListItem<string>[] => {
     const result = [];
-    if (filters.conservationStatus) {
+    if (filters.conservationCategory) {
       result.push({
-        id: 'conservationStatus',
-        label: strings.CONSERVATION_STATUS,
-        value: filters.conservationStatus.values?.join(', ') ?? '',
-        onRemove: () => onRemoveFilter('conservationStatus'),
+        id: 'conservationCategory',
+        label: strings.CONSERVATION_CATEGORY,
+        value: filters.conservationCategory.values?.join(', ') ?? '',
+        onRemove: () => onRemoveFilter('conservationCategory'),
       });
     }
-
+    if (filters.rare) {
+      result.push({
+        id: 'rare',
+        label: strings.RARE,
+        value: filters.rare.values?.join(', ') ?? '',
+        onRemove: () => onRemoveFilter('rare'),
+      });
+    }
     if (filters.growthForm) {
       result.push({
         id: 'growthForm',
@@ -698,33 +714,6 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     return result;
   };
 
-  const getHeaderButtons = () => (
-    <>
-      <Box marginLeft={1} display='inline'>
-        <Tooltip title={strings.MORE_OPTIONS}>
-          <Button
-            id='more-options'
-            icon='menuVertical'
-            onClick={(event) => event && handleClickActionMenuButton(event)}
-            priority='secondary'
-            size='medium'
-          />
-        </Tooltip>
-      </Box>
-      <PopoverMenu
-        sections={[
-          [
-            { label: strings.CHECK_DATA, value: 'checkData' },
-            { label: strings.IMPORT, value: 'import' },
-          ],
-        ]}
-        handleClick={onItemClick}
-        anchorElement={actionMenuAnchorEl}
-        setAnchorElement={setActionMenuAnchorEl}
-      />
-    </>
-  );
-
   const onSortChange = (order: SortOrder, orderBy: string) => {
     const isClientSorted = BE_SORTED_FIELDS.indexOf(orderBy) === -1;
     setSearchSortOrder(
@@ -751,7 +740,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
         onClose={() => setDeleteSpeciesModalOpen(false)}
         onSubmit={deleteSelectedSpecies}
       />
-      <AddSpeciesModal open={editSpeciesModalOpen} onClose={onCloseEditSpeciesModal} initialSpecies={selectedSpecies} />
+      {editSpeciesModalOpen && (
+        <AddSpeciesModal
+          open={editSpeciesModalOpen}
+          onClose={onCloseEditSpeciesModal}
+          initialSpecies={selectedSpecies}
+        />
+      )}
       <ImportSpeciesModal
         open={importSpeciesModalOpen}
         onClose={onCloseImportSpeciesModal}
@@ -770,7 +765,13 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
             {species && species.length > 0 && !isMobile && userCanEdit && (
               <div>
                 <Button id='add-species' label={strings.ADD_SPECIES} icon='plus' onClick={onNewSpecies} size='medium' />
-                {getHeaderButtons()}
+                <OptionsMenu
+                  onOptionItemClick={onOptionItemClick}
+                  optionItems={[
+                    { label: strings.CHECK_DATA, value: 'checkData' },
+                    { label: strings.IMPORT, value: 'import' },
+                  ]}
+                />
               </div>
             )}
             {isMobile && userCanEdit && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
@@ -836,13 +837,20 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               />
             </Tooltip>
           </Grid>
-          <Grid item xs={12} className={classes.searchBar}>
+          <Grid item xs={12} className={classes.pillList}>
             <PillList data={getFilterPillData()} />
           </Grid>
           {species && species.length ? (
             <Grid item xs={12}>
               {results && (
                 <Table
+                  setColumns={(columnsToSet: TableColumnType[]) => {
+                    // show the check-data error column only if it was already exposed
+                    const showProblemsColumn = selectedColumns.find((column) => column.key === problemsColumn.key);
+                    setSelectedColumns(
+                      columnsToSet.filter((column) => showProblemsColumn || column.key !== problemsColumn.key)
+                    );
+                  }}
                   id='species-table'
                   columns={selectedColumns}
                   rows={results}

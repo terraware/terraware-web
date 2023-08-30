@@ -1,5 +1,5 @@
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
@@ -115,6 +115,46 @@ export default function NurseryDetails(): JSX.Element {
             type='text'
             value={tz.longName}
             tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
+            display={true}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          <TextField
+            id={'buildStartedDate'}
+            label={strings.FACILITY_BUILD_START_DATE}
+            value={nursery?.buildStartedDate ?? ''}
+            type='text'
+            aria-label='date-picker'
+            display={true}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          <TextField
+            id={'buildCompletedDate'}
+            label={strings.FACILITY_BUILD_COMPLETION_DATE}
+            value={nursery?.buildCompletedDate ?? ''}
+            type='text'
+            aria-label='date-picker'
+            display={true}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          <TextField
+            id={'operationStartedDate'}
+            label={strings.FACILITY_OPERATION_START_DATE}
+            value={nursery?.operationStartedDate ?? ''}
+            type='text'
+            aria-label='date-picker'
+            display={true}
+          />
+        </Grid>
+        <Grid item xs={gridSize()}>
+          <TextField
+            id={'capacity'}
+            label={strings.NURSERY_CAPACITY}
+            value={nursery?.capacity ?? ''}
+            type='number'
+            aria-label='date-picker'
             display={true}
           />
         </Grid>

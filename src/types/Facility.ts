@@ -15,6 +15,10 @@ export interface Facility {
   type: FacilityType;
   connectionState: 'Not Connected' | 'Connected' | 'Configured';
   timeZone?: string;
+  buildStartedDate?: string;
+  buildCompletedDate?: string;
+  operationStartedDate?: string;
+  capacity?: number;
 }
 
 export const DEFAULT_STORAGE_LOCATIONS = (): string[] => [

@@ -46,6 +46,9 @@ jobs:
       - name: Output License Report
         run: yarn license-report
 
+      - name: Run unit tests to generate coverage
+        run: yarn test-coverage
+
       - name: Output git log since last release
         run: bash ./.github/scripts/gitlog.sh
 

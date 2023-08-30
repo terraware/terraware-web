@@ -8,7 +8,7 @@ import { ErrorBox, TableColumnType } from '@terraware/web-components';
 import WithdrawalBatchesCellRenderer from './WithdrawalBatchesCellRenderer';
 import useForm from 'src/utils/useForm';
 import { makeStyles } from '@mui/styles';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization } from 'src/providers';
 import Table from 'src/components/common/table';
 
 type SelectBatchesWithdrawnQuantityProps = {
@@ -41,6 +41,50 @@ const useStyles = makeStyles(() => ({
     },
   },
 }));
+
+const tableColumns = (): TableColumnType[] => [
+  {
+    key: 'batchNumber',
+    name: strings.SEEDLING_BATCH,
+    type: 'string',
+  },
+  {
+    key: 'facilityName',
+    name: strings.NURSERY,
+    type: 'string',
+  },
+  {
+    key: 'notReadyQuantityWithdrawn',
+    name: strings.NOT_READY_QUANTITY,
+    type: 'string',
+  },
+  { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'string' },
+  { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'string' },
+  {
+    key: 'totalWithdraw',
+    name: strings.TOTAL_WITHDRAW,
+    type: 'string',
+  },
+];
+
+const outplantTableColumns = (): TableColumnType[] => [
+  {
+    key: 'batchNumber',
+    name: strings.SEEDLING_BATCH,
+    type: 'string',
+  },
+  {
+    key: 'facilityName',
+    name: strings.NURSERY,
+    type: 'string',
+  },
+  {
+    key: 'readyQuantity',
+    name: strings.READY_QUANTITY,
+    type: 'string',
+  },
+  { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string' },
+];
 
 export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -91,50 +135,6 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
 
     transformBatchesForTable();
   }, [batches, nurseryWithdrawal, selectedOrganization, setRecord]);
-
-  const columns: TableColumnType[] = [
-    {
-      key: 'batchNumber',
-      name: strings.SEEDLING_BATCH,
-      type: 'string',
-    },
-    {
-      key: 'facilityName',
-      name: strings.NURSERY,
-      type: 'string',
-    },
-    {
-      key: 'notReadyQuantityWithdrawn',
-      name: strings.NOT_READY_QUANTITY,
-      type: 'string',
-    },
-    { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'string' },
-    { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'string' },
-    {
-      key: 'totalWithdraw',
-      name: strings.TOTAL_WITHDRAW,
-      type: 'string',
-    },
-  ];
-
-  const outplantColumns: TableColumnType[] = [
-    {
-      key: 'batchNumber',
-      name: strings.SEEDLING_BATCH,
-      type: 'string',
-    },
-    {
-      key: 'facilityName',
-      name: strings.NURSERY,
-      type: 'string',
-    },
-    {
-      key: 'readyQuantity',
-      name: strings.READY_QUANTITY,
-      type: 'string',
-    },
-    { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string' },
-  ];
 
   const onEditHandler = (batch: BatchWithdrawalForTable, fromColumn?: string, value?: string) => {
     setRecord((previousRecord: BatchWithdrawalForTable[]): BatchWithdrawalForTable[] => {
@@ -311,8 +311,8 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                   <Grid item xs={12} marginBottom={5}>
                     {record.length > 0 && (
                       <Table
-                        id='inventory-table'
-                        columns={nurseryWithdrawal.purpose === OUTPLANT ? outplantColumns : columns}
+                        id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}
+                        columns={nurseryWithdrawal.purpose === OUTPLANT ? outplantTableColumns : tableColumns}
                         rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
                         Renderer={WithdrawalBatchesCellRenderer}
                         orderBy={'batchId'}

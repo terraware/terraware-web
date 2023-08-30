@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   notification: {
     display: 'flex',
     alignItems: 'flex-start',
-    padding: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : '8px 20px 8px 26px'),
+    padding: (props: StyleProps) => (props.isMobile ? theme.spacing(1, 2, 1, 1) : '8px 20px 8px 26px'),
     borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     '&:last-child': {
       borderBottom: 'none',

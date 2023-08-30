@@ -33,12 +33,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '24px',
     fontWeight: 600,
   },
-  mainContent: {
-    padding: theme.spacing(3),
-    backgroundColor: theme.palette.TwClrBg,
-    borderRadius: '32px',
-    minWidth: 'fit-content',
-  },
   contentContainer: {
     backgroundColor: theme.palette.TwClrBg,
     padding: theme.spacing(3),
@@ -55,6 +49,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '300px',
   },
 }));
+
+const columns = (): TableColumnType[] => [
+  { key: 'email', name: strings.EMAIL, type: 'string' },
+  { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
+  { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
+  { key: 'role', name: strings.ROLE, type: 'string' },
+  { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
+];
 
 export default function PeopleList(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
@@ -76,13 +78,6 @@ export default function PeopleList(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
-  const columns: TableColumnType[] = [
-    { key: 'email', name: strings.EMAIL, type: 'string' },
-    { key: 'firstName', name: strings.FIRST_NAME, type: 'string' },
-    { key: 'lastName', name: strings.LAST_NAME, type: 'string' },
-    { key: 'role', name: strings.ROLE, type: 'string' },
-    { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
-  ];
 
   useEffect(() => {
     const refreshSearch = async () => {
@@ -315,7 +310,7 @@ export default function PeopleList(): JSX.Element {
         </Grid>
       </PageHeaderWrapper>
       <Grid container className={classes.contentContainer} ref={contentRef}>
-        <Grid item xs={12}>
+        <Grid item xs={12} marginBottom='16px'>
           <TextField
             placeholder={strings.SEARCH}
             iconLeft='search'
@@ -331,7 +326,7 @@ export default function PeopleList(): JSX.Element {
         </Grid>
 
         <Grid item xs={12}>
-          <div className={classes.mainContent}>
+          <div>
             <Grid container spacing={4}>
               <Grid item xs={12}>
                 {results && (

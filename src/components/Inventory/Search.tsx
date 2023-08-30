@@ -35,7 +35,7 @@ export default function Search(props: SearchProps): JSX.Element {
 
   return (
     <>
-      <Box display='flex' flexDirection='row' alignItems='center' marginBottom={filters.facilityIds?.length ? 2 : 0}>
+      <Box display='flex' flexDirection='row' alignItems='center' marginBottom='16px'>
         <Box width='300px'>
           <Textfield
             placeholder={strings.SEARCH}

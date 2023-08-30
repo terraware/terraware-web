@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import EmptyMessage from 'src/components/common/EmptyMessage';
@@ -20,9 +20,10 @@ import { downloadCsvTemplateHandler } from '../common/ImportModal';
 import NurseryInventoryService, { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
 import ImportInventoryModal from './ImportInventoryModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { Button, DropdownItem, Tooltip } from '@terraware/web-components';
-import PopoverMenu from '../common/PopoverMenu';
-import { useOrganization } from 'src/providers/hooks';
+import { Button, DropdownItem } from '@terraware/web-components';
+import { useOrganization, useUser } from 'src/providers/hooks';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 interface StyleProps {
   isMobile: boolean;
@@ -60,11 +61,25 @@ type FacilityName = {
 type InventoryResult = {
   species_id: string;
   species_scientificName: string;
+  species_commonName?: string;
   germinatingQuantity: string;
   notReadyQuantity: string;
   readyQuantity: string;
   totalQuantity: string;
   facilityInventories: FacilityName[];
+};
+
+type InventoryResultWithFacilityNames = Omit<InventoryResult, 'facilityInventories'> & { facilityInventories: string };
+
+type FacilityInventoryResult = {
+  facility_name: string;
+  species_id: string;
+  species_scientificName: string;
+  species_commonName?: string;
+  'germinatingQuantity(raw)': string;
+  'readyQuantity(raw)': string;
+  'notReadyQuantity(raw)': string;
+  'totalQuantity(raw)': string;
 };
 
 export default function Inventory(props: InventoryProps): JSX.Element {
@@ -85,6 +100,10 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     direction: 'Ascending',
   });
   const contentRef = useRef(null);
+
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
@@ -146,11 +165,65 @@ export default function Inventory(props: InventoryProps): JSX.Element {
       facilityIds: filters.facilityIds,
       searchSortOrder,
     });
-    const updatedResult = apiSearchResults?.map((result) => {
-      const resultTyped = result as InventoryResult;
-      const facilityInventoriesNames = resultTyped.facilityInventories.map((nursery) => nursery.facility_name);
-      return { ...result, facilityInventories: facilityInventoriesNames.join('\r') };
-    });
+
+    let updatedResult: InventoryResultWithFacilityNames[] | undefined = [];
+    if (filters.facilityIds && filters.facilityIds.length) {
+      const nextResults = apiSearchResults?.reduce((acc, result) => {
+        const resultTyped = result as FacilityInventoryResult;
+        const indexFound = acc.findIndex((res) => res.species_id === resultTyped.species_id);
+
+        if (indexFound !== undefined && indexFound !== -1) {
+          const existingSpecies = acc[indexFound];
+          acc[indexFound] = {
+            ...existingSpecies,
+            germinatingQuantity: (
+              Number(existingSpecies.germinatingQuantity) + Number(resultTyped['germinatingQuantity(raw)'])
+            ).toString(),
+            notReadyQuantity: (
+              Number(existingSpecies.notReadyQuantity) + Number(resultTyped['notReadyQuantity(raw)'])
+            ).toString(),
+            readyQuantity: (
+              Number(existingSpecies.readyQuantity) + Number(resultTyped['readyQuantity(raw)'])
+            ).toString(),
+            totalQuantity: (
+              Number(existingSpecies.totalQuantity) + Number(resultTyped['totalQuantity(raw)'])
+            ).toString(),
+            facilityInventories: `${existingSpecies.facilityInventories}, ${resultTyped.facility_name}`,
+          };
+        } else {
+          const transformedResult: InventoryResultWithFacilityNames = {
+            species_id: resultTyped.species_id,
+            species_scientificName: resultTyped.species_scientificName,
+            species_commonName: resultTyped.species_commonName,
+            germinatingQuantity: resultTyped['germinatingQuantity(raw)'],
+            notReadyQuantity: resultTyped['notReadyQuantity(raw)'],
+            readyQuantity: resultTyped['readyQuantity(raw)'],
+            totalQuantity: resultTyped['totalQuantity(raw)'],
+            facilityInventories: resultTyped.facility_name,
+          };
+
+          acc.push(transformedResult);
+        }
+        return acc;
+      }, [] as InventoryResultWithFacilityNames[]);
+
+      // format results
+      updatedResult = nextResults?.map((uR) => {
+        return {
+          ...uR,
+          germinatingQuantity: numericFormatter.format(uR.germinatingQuantity),
+          notReadyQuantity: numericFormatter.format(uR.notReadyQuantity),
+          readyQuantity: numericFormatter.format(uR.readyQuantity),
+          totalQuantity: numericFormatter.format(uR.totalQuantity),
+        };
+      });
+    } else {
+      updatedResult = apiSearchResults?.map((result) => {
+        const resultTyped = result as InventoryResult;
+        const facilityInventoriesNames = resultTyped.facilityInventories.map((nursery) => nursery.facility_name);
+        return { ...resultTyped, facilityInventories: facilityInventoriesNames.join('\r') };
+      });
+    }
     if (updatedResult) {
       if (!debouncedSearchTerm && !filters.facilityIds?.length) {
         setUnfilteredInventory(updatedResult);
@@ -159,7 +232,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
         setSearchResults(updatedResult);
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter]);
 
   useEffect(() => {
     onApplyFilters();
@@ -167,51 +240,11 @@ export default function Inventory(props: InventoryProps): JSX.Element {
 
   const shouldShowTable = isOnboarded && unfilteredInventory && unfilteredInventory.length > 0;
 
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = React.useState<HTMLElement | null>(null);
-
-  const handleClickActionMenuButton = (event: React.MouseEvent<HTMLElement>) => {
-    setActionMenuAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseActionMenu = () => {
-    setActionMenuAnchorEl(null);
-  };
-
-  const onItemClick = (selectedItem: DropdownItem) => {
-    switch (selectedItem.value) {
-      case 'import': {
-        handleCloseActionMenu();
-        setImportInventoryModalOpen(true);
-        break;
-      }
-      default: {
-        handleCloseActionMenu();
-      }
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    if (optionItem.value === 'import') {
+      setImportInventoryModalOpen(true);
     }
   };
-
-  const getHeaderButtons = () => (
-    <>
-      <Box marginLeft={1} display='inline'>
-        <Tooltip title={strings.MORE_OPTIONS}>
-          <Button
-            id='more-options'
-            icon='menuVertical'
-            onClick={(event) => event && handleClickActionMenuButton(event)}
-            priority='secondary'
-            size='medium'
-          />
-        </Tooltip>
-      </Box>
-
-      <PopoverMenu
-        sections={[[{ label: strings.IMPORT, value: 'import' }]]}
-        handleClick={onItemClick}
-        anchorElement={actionMenuAnchorEl}
-        setAnchorElement={setActionMenuAnchorEl}
-      />
-    </>
-  );
 
   return (
     <TfMain backgroundImageVisible={!isOnboarded}>
@@ -243,7 +276,10 @@ export default function Inventory(props: InventoryProps): JSX.Element {
                         size='medium'
                       />
                     </Box>
-                    {getHeaderButtons()}
+                    <OptionsMenu
+                      onOptionItemClick={onOptionItemClick}
+                      optionItems={[{ label: strings.IMPORT, value: 'import' }]}
+                    />
                   </>
                 )}
               </Grid>

@@ -8,10 +8,34 @@ import { SustainableDevelopmentGoal, SDG } from 'src/types/Report';
 import useSDGProgress from './useSDGProgress';
 import { REPORT_FILE_ENDPOINT } from 'src/services/ReportService';
 import { makeStyles } from '@mui/styles';
+import { numWords, overWordLimit } from 'src/utils/text';
 
 const useStyles = makeStyles((theme: Theme) => ({
   hiddenInput: {
     display: 'none',
+  },
+  noDisplayTextField: {
+    '& .textfield-value--display': {
+      display: 'none',
+    },
+    '& .textfield-label-container': {
+      marginTop: theme.spacing(1),
+    },
+  },
+  quarterPage: {
+    '& textarea': {
+      minHeight: '240px',
+    },
+  },
+  halfPage: {
+    '& textarea': {
+      minHeight: '480px',
+    },
+  },
+  fullPage: {
+    '& textarea': {
+      minHeight: '720px',
+    },
   },
 }));
 
@@ -187,7 +211,8 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       spacing={theme.spacing(3)}
       borderRadius={theme.spacing(3)}
       padding={theme.spacing(0, 3, 3, 0)}
-      marginLeft={0}
+      margin={0}
+      width='100%'
       sx={{
         backgroundColor: theme.palette.TwClrBg,
       }}
@@ -198,8 +223,17 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+        <Typography id='observation-months' fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
           {strings.BEST_MONTHS_FOR_OBSERVATIONS}
+        </Typography>
+        <Typography
+          color={theme.palette.TwClrTxtSecondary}
+          fontSize='14px'
+          fontWeight={400}
+          marginTop={theme.spacing(0.5)}
+          maxWidth='800px'
+        >
+          {strings.BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS}
         </Typography>
       </Grid>
       {MONTHS.map((monthName, index) => (
@@ -214,9 +248,25 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           />
         </Grid>
       ))}
+      <Grid item xs={12} paddingTop={0} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
+        <Textfield
+          label=''
+          id='observations-months-validation'
+          type='text'
+          display={true}
+          preserveNewlines={true}
+          className={classes.noDisplayTextField}
+          errorText={
+            validate && (report.annualDetails?.bestMonthsForObservation?.length ?? 0) === 0
+              ? strings.BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR
+              : ''
+          }
+        />
+      </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.PROJECT_SUMMARY}
+          id='project-summary'
+          title={strings.PROJECT_SUMMARY_REQUIRED}
           instructions={strings.PROJECT_SUMMARY_INSTRUCTIONS}
           editable={editable}
           value={projectSummary}
@@ -226,13 +276,31 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
               updateDetails('projectSummary', value);
             }
           }}
-          errorText={validate && !report.annualDetails?.projectSummary ? strings.REQUIRED_FIELD : ''}
+          errorText={
+            validate && !report.annualDetails?.projectSummary
+              ? strings.REQUIRED_FIELD
+              : validate && overWordLimit(projectSummary, 100)
+              ? strings.OVER_WORD_LIMIT
+              : ''
+          }
         />
+        {editable && (
+          <Typography
+            color={theme.palette.TwClrTxtSecondary}
+            fontSize='14px'
+            fontWeight={400}
+            marginTop={theme.spacing(0.5)}
+          >
+            {`${strings.WORDS}: ${numWords(projectSummary)}`}
+          </Typography>
+        )}
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.PROJECT_IMPACT}
+          id='project-impact'
+          title={strings.PROJECT_IMPACT_REQUIRED}
           instructions={strings.PROJECT_IMPACT_INSTRUCTIONS}
+          pageSize='full'
           editable={editable}
           value={projectImpact}
           onChange={(value) => {
@@ -246,8 +314,10 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.BUDGET_NARRATIVE_SUMMARY}
+          id='budget-narrative'
+          title={strings.BUDGET_NARRATIVE_SUMMARY_REQUIRED}
           instructions={strings.BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS}
+          pageSize='half'
           editable={editable}
           value={budgetNarrativeSummary}
           onChange={(value) => {
@@ -298,8 +368,10 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.SOCIAL_IMPACT}
+          id='social-impact'
+          title={strings.SOCIAL_IMPACT_REQUIRED}
           instructions={strings.SOCIAL_IMPACT_INSTRUCTIONS}
+          pageSize='half'
           editable={editable}
           value={socialImpact}
           onChange={(value) => {
@@ -312,7 +384,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         />
       </Grid>
       <Grid item xs={12}>
-        <Typography fontSize='20px' fontWeight={600}>
+        <Typography id='sdg' fontSize='20px' fontWeight={600}>
           {strings.SUSTAINABLE_DEVELOPMENT_GOALS}
         </Typography>
       </Grid>
@@ -327,36 +399,51 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
             onChange={(value) => handleSDGChange(value, key as SustainableDevelopmentGoal)}
           />
           {sdgList.includes(key as SustainableDevelopmentGoal) && (
-            <Textfield
-              label=''
-              id={key}
-              type='textarea'
-              readonly={!editable}
-              value={sdgProgressStates[SDG.findIndex((sdg) => key === sdg)]}
-              onChange={(value) => {
-                setSdgProgressStates[SDG.findIndex((sdg) => key === sdg)](value as string);
-                const index = report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key);
-                if (updateSDGProgress && index !== undefined && index >= 0) {
-                  updateSDGProgress(index, value as string);
+            <>
+              <Textfield
+                label=''
+                id={key}
+                type='textarea'
+                display={!editable}
+                preserveNewlines={true}
+                value={sdgProgressStates[SDG.findIndex((sdg) => key === sdg)]}
+                onChange={(value) => {
+                  setSdgProgressStates[SDG.findIndex((sdg) => key === sdg)](value as string);
+                  const index = report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key);
+                  if (updateSDGProgress && index !== undefined && index >= 0) {
+                    updateSDGProgress(index, value as string);
+                  }
+                }}
+                errorText={
+                  validate &&
+                  !report.annualDetails?.sustainableDevelopmentGoals[
+                    report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key)
+                  ].progress
+                    ? strings.REQUIRED_FIELD
+                    : ''
                 }
-              }}
-              errorText={
-                validate &&
-                !report.annualDetails?.sustainableDevelopmentGoals[
-                  report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key)
-                ].progress
-                  ? strings.REQUIRED_FIELD
-                  : ''
-              }
-            />
+              />
+              {editable && (
+                <Typography
+                  fontSize='14px'
+                  fontWeight={400}
+                  color={theme.palette.TwClrTxtSecondary}
+                  margin={theme.spacing(0.5, 0, 0, 0.5)}
+                >
+                  {strings.REQUIRED}
+                </Typography>
+              )}
+            </>
           )}
         </Grid>
       ))}
       <br />
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.CHALLENGES}
+          id='challenges'
+          title={strings.CHALLENGES_REQUIRED}
           instructions={strings.CHALLENGES_INSTRUCTIONS}
+          pageSize='full'
           editable={editable}
           value={challenges}
           onChange={(value) => {
@@ -370,8 +457,10 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.KEY_LESSONS}
+          id='key-lessons'
+          title={strings.KEY_LESSONS_REQUIRED}
           instructions={strings.KEY_LESSONS_INSTRUCTIONS}
+          pageSize='half'
           editable={editable}
           value={keyLessons}
           onChange={(value) => {
@@ -385,8 +474,10 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.SUCCESS_STORIES}
+          id='success-stories'
+          title={strings.SUCCESS_STORIES_REQUIRED}
           instructions={strings.SUCCESS_STORIES_INSTRUCTIONS}
+          pageSize='half'
           editable={editable}
           value={successStories}
           onChange={(value) => {
@@ -411,30 +502,36 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           value={isCatalytic}
         />
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
-        <Textfield
-          id={`catalyticDetail-field`}
-          type='textarea'
-          label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
-          readonly={!editable}
-          onChange={(v) => {
-            setCatalyticDetail(v as string);
-            if (updateDetails) {
-              updateDetails('catalyticDetail', v);
+      {isCatalytic && (
+        <Grid item xs={mediumItemGridWidth()}>
+          <Textfield
+            id={`catalytic-detail`}
+            type='textarea'
+            className={classes.quarterPage}
+            label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
+            display={!editable}
+            preserveNewlines={true}
+            onChange={(v) => {
+              setCatalyticDetail(v as string);
+              if (updateDetails) {
+                updateDetails('catalyticDetail', v);
+              }
+            }}
+            value={catalyticDetail}
+            errorText={
+              validate && report.annualDetails?.isCatalytic && !report.annualDetails?.catalyticDetail
+                ? strings.REQUIRED_FIELD
+                : ''
             }
-          }}
-          value={catalyticDetail}
-          errorText={
-            validate && report.annualDetails?.isCatalytic && !report.annualDetails?.catalyticDetail
-              ? strings.REQUIRED_FIELD
-              : ''
-          }
-        />
-      </Grid>
+          />
+        </Grid>
+      )}
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.OPPORTUNITIES}
+          id='opportunities'
+          title={strings.OPPORTUNITIES_REQUIRED}
           instructions={strings.OPPORTUNITIES_INSTRUCTIONS}
+          pageSize='quarter'
           editable={editable}
           value={opportunities}
           onChange={(value) => {
@@ -448,8 +545,10 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <ReportField
-          title={strings.NEXT_STEPS}
+          id='next-steps'
+          title={strings.NEXT_STEPS_REQUIRED}
           instructions={strings.NEXT_STEPS_INSTRUCTIONS}
+          pageSize='quarter'
           editable={editable}
           value={nextSteps}
           onChange={(value) => {
@@ -466,30 +565,43 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
 }
 
 type ReportFieldProps = {
+  id: string;
   title: string;
   instructions: string;
   editable: boolean;
   value: string;
   onChange: (value: string) => void;
   errorText?: string;
+  pageSize?: 'quarter' | 'half' | 'full';
 };
 
 function ReportField(props: ReportFieldProps): JSX.Element {
-  const { title, instructions, editable, value, onChange, errorText } = props;
+  const { id, title, instructions, editable, value, onChange, errorText, pageSize } = props;
   const theme = useTheme();
+  const classes = useStyles();
   return (
     <>
-      <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
+      <Typography id={id} fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
         {title}
       </Typography>
       <Textfield
+        id={`${id}-input`}
         label={instructions}
-        id={`${title}-field`}
         type='textarea'
-        readonly={!editable}
+        display={!editable}
+        preserveNewlines={true}
         onChange={(v) => onChange(v as string)}
         value={value}
         errorText={errorText}
+        className={
+          pageSize === 'quarter'
+            ? classes.quarterPage
+            : pageSize === 'half'
+            ? classes.halfPage
+            : pageSize === 'full'
+            ? classes.fullPage
+            : ''
+        }
       />
     </>
   );

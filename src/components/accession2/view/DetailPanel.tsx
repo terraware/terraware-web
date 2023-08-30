@@ -1,7 +1,7 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Accession } from 'src/types/Accession';
 import strings from 'src/strings';
 import { LocationService } from 'src/services';
@@ -9,9 +9,9 @@ import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { Country } from 'src/types/Country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Accession2EditModal from '../edit/Accession2EditModal';
-import ViewPhotosModal from 'src/components/common/ViewPhotosModal';
 import { isContributor } from 'src/utils/organization';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import PhotosList from 'src/components/common/PhotosList';
 
 type DetailPanelProps = {
   accession?: Accession;
@@ -57,8 +57,6 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
   const gridLeftSide = isMobile ? 12 : 2;
   const gridRightSide = isMobile ? 12 : 10;
-  const [photosModalOpened, setPhotosModalOpened] = useState(false);
-  const [selectedSlide, setSelectedSlide] = useState(0);
   const [openEditAccessionModal, setOpenEditAccessionModal] = useState(false);
   const [countries, setCountries] = useState<Country[]>();
   const classes = useStyles();
@@ -113,6 +111,11 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
 
   const spaceFiller = () => <Box sx={{ marginLeft: 1, height: '24px', width: 2 }} />;
 
+  const photoUrls = useMemo(
+    () => accession?.photoFilenames?.map((file) => `/api/v1/seedbank/accessions/${accession.id}/photos/${file}`) ?? [],
+    [accession?.photoFilenames, accession?.id]
+  );
+
   return accession ? (
     <>
       {openEditAccessionModal && (
@@ -123,14 +126,6 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
           reload={reload}
         />
       )}
-      <ViewPhotosModal
-        photosUrls={
-          accession.photoFilenames?.map((file) => `/api/v1/seedbank/accessions/${accession.id}/photos/${file}`) || []
-        }
-        open={photosModalOpened}
-        onClose={() => setPhotosModalOpened(false)}
-        selectedSlide={selectedSlide}
-      />
       <Grid container>
         <Grid item xs={9}>
           <Grid item xs={12} sx={headerStyle}>
@@ -213,20 +208,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {strings.PHOTOS}
             </Grid>
             <Grid item xs={gridRightSide} sx={valueStyle} display='flex'>
-              {accession.photoFilenames?.map((file, index) => {
-                return (
-                  <Box paddingRight={theme.spacing(2)} key={`photo-${index}`}>
-                    <img
-                      src={`/api/v1/seedbank/accessions/${accession.id}/photos/${file}?maxHeight=100`}
-                      alt=''
-                      onClick={() => {
-                        setSelectedSlide(index);
-                        setPhotosModalOpened(true);
-                      }}
-                    />
-                  </Box>
-                );
-              })}
+              <PhotosList photoUrls={photoUrls} />
             </Grid>
           </Grid>
         </Grid>

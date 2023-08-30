@@ -3,7 +3,7 @@ import HttpService, { Response } from './HttpService';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
 import SearchService, { SearchRequestPayload } from './SearchService';
-import { SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { FieldOptionsMap, SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import strings from 'src/strings';
 import PhotoService from './PhotoService';
 
@@ -33,7 +33,6 @@ export type NurseryWithdrawalData = {
 export type NurseryWithdrawalListPhotoIds = {
   photoIds?: { id: number }[];
 };
-export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };
 
 export type CreateNurseryWithdrawalRequestPayload =
   paths[typeof BATCH_WITHDRAWALS_ENDPOINT]['post']['requestBody']['content']['application/json'];
@@ -87,7 +86,7 @@ const listNurseryWithdrawals = async (
       'purpose',
       'facility_name',
       'destinationName',
-      'plotNames',
+      'plantingSubzoneNames',
       'batchWithdrawals.batch_species_scientificName',
       'totalWithdrawn',
       'hasReassignments',
@@ -183,7 +182,7 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
       'purpose',
       'facility_name',
       'destinationName',
-      'plotNames',
+      'plantingSubzoneNames',
       'batchWithdrawals.batch_species_scientificName',
     ],
     search: SearchService.convertToSearchNodePayload({}, organizationId),
@@ -195,22 +194,48 @@ const getFilterOptions = async (organizationId: number): Promise<FieldOptionsMap
   return (data ?? []).reduce((acc, d) => {
     return Object.keys(d).reduce((innerAcc, k) => {
       const isBatchWithdrawals = k === 'batchWithdrawals';
+      const isSubzones = k === 'plantingSubzoneNames';
       const newKey = isBatchWithdrawals ? 'batchWithdrawals.batch_species_scientificName' : k;
       if (!innerAcc[newKey]) {
         innerAcc[newKey] = { partial: false, values: [] };
       }
-      const value = isBatchWithdrawals
-        ? (d[k] as any[]).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName)
-        : d[k];
-      if (Array.isArray(value)) {
-        (innerAcc[newKey] as Record<string, any>).values.push(...value);
+      let value;
+      if (isBatchWithdrawals) {
+        value = (d[k] as any[]).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName);
+      } else if (isSubzones) {
+        value = parsePlantingSubzones(d[k] as string);
       } else {
-        (innerAcc[newKey] as Record<string, any>).values.push(value);
+        value = d[k];
       }
+      const record = innerAcc[newKey] as Record<string, any>;
+      const currentValues = record.values;
+      if (Array.isArray(value)) {
+        currentValues.push(...value);
+      } else {
+        currentValues.push(value);
+      }
+      // sort the values (uniquification in set is not necessary but helps with sort perf)
+      const newValues = Array.from(new Set([...currentValues])).sort((a, b) => a.localeCompare(b));
+      record.values = newValues;
       return innerAcc;
     }, acc);
   }, {}) as FieldOptionsMap;
 };
+
+/**
+ * Parse subzones from following patterns:
+ * 'subzone'
+ * 'subzone (subzone)'
+ * 'subzone (subzone1, subzone2)' [basically (subzone1, subzone2..., subzoneN)]
+ */
+const parsePlantingSubzones = (value: string): string[] =>
+  (value || '')
+    .replaceAll('(', '') // remove ( and ) and ,
+    .replaceAll(')', '')
+    .replaceAll(',', '')
+    .split(' ') // split on space
+    .map((s) => s.trim()) // return trimmed value and filter out empty values
+    .filter((x) => x);
 
 /**
  * Exported functions

@@ -1,7 +1,7 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName = 'Show Production View' | 'Locale selection' | 'Reporting V1';
+export type FeatureName = 'Show Production View' | 'TrackingV2' | 'Simple Map Editor';
 
 export type Feature = {
   name: FeatureName;
@@ -36,26 +36,22 @@ export const OPT_IN_FEATURES: Feature[] = [
     set: env().forceProductionView,
   },
   {
-    name: 'Locale selection',
-    preferenceName: 'enableLocales',
+    name: 'TrackingV2',
+    preferenceName: 'enableTrackingV2',
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['Allow switching to different locales (languages)'],
-    disclosure: [
-      'This is WIP.',
-      'Locale selection is not saved, so will reset when you reload the page.',
-      'Some values such as accession statuses are currently still in English.',
-    ],
+    description: ['Show Tracking V2 features'],
+    disclosure: ['This is WIP.'],
   },
   {
-    name: 'Reporting V1',
-    preferenceName: 'enableReportingV1',
+    name: 'Simple Map Editor',
+    preferenceName: 'enableSimpleMapEditor',
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['Reporting Feature for quarterly and annual reporting.'],
-    disclosure: ['This is WIP.'],
+    description: ['Allow editing the boundaries of simple planting sites.'],
+    disclosure: ['Planting sites with planting zones and subzones are not user-editable.'],
   },
 ];
 

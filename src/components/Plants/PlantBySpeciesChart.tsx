@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { cardTitleStyle } from './PlantingSiteDetails';
 import strings from 'src/strings';
-import DashboardChart from './DashboardChart';
+import BarChart from 'src/components/common/Chart/BarChart';
 
 export interface PlantBySpeciesChartProps {
   plantsBySpecies?: { [key: string]: number } | undefined;
@@ -27,7 +27,17 @@ export default function PlantBySpeciesChart({ plantsBySpecies }: PlantBySpeciesC
     <>
       <Typography sx={cardTitleStyle}>{strings.NUMBER_OF_PLANTS_BY_SPECIES}</Typography>
       <Box sx={{ marginTop: theme.spacing(3), display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <DashboardChart chartId='plantsBySpecies' chartLabels={labels} chartValues={values} />
+        <BarChart
+          chartId='plantsBySpecies'
+          chartData={{
+            labels: labels ?? [],
+            datasets: [
+              {
+                values: values ?? [],
+              },
+            ],
+          }}
+        />
       </Box>
     </>
   );

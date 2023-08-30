@@ -1,6 +1,8 @@
 export const API_PULL_INTERVAL = 60000;
-export const TERRAWARE_SUPPORT_LINK = 'https://www.terraformation.com/contact-us/terraware-support';
-export const TERRAFORMATION_PRIVACY_POLICY = 'https://www.terraformation.com/privacy-policy';
+
+export const SEED_COLLECTOR_APP_STORE_LINK = 'https://apps.apple.com/us/app/terraware/id1568369900';
+export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =
+  'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
 
 export enum APP_PATHS {
   ACCESSIONS = '/accessions',
@@ -23,6 +25,11 @@ export enum APP_PATHS {
   INVENTORY_NEW = '/inventory/new',
   INVENTORY_ITEM = '/inventory/:speciesId',
   INVENTORY_WITHDRAW = '/inventory/withdraw',
+  OBSERVATIONS = '/observations',
+  OBSERVATIONS_SITE = '/observations/:plantingSiteId',
+  OBSERVATION_DETAILS = '/observations/:plantingSiteId/results/:observationId',
+  OBSERVATION_PLANTING_ZONE_DETAILS = '/observations/:plantingSiteId/results/:observationId/zone/:plantingZoneId',
+  OBSERVATION_MONITORING_PLOT_DETAILS = '/observations/:plantingSiteId/results/:observationId/zone/:plantingZoneId/plot/:monitoringPlotId',
   OPT_IN = '/opt-in',
   ORGANIZATION_EDIT = '/organization/edit',
   ORGANIZATION = '/organization',
@@ -49,6 +56,8 @@ export enum APP_PATHS {
   PLANTING_SITES_NEW = '/planting-sites/new',
   PLANTING_SITES_VIEW = '/planting-sites/:plantingSiteId',
   PLANTING_SITES_EDIT = '/planting-sites/:plantingSiteId/edit',
+  PLANTING_SITES_ZONE_VIEW = '/planting-sites/:plantingSiteId/zone/:zoneId',
+  PLANTING_SITES_SUBZONE_VIEW = '/planting-sites/:plantingSiteId/zone/:zoneId/subzone/:subzoneId',
   NURSERY_WITHDRAWALS = '/nursery/withdrawals',
   NURSERY_WITHDRAWALS_DETAILS = '/nursery/withdrawals/:withdrawalId',
   NURSERY_REASSIGNMENT = '/nursery/reassignment/:deliveryId',

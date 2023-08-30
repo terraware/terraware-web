@@ -3,7 +3,7 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Notification } from 'src/types/Notifications';
 import { weightSystemsNames } from 'src/units';
-import { supportedLocales } from 'src/strings/locales';
+import { useSupportedLocales } from 'src/strings/locales';
 import TextWithLink from 'src/components/common/TextWithLink';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
@@ -15,6 +15,7 @@ import { InitializedUnits } from 'src/units';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
 
 export default function UserNotification(): Notification | null {
+  const supportedLocales = useSupportedLocales();
   const [unitNotification, setUnitNotification] = useState(false);
   const [unitNotificationRead, setUnitNotificationRead] = useState(false);
   const [timeZoneUserNotification, setTimeZoneUserNotification] = useState(false);
@@ -146,5 +147,6 @@ export default function UserNotification(): Notification | null {
     userTimeZone,
     timeZoneUserNotificationRead,
     unitNotificationRead,
+    supportedLocales,
   ]);
 }

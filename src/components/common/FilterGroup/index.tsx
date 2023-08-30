@@ -48,10 +48,11 @@ export type FilterGroupProps = {
   values: FieldValuesPayload;
   onConfirm: (filters: Record<string, SearchNodePayload>) => void;
   onCancel: () => void;
+  noScroll?: boolean;
 };
 
 export default function FilterGroup(props: FilterGroupProps): JSX.Element {
-  const { initialFilters, fields, values, onConfirm, onCancel } = props;
+  const { initialFilters, fields, values, onConfirm, onCancel, noScroll } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles({ isMobile });
@@ -91,7 +92,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
           {strings.FILTERS}
         </Typography>
       </Box>
-      <Box flex='1 1 auto' overflow='auto' maxHeight='380px'>
+      <Box flex='1 1 auto' overflow={noScroll ? 'visible' : 'auto'} maxHeight='380px'>
         {fields.map((f, index) => (
           <Box key={f.name}>
             {index > 0 && <hr className={classes.divider} />}

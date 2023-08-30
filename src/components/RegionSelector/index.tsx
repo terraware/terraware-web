@@ -12,10 +12,13 @@ type RegionSelectorProps = {
   selectedCountryCode?: string;
   selectedCountrySubdivisionCode?: string;
   onChangeCountryCode: (countryCode: string, hasSubdivisions: boolean) => void;
-  onChangeCountrySubdivisionCode: (countrySubdivisionCode: string) => void;
+  onChangeCountrySubdivisionCode?: (countrySubdivisionCode: string) => void;
   countryError?: string;
   countrySubdivisionError?: string;
   horizontalLayout?: boolean;
+  hideCountrySubdivisions?: boolean;
+  countryLabel?: string;
+  countryTooltip?: string;
 };
 
 export default function RegionSelector({
@@ -26,6 +29,9 @@ export default function RegionSelector({
   countryError,
   countrySubdivisionError,
   horizontalLayout,
+  hideCountrySubdivisions,
+  countryLabel,
+  countryTooltip,
 }: RegionSelectorProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -53,7 +59,7 @@ export default function RegionSelector({
   };
 
   const onChangeCountrySubdivision = (newValue: string) => {
-    if (countries && selectedCountryCode) {
+    if (countries && selectedCountryCode && onChangeCountrySubdivisionCode) {
       const selectedCountry = getCountryByCode(countries, selectedCountryCode);
       const found = selectedCountry?.subdivisions.find(
         (subdivision: Subdivision) => subdivision.code.toString() === newValue
@@ -103,7 +109,7 @@ export default function RegionSelector({
   return (
     <>
       {countries && (
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid item xs={gridSize()} paddingBottom={isMobile ? 0 : theme.spacing(4)}>
           <Dropdown
             id='countryCode'
             placeholder={strings.SELECT}
@@ -111,13 +117,14 @@ export default function RegionSelector({
             options={countriesOptions()}
             onChange={(value: any) => onChangeCountry(value)}
             hideClearIcon={true}
-            label={strings.COUNTRY_REQUIRED}
+            label={countryLabel || strings.COUNTRY_REQUIRED}
             errorText={countryError}
             autocomplete={true}
+            tooltipTitle={countryTooltip}
           />
         </Grid>
       )}
-      {getSelectedCountry()?.subdivisions ? (
+      {!hideCountrySubdivisions && getSelectedCountry()?.subdivisions ? (
         <Grid
           item
           xs={gridSize()}

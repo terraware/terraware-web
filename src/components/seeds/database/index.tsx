@@ -4,14 +4,10 @@ import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
-import SeedBankService, {
-  DEFAULT_SEED_SEARCH_FILTERS,
-  AllFieldValuesMap,
-  FieldValuesMap,
-} from 'src/services/SeedBankService';
+import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
 import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/types/Search';
 import Button from 'src/components/common/button/Button';
-import Table from 'src/components/common/table';
+import { BaseTable as Table } from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -24,8 +20,6 @@ import Filters from './Filters';
 import SearchCellRenderer from './TableCellRenderer';
 import { Facility } from 'src/types/Facility';
 import { stateName } from 'src/types/Accession';
-import { seedsDatabaseSelectedOrgInfo } from 'src/state/selectedOrgInfoPerPage';
-import { useRecoilState } from 'recoil';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
@@ -34,15 +28,17 @@ import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportAccessionsModal from './ImportAccessionsModal';
-import { Message, Tooltip } from '@terraware/web-components';
+import { DropdownItem, Message } from '@terraware/web-components';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { DropdownItem } from '@terraware/web-components';
-import PopoverMenu from 'src/components/common/PopoverMenu';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
-import useSnackbar from 'src/utils/useSnackbar';
+import useSnackbar, { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectMessage } from 'src/redux/features/message/messageSelectors';
+import { sendMessage } from 'src/redux/features/message/messageSlice';
 
 interface StyleProps {
   isMobile: boolean;
@@ -186,7 +182,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
-  const [selectedOrgInfo, setSelectedOrgInfo] = useRecoilState(seedsDatabaseSelectedOrgInfo);
+  const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
   const contentRef = useRef(null);
   const searchedLocaleRef = useRef<string | null>(activeLocale);
 
@@ -195,7 +191,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
    * keys: all single and multi select search fields.
    * values: all the existing values that the field has in the database, for all accessions.
    */
-  const [fieldOptions, setFieldOptions] = useState<AllFieldValuesMap | null>();
+  const [fieldOptions, setFieldOptions] = useState<FieldValuesMap | null>();
   /*
    * availableFieldOptions is a list of records
    * keys: all single and multi select search fields.
@@ -210,6 +206,20 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const [showDefaultSystemSnackbar, setShowDefaultSystemSnackbar] = useState(false);
   const { userPreferences } = useUser();
   const snackbar = useSnackbar();
+  const dispatch = useAppDispatch();
+
+  const closeMessageSelector = useAppSelector(selectMessage(`seeds.${SNACKBAR_PAGE_CLOSE_KEY}.ackWeightSystem`));
+
+  useEffect(() => {
+    const updatePreferences = async () => {
+      await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });
+      reloadUserPreferences();
+    };
+    if (closeMessageSelector) {
+      dispatch(sendMessage({ key: `seeds.${SNACKBAR_PAGE_CLOSE_KEY}.dismissPageMessage`, data: undefined }));
+      updatePreferences();
+    }
+  }, [closeMessageSelector, dispatch, reloadUserPreferences]);
 
   useEffect(() => {
     const showSnackbar = () => {
@@ -221,12 +231,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
         '',
         {
           label: strings.GOT_IT,
-          apply: async () => {
-            await PreferencesService.updateUserPreferences({ defaultWeightSystemAcknowledgedOnMs: Date.now() });
-            reloadUserPreferences();
-          },
-        },
-        'user'
+          key: 'ackWeightSystem',
+          payload: Date.now(),
+        }
       );
     };
     if (showDefaultSystemSnackbar) {
@@ -237,13 +244,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const updateSearchColumns = useCallback(
     (columnNames?: string[]) => {
       if (columnNames) {
-        if (
-          !userPreferences.defaultWeightSystemAcknowledgedOnMs &&
-          userPreferences.preferredWeightSystem !== 'imperial' &&
-          columnNames.find((cn) => cn === 'estimatedWeightOunces' || cn === 'estimatedWeightPounds')
-        ) {
-          setShowDefaultSystemSnackbar(true);
-        }
         const columnInfo = columnsIndexed();
         const validColumns = columnNames.filter((name) => name in columnInfo);
         const searchSelectedColumns = validColumns.reduce((acum, value) => {
@@ -260,28 +260,51 @@ export default function Database(props: DatabaseProps): JSX.Element {
         setDisplayColumnNames(validColumns);
       }
     },
-    [
-      setSearchColumns,
-      setDisplayColumnNames,
-      userPreferences.preferredWeightSystem,
-      userPreferences.defaultWeightSystemAcknowledgedOnMs,
-    ]
+    [setSearchColumns, setDisplayColumnNames]
+  );
+
+  const updateSearchColumnsBootstrap = useCallback(
+    (columnNames?: string[]) => {
+      if (columnNames) {
+        if (
+          !userPreferences.defaultWeightSystemAcknowledgedOnMs &&
+          userPreferences.preferredWeightSystem !== 'imperial' &&
+          columnNames.find((cn) => cn === 'estimatedWeightOunces' || cn === 'estimatedWeightPounds')
+        ) {
+          setShowDefaultSystemSnackbar(true);
+        }
+        updateSearchColumns(columnNames);
+      }
+    },
+    [userPreferences.preferredWeightSystem, userPreferences.defaultWeightSystemAcknowledgedOnMs, updateSearchColumns]
+  );
+
+  const saveSearchColumns = useCallback(
+    async (columnNames?: string[]) => {
+      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
+      reloadOrgPreferences();
+    },
+    [selectedOrganization.id, reloadOrgPreferences]
   );
 
   const saveUpdateSearchColumns = useCallback(
     async (columnNames?: string[]) => {
       updateSearchColumns(columnNames);
-      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
-      reloadOrgPreferences();
+      await saveSearchColumns(columnNames);
     },
-    [selectedOrganization.id, updateSearchColumns, reloadOrgPreferences]
+    [updateSearchColumns, saveSearchColumns]
   );
+
+  const reorderSearchColumns = async (columnNames: string[]) => {
+    setDisplayColumnNames(columnNames);
+    await saveSearchColumns(columnNames);
+  };
 
   useEffect(() => {
     if (orgPreferences?.accessionsColumns) {
-      updateSearchColumns(orgPreferences.accessionsColumns as string[]);
+      updateSearchColumnsBootstrap(orgPreferences.accessionsColumns as string[]);
     }
-  }, [orgPreferences, updateSearchColumns]);
+  }, [orgPreferences, updateSearchColumnsBootstrap]);
 
   useEffect(() => {
     // if url has stage=<accession state>, apply that filter
@@ -429,7 +452,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
       const populateFieldOptions = async () => {
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        const allValues = await SeedBankService.getAllFieldValues(singleAndMultiChoiceFields, selectedOrganization.id);
+        const allValues = await SeedBankService.searchFieldValues(
+          singleAndMultiChoiceFields,
+          {},
+          selectedOrganization.id
+        );
 
         if (activeRequests) {
           setFieldOptions(allValues);
@@ -482,12 +509,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const onOpenEditColumnsModal = () => {
-    setAnchorEl(null);
     setEditColumnsModalOpen(true);
   };
 
   const onDownloadReport = () => {
-    setAnchorEl(null);
     setReportModalOpen(true);
   };
 
@@ -506,10 +531,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     return false;
   };
 
-  const reorderEndHandler = (newOrder: string[]) => {
-    setDisplayColumnNames(newOrder);
-  };
-
   const handleViewCollections = () => {
     history.push(APP_PATHS.CHECKIN);
   };
@@ -526,26 +547,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
     history.push(newAccessionLocation);
   };
 
-  const onSeedBankForImportSelected = (selectedFacility: Facility | undefined) => {
+  const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {
     setSelectSeedBankForImportModalOpen(false);
-    if (selectedFacility) {
-      setSelectedOrgInfo({ ...selectedOrgInfo, selectedFacility });
+    if (selectedFacilityOnModal) {
+      setSelectedFacility(selectedFacilityOnModal);
       setOpenImportModal(true);
     }
   };
 
   const importAccessions = () => {
     setSelectSeedBankForImportModalOpen(true);
-  };
-
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   const getEmptyState = () => {
@@ -583,10 +594,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const isOnboarded = hasSeedBanks && hasSpecies;
 
-  const onItemClick = (selectedItem: DropdownItem) => {
-    switch (selectedItem.value) {
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    switch (optionItem.value) {
       case 'import': {
-        handleClose();
         setSelectSeedBankForImportModalOpen(true);
         break;
       }
@@ -598,40 +608,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
         onOpenEditColumnsModal();
         break;
       }
-      default: {
-        handleClose();
-      }
     }
   };
-
-  const getHeaderButtons = () => (
-    <>
-      <Box marginLeft={1} display='inline'>
-        <Tooltip title={strings.MORE_OPTIONS}>
-          <Button
-            id='more-options'
-            icon='menuVertical'
-            onClick={(event) => event && handleClick(event)}
-            priority='secondary'
-            size='medium'
-          />
-        </Tooltip>
-      </Box>
-
-      <PopoverMenu
-        sections={[
-          [
-            { label: strings.IMPORT, value: 'import' },
-            { label: strings.EXPORT, value: 'export' },
-            { label: strings.CUSTOMIZE_TABLE_COLUMNS, value: 'tableColumns' },
-          ],
-        ]}
-        handleClick={onItemClick}
-        anchorElement={anchorEl}
-        setAnchorElement={setAnchorEl}
-      />
-    </>
-  );
 
   const emptyStateSpacer = () => {
     return <Grid item xs={12} padding={theme.spacing(3)} />;
@@ -639,11 +617,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   return (
     <>
-      {selectedOrgInfo.selectedFacility && (
+      {selectedFacility && (
         <ImportAccessionsModal
           open={openImportModal}
           onClose={() => setOpenImportModal(false)}
-          facility={selectedOrgInfo.selectedFacility}
+          facility={selectedFacility}
           reloadData={reloadData}
         />
       )}
@@ -667,7 +645,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
           <PageHeader
             title=''
             subtitle={strings.ACCESSIONS_DATABASE_DESCRIPTION}
-            allowAll={true}
             page={strings.ACCESSIONS}
             parentPage={strings.SEEDS}
             rightComponent={
@@ -685,7 +662,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         id='newAccession'
                       />
                     ))}
-                  {getHeaderButtons()}
+                  <OptionsMenu
+                    onOptionItemClick={onOptionItemClick}
+                    optionItems={[
+                      { label: strings.IMPORT, value: 'import' },
+                      { label: strings.EXPORT, value: 'export' },
+                      { label: strings.CUSTOMIZE_TABLE_COLUMNS, value: 'tableColumns' },
+                    ]}
+                  />
                 </>
               ) : undefined
             }
@@ -748,7 +732,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           onSelect={onSelect}
                           sortHandler={onSortChange}
                           isInactive={isInactive}
-                          onReorderEnd={reorderEndHandler}
+                          onReorderEnd={reorderSearchColumns}
                           isPresorted={true}
                         />
                       )}

@@ -30,6 +30,25 @@ export type LocationSectionProps = {
   validate?: boolean;
 };
 
+const columns = (): TableColumnType[] => [
+  {
+    key: 'name',
+    name: strings.SPECIES,
+    type: 'string',
+  },
+  {
+    key: 'growthForm',
+    name: strings.GROWTH_FORM,
+    type: 'string',
+  },
+  {
+    key: 'totalPlanted',
+    name: strings.TOTAL_PLANTED_REQUIRED,
+    type: 'string',
+  },
+  { key: 'mortalityRateInField', name: strings.MORTALITY_RATE_IN_FIELD_REQUIRED, type: 'string' },
+];
+
 export default function LocationSection(props: LocationSectionProps): JSX.Element {
   const { editable, location, onUpdateLocation, onUpdateWorkers, locationType, validate } = props;
   const { isMobile, isTablet } = useDeviceInfo();
@@ -41,9 +60,11 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const isNursery = locationType === 'nursery';
   const isPlantingSite = locationType === 'plantingSite';
 
-  const [paidWorkers, setPaidWorkers] = useState<number>(location.workers?.paidWorkers ?? 0);
-  const [femalePaidWorkers, setFemalePaidWorkers] = useState<number>(location.workers?.femalePaidWorkers ?? 0);
-  const [volunteers, setVolunteers] = useState<number>(location.workers?.volunteers ?? 0);
+  const [paidWorkers, setPaidWorkers] = useState<number | null>(location.workers?.paidWorkers ?? null);
+  const [femalePaidWorkers, setFemalePaidWorkers] = useState<number | null>(
+    location.workers?.femalePaidWorkers ?? null
+  );
+  const [volunteers, setVolunteers] = useState<number | null>(location.workers?.volunteers ?? null);
   const [locationNotes, setLocationNotes] = useState(location.notes ?? '');
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
@@ -85,7 +106,6 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             name: foundSpecies.scientificName,
             growthForm: foundSpecies.growthForm,
             mortalityRateInField: iSpecies.mortalityRateInField,
-            mortalityRateInNursery: iSpecies.mortalityRateInNursery,
             totalPlanted: iSpecies.totalPlanted,
           });
         }
@@ -94,28 +114,8 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     }
   }, [allSpecies, isPlantingSite, location]);
 
-  const columns: TableColumnType[] = [
-    {
-      key: 'name',
-      name: strings.SPECIES,
-      type: 'string',
-    },
-    {
-      key: 'growthForm',
-      name: strings.GROWTH_FORM,
-      type: 'string',
-    },
-    {
-      key: 'totalPlanted',
-      name: strings.TOTAL_PLANTED,
-      type: 'string',
-    },
-    { key: 'mortalityRateInField', name: strings.MORTALITY_RATE_IN_FIELD, type: 'string' },
-    { key: 'mortalityRateInNursery', name: strings.MORTALITY_RATE_IN_NURSERY, type: 'string' },
-  ];
-
   const onEditPlantingSiteReport = (species: PlantingSiteSpecies, fromColumn?: string, value?: any) => {
-    if (fromColumn && value) {
+    if (fromColumn) {
       const speciesToEditIndex = (location as ReportPlantingSite).species.findIndex(
         (iSpecies) => iSpecies.id === species.id
       );
@@ -124,7 +124,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       const newSpecies = [...(location as ReportPlantingSite).species];
       const speciesModified = {
         ...speciesToEdit,
-        [fromColumn as 'mortalityRateInField' | 'mortalityRateInNursery' | 'totalPlanted']: value,
+        [fromColumn as 'mortalityRateInField' | 'totalPlanted']: value,
       };
 
       newSpecies[speciesToEditIndex] = speciesModified;
@@ -143,14 +143,19 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               label={
                 locationType === 'seedBank'
                   ? strings.REPORT_SEEDBANK_BUILD_START_DATE
-                  : strings.REPORT_NURSERY_BUILD_START_DATE
+                  : strings.FACILITY_BUILD_START_DATE_REQUIRED
               }
               editable={editable && (location as ReportSeedBank | ReportNursery).buildStartedDateEditable}
               value={(location as ReportSeedBank | ReportNursery).buildStartedDate ?? ''}
               onChange={(value) => onUpdateLocation('buildStartedDate', value)}
               type='date'
+              maxDate={(location as ReportSeedBank | ReportNursery).buildCompletedDate}
               errorText={
-                validate && !(location as ReportSeedBank | ReportNursery).buildStartedDate ? strings.REQUIRED_FIELD : ''
+                validate && !(location as ReportSeedBank | ReportNursery).buildStartedDate
+                  ? strings.REQUIRED_FIELD
+                  : validate && !buildStartedDateValid(location as ReportSeedBank | ReportNursery)
+                  ? strings.FACILITY_BUILD_START_DATE_INVALID
+                  : ''
               }
             />
           </Grid>
@@ -160,15 +165,19 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               label={
                 locationType === 'seedBank'
                   ? strings.REPORT_SEEDBANK_BUILD_COMPLETION_DATE
-                  : strings.REPORT_NURSERY_BUILD_COMPLETION_DATE
+                  : strings.FACILITY_BUILD_COMPLETION_DATE_REQUIRED
               }
               editable={editable && (location as ReportSeedBank | ReportNursery).buildCompletedDateEditable}
               value={(location as ReportSeedBank | ReportNursery).buildCompletedDate ?? ''}
               onChange={(value) => onUpdateLocation('buildCompletedDate', value)}
               type='date'
+              minDate={(location as ReportSeedBank | ReportNursery).buildStartedDate}
+              maxDate={(location as ReportSeedBank | ReportNursery).operationStartedDate}
               errorText={
                 validate && !(location as ReportSeedBank | ReportNursery).buildCompletedDate
                   ? strings.REQUIRED_FIELD
+                  : validate && !buildCompletedDateValid(location as ReportSeedBank | ReportNursery)
+                  ? strings.FACILITY_BUILD_COMPLETION_DATE_INVALID
                   : ''
               }
             />
@@ -179,15 +188,18 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               label={
                 locationType === 'seedBank'
                   ? strings.REPORT_SEEDBANK_OPERATION_START_DATE
-                  : strings.REPORT_NURSERY_OPERATION_START_DATE
+                  : strings.FACILITY_OPERATION_START_DATE_REQUIRED
               }
               editable={editable && (location as ReportSeedBank | ReportNursery).operationStartedDateEditable}
               value={(location as ReportSeedBank | ReportNursery).operationStartedDate ?? ''}
               onChange={(value) => onUpdateLocation('operationStartedDate', value)}
               type='date'
+              minDate={(location as ReportSeedBank | ReportNursery).buildCompletedDate}
               errorText={
                 validate && !(location as ReportSeedBank | ReportNursery).operationStartedDate
                   ? strings.REQUIRED_FIELD
+                  : validate && !operationStartedDateValid(location as ReportSeedBank | ReportNursery)
+                  ? strings.FACILITY_OPERATION_START_DATE_INVALID
                   : ''
               }
             />
@@ -209,12 +221,14 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           <Grid item xs={smallItemGridWidth()}>
             <InfoField
               id={`${location.id}-nursery-capacity`}
-              label={strings.REPORT_NURSERY_CAPACITY}
+              label={strings.NURSERY_CAPACITY_REQUIRED}
               value={(location as ReportNursery).capacity ?? ''}
+              minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('capacity', value)}
+              onChange={(value) => onUpdateLocation('capacity', transformNumericValue(value, { min: 0 }))}
               type='text'
-              errorText={validate && !(location as ReportNursery).capacity ? strings.REQUIRED_FIELD : ''}
+              errorText={validate && (location as ReportNursery).capacity === null ? strings.REQUIRED_FIELD : ''}
+              tooltipTitle={strings.REPORT_NURSERY_CAPACITY_INFO}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -229,7 +243,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             <OverviewItemCard
               isEditable={false}
               title={strings.NURSERY_MORTALITY_RATE}
-              contents={(location as ReportNursery).mortalityRate.toString() ?? '0'}
+              contents={`${(location as ReportNursery).mortalityRate.toString() ?? '0'}%`}
               className={classes.infoCardStyle}
             />
           </Grid>
@@ -242,12 +256,16 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               id={`${location.id}-planting-site-area`}
               label={strings.TOTAL_PLANTING_SITE_AREA_HA}
               value={(location as ReportPlantingSite).totalPlantingSiteArea ?? ''}
+              minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalPlantingSiteArea', value)}
+              onChange={(value) => onUpdateLocation('totalPlantingSiteArea', transformNumericValue(value, { min: 0 }))}
               type='text'
               errorText={
-                validate && !(location as ReportPlantingSite).totalPlantingSiteArea ? strings.REQUIRED_FIELD : ''
+                validate && (location as ReportPlantingSite).totalPlantingSiteArea === null
+                  ? strings.REQUIRED_FIELD
+                  : ''
               }
+              tooltipTitle={strings.REPORT_TOTAL_PLANTING_SITE_AREA_INFO}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -255,10 +273,14 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               id={`${location.id}-total-planted-area`}
               label={strings.TOTAL_PLANTED_AREA_HA}
               value={(location as ReportPlantingSite).totalPlantedArea ?? ''}
+              minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalPlantedArea', value)}
+              onChange={(value) => onUpdateLocation('totalPlantedArea', transformNumericValue(value, { min: 0 }))}
               type='text'
-              errorText={validate && !(location as ReportPlantingSite).totalPlantedArea ? strings.REQUIRED_FIELD : ''}
+              errorText={
+                validate && (location as ReportPlantingSite).totalPlantedArea === null ? strings.REQUIRED_FIELD : ''
+              }
+              tooltipTitle={strings.REPORT_TOTAL_PLANTED_AREA_INFO}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()} />
@@ -267,11 +289,15 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               id={`${location.id}-total-trees-planted`}
               label={strings.TOTAL_TREES_PLANTED}
               value={(location as ReportPlantingSite).totalTreesPlanted ?? ''}
+              minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalTreesPlanted', value)}
+              onChange={(value) => onUpdateLocation('totalTreesPlanted', transformNumericValue(value, { min: 0 }))}
               type='text'
               helper={strings.TOTAL_TREES_PLANTED_HELPER_TEXT}
-              errorText={validate && !(location as ReportPlantingSite).totalTreesPlanted ? strings.REQUIRED_FIELD : ''}
+              errorText={
+                validate && (location as ReportPlantingSite).totalTreesPlanted === null ? strings.REQUIRED_FIELD : ''
+              }
+              tooltipTitle={strings.REPORT_TOTAL_TREES_PLANTED_INFO}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -279,31 +305,48 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               id={`${location.id}-total-plants-planted`}
               label={strings.TOTAL_PLANTS_PLANTED}
               value={(location as ReportPlantingSite).totalPlantsPlanted ?? ''}
+              minNum={0}
               editable={editable}
-              onChange={(value) => onUpdateLocation('totalPlantsPlanted', value)}
+              onChange={(value) => onUpdateLocation('totalPlantsPlanted', transformNumericValue(value, { min: 0 }))}
               type='text'
               helper={strings.TOTAL_PLANTS_PLANTED_HELPER_TEXT}
-              errorText={validate && !(location as ReportPlantingSite).totalPlantsPlanted ? strings.REQUIRED_FIELD : ''}
+              errorText={
+                validate && (location as ReportPlantingSite).totalPlantsPlanted === null ? strings.REQUIRED_FIELD : ''
+              }
+              tooltipTitle={strings.REPORT_TOTAL_NON_TREES_PLANTED_INFO}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
             <InfoField
               id={`${location.id}-mortality-rate`}
-              label={strings.MORTALITY_RATE}
-              value={(location as ReportPlantingSite).mortalityRate ?? ''}
+              label={strings.MORTALITY_RATE_PERCENT_REQUIRED}
+              value={
+                editable
+                  ? (location as ReportPlantingSite).mortalityRate ?? ''
+                  : (location as ReportPlantingSite).mortalityRate
+                  ? `${(location as ReportPlantingSite).mortalityRate}%`
+                  : ''
+              }
+              minNum={0}
+              maxNum={100}
               editable={editable}
-              onChange={(value) => onUpdateLocation('mortalityRate', value)}
+              onChange={(value) =>
+                onUpdateLocation('mortalityRate', transformNumericValue(value, { min: 0, max: 100 }))
+              }
               type='text'
-              errorText={validate && !(location as ReportPlantingSite).mortalityRate ? strings.REQUIRED_FIELD : ''}
+              errorText={
+                validate && (location as ReportPlantingSite).mortalityRate === null ? strings.REQUIRED_FIELD : ''
+              }
+              tooltipTitle={strings.REPORT_MORTALITY_RATE_INFO}
             />
           </Grid>
           {plantingSiteSpecies && (
             <Grid item xs={12} marginBottom={3}>
               <Table
-                id='species-table'
+                id='reports-species-table'
                 columns={columns}
                 rows={plantingSiteSpecies}
-                Renderer={PlantingSiteSpeciesCellRenderer({ editMode: editable })}
+                Renderer={PlantingSiteSpeciesCellRenderer({ editMode: editable, validate })}
                 showPagination={false}
                 onSelect={onEditPlantingSiteReport}
                 controlledOnSelect={true}
@@ -319,12 +362,16 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-workers-paid-engaged`}
           label={strings.WORKERS_PAID_ENGAGED}
           editable={editable}
-          value={editable ? paidWorkers : location.workers.paidWorkers?.toString() ?? '0'}
+          value={editable ? paidWorkers ?? '' : location.workers.paidWorkers?.toString() ?? ''}
+          minNum={0}
           onChange={(value) => {
-            setPaidWorkers(value as number);
-            onUpdateWorkers('paidWorkers', value);
+            const newValue = transformNumericValue(value, { min: 0 });
+            setPaidWorkers(newValue);
+            onUpdateWorkers('paidWorkers', newValue);
           }}
           type='text'
+          tooltipTitle={strings.REPORT_TOTAL_PAID_WORKERS_INFO}
+          errorText={validate && location.workers.paidWorkers === null ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
@@ -332,12 +379,16 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-${locationType}-paid-female`}
           label={strings.WORKERS_PAID_FEMALE}
           editable={editable}
-          value={editable ? femalePaidWorkers : location.workers.femalePaidWorkers?.toString() ?? '0'}
+          value={editable ? femalePaidWorkers ?? '' : location.workers.femalePaidWorkers?.toString() ?? ''}
+          minNum={0}
           onChange={(value) => {
-            setFemalePaidWorkers(value as number);
-            onUpdateWorkers('femalePaidWorkers', value);
+            const newValue = transformNumericValue(value, { min: 0 });
+            setFemalePaidWorkers(newValue);
+            onUpdateWorkers('femalePaidWorkers', newValue);
           }}
           type='text'
+          tooltipTitle={strings.REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO}
+          errorText={validate && location.workers.femalePaidWorkers === null ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
@@ -345,12 +396,16 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-${locationType}-volunteer`}
           label={strings.WORKERS_VOLUNTEERS}
           editable={editable}
-          value={editable ? volunteers : location.workers.volunteers?.toString() ?? '0'}
+          value={editable ? volunteers ?? '' : location.workers.volunteers?.toString() ?? ''}
+          minNum={0}
           onChange={(value) => {
-            setVolunteers(value as number);
-            onUpdateWorkers('volunteers', value);
+            const newValue = transformNumericValue(value, { min: 0 });
+            setVolunteers(newValue);
+            onUpdateWorkers('volunteers', newValue);
           }}
           type='text'
+          tooltipTitle={strings.REPORT_TOTAL_VOLUNTEERS_INFO}
+          errorText={validate && location.workers.volunteers === null ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -358,21 +413,24 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           label={getNotesLabel()}
           id={`${location.id}-notes`}
           type='textarea'
-          disabled={!editable}
+          display={!editable}
+          preserveNewlines={true}
           value={locationNotes}
           onChange={(value) => {
             setLocationNotes(value as string);
             onUpdateLocation('notes', value);
           }}
         />
-        <Typography
-          color={theme.palette.TwClrTxtSecondary}
-          fontSize='14px'
-          fontWeight={400}
-          marginTop={theme.spacing(0.5)}
-        >
-          {strings.NOTE_ANY_ISSUES}
-        </Typography>
+        {editable && (
+          <Typography
+            color={theme.palette.TwClrTxtSecondary}
+            fontSize='14px'
+            fontWeight={400}
+            marginTop={theme.spacing(0.5)}
+          >
+            {strings.NOTE_ANY_ISSUES}
+          </Typography>
+        )}
       </Grid>
     </>
   );
@@ -393,10 +451,29 @@ type InfoFieldProps = {
   type: 'text' | 'date';
   helper?: string;
   errorText?: string;
+  minNum?: number;
+  maxNum?: number;
+  maxDate?: any;
+  minDate?: any;
+  tooltipTitle?: string;
 };
 
 function InfoField(props: InfoFieldProps): JSX.Element {
-  const { id, label, editable, value, onChange, type, helper, errorText } = props;
+  const {
+    id,
+    label,
+    editable,
+    value,
+    onChange,
+    type,
+    helper,
+    errorText,
+    minNum,
+    maxNum,
+    maxDate,
+    minDate,
+    tooltipTitle,
+  } = props;
   const classes = useStyles();
   return editable ? (
     type === 'text' ? (
@@ -405,10 +482,13 @@ function InfoField(props: InfoFieldProps): JSX.Element {
         id={id}
         type='number'
         value={value}
-        readonly={!editable}
+        min={minNum}
+        max={maxNum}
+        display={!editable}
         onChange={onChange}
         helperText={helper}
         errorText={errorText}
+        tooltipTitle={tooltipTitle}
       />
     ) : type === 'date' ? (
       <DatePicker
@@ -418,6 +498,9 @@ function InfoField(props: InfoFieldProps): JSX.Element {
         onChange={onChange}
         aria-label='date-picker'
         errorText={errorText}
+        maxDate={maxDate}
+        minDate={minDate}
+        helperText={tooltipTitle}
       />
     ) : (
       <></>
@@ -428,6 +511,47 @@ function InfoField(props: InfoFieldProps): JSX.Element {
       title={label}
       contents={value.toString() ?? '0'}
       className={classes.infoCardStyle}
+      titleInfoTooltip={tooltipTitle}
     />
   );
 }
+
+export const buildStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+  let beforeBuildCompletedConditionMet = false;
+  let beforeOpStartedConditionMet = false;
+  if (loc.buildStartedDate && loc.buildCompletedDate) {
+    beforeBuildCompletedConditionMet = Date.parse(loc.buildStartedDate) <= Date.parse(loc.buildCompletedDate);
+  }
+  if (loc.buildStartedDate && loc.operationStartedDate) {
+    beforeOpStartedConditionMet = Date.parse(loc.buildStartedDate) <= Date.parse(loc.operationStartedDate);
+  }
+  return beforeBuildCompletedConditionMet && beforeOpStartedConditionMet;
+};
+
+export const buildCompletedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+  let afterStartConditionMet = false;
+  let beforeOpStartedConditionMet = false;
+  if (loc.buildStartedDate && loc.buildCompletedDate) {
+    afterStartConditionMet = Date.parse(loc.buildStartedDate) <= Date.parse(loc.buildCompletedDate);
+  }
+  if (loc.buildCompletedDate && loc.operationStartedDate) {
+    beforeOpStartedConditionMet = Date.parse(loc.buildCompletedDate) <= Date.parse(loc.operationStartedDate);
+  }
+  return afterStartConditionMet && beforeOpStartedConditionMet;
+};
+
+export const operationStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+  let afterBuildStartedConditionMet = false;
+  let afterBuildCompletedConditionMet = false;
+  if (loc.buildStartedDate && loc.operationStartedDate) {
+    afterBuildStartedConditionMet = Date.parse(loc.buildStartedDate) <= Date.parse(loc.operationStartedDate);
+  }
+  if (loc.buildCompletedDate && loc.operationStartedDate) {
+    afterBuildCompletedConditionMet = Date.parse(loc.buildCompletedDate) <= Date.parse(loc.operationStartedDate);
+  }
+  return afterBuildStartedConditionMet && afterBuildCompletedConditionMet;
+};
+
+const transformNumericValue = (value: any, { min = -Infinity, max = Infinity }): number | null => {
+  return value === '' ? null : Math.min(max, Math.max(min, Math.floor(value as number)));
+};

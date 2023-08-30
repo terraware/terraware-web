@@ -12,7 +12,7 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 
 type ReassignmentTabPanelContentProps = {
   species: Species[];
-  plotNames: Record<number, string>;
+  plantingSubzoneNames: Record<number, string>;
   withdrawal?: NurseryWithdrawal;
   delivery?: Delivery;
   batches?: Batch[];
@@ -20,7 +20,7 @@ type ReassignmentTabPanelContentProps = {
 
 export default function ReassignmentTabPanelContent({
   species,
-  plotNames,
+  plantingSubzoneNames,
   withdrawal,
   delivery,
 }: ReassignmentTabPanelContentProps): JSX.Element {
@@ -64,7 +64,7 @@ export default function ReassignmentTabPanelContent({
       <Box marginTop={theme.spacing(3)}>
         <OutplantReassignmentTable
           species={species}
-          plotNames={plotNames}
+          subzoneNames={plantingSubzoneNames}
           delivery={delivery}
           withdrawalNotes={withdrawal?.notes}
         />

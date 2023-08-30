@@ -16,7 +16,6 @@ import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import hexRgb from 'hex-rgb';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
@@ -25,6 +24,7 @@ import Icon from './common/icon/Icon';
 import useEnvironment from 'src/utils/useEnvironment';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
+import { getRgbaFromHex } from 'src/utils/color';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -39,52 +39,50 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '32px',
   },
   largeIcon: {
-    width: '48px',
-    height: '48px',
+    width: '40px',
+    height: '40px',
   },
   closeButton: {
     background: 'none',
     border: 'none',
     cursor: 'pointer',
     marginLeft: 'auto',
-    height: 'fit-content',
+    height: 'auto',
+    paddingBottom: '16px',
   },
   closeIcon: {
     fill: theme.palette.TwClrIcnSecondary,
-    width: '27px',
-    height: '27px',
   },
   userMenuOpened: {
     '& .blurred': {
       backdropFilter: 'blur(8px)',
-      background: hexRgb(`${theme.palette.TwClrBgSecondary}`, { alpha: 0.8, format: 'css' }),
+      background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
       height: '100%',
       alignItems: 'center',
       position: 'fixed',
       zIndex: 1300,
       inset: '0px',
+      overflowY: 'scroll',
     },
   },
   menuItem: {
     fontSize: '14px',
-    padding: '16px 0',
+    padding: '16px 16px',
     display: 'flex',
+    fontWeight: 500,
+    borderRadius: '16px',
   },
-  checkmarkIcon: {
-    marginLeft: 'auto',
+  menuItemSelected: {
+    backgroundColor: theme.palette.TwClrBgGhostActive,
   },
   menuList: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
-  },
-  orgsList: {
-    overflow: 'auto',
   },
   divider: {
+    background: theme.palette.TwClrBrdrTertiary,
     '&.MuiDivider-root': {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
+      margin: theme.spacing(1, 2, 1, 2),
     },
   },
   avatarButton: {
@@ -122,9 +120,10 @@ export default function SmallDeviceUserMenu({
   const handleClose = (event: Event | React.SyntheticEvent) => {
     if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
+    } else {
+      event.preventDefault();
+      setOpen(false);
     }
-
-    setOpen(false);
   };
 
   // return focus to the button when we transitioned from !open -> open
@@ -161,11 +160,12 @@ export default function SmallDeviceUserMenu({
           open={open}
           anchorEl={anchorRef.current}
           placement='top-end'
+          disablePortal={true}
           transition
           sx={{ width: '300px', height: '100%', right: '0 !important', left: 'auto !important', zIndex: 1111 }}
         >
           <Slide direction='left' in={open} mountOnEnter unmountOnExit>
-            <Paper sx={{ width: '300px', height: '100%' }}>
+            <Paper sx={{ width: '300px', height: 'auto', boxShadow: 'none' }}>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList
                   autoFocusItem={open}
@@ -175,17 +175,48 @@ export default function SmallDeviceUserMenu({
                   className={classes.menuList}
                 >
                   <Box sx={{ display: 'flex' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
-                      <Typography sx={{ paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
-                        {user?.firstName} {user?.lastName}
-                      </Typography>
-                    </Box>
                     <button onClick={handleClose} className={classes.closeButton}>
-                      <Icon name='close' className={classes.closeIcon} />
+                      <Icon name='close' size='medium' className={classes.closeIcon} />
                     </button>
                   </Box>
-                  <Divider sx={{ margin: '16px 0' }} />
+                  <Typography
+                    sx={{
+                      paddingLeft: '16px',
+                      paddingBottom: '12px',
+                      color: theme.palette.TwClrTxt,
+                      fontSize: '12px',
+                      fontWeight: 400,
+                    }}
+                  >
+                    {strings.ACCOUNT.toUpperCase()}
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      paddingLeft: '16px',
+                      paddingTop: '8px',
+                      paddingBottom: '12px',
+                    }}
+                  >
+                    <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
+                    <div>
+                      <Typography sx={{ height: '24px', paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
+                        {user?.firstName} {user?.lastName}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          paddingLeft: '8px',
+                          paddingTop: '4px',
+                          fontSize: '12px',
+                          fontWeight: 400,
+                          color: theme.palette.TwClrTxt,
+                        }}
+                      >
+                        {user?.email}
+                      </Typography>
+                    </div>
+                  </Box>
                   <MenuItem
                     onClick={(e) => {
                       navigate(APP_PATHS.MY_ACCOUNT);
@@ -204,9 +235,21 @@ export default function SmallDeviceUserMenu({
                   >
                     {strings.LOG_OUT}
                   </MenuItem>
-                  {hasOrganizations ? <Divider className={classes.divider} sx={{ margin: '16px 0' }} /> : null}
+                  <Divider className={classes.divider} sx={{ margin: '16px 0' }} />
+                  <Typography
+                    sx={{
+                      paddingLeft: '16px',
+                      paddingBottom: '12px',
+                      paddingTop: '12px',
+                      color: theme.palette.TwClrTxt,
+                      fontSize: '12px',
+                      fontWeight: 400,
+                    }}
+                  >
+                    {strings.ORGANIZATIONS.toUpperCase()}
+                  </Typography>
                   {hasOrganizations ? (
-                    <div className={classes.orgsList}>
+                    <div>
                       {organizations?.map((org, index) => {
                         return (
                           <MenuItem
@@ -214,41 +257,31 @@ export default function SmallDeviceUserMenu({
                               selectOrganization(org);
                               handleClose(e);
                             }}
-                            className={classes.menuItem}
+                            className={
+                              selectedOrganization.id === org.id
+                                ? `${classes.menuItem} ${classes.menuItemSelected}`
+                                : classes.menuItem
+                            }
                             key={`item-${index}`}
                           >
-                            <Typography
-                              sx={{ fontSize: '14px', fontWeight: selectedOrganization.id === org.id ? 600 : 400 }}
-                            >
-                              {org.name}
-                            </Typography>
-                            {selectedOrganization.id === org.id ? (
-                              <Box className={classes.checkmarkIcon}>
-                                <Icon name='checkmark' />
-                              </Box>
-                            ) : null}
+                            {org.name}
                           </MenuItem>
                         );
                       })}
                     </div>
                   ) : null}
-                  {hasOrganizations ? (
-                    <>
-                      <MenuItem className={classes.menuItem}> --- </MenuItem>
-                      <MenuItem
-                        onClick={(e) => {
-                          handleClose(e);
-                          setNewOrganizationModalOpened(true);
-                        }}
-                        className={classes.menuItem}
-                      >
-                        {strings.CREATE_NEW_ORGANIZATION}
-                      </MenuItem>
-                    </>
-                  ) : null}
+                  <MenuItem
+                    onClick={(e) => {
+                      handleClose(e);
+                      setNewOrganizationModalOpened(true);
+                    }}
+                    className={classes.menuItem}
+                  >
+                    <Icon name='plus' />
+                    <div style={{ paddingLeft: '8px' }}>{strings.CREATE_NEW_ORGANIZATION}</div>
+                  </MenuItem>
                   {!isProduction && hasOrganizations ? (
-                    <>
-                      <MenuItem className={classes.menuItem}> --- </MenuItem>
+                    <div>
                       <MenuItem
                         onClick={(e) => {
                           navigate(APP_PATHS.OPT_IN);
@@ -258,7 +291,7 @@ export default function SmallDeviceUserMenu({
                       >
                         {strings.OPT_IN}
                       </MenuItem>
-                    </>
+                    </div>
                   ) : null}
                 </MenuList>
               </ClickAwayListener>

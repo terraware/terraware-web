@@ -16,9 +16,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingRight: 0,
     borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     display: 'flex',
-
-    borderRadius: (props: StyleProps) => (props.isMobile ? 'unset' : '7px 7px 0 0'),
-    backgroundColor: (props: StyleProps) => (props.isMobile ? theme.palette.TwClrBg : theme.palette.TwClrBgSecondary),
+    borderRadius: '7px 7px 0 0',
+    backgroundColor: theme.palette.TwClrBgSecondary,
   },
   title: {
     fontSize: '20px',
@@ -37,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   popover: {
     padding: 0,
     borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderRadius: (props: StyleProps) => (props.isMobile ? 'unset' : '7px 7px 0 0'),
+    borderRadius: '7px 7px 0 0',
     height: '64px',
   },
   paper: {
@@ -71,9 +70,8 @@ const useStyles = makeStyles((theme: Theme) => ({
       top: '56px !important',
       left: '0px !important',
       right: '0px !important',
-      bottom: '0px !important',
+      bottom: 'auto !important',
       maxWidth: '100vw',
-      borderRadius: 'unset',
     },
   },
   divotWrapper: {

@@ -1,6 +1,5 @@
 import React from 'react';
 import Title from '../common/Title';
-import { SelectedOrgInfo } from 'src/types/Organization';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { Container, Grid, Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -53,9 +52,6 @@ interface Props {
   parentPage?: string;
   back?: boolean;
   backUrl?: string;
-  allowAll?: boolean;
-  onChangeSelectedOrgInfo?: (selectedValues: SelectedOrgInfo) => void;
-  showFacility?: boolean;
   titleClassName?: string;
 }
 
@@ -68,9 +64,6 @@ export default function PageHeader({
   backUrl,
   page,
   parentPage,
-  allowAll,
-  onChangeSelectedOrgInfo,
-  showFacility,
   titleClassName,
 }: Props): JSX.Element {
   const classes = useStyles();
@@ -121,7 +114,7 @@ export default function PageHeader({
                 </Typography>
               )}
             </Box>
-            <PageSnackbar />
+            <PageSnackbar pageKey='seeds' />
             {children}
           </div>
         </Grid>

@@ -3,7 +3,6 @@ import { CssBaseline, Slide, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import hexRgb from 'hex-rgb';
 import useStateLocation from './utils/useStateLocation';
 import { DEFAULT_SEED_SEARCH_FILTERS, DEFAULT_SEED_SEARCH_SORT_ORDER } from 'src/services/SeedBankService';
 import { SearchSortOrder, SearchCriteria } from 'src/types/Search';
@@ -28,8 +27,12 @@ import TopBarContent from 'src/components/TopBar/TopBarContent';
 import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { FacilityType } from 'src/types/Facility';
-import MyAccount from './components/MyAccount';
 import { Species } from './types/Species';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import MyAccount from './components/MyAccount';
 import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
 import NewSeedBank from './components/NewSeedBank';
@@ -45,15 +48,13 @@ import Inventory from './components/Inventory';
 import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
-import { CreatePlantingSite, PlantingSitesList } from './components/PlantingSites';
-import PlantingSiteView from './components/PlantingSites/PlantingSiteView';
 import {
   BatchBulkWithdrawWrapperComponent,
   SpeciesBulkWithdrawWrapperComponent,
 } from './components/Inventory/withdraw';
 import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
-import { SpeciesService, TrackingService } from 'src/services';
+import { SpeciesService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { defaultSelectedOrg } from 'src/providers/contexts';
@@ -61,8 +62,12 @@ import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
-import isEnabled from './features';
 import { ReportList, ReportView, ReportEdit } from './components/Reports';
+import isEnabled from 'src/features';
+import Observations from 'src/components/Observations';
+import { getRgbaFromHex } from 'src/utils/color';
+import PlantsDashboardV2 from 'src/components/PlantsV2';
+import PlantingSites from 'src/components/PlantingSites';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -73,22 +78,25 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.TwClrBaseGray025,
     backgroundImage:
       'linear-gradient(180deg,' +
-      `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0, format: 'css' })} 0%,` +
-      `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`,
+      `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
+      `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`,
     backgroundAttachment: 'fixed',
     minHeight: '100vh',
     '& .navbar': {
-      backgroundColor: theme.palette.TwClrBaseGray025,
-      backgroundImage:
-        'linear-gradient(180deg,' +
-        `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0, format: 'css' })} 0%,` +
-        `${hexRgb(`${theme.palette.TwClrBaseGreen050}`, { alpha: 0.4, format: 'css' })} 100%)`,
+      backgroundColor: (props: StyleProps) =>
+        props.isDesktop ? theme.palette.TwClrBaseGray025 : theme.palette.TwClrBaseWhite,
+      backgroundImage: (props: StyleProps) =>
+        props.isDesktop
+          ? 'linear-gradient(180deg,' +
+            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
+            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`
+          : null,
       backgroundAttachment: 'fixed',
       paddingRight: (props: StyleProps) => (props.isDesktop ? '8px' : undefined),
-      marginTop: (props: StyleProps) => (props.isDesktop ? '96px' : '8px'),
-      paddingTop: 0,
+      marginTop: (props: StyleProps) => (props.isDesktop ? '96px' : '0px'),
+      paddingTop: (props: StyleProps) => (props.isDesktop ? '0px' : '24px'),
       overflowY: 'auto',
-      width: (props: StyleProps) => (props.isDesktop ? '210px' : undefined),
+      width: (props: StyleProps) => (props.isDesktop ? '210px' : '300px'),
       zIndex: 1000,
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: theme.palette.TwClrBgGhostActive,
@@ -111,15 +119,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   navBarOpened: {
-    '& .blurred': {
-      backdropFilter: 'blur(8px)',
-      background: hexRgb(`${theme.palette.TwClrBgSecondary}`, { alpha: 0.8, format: 'css' }),
-      height: '100%',
-      alignItems: 'center',
-      position: 'fixed',
-      zIndex: 1300,
-      inset: '0px',
-    },
+    backdropFilter: 'blur(8px)',
+    background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
+    height: '100%',
+    alignItems: 'center',
+    position: 'fixed',
+    zIndex: 1300,
+    inset: '0px',
   },
 }));
 
@@ -167,9 +173,13 @@ function AppContent() {
 
   const history = useHistory();
   const [species, setSpecies] = useState<Species[]>([]);
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>([]);
-  const [plotNames, setPlotNames] = useState<Record<number, string>>({});
+  const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
+  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
+  const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
+  const trackingV2 = isEnabled('TrackingV2');
+  const dispatch = useAppDispatch();
+  const { activeLocale } = useLocalization();
 
   const setDefaults = useCallback(() => {
     if (!isPlaceholderOrg(selectedOrganization.id)) {
@@ -193,16 +203,13 @@ function AppContent() {
   }, [selectedOrganization]);
 
   const reloadTracking = useCallback(() => {
-    const populatePlantingSites = async () => {
+    const populatePlantingSites = () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        const response = await TrackingService.listPlantingSites(selectedOrganization.id, true);
-        if (response.requestSucceeded) {
-          setPlantingSites(response.sites || []);
-        }
+        dispatch(requestPlantingSites(selectedOrganization.id, activeLocale || undefined));
       }
     };
     populatePlantingSites();
-  }, [selectedOrganization]);
+  }, [dispatch, selectedOrganization.id, activeLocale]);
 
   useEffect(() => {
     setDefaults();
@@ -217,16 +224,16 @@ function AppContent() {
   }, [reloadTracking]);
 
   useEffect(() => {
-    const plots: Record<number, string> = {};
-    for (const plantingSite of plantingSites) {
+    const subzones: Record<number, string> = {};
+    for (const plantingSite of plantingSites ?? []) {
       for (const plantingZone of plantingSite.plantingZones ?? []) {
-        for (const plot of plantingZone.plots ?? []) {
-          plots[plot.id] = plot.name;
+        for (const subzone of plantingZone.plantingSubzones ?? []) {
+          subzones[subzone.id] = subzone.name;
         }
       }
     }
 
-    setPlotNames(plots);
+    setPlantingSubzoneNames(subzones);
   }, [plantingSites]);
 
   useEffect(() => {
@@ -259,7 +266,7 @@ function AppContent() {
 
   const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType('Nursery');
 
-  const selectedOrgHasPlantingSites = (): boolean => plantingSites.length > 0;
+  const selectedOrgHasPlantingSites = (): boolean => plantingSites !== undefined && plantingSites.length > 0;
 
   const getSeedBanksView = (): JSX.Element => {
     if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasSeedBanks()) {
@@ -285,6 +292,7 @@ function AppContent() {
       (location.pathname.startsWith(APP_PATHS.INVENTORY) && (!selectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||
       (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
       (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
+      (location.pathname.startsWith(APP_PATHS.OBSERVATIONS) && !hasObservationsResults) ||
       (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites())
     ) {
       return true;
@@ -321,25 +329,24 @@ function AppContent() {
 
   const getContent = () => (
     <>
-      {showNavBar ? (
-        <div className={type !== 'desktop' ? classes.navBarOpened : ''}>
-          <div className='blurred'>
-            {type !== 'desktop' ? (
-              <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-                <div>
-                  <NavBar setShowNavBar={setShowNavBar} withdrawalCreated={withdrawalCreated} />
-                </div>
-              </Slide>
-            ) : (
-              <NavBar
-                setShowNavBar={setShowNavBar}
-                backgroundTransparent={viewHasBackgroundImage()}
-                withdrawalCreated={withdrawalCreated}
-              />
-            )}
+      {type !== 'desktop' ? (
+        <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
+          <div className={classes.navBarOpened}>
+            <NavBar
+              setShowNavBar={setShowNavBar}
+              withdrawalCreated={withdrawalCreated}
+              hasPlantingSites={selectedOrgHasPlantingSites()}
+            />
           </div>
-        </div>
-      ) : null}
+        </Slide>
+      ) : (
+        <NavBar
+          setShowNavBar={setShowNavBar}
+          backgroundTransparent={viewHasBackgroundImage()}
+          withdrawalCreated={withdrawalCreated}
+          hasPlantingSites={selectedOrgHasPlantingSites()}
+        />
+      )}
       <div
         className={`${type === 'desktop' && showNavBar ? classes.contentWithNavBar : ''} ${
           classes.content
@@ -428,10 +435,10 @@ function AppContent() {
               <NewNursery />
             </Route>
             <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
-              <PlantsDashboard />
+              {trackingV2 ? <PlantsDashboardV2 /> : <PlantsDashboard />}
             </Route>
             <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
-              <PlantsDashboard />
+              {trackingV2 ? <PlantsDashboardV2 /> : <PlantsDashboard />}
             </Route>
             <Route path={APP_PATHS.NURSERIES_VIEW}>
               <NurseryDetails />
@@ -454,23 +461,14 @@ function AppContent() {
             <Route path={APP_PATHS.BATCH_WITHDRAW}>
               <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
             </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITES_NEW}>
-              <CreatePlantingSite reloadPlantingSites={reloadTracking} />
-            </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITES_EDIT}>
-              <CreatePlantingSite reloadPlantingSites={reloadTracking} />
-            </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITES}>
-              <PlantingSitesList />
-            </Route>
-            <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
-              <PlantingSiteView />
+            <Route path={APP_PATHS.PLANTING_SITES}>
+              <PlantingSites reloadTracking={reloadTracking} />
             </Route>
             <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
-              <NurseryWithdrawals />
+              <NurseryWithdrawals reloadTracking={reloadTracking} />
             </Route>
             <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-              <NurseryWithdrawalsDetails species={species} plotNames={plotNames} />
+              <NurseryWithdrawalsDetails species={species} plantingSubzoneNames={plantingSubzoneNames} />
             </Route>
             <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
               <NurseryReassignment />
@@ -485,19 +483,25 @@ function AppContent() {
               <MyAccount organizations={organizations} edit={false} />
             </Route>
 
-            {isEnabled('Reporting V1') && (
+            {selectedOrganization.canSubmitReports && (
               <Route exact path={APP_PATHS.REPORTS}>
                 <ReportList />
               </Route>
             )}
-            {isEnabled('Reporting V1') && (
+            {selectedOrganization.canSubmitReports && (
               <Route path={APP_PATHS.REPORTS_EDIT}>
-                <ReportEdit organization={selectedOrganization} />
+                <ReportEdit />
               </Route>
             )}
-            {isEnabled('Reporting V1') && (
+            {selectedOrganization.canSubmitReports && (
               <Route path={APP_PATHS.REPORTS_VIEW}>
                 <ReportView />
+              </Route>
+            )}
+
+            {trackingV2 && (
+              <Route path={APP_PATHS.OBSERVATIONS}>
+                <Observations />
               </Route>
             )}
 
@@ -557,10 +561,10 @@ function AppContent() {
 
 export default function App(): JSX.Element {
   return (
-    <AppBootstrap>
-      <Provider store={store}>
+    <Provider store={store}>
+      <AppBootstrap>
         <AppContent />
-      </Provider>
-    </AppBootstrap>
+      </AppBootstrap>
+    </Provider>
   );
 }

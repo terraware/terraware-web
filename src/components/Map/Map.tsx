@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import ReactMapGL, { AttributionControl, Layer, NavigationControl, Popup, Source } from 'react-map-gl';
-import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';
+import ReactMapGL, { AttributionControl, Layer, MapRef, NavigationControl, Popup, Source } from 'react-map-gl';
+import { MapSource, MapEntityId, MapEntityOptions, MapOptions, MapPopupRenderer, MapGeometry } from 'src/types/Map';
 import { MapService } from 'src/services';
 
 /**
@@ -11,10 +11,20 @@ import { MapService } from 'src/services';
  */
 import mapboxgl from 'mapbox-gl';
 import MapBanner from './MapBanner';
+import { useIsVisible } from 'src/hooks/useIsVisible';
+import useSnackbar from 'src/utils/useSnackbar';
+import { Icon } from '@terraware/web-components';
 const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
+
+type FeatureStateId = Record<string, Record<string, number | undefined>>;
+
+export type MapImage = {
+  name: string;
+  url: string;
+};
 
 const navControlStyle = {
   marginRight: '5px',
@@ -41,19 +51,57 @@ export type MapProps = {
   bannerMessage?: string;
   // entity options
   entityOptions?: MapEntityOptions;
+  mapImages?: MapImage[];
 };
 
 export default function Map(props: MapProps): JSX.Element {
-  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, entityOptions } = props;
+  const { token, onTokenExpired, options, popupRenderer, mapId, style, bannerMessage, entityOptions, mapImages } =
+    props;
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const [deferredHighlightEntity, setDeferredHighlightEntity] = useState<MapEntityId | undefined>();
-  const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId | undefined>();
-  const mapRef = useRef(null);
-  const hoverStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
-  const selectStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
-  const highlightStateId: { [key: string]: number | undefined } = useMemo(() => ({}), []);
+  const [deferredHighlightEntity, setDeferredHighlightEntity] = useState<MapEntityId[] | undefined>();
+  const [deferredFocusEntity, setDeferredFocusEntity] = useState<MapEntityId[] | undefined>();
+  const mapRef = useRef<MapRef | null>(null);
+  const containerRef = useRef(null);
+  const hoverStateId: FeatureStateId = useMemo(() => ({}), []);
+  const selectStateId: FeatureStateId = useMemo(() => ({}), []);
+  const highlightStateId: FeatureStateId = useMemo(() => ({}), []);
+  const [firstVisible, setFirstVisible] = useState<boolean>(false);
+  const [resized, setResized] = useState<boolean>(false);
+  const visible = useIsVisible(containerRef);
+  const snackbar = useSnackbar();
+  const theme = useTheme();
+
+  useEffect(() => {
+    // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
+    // rendered if `firstVisible` is true. This accounts for cases in which the map is initially rendered hidden, and
+    // is improperly resized when it first becomes visible.
+    setFirstVisible((fv) => fv || visible);
+  }, [visible]);
+
+  const mapRefCb = useCallback(
+    (map: MapRef | null) => {
+      if (map !== null) {
+        mapRef.current = map;
+
+        // Load all needed map images here
+        // It is done in the callbackRef to ensure the images are available quickly enough for the map layers to use
+        // See https://github.com/visgl/react-map-gl/issues/1118#issuecomment-1139976172
+        mapImages?.forEach(({ name, url }) => {
+          if (!map.hasImage(name)) {
+            map.loadImage(url, (error, image) => {
+              if (error || !image) {
+                snackbar.toastError(error?.message ?? 'Error loading map image.');
+              }
+              map.addImage(name, image!, { sdf: true });
+            });
+          }
+        });
+      }
+    },
+    [mapImages, snackbar]
+  );
 
   const getFillColor = (source: MapSource, type: 'highlight' | 'select' | 'hover' | 'default') => {
     switch (type) {
@@ -81,21 +129,39 @@ export default function Map(props: MapProps): JSX.Element {
     [onTokenExpired]
   );
 
-  const updateFeatureState = useCallback((featureVar: any, property: string, mapEntityId: MapEntityId) => {
+  const clearFeatureVar = (featureVar: any, property?: string) => {
+    const map: any = mapRef && mapRef.current;
+
+    Object.keys(featureVar).forEach((sourceId) => {
+      Object.keys(featureVar[sourceId]).forEach((id) => {
+        if (map && property) {
+          map.setFeatureState({ source: sourceId, id: featureVar[sourceId][id] }, { [property]: false });
+        }
+      });
+      delete featureVar[sourceId];
+    });
+  };
+
+  const updateFeatureState = useCallback((featureVar: any, property: string, mapEntityId: MapEntityId[]) => {
     const map: any = mapRef && mapRef.current;
     if (!map) {
       return;
     }
-    const { id, sourceId } = mapEntityId;
-    // clear previous
-    if (featureVar[sourceId] && id !== featureVar[sourceId]) {
-      map.setFeatureState({ source: sourceId, id: featureVar[sourceId] }, { [property]: false });
-    }
+
+    // clear previous features of this property
+    clearFeatureVar(featureVar, property);
+
     // set new
-    if (id) {
-      map.setFeatureState({ source: sourceId, id }, { [property]: true });
-    }
-    featureVar[sourceId] = id;
+    mapEntityId.forEach((entity) => {
+      const { id, sourceId } = entity;
+      if (!featureVar[sourceId]) {
+        featureVar[sourceId] = {};
+      }
+      if (id) {
+        map.setFeatureState({ source: sourceId, id }, { [property]: true });
+        featureVar[sourceId][id] = id;
+      }
+    });
   }, []);
 
   const onMapClick = useCallback(
@@ -110,59 +176,114 @@ export default function Map(props: MapProps): JSX.Element {
           properties,
           sourceId,
         });
-        updateFeatureState(selectStateId, 'select', { sourceId, id });
+        updateFeatureState(selectStateId, 'select', [{ sourceId, id }]);
       }
     },
     [updateFeatureState, selectStateId]
   );
 
   const drawFocusTo = useCallback(
-    (mapEntity: MapEntityId) => {
+    (mapEntity: MapEntityId[]) => {
+      if (mapEntity.length <= 0) {
+        return;
+      }
       const map: any = mapRef?.current;
-      if (!map || !mapEntity.id || !mapEntity.sourceId) {
+      if (!map) {
         return;
       }
-      const foundSource = geoData && geoData.find((geo) => geo.id === mapEntity.sourceId);
-      if (!foundSource || !foundSource.data) {
-        return;
+      const coordinates: MapGeometry = [];
+      mapEntity.forEach((entity) => {
+        if (!entity.id || !entity.sourceId) {
+          return;
+        }
+        const foundSource = geoData && geoData.find((geo) => geo.id === entity.sourceId);
+        if (!foundSource || !foundSource.data) {
+          return;
+        }
+        const feature = foundSource.data.features.find((featureData: any) => featureData.id === entity.id);
+        if (!feature) {
+          return;
+        }
+        coordinates.push(feature.geometry.coordinates);
+      });
+      if (coordinates.length > 0) {
+        const bbox = MapService.getBoundingBox([coordinates]);
+        // this is a hack to allow zooming to geometry while data is being updated, otherwise the zoom was not taking effect
+        setTimeout(() => {
+          map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20, linear: true });
+        }, 0);
       }
-      const feature = foundSource.data.features.find((featureData: any) => featureData.id === mapEntity.id);
-      if (!feature) {
-        return;
-      }
-      const coordinates = feature.geometry.coordinates;
-      const bbox = MapService.getBoundingBox([[coordinates]]);
-      map.fitBounds([bbox.lowerLeft, bbox.upperRight], { padding: 20 });
     },
     [geoData]
   );
 
-  const onLoad = () => {
+  const zoomToFit = () => {
+    const map: any = mapRef?.current;
+    map?.fitBounds([options.bbox.lowerLeft, options.bbox.upperRight], { padding: 20, linear: true });
+  };
+
+  useEffect(() => {
     const map: any = mapRef && mapRef.current;
     if (!map) {
       return;
     }
-    Object.keys(hoverStateId).forEach((key) => delete hoverStateId[key]);
-    Object.keys(selectStateId).forEach((key) => delete selectStateId[key]);
-    Object.keys(highlightStateId).forEach((key) => delete highlightStateId[key]);
-
     const { sources } = options;
-    sources
+
+    clearFeatureVar(hoverStateId);
+    clearFeatureVar(highlightStateId);
+    if (!popupInfo) {
+      // don't clear select state if popup is open
+      clearFeatureVar(selectStateId);
+    }
+
+    const mouseMoveCallbacks = sources
       .filter((source) => source.isInteractive)
-      .forEach((source) => {
+      .map((source) => {
         const layerId = `${source.id}-fill`;
-        map.on('mousemove', layerId, (e: any) => {
-          if (!e.features.length || !e.features[0].properties) {
-            return;
-          }
-          const newId = e.features[0].id;
-          updateFeatureState(hoverStateId, 'hover', { sourceId: source.id, id: newId });
-        });
-        map.on('mouseleave', `${source.id}-fill`, () => {
-          updateFeatureState(hoverStateId, 'hover', { sourceId: source.id });
-        });
+        return {
+          [layerId]: (e: any) => {
+            if (!e.features.length || !e.features[0].properties) {
+              return;
+            }
+            const newId = e.features[0].id;
+            updateFeatureState(hoverStateId, 'hover', [{ sourceId: source.id, id: newId }]);
+          },
+        };
       });
 
+    const mouseLeaveCallbacks = sources
+      .filter((source) => source.isInteractive)
+      .map((source) => {
+        const layerId = `${source.id}-fill`;
+        return {
+          [layerId]: () => {
+            updateFeatureState(hoverStateId, 'hover', [{ sourceId: source.id }]);
+          },
+        };
+      });
+
+    mouseMoveCallbacks.forEach((cb) => {
+      const layerId = Object.keys(cb)[0];
+      map.on('mousemove', layerId, cb[layerId]);
+    });
+    mouseLeaveCallbacks.forEach((cb) => {
+      const layerId = Object.keys(cb)[0];
+      map.on('mouseleave', layerId, cb[layerId]);
+    });
+
+    return () => {
+      mouseMoveCallbacks.forEach((cb) => {
+        const layerId = Object.keys(cb)[0];
+        map.off('mousemove', layerId, cb[layerId]);
+      });
+      mouseLeaveCallbacks.forEach((cb) => {
+        const layerId = Object.keys(cb)[0];
+        map.off('mouseleave', layerId, cb[layerId]);
+      });
+    };
+  }, [options, highlightStateId, selectStateId, hoverStateId, popupInfo, updateFeatureState]);
+
+  const onLoad = () => {
     if (deferredHighlightEntity) {
       updateFeatureState(highlightStateId, 'highlight', deferredHighlightEntity);
       setDeferredHighlightEntity(undefined);
@@ -175,14 +296,11 @@ export default function Map(props: MapProps): JSX.Element {
 
   useEffect(() => {
     const { sources } = options;
-    if (geoData) {
-      return;
-    }
 
     /**
      * Initialize sources - we want ONE source per data type, eg. one source containing all geometries for zones.
-     * Creating multiple sources, one per zone or one per plot, is unnecessarily and will create performance bottlenecks.
-     * Leverage data-drive rendering using properties in the features and mapbox supported properties:
+     * Creating multiple sources, one per zone or one per subzone, is unnecessarily and will create performance
+     * bottlenecks. Leverage data-drive rendering using properties in the features and mapbox supported properties:
      *  eg. 'text-field': ['get', source.annotation.textField]
      */
     const geo = sources
@@ -260,6 +378,16 @@ export default function Map(props: MapProps): JSX.Element {
                 },
               }
             : null,
+          patternFill: source.patternFill
+            ? {
+                id: `${source.id}-pattern`,
+                type: 'fill',
+                paint: {
+                  'fill-pattern': source.patternFill.imageName,
+                  'fill-opacity': source.patternFill.opacityExpression ?? 1.0,
+                },
+              }
+            : null,
         };
       })
       .filter((g) => g);
@@ -267,34 +395,15 @@ export default function Map(props: MapProps): JSX.Element {
     if (popupRenderer) {
       setLayerIds(geo.filter((g: any) => g.isInteractive).map((g: any) => g.layer.id));
     }
-  }, [options, geoData, setGeoData, token, popupRenderer]);
-
-  useEffect(() => {
-    if (entityOptions?.highlight) {
-      if (!mapRef || !mapRef.current) {
-        setDeferredHighlightEntity(entityOptions?.highlight);
-      } else {
-        updateFeatureState(highlightStateId, 'highlight', entityOptions?.highlight);
-      }
-    }
-  }, [entityOptions?.highlight, highlightStateId, updateFeatureState]);
-
-  useEffect(() => {
-    if (entityOptions?.focus) {
-      if (!mapRef || !mapRef.current) {
-        setDeferredFocusEntity(entityOptions?.focus);
-      } else {
-        drawFocusTo(entityOptions?.focus);
-      }
-    }
-  }, [drawFocusTo, entityOptions?.focus]);
+  }, [options, setGeoData, token, popupRenderer]);
 
   const mapSources = useMemo(() => {
     if (!geoData) {
       return null;
     }
-    const sources = (geoData as any[]).map((geo: any, index) => (
-      <Source type='geojson' key={index} data={geo.data} id={geo.id}>
+    const sources = (geoData as any[]).map((geo: any) => (
+      <Source type='geojson' key={geo.id} data={geo.data} id={geo.id}>
+        {geo.patternFill && <Layer {...geo.patternFill} />}
         {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
         {geo.layerOutline && <Layer {...geo.layerOutline} />}
         {geo.layer && <Layer {...geo.layer} />}
@@ -304,49 +413,106 @@ export default function Map(props: MapProps): JSX.Element {
     return sources;
   }, [geoData]);
 
+  useEffect(() => {
+    if (entityOptions?.highlight) {
+      if (!mapRef || !mapRef.current) {
+        setDeferredHighlightEntity(entityOptions?.highlight);
+      } else {
+        updateFeatureState(highlightStateId, 'highlight', entityOptions?.highlight);
+      }
+    }
+  }, [entityOptions?.highlight, highlightStateId, updateFeatureState, mapSources]);
+
+  useEffect(() => {
+    if (entityOptions?.focus) {
+      if (!mapRef || !mapRef.current) {
+        setDeferredFocusEntity(entityOptions?.focus);
+      } else {
+        drawFocusTo(entityOptions?.focus);
+      }
+    }
+  }, [drawFocusTo, entityOptions?.focus, geoData]);
+
   const hasEntities = options.sources?.some((source) => {
     return source.entities?.some((entity) => entity?.boundary?.length);
   });
 
+  // keep track of map being destroyed, this is not bound by react event loop
+  let destroying = false;
+
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }}>
+    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }} ref={containerRef}>
       {bannerMessage && <MapBanner message={bannerMessage} />}
-      <ReactMapGL
-        key={mapId}
-        mapboxAccessToken={token}
-        mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true'
-        initialViewState={{
-          bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
-          fitBoundsOptions: hasEntities ? { padding: 20 } : undefined,
-        }}
-        interactiveLayerIds={layerIds}
-        onError={onMapError}
-        onClick={onMapClick}
-        style={style}
-        attributionControl={false}
-        onLoad={onLoad}
-        ref={mapRef}
-        onRender={(event) => event.target.resize()}
-      >
-        {mapSources}
-        <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
-        <AttributionControl compact={true} style={{ marginRight: '5px' }} />
-        {popupInfo && popupRenderer && (
-          <Popup
-            anchor='top'
-            longitude={Number(popupInfo.lng)}
-            latitude={Number(popupInfo.lat)}
-            onClose={() => {
-              setPopupInfo(null);
-              updateFeatureState(selectStateId, 'select', { sourceId: popupInfo.sourceId });
+      {firstVisible && (
+        <ReactMapGL
+          key={mapId}
+          mapboxAccessToken={token}
+          mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true'
+          initialViewState={{
+            bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
+            fitBoundsOptions: hasEntities ? { padding: 20, linear: true } : undefined,
+          }}
+          interactiveLayerIds={layerIds}
+          onError={onMapError}
+          onClick={onMapClick}
+          style={style}
+          attributionControl={false}
+          onLoad={onLoad}
+          onRemove={() => {
+            destroying = true;
+          }}
+          ref={mapRefCb}
+          onRender={(event) => {
+            if (!resized) {
+              setResized(true);
+              event.target.resize();
+            }
+          }}
+        >
+          {mapSources}
+          <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
+          <AttributionControl compact={true} style={{ marginRight: '5px' }} />
+          <Box
+            style={{
+              width: 28,
+              height: 28,
+              backgroundColor: `${theme.palette.TwClrBaseWhite}`,
+              position: 'absolute',
+              bottom: '120px',
+              right: '5px',
+              zIndex: 10,
+              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
             }}
-            style={popupRenderer.style}
-            className={popupRenderer.className}
           >
-            {popupRenderer.render(popupInfo.properties)}
-          </Popup>
-        )}
-      </ReactMapGL>
+            <button
+              style={{ background: 'none', border: 'none', cursor: 'pointer', height: '18px' }}
+              onClick={zoomToFit}
+            >
+              <Icon name='iconFullScreen' />
+            </button>
+          </Box>
+          {popupInfo && popupRenderer && (
+            <Popup
+              anchor={popupRenderer.anchor ?? 'top'}
+              longitude={Number(popupInfo.lng)}
+              latitude={Number(popupInfo.lat)}
+              onClose={() => {
+                if (destroying) {
+                  return; // otherwise errors out updating feature state while map is being destroyed
+                }
+                setPopupInfo(null);
+                updateFeatureState(selectStateId, 'select', [{ sourceId: popupInfo.sourceId }]);
+              }}
+              style={popupRenderer.style}
+              className={popupRenderer.className}
+            >
+              {popupRenderer.render(popupInfo.properties)}
+            </Popup>
+          )}
+        </ReactMapGL>
+      )}
     </Box>
   );
 }

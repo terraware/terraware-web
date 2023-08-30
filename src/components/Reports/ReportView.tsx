@@ -13,6 +13,7 @@ import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
 import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
 import useReportFiles from 'src/components/Reports/useReportFiles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
@@ -20,6 +21,8 @@ export default function ReportView(): JSX.Element {
   const reportIdInt = parseInt(reportId, 10);
 
   const theme = useTheme();
+
+  const { isMobile } = useDeviceInfo();
 
   const history = useHistory();
 
@@ -68,6 +71,18 @@ export default function ReportView(): JSX.Element {
     }
   };
 
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const switchPages = (page: 'quarterly' | 'annual') => {
+    setShowAnnual(page === 'annual');
+    goToTop();
+  };
+
   return (
     <TfMain>
       <ConcurrentEditorWarningDialog
@@ -81,11 +96,41 @@ export default function ReportView(): JSX.Element {
         <Box paddingLeft={theme.spacing(3)}>
           <BackToLink id='backToReports' name={strings.REPORTS} to={APP_PATHS.REPORTS} />
         </Box>
-        <Box display='flex' justifyContent='space-between' padding={theme.spacing(4, 3)}>
+        <Box
+          display='flex'
+          flexDirection={isMobile ? 'column' : 'row'}
+          justifyContent='space-between'
+          padding={theme.spacing(4, 3)}
+        >
           <Typography fontSize='24px' fontWeight={600}>
             {report ? `Report (${report?.year}-Q${report?.quarter})` : ''}
           </Typography>
-          {report?.status !== 'Submitted' && <Button label={strings.REPORT_EDIT} icon='iconEdit' onClick={startEdit} />}
+          <Box
+            display='flex'
+            gap={isMobile ? 0 : theme.spacing(1)}
+            flexDirection={isMobile ? 'column' : 'row'}
+            marginTop={isMobile ? theme.spacing(1) : theme.spacing(0)}
+          >
+            {report?.isAnnual &&
+              (showAnnual ? (
+                <Button
+                  label={strings.REPORT_VIEW_QUARTERLY}
+                  type='productive'
+                  priority='secondary'
+                  onClick={() => switchPages('quarterly')}
+                />
+              ) : (
+                <Button
+                  label={strings.REPORT_VIEW_ANNUAL}
+                  type='productive'
+                  priority='secondary'
+                  onClick={() => switchPages('annual')}
+                />
+              ))}
+            {report?.status !== 'Submitted' && (
+              <Button label={strings.REPORT_EDIT} icon='iconEdit' onClick={startEdit} />
+            )}
+          </Box>
         </Box>
       </Box>
       {report &&
@@ -100,12 +145,27 @@ export default function ReportView(): JSX.Element {
             allPlantingSites={report.plantingSites}
           />
         ))}
-      <Box display='flex' justifyContent='flex-end' padding={theme.spacing(3)}>
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        justifyContent='flex-end'
+        padding={theme.spacing(3)}
+      >
         {report?.isAnnual &&
           (showAnnual ? (
-            <Button label={strings.BACK} type='passive' onClick={() => setShowAnnual(false)} />
+            <Button
+              label={strings.REPORT_VIEW_QUARTERLY}
+              type='productive'
+              priority='secondary'
+              onClick={() => switchPages('quarterly')}
+            />
           ) : (
-            <Button label={strings.NEXT} type='passive' onClick={() => setShowAnnual(true)} />
+            <Button
+              label={strings.REPORT_VIEW_ANNUAL}
+              type='productive'
+              priority='secondary'
+              onClick={() => switchPages('annual')}
+            />
           ))}
       </Box>
     </TfMain>

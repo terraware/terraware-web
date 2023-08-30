@@ -16,6 +16,14 @@ type EmptyStateStyleProps = {
   isMobile?: boolean;
 };
 
+const DEFAULT_EMPTY_STATE_CONTENT_STYLES = {
+  titleFontSize: '20px',
+  titleLineHeight: '28px',
+  subtitleFontSize: '16px',
+  subtitleLineHeight: '24px',
+  listContainerVerticalMargin: '24px',
+};
+
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     fontWeight: 400,
@@ -103,19 +111,21 @@ export type ListItemContent = {
 
 type EmptyStateContentProps = {
   title: string;
-  subtitle: string;
-  listItems: ListItemContent[];
+  subtitle: string | string[];
+  listItems?: ListItemContent[];
   buttonText?: string;
   buttonIcon?: IconName;
   onClickButton?: () => void;
   footnote?: string[];
-  styles: EmptyStateStyleProps;
+  styles?: EmptyStateStyleProps;
 };
 
 export default function EmptyStateContent(props: EmptyStateContentProps): JSX.Element {
   const { title, subtitle, listItems, buttonText, buttonIcon, onClickButton, footnote, styles } = props;
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ ...styles, isMobile });
+  const classes = useStyles({ ...(styles || DEFAULT_EMPTY_STATE_CONTENT_STYLES), isMobile });
+
+  const subtitleParagraphs: string[] = typeof subtitle === 'string' ? [subtitle] : subtitle;
 
   const gridSize = () => {
     if (isMobile) {
@@ -127,9 +137,13 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
   return (
     <Container className={classes.container}>
       <h1 className={classes.title}>{title}</h1>
-      <p className={classes.subtitle}>{subtitle}</p>
+      {subtitleParagraphs.map((para, index) => (
+        <p className={classes.subtitle} key={index}>
+          {para}
+        </p>
+      ))}
       <div className={classes.listContainer}>
-        {listItems.map((item, index) => {
+        {listItems?.map((item, index) => {
           return (
             <Grid item xs={gridSize()} key={`${item.title}-${index}`} className={`${classes.listItem}`}>
               <Icon name={item.icon} className={classes.listItemIcon} />

@@ -9,3 +9,5 @@ export type FieldValuesPayload = { [key: string]: components['schemas']['FieldVa
 export type SearchCriteria = Record<string, SearchNodePayload>;
 export type SearchSortOrder = components['schemas']['SearchSortOrderElement'];
 export type SearchResponseElement = components['schemas']['SearchResponsePayload']['results'][0];
+
+export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };

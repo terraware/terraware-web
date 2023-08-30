@@ -13,22 +13,27 @@ import NavFooter from './common/Navbar/NavFooter';
 import { useOrganization } from 'src/providers/hooks';
 import LocaleSelector from './LocaleSelector';
 import isEnabled from '../features';
+import ReportService, { Reports } from 'src/services/ReportService';
 
 type NavBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
   backgroundTransparent?: boolean;
   withdrawalCreated?: boolean;
+  hasPlantingSites?: boolean;
 };
 export default function NavBar({
   setShowNavBar,
   backgroundTransparent,
   withdrawalCreated,
+  hasPlantingSites,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
   const [role, setRole] = useState<OrganizationRole>();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
+  const [reports, setReports] = useState<Reports>([]);
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
+  const trackingV2 = isEnabled('TrackingV2');
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
   const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
@@ -48,6 +53,7 @@ export default function NavBar({
   const isWithdrawalLogRoute = useRouteMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
   const isReassignmentRoute = useRouteMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
   const isReportsRoute = useRouteMatch(APP_PATHS.REPORTS + '/');
+  const isObservationsRoute = useRouteMatch(APP_PATHS.OBSERVATIONS + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -86,6 +92,15 @@ export default function NavBar({
     }
   }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
 
+  useEffect(() => {
+    const reportSearch = async () => {
+      const reportsResults = await ReportService.getReports(selectedOrganization.id);
+      setReports(reportsResults.reports || []);
+    };
+
+    reportSearch();
+  }, [selectedOrganization.id]);
+
   const getSeedlingsMenuItems = () => {
     const inventoryMenu = (
       <NavItem
@@ -101,7 +116,7 @@ export default function NavBar({
 
     const withdrawalLogMenu = (
       <NavItem
-        label={strings.WITHDRAWAL_LOG}
+        label={trackingV2 ? strings.WITHDRAWALS : strings.WITHDRAWAL_LOG}
         selected={!!isWithdrawalLogRoute || !!isReassignmentRoute}
         onClick={() => {
           closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
@@ -176,9 +191,19 @@ export default function NavBar({
             }}
             id='plants-dashboard'
           />
+          {trackingV2 && hasPlantingSites === true && (
+            <NavItem
+              label={strings.OBSERVATIONS}
+              selected={!!isObservationsRoute}
+              onClick={() => {
+                closeAndNavigateTo(APP_PATHS.OBSERVATIONS);
+              }}
+              id='observations'
+            />
+          )}
         </SubNavbar>
       </NavItem>
-      {isEnabled('Reporting V1') && (
+      {reports.length > 0 && selectedOrganization.canSubmitReports && (
         <>
           <NavSection />
           <NavItem
@@ -255,7 +280,7 @@ export default function NavBar({
           id='contactus'
         />
 
-        {isEnabled('Locale selection') && <LocaleSelector transparent={true} />}
+        <LocaleSelector transparent={true} />
       </NavFooter>
     </Navbar>
   );

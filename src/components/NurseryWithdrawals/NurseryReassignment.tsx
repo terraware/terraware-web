@@ -13,15 +13,16 @@ import TfMain from 'src/components/common/TfMain';
 import TitleDescription from 'src/components/common/TitleDescription';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
-import ReassignmentRenderer, { Reassignment, PlotInfo } from './ReassignmentRenderer';
+import ReassignmentRenderer, { Reassignment, SubzoneInfo } from './ReassignmentRenderer';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization } from 'src/providers';
 import Table from 'src/components/common/table';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import { makeStyles } from '@mui/styles';
 import BackToLink from 'src/components/common/BackToLink';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backToWithdrawals: {
@@ -29,6 +30,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
+
+const columns = (): TableColumnType[] => [
+  { key: 'species', name: strings.SPECIES, type: 'string' },
+  { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
+  { key: 'zoneName', name: strings.ZONE, type: 'string' },
+  { key: 'originalSubzone', name: strings.ORIGINAL_SUBZONE, type: 'string' },
+  { key: 'newSubzone', name: strings.NEW_SUBZONE, type: 'string' },
+  { key: 'reassign', name: strings.REASSIGN, type: 'string' },
+  { key: 'notes', name: strings.NOTES, type: 'string' },
+];
 
 export default function NurseryReassignment(): JSX.Element {
   const classes = useStyles();
@@ -43,21 +54,13 @@ export default function NurseryReassignment(): JSX.Element {
   const snackbar = useSnackbar();
   const [speciesMap, setSpeciesMap] = useState<{ [id: string]: string }>();
   const [delivery, setDelivery] = useState<Delivery>();
-  const [plots, setPlots] = useState<PlotInfo[]>();
+  const [subzones, setSubzones] = useState<SubzoneInfo[]>();
   const [zoneName, setZoneName] = useState<string>();
   const [siteName, setSiteName] = useState<string>();
-  const [reassignments, setReassignments] = useState<{ [plotId: string]: Reassignment }>({});
+  const [reassignments, setReassignments] = useState<{ [subzoneId: string]: Reassignment }>({});
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
   const contentRef = useRef(null);
-  const columns: TableColumnType[] = [
-    { key: 'species', name: strings.SPECIES, type: 'string' },
-    { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
-    { key: 'zoneName', name: strings.ZONE, type: 'string' },
-    { key: 'originalPlot', name: strings.ORIGINAL_PLOT, type: 'string' },
-    { key: 'newPlot', name: strings.NEW_PLOT, type: 'string' },
-    { key: 'reassign', name: strings.REASSIGN, type: 'string' },
-    { key: 'notes', name: strings.NOTES, type: 'string' },
-  ];
+  const trackingV2 = isEnabled('TrackingV2');
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
@@ -97,34 +100,34 @@ export default function NurseryReassignment(): JSX.Element {
     populateDelivery();
   }, [deliveryId, snackbar]);
 
-  // populate lookup maps of zones and plots
+  // populate lookup maps of zones and subzones
   useEffect(() => {
     if (!delivery) {
       return;
     }
 
-    const populatePlots = async () => {
-      const plotIds = delivery.plantings.map((planting) => planting.plotId).filter((id) => id);
-      if (!plotIds.length) {
+    const populateSubzones = async () => {
+      const plantingSubzoneIds = delivery.plantings.map((planting) => planting.plantingSubzoneId).filter((id) => id);
+      if (!plantingSubzoneIds.length) {
         return;
       }
       const response = await TrackingService.getPlantingSite(delivery.plantingSiteId);
       if (response.requestSucceeded && response.site) {
         setSiteName(response.site.name);
         const zone = response.site.plantingZones?.find((otherZone) =>
-          otherZone.plots?.some((plot) => plotIds.indexOf(plot.id) !== -1)
+          otherZone.plantingSubzones?.some((subzone) => plantingSubzoneIds.indexOf(subzone.id) !== -1)
         );
         if (!zone) {
           return;
         }
-        setPlots(zone.plots.map((plot) => ({ id: plot.id.toString(), name: plot.fullName })));
+        setSubzones(zone.plantingSubzones.map((subzone) => ({ id: subzone.id.toString(), name: subzone.fullName })));
         setZoneName(zone.name);
       } else {
         snackbar.toastError();
       }
     };
 
-    populatePlots();
+    populateSubzones();
   }, [delivery, snackbar]);
 
   const goToWithdrawals = () => {
@@ -143,7 +146,7 @@ export default function NurseryReassignment(): JSX.Element {
           hasErrors = true;
           return false;
         }
-        return Number(reassignment.quantity) > 0 && reassignment.newPlot;
+        return Number(reassignment.quantity) > 0 && reassignment.newSubzone;
       });
 
     if (hasErrors) {
@@ -159,7 +162,7 @@ export default function NurseryReassignment(): JSX.Element {
       reassignments: validReassignments.map((reassignment) => ({
         fromPlantingId: reassignment!.plantingId,
         numPlants: Number(reassignment!.quantity),
-        toPlotId: Number(reassignment!.newPlot!.id),
+        toPlantingSubzoneId: Number(reassignment!.newSubzone!.id),
         notes: reassignment?.notes,
       })),
     };
@@ -179,12 +182,12 @@ export default function NurseryReassignment(): JSX.Element {
 
     return delivery.plantings
       .map((planting) => {
-        if (planting.type !== 'Delivery' || !planting.plotId || !speciesMap) {
+        if (planting.type !== 'Delivery' || !planting.plantingSubzoneId || !speciesMap) {
           return null;
         }
 
-        const plot = plots?.find((plotInfo) => plotInfo.id === planting.plotId?.toString());
-        if (!plot) {
+        const subzone = subzones?.find((subzoneInfo) => subzoneInfo.id === planting.plantingSubzoneId?.toString());
+        if (!subzone) {
           return null;
         }
 
@@ -193,18 +196,18 @@ export default function NurseryReassignment(): JSX.Element {
           species: speciesMap![planting.speciesId],
           zoneName,
           siteName,
-          plot,
+          subzone,
           reassignment: reassignments[planting.id] || { plantingId: planting.id, error: {}, notes: '' },
         };
       })
       .filter((planting) => !!planting);
-  }, [delivery, siteName, speciesMap, zoneName, plots, reassignments]);
+  }, [delivery, siteName, speciesMap, zoneName, subzones, reassignments]);
 
   const reassignmentRenderer = useMemo(
     () =>
       ReassignmentRenderer({
         numericFormatter,
-        plots: plots || [],
+        subzones: subzones || [],
         setReassignment: (reassignment: Reassignment) =>
           setReassignments((current) => {
             const newReassignments = { ...current };
@@ -212,7 +215,7 @@ export default function NurseryReassignment(): JSX.Element {
             return newReassignments;
           }),
       }),
-    [plots, numericFormatter]
+    [subzones, numericFormatter]
   );
 
   return (
@@ -221,7 +224,7 @@ export default function NurseryReassignment(): JSX.Element {
         <Box>
           <BackToLink
             id='back'
-            to={APP_PATHS.NURSERY_WITHDRAWALS}
+            to={trackingV2 ? `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history` : APP_PATHS.NURSERY_WITHDRAWALS}
             className={classes.backToWithdrawals}
             name={strings.WITHDRAWAL_LOG}
           />
@@ -238,7 +241,7 @@ export default function NurseryReassignment(): JSX.Element {
           <ErrorBox title={strings.NO_REASSIGNMENTS} text={strings.NO_REASSIGNMENTS_TEXT} />
         </Box>
       )}
-      {plots ? (
+      {subzones ? (
         <PageForm
           cancelID='cancelNurseryReassignment'
           saveID='saveNurseryReassignment'

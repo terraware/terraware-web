@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
@@ -10,6 +10,9 @@ import SelectPhotos from '../common/SelectPhotos';
 import { ReportSeedBank } from 'src/types/Report';
 import { makeStyles } from '@mui/styles';
 import LocationSection from './LocationSection';
+import ReportService from 'src/services/ReportService';
+
+const MAX_PHOTOS = 30;
 
 const useStyles = makeStyles((theme: Theme) => ({
   infoCardStyle: {
@@ -67,6 +70,20 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
 
   const [summaryOfProgress, setSummaryOfProgress] = useState(draftReport.summaryOfProgress ?? '');
   const [projectNotes, setProjectNotes] = useState(draftReport.notes ?? '');
+  const [photoCount, setPhotoCount] = useState(0);
+
+  useEffect(() => {
+    const getPhotoCount = async () => {
+      const photoListResponse = await ReportService.getReportPhotos(draftReport.id);
+      if (!photoListResponse.requestSucceeded || photoListResponse.error) {
+        setPhotoCount(0);
+      } else {
+        setPhotoCount(photoListResponse.photos?.length ?? 0);
+      }
+    };
+
+    getPhotoCount();
+  }, [draftReport.id]);
 
   const handleAddRemoveLocation = (
     selected: boolean,
@@ -87,7 +104,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
       spacing={theme.spacing(3)}
       borderRadius={theme.spacing(3)}
       padding={theme.spacing(0, 3, 3, 0)}
-      marginLeft={0}
+      margin={0}
+      width='fit-content'
       sx={{
         backgroundColor: theme.palette.TwClrBg,
       }}
@@ -109,7 +127,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         <OverviewItemCard
           isEditable={false}
           title={strings.SEED_BANKS}
-          contents={`${draftReport.totalSeedBanks}` ?? '0'}
+          contents={`${draftReport?.seedBanks?.filter((sb) => sb.selected)?.length}` ?? '0'}
           className={classes.infoCardStyle}
         />
       </Grid>
@@ -117,7 +135,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         <OverviewItemCard
           isEditable={false}
           title={strings.NURSERIES}
-          contents={`${draftReport.totalNurseries}` ?? '0'}
+          contents={`${draftReport?.nurseries?.filter((n) => n.selected)?.length}` ?? '0'}
           className={classes.infoCardStyle}
         />
       </Grid>
@@ -125,17 +143,18 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         <OverviewItemCard
           isEditable={false}
           title={strings.PLANTING_SITES}
-          contents={`${draftReport.totalPlantingSites}` ?? '0'}
+          contents={`${draftReport?.plantingSites?.filter((ps) => ps.selected)?.length}` ?? '0'}
           className={classes.infoCardStyle}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
         <Textfield
-          label={strings.SUMMARY_OF_PROGRESS}
+          label={strings.SUMMARY_OF_PROGRESS_REQUIRED}
           placeholder={strings.SUMMARY_OF_PROGRESS_DESCRIPTION}
-          id='summary'
+          id='summary-of-progress'
           type='textarea'
-          disabled={!editable}
+          display={!editable}
+          preserveNewlines={true}
           value={summaryOfProgress}
           onChange={(value) => {
             setSummaryOfProgress(value as string);
@@ -144,6 +163,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             }
           }}
           errorText={validate && !draftReport.summaryOfProgress ? strings.REQUIRED_FIELD : ''}
+          tooltipTitle={strings.REPORT_SUMMARY_OF_PROGRESS_INFO}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -151,7 +171,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           label={strings.PROJECT_NOTES}
           id='notes'
           type='textarea'
-          disabled={!editable}
+          display={!editable}
+          preserveNewlines={true}
           value={projectNotes}
           onChange={(value) => {
             setProjectNotes(value as string);
@@ -160,23 +181,44 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             }
           }}
         />
-        <Typography
-          color={theme.palette.TwClrTxtSecondary}
-          fontSize='14px'
-          fontWeight={400}
-          marginTop={theme.spacing(0.5)}
-        >
-          {strings.NOTE_ANY_ISSUES}
-        </Typography>
+        {editable && (
+          <Typography
+            color={theme.palette.TwClrTxtSecondary}
+            fontSize='14px'
+            fontWeight={400}
+            marginTop={theme.spacing(0.5)}
+          >
+            {strings.NOTE_ANY_ISSUES}
+          </Typography>
+        )}
         <Grid item xs={12}>
           <Typography fontSize='20px' fontWeight={600} marginTop={4}>
             {strings.PROJECT_PHOTOS}
           </Typography>
         </Grid>
-        <ViewPhotos reportId={draftReport.id} onPhotoRemove={onPhotoRemove} editable={editable} />
+        <ViewPhotos
+          reportId={draftReport.id}
+          onPhotoRemove={(id) => {
+            setPhotoCount(photoCount - 1);
+            if (onPhotoRemove) {
+              onPhotoRemove(id);
+            }
+          }}
+          editable={editable}
+        />
         {editable && onPhotosChanged && (
           <Container maxWidth={false}>
-            <SelectPhotos onPhotosChanged={onPhotosChanged} multipleSelection={true} />
+            <SelectPhotos
+              onPhotosChanged={onPhotosChanged}
+              multipleSelection={true}
+              maxPhotos={MAX_PHOTOS - photoCount}
+              description={
+                strings.PHOTOS_TO_UPLOAD +
+                ' ' +
+                strings.formatString(strings.PHOTOS_TO_UPLOAD_LIMIT, MAX_PHOTOS - photoCount) +
+                ':'
+              }
+            />
           </Container>
         )}
       </Grid>
@@ -192,7 +234,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
               {index !== 0 && <Grid item xs={12} className={classes.section} />}
               <Grid item xs={12}>
                 <Checkbox
-                  id={seedbank.id.toString()}
+                  id={`seedbank-${index}`}
                   disabled={!editable}
                   name={seedbank.name}
                   label={seedbank.name}
@@ -232,7 +274,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
               {index !== 0 && <Grid item xs={12} className={classes.section} />}
               <Grid item xs={12}>
                 <Checkbox
-                  id={nursery.id.toString()}
+                  id={`nursery-${index}`}
                   disabled={!editable}
                   name={nursery.name}
                   label={nursery.name}
@@ -273,7 +315,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
               {index !== 0 && <Grid item xs={12} className={classes.section} />}
               <Grid item xs={12}>
                 <Checkbox
-                  id={plantingSite.id.toString()}
+                  id={`planting-site-${index}`}
                   disabled={!editable}
                   name={plantingSite.name}
                   label={plantingSite.name}

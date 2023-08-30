@@ -3,17 +3,21 @@ import { Typography, Grid, Theme, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { TrackingService } from 'src/services';
 import { APP_PATHS } from 'src/constants';
 import { useHistory, useParams } from 'react-router-dom';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { useEffect, useState } from 'react';
+import { useAppSelector } from 'src/redux/store';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import PageSnackbar from '../PageSnackbar';
 import { makeStyles } from '@mui/styles';
-import { PlantingSite } from 'src/types/Tracking';
-import BoundariesAndPlots from './BoundariesAndPlots';
+import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones';
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import Card from 'src/components/common/Card';
+import isEnabled from 'src/features';
+import { getMonth } from 'src/utils/dateFormatter';
+import { useLocalization } from 'src/providers';
+import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -26,23 +30,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function PlantingSiteView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const { activeLocale } = useLocalization();
   const classes = useStyles();
   const theme = useTheme();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const [plantingSite, setPlantingSite] = useState<PlantingSite>();
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
   const history = useHistory();
   const tz = useLocationTimeZone().get(plantingSite);
-
-  useEffect(() => {
-    const loadPlantingSite = async () => {
-      const response = await TrackingService.getPlantingSite(Number.parseInt(plantingSiteId, 10));
-      if (response.requestSucceeded) {
-        setPlantingSite(response.site);
-      }
-    };
-
-    loadPlantingSite();
-  }, [plantingSiteId]);
+  const trackingV2 = isEnabled('TrackingV2');
 
   const gridSize = () => {
     if (isMobile) {
@@ -81,39 +76,65 @@ export default function PlantingSiteView(): JSX.Element {
         </Grid>
       </Grid>
 
-      <Grid
-        container
-        sx={{
-          backgroundColor: theme.palette.TwClrBg,
-          borderRadius: '32px',
-          padding: theme.spacing(3),
-          margin: 0,
-        }}
-      >
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-          <TextField label={strings.NAME} id='name' type='text' value={plantingSite?.name} display={true} />
+      <Card flushMobile style={{ flexGrow: plantingSite?.boundary ? 1 : 0, display: 'flex', flexDirection: 'column' }}>
+        <Grid container>
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+            <TextField label={strings.NAME} id='name' type='text' value={plantingSite?.name} display={true} />
+          </Grid>
+          <Grid item xs={gridSize()}>
+            <TextField
+              label={strings.DESCRIPTION}
+              id='description'
+              type='text'
+              value={plantingSite?.description}
+              display={true}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+            <TextField
+              label={strings.TIME_ZONE}
+              id='timezone'
+              type='text'
+              value={tz.longName}
+              tooltipTitle={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
+              display={true}
+            />
+          </Grid>
+          {trackingV2 && (
+            <>
+              <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+                <TextField
+                  label={strings.PLANTING_SEASON_START}
+                  id='planting-season-start'
+                  type='text'
+                  value={getMonth(plantingSite?.plantingSeasonStartMonth, activeLocale)}
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+                <TextField
+                  label={strings.PLANTING_SEASON_END}
+                  id='planting-season-end'
+                  type='text'
+                  value={getMonth(plantingSite?.plantingSeasonEndMonth, activeLocale)}
+                  display={true}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
-        <Grid item xs={gridSize()}>
-          <TextField
-            label={strings.DESCRIPTION}
-            id='description'
-            type='text'
-            value={plantingSite?.description}
-            display={true}
-          />
-        </Grid>
-        <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
-          <TextField
-            label={strings.TIME_ZONE}
-            id='timezone'
-            type='text'
-            value={tz.longName}
-            tooltipTitle={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
-            display={true}
-          />
-        </Grid>
-      </Grid>
-      {plantingSite?.boundary && <BoundariesAndPlots plantingSite={plantingSite} />}
+        {plantingSite?.boundary && (
+          <Grid container flexGrow={1}>
+            <Grid item xs={12} display='flex'>
+              {plantingSite.plantingZones ? (
+                <BoundariesAndZones plantingSite={plantingSite} />
+              ) : (
+                <SimplePlantingSite plantingSite={plantingSite} />
+              )}
+            </Grid>
+          </Grid>
+        )}
+      </Card>
     </TfMain>
   );
 }

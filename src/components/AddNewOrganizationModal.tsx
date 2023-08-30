@@ -14,6 +14,7 @@ import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import RegionSelector from 'src/components/RegionSelector';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 export type AddNewOrganizationModalProps = {
   open: boolean;
@@ -25,6 +26,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const history = useHistory();
   const { onCancel, open } = props;
   const snackbar = useSnackbar();
+  const { isDesktop } = useDeviceInfo();
   const [nameError, setNameError] = useState('');
   const [timeZoneError, setTimeZoneError] = useState('');
   const [countryError, setCountryError] = useState('');
@@ -83,7 +85,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     const response = await OrganizationService.createOrganization(newOrganization);
     if (response.requestSucceeded && response.organization) {
       snackbar.pageSuccess(
-        strings.ORGANIZATION_CREATED_MSG,
+        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
       );
       reloadOrganizations();

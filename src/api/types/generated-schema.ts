@@ -113,6 +113,7 @@ export interface paths {
     delete: operations["deleteBatch"];
   };
   "/api/v1/nursery/batches/{id}/quantities": {
+    /** This should not be used to record withdrawals; use the withdrawal API for that. */
     put: operations["updateBatchQuantities"];
   };
   "/api/v1/nursery/species/{speciesId}/summary": {
@@ -156,6 +157,20 @@ export interface paths {
     put: operations["updateOrganizationUser"];
     /** Does not remove any data created by the user. */
     delete: operations["deleteOrganizationUser"];
+  };
+  "/api/v1/projects": {
+    get: operations["listProjects"];
+    post: operations["createProject"];
+  };
+  "/api/v1/projects/{id}": {
+    get: operations["getProject"];
+    put: operations["updateProject"];
+    /** Any accessions, seedling batches, or planting sites that were assigned to the project will no longer be assigned to any project. */
+    delete: operations["deleteProject"];
+  };
+  "/api/v1/projects/{id}/assign": {
+    /** Overwrites any existing project assignments. */
+    post: operations["assignProject"];
   };
   "/api/v1/reports": {
     get: operations["listReports"];
@@ -202,6 +217,7 @@ export interface paths {
     delete: operations["deleteReportPhoto"];
   };
   "/api/v1/search": {
+    /** If a sublist field has multiple values, they are separated with line breaks in the exported file. */
     post: operations["search_1"];
   };
   "/api/v1/seedbank/accessions/{id}": {
@@ -219,6 +235,7 @@ export interface paths {
   "/api/v1/seedbank/accessions/{id}/photos/{photoFilename}": {
     /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
     get: operations["getPhoto"];
+    /** If there was already a photo with the specified filename, replaces it. */
     post: operations["uploadPhoto"];
   };
   "/api/v1/seedbank/clock": {
@@ -308,15 +325,62 @@ export interface paths {
     post: operations["reassignDelivery"];
   };
   "/api/v1/tracking/mapbox/token": {
+    /** Mapbox API tokens are short-lived; when a token expires, request a new one. */
     get: operations["getMapboxToken"];
   };
+  "/api/v1/tracking/observations": {
+    get: operations["listObservations"];
+  };
+  "/api/v1/tracking/observations/results": {
+    get: operations["listObservationResults"];
+  };
+  "/api/v1/tracking/observations/{observationId}": {
+    get: operations["getObservation"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots": {
+    get: operations["listAssignedPlots"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}": {
+    post: operations["completePlotObservation"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/claim": {
+    /** A plot may only be claimed by one user at a time. */
+    post: operations["claimMonitoringPlot"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos": {
+    post: operations["uploadPlotPhoto"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos/{fileId}": {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    get: operations["getPlotPhoto"];
+  };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/release": {
+    post: operations["releaseMonitoringPlot"];
+  };
+  "/api/v1/tracking/observations/{observationId}/results": {
+    /** Some information is only available once all plots have been completed. */
+    get: operations["getObservationResults"];
+  };
   "/api/v1/tracking/sites": {
+    /** The list can optionally contain information about planting zones and subzones. */
     get: operations["listPlantingSites"];
     post: operations["createPlantingSite"];
   };
   "/api/v1/tracking/sites/{id}": {
+    /** Includes information about the site's planting zones and subzones. */
     get: operations["getPlantingSite"];
     put: operations["updatePlantingSite"];
+  };
+  "/api/v1/tracking/sites/{id}/reportedPlants": {
+    /** The totals are based on nursery withdrawals. */
+    get: operations["getPlantingSiteReportedPlants"];
+  };
+  "/api/v1/tracking/subzones/{id}": {
+    put: operations["updatePlantingSubzone"];
+  };
+  "/api/v1/tracking/subzones/{id}/species": {
+    /** The list is based on nursery withdrawals. */
+    get: operations["listPlantingSubzoneSpecies"];
   };
   "/api/v1/users/me": {
     get: operations["getMyself"];
@@ -434,6 +498,8 @@ export interface components {
       estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       /** Format: int64 */
       facilityId: number;
+      /** @description If true, plants from this accession's seeds were delivered to a planting site. */
+      hasDeliveries: boolean;
       /**
        * Format: int64
        * @description Server-generated unique identifier for the accession. This is unique across all seed banks, but is not suitable for display to end users.
@@ -454,14 +520,14 @@ export interface components {
        * @description Estimated number of plants the seeds were collected from.
        */
       plantsCollectedFrom?: number;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       receivedDate?: string;
       /** @description Number or weight of seeds remaining for withdrawal and testing. May be calculated by the server after withdrawals. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** @description Which source of data this accession originally came from. */
       source?: "Web" | "Seed Collector App" | "File Import";
-      /** @description Scientific name of the species. */
-      speciesScientificName?: string;
       /** @description Common name of the species, if defined. */
       speciesCommonName?: string;
       /**
@@ -469,6 +535,8 @@ export interface components {
        * @description Server-generated unique ID of the species.
        */
       speciesId?: number;
+      /** @description Scientific name of the species. */
+      speciesScientificName?: string;
       state:
         | "Awaiting Check-In"
         | "Awaiting Processing"
@@ -498,10 +566,10 @@ export interface components {
       role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     AllFieldValuesPayload: {
-      /** @description All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
-      values: string[];
       /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
       partial: boolean;
+      /** @description All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
+      values: string[];
     };
     /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
     AndNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -525,36 +593,63 @@ export interface components {
       successStories?: string;
       sustainableDevelopmentGoals: components["schemas"]["GoalProgressPayloadV1"][];
     };
+    AssignProjectRequestPayload: {
+      accessionIds?: number[];
+      batchIds?: number[];
+      plantingSiteIds?: number[];
+    };
+    AssignedPlotPayload: {
+      boundary: components["schemas"]["Geometry"];
+      claimedByName?: string;
+      /** Format: int64 */
+      claimedByUserId?: number;
+      completedByName?: string;
+      /** Format: int64 */
+      completedByUserId?: number;
+      /** Format: date-time */
+      completedTime?: string;
+      /** @description True if this is the first observation to include the monitoring plot. */
+      isFirstObservation: boolean;
+      isPermanent: boolean;
+      /** Format: int64 */
+      observationId: number;
+      /** Format: int64 */
+      plantingSubzoneId: number;
+      plantingSubzoneName: string;
+      /** Format: int64 */
+      plotId: number;
+      plotName: string;
+    };
     AutomationPayload: {
-      /** Format: int64 */
-      id: number;
-      /** Format: int64 */
-      facilityId: number;
-      type: string;
-      /** @description Short human-readable name of this automation. */
-      name: string;
       /** @description Human-readable description of this automation. */
       description?: string;
       /** Format: int64 */
       deviceId?: number;
-      timeseriesName?: string;
-      /** Format: int32 */
-      verbosity: number;
+      /** Format: int64 */
+      facilityId: number;
+      /** Format: int64 */
+      id: number;
       /** Format: double */
       lowerThreshold?: number;
-      /** Format: double */
-      upperThreshold?: number;
+      /** @description Short human-readable name of this automation. */
+      name: string;
       /** @description Client-defined configuration data for this automation. */
       settings?: { [key: string]: unknown };
+      timeseriesName?: string;
+      type: string;
+      /** Format: double */
+      upperThreshold?: number;
+      /** Format: int32 */
+      verbosity: number;
     };
     AutomationTriggerRequestPayload: {
+      /** @description Default message to publish if the automation type isn't yet supported by the server. */
+      message?: string;
       /**
        * Format: double
        * @description For automations that are triggered by changes to timeseries values, the value that triggered the automation.
        */
       timeseriesValue?: number;
-      /** @description Default message to publish if the automation type isn't yet supported by the server. */
-      message?: string;
     };
     BatchPayload: {
       /**
@@ -573,9 +668,11 @@ export interface components {
       id: number;
       /** Format: date-time */
       latestObservedTime: string;
-      notes?: string;
       /** Format: int32 */
       notReadyQuantity: number;
+      notes?: string;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       readyByDate?: string;
       /** Format: int32 */
@@ -604,8 +701,8 @@ export interface components {
     };
     /** @description Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
     CRS: {
-      type: "name";
       properties: components["schemas"]["CRSProperties"];
+      type: "name";
     };
     CRSProperties: {
       /**
@@ -613,6 +710,24 @@ export interface components {
        * @example EPSG:4326
        */
       name: string;
+    };
+    CompletePlotObservationRequestPayload: {
+      conditions: (
+        | "AnimalDamage"
+        | "FastGrowth"
+        | "FavorableWeather"
+        | "Fungus"
+        | "Pests"
+        | "SeedProduction"
+        | "UnfavorableWeather"
+      )[];
+      notes?: string;
+      /**
+       * Format: date-time
+       * @description Date and time the observation was performed in the field.
+       */
+      observedTime: string;
+      plants: components["schemas"]["RecordedPlantPayload"][];
     };
     ConnectDeviceManagerRequestPayload: {
       /** Format: int64 */
@@ -640,6 +755,8 @@ export interface components {
        * @description Estimated number of plants the seeds were collected from.
        */
       plantsCollectedFrom?: number;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       receivedDate?: string;
       source?: "Web" | "Seed Collector App" | "File Import";
@@ -659,21 +776,21 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     CreateAutomationRequestPayload: {
-      /** Format: int64 */
-      facilityId: number;
-      type: string;
-      name: string;
       description?: string;
       /** Format: int64 */
       deviceId?: number;
-      timeseriesName?: string;
-      /** Format: int32 */
-      verbosity?: number;
+      /** Format: int64 */
+      facilityId: number;
       /** Format: double */
       lowerThreshold?: number;
+      name: string;
+      settings?: { [key: string]: unknown };
+      timeseriesName?: string;
+      type: string;
       /** Format: double */
       upperThreshold?: number;
-      settings?: { [key: string]: unknown };
+      /** Format: int32 */
+      verbosity?: number;
     };
     CreateAutomationResponsePayload: {
       /** Format: int64 */
@@ -685,34 +802,31 @@ export interface components {
       addedDate: string;
       /** Format: int64 */
       facilityId: number;
-      notes?: string;
-      /** Format: date */
-      readyByDate?: string;
-      /** Format: int64 */
-      speciesId: number;
       /** Format: int32 */
       germinatingQuantity: number;
       /** Format: int32 */
       notReadyQuantity: number;
+      notes?: string;
+      /** Format: int64 */
+      projectId?: number;
+      /** Format: date */
+      readyByDate?: string;
       /** Format: int32 */
       readyQuantity: number;
+      /** Format: int64 */
+      speciesId: number;
     };
     CreateDeviceRequestPayload: {
+      /**
+       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
+       * @example 192.168.1.100
+       */
+      address?: string;
       /**
        * Format: int64
        * @description Identifier of facility where this device is located.
        */
       facilityId: number;
-      /**
-       * @description Name of this device.
-       * @example BMU-1
-       */
-      name: string;
-      /**
-       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
-       * @example inverter
-       */
-      type: string;
       /**
        * @description Name of device manufacturer.
        * @example InHand Networks
@@ -724,33 +838,38 @@ export interface components {
        */
       model: string;
       /**
-       * @description Device manager protocol name.
-       * @example modbus
+       * @description Name of this device.
+       * @example BMU-1
        */
-      protocol?: string;
+      name: string;
       /**
-       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
-       * @example 192.168.1.100
+       * Format: int64
+       * @description ID of parent device such as a hub or gateway, if any. The parent device must exist.
        */
-      address?: string;
+      parentId?: number;
       /**
        * Format: int32
        * @description Port number if relevant for the protocol.
        * @example 50000
        */
       port?: number;
+      /**
+       * @description Device manager protocol name.
+       * @example modbus
+       */
+      protocol?: string;
       /** @description Protocol- and device-specific custom settings. This is an arbitrary JSON object; the exact settings depend on the device type. */
       settings?: { [key: string]: unknown };
+      /**
+       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
+       * @example inverter
+       */
+      type: string;
       /**
        * Format: int32
        * @description Level of diagnostic information to log.
        */
       verbosity?: number;
-      /**
-       * Format: int64
-       * @description ID of parent device such as a hub or gateway, if any. The parent device must exist.
-       */
-      parentId?: number;
     };
     CreateFacilityRequestPayload: {
       /** Format: date */
@@ -791,9 +910,9 @@ export interface components {
       destinationFacilityId: number;
       /** Format: int32 */
       germinatingQuantity: number;
-      notes?: string;
       /** Format: int32 */
       notReadyQuantity: number;
+      notes?: string;
       /** Format: date */
       readyByDate?: string;
       /** Format: int32 */
@@ -833,9 +952,9 @@ export interface components {
       plantingSiteId?: number;
       /**
        * Format: int64
-       * @description If purpose is "Out Plant", the ID of the plot to which the seedlings were delivered. Must be specified if the planting site has plots, but must be omitted or set to null if the planting site has no plots.
+       * @description If purpose is "Out Plant", the ID of the planting subzone to which the seedlings were delivered. Must be specified if the planting site has planting subzones, but must be omitted or set to null if the planting site has no planting subzones.
        */
-      plotId?: number;
+      plantingSubzoneId?: number;
       purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
       /**
        * Format: date
@@ -873,10 +992,23 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     CreatePlantingSiteRequestPayload: {
+      boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       name: string;
       /** Format: int64 */
       organizationId: number;
+      /**
+       * Format: int32
+       * @description What month this site's planting season ends. 1=January.
+       */
+      plantingSeasonEndMonth?: number;
+      /**
+       * Format: int32
+       * @description What month this site's planting season starts. 1=January.
+       */
+      plantingSeasonStartMonth?: number;
+      /** Format: int64 */
+      projectId?: number;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -884,6 +1016,17 @@ export interface components {
       timeZone?: string;
     };
     CreatePlantingSiteResponsePayload: {
+      /** Format: int64 */
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateProjectRequestPayload: {
+      description?: string;
+      name: string;
+      /** Format: int64 */
+      organizationId: number;
+    };
+    CreateProjectResponsePayload: {
       /** Format: int64 */
       id: number;
       status: components["schemas"]["SuccessOrError"];
@@ -900,6 +1043,11 @@ export interface components {
     };
     CreateTimeseriesEntry: {
       /**
+       * Format: int32
+       * @description Number of significant fractional digits (after the decimal point), if this is a timeseries with non-integer numeric values.
+       */
+      decimalPlaces?: number;
+      /**
        * Format: int64
        * @description ID of device that produces this timeseries.
        */
@@ -907,11 +1055,6 @@ export interface components {
       /** @description Name of this timeseries. Duplicate timeseries names for the same device aren't allowed, but different devices can have timeseries with the same name. */
       timeseriesName: string;
       type: "Numeric" | "Text";
-      /**
-       * Format: int32
-       * @description Number of significant fractional digits (after the decimal point), if this is a timeseries with non-integer numeric values.
-       */
-      decimalPlaces?: number;
       /**
        * @description Units of measure for values in this timeseries.
        * @example volts
@@ -925,6 +1068,7 @@ export interface components {
       /** Format: date */
       endDate?: string;
       notes?: string;
+      seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
       /** Format: int32 */
@@ -933,7 +1077,6 @@ export interface components {
       seedsFilled?: number;
       /** Format: int32 */
       seedsTested: number;
-      seedType?: "Fresh" | "Stored";
       /** Format: date */
       startDate?: string;
       substrate?:
@@ -965,8 +1108,8 @@ export interface components {
     CreateWithdrawalRequestPayload: {
       /** Format: date */
       date?: string;
-      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
        * @description ID of the user who withdrew the seeds. Default is the current user's ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization.
@@ -979,33 +1122,28 @@ export interface components {
     DeliveryPayload: {
       /** Format: int64 */
       id: number;
-      plantings: components["schemas"]["PlantingPayload"][];
       /** Format: int64 */
       plantingSiteId: number;
+      plantings: components["schemas"]["PlantingPayload"][];
       /** Format: int64 */
       withdrawalId: number;
     };
     DeviceConfig: {
       /**
-       * Format: int64
-       * @description Unique identifier of this device.
+       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
+       * @example 192.168.1.100
        */
-      id: number;
+      address?: string;
       /**
        * Format: int64
        * @description Identifier of facility where this device is located.
        */
       facilityId: number;
       /**
-       * @description Name of this device.
-       * @example BMU-1
+       * Format: int64
+       * @description Unique identifier of this device.
        */
-      name: string;
-      /**
-       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
-       * @example inverter
-       */
-      type: string;
+      id: number;
       /**
        * @description Name of device manufacturer.
        * @example InHand Networks
@@ -1017,37 +1155,39 @@ export interface components {
        */
       model: string;
       /**
-       * @description Device manager protocol name.
-       * @example modbus
+       * @description Name of this device.
+       * @example BMU-1
        */
-      protocol?: string;
+      name: string;
       /**
-       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
-       * @example 192.168.1.100
+       * Format: int64
+       * @description ID of parent device such as a hub or gateway, if any.
        */
-      address?: string;
+      parentId?: number;
       /**
        * Format: int32
        * @description Port number if relevant for the protocol.
        * @example 50000
        */
       port?: number;
+      /**
+       * @description Device manager protocol name.
+       * @example modbus
+       */
+      protocol?: string;
       settings?: { [key: string]: unknown };
+      /**
+       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
+       * @example inverter
+       */
+      type: string;
       /**
        * Format: int32
        * @description Level of diagnostic information to log.
        */
       verbosity?: number;
-      /**
-       * Format: int64
-       * @description ID of parent device such as a hub or gateway, if any.
-       */
-      parentId?: number;
     };
     DeviceManagerPayload: {
-      /** Format: int64 */
-      id: number;
-      sensorKitId: string;
       /** @description If true, this device manager is available to connect to a facility. */
       available: boolean;
       /**
@@ -1055,6 +1195,8 @@ export interface components {
        * @description The facility this device manager is connected to, or null if it is not connected.
        */
       facilityId?: number;
+      /** Format: int64 */
+      id: number;
       /** @description If true, this device manager is currently online. */
       isOnline: boolean;
       /**
@@ -1062,6 +1204,7 @@ export interface components {
        * @description When the device manager's isOnline value changed most recently. In other words, if isOnline is true, the device manager has been online since this time; if isOnline is false, the device manager has been offline since this time. This may be null if the device manager has not come online for the first time yet.
        */
       onlineChangedTime?: string;
+      sensorKitId: string;
       /**
        * Format: int32
        * @description If an update is being downloaded or installed, its progress as a percentage. Not present if no update is in progress.
@@ -1069,32 +1212,32 @@ export interface components {
       updateProgress?: number;
     };
     DeviceTemplatePayload: {
+      address?: string;
+      category: "PV" | "Seed Bank Default";
       /** Format: int64 */
       id: number;
-      category: "PV" | "Seed Bank Default";
-      name: string;
-      type: string;
       make: string;
       model: string;
-      protocol?: string;
-      address?: string;
+      name: string;
       /** Format: int32 */
       port?: number;
+      protocol?: string;
       settings?: { [key: string]: unknown };
+      type: string;
       /** Format: int32 */
       verbosity?: number;
     };
     DeviceUnresponsiveRequestPayload: {
       /**
-       * Format: date-time
-       * @description When the device most recently responded. Null or absent if the device has never responded.
-       */
-      lastRespondedTime?: string;
-      /**
        * Format: int32
        * @description The expected amount of time between updates from the device. Null or absent if there is no fixed update interval.
        */
       expectedIntervalSecs?: number;
+      /**
+       * Format: date-time
+       * @description When the device most recently responded. Null or absent if the device has never responded.
+       */
+      lastRespondedTime?: string;
     };
     ErrorDetails: {
       message: string;
@@ -1129,24 +1272,44 @@ export interface components {
     };
     FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
       field?: string;
+      type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "Range";
       /** @description List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
       values?: (string | null)[];
-      type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "Range";
     } & {
       field: unknown;
       type: unknown;
       values: unknown;
     };
     FieldValuesPayload: {
-      /** @description List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
-      values: (string | null)[];
       /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
       partial: boolean;
+      /** @description List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
+      values: (string | null)[];
     };
     Geolocation: {
+      accuracy?: number;
       latitude: number;
       longitude: number;
-      accuracy?: number;
+    };
+    /** @description GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
+    Geometry: {
+      type:
+        | "Point"
+        | "LineString"
+        | "Polygon"
+        | "MultiPoint"
+        | "MultiLineString"
+        | "MultiPolygon"
+        | "GeometryCollection";
+      coordinates: number[];
+      crs?: components["schemas"]["CRS"];
+    };
+    GeometryCollection: components["schemas"]["Geometry"] & {
+      geometries?: components["schemas"]["Geometry"][];
+      type?: "GeometryCollection";
+    } & {
+      geometries: unknown;
+      type: unknown;
     };
     GetAccessionHistoryResponsePayload: {
       /** @description History of changes in descending time order (newest first.) */
@@ -1188,8 +1351,8 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     GetMapboxTokenResponsePayload: {
-      token: string;
       status: components["schemas"]["SuccessOrError"];
+      token: string;
     };
     GetNotificationResponsePayload: {
       notification: components["schemas"]["NotificationPayload"];
@@ -1230,7 +1393,15 @@ export interface components {
       batches: components["schemas"]["BatchPayload"][];
       /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
       delivery?: components["schemas"]["DeliveryPayload"];
+      status: components["schemas"]["SuccessOrError"];
       withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
+    };
+    GetObservationResponsePayload: {
+      observation: components["schemas"]["ObservationPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetObservationResultsResponsePayload: {
+      observation: components["schemas"]["ObservationResultsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationResponsePayload: {
@@ -1238,7 +1409,11 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationUserResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
       user: components["schemas"]["OrganizationUserPayload"];
+    };
+    GetPlantingSiteReportedPlantsResponsePayload: {
+      site: components["schemas"]["PlantingSiteReportedPlantsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetPlantingSiteResponsePayload: {
@@ -1250,8 +1425,6 @@ export interface components {
       id: number;
       /** Format: int32 */
       mortalityRateInField?: number;
-      /** Format: int32 */
-      mortalityRateInNursery?: number;
       /** Format: int32 */
       totalPlanted?: number;
     };
@@ -1274,30 +1447,34 @@ export interface components {
       totalTreesPlanted?: number;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
+    GetProjectResponsePayload: {
+      project: components["schemas"]["ProjectPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetReportPayload: {
       /** Format: int64 */
       id: number;
-      /** Format: int32 */
-      year: number;
-      /** Format: int32 */
-      quarter: number;
-      status: "New" | "In Progress" | "Locked" | "Submitted";
-      /** Format: date-time */
-      lockedTime?: string;
-      /** Format: date-time */
-      submittedTime?: string;
-      /** Format: date-time */
-      modifiedTime?: string;
       lockedByName?: string;
       /** Format: int64 */
       lockedByUserId?: number;
+      /** Format: date-time */
+      lockedTime?: string;
       modifiedByName?: string;
       /** Format: int64 */
       modifiedByUserId?: number;
+      /** Format: date-time */
+      modifiedTime?: string;
+      /** Format: int32 */
+      quarter: number;
+      status: "New" | "In Progress" | "Locked" | "Submitted";
       submittedByName?: string;
       /** Format: int64 */
       submittedByUserId?: number;
+      /** Format: date-time */
+      submittedTime?: string;
       version: string;
+      /** Format: int32 */
+      year: number;
     };
     GetReportPayloadV1: components["schemas"]["GetReportPayload"] & {
       annualDetails?: components["schemas"]["AnnualDetailsPayloadV1"];
@@ -1360,19 +1537,19 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesSummaryResponsePayload: {
-      summary: components["schemas"]["SpeciesSummaryPayload"];
       status: components["schemas"]["SuccessOrError"];
+      summary: components["schemas"]["SpeciesSummaryPayload"];
     };
     GetStorageLocationResponsePayload: {
-      storageLocation: components["schemas"]["StorageLocationPayload"];
       status: components["schemas"]["SuccessOrError"];
+      storageLocation: components["schemas"]["StorageLocationPayload"];
     };
     GetTimeseriesHistoryRequestPayload: {
       /**
-       * Format: date-time
-       * @description Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent.
+       * Format: int32
+       * @description Number of values to return. The time range is divided into this many equal intervals, and a value is returned from each interval if available.
        */
-      startTime?: string;
+      count: number;
       /**
        * Format: date-time
        * @description End of time range to query. If this is non-null, startTime must also be specified, and seconds must be null or absent.
@@ -1384,10 +1561,10 @@ export interface components {
        */
       seconds?: number;
       /**
-       * Format: int32
-       * @description Number of values to return. The time range is divided into this many equal intervals, and a value is returned from each interval if available.
+       * Format: date-time
+       * @description Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent.
        */
-      count: number;
+      startTime?: string;
       /** @description Timeseries to query. May be from different devices. */
       timeseries: components["schemas"]["TimeseriesIdPayload"][];
     };
@@ -1395,6 +1572,9 @@ export interface components {
       values: components["schemas"]["TimeseriesValuesPayload"][];
     };
     GetUploadStatusDetailsPayload: {
+      errors?: components["schemas"]["UploadProblemPayload"][];
+      /** @description True if the server is finished processing the file, either successfully or not. */
+      finished: boolean;
       /** Format: int64 */
       id: number;
       status:
@@ -1408,10 +1588,7 @@ export interface components {
         | "Awaiting Validation"
         | "Awaiting User Action"
         | "Awaiting Processing";
-      errors?: components["schemas"]["UploadProblemPayload"][];
       warnings?: components["schemas"]["UploadProblemPayload"][];
-      /** @description True if the server is finished processing the file, either successfully or not. */
-      finished: boolean;
     };
     GetUploadStatusResponsePayload: {
       details: components["schemas"]["GetUploadStatusDetailsPayload"];
@@ -1423,8 +1600,8 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     GetUserResponsePayload: {
-      user: components["schemas"]["UserProfilePayload"];
       status: components["schemas"]["SuccessOrError"];
+      user: components["schemas"]["UserProfilePayload"];
     };
     GetViabilityTestPayload: {
       /** Format: int64 */
@@ -1434,6 +1611,7 @@ export interface components {
       /** Format: int64 */
       id: number;
       notes?: string;
+      seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
       /** Format: int32 */
@@ -1442,7 +1620,6 @@ export interface components {
       seedsFilled?: number;
       /** Format: int32 */
       seedsTested: number;
-      seedType?: "Fresh" | "Stored";
       /** Format: date */
       startDate?: string;
       substrate?:
@@ -1481,8 +1658,8 @@ export interface components {
       withdrawnByUserId?: number;
     };
     GetViabilityTestResponsePayload: {
-      viabilityTest: components["schemas"]["GetViabilityTestPayload"];
       status: components["schemas"]["SuccessOrError"];
+      viabilityTest: components["schemas"]["GetViabilityTestPayload"];
     };
     GetWithdrawalPayload: {
       /** Format: date */
@@ -1499,8 +1676,8 @@ export interface components {
        * @description Server-assigned unique ID of this withdrawal.
        */
       id?: number;
-      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
        * @description If this withdrawal is of purpose "Viability Testing", the ID of the test it is associated with.
@@ -1517,12 +1694,12 @@ export interface components {
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
     GetWithdrawalResponsePayload: {
-      withdrawal: components["schemas"]["GetWithdrawalPayload"];
       status: components["schemas"]["SuccessOrError"];
+      withdrawal: components["schemas"]["GetWithdrawalPayload"];
     };
     GetWithdrawalsResponsePayload: {
-      withdrawals: components["schemas"]["GetWithdrawalPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      withdrawals: components["schemas"]["GetWithdrawalPayload"][];
     };
     GoalProgressPayloadV1: {
       goal:
@@ -1545,17 +1722,26 @@ export interface components {
         | "Partnerships";
       progress?: string;
     };
+    LineString: components["schemas"]["Geometry"] & {
+      coordinates?: number[][];
+      type?: "LineString";
+    } & {
+      coordinates: unknown;
+      type: unknown;
+    };
     ListAllFieldValuesRequestPayload: {
-      /** Format: int64 */
-      facilityId?: number;
       fields: string[];
       /** Format: int64 */
-      organizationId?: number;
+      organizationId: number;
     };
     ListAllFieldValuesResponsePayload: {
       results: {
         [key: string]: components["schemas"]["AllFieldValuesPayload"];
       };
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListAssignedPlotsResponsePayload: {
+      plots: components["schemas"]["AssignedPlotPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListAutomationsResponsePayload: {
@@ -1567,8 +1753,8 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     ListDeviceTemplatesResponsePayload: {
-      templates: components["schemas"]["DeviceTemplatePayload"][];
       status: components["schemas"]["SuccessOrError"];
+      templates: components["schemas"]["DeviceTemplatePayload"][];
     };
     ListFacilitiesResponse: {
       facilities: components["schemas"]["FacilityPayload"][];
@@ -1590,13 +1776,26 @@ export interface components {
       results: { [key: string]: components["schemas"]["FieldValuesPayload"] };
       status: components["schemas"]["SuccessOrError"];
     };
+    ListObservationResultsResponsePayload: {
+      observations: components["schemas"]["ObservationResultsPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListObservationsResponsePayload: {
+      observations: components["schemas"]["ObservationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+      /**
+       * Format: int32
+       * @description Total number of monitoring plots that haven't been claimed yet across all current observations.
+       */
+      totalUnclaimedPlots: number;
+    };
     ListOrganizationRolesResponsePayload: {
       roles: components["schemas"]["OrganizationRolePayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationUsersResponsePayload: {
-      users: components["schemas"]["OrganizationUserPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      users: components["schemas"]["OrganizationUserPayload"][];
     };
     ListOrganizationsResponsePayload: {
       organizations: components["schemas"]["OrganizationPayload"][];
@@ -1613,6 +1812,14 @@ export interface components {
     };
     ListPlantingSitesResponsePayload: {
       sites: components["schemas"]["PlantingSitePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListPlantingSubzoneSpeciesResponsePayload: {
+      species: components["schemas"]["PlantingSubzoneSpeciesPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListProjectsResponsePayload: {
+      projects: components["schemas"]["ProjectPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListReportFilesResponseElement: {
@@ -1667,29 +1874,45 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     ListStorageLocationsResponsePayload: {
-      storageLocations: components["schemas"]["StorageLocationPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      storageLocations: components["schemas"]["StorageLocationPayload"][];
     };
     ListTimeZoneNamesResponsePayload: {
-      timeZones: components["schemas"]["TimeZonePayload"][];
       status: components["schemas"]["SuccessOrError"];
+      timeZones: components["schemas"]["TimeZonePayload"][];
     };
     ListTimeseriesResponsePayload: {
-      timeseries: components["schemas"]["TimeseriesPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      timeseries: components["schemas"]["TimeseriesPayload"][];
     };
     ListViabilityTestsResponsePayload: {
-      viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
     };
     ListWithdrawalPhotosResponsePayload: {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    MultiPolygon: {
-      coordinates: number[][][][];
-      type: "MultiPolygon";
-      crs?: components["schemas"]["CRS"];
+    MultiLineString: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][];
+      type?: "MultiLineString";
+    } & {
+      coordinates: unknown;
+      type: unknown;
+    };
+    MultiPoint: components["schemas"]["Geometry"] & {
+      coordinates?: number[][];
+      type?: "MultiPoint";
+    } & {
+      coordinates: unknown;
+      type: unknown;
+    };
+    MultiPolygon: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][][];
+      type?: "MultiPolygon";
+    } & {
+      coordinates: unknown;
+      type: unknown;
     };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1704,18 +1927,18 @@ export interface components {
       unread: number;
     };
     NotificationPayload: {
+      body: string;
+      /** Format: date-time */
+      createdTime: string;
       /** Format: int64 */
       id: number;
+      isRead: boolean;
+      /** Format: uri */
+      localUrl: string;
       notificationCriticality: "Info" | "Warning" | "Error" | "Success";
       /** Format: int64 */
       organizationId?: number;
       title: string;
-      body: string;
-      /** Format: uri */
-      localUrl: string;
-      /** Format: date-time */
-      createdTime: string;
-      isRead: boolean;
     };
     NurseryWithdrawalPayload: {
       batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
@@ -1736,6 +1959,171 @@ export interface components {
     NurseryWithdrawalPhotoPayload: {
       /** Format: int64 */
       id: number;
+    };
+    ObservationMonitoringPlotPhotoPayload: {
+      /** Format: int64 */
+      fileId: number;
+    };
+    ObservationMonitoringPlotResultsPayload: {
+      boundary: components["schemas"]["Polygon"];
+      claimedByName?: string;
+      /** Format: int64 */
+      claimedByUserId?: number;
+      /** Format: date-time */
+      completedTime?: string;
+      /** @description True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
+      isPermanent: boolean;
+      /** Format: int64 */
+      monitoringPlotId: number;
+      /** @description Full name of this monitoring plot, including zone and subzone prefixes. */
+      monitoringPlotName: string;
+      /**
+       * Format: int32
+       * @description If this is a permanent monitoring plot in this observation, percentage of plants of all species that were dead.
+       */
+      mortalityRate?: number;
+      notes?: string;
+      photos: components["schemas"]["ObservationMonitoringPlotPhotoPayload"][];
+      /**
+       * Format: int32
+       * @description Number of live plants per hectare.
+       */
+      plantingDensity: number;
+      species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+      status: "Outstanding" | "InProgress" | "Completed";
+      /**
+       * Format: int32
+       * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
+       */
+      totalPlants: number;
+      /**
+       * Format: int32
+       * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+       */
+      totalSpecies: number;
+    };
+    ObservationPayload: {
+      /**
+       * Format: date
+       * @description Date this observation is scheduled to end.
+       */
+      endDate: string;
+      /** Format: int64 */
+      id: number;
+      /**
+       * Format: int32
+       * @description Total number of monitoring plots that haven't been claimed yet.
+       */
+      numUnclaimedPlots: number;
+      /** Format: int64 */
+      plantingSiteId: number;
+      plantingSiteName: string;
+      /**
+       * Format: date
+       * @description Date this observation started.
+       */
+      startDate: string;
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
+    };
+    ObservationPlantingSubzoneResultsPayload: {
+      monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
+      /** Format: int64 */
+      plantingSubzoneId: number;
+    };
+    ObservationPlantingZoneResultsPayload: {
+      /** @description Area of this planting zone in hectares. */
+      areaHa: number;
+      /** Format: date-time */
+      completedTime?: string;
+      /**
+       * Format: int32
+       * @description Estimated number of plants in planting zone based on estimated planting density and planting zone area. Only present if all the subzones in the zone have been marked as having completed planting.
+       */
+      estimatedPlants?: number;
+      /**
+       * Format: int32
+       * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
+       */
+      mortalityRate: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
+       */
+      plantingDensity?: number;
+      plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
+      /** Format: int64 */
+      plantingZoneId: number;
+      species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+      /**
+       * Format: int32
+       * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
+       */
+      totalPlants: number;
+      /**
+       * Format: int32
+       * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+       */
+      totalSpecies: number;
+    };
+    ObservationResultsPayload: {
+      /** Format: date-time */
+      completedTime?: string;
+      /**
+       * Format: int32
+       * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as having completed planting.
+       */
+      estimatedPlants?: number;
+      /**
+       * Format: int32
+       * @description Percentage of plants of all species that were dead in this site's permanent monitoring plots.
+       */
+      mortalityRate: number;
+      /** Format: int64 */
+      observationId: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as having completed planting.
+       */
+      plantingDensity?: number;
+      /** Format: int64 */
+      plantingSiteId: number;
+      plantingZones: components["schemas"]["ObservationPlantingZoneResultsPayload"][];
+      species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+      /** Format: date */
+      startDate: string;
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
+      /** Format: int32 */
+      totalSpecies: number;
+    };
+    ObservationSpeciesResultsPayload: {
+      certainty: "Known" | "Other" | "Unknown";
+      /**
+       * Format: int32
+       * @description Number of dead plants observed in permanent monitoring plots in all observations including this one. 0 if this is a plot-level result for a temporary monitoring plot.
+       */
+      cumulativeDead: number;
+      /**
+       * Format: int32
+       * @description Percentage of plants in permanent monitoring plots that are dead. If there are no permanent monitoring plots (or if this is a plot-level result for a temporary monitoring plot) this will be null.
+       */
+      mortalityRate?: number;
+      /**
+       * Format: int32
+       * @description Number of live plants observed in permanent plots in this observation, not including existing plants. 0 if ths is a plot-level result for a temporary monitoring plot.
+       */
+      permanentLive: number;
+      /**
+       * Format: int64
+       * @description If certainty is Known, the ID of the species. Null if certainty is Other or Unknown.
+       */
+      speciesId?: number;
+      /** @description If certainty is Other, the user-supplied name of the species. Null if certainty is Known or Unknown. */
+      speciesName?: string;
+      /**
+       * Format: int32
+       * @description Total number of live and existing plants of this species.
+       */
+      totalPlants: number;
     };
     /** @description Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
     OrNodePayload: components["schemas"]["SearchNodePayload"] & {
@@ -1793,10 +2181,10 @@ export interface components {
        */
       addedTime: string;
       email: string;
-      /** Format: int64 */
-      id: number;
       /** @description The user's first name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       firstName?: string;
+      /** Format: int64 */
+      id: number;
       /** @description The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
       role: "Contributor" | "Manager" | "Admin" | "Owner";
@@ -1812,37 +2200,117 @@ export interface components {
        */
       numPlants: number;
       /** Format: int64 */
-      plotId?: number;
+      plantingSubzoneId?: number;
       /** Format: int64 */
       speciesId: number;
       type: "Delivery" | "Reassignment From" | "Reassignment To";
     };
     PlantingSitePayload: {
+      /** @description Area of planting site in hectares. Only present if the site has planting zones. */
+      areaHa?: number;
       boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       /** Format: int64 */
       id: number;
       name: string;
+      /** Format: int64 */
+      organizationId: number;
+      /**
+       * Format: int32
+       * @description What month this site's planting season ends. 1=January.
+       */
+      plantingSeasonEndMonth?: number;
+      /**
+       * Format: int32
+       * @description What month this site's planting season starts. 1=January.
+       */
+      plantingSeasonStartMonth?: number;
       plantingZones?: components["schemas"]["PlantingZonePayload"][];
+      /** Format: int64 */
+      projectId?: number;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
        */
       timeZone?: string;
     };
-    PlantingZonePayload: {
-      boundary: components["schemas"]["MultiPolygon"];
+    PlantingSiteReportedPlantsPayload: {
       /** Format: int64 */
       id: number;
-      name: string;
-      plots: components["schemas"]["PlotPayload"][];
+      plantingZones: components["schemas"]["PlantingZoneReportedPlantsPayload"][];
+      /** Format: int32 */
+      plantsSinceLastObservation: number;
+      /** Format: int32 */
+      progressPercent?: number;
+      /** Format: int32 */
+      totalPlants: number;
     };
-    PlotPayload: {
+    PlantingSubzonePayload: {
+      /** @description Area of planting subzone in hectares. */
+      areaHa: number;
       boundary: components["schemas"]["MultiPolygon"];
       fullName: string;
       /** Format: int64 */
       id: number;
       name: string;
+      plantingCompleted: boolean;
+      /**
+       * Format: date-time
+       * @description When planting of the planting subzone was marked as completed.
+       */
+      plantingCompletedTime?: string;
+    };
+    PlantingSubzoneSpeciesPayload: {
+      commonName?: string;
+      /** Format: int64 */
+      id: number;
+      scientificName: string;
+    };
+    PlantingZonePayload: {
+      /** @description Area of planting zone in hectares. */
+      areaHa: number;
+      boundary: components["schemas"]["MultiPolygon"];
+      /** Format: int64 */
+      id: number;
+      name: string;
+      plantingSubzones: components["schemas"]["PlantingSubzonePayload"][];
+      targetPlantingDensity: number;
+    };
+    PlantingZoneReportedPlantsPayload: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int32 */
+      plantsSinceLastObservation: number;
+      /** Format: int32 */
+      progressPercent: number;
+      /** Format: int32 */
+      totalPlants: number;
+    };
+    Point: components["schemas"]["Geometry"] & {
+      /**
+       * @description A single position consisting of X and Y values in the coordinate system specified by the crs field.
+       * @example 120,-9.53
+       */
+      coordinates?: number[];
+      type?: "Point";
+    } & {
+      coordinates: unknown;
+      type: unknown;
+    };
+    Polygon: components["schemas"]["Geometry"] & {
+      coordinates?: number[][][];
+      type?: "Polygon";
+    } & {
+      coordinates: unknown;
+      type: unknown;
+    };
+    ProjectPayload: {
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /** Format: int64 */
+      organizationId: number;
     };
     PutNurseryV1: {
       /** Format: date */
@@ -1865,18 +2333,16 @@ export interface components {
       /** Format: int32 */
       mortalityRateInField?: number;
       /** Format: int32 */
-      mortalityRateInNursery?: number;
-      /** Format: int32 */
       totalPlanted?: number;
     };
     PutPlantingSiteV1: {
       /** Format: int64 */
       id: number;
+      /** Format: int32 */
+      mortalityRate?: number;
       notes?: string;
       selected: boolean;
       species: components["schemas"]["PutPlantingSiteSpeciesV1"][];
-      /** Format: int32 */
-      mortalityRate?: number;
       /** Format: int32 */
       totalPlantedArea?: number;
       /** Format: int32 */
@@ -1924,24 +2390,37 @@ export interface components {
     ReassignmentPayload: {
       /** Format: int64 */
       fromPlantingId: number;
+      notes?: string;
       /**
        * Format: int32
-       * @description Number of plants to reassign from the planting's original plot to the new one. Must be less than or equal to the number of plants in the original planting.
+       * @description Number of plants to reassign from the planting's original subzone to the new one. Must be less than or equal to the number of plants in the original planting.
        */
       numPlants: number;
-      notes?: string;
       /** Format: int64 */
-      toPlotId: number;
+      toPlantingSubzoneId: number;
     };
     RecordTimeseriesValuesRequestPayload: {
       timeseries: components["schemas"]["TimeseriesValuesPayload"][];
     };
     /** @description Results of a request to record timeseries values. */
     RecordTimeseriesValuesResponsePayload: {
+      error?: components["schemas"]["ErrorDetails"];
       /** @description List of values that the server failed to record. Will not be included if all the values were recorded successfully. */
       failures?: components["schemas"]["TimeseriesValuesErrorPayload"][];
       status: components["schemas"]["SuccessOrError"];
-      error?: components["schemas"]["ErrorDetails"];
+    };
+    RecordedPlantPayload: {
+      certainty: "Known" | "Other" | "Unknown";
+      /** @description GPS coordinates where plant was observed. */
+      gpsCoordinates: components["schemas"]["Point"];
+      /**
+       * Format: int64
+       * @description Required if certainty is Known. Ignored if certainty is Other or Unknown.
+       */
+      speciesId?: number;
+      /** @description If certainty is Other, the optional user-supplied name of the species. Ignored if certainty is Known or Unknown. */
+      speciesName?: string;
+      status: "Live" | "Dead" | "Existing";
     };
     ResolveUploadRequestPayload: {
       /** @description If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
@@ -1951,23 +2430,6 @@ export interface components {
     SearchNodePayload: any;
     SearchRequestPayload: {
       /**
-       * @description Prefix for field names. This determines how field names are interpreted, and also how results are structured. Each element in the "results" array in the response will be an instance of whatever entity the prefix points to. Always evaluated starting from the "organizations" level. If not present, the search will return a list of organizations.
-       * @example facilities.accessions
-       */
-      prefix?: string;
-      /**
-       * @description List of fields to return. Field names should be relative to the prefix. They may navigate the data hierarchy using '.' or '_' as delimiters.
-       * @example processingStartDate,viabilityTests.seedsTested,facility_name
-       */
-      fields: string[];
-      /** @description How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
-      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
-      search?:
-        | components["schemas"]["AndNodePayload"]
-        | components["schemas"]["FieldNodePayload"]
-        | components["schemas"]["NotNodePayload"]
-        | components["schemas"]["OrNodePayload"];
-      /**
        * Format: int32
        * @description Maximum number of top-level search results to return. The system may impose a limit on this value. A separate system-imposed limit may also be applied to lists of child objects inside the top-level results. Use a value of 0 to return the maximum number of allowed results.
        * @default 25
@@ -1975,22 +2437,34 @@ export interface components {
       count: number;
       /** @description Starting point for search results. If present, a previous search will be continued from where it left off. This should be the value of the cursor that was returned in the response to a previous search. */
       cursor?: string;
+      /**
+       * @description List of fields to return. Field names should be relative to the prefix. They may navigate the data hierarchy using '.' or '_' as delimiters.
+       * @example processingStartDate,viabilityTests.seedsTested,facility_name
+       */
+      fields: string[];
+      /**
+       * @description Prefix for field names. This determines how field names are interpreted, and also how results are structured. Each element in the "results" array in the response will be an instance of whatever entity the prefix points to. Always evaluated starting from the "organizations" level. If not present, the search will return a list of organizations.
+       * @example facilities.accessions
+       */
+      prefix?: string;
+      search?:
+        | components["schemas"]["AndNodePayload"]
+        | components["schemas"]["FieldNodePayload"]
+        | components["schemas"]["NotNodePayload"]
+        | components["schemas"]["OrNodePayload"];
+      /** @description How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
+      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
     };
     SearchResponsePayload: {
-      results: { [key: string]: unknown }[];
       cursor?: string;
+      results: { [key: string]: unknown }[];
     };
     SearchSortOrderElement: {
-      field: string;
       /** @default Ascending */
       direction?: "Ascending" | "Descending";
+      field: string;
     };
     SeedCountSummaryPayload: {
-      /**
-       * Format: int64
-       * @description Total number of seeds remaining. The sum of subtotalBySeedCount and subtotalByWeightEstimate.
-       */
-      total: number;
       /**
        * Format: int64
        * @description Total number of seeds remaining in accessions whose quantities are measured in seeds.
@@ -2002,6 +2476,11 @@ export interface components {
        */
       subtotalByWeightEstimate: number;
       /**
+       * Format: int64
+       * @description Total number of seeds remaining. The sum of subtotalBySeedCount and subtotalByWeightEstimate.
+       */
+      total: number;
+      /**
        * Format: int32
        * @description Number of accessions that are measured by weight and don't have subset weight and count data. The system cannot estimate how many seeds they have.
        */
@@ -2009,6 +2488,8 @@ export interface components {
     };
     /** @description Represents a quantity of seeds, measured either in individual seeds or by weight. */
     SeedQuantityPayload: {
+      /** @description If this quantity is a weight measurement, the weight in grams. This is not set if the "units" field is "Seeds". This is always calculated on the server side and is ignored on input. */
+      grams?: number;
       /** @description Number of units of seeds. If "units" is "Seeds", this is the number of seeds and must be an integer. Otherwise it is a measurement in the weight units specified in the "units" field, and may have a fractional part. */
       quantity: number;
       units:
@@ -2018,13 +2499,11 @@ export interface components {
         | "Kilograms"
         | "Ounces"
         | "Pounds";
-      /** @description If this quantity is a weight measurement, the weight in grams. This is not set if the "units" field is "Seeds". This is always calculated on the server side and is ignored on input. */
-      grams?: number;
     };
     SendFacilityAlertRequestPayload: {
-      subject: string;
       /** @description Alert body in plain text. HTML alerts are not supported yet. */
       body: string;
+      subject: string;
     };
     SimpleErrorResponsePayload: {
       error: components["schemas"]["ErrorDetails"];
@@ -2034,19 +2513,28 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SpeciesLookupCommonNamePayload: {
-      name: string;
       /** @description ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
       language?: string;
+      name: string;
     };
     SpeciesLookupDetailsResponsePayload: {
-      scientificName: string;
       /** @description List of known common names for the species, if any. */
       commonNames?: components["schemas"]["SpeciesLookupCommonNamePayload"][];
+      /** @description IUCN Red List conservation category code. */
+      conservationCategory?:
+        | "CR"
+        | "DD"
+        | "EN"
+        | "EW"
+        | "EX"
+        | "LC"
+        | "NE"
+        | "NT"
+        | "VU";
       familyName: string;
-      /** @description True if the species is known to be endangered, false if the species is known to not be endangered. This value will not be present if the server's taxonomic database doesn't indicate whether or not the species is endangered. */
-      endangered?: boolean;
       /** @description If this is not the accepted name for the species, the type of problem the name has. Currently, this will always be "Name Is Synonym". */
       problemType?: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
+      scientificName: string;
       /** @description If this is not the accepted name for the species, the name to suggest as an alternative. */
       suggestedScientificName?: string;
     };
@@ -2057,14 +2545,26 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SpeciesProblemElement: {
+      field: "Scientific Name";
       /** Format: int64 */
       id: number;
-      field: "Scientific Name";
-      type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
       /** @description Value for the field in question that would correct the problem. Absent if the system is unable to calculate a corrected value. */
       suggestedValue?: string;
+      type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
     };
     SpeciesRequestPayload: {
+      commonName?: string;
+      /** @description IUCN Red List conservation category code. */
+      conservationCategory?:
+        | "CR"
+        | "DD"
+        | "EN"
+        | "EW"
+        | "EX"
+        | "LC"
+        | "NE"
+        | "NT"
+        | "VU";
       ecosystemTypes?: (
         | "Boreal forests/Taiga"
         | "Deserts and xeric shrublands"
@@ -2081,10 +2581,21 @@ export interface components {
         | "Tropical and subtropical moist broad leaf forests"
         | "Tundra"
       )[];
-      commonName?: string;
-      endangered?: boolean;
       familyName?: string;
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
+      growthForm?:
+        | "Tree"
+        | "Shrub"
+        | "Forb"
+        | "Graminoid"
+        | "Fern"
+        | "Fungus"
+        | "Lichen"
+        | "Moss"
+        | "Vine"
+        | "Liana"
+        | "Shrub/Tree"
+        | "Subshrub"
+        | "Multiple Forms";
       /**
        * Format: int64
        * @description Which organization's species list to update.
@@ -2096,9 +2607,24 @@ export interface components {
         | "Orthodox"
         | "Recalcitrant"
         | "Intermediate"
-        | "Unknown";
+        | "Unknown"
+        | "Likely Orthodox"
+        | "Likely Recalcitrant"
+        | "Likely Intermediate";
     };
     SpeciesResponseElement: {
+      commonName?: string;
+      /** @description IUCN Red List conservation category code. */
+      conservationCategory?:
+        | "CR"
+        | "DD"
+        | "EN"
+        | "EW"
+        | "EX"
+        | "LC"
+        | "NE"
+        | "NT"
+        | "VU";
       ecosystemTypes?: (
         | "Boreal forests/Taiga"
         | "Deserts and xeric shrublands"
@@ -2115,10 +2641,21 @@ export interface components {
         | "Tropical and subtropical moist broad leaf forests"
         | "Tundra"
       )[];
-      commonName?: string;
-      endangered?: boolean;
       familyName?: string;
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern";
+      growthForm?:
+        | "Tree"
+        | "Shrub"
+        | "Forb"
+        | "Graminoid"
+        | "Fern"
+        | "Fungus"
+        | "Lichen"
+        | "Moss"
+        | "Vine"
+        | "Liana"
+        | "Shrub/Tree"
+        | "Subshrub"
+        | "Multiple Forms";
       /** Format: int64 */
       id: number;
       problems?: components["schemas"]["SpeciesProblemElement"][];
@@ -2128,7 +2665,10 @@ export interface components {
         | "Orthodox"
         | "Recalcitrant"
         | "Intermediate"
-        | "Unknown";
+        | "Unknown"
+        | "Likely Orthodox"
+        | "Likely Recalcitrant"
+        | "Likely Intermediate";
     };
     SpeciesSummaryNurseryPayload: {
       /** Format: int64 */
@@ -2187,21 +2727,21 @@ export interface components {
     SummarizeAccessionSearchResponsePayload: {
       /** Format: int32 */
       accessions: number;
+      seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
       /** Format: int32 */
       species: number;
-      seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     /** @description Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponsePayload: {
-      /** Format: int32 */
-      activeAccessions: number;
-      /** Format: int32 */
-      species: number;
       /** @description Number of accessions in each state. */
       accessionsByState: { [key: string]: number };
+      /** Format: int32 */
+      activeAccessions: number;
       /** @description Summary of the number of seeds remaining across all active accessions. */
       seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
+      /** Format: int32 */
+      species: number;
       status: components["schemas"]["SuccessOrError"];
     };
     TimeZonePayload: {
@@ -2223,24 +2763,24 @@ export interface components {
     };
     TimeseriesPayload: {
       /**
-       * Format: int64
-       * @description ID of device that produces this timeseries.
-       */
-      deviceId: number;
-      timeseriesName: string;
-      type: "Numeric" | "Text";
-      /**
        * Format: int32
        * @description Number of significant fractional digits (after the decimal point), if this is a timeseries with non-integer numeric values.
        */
       decimalPlaces?: number;
       /**
+       * Format: int64
+       * @description ID of device that produces this timeseries.
+       */
+      deviceId: number;
+      /** @description If any values have been recorded for the timeseries, the latest one. */
+      latestValue?: components["schemas"]["TimeseriesValuePayload"];
+      timeseriesName: string;
+      type: "Numeric" | "Text";
+      /**
        * @description Units of measure for values in this timeseries.
        * @example volts
        */
       units?: string;
-      /** @description If any values have been recorded for the timeseries, the latest one. */
-      latestValue?: components["schemas"]["TimeseriesValuePayload"];
     };
     TimeseriesValuePayload: {
       /** Format: date-time */
@@ -2254,12 +2794,12 @@ export interface components {
        * @description Device ID as specified in the failing request.
        */
       deviceId: number;
+      /** @description Human-readable details about the failure. */
+      message: string;
       /** @description Name of timeseries as specified in the failing request. */
       timeseriesName: string;
       /** @description Values that the server was not able to successfully record. */
       values: components["schemas"]["TimeseriesValuePayload"][];
-      /** @description Human-readable details about the failure. */
-      message: string;
     };
     TimeseriesValuesPayload: {
       /**
@@ -2295,6 +2835,8 @@ export interface components {
        * @description Estimated number of plants the seeds were collected from.
        */
       plantsCollectedFrom?: number;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       receivedDate?: string;
       /** @description Quantity of seeds remaining in the accession. If this is different than the existing value, it is considered a new observation, and the new value will override any previously-calculated remaining quantities. */
@@ -2321,19 +2863,19 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     UpdateAutomationRequestPayload: {
-      type: string;
-      name: string;
       description?: string;
       /** Format: int64 */
       deviceId?: number;
-      timeseriesName?: string;
-      /** Format: int32 */
-      verbosity?: number;
       /** Format: double */
       lowerThreshold?: number;
+      name: string;
+      settings?: { [key: string]: unknown };
+      timeseriesName?: string;
+      type: string;
       /** Format: double */
       upperThreshold?: number;
-      settings?: { [key: string]: unknown };
+      /** Format: int32 */
+      verbosity?: number;
     };
     UpdateBatchQuantitiesRequestPayload: {
       /** Format: int32 */
@@ -2347,6 +2889,8 @@ export interface components {
     };
     UpdateBatchRequestPayload: {
       notes?: string;
+      /** Format: int64 */
+      projectId?: number;
       /** Format: date */
       readyByDate?: string;
       /** Format: int32 */
@@ -2354,15 +2898,10 @@ export interface components {
     };
     UpdateDeviceRequestPayload: {
       /**
-       * @description Name of this device.
-       * @example BMU-1
+       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
+       * @example 192.168.1.100
        */
-      name: string;
-      /**
-       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
-       * @example inverter
-       */
-      type: string;
+      address?: string;
       /**
        * @description Name of device manufacturer.
        * @example InHand Networks
@@ -2374,33 +2913,38 @@ export interface components {
        */
       model: string;
       /**
-       * @description Device manager protocol name.
-       * @example modbus
+       * @description Name of this device.
+       * @example BMU-1
        */
-      protocol?: string;
+      name: string;
       /**
-       * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
-       * @example 192.168.1.100
+       * Format: int64
+       * @description ID of parent device such as a hub or gateway, if any. The parent device must exist.
        */
-      address?: string;
+      parentId?: number;
       /**
        * Format: int32
        * @description Port number if relevant for the protocol.
        * @example 50000
        */
       port?: number;
+      /**
+       * @description Device manager protocol name.
+       * @example modbus
+       */
+      protocol?: string;
       /** @description Protocol- and device-specific custom settings. This is an arbitrary JSON object; the exact settings depend on the device type. */
       settings?: { [key: string]: unknown };
+      /**
+       * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
+       * @example inverter
+       */
+      type: string;
       /**
        * Format: int32
        * @description Level of diagnostic information to log.
        */
       verbosity?: number;
-      /**
-       * Format: int64
-       * @description ID of parent device such as a hub or gateway, if any. The parent device must exist.
-       */
-      parentId?: number;
     };
     UpdateFacilityRequestPayload: {
       /** Format: date */
@@ -2426,9 +2970,9 @@ export interface components {
       read: boolean;
     };
     UpdateNotificationsRequestPayload: {
-      read: boolean;
       /** Format: int64 */
       organizationId?: number;
+      read: boolean;
     };
     UpdateOrganizationRequestPayload: {
       /**
@@ -2453,13 +2997,34 @@ export interface components {
       role: "Contributor" | "Manager" | "Admin" | "Owner";
     };
     UpdatePlantingSiteRequestPayload: {
+      /** @description Site boundary. Ignored if this is a detailed planting site. */
+      boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       name: string;
+      /**
+       * Format: int32
+       * @description What month this site's planting season ends. 1=January.
+       */
+      plantingSeasonEndMonth?: number;
+      /**
+       * Format: int32
+       * @description What month this site's planting season starts. 1=January.
+       */
+      plantingSeasonStartMonth?: number;
+      /** Format: int64 */
+      projectId?: number;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
        */
       timeZone?: string;
+    };
+    UpdatePlantingSubzoneRequestPayload: {
+      plantingCompleted: boolean;
+    };
+    UpdateProjectRequestPayload: {
+      description?: string;
+      name: string;
     };
     UpdateReportPhotoRequestPayload: {
       caption?: string;
@@ -2476,6 +3041,11 @@ export interface components {
       preferences: { [key: string]: unknown };
     };
     UpdateUserRequestPayload: {
+      /**
+       * @description Two-letter code of the user's country.
+       * @example US
+       */
+      countryCode?: string;
       /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." If null, leave the existing value as-is. */
       emailNotificationsEnabled?: boolean;
       firstName: string;
@@ -2495,6 +3065,7 @@ export interface components {
       /** Format: date */
       endDate?: string;
       notes?: string;
+      seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
       /** Format: int32 */
@@ -2503,7 +3074,6 @@ export interface components {
       seedsFilled?: number;
       /** Format: int32 */
       seedsTested: number;
-      seedType?: "Fresh" | "Stored";
       /** Format: date */
       startDate?: string;
       substrate?:
@@ -2534,8 +3104,8 @@ export interface components {
     UpdateWithdrawalRequestPayload: {
       /** Format: date */
       date?: string;
-      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       notes?: string;
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
        * @description ID of the user who withdrew the seeds. Default is the withdrawal's existing user ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization.
@@ -2550,6 +3120,19 @@ export interface components {
        * @description ID of uploaded file. This may be used to poll for the file's status.
        */
       id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    UploadPlotPhotoRequestPayload: {
+      gpsCoordinates: components["schemas"]["Point"];
+      position:
+        | "SouthwestCorner"
+        | "SoutheastCorner"
+        | "NortheastCorner"
+        | "NorthwestCorner";
+    };
+    UploadPlotPhotoResponsePayload: {
+      /** Format: int64 */
+      fileId: number;
       status: components["schemas"]["SuccessOrError"];
     };
     /** @description List of conditions that might cause the user to want to cancel the upload but that can be automatically resolved if desired. */
@@ -2578,14 +3161,19 @@ export interface components {
     };
     UserProfilePayload: {
       /**
-       * Format: int64
-       * @description User's unique ID. This should not be shown to the user, but is a required input to some API endpoints.
+       * @description Two-letter code of the user's country.
+       * @example US
        */
-      id: number;
+      countryCode?: string;
       email: string;
       /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
       emailNotificationsEnabled: boolean;
       firstName?: string;
+      /**
+       * Format: int64
+       * @description User's unique ID. This should not be shown to the user, but is a required input to some API endpoints.
+       */
+      id: number;
       lastName?: string;
       /**
        * @description IETF locale code containing user's preferred language.
@@ -2600,13 +3188,13 @@ export interface components {
     };
     VersionsEntryPayload: {
       appName: string;
-      platform: string;
       minimumVersion: string;
+      platform: string;
       recommendedVersion: string;
     };
     VersionsResponsePayload: {
-      versions: components["schemas"]["VersionsEntryPayload"][];
       status: components["schemas"]["SuccessOrError"];
+      versions: components["schemas"]["VersionsEntryPayload"][];
     };
     ViabilityTestResultPayload: {
       /** Format: date */
@@ -2745,7 +3333,9 @@ export interface operations {
   getDeviceManagers: {
     parameters: {
       query: {
+        /** Search for device managers with this sensor kit ID. Either this or facilityId must be specified. */
         sensorKitId?: string;
+        /** Search for device managers associated with this facility. Either this or sensorKitId must be specified. */
         facilityId?: number;
       };
     };
@@ -3390,6 +3980,7 @@ export interface operations {
       };
     };
   };
+  /** This should not be used to record withdrawals; use the withdrawal API for that. */
   updateBatchQuantities: {
     parameters: {
       path: {
@@ -3764,6 +4355,109 @@ export interface operations {
       };
     };
   };
+  listProjects: {
+    parameters: {
+      query: {
+        /** If specified, list projects in this organization. If absent, list projects in all the user's organizations. */
+        organizationId?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListProjectsResponsePayload"];
+        };
+      };
+    };
+  };
+  createProject: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateProjectResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateProjectRequestPayload"];
+      };
+    };
+  };
+  getProject: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectResponsePayload"];
+        };
+      };
+    };
+  };
+  updateProject: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProjectRequestPayload"];
+      };
+    };
+  };
+  /** Any accessions, seedling batches, or planting sites that were assigned to the project will no longer be assigned to any project. */
+  deleteProject: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Overwrites any existing project assignments. */
+  assignProject: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AssignProjectRequestPayload"];
+      };
+    };
+  };
   listReports: {
     parameters: {
       query: {
@@ -4076,6 +4770,7 @@ export interface operations {
       };
     };
   };
+  /** If a sublist field has multiple values, they are separated with line breaks in the exported file. */
   search_1: {
     responses: {
       /** OK */
@@ -4206,6 +4901,7 @@ export interface operations {
       };
     };
   };
+  /** If there was already a photo with the specified filename, replaces it. */
   uploadPhoto: {
     parameters: {
       path: {
@@ -4222,12 +4918,6 @@ export interface operations {
       };
       /** The specified accession does not exist. */
       404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-      /** The requested photo already exists on the accession. */
-      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
@@ -4354,10 +5044,16 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The storage location contains accessions. Move them to a different storage location first. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4866,6 +5562,7 @@ export interface operations {
       };
     };
   };
+  /** Mapbox API tokens are short-lived; when a token expires, request a new one. */
   getMapboxToken: {
     responses: {
       /** The requested operation succeeded. */
@@ -4888,11 +5585,222 @@ export interface operations {
       };
     };
   };
+  listObservations: {
+    parameters: {
+      query: {
+        /** Limit results to observations of planting sites in a specific organization. Ignored if plantingSiteId is specified. */
+        organizationId?: string;
+        /** Limit results to observations of a specific planting site. Required if organizationId is not specified. */
+        plantingSiteId?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListObservationsResponsePayload"];
+        };
+      };
+    };
+  };
+  listObservationResults: {
+    parameters: {
+      query: {
+        organizationId?: number;
+        plantingSiteId?: number;
+        /** Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
+        limit?: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListObservationResultsResponsePayload"];
+        };
+      };
+    };
+  };
+  getObservation: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetObservationResponsePayload"];
+        };
+      };
+    };
+  };
+  listAssignedPlots: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAssignedPlotsResponsePayload"];
+        };
+      };
+    };
+  };
+  completePlotObservation: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The observation of the plot was already completed. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CompletePlotObservationRequestPayload"];
+      };
+    };
+  };
+  /** A plot may only be claimed by one user at a time. */
+  claimMonitoringPlot: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The plot is already claimed by someone else. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  uploadPlotPhoto: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadPlotPhotoResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+          payload: components["schemas"]["UploadPlotPhotoRequestPayload"];
+        };
+      };
+    };
+  };
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  getPlotPhoto: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+        fileId: number;
+      };
+      query: {
+        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: number;
+        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: number;
+      };
+    };
+    responses: {
+      /** The photo was successfully retrieved. */
+      200: {
+        content: {
+          "image/jpeg": string;
+          "image/png": string;
+        };
+      };
+      /** The plot observation does not exist, or does not have a photo with the requested ID. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  releaseMonitoringPlot: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** You don't have a claim on the plot. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Some information is only available once all plots have been completed. */
+  getObservationResults: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetObservationResultsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** The list can optionally contain information about planting zones and subzones. */
   listPlantingSites: {
     parameters: {
       query: {
         organizationId: number;
-        /** If true, include planting zones and plots for each site. */
+        /** If true, include planting zones and subzones for each site. */
         full?: string;
       };
     };
@@ -4920,6 +5828,7 @@ export interface operations {
       };
     };
   };
+  /** Includes information about the site's planting zones and subzones. */
   getPlantingSite: {
     parameters: {
       path: {
@@ -4952,6 +5861,58 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdatePlantingSiteRequestPayload"];
+      };
+    };
+  };
+  /** The totals are based on nursery withdrawals. */
+  getPlantingSiteReportedPlants: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetPlantingSiteReportedPlantsResponsePayload"];
+        };
+      };
+    };
+  };
+  updatePlantingSubzone: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdatePlantingSubzoneRequestPayload"];
+      };
+    };
+  };
+  /** The list is based on nursery withdrawals. */
+  listPlantingSubzoneSpecies: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListPlantingSubzoneSpeciesResponsePayload"];
+        };
       };
     };
   };
@@ -5388,6 +6349,12 @@ export interface operations {
       };
       /** The specified accession doesn't exist. */
       404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** One of the requested changes couldn't be made because the accession is in a state that doesn't allow the change. */
+      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
