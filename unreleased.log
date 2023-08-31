@@ -1,3 +1,4 @@
+448f30b56 SW-4124 Move Mapbox info pop-up to the top (#1690)
 f985552a8 SW-3740 Remove Recoil dependency (#1687)
 d0f09553d Add renovate.json (#1689)
 0ccaf6646 SW-3740 Remove recoil usage from user provider (#1686)
