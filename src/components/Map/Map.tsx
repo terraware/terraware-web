@@ -471,14 +471,14 @@ export default function Map(props: MapProps): JSX.Element {
         >
           {mapSources}
           <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
-          <AttributionControl compact={true} style={{ marginRight: '5px' }} />
+          <AttributionControl compact={true} style={{ marginRight: '5px' }} position='top-left' />
           <Box
             style={{
               width: 28,
               height: 28,
               backgroundColor: `${theme.palette.TwClrBaseWhite}`,
               position: 'absolute',
-              bottom: '120px',
+              bottom: '84px',
               right: '5px',
               zIndex: 10,
               borderRadius: '4px',
