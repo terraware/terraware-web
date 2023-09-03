@@ -1,4 +1,4 @@
-FROM nginx:1.19-alpine
+FROM nginx:1.25-alpine
 COPY self-signed.key /etc/ssl/private/self-signed.key
 COPY self-signed.crt /etc/ssl/certs/self-signed.crt
 COPY default.conf.template /etc/nginx/templates/
