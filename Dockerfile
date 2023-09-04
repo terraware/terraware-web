@@ -1,4 +1,4 @@
-FROM nginx:1.19-alpine
+FROM nginx:1.25-alpine
 COPY ./build /usr/share/nginx/html
 COPY nginx/default.conf.template /etc/nginx/templates/
 ENV SERVER_URL=http://web:8008
