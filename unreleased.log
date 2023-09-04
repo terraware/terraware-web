@@ -1,1 +1,3 @@
+6c1f65bca Update nginx Docker tag to v1.25 (#1694)
+3023a350e Update dependency axios to ^0.27.0 (#1693)
 5390e150c Update JamesIves/github-pages-deploy-action action to v4.4.3 (#1691)
