@@ -38,7 +38,7 @@
     "coordinate-parser": "^1.0.7",
     "date-fns": "^2.29.3",
     "hex-rgb": "^5.0.0",
-    "immer": "^9.0.19",
+    "immer": "^10.0.0",
     "jwt-decode": "^3.1.2",
     "license-report": "^6.0.0",
     "lodash": "^4.17.21",
