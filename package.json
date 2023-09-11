@@ -17,7 +17,7 @@
     "@reduxjs/toolkit": "^1.9.3",
     "@terraware/web-components": "^2.3.57",
     "@testing-library/jest-dom": "^6.0.0",
-    "@testing-library/react": "^12.1.5",
+    "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@turf/bbox": "^6.5.0",
     "@types/geojson": "^7946.0.10",
