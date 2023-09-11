@@ -110,6 +110,11 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "moduleNameMapper": {
+      "^axios$": "axios/dist/axios.js"
+    }
+  },
   "devDependencies": {
     "@craco/craco": "^7.0.0",
     "@cypress/code-coverage": "^3.10.0",
