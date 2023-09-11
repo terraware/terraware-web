@@ -1,4 +1,1 @@
-950464207 Update dependency @storybook/testing-library to ^0.2.0 (#1692)
-6c1f65bca Update nginx Docker tag to v1.25 (#1694)
-3023a350e Update dependency axios to ^0.27.0 (#1693)
-5390e150c Update JamesIves/github-pages-deploy-action action to v4.4.3 (#1691)
+f70b55a15 Update actions/checkout action to v4 (#1695)
