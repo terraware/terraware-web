@@ -138,7 +138,7 @@
     "jest-mock-axios": "^4.4.1",
     "jest-mock-extended": "^3.0.1",
     "nyc": "^15.1.0",
-    "openapi-typescript": "^4.0.2",
+    "openapi-typescript": "^6.0.0",
     "prop-types": "^15.8.1",
     "start-server-and-test": "^2.0.0",
     "storybook": "^7.0.12",
