@@ -56,7 +56,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.1",
     "sass": "^1.38.0",
-    "styled-components": "^5.3.5",
+    "styled-components": "^6.0.0",
     "tslint-plugin-cypress": "^1.0.4",
     "typescript": "^5.0.0",
     "utm": "^1.1.1",
