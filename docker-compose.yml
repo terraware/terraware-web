@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    image: 'postgis/postgis:13-3.3'
+    image: 'postgis/postgis:15-3.3'
     ports:
       - '5432:5432'
     environment:
