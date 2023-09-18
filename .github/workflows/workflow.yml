@@ -103,7 +103,7 @@ jobs:
           REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Docker login
         if: env.IS_CD == 'true'
