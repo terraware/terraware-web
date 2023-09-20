@@ -1,5 +1,5 @@
 import { Facility, FacilityType } from 'src/types/Facility';
-import { HighOrganizationRolesValues, Organization } from 'src/types/Organization';
+import { HighOrganizationRolesValues, Organization, OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 
 export const getFacilitiesByType = (organization: Organization, type: FacilityType, locale?: string) => {
@@ -23,6 +23,8 @@ export const getSeedBank = (organization: Organization, facilityId: number): Fac
 export const isAdmin = (organization: Organization | undefined) => {
   return HighOrganizationRolesValues.includes(organization?.role || '');
 };
+
+export const isTfContact = (role: OrganizationRole | undefined) => role === 'Terraformation Contact';
 
 export const isContributor = (roleHolder: Organization | OrganizationUser | undefined) => {
   return roleHolder?.role === 'Contributor';

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -25,7 +25,8 @@ import useDebounce from 'src/utils/useDebounce';
 import { SearchNodePayload } from 'src/types/Search';
 import { SearchService } from 'src/services';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { useUser, useOrganization, useLocalization } from '../../providers/hooks';
+import { useUser, useOrganization, useLocalization } from 'src/providers/hooks';
+import { isTfContact } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -74,19 +75,20 @@ export default function PeopleList(): JSX.Element {
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<OrganizationUser[]>();
+  const [totalUsers, setTotalUsers] = useState<number>(0);
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
 
-  useEffect(() => {
-    const refreshSearch = async () => {
-      const searchField = debouncedSearchTerm
+  const search = useCallback(
+    async (searchTerm: string, skipTfContact = false) => {
+      const searchField = searchTerm
         ? {
             operation: 'or',
             children: [
-              { operation: 'field', field: 'user_firstName', type: 'Fuzzy', values: [debouncedSearchTerm] },
-              { operation: 'field', field: 'user_lastName', type: 'Fuzzy', values: [debouncedSearchTerm] },
+              { operation: 'field', field: 'user_firstName', type: 'Fuzzy', values: [searchTerm] },
+              { operation: 'field', field: 'user_lastName', type: 'Fuzzy', values: [searchTerm] },
             ],
           }
         : null;
@@ -117,11 +119,12 @@ export default function PeopleList(): JSX.Element {
         params.search.children.push(searchField);
       }
 
-      const requestId = Math.random().toString();
-      setRequestId('searchUsers', requestId);
       const searchResults = await SearchService.search(params);
       const usersResults: OrganizationUser[] = [];
       searchResults?.forEach((result) => {
+        if (skipTfContact && isTfContact(result.roleName as OrganizationRole)) {
+          return;
+        }
         usersResults.push({
           firstName: result.user_firstName as string,
           lastName: result.user_lastName as string,
@@ -131,6 +134,16 @@ export default function PeopleList(): JSX.Element {
           addedTime: result.createdTime as string,
         });
       });
+      return usersResults;
+    },
+    [selectedOrganization.id]
+  );
+
+  useEffect(() => {
+    const refreshSearch = async () => {
+      const requestId = Math.random().toString();
+      setRequestId('searchUsers', requestId);
+      const usersResults = await search(debouncedSearchTerm);
       if (getRequestId('searchUsers') === requestId) {
         setResults(usersResults);
       }
@@ -139,7 +152,16 @@ export default function PeopleList(): JSX.Element {
     if (activeLocale) {
       refreshSearch();
     }
-  }, [debouncedSearchTerm, selectedOrganization, activeLocale]);
+  }, [debouncedSearchTerm, search, activeLocale]);
+
+  useEffect(() => {
+    const findTotalUsers = async () => {
+      const users = await search('', true);
+      setTotalUsers(users.length);
+    };
+
+    findTotalUsers();
+  }, [search]);
 
   const goToNewPerson = () => {
     const newPersonLocation = {
@@ -155,7 +177,8 @@ export default function PeopleList(): JSX.Element {
 
   const removeSelectedPeopleFromOrg = async () => {
     if (selectedOrganization) {
-      if (selectedPeopleRows.length === selectedOrganization.totalUsers) {
+      const removableUsers = selectedPeopleRows.filter((row) => !isTfContact(row.role));
+      if (removableUsers.length === totalUsers) {
         setCannotRemovePeopleModalOpened(true);
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
@@ -169,7 +192,7 @@ export default function PeopleList(): JSX.Element {
                 if (found) {
                   return false;
                 }
-                return true;
+                return !isTfContact(person.role);
               })
             );
             if (assignNewOwnerModalOpened) {
@@ -228,7 +251,7 @@ export default function PeopleList(): JSX.Element {
   const deleteOrgHandler = async () => {
     if (user) {
       let allRemoved = true;
-      const otherUsers = selectedPeopleRows.filter((person) => person.id !== user.id);
+      const otherUsers = selectedPeopleRows.filter((person) => person.id !== user.id && !isTfContact(person.role));
       if (otherUsers.length) {
         const promises: Promise<Response>[] = [];
         otherUsers.forEach((person) => {
@@ -262,6 +285,11 @@ export default function PeopleList(): JSX.Element {
   const onChangeSearch = (id: string, value: unknown) => {
     setTemporalSearchValue(value as string);
   };
+
+  const hasRemovableUsers = useMemo(
+    () => selectedPeopleRows.some((row) => row.role !== 'Terraformation Contact'),
+    [selectedPeopleRows]
+  );
 
   return (
     <TfMain>
@@ -340,14 +368,18 @@ export default function PeopleList(): JSX.Element {
                     selectedRows={selectedPeopleRows}
                     setSelectedRows={setSelectedPeopleRows}
                     showTopBar={true}
-                    topBarButtons={[
-                      {
-                        buttonType: 'passive',
-                        ...(!isMobile && { buttonText: strings.REMOVE }),
-                        onButtonClick: removeSelectedPeopleFromOrg,
-                        icon: 'iconTrashCan',
-                      },
-                    ]}
+                    topBarButtons={
+                      hasRemovableUsers
+                        ? [
+                            {
+                              buttonType: 'passive',
+                              ...(!isMobile && { buttonText: strings.REMOVE }),
+                              onButtonClick: removeSelectedPeopleFromOrg,
+                              icon: 'iconTrashCan',
+                            },
+                          ]
+                        : []
+                    }
                   />
                 )}
               </Grid>
