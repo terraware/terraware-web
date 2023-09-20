@@ -287,7 +287,7 @@ export default function PeopleList(): JSX.Element {
   };
 
   const hasRemovableUsers = useMemo(
-    () => selectedPeopleRows.some((row) => row.role !== 'Terraformation Contact'),
+    () => selectedPeopleRows.some((row) => !isTfContact(row.role)),
     [selectedPeopleRows]
   );
 
