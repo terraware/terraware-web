@@ -251,7 +251,13 @@ export default function PeopleList(): JSX.Element {
   const deleteOrgHandler = async () => {
     if (user) {
       let allRemoved = true;
-      const otherUsers = selectedPeopleRows.filter((person) => person.id !== user.id && !isTfContact(person.role));
+      const keepOneOwnerId = selectedPeopleRows.filter((person) => person.role === 'Owner')[0].id.toString();
+      const otherUsers = selectedPeopleRows.filter(
+        (person) =>
+          person.id.toString() !== user.id.toString() &&
+          !isTfContact(person.role) &&
+          person.id.toString() !== keepOneOwnerId
+      );
       if (otherUsers.length) {
         const promises: Promise<Response>[] = [];
         otherUsers.forEach((person) => {

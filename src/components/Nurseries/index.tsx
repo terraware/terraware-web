@@ -18,6 +18,7 @@ import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import Table from 'src/components/common/table';
 import { useTimeZones } from 'src/providers';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { isAdmin } from 'src/utils/organization';
 
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.NAME, type: 'string' },
@@ -87,7 +88,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
             </Typography>
           </Grid>
           <Grid item xs={3} sx={{ textAlign: 'right' }}>
-            {['Admin', 'Owner'].includes(organization.role) &&
+            {isAdmin(organization) &&
               (isMobile ? (
                 <Button id='new-nursery' icon='plus' onClick={goToNewNursery} size='medium' />
               ) : (

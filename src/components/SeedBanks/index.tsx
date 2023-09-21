@@ -20,6 +20,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import { useTimeZones } from 'src/providers';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { isAdmin } from 'src/utils/organization';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -119,7 +120,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
                 <h1 className={classes.title}>{strings.SEED_BANKS}</h1>
               </Grid>
               <Grid item xs={4} className={classes.centered}>
-                {['Admin', 'Owner'].includes(organization.role) &&
+                {isAdmin(organization) &&
                   (isMobile ? (
                     <Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' />
                   ) : (

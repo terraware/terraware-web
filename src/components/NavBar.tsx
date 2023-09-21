@@ -6,7 +6,6 @@ import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { OrganizationRole } from 'src/types/Organization';
 import { NurseryWithdrawalService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import NavFooter from './common/Navbar/NavFooter';
@@ -14,6 +13,7 @@ import { useOrganization } from 'src/providers/hooks';
 import LocaleSelector from './LocaleSelector';
 import isEnabled from '../features';
 import ReportService, { Reports } from 'src/services/ReportService';
+import { isAdmin } from 'src/utils/organization';
 
 type NavBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,7 +28,6 @@ export default function NavBar({
   hasPlantingSites,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
-  const [role, setRole] = useState<OrganizationRole>();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
   const { isDesktop } = useDeviceInfo();
@@ -81,7 +80,6 @@ export default function NavBar({
   useEffect(() => {
     setShowNurseryWithdrawals(false);
     if (selectedOrganization) {
-      setRole(selectedOrganization.role);
       checkNurseryWithdrawals();
     }
   }, [selectedOrganization, checkNurseryWithdrawals]);
@@ -217,7 +215,7 @@ export default function NavBar({
           />
         </>
       )}
-      {role && ['Admin', 'Owner'].includes(role) && (
+      {isAdmin(selectedOrganization) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
           <NavItem
