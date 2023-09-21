@@ -1,3 +1,4 @@
+377a9fcf7 SW-4240 Add 'Terraformation Contact' semantics in FE (#1713)
 94327331c Update postgis/postgis Docker tag to v15 (#1711)
 1c8fdd70d Update docker/setup-buildx-action action to v3 (#1710)
 7263553a0 Update docker/login-action action to v3 (#1709)

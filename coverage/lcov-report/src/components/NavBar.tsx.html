@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -348,9 +348,7 @@
 <a name='L283'></a><a href='#L283'>283</a>
 <a name='L284'></a><a href='#L284'>284</a>
 <a name='L285'></a><a href='#L285'>285</a>
-<a name='L286'></a><a href='#L286'>286</a>
-<a name='L287'></a><a href='#L287'>287</a>
-<a name='L288'></a><a href='#L288'>288</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L286'></a><a href='#L286'>286</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -379,7 +377,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -430,7 +427,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -645,7 +641,6 @@ import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { OrganizationRole } from 'src/types/Organization';
 import { NurseryWithdrawalService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import NavFooter from './common/Navbar/NavFooter';
@@ -653,6 +648,7 @@ import { useOrganization } from 'src/providers/hooks';
 import LocaleSelector from './LocaleSelector';
 import isEnabled from '../features';
 import ReportService, { Reports } from 'src/services/ReportService';
+import { isAdmin } from 'src/utils/organization';
 &nbsp;
 type NavBarProps = {
   setShowNavBar: React.Dispatch&lt;React.SetStateAction&lt;boolean&gt;&gt;;
@@ -667,7 +663,6 @@ export default function <span class="fstat-no" title="function not covered" >Nav
   hasPlantingSites,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const [role, setRole] = <span class="cstat-no" title="statement not covered" >useState&lt;OrganizationRole&gt;();</span>
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [reports, setReports] = <span class="cstat-no" title="statement not covered" >useState&lt;Reports&gt;([]);</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
@@ -720,7 +715,6 @@ export default function <span class="fstat-no" title="function not covered" >Nav
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setShowNurseryWithdrawals(false);</span>
 <span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
-<span class="cstat-no" title="statement not covered" >      setRole(selectedOrganization.role);</span>
 <span class="cstat-no" title="statement not covered" >      checkNurseryWithdrawals();</span>
     }
   }, [selectedOrganization, checkNurseryWithdrawals]);
@@ -856,7 +850,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
           /&gt;
         &lt;/&gt;
       )}
-      {role &amp;&amp; ['Admin', 'Owner'].includes(role) &amp;&amp; (
+      {isAdmin(selectedOrganization) &amp;&amp; (
         &lt;&gt;
           &lt;NavSection title={strings.SETTINGS.toUpperCase()} /&gt;
           &lt;NavItem
@@ -931,7 +925,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-09-18T14:20:05.319Z
+                at 2023-09-21T14:52:22.820Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
