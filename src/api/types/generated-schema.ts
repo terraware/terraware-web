@@ -40,8 +40,8 @@ export interface paths {
     post: operations["deviceUnresponsive"];
   };
   "/api/v1/facilities": {
-    get: operations["listAllFacilities_1"];
-    post: operations["createFacility_1"];
+    get: operations["listAllFacilities"];
+    post: operations["createFacility"];
   };
   "/api/v1/facilities/{facilityId}": {
     get: operations["getFacility"];
@@ -52,25 +52,10 @@ export interface paths {
   };
   "/api/v1/facilities/{facilityId}/configured": {
     /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
-    post: operations["postConfigured_1"];
+    post: operations["postConfigured"];
   };
   "/api/v1/facilities/{facilityId}/devices": {
     get: operations["listFacilityDevices"];
-  };
-  "/api/v1/facility": {
-    get: operations["listAllFacilities"];
-    post: operations["createFacility"];
-  };
-  "/api/v1/facility/{facilityId}": {
-    get: operations["getFacility_1"];
-    put: operations["updateFacility_1"];
-  };
-  "/api/v1/facility/{facilityId}/alert/send": {
-    post: operations["sendFacilityAlert_1"];
-  };
-  "/api/v1/facility/{facilityId}/configured": {
-    /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
-    post: operations["postConfigured"];
   };
   "/api/v1/facility/{facilityId}/devices": {
     get: operations["listFacilityDevices_1"];
@@ -563,7 +548,12 @@ export interface components {
     };
     AddOrganizationUserRequestPayload: {
       email: string;
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
+      role:
+        | "Contributor"
+        | "Manager"
+        | "Admin"
+        | "Owner"
+        | "Terraformation Contact";
     };
     AllFieldValuesPayload: {
       /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
@@ -1785,6 +1775,11 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       /**
        * Format: int32
+       * @description Total number of monitoring plots that haven't been completed yet across all current observations.
+       */
+      totalIncompletePlots: number;
+      /**
+       * Format: int32
        * @description Total number of monitoring plots that haven't been claimed yet across all current observations.
        */
       totalUnclaimedPlots: number;
@@ -2012,6 +2007,16 @@ export interface components {
       id: number;
       /**
        * Format: int32
+       * @description Total number of monitoring plots that haven't been completed yet. Includes both claimed and unclaimed plots.
+       */
+      numIncompletePlots: number;
+      /**
+       * Format: int32
+       * @description Total number of monitoring plots in observation, regardless of status.
+       */
+      numPlots: number;
+      /**
+       * Format: int32
        * @description Total number of monitoring plots that haven't been claimed yet.
        */
       numUnclaimedPlots: number;
@@ -2154,7 +2159,12 @@ export interface components {
       id: number;
       name: string;
       /** @description The current user's role in the organization. */
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
+      role:
+        | "Contributor"
+        | "Manager"
+        | "Admin"
+        | "Owner"
+        | "Terraformation Contact";
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -2167,7 +2177,12 @@ export interface components {
       totalUsers: number;
     };
     OrganizationRolePayload: {
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
+      role:
+        | "Contributor"
+        | "Manager"
+        | "Admin"
+        | "Owner"
+        | "Terraformation Contact";
       /**
        * Format: int32
        * @description Total number of users in the organization with this role.
@@ -2187,7 +2202,12 @@ export interface components {
       id: number;
       /** @description The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
+      role:
+        | "Contributor"
+        | "Manager"
+        | "Admin"
+        | "Owner"
+        | "Terraformation Contact";
     };
     PlantingPayload: {
       /** Format: int64 */
@@ -2994,7 +3014,12 @@ export interface components {
       timeZone?: string;
     };
     UpdateOrganizationUserRequestPayload: {
-      role: "Contributor" | "Manager" | "Admin" | "Owner";
+      role:
+        | "Contributor"
+        | "Manager"
+        | "Admin"
+        | "Owner"
+        | "Terraformation Contact";
     };
     UpdatePlantingSiteRequestPayload: {
       /** @description Site boundary. Ignored if this is a detailed planting site. */
@@ -3472,7 +3497,7 @@ export interface operations {
       };
     };
   };
-  listAllFacilities_1: {
+  listAllFacilities: {
     responses: {
       /** OK */
       200: {
@@ -3482,7 +3507,7 @@ export interface operations {
       };
     };
   };
-  createFacility_1: {
+  createFacility: {
     responses: {
       /** OK */
       200: {
@@ -3559,7 +3584,7 @@ export interface operations {
     };
   };
   /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
-  postConfigured_1: {
+  postConfigured: {
     parameters: {
       path: {
         facilityId: number;
@@ -3595,114 +3620,6 @@ export interface operations {
       };
       /** The facility does not exist or is not accessible by the current user. */
       404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  listAllFacilities: {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListFacilitiesResponse"];
-        };
-      };
-    };
-  };
-  createFacility: {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateFacilityResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateFacilityRequestPayload"];
-      };
-    };
-  };
-  getFacility_1: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetFacilityResponse"];
-        };
-      };
-    };
-  };
-  updateFacility_1: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateFacilityRequestPayload"];
-      };
-    };
-  };
-  sendFacilityAlert_1: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The request was received, but the user is still configuring or placing sensors, so no notification has been generated. */
-      202: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SendFacilityAlertRequestPayload"];
-      };
-    };
-  };
-  /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
-  postConfigured: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The facility's device manager was not in the process of being configured. */
-      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };

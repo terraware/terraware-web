@@ -15,9 +15,9 @@ export type Organization = {
   canSubmitReports?: boolean;
 };
 
-export type HighOrganizationRoles = 'Admin' | 'Owner';
+export type HighOrganizationRoles = 'Admin' | 'Owner' | 'Terraformation Contact';
 
-export const HighOrganizationRolesValues = ['Admin', 'Owner'];
+export const HighOrganizationRolesValues = ['Admin', 'Owner', 'Terraformation Contact'];
 
 // Manager role included here so we don't get type issues with the server response,
 // which could contain a user with a manger role.
@@ -33,6 +33,8 @@ export function roleName(role: OrganizationRole) {
       return strings.CONTRIBUTOR;
     case 'Manager':
       return strings.MANAGER;
+    case 'Terraformation Contact':
+      return strings.TERRAFORMATION_CONTACT;
   }
 }
 
