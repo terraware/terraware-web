@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -177,8 +177,7 @@ export default function PeopleList(): JSX.Element {
 
   const removeSelectedPeopleFromOrg = async () => {
     if (selectedOrganization) {
-      const removableUsers = selectedPeopleRows.filter((row) => !isTfContact(row.role));
-      if (removableUsers.length === totalUsers) {
+      if (selectedPeopleRows.length === totalUsers) {
         setCannotRemovePeopleModalOpened(true);
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
@@ -253,10 +252,7 @@ export default function PeopleList(): JSX.Element {
       let allRemoved = true;
       const keepOneOwnerId = selectedPeopleRows.filter((person) => person.role === 'Owner')[0].id.toString();
       const otherUsers = selectedPeopleRows.filter(
-        (person) =>
-          person.id.toString() !== user.id.toString() &&
-          !isTfContact(person.role) &&
-          person.id.toString() !== keepOneOwnerId
+        (person) => person.id.toString() !== user.id.toString() && person.id.toString() !== keepOneOwnerId
       );
       if (otherUsers.length) {
         const promises: Promise<Response>[] = [];
@@ -292,9 +288,10 @@ export default function PeopleList(): JSX.Element {
     setTemporalSearchValue(value as string);
   };
 
-  const hasRemovableUsers = useMemo(
-    () => selectedPeopleRows.some((row) => !isTfContact(row.role)),
-    [selectedPeopleRows]
+  const isSelectable = useCallback((row: any) => !isTfContact(row.role), []);
+  const checkboxTooltip = useCallback(
+    (row: any) => (!activeLocale || isSelectable(row) ? undefined : strings.TERRAFORMATION_CONTACT_READONLY),
+    [isSelectable, activeLocale]
   );
 
   return (
@@ -374,18 +371,16 @@ export default function PeopleList(): JSX.Element {
                     selectedRows={selectedPeopleRows}
                     setSelectedRows={setSelectedPeopleRows}
                     showTopBar={true}
-                    topBarButtons={
-                      hasRemovableUsers
-                        ? [
-                            {
-                              buttonType: 'passive',
-                              ...(!isMobile && { buttonText: strings.REMOVE }),
-                              onButtonClick: removeSelectedPeopleFromOrg,
-                              icon: 'iconTrashCan',
-                            },
-                          ]
-                        : []
-                    }
+                    isSelectable={isSelectable}
+                    checkboxTooltip={checkboxTooltip}
+                    topBarButtons={[
+                      {
+                        buttonType: 'passive',
+                        ...(!isMobile && { buttonText: strings.REMOVE }),
+                        onButtonClick: removeSelectedPeopleFromOrg,
+                        icon: 'iconTrashCan',
+                      },
+                    ]}
                   />
                 )}
               </Grid>

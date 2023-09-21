@@ -1139,6 +1139,7 @@ TEMPLATES,Templates
 TEMPORARY,Temporary
 TEMPORARY_PLOTS,Temporary Plots
 TERRAFORMATION_CONTACT,Terraformation Contact
+TERRAFORMATION_CONTACT_READONLY,Terraformation Contact is a readonly user
 TEST,Test
 TEST_DATE_REQUIRED,Test Date *
 TEST_METHOD,Test Method
