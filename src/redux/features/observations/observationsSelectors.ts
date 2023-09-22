@@ -173,10 +173,7 @@ export const selectLatestObservation = createCachedSelector(
 export const selectCurrentObservation = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
     searchObservations(state, plantingSiteId, defaultTimeZoneId, '', [], ['InProgress']),
-  (observationsResults: ObservationResults[] | undefined) => {
-    console.log(observationsResults, 'observationsResults');
-    return observationsResults?.[0];
-  }
+  (observationsResults: ObservationResults[] | undefined) => observationsResults?.[0]
 )((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
 
 // get the next observation for a planting site
