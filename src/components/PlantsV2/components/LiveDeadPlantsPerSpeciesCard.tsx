@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 import PieChart from 'src/components/common/Chart/PieChart';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useAppSelector } from 'src/redux/store';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { makeStyles } from '@mui/styles';
 
 type LiveDeadPlantsPerSpeciesCardProps = {
   plantingSiteId: number;
 };
 
+const useStyles = makeStyles((theme: Theme) => ({
+  maxDropdownWidth: {
+    maxWidth: '228px',
+  },
+}));
+
 export default function LiveDeadPlantsPerSpeciesCard({
   plantingSiteId,
 }: LiveDeadPlantsPerSpeciesCardProps): JSX.Element {
   const theme = useTheme();
+  const classes = useStyles();
   const defaultTimeZone = useDefaultTimeZone();
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
@@ -70,7 +78,7 @@ export default function LiveDeadPlantsPerSpeciesCard({
       isEditable={false}
       contents={
         <Box display='flex' flexDirection='column'>
-          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
+          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)} sx={{ flexFlow: 'row wrap' }}>
             {strings.LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE}
           </Typography>
           <Dropdown
@@ -78,6 +86,8 @@ export default function LiveDeadPlantsPerSpeciesCard({
             label=''
             options={allSpecies}
             selectedValue={selectedSpecies}
+            className={classes.maxDropdownWidth}
+            fullWidth={true}
           />
           {showChart && (
             <Box marginTop={theme.spacing(3)}>

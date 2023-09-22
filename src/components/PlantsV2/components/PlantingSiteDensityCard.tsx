@@ -44,7 +44,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
       isEditable={false}
       contents={
         <Box display='flex' flexDirection='column'>
-          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
+          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)} sx={{ flexFlow: 'row wrap' }}>
             {observation?.completedTime
               ? strings.formatString(
                   strings.PLANTING_DENSITY_CARD_TITLE,
@@ -52,7 +52,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
                 )
               : ''}
           </Typography>
-          <Box display={'flex'} alignItems='baseline'>
+          <Box display={'flex'} alignItems='baseline' sx={{ flexFlow: 'row wrap' }}>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
               {Math.round(plantingDensity)}
             </Typography>
