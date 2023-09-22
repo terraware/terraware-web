@@ -23,6 +23,7 @@ import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
+import isEnabled from 'src/features';
 
 type PlantingSiteSpecies = {
   id: number;
@@ -96,6 +97,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const [allSpecies, setAllSpecies] = useState<Species[]>();
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
 
+  const trackingV2 = isEnabled('TrackingV2');
   const defaultTimeZone = useDefaultTimeZone();
   const currentObservation = useAppSelector((state) =>
     selectCurrentObservation(state, location.id, defaultTimeZone.get().id)
@@ -417,7 +419,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               />
             </Grid>
           )}
-          {isPlantingSite && latestObservation && (
+          {trackingV2 && isPlantingSite && latestObservation && (
             <>
               <Grid item xs={smallItemGridWidth()}>
                 <OverviewItemCard
