@@ -168,3 +168,20 @@ export const selectLatestObservation = createCachedSelector(
     // the order of results (as returned by the server) are in reverse completed-time order, most recent completed will show up first
     observationsResults?.filter((result: ObservationResults) => result.completedTime)?.[0]
 )((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
+
+// get the current observation for a planting site
+export const selectCurrentObservation = createCachedSelector(
+  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
+    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', [], ['InProgress']),
+  (observationsResults: ObservationResults[] | undefined) => {
+    console.log(observationsResults, 'observationsResults');
+    return observationsResults?.[0];
+  }
+)((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
+
+// get the next observation for a planting site
+export const selectNextObservation = createCachedSelector(
+  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
+    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', [], ['Upcoming']),
+  (observationsResults: ObservationResults[] | undefined) => observationsResults?.[0]
+)((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);

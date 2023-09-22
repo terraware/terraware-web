@@ -195,6 +195,7 @@ CT,ct
 CULTIVATED,Cultivated
 CULTIVATED_EX_SITU,Cultivated (Ex Situ)
 CULTIVATED_EX_SITU_DESCRIPTION,"Plants that have been grown in a nursery, seed production area, or other propagation facility."
+CURRENT_NEXT_OBSERVATION,Current/Next Observation
 CUSTOMIZE_TABLE_COLUMNS,Customize table columns
 CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Select columns you want to add. Deselect columns you want to remove.
 CUT_TEST,Cut Test
@@ -210,6 +211,7 @@ DATE_ADDED,Date Added
 DATE_ADDED_REQUIRED,Date Added *
 DATE_SUBMITTED,Date Submitted
 DEAD,Dead
+DEAD_PLANTS_OBSERVED,Dead Plants Observed
 DEFAULT_LANGUAGE_SELECTED,Default language: {0}
 DEGREES_CELSIUS_VALUE,{0}ºC
 DELETE,Delete
@@ -311,6 +313,7 @@ ENTER_SIX_DIGIT_KEY,Enter 6-digit key
 ENVIRONMENTAL_NOTES,Environmental Notes
 ENVIRONMENTAL_NOTES_PLACEHOLDER,"Important notes about landscape, climate, and environmental conditions"
 EST_READY_DATE,Est. Ready Date
+EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA,Est. Total Plants (Planting Density × Area)
 ESTIMATED_DRYING_END_DATE,Estimated Drying End Date
 ESTIMATED_READY_DATE,Estimated Ready Date
 ESTIMATED_SEEDS_INCOMING,Estimated Seeds Incoming
@@ -509,6 +512,7 @@ LIST,List
 LIVE,Live
 LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,How many live and dead plants are there per species?
 LIVE_PLANTS,Live Plants
+LIVE_PLANTS_OBSERVED,Live Plants Observed
 LIVE_SPECIES,Live Species
 LOADING,Loading...
 LOCATION,Location
@@ -531,6 +535,7 @@ MARK_ALL_AS_READ,Mark All As Read
 MARK_AS_COMPLETE,Mark as Complete
 MARK_AS_READ,Mark As Read
 MARK_AS_UNREAD,Mark As Unread
+MARKED_AS_PLANTING_COMPLETE,Marked as Planting Complete (%)
 MAX,Max
 MEDIA_MIX,Media Mix
 METRIC,Metric
@@ -576,8 +581,10 @@ MORTALITY_RATE_IN_FIELD_REQUIRED,Mortality Rate in Field (%) *
 MORTALITY_RATE_IN_NURSERY,Mortality Rate in Nursery (%)
 MORTALITY_RATE_IN_NURSERY_REQUIRED,Mortality Rate in Nursery (%) *
 MORTALITY_RATE_PER_SPECIES,Mortality Rate per Species
+MORTALITY_RATE_PERCENT,Mortality Rate (%)
 MORTALITY_RATE_PERCENT_REQUIRED,Mortality Rate (%) *
 MOSS,Moss
+MOST_RECENT_OBSERVATION,Most Recent Observation
 MOST_RECENT_PERCENTAGE_VIABILITY,Most Recent % Viability
 MOVE,Move
 MULTIPLE_FORMS,Multiple Forms,"Describes a plant that can grow in more than one form, e.g., both a shrub and a forb."
@@ -652,6 +659,7 @@ NUMBER_OF_PHOTOS,Number of Photos
 NUMBER_OF_PLANTS,Number of Plants
 NUMBER_OF_PLANTS_BY_SPECIES,Number of Plants by Species
 NUMBER_OF_PLANTS_BY_SUBZONE_AND_SPECIES,Number of Plants by Subzone and Species
+NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION,Number of Plots in Most Recent Observation
 NUMBER_OF_SEEDS_COMPROMISED,# Seeds Compromised
 NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Seeds Compromised *
 NUMBER_OF_SEEDS_COMPROMISED_V2,# Seeds Compromised
@@ -771,6 +779,7 @@ PLANTING_DENSITY,Planting Density
 PLANTING_DENSITY_CARD_TITLE,What is my planting density as of {0}?
 PLANTING_DENSITY_DESCRIPTION,This is your planting density as calculated from your latest observations.
 PLANTING_DENSITY_MISSING_TOOLTIP,"Once your planting site has been marked as complete for planting and you’ve completed your observations, you’ll be able to view the planting density."
+PLANTING_DENSITY_OF_PLANTED_ZONES,Planting Density (of Planted Zones)
 PLANTING_DENSITY_PER_ZONE_CARD_TITLE,What is my target planting density per zone?
 PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"This is your zone’s target planting density which you’ve provided. If you’d like to change the target planting densities, please reach out to Terraformation."
 PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,What is my target planting density and planting density as of {0} per zone?
@@ -784,6 +793,7 @@ PLANTING_PROGRESS_MAP_DESCRIPTION,Click on each subzone to mark areas where plan
 PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,What is my planting progress per zone?
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,This is your zone’s planting progress calculated from what has been reported in your nursery withdrawals.
 PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Once a zone has been marked as complete for planting and you’ve completed your observations, you’ll be able to view that zone’s planting density."
+PLANTING_PROGRESS_PERCENT,Planting Progress (%)
 PLANTING_PROGRESS_TABLE_DESCRIPTION,Use the checkboxes next to each subzone to mark areas where planting has been completed. Planting density will be calculated once planting has been completed for each zone.
 PLANTING_SEASON_END,Planting Season End
 PLANTING_SEASON_START,Planting Season Start
@@ -1071,6 +1081,7 @@ SPECIES_EMPTY_MSG_BODY,Enter species that you collect or plant now to simplify y
 SPECIES_ERROR_SEARCH,Couldn't load species list for search
 SPECIES_IMPORT_COMPLETE,Species data import complete!
 SPECIES_NAME,Species Name
+SPECIES_OBSERVED,Species Observed
 SPECIES_PROBLEM_NAME_IS_SYNONYM,Name Is Synonym
 SPECIES_PROBLEM_NAME_MISSPELLED,Name Misspelled
 SPECIES_PROBLEM_NAME_NOT_FOUND,Name Not Found
@@ -1215,6 +1226,7 @@ TOTAL_PLANTED_AREA_HA,Total Planted Area (Ha) *
 TOTAL_PLANTED_REQUIRED,Total Planted *
 TOTAL_PLANTING_SITE_AREA_HA,Total Planting Site Area (Ha) *
 TOTAL_PLANTS_AND_SPECIES,Total Plants and Species
+TOTAL_PLANTS_OBSERVED,Total Plants Observed
 TOTAL_PLANTS_PLANTED,Total Plants Planted *
 TOTAL_PLANTS_PLANTED_HELPER_TEXT,Species not classified as “trees” in the species list.
 TOTAL_QUANTITY,Total Quantity
