@@ -52,7 +52,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
                 )
               : ''}
           </Typography>
-          <Box display={'flex'} alignItems='baseline'>
+          <Box display={'flex'} alignItems='baseline' sx={{ flexFlow: 'row wrap' }}>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
               {Math.round(plantingDensity)}
             </Typography>

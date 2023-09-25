@@ -41,7 +41,7 @@ export default function HectaresPlantedCard({ plantingSiteId }: HectaresPlantedC
           <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
             {strings.HECTARES_PLANTED_CARD_TITLE}
           </Typography>
-          <Box display={'flex'} alignItems='baseline'>
+          <Box display={'flex'} alignItems='baseline' sx={{ flexFlow: 'row wrap' }}>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}>
               <FormattedNumber value={Math.round(totalPlantedArea) || 0} />
             </Typography>

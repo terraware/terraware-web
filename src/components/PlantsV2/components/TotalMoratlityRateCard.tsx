@@ -31,9 +31,14 @@ export default function TotalMortalityRateCard({ plantingSiteId }: TotalMortalit
               observation?.completedTime ? getShortDate(observation.completedTime, locale.activeLocale) : ''
             )}
           </Typography>
-          <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
-            <FormattedNumber value={observation?.mortalityRate || 0} />%
-          </Typography>
+          <Box display='flex' sx={{ flexFlow: 'row wrap' }}>
+            <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
+              <FormattedNumber value={observation?.mortalityRate || 0} />
+            </Typography>
+            <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
+              %
+            </Typography>
+          </Box>
           <Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}>
             {strings.MORTALITY_RATE_CLARIFICATION}
           </Typography>
