@@ -220,8 +220,8 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       return (
         (
           <Box>
-            {zoneNameWithDensities?.map((zd) => (
-              <Box>{zd}</Box>
+            {zoneNameWithDensities?.map((zd, index) => (
+              <Box key={`zone-${index}`}>{zd}</Box>
             ))}
           </Box>
         ) || ''
