@@ -96,6 +96,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
 
   const [allSpecies, setAllSpecies] = useState<Species[]>();
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
+  const [plantingDensity, setPlantingDensity] = useState<Record<string, number | string>>();
 
   const trackingV2 = isEnabled('TrackingV2');
   const defaultTimeZone = useDefaultTimeZone();
@@ -120,6 +121,19 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization]);
+
+  useEffect(() => {
+    if (plantingSite) {
+      const zoneDensities: Record<string, number | string> = {};
+      plantingSite.plantingZones?.forEach((zone) => {
+        if (latestObservation) {
+          const zoneFromObs = latestObservation.plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
+          zoneDensities[zone.name] = zoneFromObs?.plantingDensity ?? '';
+        }
+      });
+      setPlantingDensity(zoneDensities);
+    }
+  }, [plantingSite, latestObservation]);
 
   useEffect(() => {
     const populateSpecies = async () => {
@@ -197,6 +211,17 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     }
     return '0%';
   };
+
+  const getPlantingDensityForZones = () => {
+    if (plantingSite && plantingDensity) {
+      const zoneNameWithDensities = plantingSite.plantingZones?.map(
+        (zone) => `${zone.name}: ${plantingDensity[zone.name]}`
+      );
+      return zoneNameWithDensities?.join('\r\n') || '';
+    }
+    return '';
+  };
+
   return (
     <>
       {(isSeedBank || isNursery) && (
@@ -507,7 +532,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.PLANTING_DENSITY_OF_PLANTED_ZONES}
-                  contents={''}
+                  contents={getPlantingDensityForZones()}
                   className={classes.infoCardStyle}
                 />
               </Grid>
@@ -605,6 +630,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
 const useStyles = makeStyles((theme: Theme) => ({
   infoCardStyle: {
     padding: 0,
+    'white-space': 'pre',
   },
 }));
 

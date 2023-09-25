@@ -313,7 +313,7 @@ ENTER_SIX_DIGIT_KEY,Enter 6-digit key
 ENVIRONMENTAL_NOTES,Environmental Notes
 ENVIRONMENTAL_NOTES_PLACEHOLDER,"Important notes about landscape, climate, and environmental conditions"
 EST_READY_DATE,Est. Ready Date
-EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA,Est. Total Plants (Planting Density × Area)
+EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA,Est. Total Plants (Planting Density × Area), Estimated Total Plants
 ESTIMATED_DRYING_END_DATE,Estimated Drying End Date
 ESTIMATED_READY_DATE,Estimated Ready Date
 ESTIMATED_SEEDS_INCOMING,Estimated Seeds Incoming
