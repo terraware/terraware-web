@@ -25,7 +25,7 @@ export default function TotalMortalityRateCard({ plantingSiteId }: TotalMortalit
       isEditable={false}
       contents={
         <Box display='flex' flexDirection='column'>
-          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)} sx={{ flexFlow: 'row wrap' }}>
+          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
             {strings.formatString(
               strings.MORTALITY_RATE_CARD_TITLE,
               observation?.completedTime ? getShortDate(observation.completedTime, locale.activeLocale) : ''

@@ -38,7 +38,7 @@ export default function HectaresPlantedCard({ plantingSiteId }: HectaresPlantedC
       isEditable={false}
       contents={
         <Box display='flex' flexDirection='column'>
-          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)} sx={{ flexFlow: 'row wrap' }}>
+          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
             {strings.HECTARES_PLANTED_CARD_TITLE}
           </Typography>
           <Box display={'flex'} alignItems='baseline' sx={{ flexFlow: 'row wrap' }}>

@@ -78,7 +78,7 @@ export default function LiveDeadPlantsPerSpeciesCard({
       isEditable={false}
       contents={
         <Box display='flex' flexDirection='column'>
-          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)} sx={{ flexFlow: 'row wrap' }}>
+          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
             {strings.LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE}
           </Typography>
           <Dropdown
