@@ -66,7 +66,7 @@
   "scripts": {
     "start": "craco start",
     "start:dev": "craco -r @cypress/instrument-cra start",
-    "build": "craco build",
+    "build": "craco --max_old_space_size=4096 build",
     "build-with-version": "export REACT_APP_TERRAWARE_FE_BUILD_VERSION=$(git rev-parse --short HEAD) && craco build",
     "build-version-file": "echo $(git rev-parse --short HEAD) > public/build-version.txt",
     "test": "TZ=America/Los_Angeles craco test",

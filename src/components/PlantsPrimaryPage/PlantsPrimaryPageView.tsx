@@ -64,7 +64,19 @@ export default function PlantsPrimaryPageView({
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>
           <Grid item xs={12} display={isMobile ? 'block' : 'flex'} alignItems='center'>
-            <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>
+            <Box display='flex' alignItems='center'>
+              <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>
+              {actionButton && isMobile && (
+                <Box marginLeft='auto' display='flex'>
+                  <Button
+                    id={`${actionButton.title}_id}`}
+                    icon={actionButton.icon}
+                    onClick={actionButton.onClick}
+                    size='medium'
+                  />
+                </Box>
+              )}
+            </Box>
             {plantingSites.length > 0 && (
               <>
                 {!isMobile && (
@@ -91,17 +103,11 @@ export default function PlantsPrimaryPageView({
                 </Box>
               </>
             )}
-            {actionButton && (
-              <Box
-                marginLeft='auto'
-                display='flex'
-                width={isMobile ? '50px' : 'auto'}
-                height={isMobile ? '50px' : 'auto'}
-              >
+            {actionButton && !isMobile && (
+              <Box marginLeft='auto' display='flex'>
                 <Button
                   id={`${actionButton.title}_id}`}
-                  icon={isMobile ? actionButton.icon : undefined}
-                  label={isMobile ? undefined : actionButton.title}
+                  label={actionButton.title}
                   onClick={actionButton.onClick}
                   size='medium'
                 />
