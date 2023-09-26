@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -155,7 +155,26 @@
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
 <a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,20 +205,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -215,6 +229,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -254,18 +284,22 @@ import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
-import { useAppSelector } from 'src/redux/store';
-import {
-  selectPlantingSiteObservations,
-  selectPlantingSiteObservationsResults,
-} from 'src/redux/features/observations/observationsSelectors';
+import { useAppSelector, useAppDispatch } from 'src/redux/store';
+import { useLocalization, useOrganization } from 'src/providers';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { selectPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import {
+  selectUpcomingObservations,
+  selectObservationSchedulableSites,
+} from 'src/redux/features/observations/observationsUtilsSelectors';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import Card from 'src/components/common/Card';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
 import ObservationsDataView from './ObservationsDataView';
-import ObservationsEventsNotification, { ObservationEvent } from './ObservationsEventsNotification';
+import ObservationsEventsNotification from './ObservationsEventsNotification';
 &nbsp;
 export type ObservationsHomeProps = SearchProps &amp; {
   setFilterOptions: (value: FieldOptionsMap) =&gt; void;
@@ -273,6 +307,9 @@ export type ObservationsHomeProps = SearchProps &amp; {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ObservationsHome(</span>props: ObservationsHomeProps): JSX.Element {
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
+  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const [selectedPlantingSite, setSelectedPlantingSite] = <span class="cstat-no" title="statement not covered" >useState&lt;PlantingSite&gt;();</span>
   const [plantsSitePreferences, setPlantsSitePreferences] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;string, unknown&gt;&gt;();</span>
   const plantingSites = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
@@ -281,17 +318,9 @@ export default function <span class="fstat-no" title="function not covered" >Obs
   );
 &nbsp;
   // get upcoming observations for notifications
-  const upcomingObservations = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSiteObservations(state, -1, 'Upcoming'))</span>;</span>
-&nbsp;
-  // observation events are to be displayed for empty states and data view states
-  const observationsEvents = <span class="cstat-no" title="statement not covered" >useMemo&lt;ObservationEvent[]&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!upcomingObservations) {</span>
-<span class="cstat-no" title="statement not covered" >      return [];</span>
-    }
-    const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
-    // return observations that haven't passed
-<span class="cstat-no" title="statement not covered" >    return upcomingObservations.filter(<span class="fstat-no" title="function not covered" >(o</span>bservation) =&gt; <span class="cstat-no" title="statement not covered" >now &lt;= new Date(observation.endDate).getTime())</span>;</span>
-  }, [upcomingObservations]);
+  const upcomingObservations = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUpcomingObservations);</span>
+  // get observation schedulable sites
+  const newObservationsSchedulable = <span class="cstat-no" title="statement not covered" >useAppSelector(selectObservationSchedulableSites).length;</span>
 &nbsp;
   const onSelect = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(s</span>ite: PlantingSite) =&gt; <span class="cstat-no" title="statement not covered" >setSelectedPlantingSite(site),</span> [setSelectedPlantingSite]);</span>
 &nbsp;
@@ -306,6 +335,21 @@ export default function <span class="fstat-no" title="function not covered" >Obs
     }
   }, [history, plantingSites?.length]);
 &nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(requestPlantings(selectedOrganization.id));</span>
+  }, [dispatch, selectedOrganization.id]);
+&nbsp;
+  const actionButton = <span class="cstat-no" title="statement not covered" >useMemo&lt;ButtonProps | undefined&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!activeLocale || !newObservationsSchedulable) {</span>
+<span class="cstat-no" title="statement not covered" >      return undefined;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      title: strings.SCHEDULE_OBSERVATION,
+      onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >history.push(APP_PATHS.SCHEDULE_OBSERVATION),</span>
+      icon: 'plus',
+    };
+  }, [activeLocale, history, newObservationsSchedulable]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;PlantsPrimaryPage
       title={strings.OBSERVATIONS}
@@ -316,9 +360,10 @@ export default function <span class="fstat-no" title="function not covered" >Obs
       setPlantsSitePreferences={onPreferences}
       allowAllAsSiteSelection={true}
       isEmptyState={!plantingSites?.length || !observationsResults?.length}
+      actionButton={actionButton}
     &gt;
       &lt;Grid container display='flex' flexDirection='column'&gt;
-        &lt;ObservationsEventsNotification events={observationsEvents} /&gt;
+        &lt;ObservationsEventsNotification events={upcomingObservations} /&gt;
         {observationsResults === undefined ? (
           &lt;CircularProgress sx={{ margin: 'auto' }} /&gt;
         ) : selectedPlantingSite &amp;&amp; observationsResults?.length ? (
@@ -346,7 +391,7 @@ export default function <span class="fstat-no" title="function not covered" >Obs
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-09-26T15:53:11.466Z
+                at 2023-09-26T16:46:23.304Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
