@@ -10,7 +10,7 @@ type OverviewItemCardProps = {
   handleEdit?: () => void;
   title?: string;
   titleInfoTooltip?: React.ReactNode;
-  contents: JSX.Element | string | null;
+  contents: JSX.Element | string | number | null;
   className?: string;
 };
 

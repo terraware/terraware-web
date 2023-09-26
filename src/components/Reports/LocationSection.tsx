@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { DatePicker, TableColumnType, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
@@ -11,6 +11,19 @@ import Table from '../common/table';
 import { useOrganization } from 'src/providers';
 import { SpeciesService } from 'src/services';
 import { Species } from 'src/types/Species';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import {
+  selectCurrentObservation,
+  selectLatestObservation,
+  selectNextObservation,
+} from 'src/redux/features/observations/observationsSelectors';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
+import isEnabled from 'src/features';
 
 type PlantingSiteSpecies = {
   id: number;
@@ -55,6 +68,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const theme = useTheme();
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
+  const dispatch = useAppDispatch();
 
   const isSeedBank = locationType === 'seedBank';
   const isNursery = locationType === 'nursery';
@@ -82,6 +96,44 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
 
   const [allSpecies, setAllSpecies] = useState<Species[]>();
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
+  const [plantingDensity, setPlantingDensity] = useState<Record<string, number | string>>();
+
+  const trackingV2 = isEnabled('TrackingV2');
+  const defaultTimeZone = useDefaultTimeZone();
+  const currentObservation = useAppSelector((state) =>
+    selectCurrentObservation(state, location.id, defaultTimeZone.get().id)
+  );
+  const nextObservation = useAppSelector((state) =>
+    selectNextObservation(state, location.id, defaultTimeZone.get().id)
+  );
+  const latestObservation = useAppSelector((state) =>
+    selectLatestObservation(state, location.id, defaultTimeZone.get().id)
+  );
+  const reportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, location.id));
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, location.id));
+
+  useEffect(() => {
+    if (selectedOrganization && trackingV2) {
+      dispatch(requestObservations(selectedOrganization.id));
+      dispatch(requestObservationsResults(selectedOrganization.id));
+      dispatch(requestSpecies(selectedOrganization.id));
+      dispatch(requestPlantings(selectedOrganization.id));
+      dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
+    }
+  }, [dispatch, selectedOrganization, trackingV2]);
+
+  useEffect(() => {
+    if (plantingSite) {
+      const zoneDensities: Record<string, number | string> = {};
+      plantingSite.plantingZones?.forEach((zone) => {
+        if (latestObservation) {
+          const zoneFromObs = latestObservation.plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
+          zoneDensities[zone.name] = zoneFromObs?.plantingDensity ?? '';
+        }
+      });
+      setPlantingDensity(zoneDensities);
+    }
+  }, [plantingSite, latestObservation]);
 
   useEffect(() => {
     const populateSpecies = async () => {
@@ -132,6 +184,51 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       onUpdateLocation('species', newSpecies);
     }
   };
+
+  const livePlants = useMemo(() => {
+    return latestObservation?.species.reduce((acc, sp) => (acc = acc + sp.permanentLive), 0);
+  }, [latestObservation]);
+
+  const deadPlants = useMemo(() => {
+    return latestObservation?.species.reduce((acc, sp) => (acc = acc + sp.cumulativeDead), 0);
+  }, [latestObservation]);
+
+  const numberOfPlots = useMemo(() => {
+    return latestObservation?.plantingZones.flatMap((pz) =>
+      pz.plantingSubzones.flatMap((subzone) => subzone.monitoringPlots)
+    ).length;
+  }, [latestObservation]);
+
+  const markedAsComplete = useMemo(() => {
+    if (plantingSite) {
+      const totalArea = plantingSite.areaHa ?? 0;
+      const totalPlantedArea =
+        plantingSite?.plantingZones
+          ?.flatMap((zone) => zone.plantingSubzones)
+          ?.reduce((prev, curr) => (curr.plantingCompleted ? +curr.areaHa + prev : prev), 0) ?? 0;
+      const percentagePlanted = totalArea > 0 ? Math.round((totalPlantedArea / totalArea) * 100) : 0;
+      return `${percentagePlanted}%`;
+    }
+    return '0%';
+  }, [plantingSite]);
+
+  const plantingDensityForZones = useMemo(() => {
+    if (plantingSite && plantingDensity) {
+      const zoneNameWithDensities = plantingSite.plantingZones?.map(
+        (zone) => `${zone.name}: ${plantingDensity[zone.name]}`
+      );
+      return (
+        (
+          <Box>
+            {zoneNameWithDensities?.map((zd, index) => (
+              <Box key={`zone-${index}`}>{zd}</Box>
+            ))}
+          </Box>
+        ) || ''
+      );
+    }
+    return '';
+  }, [plantingSite, plantingDensity]);
 
   return (
     <>
@@ -355,6 +452,108 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               />
             </Grid>
           )}
+          {trackingV2 && isPlantingSite && latestObservation && (
+            <>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.MOST_RECENT_OBSERVATION}
+                  contents={`${latestObservation.startDate} - ${latestObservation.completedDate}`}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION}
+                  contents={numberOfPlots || ''}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.CURRENT_NEXT_OBSERVATION}
+                  contents={`${currentObservation ? currentObservation?.startDate : ''} - ${
+                    nextObservation ? nextObservation?.startDate : ''
+                  }`}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.TOTAL_PLANTS_OBSERVED}
+                  contents={latestObservation.totalPlants}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.LIVE_PLANTS_OBSERVED}
+                  contents={livePlants || ''}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.DEAD_PLANTS_OBSERVED}
+                  contents={deadPlants || ''}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.SPECIES_OBSERVED}
+                  contents={latestObservation.totalSpecies}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.MARKED_AS_PLANTING_COMPLETE}
+                  contents={markedAsComplete}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.MORTALITY_RATE_PERCENT}
+                  contents={latestObservation.mortalityRate}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.PLANTING_PROGRESS_PERCENT}
+                  contents={reportedPlants?.progressPercent || ''}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.PLANTING_DENSITY_OF_PLANTED_ZONES}
+                  contents={plantingDensityForZones}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA}
+                  contents={latestObservation.estimatedPlants?.toString() || ''}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+            </>
+          )}
         </>
       )}
       <Grid item xs={smallItemGridWidth()}>
@@ -439,6 +638,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
 const useStyles = makeStyles((theme: Theme) => ({
   infoCardStyle: {
     padding: 0,
+    'white-space': 'pre',
   },
 }));
 
