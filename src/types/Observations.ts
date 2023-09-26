@@ -5,6 +5,9 @@ import strings from 'src/strings';
 // basic information on a single observation (excluding observation results)
 export type Observation = components['schemas']['ObservationPayload'];
 
+export type ScheduleObservationRequestPayload = components['schemas']['ScheduleObservationRequestPayload'];
+export type RescheduleObservationRequestPayload = components['schemas']['RescheduleObservationRequestPayload'];
+
 // "Upcoming" | "InProgress" | "Completed" | "Overdue"
 export type ObservationState = Observation['state'];
 

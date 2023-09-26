@@ -169,6 +169,14 @@ export const selectLatestObservation = createCachedSelector(
     observationsResults?.filter((result: ObservationResults) => result.completedTime)?.[0]
 )((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
 
+// scheduling selectors
+
+export const selectScheduleObservation = (state: RootState, requestId: string) =>
+  (state.scheduleObservation as any)[requestId];
+
+export const selectRescheduleObservation = (state: RootState, requestId: string) =>
+  (state.rescheduleObservation as any)[requestId];
+
 // get the current observation for a planting site
 export const selectCurrentObservation = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
