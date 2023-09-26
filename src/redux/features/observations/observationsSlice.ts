@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Observation, ObservationResultsPayload } from 'src/types/Observations';
+import { requestScheduleObservation, requestRescheduleObservation } from './observationsAsyncThunks';
+import { buildReducers, Status } from 'src/redux/features/asyncUtils';
 
 // Define a type for the slice state
 type ResultsData = {
@@ -58,7 +60,7 @@ type PlantingSiteData = Record<number, ResultsData>;
 
 const plantingSiteInitialResultsState: PlantingSiteData = {};
 
-export const plantingSiteObservationsResultsSlice = createSlice({
+const plantingSiteObservationsResultsSlice = createSlice({
   name: 'plantingSiteObservationsResultsSlice',
   initialState: plantingSiteInitialResultsState,
   reducers: {
@@ -71,3 +73,24 @@ export const plantingSiteObservationsResultsSlice = createSlice({
 
 export const { setPlantingSiteObservationsResultsAction } = plantingSiteObservationsResultsSlice.actions;
 export const plantingSiteObservationsResultsReducer = plantingSiteObservationsResultsSlice.reducer;
+
+type SchedulingState = Record<string, Status>;
+
+const initialSchedulingState: SchedulingState = {};
+
+const scheduleObservationSlice = createSlice({
+  name: 'scheduleObservation',
+  initialState: initialSchedulingState,
+  reducers: {},
+  extraReducers: buildReducers(requestScheduleObservation),
+});
+
+const rescheduleObservationSlice = createSlice({
+  name: 'rescheduleObservation',
+  initialState: initialSchedulingState,
+  reducers: {},
+  extraReducers: buildReducers(requestRescheduleObservation),
+});
+
+export const scheduleObservationReducer = scheduleObservationSlice.reducer;
+export const rescheduleObservationReducer = rescheduleObservationSlice.reducer;

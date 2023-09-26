@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService, TrackingService } from 'src/services';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import PlantsPrimaryPageView from './PlantsPrimaryPageView';
+import PlantsPrimaryPageView, { ButtonProps } from './PlantsPrimaryPageView';
 
 export type PlantsPrimaryPageProps = {
   title: string;
@@ -20,6 +20,7 @@ export type PlantsPrimaryPageProps = {
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
   // this is to allow redux based components to pass in already selected data
   plantingSitesData?: PlantingSite[];
+  actionButton?: ButtonProps;
 };
 
 const allSitesOption = (organizationId: number): PlantingSite => ({
@@ -40,6 +41,7 @@ export default function PlantsPrimaryPage({
   allowAllAsSiteSelection,
   isEmptyState,
   plantingSitesData,
+  actionButton,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -140,6 +142,7 @@ export default function PlantsPrimaryPage({
       selectedPlantingSiteId={selectedPlantingSite?.id}
       onSelect={setActivePlantingSite}
       isEmptyState={isEmptyState}
+      actionButton={actionButton}
     />
   );
 }

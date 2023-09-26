@@ -26,6 +26,8 @@ export enum APP_PATHS {
   INVENTORY_ITEM = '/inventory/:speciesId',
   INVENTORY_WITHDRAW = '/inventory/withdraw',
   OBSERVATIONS = '/observations',
+  SCHEDULE_OBSERVATION = '/observations/schedule',
+  RESCHEDULE_OBSERVATION = '/observations/schedule/:observationId',
   OBSERVATIONS_SITE = '/observations/:plantingSiteId',
   OBSERVATION_DETAILS = '/observations/:plantingSiteId/results/:observationId',
   OBSERVATION_PLANTING_ZONE_DETAILS = '/observations/:plantingSiteId/results/:observationId/zone/:plantingZoneId',

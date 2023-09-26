@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { requestUpdatePlantingCompleted, requestUpdatePlantingsCompleted } from './plantingsAsyncThunks';
+import { buildReducers, Status } from 'src/redux/features/asyncUtils';
 
 // Define a type for the slice state
 export type PlantingSearchData = {
@@ -38,50 +39,20 @@ export const plantingsSlice = createSlice({
 
 type UpdateData = Record<string, Status>;
 
-type Status = { status: 'pending' | 'success' | 'error' };
-
 const initialUpdateState: UpdateData = {};
 
-export const updatePlantingCompletedSlice = createSlice({
+const updatePlantingCompletedSlice = createSlice({
   name: 'updatePlantingCompleted',
   initialState: initialUpdateState,
   reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(requestUpdatePlantingCompleted.pending, (state, action) => {
-        const requestId = action.meta.requestId;
-        state[requestId] = { status: 'pending' };
-      })
-      .addCase(requestUpdatePlantingCompleted.fulfilled, (state, action) => {
-        const requestId = action.meta.requestId;
-        state[requestId] = { status: 'success' };
-      })
-      .addCase(requestUpdatePlantingCompleted.rejected, (state, action) => {
-        const requestId = action.meta.requestId;
-        state[requestId] = { status: 'error' };
-      });
-  },
+  extraReducers: buildReducers(requestUpdatePlantingCompleted),
 });
 
-export const updatePlantingsCompletedSlice = createSlice({
+const updatePlantingsCompletedSlice = createSlice({
   name: 'updatePlantingsCompleted',
   initialState: initialUpdateState,
   reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(requestUpdatePlantingsCompleted.pending, (state, action) => {
-        const requestId = action.meta.requestId;
-        state[requestId] = { status: 'pending' };
-      })
-      .addCase(requestUpdatePlantingsCompleted.fulfilled, (state, action) => {
-        const requestId = action.meta.requestId;
-        state[requestId] = { status: 'success' };
-      })
-      .addCase(requestUpdatePlantingsCompleted.rejected, (state, action) => {
-        const requestId = action.meta.requestId;
-        state[requestId] = { status: 'error' };
-      });
-  },
+  extraReducers: buildReducers(requestUpdatePlantingsCompleted), // planting(s) plural
 });
 
 export const { setPlantingsAction } = plantingsSlice.actions;

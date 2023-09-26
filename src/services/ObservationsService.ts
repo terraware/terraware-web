@@ -1,6 +1,11 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
-import { Observation, ObservationResultsPayload } from 'src/types/Observations';
+import {
+  Observation,
+  ObservationResultsPayload,
+  ScheduleObservationRequestPayload,
+  RescheduleObservationRequestPayload,
+} from 'src/types/Observations';
 
 /**
  * Tracking observations related services
@@ -8,6 +13,7 @@ import { Observation, ObservationResultsPayload } from 'src/types/Observations';
 
 const OBSERVATIONS_RESULTS_ENDPOINT = '/api/v1/tracking/observations/results';
 const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
+const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
 
 type ObservationsResultsResponsePayload =
   paths[typeof OBSERVATIONS_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -28,6 +34,7 @@ export type ObservationsData = {
 
 const httpObservationsResults = HttpService.root(OBSERVATIONS_RESULTS_ENDPOINT);
 const httpObservations = HttpService.root(OBSERVATIONS_ENDPOINT);
+const httpObservation = HttpService.root(OBSERVATION_ENDPOINT);
 
 /**
  * List all observations results
@@ -69,12 +76,28 @@ const listObservations = async (organizationId: number): Promise<ObservationsDat
   return response;
 };
 
+const scheduleObservation = async (request: ScheduleObservationRequestPayload): Promise<Response> =>
+  await httpObservations.post({ entity: request });
+
+const rescheduleObservation = async (
+  observationId: number,
+  request: RescheduleObservationRequestPayload
+): Promise<Response> =>
+  await httpObservation.put({
+    urlReplacements: {
+      '{observationId}': observationId.toString(),
+    },
+    entity: request,
+  });
+
 /**
  * Exported functions
  */
 const ObservationsService = {
   listObservationsResults,
   listObservations,
+  scheduleObservation,
+  rescheduleObservation,
 };
 
 export default ObservationsService;

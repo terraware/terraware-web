@@ -20,6 +20,7 @@ export default {
 };
 
 export const Default = PlantsPrimaryPageViewTemplate.bind({});
+export const ActionButton = PlantsPrimaryPageViewTemplate.bind({});
 
 Default.args = {
   title: 'Cloudforest Sites',
@@ -30,4 +31,9 @@ Default.args = {
     { name: 'Congo', id: 3, organizationId: 1 },
   ],
   selectedPlantingSiteId: 99,
+};
+
+ActionButton.args = {
+  ...Default.args,
+  actionButton: { title: 'Plant Tree', icon: 'plus', onClick: () => window.alert('You planted a tree!!') },
 };
