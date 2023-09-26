@@ -185,21 +185,21 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     }
   };
 
-  const getLivePlants = useMemo(() => {
+  const livePlants = useMemo(() => {
     return latestObservation?.species.reduce((acc, sp) => (acc = acc + sp.permanentLive), 0);
   }, [latestObservation]);
 
-  const getDeadPlants = useMemo(() => {
+  const deadPlants = useMemo(() => {
     return latestObservation?.species.reduce((acc, sp) => (acc = acc + sp.cumulativeDead), 0);
   }, [latestObservation]);
 
-  const getNumberOfPlots = useMemo(() => {
+  const numberOfPlots = useMemo(() => {
     return latestObservation?.plantingZones.flatMap((pz) =>
       pz.plantingSubzones.flatMap((subzone) => subzone.monitoringPlots)
     ).length;
   }, [latestObservation]);
 
-  const getMarkedAsComplete = useMemo(() => {
+  const markedAsComplete = useMemo(() => {
     if (plantingSite) {
       const totalArea = plantingSite.areaHa ?? 0;
       const totalPlantedArea =
@@ -212,7 +212,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     return '0%';
   }, [plantingSite]);
 
-  const getPlantingDensityForZones = useMemo(() => {
+  const plantingDensityForZones = useMemo(() => {
     if (plantingSite && plantingDensity) {
       const zoneNameWithDensities = plantingSite.plantingZones?.map(
         (zone) => `${zone.name}: ${plantingDensity[zone.name]}`
@@ -466,7 +466,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION}
-                  contents={getNumberOfPlots || ''}
+                  contents={numberOfPlots || ''}
                   className={classes.infoCardStyle}
                 />
               </Grid>
@@ -492,7 +492,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.LIVE_PLANTS_OBSERVED}
-                  contents={getLivePlants || ''}
+                  contents={livePlants || ''}
                   className={classes.infoCardStyle}
                 />
               </Grid>
@@ -500,7 +500,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.DEAD_PLANTS_OBSERVED}
-                  contents={getDeadPlants || ''}
+                  contents={deadPlants || ''}
                   className={classes.infoCardStyle}
                 />
               </Grid>
@@ -516,7 +516,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.MARKED_AS_PLANTING_COMPLETE}
-                  contents={getMarkedAsComplete}
+                  contents={markedAsComplete}
                   className={classes.infoCardStyle}
                 />
               </Grid>
@@ -540,7 +540,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.PLANTING_DENSITY_OF_PLANTED_ZONES}
-                  contents={getPlantingDensityForZones}
+                  contents={plantingDensityForZones}
                   className={classes.infoCardStyle}
                 />
               </Grid>
