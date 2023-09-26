@@ -52,13 +52,15 @@ export default function ScheduleObservation(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    const siteId = observations?.find((observation) => observation.id.toString() === observationId)?.plantingSiteId;
-    const plantingSite = plantingSitesResult?.find((ps) => ps.id === siteId);
+    const observation = observations?.find((data) => data.id.toString() === observationId);
+    const plantingSite = plantingSitesResult?.find((ps) => ps.id === observation?.plantingSiteId);
     if (!observationId || (observations?.length && plantingSitesResult?.length && !plantingSite)) {
       goToObservations();
-    } else if (plantingSite) {
+    } else if (plantingSite && observation) {
       setPlantingSites([plantingSite]);
       setPlantingSiteId(plantingSite.id);
+      setStartDate(observation?.startDate);
+      setEndDate(observation?.endDate);
     }
   }, [goToObservations, observationId, plantingSitesResult, observations]);
 
