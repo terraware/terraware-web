@@ -9,6 +9,7 @@ import { getLongDate } from 'src/utils/dateFormatter';
 export type ObservationEvent = {
   startDate: string;
   plantingSiteName: string;
+  plantingSiteId: number;
 };
 
 export type ObservationsEventsNotificationProps = {

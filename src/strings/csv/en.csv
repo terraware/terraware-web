@@ -683,9 +683,14 @@ NURSERY_MEDIA,Nursery Media
 NURSERY_MORTALITY_RATE,Nursery Mortality Rate
 NURSERY_REQUIRED,Nursery *
 NURSERY_TRANSFER,Nursery Transfer
+OBSERVATION_END_DATE,Observation End Date
 OBSERVATION_EVENT_SCHEDULED,Observation event is scheduled for {0} for planting site(s): {1},"Example: Observation event is scheduled for June 1, 2023 for planting site(s): Site-A, Site-B"
 OBSERVATION_IN_PROGRESS,Observation in Progress
 OBSERVATION_OVERDUE,Observation Overdue
+OBSERVATION_PERIOD_WARN,Observation period cannot exceed two months.
+OBSERVATION_RESCHEDULED,Observation rescheduled!
+OBSERVATION_SCHEDULED,Observation scheduled!
+OBSERVATION_START_DATE,Observation Start Date
 OBSERVATION_STATUS,Observation Status
 OBSERVATION_STATUS_OUTSTANDING,Outstanding,Remaining to be done
 OBSERVATIONS,Observations
@@ -920,6 +925,8 @@ REQUEST_FEATURE,Request Feature
 REQUIRED,Required
 REQUIRED_FIELD,Required field
 REQUIRED_VALUE_AND_UNITS_FIELD,Value and units required
+RESCHEDULE,Reschedule
+RESCHEDULE_OBSERVATION,Reschedule Observation
 RESET,Reset
 REVIEW_ERRORS,Review Errors
 REVIEW_YOUR_ACCOUNT_SETTING,Review your account setting
@@ -941,6 +948,7 @@ SAVING,Saving...
 SCARIFY,Scarify
 SCHEDULE_DATE_INFO,Schedule a date by selecting a future date.
 SCHEDULE_DATE_TO_MOVE,Schedule Date to Move from Racks to Dry Cabinets
+SCHEDULE_OBSERVATION,Schedule Observation
 SCHEDULE_WITHDRAWAL,Schedule Withdrawal
 SCHEDULED,(Scheduled)
 SCHEDULED_FOR,Scheduled for

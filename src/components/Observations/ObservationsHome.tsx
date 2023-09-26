@@ -5,18 +5,22 @@ import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
-import { useAppSelector } from 'src/redux/store';
-import {
-  selectPlantingSiteObservations,
-  selectPlantingSiteObservationsResults,
-} from 'src/redux/features/observations/observationsSelectors';
+import { useAppSelector, useAppDispatch } from 'src/redux/store';
+import { useLocalization, useOrganization } from 'src/providers';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { selectPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import {
+  selectUpcomingObservations,
+  selectObservationSchedulableSites,
+} from 'src/redux/features/observations/observationsUtilsSelectors';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import Card from 'src/components/common/Card';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
 import ObservationsDataView from './ObservationsDataView';
-import ObservationsEventsNotification, { ObservationEvent } from './ObservationsEventsNotification';
+import ObservationsEventsNotification from './ObservationsEventsNotification';
 
 export type ObservationsHomeProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
@@ -24,6 +28,9 @@ export type ObservationsHomeProps = SearchProps & {
 
 export default function ObservationsHome(props: ObservationsHomeProps): JSX.Element {
   const history = useHistory();
+  const dispatch = useAppDispatch();
+  const { activeLocale } = useLocalization();
+  const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
   const plantingSites = useAppSelector(selectPlantingSites);
@@ -32,17 +39,9 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   );
 
   // get upcoming observations for notifications
-  const upcomingObservations = useAppSelector((state) => selectPlantingSiteObservations(state, -1, 'Upcoming'));
-
-  // observation events are to be displayed for empty states and data view states
-  const observationsEvents = useMemo<ObservationEvent[]>(() => {
-    if (!upcomingObservations) {
-      return [];
-    }
-    const now = Date.now();
-    // return observations that haven't passed
-    return upcomingObservations.filter((observation) => now <= new Date(observation.endDate).getTime());
-  }, [upcomingObservations]);
+  const upcomingObservations = useAppSelector(selectUpcomingObservations);
+  // get observation schedulable sites
+  const newObservationsSchedulable = useAppSelector(selectObservationSchedulableSites).length;
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
 
@@ -57,6 +56,21 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     }
   }, [history, plantingSites?.length]);
 
+  useEffect(() => {
+    dispatch(requestPlantings(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
+
+  const actionButton = useMemo<ButtonProps | undefined>(() => {
+    if (!activeLocale || !newObservationsSchedulable) {
+      return undefined;
+    }
+    return {
+      title: strings.SCHEDULE_OBSERVATION,
+      onClick: () => history.push(APP_PATHS.SCHEDULE_OBSERVATION),
+      icon: 'plus',
+    };
+  }, [activeLocale, history, newObservationsSchedulable]);
+
   return (
     <PlantsPrimaryPage
       title={strings.OBSERVATIONS}
@@ -67,9 +81,10 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       setPlantsSitePreferences={onPreferences}
       allowAllAsSiteSelection={true}
       isEmptyState={!plantingSites?.length || !observationsResults?.length}
+      actionButton={actionButton}
     >
       <Grid container display='flex' flexDirection='column'>
-        <ObservationsEventsNotification events={observationsEvents} />
+        <ObservationsEventsNotification events={upcomingObservations} />
         {observationsResults === undefined ? (
           <CircularProgress sx={{ margin: 'auto' }} />
         ) : selectedPlantingSite && observationsResults?.length ? (

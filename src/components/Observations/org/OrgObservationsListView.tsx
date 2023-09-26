@@ -62,6 +62,11 @@ const columns = (): TableColumnType[] => [
     name: strings.MORTALITY_RATE,
     type: 'number',
   },
+  {
+    key: 'actionsMenu',
+    name: '',
+    type: 'string',
+  },
 ];
 
 export type OrgObservationsListViewProps = {
