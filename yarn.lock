@@ -4284,10 +4284,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.3.64":
-  version "2.3.64"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.64.tgz#cd0dfb2e1c7e0fced1625eb091dc0b6320166f01"
-  integrity sha512-XikwKPy6hAVIK0BV/zUyUmzu7rfHHrHMtoOLIJ5wVYl19GK4FkwbO8/mDFsA3t1ZMzR6XShqcqVz3BJkHdm7Qw==
+"@terraware/web-components@^2.3.66":
+  version "2.3.66"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.3.66.tgz#0b96c3b658c0c9d51725efa2246f978537be6b25"
+  integrity sha512-r+qY4UXb1exigKEX/8rRA38ReuzdY4zEGqURUXuWsDYzB0TVgPTWeAkTfeRaMIRGCqa2v424PiPn6nX9XNXX5g==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
@@ -4307,6 +4307,7 @@
     moment-timezone "^0.5.43"
     react "^17.0.2"
     react-dom "^17.0.2"
+    react-intersection-observer "^9.5.2"
     react-multi-carousel "^2.8.2"
     react-responsive "^9.0.2"
     react-sortable-hoc "^2.0.0"
@@ -13196,6 +13197,11 @@ react-inspector@^6.0.0:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/react-inspector/-/react-inspector-6.0.1.tgz#1a37f0165d9df81ee804d63259eaaeabe841287d"
   integrity sha512-cxKSeFTf7jpSSVddm66sKdolG90qURAX3g1roTeaN6x0YEbtWc8JpmFN9+yIqLNH2uEkYerWLtJZIXRIFuBKrg==
+
+react-intersection-observer@^9.5.2:
+  version "9.5.2"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-9.5.2.tgz#f68363a1ff292323c0808201b58134307a1626d0"
+  integrity sha512-EmoV66/yvksJcGa1rdW0nDNc4I1RifDWkT50gXSFnPLYQ4xUptuDD4V7k+Rj1OgVAlww628KLGcxPXFlOkkU/Q==
 
 react-is@18.1.0:
   version "18.1.0"

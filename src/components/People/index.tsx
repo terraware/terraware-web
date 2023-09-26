@@ -292,8 +292,8 @@ export default function PeopleList(): JSX.Element {
     setTemporalSearchValue(value as string);
   };
 
-  const hasRemovableUsers = useMemo(
-    () => selectedPeopleRows.some((row) => !isTfContact(row.role)),
+  const isRemovingTFContact = useMemo(
+    () => selectedPeopleRows.some((row) => isTfContact(row.role)),
     [selectedPeopleRows]
   );
 
@@ -374,18 +374,16 @@ export default function PeopleList(): JSX.Element {
                     selectedRows={selectedPeopleRows}
                     setSelectedRows={setSelectedPeopleRows}
                     showTopBar={true}
-                    topBarButtons={
-                      hasRemovableUsers
-                        ? [
-                            {
-                              buttonType: 'passive',
-                              ...(!isMobile && { buttonText: strings.REMOVE }),
-                              onButtonClick: removeSelectedPeopleFromOrg,
-                              icon: 'iconTrashCan',
-                            },
-                          ]
-                        : []
-                    }
+                    topBarButtons={[
+                      {
+                        buttonType: 'destructive',
+                        ...(!isMobile && { buttonText: strings.REMOVE }),
+                        onButtonClick: removeSelectedPeopleFromOrg,
+                        icon: 'iconTrashCan',
+                        disabled: isRemovingTFContact,
+                        tooltipTitle: isRemovingTFContact ? strings.CANNOT_REMOVE_TF_CONTACT : undefined,
+                      },
+                    ]}
                   />
                 )}
               </Grid>

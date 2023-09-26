@@ -124,6 +124,7 @@ CANNOT_EDIT,Cannot Edit
 CANNOT_REMOVE,Cannot Remove
 CANNOT_REMOVE_DELETE_MSG,You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?
 CANNOT_REMOVE_MSG,You cannot remove yourself because there is no one else in the organization. Would you like to delete the organization instead?
+CANNOT_REMOVE_TF_CONTACT,Terraformation contacts cannot be removed from an organization.
 CATALYTIC_CHECKBOX,Terraformation’s support has been catalytic in securing additional funding or partnerships for our work.
 CATALYTIC_DETAIL,Catalytic Funding
 CATALYTIC_DETAIL_INSTRUCTIONS,Please state whether Terraformation’s support has been catalytic in securing additional funding or partnerships for your work. Provide detail where possible. (One-quarter page maximum.)
