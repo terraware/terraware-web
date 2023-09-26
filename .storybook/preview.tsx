@@ -2,6 +2,7 @@ import type { Preview } from '@storybook/react';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material';
 import { MemoryRouter } from 'react-router';
 import { Provider } from 'react-redux';
+import { store } from '../src/redux/store';
 
 const preview: Preview = {
   parameters: {

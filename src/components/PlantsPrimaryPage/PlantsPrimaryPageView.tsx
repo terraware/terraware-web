@@ -2,11 +2,17 @@ import React, { useMemo, useRef } from 'react';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
-import { Dropdown } from '@terraware/web-components';
+import { Button, Dropdown, IconName } from '@terraware/web-components';
 import { PlantingSite } from 'src/types/Tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PageSnackbar from 'src/components/PageSnackbar';
+
+export type ButtonProps = {
+  title: string;
+  onClick: () => void;
+  icon: IconName;
+};
 
 export type PlantsPrimaryPageViewProps = {
   title: string;
@@ -16,6 +22,7 @@ export type PlantsPrimaryPageViewProps = {
   selectedPlantingSiteId?: number;
   onSelect: (plantingSite: PlantingSite) => void; // planting site selected, id of -1 refers to All
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
+  actionButton?: ButtonProps;
 };
 
 export default function PlantsPrimaryPageView({
@@ -26,6 +33,7 @@ export default function PlantsPrimaryPageView({
   selectedPlantingSiteId,
   onSelect,
   isEmptyState,
+  actionButton,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -82,6 +90,22 @@ export default function PlantsPrimaryPageView({
                   />
                 </Box>
               </>
+            )}
+            {actionButton && (
+              <Box
+                marginLeft='auto'
+                display='flex'
+                width={isMobile ? '50px' : 'auto'}
+                height={isMobile ? '50px' : 'auto'}
+              >
+                <Button
+                  id={`${actionButton.title}_id}`}
+                  icon={isMobile ? actionButton.icon : undefined}
+                  label={isMobile ? undefined : actionButton.title}
+                  onClick={actionButton.onClick}
+                  size='medium'
+                />
+              </Box>
             )}
           </Grid>
           {text && (
