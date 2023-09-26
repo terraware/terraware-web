@@ -4,6 +4,8 @@ import {
   observationsReducer,
   observationsResultsReducer,
   plantingSiteObservationsResultsReducer,
+  scheduleObservationReducer,
+  rescheduleObservationReducer,
 } from './features/observations/observationsSlice';
 import {
   plantingsReducer,
@@ -38,6 +40,8 @@ export const reducers = {
   snackbar: snackbarReducer,
   message: messageReducer,
   userAnalytics: userAnalyticsReducer,
+  scheduleObservation: scheduleObservationReducer,
+  rescheduleObservation: rescheduleObservationReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

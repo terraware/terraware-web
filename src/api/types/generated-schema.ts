@@ -315,12 +315,14 @@ export interface paths {
   };
   "/api/v1/tracking/observations": {
     get: operations["listObservations"];
+    post: operations["scheduleObservation"];
   };
   "/api/v1/tracking/observations/results": {
     get: operations["listObservationResults"];
   };
   "/api/v1/tracking/observations/{observationId}": {
     get: operations["getObservation"];
+    put: operations["rescheduleObservation"];
   };
   "/api/v1/tracking/observations/{observationId}/plots": {
     get: operations["listAssignedPlots"];
@@ -2442,9 +2444,43 @@ export interface components {
       speciesName?: string;
       status: "Live" | "Dead" | "Existing";
     };
+    RescheduleObservationRequestPayload: {
+      /**
+       * Format: date
+       * @description The end date for this observation, should be limited to 2 months from the start date .
+       */
+      endDate: string;
+      /**
+       * Format: date
+       * @description The start date for this observation, can be up to a year from the date this schedule request occurs on.
+       */
+      startDate: string;
+    };
     ResolveUploadRequestPayload: {
       /** @description If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
       overwriteExisting: boolean;
+    };
+    ScheduleObservationRequestPayload: {
+      /**
+       * Format: date
+       * @description The end date for this observation, should be limited to 2 months from the start date .
+       */
+      endDate: string;
+      /**
+       * Format: int64
+       * @description Which planting site this observation needs to be scheduled for.
+       */
+      plantingSiteId: number;
+      /**
+       * Format: date
+       * @description The start date for this observation, can be up to a year from the date this schedule request occurs on.
+       */
+      startDate: string;
+    };
+    ScheduleObservationResponsePayload: {
+      /** Format: int64 */
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
     };
     /** @description A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
     SearchNodePayload: any;
@@ -5520,6 +5556,21 @@ export interface operations {
       };
     };
   };
+  scheduleObservation: {
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ScheduleObservationResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ScheduleObservationRequestPayload"];
+      };
+    };
+  };
   listObservationResults: {
     parameters: {
       query: {
@@ -5550,6 +5601,26 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["GetObservationResponsePayload"];
         };
+      };
+    };
+  };
+  rescheduleObservation: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RescheduleObservationRequestPayload"];
       };
     };
   };

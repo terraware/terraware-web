@@ -168,3 +168,11 @@ export const selectLatestObservation = createCachedSelector(
     // the order of results (as returned by the server) are in reverse completed-time order, most recent completed will show up first
     observationsResults?.filter((result: ObservationResults) => result.completedTime)?.[0]
 )((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
+
+// scheduling selectors
+
+export const selectScheduleObservation = (state: RootState, requestId: string) =>
+  (state.scheduleObservation as any)[requestId];
+
+export const selectRescheduleObservation = (state: RootState, requestId: string) =>
+  (state.rescheduleObservation as any)[requestId];
