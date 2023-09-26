@@ -7,6 +7,7 @@ import Link from 'src/components/common/Link';
 import { TextTruncated } from '@terraware/web-components';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { ObservationState, getStatus } from 'src/types/Observations';
+import ActionsMenu from './ActionsMenu';
 import strings from 'src/strings';
 
 const COLUMN_WIDTH = 250;
@@ -61,6 +62,10 @@ const OrgObservationsRenderer =
 
     if (column.key === 'mortalityRate') {
       return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value}%` : ''} />;
+    }
+
+    if (column.key === 'actionsMenu') {
+      return <CellRenderer {...props} value={<ActionsMenu observationId={row.observationId} state={row.state} />} />;
     }
 
     return <CellRenderer {...props} />;
