@@ -46,6 +46,7 @@ export default function OverviewItemCard({
           display: 'flex',
           flexDirection: 'column',
           flexBasis: 'fit-content',
+          flexGrow: 1,
         }}
       >
         {title && (

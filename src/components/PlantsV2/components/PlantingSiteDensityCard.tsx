@@ -43,7 +43,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
     <OverviewItemCard
       isEditable={false}
       contents={
-        <Box display='flex' flexDirection='column'>
+        <Box display='flex' flexDirection='column' flexGrow={1}>
           <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
             {observation?.completedTime
               ? strings.formatString(
