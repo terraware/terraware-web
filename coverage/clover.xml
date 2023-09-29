@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1695746783760" clover="3.2.0">
-  <project timestamp="1695746783760" name="All files">
+<coverage generated="1695991593551" clover="3.2.0">
+  <project timestamp="1695991593551" name="All files">
     <metrics statements="12494" coveredstatements="363" conditionals="7946" coveredconditionals="90" methods="3918" coveredmethods="77" elements="24358" coveredelements="530" complexity="0" loc="12494" ncloc="12494" packages="105" files="494" classes="494"/>
     <package name="src">
       <metrics statements="212" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="67" coveredmethods="0"/>
@@ -10220,7 +10220,7 @@
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
-        <line num="83" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="84" count="0" type="cond" truecount="0" falsecount="3"/>
       </file>
       <file name="PageCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PageCard.tsx">
         <metrics statements="16" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>

@@ -1,5 +1,1 @@
-ebfb6a143 Add primary action button to PlantsPrimaryPage (#1718)
-e6d2e422e SW-4263 Add more memory when building (#1721)
-b9d0b593a SW-4249 Add plant monitoring details to quarterly partner reports (#1715)
-50e01310e SW-4239 Disable 'Remove' button for TF Contact, explain 'why' with a tooltip (#1717)
-43990adea SW-4250 Fix plant dashboard cards for small widths (#1716)
+530c7aba5 SW-4250 Fix planting density card not taking the whole space (#1722)
