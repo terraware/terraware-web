@@ -17,6 +17,7 @@ import {
   selectCurrentObservation,
   selectLatestObservation,
   selectNextObservation,
+  selectObservation,
 } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
@@ -106,8 +107,14 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const currentObservation = useAppSelector((state) =>
     selectCurrentObservation(state, location.id, defaultTimeZone.get().id)
   );
+  const currentObservationData = useAppSelector((state) =>
+    selectObservation(state, location.id, Number(currentObservation?.observationId))
+  );
   const nextObservation = useAppSelector((state) =>
     selectNextObservation(state, location.id, defaultTimeZone.get().id)
+  );
+  const nextObservationData = useAppSelector((state) =>
+    selectObservation(state, location.id, Number(nextObservation?.observationId))
   );
   const latestObservation = useAppSelector((state) =>
     selectLatestObservation(state, location.id, defaultTimeZone.get().id)
@@ -247,6 +254,16 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     }
     return '';
   }, [plantingSite, plantingDensity]);
+
+  const currentNextObservationDates = useMemo(() => {
+    if (currentObservationData) {
+      return `${currentObservationData.startDate} - ${currentObservationData.endDate}`;
+    }
+    if (nextObservationData) {
+      return `${nextObservationData.startDate} - ${nextObservationData.endDate}`;
+    }
+    return '';
+  }, [currentObservationData, nextObservationData]);
 
   return (
     <>
@@ -492,9 +509,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.CURRENT_NEXT_OBSERVATION}
-                  contents={`${currentObservation ? currentObservation?.startDate : ''} - ${
-                    nextObservation ? nextObservation?.startDate : ''
-                  }`}
+                  contents={currentNextObservationDates}
                   className={classes.infoCardStyle}
                 />
               </Grid>
