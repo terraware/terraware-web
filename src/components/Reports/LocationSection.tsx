@@ -226,10 +226,15 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   }, [plantingSite]);
 
   const plantingDensityForZones = useMemo(() => {
+    const zoneNameWithDensities: string[] = [];
     if (plantingSite && plantingDensity) {
-      const zoneNameWithDensities = plantingSite.plantingZones?.map(
-        (zone) => `${zone.name}: ${plantingDensity[zone.name]}`
-      );
+      plantingSite.plantingZones?.reduce((acc, zone) => {
+        if (plantingDensity[zone.name] !== '') {
+          zoneNameWithDensities.push(`${zone.name}: ${plantingDensity[zone.name]}`);
+        }
+        return acc;
+      }, zoneNameWithDensities);
+
       return (
         (
           <Box>
