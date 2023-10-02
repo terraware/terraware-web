@@ -194,6 +194,10 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     }
   };
 
+  const estimatedPlants = useMemo(() => {
+    return latestObservation?.estimatedPlants?.toString();
+  }, [latestObservation]);
+
   const livePlants = useMemo(() => {
     return latestObservation?.species.reduce((acc, sp) => (acc = acc + sp.permanentLive), 0);
   }, [latestObservation]);
@@ -537,7 +541,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                   className={classes.infoCardStyle}
                 />
               </Grid>
-              {!latestObservation.estimatedPlants?.toString() && (
+              {!estimatedPlants && (
                 <Grid item xs={smallItemGridWidth()}>
                   <OverviewItemCard
                     isEditable={false}
@@ -561,11 +565,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA}
-                  contents={
-                    latestObservation.estimatedPlants?.toString()
-                      ? `${latestObservation.estimatedPlants?.toString()} ${strings.PLANTS_PER_HECTARE}`
-                      : ''
-                  }
+                  contents={estimatedPlants ? `${estimatedPlants} ${strings.PLANTS_PER_HECTARE}` : ''}
                   className={classes.infoCardStyle}
                 />
               </Grid>
