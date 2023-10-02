@@ -17,12 +17,16 @@ import {
   selectCurrentObservation,
   selectLatestObservation,
   selectNextObservation,
+  selectObservation,
 } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
+import {
+  requestPlantingSitesSearchResults,
+  requestSiteReportedPlants,
+} from 'src/redux/features/tracking/trackingThunks';
 import isEnabled from 'src/features';
 
 type PlantingSiteSpecies = {
@@ -103,8 +107,14 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const currentObservation = useAppSelector((state) =>
     selectCurrentObservation(state, location.id, defaultTimeZone.get().id)
   );
+  const currentObservationData = useAppSelector((state) =>
+    selectObservation(state, location.id, Number(currentObservation?.observationId))
+  );
   const nextObservation = useAppSelector((state) =>
     selectNextObservation(state, location.id, defaultTimeZone.get().id)
+  );
+  const nextObservationData = useAppSelector((state) =>
+    selectObservation(state, location.id, Number(nextObservation?.observationId))
   );
   const latestObservation = useAppSelector((state) =>
     selectLatestObservation(state, location.id, defaultTimeZone.get().id)
@@ -121,6 +131,12 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization, trackingV2]);
+
+  useEffect(() => {
+    if (plantingSite?.id) {
+      dispatch(requestSiteReportedPlants(plantingSite.id));
+    }
+  }, [plantingSite?.id, dispatch]);
 
   useEffect(() => {
     if (plantingSite) {
@@ -185,6 +201,10 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     }
   };
 
+  const estimatedPlants = useMemo(() => {
+    return latestObservation?.estimatedPlants?.toString();
+  }, [latestObservation?.estimatedPlants]);
+
   const livePlants = useMemo(() => {
     return latestObservation?.species.reduce((acc, sp) => (acc = acc + sp.permanentLive), 0);
   }, [latestObservation]);
@@ -213,22 +233,37 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   }, [plantingSite]);
 
   const plantingDensityForZones = useMemo(() => {
+    const zoneNameWithDensities: string[] = [];
     if (plantingSite && plantingDensity) {
-      const zoneNameWithDensities = plantingSite.plantingZones?.map(
-        (zone) => `${zone.name}: ${plantingDensity[zone.name]}`
-      );
-      return (
-        (
-          <Box>
-            {zoneNameWithDensities?.map((zd, index) => (
-              <Box key={`zone-${index}`}>{zd}</Box>
-            ))}
-          </Box>
-        ) || ''
+      plantingSite.plantingZones?.reduce((acc, zone) => {
+        if (plantingDensity[zone.name] !== '') {
+          zoneNameWithDensities.push(`${zone.name}: ${plantingDensity[zone.name]}`);
+        }
+        return acc;
+      }, zoneNameWithDensities);
+
+      return zoneNameWithDensities.length ? (
+        <Box>
+          {zoneNameWithDensities.map((zd, index) => (
+            <Box key={`zone-${index}`}>{zd}</Box>
+          ))}
+        </Box>
+      ) : (
+        ''
       );
     }
     return '';
   }, [plantingSite, plantingDensity]);
+
+  const currentNextObservationDates = useMemo(() => {
+    if (currentObservationData) {
+      return `${currentObservationData.startDate} - ${currentObservationData.endDate}`;
+    }
+    if (nextObservationData) {
+      return `${nextObservationData.startDate} - ${nextObservationData.endDate}`;
+    }
+    return '';
+  }, [currentObservationData, nextObservationData]);
 
   return (
     <>
@@ -474,9 +509,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.CURRENT_NEXT_OBSERVATION}
-                  contents={`${currentObservation ? currentObservation?.startDate : ''} - ${
-                    nextObservation ? nextObservation?.startDate : ''
-                  }`}
+                  contents={currentNextObservationDates}
                   className={classes.infoCardStyle}
                 />
               </Grid>
@@ -528,27 +561,31 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                   className={classes.infoCardStyle}
                 />
               </Grid>
-              <Grid item xs={smallItemGridWidth()}>
-                <OverviewItemCard
-                  isEditable={false}
-                  title={strings.PLANTING_PROGRESS_PERCENT}
-                  contents={reportedPlants?.progressPercent || ''}
-                  className={classes.infoCardStyle}
-                />
-              </Grid>
-              <Grid item xs={smallItemGridWidth()}>
-                <OverviewItemCard
-                  isEditable={false}
-                  title={strings.PLANTING_DENSITY_OF_PLANTED_ZONES}
-                  contents={plantingDensityForZones}
-                  className={classes.infoCardStyle}
-                />
-              </Grid>
+              {!estimatedPlants && (
+                <Grid item xs={smallItemGridWidth()}>
+                  <OverviewItemCard
+                    isEditable={false}
+                    title={strings.PLANTING_PROGRESS_PERCENT}
+                    contents={reportedPlants?.progressPercent || ''}
+                    className={classes.infoCardStyle}
+                  />
+                </Grid>
+              )}
+              {plantingDensityForZones && (
+                <Grid item xs={smallItemGridWidth()}>
+                  <OverviewItemCard
+                    isEditable={false}
+                    title={strings.PLANTING_DENSITY_OF_PLANTED_ZONES}
+                    contents={plantingDensityForZones}
+                    className={classes.infoCardStyle}
+                  />
+                </Grid>
+              )}
               <Grid item xs={smallItemGridWidth()}>
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA}
-                  contents={latestObservation.estimatedPlants?.toString() || ''}
+                  contents={estimatedPlants ? `${estimatedPlants} ${strings.PLANTS_PER_HECTARE}` : ''}
                   className={classes.infoCardStyle}
                 />
               </Grid>
