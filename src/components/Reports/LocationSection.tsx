@@ -129,7 +129,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     if (plantingSite) {
       dispatch(requestSiteReportedPlants(plantingSite.id));
     }
-  }, [plantingSite]);
+  }, [plantingSite, dispatch]);
 
   useEffect(() => {
     if (plantingSite) {
