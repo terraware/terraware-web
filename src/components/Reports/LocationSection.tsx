@@ -126,10 +126,10 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   }, [dispatch, selectedOrganization, trackingV2]);
 
   useEffect(() => {
-    if (plantingSite) {
+    if (plantingSite?.id) {
       dispatch(requestSiteReportedPlants(plantingSite.id));
     }
-  }, [plantingSite, dispatch]);
+  }, [plantingSite?.id, dispatch]);
 
   useEffect(() => {
     if (plantingSite) {
@@ -196,7 +196,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
 
   const estimatedPlants = useMemo(() => {
     return latestObservation?.estimatedPlants?.toString();
-  }, [latestObservation]);
+  }, [latestObservation?.estimatedPlants]);
 
   const livePlants = useMemo(() => {
     return latestObservation?.species.reduce((acc, sp) => (acc = acc + sp.permanentLive), 0);
