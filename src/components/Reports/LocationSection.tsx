@@ -22,7 +22,10 @@ import { requestObservations, requestObservationsResults } from 'src/redux/featu
 import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
+import {
+  requestPlantingSitesSearchResults,
+  requestSiteReportedPlants,
+} from 'src/redux/features/tracking/trackingThunks';
 import isEnabled from 'src/features';
 
 type PlantingSiteSpecies = {
@@ -121,6 +124,12 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization, trackingV2]);
+
+  useEffect(() => {
+    if (plantingSite) {
+      dispatch(requestSiteReportedPlants(plantingSite.id));
+    }
+  }, [plantingSite]);
 
   useEffect(() => {
     if (plantingSite) {
@@ -528,27 +537,35 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                   className={classes.infoCardStyle}
                 />
               </Grid>
-              <Grid item xs={smallItemGridWidth()}>
-                <OverviewItemCard
-                  isEditable={false}
-                  title={strings.PLANTING_PROGRESS_PERCENT}
-                  contents={reportedPlants?.progressPercent || ''}
-                  className={classes.infoCardStyle}
-                />
-              </Grid>
-              <Grid item xs={smallItemGridWidth()}>
-                <OverviewItemCard
-                  isEditable={false}
-                  title={strings.PLANTING_DENSITY_OF_PLANTED_ZONES}
-                  contents={plantingDensityForZones}
-                  className={classes.infoCardStyle}
-                />
-              </Grid>
+              {!latestObservation.estimatedPlants?.toString() && (
+                <Grid item xs={smallItemGridWidth()}>
+                  <OverviewItemCard
+                    isEditable={false}
+                    title={strings.PLANTING_PROGRESS_PERCENT}
+                    contents={reportedPlants?.progressPercent || ''}
+                    className={classes.infoCardStyle}
+                  />
+                </Grid>
+              )}
+              {plantingDensityForZones && (
+                <Grid item xs={smallItemGridWidth()}>
+                  <OverviewItemCard
+                    isEditable={false}
+                    title={strings.PLANTING_DENSITY_OF_PLANTED_ZONES}
+                    contents={plantingDensityForZones}
+                    className={classes.infoCardStyle}
+                  />
+                </Grid>
+              )}
               <Grid item xs={smallItemGridWidth()}>
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA}
-                  contents={latestObservation.estimatedPlants?.toString() || ''}
+                  contents={
+                    latestObservation.estimatedPlants?.toString()
+                      ? `${latestObservation.estimatedPlants?.toString()} ${strings.PLANTS_PER_HECTARE}`
+                      : ''
+                  }
                   className={classes.infoCardStyle}
                 />
               </Grid>
