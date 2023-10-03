@@ -21,6 +21,7 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
 import ObservationsDataView from './ObservationsDataView';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
+import isEnabled from 'src/features';
 
 export type ObservationsHomeProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
@@ -42,6 +43,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const upcomingObservations = useAppSelector(selectUpcomingObservations);
   // get observation schedulable sites
   const newObservationsSchedulable = useAppSelector(selectObservationSchedulableSites).length;
+  const scheduleObservationsEnabled = isEnabled('Schedule Observations');
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
 
@@ -61,7 +63,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   }, [dispatch, selectedOrganization.id]);
 
   const actionButton = useMemo<ButtonProps | undefined>(() => {
-    if (!activeLocale || !newObservationsSchedulable) {
+    if (!activeLocale || !newObservationsSchedulable || !scheduleObservationsEnabled) {
       return undefined;
     }
     return {
@@ -69,7 +71,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       onClick: () => history.push(APP_PATHS.SCHEDULE_OBSERVATION),
       icon: 'plus',
     };
-  }, [activeLocale, history, newObservationsSchedulable]);
+  }, [activeLocale, history, newObservationsSchedulable, scheduleObservationsEnabled]);
 
   return (
     <PlantsPrimaryPage

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Box, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -11,6 +11,7 @@ import {
   ObservationPlantingSubzoneResults,
 } from 'src/types/Observations';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const columns = (): TableColumnType[] => [
+const defaultColumns = (): TableColumnType[] => [
   {
     key: 'completedDate',
     name: strings.DATE,
@@ -62,6 +63,9 @@ const columns = (): TableColumnType[] => [
     name: strings.MORTALITY_RATE,
     type: 'number',
   },
+];
+
+const scheduleObservationsColumn = (): TableColumnType[] => [
   {
     key: 'actionsMenu',
     name: '',
@@ -78,6 +82,15 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
   const [results, setResults] = useState<any>([]);
   const classes = useStyles();
   const theme = useTheme();
+  const scheduleObservationsEnabled = isEnabled('Schedule Observations');
+
+  const columns = useCallback((): TableColumnType[] => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
+  }, [activeLocale, scheduleObservationsEnabled]);
 
   useEffect(() => {
     setResults(

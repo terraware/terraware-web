@@ -22,6 +22,7 @@ import ObservationDetails from './details';
 import ObservationPlantingZoneDetails from './zone';
 import ObservationMonitoringPlotDetails from './plot';
 import { ScheduleObservation, RescheduleObservation } from './schedule';
+import isEnabled from 'src/features';
 
 /**
  * This page will route to the correct component based on url params
@@ -115,14 +116,20 @@ const ObservationsWrapper = (): JSX.Element => {
     }
   }, [activeLocale]);
 
+  const scheduleObservationsEnabled = isEnabled('Schedule Observations');
+
   return (
     <Switch>
-      <Route path={APP_PATHS.RESCHEDULE_OBSERVATION}>
-        <RescheduleObservation />
-      </Route>
-      <Route path={APP_PATHS.SCHEDULE_OBSERVATION}>
-        <ScheduleObservation />
-      </Route>
+      {scheduleObservationsEnabled && (
+        <Route path={APP_PATHS.RESCHEDULE_OBSERVATION}>
+          <RescheduleObservation />
+        </Route>
+      )}
+      {scheduleObservationsEnabled && (
+        <Route path={APP_PATHS.SCHEDULE_OBSERVATION}>
+          <ScheduleObservation />
+        </Route>
+      )}
       <Route path={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS}>
         <ObservationMonitoringPlotDetails />
       </Route>
