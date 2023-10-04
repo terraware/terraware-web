@@ -62,6 +62,7 @@ ADD_SEEDLING_BATCH,Add Seedling Batch
 ADD_SPECIES,Add Species
 ADD_SPECIES_MANUALLY_DESCRIPTION,"Enter scientific name and other optional fields manually, one species at a time."
 ADD_SUB_LOCATION,Add Sub-Location
+ADD_SUBSET_WEIGHT_AND_COUNT,Add Subset Weight And Count
 ADD_TEST,Add Test
 ADD_VIABILITY,Add Viability
 ADD_VIABILITY_TEST,Add Viability Test
@@ -84,6 +85,7 @@ ALL_SEEDS_WITHDRAWN_MSG,"As all seeds have been withdrawn, new withdrawals are d
 ALL_SENSORS_FOUND,All sensors found.
 ALREADY_INVITED_PERSON_ERROR,It looks like you have already added or invited this person. Please enter a unique email address or go to the existing person’s profile.
 AMOUNT_REMAINING,Amount ({0} remaining)
+AMOUNT_EST_COUNT,Amount (Est. Count)
 APPLY,Apply
 APPLY_FILTERS,Apply Filters
 APPLY_RESULT,Apply Result
@@ -311,6 +313,7 @@ END_DRYING_REMINDER,End-Drying Reminder
 END_DRYING_REMINDER_OFF,End-drying Reminder Off
 ENDANGERED,Endangered
 ENTER_SIX_DIGIT_KEY,Enter 6-digit key
+ENTER_SUBSET_WEIGHT_AND_COUNT,"Enter Subset Weight and Count ratio to determine approximate seed count when withdrawing by weight from a count quantity. (Conversely, the ratio will determine approximate remaining quantity when withdrawing by count from a weight quantity.) These fields are useful when counting tiny seeds is not practical and only required if you intend to withdraw from this accession to a nursery."
 ENVIRONMENTAL_NOTES,Environmental Notes
 ENVIRONMENTAL_NOTES_PLACEHOLDER,"Important notes about landscape, climate, and environmental conditions"
 EST_READY_DATE,Est. Ready Date
@@ -1005,6 +1008,7 @@ SEED_COLLECTION_DETAIL,Seed Details
 SEED_COLLECTION_DETAIL_DESC,Enter this accession’s seed information below.
 SEED_COUNT,Seed Count
 SEED_DASHBOARD,Seed Dashboard
+SEED_QUANTITY_BY,Seed Quantity By
 SEED_STORAGE_BEHAVIOR,Seed Storage Behavior
 SEED_TYPE,Seed Type
 SEED_WEIGHT,Seed Weight
@@ -1128,8 +1132,9 @@ SUB_LOCATIONS,Sub-Locations
 SUBMITTED,Submitted
 SUBMITTED_BY,Submitted By
 SUBSET_COUNT,Subset Count
-SUBSET_WEIGHT,Weight of Seed Subset
+SUBSET_WEIGHT,Subset Weight
 SUBSET_WEIGHT_ERROR,Subset weight should be less than seed weight
+SUBSET_WEIGHT_REQUIRED,"You must enter in a subset weight and count in order to determine approximate seed count when withdrawing to a nursery. This can be done by editing the quantity of this accession."
 SUBSHRUB,Subshrub
 SUBSTRATE,Substrate
 SUBTITLE_GET_STARTED,"To get started, please create your organization now. You'll also be able to set up and manage information on people and species."
@@ -1165,6 +1170,7 @@ TEST_METHOD,Test Method
 TEST_METHOD_REQUIRED,Test Method *
 TEST_TYPE,Test Type
 TESTING_STAFF,Testing Staff
+TILDE,"~"
 TIME,Time
 TIME_PERIOD,Time Period
 TIME_ZONE,Time Zone
@@ -1241,6 +1247,7 @@ TOTAL_PLANTS_PLANTED_HELPER_TEXT,Species not classified as “trees” in the sp
 TOTAL_QUANTITY,Total Quantity
 TOTAL_READY_QUANTITY,Total Ready Quantity
 TOTAL_SEED_COUNT,Total Seed Count
+TOTAL_SEED_WEIGHT,Total Seed Weight
 TOTAL_SEEDLINGS_SENT,Total Seedlings Sent
 TOTAL_SEEDS_COUNT_ESTIMATION,Total Seeds Count Estimation
 TOTAL_SEEDS_GERMINATED,Total Seeds Germinated
@@ -1313,6 +1320,7 @@ VIEW_SITES_ZONES_SUBZONES,"View Sites, Zones, and Subzones on a map."
 VINE,Vine,A type of plant.
 WAITING_TO_DOWNLOAD,Waiting to download...
 WATTS_VALUE,{0}W
+WEIGHT,Weight
 WEIGHT_GRAMS,Weight (g)
 WEIGHT_KILOGRAMS,Weight (kg)
 WEIGHT_MILLIGRAMS,Weight (mg)
@@ -1330,6 +1338,7 @@ WILD_IN_SITU_DESCRIPTION,Plants that occur naturally in wild areas and were not 
 WITH_MAP,With Map
 WITHDRAW,Withdraw
 WITHDRAW_ALL,Withdraw all
+WITHDRAW_BY,Withdraw By
 WITHDRAW_DATE_REQUIRED,Withdraw Date *
 WITHDRAW_FROM_BATCHES,Withdraw from Batches
 WITHDRAW_INSTRUCTIONS,Select a withdrawal purpose and enter the quantities from each batch to withdraw.
