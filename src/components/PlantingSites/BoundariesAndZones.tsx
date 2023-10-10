@@ -14,7 +14,6 @@ import { searchPlantingSiteZones } from 'src/redux/features/observations/plantin
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import { MapService } from 'src/services';
-import isEnabled from 'src/features';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { View } from 'src/components/common/ListMapSelector';
@@ -40,7 +39,6 @@ type BoundariesAndZonesProps = {
 export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesProps): JSX.Element {
   const [view, setView] = useState<View>('map');
   const [search, setSearch] = useState<string>('');
-  const trackingV2 = isEnabled('TrackingV2');
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
@@ -63,7 +61,7 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
           {strings.BOUNDARIES_AND_ZONES}
         </Typography>
       </Box>
-      {plantingSite.boundary && trackingV2 && (
+      {plantingSite.boundary && (
         <ListMapView
           style={{ padding: isMobile ? theme.spacing(0, 3, 3) : 0 }}
           initialView='map'
@@ -73,53 +71,9 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
           map={<PlantingSiteMapView plantingSite={plantingSite} data={data} search={search.trim()} />}
         />
       )}
-      {plantingSite.boundary && !trackingV2 && <PlantingSiteMapViewV1 plantingSite={plantingSite} />}
     </Box>
   );
 }
-
-/**
- * Map view for planting site (tracking v1)
- */
-function PlantingSiteMapViewV1({ plantingSite }: BoundariesAndZonesProps): JSX.Element {
-  const layerOptions: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones'];
-  const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(layerOptions);
-
-  const layerOptionLabels: Record<MapLayer, string> = {
-    'Planting Site': strings.PLANTING_SITE,
-    Zones: strings.ZONES,
-    'Sub-Zones': strings.SUBZONES,
-    'Monitoring Plots': strings.MONITORING_PLOTS,
-  };
-
-  return (
-    <Box display='flex' sx={{ flexGrow: 1 }}>
-      {plantingSite.boundary ? (
-        <PlantingSiteMap
-          mapData={MapService.getMapDataFromPlantingSite(plantingSite)}
-          style={{ borderRadius: '24px' }}
-          layers={includedLayers}
-          topRightMapControl={
-            <MapLayerSelect
-              initialSelection={layerOptions}
-              onUpdateSelection={(selection) => setIncludedLayers(selection)}
-              menuSections={[
-                layerOptions.map((opt) => ({
-                  label: layerOptionLabels[opt],
-                  value: opt,
-                })),
-              ]}
-            />
-          }
-        />
-      ) : null}
-    </Box>
-  );
-}
-
-/**
- * Map view for planting site (tracking v2)
- */
 
 type PlantingSiteMapViewProps = {
   plantingSite: PlantingSite;

@@ -27,7 +27,6 @@ import {
   requestPlantingSitesSearchResults,
   requestSiteReportedPlants,
 } from 'src/redux/features/tracking/trackingThunks';
-import isEnabled from 'src/features';
 
 type PlantingSiteSpecies = {
   id: number;
@@ -102,7 +101,6 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
   const [plantingDensity, setPlantingDensity] = useState<Record<string, number | string>>();
 
-  const trackingV2 = isEnabled('TrackingV2');
   const defaultTimeZone = useDefaultTimeZone();
   const currentObservation = useAppSelector((state) =>
     selectCurrentObservation(state, location.id, defaultTimeZone.get().id)
@@ -123,14 +121,14 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, location.id));
 
   useEffect(() => {
-    if (selectedOrganization && trackingV2) {
+    if (selectedOrganization) {
       dispatch(requestObservations(selectedOrganization.id));
       dispatch(requestObservationsResults(selectedOrganization.id));
       dispatch(requestSpecies(selectedOrganization.id));
       dispatch(requestPlantings(selectedOrganization.id));
       dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization, trackingV2]);
+  }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
     if (plantingSite?.id) {
@@ -487,7 +485,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               />
             </Grid>
           )}
-          {trackingV2 && isPlantingSite && latestObservation && (
+          {isPlantingSite && latestObservation && (
             <>
               <Grid item xs={smallItemGridWidth()}>
                 <OverviewItemCard

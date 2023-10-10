@@ -52,7 +52,6 @@ import {
   BatchBulkWithdrawWrapperComponent,
   SpeciesBulkWithdrawWrapperComponent,
 } from './components/Inventory/withdraw';
-import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { SpeciesService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
@@ -63,7 +62,6 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
 import { ReportList, ReportView, ReportEdit } from './components/Reports';
-import isEnabled from 'src/features';
 import Observations from 'src/components/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
 import PlantsDashboardV2 from 'src/components/PlantsV2';
@@ -177,7 +175,6 @@ function AppContent() {
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
-  const trackingV2 = isEnabled('TrackingV2');
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
 
@@ -435,10 +432,10 @@ function AppContent() {
               <NewNursery />
             </Route>
             <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
-              {trackingV2 ? <PlantsDashboardV2 /> : <PlantsDashboard />}
+              <PlantsDashboardV2 />
             </Route>
             <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
-              {trackingV2 ? <PlantsDashboardV2 /> : <PlantsDashboard />}
+              <PlantsDashboardV2 />
             </Route>
             <Route path={APP_PATHS.NURSERIES_VIEW}>
               <NurseryDetails />
@@ -499,11 +496,9 @@ function AppContent() {
               </Route>
             )}
 
-            {trackingV2 && (
-              <Route path={APP_PATHS.OBSERVATIONS}>
-                <Observations />
-              </Route>
-            )}
+            <Route path={APP_PATHS.OBSERVATIONS}>
+              <Observations />
+            </Route>
 
             {!isProduction && (
               <Route exact path={APP_PATHS.OPT_IN}>

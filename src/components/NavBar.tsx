@@ -11,7 +11,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import NavFooter from './common/Navbar/NavFooter';
 import { useOrganization } from 'src/providers/hooks';
 import LocaleSelector from './LocaleSelector';
-import isEnabled from '../features';
 import ReportService, { Reports } from 'src/services/ReportService';
 import { isAdmin } from 'src/utils/organization';
 
@@ -32,7 +31,6 @@ export default function NavBar({
   const [reports, setReports] = useState<Reports>([]);
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
-  const trackingV2 = isEnabled('TrackingV2');
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
   const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
@@ -114,7 +112,7 @@ export default function NavBar({
 
     const withdrawalLogMenu = (
       <NavItem
-        label={trackingV2 ? strings.WITHDRAWALS : strings.WITHDRAWAL_LOG}
+        label={strings.WITHDRAWALS}
         selected={!!isWithdrawalLogRoute || !!isReassignmentRoute}
         onClick={() => {
           closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
@@ -189,7 +187,7 @@ export default function NavBar({
             }}
             id='plants-dashboard'
           />
-          {trackingV2 && hasPlantingSites === true && (
+          {hasPlantingSites === true ? (
             <NavItem
               label={strings.OBSERVATIONS}
               selected={!!isObservationsRoute}
@@ -198,6 +196,8 @@ export default function NavBar({
               }}
               id='observations'
             />
+          ) : (
+            <></>
           )}
         </SubNavbar>
       </NavItem>

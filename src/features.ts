@@ -1,7 +1,7 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName = 'Show Production View' | 'TrackingV2' | 'Simple Map Editor' | 'Schedule Observations';
+export type FeatureName = 'Show Production View' | 'Simple Map Editor' | 'Schedule Observations';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'TrackingV2',
-    preferenceName: 'enableTrackingV2',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Show Tracking V2 features'],
-    disclosure: ['This is WIP.'],
   },
   {
     name: 'Simple Map Editor',
