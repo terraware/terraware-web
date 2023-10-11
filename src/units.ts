@@ -75,7 +75,7 @@ export function getUnitsForSystem(system: string) {
 }
 
 export function convertValue(value: number, unit: string) {
-  //We are just switching between imperial and metric, but don't care about the output unit
+  // We are just switching between imperial and metric, but don't care about the output unit
   switch (unit) {
     case 'Grams': {
       return `${(value * 0.035274).toFixed(2)} ${getUnitName('Ounces')}`;
@@ -99,7 +99,7 @@ export function convertValue(value: number, unit: string) {
 }
 
 export function convertUnits(value: number, unit: string, outputUnit: string) {
-  //We want to switch between specific units
+  // We want to switch between specific units
   switch (unit) {
     case 'Grams': {
       switch (outputUnit) {
