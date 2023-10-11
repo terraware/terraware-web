@@ -64,7 +64,7 @@ import { useAppVersion } from './hooks/useAppVersion';
 import { ReportList, ReportView, ReportEdit } from './components/Reports';
 import Observations from 'src/components/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
-import PlantsDashboardV2 from 'src/components/PlantsV2';
+import PlantsDashboard from 'src/components/Plants';
 import PlantingSites from 'src/components/PlantingSites';
 
 interface StyleProps {
@@ -432,10 +432,10 @@ function AppContent() {
               <NewNursery />
             </Route>
             <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
-              <PlantsDashboardV2 />
+              <PlantsDashboard />
             </Route>
             <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
-              <PlantsDashboardV2 />
+              <PlantsDashboard />
             </Route>
             <Route path={APP_PATHS.NURSERIES_VIEW}>
               <NurseryDetails />
