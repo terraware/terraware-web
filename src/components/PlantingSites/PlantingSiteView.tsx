@@ -14,7 +14,6 @@ import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones'
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import { getMonth } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
@@ -37,7 +36,6 @@ export default function PlantingSiteView(): JSX.Element {
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
   const history = useHistory();
   const tz = useLocationTimeZone().get(plantingSite);
-  const trackingV2 = isEnabled('TrackingV2');
 
   const gridSize = () => {
     if (isMobile) {
@@ -100,28 +98,24 @@ export default function PlantingSiteView(): JSX.Element {
               display={true}
             />
           </Grid>
-          {trackingV2 && (
-            <>
-              <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
-                <TextField
-                  label={strings.PLANTING_SEASON_START}
-                  id='planting-season-start'
-                  type='text'
-                  value={getMonth(plantingSite?.plantingSeasonStartMonth, activeLocale)}
-                  display={true}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
-                <TextField
-                  label={strings.PLANTING_SEASON_END}
-                  id='planting-season-end'
-                  type='text'
-                  value={getMonth(plantingSite?.plantingSeasonEndMonth, activeLocale)}
-                  display={true}
-                />
-              </Grid>
-            </>
-          )}
+          <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+            <TextField
+              label={strings.PLANTING_SEASON_START}
+              id='planting-season-start'
+              type='text'
+              value={getMonth(plantingSite?.plantingSeasonStartMonth, activeLocale)}
+              display={true}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+            <TextField
+              label={strings.PLANTING_SEASON_END}
+              id='planting-season-end'
+              type='text'
+              value={getMonth(plantingSite?.plantingSeasonEndMonth, activeLocale)}
+              display={true}
+            />
+          </Grid>
         </Grid>
         {plantingSite?.boundary && (
           <Grid container flexGrow={1}>

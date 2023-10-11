@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -45,7 +44,6 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
   const { selectedOrganization } = useOrganization();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const dispatch = useAppDispatch();
-  const trackingV2 = isEnabled('TrackingV2');
 
   const observationsResults = useAppSelector((state) =>
     selectPlantingSiteObservationsResults(state, Number(plantingSiteId))
@@ -59,14 +57,14 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
 
   useEffect(() => {
     const siteId = Number(plantingSiteId);
-    if (!isNaN(siteId) && trackingV2) {
+    if (!isNaN(siteId)) {
       dispatch(requestPlantingSiteObservationsResults(selectedOrganization.id, siteId));
     }
-  }, [dispatch, selectedOrganization.id, plantingSiteId, trackingV2]);
+  }, [dispatch, selectedOrganization.id, plantingSiteId]);
 
   // show spinner while initializing data
   if (
-    (trackingV2 && observationsResults === undefined && !observationsResultsError) ||
+    (observationsResults === undefined && !observationsResultsError) ||
     (plantingSites === undefined && !plantingSitesError)
   ) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
@@ -74,16 +72,12 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
 
   return (
     <Switch>
-      {trackingV2 && (
-        <Route path={APP_PATHS.PLANTING_SITES_SUBZONE_VIEW}>
-          <PlantingSiteSubzoneView />
-        </Route>
-      )}
-      {trackingV2 && (
-        <Route path={APP_PATHS.PLANTING_SITES_ZONE_VIEW}>
-          <PlantingSiteZoneView />
-        </Route>
-      )}
+      <Route path={APP_PATHS.PLANTING_SITES_SUBZONE_VIEW}>
+        <PlantingSiteSubzoneView />
+      </Route>
+      <Route path={APP_PATHS.PLANTING_SITES_ZONE_VIEW}>
+        <PlantingSiteZoneView />
+      </Route>
       <Route path={APP_PATHS.PLANTING_SITES_EDIT}>
         <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
       </Route>

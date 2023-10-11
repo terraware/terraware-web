@@ -1,6 +1,4 @@
-import isEnabled from 'src/features';
 import NurseryReassignment from './NurseryReassignment';
-import NurseryWithdrawalsBase from './NurseryWithdrawals';
 import NurseryPlantingsAndWithdrawals from './NurseryPlantingsAndWithdrawals';
 import NurseryWithdrawalsDetails from './NurseryWithdrawalsDetails';
 
@@ -11,13 +9,7 @@ type NurseryWithdrawalsProps = {
   reloadTracking: () => void;
 };
 export default function NurseryWithdrawals({ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
-  const trackingV2 = isEnabled('TrackingV2');
-
-  if (trackingV2) {
-    return <NurseryPlantingsAndWithdrawals reloadTracking={reloadTracking} />;
-  }
-
-  return <NurseryWithdrawalsBase />;
+  return <NurseryPlantingsAndWithdrawals reloadTracking={reloadTracking} />;
 }
 
 export { NurseryReassignment, NurseryWithdrawals, NurseryWithdrawalsDetails };

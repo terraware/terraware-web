@@ -51,7 +51,6 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const snackbar = useSnackbar();
   const [nameError, setNameError] = useState('');
   const [loaded, setLoaded] = useState(false);
-  const trackingV2 = isEnabled('TrackingV2');
   const selectedPlantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
 
   const defaultPlantingSite = (): PlantingSite => ({
@@ -210,7 +209,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                         tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
                       />
                     </Grid>
-                    {trackingV2 && selectedPlantingSite && (
+                    {selectedPlantingSite && (
                       <>
                         <Grid item xs={gridSize()} marginTop={isMobile ? 1 : 0}>
                           <TextField
