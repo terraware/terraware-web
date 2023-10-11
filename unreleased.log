@@ -1,3 +1,1 @@
-36c7a9e51 SW-4274 Opt-in flag to show/hide schedule/reschedule observations (#1723)
-cc88f742f SW-4249 Improvements to plant monitoring details in reports (#1724)
-530c7aba5 SW-4250 Fix planting density card not taking the whole space (#1722)
+0dd6c8e7a SW-4300 Gate schedule/reschedule observation actions by permitted role (#1727)
