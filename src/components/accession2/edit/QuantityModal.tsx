@@ -112,8 +112,6 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     }
   };
 
-  const gridSize = () => (isMobile ? 12 : 6);
-
   const onChangeStatus = (id: string, value: unknown) => {
     onChange(id, value);
   };
@@ -129,7 +127,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     setIsSubsetOpen(true);
   };
 
-  const onChangeQuantityBy = (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
+  const onChangeQuantityBy = (elem: React.ChangeEvent<HTMLInputElement>, value: string) => {
     if (value === 'count') {
       setIsByWeight(false);
     } else if (value === 'weight') {
