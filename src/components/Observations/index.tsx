@@ -23,6 +23,7 @@ import ObservationPlantingZoneDetails from './zone';
 import ObservationMonitoringPlotDetails from './plot';
 import { ScheduleObservation, RescheduleObservation } from './schedule';
 import isEnabled from 'src/features';
+import { isAdmin } from 'src/utils/organization';
 
 /**
  * This page will route to the correct component based on url params
@@ -71,6 +72,7 @@ export default function Observations(): JSX.Element {
 }
 
 const ObservationsWrapper = (): JSX.Element => {
+  const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -116,7 +118,7 @@ const ObservationsWrapper = (): JSX.Element => {
     }
   }, [activeLocale]);
 
-  const scheduleObservationsEnabled = isEnabled('Schedule Observations');
+  const scheduleObservationsEnabled = isEnabled('Schedule Observations') && isAdmin(selectedOrganization);
 
   return (
     <Switch>

@@ -22,6 +22,7 @@ import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageV
 import ObservationsDataView from './ObservationsDataView';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import isEnabled from 'src/features';
+import { isAdmin } from 'src/utils/organization';
 
 export type ObservationsHomeProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
@@ -63,7 +64,12 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   }, [dispatch, selectedOrganization.id]);
 
   const actionButton = useMemo<ButtonProps | undefined>(() => {
-    if (!activeLocale || !newObservationsSchedulable || !scheduleObservationsEnabled) {
+    if (
+      !activeLocale ||
+      !newObservationsSchedulable ||
+      !scheduleObservationsEnabled ||
+      !isAdmin(selectedOrganization)
+    ) {
       return undefined;
     }
     return {
@@ -71,7 +77,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       onClick: () => history.push(APP_PATHS.SCHEDULE_OBSERVATION),
       icon: 'plus',
     };
-  }, [activeLocale, history, newObservationsSchedulable, scheduleObservationsEnabled]);
+  }, [activeLocale, history, newObservationsSchedulable, scheduleObservationsEnabled, selectedOrganization]);
 
   return (
     <PlantsPrimaryPage

@@ -4,7 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import Table from 'src/components/common/table';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import {
   ObservationResults,
   ObservationPlantingZoneResults,
@@ -12,6 +12,7 @@ import {
 } from 'src/types/Observations';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
 import isEnabled from 'src/features';
+import { isAdmin } from 'src/utils/organization';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -78,11 +79,12 @@ export type OrgObservationsListViewProps = {
 };
 
 export default function OrgObservationsListView({ observationsResults }: OrgObservationsListViewProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const [results, setResults] = useState<any>([]);
   const classes = useStyles();
   const theme = useTheme();
-  const scheduleObservationsEnabled = isEnabled('Schedule Observations');
+  const scheduleObservationsEnabled = isEnabled('Schedule Observations') && isAdmin(selectedOrganization);
 
   const columns = useCallback((): TableColumnType[] => {
     if (!activeLocale) {
