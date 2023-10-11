@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/PlantsV2/components/PlantingSiteDensityCard.tsx</title>
+    <title>Code coverage report for src/components/Plants/components/HighestAndLowestMortalityRateSpeciesCard.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/PlantsV2/components</a> PlantingSiteDensityCard.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/Plants/components</a> HighestAndLowestMortalityRateSpeciesCard.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -155,13 +155,7 @@
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
 <a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -181,30 +175,28 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -256,95 +248,91 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import React, { useMemo } from 'react';
+import { Box, Divider, Typography, useTheme } from '@mui/material';
 import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
-import { getShortDate } from 'src/utils/dateFormatter';
-import { useLocalization } from 'src/providers';
-import ProgressChart from 'src/components/common/Chart/ProgressChart';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 &nbsp;
-type PlantingSiteDensityCardProps = {
+type HighestAndLowestMortalityRateSpeciesCardProps = {
   plantingSiteId: number;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantingSiteDensityCard(</span>{ plantingSiteId }: PlantingSiteDensityCardProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >HighestAndLowestMortalityRateSpeciesCard(</span>{
+  plantingSiteId,
+}: HighestAndLowestMortalityRateSpeciesCardProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
   const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
   );
-  const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
-  const locale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
-  const targetPlantingDensity = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const weightedSum =
-<span class="cstat-no" title="statement not covered" >      plantingSite?.plantingZones?.map(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.targetPlantingDensity * z.areaHa)</span>?.reduce(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b)</span> ?? 0;</span>
-<span class="cstat-no" title="statement not covered" >    return plantingSite?.areaHa ? weightedSum / +plantingSite.areaHa : 0;</span>
-  }, [plantingSite]);
+  let highestMortalityRate = <span class="cstat-no" title="statement not covered" >0;</span>
+  let highestSpecies = <span class="cstat-no" title="statement not covered" >'';</span>
 &nbsp;
-  const plantingDensity = <span class="cstat-no" title="statement not covered" >observation?.plantingDensity ?? 0;</span>
-  const percentageOfTargetDensity = <span class="cstat-no" title="statement not covered" >(100 * plantingDensity) / targetPlantingDensity;</span>
+<span class="cstat-no" title="statement not covered" >  observation?.species.forEach(<span class="fstat-no" title="function not covered" >(s</span>p) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (sp.mortalityRate !== undefined &amp;&amp; sp.mortalityRate !== null &amp;&amp; sp.mortalityRate &gt;= highestMortalityRate) {</span>
+<span class="cstat-no" title="statement not covered" >      highestMortalityRate = sp.mortalityRate;</span>
+<span class="cstat-no" title="statement not covered" >      highestSpecies = sp.speciesScientificName || sp.speciesName || '';</span>
+    }
+  });
 &nbsp;
-  const siteReportedPlants = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectSiteReportedPlants(state, plantingSiteId))</span>;</span>
-  const numPlantedSinceObs = <span class="cstat-no" title="statement not covered" >siteReportedPlants?.plantsSinceLastObservation ?? 0;</span>
+  let lowestMortalityRate = <span class="cstat-no" title="statement not covered" >100;</span>
+  let lowestSpecies = <span class="cstat-no" title="statement not covered" >'';</span>
 &nbsp;
-  const newDensityEstimate = <span class="cstat-no" title="statement not covered" >plantingSite?.areaHa</span>
-    ? plantingDensity + numPlantedSinceObs / plantingSite.areaHa
-    : plantingDensity;
+<span class="cstat-no" title="statement not covered" >  observation?.species.forEach(<span class="fstat-no" title="function not covered" >(s</span>p) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (sp.mortalityRate !== undefined &amp;&amp; sp.mortalityRate !== null &amp;&amp; sp.mortalityRate &lt;= lowestMortalityRate) {</span>
+<span class="cstat-no" title="statement not covered" >      lowestMortalityRate = sp.mortalityRate;</span>
+<span class="cstat-no" title="statement not covered" >      lowestSpecies = sp.speciesScientificName || sp.speciesName || '';</span>
+    }
+  });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;OverviewItemCard
       isEditable={false}
       contents={
-        &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
-          &lt;Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}&gt;
-            {observation?.completedTime
-              ? strings.formatString(
-                  strings.PLANTING_DENSITY_CARD_TITLE,
-                  getShortDate(observation.completedTime, locale.activeLocale)
-                )
-              : ''}
-          &lt;/Typography&gt;
-          &lt;Box display={'flex'} alignItems='baseline' sx={{ flexFlow: 'row wrap' }}&gt;
-            &lt;Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}&gt;
-              {Math.round(plantingDensity)}
-            &lt;/Typography&gt;
-            &lt;Typography fontSize='24px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}&gt;
-              {strings.PLANTS_PER_HECTARE}
-            &lt;/Typography&gt;
-          &lt;/Box&gt;
-          &lt;Typography
-            fontSize='20px'
-            fontWeight={600}
-            lineHeight={1}
-            marginBottom={theme.spacing(2)}
-            textAlign='center'
-          &gt;
-            {strings.formatString(strings.PERCENTAGE_OF_TARGET_PLANTING_DENSITY, Math.round(percentageOfTargetDensity))}
-          &lt;/Typography&gt;
-          &lt;ProgressChart value={plantingDensity} target={targetPlantingDensity} /&gt;
-          &lt;Typography
-            fontSize='16px'
-            fontWeight={600}
-            lineHeight={1}
-            marginTop={theme.spacing(2)}
-            marginBottom={theme.spacing(2)}
-            textAlign='right'
-            color={theme.palette.TwClrBaseBlue500}
-          &gt;
-            {strings.formatString(strings.TARGET_DENSITY_PLANTS_PER_HECTARE, Math.round(targetPlantingDensity))}
+        &lt;Box display='flex' flexDirection='column'&gt;
+          &lt;Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(3)}&gt;
+            {strings.HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE}
           &lt;/Typography&gt;
           &lt;Typography fontSize='12px' fontWeight={400}&gt;
-            {strings.PLANTING_DENSITY_DESCRIPTION}
+            {strings.HIGHEST}
           &lt;/Typography&gt;
-          {numPlantedSinceObs &gt; 0 &amp;&amp; (
-            &lt;Typography fontSize='12px' fontWeight={400}&gt;
-              {strings.formatString(strings.PLANTING_DENSITY_UPDATE_DESCRIPTION, Math.round(newDensityEstimate))}
-            &lt;/Typography&gt;
+          {highestSpecies &amp;&amp; (
+            &lt;&gt;
+              &lt;Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(2)}&gt;
+                {highestSpecies}
+              &lt;/Typography&gt;
+              &lt;Typography fontSize='24px' fontWeight={600}&gt;
+                &lt;FormattedNumber value={highestMortalityRate || 0} /&gt;%
+              &lt;/Typography&gt;
+              {(!lowestSpecies || lowestSpecies === highestSpecies) &amp;&amp; (
+                &lt;Typography
+                  fontWeight={400}
+                  fontSize='12px'
+                  lineHeight='16px'
+                  color={theme.palette.gray[800]}
+                  marginTop={2}
+                &gt;
+                  {strings.SINGLE_SPECIES_MORTALITY_RATE_MESSAGE}
+                &lt;/Typography&gt;
+              )}
+            &lt;/&gt;
+          )}
+          {lowestSpecies &amp;&amp; lowestSpecies !== highestSpecies &amp;&amp; (
+            &lt;&gt;
+              &lt;Divider sx={{ marginY: theme.spacing(2) }} /&gt;
+              &lt;Typography fontSize='12px' fontWeight={400}&gt;
+                {strings.LOWEST}
+              &lt;/Typography&gt;
+              &lt;Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(2)}&gt;
+                {lowestSpecies}
+              &lt;/Typography&gt;
+              &lt;Typography fontSize='24px' fontWeight={600}&gt;
+                &lt;FormattedNumber value={lowestMortalityRate || 0} /&gt;%
+              &lt;/Typography&gt;
+            &lt;/&gt;
           )}
         &lt;/Box&gt;
       }
@@ -358,7 +346,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-11T13:13:24.173Z
+                at 2023-10-11T15:21:49.180Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

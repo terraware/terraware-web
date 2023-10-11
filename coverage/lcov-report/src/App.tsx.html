@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/106</span>
+                <span class='fraction'>0/105</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/99</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/100</span>
+                <span class='fraction'>0/99</span>
             </div>
         
             
@@ -628,12 +628,7 @@
 <a name='L563'></a><a href='#L563'>563</a>
 <a name='L564'></a><a href='#L564'>564</a>
 <a name='L565'></a><a href='#L565'>565</a>
-<a name='L566'></a><a href='#L566'>566</a>
-<a name='L567'></a><a href='#L567'>567</a>
-<a name='L568'></a><a href='#L568'>568</a>
-<a name='L569'></a><a href='#L569'>569</a>
-<a name='L570'></a><a href='#L570'>570</a>
-<a name='L571'></a><a href='#L571'>571</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L566'></a><a href='#L566'>566</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -706,8 +701,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -814,7 +807,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1095,8 +1087,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1257,7 +1247,6 @@ import {
   BatchBulkWithdrawWrapperComponent,
   SpeciesBulkWithdrawWrapperComponent,
 } from './components/Inventory/withdraw';
-import PlantsDashboard from './components/Plants';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { SpeciesService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
@@ -1268,10 +1257,9 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
 import { ReportList, ReportView, ReportEdit } from './components/Reports';
-import isEnabled from 'src/features';
 import Observations from 'src/components/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
-import PlantsDashboardV2 from 'src/components/PlantsV2';
+import PlantsDashboard from 'src/components/Plants';
 import PlantingSites from 'src/components/PlantingSites';
 &nbsp;
 interface StyleProps {
@@ -1382,7 +1370,6 @@ function <span class="fstat-no" title="function not covered" >AppContent(</span>
   const plantingSites: PlantingSite[] | undefined = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
   const [plantingSubzoneNames, setPlantingSubzoneNames] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;number, string&gt;&gt;({});</span>
   const [showNavBar, setShowNavBar] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
-  const trackingV2 = <span class="cstat-no" title="statement not covered" >isEnabled('TrackingV2');</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
@@ -1640,10 +1627,10 @@ function <span class="fstat-no" title="function not covered" >AppContent(</span>
               &lt;NewNursery /&gt;
             &lt;/Route&gt;
             &lt;Route exact path={APP_PATHS.PLANTS_DASHBOARD}&gt;
-              {trackingV2 ? &lt;PlantsDashboardV2 /&gt; : &lt;PlantsDashboard /&gt;}
+              &lt;PlantsDashboard /&gt;
             &lt;/Route&gt;
             &lt;Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}&gt;
-              {trackingV2 ? &lt;PlantsDashboardV2 /&gt; : &lt;PlantsDashboard /&gt;}
+              &lt;PlantsDashboard /&gt;
             &lt;/Route&gt;
             &lt;Route path={APP_PATHS.NURSERIES_VIEW}&gt;
               &lt;NurseryDetails /&gt;
@@ -1704,11 +1691,9 @@ function <span class="fstat-no" title="function not covered" >AppContent(</span>
               &lt;/Route&gt;
             )}
 &nbsp;
-            {trackingV2 &amp;&amp; (
-              &lt;Route path={APP_PATHS.OBSERVATIONS}&gt;
-                &lt;Observations /&gt;
-              &lt;/Route&gt;
-            )}
+            &lt;Route path={APP_PATHS.OBSERVATIONS}&gt;
+              &lt;Observations /&gt;
+            &lt;/Route&gt;
 &nbsp;
             {!isProduction &amp;&amp; (
               &lt;Route exact path={APP_PATHS.OPT_IN}&gt;
@@ -1780,7 +1765,7 @@ export default function <span class="fstat-no" title="function not covered" >App
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-11T13:13:24.173Z
+                at 2023-10-11T15:21:49.180Z
             </div>
         <script src="../prettify.js"></script>
         <script>

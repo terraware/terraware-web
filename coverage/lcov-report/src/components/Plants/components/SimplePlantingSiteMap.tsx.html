@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Plants/TotalCount.tsx</title>
+    <title>Code coverage report for src/components/Plants/components/SimplePlantingSiteMap.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../prettify.css" />
-    <link rel="stylesheet" href="../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../sort-arrow-sprite.png);
+            background-image: url(../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Plants</a> TotalCount.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/Plants/components</a> SimplePlantingSiteMap.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -94,7 +94,10 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -107,13 +110,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -121,40 +131,39 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import { cardTitleStyle } from './PlantingSiteDetails';
-import { useUser } from 'src/providers';
-import { useNumberFormatter } from 'src/utils/useNumber';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Box, CircularProgress } from '@mui/material';
+import { useMemo } from 'react';
+import { useAppSelector } from 'src/redux/store';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { PlantingSiteMap } from 'src/components/Map';
+import { MapService } from 'src/services';
 &nbsp;
-type TotalCountProps = {
-  totalCount?: number;
+type SimplePlantingSiteMapProps = {
+  plantingSiteId: number;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >TotalCount(</span>props: TotalCountProps): JSX.Element {
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
+export default function <span class="fstat-no" title="function not covered" >SimplePlantingSiteMap(</span>{ plantingSiteId }: SimplePlantingSiteMapProps): JSX.Element {
+  const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
 &nbsp;
-  const { totalCount } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const mapData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!plantingSite?.boundary) {</span>
+<span class="cstat-no" title="statement not covered" >      return undefined;</span>
+    }
 &nbsp;
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(user?.locale),</span> [numberFormatter, user?.locale]);</span>
+<span class="cstat-no" title="statement not covered" >    return MapService.getMapDataFromPlantingSite(plantingSite);</span>
+  }, [plantingSite]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;&gt;
-      &lt;Typography sx={cardTitleStyle}&gt;{strings.TOTAL_NUMBER_OF_PLANTS}&lt;/Typography&gt;
-      &lt;Box sx={{ marginTop: theme.spacing(3) }}&gt;
-        &lt;Typography fontSize='32px' fontWeight={600}&gt;
-          {numericFormatter.format(totalCount || 0)}
-        &lt;/Typography&gt;
+<span class="cstat-no" title="statement not covered" >  if (plantingSite?.boundary) {</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;PlantingSiteMap mapData={mapData!} style={{ width: '100%', borderRadius: '24px' }} layers={['Planting Site']} /&gt;
+    );
+  } else {
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;Box sx={{ position: 'fixed', top: '50%', left: '50%' }}&gt;
+        &lt;CircularProgress /&gt;
       &lt;/Box&gt;
-    &lt;/&gt;
-  );
+    );
+  }
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -163,16 +172,16 @@ export default function <span class="fstat-no" title="function not covered" >Tot
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-11T13:13:24.173Z
+                at 2023-10-11T15:21:49.180Z
             </div>
-        <script src="../../../prettify.js"></script>
+        <script src="../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../sorter.js"></script>
-        <script src="../../../block-navigation.js"></script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
     </body>
 </html>
     

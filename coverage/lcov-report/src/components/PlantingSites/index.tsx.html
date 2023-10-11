@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -152,14 +152,7 @@
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -205,7 +198,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -233,10 +225,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -258,7 +246,6 @@ import { useParams } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -300,7 +287,6 @@ export function <span class="fstat-no" title="function not covered" >PlantingSit
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { plantingSiteId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ plantingSiteId: string }&gt;();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const trackingV2 = <span class="cstat-no" title="statement not covered" >isEnabled('TrackingV2');</span>
 &nbsp;
   const observationsResults = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    selectPlantingSiteObservationsResults(state, Number(plantingSiteId))</span>
@@ -314,14 +300,14 @@ export function <span class="fstat-no" title="function not covered" >PlantingSit
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const siteId = <span class="cstat-no" title="statement not covered" >Number(plantingSiteId);</span>
-<span class="cstat-no" title="statement not covered" >    if (!isNaN(siteId) &amp;&amp; trackingV2) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!isNaN(siteId)) {</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(requestPlantingSiteObservationsResults(selectedOrganization.id, siteId));</span>
     }
-  }, [dispatch, selectedOrganization.id, plantingSiteId, trackingV2]);
+  }, [dispatch, selectedOrganization.id, plantingSiteId]);
 &nbsp;
   // show spinner while initializing data
 <span class="cstat-no" title="statement not covered" >  if (</span>
-    (trackingV2 &amp;&amp; observationsResults === undefined &amp;&amp; !observationsResultsError) ||
+    (observationsResults === undefined &amp;&amp; !observationsResultsError) ||
     (plantingSites === undefined &amp;&amp; !plantingSitesError)
   ) {
 <span class="cstat-no" title="statement not covered" >    return &lt;CircularProgress sx={{ margin: 'auto' }} /&gt;;</span>
@@ -329,16 +315,12 @@ export function <span class="fstat-no" title="function not covered" >PlantingSit
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Switch&gt;
-      {trackingV2 &amp;&amp; (
-        &lt;Route path={APP_PATHS.PLANTING_SITES_SUBZONE_VIEW}&gt;
-          &lt;PlantingSiteSubzoneView /&gt;
-        &lt;/Route&gt;
-      )}
-      {trackingV2 &amp;&amp; (
-        &lt;Route path={APP_PATHS.PLANTING_SITES_ZONE_VIEW}&gt;
-          &lt;PlantingSiteZoneView /&gt;
-        &lt;/Route&gt;
-      )}
+      &lt;Route path={APP_PATHS.PLANTING_SITES_SUBZONE_VIEW}&gt;
+        &lt;PlantingSiteSubzoneView /&gt;
+      &lt;/Route&gt;
+      &lt;Route path={APP_PATHS.PLANTING_SITES_ZONE_VIEW}&gt;
+        &lt;PlantingSiteZoneView /&gt;
+      &lt;/Route&gt;
       &lt;Route path={APP_PATHS.PLANTING_SITES_EDIT}&gt;
         &lt;PlantingSiteCreate reloadPlantingSites={reloadTracking} /&gt;
       &lt;/Route&gt;
@@ -355,7 +337,7 @@ export function <span class="fstat-no" title="function not covered" >PlantingSit
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-11T13:13:24.173Z
+                at 2023-10-11T15:21:49.180Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Plants/PlantBySpeciesChart.tsx</title>
+    <title>Code coverage report for src/components/Plants/components/TotalMoratlityRateCard.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../prettify.css" />
-    <link rel="stylesheet" href="../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../sort-arrow-sprite.png);
+            background-image: url(../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Plants</a> PlantBySpeciesChart.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/Plants/components</a> TotalMoratlityRateCard.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -107,7 +107,16 @@
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -121,15 +130,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -151,48 +153,61 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
-import { cardTitleStyle } from './PlantingSiteDetails';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
-import BarChart from 'src/components/common/Chart/BarChart';
+import { Box, Typography, useTheme } from '@mui/material';
+import { getShortDate } from 'src/utils/dateFormatter';
+import { useLocalization } from 'src/providers';
+import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useAppSelector } from 'src/redux/store';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 &nbsp;
-export interface PlantBySpeciesChartProps {
-  plantsBySpecies?: { [key: string]: number } | undefined;
-}
+type TotalMortalityRateCardProps = {
+  plantingSiteId: number;
+};
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantBySpeciesChart(</span>{ plantsBySpecies }: PlantBySpeciesChartProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >TotalMortalityRateCard(</span>{ plantingSiteId }: TotalMortalityRateCardProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const [labels, setLabels] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
-  const [values, setValues] = <span class="cstat-no" title="statement not covered" >useState&lt;number[]&gt;();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (plantsBySpecies) {</span>
-<span class="cstat-no" title="statement not covered" >      setLabels(Object.keys(plantsBySpecies));</span>
-<span class="cstat-no" title="statement not covered" >      setValues(Object.values(plantsBySpecies));</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      setLabels([]);</span>
-<span class="cstat-no" title="statement not covered" >      setValues([]);</span>
-    }
-  }, [plantsBySpecies]);
+  const locale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
+  const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
+  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;&gt;
-      &lt;Typography sx={cardTitleStyle}&gt;{strings.NUMBER_OF_PLANTS_BY_SPECIES}&lt;/Typography&gt;
-      &lt;Box sx={{ marginTop: theme.spacing(3), display: 'flex', flexDirection: 'column', flexGrow: 1 }}&gt;
-        &lt;BarChart
-          chartId='plantsBySpecies'
-          chartData={{
-            labels: labels ?? [],
-            datasets: [
-              {
-                values: values ?? [],
-              },
-            ],
-          }}
-        /&gt;
-      &lt;/Box&gt;
-    &lt;/&gt;
+    &lt;OverviewItemCard
+      isEditable={false}
+      contents={
+        &lt;Box display='flex' flexDirection='column'&gt;
+          &lt;Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}&gt;
+            {strings.formatString(
+              strings.MORTALITY_RATE_CARD_TITLE,
+              observation?.completedTime ? getShortDate(observation.completedTime, locale.activeLocale) : ''
+            )}
+          &lt;/Typography&gt;
+          &lt;Box display='flex' sx={{ flexFlow: 'row wrap' }}&gt;
+            &lt;Typography fontSize='84px' fontWeight={600} lineHeight={1}&gt;
+              &lt;FormattedNumber value={observation?.mortalityRate || 0} /&gt;
+            &lt;/Typography&gt;
+            &lt;Typography fontSize='84px' fontWeight={600} lineHeight={1}&gt;
+              %
+            &lt;/Typography&gt;
+          &lt;/Box&gt;
+          &lt;Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}&gt;
+            {strings.MORTALITY_RATE_CLARIFICATION}
+          &lt;/Typography&gt;
+        &lt;/Box&gt;
+      }
+    /&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -202,16 +217,16 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-11T13:13:24.173Z
+                at 2023-10-11T15:21:49.180Z
             </div>
-        <script src="../../../prettify.js"></script>
+        <script src="../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../sorter.js"></script>
-        <script src="../../../block-navigation.js"></script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
     </body>
 </html>
     

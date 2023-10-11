@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/178</span>
+                <span class='fraction'>0/177</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/255</span>
+                <span class='fraction'>0/252</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/167</span>
+                <span class='fraction'>0/166</span>
             </div>
         
             
@@ -855,10 +855,7 @@
 <a name='L790'></a><a href='#L790'>790</a>
 <a name='L791'></a><a href='#L791'>791</a>
 <a name='L792'></a><a href='#L792'>792</a>
-<a name='L793'></a><a href='#L793'>793</a>
-<a name='L794'></a><a href='#L794'>794</a>
-<a name='L795'></a><a href='#L795'>795</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L793'></a><a href='#L793'>793</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -961,7 +958,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1680,7 +1676,6 @@ import {
   requestPlantingSitesSearchResults,
   requestSiteReportedPlants,
 } from 'src/redux/features/tracking/trackingThunks';
-import isEnabled from 'src/features';
 &nbsp;
 type PlantingSiteSpecies = {
   id: number;
@@ -1755,7 +1750,6 @@ export default function <span class="fstat-no" title="function not covered" >Loc
   const [plantingSiteSpecies, setPlantingSiteSpecies] = <span class="cstat-no" title="statement not covered" >useState&lt;PlantingSiteSpecies[]&gt;([]);</span>
   const [plantingDensity, setPlantingDensity] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;string, number | string&gt;&gt;();</span>
 &nbsp;
-  const trackingV2 = <span class="cstat-no" title="statement not covered" >isEnabled('TrackingV2');</span>
   const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
   const currentObservation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    selectCurrentObservation(state, location.id, defaultTimeZone.get().id)</span>
@@ -1776,14 +1770,14 @@ export default function <span class="fstat-no" title="function not covered" >Loc
   const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, location.id))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization &amp;&amp; trackingV2) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(requestObservations(selectedOrganization.id));</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(requestObservationsResults(selectedOrganization.id));</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(requestSpecies(selectedOrganization.id));</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(requestPlantings(selectedOrganization.id));</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));</span>
     }
-  }, [dispatch, selectedOrganization, trackingV2]);
+  }, [dispatch, selectedOrganization]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (plantingSite?.id) {</span>
@@ -2140,7 +2134,7 @@ export default function <span class="fstat-no" title="function not covered" >Loc
               /&gt;
             &lt;/Grid&gt;
           )}
-          {trackingV2 &amp;&amp; isPlantingSite &amp;&amp; latestObservation &amp;&amp; (
+          {isPlantingSite &amp;&amp; latestObservation &amp;&amp; (
             &lt;&gt;
               &lt;Grid item xs={smallItemGridWidth()}&gt;
                 &lt;OverviewItemCard
@@ -2452,7 +2446,7 @@ const transformNumericValue = <span class="cstat-no" title="statement not covere
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-11T13:13:24.173Z
+                at 2023-10-11T15:21:49.180Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
