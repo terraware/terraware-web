@@ -860,10 +860,16 @@ REACH_OUT_TO_ADMIN_TITLE,Please reach out to an administrator from your organiza
 READY,Ready
 READY_QUANTITY,Ready Quantity
 READY_QUANTITY_REQUIRED,Ready Quantity *
+REASON,Reason
 REASSIGN,Reassign
 REASSIGN_SEEDLINGS,Reassign Seedlings
 REASSIGN_SEEDLINGS_DESCRIPTION,"Enter the new subzone, new quantity, and notes for the species you want to reassign seedlings for. The seedlings for rows you leave empty will not be reassigned."
 REASSIGNMENT,Reassignment
+REASSIGNMENT_DURATION,Reassignment Duration
+REASSIGNMENT_REQUEST_ERROR_TITLE,Unable to Complete Reassignment Request
+REASSIGNMENT_REQUEST_ERROR_DESCRIPTION,No alternate plots were available to reassign {0}. Reach out to Terraformation to discuss further.
+REASSIGNMENT_REQUEST_PROCESSED_TITLE,Reassignment Request Processed
+REASSIGNMENT_REQUEST_PROCESSED_DESCRIPTION,Plot {0} has been reassigned to {1}.
 RECALCITRANT,Recalcitrant
 RECEIVE_EMAIL_NOTIFICATIONS,Receive Email Notifications
 RECEIVED_DATE,Received Date
@@ -933,6 +939,8 @@ REPORT_VIEW_QUARTERLY,View Quarterly Report
 REPORTED_PLANTS_PER_SPECIES_CARD_TITLE,What is the reported number of plants planted per species?
 REPORTS,Reports
 REQUEST_FEATURE,Request Feature
+REQUEST_REASSIGNMENT,Request Reassignment
+REQUEST_REASSIGNMENT_JUSTIFICATION,Provide a reason for requesting a reassignment of this plot’s location.
 REQUIRED,Required
 REQUIRED_FIELD,Required field
 REQUIRED_VALUE_AND_UNITS_FIELD,Value and units required
@@ -1031,6 +1039,7 @@ SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2,Detailed sites allow you to track the lo
 SELECT_PLANTING_SITE_TYPE_DESCRIPTION_3,"Please note that if you create a simple site, you won’t be able to change it to a detailed site later on."
 SELECT_SEED_BANK,Select Seed Bank
 SELECT_SEED_BANK_INFO,Accessions require a seed bank storage location. Please select a seed bank.
+SEND_REQUEST,Send Request
 SEND_TO_NURSERY,Send to Nursery
 SENDING,Sending...
 SENSOR_KIT,Sensor Kit

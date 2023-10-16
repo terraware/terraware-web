@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { Box, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import Table from 'src/components/common/table';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -84,6 +86,7 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
   const [results, setResults] = useState<any>([]);
   const classes = useStyles();
   const theme = useTheme();
+  const history = useHistory();
   const scheduleObservationsEnabled = isEnabled('Schedule Observations') && isAdmin(selectedOrganization);
 
   const columns = useCallback((): TableColumnType[] => {
@@ -93,6 +96,13 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
 
     return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
   }, [activeLocale, scheduleObservationsEnabled]);
+
+  const goToRescheduleObservation = useCallback(
+    (observationId: number) => {
+      history.push(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
+    },
+    [history]
+  );
 
   useEffect(() => {
     setResults(
@@ -123,7 +133,7 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
         columns={columns}
         rows={results}
         orderBy='completedDate'
-        Renderer={OrgObservationsRenderer(theme, classes, activeLocale)}
+        Renderer={OrgObservationsRenderer(theme, classes, activeLocale, goToRescheduleObservation)}
       />
     </Box>
   );

@@ -1,7 +1,11 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName = 'Show Production View' | 'Simple Map Editor' | 'Schedule Observations';
+export type FeatureName =
+  | 'Show Production View'
+  | 'Simple Map Editor'
+  | 'Schedule Observations'
+  | 'Replace Observation Plot';
 
 export type Feature = {
   name: FeatureName;
@@ -51,7 +55,16 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Allow scheduling and rescheduling observations.'],
-    disclosure: ['This works but notifications are WIP.'],
+    disclosure: ['None'],
+  },
+  {
+    name: 'Replace Observation Plot',
+    preferenceName: 'enableReplaceObservationPlot',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Allow replacement of observation plots that haven not been monitored.'],
+    disclosure: ['This is WIP'],
   },
 ];
 

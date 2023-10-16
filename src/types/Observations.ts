@@ -100,17 +100,6 @@ export const getPlotStatus = (status?: MonitoringPlotStatus): string => {
   }
 };
 
-export const getReplaceObservationPlotDuration = (duration: ReplaceObservationPlotDuration): string => {
-  switch (duration) {
-    case 'Temporary':
-      return strings.TEMPORARY;
-    case 'LongTerm':
-      return strings.LONG_TERM_PERMANENT;
-    default:
-      return '';
-  }
-};
-
 export type Aggregation = {
   subzones: Record<number, Set<number>>;
   plots: Record<number, ObservationMonitoringPlotResultsPayload>;
