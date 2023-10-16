@@ -3,8 +3,10 @@ import HttpService, { Response } from './HttpService';
 import {
   Observation,
   ObservationResultsPayload,
-  ScheduleObservationRequestPayload,
+  ReplaceObservationPlotRequestPayload,
+  ReplaceObservationPlotResponsePayload,
   RescheduleObservationRequestPayload,
+  ScheduleObservationRequestPayload,
 } from 'src/types/Observations';
 
 /**
@@ -14,6 +16,7 @@ import {
 const OBSERVATIONS_RESULTS_ENDPOINT = '/api/v1/tracking/observations/results';
 const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
 const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
+const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
 
 type ObservationsResultsResponsePayload =
   paths[typeof OBSERVATIONS_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -90,14 +93,35 @@ const rescheduleObservation = async (
     entity: request,
   });
 
+const replaceObservationPlot = async (
+  observationId: number,
+  plotId: number,
+  request: ReplaceObservationPlotRequestPayload
+): Promise<Response & ReplaceObservationPlotResponsePayload> => {
+  const serverResponse: Response = await HttpService.root(REPLACE_OBSERVATION_PLOT_ENDPOINT).post({
+    urlReplacements: {
+      '{observationId}': observationId.toString(),
+      '{plotId}': plotId.toString(),
+    },
+    entity: request,
+  });
+
+  return {
+    ...serverResponse,
+    addedMonitoringPlotIds: serverResponse.data?.addedMonitoringPlotIds ?? [],
+    removedMonitoringPlotIds: serverResponse.data?.removedMonitoringPlotIds ?? [],
+  };
+};
+
 /**
  * Exported functions
  */
 const ObservationsService = {
   listObservationsResults,
   listObservations,
-  scheduleObservation,
+  replaceObservationPlot,
   rescheduleObservation,
+  scheduleObservation,
 };
 
 export default ObservationsService;

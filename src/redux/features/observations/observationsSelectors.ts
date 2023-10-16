@@ -177,6 +177,11 @@ export const selectScheduleObservation = (state: RootState, requestId: string) =
 export const selectRescheduleObservation = (state: RootState, requestId: string) =>
   (state.rescheduleObservation as any)[requestId];
 
+// replace observation plot selectors
+
+export const selectReplaceObservationPlot = (state: RootState, requestId: string) =>
+  (state.replaceObservationPlot as any)[requestId];
+
 // get the current observation for a planting site
 export const selectCurrentObservation = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
