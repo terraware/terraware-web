@@ -19,7 +19,7 @@ import AggregatedPlantsStats from 'src/components/Observations/common/Aggregated
 import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
 import isEnabled from 'src/features';
 import { isManagerOrHigher } from 'src/utils/organization';
-import ReplaceObservationPlotModal from './ReplaceObservationPlotModal';
+import ReplaceObservationPlotModal from 'src/components/Observations/replacePlot/ReplaceObservationPlotModal';
 
 const defaultColumns = (): TableColumnType[] => [
   { key: 'monitoringPlotName', name: strings.MONITORING_PLOT, type: 'string' },

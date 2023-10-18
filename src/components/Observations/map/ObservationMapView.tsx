@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&.mapboxgl-popup': {
       maxWidth: '324px !important', // !important to override a default mapbox style
     },
+    '& .mapboxgl-popup-content': {
+      padding: '0px !important',
+    },
   },
 }));
 
@@ -130,12 +133,10 @@ export default function ObservationMapView({
 
     return (
       <TooltipContents
+        monitoringPlot={entity}
+        observationId={selectedObservation?.observationId}
         observationState={selectedObservation?.state}
         title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
-        numPlants={entity?.totalPlants}
-        numSpecies={entity?.totalSpecies}
-        plantingDensity={entity?.plantingDensity}
-        percentMortality={entity?.mortalityRate}
       />
     );
   };
