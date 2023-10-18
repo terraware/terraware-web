@@ -24,6 +24,10 @@ export const isAdmin = (organization: Organization | undefined) => {
   return HighOrganizationRolesValues.includes(organization?.role || '');
 };
 
+export const isManagerOrHigher = (organization: Organization | undefined) => {
+  return organization?.role === 'Manager' || isAdmin(organization);
+};
+
 export const isTfContact = (role: OrganizationRole | undefined) => role === 'Terraformation Contact';
 
 export const isContributor = (roleHolder: Organization | OrganizationUser | undefined) => {

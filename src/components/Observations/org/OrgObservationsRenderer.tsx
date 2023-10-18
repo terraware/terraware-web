@@ -7,7 +7,7 @@ import Link from 'src/components/common/Link';
 import { TextTruncated } from '@terraware/web-components';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { ObservationState, getStatus } from 'src/types/Observations';
-import ActionsMenu from './ActionsMenu';
+import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import strings from 'src/strings';
 
 const COLUMN_WIDTH = 250;
@@ -15,7 +15,12 @@ const COLUMN_WIDTH = 250;
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
 
 const OrgObservationsRenderer =
-  (theme: Theme, classes: any, locale: string | undefined | null) =>
+  (
+    theme: Theme,
+    classes: any,
+    locale: string | undefined | null,
+    goToRescheduleObservation: (observationId: number) => void
+  ) =>
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
@@ -65,7 +70,21 @@ const OrgObservationsRenderer =
     }
 
     if (column.key === 'actionsMenu') {
-      return <CellRenderer {...props} value={<ActionsMenu observationId={row.observationId} state={row.state} />} />;
+      const tableMenuItem = (
+        <TableRowPopupMenu
+          menuItems={[
+            {
+              disabled: row.state !== 'Overdue',
+              label: strings.RESCHEDULE,
+              onClick: () => {
+                goToRescheduleObservation(row.observationId);
+              },
+            },
+          ]}
+        />
+      );
+
+      return <CellRenderer {...props} value={tableMenuItem} />;
     }
 
     return <CellRenderer {...props} />;

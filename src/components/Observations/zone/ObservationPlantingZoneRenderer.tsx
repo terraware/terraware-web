@@ -1,15 +1,21 @@
 import React from 'react';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { MonitoringPlotStatus, getPlotStatus } from 'src/types/Observations';
+import { MonitoringPlotStatus, getPlotStatus, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
+import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate', 'plantingDensity'];
 
 const ObservationPlantingZoneRenderer =
-  (plantingSiteId: number, observationId: number, plantingZoneId: number) =>
+  (
+    plantingSiteId: number,
+    observationId: number,
+    plantingZoneId: number,
+    setReplaceObservationPlot: React.Dispatch<React.SetStateAction<ObservationMonitoringPlotResultsPayload | undefined>>
+  ) =>
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
@@ -45,6 +51,24 @@ const ObservationPlantingZoneRenderer =
 
     if (column.key === 'isPermanent') {
       return <CellRenderer {...props} value={value === true ? strings.PERMANENT : strings.TEMPORARY} />;
+    }
+
+    if (column.key === 'actionsMenu') {
+      const tableMenuItem = (
+        <TableRowPopupMenu
+          menuItems={[
+            {
+              disabled: row.completedTime, // cannot replace observation plots that are completed
+              label: strings.REQUEST_REASSIGNMENT,
+              onClick: () => {
+                setReplaceObservationPlot(row as ObservationMonitoringPlotResultsPayload);
+              },
+            },
+          ]}
+        />
+      );
+
+      return <CellRenderer {...props} value={tableMenuItem} />;
     }
 
     return <CellRenderer {...props} />;
