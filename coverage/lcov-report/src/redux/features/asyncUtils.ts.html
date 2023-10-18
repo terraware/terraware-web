@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -80,7 +80,15 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -89,10 +97,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -101,19 +113,25 @@
 &nbsp;
 export type Statuses = 'pending' | 'success' | 'error';
 &nbsp;
-export type Status = { status: Statuses };
+export type StatusT&lt;T&gt; = { status: Statuses; data?: T };
+&nbsp;
+export type Status = StatusT&lt;unknown&gt;; // when data is not relevant in the response
 &nbsp;
 export const buildReducers =
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (a</span>syncThunk: AsyncThunk&lt;any, any, any&gt;) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(b</span>uilder: CaseReducers&lt;any, any&gt; | ActionReducerMapBuilder&lt;any&gt;) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  &lt;T</span>&gt;(asyncThunk: AsyncThunk&lt;any, any, any&gt;) =&gt;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (b</span>uilder: CaseReducers&lt;any, any&gt; | ActionReducerMapBuilder&lt;any&gt;) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    (builder as any)</span>
-      .addCase(asyncThunk.pending, setStatus('pending'))
-      .addCase(asyncThunk.fulfilled, setStatus('success'))
-      .addCase(asyncThunk.rejected, setStatus('error'));
+      .addCase(asyncThunk.pending, setStatus&lt;T&gt;('pending'))
+      .addCase(asyncThunk.fulfilled, setStatus&lt;T&gt;('success'))
+      .addCase(asyncThunk.rejected, setStatus&lt;T&gt;('error'));
 &nbsp;
-const setStatus = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tatus: Statuses) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: any, action: any) =&gt; {</span></span>
-  const requestId = <span class="cstat-no" title="statement not covered" >action.meta.requestId;</span>
-<span class="cstat-no" title="statement not covered" >  state[requestId] = { status };</span>
-};
+const setStatus =
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  &lt;T</span>&gt;(status: Statuses) =&gt;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (s</span>tate: any, action: any) =&gt; {</span>
+    const requestId = <span class="cstat-no" title="statement not covered" >action.meta.requestId;</span>
+    const data: T = <span class="cstat-no" title="statement not covered" >action.payload as T;</span>
+<span class="cstat-no" title="statement not covered" >    state[requestId] = { status, data };</span>
+  };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -121,7 +139,7 @@ const setStatus = <span class="cstat-no" title="statement not covered" ><span cl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-11T15:21:49.180Z
+                at 2023-10-18T02:59:05.634Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
