@@ -344,6 +344,10 @@ export interface paths {
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}/release": {
     post: operations["releaseMonitoringPlot"];
   };
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace": {
+    /** Additional monitoring plots may be replaced as well, e.g., if the requested plot is part of a permanent cluster. In some cases, the requested plot will be removed from the observation but not replaced with a different one. */
+    post: operations["replaceObservationPlot"];
+  };
   "/api/v1/tracking/observations/{observationId}/results": {
     /** Some information is only available once all plots have been completed. */
     get: operations["getObservationResults"];
@@ -2443,6 +2447,17 @@ export interface components {
       /** @description If certainty is Other, the optional user-supplied name of the species. Ignored if certainty is Known or Unknown. */
       speciesName?: string;
       status: "Live" | "Dead" | "Existing";
+    };
+    ReplaceObservationPlotRequestPayload: {
+      duration: "Temporary" | "LongTerm";
+      justification: string;
+    };
+    ReplaceObservationPlotResponsePayload: {
+      /** @description IDs of monitoring plots that were added to the observation. Empty if no plots were added. */
+      addedMonitoringPlotIds: number[];
+      /** @description IDs of monitoring plots that were removed from the observation. Will usually include the requested plot ID, but may be empty if the replacement request couldn't be satisfied. */
+      removedMonitoringPlotIds: number[];
+      status: components["schemas"]["SuccessOrError"];
     };
     RescheduleObservationRequestPayload: {
       /**
@@ -5764,6 +5779,34 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
+      };
+    };
+  };
+  /** Additional monitoring plots may be replaced as well, e.g., if the requested plot is part of a permanent cluster. In some cases, the requested plot will be removed from the observation but not replaced with a different one. */
+  replaceObservationPlot: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ReplaceObservationPlotResponsePayload"];
+        };
+      };
+      /** The observation does not exist or does not have the requested monitoring plot. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReplaceObservationPlotRequestPayload"];
       };
     };
   };

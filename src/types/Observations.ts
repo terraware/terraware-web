@@ -11,6 +11,13 @@ export type RescheduleObservationRequestPayload = components['schemas']['Resched
 // "Upcoming" | "InProgress" | "Completed" | "Overdue"
 export type ObservationState = Observation['state'];
 
+// plot replacement
+export type ReplaceObservationPlotRequestPayload = components['schemas']['ReplaceObservationPlotRequestPayload'];
+export type ReplaceObservationPlotResponseFullPayload = components['schemas']['ReplaceObservationPlotResponsePayload'];
+export type ReplaceObservationPlotResponsePayload = Omit<ReplaceObservationPlotResponseFullPayload, 'status'>;
+// "Temporary" | "LongTerm"
+export type ReplaceObservationPlotDuration = ReplaceObservationPlotRequestPayload['duration'];
+
 type Boundary = {
   boundary: MultiPolygon;
 };
@@ -88,6 +95,17 @@ export const getPlotStatus = (status?: MonitoringPlotStatus): string => {
       return strings.IN_PROGRESS;
     case 'Outstanding':
       return strings.OBSERVATION_STATUS_OUTSTANDING;
+    default:
+      return '';
+  }
+};
+
+export const getReplaceObservationPlotDuration = (duration: ReplaceObservationPlotDuration): string => {
+  switch (duration) {
+    case 'Temporary':
+      return strings.TEMPORARY;
+    case 'LongTerm':
+      return strings.LONG_TERM_PERMANENT;
     default:
       return '';
   }
