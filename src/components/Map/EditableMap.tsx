@@ -87,6 +87,9 @@ export default function EditableMap({ boundary, onBoundaryChanged, style }: Edit
     >
       {firstVisible && (
         <>
+          <Typography fontSize='16px' margin={theme.spacing(1, 0)} minHeight='4em'>
+            {instructionsForMode(mode)}
+          </Typography>
           <ReactMapGL
             key={mapId}
             onError={onMapError}
@@ -106,9 +109,6 @@ export default function EditableMap({ boundary, onBoundaryChanged, style }: Edit
           >
             <EditableMapDraw boundary={boundary} onBoundaryChanged={onBoundaryChanged} setMode={setMode} />
           </ReactMapGL>
-          <Typography fontSize='16px' margin={theme.spacing(1, 0)} minHeight='3em'>
-            {instructionsForMode(mode)}
-          </Typography>
         </>
       )}
     </Box>
