@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Observations/org/ActionsMenu.tsx</title>
+    <title>Code coverage report for src/components/common/table/TableRowPopupMenu.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/Observations/org</a> ActionsMenu.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/common/table</a> TableRowPopupMenu.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -145,15 +145,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -174,6 +171,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -202,21 +202,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { MenuItem, MenuList, Popover, Typography, useTheme } from '@mui/material';
-import { APP_PATHS } from 'src/constants';
 import { Button, Tooltip } from '@terraware/web-components';
-import { ObservationState } from 'src/types/Observations';
 import strings from 'src/strings';
 &nbsp;
-type ActionsMenuProps = {
-  observationId: number;
-  state: ObservationState;
+type TableRowPopupMenuItem = {
+  disabled: boolean;
+  label: string;
+  onClick: () =&gt; void;
 };
 &nbsp;
-const ActionsMenu = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> observationId, state }: ActionsMenuProps): JSX.Element =&gt; {</span>
+type TableRowPopupMenuProps = {
+  menuItems: TableRowPopupMenuItem[];
+};
+&nbsp;
+const TableRowPopupMenu = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> menuItems }: TableRowPopupMenuProps): JSX.Element =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
   const [menuAnchorEl, setMenuAnchorEl] = <span class="cstat-no" title="statement not covered" >useState&lt;HTMLButtonElement | null&gt;(null);</span>
   const openMenu = <span class="cstat-no" title="statement not covered" >Boolean(menuAnchorEl);</span>
 &nbsp;
@@ -226,10 +227,6 @@ const ActionsMenu = <span class="cstat-no" title="statement not covered" ><span 
 &nbsp;
   const closeMenuHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setMenuAnchorEl(null);</span>
-  };
-&nbsp;
-  const goToReschedule = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    history.push(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));</span>
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -244,16 +241,19 @@ const ActionsMenu = <span class="cstat-no" title="statement not covered" ><span 
         }}
       &gt;
         &lt;MenuList sx={{ padding: theme.spacing(2, 0) }}&gt;
-          &lt;MenuItem
-            id='reschedule'
-            onClick={goToReschedule}
-            sx={{ padding: theme.spacing(1, 2) }}
-            disabled={state !== 'Overdue'}
-          &gt;
-            &lt;Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}&gt;
-              {strings.RESCHEDULE}
-            &lt;/Typography&gt;
-          &lt;/MenuItem&gt;
+          {menuItems.map(<span class="fstat-no" title="function not covered" >(m</span>enuItem, index) =&gt; (
+<span class="cstat-no" title="statement not covered" >            &lt;MenuItem</span>
+              key={index}
+              id={`${menuItem.label}_${index}`}
+              onClick={menuItem.onClick}
+              sx={{ padding: theme.spacing(1, 2) }}
+              disabled={menuItem.disabled}
+            &gt;
+              &lt;Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}&gt;
+                {menuItem.label}
+              &lt;/Typography&gt;
+            &lt;/MenuItem&gt;
+          ))}
         &lt;/MenuList&gt;
       &lt;/Popover&gt;
       &lt;Tooltip title={strings.MORE_OPTIONS}&gt;
@@ -269,7 +269,7 @@ const ActionsMenu = <span class="cstat-no" title="statement not covered" ><span 
   );
 };
 &nbsp;
-export default ActionsMenu;
+export default TableRowPopupMenu;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -277,7 +277,7 @@ export default ActionsMenu;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-18T02:59:05.634Z
+                at 2023-10-18T03:33:25.704Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
