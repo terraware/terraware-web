@@ -124,3 +124,11 @@ export type MapObject = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'tempora
  * Sources for a map
  */
 export type MapData = Record<MapObject, MapSourceBaseData | undefined>;
+
+/**
+ * Map control props
+ */
+export type MapControl = {
+  // hide the full screen control
+  hideFullScreen?: boolean;
+};

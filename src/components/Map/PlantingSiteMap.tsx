@@ -3,6 +3,7 @@ import { Box, CircularProgress, Theme, useTheme } from '@mui/material';
 import useSnackbar from 'src/utils/useSnackbar';
 import GenericMap from './GenericMap';
 import {
+  MapControl,
   MapData,
   MapEntityId,
   MapEntityOptions,
@@ -56,7 +57,7 @@ export type PlantingSiteMapProps = {
   bottomLeftMapControl?: React.ReactNode;
   topRightMapControl?: React.ReactNode;
   showMortalityRateFill?: boolean;
-};
+} & MapControl;
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
   const {
@@ -70,6 +71,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     topRightMapControl,
     showMortalityRateFill,
   } = props;
+  const { ...controlProps }: MapControl = props;
   const theme = useTheme();
   const classes = useStyles();
   const snackbar = useSnackbar();
@@ -270,6 +272,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         style={style}
         entityOptions={entityOptions}
         mapImages={mapImages}
+        {...controlProps}
       />
       {topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
       {bottomLeftMapControl && <div className={classes.bottomLeftControl}>{bottomLeftMapControl}</div>}

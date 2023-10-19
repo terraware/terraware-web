@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from '@mui/material';
 import Map, { MapImage } from './Map';
-import { MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';
+import { MapControl, MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 const DUMMY_MAP_OPTIONS: MapOptions = {
@@ -18,16 +18,12 @@ type GenericMapProps = {
   bannerMessage?: string;
   entityOptions?: MapEntityOptions;
   mapImages?: MapImage[];
-};
+} & MapControl;
 
-export default function GenericMap({
-  contextRenderer,
-  options,
-  style,
-  bannerMessage,
-  entityOptions,
-  mapImages,
-}: GenericMapProps): JSX.Element | null {
+export default function GenericMap(props: GenericMapProps): JSX.Element | null {
+  const { contextRenderer, options, style, bannerMessage, entityOptions, mapImages } = props;
+  const { ...mapControlProps }: MapControl = props;
+
   const { token, mapId, refreshToken } = useMapboxToken();
 
   if (!token) {
@@ -50,6 +46,7 @@ export default function GenericMap({
         bannerMessage={bannerMessage}
         entityOptions={entityOptions}
         mapImages={mapImages}
+        {...mapControlProps}
       />
     </Box>
   );
