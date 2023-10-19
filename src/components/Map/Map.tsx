@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box, Theme, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   AttributionControl,
@@ -97,7 +97,6 @@ export default function Map(props: MapProps): JSX.Element {
   const [resized, setResized] = useState<boolean>(false);
   const visible = useIsVisible(containerRef);
   const snackbar = useSnackbar();
-  const theme = useTheme();
 
   useEffect(() => {
     // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
