@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1697686544888" clover="3.2.0">
-  <project timestamp="1697686544888" name="All files">
-    <metrics statements="12426" coveredstatements="364" conditionals="7886" coveredconditionals="90" methods="3901" coveredmethods="77" elements="24213" coveredelements="531" complexity="0" loc="12426" ncloc="12426" packages="105" files="489" classes="489"/>
+<coverage generated="1697722792918" clover="3.2.0">
+  <project timestamp="1697722792918" name="All files">
+    <metrics statements="12428" coveredstatements="364" conditionals="7889" coveredconditionals="90" methods="3901" coveredmethods="77" elements="24218" coveredelements="531" complexity="0" loc="12428" ncloc="12428" packages="105" files="489" classes="489"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="164" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -4921,7 +4921,7 @@
       </file>
     </package>
     <package name="src.components.Observations.map">
-      <metrics statements="65" coveredstatements="0" conditionals="63" coveredconditionals="0" methods="29" coveredmethods="0"/>
+      <metrics statements="67" coveredstatements="0" conditionals="66" coveredconditionals="0" methods="29" coveredmethods="0"/>
       <file name="ObservationMapView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/map/ObservationMapView.tsx">
         <metrics statements="51" coveredstatements="0" conditionals="45" coveredconditionals="0" methods="25" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
@@ -4977,21 +4977,23 @@
         <line num="158" count="0" type="stmt"/>
       </file>
       <file name="TooltipContents.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Observations/map/TooltipContents.tsx">
-        <metrics statements="14" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
+        <metrics statements="16" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.Observations.org">
