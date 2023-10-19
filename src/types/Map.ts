@@ -132,3 +132,12 @@ export type MapControl = {
   // hide the full screen control
   hideFullScreen?: boolean;
 };
+
+/**
+ * Map view style
+ */
+export type MapViewStyle = 'Outdoors' | 'Satellite';
+export const MapViewStyles: Record<MapViewStyle, string> = {
+  Outdoors: 'mapbox://styles/mapbox/outdoors-v12?optimize=true',
+  Satellite: 'mapbox://styles/mapbox/satellite-v9?optimize=true',
+};

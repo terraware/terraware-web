@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box, useTheme } from '@mui/material';
+import { Box, Theme, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   AttributionControl,
@@ -18,8 +19,12 @@ import {
   MapOptions,
   MapPopupRenderer,
   MapGeometry,
+  MapViewStyle,
+  MapViewStyles,
 } from 'src/types/Map';
 import { MapService } from 'src/services';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -29,11 +34,30 @@ import mapboxgl from 'mapbox-gl';
 import MapBanner from './MapBanner';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import useSnackbar from 'src/utils/useSnackbar';
-import { Icon } from '@terraware/web-components';
+import { DropdownItem, Icon, PopoverMenu } from '@terraware/web-components';
 const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
+
+const useStyles = makeStyles((theme: Theme) => ({
+  viewControl: {
+    '& .MuiButtonBase-root': {
+      padding: 0,
+    },
+    '& .MuiButtonBase-root.MuiMenuItem-root': {
+      fontSize: '12px',
+    },
+    '& svg': {
+      marginLeft: 0,
+    },
+  },
+  viewControlSelected: {
+    fontSize: '12px',
+    paddingLeft: theme.spacing(0.5),
+    color: theme.palette.TwClrTxt,
+  },
+}));
 
 type FeatureStateId = Record<string, Record<string, number | undefined>>;
 
@@ -95,8 +119,19 @@ export default function Map(props: MapProps): JSX.Element {
   const highlightStateId: FeatureStateId = useMemo(() => ({}), []);
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
   const [resized, setResized] = useState<boolean>(false);
+  const [mapViewStyle, setMapViewStyle] = useState<MapViewStyle>(
+    localStorage.getItem('mapViewStyle') === 'Outdoors' ? 'Outdoors' : 'Satellite'
+  );
   const visible = useIsVisible(containerRef);
   const snackbar = useSnackbar();
+
+  const onChangeMapViewStyle = useCallback(
+    (viewStyle: MapViewStyle) => {
+      setMapViewStyle(viewStyle);
+      localStorage.setItem('mapViewStyle', viewStyle);
+    },
+    [setMapViewStyle]
+  );
 
   useEffect(() => {
     // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
@@ -472,7 +507,7 @@ export default function Map(props: MapProps): JSX.Element {
         <ReactMapGL
           key={mapId}
           mapboxAccessToken={token}
-          mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true'
+          mapStyle={MapViewStyles[mapViewStyle || 'Satellite']}
           initialViewState={{
             bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
             fitBoundsOptions: hasEntities ? { padding: 20, linear: true } : undefined,
@@ -498,7 +533,8 @@ export default function Map(props: MapProps): JSX.Element {
           <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
           {!hideFullScreen && <FullscreenControl position='top-left' />}
           <AttributionControl compact={true} style={{ marginRight: '5px' }} position='top-left' />
-          <ZoomToFit onClick={zoomToFit} />
+          <ZoomToFitControl onClick={zoomToFit} />
+          <MapViewControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
           {popupInfo && popupRenderer && (
             <Popup
               anchor={popupRenderer.anchor ?? 'top'}
@@ -523,23 +559,23 @@ export default function Map(props: MapProps): JSX.Element {
   );
 }
 
-type ZoomToFitProps = {
+type ZoomToFitControlProps = {
   onClick: () => void;
 };
 
-const ZoomToFit = ({ onClick }: ZoomToFitProps): JSX.Element => {
+const ZoomToFitControl = ({ onClick }: ZoomToFitControlProps): JSX.Element => {
   const theme = useTheme();
 
   return (
     <Box
-      style={{
-        width: 28,
-        height: 28,
-        backgroundColor: `${theme.palette.TwClrBaseWhite}`,
+      sx={{
         position: 'absolute',
         bottom: '84px',
         right: '5px',
         zIndex: 10,
+        width: 28,
+        height: 28,
+        backgroundColor: `${theme.palette.TwClrBaseWhite}`,
         borderRadius: '4px',
         display: 'flex',
         alignItems: 'center',
@@ -548,6 +584,59 @@ const ZoomToFit = ({ onClick }: ZoomToFitProps): JSX.Element => {
       <button style={{ background: 'none', border: 'none', cursor: 'pointer', height: '18px' }} onClick={onClick}>
         <Icon name='iconFullScreen' />
       </button>
+    </Box>
+  );
+};
+
+type MapViewControlProps = {
+  mapViewStyle?: MapViewStyle;
+  onChangeMapViewStyle: (style: MapViewStyle) => void;
+};
+
+const MapViewControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewControlProps): JSX.Element => {
+  const classes = useStyles();
+  const theme = useTheme();
+  const { activeLocale } = useLocalization();
+
+  const setMapStyle = (item: DropdownItem) => {
+    const style: MapViewStyle = item.value === 'Outdoors' ? 'Outdoors' : 'Satellite';
+    onChangeMapViewStyle(style);
+  };
+
+  const viewOptions = useMemo<DropdownItem[]>(() => {
+    if (!activeLocale) {
+      return [];
+    }
+    return [
+      { label: strings.OUTDOORS, value: 'Outdoors' },
+      { label: strings.SATELLITE, value: 'Satellite' },
+    ];
+  }, [activeLocale]);
+
+  return (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: '10px',
+        left: '45px',
+        zIndex: 10,
+        height: 28,
+        backgroundColor: `${theme.palette.TwClrBaseWhite}`,
+        borderRadius: '4px',
+        display: 'flex',
+        alignItems: 'center',
+      }}
+      className={classes.viewControl}
+    >
+      <PopoverMenu
+        anchor={
+          <span className={classes.viewControlSelected}>
+            {mapViewStyle === 'Outdoors' ? strings.OUTDOORS : strings.SATELLITE}
+          </span>
+        }
+        menuSections={[viewOptions]}
+        onClick={setMapStyle}
+      />
     </Box>
   );
 };
