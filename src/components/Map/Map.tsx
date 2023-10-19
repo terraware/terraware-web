@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   AttributionControl,
@@ -35,16 +34,6 @@ const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
-
-const useStyles = makeStyles((theme: Theme) => ({
-  map: {
-    '& .mapboxgl-ctrl-fullscreen,& .mapboxgl-ctrl-shrink': {
-      width: '20px',
-      height: '20px',
-      padding: '2px',
-    },
-  },
-}));
 
 type FeatureStateId = Record<string, Record<string, number | undefined>>;
 
@@ -94,7 +83,6 @@ export default function Map(props: MapProps): JSX.Element {
     mapImages,
     hideFullScreen,
   } = props;
-  const classes = useStyles();
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
@@ -479,11 +467,7 @@ export default function Map(props: MapProps): JSX.Element {
   let destroying = false;
 
   return (
-    <Box
-      sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }}
-      ref={containerRef}
-      className={classes.map}
-    >
+    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }} ref={containerRef}>
       {bannerMessage && <MapBanner message={bannerMessage} />}
       {firstVisible && (
         <ReactMapGL
@@ -513,15 +497,7 @@ export default function Map(props: MapProps): JSX.Element {
         >
           {mapSources}
           <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
-          {!hideFullScreen && (
-            <FullscreenControl
-              position='top-left'
-              style={{
-                width: '20px',
-                height: '20px',
-              }}
-            />
-          )}
+          {!hideFullScreen && <FullscreenControl position='top-left' />}
           <AttributionControl compact={true} style={{ marginRight: '5px' }} position='top-left' />
           <ZoomToFit onClick={zoomToFit} />
           {popupInfo && popupRenderer && (
