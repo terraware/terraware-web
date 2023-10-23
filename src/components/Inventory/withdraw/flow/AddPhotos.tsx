@@ -4,16 +4,14 @@ import strings from 'src/strings';
 import SelectPhotos from 'src/components/common/SelectPhotos';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageForm from 'src/components/common/PageForm';
-import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 
 type AddPhotosProps = {
-  withdrawalPurpose: string;
   onNext: (photos: File[]) => void;
   onCancel: () => void;
   saveText: string;
 };
 export default function AddPhotos(props: AddPhotosProps): JSX.Element {
-  const { withdrawalPurpose, onNext, onCancel, saveText } = props;
+  const { onNext, onCancel, saveText } = props;
   const [photos, setPhotos] = useState<File[]>([]);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
