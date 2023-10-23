@@ -1,11 +1,7 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'Simple Map Editor'
-  | 'Schedule Observations'
-  | 'Replace Observation Plot';
+export type FeatureName = 'Show Production View' | 'Schedule Observations' | 'Replace Observation Plot';
 
 export type Feature = {
   name: FeatureName;
@@ -38,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Simple Map Editor',
-    preferenceName: 'enableSimpleMapEditor',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Allow editing the boundaries of simple planting sites.'],
-    disclosure: ['Planting sites with planting zones and subzones are not user-editable.'],
   },
   {
     name: 'Schedule Observations',
