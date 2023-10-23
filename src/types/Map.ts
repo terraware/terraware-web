@@ -1,5 +1,5 @@
 // flattened info for shapes relating to planting site data
-
+import React from 'react';
 import mapboxgl from 'mapbox-gl';
 
 export type MapGeometry = number[][][][];
@@ -131,6 +131,10 @@ export type MapData = Record<MapObject, MapSourceBaseData | undefined>;
 export type MapControl = {
   // hide the full screen control
   hideFullScreen?: boolean;
+
+  // custom map controls
+  topRightMapControl?: React.ReactNode;
+  bottomLeftMapControl?: React.ReactNode;
 };
 
 /**

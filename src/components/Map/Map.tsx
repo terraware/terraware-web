@@ -22,6 +22,7 @@ import {
   MapViewStyle,
   MapViewStyles,
 } from 'src/types/Map';
+import { useMapPortalContainer } from './MapRenderUtils';
 import { MapService } from 'src/services';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -56,6 +57,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '12px',
     paddingLeft: theme.spacing(0.5),
     color: theme.palette.TwClrTxt,
+  },
+  bottomLeftControl: {
+    height: 'max-content',
+    position: 'absolute',
+    left: theme.spacing(2),
+    bottom: theme.spacing(4),
+    width: 'max-content',
+    zIndex: 1000,
+  },
+  topRightControl: {
+    height: 'max-content',
+    position: 'absolute',
+    right: theme.spacing(2),
+    top: theme.spacing(2),
+    width: 'max-content',
+    zIndex: 1000,
   },
 }));
 
@@ -106,7 +123,10 @@ export default function Map(props: MapProps): JSX.Element {
     entityOptions,
     mapImages,
     hideFullScreen,
+    topRightMapControl,
+    bottomLeftMapControl,
   } = props;
+  const classes = useStyles();
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
@@ -553,6 +573,8 @@ export default function Map(props: MapProps): JSX.Element {
               {popupRenderer.render(popupInfo.properties)}
             </Popup>
           )}
+          {topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
+          {bottomLeftMapControl && <div className={classes.bottomLeftControl}>{bottomLeftMapControl}</div>}
         </ReactMapGL>
       )}
     </Box>
@@ -593,10 +615,11 @@ type MapViewControlProps = {
   onChangeMapViewStyle: (style: MapViewStyle) => void;
 };
 
-const MapViewControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewControlProps): JSX.Element => {
+const MapViewControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewControlProps): JSX.Element | null => {
   const classes = useStyles();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
+  const mapPortalContainer = useMapPortalContainer();
 
   const setMapStyle = (item: DropdownItem) => {
     const style: MapViewStyle = item.value === 'Outdoors' ? 'Outdoors' : 'Satellite';
@@ -612,6 +635,10 @@ const MapViewControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewControlPr
       { label: strings.SATELLITE, value: 'Satellite' },
     ];
   }, [activeLocale]);
+
+  if (mapPortalContainer) {
+    return null;
+  }
 
   return (
     <Box
