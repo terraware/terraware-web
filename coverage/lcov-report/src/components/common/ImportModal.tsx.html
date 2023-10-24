@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/131</span>
+                <span class='fraction'>0/129</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/98</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/128</span>
+                <span class='fraction'>0/126</span>
             </div>
         
             
@@ -465,7 +465,18 @@
 <a name='L400'></a><a href='#L400'>400</a>
 <a name='L401'></a><a href='#L401'>401</a>
 <a name='L402'></a><a href='#L402'>402</a>
-<a name='L403'></a><a href='#L403'>403</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -624,10 +635,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -990,7 +1012,7 @@ export default function <span class="fstat-no" title="function not covered" >Imp
   const [file, setFile] = <span class="cstat-no" title="statement not covered" >useState&lt;File&gt;();</span>
   const inputRef = <span class="cstat-no" title="statement not covered" >useRef&lt;HTMLInputElement&gt;(null);</span>
   const divRef = <span class="cstat-no" title="statement not covered" >useRef&lt;HTMLDivElement&gt;(null);</span>
-  const [error, setError] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;();</span>
+  const [error, setError] = <span class="cstat-no" title="statement not covered" >useState&lt;JSX.Element&gt;();</span>
   const [loading, setLoading] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [fileStatus, setFileStatus] = <span class="cstat-no" title="statement not covered" >useState&lt;GetUploadStatusResponsePayload&gt;();</span>
   const [uploadInterval, setUploadInterval] = <span class="cstat-no" title="statement not covered" >useState&lt;NodeJS.Timer&gt;();</span>
@@ -1025,11 +1047,22 @@ export default function <span class="fstat-no" title="function not covered" >Imp
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const getErrors = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-      let errors = <span class="cstat-no" title="statement not covered" >strings.DATA_IMPORT_FAILED;</span>
-<span class="cstat-no" title="statement not covered" >      if (fileStatus?.details.errors &amp;&amp; fileStatus?.details.errors[0]) {</span>
-<span class="cstat-no" title="statement not covered" >        errors += ': ' + fileStatus?.details.errors[0].message;</span>
-      }
-<span class="cstat-no" title="statement not covered" >      return errors;</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+        &lt;div className={classes.warningContent} key='import-error-1'&gt;
+          {strings.DATA_IMPORT_FAILED}
+          &lt;ul&gt;
+            {fileStatus?.details.errors?.map(<span class="fstat-no" title="function not covered" >(e</span>rr, index) =&gt; (
+<span class="cstat-no" title="statement not covered" >              &lt;li key={`import-error-item-${index}`}&gt;</span>
+                {strings.formatString(
+                  strings.DATA_IMPORT_ROW_MESSAGE,
+                  `${err.position}`,
+                  err.message || strings.GENERIC_ERROR
+                )}
+              &lt;/li&gt;
+            ))}
+          &lt;/ul&gt;
+        &lt;/div&gt;
+      );
     };
 &nbsp;
     const clearUploadInterval = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1052,7 +1085,7 @@ export default function <span class="fstat-no" title="function not covered" >Imp
 <span class="cstat-no" title="statement not covered" >      clearUploadInterval();</span>
 <span class="cstat-no" title="statement not covered" >      setWarning(true);</span>
     }
-  }, [fileStatus, uploadInterval]);
+  }, [fileStatus, uploadInterval, classes]);
 &nbsp;
   const dropHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent: React.DragEvent&lt;HTMLDivElement&gt;) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    event.preventDefault();</span>
@@ -1088,7 +1121,7 @@ export default function <span class="fstat-no" title="function not covered" >Imp
       }
 <span class="cstat-no" title="statement not covered" >      if (response) {</span>
 <span class="cstat-no" title="statement not covered" >        if (response.requestSucceeded === false) {</span>
-<span class="cstat-no" title="statement not covered" >          setError(strings.DATA_IMPORT_FAILED);</span>
+<span class="cstat-no" title="statement not covered" >          setError(&lt;&gt;{strings.DATA_IMPORT_FAILED}&lt;/&gt;);</span>
         } else {
 <span class="cstat-no" title="statement not covered" >          if (response.id) {</span>
 <span class="cstat-no" title="statement not covered" >            setUploadId(response.id);</span>
@@ -1276,7 +1309,7 @@ export default function <span class="fstat-no" title="function not covered" >Imp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-23T17:15:59.028Z
+                at 2023-10-24T20:23:49.243Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
