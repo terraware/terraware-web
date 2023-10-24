@@ -121,7 +121,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const [file, setFile] = useState<File>();
   const inputRef = useRef<HTMLInputElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<JSX.Element>();
   const [loading, setLoading] = useState(false);
   const [fileStatus, setFileStatus] = useState<GetUploadStatusResponsePayload>();
   const [uploadInterval, setUploadInterval] = useState<NodeJS.Timer>();
@@ -156,11 +156,22 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
 
   useEffect(() => {
     const getErrors = () => {
-      let errors = strings.DATA_IMPORT_FAILED;
-      if (fileStatus?.details.errors && fileStatus?.details.errors[0]) {
-        errors += ': ' + fileStatus?.details.errors[0].message;
-      }
-      return errors;
+      return (
+        <div className={classes.warningContent} key='import-error-1'>
+          {strings.DATA_IMPORT_FAILED}
+          <ul>
+            {fileStatus?.details.errors?.map((err, index) => (
+              <li key={`import-error-item-${index}`}>
+                {strings.formatString(
+                  strings.DATA_IMPORT_ROW_MESSAGE,
+                  `${err.position}`,
+                  err.message || strings.GENERIC_ERROR
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
     };
 
     const clearUploadInterval = () => {
@@ -183,7 +194,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       clearUploadInterval();
       setWarning(true);
     }
-  }, [fileStatus, uploadInterval]);
+  }, [fileStatus, uploadInterval, classes]);
 
   const dropHandler = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -219,7 +230,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       }
       if (response) {
         if (response.requestSucceeded === false) {
-          setError(strings.DATA_IMPORT_FAILED);
+          setError(<>{strings.DATA_IMPORT_FAILED}</>);
         } else {
           if (response.id) {
             setUploadId(response.id);
