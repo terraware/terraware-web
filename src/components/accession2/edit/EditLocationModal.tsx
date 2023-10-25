@@ -3,14 +3,14 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Grid } from '@mui/material';
-import { Facility, StorageLocation } from 'src/types/Facility';
+import { Facility, SubLocation } from 'src/types/Facility';
 import theme from 'src/theme';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Accession } from 'src/types/Accession';
 import AccessionService from 'src/services/AccessionService';
 import useForm from 'src/utils/useForm';
 import { SeedBankService } from 'src/services';
-import { StorageLocationSelector, StorageSubLocationSelector } from '../properties';
+import { FacilitySelector, SubLocationSelector } from '../properties';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 
@@ -26,29 +26,29 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   const { activeLocale } = useLocalization();
   const { onClose, open, accession, reload } = props;
   const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) as Facility[]) || [];
-  const [storageLocations, setStorageLocations] = useState<StorageLocation[]>([]);
+  const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
   const snackbar = useSnackbar();
 
   const newRecord = {
     facilityId: accession.facilityId || 0,
-    storageLocation: accession.storageLocation,
+    subLocation: accession.subLocation,
   };
 
   const [record, setRecord, onChange] = useForm(newRecord);
 
   useEffect(() => {
-    setRecord({ facilityId: accession.facilityId || 0, storageLocation: accession.storageLocation });
+    setRecord({ facilityId: accession.facilityId || 0, subLocation: accession.subLocation });
   }, [accession, setRecord]);
 
   useEffect(() => {
     const setLocations = async () => {
       if (record.facilityId && activeLocale) {
-        const response = await SeedBankService.getStorageLocations(record.facilityId);
+        const response = await SeedBankService.getSubLocations(record.facilityId);
         if (response.requestSucceeded) {
           const collator = new Intl.Collator(activeLocale);
-          setStorageLocations(response.storageLocations.sort((a, b) => collator.compare(a.name, b.name)));
+          setSubLocations(response.subLocations.sort((a, b) => collator.compare(a.name, b.name)));
         } else {
-          setStorageLocations([]);
+          setSubLocations([]);
         }
       }
     };
@@ -69,11 +69,11 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   };
 
   const onChangeHandler = (value: Facility) => {
-    setRecord({ facilityId: value.id, storageLocation: undefined });
+    setRecord({ facilityId: value.id, subLocation: undefined });
   };
 
   const onCloseHandler = () => {
-    setRecord({ facilityId: accession.facilityId, storageLocation: accession.storageLocation });
+    setRecord({ facilityId: accession.facilityId, subLocation: accession.subLocation });
     onClose();
   };
 
@@ -97,21 +97,21 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
     >
       <Grid item xs={12} textAlign='left'>
         <Grid item xs={12}>
-          <StorageLocationSelector
+          <FacilitySelector
             id='edit-location'
             label={strings.LOCATION}
-            selectedStorageLocation={seedBanks.find((sb) => sb.id === record.facilityId)}
-            storageLocations={seedBanks}
+            selectedFacility={seedBanks.find((sb) => sb.id === record.facilityId)}
+            facilities={seedBanks}
             onChange={(value: Facility) => onChangeHandler(value)}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-          <StorageSubLocationSelector
+          <SubLocationSelector
             id='edit-sub-location'
             label={strings.SUB_LOCATION}
-            selectedStorageSubLocation={record.storageLocation}
-            storageSubLocations={storageLocations.map((obj) => obj.name)}
-            onChange={(value: string) => onChange('storageLocation', value)}
+            selectedSubLocation={record.subLocation}
+            subLocations={subLocations.map((obj) => obj.name)}
+            onChange={(value: string) => onChange('subLocation', value)}
             disabled={!record.facilityId}
           />
         </Grid>
