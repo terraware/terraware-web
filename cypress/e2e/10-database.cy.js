@@ -156,7 +156,7 @@ describe('Database', () => {
         cy.get('#table-header-state').contains('STATUS');
         cy.get('#table-header-collectedDate').contains('COLLECTION DATE');
         cy.get('#table-header-facility_name').contains('SEED BANKS');
-        cy.get('#table-header-storageLocation_name').contains('SUB-LOCATION');
+        cy.get('#table-header-subLocation_name').contains('SUB-LOCATION');
       });
 
       it('Custom columns', () => {
