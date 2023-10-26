@@ -6,8 +6,8 @@ import CollectionSource from './CollectionSource';
 import Collectors2 from './Collectors2';
 import SeedBank2Selector from './SeedBank2Selector';
 import Species2Dropdown from './Species2Dropdown';
-import StorageLocationSelector from './StorageLocationSelector';
-import StorageSubLocationSelector from './StorageSubLocationSelector';
+import FacilitySelector from 'src/components/accession2/properties/FacilitySelector';
+import SubLocationSelector from 'src/components/accession2/properties/SubLocationSelector';
 
 export {
   Accession2Address,
@@ -18,6 +18,6 @@ export {
   Collectors2,
   SeedBank2Selector,
   Species2Dropdown,
-  StorageLocationSelector,
-  StorageSubLocationSelector,
+  FacilitySelector,
+  SubLocationSelector,
 };

@@ -14,7 +14,7 @@ import TfMain from '../common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import StorageLocations from './StorageLocations';
+import SubLocations from 'src/components/SeedBank/SubLocations';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -148,7 +148,7 @@ export default function SeedBankDetails(): JSX.Element {
             display={true}
           />
         </Grid>
-        {seedBank && <StorageLocations seedBankId={seedBank.id} />}
+        {seedBank && <SubLocations seedBankId={seedBank.id} />}
       </Grid>
     </TfMain>
   );
