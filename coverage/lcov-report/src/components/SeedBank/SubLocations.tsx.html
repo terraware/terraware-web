@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/SeedBank/StorageLocations.tsx</title>
+    <title>Code coverage report for src/components/SeedBank/SubLocations.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/SeedBank</a> StorageLocations.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/SeedBank</a> SubLocations.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -399,24 +399,24 @@
 import { Box, Grid, Typography } from '@mui/material';
 import strings from 'src/strings';
 import { SeedBankService } from 'src/services';
-import { DEFAULT_STORAGE_LOCATIONS, PartialStorageLocation } from 'src/types/Facility';
+import { DEFAULT_SUB_LOCATIONS, PartialSubLocation } from 'src/types/Facility';
 import { useLocalization } from 'src/providers';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { useNumberFormatter } from 'src/utils/useNumber';
-import StorageLocationsCellRenderer from './StorageLocationsCellRenderer';
+import SubLocationsCellRenderer from 'src/components/SeedBank/SubLocationsCellRenderer';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { Button } from '@terraware/web-components';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import AddEditStorageLocationModal from './AddEditStorageLocationModal';
+import AddEditSubLocationModal from 'src/components/SeedBank/AddEditSubLocationModal';
 import _ from 'lodash';
 &nbsp;
-export type StorageLocationsProps = {
+export type SublocationsProps = {
   seedBankId?: number;
-  onEdit?: (storageLocations: PartialStorageLocation[]) =&gt; void;
+  onEdit?: (subLocations: PartialSubLocation[]) =&gt; void;
 };
 &nbsp;
-const storageLocationWith = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ame: string, id: number) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+const subLocationWith = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ame: string, id: number) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   name,
   id: -id,
   activeAccessions: 0,
@@ -427,31 +427,31 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
   { key: 'activeAccessions', name: strings.ACTIVE_ACCESSIONS, type: 'number' },
 ];
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >StorageLocations(</span>{ seedBankId, onEdit }: StorageLocationsProps): JSX.Element | null {
+export default function <span class="fstat-no" title="function not covered" >SubLocations(</span>{ seedBankId, onEdit }: SublocationsProps): JSX.Element | null {
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
-  const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialStorageLocation[]&gt;([]);</span>
-  const [selectedStorageLocation, setSelectedStorageLocation] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialStorageLocation | undefined&gt;();</span>
-  const [storageLocations, setStorageLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialStorageLocation[]&gt;([]);</span>
-  const [openStorageLocationModal, setOpenStorageLocationModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
+  const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialSubLocation[]&gt;([]);</span>
+  const [selectedSubLocation, setSelectedSubLocation] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialSubLocation | undefined&gt;();</span>
+  const [subLocations, setSubLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialSubLocation[]&gt;([]);</span>
+  const [openSubLocationModal, setOpenSubLocationModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(activeLocale),</span> [numberFormatter, activeLocale]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const fetchStorageLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-      const response = <span class="cstat-no" title="statement not covered" >await SeedBankService.getStorageLocations(seedBankId!);</span>
+    const fetchSubLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+      const response = <span class="cstat-no" title="statement not covered" >await SeedBankService.getSubLocations(seedBankId!);</span>
 <span class="cstat-no" title="statement not covered" >      if (response.requestSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >        if (activeLocale) {</span>
           const collator = <span class="cstat-no" title="statement not covered" >new Intl.Collator(activeLocale);</span>
-<span class="cstat-no" title="statement not covered" >          setStorageLocations(response.storageLocations.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >collator.compare(a.name, b.name))</span>);</span>
+<span class="cstat-no" title="statement not covered" >          setSubLocations(response.subLocations.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >collator.compare(a.name, b.name))</span>);</span>
         }
       }
     };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (seedBankId) {</span>
-<span class="cstat-no" title="statement not covered" >      fetchStorageLocations();</span>
+<span class="cstat-no" title="statement not covered" >      fetchSubLocations();</span>
     } else {
-<span class="cstat-no" title="statement not covered" >      setStorageLocations(DEFAULT_STORAGE_LOCATIONS().map(<span class="fstat-no" title="function not covered" >(n</span>ame, index) =&gt; <span class="cstat-no" title="statement not covered" >storageLocationWith(name, index))</span>);</span>
+<span class="cstat-no" title="statement not covered" >      setSubLocations(DEFAULT_SUB_LOCATIONS().map(<span class="fstat-no" title="function not covered" >(n</span>ame, index) =&gt; <span class="cstat-no" title="statement not covered" >subLocationWith(name, index))</span>);</span>
     }
   }, [seedBankId, activeLocale]);
 &nbsp;
@@ -462,53 +462,53 @@ export default function <span class="fstat-no" title="function not covered" >Sto
         buttonText: strings.DELETE,
         // we don't want to delete locations that have active accessions
         disabled: !selectedRows.some(<span class="fstat-no" title="function not covered" >(l</span>ocation) =&gt; <span class="cstat-no" title="statement not covered" >!location.activeAccessions)</span>,
-        onButtonClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >deleteStorageLocations(selectedRows.filter(<span class="fstat-no" title="function not covered" >(l</span>ocation) =&gt; <span class="cstat-no" title="statement not covered" >!location.activeAccessions)</span>),</span>
+        onButtonClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >deleteSubLocations(selectedRows.filter(<span class="fstat-no" title="function not covered" >(l</span>ocation) =&gt; <span class="cstat-no" title="statement not covered" >!location.activeAccessions)</span>),</span>
       },
     ];
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return topBarButtons;</span>
   };
 &nbsp;
-  const onStorageLocationSelected = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocation: PartialStorageLocation, fromColumn?: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setSelectedStorageLocation(location);</span>
-<span class="cstat-no" title="statement not covered" >    setOpenStorageLocationModal(true);</span>
+  const onSubLocationSelected = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocation: PartialSubLocation, fromColumn?: string) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setSelectedSubLocation(location);</span>
+<span class="cstat-no" title="statement not covered" >    setOpenSubLocationModal(true);</span>
   };
 &nbsp;
-  const onAddStorageLocationClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setSelectedStorageLocation(undefined);</span>
-<span class="cstat-no" title="statement not covered" >    setOpenStorageLocationModal(true);</span>
+  const onAddSubLocationClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setSelectedSubLocation(undefined);</span>
+<span class="cstat-no" title="statement not covered" >    setOpenSubLocationModal(true);</span>
   };
 &nbsp;
-  const setNewStorageLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocations: PartialStorageLocation[]) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setStorageLocations(locations);</span>
+  const setNewSubLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocations: PartialSubLocation[]) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setSubLocations(locations);</span>
 <span class="cstat-no" title="statement not covered" >    if (onEdit) {</span>
 <span class="cstat-no" title="statement not covered" >      onEdit(locations);</span>
     }
   };
 &nbsp;
-  const addStorageLocation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ame: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setNewStorageLocations([...storageLocations, storageLocationWith(name, Date.now())]);</span>
+  const addSubLocation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ame: string) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setNewSubLocations([...subLocations, subLocationWith(name, Date.now())]);</span>
   };
 &nbsp;
-  const editStorageLocation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocation: PartialStorageLocation) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setNewStorageLocations([...storageLocations.filter(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.id !== location.id)</span>, location]);</span>
+  const editSubLocation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocation: PartialSubLocation) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setNewSubLocations([...subLocations.filter(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.id !== location.id)</span>, location]);</span>
   };
 &nbsp;
-  const deleteStorageLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocations: PartialStorageLocation[]) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setNewStorageLocations([..._.differenceWith(storageLocations, locations, <span class="fstat-no" title="function not covered" >(l</span>1, l2) =&gt; <span class="cstat-no" title="statement not covered" >l1.id === l2.id)</span>]);</span>
+  const deleteSubLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocations: PartialSubLocation[]) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setNewSubLocations([..._.differenceWith(subLocations, locations, <span class="fstat-no" title="function not covered" >(l</span>1, l2) =&gt; <span class="cstat-no" title="statement not covered" >l1.id === l2.id)</span>]);</span>
   };
 &nbsp;
   const editMode: boolean = <span class="cstat-no" title="statement not covered" >!!onEdit;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
-      &lt;AddEditStorageLocationModal
-        open={openStorageLocationModal}
-        onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setOpenStorageLocationModal(false)}</span>
-        onAddStorageLocation={<span class="fstat-no" title="function not covered" >(l</span>ocationName: string) =&gt; <span class="cstat-no" title="statement not covered" >addStorageLocation(locationName)}</span>
-        onEditStorageLocation={<span class="fstat-no" title="function not covered" >(l</span>ocation: PartialStorageLocation) =&gt; <span class="cstat-no" title="statement not covered" >editStorageLocation(location)}</span>
-        selectedStorageLocation={selectedStorageLocation}
-        storageLocations={storageLocations}
+      &lt;AddEditSubLocationModal
+        open={openSubLocationModal}
+        onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setOpenSubLocationModal(false)}</span>
+        onAddSubLocation={<span class="fstat-no" title="function not covered" >(l</span>ocationName: string) =&gt; <span class="cstat-no" title="statement not covered" >addSubLocation(locationName)}</span>
+        onEditSubLocation={<span class="fstat-no" title="function not covered" >(l</span>ocation: PartialSubLocation) =&gt; <span class="cstat-no" title="statement not covered" >editSubLocation(location)}</span>
+        selectedSubLocation={selectedSubLocation}
+        subLocations={subLocations}
       /&gt;
       &lt;Grid
         item
@@ -527,30 +527,30 @@ export default function <span class="fstat-no" title="function not covered" >Sto
             id='new-batch'
             icon='plus'
             label={isMobile ? '' : strings.ADD_SUB_LOCATION}
-            onClick={onAddStorageLocationClick}
+            onClick={onAddSubLocationClick}
             size='small'
           /&gt;
         )}
       &lt;/Grid&gt;
       &lt;Grid item xs={12}&gt;
-        {(storageLocations.length &gt; 0 || editMode) &amp;&amp; (
+        {(subLocations.length &gt; 0 || editMode) &amp;&amp; (
           &lt;Table
-            id='storage-sub-locations-table'
+            id='sub-locations-table'
             columns={columns}
-            rows={storageLocations}
+            rows={subLocations}
             orderBy='name'
-            Renderer={StorageLocationsCellRenderer({ seedBankId, numericFormatter, editMode })}
+            Renderer={SubLocationsCellRenderer({ seedBankId, numericFormatter, editMode })}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={editMode}
             isClickable={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >false}</span>
             showTopBar={editMode}
             topBarButtons={getTopBarButtons()}
-            onSelect={onStorageLocationSelected}
+            onSelect={onSubLocationSelected}
             controlledOnSelect={true}
           /&gt;
         )}
-        {storageLocations.length === 0 &amp;&amp; !editMode &amp;&amp; (
+        {subLocations.length === 0 &amp;&amp; !editMode &amp;&amp; (
           &lt;Box paddingY={isMobile ? 3 : 6} textAlign='center'&gt;
             &lt;Typography fontSize='14px' fontWeight={400}&gt;
               {strings.NO_SUB_LOCATIONS}
@@ -568,7 +568,7 @@ export default function <span class="fstat-no" title="function not covered" >Sto
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-24T20:23:49.243Z
+                at 2023-10-26T23:08:25.469Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

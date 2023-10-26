@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/83</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
@@ -375,7 +375,12 @@
 <a name='L310'></a><a href='#L310'>310</a>
 <a name='L311'></a><a href='#L311'>311</a>
 <a name='L312'></a><a href='#L312'>312</a>
-<a name='L313'></a><a href='#L313'>313</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -479,6 +484,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -698,7 +708,7 @@ import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
-import { FacilityService, SeedBankService, StorageLocationService } from 'src/services';
+import { FacilityService, SeedBankService, SubLocationService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -706,8 +716,8 @@ import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
-import { PartialStorageLocation } from 'src/types/Facility';
-import StorageLocations from 'src/components/SeedBank/StorageLocations';
+import { PartialSubLocation } from 'src/types/Facility';
+import SubLocations from 'src/components/SeedBank/SubLocations';
 import { DatePicker } from '@terraware/web-components';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >SeedBankView(</span>): JSX.Element {
@@ -716,7 +726,7 @@ export default function <span class="fstat-no" title="function not covered" >See
   const [nameError, setNameError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [descriptionError, setDescriptionError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [validateDates, setValidateDates] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-  const [editedStorageLocations, setEditedStorageLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialStorageLocation[]&gt;();</span>
+  const [editedSubLocations, setEditedSubLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialSubLocation[]&gt;();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
 &nbsp;
   const [record, setRecord, onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;Facility&gt;({</span>
@@ -764,16 +774,16 @@ export default function <span class="fstat-no" title="function not covered" >See
 <span class="cstat-no" title="statement not covered" >    history.push(sitesLocation);</span>
   };
 &nbsp;
-  const saveStorageLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (facilityId: number) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!editedStorageLocations) {</span>
+  const saveSubLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (facilityId: number) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!editedSubLocations) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-    const isEqual = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocation1: PartialStorageLocation, location2: PartialStorageLocation) =&gt; {</span>
+    const isEqual = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocation1: PartialSubLocation, location2: PartialSubLocation) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      return location1.id === location2.id;</span>
     };
 &nbsp;
-    const isModified = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocation1: PartialStorageLocation, location2: PartialStorageLocation) =&gt; {</span>
+    const isModified = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocation1: PartialSubLocation, location2: PartialSubLocation) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      return location1.id === location2.id &amp;&amp; location1.name !== location2.name;</span>
     };
 &nbsp;
@@ -781,23 +791,28 @@ export default function <span class="fstat-no" title="function not covered" >See
      * Find existing locations and pick out the ones to delete, create and update.
      * Use bulk API to delete, create, update.
      */
-    const response = <span class="cstat-no" title="statement not covered" >await SeedBankService.getStorageLocations(facilityId);</span>
+    const response = <span class="cstat-no" title="statement not covered" >await SeedBankService.getSubLocations(facilityId);</span>
 <span class="cstat-no" title="statement not covered" >    if (response.requestSucceeded) {</span>
-      const { storageLocations } = <span class="cstat-no" title="statement not covered" >response;</span>
-      const toDelete = <span class="cstat-no" title="statement not covered" >_.differenceWith(storageLocations, editedStorageLocations, isEqual);</span>
-      const toCreate = <span class="cstat-no" title="statement not covered" >_.differenceWith(editedStorageLocations, storageLocations, isEqual);</span>
-      const toUpdate = <span class="cstat-no" title="statement not covered" >_.intersectionWith(editedStorageLocations, storageLocations, isModified);</span>
+      const { subLocations } = <span class="cstat-no" title="statement not covered" >response;</span>
+      const toDelete = <span class="cstat-no" title="statement not covered" >_.differenceWith(subLocations, editedSubLocations, isEqual);</span>
+      const toCreate = <span class="cstat-no" title="statement not covered" >_.differenceWith(editedSubLocations, subLocations, isEqual);</span>
+      const toUpdate = <span class="cstat-no" title="statement not covered" >_.intersectionWith(editedSubLocations, subLocations, isModified);</span>
 &nbsp;
       const promises = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >      if (toDelete.length) {</span>
-<span class="cstat-no" title="statement not covered" >        promises.push(StorageLocationService.deleteStorageLocations(toDelete.map(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.id)</span>));</span>
+<span class="cstat-no" title="statement not covered" >        promises.push(</span>
+          SubLocationService.deleteSubLocations(
+            facilityId,
+            toDelete.map(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.id)</span>
+          )
+        );
       }
 <span class="cstat-no" title="statement not covered" >      if (toUpdate.length) {</span>
-<span class="cstat-no" title="statement not covered" >        promises.push(StorageLocationService.updateStorageLocations(toUpdate as { name: string; id: number }[]));</span>
+<span class="cstat-no" title="statement not covered" >        promises.push(SubLocationService.updateSubLocations(facilityId, toUpdate as { name: string; id: number }[]));</span>
       }
 <span class="cstat-no" title="statement not covered" >      if (toCreate.length) {</span>
 <span class="cstat-no" title="statement not covered" >        promises.push(</span>
-          SeedBankService.createStorageLocations(
+          SeedBankService.createSubLocations(
             facilityId,
             toCreate.map(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.name as string)</span>
           )
@@ -839,7 +854,7 @@ export default function <span class="fstat-no" title="function not covered" >See
 <span class="cstat-no" title="statement not covered" >    if (selectedSeedBank) {</span>
       const response = <span class="cstat-no" title="statement not covered" >await FacilityService.updateFacility({ ...record } as Facility);</span>
 <span class="cstat-no" title="statement not covered" >      if (response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >        await saveStorageLocations(selectedSeedBank.id as number);</span>
+<span class="cstat-no" title="statement not covered" >        await saveSubLocations(selectedSeedBank.id as number);</span>
 <span class="cstat-no" title="statement not covered" >        await reloadOrganizations(selectedOrganization.id);</span>
 <span class="cstat-no" title="statement not covered" >        snackbar.toastSuccess(strings.CHANGES_SAVED);</span>
       } else {
@@ -848,7 +863,7 @@ export default function <span class="fstat-no" title="function not covered" >See
     } else {
       const response = <span class="cstat-no" title="statement not covered" >await FacilityService.createFacility({</span>
         ...record,
-        storageLocationNames: editedStorageLocations?.map(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.name as string)</span>,
+        subLocationNames: editedSubLocations?.map(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.name as string)</span>,
       });
 <span class="cstat-no" title="statement not covered" >      if (response.requestSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >        await reloadOrganizations(selectedOrganization.id);</span>
@@ -990,9 +1005,9 @@ export default function <span class="fstat-no" title="function not covered" >See
               /&gt;
             &lt;/Grid&gt;
           &lt;/Grid&gt;
-          &lt;StorageLocations
+          &lt;SubLocations
             seedBankId={selectedSeedBank?.id === -1 ? undefined : selectedSeedBank?.id}
-            onEdit={<span class="fstat-no" title="function not covered" >(l</span>ocations) =&gt; <span class="cstat-no" title="statement not covered" >setEditedStorageLocations(locations)}</span>
+            onEdit={<span class="fstat-no" title="function not covered" >(l</span>ocations) =&gt; <span class="cstat-no" title="statement not covered" >setEditedSubLocations(locations)}</span>
           /&gt;
         &lt;/Box&gt;
       &lt;/PageForm&gt;
@@ -1006,7 +1021,7 @@ export default function <span class="fstat-no" title="function not covered" >See
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-24T20:23:49.243Z
+                at 2023-10-26T23:08:25.469Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

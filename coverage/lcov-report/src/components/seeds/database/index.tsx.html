@@ -1921,7 +1921,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
     // if url has stage=&lt;accession state&gt;, apply that filter
     const stage = <span class="cstat-no" title="statement not covered" >query.getAll('stage');</span>
     const facilityId = <span class="cstat-no" title="statement not covered" >query.get('facilityId');</span>
-    const storageLocationName = <span class="cstat-no" title="statement not covered" >query.get('storageLocationName');</span>
+    const subLocationName = <span class="cstat-no" title="statement not covered" >query.get('subLocationName');</span>
     let newSearchCriteria = <span class="cstat-no" title="statement not covered" >searchCriteria || {};</span>
 <span class="cstat-no" title="statement not covered" >    if (stage.length || query.has('stage')) {</span>
 <span class="cstat-no" title="statement not covered" >      delete newSearchCriteria.state;</span>
@@ -1940,20 +1940,20 @@ export default function <span class="fstat-no" title="function not covered" >Dat
       }
 <span class="cstat-no" title="statement not covered" >      query.delete('stage');</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (storageLocationName || query.has('storageLocationName')) {</span>
-<span class="cstat-no" title="statement not covered" >      delete newSearchCriteria.storageLocation_name;</span>
-<span class="cstat-no" title="statement not covered" >      if (storageLocationName) {</span>
+<span class="cstat-no" title="statement not covered" >    if (subLocationName || query.has('subLocationName')) {</span>
+<span class="cstat-no" title="statement not covered" >      delete newSearchCriteria.subLocation_name;</span>
+<span class="cstat-no" title="statement not covered" >      if (subLocationName) {</span>
 <span class="cstat-no" title="statement not covered" >        newSearchCriteria = {</span>
           ...newSearchCriteria,
-          storageLocation_name: {
-            field: 'storageLocation_name',
-            values: [storageLocationName],
+          subLocation_name: {
+            field: 'subLocation_name',
+            values: [subLocationName],
             type: 'Exact',
             operation: 'field',
           },
         };
       }
-<span class="cstat-no" title="statement not covered" >      query.delete('storageLocationName');</span>
+<span class="cstat-no" title="statement not covered" >      query.delete('subLocationName');</span>
     }
 <span class="cstat-no" title="statement not covered" >    if ((facilityId || query.has('facilityId')) &amp;&amp; selectedOrganization) {</span>
       const seedBanks = <span class="cstat-no" title="statement not covered" >getAllSeedBanks(selectedOrganization);</span>
@@ -1975,21 +1975,21 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 <span class="cstat-no" title="statement not covered" >      query.delete('facilityId');</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (stage.length || (facilityId &amp;&amp; selectedOrganization) || storageLocationName) {</span>
+<span class="cstat-no" title="statement not covered" >    if (stage.length || (facilityId &amp;&amp; selectedOrganization) || subLocationName) {</span>
 <span class="cstat-no" title="statement not covered" >      history.replace(getLocation(location.pathname, location, query.toString()));</span>
 <span class="cstat-no" title="statement not covered" >      setSearchCriteria(newSearchCriteria);</span>
 &nbsp;
       // add seed bank and sub-location columns to show the filtered values as needed
-<span class="cstat-no" title="statement not covered" >      if (facilityId || storageLocationName) {</span>
+<span class="cstat-no" title="statement not covered" >      if (facilityId || subLocationName) {</span>
         const newColumns = <span class="cstat-no" title="statement not covered" >displayColumnNames</span>
           .filter(<span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; {
 <span class="cstat-no" title="statement not covered" >            if (facilityId &amp;&amp; name === 'facility_name') {</span>
 <span class="cstat-no" title="statement not covered" >              return false;</span>
             }
-<span class="cstat-no" title="statement not covered" >            return name !== 'storageLocation_name';</span>
+<span class="cstat-no" title="statement not covered" >            return name !== 'subeLocation_name';</span>
           })
           .concat(facilityId ? ['facility_name'] : [])
-          .concat(storageLocationName ? ['storageLocation_name'] : []);
+          .concat(subLocationName ? ['subLocation_name'] : []);
 <span class="cstat-no" title="statement not covered" >        saveUpdateSearchColumns(newColumns);</span>
       }
     }
@@ -2389,7 +2389,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-24T20:23:49.243Z
+                at 2023-10-26T23:08:25.469Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

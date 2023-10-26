@@ -310,14 +310,14 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Grid } from '@mui/material';
-import { Facility, StorageLocation } from 'src/types/Facility';
+import { Facility, SubLocation } from 'src/types/Facility';
 import theme from 'src/theme';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Accession } from 'src/types/Accession';
 import AccessionService from 'src/services/AccessionService';
 import useForm from 'src/utils/useForm';
 import { SeedBankService } from 'src/services';
-import { StorageLocationSelector, StorageSubLocationSelector } from '../properties';
+import { FacilitySelector, SubLocationSelector } from '../properties';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 &nbsp;
@@ -333,29 +333,29 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { onClose, open, accession, reload } = <span class="cstat-no" title="statement not covered" >props;</span>
   const seedBanks: Facility[] = <span class="cstat-no" title="statement not covered" >(getAllSeedBanks(selectedOrganization).filter(<span class="fstat-no" title="function not covered" >(s</span>b) =&gt; <span class="cstat-no" title="statement not covered" >!!sb)</span> as Facility[]) || [];</span>
-  const [storageLocations, setStorageLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;StorageLocation[]&gt;([]);</span>
+  const [subLocations, setSubLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;SubLocation[]&gt;([]);</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
 &nbsp;
   const newRecord = <span class="cstat-no" title="statement not covered" >{</span>
     facilityId: accession.facilityId || 0,
-    storageLocation: accession.storageLocation,
+    subLocation: accession.subLocation,
   };
 &nbsp;
   const [record, setRecord, onChange] = <span class="cstat-no" title="statement not covered" >useForm(newRecord);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setRecord({ facilityId: accession.facilityId || 0, storageLocation: accession.storageLocation });</span>
+<span class="cstat-no" title="statement not covered" >    setRecord({ facilityId: accession.facilityId || 0, subLocation: accession.subLocation });</span>
   }, [accession, setRecord]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const setLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (record.facilityId &amp;&amp; activeLocale) {</span>
-        const response = <span class="cstat-no" title="statement not covered" >await SeedBankService.getStorageLocations(record.facilityId);</span>
+        const response = <span class="cstat-no" title="statement not covered" >await SeedBankService.getSubLocations(record.facilityId);</span>
 <span class="cstat-no" title="statement not covered" >        if (response.requestSucceeded) {</span>
           const collator = <span class="cstat-no" title="statement not covered" >new Intl.Collator(activeLocale);</span>
-<span class="cstat-no" title="statement not covered" >          setStorageLocations(response.storageLocations.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >collator.compare(a.name, b.name))</span>);</span>
+<span class="cstat-no" title="statement not covered" >          setSubLocations(response.subLocations.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >collator.compare(a.name, b.name))</span>);</span>
         } else {
-<span class="cstat-no" title="statement not covered" >          setStorageLocations([]);</span>
+<span class="cstat-no" title="statement not covered" >          setSubLocations([]);</span>
         }
       }
     };
@@ -376,11 +376,11 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   };
 &nbsp;
   const onChangeHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: Facility) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setRecord({ facilityId: value.id, storageLocation: undefined });</span>
+<span class="cstat-no" title="statement not covered" >    setRecord({ facilityId: value.id, subLocation: undefined });</span>
   };
 &nbsp;
   const onCloseHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setRecord({ facilityId: accession.facilityId, storageLocation: accession.storageLocation });</span>
+<span class="cstat-no" title="statement not covered" >    setRecord({ facilityId: accession.facilityId, subLocation: accession.subLocation });</span>
 <span class="cstat-no" title="statement not covered" >    onClose();</span>
   };
 &nbsp;
@@ -404,21 +404,21 @@ export default function <span class="fstat-no" title="function not covered" >Edi
     &gt;
       &lt;Grid item xs={12} textAlign='left'&gt;
         &lt;Grid item xs={12}&gt;
-          &lt;StorageLocationSelector
+          &lt;FacilitySelector
             id='edit-location'
             label={strings.LOCATION}
-            selectedStorageLocation={seedBanks.find(<span class="fstat-no" title="function not covered" >(s</span>b) =&gt; <span class="cstat-no" title="statement not covered" >sb.id === record.facilityId)</span>}
-            storageLocations={seedBanks}
+            selectedFacility={seedBanks.find(<span class="fstat-no" title="function not covered" >(s</span>b) =&gt; <span class="cstat-no" title="statement not covered" >sb.id === record.facilityId)</span>}
+            facilities={seedBanks}
             onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: Facility) =&gt; <span class="cstat-no" title="statement not covered" >onChangeHandler(value)}</span>
           /&gt;
         &lt;/Grid&gt;
         &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
-          &lt;StorageSubLocationSelector
+          &lt;SubLocationSelector
             id='edit-sub-location'
             label={strings.SUB_LOCATION}
-            selectedStorageSubLocation={record.storageLocation}
-            storageSubLocations={storageLocations.map(<span class="fstat-no" title="function not covered" >(o</span>bj) =&gt; <span class="cstat-no" title="statement not covered" >obj.name)</span>}
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >onChange('storageLocation', value)}</span>
+            selectedSubLocation={record.subLocation}
+            subLocations={subLocations.map(<span class="fstat-no" title="function not covered" >(o</span>bj) =&gt; <span class="cstat-no" title="statement not covered" >obj.name)</span>}
+            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >onChange('subLocation', value)}</span>
             disabled={!record.facilityId}
           /&gt;
         &lt;/Grid&gt;
@@ -433,7 +433,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-24T20:23:49.243Z
+                at 2023-10-26T23:08:25.469Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

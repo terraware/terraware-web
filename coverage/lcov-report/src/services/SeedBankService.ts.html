@@ -367,11 +367,7 @@
 <a name='L302'></a><a href='#L302'>302</a>
 <a name='L303'></a><a href='#L303'>303</a>
 <a name='L304'></a><a href='#L304'>304</a>
-<a name='L305'></a><a href='#L305'>305</a>
-<a name='L306'></a><a href='#L306'>306</a>
-<a name='L307'></a><a href='#L307'>307</a>
-<a name='L308'></a><a href='#L308'>308</a>
-<a name='L309'></a><a href='#L309'>309</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -617,12 +613,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -642,19 +634,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -681,7 +673,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { paths } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
-import { StorageLocation } from 'src/types/Facility';
+import { SubLocation } from 'src/types/Facility';
 import HttpService, { Response } from './HttpService';
 import SearchService, { SearchRequestPayload } from './SearchService';
 import { SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
@@ -693,7 +685,7 @@ import { getPromisesResponse } from './utils';
  */
 &nbsp;
 const SUMMARY_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/seedbank/summary';</span>
-const STORAGE_LOCATIONS_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/seedbank/storageLocations';</span>
+const SUB_LOCATIONS_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/facilities/{facilityId}/subLocations';</span>
 const ACCESSIONS_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v2/seedbank/accessions';</span>
 const FIELD_VALUES_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/seedbank/values';</span>
 const ACCESSIONS_TEMPLATE_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v2/seedbank/accessions/uploads/template';</span>
@@ -705,7 +697,7 @@ type ValuesPostRequestBody = paths[typeof FIELD_VALUES_ENDPOINT]['post']['reques
 type ValuesPostResponse = paths[typeof FIELD_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 &nbsp;
 type StorageLocationsResponsePayload =
-  paths[typeof STORAGE_LOCATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+  paths[typeof SUB_LOCATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 &nbsp;
 export type FieldValuesMap = ValuesPostResponse['results'];
 export const DEFAULT_SEED_SEARCH_FILTERS = <span class="cstat-no" title="statement not covered" >{};</span>
@@ -726,15 +718,15 @@ export type Summary = {
 };
 export type SummaryResponse = Response &amp; Summary;
 &nbsp;
-export type StorageLocationsData = {
-  storageLocations: StorageLocation[];
+export type SubLocationsData = {
+  subLocations: SubLocation[];
 };
-export type StorageLocationsResponse = Response &amp; StorageLocationsData;
+export type SubLocationsResponse = Response &amp; SubLocationsData;
 &nbsp;
-export type StorageLocationData = {
-  storageLocation?: StorageLocation;
+export type SubLocationData = {
+  subLocation?: SubLocation;
 };
-export type StorageLocationResponse = Response &amp; StorageLocationData;
+export type SubLocationResponse = Response &amp; SubLocationData;
 &nbsp;
 export type AccessionPostRequestBody =
   paths[typeof ACCESSIONS_ENDPOINT]['post']['requestBody']['content']['application/json'];
@@ -750,7 +742,7 @@ export type AccessionsSearchParams = {
   sortOrder?: SearchSortOrder;
 };
 &nbsp;
-const httpStorageLocations = <span class="cstat-no" title="statement not covered" >HttpService.root(STORAGE_LOCATIONS_ENDPOINT);</span>
+const httpSubLocations = <span class="cstat-no" title="statement not covered" >HttpService.root(SUB_LOCATIONS_ENDPOINT);</span>
 &nbsp;
 /**
  * Seed bank summary
@@ -923,48 +915,44 @@ const resolveAccessionsUpload = <span class="cstat-no" title="statement not cove
 };
 &nbsp;
 /*
- * getLocations() returns all the storage locations associated with a given facility or null if the
- * API call failed.
+ * Returns all the sub-locations associated with a given facility or null if the API call failed.
  */
-const getStorageLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (seedbankId: number): Promise&lt;StorageLocationsResponse&gt; =&gt; {</span>
-  const response: StorageLocationsResponse = <span class="cstat-no" title="statement not covered" >await httpStorageLocations.get&lt;</span>
-    StorageLocationsResponsePayload,
-    StorageLocationsData
-  &gt;(
+const getSubLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (facilityId: number): Promise&lt;SubLocationsResponse&gt; =&gt; {</span>
+  const response: SubLocationsResponse = <span class="cstat-no" title="statement not covered" >await httpSubLocations.get&lt;StorageLocationsResponsePayload, SubLocationsData&gt;(</span>
     {
-      params: {
-        facilityId: seedbankId.toString(),
+      urlReplacements: {
+        '{facilityId}': facilityId.toString(),
       },
     },
-<span class="fstat-no" title="function not covered" >    (d</span>ata) =&gt; (<span class="cstat-no" title="statement not covered" >{ storageLocations: data?.storageLocations ?? [] })</span>
+<span class="fstat-no" title="function not covered" >    (d</span>ata) =&gt; (<span class="cstat-no" title="statement not covered" >{ subLocations: data?.subLocations ?? [] })</span>
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return response;</span>
 };
 &nbsp;
 /**
- * Create a single storage location
+ * Create a single sub-location
  */
-const createStorageLocation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (facilityId: number, name: string): Promise&lt;StorageLocationResponse&gt; =&gt; {</span>
-  const response: Response = <span class="cstat-no" title="statement not covered" >await httpStorageLocations.post({</span>
-    entity: { facilityId, name },
+const createSubLocation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (facilityId: number, name: string): Promise&lt;SubLocationResponse&gt; =&gt; {</span>
+  const response: Response = <span class="cstat-no" title="statement not covered" >await httpSubLocations.post({</span>
+    urlReplacements: {
+      '{facilityId}': facilityId.toString(),
+    },
+    entity: { name },
   });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
     ...response,
-    storageLocation: response.data?.storageLocation,
+    subLocation: response.data?.subLocation,
   };
 };
 &nbsp;
 /**
- * Create one or more storage locations
+ * Create one or more sub-locations
  */
-const createStorageLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (</span>
-  facilityId: number,
-  names: string[]
-): Promise&lt;(StorageLocationResponse | null)[]&gt; =&gt; {
-  const promises = <span class="cstat-no" title="statement not covered" >names.map(<span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; <span class="cstat-no" title="statement not covered" >createStorageLocation(facilityId, name))</span>;</span>
-<span class="cstat-no" title="statement not covered" >  return getPromisesResponse&lt;StorageLocationResponse&gt;(promises);</span>
+const createSubLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (facilityId: number, names: string[]): Promise&lt;(SubLocationResponse | null)[]&gt; =&gt; {</span>
+  const promises = <span class="cstat-no" title="statement not covered" >names.map(<span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; <span class="cstat-no" title="statement not covered" >createSubLocation(facilityId, name))</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return getPromisesResponse&lt;SubLocationResponse&gt;(promises);</span>
 };
 &nbsp;
 /**
@@ -981,9 +969,9 @@ const SeedBankService = <span class="cstat-no" title="statement not covered" >{<
   uploadAccessions,
   getAccessionsUploadStatus,
   resolveAccessionsUpload,
-  getStorageLocations,
-  createStorageLocation,
-  createStorageLocations,
+  getSubLocations,
+  createSubLocation,
+  createSubLocations,
 };
 &nbsp;
 export default SeedBankService;
@@ -994,7 +982,7 @@ export default SeedBankService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-24T20:23:49.243Z
+                at 2023-10-26T23:08:25.469Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
