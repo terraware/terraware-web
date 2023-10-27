@@ -129,7 +129,7 @@ export default function ObservationPlantingZone(): JSX.Element {
       {replaceObservationPlot && (
         <ReplaceObservationPlotModal
           onClose={onCloseModal}
-          observationId={Number(observationId)}
+          observation={}
           monitoringPlot={replaceObservationPlot}
         />
       )}

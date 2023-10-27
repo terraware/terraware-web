@@ -134,8 +134,7 @@ export default function ObservationMapView({
     return (
       <TooltipContents
         monitoringPlot={entity}
-        observationId={selectedObservation?.observationId}
-        observationState={selectedObservation?.state}
+        observation={selectedObservation}
         title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
       />
     );

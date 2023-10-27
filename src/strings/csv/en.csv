@@ -866,10 +866,12 @@ REASSIGN_SEEDLINGS,Reassign Seedlings
 REASSIGN_SEEDLINGS_DESCRIPTION,"Enter the new subzone, new quantity, and notes for the species you want to reassign seedlings for. The seedlings for rows you leave empty will not be reassigned."
 REASSIGNMENT,Reassignment
 REASSIGNMENT_DURATION,Reassignment Duration
-REASSIGNMENT_REQUEST_ERROR_TITLE,Unable to Complete Reassignment Request
-REASSIGNMENT_REQUEST_ERROR_DESCRIPTION,No alternate plots were available to reassign {0}. Reach out to Terraformation to discuss further.
-REASSIGNMENT_REQUEST_PROCESSED_TITLE,Reassignment Request Processed
-REASSIGNMENT_REQUEST_PROCESSED_DESCRIPTION,Plot {0} has been reassigned to {1}.
+REASSIGNMENT_REQUEST_PLOTS_ADDED,The following plots will be added: {0}.
+REASSIGNMENT_REQUEST_PLOTS_REMOVED,The following plots will be removed: {0}.
+REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,No plots will be added.
+REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,No plots will be added: no plot available for reassignment.
+REASSIGNMENT_REQUEST_SENT,Reassignment Request Sent
+REASSIGNMENT_REQUEST_STATUS,Reassignment Request Status
 RECALCITRANT,Recalcitrant
 RECEIVE_EMAIL_NOTIFICATIONS,Receive Email Notifications
 RECEIVED_DATE,Received Date

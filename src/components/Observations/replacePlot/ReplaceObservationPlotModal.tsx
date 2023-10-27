@@ -3,7 +3,11 @@ import { Grid, Typography, useTheme } from '@mui/material';
 import { Button, BusySpinner, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
-import { ObservationMonitoringPlotResultsPayload, ReplaceObservationPlotDuration } from 'src/types/Observations';
+import {
+  ObservationMonitoringPlotResultsPayload,
+  ReplaceObservationPlotDuration,
+  ReplaceObservationPlotResponsePayload,
+} from 'src/types/Observations';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useAppSelector, useAppDispatch } from 'src/redux/store';
 import { selectReplaceObservationPlot } from 'src/redux/features/observations/observationsSelectors';
@@ -63,7 +67,8 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
     if (result.status === 'error') {
       snackbar.toastError();
     } else if (result.status === 'success') {
-      // TODO: display page message on what was replaced by parsing results.{added,removed}MonitoringPlotIds
+      const { addedMonitoringPlotIds, removedMonitoringPlotIds } = result.data as ReplaceObservationPlotResponsePayload;
+      snackbar.toastInfo(strings.REASSIGNMENT_REQUEST_SENT);
       dispatch(requestObservationsResults(selectedOrganization.id));
       onClose();
     }
