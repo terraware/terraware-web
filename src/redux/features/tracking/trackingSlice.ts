@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PlantingSite, PlantingSiteReportedPlants, PlantingSiteSearchResult } from 'src/types/Tracking';
 import { PlantingSiteZone } from 'src/types/PlantingSite';
+import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsyncThunks';
+import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
 
 // Define a type for the slice state
 type Data = {
@@ -100,3 +102,18 @@ export const siteReportedPlantsSlice = createSlice({
 export const { setSiteReportedPlantsAction } = siteReportedPlantsSlice.actions;
 
 export const siteReportedPlantsReducer = siteReportedPlantsSlice.reducer;
+
+// Monitoring plots
+
+type MonitoringPlotsState = Record<string, StatusT<MonitoringPlotsResponse>>;
+
+const initialMonitoringPlotsState: MonitoringPlotsState = {};
+
+const monitoringPlotsSlice = createSlice({
+  name: 'monitoringPlots',
+  initialState: initialMonitoringPlotsState,
+  reducers: {},
+  extraReducers: buildReducers<MonitoringPlotsResponse>(requestMonitoringPlots),
+});
+
+export const monitoringPlotsReducer = monitoringPlotsSlice.reducer;

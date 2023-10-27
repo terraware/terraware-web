@@ -15,10 +15,11 @@ import {
 } from './features/plantings/plantingsSlice';
 import { speciesReducer } from './features/species/speciesSlice';
 import {
-  trackingReducer,
-  sitePopulationReducer,
+  monitoringPlotsReducer,
   plantingSitesSearchResultsReducer,
+  sitePopulationReducer,
   siteReportedPlantsReducer,
+  trackingReducer,
 } from './features/tracking/trackingSlice';
 import { snackbarReducer } from './features/snackbar/snackbarSlice';
 import { messageReducer } from './features/message/messageSlice';
@@ -27,23 +28,24 @@ import { userAnalyticsReducer } from './features/user/userAnalyticsSlice';
 // assembly of app reducers
 export const reducers = {
   appVersion: appVersionReducer,
-  observationsResults: observationsResultsReducer,
+  message: messageReducer,
+  monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,
+  observationsResults: observationsResultsReducer,
   plantings: plantingsReducer,
-  species: speciesReducer,
-  tracking: trackingReducer,
-  sitePopulation: sitePopulationReducer,
   plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,
+  plantingSitesSearchResults: plantingSitesSearchResultsReducer,
+  replaceObservationPlot: replaceObservationPlotReducer,
+  rescheduleObservation: rescheduleObservationReducer,
+  scheduleObservation: scheduleObservationReducer,
+  sitePopulation: sitePopulationReducer,
+  siteReportedPlantsResults: siteReportedPlantsReducer,
+  species: speciesReducer,
+  snackbar: snackbarReducer,
+  tracking: trackingReducer,
   updatePlantingCompleted: updatePlantingCompletedReducer,
   updatePlantingsCompleted: updatePlantingsCompletedReducer,
-  plantingSitesSearchResults: plantingSitesSearchResultsReducer,
-  siteReportedPlantsResults: siteReportedPlantsReducer,
-  snackbar: snackbarReducer,
-  message: messageReducer,
   userAnalytics: userAnalyticsReducer,
-  scheduleObservation: scheduleObservationReducer,
-  rescheduleObservation: rescheduleObservationReducer,
-  replaceObservationPlot: replaceObservationPlotReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

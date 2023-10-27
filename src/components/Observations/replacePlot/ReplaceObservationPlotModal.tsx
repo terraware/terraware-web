@@ -10,18 +10,24 @@ import {
 } from 'src/types/Observations';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useAppSelector, useAppDispatch } from 'src/redux/store';
-import { selectReplaceObservationPlot } from 'src/redux/features/observations/observationsSelectors';
 import { requestReplaceObservationPlot } from 'src/redux/features/observations/observationsAsyncThunks';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestMonitoringPlots } from 'src/redux/features/tracking/trackingAsyncThunks';
+import { selectMonitoringPlots } from 'src/redux/features/tracking/trackingSelectors';
+import {
+  selectHasCompletedObservations,
+  selectReplaceObservationPlot,
+} from 'src/redux/features/observations/observationsSelectors';
 
 export interface ReplaceObservationPlotModalProps {
-  onClose: () => void;
-  observationId: number;
   monitoringPlot: ObservationMonitoringPlotResultsPayload;
+  observationId: number;
+  onClose: () => void;
+  plantingSiteId: number;
 }
 
 export default function ReplaceObservationPlotModal(props: ReplaceObservationPlotModalProps): JSX.Element {
-  const { onClose, observationId, monitoringPlot } = props;
+  const { monitoringPlot, observationId, onClose, plantingSiteId } = props;
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -31,8 +37,13 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
   const [duration, setDuration] = useState<ReplaceObservationPlotDuration | undefined>();
   const [validate, setValidate] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
+  const [monitoringPlotsRequestId, setMonitoringPlotsRequestId] = useState<string>('');
+  const [addedPlotIds, setAddedPlotIds] = useState<number[]>([]);
+  const [removedPlotIds, setRemovedPlotIds] = useState<number[]>([]);
 
   const result = useAppSelector((state) => selectReplaceObservationPlot(state, requestId));
+  const plots = useAppSelector((state) => selectMonitoringPlots(state, monitoringPlotsRequestId));
+  const hasCompletedObservations = useAppSelector((state) => selectHasCompletedObservations(state, plantingSiteId));
 
   const replaceObservationPlot = () => {
     setValidate(true);
@@ -68,15 +79,62 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
       snackbar.toastError();
     } else if (result.status === 'success') {
       const { addedMonitoringPlotIds, removedMonitoringPlotIds } = result.data as ReplaceObservationPlotResponsePayload;
-      snackbar.toastInfo(strings.REASSIGNMENT_REQUEST_SENT);
+      setAddedPlotIds(addedMonitoringPlotIds);
+      setRemovedPlotIds(removedMonitoringPlotIds);
+      snackbar.toastSuccess(strings.REASSIGNMENT_REQUEST_SENT);
       dispatch(requestObservationsResults(selectedOrganization.id));
+      const dispatched = dispatch(
+        requestMonitoringPlots({
+          plantingSiteId,
+          monitoringPlotIds: [...addedMonitoringPlotIds, ...removedMonitoringPlotIds],
+        })
+      );
+      setMonitoringPlotsRequestId(dispatched.requestId);
+    }
+  }, [dispatch, result, selectedOrganization.id, snackbar, plantingSiteId]);
+
+  useEffect(() => {
+    if (plots?.status === 'pending') {
+      return;
+    }
+    if (plots && plots.status === 'success') {
+      // show page message of status
+      const addedPlotsNames = addedPlotIds.map((id) => plots.data[Number(id)]?.fullName).join(', ');
+      const removedPlotsNames = removedPlotIds.map((id) => plots.data[Number(id)]?.fullName).join(', ');
+
+      // we don't add new plots for a permanent plot if the site has completed observations
+      const noReplacedPlotsFound = !addedPlotIds.length && (!monitoringPlot.isPermanent || !hasCompletedObservations);
+
+      if (noReplacedPlotsFound) {
+        snackbar.pageWarning(
+          [
+            strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_REMOVED, removedPlotsNames) as string,
+            <br key='warn' />,
+            strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,
+          ],
+          strings.REASSIGNMENT_REQUEST_STATUS,
+          { label: strings.CLOSE }
+        );
+      } else {
+        snackbar.pageInfo(
+          [
+            strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_REMOVED, removedPlotsNames) as string,
+            <br key='info' />,
+            addedPlotIds.length
+              ? (strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_ADDED, addedPlotsNames) as string)
+              : strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,
+          ],
+          strings.REASSIGNMENT_REQUEST_STATUS,
+          { label: strings.CLOSE }
+        );
+      }
       onClose();
     }
-  }, [dispatch, onClose, result, selectedOrganization.id, snackbar]);
+  }, [plots, onClose, snackbar, addedPlotIds, removedPlotIds, hasCompletedObservations, monitoringPlot]);
 
   return (
     <>
-      {result?.status === 'pending' && <BusySpinner withSkrim={true} />}
+      {(result?.status === 'pending' || plots?.status === 'pending') && <BusySpinner withSkrim={true} />}
       <DialogBox
         onClose={onClose}
         open={true}

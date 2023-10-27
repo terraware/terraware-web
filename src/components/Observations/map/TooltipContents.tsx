@@ -4,10 +4,7 @@ import { Portal } from '@mui/base';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
-import {
-  ObservationResults,
-  ObservationMonitoringPlotResultsPayload,
-} from 'src/types/Observations';
+import { ObservationState, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import { useOrganization } from 'src/providers';
 import isEnabled from 'src/features';
 import { isManagerOrHigher } from 'src/utils/organization';
@@ -24,12 +21,14 @@ const useStyles = makeStyles(() => ({
 
 type TooltipContentsProps = {
   monitoringPlot: ObservationMonitoringPlotResultsPayload;
-  observation?: ObservationResults;
+  observationId?: number;
+  observationState?: ObservationState;
+  plantingSiteId: number;
   title: string;
 };
 
 export default function TooltipContents(props: TooltipContentsProps): JSX.Element {
-  const { monitoringPlot, observation, title } = props;
+  const { monitoringPlot, observationId, observationState, plantingSiteId, title } = props;
   const theme = useTheme();
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
@@ -38,8 +37,8 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   const replaceObservationPlotEnabled =
     isEnabled('Replace Observation Plot') && isManagerOrHigher(selectedOrganization);
 
-  const observationInProgress = observation?.state === 'InProgress';
-  const observationOverdue = observation?.state === 'Overdue';
+  const observationInProgress = observationState === 'InProgress';
+  const observationOverdue = observationState === 'Overdue';
 
   const numPlants = monitoringPlot?.totalPlants;
   const numSpecies = monitoringPlot?.totalSpecies;
@@ -48,12 +47,13 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
 
   return (
     <>
-      {showReplacePlotModal && observation && monitoringPlot && (
+      {showReplacePlotModal && observationId && monitoringPlot && (
         <Portal>
           <ReplaceObservationPlotModal
-            onClose={() => setShowReplacePlotModal(false)}
-            observation={observation}
             monitoringPlot={monitoringPlot}
+            observationId={observationId}
+            onClose={() => setShowReplacePlotModal(false)}
+            plantingSiteId={plantingSiteId}
           />
         </Portal>
       )}
