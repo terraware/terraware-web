@@ -1,5 +1,5 @@
 // flattened info for shapes relating to planting site data
-
+import React from 'react';
 import mapboxgl from 'mapbox-gl';
 
 export type MapGeometry = number[][][][];
@@ -93,7 +93,7 @@ export type MapOptions = {
  * Render a popup based on properties
  */
 export type MapPopupRenderer = {
-  render: (properties: MapSourceProperties) => JSX.Element;
+  render: (properties: MapSourceProperties) => JSX.Element | null;
   style?: object;
   className?: string;
   anchor?: mapboxgl.Anchor;
@@ -131,4 +131,17 @@ export type MapData = Record<MapObject, MapSourceBaseData | undefined>;
 export type MapControl = {
   // hide the full screen control
   hideFullScreen?: boolean;
+
+  // custom map controls
+  topRightMapControl?: React.ReactNode;
+  bottomLeftMapControl?: React.ReactNode;
+};
+
+/**
+ * Map view style
+ */
+export type MapViewStyle = 'Outdoors' | 'Satellite';
+export const MapViewStyles: Record<MapViewStyle, string> = {
+  Outdoors: 'mapbox://styles/mapbox/outdoors-v12?optimize=true',
+  Satellite: 'mapbox://styles/mapbox/satellite-v9?optimize=true',
 };

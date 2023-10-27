@@ -6,6 +6,7 @@ import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
 import { ObservationState, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import ReplaceObservationPlotModal from 'src/components/Observations/replacePlot/ReplaceObservationPlotModal';
+import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -27,6 +28,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   const { monitoringPlot, observationId, observationState, title } = props;
   const theme = useTheme();
   const classes = useStyles();
+  const mapPortalContainer = useMapPortalContainer();
   const [showReplacePlotModal, setShowReplacePlotModal] = useState<boolean>(false);
 
   const observationInProgress = observationState === 'InProgress';
@@ -40,7 +42,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   return (
     <>
       {showReplacePlotModal && observationId && monitoringPlot && (
-        <Portal>
+        <Portal container={mapPortalContainer}>
           <ReplaceObservationPlotModal
             onClose={() => setShowReplacePlotModal(false)}
             observationId={observationId}
