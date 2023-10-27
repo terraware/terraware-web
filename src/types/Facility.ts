@@ -1,9 +1,9 @@
 import strings from 'src/strings';
 import { components } from 'src/api/types/generated-schema';
 
-export type StorageLocation = components['schemas']['StorageLocationPayload'];
+export type SubLocation = components['schemas']['SubLocationPayload'];
 
-export type PartialStorageLocation = Partial<StorageLocation>;
+export type PartialSubLocation = Partial<SubLocation>;
 
 export type FacilityType = components['schemas']['FacilityPayload']['type'];
 
@@ -21,7 +21,7 @@ export interface Facility {
   capacity?: number;
 }
 
-export const DEFAULT_STORAGE_LOCATIONS = (): string[] => [
+export const DEFAULT_SUB_LOCATIONS = (): string[] => [
   strings.FREEZER_1,
   strings.FREEZER_2,
   strings.FREEZER_3,

@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import { Container, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import SelectPhotos, { ErrorType } from 'src/components/common/SelectPhotos';
+import SelectPhotos from 'src/components/common/SelectPhotos';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageForm from 'src/components/common/PageForm';
-import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 
 type AddPhotosProps = {
-  withdrawalPurpose: string;
   onNext: (photos: File[]) => void;
   onCancel: () => void;
   saveText: string;
 };
 export default function AddPhotos(props: AddPhotosProps): JSX.Element {
-  const { withdrawalPurpose, onNext, onCancel, saveText } = props;
+  const { onNext, onCancel, saveText } = props;
   const [photos, setPhotos] = useState<File[]>([]);
-  const [error, setError] = useState<ErrorType | undefined>();
-  const [photosRequired] = useState<boolean>(withdrawalPurpose === NurseryWithdrawalPurposes.OUTPLANT);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
@@ -25,12 +21,7 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
   };
 
   const onNextHandler = async () => {
-    if (photosRequired && !photos.length) {
-      setError({ title: strings.PHOTOS_REQUIRED, text: strings.PHOTOS_OUTPLANT_DESCRIPTION });
-    } else {
-      setError(undefined);
-      await onNext(photos);
-    }
+    await onNext(photos);
   };
 
   return (
@@ -54,14 +45,9 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
       >
         <SelectPhotos
           onPhotosChanged={onPhotosChanged}
-          title={photosRequired ? strings.ADD_PHOTOS_REQUIRED : strings.ADD_PHOTOS}
-          description={
-            photosRequired
-              ? [strings.ADD_PHOTOS_REQUIRED_OUTPLANT, strings.ADD_PHOTOS_DESCRIPTION]
-              : strings.ADD_PHOTOS_DESCRIPTION_OPTIONAL
-          }
+          title={strings.ADD_PHOTOS}
+          description={strings.ADD_PHOTOS_DESCRIPTION}
           multipleSelection={true}
-          error={error}
         />
       </Container>
     </PageForm>

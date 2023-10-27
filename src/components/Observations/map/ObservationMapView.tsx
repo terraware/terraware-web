@@ -117,7 +117,7 @@ export default function ObservationMapView({
 
   const hasSearchCriteria = search.trim() || filterZoneNames.length;
 
-  const contextRenderer = (properties: MapSourceProperties): JSX.Element => {
+  const contextRenderer = (properties: MapSourceProperties): JSX.Element | null => {
     let entity: any;
     if (properties.type === 'site') {
       entity = selectedObservation;
@@ -129,6 +129,10 @@ export default function ObservationMapView({
         ?.flatMap((z) => z.plantingSubzones)
         ?.flatMap((sz) => sz.monitoringPlots)
         ?.find((p) => p.monitoringPlotId === properties.id);
+    }
+
+    if (!entity) {
+      return null;
     }
 
     return (

@@ -40,8 +40,8 @@ type CreateFacilityRequestPayload =
 type UpdateFacilityRequestPayload =
   paths[typeof FACILITY_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
-type StorageLocations = {
-  storageLocationNames?: string[];
+type SubLocations = {
+  subLocationNames?: string[];
 };
 
 const httpFacilities = HttpService.root(FACILITIES_ENDPOINT);
@@ -50,14 +50,14 @@ const httpFacility = HttpService.root(FACILITY_ENDPOINT);
 /**
  * create a facility
  */
-const createFacility = async (facility: Omit<Facility, 'id'> & StorageLocations): Promise<CreateFacilityResponse> => {
+const createFacility = async (facility: Omit<Facility, 'id'> & SubLocations): Promise<CreateFacilityResponse> => {
   const entity: CreateFacilityRequestPayload = {
     name: facility.name,
     description: facility.description,
     organizationId: facility.organizationId,
     type: facility.type,
     timeZone: facility.timeZone,
-    storageLocationNames: facility.storageLocationNames,
+    subLocationNames: facility.subLocationNames,
     buildStartedDate: facility.buildStartedDate,
     buildCompletedDate: facility.buildCompletedDate,
     operationStartedDate: facility.operationStartedDate,

@@ -57,6 +57,16 @@ export interface paths {
   "/api/v1/facilities/{facilityId}/devices": {
     get: operations["listFacilityDevices"];
   };
+  "/api/v1/facilities/{facilityId}/subLocations": {
+    get: operations["listSubLocations"];
+    post: operations["createSubLocation"];
+  };
+  "/api/v1/facilities/{facilityId}/subLocations/{subLocationId}": {
+    get: operations["getSubLocation"];
+    put: operations["updateSubLocation"];
+    /** The sub-location must not be in use. */
+    delete: operations["deleteSubLocation"];
+  };
   "/api/v1/facility/{facilityId}/devices": {
     get: operations["listFacilityDevices_1"];
   };
@@ -328,6 +338,7 @@ export interface paths {
     get: operations["listAssignedPlots"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}": {
+    put: operations["updatePlotObservation"];
     post: operations["completePlotObservation"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}/claim": {
@@ -535,7 +546,12 @@ export interface components {
         | "Drying"
         | "In Storage"
         | "Used Up";
+      /**
+       * @deprecated
+       * @description Use subLocation instead.
+       */
       storageLocation?: string;
+      subLocation?: string;
       /** Format: int32 */
       subsetCount?: number;
       /** @description Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
@@ -765,7 +781,12 @@ export interface components {
         | "Drying"
         | "In Storage"
         | "Used Up";
+      /**
+       * @deprecated
+       * @description Use subLocation instead.
+       */
       storageLocation?: string;
+      subLocation?: string;
     };
     CreateAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
@@ -886,7 +907,12 @@ export interface components {
        * @description Which organization this facility belongs to.
        */
       organizationId: number;
+      /**
+       * @deprecated
+       * @description Use subLocationNames instead.
+       */
       storageLocationNames?: string[];
+      subLocationNames?: string[];
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -1035,6 +1061,9 @@ export interface components {
     CreateStorageLocationRequestPayload: {
       /** Format: int64 */
       facilityId: number;
+      name: string;
+    };
+    CreateSubLocationRequestPayload: {
       name: string;
     };
     CreateTimeseriesEntry: {
@@ -1252,6 +1281,11 @@ export interface components {
       /** Format: date-time */
       createdTime: string;
       description?: string;
+      /**
+       * Format: int32
+       * @description Short numeric identifier for this facility. Facility numbers start at 1 for each facility type in an organization.
+       */
+      facilityNumber: number;
       /** Format: int64 */
       id: number;
       name: string;
@@ -1539,6 +1573,10 @@ export interface components {
     GetStorageLocationResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       storageLocation: components["schemas"]["StorageLocationPayload"];
+    };
+    GetSubLocationResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      subLocation: components["schemas"]["SubLocationPayload"];
     };
     GetTimeseriesHistoryRequestPayload: {
       /**
@@ -1878,6 +1916,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       storageLocations: components["schemas"]["StorageLocationPayload"][];
     };
+    ListSubLocationsResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      subLocations: components["schemas"]["SubLocationPayload"][];
+    };
     ListTimeZoneNamesResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       timeZones: components["schemas"]["TimeZonePayload"][];
@@ -1961,9 +2003,23 @@ export interface components {
       /** Format: int64 */
       id: number;
     };
+    ObservationMonitoringPlotCoordinatesPayload: {
+      gpsCoordinates: components["schemas"]["Point"];
+      position:
+        | "SouthwestCorner"
+        | "SoutheastCorner"
+        | "NortheastCorner"
+        | "NorthwestCorner";
+    };
     ObservationMonitoringPlotPhotoPayload: {
       /** Format: int64 */
       fileId: number;
+      gpsCoordinates: components["schemas"]["Point"];
+      position:
+        | "SouthwestCorner"
+        | "SoutheastCorner"
+        | "NortheastCorner"
+        | "NorthwestCorner";
     };
     ObservationMonitoringPlotResultsPayload: {
       boundary: components["schemas"]["Polygon"];
@@ -1972,6 +2028,8 @@ export interface components {
       claimedByUserId?: number;
       /** Format: date-time */
       completedTime?: string;
+      /** @description Observed coordinates, if any, up to one per position. */
+      coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
       /** @description True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
       isPermanent: boolean;
       /** Format: int64 */
@@ -2786,6 +2844,23 @@ export interface components {
       id: number;
       name: string;
     };
+    SubLocationPayload: {
+      /**
+       * Format: int32
+       * @description If this sub-location is at a seed bank, the number of active accessions stored there.
+       */
+      activeAccessions?: number;
+      /**
+       * Format: int32
+       * @description If this sub-location is at a nursery, the number of batches stored there that have seedlings.
+       */
+      activeBatches?: number;
+      /** Format: int64 */
+      facilityId: number;
+      /** Format: int64 */
+      id: number;
+      name: string;
+    };
     /** @description Indicates of success or failure of the requested operation. */
     SuccessOrError: "ok" | "error";
     SummarizeAccessionSearchRequestPayload: {
@@ -2921,7 +2996,12 @@ export interface components {
         | "Drying"
         | "In Storage"
         | "Used Up";
+      /**
+       * @deprecated
+       * @description Use subLocation instead.
+       */
       storageLocation?: string;
+      subLocation?: string;
       /** Format: int32 */
       subsetCount?: number;
       /** @description Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
@@ -3098,6 +3178,10 @@ export interface components {
     UpdatePlantingSubzoneRequestPayload: {
       plantingCompleted: boolean;
     };
+    UpdatePlotObservationRequestPayload: {
+      /** @description Observed coordinates, if any, up to one per position. */
+      coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
+    };
     UpdateProjectRequestPayload: {
       description?: string;
       name: string;
@@ -3106,6 +3190,9 @@ export interface components {
       caption?: string;
     };
     UpdateStorageLocationRequestPayload: {
+      name: string;
+    };
+    UpdateSubLocationRequestPayload: {
       name: string;
     };
     UpdateUserPreferencesRequestPayload: {
@@ -3671,6 +3758,113 @@ export interface operations {
       };
       /** The facility does not exist or is not accessible by the current user. */
       404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  listSubLocations: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListSubLocationsResponsePayload"];
+        };
+      };
+    };
+  };
+  createSubLocation: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSubLocationResponsePayload"];
+        };
+      };
+      /** A sub-location with the requested name already exists at the facility. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateSubLocationRequestPayload"];
+      };
+    };
+  };
+  getSubLocation: {
+    parameters: {
+      path: {
+        facilityId: number;
+        subLocationId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSubLocationResponsePayload"];
+        };
+      };
+    };
+  };
+  updateSubLocation: {
+    parameters: {
+      path: {
+        facilityId: number;
+        subLocationId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** A sub-location with the requested name already exists at the facility. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateSubLocationRequestPayload"];
+      };
+    };
+  };
+  /** The sub-location must not be in use. */
+  deleteSubLocation: {
+    parameters: {
+      path: {
+        facilityId: number;
+        subLocationId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The sub-location is in use, e.g., there are seeds or seedlings stored there. */
+      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
@@ -5654,6 +5848,27 @@ export interface operations {
       };
     };
   };
+  updatePlotObservation: {
+    parameters: {
+      path: {
+        observationId: number;
+        plotId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdatePlotObservationRequestPayload"];
+      };
+    };
+  };
   completePlotObservation: {
     parameters: {
       path: {
@@ -5799,6 +6014,12 @@ export interface operations {
       };
       /** The observation does not exist or does not have the requested monitoring plot. */
       404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The observation of the monitoring plot has already been completed and the plot cannot be replaced. */
+      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };

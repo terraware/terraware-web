@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Icon, PopoverMultiSelect } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
+import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 
 export type MapLayer = 'Planting Site' | 'Zones' | 'Sub-Zones' | 'Monitoring Plots';
 
@@ -29,12 +30,17 @@ export default function MapLayerSelect({
   initialSelection,
   onUpdateSelection,
   menuSections,
-}: MapLayerSelectProps): JSX.Element {
+}: MapLayerSelectProps): JSX.Element | null {
   const classes = useStyles();
+  const mapPortalContainer = useMapPortalContainer();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleClick = (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
     setAnchorEl(event?.currentTarget ?? null);
   };
+
+  if (mapPortalContainer) {
+    return null;
+  }
 
   return (
     <>

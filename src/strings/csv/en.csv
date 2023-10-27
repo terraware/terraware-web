@@ -206,6 +206,7 @@ DASHBOARD_MESSAGE,Your seeds dashboard will automatically populate with data as 
 DASHBOARD_MESSAGE_TITLE,Add Accessions to See Data
 DATA_CHECK_COMPLETED,Database check complete. No errors were found!
 DATA_CHECK_WITH_PROBLEMS,Database check complete. {0} potential errors were found.
+DATA_IMPORT_ROW_MESSAGE,Row {0}: {1},{0} is a number referring to a row in a spreadsheet file; {1} is an error message related to the row.
 DATA_IMPORT_FAILED,Data import failed
 DATE,Date
 DATE_ADDED,Date Added
@@ -741,6 +742,7 @@ ORTHODOX,Orthodox
 OTHER,Other
 OUNCES,Ounces
 OUT_PLANTING,Out-planting
+OUTDOORS,Outdoors
 OUTPLANT,Outplant
 OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Outplants require batches with seedlings that are ""ready."""
 OUTSTANDING,Outstanding
@@ -960,6 +962,7 @@ RUN_A_DATABASE_CHECK,Run a Database Check
 S_SEED_COUNT,seed count
 SAND,Sand
 SAND_PETRI_DISH,Sand Petri Dish
+SATELLITE,Satellite
 SAVE,Save
 SAVE_ACCESSION_ERROR,An error occurred when saving the accession.
 SAVE_AND_NEXT,Save and Next

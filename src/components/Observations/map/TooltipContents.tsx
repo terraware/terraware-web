@@ -9,6 +9,7 @@ import { useOrganization } from 'src/providers';
 import isEnabled from 'src/features';
 import { isManagerOrHigher } from 'src/utils/organization';
 import ReplaceObservationPlotModal from 'src/components/Observations/replacePlot/ReplaceObservationPlotModal';
+import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -31,6 +32,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   const { monitoringPlot, observationId, observationState, plantingSiteId, title } = props;
   const theme = useTheme();
   const classes = useStyles();
+  const mapPortalContainer = useMapPortalContainer();
   const { selectedOrganization } = useOrganization();
   const [showReplacePlotModal, setShowReplacePlotModal] = useState<boolean>(false);
 
@@ -48,7 +50,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   return (
     <>
       {showReplacePlotModal && observationId && monitoringPlot && (
-        <Portal>
+        <Portal container={mapPortalContainer}>
           <ReplaceObservationPlotModal
             monitoringPlot={monitoringPlot}
             observationId={observationId}

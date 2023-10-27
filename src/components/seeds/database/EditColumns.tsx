@@ -184,7 +184,7 @@ function sections(system?: string): Section[] {
     },
     {
       name: strings.STORING,
-      options: [[columns.facility_name], [columns.storageLocation_name]],
+      options: [[columns.facility_name], [columns.subLocation_name]],
     },
     {
       name: strings.SEED_COLLECTION,

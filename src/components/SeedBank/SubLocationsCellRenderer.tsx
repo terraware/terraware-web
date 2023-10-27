@@ -6,17 +6,17 @@ import Link from 'src/components/common/Link';
 import { ActiveStatuses } from 'src/types/Accession';
 import { NumericFormatter } from 'src/types/Number';
 
-export type StorageLocationsCellRendererProps = {
+export type SubLocationsCellRendererProps = {
   seedBankId?: number;
   numericFormatter: NumericFormatter;
   editMode: boolean;
 };
 
-export default function StorageLocationsCellRenderer({
+export default function SubLocationsCellRenderer({
   seedBankId,
   numericFormatter,
   editMode,
-}: StorageLocationsCellRendererProps) {
+}: SubLocationsCellRendererProps) {
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, value, row, onRowClick } = props;
 
@@ -29,7 +29,7 @@ export default function StorageLocationsCellRenderer({
     const createLinkToAccessions = (locationName: string, data: string) => {
       const to = [
         `${APP_PATHS.ACCESSIONS}/?`,
-        `storageLocationName=${encodeURIComponent(locationName)}`,
+        `subLocationName=${encodeURIComponent(locationName)}`,
         `facilityId=${seedBankId}`,
         ...ActiveStatuses().map((status) => `stage=${status}`),
       ].join('&');
