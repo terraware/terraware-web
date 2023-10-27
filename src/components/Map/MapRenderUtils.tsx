@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useMap } from 'react-map-gl';
 import { makeStyles } from '@mui/styles';
 import { Box, Typography, useTheme } from '@mui/material';
 import { MapPopupRenderer, MapSourceProperties } from 'src/types/Map';
@@ -49,6 +51,28 @@ export function useSpeciesPlantsRenderer(subzonesWithPlants: any): MapPopupRende
       );
     },
   };
+}
+
+/**
+ * Full screen map container ref for Portals
+ */
+export function useMapPortalContainer(): Element | undefined {
+  const { current: map } = useMap();
+  const [container, setContainer] = useState<Element | undefined>();
+
+  const updateContainer = useCallback(() => {
+    if (window.document.fullscreenElement?.attributes?.getNamedItem('class')?.value === 'mapboxgl-map') {
+      setContainer(window.document.fullscreenElement);
+    } else {
+      setContainer(undefined);
+    }
+  }, [setContainer]);
+
+  useEffect(updateContainer);
+
+  map?.on('resize', updateContainer);
+
+  return container;
 }
 
 /**

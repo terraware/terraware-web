@@ -11,7 +11,7 @@ import { requestReplaceObservationPlot } from 'src/redux/features/observations/o
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 
 export interface ReplaceObservationPlotModalProps {
-  onClose: () => void;
+  onClose: (replaced?: boolean) => void;
   observationId: number;
   monitoringPlot: ObservationMonitoringPlotResultsPayload;
 }
@@ -65,7 +65,7 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
     } else if (result.status === 'success') {
       // TODO: display page message on what was replaced by parsing results.{added,removed}MonitoringPlotIds
       dispatch(requestObservationsResults(selectedOrganization.id));
-      onClose();
+      onClose(true);
     }
   }, [dispatch, onClose, result, selectedOrganization.id, snackbar]);
 
@@ -73,7 +73,7 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
     <>
       {result?.status === 'pending' && <BusySpinner withSkrim={true} />}
       <DialogBox
-        onClose={onClose}
+        onClose={() => onClose(false)}
         open={true}
         title={strings.REQUEST_REASSIGNMENT}
         size='medium'
@@ -82,7 +82,7 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
             id='cancelReplaceObservationPlot'
             label={strings.CANCEL}
             type='passive'
-            onClick={onClose}
+            onClick={() => onClose(false)}
             priority='secondary'
             key='button-1'
           />,

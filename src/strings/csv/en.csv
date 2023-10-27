@@ -742,6 +742,7 @@ ORTHODOX,Orthodox
 OTHER,Other
 OUNCES,Ounces
 OUT_PLANTING,Out-planting
+OUTDOORS,Outdoors
 OUTPLANT,Outplant
 OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Outplants require batches with seedlings that are ""ready."""
 OUTSTANDING,Outstanding
@@ -959,6 +960,7 @@ RUN_A_DATABASE_CHECK,Run a Database Check
 S_SEED_COUNT,seed count
 SAND,Sand
 SAND_PETRI_DISH,Sand Petri Dish
+SATELLITE,Satellite
 SAVE,Save
 SAVE_ACCESSION_ERROR,An error occurred when saving the accession.
 SAVE_AND_NEXT,Save and Next

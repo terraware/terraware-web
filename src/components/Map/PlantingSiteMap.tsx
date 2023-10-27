@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, CircularProgress, Theme, useTheme } from '@mui/material';
+import { Box, CircularProgress, useTheme } from '@mui/material';
 import useSnackbar from 'src/utils/useSnackbar';
 import GenericMap from './GenericMap';
 import {
+  MapControl,
   MapData,
   MapEntityId,
   MapEntityOptions,
@@ -14,7 +15,6 @@ import {
 import { MapService } from 'src/services';
 import _ from 'lodash';
 import { MapLayer } from 'src/components/common/MapLayerSelect';
-import { makeStyles } from '@mui/styles';
 import { getRgbaFromHex } from 'src/utils/color';
 
 const mapImages = [
@@ -23,25 +23,6 @@ const mapImages = [
     url: '/assets/mortality-rate-indicator.png',
   },
 ];
-
-const useStyles = makeStyles((theme: Theme) => ({
-  bottomLeftControl: {
-    height: 'max-content',
-    position: 'absolute',
-    left: theme.spacing(2),
-    bottom: theme.spacing(4),
-    width: 'max-content',
-    zIndex: 1000,
-  },
-  topRightControl: {
-    height: 'max-content',
-    position: 'absolute',
-    right: theme.spacing(2),
-    top: theme.spacing(2),
-    width: 'max-content',
-    zIndex: 1000,
-  },
-}));
 
 export type PlantingSiteMapProps = {
   mapData: MapData;
@@ -53,25 +34,13 @@ export type PlantingSiteMapProps = {
   focusEntities?: MapEntityId[];
   // layers to be displayed on map
   layers?: MapLayer[];
-  bottomLeftMapControl?: React.ReactNode;
-  topRightMapControl?: React.ReactNode;
   showMortalityRateFill?: boolean;
-};
+} & MapControl;
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
-  const {
-    mapData,
-    style,
-    contextRenderer,
-    highlightEntities,
-    focusEntities,
-    layers,
-    bottomLeftMapControl,
-    topRightMapControl,
-    showMortalityRateFill,
-  } = props;
+  const { mapData, style, contextRenderer, highlightEntities, focusEntities, layers, showMortalityRateFill } = props;
+  const { ...controlProps }: MapControl = props;
   const theme = useTheme();
-  const classes = useStyles();
   const snackbar = useSnackbar();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
 
@@ -270,9 +239,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         style={style}
         entityOptions={entityOptions}
         mapImages={mapImages}
+        {...controlProps}
       />
-      {topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
-      {bottomLeftMapControl && <div className={classes.bottomLeftControl}>{bottomLeftMapControl}</div>}
     </Box>
   );
 }
