@@ -310,7 +310,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     // if url has stage=<accession state>, apply that filter
     const stage = query.getAll('stage');
     const facilityId = query.get('facilityId');
-    const storageLocationName = query.get('storageLocationName');
+    const subLocationName = query.get('subLocationName');
     let newSearchCriteria = searchCriteria || {};
     if (stage.length || query.has('stage')) {
       delete newSearchCriteria.state;
@@ -329,20 +329,20 @@ export default function Database(props: DatabaseProps): JSX.Element {
       }
       query.delete('stage');
     }
-    if (storageLocationName || query.has('storageLocationName')) {
-      delete newSearchCriteria.storageLocation_name;
-      if (storageLocationName) {
+    if (subLocationName || query.has('subLocationName')) {
+      delete newSearchCriteria.subLocation_name;
+      if (subLocationName) {
         newSearchCriteria = {
           ...newSearchCriteria,
-          storageLocation_name: {
-            field: 'storageLocation_name',
-            values: [storageLocationName],
+          subLocation_name: {
+            field: 'subLocation_name',
+            values: [subLocationName],
             type: 'Exact',
             operation: 'field',
           },
         };
       }
-      query.delete('storageLocationName');
+      query.delete('subLocationName');
     }
     if ((facilityId || query.has('facilityId')) && selectedOrganization) {
       const seedBanks = getAllSeedBanks(selectedOrganization);
@@ -364,21 +364,21 @@ export default function Database(props: DatabaseProps): JSX.Element {
       query.delete('facilityId');
     }
 
-    if (stage.length || (facilityId && selectedOrganization) || storageLocationName) {
+    if (stage.length || (facilityId && selectedOrganization) || subLocationName) {
       history.replace(getLocation(location.pathname, location, query.toString()));
       setSearchCriteria(newSearchCriteria);
 
       // add seed bank and sub-location columns to show the filtered values as needed
-      if (facilityId || storageLocationName) {
+      if (facilityId || subLocationName) {
         const newColumns = displayColumnNames
           .filter((name) => {
             if (facilityId && name === 'facility_name') {
               return false;
             }
-            return name !== 'storageLocation_name';
+            return name !== 'subeLocation_name';
           })
           .concat(facilityId ? ['facility_name'] : [])
-          .concat(storageLocationName ? ['storageLocation_name'] : []);
+          .concat(subLocationName ? ['subLocation_name'] : []);
         saveUpdateSearchColumns(newColumns);
       }
     }

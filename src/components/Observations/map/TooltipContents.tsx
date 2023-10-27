@@ -5,6 +5,9 @@ import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
 import { ObservationState, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
+import { useOrganization } from 'src/providers';
+import isEnabled from 'src/features';
+import { isManagerOrHigher } from 'src/utils/organization';
 import ReplaceObservationPlotModal from 'src/components/Observations/replacePlot/ReplaceObservationPlotModal';
 import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 
@@ -29,7 +32,11 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   const theme = useTheme();
   const classes = useStyles();
   const mapPortalContainer = useMapPortalContainer();
+  const { selectedOrganization } = useOrganization();
   const [showReplacePlotModal, setShowReplacePlotModal] = useState<boolean>(false);
+
+  const replaceObservationPlotEnabled =
+    isEnabled('Replace Observation Plot') && isManagerOrHigher(selectedOrganization);
 
   const observationInProgress = observationState === 'InProgress';
   const observationOverdue = observationState === 'Overdue';
@@ -76,7 +83,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
             </>
           )}
         </Box>
-        {!monitoringPlot?.completedTime && (
+        {!monitoringPlot?.completedTime && replaceObservationPlotEnabled && (
           <Box display='flex' padding={theme.spacing(2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
             <Button
               className={classes.button}

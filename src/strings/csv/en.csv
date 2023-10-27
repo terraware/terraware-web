@@ -206,6 +206,7 @@ DASHBOARD_MESSAGE,Your seeds dashboard will automatically populate with data as 
 DASHBOARD_MESSAGE_TITLE,Add Accessions to See Data
 DATA_CHECK_COMPLETED,Database check complete. No errors were found!
 DATA_CHECK_WITH_PROBLEMS,Database check complete. {0} potential errors were found.
+DATA_IMPORT_ROW_MESSAGE,Row {0}: {1},{0} is a number referring to a row in a spreadsheet file; {1} is an error message related to the row.
 DATA_IMPORT_FAILED,Data import failed
 DATE,Date
 DATE_ADDED,Date Added
@@ -528,7 +529,7 @@ MANAGER,Manager
 MANAGER_INFO,"A manager can do the above as well as edit data entries for seeds and manage outplant withdrawals, planting sites and species."
 MAP,Map
 MAP_EDITOR_DRAWING_ADDITIONAL_FEATURE,"Add points to your new boundary by clicking on the map. To finish drawing, complete the boundary by either double-clicking or by clicking on the starting point again. The original boundary will be replaced by the new one when you finish drawing."
-MAP_EDITOR_DRAWING_FIRST_FEATURE,"Add points to your boundary by clicking on the map. To finish drawing, complete the boundary by either double-clicking or by clicking on the starting point again."
+MAP_EDITOR_DRAWING_FIRST_FEATURE,"Add points to your boundary by zooming in to where your planting site is, and then clicking on the map. To finish drawing, complete the boundary by either double-clicking or by clicking on the starting point again."
 MAP_EDITOR_EDITING_FEATURE,"Click and drag a corner of the boundary to adjust its position. Click the midpoint between two corners to add another one. To remove a corner, click on it and then click the {trash} button. When finished, click outside the boundary."
 MAP_EDITOR_NO_FEATURES,"Start drawing the boundary of your planting site. When finished, click on the starting point or double-click to complete the boundary."
 MAP_EDITOR_NO_SELECTION,"Click on your planting site's boundary if you want to adjust its position or its shape. To replace the boundary with a new one, click the {polygon} button.",{polygon} will be replaced with a symbol.

@@ -20,13 +20,11 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import { PlantingSiteId } from 'src/services/TrackingService';
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import { getMonth } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
 import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';
 import { makeStyles } from '@mui/styles';
 import { MultiPolygon } from 'geojson';
-import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
 
 type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
@@ -236,10 +234,8 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                     <Grid item xs={12} display='flex'>
                       {record?.plantingZones ? (
                         <BoundariesAndZones plantingSite={record} />
-                      ) : isEnabled('Simple Map Editor') ? (
-                        <PlantingSiteMapEditor onBoundaryChanged={onBoundaryChanged} plantingSite={record} />
                       ) : (
-                        record.boundary && <SimplePlantingSite plantingSite={record} />
+                        <PlantingSiteMapEditor onBoundaryChanged={onBoundaryChanged} plantingSite={record} />
                       )}
                     </Grid>
                   </Grid>

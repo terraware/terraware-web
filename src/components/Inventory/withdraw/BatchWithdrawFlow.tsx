@@ -174,14 +174,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           nurseryWithdrawal={record}
         />
       )}
-      {flowState === 'photos' && (
-        <AddPhotos
-          onNext={withdraw}
-          withdrawalPurpose={record.purpose}
-          onCancel={goToInventory}
-          saveText={strings.WITHDRAW}
-        />
-      )}
+      {flowState === 'photos' && <AddPhotos onNext={withdraw} onCancel={goToInventory} saveText={strings.WITHDRAW} />}
     </TfMain>
   );
 }

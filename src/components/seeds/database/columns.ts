@@ -23,7 +23,7 @@ function columns(): DatabaseColumn[] {
       filter: { type: 'multiple_selection' },
     },
     {
-      key: 'storageLocation_name',
+      key: 'subLocation_name',
       name: strings.SUB_LOCATION,
       type: 'string',
       filter: { type: 'multiple_selection' },
@@ -199,7 +199,7 @@ const generalInventoryPreset: Preset = {
 
 const seedStoragePreset: Preset = {
   name: 'Seed Storage Status',
-  fields: ['accessionNumber', 'speciesName', 'state', 'collectedDate', 'facility_name', 'storageLocation_name'],
+  fields: ['accessionNumber', 'speciesName', 'state', 'collectedDate', 'facility_name', 'subLocation_name'],
 };
 
 export const searchPresets = (preferredWeightSystem: string) => {

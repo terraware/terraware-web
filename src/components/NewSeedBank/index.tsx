@@ -9,7 +9,7 @@ import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
-import { FacilityService, SeedBankService, StorageLocationService } from 'src/services';
+import { FacilityService, SeedBankService, SubLocationService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -17,8 +17,8 @@ import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
-import { PartialStorageLocation } from 'src/types/Facility';
-import StorageLocations from 'src/components/SeedBank/StorageLocations';
+import { PartialSubLocation } from 'src/types/Facility';
+import SubLocations from 'src/components/SeedBank/SubLocations';
 import { DatePicker } from '@terraware/web-components';
 
 export default function SeedBankView(): JSX.Element {
@@ -27,7 +27,7 @@ export default function SeedBankView(): JSX.Element {
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const [validateDates, setValidateDates] = useState(false);
-  const [editedStorageLocations, setEditedStorageLocations] = useState<PartialStorageLocation[]>();
+  const [editedSubLocations, setEditedSubLocations] = useState<PartialSubLocation[]>();
   const snackbar = useSnackbar();
 
   const [record, setRecord, onChange] = useForm<Facility>({
@@ -75,16 +75,16 @@ export default function SeedBankView(): JSX.Element {
     history.push(sitesLocation);
   };
 
-  const saveStorageLocations = async (facilityId: number) => {
-    if (!editedStorageLocations) {
+  const saveSubLocations = async (facilityId: number) => {
+    if (!editedSubLocations) {
       return;
     }
 
-    const isEqual = (location1: PartialStorageLocation, location2: PartialStorageLocation) => {
+    const isEqual = (location1: PartialSubLocation, location2: PartialSubLocation) => {
       return location1.id === location2.id;
     };
 
-    const isModified = (location1: PartialStorageLocation, location2: PartialStorageLocation) => {
+    const isModified = (location1: PartialSubLocation, location2: PartialSubLocation) => {
       return location1.id === location2.id && location1.name !== location2.name;
     };
 
@@ -92,23 +92,28 @@ export default function SeedBankView(): JSX.Element {
      * Find existing locations and pick out the ones to delete, create and update.
      * Use bulk API to delete, create, update.
      */
-    const response = await SeedBankService.getStorageLocations(facilityId);
+    const response = await SeedBankService.getSubLocations(facilityId);
     if (response.requestSucceeded) {
-      const { storageLocations } = response;
-      const toDelete = _.differenceWith(storageLocations, editedStorageLocations, isEqual);
-      const toCreate = _.differenceWith(editedStorageLocations, storageLocations, isEqual);
-      const toUpdate = _.intersectionWith(editedStorageLocations, storageLocations, isModified);
+      const { subLocations } = response;
+      const toDelete = _.differenceWith(subLocations, editedSubLocations, isEqual);
+      const toCreate = _.differenceWith(editedSubLocations, subLocations, isEqual);
+      const toUpdate = _.intersectionWith(editedSubLocations, subLocations, isModified);
 
       const promises = [];
       if (toDelete.length) {
-        promises.push(StorageLocationService.deleteStorageLocations(toDelete.map((l) => l.id)));
+        promises.push(
+          SubLocationService.deleteSubLocations(
+            facilityId,
+            toDelete.map((l) => l.id)
+          )
+        );
       }
       if (toUpdate.length) {
-        promises.push(StorageLocationService.updateStorageLocations(toUpdate as { name: string; id: number }[]));
+        promises.push(SubLocationService.updateSubLocations(facilityId, toUpdate as { name: string; id: number }[]));
       }
       if (toCreate.length) {
         promises.push(
-          SeedBankService.createStorageLocations(
+          SeedBankService.createSubLocations(
             facilityId,
             toCreate.map((l) => l.name as string)
           )
@@ -150,7 +155,7 @@ export default function SeedBankView(): JSX.Element {
     if (selectedSeedBank) {
       const response = await FacilityService.updateFacility({ ...record } as Facility);
       if (response.requestSucceeded) {
-        await saveStorageLocations(selectedSeedBank.id as number);
+        await saveSubLocations(selectedSeedBank.id as number);
         await reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
@@ -159,7 +164,7 @@ export default function SeedBankView(): JSX.Element {
     } else {
       const response = await FacilityService.createFacility({
         ...record,
-        storageLocationNames: editedStorageLocations?.map((l) => l.name as string),
+        subLocationNames: editedSubLocations?.map((l) => l.name as string),
       });
       if (response.requestSucceeded) {
         await reloadOrganizations(selectedOrganization.id);
@@ -301,9 +306,9 @@ export default function SeedBankView(): JSX.Element {
               />
             </Grid>
           </Grid>
-          <StorageLocations
+          <SubLocations
             seedBankId={selectedSeedBank?.id === -1 ? undefined : selectedSeedBank?.id}
-            onEdit={(locations) => setEditedStorageLocations(locations)}
+            onEdit={(locations) => setEditedSubLocations(locations)}
           />
         </Box>
       </PageForm>
