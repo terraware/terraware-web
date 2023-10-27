@@ -93,7 +93,7 @@ export type MapOptions = {
  * Render a popup based on properties
  */
 export type MapPopupRenderer = {
-  render: (properties: MapSourceProperties) => JSX.Element;
+  render: (properties: MapSourceProperties) => JSX.Element | null;
   style?: object;
   className?: string;
   anchor?: mapboxgl.Anchor;
