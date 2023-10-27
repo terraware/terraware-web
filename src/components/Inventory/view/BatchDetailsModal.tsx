@@ -21,7 +21,6 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 import { useUser } from 'src/providers';
 
 export interface BatchDetailsModalProps {
-  open: boolean;
   onClose: () => void;
   reload: () => void;
   selectedBatch: any;
@@ -32,7 +31,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
-  const { onClose, open, reload, selectedBatch, speciesId } = props;
+  const { onClose, reload, selectedBatch, speciesId } = props;
 
   const [record, setRecord, onChange] = useForm(selectedBatch);
   const snackbar = useSnackbar();
@@ -136,7 +135,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     if (foundFacility) {
       setFacility(foundFacility);
     }
-  }, [selectedBatch, speciesId, setRecord, selectedOrganization, open]);
+  }, [selectedBatch, speciesId, setRecord, selectedOrganization]);
 
   const MANDATORY_FIELDS = [
     'facilityId',
@@ -209,7 +208,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       {record && (
         <DialogBox
           onClose={onCloseHandler}
-          open={open}
+          open={true}
           title={record.id === -1 ? strings.ADD_SEEDLING_BATCH : strings.SEEDLING_BATCH_DETAILS}
           size='large'
           middleButtons={[
