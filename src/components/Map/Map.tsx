@@ -517,6 +517,13 @@ export default function Map(props: MapProps): JSX.Element {
     return source.entities?.some((entity) => entity?.boundary?.length);
   });
 
+  const renderedPopup = useMemo<JSX.Element | null>(() => {
+    if (!popupInfo || !popupRenderer) {
+      return null;
+    }
+    return popupRenderer.render(popupInfo.properties);
+  }, [popupInfo, popupRenderer]);
+
   // keep track of map being destroyed, this is not bound by react event loop
   let destroying = false;
 
@@ -555,7 +562,7 @@ export default function Map(props: MapProps): JSX.Element {
           <AttributionControl compact={true} style={{ marginRight: '5px' }} position='top-left' />
           <ZoomToFitControl onClick={zoomToFit} />
           <MapViewControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
-          {popupInfo && popupRenderer && (
+          {popupInfo && popupRenderer && renderedPopup && (
             <Popup
               anchor={popupRenderer.anchor ?? 'top'}
               longitude={Number(popupInfo.lng)}
@@ -570,7 +577,7 @@ export default function Map(props: MapProps): JSX.Element {
               style={popupRenderer.style}
               className={popupRenderer.className}
             >
-              {popupRenderer.render(popupInfo.properties)}
+              {renderedPopup}
             </Popup>
           )}
           {topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
