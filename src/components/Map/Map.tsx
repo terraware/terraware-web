@@ -22,6 +22,7 @@ import {
   MapViewStyle,
   MapViewStyles,
 } from 'src/types/Map';
+import { useMapPortalContainer } from './MapRenderUtils';
 import { MapService } from 'src/services';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -56,6 +57,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '12px',
     paddingLeft: theme.spacing(0.5),
     color: theme.palette.TwClrTxt,
+  },
+  bottomLeftControl: {
+    height: 'max-content',
+    position: 'absolute',
+    left: theme.spacing(2),
+    bottom: theme.spacing(4),
+    width: 'max-content',
+    zIndex: 1000,
+  },
+  topRightControl: {
+    height: 'max-content',
+    position: 'absolute',
+    right: theme.spacing(2),
+    top: theme.spacing(2),
+    width: 'max-content',
+    zIndex: 1000,
   },
 }));
 
@@ -106,7 +123,10 @@ export default function Map(props: MapProps): JSX.Element {
     entityOptions,
     mapImages,
     hideFullScreen,
+    topRightMapControl,
+    bottomLeftMapControl,
   } = props;
+  const classes = useStyles();
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
@@ -497,6 +517,13 @@ export default function Map(props: MapProps): JSX.Element {
     return source.entities?.some((entity) => entity?.boundary?.length);
   });
 
+  const renderedPopup = useMemo<JSX.Element | null>(() => {
+    if (!popupInfo || !popupRenderer) {
+      return null;
+    }
+    return popupRenderer.render(popupInfo.properties);
+  }, [popupInfo, popupRenderer]);
+
   // keep track of map being destroyed, this is not bound by react event loop
   let destroying = false;
 
@@ -535,7 +562,7 @@ export default function Map(props: MapProps): JSX.Element {
           <AttributionControl compact={true} style={{ marginRight: '5px' }} position='top-left' />
           <ZoomToFitControl onClick={zoomToFit} />
           <MapViewControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
-          {popupInfo && popupRenderer && (
+          {popupInfo && popupRenderer && renderedPopup && (
             <Popup
               anchor={popupRenderer.anchor ?? 'top'}
               longitude={Number(popupInfo.lng)}
@@ -550,9 +577,11 @@ export default function Map(props: MapProps): JSX.Element {
               style={popupRenderer.style}
               className={popupRenderer.className}
             >
-              {popupRenderer.render(popupInfo.properties)}
+              {renderedPopup}
             </Popup>
           )}
+          {topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
+          {bottomLeftMapControl && <div className={classes.bottomLeftControl}>{bottomLeftMapControl}</div>}
         </ReactMapGL>
       )}
     </Box>
@@ -593,10 +622,11 @@ type MapViewControlProps = {
   onChangeMapViewStyle: (style: MapViewStyle) => void;
 };
 
-const MapViewControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewControlProps): JSX.Element => {
+const MapViewControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewControlProps): JSX.Element | null => {
   const classes = useStyles();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
+  const mapPortalContainer = useMapPortalContainer();
 
   const setMapStyle = (item: DropdownItem) => {
     const style: MapViewStyle = item.value === 'Outdoors' ? 'Outdoors' : 'Satellite';
@@ -612,6 +642,10 @@ const MapViewControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewControlPr
       { label: strings.SATELLITE, value: 'Satellite' },
     ];
   }, [activeLocale]);
+
+  if (mapPortalContainer) {
+    return null;
+  }
 
   return (
     <Box
