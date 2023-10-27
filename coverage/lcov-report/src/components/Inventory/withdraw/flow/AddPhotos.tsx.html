@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -118,23 +118,7 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,8 +135,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -160,19 +142,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,22 +176,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
 import { Container, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import SelectPhotos, { ErrorType } from 'src/components/common/SelectPhotos';
+import SelectPhotos from 'src/components/common/SelectPhotos';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageForm from 'src/components/common/PageForm';
-import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 &nbsp;
 type AddPhotosProps = {
-  withdrawalPurpose: string;
   onNext: (photos: File[]) =&gt; void;
   onCancel: () =&gt; void;
   saveText: string;
 };
 export default function <span class="fstat-no" title="function not covered" >AddPhotos(</span>props: AddPhotosProps): JSX.Element {
-  const { withdrawalPurpose, onNext, onCancel, saveText } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { onNext, onCancel, saveText } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [photos, setPhotos] = <span class="cstat-no" title="statement not covered" >useState&lt;File[]&gt;([]);</span>
-  const [error, setError] = <span class="cstat-no" title="statement not covered" >useState&lt;ErrorType | undefined&gt;();</span>
-  const [photosRequired] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(withdrawalPurpose === NurseryWithdrawalPurposes.OUTPLANT);</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
@@ -228,12 +196,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
   };
 &nbsp;
   const onNextHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (photosRequired &amp;&amp; !photos.length) {</span>
-<span class="cstat-no" title="statement not covered" >      setError({ title: strings.PHOTOS_REQUIRED, text: strings.PHOTOS_OUTPLANT_DESCRIPTION });</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      setError(undefined);</span>
-<span class="cstat-no" title="statement not covered" >      await onNext(photos);</span>
-    }
+<span class="cstat-no" title="statement not covered" >    await onNext(photos);</span>
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -257,14 +220,9 @@ export default function <span class="fstat-no" title="function not covered" >Add
       &gt;
         &lt;SelectPhotos
           onPhotosChanged={onPhotosChanged}
-          title={photosRequired ? strings.ADD_PHOTOS_REQUIRED : strings.ADD_PHOTOS}
-          description={
-            photosRequired
-              ? [strings.ADD_PHOTOS_REQUIRED_OUTPLANT, strings.ADD_PHOTOS_DESCRIPTION]
-              : strings.ADD_PHOTOS_DESCRIPTION_OPTIONAL
-          }
+          title={strings.ADD_PHOTOS}
+          description={strings.ADD_PHOTOS_DESCRIPTION}
           multipleSelection={true}
-          error={error}
         /&gt;
       &lt;/Container&gt;
     &lt;/PageForm&gt;
@@ -277,7 +235,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-26T23:08:25.469Z
+                at 2023-10-27T15:52:44.908Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

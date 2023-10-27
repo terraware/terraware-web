@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1698361706060" clover="3.2.0">
-  <project timestamp="1698361706060" name="All files">
-    <metrics statements="12427" coveredstatements="364" conditionals="7883" coveredconditionals="90" methods="3902" coveredmethods="77" elements="24212" coveredelements="531" complexity="0" loc="12427" ncloc="12427" packages="105" files="489" classes="489"/>
+<coverage generated="1698421965304" clover="3.2.0">
+  <project timestamp="1698421965305" name="All files">
+    <metrics statements="12422" coveredstatements="364" conditionals="7875" coveredconditionals="90" methods="3902" coveredmethods="77" elements="24199" coveredelements="531" complexity="0" loc="12422" ncloc="12422" packages="105" files="489" classes="489"/>
     <package name="src">
       <metrics statements="211" coveredstatements="0" conditionals="164" coveredconditionals="0" methods="67" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1883,23 +1883,18 @@
       </file>
     </package>
     <package name="src.components.Inventory.withdraw.flow">
-      <metrics statements="379" coveredstatements="0" conditionals="281" coveredconditionals="0" methods="90" coveredmethods="0"/>
+      <metrics statements="374" coveredstatements="0" conditionals="273" coveredconditionals="0" methods="90" coveredmethods="0"/>
       <file name="AddPhotos.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Inventory/withdraw/flow/AddPhotos.tsx">
-        <metrics statements="14" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
       </file>
       <file name="SelectBatchesWithdrawnQuantity.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Inventory/withdraw/flow/SelectBatchesWithdrawnQuantity.tsx">
         <metrics statements="96" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="19" coveredmethods="0"/>
