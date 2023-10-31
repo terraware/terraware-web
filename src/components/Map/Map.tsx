@@ -19,13 +19,10 @@ import {
   MapOptions,
   MapPopupRenderer,
   MapGeometry,
-  MapViewStyle,
   MapViewStyles,
 } from 'src/types/Map';
-import { useMapPortalContainer } from './MapRenderUtils';
 import { MapService } from 'src/services';
-import { useLocalization } from 'src/providers';
-import strings from 'src/strings';
+import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -35,7 +32,7 @@ import mapboxgl from 'mapbox-gl';
 import MapBanner from './MapBanner';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import useSnackbar from 'src/utils/useSnackbar';
-import { DropdownItem, Icon, PopoverMenu } from '@terraware/web-components';
+import { Icon } from '@terraware/web-components';
 const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -139,19 +136,9 @@ export default function Map(props: MapProps): JSX.Element {
   const highlightStateId: FeatureStateId = useMemo(() => ({}), []);
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
   const [resized, setResized] = useState<boolean>(false);
-  const [mapViewStyle, setMapViewStyle] = useState<MapViewStyle>(
-    localStorage.getItem('mapViewStyle') === 'Outdoors' ? 'Outdoors' : 'Satellite'
-  );
+  const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle();
   const visible = useIsVisible(containerRef);
   const snackbar = useSnackbar();
-
-  const onChangeMapViewStyle = useCallback(
-    (viewStyle: MapViewStyle) => {
-      setMapViewStyle(viewStyle);
-      localStorage.setItem('mapViewStyle', viewStyle);
-    },
-    [setMapViewStyle]
-  );
 
   useEffect(() => {
     // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
@@ -534,7 +521,7 @@ export default function Map(props: MapProps): JSX.Element {
         <ReactMapGL
           key={mapId}
           mapboxAccessToken={token}
-          mapStyle={MapViewStyles[mapViewStyle || 'Satellite']}
+          mapStyle={MapViewStyles[mapViewStyle]}
           initialViewState={{
             bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
             fitBoundsOptions: hasEntities ? { padding: 20, linear: true } : undefined,
@@ -561,7 +548,7 @@ export default function Map(props: MapProps): JSX.Element {
           {!hideFullScreen && <FullscreenControl position='top-left' />}
           <AttributionControl compact={true} style={{ marginRight: '5px' }} position='top-left' />
           <ZoomToFitControl onClick={zoomToFit} />
-          <MapViewControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+          <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
           {popupInfo && popupRenderer && renderedPopup && (
             <Popup
               anchor={popupRenderer.anchor ?? 'top'}
@@ -613,64 +600,6 @@ const ZoomToFitControl = ({ onClick }: ZoomToFitControlProps): JSX.Element => {
       <button style={{ background: 'none', border: 'none', cursor: 'pointer', height: '18px' }} onClick={onClick}>
         <Icon name='iconFullScreen' />
       </button>
-    </Box>
-  );
-};
-
-type MapViewControlProps = {
-  mapViewStyle?: MapViewStyle;
-  onChangeMapViewStyle: (style: MapViewStyle) => void;
-};
-
-const MapViewControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewControlProps): JSX.Element | null => {
-  const classes = useStyles();
-  const theme = useTheme();
-  const { activeLocale } = useLocalization();
-  const mapPortalContainer = useMapPortalContainer();
-
-  const setMapStyle = (item: DropdownItem) => {
-    const style: MapViewStyle = item.value === 'Outdoors' ? 'Outdoors' : 'Satellite';
-    onChangeMapViewStyle(style);
-  };
-
-  const viewOptions = useMemo<DropdownItem[]>(() => {
-    if (!activeLocale) {
-      return [];
-    }
-    return [
-      { label: strings.OUTDOORS, value: 'Outdoors' },
-      { label: strings.SATELLITE, value: 'Satellite' },
-    ];
-  }, [activeLocale]);
-
-  if (mapPortalContainer) {
-    return null;
-  }
-
-  return (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: '10px',
-        left: '45px',
-        zIndex: 10,
-        height: 28,
-        backgroundColor: `${theme.palette.TwClrBaseWhite}`,
-        borderRadius: '4px',
-        display: 'flex',
-        alignItems: 'center',
-      }}
-      className={classes.viewControl}
-    >
-      <PopoverMenu
-        anchor={
-          <span className={classes.viewControlSelected}>
-            {mapViewStyle === 'Outdoors' ? strings.OUTDOORS : strings.SATELLITE}
-          </span>
-        }
-        menuSections={[viewOptions]}
-        onClick={setMapStyle}
-      />
     </Box>
   );
 };

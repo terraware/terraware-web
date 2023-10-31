@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import ReactMapGL, { LngLatBoundsLike, MapRef } from 'react-map-gl';
+import ReactMapGL, { FullscreenControl, LngLatBoundsLike, MapRef } from 'react-map-gl';
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDraw';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { Box, Typography, useTheme } from '@mui/material';
@@ -7,6 +7,8 @@ import { useIsVisible } from 'src/hooks/useIsVisible';
 import bbox from '@turf/bbox';
 import { MultiPolygon } from 'geojson';
 import strings from 'src/strings';
+import { MapViewStyles } from 'src/types/Map';
+import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 
 export type EditableMapProps = {
   boundary?: MultiPolygon;
@@ -50,6 +52,7 @@ export default function EditableMap({ boundary, onBoundaryChanged, style }: Edit
   const mapRef = useRef<MapRef | null>(null);
   const visible = useIsVisible(containerRef);
   const theme = useTheme();
+  const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle();
 
   useEffect(() => {
     // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
@@ -95,7 +98,7 @@ export default function EditableMap({ boundary, onBoundaryChanged, style }: Edit
             onError={onMapError}
             ref={mapRef}
             mapboxAccessToken={token}
-            mapStyle='mapbox://styles/mapbox/satellite-v9?optimize=true'
+            mapStyle={MapViewStyles[mapViewStyle]}
             style={{
               position: 'relative',
               width: '100%',
@@ -107,6 +110,8 @@ export default function EditableMap({ boundary, onBoundaryChanged, style }: Edit
             }}
             initialViewState={initialViewState}
           >
+            <FullscreenControl position='top-left' />
+            <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw boundary={boundary} onBoundaryChanged={onBoundaryChanged} setMode={setMode} />
           </ReactMapGL>
         </>

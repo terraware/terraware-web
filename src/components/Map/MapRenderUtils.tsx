@@ -61,7 +61,7 @@ export function useMapPortalContainer(): Element | undefined {
   const [container, setContainer] = useState<Element | undefined>();
 
   const updateContainer = useCallback(() => {
-    if (window.document.fullscreenElement?.attributes?.getNamedItem('class')?.value === 'mapboxgl-map') {
+    if (window.document.fullscreenElement?.attributes?.getNamedItem('class')?.value?.includes('mapboxgl-map')) {
       setContainer(window.document.fullscreenElement);
     } else {
       setContainer(undefined);
