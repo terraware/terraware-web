@@ -161,16 +161,16 @@ export function convertUnits(value: number, unit: string, outputUnit: string) {
     case 'Pounds': {
       switch (outputUnit) {
         case 'Ounces': {
-          return value * 0.035274;
+          return value * 16;
         }
         case 'Grams': {
-          return value * 0.035274;
+          return value * 453.592;
         }
         case 'Milligrams': {
-          return value * 0.035274;
+          return value * 453592.000004704;
         }
         case 'Kilograms': {
-          return value * 0.035274;
+          return value * 0.453592;
         }
         default: {
           return value;
@@ -230,3 +230,12 @@ export function getUnitName(unit: string) {
     }
   }
 }
+
+export const unitAbbv = (): Record<string, string> => ({
+  Seeds: strings.CT,
+  Grams: strings.G,
+  Milligrams: strings.MG,
+  Kilograms: strings.KG,
+  Ounces: strings.OZ,
+  Pounds: strings.LB,
+});

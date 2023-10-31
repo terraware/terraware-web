@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, useTheme, Radio, RadioGroup, FormControlLabel, Typography, Theme } from '@mui/material';
-import { Checkbox, SelectT, Textfield } from '@terraware/web-components';
+import { SelectT, Textfield } from '@terraware/web-components';
 import DatePicker from 'src/components/common/DatePicker';
 import { Accession, Withdrawal } from 'src/types/Accession';
 import { NurseryTransfer } from 'src/types/Batch';
@@ -24,7 +24,9 @@ import { useOrganization } from 'src/providers/hooks';
 import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { makeStyles } from '@mui/styles';
-import { convertUnits } from 'src/units';
+import { convertUnits, unitAbbv } from 'src/units';
+import CountWithdrawal from 'src/components/accession2/withdraw/CountWithdrawal';
+import WeightWithdrawal from 'src/components/accession2/withdraw/WeightWithdrawal';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdraw: {
@@ -54,7 +56,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [isNurseryTransfer, setIsNurseryTransfer] = useState<boolean>(true);
   const [viabilityTesting, , onChangeViabilityTesting] = useForm(newViabilityTesting);
   const [users, setUsers] = useState<OrganizationUser[]>();
-  const [withdrawAllSelected, setWithdrawAllSelected] = useState(false);
   const [isNotesOpened, setIsNotesOpened] = useState(false);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const theme = useTheme();
@@ -65,16 +66,12 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [timeZone, setTimeZone] = useState(tz.id);
   const [isByWeight, setIsByWeight] = useState(accession.remainingQuantity?.units === 'Seeds' ? false : true);
   const classes = useStyles();
-  const [estimatedWithdrawnCt, setEstimatedWithdrawnCt] = useState<number>(0);
+  const [withdrawalQty, setWithdrawalQty] = useState<number>(0);
+  const [withdrawalUnits, setWithdrawalUnits] = useState<
+    'Seeds' | 'Grams' | 'Milligrams' | 'Kilograms' | 'Ounces' | 'Pounds'
+  >('Grams');
+  const [withdrawalValid, setWithdrawalValid] = useState<boolean>(false);
 
-  const unitAbbv = new Map<string, string>([
-    ['Seeds', 'ct'],
-    ['Grams', 'g'],
-    ['Milligrams', 'mg'],
-    ['Kilograms', 'Kg'],
-    ['Ounces', 'oz'],
-    ['Pounds', 'lbs'],
-  ]);
   const newWithdrawal: Withdrawal = {
     purpose: 'Nursery',
     withdrawnByUserId: user.id,
@@ -151,24 +148,23 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const saveWithdrawal = async () => {
     let response;
     if (record) {
-      const nurseryTransferInvalid = !validateNurseryTransfer();
-      const amountInvalid = !validateAmount(isNurseryTransfer, record.purpose);
-      if (
-        fieldsErrors.date ||
-        (isNurseryTransfer && fieldsErrors.readyByDate) ||
-        nurseryTransferInvalid ||
-        amountInvalid
-      ) {
+      if (isNurseryTransfer && nurseryTransferRecord.destinationFacilityId === -1) {
+        setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
+        return;
+      }
+      if (fieldsErrors.date || (isNurseryTransfer && fieldsErrors.readyByDate)) {
         return;
       }
 
       if (isNurseryTransfer) {
+        nurseryTransferRecord.germinatingQuantity = withdrawalQty;
         response = await AccessionService.transferToNursery(nurseryTransferRecord, accession.id);
       } else if (record.purpose === 'Viability Testing') {
-        viabilityTesting.seedsTested = isByWeight ? estimatedWithdrawnCt : record.withdrawnQuantity?.quantity || 0;
+        viabilityTesting.seedsTested = withdrawalQty;
         viabilityTesting.startDate = record.date;
         response = await AccessionService.createViabilityTest(viabilityTesting, accession.id);
       } else {
+        record.withdrawnQuantity = { quantity: withdrawalQty, units: withdrawalUnits };
         response = await AccessionService.createWithdrawal(record, accession.id);
       }
 
@@ -181,103 +177,9 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     }
   };
 
-  const onChangeWithdrawnQuantity = (value: number) => {
-    let estimated = 0;
-    if (
-      value.toString() === accession.remainingQuantity?.quantity.toString() &&
-      record.withdrawnQuantity?.units === accession.remainingQuantity?.units
-    ) {
-      setWithdrawAllSelected(true);
-    } else {
-      setWithdrawAllSelected(false);
-    }
-
-    if (isByWeight && accession.subsetCount && accession.subsetWeight) {
-      if (
-        accession.remainingQuantity?.units &&
-        accession.remainingQuantity?.units === 'Seeds' &&
-        accession.estimatedWeight?.units
-      ) {
-        estimated =
-          convertUnits(value, accession.estimatedWeight?.units, accession.subsetWeight.units) *
-          (accession.subsetCount / accession.subsetWeight.quantity);
-      } else if (accession.remainingQuantity?.units) {
-        estimated =
-          convertUnits(value, accession.remainingQuantity?.units, accession.subsetWeight.units) *
-          (accession.subsetCount / accession.subsetWeight.quantity);
-      }
-      setEstimatedWithdrawnCt(estimated);
-    }
-
-    setRecord((prev) => ({
-      ...prev,
-      withdrawnQuantity:
-        value.toString().trim() === ''
-          ? undefined
-          : {
-              quantity: value || 0,
-              units: prev.withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams',
-            },
-    }));
-
-    setNurseryTransferRecord((prev) => ({
-      ...prev,
-      germinatingQuantity: isByWeight ? estimated : value.toString().trim() === '' ? 0 : value || 0,
-    }));
-
-    setIndividualError('withdrawnQuantity', '');
-    if (isNurseryTransfer || record.purpose === 'Viability Testing') {
-      if (!accession.estimatedCount || (isByWeight && (!accession.subsetWeight?.quantity || !accession.subsetCount))) {
-        setIndividualError(
-          'withdrawnQuantity',
-          isNurseryTransfer
-            ? strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY
-            : strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST
-        );
-      }
-    }
-  };
-
   const onChangeUser = (newValue: OrganizationUser) => {
     onChange('withdrawnByUserId', newValue.id);
     onChangeNurseryTransfer('withdrawnByUserId', newValue.id);
-  };
-
-  const onSelectAll = (id: string, withdrawAll: boolean) => {
-    if (withdrawAll) {
-      if (isByWeight) {
-        if (
-          accession.remainingQuantity?.units &&
-          accession.remainingQuantity?.units === 'Seeds' &&
-          accession.estimatedWeight?.quantity
-        ) {
-          onChangeWithdrawnQuantity(accession.estimatedWeight?.quantity);
-        } else if (accession.remainingQuantity?.units && accession.remainingQuantity?.units !== 'Seeds') {
-          onChangeWithdrawnQuantity(accession.remainingQuantity?.quantity);
-        }
-      } else {
-        if (
-          accession.remainingQuantity?.units &&
-          accession.remainingQuantity?.units !== 'Seeds' &&
-          accession.estimatedCount
-        ) {
-          onChangeWithdrawnQuantity(accession.estimatedCount);
-        } else if (accession.remainingQuantity?.units && accession.remainingQuantity?.units === 'Seeds') {
-          onChangeWithdrawnQuantity(accession.remainingQuantity?.quantity);
-        }
-      }
-    } else {
-      setRecord({
-        ...record,
-        withdrawnQuantity: undefined,
-      });
-      setNurseryTransferRecord({
-        ...nurseryTransferRecord,
-        germinatingQuantity: 0,
-      });
-    }
-
-    setWithdrawAllSelected(withdrawAll);
   };
 
   const validateDate = (id: string, value?: any) => {
@@ -316,31 +218,25 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     onChange(id, value);
   };
 
+  const onWithdrawCtUpdate = (withdrawnQuantity: Withdrawal['withdrawnQuantity'], valid: boolean) => {
+    if (withdrawnQuantity) {
+      setWithdrawalQty(withdrawnQuantity.quantity);
+      setWithdrawalUnits(withdrawnQuantity.units);
+    }
+    setWithdrawalValid(valid);
+  };
+
   const onChangePurpose = (value: string) => {
     const nurseryTransfer = value === 'Nursery';
-    if (value === 'Nursery' || value === 'Viability Testing') {
-      validateAmount(nurseryTransfer, value);
-    } else {
-      setIndividualError('withdrawnQuantity', '');
-    }
     if (nurseryTransfer) {
       setIsNurseryTransfer(true);
     } else {
       setIsNurseryTransfer(false);
-      setRecord({
-        ...record,
-        withdrawnQuantity: {
-          quantity: record.withdrawnQuantity?.quantity || 0,
-          units: isByWeight ? accession.estimatedWeight?.units || 'Grams' : 'Seeds',
-        },
-      });
-
       onChange('purpose', value);
     }
   };
 
   const onCloseHandler = () => {
-    setWithdrawAllSelected(false);
     setIsNotesOpened(false);
     setRecord(newWithdrawal);
     setNurseryTransferRecord(nurseryTransferWithdrawal);
@@ -348,28 +244,12 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   };
 
   const onChangeWithdrawBy = (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
+    setIndividualError('withdrawnQuantity', '');
+
     if (value === 'count') {
       setIsByWeight(false);
-      setRecord({
-        ...record,
-        withdrawnQuantity: {
-          quantity: record.withdrawnQuantity?.quantity ? record.withdrawnQuantity?.quantity : 0,
-          units: 'Seeds',
-        },
-      });
-      setIndividualError('withdrawnQuantity', '');
     } else if (value === 'weight') {
       setIsByWeight(true);
-      setRecord({
-        ...record,
-        withdrawnQuantity: {
-          quantity: record.withdrawnQuantity?.quantity ? record.withdrawnQuantity?.quantity : 0,
-          units: record.estimatedWeight?.units ? record.estimatedWeight?.units : 'Grams',
-        },
-      });
-      if (!accession.subsetWeight) {
-        setIndividualError('withdrawnQuantity', strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY);
-      }
     }
   };
 
@@ -378,62 +258,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       ...prev,
       [id]: error,
     }));
-  };
-
-  const validateNurseryTransfer = () => {
-    if (isNurseryTransfer) {
-      if (nurseryTransferRecord.destinationFacilityId === -1) {
-        setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const validateAmount = (nurseryTransfer: boolean, purpose?: string) => {
-    if (record.withdrawnQuantity?.quantity) {
-      if (isNaN(record.withdrawnQuantity.quantity)) {
-        setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
-        return false;
-      }
-      if (Number(record.withdrawnQuantity.quantity) <= 0) {
-        setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
-        return false;
-      }
-      if (
-        accession.remainingQuantity?.units &&
-        Number(record.withdrawnQuantity.units === accession.remainingQuantity.units)
-      ) {
-        if (accession.remainingQuantity.units === 'Seeds' && isByWeight) {
-          if (Number(estimatedWithdrawnCt) > accession.remainingQuantity?.quantity) {
-            setIndividualError('withdrawnQuantity', strings.WITHDRAWN_QUANTITY_ERROR);
-            return false;
-          }
-        } else if (record.withdrawnQuantity.quantity > accession.remainingQuantity?.quantity) {
-          setIndividualError('withdrawnQuantity', strings.WITHDRAWN_QUANTITY_ERROR);
-          return false;
-        }
-      }
-      if (nurseryTransfer || purpose === 'Viability Testing') {
-        if (
-          !accession.estimatedCount ||
-          (isByWeight && (!accession.subsetWeight?.quantity || !accession.subsetCount))
-        ) {
-          setIndividualError(
-            'withdrawnQuantity',
-            nurseryTransfer
-              ? strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY
-              : strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST
-          );
-          return false;
-        }
-      }
-      setIndividualError('withdrawnQuantity', '');
-      return true;
-    } else {
-      setIndividualError('withdrawnQuantity', strings.REQUIRED_FIELD);
-      return false;
-    }
   };
 
   return (
@@ -451,11 +275,17 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
           priority='secondary'
           key='button-1'
         />,
-        <Button id='saveWithdraw' onClick={saveWithdrawal} label={strings.WITHDRAW} key='button-2' />,
+        <Button
+          id='saveWithdraw'
+          onClick={saveWithdrawal}
+          label={strings.WITHDRAW}
+          key='button-2'
+          disabled={!withdrawalValid}
+        />,
       ]}
       scrolled={true}
     >
-      <Grid container xs={12} textAlign='left'>
+      <Grid container textAlign='left'>
         <Grid item xs={12} paddingBottom={2}>
           <Dropdown
             label={strings.PURPOSE}
@@ -534,96 +364,15 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
               </Grid>
             </RadioGroup>
           </Grid>
-          {isByWeight && accession.subsetWeight?.quantity && accession.subsetCount ? (
-            <Grid container direction='row'>
-              <Grid item xs={6} sx={{ marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }}>
-                <Textfield
-                  label={strings.SUBSET_WEIGHT}
-                  id='subsetWeight'
-                  type='number'
-                  value={`${accession.subsetWeight?.quantity} ${accession.subsetWeight?.units}`}
-                  display={true}
-                  tooltipTitle={strings.SUBSET_WEIGHT_REQUIRED}
-                />
-              </Grid>
-              <Grid item xs={6} sx={{ marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }}>
-                <Textfield
-                  label={strings.SUBSET_COUNT}
-                  id='subsetCount'
-                  type='number'
-                  value={accession.subsetCount}
-                  display={true}
-                />
-              </Grid>
-            </Grid>
-          ) : null}
-          <Grid container direction='row' justifyContent='space-between'>
-            <Grid
-              item
-              xs={isByWeight && accession.subsetWeight?.quantity && accession.subsetCount ? 6 : 12}
-              paddingBottom={2}
-            >
-              <Box display='flex' alignItems={fieldsErrors.withdrawnQuantity ? 'center' : 'end'}>
-                <Textfield
-                  label={strings
-                    .formatString(
-                      strings.AMOUNT_REMAINING,
-                      isByWeight
-                        ? `${
-                            accession.remainingQuantity?.units !== 'Seeds'
-                              ? accession.remainingQuantity?.quantity
-                              : accession.estimatedWeight?.quantity
-                          }${accession.estimatedWeight?.units ? unitAbbv.get(accession.estimatedWeight?.units) : ''}`
-                        : `${
-                            accession.remainingQuantity?.units === 'Seeds'
-                              ? accession.remainingQuantity?.quantity
-                              : accession.estimatedCount
-                          }${strings.CT}`
-                    )
-                    .toString()}
-                  id='withdrawnQuantity'
-                  onChange={(value) => onChangeWithdrawnQuantity(Number(value))}
-                  type='text'
-                  value={record.withdrawnQuantity?.quantity.toString()}
-                  errorText={fieldsErrors.withdrawnQuantity}
-                  required={true}
-                />
-                <Box paddingLeft={1}>
-                  {!isByWeight ? (
-                    <Box>{strings.CT}</Box>
-                  ) : (
-                    <Box>
-                      {accession.remainingQuantity?.units === 'Seeds'
-                        ? accession.estimatedWeight?.units
-                          ? unitAbbv.get(accession.estimatedWeight?.units)
-                          : ''
-                        : accession.remainingQuantity?.units
-                        ? unitAbbv.get(accession.remainingQuantity?.units)
-                        : ''}
-                    </Box>
-                  )}
-                </Box>
-              </Box>
-              <Checkbox
-                id='withdrawAll'
-                name=''
-                label={strings.WITHDRAW_ALL}
-                onChange={(value) => onSelectAll('withdrawAll', value)}
-                value={withdrawAllSelected}
-              />
-            </Grid>
-            {isByWeight && accession.subsetWeight?.quantity && accession.subsetCount ? (
-              <Grid xs={5}>
-                <Textfield
-                  label={strings.AMOUNT_EST_COUNT}
-                  id='amountEstCount'
-                  type='text'
-                  value={`${strings.TILDE}${estimatedWithdrawnCt}${strings.CT}`}
-                  display={true}
-                />
-              </Grid>
-            ) : null}
-          </Grid>
+          {isByWeight ? (
+            <WeightWithdrawal
+              accession={accession}
+              purpose={isNurseryTransfer ? 'Nursery' : record.purpose}
+              onWithdrawCtUpdate={onWithdrawCtUpdate}
+            />
+          ) : (
+            <CountWithdrawal accession={accession} onWithdrawCtUpdate={onWithdrawCtUpdate} />
+          )}
         </Box>
         <Grid item xs={12} paddingBottom={2}>
           <SelectT<OrganizationUser>

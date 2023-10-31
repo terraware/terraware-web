@@ -3,22 +3,19 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { Box, Grid, useTheme, Radio, RadioGroup, FormControlLabel, Typography, Theme } from '@mui/material';
-
 import { makeStyles } from '@mui/styles';
-import { Textfield } from '@terraware/web-components';
 import { Accession } from 'src/types/Accession';
 import AccessionService from 'src/services/AccessionService';
 import useForm from 'src/utils/useForm';
 import { isUnitInPreferredSystem, Unit, usePreferredWeightUnits } from 'src/units';
 import useSnackbar from 'src/utils/useSnackbar';
-import { Dropdown } from '@terraware/web-components';
+import { Dropdown, Icon, Textfield } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import EditState from './EditState';
 import _ from 'lodash';
 import { useUser } from 'src/providers';
 import ConvertedValue from 'src/components/ConvertedValue';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Icon from 'src/components/common/icon/Icon';
 
 const useStyles = makeStyles((theme: Theme) => ({
   addIcon: {
@@ -43,7 +40,25 @@ export interface QuantityModalProps {
   statusEdit?: boolean;
   title: string;
 }
+interface UnitsSelectorProps {
+  onChange: (newValue: string) => void;
+  selectedValue: any;
+  className?: string | undefined;
+}
+function UnitsSelector(props: UnitsSelectorProps): JSX.Element {
+  const preferredUnits = usePreferredWeightUnits();
 
+  return (
+    <Dropdown
+      options={preferredUnits}
+      placeholder={strings.SELECT}
+      onChange={props.onChange}
+      selectedValue={props.selectedValue}
+      fullWidth={true}
+      className={props.className}
+    />
+  );
+}
 export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const { onClose, open, accession, reload, statusEdit } = props;
 
@@ -52,10 +67,9 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const [quantityError, setQuantityError] = useState(false);
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const preferredUnits = usePreferredWeightUnits();
   const { userPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
-  const [isByWeight, setIsByWeight] = useState(!(accession.remainingQuantity?.units === 'Seeds'));
+  const [isByWeight, setIsByWeight] = useState(accession.remainingQuantity?.units !== 'Seeds');
 
   const [subsetError, setSubsetError] = useState('');
   const [subsetWeightError, setSubsetWeightError] = useState('');
@@ -179,7 +193,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   return (
     <>
       <DialogBox
-        scrolled={true}
+        scrolled={false}
         onClose={onCloseHandler}
         open={open}
         title={props.title}
@@ -262,16 +276,13 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                   errorText={totalWeightError}
                 />
                 <Box height={totalWeightError ? '85px' : 'auto'}>
-                  <Dropdown
-                    options={preferredUnits}
-                    placeholder={strings.SELECT}
+                  <UnitsSelector
                     onChange={onChangeRemainingQuantityUnit}
                     selectedValue={
                       record.remainingQuantity?.units === 'Seeds'
                         ? record.estimatedWeight?.units
                         : record.remainingQuantity?.units
                     }
-                    fullWidth={true}
                     className={classes.units}
                   />
                 </Box>
@@ -306,7 +317,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
               <Box className={classes.subset}>
                 <Grid container item justifyContent='space-between'>
                   <Grid container item xs={isMobile ? 12 : 7} spacing={1}>
-                    <Grid item xs={8}>
+                    <Grid item xs={8} textAlign='left'>
                       <Textfield
                         label={strings.SUBSET_WEIGHT}
                         id='subsetWeight'
@@ -321,18 +332,11 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                     </Grid>
                     <Grid item xs={4}>
                       <Box height={subsetWeightError ? '85px' : subsetError ? '65px' : 'auto'} paddingTop='24px'>
-                        <Dropdown
-                          label=''
-                          options={preferredUnits}
-                          placeholder={strings.SELECT}
-                          onChange={onChangeSubsetUnit}
-                          selectedValue={record.subsetWeight?.units}
-                          fullWidth={true}
-                        />
+                        <UnitsSelector onChange={onChangeSubsetUnit} selectedValue={record.subsetWeight?.units} />
                       </Box>
                     </Grid>
                   </Grid>
-                  <Grid item xs={isMobile ? 12 : 4} paddingTop={isMobile ? '4px' : '0px'}>
+                  <Grid item xs={isMobile ? 12 : 4} paddingTop={isMobile ? '4px' : '0px'} textAlign='left'>
                     <Textfield
                       label={strings.SUBSET_COUNT}
                       id='subsetCount'

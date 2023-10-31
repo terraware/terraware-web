@@ -90,6 +90,7 @@ APPLY,Apply
 APPLY_FILTERS,Apply Filters
 APPLY_RESULT,Apply Result
 APPLY_RESULT_QUESTION,Do you want to apply this result to the accession?
+APPROX_SYMBOL,"~"
 ARE_YOU_SURE,Are you sure?
 AS_OF,As of
 ASSIGN,Assign
@@ -549,6 +550,7 @@ MG_MILLIGRAMS,mg (milligrams)
 MIDDLE_OF_SEED_BANK,Middle of Seed Bank
 MILLIGRAMS,Milligrams
 MIN,Min
+MISSING_SUBSET_WEIGHT_ERROR_COUNT,You must enter a subset weight in order to withdraw by count
 MISSING_SUBSET_WEIGHT_ERROR_NURSERY,You must enter in a subset weight in order to withdraw to a nursery. This can be done by editing the quantity of this accession.
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,You must enter in a subset weight in order to create a viability test. This can be done by editing the quantity of this accession.
 MONITORING,Monitoring
@@ -1170,7 +1172,6 @@ TEST_METHOD,Test Method
 TEST_METHOD_REQUIRED,Test Method *
 TEST_TYPE,Test Type
 TESTING_STAFF,Testing Staff
-TILDE,"~"
 TIME,Time
 TIME_PERIOD,Time Period
 TIME_ZONE,Time Zone
