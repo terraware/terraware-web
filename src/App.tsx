@@ -45,9 +45,12 @@ import OptInFeatures from './components/OptInFeatures';
 import Nurseries from './components/Nurseries';
 import NewNursery from './components/NewNursery';
 import Inventory from './components/Inventory';
+import InventoryV2 from './components/InventoryV2';
 import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
+import InventoryViewForNursery from './components/InventoryV2/InventoryViewForNursery';
+import InventoryBatch from './components/InventoryV2/InventoryBatch';
 import {
   BatchBulkWithdrawWrapperComponent,
   SpeciesBulkWithdrawWrapperComponent,
@@ -66,6 +69,7 @@ import Observations from 'src/components/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
 import PlantsDashboard from 'src/components/Plants';
 import PlantingSites from 'src/components/PlantingSites';
+import isEnabled from 'src/features';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -175,6 +179,7 @@ function AppContent() {
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
+  const nurseryV2 = isEnabled('Nursery Updates');
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
 
@@ -444,7 +449,10 @@ function AppContent() {
               {getNurseriesView()}
             </Route>
             <Route exact path={APP_PATHS.INVENTORY}>
-              <Inventory hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
+              {nurseryV2
+                ? <InventoryV2 hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
+                : <Inventory hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
+              }
             </Route>
             <Route exact path={APP_PATHS.INVENTORY_NEW}>
               <InventoryCreate />
@@ -452,7 +460,20 @@ function AppContent() {
             <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
               <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
             </Route>
-            <Route path={APP_PATHS.INVENTORY_ITEM}>
+            {nurseryV2 &&
+              <>
+                <Route path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}>
+                  <InventoryBatch origin='Nursery' />
+                </Route>
+                <Route path={APP_PATHS.INVENTORY_BATCH_FOR_SPECIES}>
+                  <InventoryBatch origin='Species' />
+                </Route>
+                <Route path={APP_PATHS.INVENTORY_ITEM_FOR_NURSERY}>
+                  <InventoryViewForNursery />
+                </Route>
+              </>
+            }
+            <Route path={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES}>
               <InventoryView species={species} />
             </Route>
             <Route path={APP_PATHS.BATCH_WITHDRAW}>

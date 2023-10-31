@@ -1,7 +1,11 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName = 'Show Production View' | 'Schedule Observations' | 'Replace Observation Plot';
+export type FeatureName =
+  | 'Show Production View'
+  | 'Schedule Observations'
+  | 'Replace Observation Plot'
+  | 'Nursery Updates';
 
 export type Feature = {
   name: FeatureName;
@@ -51,6 +55,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Allow replacement of observation plots that haven not been monitored.'],
+    disclosure: ['This is WIP'],
+  },
+  {
+    name: 'Nursery Updates',
+    preferenceName: 'enableNurseryV2',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Updates to Nursery Feature.'],
     disclosure: ['This is WIP'],
   },
 ];

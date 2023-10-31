@@ -40,7 +40,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   const createLinkToBatchDetail = (iValue: React.ReactNode | unknown[]) => {
     return (
       <Link
-        to={`${APP_PATHS.INVENTORY_ITEM.replace(':speciesId', row.speciesId.toString())}?batch=${iValue}`}
+        to={`${APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', row.speciesId.toString())}?batch=${iValue}`}
         target='_blank'
       >
         {iValue as React.ReactNode}

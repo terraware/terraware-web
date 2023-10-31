@@ -14,6 +14,7 @@ import PageSnackbar from '../PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -31,6 +32,7 @@ export default function NurseryDetails(): JSX.Element {
   const [nursery, setNursery] = useState<Facility>();
   const history = useHistory();
   const tz = useLocationTimeZone().get(nursery);
+  const nurseryV2 = isEnabled('Nursery Updates', selectedOrganization.id);
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -158,6 +160,11 @@ export default function NurseryDetails(): JSX.Element {
             display={true}
           />
         </Grid>
+        {nurseryV2 &&
+          <Grid item xs={12}>
+            TODO: Add sub-locations table
+          </Grid>
+        }
       </Grid>
     </TfMain>
   );
