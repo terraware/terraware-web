@@ -22,3 +22,9 @@ export type Planting = components['schemas']['PlantingPayload'];
 
 // reported plants
 export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];
+
+// monitoring plots
+export type MonitoringPlotSearchResult = {
+  id: number;
+  fullName: string;
+};

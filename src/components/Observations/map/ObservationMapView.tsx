@@ -140,6 +140,7 @@ export default function ObservationMapView({
         monitoringPlot={entity}
         observationId={selectedObservation?.observationId}
         observationState={selectedObservation?.state}
+        plantingSiteId={selectedPlantingSite.id}
         title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
       />
     );

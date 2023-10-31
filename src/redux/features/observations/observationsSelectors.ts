@@ -21,6 +21,13 @@ export const selectHasObservationsResults = (state: RootState) => {
   const results = selectObservationsResults(state);
   return results !== undefined && results.filter((result) => result.state !== 'Upcoming').length > 0;
 };
+export const selectHasCompletedObservations = (state: RootState, plantingSiteId: number) => {
+  const results = selectObservationsResults(state);
+  return (
+    results !== undefined &&
+    results.some((result) => result.state === 'Completed' && result.plantingSiteId === plantingSiteId)
+  );
+};
 
 /**
  * Select observations results, filtered down by planting site and/or observation state.

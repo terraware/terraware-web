@@ -16,6 +16,9 @@ interface StyleProps {
 }
 
 const useStyles = makeStyles(() => ({
+  fullWidth: {
+    width: '100%',
+  },
   mainSnackbar: {
     '&.MuiSnackbar-anchorOriginTopCenter': {
       top: '0px',
@@ -106,7 +109,7 @@ function SnackbarMessage({ snack, onClose }: SnackbarMessageProps): JSX.Element 
       id='page-snackbar'
       className={classes.mainSnackbar}
     >
-      <div>
+      <div className={classes.fullWidth}>
         {snack && (
           <Message
             type='page'

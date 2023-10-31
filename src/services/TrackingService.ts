@@ -4,7 +4,7 @@ import { Delivery, PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tr
 import { PlantingSiteZone, Population } from 'src/types/PlantingSite';
 import SearchService from './SearchService';
 import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
-import { PlantingSiteSearchResult } from 'src/types/Tracking';
+import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 /**
  * Tracking related services
@@ -289,6 +289,43 @@ async function searchPlantingSites(
 }
 
 /**
+ * Search monitoring plots
+ */
+async function searchMonitoringPlots(
+  plantingSiteId: number,
+  monitoringPlotIds: number[]
+): Promise<MonitoringPlotSearchResult[] | null> {
+  const defaultSortOrder = {
+    field: 'id',
+    direction: 'Ascending',
+  } as SearchSortOrder;
+
+  const params = {
+    fields: ['id', 'fullName'],
+    prefix: 'plantingSites.plantingZones.plantingSubzones.monitoringPlots',
+    sortOrder: [defaultSortOrder],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          field: 'plantingSubzone_plantingSite_id',
+          operation: 'field',
+          values: [plantingSiteId],
+        },
+        {
+          field: 'id',
+          operation: 'field',
+          values: monitoringPlotIds,
+        },
+      ],
+    },
+    count: 0,
+  };
+
+  return (await SearchService.search(params)) as MonitoringPlotSearchResult[];
+}
+
+/**
  * Exported functions
  */
 const TrackingService = {
@@ -302,6 +339,7 @@ const TrackingService = {
   getTotalPlantsInSite,
   getReportedPlants,
   searchPlantingSites,
+  searchMonitoringPlots,
 };
 
 export default TrackingService;

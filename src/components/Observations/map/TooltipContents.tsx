@@ -24,11 +24,12 @@ type TooltipContentsProps = {
   monitoringPlot: ObservationMonitoringPlotResultsPayload;
   observationId?: number;
   observationState?: ObservationState;
+  plantingSiteId: number;
   title: string;
 };
 
 export default function TooltipContents(props: TooltipContentsProps): JSX.Element {
-  const { monitoringPlot, observationId, observationState, title } = props;
+  const { monitoringPlot, observationId, observationState, plantingSiteId, title } = props;
   const theme = useTheme();
   const classes = useStyles();
   const mapPortalContainer = useMapPortalContainer();
@@ -51,9 +52,10 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
       {showReplacePlotModal && observationId && monitoringPlot && (
         <Portal container={mapPortalContainer}>
           <ReplaceObservationPlotModal
-            onClose={() => setShowReplacePlotModal(false)}
-            observationId={observationId}
             monitoringPlot={monitoringPlot}
+            observationId={observationId}
+            onClose={() => setShowReplacePlotModal(false)}
+            plantingSiteId={plantingSiteId}
           />
         </Portal>
       )}
