@@ -241,16 +241,17 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
           padding: theme.spacing(3),
         }}
       >
-        <BatchDetailsModal
-          open={openNewBatchModal}
-          reload={reloadData}
-          onClose={() => {
-            onUpdateOpenBatch(null);
-            setOpenNewBatchModal(false);
-          }}
-          speciesId={speciesId}
-          selectedBatch={selectedBatch}
-        />
+        {openNewBatchModal && (
+          <BatchDetailsModal
+            reload={reloadData}
+            onClose={() => {
+              onUpdateOpenBatch(null);
+              setOpenNewBatchModal(false);
+            }}
+            speciesId={speciesId}
+            selectedBatch={selectedBatch}
+          />
+        )}
         <DeleteBatchesModal
           open={openDeleteModal}
           onClose={() => setOpenDeleteModal(false)}
