@@ -160,11 +160,11 @@ export default function NurseryDetails(): JSX.Element {
             display={true}
           />
         </Grid>
-        {nurseryV2 &&
+        {nurseryV2 && (
           <Grid item xs={12}>
             TODO: Add sub-locations table
           </Grid>
-        }
+        )}
       </Grid>
     </TfMain>
   );

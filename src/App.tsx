@@ -449,10 +449,11 @@ function AppContent() {
               {getNurseriesView()}
             </Route>
             <Route exact path={APP_PATHS.INVENTORY}>
-              {nurseryV2
-                ? <InventoryV2 hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
-                : <Inventory hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
-              }
+              {nurseryV2 ? (
+                <InventoryV2 hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
+              ) : (
+                <Inventory hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
+              )}
             </Route>
             <Route exact path={APP_PATHS.INVENTORY_NEW}>
               <InventoryCreate />
@@ -460,7 +461,7 @@ function AppContent() {
             <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
               <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
             </Route>
-            {nurseryV2 &&
+            {nurseryV2 && (
               <>
                 <Route path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}>
                   <InventoryBatch origin='Nursery' />
@@ -472,7 +473,7 @@ function AppContent() {
                   <InventoryViewForNursery />
                 </Route>
               </>
-            }
+            )}
             <Route path={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES}>
               <InventoryView species={species} />
             </Route>

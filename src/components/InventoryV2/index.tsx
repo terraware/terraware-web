@@ -43,10 +43,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
 
   return (
     <TfMain backgroundImageVisible={!isOnboarded}>
-      <ImportInventoryModal
-        open={importInventoryModalOpen}
-        onClose={() => setImportInventoryModalOpen(false)}
-      />
+      <ImportInventoryModal open={importInventoryModalOpen} onClose={() => setImportInventoryModalOpen(false)} />
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}>
           <Grid container>
@@ -74,7 +71,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
                       onOptionItemClick={onOptionItemClick}
                       optionItems={[
                         { label: strings.IMPORT, value: 'import' },
-                        { label: strings.EXPORT, value: 'export' }
+                        { label: strings.EXPORT, value: 'export' },
                       ]}
                     />
                   </>

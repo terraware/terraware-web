@@ -9,9 +9,5 @@ type InventoryBatchProps = {
 export default function InventoryBatch({ origin }: InventoryBatchProps) {
   // TODO: construct parent path for breadcrumbs based on origin
 
-  return (
-    <TfMain>
-      TODO: Add batch details and history
-    </TfMain>
-  );
+  return <TfMain>TODO: Add batch details and history</TfMain>;
 }
