@@ -41,7 +41,8 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
       return;
     }
     setSaving(true);
-    const response = await NurseryBatchService.updateBatchQuantities({ ...record, version: row.version });
+    const operation = type === 'germinating' ? 'GerminatingToNotReady' : 'NotReadyToReady';
+    const response = await NurseryBatchService.changeBatchStatuses(record, { operation, quantity: movedValue });
     setSaving(false);
     if (response.requestSucceeded) {
       if (reload) {

@@ -107,6 +107,10 @@ export interface paths {
     put: operations["updateBatch"];
     delete: operations["deleteBatch"];
   };
+  "/api/v1/nursery/batches/{id}/changeStatuses": {
+    /** There must be enough seedlings available to move to the next status. */
+    post: operations["changeBatchStatuses"];
+  };
   "/api/v1/nursery/batches/{id}/quantities": {
     /** This should not be used to record withdrawals; use the withdrawal API for that. */
     put: operations["updateBatchQuantities"];
@@ -722,6 +726,15 @@ export interface components {
        * @example EPSG:4326
        */
       name: string;
+    };
+    ChangeBatchStatusRequestPayload: {
+      /** @description Which status change to apply. */
+      operation: "GerminatingToNotReady" | "NotReadyToReady";
+      /**
+       * Format: int32
+       * @description Number of seedlings to move from one status to the next.
+       */
+      quantity: number;
     };
     CompletePlotObservationRequestPayload: {
       conditions: (
@@ -4139,6 +4152,39 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
+      };
+    };
+  };
+  /** There must be enough seedlings available to move to the next status. */
+  changeBatchStatuses: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** The requested resource has a newer version and was not updated. */
+      412: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ChangeBatchStatusRequestPayload"];
       };
     };
   };
