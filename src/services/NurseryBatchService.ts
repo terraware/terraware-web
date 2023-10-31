@@ -9,6 +9,7 @@ import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/t
  */
 
 const BATCHES_ENDPOINT = '/api/v1/nursery/batches';
+const BATCH_CHANGE_STATUSES_ENDPOINT = '/api/v1/nursery/batches/{id}/changeStatuses';
 const BATCH_ID_ENDPOINT = '/api/v1/nursery/batches/{id}';
 const BATCH_QUANTITIES_ENDPOINT = '/api/v1/nursery/batches/{id}/quantities';
 
@@ -53,6 +54,8 @@ export type BatchData = {
   batch: Batch | null;
 };
 
+export type ChangeBatchStatusesRequestPayload =
+  paths[typeof BATCH_CHANGE_STATUSES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 export type UpdateBatchRequestPayload =
   paths[typeof BATCH_ID_ENDPOINT]['put']['requestBody']['content']['application/json'];
 export type UpdateBatchQuantitiesRequestPayload =
@@ -253,9 +256,22 @@ const updateBatchQuantities = async (batch: Batch): Promise<Response> => {
 };
 
 /**
+ * Change the statuses of seedlings in a batch
+ */
+const changeBatchStatuses = async (batch: Batch, entity: ChangeBatchStatusesRequestPayload): Promise<Response> => {
+  return await HttpService.root(BATCH_CHANGE_STATUSES_ENDPOINT).post({
+    entity,
+    urlReplacements: {
+      '{id}': batch.id.toString(),
+    },
+  });
+};
+
+/**
  * Exported functions
  */
 const NurseryBatchService = {
+  changeBatchStatuses,
   createBatch,
   getBatch,
   getBatches,
