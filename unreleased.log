@@ -1,3 +1,4 @@
+19f4e0ead SW-4330-followup Add map style dropdown and fullscreen button to editable map view (#1751)
 76f615fb2 SW-4372 Create batch details modal without keeping state of previous batch selection (#1747)
 875940799 SW-4325 Show status of monitoring plot reassignment request (#1746)
 e71d16b0d SW-3968 / SW-4330 Add full screen control to maps and option to display 'outdoors' style map (#1735)
