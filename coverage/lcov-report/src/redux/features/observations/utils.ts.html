@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/87</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
@@ -324,7 +324,11 @@
 <a name='L259'></a><a href='#L259'>259</a>
 <a name='L260'></a><a href='#L260'>260</a>
 <a name='L261'></a><a href='#L261'>261</a>
-<a name='L262'></a><a href='#L262'>262</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -478,6 +482,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -517,6 +522,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -525,6 +531,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -739,6 +747,7 @@ export const mergeObservations = <span class="cstat-no" title="statement not cov
         species: mergeSpecies(observation.species, species),
         totalPlants: observation.plantingZones.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; <span class="cstat-no" title="statement not covered" >acc + curr.totalPlants,</span> 0),
         hasObservedPermanentPlots: mergedZones.some(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.hasObservedPermanentPlots)</span>,
+        hasObservedTemporaryPlots: mergedZones.some(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.hasObservedTemporaryPlots)</span>,
       };
     });
 };
@@ -789,6 +798,9 @@ const mergeZones = <span class="cstat-no" title="statement not covered" ><span c
         status,
         hasObservedPermanentPlots: zoneObservation.plantingSubzones.some(<span class="fstat-no" title="function not covered" >(p</span>lantingSubzone) =&gt;
 <span class="cstat-no" title="statement not covered" >          plantingSubzone.monitoringPlots.some(<span class="fstat-no" title="function not covered" >(p</span>lot) =&gt; <span class="cstat-no" title="statement not covered" >plot.isPermanent &amp;&amp; plot.completedTime)</span></span>
+        ),
+        hasObservedTemporaryPlots: zoneObservation.plantingSubzones.some(<span class="fstat-no" title="function not covered" >(p</span>lantingSubzone) =&gt;
+<span class="cstat-no" title="statement not covered" >          plantingSubzone.monitoringPlots.some(<span class="fstat-no" title="function not covered" >(p</span>lot) =&gt; <span class="cstat-no" title="statement not covered" >!plot.isPermanent &amp;&amp; plot.completedTime)</span></span>
         ),
       };
     });
@@ -853,7 +865,7 @@ const mergeSpecies = <span class="cstat-no" title="statement not covered" ><span
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-01T17:59:24.788Z
+                at 2023-11-01T19:53:27.359Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
