@@ -66,14 +66,16 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
               <Box marginBottom={3}>
                 {eventsInfo.map((event, index) => (
                   <Box key={index} display='flex'>
-                    {event.infoPrefix}&nbsp;
-                    {event.eventDetails.map((data, eventDetailsIndex) => (
-                      <Box key={eventDetailsIndex} display='flex'>
-                        <Typography>{data.detail.plantingSiteName}&nbsp;(</Typography>
-                        <Link to={data.rescheduleUrl}>{strings.RESCHEDULE}</Link>
-                        <Typography>){eventDetailsIndex < event.eventDetails.length - 1 ? ', ' : ''}&nbsp;</Typography>
-                      </Box>
-                    ))}
+                    <Typography sx={{ whiteSpace: 'pre-wrap' }}>
+                      {event.infoPrefix}&nbsp;
+                      {event.eventDetails.map((data, eventDetailsIndex) => (
+                        <>
+                          {data.detail.plantingSiteName}&nbsp; (
+                          <Link to={data.rescheduleUrl}>{strings.RESCHEDULE}</Link>)
+                          {eventDetailsIndex < event.eventDetails.length - 1 ? ',' : ''}&nbsp;
+                        </>
+                      ))}
+                    </Typography>
                   </Box>
                 ))}
               </Box>
