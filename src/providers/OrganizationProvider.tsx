@@ -118,14 +118,14 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           }
           if (queryOrganizationId !== orgToUse.id.toString()) {
             query.set('organizationId', orgToUse.id.toString());
-            history.push(getLocation(location.pathname, location, query.toString()));
+            history.replace(getLocation(location.pathname, location, query.toString()));
           }
         }
       }
       if (!orgToUse && queryOrganizationId) {
         // user does not belong to any orgs, clear the url param org id
         query.delete('organizationId');
-        history.push(getLocation(location.pathname, location, query.toString()));
+        history.replace(getLocation(location.pathname, location, query.toString()));
       }
     }
   }, [organizations, selectedOrganization, query, location, history, userPreferences, userBootstrapped]);
