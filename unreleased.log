@@ -1,3 +1,4 @@
+5e9ed5087 Fix font size in Reschedule link (#1755)
 7580a6533 SW-4402 Allow upcoming observations to be rescheduled  (#1753)
 a93e86023 SW-4401 Nursery Updates Feature Flag (#1752)
 aa64501ec SW-4376 Distinguish status changes from quantity edits (#1750)
