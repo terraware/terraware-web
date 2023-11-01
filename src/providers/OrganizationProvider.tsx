@@ -28,7 +28,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
   const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(defaultSelectedOrg.id);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [organizations, setOrganizations] = useState<Organization[]>();
   const history = useHistory();
   const query = useQuery();
   const location = useStateLocation();
@@ -86,7 +86,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     setOrganizationData((prev) => ({
       ...prev,
       selectedOrganization: selectedOrganization || defaultSelectedOrg,
-      organizations,
+      organizations: organizations ?? [],
       orgPreferences,
       bootstrapped,
       orgPreferenceForId,
@@ -99,37 +99,33 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [reloadOrgPreferences]);
 
   useEffect(() => {
-    if (userBootstrapped && userPreferences) {
-      const organizationId = query.get('organizationId');
-      // if the org id in url is missing or does not match the selected organization, update the url
-      // this allows us to create links across the app without worrying about
-      // populating the org id, which will be handled here
-      if (selectedOrganization && selectedOrganization.id.toString() !== organizationId && organizations.length) {
-        if (!location.pathname.startsWith(APP_PATHS.WELCOME)) {
-          query.set('organizationId', selectedOrganization.id.toString());
-          history.push(getLocation(location.pathname, location, query.toString()));
+    if (userBootstrapped && userPreferences && organizations) {
+      const queryOrganizationId = query.get('organizationId');
+      let orgToUse;
+      if (organizations.length) {
+        const querySelectionOrg =
+          queryOrganizationId && organizations.find((org) => org.id === parseInt(queryOrganizationId, 10));
+        orgToUse = querySelectionOrg || organizations.find((org) => org.id === selectedOrganization?.id);
+        if (!orgToUse && userPreferences.lastVisitedOrg) {
+          orgToUse = organizations.find((org) => org.id === userPreferences.lastVisitedOrg);
         }
-      } else if (organizationId && !organizations.length) {
-        // user does not belong to any orgs
+        if (!orgToUse) {
+          orgToUse = organizations[0];
+        }
+        if (orgToUse) {
+          if (selectedOrganization?.id !== orgToUse.id) {
+            setSelectedOrganization(orgToUse);
+          }
+          if (queryOrganizationId !== orgToUse.id.toString()) {
+            query.set('organizationId', orgToUse.id.toString());
+            history.push(getLocation(location.pathname, location, query.toString()));
+          }
+        }
+      }
+      if (!orgToUse && queryOrganizationId) {
+        // user does not belong to any orgs, clear the url param org id
         query.delete('organizationId');
         history.push(getLocation(location.pathname, location, query.toString()));
-      }
-    }
-  }, [selectedOrganization, query, location, history, userBootstrapped, organizations.length, userPreferences]);
-
-  useEffect(() => {
-    if (userBootstrapped && organizations.length && userPreferences) {
-      const organizationId = query.get('organizationId');
-      const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
-      let orgToUse = querySelectionOrg || organizations.find((org) => org.id === selectedOrganization?.id);
-      if (!orgToUse && userPreferences.lastVisitedOrg) {
-        orgToUse = organizations.find((org) => org.id === userPreferences.lastVisitedOrg);
-      }
-      if (!orgToUse) {
-        orgToUse = organizations[0];
-      }
-      if (orgToUse && selectedOrganization?.id !== orgToUse.id) {
-        setSelectedOrganization(orgToUse);
       }
     }
   }, [organizations, selectedOrganization, query, location, history, userPreferences, userBootstrapped]);
@@ -152,7 +148,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
     selectedOrganization: selectedOrganization || defaultSelectedOrg,
     setSelectedOrganization,
-    organizations,
+    organizations: organizations ?? [],
     orgPreferences,
     reloadOrganizations,
     reloadOrgPreferences,
