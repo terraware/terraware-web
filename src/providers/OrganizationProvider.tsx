@@ -99,6 +99,25 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [reloadOrgPreferences]);
 
   useEffect(() => {
+    if (userBootstrapped && userPreferences) {
+      const organizationId = query.get('organizationId');
+      // if the org id in url is missing or does not match the selected organization, update the url
+      // this allows us to create links across the app without worrying about
+      // populating the org id, which will be handled here
+      if (selectedOrganization && selectedOrganization.id.toString() !== organizationId && organizations.length) {
+        if (!location.pathname.startsWith(APP_PATHS.WELCOME)) {
+          query.set('organizationId', selectedOrganization.id.toString());
+          history.push(getLocation(location.pathname, location, query.toString()));
+        }
+      } else if (organizationId && !organizations.length) {
+        // user does not belong to any orgs
+        query.delete('organizationId');
+        history.push(getLocation(location.pathname, location, query.toString()));
+      }
+    }
+  }, [selectedOrganization, query, location, history, userBootstrapped, organizations.length, userPreferences]);
+
+  useEffect(() => {
     if (userBootstrapped && organizations.length && userPreferences) {
       const organizationId = query.get('organizationId');
       const querySelectionOrg = organizationId && organizations.find((org) => org.id === parseInt(organizationId, 10));
@@ -109,13 +128,8 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       if (!orgToUse) {
         orgToUse = organizations[0];
       }
-      if (orgToUse) {
+      if (orgToUse && selectedOrganization?.id !== orgToUse.id) {
         setSelectedOrganization(orgToUse);
-      }
-      if (organizationId) {
-        query.delete('organizationId');
-        // preserve other url params
-        history.push(getLocation(location.pathname, location, query.toString()));
       }
     }
   }, [organizations, selectedOrganization, query, location, history, userPreferences, userBootstrapped]);

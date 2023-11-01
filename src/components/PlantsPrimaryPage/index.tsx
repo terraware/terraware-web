@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import _ from 'lodash';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
-import { PreferencesService, TrackingService } from 'src/services';
+import { CachedUserService, PreferencesService, TrackingService } from 'src/services';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import PlantsPrimaryPageView, { ButtonProps } from './PlantsPrimaryPageView';
 
@@ -53,9 +54,12 @@ export default function PlantsPrimaryPage({
 
   useEffect(() => {
     if (plantsSitePreferences) {
-      PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-        [lastVisitedPreferenceName]: plantsSitePreferences,
-      });
+      const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
+      if (!_.isEqual(response[lastVisitedPreferenceName], plantsSitePreferences)) {
+        PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+          [lastVisitedPreferenceName]: plantsSitePreferences,
+        });
+      }
     }
   }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization.id]);
 
@@ -94,12 +98,12 @@ export default function PlantsPrimaryPage({
   );
 
   useEffect(() => {
-    const initializePlantingSite = async () => {
+    const initializePlantingSite = () => {
       if (plantingSites && plantingSites.length) {
         let lastVisitedPlantingSite: any = {};
-        const response = await PreferencesService.getUserOrgPreferences(selectedOrganization.id);
-        if (response.requestSucceeded && response.preferences && response.preferences[lastVisitedPreferenceName]) {
-          lastVisitedPlantingSite = response.preferences[lastVisitedPreferenceName];
+        const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
+        if (response[lastVisitedPreferenceName]) {
+          lastVisitedPlantingSite = response[lastVisitedPreferenceName];
         }
         const plantingSiteIdToUse = plantingSiteId || lastVisitedPlantingSite.plantingSiteId;
         const requestedPlantingSite = plantingSites.find(
