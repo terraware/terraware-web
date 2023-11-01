@@ -71,8 +71,10 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
                       {event.eventDetails.map((data, eventDetailsIndex) => (
                         <>
                           {data.detail.plantingSiteName}&nbsp; (
-                          <Link to={data.rescheduleUrl}>{strings.RESCHEDULE}</Link>)
-                          {eventDetailsIndex < event.eventDetails.length - 1 ? ',' : ''}&nbsp;
+                          <Link fontSize={16} to={data.rescheduleUrl}>
+                            {strings.RESCHEDULE}
+                          </Link>
+                          ){eventDetailsIndex < event.eventDetails.length - 1 ? ',' : ''}&nbsp;
                         </>
                       ))}
                     </Typography>
