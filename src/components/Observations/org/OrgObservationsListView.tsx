@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { Box, useTheme } from '@mui/material';
@@ -7,11 +7,9 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import Table from 'src/components/common/table';
 import { useLocalization, useOrganization } from 'src/providers';
-import {
-  ObservationResults,
-  ObservationPlantingZoneResults,
-  ObservationPlantingSubzoneResults,
-} from 'src/types/Observations';
+import { Observation, ObservationResults, ObservationPlantingZoneResults } from 'src/types/Observations';
+import { useAppSelector } from 'src/redux/store';
+import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
 import isEnabled from 'src/features';
 import { isAdmin } from 'src/utils/organization';
@@ -37,13 +35,13 @@ const defaultColumns = (): TableColumnType[] => [
     type: 'string',
   },
   {
-    key: 'plantingZones',
-    name: strings.ZONES,
+    key: 'plantingSiteName',
+    name: strings.PLANTING_SITE,
     type: 'string',
   },
   {
-    key: 'plantingSubzones',
-    name: strings.SUBZONES,
+    key: 'plantingZones',
+    name: strings.ZONES,
     type: 'string',
   },
   {
@@ -66,6 +64,11 @@ const defaultColumns = (): TableColumnType[] => [
     name: strings.MORTALITY_RATE,
     type: 'number',
   },
+  {
+    key: 'endDate',
+    name: strings.END_DATE,
+    type: 'date',
+  },
 ];
 
 const scheduleObservationsColumn = (): TableColumnType[] => [
@@ -77,10 +80,14 @@ const scheduleObservationsColumn = (): TableColumnType[] => [
 ];
 
 export type OrgObservationsListViewProps = {
+  plantingSiteId: number;
   observationsResults?: ObservationResults[];
 };
 
-export default function OrgObservationsListView({ observationsResults }: OrgObservationsListViewProps): JSX.Element {
+export default function OrgObservationsListView({
+  observationsResults,
+  plantingSiteId,
+}: OrgObservationsListViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const [results, setResults] = useState<any>([]);
@@ -88,6 +95,10 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
   const theme = useTheme();
   const history = useHistory();
   const scheduleObservationsEnabled = isEnabled('Schedule Observations') && isAdmin(selectedOrganization);
+
+  const observations: Observation[] | undefined = useAppSelector((state) =>
+    selectPlantingSiteObservations(state, plantingSiteId)
+  );
 
   const columns = useCallback((): TableColumnType[] => {
     if (!activeLocale) {
@@ -104,6 +115,15 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
     [history]
   );
 
+  const endDates = useMemo<Record<number, string>>(
+    () =>
+      (observations ?? []).reduce((acc, observation) => {
+        acc[observation.id] = observation.endDate;
+        return acc;
+      }, {} as Record<number, string>),
+    [observations]
+  );
+
   useEffect(() => {
     setResults(
       (observationsResults ?? []).map((observation: ObservationResults) => {
@@ -112,19 +132,11 @@ export default function OrgObservationsListView({ observationsResults }: OrgObse
           plantingZones: observation.plantingZones
             .map((zone: ObservationPlantingZoneResults) => zone.plantingZoneName)
             .join('\r'),
-          plantingSubzones: Array.from(
-            new Set(
-              observation.plantingZones.flatMap((zone: ObservationPlantingZoneResults) =>
-                zone.plantingSubzones.flatMap(
-                  (subzone: ObservationPlantingSubzoneResults) => subzone.plantingSubzoneName
-                )
-              )
-            )
-          ).join('\r'),
+          endDate: endDates[observation.observationId] ?? '',
         };
       })
     );
-  }, [observationsResults]);
+  }, [endDates, observationsResults]);
 
   return (
     <Box>
