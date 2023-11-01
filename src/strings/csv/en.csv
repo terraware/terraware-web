@@ -694,7 +694,7 @@ NURSERY_MORTALITY_RATE,Nursery Mortality Rate
 NURSERY_REQUIRED,Nursery *
 NURSERY_TRANSFER,Nursery Transfer
 OBSERVATION_END_DATE,Observation End Date
-OBSERVATION_EVENT_SCHEDULED,Observation event is scheduled for {0} for planting site(s): {1},"Example: Observation event is scheduled for June 1, 2023 for planting site(s): Site-A, Site-B"
+OBSERVATION_EVENT_SCHEDULED,Observation event is scheduled for {0} for planting site(s):,"Example: Observation event is scheduled for June 1, 2023 for planting site(s): "
 OBSERVATION_IN_PROGRESS,Observation in Progress
 OBSERVATION_OVERDUE,Observation Overdue
 OBSERVATION_PERIOD_WARN,Observation period cannot exceed two months.

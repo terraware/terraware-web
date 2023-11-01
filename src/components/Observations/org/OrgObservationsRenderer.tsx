@@ -74,7 +74,7 @@ const OrgObservationsRenderer =
         <TableRowPopupMenu
           menuItems={[
             {
-              disabled: row.state !== 'Overdue',
+              disabled: row.state === 'Completed' || row.hasObservedPermanentPlots || row.hasObservedTemporaryPlots,
               label: strings.RESCHEDULE,
               onClick: () => {
                 goToRescheduleObservation(row.observationId);

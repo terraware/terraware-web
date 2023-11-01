@@ -152,6 +152,7 @@ export const mergeObservations = (
         species: mergeSpecies(observation.species, species),
         totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
         hasObservedPermanentPlots: mergedZones.some((zone) => zone.hasObservedPermanentPlots),
+        hasObservedTemporaryPlots: mergedZones.some((zone) => zone.hasObservedTemporaryPlots),
       };
     });
 };
@@ -202,6 +203,9 @@ const mergeZones = (
         status,
         hasObservedPermanentPlots: zoneObservation.plantingSubzones.some((plantingSubzone) =>
           plantingSubzone.monitoringPlots.some((plot) => plot.isPermanent && plot.completedTime)
+        ),
+        hasObservedTemporaryPlots: zoneObservation.plantingSubzones.some((plantingSubzone) =>
+          plantingSubzone.monitoringPlots.some((plot) => !plot.isPermanent && plot.completedTime)
         ),
       };
     });
