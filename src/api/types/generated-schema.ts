@@ -102,6 +102,10 @@ export interface paths {
     /** Clients may poll this endpoint to monitor the progress of the file. */
     get: operations["getSeedlingBatchesListUploadStatus"];
   };
+  "/api/v1/nursery/batches/{batchId}/history": {
+    /** Each event includes a version number. For events such as details edits that are snapshots of the values at a particular time, clients can compare against the event with the previous version number to see what has changed, e.g., to show a delta or a diff view. */
+    get: operations["getBatchHistory"];
+  };
   "/api/v1/nursery/batches/{id}": {
     get: operations["getBatch"];
     put: operations["updateBatch"];
@@ -243,15 +247,6 @@ export interface paths {
   };
   "/api/v1/seedbank/log/{tag}": {
     post: operations["recordLogMessage"];
-  };
-  "/api/v1/seedbank/storageLocations": {
-    get: operations["listStorageLocations"];
-    post: operations["createStorageLocation"];
-  };
-  "/api/v1/seedbank/storageLocations/{id}": {
-    get: operations["getStorageLocation"];
-    put: operations["updateStorageLocation"];
-    delete: operations["deleteStorageLocation"];
   };
   "/api/v1/seedbank/summary": {
     get: operations["getSeedBankSummary"];
@@ -550,11 +545,6 @@ export interface components {
         | "Drying"
         | "In Storage"
         | "Used Up";
-      /**
-       * @deprecated
-       * @description Use subLocation instead.
-       */
-      storageLocation?: string;
       subLocation?: string;
       /** Format: int32 */
       subsetCount?: number;
@@ -667,6 +657,166 @@ export interface components {
        */
       timeseriesValue?: number;
     };
+    /** @description A change to the non-quantity-related details of a batch. */
+    BatchHistoryDetailsEditedPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      notes?: string;
+      /**
+       * Format: int64
+       * @description The ID of the batch's project if the project still exists. If the project was subsequently deleted, this will be null but the project name will still be set.
+       */
+      projectId?: number;
+      /** @description The name of the project at the time the details were edited. If the project was subsequently renamed or deleted, this name remains the same. */
+      projectName?: string;
+      /** Format: date */
+      readyByDate?: string;
+      subLocations: components["schemas"]["BatchHistorySubLocationPayload"][];
+      substrate?:
+        | "MediaMix"
+        | "Soil"
+        | "Sand"
+        | "Moss"
+        | "PerliteVermiculite"
+        | "Other";
+      substrateNotes?: string;
+      treatment?:
+        | "Soak"
+        | "Scarify"
+        | "Chemical"
+        | "Stratification"
+        | "Other"
+        | "Light";
+      treatmentNotes?: string;
+      type:
+        | "DetailsEdited"
+        | "IncomingWithdrawal"
+        | "OutgoingWithdrawal"
+        | "QuantityEdited"
+        | "StatusChanged";
+      /** Format: int32 */
+      version: number;
+    };
+    /** @description A nursery transfer withdrawal from another batch that added seedlings to this batch. */
+    BatchHistoryIncomingWithdrawalPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: int64 */
+      fromBatchId: number;
+      /** Format: int32 */
+      germinatingQuantityAdded: number;
+      /** Format: int32 */
+      notReadyQuantityAdded: number;
+      /** Format: int32 */
+      readyQuantityAdded: number;
+      type:
+        | "DetailsEdited"
+        | "IncomingWithdrawal"
+        | "OutgoingWithdrawal"
+        | "QuantityEdited"
+        | "StatusChanged";
+      /** Format: int32 */
+      version: number;
+      /** Format: int64 */
+      withdrawalId: number;
+      /** Format: date */
+      withdrawnDate: string;
+    };
+    /** @description A withdrawal that removed seedlings from this batch. This does not include the full details of the withdrawal; they can be retrieved using the withdrawal ID. */
+    BatchHistoryOutgoingWithdrawalPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: int32 */
+      germinatingQuantityWithdrawn: number;
+      /** Format: int32 */
+      notReadyQuantityWithdrawn: number;
+      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      /** Format: int32 */
+      readyQuantityWithdrawn: number;
+      type:
+        | "DetailsEdited"
+        | "IncomingWithdrawal"
+        | "OutgoingWithdrawal"
+        | "QuantityEdited"
+        | "StatusChanged";
+      /** Format: int32 */
+      version: number;
+      /** Format: int64 */
+      withdrawalId: number;
+      /** Format: date */
+      withdrawnDate: string;
+    };
+    BatchHistoryPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      type:
+        | "DetailsEdited"
+        | "IncomingWithdrawal"
+        | "OutgoingWithdrawal"
+        | "QuantityEdited"
+        | "StatusChanged";
+      /** Format: int32 */
+      version: number;
+    };
+    /** @description A manual edit of a batch's remaining quantities. */
+    BatchHistoryQuantityEditedPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: int32 */
+      germinatingQuantity: number;
+      /** Format: int32 */
+      notReadyQuantity: number;
+      /** Format: int32 */
+      readyQuantity: number;
+      type:
+        | "DetailsEdited"
+        | "IncomingWithdrawal"
+        | "OutgoingWithdrawal"
+        | "QuantityEdited"
+        | "StatusChanged";
+      /** Format: int32 */
+      version: number;
+    };
+    /** @description The new quantities resulting from changing the statuses of seedlings in a batch. The values here are the total quantities remaining after the status change, not the number of seedlings whose statuses were changed. */
+    BatchHistoryStatusChangedPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: int32 */
+      germinatingQuantity: number;
+      /** Format: int32 */
+      notReadyQuantity: number;
+      /** Format: int32 */
+      readyQuantity: number;
+      type:
+        | "DetailsEdited"
+        | "IncomingWithdrawal"
+        | "OutgoingWithdrawal"
+        | "QuantityEdited"
+        | "StatusChanged";
+      /** Format: int32 */
+      version: number;
+    };
+    BatchHistorySubLocationPayload: {
+      /**
+       * Format: int64
+       * @description The ID of the sub-location if it still exists. If it was subsequently deleted, this will be null but the name will still be present.
+       */
+      id?: number;
+      /** @description The name of the sub-location at the time the details were edited. If the sub-location was subsequently renamed or deleted, this name remains the same. */
+      name: string;
+    };
     BatchPayload: {
       /**
        * Format: int64
@@ -680,10 +830,19 @@ export interface components {
       facilityId: number;
       /** Format: int32 */
       germinatingQuantity: number;
+      /** Format: int32 */
+      germinationRate?: number;
       /** Format: int64 */
       id: number;
+      /**
+       * Format: int64
+       * @description If this batch was created via a nursery transfer from another batch, the ID of the batch it came from.
+       */
+      initialBatchId?: number;
       /** Format: date-time */
       latestObservedTime: string;
+      /** Format: int32 */
+      lossRate?: number;
       /** Format: int32 */
       notReadyQuantity: number;
       notes?: string;
@@ -695,6 +854,23 @@ export interface components {
       readyQuantity: number;
       /** Format: int64 */
       speciesId: number;
+      subLocationIds: number[];
+      substrate?:
+        | "MediaMix"
+        | "Soil"
+        | "Sand"
+        | "Moss"
+        | "PerliteVermiculite"
+        | "Other";
+      substrateNotes?: string;
+      treatment?:
+        | "Soak"
+        | "Scarify"
+        | "Chemical"
+        | "Stratification"
+        | "Other"
+        | "Light";
+      treatmentNotes?: string;
       /**
        * Format: int32
        * @description Increases every time a batch is updated. Must be passed as a parameter for certain kinds of write operations to detect when a batch has changed since the client last retrieved it.
@@ -794,11 +970,6 @@ export interface components {
         | "Drying"
         | "In Storage"
         | "Used Up";
-      /**
-       * @deprecated
-       * @description Use subLocation instead.
-       */
-      storageLocation?: string;
       subLocation?: string;
     };
     CreateAccessionResponsePayloadV2: {
@@ -845,6 +1016,23 @@ export interface components {
       readyQuantity: number;
       /** Format: int64 */
       speciesId: number;
+      subLocationIds?: number[];
+      substrate?:
+        | "MediaMix"
+        | "Soil"
+        | "Sand"
+        | "Moss"
+        | "PerliteVermiculite"
+        | "Other";
+      substrateNotes?: string;
+      treatment?:
+        | "Soak"
+        | "Scarify"
+        | "Chemical"
+        | "Stratification"
+        | "Other"
+        | "Light";
+      treatmentNotes?: string;
     };
     CreateDeviceRequestPayload: {
       /**
@@ -920,11 +1108,6 @@ export interface components {
        * @description Which organization this facility belongs to.
        */
       organizationId: number;
-      /**
-       * @deprecated
-       * @description Use subLocationNames instead.
-       */
-      storageLocationNames?: string[];
       subLocationNames?: string[];
       /**
        * @description Time zone name in IANA tz database format
@@ -1070,11 +1253,6 @@ export interface components {
       /** Format: int64 */
       id: number;
       status: components["schemas"]["SuccessOrError"];
-    };
-    CreateStorageLocationRequestPayload: {
-      /** Format: int64 */
-      facilityId: number;
-      name: string;
     };
     CreateSubLocationRequestPayload: {
       name: string;
@@ -1367,6 +1545,10 @@ export interface components {
       automation: components["schemas"]["AutomationPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetBatchHistoryResponsePayload: {
+      history: components["schemas"]["BatchHistoryPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetCurrentTimeResponsePayload: {
       /** Format: date-time */
       currentTime: string;
@@ -1582,10 +1764,6 @@ export interface components {
     GetSpeciesSummaryResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       summary: components["schemas"]["SpeciesSummaryPayload"];
-    };
-    GetStorageLocationResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
-      storageLocation: components["schemas"]["StorageLocationPayload"];
     };
     GetSubLocationResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
@@ -1924,10 +2102,6 @@ export interface components {
     ListSpeciesResponsePayload: {
       species: components["schemas"]["SpeciesResponseElement"][];
       status: components["schemas"]["SuccessOrError"];
-    };
-    ListStorageLocationsResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
-      storageLocations: components["schemas"]["StorageLocationPayload"][];
     };
     ListSubLocationsResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
@@ -2848,15 +3022,6 @@ export interface components {
        */
       totalWithdrawn: number;
     };
-    StorageLocationPayload: {
-      /** Format: int32 */
-      activeAccessions: number;
-      /** Format: int64 */
-      facilityId: number;
-      /** Format: int64 */
-      id: number;
-      name: string;
-    };
     SubLocationPayload: {
       /**
        * Format: int32
@@ -3009,11 +3174,6 @@ export interface components {
         | "Drying"
         | "In Storage"
         | "Used Up";
-      /**
-       * @deprecated
-       * @description Use subLocation instead.
-       */
-      storageLocation?: string;
       subLocation?: string;
       /** Format: int32 */
       subsetCount?: number;
@@ -3057,6 +3217,23 @@ export interface components {
       projectId?: number;
       /** Format: date */
       readyByDate?: string;
+      subLocationIds?: number[];
+      substrate?:
+        | "MediaMix"
+        | "Soil"
+        | "Sand"
+        | "Moss"
+        | "PerliteVermiculite"
+        | "Other";
+      substrateNotes?: string;
+      treatment?:
+        | "Soak"
+        | "Scarify"
+        | "Chemical"
+        | "Stratification"
+        | "Other"
+        | "Light";
+      treatmentNotes?: string;
       /** Format: int32 */
       version: number;
     };
@@ -3201,9 +3378,6 @@ export interface components {
     };
     UpdateReportPhotoRequestPayload: {
       caption?: string;
-    };
-    UpdateStorageLocationRequestPayload: {
-      name: string;
     };
     UpdateSubLocationRequestPayload: {
       name: string;
@@ -4083,6 +4257,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetUploadStatusResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Each event includes a version number. For events such as details edits that are snapshots of the values at a particular time, clients can compare against the event with the previous version number to see what has changed, e.g., to show a delta or a diff view. */
+  getBatchHistory: {
+    parameters: {
+      path: {
+        batchId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetBatchHistoryResponsePayload"];
+        };
+      };
+      /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5165,104 +5361,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": string;
-      };
-    };
-  };
-  listStorageLocations: {
-    parameters: {
-      query: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListStorageLocationsResponsePayload"];
-        };
-      };
-    };
-  };
-  createStorageLocation: {
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetStorageLocationResponsePayload"];
-        };
-      };
-      /** A storage location with the requested name already exists at the facility. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateStorageLocationRequestPayload"];
-      };
-    };
-  };
-  getStorageLocation: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetStorageLocationResponsePayload"];
-        };
-      };
-    };
-  };
-  updateStorageLocation: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** A storage location with the requested name already exists at the facility. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateStorageLocationRequestPayload"];
-      };
-    };
-  };
-  deleteStorageLocation: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The storage location contains accessions. Move them to a different storage location first. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
   };

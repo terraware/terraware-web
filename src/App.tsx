@@ -463,12 +463,12 @@ function AppContent() {
             </Route>
             {nurseryV2 && (
               <Route path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}>
-                <InventoryBatch origin='Nursery' />
+                <InventoryBatch origin='Nursery' species={species} />
               </Route>
             )}
             {nurseryV2 && (
               <Route path={APP_PATHS.INVENTORY_BATCH_FOR_SPECIES}>
-                <InventoryBatch origin='Species' />
+                <InventoryBatch origin='Species' species={species} />
               </Route>
             )}
             {nurseryV2 && (
