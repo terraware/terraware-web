@@ -106,6 +106,15 @@ export interface paths {
     /** Each event includes a version number. For events such as details edits that are snapshots of the values at a particular time, clients can compare against the event with the previous version number to see what has changed, e.g., to show a delta or a diff view. */
     get: operations["getBatchHistory"];
   };
+  "/api/v1/nursery/batches/{batchId}/photos": {
+    get: operations["listBatchPhotos"];
+    post: operations["createBatchPhoto"];
+  };
+  "/api/v1/nursery/batches/{batchId}/photos/{photoId}": {
+    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    get: operations["getBatchPhoto"];
+    delete: operations["deleteBatchPhoto"];
+  };
   "/api/v1/nursery/batches/{id}": {
     get: operations["getBatch"];
     put: operations["updateBatch"];
@@ -694,6 +703,8 @@ export interface components {
         | "DetailsEdited"
         | "IncomingWithdrawal"
         | "OutgoingWithdrawal"
+        | "PhotoCreated"
+        | "PhotoDeleted"
         | "QuantityEdited"
         | "StatusChanged";
       /** Format: int32 */
@@ -717,6 +728,8 @@ export interface components {
         | "DetailsEdited"
         | "IncomingWithdrawal"
         | "OutgoingWithdrawal"
+        | "PhotoCreated"
+        | "PhotoDeleted"
         | "QuantityEdited"
         | "StatusChanged";
       /** Format: int32 */
@@ -743,6 +756,8 @@ export interface components {
         | "DetailsEdited"
         | "IncomingWithdrawal"
         | "OutgoingWithdrawal"
+        | "PhotoCreated"
+        | "PhotoDeleted"
         | "QuantityEdited"
         | "StatusChanged";
       /** Format: int32 */
@@ -761,10 +776,45 @@ export interface components {
         | "DetailsEdited"
         | "IncomingWithdrawal"
         | "OutgoingWithdrawal"
+        | "PhotoCreated"
+        | "PhotoDeleted"
         | "QuantityEdited"
         | "StatusChanged";
       /** Format: int32 */
-      version: number;
+      version?: number;
+    };
+    BatchHistoryPhotoCreatedPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /**
+       * Format: int64
+       * @description ID of the photo if it exists. Null if the photo has been deleted.
+       */
+      fileId?: number;
+      type:
+        | "DetailsEdited"
+        | "IncomingWithdrawal"
+        | "OutgoingWithdrawal"
+        | "PhotoCreated"
+        | "PhotoDeleted"
+        | "QuantityEdited"
+        | "StatusChanged";
+    };
+    BatchHistoryPhotoDeletedPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      type:
+        | "DetailsEdited"
+        | "IncomingWithdrawal"
+        | "OutgoingWithdrawal"
+        | "PhotoCreated"
+        | "PhotoDeleted"
+        | "QuantityEdited"
+        | "StatusChanged";
     };
     /** @description A manual edit of a batch's remaining quantities. */
     BatchHistoryQuantityEditedPayload: {
@@ -782,6 +832,8 @@ export interface components {
         | "DetailsEdited"
         | "IncomingWithdrawal"
         | "OutgoingWithdrawal"
+        | "PhotoCreated"
+        | "PhotoDeleted"
         | "QuantityEdited"
         | "StatusChanged";
       /** Format: int32 */
@@ -803,6 +855,8 @@ export interface components {
         | "DetailsEdited"
         | "IncomingWithdrawal"
         | "OutgoingWithdrawal"
+        | "PhotoCreated"
+        | "PhotoDeleted"
         | "QuantityEdited"
         | "StatusChanged";
       /** Format: int32 */
@@ -863,6 +917,8 @@ export interface components {
         | "PerliteVermiculite"
         | "Other";
       substrateNotes?: string;
+      /** Format: int32 */
+      totalWithdrawn: number;
       treatment?:
         | "Soak"
         | "Scarify"
@@ -876,6 +932,10 @@ export interface components {
        * @description Increases every time a batch is updated. Must be passed as a parameter for certain kinds of write operations to detect when a batch has changed since the client last retrieved it.
        */
       version: number;
+    };
+    BatchPhotoPayload: {
+      /** Format: int64 */
+      id: number;
     };
     BatchResponsePayload: {
       batch: components["schemas"]["BatchPayload"];
@@ -994,6 +1054,11 @@ export interface components {
       verbosity?: number;
     };
     CreateAutomationResponsePayload: {
+      /** Format: int64 */
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateBatchPhotoResponsePayload: {
       /** Format: int64 */
       id: number;
       status: components["schemas"]["SuccessOrError"];
@@ -1971,6 +2036,10 @@ export interface components {
     };
     ListAutomationsResponsePayload: {
       automations: components["schemas"]["AutomationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListBatchPhotosResponsePayload: {
+      photos: components["schemas"]["BatchPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListDeviceConfigsResponse: {
@@ -4276,6 +4345,102 @@ export interface operations {
         };
       };
       /** The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  listBatchPhotos: {
+    parameters: {
+      path: {
+        batchId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListBatchPhotosResponsePayload"];
+        };
+      };
+      /** The batch does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  createBatchPhoto: {
+    parameters: {
+      path: {
+        batchId: number;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateBatchPhotoResponsePayload"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+  };
+  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  getBatchPhoto: {
+    parameters: {
+      path: {
+        batchId: number;
+        photoId: number;
+      };
+      query: {
+        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
+    };
+    responses: {
+      /** The photo was successfully retrieved. */
+      200: {
+        content: {
+          "image/jpeg": string;
+          "image/png": string;
+        };
+      };
+      /** The batch does not exist, or does not have a photo with the requested ID. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  deleteBatchPhoto: {
+    parameters: {
+      path: {
+        batchId: number;
+        photoId: number;
+      };
+    };
+    responses: {
+      /** The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** The batch does not exist, or does not have a photo with the requested ID. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
