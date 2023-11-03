@@ -2,9 +2,7 @@ import { Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import Card from 'src/components/common/Card';
 
-type BatchHistoryProps = {};
-
-export default function BatchHistory({}: BatchHistoryProps): JSX.Element {
+export default function BatchHistory(): JSX.Element {
   const theme = useTheme();
 
   return (

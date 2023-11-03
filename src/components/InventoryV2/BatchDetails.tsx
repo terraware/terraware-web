@@ -2,9 +2,7 @@ import { Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import Card from 'src/components/common/Card';
 
-type BatchDetailsProps = {};
-
-export default function BatchDetails({}: BatchDetailsProps): JSX.Element {
+export default function BatchDetails(): JSX.Element {
   const theme = useTheme();
 
   return (
