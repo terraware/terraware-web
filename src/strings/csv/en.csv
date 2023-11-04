@@ -117,6 +117,9 @@ BUDGET_DOCUMENT_XLS,Budget Document (.XLS)
 BUDGET_NARRATIVE_SUMMARY,Budget Narrative Summary
 BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS,"Provide a high level narrative of your budget-to-actuals, noting any major discrepancies and listing any contributors. (One-half page maximum.)"
 BUDGET_NARRATIVE_SUMMARY_REQUIRED,Budget Narrative Summary *
+BY_BATCH,By Batch
+BY_NURSERY,By Nursery
+BY_SPECIES,By Species
 CANCEL,Cancel
 CANCEL_DATA_CHECK,Cancel Data Check
 CANCEL_IMPORT,Cancel Import
