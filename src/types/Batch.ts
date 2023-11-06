@@ -31,3 +31,5 @@ export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
       return strings.OTHER;
   }
 };
+
+export type BatchPhoto = components['schemas']['BatchPhotoPayload'];
