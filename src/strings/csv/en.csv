@@ -102,6 +102,8 @@ BACK_OF_SEED_BANK,Back of Seed Bank
 BACK_TO_TERRAWARE,Back to Terraware
 BAG_ID,Bag ID
 BAG_IDS,Bag IDs
+BATCHES_AT,Batches at {0}
+BATCHES_OF,Batches of {0}
 BATCH_WITHDRAW_SUCCESS,{0} {1} for a total of {2} {3} withdrawn.
 BATCHES_PLURAL,batches
 BATCHES_SINGULAR,batch
@@ -378,6 +380,7 @@ GERMINATING,Germinating
 GERMINATING_QUANTITY,Germinating Quantity
 GERMINATING_QUANTITY_REQUIRED,Germinating Quantity *
 GERMINATION_TESTED_BY,Germination Tested By
+GERMINATION_RATE,Germination Rate
 GET_ACCESSION_ERROR,An error occurred when getting the accession.
 GET_COUNT,Get Count
 GET_STARTED,Get Started
