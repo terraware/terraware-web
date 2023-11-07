@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/75</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -213,7 +213,17 @@
 <a name='L148'></a><a href='#L148'>148</a>
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -316,6 +326,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -326,10 +339,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -393,7 +413,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
   const [orgPreferences, setOrgPreferences] = <span class="cstat-no" title="statement not covered" >useState&lt;PreferencesType&gt;({});</span>
   const [orgPreferenceForId, setOrgPreferenceForId] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(defaultSelectedOrg.id);</span>
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = <span class="cstat-no" title="statement not covered" >useState&lt;APIRequestStatus&gt;(APIRequestStatus.AWAITING);</span>
-  const [organizations, setOrganizations] = <span class="cstat-no" title="statement not covered" >useState&lt;Organization[]&gt;([]);</span>
+  const [organizations, setOrganizations] = <span class="cstat-no" title="statement not covered" >useState&lt;Organization[]&gt;();</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
@@ -451,7 +471,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
 <span class="cstat-no" title="statement not covered" >    setOrganizationData(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
       ...prev,
       selectedOrganization: selectedOrganization || defaultSelectedOrg,
-      organizations,
+      organizations: organizations ?? [],
       orgPreferences,
       bootstrapped,
       orgPreferenceForId,
@@ -464,23 +484,33 @@ export default function <span class="fstat-no" title="function not covered" >Org
   }, [reloadOrgPreferences]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (userBootstrapped &amp;&amp; organizations.length &amp;&amp; userPreferences) {</span>
-      const organizationId = <span class="cstat-no" title="statement not covered" >query.get('organizationId');</span>
-      const querySelectionOrg = <span class="cstat-no" title="statement not covered" >organizationId &amp;&amp; organizations.find(<span class="fstat-no" title="function not covered" >(o</span>rg) =&gt; <span class="cstat-no" title="statement not covered" >org.id === parseInt(organizationId, 10))</span>;</span>
-      let orgToUse = <span class="cstat-no" title="statement not covered" >querySelectionOrg || organizations.find(<span class="fstat-no" title="function not covered" >(o</span>rg) =&gt; <span class="cstat-no" title="statement not covered" >org.id === selectedOrganization?.id)</span>;</span>
-<span class="cstat-no" title="statement not covered" >      if (!orgToUse &amp;&amp; userPreferences.lastVisitedOrg) {</span>
-<span class="cstat-no" title="statement not covered" >        orgToUse = organizations.find(<span class="fstat-no" title="function not covered" >(o</span>rg) =&gt; <span class="cstat-no" title="statement not covered" >org.id === userPreferences.lastVisitedOrg)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    if (userBootstrapped &amp;&amp; userPreferences &amp;&amp; organizations) {</span>
+      const queryOrganizationId = <span class="cstat-no" title="statement not covered" >query.get('organizationId');</span>
+      let orgToUse;
+<span class="cstat-no" title="statement not covered" >      if (organizations.length) {</span>
+        const querySelectionOrg =
+<span class="cstat-no" title="statement not covered" >          queryOrganizationId &amp;&amp; organizations.find(<span class="fstat-no" title="function not covered" >(o</span>rg) =&gt; <span class="cstat-no" title="statement not covered" >org.id === parseInt(queryOrganizationId, 10))</span>;</span>
+<span class="cstat-no" title="statement not covered" >        orgToUse = querySelectionOrg || organizations.find(<span class="fstat-no" title="function not covered" >(o</span>rg) =&gt; <span class="cstat-no" title="statement not covered" >org.id === selectedOrganization?.id)</span>;</span>
+<span class="cstat-no" title="statement not covered" >        if (!orgToUse &amp;&amp; userPreferences.lastVisitedOrg) {</span>
+<span class="cstat-no" title="statement not covered" >          orgToUse = organizations.find(<span class="fstat-no" title="function not covered" >(o</span>rg) =&gt; <span class="cstat-no" title="statement not covered" >org.id === userPreferences.lastVisitedOrg)</span>;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (!orgToUse) {</span>
+<span class="cstat-no" title="statement not covered" >          orgToUse = organizations[0];</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (orgToUse) {</span>
+<span class="cstat-no" title="statement not covered" >          if (selectedOrganization?.id !== orgToUse.id) {</span>
+<span class="cstat-no" title="statement not covered" >            setSelectedOrganization(orgToUse);</span>
+          }
+<span class="cstat-no" title="statement not covered" >          if (queryOrganizationId !== orgToUse.id.toString()) {</span>
+<span class="cstat-no" title="statement not covered" >            query.set('organizationId', orgToUse.id.toString());</span>
+<span class="cstat-no" title="statement not covered" >            history.replace(getLocation(location.pathname, location, query.toString()));</span>
+          }
+        }
       }
-<span class="cstat-no" title="statement not covered" >      if (!orgToUse) {</span>
-<span class="cstat-no" title="statement not covered" >        orgToUse = organizations[0];</span>
-      }
-<span class="cstat-no" title="statement not covered" >      if (orgToUse) {</span>
-<span class="cstat-no" title="statement not covered" >        setSelectedOrganization(orgToUse);</span>
-      }
-<span class="cstat-no" title="statement not covered" >      if (organizationId) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!orgToUse &amp;&amp; queryOrganizationId) {</span>
+        // user does not belong to any orgs, clear the url param org id
 <span class="cstat-no" title="statement not covered" >        query.delete('organizationId');</span>
-        // preserve other url params
-<span class="cstat-no" title="statement not covered" >        history.push(getLocation(location.pathname, location, query.toString()));</span>
+<span class="cstat-no" title="statement not covered" >        history.replace(getLocation(location.pathname, location, query.toString()));</span>
       }
     }
   }, [organizations, selectedOrganization, query, location, history, userPreferences, userBootstrapped]);
@@ -503,7 +533,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
   const [organizationData, setOrganizationData] = <span class="cstat-no" title="statement not covered" >useState&lt;ProvidedOrganizationData&gt;({</span>
     selectedOrganization: selectedOrganization || defaultSelectedOrg,
     setSelectedOrganization,
-    organizations,
+    organizations: organizations ?? [],
     orgPreferences,
     reloadOrganizations,
     reloadOrgPreferences,
@@ -520,7 +550,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-06T16:16:36.326Z
+                at 2023-11-07T15:32:55.380Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
