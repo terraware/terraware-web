@@ -11,7 +11,6 @@ import { Observation, ObservationResults, ObservationPlantingZoneResults } from 
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
-import isEnabled from 'src/features';
 import { isAdmin } from 'src/utils/organization';
 
 const useStyles = makeStyles(() => ({
@@ -94,7 +93,7 @@ export default function OrgObservationsListView({
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
-  const scheduleObservationsEnabled = isEnabled('Schedule Observations') && isAdmin(selectedOrganization);
+  const scheduleObservationsEnabled = isAdmin(selectedOrganization);
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
     selectPlantingSiteObservations(state, plantingSiteId)
