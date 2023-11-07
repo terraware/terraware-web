@@ -101,16 +101,20 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
     return inventoryNursery?.name || '';
   };
 
-  useEffect(() => {
+  const reloadData = useCallback(() => {
     const populateBatch = async () => {
       const response = await NurseryBatchService.getBatch(Number(batchId));
       setBatch(response.batch);
     };
 
-    if (!batch) {
+    if (batchId !== undefined) {
       populateBatch();
     }
-  }, [batchId, batch]);
+  }, [batchId]);
+
+  useEffect(() => {
+    reloadData();
+  }, [batchId, reloadData]);
 
   const onTabChange = useCallback(
     (newTab: string) => {
@@ -119,6 +123,10 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
     },
     [query, history, location]
   );
+
+  const onUpdateBatch = () => {
+    reloadData();
+  };
 
   return (
     <TfMain>
@@ -185,7 +193,7 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
                   {
                     id: 'details',
                     label: strings.DETAILS,
-                    children: <BatchDetails />,
+                    children: <BatchDetails batch={batch} onUpdate={onUpdateBatch} />,
                   },
                   { id: 'history', label: strings.HISTORY, children: <BatchHistory /> },
                 ]}
