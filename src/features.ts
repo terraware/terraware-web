@@ -1,11 +1,7 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'Schedule Observations'
-  | 'Replace Observation Plot'
-  | 'Nursery Updates';
+export type FeatureName = 'Show Production View' | 'Replace Observation Plot' | 'Nursery Updates';
 
 export type Feature = {
   name: FeatureName;
@@ -38,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Schedule Observations',
-    preferenceName: 'enableScheduleObservations',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Allow scheduling and rescheduling observations.'],
-    disclosure: ['None'],
   },
   {
     name: 'Replace Observation Plot',
