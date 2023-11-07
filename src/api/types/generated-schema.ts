@@ -3,460 +3,736 @@
  * Do not make direct changes to the file.
  */
 
+
+/** WithRequired type helpers */
+type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
+
 export interface paths {
   "/api/v1/automations": {
+    /** Gets a list of automations for a device or facility. */
     get: operations["listAutomations"];
+    /** Creates a new automation for a device or facility. */
     post: operations["createAutomation"];
   };
   "/api/v1/automations/{automationId}": {
+    /** Gets the details of a single automation for a device or facility. */
     get: operations["getAutomation"];
+    /** Updates an existing automation for a device or facility. */
     put: operations["updateAutomation"];
+    /** Deletes an existing automation from a device or facility. */
     delete: operations["deleteAutomation"];
   };
   "/api/v1/automations/{automationId}/trigger": {
+    /** Reports that an automation has been triggered. */
     post: operations["postAutomationTrigger"];
   };
   "/api/v1/devices": {
+    /** Registers a new device a facility's device manager. */
     post: operations["createDevice"];
   };
   "/api/v1/devices/managers": {
+    /** Searches for device managers matching a set of criteria. */
     get: operations["getDeviceManagers"];
   };
   "/api/v1/devices/managers/{deviceManagerId}": {
+    /** Gets information about a specific device manager. */
     get: operations["getDeviceManager"];
   };
   "/api/v1/devices/managers/{deviceManagerId}/connect": {
+    /** Connects a device manager to a facility. */
     post: operations["connectDeviceManager"];
   };
   "/api/v1/devices/templates": {
+    /** Lists the available templates for new devices. */
     get: operations["listDeviceTemplates"];
   };
   "/api/v1/devices/{id}": {
+    /** Gets the configuration of a single device. */
     get: operations["getDevice"];
+    /** Updates the configuration of an existing device. */
     put: operations["updateDevice"];
   };
   "/api/v1/devices/{id}/unresponsive": {
-    /** Notifies the appropriate users so they can troubleshoot the problem. */
+    /**
+     * Marks a device as unresponsive.
+     * @description Notifies the appropriate users so they can troubleshoot the problem.
+     */
     post: operations["deviceUnresponsive"];
   };
   "/api/v1/facilities": {
+    /** Lists all accessible facilities. */
     get: operations["listAllFacilities"];
+    /** Creates a new facility. */
     post: operations["createFacility"];
   };
   "/api/v1/facilities/{facilityId}": {
+    /** Gets information about a single facility. */
     get: operations["getFacility"];
+    /** Updates information about a facility. */
     put: operations["updateFacility"];
   };
   "/api/v1/facilities/{facilityId}/alert/send": {
+    /** Sends an alert to the facility's configured alert recipients. */
     post: operations["sendFacilityAlert"];
   };
   "/api/v1/facilities/{facilityId}/configured": {
-    /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
+    /**
+     * Marks a facility as fully configured.
+     * @description After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`.
+     */
     post: operations["postConfigured"];
   };
   "/api/v1/facilities/{facilityId}/devices": {
+    /** Lists the configurations of all the devices at a facility. */
     get: operations["listFacilityDevices"];
   };
   "/api/v1/facilities/{facilityId}/subLocations": {
+    /** Gets a list of sub-locations at a facility. */
     get: operations["listSubLocations"];
+    /** Creates a new sub-location at a facility. */
     post: operations["createSubLocation"];
   };
   "/api/v1/facilities/{facilityId}/subLocations/{subLocationId}": {
+    /** Gets information about a specific sub-location at a facility. */
     get: operations["getSubLocation"];
+    /** Updates the name of a sub-location at a facility. */
     put: operations["updateSubLocation"];
-    /** The sub-location must not be in use. */
+    /**
+     * Deletes a sub-location from a facility.
+     * @description The sub-location must not be in use.
+     */
     delete: operations["deleteSubLocation"];
   };
   "/api/v1/facility/{facilityId}/devices": {
+    /** Lists the configurations of all the devices at a facility. */
     get: operations["listFacilityDevices_1"];
   };
   "/api/v1/i18n/timeZones": {
+    /** Gets a list of supported time zones and their names. */
     get: operations["listTimeZoneNames"];
   };
   "/api/v1/login": {
-    /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
+    /**
+     * Redirects to a login page.
+     * @description For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in.
+     */
     get: operations["login"];
   };
   "/api/v1/notifications": {
+    /** Retrieve all notifications for current user scoped to an organization. */
     get: operations["readAll"];
+    /** Update notifications as read or unread */
     put: operations["markAllRead"];
   };
   "/api/v1/notifications/count": {
+    /** Retrieve notifications count by organization for current user. */
     get: operations["count"];
   };
   "/api/v1/notifications/{id}": {
+    /** Retrieve a notification by its id. */
     get: operations["read"];
+    /** Update a single notification as read or unread */
     put: operations["markRead"];
   };
   "/api/v1/nursery/batches": {
+    /** Creates a new seedling batch at a nursery. */
     post: operations["createBatch"];
   };
   "/api/v1/nursery/batches/uploads": {
-    /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/nursery/batches/uploads/template` endpoint. */
+    /**
+     * Uploads a list of seedling batches to add to the nursery.
+     * @description The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/nursery/batches/uploads/template` endpoint.
+     */
     post: operations["uploadSeedlingBatchesList"];
   };
   "/api/v1/nursery/batches/uploads/template": {
+    /** Gets a template file that contains the required header row for seedling batch uploads. */
     get: operations["getSeedlingBatchesUploadTemplate"];
   };
   "/api/v1/nursery/batches/uploads/{uploadId}": {
-    /** Clients may poll this endpoint to monitor the progress of the file. */
+    /**
+     * Gets the status of a seedling batches list uploaded previously.
+     * @description Clients may poll this endpoint to monitor the progress of the file.
+     */
     get: operations["getSeedlingBatchesListUploadStatus"];
   };
   "/api/v1/nursery/batches/{batchId}/history": {
-    /** Each event includes a version number. For events such as details edits that are snapshots of the values at a particular time, clients can compare against the event with the previous version number to see what has changed, e.g., to show a delta or a diff view. */
+    /**
+     * Gets the history of changes to a seedling batch.
+     * @description Each event includes a version number. For events such as details edits that are snapshots of the values at a particular time, clients can compare against the event with the previous version number to see what has changed, e.g., to show a delta or a diff view.
+     */
     get: operations["getBatchHistory"];
   };
   "/api/v1/nursery/batches/{batchId}/photos": {
+    /** Lists all the photos of a seedling batch. */
     get: operations["listBatchPhotos"];
+    /** Creates a new photo of a seedling batch. */
     post: operations["createBatchPhoto"];
   };
   "/api/v1/nursery/batches/{batchId}/photos/{photoId}": {
-    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    /**
+     * Retrieves a specific photo from a seedling batch.
+     * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+     */
     get: operations["getBatchPhoto"];
+    /** Deletes a photo from a seedling batch. */
     delete: operations["deleteBatchPhoto"];
   };
   "/api/v1/nursery/batches/{id}": {
+    /** Gets information about a single seedling batch. */
     get: operations["getBatch"];
+    /** Updates non-quantity-related details about a batch. */
     put: operations["updateBatch"];
+    /** Deletes an existing seedling batch from a nursery. */
     delete: operations["deleteBatch"];
   };
   "/api/v1/nursery/batches/{id}/changeStatuses": {
-    /** There must be enough seedlings available to move to the next status. */
+    /**
+     * Changes the statuses of seedlings in a batch.
+     * @description There must be enough seedlings available to move to the next status.
+     */
     post: operations["changeBatchStatuses"];
   };
   "/api/v1/nursery/batches/{id}/quantities": {
-    /** This should not be used to record withdrawals; use the withdrawal API for that. */
+    /**
+     * Updates the remaining quantities in a seedling batch.
+     * @description This should not be used to record withdrawals; use the withdrawal API for that.
+     */
     put: operations["updateBatchQuantities"];
   };
   "/api/v1/nursery/species/{speciesId}/summary": {
+    /** Gets a summary of the numbers of plants of each species in all nurseries. */
     get: operations["getSpeciesSummary"];
   };
   "/api/v1/nursery/withdrawals": {
+    /** Withdraws seedlings from one or more seedling batches at a nursery. */
     post: operations["createBatchWithdrawal"];
   };
   "/api/v1/nursery/withdrawals/{withdrawalId}": {
+    /** Gets information about a specific nursery withdrawal. */
     get: operations["getNurseryWithdrawal"];
   };
   "/api/v1/nursery/withdrawals/{withdrawalId}/photos": {
+    /** Lists all the photos of a withdrawal. */
     get: operations["listWithdrawalPhotos"];
+    /** Creates a new photo of a seedling batch withdrawal. */
     post: operations["uploadWithdrawalPhoto"];
   };
   "/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}": {
-    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    /**
+     * Retrieves a specific photo from a withdrawal.
+     * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+     */
     get: operations["getWithdrawalPhoto"];
   };
   "/api/v1/organizations": {
-    /** Lists all organizations the user can access. */
+    /**
+     * Lists all organizations.
+     * @description Lists all organizations the user can access.
+     */
     get: operations["listOrganizations"];
+    /** Creates a new organization. */
     post: operations["createOrganization"];
   };
   "/api/v1/organizations/{organizationId}": {
+    /** Gets information about an organization. */
     get: operations["getOrganization"];
+    /** Updates an existing organization. */
     put: operations["updateOrganization"];
-    /** Organizations can only be deleted if they have no members other than the current user. */
+    /**
+     * Deletes an existing organization.
+     * @description Organizations can only be deleted if they have no members other than the current user.
+     */
     delete: operations["deleteOrganization"];
   };
   "/api/v1/organizations/{organizationId}/roles": {
+    /** Lists the roles in an organization. */
     get: operations["listOrganizationRoles"];
   };
   "/api/v1/organizations/{organizationId}/users": {
+    /** Lists the users in an organization. */
     get: operations["listOrganizationUsers"];
+    /** Adds a user to an organization. */
     post: operations["addOrganizationUser"];
   };
   "/api/v1/organizations/{organizationId}/users/{userId}": {
+    /** Gets information about a user's membership in an organization. */
     get: operations["getOrganizationUser"];
-    /** Only includes organization-level information that can be modified by organization administrators. */
+    /**
+     * Updates the user's organization information.
+     * @description Only includes organization-level information that can be modified by organization administrators.
+     */
     put: operations["updateOrganizationUser"];
-    /** Does not remove any data created by the user. */
+    /**
+     * Removes a user from an organization.
+     * @description Does not remove any data created by the user.
+     */
     delete: operations["deleteOrganizationUser"];
   };
   "/api/v1/projects": {
+    /** Lists accessible projects. */
     get: operations["listProjects"];
+    /** Creates a new project. */
     post: operations["createProject"];
   };
   "/api/v1/projects/{id}": {
+    /** Gets information about a specific project. */
     get: operations["getProject"];
+    /** Updates information about an existing project. */
     put: operations["updateProject"];
-    /** Any accessions, seedling batches, or planting sites that were assigned to the project will no longer be assigned to any project. */
+    /**
+     * Deletes an existing project.
+     * @description Any accessions, seedling batches, or planting sites that were assigned to the project will no longer be assigned to any project.
+     */
     delete: operations["deleteProject"];
   };
   "/api/v1/projects/{id}/assign": {
-    /** Overwrites any existing project assignments. */
+    /**
+     * Assigns multiple entities to a project.
+     * @description Overwrites any existing project assignments.
+     */
     post: operations["assignProject"];
   };
   "/api/v1/reports": {
+    /** Lists an organization's reports. */
     get: operations["listReports"];
   };
   "/api/v1/reports/{id}": {
+    /** Retrieves the contents of a report. */
     get: operations["getReport"];
-    /** The report must be locked by the current user. */
+    /**
+     * Updates a report.
+     * @description The report must be locked by the current user.
+     */
     put: operations["updateReport"];
   };
   "/api/v1/reports/{id}/files": {
+    /** Lists the files associated with a report. */
     get: operations["listReportFiles"];
   };
   "/api/v1/reports/{id}/lock": {
-    /** Only succeeds if the report is not currently locked or if it is locked by the current user. */
+    /**
+     * Locks a report.
+     * @description Only succeeds if the report is not currently locked or if it is locked by the current user.
+     */
     post: operations["lockReport"];
   };
   "/api/v1/reports/{id}/lock/force": {
+    /** Locks a report even if it is locked by another user already. */
     post: operations["forceLockReport"];
   };
   "/api/v1/reports/{id}/photos": {
+    /** Lists the photos associated with a report. */
     get: operations["listReportPhotos"];
   };
   "/api/v1/reports/{id}/submit": {
-    /** The report must be locked by the current user. Submitting a report releases the lock. Once a report is submitted, it may no longer be locked or updated. */
+    /**
+     * Submits a report.
+     * @description The report must be locked by the current user. Submitting a report releases the lock. Once a report is submitted, it may no longer be locked or updated.
+     */
     post: operations["submitReport"];
   };
   "/api/v1/reports/{id}/unlock": {
+    /** Releases the lock on a report. */
     post: operations["unlockReport"];
   };
   "/api/v1/reports/{reportId}/files": {
+    /** Uploads a file to associate with a report. */
     post: operations["uploadReportFile"];
   };
   "/api/v1/reports/{reportId}/files/{fileId}": {
+    /** Downloads a file associated with a report. */
     get: operations["downloadReportFile"];
+    /** Deletes a file from a report. */
     delete: operations["deleteReportFile"];
   };
   "/api/v1/reports/{reportId}/photos": {
+    /** Uploads a photo to include with a report. */
     post: operations["uploadReportPhoto"];
   };
   "/api/v1/reports/{reportId}/photos/{photoId}": {
-    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    /**
+     * Gets the contents of a photo.
+     * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+     */
     get: operations["getReportPhoto"];
+    /** Updates a photo's caption. */
     put: operations["updateReportPhoto"];
+    /** Deletes a photo from a report. */
     delete: operations["deleteReportPhoto"];
   };
   "/api/v1/search": {
-    /** If a sublist field has multiple values, they are separated with line breaks in the exported file. */
+    /**
+     * Exports selected fields from data matching a set of search criteria.
+     * @description If a sublist field has multiple values, they are separated with line breaks in the exported file.
+     */
     post: operations["search_1"];
   };
   "/api/v1/seedbank/accessions/{id}": {
+    /** Deletes an existing accession. */
     delete: operations["delete"];
   };
   "/api/v1/seedbank/accessions/{id}/checkIn": {
+    /** Marks an accession as checked in. */
     post: operations["checkIn"];
   };
   "/api/v1/seedbank/accessions/{id}/history": {
+    /** Gets the history of changes to an accession. */
     get: operations["getAccessionHistory"];
   };
   "/api/v1/seedbank/accessions/{id}/photos": {
+    /** List all the available photos for an accession. */
     get: operations["listPhotos"];
   };
   "/api/v1/seedbank/accessions/{id}/photos/{photoFilename}": {
-    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    /**
+     * Retrieve a specific photo from an accession.
+     * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+     */
     get: operations["getPhoto"];
-    /** If there was already a photo with the specified filename, replaces it. */
+    /**
+     * Upload a new photo for an accession.
+     * @description If there was already a photo with the specified filename, replaces it.
+     */
     post: operations["uploadPhoto"];
   };
   "/api/v1/seedbank/clock": {
-    /** In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time. */
+    /**
+     * Get the server's current date and time.
+     * @description In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time.
+     */
     get: operations["getCurrentTime"];
   };
   "/api/v1/seedbank/log/{tag}": {
+    /** Records a log message from a device at a seed bank. */
     post: operations["recordLogMessage"];
   };
   "/api/v1/seedbank/summary": {
+    /** Get summary statistics about a specific seed bank or all seed banks within an organization. */
     get: operations["getSeedBankSummary"];
+    /** Get summary statistics about accessions that match a specified set of search criteria. */
     post: operations["summarizeAccessionSearch"];
   };
   "/api/v1/seedbank/values": {
+    /** List the values of a set of search fields for a set of accessions matching certain filter criteria. */
     post: operations["listFieldValues"];
   };
   "/api/v1/seedbank/values/all": {
+    /** List the possible values of a set of search fields. */
     post: operations["listAllFieldValues"];
   };
   "/api/v1/species": {
+    /** Lists all the species available in an organization. */
     get: operations["listSpecies"];
+    /** Creates a new species. */
     post: operations["createSpecies"];
   };
   "/api/v1/species/lookup/details": {
+    /** Gets more information about a species with a particular scientific name. */
     get: operations["getSpeciesDetails"];
   };
   "/api/v1/species/lookup/names": {
-    /** Gets a list of known scientific names whose words begin with particular letters. */
+    /** @description Gets a list of known scientific names whose words begin with particular letters. */
     get: operations["listSpeciesNames"];
   };
   "/api/v1/species/problems/{problemId}": {
-    /** Returns details about a problem with a species. */
+    /** @description Returns details about a problem with a species. */
     get: operations["getSpeciesProblem"];
-    /** Only valid for problems that include suggested changes. */
+    /**
+     * Applies suggested changes to fix a problem with a species.
+     * @description Only valid for problems that include suggested changes.
+     */
     post: operations["acceptProblemSuggestion"];
+    /** Deletes information about a problem with a species without applying any suggested changes. */
     delete: operations["deleteProblem"];
   };
   "/api/v1/species/uploads": {
-    /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/species/uploads/template` endpoint. */
+    /**
+     * Uploads a list of species to add to the organization.
+     * @description The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/species/uploads/template` endpoint.
+     */
     post: operations["uploadSpeciesList"];
   };
   "/api/v1/species/uploads/template": {
+    /** Gets a template file that contains the required header row for species list uploads. */
     get: operations["getSpeciesListUploadTemplate"];
   };
   "/api/v1/species/uploads/{uploadId}": {
-    /** Clients may poll this endpoint to monitor the progress of the file. */
+    /**
+     * Gets the status of a species list uploaded previously.
+     * @description Clients may poll this endpoint to monitor the progress of the file.
+     */
     get: operations["getSpeciesListUploadStatus"];
-    /** This may only be called if the status of the upload is "Awaiting User Action". */
+    /**
+     * Deletes a species list upload that is awaiting user action.
+     * @description This may only be called if the status of the upload is "Awaiting User Action".
+     */
     delete: operations["deleteSpeciesListUpload"];
   };
   "/api/v1/species/uploads/{uploadId}/resolve": {
-    /** This may only be called if the status of the upload is "Awaiting User Action". */
+    /**
+     * Resolves the problems with a species list that is awaiting user action.
+     * @description This may only be called if the status of the upload is "Awaiting User Action".
+     */
     post: operations["resolveSpeciesListUpload"];
   };
   "/api/v1/species/{speciesId}": {
+    /** Gets information about a single species. */
     get: operations["getSpecies"];
+    /** Updates an existing species. */
     put: operations["updateSpecies"];
-    /** The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it. */
+    /**
+     * Deletes an existing species.
+     * @description The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it.
+     */
     delete: operations["deleteSpecies"];
   };
   "/api/v1/timeseries": {
+    /** Lists the timeseries for one or more devices. */
     get: operations["listTimeseries"];
   };
   "/api/v1/timeseries/create": {
-    /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
+    /**
+     * Defines a list of timeseries for one or more devices.
+     * @description If there are existing timeseries with the same names, the old definitions will be overwritten.
+     */
     post: operations["createMultipleTimeseries"];
   };
   "/api/v1/timeseries/history": {
+    /** Returns historical values of timeseries. */
     post: operations["getTimeseriesHistory"];
   };
   "/api/v1/timeseries/values": {
+    /** Records new values for one or more timeseries. */
     post: operations["recordTimeseriesValues"];
   };
   "/api/v1/tracking/deliveries/{id}": {
+    /** Gets information about a specific delivery of seedlings to a planting site. */
     get: operations["getDelivery"];
   };
   "/api/v1/tracking/deliveries/{id}/reassign": {
+    /** Reassigns some of the seedlings from a delivery to a different planting subzone. */
     post: operations["reassignDelivery"];
   };
   "/api/v1/tracking/mapbox/token": {
-    /** Mapbox API tokens are short-lived; when a token expires, request a new one. */
+    /**
+     * Gets an API token to use for displaying Mapbox maps.
+     * @description Mapbox API tokens are short-lived; when a token expires, request a new one.
+     */
     get: operations["getMapboxToken"];
   };
   "/api/v1/tracking/observations": {
+    /** Gets a list of observations of planting sites. */
     get: operations["listObservations"];
+    /** Schedules a new observation. */
     post: operations["scheduleObservation"];
   };
   "/api/v1/tracking/observations/results": {
+    /** Gets a list of the results of observations. */
     get: operations["listObservationResults"];
   };
   "/api/v1/tracking/observations/{observationId}": {
+    /** Gets information about a single observation. */
     get: operations["getObservation"];
+    /** Reschedules an existing observation. */
     put: operations["rescheduleObservation"];
   };
   "/api/v1/tracking/observations/{observationId}/plots": {
+    /** Gets a list of monitoring plots assigned to an observation. */
     get: operations["listAssignedPlots"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}": {
+    /** Updates information about the observation of a plot. */
     put: operations["updatePlotObservation"];
+    /** Stores the results of a completed observation of a plot. */
     post: operations["completePlotObservation"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}/claim": {
-    /** A plot may only be claimed by one user at a time. */
+    /**
+     * Claims a monitoring plot.
+     * @description A plot may only be claimed by one user at a time.
+     */
     post: operations["claimMonitoringPlot"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos": {
+    /** Uploads a photo of a monitoring plot. */
     post: operations["uploadPlotPhoto"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos/{fileId}": {
-    /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+    /**
+     * Retrieves a specific photo from an observation of a monitoring plot.
+     * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+     */
     get: operations["getPlotPhoto"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}/release": {
+    /** Releases the claim on a monitoring plot. */
     post: operations["releaseMonitoringPlot"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace": {
-    /** Additional monitoring plots may be replaced as well, e.g., if the requested plot is part of a permanent cluster. In some cases, the requested plot will be removed from the observation but not replaced with a different one. */
+    /**
+     * Requests that a monitoring plot be replaced with a new one.
+     * @description Additional monitoring plots may be replaced as well, e.g., if the requested plot is part of a permanent cluster. In some cases, the requested plot will be removed from the observation but not replaced with a different one.
+     */
     post: operations["replaceObservationPlot"];
   };
   "/api/v1/tracking/observations/{observationId}/results": {
-    /** Some information is only available once all plots have been completed. */
+    /**
+     * Gets the results of an observation of a planting site.
+     * @description Some information is only available once all plots have been completed.
+     */
     get: operations["getObservationResults"];
   };
   "/api/v1/tracking/sites": {
-    /** The list can optionally contain information about planting zones and subzones. */
+    /**
+     * Gets a list of an organization's planting sites.
+     * @description The list can optionally contain information about planting zones and subzones.
+     */
     get: operations["listPlantingSites"];
+    /** Creates a new planting site. */
     post: operations["createPlantingSite"];
   };
   "/api/v1/tracking/sites/{id}": {
-    /** Includes information about the site's planting zones and subzones. */
+    /**
+     * Gets information about a specific planting site.
+     * @description Includes information about the site's planting zones and subzones.
+     */
     get: operations["getPlantingSite"];
+    /** Updates information about an existing planting site. */
     put: operations["updatePlantingSite"];
   };
   "/api/v1/tracking/sites/{id}/reportedPlants": {
-    /** The totals are based on nursery withdrawals. */
+    /**
+     * Gets the total number of plants planted at a planting site and in each planting zone.
+     * @description The totals are based on nursery withdrawals.
+     */
     get: operations["getPlantingSiteReportedPlants"];
   };
   "/api/v1/tracking/subzones/{id}": {
+    /** Updates information about a planting subzone. */
     put: operations["updatePlantingSubzone"];
   };
   "/api/v1/tracking/subzones/{id}/species": {
-    /** The list is based on nursery withdrawals. */
+    /**
+     * Gets a list of the species that have been planted in a specific planting subzone.
+     * @description The list is based on nursery withdrawals.
+     */
     get: operations["listPlantingSubzoneSpecies"];
   };
   "/api/v1/users/me": {
+    /** Gets information about the current user. */
     get: operations["getMyself"];
+    /** Updates information about the current user. */
     put: operations["updateMyself"];
-    /** WARNING! This operation is not reversible. */
+    /**
+     * Deletes the current user's account.
+     * @description WARNING! This operation is not reversible.
+     */
     delete: operations["deleteMyself"];
   };
   "/api/v1/users/me/preferences": {
+    /** Gets the current user's preferences. */
     get: operations["getUserPreferences"];
+    /** Updates the current user's preferences. */
     put: operations["updateUserPreferences"];
   };
   "/api/v1/versions": {
+    /** Gets the minimum and recommended versions for Terraware's client applications. */
     get: operations["getVersions"];
   };
   "/api/v2/seedbank/accessions": {
+    /** Creates a new accession. */
     post: operations["createAccession"];
   };
   "/api/v2/seedbank/accessions/uploads": {
-    /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v2/seedbank/accessions/uploads/template` endpoint. */
+    /**
+     * Uploads a list of accessions to add to the facility.
+     * @description The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v2/seedbank/accessions/uploads/template` endpoint.
+     */
     post: operations["uploadAccessionsList"];
   };
   "/api/v2/seedbank/accessions/uploads/template": {
+    /** Gets a template file that contains the required header row for accessions list uploads. */
     get: operations["getAccessionsListUploadTemplate"];
   };
   "/api/v2/seedbank/accessions/uploads/{uploadId}": {
-    /** Clients may poll this endpoint to monitor the progress of the file. */
+    /**
+     * Gets the status of an accessions list uploaded previously.
+     * @description Clients may poll this endpoint to monitor the progress of the file.
+     */
     get: operations["getAccessionsListUploadStatus"];
-    /** This may only be called if the status of the upload is "Awaiting User Action". */
+    /**
+     * Deletes an accessions list upload that is awaiting user action.
+     * @description This may only be called if the status of the upload is "Awaiting User Action".
+     */
     delete: operations["deleteAccessionsListUpload"];
   };
   "/api/v2/seedbank/accessions/uploads/{uploadId}/resolve": {
-    /** This may only be called if the status of the upload is "Awaiting User Action". */
+    /**
+     * Resolves the problems with an accessions list that is awaiting user action.
+     * @description This may only be called if the status of the upload is "Awaiting User Action".
+     */
     post: operations["resolveAccessionsListUpload"];
   };
   "/api/v2/seedbank/accessions/{accessionId}/transfers/nursery": {
+    /** Transfers seeds to a nursery. */
     post: operations["createNurseryTransferWithdrawal"];
   };
   "/api/v2/seedbank/accessions/{accessionId}/viabilityTests": {
+    /** List all of the accession's viability tests. */
     get: operations["listViabilityTests"];
-    /** May cause the accession's remaining quantity to change. */
+    /**
+     * Create a new viability test on an existing accession.
+     * @description May cause the accession's remaining quantity to change.
+     */
     post: operations["createViabilityTest"];
   };
   "/api/v2/seedbank/accessions/{accessionId}/viabilityTests/{viabilityTestId}": {
+    /** Get a single viability test. */
     get: operations["getViabilityTest"];
-    /** May cause the accession's remaining quantity to change. */
+    /**
+     * Update the details of an existing viability test.
+     * @description May cause the accession's remaining quantity to change.
+     */
     put: operations["updateViabilityTest"];
-    /** May cause the accession's remaining quantity to change. */
+    /**
+     * Delete an existing viability test.
+     * @description May cause the accession's remaining quantity to change.
+     */
     delete: operations["deleteViabilityTest"];
   };
   "/api/v2/seedbank/accessions/{accessionId}/withdrawals": {
+    /** List all the withdrawals from an accession. */
     get: operations["listWithdrawals"];
-    /** May cause the accession's remaining quantity to change. */
+    /**
+     * Create a new withdrawal on an existing accession.
+     * @description May cause the accession's remaining quantity to change.
+     */
     post: operations["createWithdrawal"];
   };
   "/api/v2/seedbank/accessions/{accessionId}/withdrawals/{withdrawalId}": {
+    /** Get a single withdrawal. */
     get: operations["getWithdrawal"];
-    /** May cause the accession's remaining quantity to change. */
+    /**
+     * Update the details of an existing withdrawal.
+     * @description May cause the accession's remaining quantity to change.
+     */
     put: operations["updateWithdrawal"];
-    /** May cause the accession's remaining quantity to change. */
+    /**
+     * Delete an existing withdrawal.
+     * @description May cause the accession's remaining quantity to change.
+     */
     delete: operations["deleteWithdrawal"];
   };
   "/api/v2/seedbank/accessions/{id}": {
+    /** Retrieve an existing accession. */
     get: operations["getAccession"];
+    /** Update an existing accession. */
     put: operations["updateAccession"];
   };
 }
+
+export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
@@ -472,17 +748,16 @@ export interface components {
       fullName?: string;
       /** @description User-entered notes about the event, if any. */
       notes?: string;
-      type:
-        | "Created"
-        | "QuantityUpdated"
-        | "StateChanged"
-        | "ViabilityTesting"
-        | "Withdrawal";
+      /** @enum {string} */
+      type: "Created" | "QuantityUpdated" | "StateChanged" | "ViabilityTesting" | "Withdrawal";
     };
     AccessionPayloadV2: {
       /** @description Server-generated human-readable identifier for the accession. This is unique within a single seed bank, but different seed banks may have accessions with the same number. */
       accessionNumber: string;
-      /** @description Server-calculated active indicator. This is based on the accession's state. */
+      /**
+       * @description Server-calculated active indicator. This is based on the accession's state.
+       * @enum {string}
+       */
       active: "Inactive" | "Active";
       bagNumbers?: string[];
       /** Format: date */
@@ -494,6 +769,7 @@ export interface components {
       collectionSiteLandowner?: string;
       collectionSiteName?: string;
       collectionSiteNotes?: string;
+      /** @enum {string} */
       collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       /** @description Names of the people who collected the seeds. */
       collectors?: string[];
@@ -536,7 +812,10 @@ export interface components {
       receivedDate?: string;
       /** @description Number or weight of seeds remaining for withdrawal and testing. May be calculated by the server after withdrawals. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
-      /** @description Which source of data this accession originally came from. */
+      /**
+       * @description Which source of data this accession originally came from.
+       * @enum {string}
+       */
       source?: "Web" | "Seed Collector App" | "File Import";
       /** @description Common name of the species, if defined. */
       speciesCommonName?: string;
@@ -547,13 +826,8 @@ export interface components {
       speciesId?: number;
       /** @description Scientific name of the species. */
       speciesScientificName?: string;
-      state:
-        | "Awaiting Check-In"
-        | "Awaiting Processing"
-        | "Processing"
-        | "Drying"
-        | "In Storage"
-        | "Used Up";
+      /** @enum {string} */
+      state: "Awaiting Check-In" | "Awaiting Processing" | "Processing" | "Drying" | "In Storage" | "Used Up";
       subLocation?: string;
       /** Format: int32 */
       subsetCount?: number;
@@ -573,12 +847,8 @@ export interface components {
     };
     AddOrganizationUserRequestPayload: {
       email: string;
-      role:
-        | "Contributor"
-        | "Manager"
-        | "Admin"
-        | "Owner"
-        | "Terraformation Contact";
+      /** @enum {string} */
+      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
     AllFieldValuesPayload: {
       /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
@@ -587,12 +857,12 @@ export interface components {
       values: string[];
     };
     /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
-    AndNodePayload: components["schemas"]["SearchNodePayload"] & {
+    AndNodePayload: WithRequired<{
+      operation: "and";
+    } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
       /** @description List of criteria all of which must be satisfied */
       children?: components["schemas"]["SearchNodePayload"][];
-    } & {
-      children: unknown;
-    };
+    }, "children">;
     AnnualDetailsPayloadV1: {
       bestMonthsForObservation: number[];
       budgetNarrativeSummary?: string;
@@ -649,7 +919,9 @@ export interface components {
       /** @description Short human-readable name of this automation. */
       name: string;
       /** @description Client-defined configuration data for this automation. */
-      settings?: { [key: string]: unknown };
+      settings?: {
+        [key: string]: unknown;
+      };
       timeseriesName?: string;
       type: string;
       /** Format: double */
@@ -667,11 +939,11 @@ export interface components {
       timeseriesValue?: number;
     };
     /** @description A change to the non-quantity-related details of a batch. */
-    BatchHistoryDetailsEditedPayload: {
+    BatchHistoryDetailsEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & ({
       /** Format: int64 */
-      createdBy: number;
+      createdBy?: number;
       /** Format: date-time */
-      createdTime: string;
+      createdTime?: string;
       notes?: string;
       /**
        * Format: int64
@@ -682,186 +954,128 @@ export interface components {
       projectName?: string;
       /** Format: date */
       readyByDate?: string;
-      subLocations: components["schemas"]["BatchHistorySubLocationPayload"][];
-      substrate?:
-        | "MediaMix"
-        | "Soil"
-        | "Sand"
-        | "Moss"
-        | "PerliteVermiculite"
-        | "Other";
+      subLocations?: components["schemas"]["BatchHistorySubLocationPayload"][];
+      /** @enum {string} */
+      substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
       substrateNotes?: string;
-      treatment?:
-        | "Soak"
-        | "Scarify"
-        | "Chemical"
-        | "Stratification"
-        | "Other"
-        | "Light";
+      /** @enum {string} */
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       treatmentNotes?: string;
-      type:
-        | "DetailsEdited"
-        | "IncomingWithdrawal"
-        | "OutgoingWithdrawal"
-        | "PhotoCreated"
-        | "PhotoDeleted"
-        | "QuantityEdited"
-        | "StatusChanged";
+      /** @enum {string} */
+      type?: "DetailsEdited";
       /** Format: int32 */
-      version: number;
-    };
+      version?: number;
+    }), "createdBy" | "createdTime" | "subLocations" | "type" | "version">;
     /** @description A nursery transfer withdrawal from another batch that added seedlings to this batch. */
-    BatchHistoryIncomingWithdrawalPayload: {
+    BatchHistoryIncomingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
       /** Format: int64 */
-      createdBy: number;
+      createdBy?: number;
       /** Format: date-time */
-      createdTime: string;
+      createdTime?: string;
       /** Format: int64 */
-      fromBatchId: number;
+      fromBatchId?: number;
       /** Format: int32 */
-      germinatingQuantityAdded: number;
+      germinatingQuantityAdded?: number;
       /** Format: int32 */
-      notReadyQuantityAdded: number;
+      notReadyQuantityAdded?: number;
       /** Format: int32 */
-      readyQuantityAdded: number;
-      type:
-        | "DetailsEdited"
-        | "IncomingWithdrawal"
-        | "OutgoingWithdrawal"
-        | "PhotoCreated"
-        | "PhotoDeleted"
-        | "QuantityEdited"
-        | "StatusChanged";
+      readyQuantityAdded?: number;
+      /** @enum {string} */
+      type?: "IncomingWithdrawal";
       /** Format: int32 */
-      version: number;
+      version?: number;
       /** Format: int64 */
-      withdrawalId: number;
+      withdrawalId?: number;
       /** Format: date */
-      withdrawnDate: string;
-    };
+      withdrawnDate?: string;
+    }, "createdBy" | "createdTime" | "fromBatchId" | "germinatingQuantityAdded" | "notReadyQuantityAdded" | "readyQuantityAdded" | "type" | "version" | "withdrawalId" | "withdrawnDate">;
     /** @description A withdrawal that removed seedlings from this batch. This does not include the full details of the withdrawal; they can be retrieved using the withdrawal ID. */
-    BatchHistoryOutgoingWithdrawalPayload: {
+    BatchHistoryOutgoingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & ({
       /** Format: int64 */
-      createdBy: number;
+      createdBy?: number;
       /** Format: date-time */
-      createdTime: string;
+      createdTime?: string;
       /** Format: int32 */
-      germinatingQuantityWithdrawn: number;
+      germinatingQuantityWithdrawn?: number;
       /** Format: int32 */
-      notReadyQuantityWithdrawn: number;
-      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      notReadyQuantityWithdrawn?: number;
+      /** @enum {string} */
+      purpose?: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
       /** Format: int32 */
-      readyQuantityWithdrawn: number;
-      type:
-        | "DetailsEdited"
-        | "IncomingWithdrawal"
-        | "OutgoingWithdrawal"
-        | "PhotoCreated"
-        | "PhotoDeleted"
-        | "QuantityEdited"
-        | "StatusChanged";
+      readyQuantityWithdrawn?: number;
+      /** @enum {string} */
+      type?: "OutgoingWithdrawal";
       /** Format: int32 */
-      version: number;
+      version?: number;
       /** Format: int64 */
-      withdrawalId: number;
+      withdrawalId?: number;
       /** Format: date */
-      withdrawnDate: string;
-    };
-    BatchHistoryPayload: {
+      withdrawnDate?: string;
+    }), "createdBy" | "createdTime" | "germinatingQuantityWithdrawn" | "notReadyQuantityWithdrawn" | "purpose" | "readyQuantityWithdrawn" | "type" | "version" | "withdrawalId" | "withdrawnDate">;
+    BatchHistoryPayload: components["schemas"]["BatchHistoryDetailsEditedPayload"] | components["schemas"]["BatchHistoryIncomingWithdrawalPayload"] | components["schemas"]["BatchHistoryOutgoingWithdrawalPayload"] | components["schemas"]["BatchHistoryPhotoCreatedPayload"] | components["schemas"]["BatchHistoryPhotoDeletedPayload"] | components["schemas"]["BatchHistoryQuantityEditedPayload"] | components["schemas"]["BatchHistoryStatusChangedPayload"];
+    BatchHistoryPayloadCommonProps: {
       /** Format: int64 */
       createdBy: number;
       /** Format: date-time */
       createdTime: string;
-      type:
-        | "DetailsEdited"
-        | "IncomingWithdrawal"
-        | "OutgoingWithdrawal"
-        | "PhotoCreated"
-        | "PhotoDeleted"
-        | "QuantityEdited"
-        | "StatusChanged";
       /** Format: int32 */
       version?: number;
     };
-    BatchHistoryPhotoCreatedPayload: {
+    BatchHistoryPhotoCreatedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
       /** Format: int64 */
-      createdBy: number;
+      createdBy?: number;
       /** Format: date-time */
-      createdTime: string;
+      createdTime?: string;
       /**
        * Format: int64
        * @description ID of the photo if it exists. Null if the photo has been deleted.
        */
       fileId?: number;
-      type:
-        | "DetailsEdited"
-        | "IncomingWithdrawal"
-        | "OutgoingWithdrawal"
-        | "PhotoCreated"
-        | "PhotoDeleted"
-        | "QuantityEdited"
-        | "StatusChanged";
-    };
-    BatchHistoryPhotoDeletedPayload: {
+      /** @enum {string} */
+      type?: "PhotoCreated";
+    }, "createdBy" | "createdTime" | "type">;
+    BatchHistoryPhotoDeletedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
       /** Format: int64 */
-      createdBy: number;
+      createdBy?: number;
       /** Format: date-time */
-      createdTime: string;
-      type:
-        | "DetailsEdited"
-        | "IncomingWithdrawal"
-        | "OutgoingWithdrawal"
-        | "PhotoCreated"
-        | "PhotoDeleted"
-        | "QuantityEdited"
-        | "StatusChanged";
-    };
+      createdTime?: string;
+      /** @enum {string} */
+      type?: "PhotoDeleted";
+    }, "createdBy" | "createdTime" | "type">;
     /** @description A manual edit of a batch's remaining quantities. */
-    BatchHistoryQuantityEditedPayload: {
+    BatchHistoryQuantityEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
       /** Format: int64 */
-      createdBy: number;
+      createdBy?: number;
       /** Format: date-time */
-      createdTime: string;
+      createdTime?: string;
       /** Format: int32 */
-      germinatingQuantity: number;
+      germinatingQuantity?: number;
       /** Format: int32 */
-      notReadyQuantity: number;
+      notReadyQuantity?: number;
       /** Format: int32 */
-      readyQuantity: number;
-      type:
-        | "DetailsEdited"
-        | "IncomingWithdrawal"
-        | "OutgoingWithdrawal"
-        | "PhotoCreated"
-        | "PhotoDeleted"
-        | "QuantityEdited"
-        | "StatusChanged";
+      readyQuantity?: number;
+      /** @enum {string} */
+      type?: "QuantityEdited";
       /** Format: int32 */
-      version: number;
-    };
+      version?: number;
+    }, "createdBy" | "createdTime" | "germinatingQuantity" | "notReadyQuantity" | "readyQuantity" | "type" | "version">;
     /** @description The new quantities resulting from changing the statuses of seedlings in a batch. The values here are the total quantities remaining after the status change, not the number of seedlings whose statuses were changed. */
-    BatchHistoryStatusChangedPayload: {
+    BatchHistoryStatusChangedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
       /** Format: int64 */
-      createdBy: number;
+      createdBy?: number;
       /** Format: date-time */
-      createdTime: string;
+      createdTime?: string;
       /** Format: int32 */
-      germinatingQuantity: number;
+      germinatingQuantity?: number;
       /** Format: int32 */
-      notReadyQuantity: number;
+      notReadyQuantity?: number;
       /** Format: int32 */
-      readyQuantity: number;
-      type:
-        | "DetailsEdited"
-        | "IncomingWithdrawal"
-        | "OutgoingWithdrawal"
-        | "PhotoCreated"
-        | "PhotoDeleted"
-        | "QuantityEdited"
-        | "StatusChanged";
+      readyQuantity?: number;
+      /** @enum {string} */
+      type?: "StatusChanged";
       /** Format: int32 */
-      version: number;
-    };
+      version?: number;
+    }, "createdBy" | "createdTime" | "germinatingQuantity" | "notReadyQuantity" | "readyQuantity" | "type" | "version">;
     BatchHistorySubLocationPayload: {
       /**
        * Format: int64
@@ -909,23 +1123,13 @@ export interface components {
       /** Format: int64 */
       speciesId: number;
       subLocationIds: number[];
-      substrate?:
-        | "MediaMix"
-        | "Soil"
-        | "Sand"
-        | "Moss"
-        | "PerliteVermiculite"
-        | "Other";
+      /** @enum {string} */
+      substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
       substrateNotes?: string;
       /** Format: int32 */
       totalWithdrawn: number;
-      treatment?:
-        | "Soak"
-        | "Scarify"
-        | "Chemical"
-        | "Stratification"
-        | "Other"
-        | "Light";
+      /** @enum {string} */
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       treatmentNotes?: string;
       /**
        * Format: int32
@@ -944,7 +1148,10 @@ export interface components {
     BatchWithdrawalPayload: {
       /** Format: int64 */
       batchId: number;
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @default 0
+       */
       germinatingQuantityWithdrawn?: number;
       /** Format: int32 */
       notReadyQuantityWithdrawn: number;
@@ -954,6 +1161,7 @@ export interface components {
     /** @description Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
     CRS: {
       properties: components["schemas"]["CRSProperties"];
+      /** @enum {string} */
       type: "name";
     };
     CRSProperties: {
@@ -964,7 +1172,10 @@ export interface components {
       name: string;
     };
     ChangeBatchStatusRequestPayload: {
-      /** @description Which status change to apply. */
+      /**
+       * @description Which status change to apply.
+       * @enum {string}
+       */
       operation: "GerminatingToNotReady" | "NotReadyToReady";
       /**
        * Format: int32
@@ -973,15 +1184,7 @@ export interface components {
       quantity: number;
     };
     CompletePlotObservationRequestPayload: {
-      conditions: (
-        | "AnimalDamage"
-        | "FastGrowth"
-        | "FavorableWeather"
-        | "Fungus"
-        | "Pests"
-        | "SeedProduction"
-        | "UnfavorableWeather"
-      )[];
+      conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather")[];
       notes?: string;
       /**
        * Format: date-time
@@ -1005,6 +1208,7 @@ export interface components {
       collectionSiteLandowner?: string;
       collectionSiteName?: string;
       collectionSiteNotes?: string;
+      /** @enum {string} */
       collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       collectors?: string[];
       /** Format: int64 */
@@ -1020,16 +1224,12 @@ export interface components {
       projectId?: number;
       /** Format: date */
       receivedDate?: string;
+      /** @enum {string} */
       source?: "Web" | "Seed Collector App" | "File Import";
       /** Format: int64 */
       speciesId?: number;
-      state?:
-        | "Awaiting Check-In"
-        | "Awaiting Processing"
-        | "Processing"
-        | "Drying"
-        | "In Storage"
-        | "Used Up";
+      /** @enum {string} */
+      state?: "Awaiting Check-In" | "Awaiting Processing" | "Processing" | "Drying" | "In Storage" | "Used Up";
       subLocation?: string;
     };
     CreateAccessionResponsePayloadV2: {
@@ -1045,7 +1245,9 @@ export interface components {
       /** Format: double */
       lowerThreshold?: number;
       name: string;
-      settings?: { [key: string]: unknown };
+      settings?: {
+        [key: string]: unknown;
+      };
       timeseriesName?: string;
       type: string;
       /** Format: double */
@@ -1082,21 +1284,11 @@ export interface components {
       /** Format: int64 */
       speciesId: number;
       subLocationIds?: number[];
-      substrate?:
-        | "MediaMix"
-        | "Soil"
-        | "Sand"
-        | "Moss"
-        | "PerliteVermiculite"
-        | "Other";
+      /** @enum {string} */
+      substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
       substrateNotes?: string;
-      treatment?:
-        | "Soak"
-        | "Scarify"
-        | "Chemical"
-        | "Stratification"
-        | "Other"
-        | "Light";
+      /** @enum {string} */
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       treatmentNotes?: string;
     };
     CreateDeviceRequestPayload: {
@@ -1142,7 +1334,9 @@ export interface components {
        */
       protocol?: string;
       /** @description Protocol- and device-specific custom settings. This is an arbitrary JSON object; the exact settings depend on the device type. */
-      settings?: { [key: string]: unknown };
+      settings?: {
+        [key: string]: unknown;
+      };
       /**
        * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
        * @example inverter
@@ -1179,6 +1373,7 @@ export interface components {
        * @example America/New_York
        */
       timeZone?: string;
+      /** @enum {string} */
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
     };
     CreateFacilityResponsePayload: {
@@ -1238,6 +1433,7 @@ export interface components {
        * @description If purpose is "Out Plant", the ID of the planting subzone to which the seedlings were delivered. Must be specified if the planting site has planting subzones, but must be omitted or set to null if the planting site has no planting subzones.
        */
       plantingSubzoneId?: number;
+      /** @enum {string} */
       purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
       /**
        * Format: date
@@ -1335,6 +1531,7 @@ export interface components {
       deviceId: number;
       /** @description Name of this timeseries. Duplicate timeseries names for the same device aren't allowed, but different devices can have timeseries with the same name. */
       timeseriesName: string;
+      /** @enum {string} */
       type: "Numeric" | "Text";
       /**
        * @description Units of measure for values in this timeseries.
@@ -1349,6 +1546,7 @@ export interface components {
       /** Format: date */
       endDate?: string;
       notes?: string;
+      /** @enum {string} */
       seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
@@ -1360,26 +1558,13 @@ export interface components {
       seedsTested: number;
       /** Format: date */
       startDate?: string;
-      substrate?:
-        | "Nursery Media"
-        | "Agar"
-        | "Paper"
-        | "Other"
-        | "Sand"
-        | "Media Mix"
-        | "Soil"
-        | "Moss"
-        | "Perlite/Vermiculite"
-        | "None";
+      /** @enum {string} */
+      substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
+      /** @enum {string} */
       testType: "Lab" | "Nursery" | "Cut";
-      treatment?:
-        | "Soak"
-        | "Scarify"
-        | "Chemical"
-        | "Stratification"
-        | "Other"
-        | "Light";
+      /** @enum {string} */
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       /**
        * Format: int64
        * @description ID of user who withdrew seeds to perform the test. Defaults to the current user. If non-null, the current user must have permission to see the referenced user's membership details in the organization.
@@ -1390,6 +1575,7 @@ export interface components {
       /** Format: date */
       date?: string;
       notes?: string;
+      /** @enum {string} */
       purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
@@ -1456,7 +1642,7 @@ export interface components {
        * @example modbus
        */
       protocol?: string;
-      settings?: { [key: string]: unknown };
+      settings?: Record<string, never>;
       /**
        * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
        * @example inverter
@@ -1494,6 +1680,7 @@ export interface components {
     };
     DeviceTemplatePayload: {
       address?: string;
+      /** @enum {string} */
       category: "PV" | "Seed Bank Default";
       /** Format: int64 */
       id: number;
@@ -1503,7 +1690,9 @@ export interface components {
       /** Format: int32 */
       port?: number;
       protocol?: string;
-      settings?: { [key: string]: unknown };
+      settings?: {
+        [key: string]: unknown;
+      };
       type: string;
       /** Format: int32 */
       verbosity?: number;
@@ -1533,6 +1722,7 @@ export interface components {
        * @description For nursery facilities, the number of plants this nursery is capable of holding.
        */
       capacity?: number;
+      /** @enum {string} */
       connectionState: "Not Connected" | "Connected" | "Configured";
       /** Format: date-time */
       createdTime: string;
@@ -1554,18 +1744,18 @@ export interface components {
        * @example America/New_York
        */
       timeZone?: string;
+      /** @enum {string} */
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
     };
-    FieldNodePayload: components["schemas"]["SearchNodePayload"] & {
+    FieldNodePayload: WithRequired<{
+      operation: "field";
+    } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & ({
       field?: string;
+      /** @enum {string} */
       type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "Range";
       /** @description List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
       values?: (string | null)[];
-    } & {
-      field: unknown;
-      type: unknown;
-      values: unknown;
-    };
+    }), "field" | "type" | "values">;
     FieldValuesPayload: {
       /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
       partial: boolean;
@@ -1579,24 +1769,17 @@ export interface components {
     };
     /** @description GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
     Geometry: {
-      type:
-        | "Point"
-        | "LineString"
-        | "Polygon"
-        | "MultiPoint"
-        | "MultiLineString"
-        | "MultiPolygon"
-        | "GeometryCollection";
-      coordinates: number[];
       crs?: components["schemas"]["CRS"];
+      /** @enum {string} */
+      type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
     };
-    GeometryCollection: components["schemas"]["Geometry"] & {
+    GeometryCollection: WithRequired<{
+      type: "GeometryCollection";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
       geometries?: components["schemas"]["Geometry"][];
+      /** @enum {string} */
       type?: "GeometryCollection";
-    } & {
-      geometries: unknown;
-      type: unknown;
-    };
+    }, "geometries" | "type">;
     GetAccessionHistoryResponsePayload: {
       /** @description History of changes in descending time order (newest first.) */
       history: components["schemas"]["AccessionHistoryEntryPayload"][];
@@ -1756,6 +1939,7 @@ export interface components {
       modifiedTime?: string;
       /** Format: int32 */
       quarter: number;
+      /** @enum {string} */
       status: "New" | "In Progress" | "Locked" | "Submitted";
       submittedByName?: string;
       /** Format: int64 */
@@ -1766,7 +1950,9 @@ export interface components {
       /** Format: int32 */
       year: number;
     };
-    GetReportPayloadV1: components["schemas"]["GetReportPayload"] & {
+    GetReportPayloadV1: WithRequired<{
+      version: "1";
+    } & Omit<components["schemas"]["GetReportPayload"], "version"> & {
       annualDetails?: components["schemas"]["AnnualDetailsPayloadV1"];
       isAnnual?: boolean;
       notes?: string;
@@ -1781,20 +1967,7 @@ export interface components {
       totalPlantingSites?: number;
       /** Format: int32 */
       totalSeedBanks?: number;
-    } & {
-      id: unknown;
-      isAnnual: unknown;
-      nurseries: unknown;
-      organizationName: unknown;
-      plantingSites: unknown;
-      quarter: unknown;
-      seedBanks: unknown;
-      status: unknown;
-      totalNurseries: unknown;
-      totalPlantingSites: unknown;
-      totalSeedBanks: unknown;
-      year: unknown;
-    };
+    }, "id" | "isAnnual" | "nurseries" | "organizationName" | "plantingSites" | "quarter" | "seedBanks" | "status" | "totalNurseries" | "totalPlantingSites" | "totalSeedBanks" | "year">;
     GetReportResponsePayload: {
       report: components["schemas"]["GetReportPayloadV1"];
       status: components["schemas"]["SuccessOrError"];
@@ -1867,17 +2040,8 @@ export interface components {
       finished: boolean;
       /** Format: int64 */
       id: number;
-      status:
-        | "Receiving"
-        | "Validating"
-        | "Processing"
-        | "Completed"
-        | "Processing Failed"
-        | "Invalid"
-        | "Receiving Failed"
-        | "Awaiting Validation"
-        | "Awaiting User Action"
-        | "Awaiting Processing";
+      /** @enum {string} */
+      status: "Receiving" | "Validating" | "Processing" | "Completed" | "Processing Failed" | "Invalid" | "Receiving Failed" | "Awaiting Validation" | "Awaiting User Action" | "Awaiting Processing";
       warnings?: components["schemas"]["UploadProblemPayload"][];
     };
     GetUploadStatusResponsePayload: {
@@ -1886,7 +2050,9 @@ export interface components {
     };
     GetUserPreferencesResponsePayload: {
       /** @description The user's preferences, or null if no preferences have been stored yet. */
-      preferences?: { [key: string]: unknown };
+      preferences?: {
+        [key: string]: unknown;
+      };
       status: components["schemas"]["SuccessOrError"];
     };
     GetUserResponsePayload: {
@@ -1901,6 +2067,7 @@ export interface components {
       /** Format: int64 */
       id: number;
       notes?: string;
+      /** @enum {string} */
       seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
@@ -1912,28 +2079,15 @@ export interface components {
       seedsTested: number;
       /** Format: date */
       startDate?: string;
-      substrate?:
-        | "Nursery Media"
-        | "Agar"
-        | "Paper"
-        | "Other"
-        | "Sand"
-        | "Media Mix"
-        | "Soil"
-        | "Moss"
-        | "Perlite/Vermiculite"
-        | "None";
+      /** @enum {string} */
+      substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
+      /** @enum {string} */
       testType: "Lab" | "Nursery" | "Cut";
       /** Format: int32 */
       totalSeedsGerminated?: number;
-      treatment?:
-        | "Soak"
-        | "Scarify"
-        | "Chemical"
-        | "Stratification"
-        | "Other"
-        | "Light";
+      /** @enum {string} */
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       /**
        * Format: int32
        * @description Server-calculated viability percent for this test. For lab and nursery tests, this is based on the total seeds germinated across all test results. For cut tests, it is based on the number of seeds filled.
@@ -1967,6 +2121,7 @@ export interface components {
        */
       id?: number;
       notes?: string;
+      /** @enum {string} */
       purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
@@ -1992,33 +2147,17 @@ export interface components {
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
     };
     GoalProgressPayloadV1: {
-      goal:
-        | "NoPoverty"
-        | "ZeroHunger"
-        | "GoodHealth"
-        | "QualityEducation"
-        | "GenderEquality"
-        | "CleanWater"
-        | "AffordableEnergy"
-        | "DecentWork"
-        | "Industry"
-        | "ReducedInequalities"
-        | "SustainableCities"
-        | "ResponsibleConsumption"
-        | "ClimateAction"
-        | "LifeBelowWater"
-        | "LifeOnLand"
-        | "Peace"
-        | "Partnerships";
+      /** @enum {string} */
+      goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
       progress?: string;
     };
-    LineString: components["schemas"]["Geometry"] & {
+    LineString: WithRequired<{
+      type: "LineString";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
       coordinates?: number[][];
+      /** @enum {string} */
       type?: "LineString";
-    } & {
-      coordinates: unknown;
-      type: unknown;
-    };
+    }, "coordinates" | "type">;
     ListAllFieldValuesRequestPayload: {
       fields: string[];
       /** Format: int64 */
@@ -2060,14 +2199,12 @@ export interface components {
       fields: string[];
       /** Format: int64 */
       organizationId?: number;
-      search?:
-        | components["schemas"]["AndNodePayload"]
-        | components["schemas"]["FieldNodePayload"]
-        | components["schemas"]["NotNodePayload"]
-        | components["schemas"]["OrNodePayload"];
+      search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
     };
     ListFieldValuesResponsePayload: {
-      results: { [key: string]: components["schemas"]["FieldValuesPayload"] };
+      results: {
+        [key: string]: components["schemas"]["FieldValuesPayload"];
+      };
       status: components["schemas"]["SuccessOrError"];
     };
     ListObservationResultsResponsePayload: {
@@ -2155,6 +2292,7 @@ export interface components {
       modifiedTime?: string;
       /** Format: int32 */
       quarter: number;
+      /** @enum {string} */
       status: "New" | "In Progress" | "Locked" | "Submitted";
       submittedByName?: string;
       /** Format: int64 */
@@ -2192,33 +2330,33 @@ export interface components {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    MultiLineString: components["schemas"]["Geometry"] & {
+    MultiLineString: WithRequired<{
+      type: "MultiLineString";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
       coordinates?: number[][][];
+      /** @enum {string} */
       type?: "MultiLineString";
-    } & {
-      coordinates: unknown;
-      type: unknown;
-    };
-    MultiPoint: components["schemas"]["Geometry"] & {
+    }, "coordinates" | "type">;
+    MultiPoint: WithRequired<{
+      type: "MultiPoint";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
       coordinates?: number[][];
+      /** @enum {string} */
       type?: "MultiPoint";
-    } & {
-      coordinates: unknown;
-      type: unknown;
-    };
-    MultiPolygon: components["schemas"]["Geometry"] & {
+    }, "coordinates" | "type">;
+    MultiPolygon: WithRequired<{
+      type: "MultiPolygon";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
       coordinates?: number[][][][];
+      /** @enum {string} */
       type?: "MultiPolygon";
-    } & {
-      coordinates: unknown;
-      type: unknown;
-    };
+    }, "coordinates" | "type">;
     /** @description Search criterion that matches results that do not match a set of search criteria. */
-    NotNodePayload: components["schemas"]["SearchNodePayload"] & {
+    NotNodePayload: WithRequired<{
+      operation: "not";
+    } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
       child?: components["schemas"]["SearchNodePayload"];
-    } & {
-      child: unknown;
-    };
+    }, "child">;
     NotificationCountPayload: {
       /** Format: int64 */
       organizationId?: number;
@@ -2234,6 +2372,7 @@ export interface components {
       isRead: boolean;
       /** Format: uri */
       localUrl: string;
+      /** @enum {string} */
       notificationCriticality: "Info" | "Warning" | "Error" | "Success";
       /** Format: int64 */
       organizationId?: number;
@@ -2251,6 +2390,7 @@ export interface components {
       /** Format: int64 */
       id: number;
       notes?: string;
+      /** @enum {string} */
       purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
       /** Format: date */
       withdrawnDate: string;
@@ -2261,21 +2401,15 @@ export interface components {
     };
     ObservationMonitoringPlotCoordinatesPayload: {
       gpsCoordinates: components["schemas"]["Point"];
-      position:
-        | "SouthwestCorner"
-        | "SoutheastCorner"
-        | "NortheastCorner"
-        | "NorthwestCorner";
+      /** @enum {string} */
+      position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
     };
     ObservationMonitoringPlotPhotoPayload: {
       /** Format: int64 */
       fileId: number;
       gpsCoordinates: components["schemas"]["Point"];
-      position:
-        | "SouthwestCorner"
-        | "SoutheastCorner"
-        | "NortheastCorner"
-        | "NorthwestCorner";
+      /** @enum {string} */
+      position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
     };
     ObservationMonitoringPlotResultsPayload: {
       boundary: components["schemas"]["Polygon"];
@@ -2305,6 +2439,7 @@ export interface components {
        */
       plantingDensity: number;
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+      /** @enum {string} */
       status: "Outstanding" | "InProgress" | "Completed";
       /**
        * Format: int32
@@ -2348,6 +2483,7 @@ export interface components {
        * @description Date this observation started.
        */
       startDate: string;
+      /** @enum {string} */
       state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
     };
     ObservationPlantingSubzoneResultsPayload: {
@@ -2416,11 +2552,13 @@ export interface components {
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /** Format: date */
       startDate: string;
+      /** @enum {string} */
       state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
       /** Format: int32 */
       totalSpecies: number;
     };
     ObservationSpeciesResultsPayload: {
+      /** @enum {string} */
       certainty: "Known" | "Other" | "Unknown";
       /**
        * Format: int32
@@ -2451,12 +2589,12 @@ export interface components {
       totalPlants: number;
     };
     /** @description Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
-    OrNodePayload: components["schemas"]["SearchNodePayload"] & {
+    OrNodePayload: WithRequired<{
+      operation: "or";
+    } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
       /** @description List of criteria at least one of which must be satisfied */
       children?: components["schemas"]["SearchNodePayload"][];
-    } & {
-      children: unknown;
-    };
+    }, "children">;
     OrganizationPayload: {
       /** @description Whether this organization can submit reports to Terraformation. */
       canSubmitReports: boolean;
@@ -2478,13 +2616,11 @@ export interface components {
       /** Format: int64 */
       id: number;
       name: string;
-      /** @description The current user's role in the organization. */
-      role:
-        | "Contributor"
-        | "Manager"
-        | "Admin"
-        | "Owner"
-        | "Terraformation Contact";
+      /**
+       * @description The current user's role in the organization.
+       * @enum {string}
+       */
+      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -2497,12 +2633,8 @@ export interface components {
       totalUsers: number;
     };
     OrganizationRolePayload: {
-      role:
-        | "Contributor"
-        | "Manager"
-        | "Admin"
-        | "Owner"
-        | "Terraformation Contact";
+      /** @enum {string} */
+      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
       /**
        * Format: int32
        * @description Total number of users in the organization with this role.
@@ -2522,12 +2654,8 @@ export interface components {
       id: number;
       /** @description The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
-      role:
-        | "Contributor"
-        | "Manager"
-        | "Admin"
-        | "Owner"
-        | "Terraformation Contact";
+      /** @enum {string} */
+      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
     PlantingPayload: {
       /** Format: int64 */
@@ -2543,6 +2671,7 @@ export interface components {
       plantingSubzoneId?: number;
       /** Format: int64 */
       speciesId: number;
+      /** @enum {string} */
       type: "Delivery" | "Reassignment From" | "Reassignment To";
     };
     PlantingSitePayload: {
@@ -2626,24 +2755,27 @@ export interface components {
       /** Format: int32 */
       totalPlants: number;
     };
-    Point: components["schemas"]["Geometry"] & {
+    Point: WithRequired<{
+      type: "Point";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
       /**
        * @description A single position consisting of X and Y values in the coordinate system specified by the crs field.
-       * @example 120,-9.53
+       * @example [
+       *   120,
+       *   -9.53
+       * ]
        */
       coordinates?: number[];
+      /** @enum {string} */
       type?: "Point";
-    } & {
-      coordinates: unknown;
-      type: unknown;
-    };
-    Polygon: components["schemas"]["Geometry"] & {
+    }, "coordinates" | "type">;
+    Polygon: WithRequired<{
+      type: "Polygon";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
       coordinates?: number[][][];
+      /** @enum {string} */
       type?: "Polygon";
-    } & {
-      coordinates: unknown;
-      type: unknown;
-    };
+    }, "coordinates" | "type">;
     ProjectPayload: {
       description?: string;
       /** Format: int64 */
@@ -2696,18 +2828,16 @@ export interface components {
     PutReportPayload: {
       version: string;
     };
-    PutReportPayloadV1: components["schemas"]["PutReportPayload"] & {
+    PutReportPayloadV1: WithRequired<{
+      version: "1";
+    } & Omit<components["schemas"]["PutReportPayload"], "version"> & {
       annualDetails?: components["schemas"]["AnnualDetailsPayloadV1"];
       notes?: string;
       nurseries?: components["schemas"]["PutNurseryV1"][];
       plantingSites?: components["schemas"]["PutPlantingSiteV1"][];
       seedBanks?: components["schemas"]["PutSeedBankV1"][];
       summaryOfProgress?: string;
-    } & {
-      nurseries: unknown;
-      plantingSites: unknown;
-      seedBanks: unknown;
-    };
+    }, "nurseries" | "plantingSites" | "seedBanks">;
     PutReportRequestPayload: {
       report: components["schemas"]["PutReportPayloadV1"];
     };
@@ -2750,6 +2880,7 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     RecordedPlantPayload: {
+      /** @enum {string} */
       certainty: "Known" | "Other" | "Unknown";
       /** @description GPS coordinates where plant was observed. */
       gpsCoordinates: components["schemas"]["Point"];
@@ -2760,9 +2891,11 @@ export interface components {
       speciesId?: number;
       /** @description If certainty is Other, the optional user-supplied name of the species. Ignored if certainty is Known or Unknown. */
       speciesName?: string;
+      /** @enum {string} */
       status: "Live" | "Dead" | "Existing";
     };
     ReplaceObservationPlotRequestPayload: {
+      /** @enum {string} */
       duration: "Temporary" | "LongTerm";
       justification: string;
     };
@@ -2824,7 +2957,11 @@ export interface components {
       cursor?: string;
       /**
        * @description List of fields to return. Field names should be relative to the prefix. They may navigate the data hierarchy using '.' or '_' as delimiters.
-       * @example processingStartDate,viabilityTests.seedsTested,facility_name
+       * @example [
+       *   "processingStartDate",
+       *   "viabilityTests.seedsTested",
+       *   "facility_name"
+       * ]
        */
       fields: string[];
       /**
@@ -2832,20 +2969,21 @@ export interface components {
        * @example facilities.accessions
        */
       prefix?: string;
-      search?:
-        | components["schemas"]["AndNodePayload"]
-        | components["schemas"]["FieldNodePayload"]
-        | components["schemas"]["NotNodePayload"]
-        | components["schemas"]["OrNodePayload"];
+      search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
       /** @description How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
       sortOrder?: components["schemas"]["SearchSortOrderElement"][];
     };
     SearchResponsePayload: {
       cursor?: string;
-      results: { [key: string]: unknown }[];
+      results: {
+          [key: string]: unknown;
+        }[];
     };
     SearchSortOrderElement: {
-      /** @default Ascending */
+      /**
+       * @default Ascending
+       * @enum {string}
+       */
       direction?: "Ascending" | "Descending";
       field: string;
     };
@@ -2877,13 +3015,8 @@ export interface components {
       grams?: number;
       /** @description Number of units of seeds. If "units" is "Seeds", this is the number of seeds and must be an integer. Otherwise it is a measurement in the weight units specified in the "units" field, and may have a fractional part. */
       quantity: number;
-      units:
-        | "Seeds"
-        | "Grams"
-        | "Milligrams"
-        | "Kilograms"
-        | "Ounces"
-        | "Pounds";
+      /** @enum {string} */
+      units: "Seeds" | "Grams" | "Milligrams" | "Kilograms" | "Ounces" | "Pounds";
     };
     SendFacilityAlertRequestPayload: {
       /** @description Alert body in plain text. HTML alerts are not supported yet. */
@@ -2905,19 +3038,16 @@ export interface components {
     SpeciesLookupDetailsResponsePayload: {
       /** @description List of known common names for the species, if any. */
       commonNames?: components["schemas"]["SpeciesLookupCommonNamePayload"][];
-      /** @description IUCN Red List conservation category code. */
-      conservationCategory?:
-        | "CR"
-        | "DD"
-        | "EN"
-        | "EW"
-        | "EX"
-        | "LC"
-        | "NE"
-        | "NT"
-        | "VU";
+      /**
+       * @description IUCN Red List conservation category code.
+       * @enum {string}
+       */
+      conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
       familyName: string;
-      /** @description If this is not the accepted name for the species, the type of problem the name has. Currently, this will always be "Name Is Synonym". */
+      /**
+       * @description If this is not the accepted name for the species, the type of problem the name has. Currently, this will always be "Name Is Synonym".
+       * @enum {string}
+       */
       problemType?: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
       scientificName: string;
       /** @description If this is not the accepted name for the species, the name to suggest as an alternative. */
@@ -2930,57 +3060,26 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SpeciesProblemElement: {
+      /** @enum {string} */
       field: "Scientific Name";
       /** Format: int64 */
       id: number;
       /** @description Value for the field in question that would correct the problem. Absent if the system is unable to calculate a corrected value. */
       suggestedValue?: string;
+      /** @enum {string} */
       type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
     };
     SpeciesRequestPayload: {
       commonName?: string;
-      /** @description IUCN Red List conservation category code. */
-      conservationCategory?:
-        | "CR"
-        | "DD"
-        | "EN"
-        | "EW"
-        | "EX"
-        | "LC"
-        | "NE"
-        | "NT"
-        | "VU";
-      ecosystemTypes?: (
-        | "Boreal forests/Taiga"
-        | "Deserts and xeric shrublands"
-        | "Flooded grasslands and savannas"
-        | "Mangroves"
-        | "Mediterranean forests, woodlands and scrubs"
-        | "Montane grasslands and shrublands"
-        | "Temperate broad leaf and mixed forests"
-        | "Temperate coniferous forest"
-        | "Temperate grasslands, savannas and shrublands"
-        | "Tropical and subtropical coniferous forests"
-        | "Tropical and subtropical dry broad leaf forests"
-        | "Tropical and subtropical grasslands, savannas and shrublands"
-        | "Tropical and subtropical moist broad leaf forests"
-        | "Tundra"
-      )[];
+      /**
+       * @description IUCN Red List conservation category code.
+       * @enum {string}
+       */
+      conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
-      growthForm?:
-        | "Tree"
-        | "Shrub"
-        | "Forb"
-        | "Graminoid"
-        | "Fern"
-        | "Fungus"
-        | "Lichen"
-        | "Moss"
-        | "Vine"
-        | "Liana"
-        | "Shrub/Tree"
-        | "Subshrub"
-        | "Multiple Forms";
+      /** @enum {string} */
+      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms";
       /**
        * Format: int64
        * @description Which organization's species list to update.
@@ -2988,72 +3087,27 @@ export interface components {
       organizationId: number;
       rare?: boolean;
       scientificName: string;
-      seedStorageBehavior?:
-        | "Orthodox"
-        | "Recalcitrant"
-        | "Intermediate"
-        | "Unknown"
-        | "Likely Orthodox"
-        | "Likely Recalcitrant"
-        | "Likely Intermediate";
+      /** @enum {string} */
+      seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
     };
     SpeciesResponseElement: {
       commonName?: string;
-      /** @description IUCN Red List conservation category code. */
-      conservationCategory?:
-        | "CR"
-        | "DD"
-        | "EN"
-        | "EW"
-        | "EX"
-        | "LC"
-        | "NE"
-        | "NT"
-        | "VU";
-      ecosystemTypes?: (
-        | "Boreal forests/Taiga"
-        | "Deserts and xeric shrublands"
-        | "Flooded grasslands and savannas"
-        | "Mangroves"
-        | "Mediterranean forests, woodlands and scrubs"
-        | "Montane grasslands and shrublands"
-        | "Temperate broad leaf and mixed forests"
-        | "Temperate coniferous forest"
-        | "Temperate grasslands, savannas and shrublands"
-        | "Tropical and subtropical coniferous forests"
-        | "Tropical and subtropical dry broad leaf forests"
-        | "Tropical and subtropical grasslands, savannas and shrublands"
-        | "Tropical and subtropical moist broad leaf forests"
-        | "Tundra"
-      )[];
+      /**
+       * @description IUCN Red List conservation category code.
+       * @enum {string}
+       */
+      conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
-      growthForm?:
-        | "Tree"
-        | "Shrub"
-        | "Forb"
-        | "Graminoid"
-        | "Fern"
-        | "Fungus"
-        | "Lichen"
-        | "Moss"
-        | "Vine"
-        | "Liana"
-        | "Shrub/Tree"
-        | "Subshrub"
-        | "Multiple Forms";
+      /** @enum {string} */
+      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms";
       /** Format: int64 */
       id: number;
       problems?: components["schemas"]["SpeciesProblemElement"][];
       rare?: boolean;
       scientificName: string;
-      seedStorageBehavior?:
-        | "Orthodox"
-        | "Recalcitrant"
-        | "Intermediate"
-        | "Unknown"
-        | "Likely Orthodox"
-        | "Likely Recalcitrant"
-        | "Likely Intermediate";
+      /** @enum {string} */
+      seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
     };
     SpeciesSummaryNurseryPayload: {
       /** Format: int64 */
@@ -3063,11 +3117,13 @@ export interface components {
     SpeciesSummaryPayload: {
       /** Format: int64 */
       germinatingQuantity: number;
+      /** Format: int32 */
+      germinationRate?: number;
       /**
        * Format: int32
        * @description Percentage of current and past inventory that was withdrawn due to death.
        */
-      lossRate: number;
+      lossRate?: number;
       /** Format: int64 */
       notReadyQuantity: number;
       nurseries: components["schemas"]["SpeciesSummaryNurseryPayload"][];
@@ -3108,14 +3164,13 @@ export interface components {
       id: number;
       name: string;
     };
-    /** @description Indicates of success or failure of the requested operation. */
+    /**
+     * @description Indicates of success or failure of the requested operation.
+     * @enum {string}
+     */
     SuccessOrError: "ok" | "error";
     SummarizeAccessionSearchRequestPayload: {
-      search?:
-        | components["schemas"]["AndNodePayload"]
-        | components["schemas"]["FieldNodePayload"]
-        | components["schemas"]["NotNodePayload"]
-        | components["schemas"]["OrNodePayload"];
+      search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
     };
     SummarizeAccessionSearchResponsePayload: {
       /** Format: int32 */
@@ -3128,7 +3183,9 @@ export interface components {
     /** @description Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponsePayload: {
       /** @description Number of accessions in each state. */
-      accessionsByState: { [key: string]: number };
+      accessionsByState: {
+        [key: string]: number;
+      };
       /** Format: int32 */
       activeAccessions: number;
       /** @description Summary of the number of seeds remaining across all active accessions. */
@@ -3168,6 +3225,7 @@ export interface components {
       /** @description If any values have been recorded for the timeseries, the latest one. */
       latestValue?: components["schemas"]["TimeseriesValuePayload"];
       timeseriesName: string;
+      /** @enum {string} */
       type: "Numeric" | "Text";
       /**
        * @description Units of measure for values in this timeseries.
@@ -3215,6 +3273,7 @@ export interface components {
       collectionSiteLandowner?: string;
       collectionSiteName?: string;
       collectionSiteNotes?: string;
+      /** @enum {string} */
       collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       collectors?: string[];
       /** Format: date */
@@ -3236,13 +3295,8 @@ export interface components {
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** Format: int64 */
       speciesId?: number;
-      state?:
-        | "Awaiting Check-In"
-        | "Awaiting Processing"
-        | "Processing"
-        | "Drying"
-        | "In Storage"
-        | "Used Up";
+      /** @enum {string} */
+      state?: "Awaiting Check-In" | "Awaiting Processing" | "Processing" | "Drying" | "In Storage" | "Used Up";
       subLocation?: string;
       /** Format: int32 */
       subsetCount?: number;
@@ -3262,7 +3316,9 @@ export interface components {
       /** Format: double */
       lowerThreshold?: number;
       name: string;
-      settings?: { [key: string]: unknown };
+      settings?: {
+        [key: string]: unknown;
+      };
       timeseriesName?: string;
       type: string;
       /** Format: double */
@@ -3287,21 +3343,11 @@ export interface components {
       /** Format: date */
       readyByDate?: string;
       subLocationIds?: number[];
-      substrate?:
-        | "MediaMix"
-        | "Soil"
-        | "Sand"
-        | "Moss"
-        | "PerliteVermiculite"
-        | "Other";
+      /** @enum {string} */
+      substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
       substrateNotes?: string;
-      treatment?:
-        | "Soak"
-        | "Scarify"
-        | "Chemical"
-        | "Stratification"
-        | "Other"
-        | "Light";
+      /** @enum {string} */
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       treatmentNotes?: string;
       /** Format: int32 */
       version: number;
@@ -3344,7 +3390,9 @@ export interface components {
        */
       protocol?: string;
       /** @description Protocol- and device-specific custom settings. This is an arbitrary JSON object; the exact settings depend on the device type. */
-      settings?: { [key: string]: unknown };
+      settings?: {
+        [key: string]: unknown;
+      };
       /**
        * @description High-level type of the device. Device manager may use this in conjunction with the make and model to determine which metrics to report.
        * @example inverter
@@ -3404,12 +3452,8 @@ export interface components {
       timeZone?: string;
     };
     UpdateOrganizationUserRequestPayload: {
-      role:
-        | "Contributor"
-        | "Manager"
-        | "Admin"
-        | "Owner"
-        | "Terraformation Contact";
+      /** @enum {string} */
+      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
     UpdatePlantingSiteRequestPayload: {
       /** @description Site boundary. Ignored if this is a detailed planting site. */
@@ -3457,7 +3501,9 @@ export interface components {
        * @description If present, update the user's per-organization preferences for this organization. If not present, update the user's global preferences.
        */
       organizationId?: number;
-      preferences: { [key: string]: unknown };
+      preferences: {
+        [key: string]: unknown;
+      };
     };
     UpdateUserRequestPayload: {
       /**
@@ -3484,6 +3530,7 @@ export interface components {
       /** Format: date */
       endDate?: string;
       notes?: string;
+      /** @enum {string} */
       seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
@@ -3495,25 +3542,11 @@ export interface components {
       seedsTested: number;
       /** Format: date */
       startDate?: string;
-      substrate?:
-        | "Nursery Media"
-        | "Agar"
-        | "Paper"
-        | "Other"
-        | "Sand"
-        | "Media Mix"
-        | "Soil"
-        | "Moss"
-        | "Perlite/Vermiculite"
-        | "None";
+      /** @enum {string} */
+      substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
       testResults?: components["schemas"]["ViabilityTestResultPayload"][];
-      treatment?:
-        | "Soak"
-        | "Scarify"
-        | "Chemical"
-        | "Stratification"
-        | "Other"
-        | "Light";
+      /** @enum {string} */
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       /**
        * Format: int64
        * @description ID of user who withdrew seeds to perform the test. If non-null, the current user must have permission to see the referenced user's membership details in the organization. If absent or null, the existing value is left unchanged.
@@ -3524,6 +3557,7 @@ export interface components {
       /** Format: date */
       date?: string;
       notes?: string;
+      /** @enum {string} */
       purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
@@ -3543,11 +3577,8 @@ export interface components {
     };
     UploadPlotPhotoRequestPayload: {
       gpsCoordinates: components["schemas"]["Point"];
-      position:
-        | "SouthwestCorner"
-        | "SoutheastCorner"
-        | "NortheastCorner"
-        | "NorthwestCorner";
+      /** @enum {string} */
+      position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
     };
     UploadPlotPhotoResponsePayload: {
       /** Format: int64 */
@@ -3565,11 +3596,8 @@ export interface components {
        * @description Position (row number) of the record with the problem.
        */
       position?: number;
-      type:
-        | "Unrecognized Value"
-        | "Missing Required Value"
-        | "Duplicate Value"
-        | "Malformed Value";
+      /** @enum {string} */
+      type: "Unrecognized Value" | "Missing Required Value" | "Duplicate Value" | "Malformed Value";
       /** @description The value that caused the problem. Absent if the problem wasn't caused by a specific field value. */
       value?: string;
     };
@@ -3630,18 +3658,29 @@ export interface components {
       volunteers?: number;
     };
   };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 
+export type $defs = Record<string, never>;
+
+export type external = Record<string, never>;
+
 export interface operations {
+
+  /** Gets a list of automations for a device or facility. */
   listAutomations: {
     parameters: {
-      query: {
+      query?: {
         deviceId?: number;
         facilityId?: number;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListAutomationsResponsePayload"];
@@ -3649,21 +3688,23 @@ export interface operations {
       };
     };
   };
+  /** Creates a new automation for a device or facility. */
   createAutomation: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateAutomationRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["CreateAutomationResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateAutomationRequestPayload"];
-      };
-    };
   };
+  /** Gets the details of a single automation for a device or facility. */
   getAutomation: {
     parameters: {
       path: {
@@ -3671,7 +3712,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetAutomationResponsePayload"];
@@ -3679,18 +3720,11 @@ export interface operations {
       };
     };
   };
+  /** Updates an existing automation for a device or facility. */
   updateAutomation: {
     parameters: {
       path: {
         automationId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -3698,7 +3732,16 @@ export interface operations {
         "application/json": components["schemas"]["UpdateAutomationRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
   };
+  /** Deletes an existing automation from a device or facility. */
   deleteAutomation: {
     parameters: {
       path: {
@@ -3706,7 +3749,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
@@ -3714,18 +3757,11 @@ export interface operations {
       };
     };
   };
+  /** Reports that an automation has been triggered. */
   postAutomationTrigger: {
     parameters: {
       path: {
         automationId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -3733,33 +3769,43 @@ export interface operations {
         "application/json": components["schemas"]["AutomationTriggerRequestPayload"];
       };
     };
-  };
-  createDevice: {
     responses: {
-      /** The requested operation succeeded. */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
+  };
+  /** Registers a new device a facility's device manager. */
+  createDevice: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateDeviceRequestPayload"];
       };
     };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
   };
+  /** Searches for device managers matching a set of criteria. */
   getDeviceManagers: {
     parameters: {
-      query: {
-        /** Search for device managers with this sensor kit ID. Either this or facilityId must be specified. */
+      query?: {
+        /** @description Search for device managers with this sensor kit ID. Either this or facilityId must be specified. */
         sensorKitId?: string;
-        /** Search for device managers associated with this facility. Either this or sensorKitId must be specified. */
+        /** @description Search for device managers associated with this facility. Either this or sensorKitId must be specified. */
         facilityId?: number;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetDeviceManagersResponsePayload"];
@@ -3767,6 +3813,7 @@ export interface operations {
       };
     };
   };
+  /** Gets information about a specific device manager. */
   getDeviceManager: {
     parameters: {
       path: {
@@ -3774,7 +3821,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetDeviceManagerResponsePayload"];
@@ -3782,18 +3829,11 @@ export interface operations {
       };
     };
   };
+  /** Connects a device manager to a facility. */
   connectDeviceManager: {
     parameters: {
       path: {
         deviceManagerId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -3801,15 +3841,24 @@ export interface operations {
         "application/json": components["schemas"]["ConnectDeviceManagerRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
   };
+  /** Lists the available templates for new devices. */
   listDeviceTemplates: {
     parameters: {
-      query: {
+      query?: {
         category?: "PV" | "Seed Bank Default";
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListDeviceTemplatesResponsePayload"];
@@ -3817,6 +3866,7 @@ export interface operations {
       };
     };
   };
+  /** Gets the configuration of a single device. */
   getDevice: {
     parameters: {
       path: {
@@ -3824,13 +3874,13 @@ export interface operations {
       };
     };
     responses: {
-      /** Device configuration retrieved. */
+      /** @description Device configuration retrieved. */
       200: {
         content: {
           "application/json": components["schemas"]["GetDeviceResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -3838,24 +3888,11 @@ export interface operations {
       };
     };
   };
+  /** Updates the configuration of an existing device. */
   updateDevice: {
     parameters: {
       path: {
         id: number;
-      };
-    };
-    responses: {
-      /** Device configuration updated. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -3863,26 +3900,29 @@ export interface operations {
         "application/json": components["schemas"]["UpdateDeviceRequestPayload"];
       };
     };
-  };
-  /** Notifies the appropriate users so they can troubleshoot the problem. */
-  deviceUnresponsive: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description Device configuration updated. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
+      };
+    };
+  };
+  /**
+   * Marks a device as unresponsive.
+   * @description Notifies the appropriate users so they can troubleshoot the problem.
+   */
+  deviceUnresponsive: {
+    parameters: {
+      path: {
+        id: number;
       };
     };
     requestBody: {
@@ -3890,129 +3930,14 @@ export interface operations {
         "application/json": components["schemas"]["DeviceUnresponsiveRequestPayload"];
       };
     };
-  };
-  listAllFacilities: {
     responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListFacilitiesResponse"];
-        };
-      };
-    };
-  };
-  createFacility: {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateFacilityResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateFacilityRequestPayload"];
-      };
-    };
-  };
-  getFacility: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetFacilityResponse"];
-        };
-      };
-    };
-  };
-  updateFacility: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** OK */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateFacilityRequestPayload"];
-      };
-    };
-  };
-  sendFacilityAlert: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The request was received, but the user is still configuring or placing sensors, so no notification has been generated. */
-      202: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SendFacilityAlertRequestPayload"];
-      };
-    };
-  };
-  /** After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`. */
-  postConfigured: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The facility's device manager was not in the process of being configured. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  listFacilityDevices: {
-    parameters: {
-      path: {
-        facilityId: number;
-      };
-    };
-    responses: {
-      /** Successfully listed the facility's devices. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListDeviceConfigsResponse"];
-        };
-      };
-      /** The facility does not exist or is not accessible by the current user. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4020,6 +3945,145 @@ export interface operations {
       };
     };
   };
+  /** Lists all accessible facilities. */
+  listAllFacilities: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListFacilitiesResponse"];
+        };
+      };
+    };
+  };
+  /** Creates a new facility. */
+  createFacility: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateFacilityRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateFacilityResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets information about a single facility. */
+  getFacility: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetFacilityResponse"];
+        };
+      };
+    };
+  };
+  /** Updates information about a facility. */
+  updateFacility: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateFacilityRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Sends an alert to the facility's configured alert recipients. */
+  sendFacilityAlert: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SendFacilityAlertRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The request was received, but the user is still configuring or placing sensors, so no notification has been generated. */
+      202: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Marks a facility as fully configured.
+   * @description After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`.
+   */
+  postConfigured: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The facility's device manager was not in the process of being configured. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Lists the configurations of all the devices at a facility. */
+  listFacilityDevices: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** @description Successfully listed the facility's devices. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListDeviceConfigsResponse"];
+        };
+      };
+      /** @description The facility does not exist or is not accessible by the current user. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a list of sub-locations at a facility. */
   listSubLocations: {
     parameters: {
       path: {
@@ -4027,7 +4091,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListSubLocationsResponsePayload"];
@@ -4035,24 +4099,11 @@ export interface operations {
       };
     };
   };
+  /** Creates a new sub-location at a facility. */
   createSubLocation: {
     parameters: {
       path: {
         facilityId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetSubLocationResponsePayload"];
-        };
-      };
-      /** A sub-location with the requested name already exists at the facility. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -4060,7 +4111,22 @@ export interface operations {
         "application/json": components["schemas"]["CreateSubLocationRequestPayload"];
       };
     };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSubLocationResponsePayload"];
+        };
+      };
+      /** @description A sub-location with the requested name already exists at the facility. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
   };
+  /** Gets information about a specific sub-location at a facility. */
   getSubLocation: {
     parameters: {
       path: {
@@ -4069,7 +4135,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetSubLocationResponsePayload"];
@@ -4077,6 +4143,7 @@ export interface operations {
       };
     };
   };
+  /** Updates the name of a sub-location at a facility. */
   updateSubLocation: {
     parameters: {
       path: {
@@ -4084,27 +4151,30 @@ export interface operations {
         subLocationId: number;
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateSubLocationRequestPayload"];
+      };
+    };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** A sub-location with the requested name already exists at the facility. */
+      /** @description A sub-location with the requested name already exists at the facility. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateSubLocationRequestPayload"];
-      };
-    };
   };
-  /** The sub-location must not be in use. */
+  /**
+   * Deletes a sub-location from a facility.
+   * @description The sub-location must not be in use.
+   */
   deleteSubLocation: {
     parameters: {
       path: {
@@ -4113,13 +4183,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The sub-location is in use, e.g., there are seeds or seedlings stored there. */
+      /** @description The sub-location is in use, e.g., there are seeds or seedlings stored there. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4127,6 +4197,7 @@ export interface operations {
       };
     };
   };
+  /** Lists the configurations of all the devices at a facility. */
   listFacilityDevices_1: {
     parameters: {
       path: {
@@ -4134,13 +4205,13 @@ export interface operations {
       };
     };
     responses: {
-      /** Successfully listed the facility's devices. */
+      /** @description Successfully listed the facility's devices. */
       200: {
         content: {
           "application/json": components["schemas"]["ListDeviceConfigsResponse"];
         };
       };
-      /** The facility does not exist or is not accessible by the current user. */
+      /** @description The facility does not exist or is not accessible by the current user. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4148,15 +4219,19 @@ export interface operations {
       };
     };
   };
+  /** Gets a list of supported time zones and their names. */
   listTimeZoneNames: {
     parameters: {
-      query: {
-        /** Language code and optional country code suffix. If not specified, the preferred locale from the Accept-Language header is used if supported; otherwise US English is the default. */
+      query?: {
+        /**
+         * @description Language code and optional country code suffix. If not specified, the preferred locale from the Accept-Language header is used if supported; otherwise US English is the default.
+         * @example zh-CN
+         */
         locale?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListTimeZoneNamesResponsePayload"];
@@ -4164,28 +4239,34 @@ export interface operations {
       };
     };
   };
-  /** For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in. */
+  /**
+   * Redirects to a login page.
+   * @description For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in.
+   */
   login: {
     parameters: {
       query: {
-        /** URL to redirect to after login. The list of valid redirect URLs is restricted; this must be the URL of a Terraware web application. */
+        /** @description URL to redirect to after login. The list of valid redirect URLs is restricted; this must be the URL of a Terraware web application. */
         redirect: string;
       };
     };
     responses: {
-      /** Redirects to a login page. After login, the user will be redirected back to the URL specified in the "redirect" parameter. */
-      302: never;
+      /** @description Redirects to a login page. After login, the user will be redirected back to the URL specified in the "redirect" parameter. */
+      302: {
+        content: never;
+      };
     };
   };
+  /** Retrieve all notifications for current user scoped to an organization. */
   readAll: {
     parameters: {
-      query: {
-        /** If set, return notifications relevant to that organization. */
+      query?: {
+        /** @description If set, return notifications relevant to that organization. */
         organizationId?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetNotificationsResponsePayload"];
@@ -4193,24 +4274,26 @@ export interface operations {
       };
     };
   };
+  /** Update notifications as read or unread */
   markAllRead: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateNotificationsRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateNotificationsRequestPayload"];
-      };
-    };
   };
+  /** Retrieve notifications count by organization for current user. */
   count: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetNotificationsCountResponsePayload"];
@@ -4218,6 +4301,7 @@ export interface operations {
       };
     };
   };
+  /** Retrieve a notification by its id. */
   read: {
     parameters: {
       path: {
@@ -4225,13 +4309,13 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetNotificationResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4239,24 +4323,11 @@ export interface operations {
       };
     };
   };
+  /** Update a single notification as read or unread */
   markRead: {
     parameters: {
       path: {
         id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -4264,38 +4335,48 @@ export interface operations {
         "application/json": components["schemas"]["UpdateNotificationRequestPayload"];
       };
     };
-  };
-  createBatch: {
     responses: {
-      /** The batch was created successfully. Response includes fields populated by the server, including the batch ID. */
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new seedling batch at a nursery. */
+  createBatch: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateBatchRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The batch was created successfully. Response includes fields populated by the server, including the batch ID. */
       200: {
         content: {
           "application/json": components["schemas"]["BatchResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateBatchRequestPayload"];
-      };
-    };
   };
-  /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/nursery/batches/uploads/template` endpoint. */
+  /**
+   * Uploads a list of seedling batches to add to the nursery.
+   * @description The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/nursery/batches/uploads/template` endpoint.
+   */
   uploadSeedlingBatchesList: {
     parameters: {
       query: {
         facilityId: number;
       };
     };
-    responses: {
-      /** The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v1/nursery/batches/uploads/{uploadId}` GET endpoint. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadFileResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -4303,10 +4384,19 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v1/nursery/batches/uploads/{uploadId}` GET endpoint. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadFileResponsePayload"];
+        };
+      };
+    };
   };
+  /** Gets a template file that contains the required header row for seedling batch uploads. */
   getSeedlingBatchesUploadTemplate: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": string;
@@ -4314,7 +4404,10 @@ export interface operations {
       };
     };
   };
-  /** Clients may poll this endpoint to monitor the progress of the file. */
+  /**
+   * Gets the status of a seedling batches list uploaded previously.
+   * @description Clients may poll this endpoint to monitor the progress of the file.
+   */
   getSeedlingBatchesListUploadStatus: {
     parameters: {
       path: {
@@ -4322,7 +4415,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetUploadStatusResponsePayload"];
@@ -4330,7 +4423,10 @@ export interface operations {
       };
     };
   };
-  /** Each event includes a version number. For events such as details edits that are snapshots of the values at a particular time, clients can compare against the event with the previous version number to see what has changed, e.g., to show a delta or a diff view. */
+  /**
+   * Gets the history of changes to a seedling batch.
+   * @description Each event includes a version number. For events such as details edits that are snapshots of the values at a particular time, clients can compare against the event with the previous version number to see what has changed, e.g., to show a delta or a diff view.
+   */
   getBatchHistory: {
     parameters: {
       path: {
@@ -4338,13 +4434,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["GetBatchHistoryResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4352,6 +4448,7 @@ export interface operations {
       };
     };
   };
+  /** Lists all the photos of a seedling batch. */
   listBatchPhotos: {
     parameters: {
       path: {
@@ -4359,13 +4456,13 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListBatchPhotosResponsePayload"];
         };
       };
-      /** The batch does not exist. */
+      /** @description The batch does not exist. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4373,21 +4470,14 @@ export interface operations {
       };
     };
   };
+  /** Creates a new photo of a seedling batch. */
   createBatchPhoto: {
     parameters: {
       path: {
         batchId: number;
       };
     };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateBatchPhotoResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -4395,30 +4485,41 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateBatchPhotoResponsePayload"];
+        };
+      };
+    };
   };
-  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  /**
+   * Retrieves a specific photo from a seedling batch.
+   * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+   */
   getBatchPhoto: {
     parameters: {
+      query?: {
+        /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
       path: {
         batchId: number;
         photoId: number;
       };
-      query: {
-        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: string;
-        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: string;
-      };
     };
     responses: {
-      /** The photo was successfully retrieved. */
+      /** @description The photo was successfully retrieved. */
       200: {
         content: {
           "image/jpeg": string;
           "image/png": string;
         };
       };
-      /** The batch does not exist, or does not have a photo with the requested ID. */
+      /** @description The batch does not exist, or does not have a photo with the requested ID. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4426,6 +4527,7 @@ export interface operations {
       };
     };
   };
+  /** Deletes a photo from a seedling batch. */
   deleteBatchPhoto: {
     parameters: {
       path: {
@@ -4434,13 +4536,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The batch does not exist, or does not have a photo with the requested ID. */
+      /** @description The batch does not exist, or does not have a photo with the requested ID. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4448,6 +4550,7 @@ export interface operations {
       };
     };
   };
+  /** Gets information about a single seedling batch. */
   getBatch: {
     parameters: {
       path: {
@@ -4455,13 +4558,13 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["BatchResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4469,30 +4572,11 @@ export interface operations {
       };
     };
   };
+  /** Updates non-quantity-related details about a batch. */
   updateBatch: {
     parameters: {
       path: {
         id: number;
-      };
-    };
-    responses: {
-      /** The batch was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-      /** The requested resource has a newer version and was not updated. */
-      412: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -4500,7 +4584,28 @@ export interface operations {
         "application/json": components["schemas"]["UpdateBatchRequestPayload"];
       };
     };
+    responses: {
+      /** @description The batch was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The requested resource has a newer version and was not updated. */
+      412: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
   };
+  /** Deletes an existing seedling batch from a nursery. */
   deleteBatch: {
     parameters: {
       path: {
@@ -4508,7 +4613,7 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
@@ -4516,31 +4621,14 @@ export interface operations {
       };
     };
   };
-  /** There must be enough seedlings available to move to the next status. */
+  /**
+   * Changes the statuses of seedlings in a batch.
+   * @description There must be enough seedlings available to move to the next status.
+   */
   changeBatchStatuses: {
     parameters: {
       path: {
         id: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-      /** The requested resource has a newer version and was not updated. */
-      412: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -4548,32 +4636,35 @@ export interface operations {
         "application/json": components["schemas"]["ChangeBatchStatusRequestPayload"];
       };
     };
-  };
-  /** This should not be used to record withdrawals; use the withdrawal API for that. */
-  updateBatchQuantities: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["BatchResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-      /** The requested resource has a newer version and was not updated. */
+      /** @description The requested resource has a newer version and was not updated. */
       412: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
+      };
+    };
+  };
+  /**
+   * Updates the remaining quantities in a seedling batch.
+   * @description This should not be used to record withdrawals; use the withdrawal API for that.
+   */
+  updateBatchQuantities: {
+    parameters: {
+      path: {
+        id: number;
       };
     };
     requestBody: {
@@ -4581,7 +4672,28 @@ export interface operations {
         "application/json": components["schemas"]["UpdateBatchQuantitiesRequestPayload"];
       };
     };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The requested resource has a newer version and was not updated. */
+      412: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
   };
+  /** Gets a summary of the numbers of plants of each species in all nurseries. */
   getSpeciesSummary: {
     parameters: {
       path: {
@@ -4589,7 +4701,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetSpeciesSummaryResponsePayload"];
@@ -4597,21 +4709,23 @@ export interface operations {
       };
     };
   };
+  /** Withdraws seedlings from one or more seedling batches at a nursery. */
   createBatchWithdrawal: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateNurseryWithdrawalRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetNurseryWithdrawalResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateNurseryWithdrawalRequestPayload"];
-      };
-    };
   };
+  /** Gets information about a specific nursery withdrawal. */
   getNurseryWithdrawal: {
     parameters: {
       path: {
@@ -4619,7 +4733,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetNurseryWithdrawalResponsePayload"];
@@ -4627,6 +4741,7 @@ export interface operations {
       };
     };
   };
+  /** Lists all the photos of a withdrawal. */
   listWithdrawalPhotos: {
     parameters: {
       path: {
@@ -4634,13 +4749,13 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListWithdrawalPhotosResponsePayload"];
         };
       };
-      /** The withdrawal does not exist. */
+      /** @description The withdrawal does not exist. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4648,21 +4763,14 @@ export interface operations {
       };
     };
   };
+  /** Creates a new photo of a seedling batch withdrawal. */
   uploadWithdrawalPhoto: {
     parameters: {
       path: {
         withdrawalId: number;
       };
     };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateNurseryWithdrawalPhotoResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -4670,30 +4778,41 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateNurseryWithdrawalPhotoResponsePayload"];
+        };
+      };
+    };
   };
-  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  /**
+   * Retrieves a specific photo from a withdrawal.
+   * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+   */
   getWithdrawalPhoto: {
     parameters: {
+      query?: {
+        /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
       path: {
         withdrawalId: number;
         photoId: number;
       };
-      query: {
-        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: string;
-        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: string;
-      };
     };
     responses: {
-      /** The photo was successfully retrieved. */
+      /** @description The photo was successfully retrieved. */
       200: {
         content: {
           "image/jpeg": string;
           "image/png": string;
         };
       };
-      /** The withdrawal does not exist, or does not have a photo with the requested ID. */
+      /** @description The withdrawal does not exist, or does not have a photo with the requested ID. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4701,16 +4820,19 @@ export interface operations {
       };
     };
   };
-  /** Lists all organizations the user can access. */
+  /**
+   * Lists all organizations.
+   * @description Lists all organizations the user can access.
+   */
   listOrganizations: {
     parameters: {
-      query: {
-        /** Return this level of information about the organization's contents. */
+      query?: {
+        /** @description Return this level of information about the organization's contents. */
         depth?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListOrganizationsResponsePayload"];
@@ -4718,34 +4840,15 @@ export interface operations {
       };
     };
   };
+  /** Creates a new organization. */
   createOrganization: {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetOrganizationResponsePayload"];
-        };
-      };
-    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateOrganizationRequestPayload"];
       };
     };
-  };
-  getOrganization: {
-    parameters: {
-      path: {
-        /** ID of organization to get. User must be a member of the organization. */
-        organizationId: string;
-      };
-      query: {
-        /** Return this level of information about the organization's contents. */
-        depth?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetOrganizationResponsePayload"];
@@ -4753,18 +4856,32 @@ export interface operations {
       };
     };
   };
+  /** Gets information about an organization. */
+  getOrganization: {
+    parameters: {
+      query?: {
+        /** @description Return this level of information about the organization's contents. */
+        depth?: string;
+      };
+      path: {
+        /** @description ID of organization to get. User must be a member of the organization. */
+        organizationId: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetOrganizationResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates an existing organization. */
   updateOrganization: {
     parameters: {
       path: {
         organizationId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -4772,8 +4889,19 @@ export interface operations {
         "application/json": components["schemas"]["UpdateOrganizationRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
   };
-  /** Organizations can only be deleted if they have no members other than the current user. */
+  /**
+   * Deletes an existing organization.
+   * @description Organizations can only be deleted if they have no members other than the current user.
+   */
   deleteOrganization: {
     parameters: {
       path: {
@@ -4781,13 +4909,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The organization has other members and cannot be deleted. */
+      /** @description The organization has other members and cannot be deleted. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4795,6 +4923,7 @@ export interface operations {
       };
     };
   };
+  /** Lists the roles in an organization. */
   listOrganizationRoles: {
     parameters: {
       path: {
@@ -4802,7 +4931,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListOrganizationRolesResponsePayload"];
@@ -4810,6 +4939,7 @@ export interface operations {
       };
     };
   };
+  /** Lists the users in an organization. */
   listOrganizationUsers: {
     parameters: {
       path: {
@@ -4817,7 +4947,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListOrganizationUsersResponsePayload"];
@@ -4825,18 +4955,11 @@ export interface operations {
       };
     };
   };
+  /** Adds a user to an organization. */
   addOrganizationUser: {
     parameters: {
       path: {
         organizationId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateOrganizationUserResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -4844,7 +4967,16 @@ export interface operations {
         "application/json": components["schemas"]["AddOrganizationUserRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateOrganizationUserResponsePayload"];
+        };
+      };
+    };
   };
+  /** Gets information about a user's membership in an organization. */
   getOrganizationUser: {
     parameters: {
       path: {
@@ -4853,7 +4985,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetOrganizationUserResponsePayload"];
@@ -4861,7 +4993,10 @@ export interface operations {
       };
     };
   };
-  /** Only includes organization-level information that can be modified by organization administrators. */
+  /**
+   * Updates the user's organization information.
+   * @description Only includes organization-level information that can be modified by organization administrators.
+   */
   updateOrganizationUser: {
     parameters: {
       path: {
@@ -4869,33 +5004,36 @@ export interface operations {
         userId: number;
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrganizationUserRequestPayload"];
+      };
+    };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The user is not a member of the organization. */
+      /** @description The user is not a member of the organization. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-      /** An organization must have at least one owner; cannot change the role of an organization's only owner. */
+      /** @description An organization must have at least one owner; cannot change the role of an organization's only owner. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateOrganizationUserRequestPayload"];
-      };
-    };
   };
-  /** Does not remove any data created by the user. */
+  /**
+   * Removes a user from an organization.
+   * @description Does not remove any data created by the user.
+   */
   deleteOrganizationUser: {
     parameters: {
       path: {
@@ -4904,19 +5042,19 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The user is not a member of the organization. */
+      /** @description The user is not a member of the organization. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-      /** The user is the organization's only owner and an organization must have at least one owner. */
+      /** @description The user is the organization's only owner and an organization must have at least one owner. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4924,15 +5062,16 @@ export interface operations {
       };
     };
   };
+  /** Lists accessible projects. */
   listProjects: {
     parameters: {
-      query: {
-        /** If specified, list projects in this organization. If absent, list projects in all the user's organizations. */
+      query?: {
+        /** @description If specified, list projects in this organization. If absent, list projects in all the user's organizations. */
         organizationId?: number;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListProjectsResponsePayload"];
@@ -4940,21 +5079,23 @@ export interface operations {
       };
     };
   };
+  /** Creates a new project. */
   createProject: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateProjectRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["CreateProjectResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateProjectRequestPayload"];
-      };
-    };
   };
+  /** Gets information about a specific project. */
   getProject: {
     parameters: {
       path: {
@@ -4962,7 +5103,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetProjectResponsePayload"];
@@ -4970,18 +5111,11 @@ export interface operations {
       };
     };
   };
+  /** Updates information about an existing project. */
   updateProject: {
     parameters: {
       path: {
         id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -4989,8 +5123,19 @@ export interface operations {
         "application/json": components["schemas"]["UpdateProjectRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
   };
-  /** Any accessions, seedling batches, or planting sites that were assigned to the project will no longer be assigned to any project. */
+  /**
+   * Deletes an existing project.
+   * @description Any accessions, seedling batches, or planting sites that were assigned to the project will no longer be assigned to any project.
+   */
   deleteProject: {
     parameters: {
       path: {
@@ -4998,7 +5143,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
@@ -5006,19 +5151,14 @@ export interface operations {
       };
     };
   };
-  /** Overwrites any existing project assignments. */
+  /**
+   * Assigns multiple entities to a project.
+   * @description Overwrites any existing project assignments.
+   */
   assignProject: {
     parameters: {
       path: {
         id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -5026,7 +5166,16 @@ export interface operations {
         "application/json": components["schemas"]["AssignProjectRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
   };
+  /** Lists an organization's reports. */
   listReports: {
     parameters: {
       query: {
@@ -5034,7 +5183,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListReportsResponsePayload"];
@@ -5042,6 +5191,7 @@ export interface operations {
       };
     };
   };
+  /** Retrieves the contents of a report. */
   getReport: {
     parameters: {
       path: {
@@ -5049,7 +5199,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetReportResponsePayload"];
@@ -5057,25 +5207,14 @@ export interface operations {
       };
     };
   };
-  /** The report must be locked by the current user. */
+  /**
+   * Updates a report.
+   * @description The report must be locked by the current user.
+   */
   updateReport: {
     parameters: {
       path: {
         id: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The report is not locked by the current user. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -5083,7 +5222,22 @@ export interface operations {
         "application/json": components["schemas"]["PutReportRequestPayload"];
       };
     };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The report is not locked by the current user. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
   };
+  /** Lists the files associated with a report. */
   listReportFiles: {
     parameters: {
       path: {
@@ -5091,7 +5245,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListReportFilesResponsePayload"];
@@ -5099,7 +5253,10 @@ export interface operations {
       };
     };
   };
-  /** Only succeeds if the report is not currently locked or if it is locked by the current user. */
+  /**
+   * Locks a report.
+   * @description Only succeeds if the report is not currently locked or if it is locked by the current user.
+   */
   lockReport: {
     parameters: {
       path: {
@@ -5107,13 +5264,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The report is now locked by the current user. */
+      /** @description The report is now locked by the current user. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The report was already locked by another user. */
+      /** @description The report was already locked by another user. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5121,6 +5278,7 @@ export interface operations {
       };
     };
   };
+  /** Locks a report even if it is locked by another user already. */
   forceLockReport: {
     parameters: {
       path: {
@@ -5128,7 +5286,7 @@ export interface operations {
       };
     };
     responses: {
-      /** The report is now locked by the current user. */
+      /** @description The report is now locked by the current user. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
@@ -5136,6 +5294,7 @@ export interface operations {
       };
     };
   };
+  /** Lists the photos associated with a report. */
   listReportPhotos: {
     parameters: {
       path: {
@@ -5143,7 +5302,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListReportPhotosResponsePayload"];
@@ -5151,7 +5310,10 @@ export interface operations {
       };
     };
   };
-  /** The report must be locked by the current user. Submitting a report releases the lock. Once a report is submitted, it may no longer be locked or updated. */
+  /**
+   * Submits a report.
+   * @description The report must be locked by the current user. Submitting a report releases the lock. Once a report is submitted, it may no longer be locked or updated.
+   */
   submitReport: {
     parameters: {
       path: {
@@ -5159,19 +5321,19 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The report is missing required information and can't be submitted. */
+      /** @description The report is missing required information and can't be submitted. */
       400: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-      /** The report is not locked by the current user or has already been submitted. */
+      /** @description The report is not locked by the current user or has already been submitted. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5179,6 +5341,7 @@ export interface operations {
       };
     };
   };
+  /** Releases the lock on a report. */
   unlockReport: {
     parameters: {
       path: {
@@ -5186,13 +5349,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The report is no longer locked. */
+      /** @description The report is no longer locked. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The report is locked by another user. */
+      /** @description The report is locked by another user. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5200,21 +5363,14 @@ export interface operations {
       };
     };
   };
+  /** Uploads a file to associate with a report. */
   uploadReportFile: {
     parameters: {
       path: {
         reportId: number;
       };
     };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadReportFileResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -5222,7 +5378,16 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadReportFileResponsePayload"];
+        };
+      };
+    };
   };
+  /** Downloads a file associated with a report. */
   downloadReportFile: {
     parameters: {
       path: {
@@ -5231,7 +5396,7 @@ export interface operations {
       };
     };
     responses: {
-      /** The file was successfully retrieved. */
+      /** @description The file was successfully retrieved. */
       200: {
         content: {
           "*/*": string;
@@ -5239,6 +5404,7 @@ export interface operations {
       };
     };
   };
+  /** Deletes a file from a report. */
   deleteReportFile: {
     parameters: {
       path: {
@@ -5247,7 +5413,7 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
@@ -5255,21 +5421,14 @@ export interface operations {
       };
     };
   };
+  /** Uploads a photo to include with a report. */
   uploadReportPhoto: {
     parameters: {
       path: {
         reportId: number;
       };
     };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadReportFileResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -5277,23 +5436,34 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadReportFileResponsePayload"];
+        };
+      };
+    };
   };
-  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  /**
+   * Gets the contents of a photo.
+   * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+   */
   getReportPhoto: {
     parameters: {
+      query?: {
+        /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
       path: {
         reportId: number;
         photoId: number;
       };
-      query: {
-        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: string;
-        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: string;
-      };
     };
     responses: {
-      /** The photo was successfully retrieved. */
+      /** @description The photo was successfully retrieved. */
       200: {
         content: {
           "image/jpeg": string;
@@ -5302,6 +5472,7 @@ export interface operations {
       };
     };
   };
+  /** Updates a photo's caption. */
   updateReportPhoto: {
     parameters: {
       path: {
@@ -5309,20 +5480,21 @@ export interface operations {
         photoId: number;
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateReportPhotoRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateReportPhotoRequestPayload"];
-      };
-    };
   };
+  /** Deletes a photo from a report. */
   deleteReportPhoto: {
     parameters: {
       path: {
@@ -5331,7 +5503,7 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
@@ -5339,10 +5511,18 @@ export interface operations {
       };
     };
   };
-  /** If a sublist field has multiple values, they are separated with line breaks in the exported file. */
+  /**
+   * Exports selected fields from data matching a set of search criteria.
+   * @description If a sublist field has multiple values, they are separated with line breaks in the exported file.
+   */
   search_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SearchRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SearchResponsePayload"];
@@ -5350,12 +5530,8 @@ export interface operations {
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SearchRequestPayload"];
-      };
-    };
   };
+  /** Deletes an existing accession. */
   delete: {
     parameters: {
       path: {
@@ -5363,13 +5539,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5377,6 +5553,7 @@ export interface operations {
       };
     };
   };
+  /** Marks an accession as checked in. */
   checkIn: {
     parameters: {
       path: {
@@ -5384,13 +5561,13 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5398,6 +5575,7 @@ export interface operations {
       };
     };
   };
+  /** Gets the history of changes to an accession. */
   getAccessionHistory: {
     parameters: {
       path: {
@@ -5405,13 +5583,13 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetAccessionHistoryResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5419,6 +5597,7 @@ export interface operations {
       };
     };
   };
+  /** List all the available photos for an accession. */
   listPhotos: {
     parameters: {
       path: {
@@ -5426,13 +5605,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The accession's photos are listed in the response. */
+      /** @description The accession's photos are listed in the response. */
       200: {
         content: {
           "application/json": components["schemas"]["ListPhotosResponsePayload"];
         };
       };
-      /** The accession does not exist. */
+      /** @description The accession does not exist. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5440,29 +5619,32 @@ export interface operations {
       };
     };
   };
-  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  /**
+   * Retrieve a specific photo from an accession.
+   * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+   */
   getPhoto: {
     parameters: {
+      query?: {
+        /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
       path: {
         id: number;
         photoFilename: string;
       };
-      query: {
-        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: string;
-        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: string;
-      };
     };
     responses: {
-      /** The photo was successfully retrieved. */
+      /** @description The photo was successfully retrieved. */
       200: {
         content: {
           "image/jpeg": string;
           "image/png": string;
         };
       };
-      /** The accession does not exist, or does not have a photo with the requested filename. */
+      /** @description The accession does not exist, or does not have a photo with the requested filename. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5470,7 +5652,10 @@ export interface operations {
       };
     };
   };
-  /** If there was already a photo with the specified filename, replaces it. */
+  /**
+   * Upload a new photo for an accession.
+   * @description If there was already a photo with the specified filename, replaces it.
+   */
   uploadPhoto: {
     parameters: {
       path: {
@@ -5478,21 +5663,7 @@ export interface operations {
         photoFilename: string;
       };
     };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The specified accession does not exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -5500,11 +5671,28 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The specified accession does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
   };
-  /** In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time. */
+  /**
+   * Get the server's current date and time.
+   * @description In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time.
+   */
   getCurrentTime: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetCurrentTimeResponsePayload"];
@@ -5512,34 +5700,41 @@ export interface operations {
       };
     };
   };
+  /** Records a log message from a device at a seed bank. */
   recordLogMessage: {
     parameters: {
       path: {
-        /** Source of the log message. */
+        /**
+         * @description Source of the log message.
+         * @example seedbank-app
+         */
         tag: string;
       };
-    };
-    responses: {
-      /** OK */
-      200: unknown;
     };
     requestBody: {
       content: {
         "application/json": string;
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+    };
   };
+  /** Get summary statistics about a specific seed bank or all seed banks within an organization. */
   getSeedBankSummary: {
     parameters: {
-      query: {
-        /** If set, return summary on all seedbanks for that organization. */
+      query?: {
+        /** @description If set, return summary on all seedbanks for that organization. */
         organizationId?: string;
-        /** If set, return summary on that specific seedbank. */
+        /** @description If set, return summary on that specific seedbank. */
         facilityId?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SummaryResponsePayload"];
@@ -5547,60 +5742,64 @@ export interface operations {
       };
     };
   };
+  /** Get summary statistics about accessions that match a specified set of search criteria. */
   summarizeAccessionSearch: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SummarizeAccessionSearchRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SummarizeAccessionSearchResponsePayload"];
         };
       };
     };
+  };
+  /** List the values of a set of search fields for a set of accessions matching certain filter criteria. */
+  listFieldValues: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["SummarizeAccessionSearchRequestPayload"];
+        "application/json": components["schemas"]["ListFieldValuesRequestPayload"];
       };
     };
-  };
-  listFieldValues: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListFieldValuesResponsePayload"];
         };
       };
     };
+  };
+  /** List the possible values of a set of search fields. */
+  listAllFieldValues: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["ListFieldValuesRequestPayload"];
+        "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
       };
     };
-  };
-  listAllFieldValues: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListAllFieldValuesResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
-      };
-    };
   };
+  /** Lists all the species available in an organization. */
   listSpecies: {
     parameters: {
       query: {
-        /** Organization whose species should be listed. */
+        /** @description Organization whose species should be listed. */
         organizationId: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListSpeciesResponsePayload"];
@@ -5608,44 +5807,49 @@ export interface operations {
       };
     };
   };
+  /** Creates a new species. */
   createSpecies: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SpeciesRequestPayload"];
+      };
+    };
     responses: {
-      /** Species created. */
+      /** @description Species created. */
       200: {
         content: {
           "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
         };
       };
-      /** A species with the requested name already exists. */
+      /** @description A species with the requested name already exists. */
       409: {
         content: {
           "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SpeciesRequestPayload"];
-      };
-    };
   };
+  /** Gets more information about a species with a particular scientific name. */
   getSpeciesDetails: {
     parameters: {
       query: {
-        /** Exact scientific name to look up. This name is case-sensitive. */
+        /** @description Exact scientific name to look up. This name is case-sensitive. */
         scientificName: string;
-        /** If specified, only return common names in this language or whose language is unknown. Names with unknown languages are always included. This is a two-letter ISO 639-1 language code. */
+        /**
+         * @description If specified, only return common names in this language or whose language is unknown. Names with unknown languages are always included. This is a two-letter ISO 639-1 language code.
+         * @example en
+         */
         language?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SpeciesLookupDetailsResponsePayload"];
         };
       };
-      /** The scientific name was not found in the server's taxonomic database. */
+      /** @description The scientific name was not found in the server's taxonomic database. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5653,18 +5857,21 @@ export interface operations {
       };
     };
   };
-  /** Gets a list of known scientific names whose words begin with particular letters. */
+  /** @description Gets a list of known scientific names whose words begin with particular letters. */
   listSpeciesNames: {
     parameters: {
       query: {
-        /** Space-delimited list of word prefixes to search for. Non-alphabetic characters are ignored, and matches are case-insensitive. The order of prefixes is significant; "ag sc" will match "Aglaonema schottianum" but won't match "Scabiosa agrestis". */
+        /**
+         * @description Space-delimited list of word prefixes to search for. Non-alphabetic characters are ignored, and matches are case-insensitive. The order of prefixes is significant; "ag sc" will match "Aglaonema schottianum" but won't match "Scabiosa agrestis".
+         * @example ag sc
+         */
         search: string;
-        /** Maximum number of results to return. */
+        /** @description Maximum number of results to return. */
         maxResults?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SpeciesLookupNamesResponsePayload"];
@@ -5672,7 +5879,7 @@ export interface operations {
       };
     };
   };
-  /** Returns details about a problem with a species. */
+  /** @description Returns details about a problem with a species. */
   getSpeciesProblem: {
     parameters: {
       path: {
@@ -5680,13 +5887,13 @@ export interface operations {
       };
     };
     responses: {
-      /** Problem retrieved. */
+      /** @description Problem retrieved. */
       200: {
         content: {
           "application/json": components["schemas"]["GetSpeciesProblemResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5694,7 +5901,10 @@ export interface operations {
       };
     };
   };
-  /** Only valid for problems that include suggested changes. */
+  /**
+   * Applies suggested changes to fix a problem with a species.
+   * @description Only valid for problems that include suggested changes.
+   */
   acceptProblemSuggestion: {
     parameters: {
       path: {
@@ -5702,19 +5912,19 @@ export interface operations {
       };
     };
     responses: {
-      /** Suggestion applied. Response contains the updated species information. */
+      /** @description Suggestion applied. Response contains the updated species information. */
       200: {
         content: {
           "application/json": components["schemas"]["GetSpeciesResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-      /** There is no suggested change for this problem. */
+      /** @description There is no suggested change for this problem. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5722,6 +5932,7 @@ export interface operations {
       };
     };
   };
+  /** Deletes information about a problem with a species without applying any suggested changes. */
   deleteProblem: {
     parameters: {
       path: {
@@ -5729,13 +5940,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5743,22 +5954,17 @@ export interface operations {
       };
     };
   };
-  /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/species/uploads/template` endpoint. */
+  /**
+   * Uploads a list of species to add to the organization.
+   * @description The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/species/uploads/template` endpoint.
+   */
   uploadSpeciesList: {
     parameters: {
       query: {
         organizationId: number;
       };
     };
-    responses: {
-      /** The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v1/species/uploads/{uploadId}` GET endpoint. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadFileResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -5766,10 +5972,19 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v1/species/uploads/{uploadId}` GET endpoint. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadFileResponsePayload"];
+        };
+      };
+    };
   };
+  /** Gets a template file that contains the required header row for species list uploads. */
   getSpeciesListUploadTemplate: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": string;
@@ -5777,7 +5992,10 @@ export interface operations {
       };
     };
   };
-  /** Clients may poll this endpoint to monitor the progress of the file. */
+  /**
+   * Gets the status of a species list uploaded previously.
+   * @description Clients may poll this endpoint to monitor the progress of the file.
+   */
   getSpeciesListUploadStatus: {
     parameters: {
       path: {
@@ -5785,7 +6003,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetUploadStatusResponsePayload"];
@@ -5793,7 +6011,10 @@ export interface operations {
       };
     };
   };
-  /** This may only be called if the status of the upload is "Awaiting User Action". */
+  /**
+   * Deletes a species list upload that is awaiting user action.
+   * @description This may only be called if the status of the upload is "Awaiting User Action".
+   */
   deleteSpeciesListUpload: {
     parameters: {
       path: {
@@ -5801,13 +6022,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The upload was not awaiting user action. */
+      /** @description The upload was not awaiting user action. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5815,25 +6036,14 @@ export interface operations {
       };
     };
   };
-  /** This may only be called if the status of the upload is "Awaiting User Action". */
+  /**
+   * Resolves the problems with a species list that is awaiting user action.
+   * @description This may only be called if the status of the upload is "Awaiting User Action".
+   */
   resolveSpeciesListUpload: {
     parameters: {
       path: {
         uploadId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The upload was not awaiting user action. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -5841,50 +6051,52 @@ export interface operations {
         "application/json": components["schemas"]["ResolveUploadRequestPayload"];
       };
     };
-  };
-  getSpecies: {
-    parameters: {
-      path: {
-        speciesId: number;
-      };
-      query: {
-        /** Organization whose information about the species should be returned. */
-        organizationId: string;
-      };
-    };
     responses: {
-      /** Species retrieved. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetSpeciesResponsePayload"];
-        };
-      };
-      /** The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  updateSpecies: {
-    parameters: {
-      path: {
-        speciesId: number;
-      };
-    };
-    responses: {
-      /** Species updated or merged with an existing species. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The upload was not awaiting user action. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets information about a single species. */
+  getSpecies: {
+    parameters: {
+      query: {
+        /** @description Organization whose information about the species should be returned. */
+        organizationId: string;
+      };
+      path: {
+        speciesId: number;
+      };
+    };
+    responses: {
+      /** @description Species retrieved. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSpeciesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
+      };
+    };
+  };
+  /** Updates an existing species. */
+  updateSpecies: {
+    parameters: {
+      path: {
+        speciesId: number;
       };
     };
     requestBody: {
@@ -5892,32 +6104,49 @@ export interface operations {
         "application/json": components["schemas"]["SpeciesRequestPayload"];
       };
     };
-  };
-  /** The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it. */
-  deleteSpecies: {
-    parameters: {
-      path: {
-        speciesId: number;
-      };
-      query: {
-        /** Organization from which the species should be deleted. */
-        organizationId: string;
-      };
-    };
     responses: {
-      /** Species deleted. */
+      /** @description Species updated or merged with an existing species. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-      /** Cannot delete the species because it is currently in use. */
+    };
+  };
+  /**
+   * Deletes an existing species.
+   * @description The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it.
+   */
+  deleteSpecies: {
+    parameters: {
+      query: {
+        /** @description Organization from which the species should be deleted. */
+        organizationId: string;
+      };
+      path: {
+        speciesId: number;
+      };
+    };
+    responses: {
+      /** @description Species deleted. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description Cannot delete the species because it is currently in use. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5925,6 +6154,7 @@ export interface operations {
       };
     };
   };
+  /** Lists the timeseries for one or more devices. */
   listTimeseries: {
     parameters: {
       query: {
@@ -5932,7 +6162,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListTimeseriesResponsePayload"];
@@ -5940,64 +6170,70 @@ export interface operations {
       };
     };
   };
-  /** If there are existing timeseries with the same names, the old definitions will be overwritten. */
+  /**
+   * Defines a list of timeseries for one or more devices.
+   * @description If there are existing timeseries with the same names, the old definitions will be overwritten.
+   */
   createMultipleTimeseries: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateTimeseriesRequestPayload"];
+      };
+    };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
+  };
+  /** Returns historical values of timeseries. */
+  getTimeseriesHistory: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["CreateTimeseriesRequestPayload"];
+        "application/json": components["schemas"]["GetTimeseriesHistoryRequestPayload"];
       };
     };
-  };
-  getTimeseriesHistory: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetTimeseriesHistoryResponsePayload"];
         };
       };
     };
+  };
+  /** Records new values for one or more timeseries. */
+  recordTimeseriesValues: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["GetTimeseriesHistoryRequestPayload"];
+        "application/json": components["schemas"]["RecordTimeseriesValuesRequestPayload"];
       };
     };
-  };
-  recordTimeseriesValues: {
     responses: {
-      /** Successfully processed the request. Note that this status will be returned even if the server was unable to record some of the values. In that case, the failed values will be returned in the response payload. */
+      /** @description Successfully processed the request. Note that this status will be returned even if the server was unable to record some of the values. In that case, the failed values will be returned in the response payload. */
       200: {
         content: {
           "application/json": components["schemas"]["RecordTimeseriesValuesResponsePayload"];
         };
       };
-      /** The request was valid, but the user is still configuring or placing sensors, so the timeseries values have not been recorded. */
+      /** @description The request was valid, but the user is still configuring or placing sensors, so the timeseries values have not been recorded. */
       202: {
         content: {
           "application/json": components["schemas"]["RecordTimeseriesValuesResponsePayload"];
         };
       };
-      /** The request had more than 1000 values. */
+      /** @description The request had more than 1000 values. */
       413: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RecordTimeseriesValuesRequestPayload"];
-      };
-    };
   };
+  /** Gets information about a specific delivery of seedlings to a planting site. */
   getDelivery: {
     parameters: {
       path: {
@@ -6005,7 +6241,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetDeliveryResponsePayload"];
@@ -6013,18 +6249,11 @@ export interface operations {
       };
     };
   };
+  /** Reassigns some of the seedlings from a delivery to a different planting subzone. */
   reassignDelivery: {
     parameters: {
       path: {
         id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -6032,23 +6261,34 @@ export interface operations {
         "application/json": components["schemas"]["ReassignDeliveryRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
   };
-  /** Mapbox API tokens are short-lived; when a token expires, request a new one. */
+  /**
+   * Gets an API token to use for displaying Mapbox maps.
+   * @description Mapbox API tokens are short-lived; when a token expires, request a new one.
+   */
   getMapboxToken: {
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["GetMapboxTokenResponsePayload"];
         };
       };
-      /** The server is not configured to return Mapbox tokens. */
+      /** @description The server is not configured to return Mapbox tokens. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-      /** The server is temporarily unable to generate a new Mapbox token. */
+      /** @description The server is temporarily unable to generate a new Mapbox token. */
       503: {
         content: {
           "application/json": components["schemas"]["GetMapboxTokenResponsePayload"];
@@ -6056,17 +6296,18 @@ export interface operations {
       };
     };
   };
+  /** Gets a list of observations of planting sites. */
   listObservations: {
     parameters: {
-      query: {
-        /** Limit results to observations of planting sites in a specific organization. Ignored if plantingSiteId is specified. */
+      query?: {
+        /** @description Limit results to observations of planting sites in a specific organization. Ignored if plantingSiteId is specified. */
         organizationId?: string;
-        /** Limit results to observations of a specific planting site. Required if organizationId is not specified. */
+        /** @description Limit results to observations of a specific planting site. Required if organizationId is not specified. */
         plantingSiteId?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListObservationsResponsePayload"];
@@ -6074,32 +6315,34 @@ export interface operations {
       };
     };
   };
+  /** Schedules a new observation. */
   scheduleObservation: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ScheduleObservationRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ScheduleObservationResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ScheduleObservationRequestPayload"];
-      };
-    };
   };
+  /** Gets a list of the results of observations. */
   listObservationResults: {
     parameters: {
-      query: {
+      query?: {
         organizationId?: number;
         plantingSiteId?: number;
-        /** Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
+        /** @description Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
         limit?: number;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListObservationResultsResponsePayload"];
@@ -6107,6 +6350,7 @@ export interface operations {
       };
     };
   };
+  /** Gets information about a single observation. */
   getObservation: {
     parameters: {
       path: {
@@ -6114,7 +6358,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetObservationResponsePayload"];
@@ -6122,18 +6366,11 @@ export interface operations {
       };
     };
   };
+  /** Reschedules an existing observation. */
   rescheduleObservation: {
     parameters: {
       path: {
         observationId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -6141,7 +6378,16 @@ export interface operations {
         "application/json": components["schemas"]["RescheduleObservationRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
   };
+  /** Gets a list of monitoring plots assigned to an observation. */
   listAssignedPlots: {
     parameters: {
       path: {
@@ -6149,7 +6395,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListAssignedPlotsResponsePayload"];
@@ -6157,6 +6403,7 @@ export interface operations {
       };
     };
   };
+  /** Updates information about the observation of a plot. */
   updatePlotObservation: {
     parameters: {
       path: {
@@ -6164,20 +6411,21 @@ export interface operations {
         plotId: number;
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdatePlotObservationRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdatePlotObservationRequestPayload"];
-      };
-    };
   };
+  /** Stores the results of a completed observation of a plot. */
   completePlotObservation: {
     parameters: {
       path: {
@@ -6185,27 +6433,30 @@ export interface operations {
         plotId: number;
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CompletePlotObservationRequestPayload"];
+      };
+    };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The observation of the plot was already completed. */
+      /** @description The observation of the plot was already completed. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CompletePlotObservationRequestPayload"];
-      };
-    };
   };
-  /** A plot may only be claimed by one user at a time. */
+  /**
+   * Claims a monitoring plot.
+   * @description A plot may only be claimed by one user at a time.
+   */
   claimMonitoringPlot: {
     parameters: {
       path: {
@@ -6214,13 +6465,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The plot is already claimed by someone else. */
+      /** @description The plot is already claimed by someone else. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -6228,6 +6479,7 @@ export interface operations {
       };
     };
   };
+  /** Uploads a photo of a monitoring plot. */
   uploadPlotPhoto: {
     parameters: {
       path: {
@@ -6235,15 +6487,7 @@ export interface operations {
         plotId: number;
       };
     };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadPlotPhotoResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -6252,31 +6496,42 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadPlotPhotoResponsePayload"];
+        };
+      };
+    };
   };
-  /** Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio. */
+  /**
+   * Retrieves a specific photo from an observation of a monitoring plot.
+   * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+   */
   getPlotPhoto: {
     parameters: {
+      query?: {
+        /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: number;
+        /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: number;
+      };
       path: {
         observationId: number;
         plotId: number;
         fileId: number;
       };
-      query: {
-        /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: number;
-        /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: number;
-      };
     };
     responses: {
-      /** The photo was successfully retrieved. */
+      /** @description The photo was successfully retrieved. */
       200: {
         content: {
           "image/jpeg": string;
           "image/png": string;
         };
       };
-      /** The plot observation does not exist, or does not have a photo with the requested ID. */
+      /** @description The plot observation does not exist, or does not have a photo with the requested ID. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -6284,6 +6539,7 @@ export interface operations {
       };
     };
   };
+  /** Releases the claim on a monitoring plot. */
   releaseMonitoringPlot: {
     parameters: {
       path: {
@@ -6292,13 +6548,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** You don't have a claim on the plot. */
+      /** @description You don't have a claim on the plot. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -6306,7 +6562,10 @@ export interface operations {
       };
     };
   };
-  /** Additional monitoring plots may be replaced as well, e.g., if the requested plot is part of a permanent cluster. In some cases, the requested plot will be removed from the observation but not replaced with a different one. */
+  /**
+   * Requests that a monitoring plot be replaced with a new one.
+   * @description Additional monitoring plots may be replaced as well, e.g., if the requested plot is part of a permanent cluster. In some cases, the requested plot will be removed from the observation but not replaced with a different one.
+   */
   replaceObservationPlot: {
     parameters: {
       path: {
@@ -6314,33 +6573,36 @@ export interface operations {
         plotId: number;
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReplaceObservationPlotRequestPayload"];
+      };
+    };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["ReplaceObservationPlotResponsePayload"];
         };
       };
-      /** The observation does not exist or does not have the requested monitoring plot. */
+      /** @description The observation does not exist or does not have the requested monitoring plot. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-      /** The observation of the monitoring plot has already been completed and the plot cannot be replaced. */
+      /** @description The observation of the monitoring plot has already been completed and the plot cannot be replaced. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ReplaceObservationPlotRequestPayload"];
-      };
-    };
   };
-  /** Some information is only available once all plots have been completed. */
+  /**
+   * Gets the results of an observation of a planting site.
+   * @description Some information is only available once all plots have been completed.
+   */
   getObservationResults: {
     parameters: {
       path: {
@@ -6348,7 +6610,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetObservationResultsResponsePayload"];
@@ -6356,17 +6618,20 @@ export interface operations {
       };
     };
   };
-  /** The list can optionally contain information about planting zones and subzones. */
+  /**
+   * Gets a list of an organization's planting sites.
+   * @description The list can optionally contain information about planting zones and subzones.
+   */
   listPlantingSites: {
     parameters: {
       query: {
         organizationId: number;
-        /** If true, include planting zones and subzones for each site. */
+        /** @description If true, include planting zones and subzones for each site. */
         full?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListPlantingSitesResponsePayload"];
@@ -6374,22 +6639,26 @@ export interface operations {
       };
     };
   };
+  /** Creates a new planting site. */
   createPlantingSite: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreatePlantingSiteRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["CreatePlantingSiteResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreatePlantingSiteRequestPayload"];
-      };
-    };
   };
-  /** Includes information about the site's planting zones and subzones. */
+  /**
+   * Gets information about a specific planting site.
+   * @description Includes information about the site's planting zones and subzones.
+   */
   getPlantingSite: {
     parameters: {
       path: {
@@ -6397,7 +6666,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetPlantingSiteResponsePayload"];
@@ -6405,18 +6674,11 @@ export interface operations {
       };
     };
   };
+  /** Updates information about an existing planting site. */
   updatePlantingSite: {
     parameters: {
       path: {
         id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -6424,8 +6686,19 @@ export interface operations {
         "application/json": components["schemas"]["UpdatePlantingSiteRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
   };
-  /** The totals are based on nursery withdrawals. */
+  /**
+   * Gets the total number of plants planted at a planting site and in each planting zone.
+   * @description The totals are based on nursery withdrawals.
+   */
   getPlantingSiteReportedPlants: {
     parameters: {
       path: {
@@ -6433,7 +6706,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetPlantingSiteReportedPlantsResponsePayload"];
@@ -6441,18 +6714,11 @@ export interface operations {
       };
     };
   };
+  /** Updates information about a planting subzone. */
   updatePlantingSubzone: {
     parameters: {
       path: {
         id: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -6460,8 +6726,19 @@ export interface operations {
         "application/json": components["schemas"]["UpdatePlantingSubzoneRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
   };
-  /** The list is based on nursery withdrawals. */
+  /**
+   * Gets a list of the species that have been planted in a specific planting subzone.
+   * @description The list is based on nursery withdrawals.
+   */
   listPlantingSubzoneSpecies: {
     parameters: {
       path: {
@@ -6469,7 +6746,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListPlantingSubzoneSpeciesResponsePayload"];
@@ -6477,9 +6754,10 @@ export interface operations {
       };
     };
   };
+  /** Gets information about the current user. */
   getMyself: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetUserResponsePayload"];
@@ -6487,25 +6765,15 @@ export interface operations {
       };
     };
   };
+  /** Updates information about the current user. */
   updateMyself: {
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateUserRequestPayload"];
       };
     };
-  };
-  /** WARNING! This operation is not reversible. */
-  deleteMyself: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
@@ -6513,15 +6781,30 @@ export interface operations {
       };
     };
   };
+  /**
+   * Deletes the current user's account.
+   * @description WARNING! This operation is not reversible.
+   */
+  deleteMyself: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the current user's preferences. */
   getUserPreferences: {
     parameters: {
-      query: {
-        /** If present, get the user's per-organization preferences for this organization. If not present, get the user's global preferences. */
+      query?: {
+        /** @description If present, get the user's per-organization preferences for this organization. If not present, get the user's global preferences. */
         organizationId?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetUserPreferencesResponsePayload"];
@@ -6529,24 +6812,26 @@ export interface operations {
       };
     };
   };
+  /** Updates the current user's preferences. */
   updateUserPreferences: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserPreferencesRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateUserPreferencesRequestPayload"];
-      };
-    };
   };
+  /** Gets the minimum and recommended versions for Terraware's client applications. */
   getVersions: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["VersionsResponsePayload"];
@@ -6554,37 +6839,33 @@ export interface operations {
       };
     };
   };
+  /** Creates a new accession. */
   createAccession: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateAccessionRequestPayloadV2"];
+      };
+    };
     responses: {
-      /** The accession was created successfully. Response includes fields populated by the server, including the accession number and ID. */
+      /** @description The accession was created successfully. Response includes fields populated by the server, including the accession number and ID. */
       200: {
         content: {
           "application/json": components["schemas"]["CreateAccessionResponsePayloadV2"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateAccessionRequestPayloadV2"];
-      };
-    };
   };
-  /** The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v2/seedbank/accessions/uploads/template` endpoint. */
+  /**
+   * Uploads a list of accessions to add to the facility.
+   * @description The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v2/seedbank/accessions/uploads/template` endpoint.
+   */
   uploadAccessionsList: {
     parameters: {
       query: {
         facilityId: number;
       };
     };
-    responses: {
-      /** The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v2/seedbank/accessions/uploads/{uploadId}` GET endpoint. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadFileResponsePayload"];
-        };
-      };
-    };
-    requestBody: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -6592,10 +6873,19 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v2/seedbank/accessions/uploads/{uploadId}` GET endpoint. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadFileResponsePayload"];
+        };
+      };
+    };
   };
+  /** Gets a template file that contains the required header row for accessions list uploads. */
   getAccessionsListUploadTemplate: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": string;
@@ -6603,7 +6893,10 @@ export interface operations {
       };
     };
   };
-  /** Clients may poll this endpoint to monitor the progress of the file. */
+  /**
+   * Gets the status of an accessions list uploaded previously.
+   * @description Clients may poll this endpoint to monitor the progress of the file.
+   */
   getAccessionsListUploadStatus: {
     parameters: {
       path: {
@@ -6611,7 +6904,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetUploadStatusResponsePayload"];
@@ -6619,7 +6912,10 @@ export interface operations {
       };
     };
   };
-  /** This may only be called if the status of the upload is "Awaiting User Action". */
+  /**
+   * Deletes an accessions list upload that is awaiting user action.
+   * @description This may only be called if the status of the upload is "Awaiting User Action".
+   */
   deleteAccessionsListUpload: {
     parameters: {
       path: {
@@ -6627,13 +6923,13 @@ export interface operations {
       };
     };
     responses: {
-      /** The requested operation succeeded. */
+      /** @description The requested operation succeeded. */
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** The upload was not awaiting user action. */
+      /** @description The upload was not awaiting user action. */
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -6641,25 +6937,14 @@ export interface operations {
       };
     };
   };
-  /** This may only be called if the status of the upload is "Awaiting User Action". */
+  /**
+   * Resolves the problems with an accessions list that is awaiting user action.
+   * @description This may only be called if the status of the upload is "Awaiting User Action".
+   */
   resolveAccessionsListUpload: {
     parameters: {
       path: {
         uploadId: number;
-      };
-    };
-    responses: {
-      /** The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** The upload was not awaiting user action. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -6667,19 +6952,26 @@ export interface operations {
         "application/json": components["schemas"]["ResolveUploadRequestPayload"];
       };
     };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The upload was not awaiting user action. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
   };
+  /** Transfers seeds to a nursery. */
   createNurseryTransferWithdrawal: {
     parameters: {
       path: {
         accessionId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreateNurseryTransferResponsePayload"];
-        };
       };
     };
     requestBody: {
@@ -6687,7 +6979,16 @@ export interface operations {
         "application/json": components["schemas"]["CreateNurseryTransferRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateNurseryTransferResponsePayload"];
+        };
+      };
+    };
   };
+  /** List all of the accession's viability tests. */
   listViabilityTests: {
     parameters: {
       path: {
@@ -6695,7 +6996,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["ListViabilityTestsResponsePayload"];
@@ -6703,19 +7004,14 @@ export interface operations {
       };
     };
   };
-  /** May cause the accession's remaining quantity to change. */
+  /**
+   * Create a new viability test on an existing accession.
+   * @description May cause the accession's remaining quantity to change.
+   */
   createViabilityTest: {
     parameters: {
       path: {
         accessionId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
-        };
       };
     };
     requestBody: {
@@ -6723,7 +7019,16 @@ export interface operations {
         "application/json": components["schemas"]["CreateViabilityTestRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
+        };
+      };
+    };
   };
+  /** Get a single viability test. */
   getViabilityTest: {
     parameters: {
       path: {
@@ -6732,7 +7037,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetViabilityTestResponsePayload"];
@@ -6740,7 +7045,10 @@ export interface operations {
       };
     };
   };
-  /** May cause the accession's remaining quantity to change. */
+  /**
+   * Update the details of an existing viability test.
+   * @description May cause the accession's remaining quantity to change.
+   */
   updateViabilityTest: {
     parameters: {
       path: {
@@ -6748,21 +7056,24 @@ export interface operations {
         viabilityTestId: number;
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateViabilityTestRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateViabilityTestRequestPayload"];
-      };
-    };
   };
-  /** May cause the accession's remaining quantity to change. */
+  /**
+   * Delete an existing viability test.
+   * @description May cause the accession's remaining quantity to change.
+   */
   deleteViabilityTest: {
     parameters: {
       path: {
@@ -6771,7 +7082,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
@@ -6779,6 +7090,7 @@ export interface operations {
       };
     };
   };
+  /** List all the withdrawals from an accession. */
   listWithdrawals: {
     parameters: {
       path: {
@@ -6786,7 +7098,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetWithdrawalsResponsePayload"];
@@ -6794,19 +7106,14 @@ export interface operations {
       };
     };
   };
-  /** May cause the accession's remaining quantity to change. */
+  /**
+   * Create a new withdrawal on an existing accession.
+   * @description May cause the accession's remaining quantity to change.
+   */
   createWithdrawal: {
     parameters: {
       path: {
         accessionId: number;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
-        };
       };
     };
     requestBody: {
@@ -6814,7 +7121,16 @@ export interface operations {
         "application/json": components["schemas"]["CreateWithdrawalRequestPayload"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
+        };
+      };
+    };
   };
+  /** Get a single withdrawal. */
   getWithdrawal: {
     parameters: {
       path: {
@@ -6823,7 +7139,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetWithdrawalResponsePayload"];
@@ -6831,7 +7147,10 @@ export interface operations {
       };
     };
   };
-  /** May cause the accession's remaining quantity to change. */
+  /**
+   * Update the details of an existing withdrawal.
+   * @description May cause the accession's remaining quantity to change.
+   */
   updateWithdrawal: {
     parameters: {
       path: {
@@ -6839,21 +7158,24 @@ export interface operations {
         withdrawalId: number;
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateWithdrawalRequestPayload"];
+      };
+    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateWithdrawalRequestPayload"];
-      };
-    };
   };
-  /** May cause the accession's remaining quantity to change. */
+  /**
+   * Delete an existing withdrawal.
+   * @description May cause the accession's remaining quantity to change.
+   */
   deleteWithdrawal: {
     parameters: {
       path: {
@@ -6862,7 +7184,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
@@ -6870,6 +7192,7 @@ export interface operations {
       };
     };
   };
+  /** Retrieve an existing accession. */
   getAccession: {
     parameters: {
       path: {
@@ -6877,13 +7200,13 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/json": components["schemas"]["GetAccessionResponsePayloadV2"];
         };
       };
-      /** The requested resource was not found. */
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -6891,34 +7214,15 @@ export interface operations {
       };
     };
   };
+  /** Update an existing accession. */
   updateAccession: {
     parameters: {
-      path: {
-        id: number;
-      };
-      query: {
-        /** If true, do not actually save the accession; just return the result that would have been returned if it had been saved. */
+      query?: {
+        /** @description If true, do not actually save the accession; just return the result that would have been returned if it had been saved. */
         simulate?: string;
       };
-    };
-    responses: {
-      /** The accession was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
-        };
-      };
-      /** The specified accession doesn't exist. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-      /** One of the requested changes couldn't be made because the accession is in a state that doesn't allow the change. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
+      path: {
+        id: number;
       };
     };
     requestBody: {
@@ -6926,7 +7230,25 @@ export interface operations {
         "application/json": components["schemas"]["UpdateAccessionRequestPayloadV2"];
       };
     };
+    responses: {
+      /** @description The accession was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
+        };
+      };
+      /** @description The specified accession doesn't exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description One of the requested changes couldn't be made because the accession is in a state that doesn't allow the change. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
   };
 }
-
-export interface external {}
