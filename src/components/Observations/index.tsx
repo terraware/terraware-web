@@ -22,7 +22,6 @@ import ObservationDetails from './details';
 import ObservationPlantingZoneDetails from './zone';
 import ObservationMonitoringPlotDetails from './plot';
 import { ScheduleObservation, RescheduleObservation } from './schedule';
-import isEnabled from 'src/features';
 import { isAdmin } from 'src/utils/organization';
 
 /**
@@ -118,7 +117,7 @@ const ObservationsWrapper = (): JSX.Element => {
     }
   }, [activeLocale]);
 
-  const scheduleObservationsEnabled = isEnabled('Schedule Observations') && isAdmin(selectedOrganization);
+  const scheduleObservationsEnabled = isAdmin(selectedOrganization);
 
   return (
     <Switch>
