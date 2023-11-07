@@ -26,10 +26,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
     {
       title: strings.GERMINATING_QUANTITY,
       data: batch.germinatingQuantity,
-    },
-    {
-      title: '',
-      data: '',
+      fullWidth: true,
     },
     {
       title: strings.NOT_READY_QUANTITY,
@@ -115,7 +112,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
       </Box>
       <Grid container>
         {overviewCardData.map((item) => (
-          <Grid item xs={isMobile ? 12 : 6} key={item.title}>
+          <Grid item xs={isMobile || item.fullWidth ? 12 : 6} key={item.title}>
             <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
           </Grid>
         ))}

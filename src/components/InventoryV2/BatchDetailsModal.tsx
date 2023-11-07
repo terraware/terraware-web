@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type BatchPhotoWithUrl = BatchPhoto & { url: string };
 
-export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
+export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element | null {
   const classes = useStyles();
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
@@ -208,189 +208,181 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     marginTop: theme.spacing(2),
   };
 
-  return (
-    <>
-      {record && (
-        <DialogBox
-          onClose={onCloseHandler}
-          open={true}
-          title={strings.EDIT_BATCH_DETAILS}
-          size='medium'
-          middleButtons={[
-            <Button
-              id='cancelBatchDetails'
-              label={strings.CANCEL}
-              type='passive'
-              onClick={onCloseHandler}
-              priority='secondary'
-              key='button-1'
-            />,
-            <Button id='saveBatchDetails' onClick={saveBatch} label={strings.SAVE} key='button-2' />,
-          ]}
-          scrolled={true}
+  return record ? (
+    <DialogBox
+      onClose={onCloseHandler}
+      open={true}
+      title={strings.EDIT_BATCH_DETAILS}
+      size='medium'
+      middleButtons={[
+        <Button
+          id='cancelBatchDetails'
+          label={strings.CANCEL}
+          type='passive'
+          onClick={onCloseHandler}
+          priority='secondary'
+          key='button-1'
+        />,
+        <Button id='saveBatchDetails' onClick={saveBatch} label={strings.SAVE} key='button-2' />,
+      ]}
+      scrolled={true}
+    >
+      <Grid container item xs={12} spacing={2} textAlign='left'>
+        <Grid
+          item
+          xs={12}
+          paddingRight={paddingSeparator}
+          sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
         >
-          <Grid container item xs={12} spacing={2} textAlign='left'>
-            <Grid
-              item
-              xs={12}
-              paddingRight={paddingSeparator}
-              sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
-            >
-              <Textfield
-                id='germinatingQuantity'
-                value={record.germinatingQuantity}
-                onChange={(value) => onChange('germinatingQuantity', value)}
-                type='number'
-                label={strings.GERMINATING_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-                errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
-                min={0}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-              <Textfield
-                id='notReadyQuantity'
-                value={record.notReadyQuantity}
-                onChange={(value) => onChange('notReadyQuantity', value)}
-                type='number'
-                label={strings.NOT_READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
-                min={0}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-              <DatePicker
-                id='readyByDate'
-                label={strings.ESTIMATED_READY_DATE}
-                aria-label={strings.ESTIMATED_READY_DATE}
-                value={record.readyByDate}
-                onChange={(value) => changeDate('readyByDate', value)}
-                defaultTimeZone={timeZone}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-              <Textfield
-                id='readyQuantity'
-                value={record.readyQuantity}
-                onChange={(value) => onChange('readyQuantity', value)}
-                type='number'
-                label={strings.READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-                errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}
-                min={0}
-              />
-            </Grid>
+          <Textfield
+            id='germinatingQuantity'
+            value={record.germinatingQuantity}
+            onChange={(value) => onChange('germinatingQuantity', value)}
+            type='number'
+            label={strings.GERMINATING_QUANTITY_REQUIRED}
+            tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+            errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
+            min={0}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+          <Textfield
+            id='notReadyQuantity'
+            value={record.notReadyQuantity}
+            onChange={(value) => onChange('notReadyQuantity', value)}
+            type='number'
+            label={strings.NOT_READY_QUANTITY_REQUIRED}
+            tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
+            errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
+            min={0}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+          <DatePicker
+            id='readyByDate'
+            label={strings.ESTIMATED_READY_DATE}
+            aria-label={strings.ESTIMATED_READY_DATE}
+            value={record.readyByDate}
+            onChange={(value) => changeDate('readyByDate', value)}
+            defaultTimeZone={timeZone}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+          <Textfield
+            id='readyQuantity'
+            value={record.readyQuantity}
+            onChange={(value) => onChange('readyQuantity', value)}
+            type='number'
+            label={strings.READY_QUANTITY_REQUIRED}
+            tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
+            errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}
+            min={0}
+          />
+        </Grid>
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator} />
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-              <Textfield
-                id='totalQuantity'
-                value={numericFormatter.format(totalQuantity)}
-                type='text'
-                label={strings.TOTAL_QUANTITY}
-                display={true}
-                tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
-              />
-            </Grid>
-            <Grid item xs={12} sx={marginTop}>
-              <Divider />
-            </Grid>
+        <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator} />
+        <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+          <Textfield
+            id='totalQuantity'
+            value={numericFormatter.format(totalQuantity)}
+            type='text'
+            label={strings.TOTAL_QUANTITY}
+            display={true}
+            tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
+          />
+        </Grid>
+        <Grid item xs={12} sx={marginTop}>
+          <Divider />
+        </Grid>
 
-            <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()}>
-              <Dropdown
-                id='substrate'
-                label={strings.SUBSTRATE}
-                selectedValue={record.substrate}
-                options={nurserySubstrates()}
-                onChange={(value) => onChange('substrate', value)}
-                fullWidth={true}
-              />
-            </Grid>
-            <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
-              {record.substrate === strings.OTHER && (
-                <Textfield
-                  preserveNewlines={true}
-                  id='substrateNotes'
-                  value={record.substrateNotes}
-                  type='text'
-                  label=''
-                  onChange={(value) => onChange('substrateNotes', value)}
+        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()}>
+          <Dropdown
+            id='substrate'
+            label={strings.SUBSTRATE}
+            selectedValue={record.substrate}
+            options={nurserySubstrates()}
+            onChange={(value) => onChange('substrate', value)}
+            fullWidth={true}
+          />
+        </Grid>
+        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
+          {record.substrate === strings.OTHER && (
+            <Textfield
+              preserveNewlines={true}
+              id='substrateNotes'
+              value={record.substrateNotes}
+              type='text'
+              label=''
+              onChange={(value) => onChange('substrateNotes', value)}
+            />
+          )}
+        </Grid>
+        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()}>
+          <Dropdown
+            id='treatment'
+            label={strings.TREATMENT}
+            selectedValue={record.treatment}
+            options={treatments()}
+            onChange={(value) => onChange('treatment', value)}
+            fullWidth={true}
+          />
+        </Grid>
+        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
+          {record.treatment === strings.OTHER && (
+            <Textfield
+              id='treatmentNotes'
+              value={record.treatmentNotes}
+              type='text'
+              label=''
+              onChange={(value) => onChange('treatmentNotes', value)}
+            />
+          )}
+        </Grid>
+        <Grid item xs={12} sx={marginTop}>
+          <Divider />
+        </Grid>
+        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
+          <Textfield
+            id='notes'
+            value={record?.notes}
+            onChange={(value) => onChange('notes', value)}
+            type='textarea'
+            label={strings.NOTES}
+          />
+        </Grid>
+
+        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
+          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+            {strings.PHOTOS}
+          </Typography>
+          <Box display='flex' flexWrap='wrap' flexDirection='row'>
+            {photos.map((photo, index) => (
+              <Box
+                key={index}
+                display='flex'
+                position='relative'
+                height={122}
+                width={122}
+                marginRight={isMobile ? 2 : 3}
+                marginTop={1}
+                border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+                sx={{ cursor: 'pointer' }}
+              >
+                <Button
+                  icon='iconTrashCan'
+                  onClick={() => removePhoto(photo.id, index)}
+                  size='small'
+                  className={classes.removePhoto}
                 />
-              )}
-            </Grid>
-            <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()}>
-              <Dropdown
-                id='treatment'
-                label={strings.TREATMENT}
-                selectedValue={record.treatment}
-                options={treatments()}
-                onChange={(value) => onChange('treatment', value)}
-                fullWidth={true}
-              />
-            </Grid>
-            <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
-              {record.treatment === strings.OTHER && (
-                <Textfield
-                  id='treatmentNotes'
-                  value={record.treatmentNotes}
-                  type='text'
-                  label=''
-                  onChange={(value) => onChange('treatmentNotes', value)}
-                />
-              )}
-            </Grid>
-            <Grid item xs={12} sx={marginTop}>
-              <Divider />
-            </Grid>
-            <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
-              <Textfield
-                id='notes'
-                value={record?.notes}
-                onChange={(value) => onChange('notes', value)}
-                type='textarea'
-                label={strings.NOTES}
-              />
-            </Grid>
-
-            <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
-              <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-                {strings.PHOTOS}
-              </Typography>
-              <Box display='flex' flexWrap='wrap' flexDirection='row'>
-                {photos.map((photo, index) => (
-                  <Box
-                    key={index}
-                    display='flex'
-                    position='relative'
-                    height={122}
-                    width={122}
-                    marginRight={isMobile ? 2 : 3}
-                    marginTop={1}
-                    border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-                    sx={{ cursor: 'pointer' }}
-                  >
-                    <Button
-                      icon='iconTrashCan'
-                      onClick={() => removePhoto(photo.id, index)}
-                      size='small'
-                      className={classes.removePhoto}
-                    />
-                    <img
-                      className={classes.thumbnail}
-                      src={`${photo.url}?maxHeight=120&maxWidth=120`}
-                      alt={`${index}`}
-                    />
-                  </Box>
-                ))}
+                <img className={classes.thumbnail} src={`${photo.url}?maxHeight=120&maxWidth=120`} alt={`${index}`} />
               </Box>
-            </Grid>
-            <Container maxWidth={false}>
-              <SelectPhotos onPhotosChanged={onPhotosChanged} multipleSelection={true} />
-            </Container>
-          </Grid>
-        </DialogBox>
-      )}
-    </>
-  );
+            ))}
+          </Box>
+        </Grid>
+        <Container maxWidth={false}>
+          <SelectPhotos onPhotosChanged={onPhotosChanged} multipleSelection={true} />
+        </Container>
+      </Grid>
+    </DialogBox>
+  ) : null;
 }
