@@ -2,7 +2,7 @@ import { Grid, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
 import OverviewItemCard from '../common/OverviewItemCard';
-import { SeedBankService } from 'src/services';
+import { SubLocationService } from 'src/services';
 import { useEffect, useState } from 'react';
 
 interface BatchSummaryProps {
@@ -17,7 +17,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   useEffect(() => {
     const setLocations = async () => {
       if (batch?.facilityId) {
-        const response = await SeedBankService.getSubLocations(Number(batch.facilityId));
+        const response = await SubLocationService.getSubLocations(Number(batch.facilityId));
         if (response.requestSucceeded) {
           const nurserySLs: string[] = [];
           batch.subLocationIds.forEach((subLocId) => {

@@ -9,7 +9,7 @@ import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
-import { FacilityService, SeedBankService, SubLocationService } from 'src/services';
+import { FacilityService, SubLocationService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -92,7 +92,7 @@ export default function SeedBankView(): JSX.Element {
      * Find existing locations and pick out the ones to delete, create and update.
      * Use bulk API to delete, create, update.
      */
-    const response = await SeedBankService.getSubLocations(facilityId);
+    const response = await SubLocationService.getSubLocations(facilityId);
     if (response.requestSucceeded) {
       const { subLocations } = response;
       const toDelete = _.differenceWith(subLocations, editedSubLocations, isEqual);
@@ -113,7 +113,7 @@ export default function SeedBankView(): JSX.Element {
       }
       if (toCreate.length) {
         promises.push(
-          SeedBankService.createSubLocations(
+          SubLocationService.createSubLocations(
             facilityId,
             toCreate.map((l) => l.name as string)
           )

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import strings from 'src/strings';
-import { SeedBankService } from 'src/services';
+import { SubLocationService } from 'src/services';
 import { DEFAULT_SUB_LOCATIONS, PartialSubLocation } from 'src/types/Facility';
 import { useLocalization } from 'src/providers';
 import Table from 'src/components/common/table';
@@ -42,7 +42,7 @@ export default function SubLocations({ seedBankId, onEdit }: SublocationsProps):
 
   useEffect(() => {
     const fetchSubLocations = async () => {
-      const response = await SeedBankService.getSubLocations(seedBankId!);
+      const response = await SubLocationService.getSubLocations(seedBankId!);
       if (response.requestSucceeded) {
         if (activeLocale) {
           const collator = new Intl.Collator(activeLocale);
