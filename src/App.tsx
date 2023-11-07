@@ -321,7 +321,7 @@ function AppContent() {
               <OptInFeatures refresh={reloadPreferences} />
             </Route>
           )}
-          <Route path='/'>
+          <Route path='*'>
             <Redirect to={APP_PATHS.WELCOME} />
           </Route>
         </Switch>
@@ -553,7 +553,7 @@ function AppContent() {
             <Route path={APP_PATHS.SPECIES + '/'}>
               <Redirect to={APP_PATHS.SPECIES} />
             </Route>
-            <Route path='/'>
+            <Route path='*'>
               <Redirect to={APP_PATHS.HOME} />
             </Route>
           </Switch>
