@@ -4,7 +4,7 @@ import Card from 'src/components/common/Card';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { makeStyles } from '@mui/styles';
 import { useEffect, useState } from 'react';
-import Table from '../common/table';
+import Table from 'src/components/common/table';
 import { TableColumnType } from '@terraware/web-components';
 import { NurseryBatchService, OrganizationUserService } from 'src/services';
 import { BatchHistoryItem } from 'src/types/Batch';
@@ -12,6 +12,7 @@ import { User } from 'src/types/User';
 import { useOrganization } from 'src/providers';
 import BatchHistoryRenderer from './BatchHistoryRenderer';
 import EventDetailsModal from './EventDetailsModal';
+import { getUserDisplayName } from 'src/utils/user';
 
 const useStyles = makeStyles((theme: Theme) => ({
   searchField: {
@@ -40,7 +41,7 @@ export default function BatchHistory({ batchId }: BatchHistoryProps): JSX.Elemen
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState('');
   const [results, setResults] = useState<BatchHistoryItemWithUser[] | null>();
-  const [users, setUsers] = useState<User[]>();
+  const [users, setUsers] = useState<Record<number, User> | undefined>();
   const { selectedOrganization } = useOrganization();
   const [selectedEvent, setSelectedEvent] = useState<any>();
   const [openEventDetailsModal, setOpenEventDetailsModal] = useState<boolean>(false);
@@ -49,7 +50,11 @@ export default function BatchHistory({ batchId }: BatchHistoryProps): JSX.Elemen
     const fetchUsers = async () => {
       const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
       if (response.requestSucceeded) {
-        setUsers(response.users);
+        const usersById: Record<number, User> = {};
+        for (const user of response.users ?? []) {
+          usersById[user.id] = user;
+        }
+        setUsers(usersById);
       }
     };
     fetchUsers();
@@ -62,8 +67,8 @@ export default function BatchHistory({ batchId }: BatchHistoryProps): JSX.Elemen
         if (response.requestSucceeded) {
           const historyItemsWithUsers =
             response.history?.map((historyItem) => {
-              const userSelected = users?.find((user) => user.id === historyItem.createdBy);
-              return { ...historyItem, editedByName: `${userSelected?.firstName} ${userSelected?.lastName}` };
+              const userSelected = users[historyItem.createdBy];
+              return { ...historyItem, editedByName: getUserDisplayName(userSelected) || '' };
             }) || null;
           setResults(historyItemsWithUsers);
         }

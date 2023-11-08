@@ -48,7 +48,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         </Grid>
         <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
-            id='seedlingsBatch'
+            id='editedByName'
             value={selectedEvent.editedByName}
             type='text'
             label={strings.EDITED_BY}
@@ -60,7 +60,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         </Grid>
         <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
-            id='seedlingsBatch'
+            id='germinationQuantityBefore'
             value={selectedEvent.editedByName}
             type='text'
             label={strings.GERMINATION_QUANTITY_BEFORE}
@@ -69,7 +69,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         </Grid>
         <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
-            id='seedlingsBatch'
+            id='germinationQuantityAfter'
             value={selectedEvent.editedByName}
             type='text'
             label={strings.GERMINATION_QUANTITY_AFTER}
@@ -81,7 +81,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         </Grid>
         <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
-            id='seedlingsBatch'
+            id='substrateBefore'
             value={selectedEvent.editedByName}
             type='text'
             label={strings.SUBSTRATE_BEFORE}
@@ -90,7 +90,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         </Grid>
         <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
-            id='seedlingsBatch'
+            id='substrateAfter'
             value={selectedEvent.editedByName}
             type='text'
             label={strings.SUBSTRATE_AFTER}
@@ -103,7 +103,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         </Grid>
         <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
-            id='seedlingsBatch'
+            id='notesBefore'
             value={selectedEvent.editedByName}
             type='text'
             label={strings.NOTES_BEFORE}
@@ -112,7 +112,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         </Grid>
         <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
-            id='seedlingsBatch'
+            id='notesAfter'
             value={selectedEvent.editedByName}
             type='text'
             label={strings.NOTES_AFTER}
