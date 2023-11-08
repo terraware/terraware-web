@@ -1,5 +1,5 @@
-import { SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import SearchService, { SearchRequestPayload } from 'src/services/SearchService';
+import { SearchCriteria, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import SearchService from 'src/services/SearchService';
 import HttpService, { Response } from './HttpService';
 import { UpdatePlantingSubzonePayload } from 'src/types/PlantingSite';
 

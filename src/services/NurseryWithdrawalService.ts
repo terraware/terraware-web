@@ -2,8 +2,14 @@ import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
-import SearchService, { SearchRequestPayload } from './SearchService';
-import { FieldOptionsMap, SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import SearchService from './SearchService';
+import {
+  FieldOptionsMap,
+  SearchNodePayload,
+  SearchRequestPayload,
+  SearchResponseElement,
+  SearchSortOrder,
+} from 'src/types/Search';
 import strings from 'src/strings';
 import PhotoService from './PhotoService';
 
@@ -74,7 +80,7 @@ const uploadWithdrawalPhotos = async (
  */
 const listNurseryWithdrawals = async (
   organizationId: number,
-  searchCriteria: SearchCriteria,
+  searchCriteria: SearchNodePayload[],
   sortOrder?: SearchSortOrder
 ): Promise<SearchResponseElement[] | null> => {
   const searchParams: SearchRequestPayload = {

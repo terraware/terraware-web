@@ -3,7 +3,7 @@ import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { TrackingService } from 'src/services';
-import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { OrNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -32,7 +32,7 @@ export default function PlantingSitesList(): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
   const onSearch = useCallback(async () => {
-    const searchField = debouncedSearchTerm
+    const searchField: OrNodePayload | undefined = debouncedSearchTerm
       ? {
           operation: 'or',
           children: [

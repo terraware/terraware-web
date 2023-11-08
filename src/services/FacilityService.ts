@@ -2,7 +2,7 @@ import strings from 'src/strings';
 import { paths } from 'src/api/types/generated-schema';
 import { Organization } from 'src/types/Organization';
 import { Facility, FacilityType } from 'src/types/Facility';
-import { SearchNodePayload } from 'src/types/Search';
+import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import SearchService from './SearchService';
 import HttpService, { Response } from './HttpService';
 import { getAllSeedBanks, getAllNurseries } from 'src/utils/organization';
@@ -112,7 +112,7 @@ const updateFacility = async (facility: Facility): Promise<Response> => {
  */
 const getFacilities = async ({ type, organizationId, query }: FacilitySearchParams): Promise<Facilities> => {
   const typeVal = type === 'Seed Bank' ? strings.SEED_BANK : strings.NURSERY;
-  const searchField = query
+  const searchField: OrNodePayload | null = query
     ? {
         operation: 'or',
         children: [
@@ -122,7 +122,7 @@ const getFacilities = async ({ type, organizationId, query }: FacilitySearchPara
       }
     : null;
 
-  const params: SearchNodePayload = {
+  const params: SearchRequestPayload = {
     prefix: 'facilities',
     fields: [
       'id',

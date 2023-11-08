@@ -1,8 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 import HttpService, { Response } from './HttpService';
-import SearchService, { SearchRequestPayload } from './SearchService';
-import { SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import SearchService from './SearchService';
+import { SearchCriteria, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 
 /**
@@ -150,9 +150,10 @@ const getPendingAccessions = async (organizationId: number): Promise<SearchRespo
     search: SearchService.convertToSearchNodePayload(
       [
         {
-          field: 'state',
-          values: [strings.AWAITING_CHECK_IN],
           operation: 'field',
+          field: 'state',
+          type: 'Exact',
+          values: [strings.AWAITING_CHECK_IN],
         },
       ],
       organizationId

@@ -137,7 +137,7 @@ export default function Filters(props: Props): JSX.Element {
     const result: PillListItem<string>[] = [];
     const preExpFilterPill: PillListItem<string> = filters[preExpFilterKey] && {
       id: preExpFilterKey,
-      label: preExpFilterColumn.name,
+      label: preExpFilterColumn.name as string,
       value: filters[preExpFilterKey].values.join(', '),
     };
     if (preExpFilterPill) {

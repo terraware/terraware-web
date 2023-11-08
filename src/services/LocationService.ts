@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { Country } from 'src/types/Country';
 import HttpService, { Response } from './HttpService';
-import SearchService, { SearchRequestPayload } from './SearchService';
+import SearchService, { RawSearchRequestPayload } from './SearchService';
 import { SearchResponseElement } from 'src/types/Search';
 
 const TIMEZONES_ENDPOINT = '/api/v1/i18n/timeZones';
@@ -35,7 +35,7 @@ export const getTimeZones = async (): Promise<TimeZonesResponse> => {
  * Return countries list from BE database
  */
 const getCountries = async (): Promise<Country[] | null> => {
-  const params: SearchRequestPayload = {
+  const params: RawSearchRequestPayload = {
     prefix: 'country',
     fields: ['code', 'name', 'subdivisions.code', 'subdivisions.name'],
     sortOrder: [{ field: 'name' }, { field: 'subdivisions.name' }],

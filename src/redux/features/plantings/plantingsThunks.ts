@@ -6,7 +6,7 @@ import { setPlantingsAction } from './plantingsSlice';
 export const requestPlantings = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
-      const response = await PlantingsService.listPlantings(organizationId, []);
+      const response = await PlantingsService.listPlantings(organizationId, {});
       const plantings = response?.flatMap((r) => (r as any).delivery.plantings);
       dispatch(setPlantingsAction({ plantings }));
     } catch (e) {

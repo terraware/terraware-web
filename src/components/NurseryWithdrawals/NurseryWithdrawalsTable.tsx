@@ -9,7 +9,15 @@ import { APP_PATHS } from 'src/constants';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { NurseryWithdrawalService } from 'src/services';
-import { FieldNodePayload, FieldOptionsMap, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import {
+  AndNodePayload,
+  FieldNodePayload,
+  FieldOptionsMap,
+  OrNodePayload,
+  SearchNodePayload,
+  SearchResponseElement,
+  SearchSortOrder,
+} from 'src/types/Search';
 import WithdrawalLogRenderer from './WithdrawalLogRenderer';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -125,7 +133,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   };
 
   const getSearchChildren = useCallback(() => {
-    const finalSearchValueChildren: FieldNodePayload[] = [];
+    const finalSearchValueChildren: SearchNodePayload[] = [];
     const searchValueChildren: FieldNodePayload[] = [];
     if (debouncedSearchTerm) {
       const fromNurseryNode: FieldNodePayload = {
@@ -153,16 +161,16 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       searchValueChildren.push(speciesNameNode);
     }
 
-    const filterValueChildren: FieldNodePayload[] = [...Object.values(filters)];
+    const filterValueChildren: SearchNodePayload[] = [...Object.values(filters)];
 
     if (searchValueChildren.length) {
-      const searchValueNodes: FieldNodePayload = {
+      const searchValueNodes: OrNodePayload = {
         operation: 'or',
         children: searchValueChildren,
       };
 
       if (filterValueChildren.length) {
-        const filterValueNodes: FieldNodePayload = {
+        const filterValueNodes: AndNodePayload = {
           operation: 'and',
           children: filterValueChildren,
         };
@@ -175,7 +183,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         finalSearchValueChildren.push(searchValueNodes);
       }
     } else if (filterValueChildren.length) {
-      const filterValueNodes: FieldNodePayload = {
+      const filterValueNodes: AndNodePayload = {
         operation: 'and',
         children: filterValueChildren,
       };
@@ -185,7 +193,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [filters, debouncedSearchTerm]);
 
   const onApplyFilters = useCallback(async () => {
-    const searchChildren: FieldNodePayload[] = getSearchChildren();
+    const searchChildren: SearchNodePayload[] = getSearchChildren();
     const requestId = Math.random().toString();
     setRequestId('searchWithdrawals', requestId);
     const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(

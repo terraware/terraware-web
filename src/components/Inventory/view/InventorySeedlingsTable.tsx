@@ -4,7 +4,7 @@ import { Typography, Grid, Box, useTheme } from '@mui/material';
 import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
-import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -65,7 +65,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const getSearchFields = useCallback(() => {
     // Skip fuzzy search on empty strings since the query will be
     // expensive and results will be the same as not adding the fuzzy search
-    const fields = debouncedSearchTerm
+    const fields: FieldNodePayload[] = debouncedSearchTerm
       ? [
           {
             operation: 'field',
