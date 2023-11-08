@@ -13,12 +13,7 @@ import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../common/Textfield/Textfield';
 import SearchService from 'src/services/SearchService';
-import {
-  FieldNodePayload,
-  FieldOptionsMap,
-  SearchRequestPayload,
-  SearchSortOrder,
-} from 'src/types/Search';
+import { FieldNodePayload, FieldOptionsMap, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
 import ImportSpeciesModal from './ImportSpeciesModal';
