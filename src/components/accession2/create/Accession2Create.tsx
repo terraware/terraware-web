@@ -34,7 +34,7 @@ const SubTitleStyle = {
 
 const MANDATORY_FIELDS = ['speciesId', 'collectedDate', 'receivedDate', 'state', 'facilityId'] as const;
 
-type MandatoryField = typeof MANDATORY_FIELDS[number];
+type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
 export default function CreateAccession(): JSX.Element {
   const { isMobile } = useDeviceInfo();

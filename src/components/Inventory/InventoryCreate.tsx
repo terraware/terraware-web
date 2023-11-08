@@ -31,7 +31,7 @@ const MANDATORY_FIELDS = [
   'readyQuantity',
 ] as const;
 
-type MandatoryField = typeof MANDATORY_FIELDS[number];
+type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
 export default function CreateInventory(): JSX.Element {
   const { isMobile } = useDeviceInfo();
