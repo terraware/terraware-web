@@ -70,7 +70,7 @@ export default function SingleSelection(props: Props): JSX.Element {
   return (
     <div id={`filter-list-${props.field}`} className={classes.box}>
       <Dropdown
-        options={options.map(({ label, value }) => ({ label, value } as DropdownItem))}
+        options={options.map(({ label, value }) => ({ label, value }) as DropdownItem)}
         onChange={(val) => handleChange(val)}
         selectedValue={props.value}
         fullWidth={true}

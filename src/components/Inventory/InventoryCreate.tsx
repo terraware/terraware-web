@@ -58,7 +58,7 @@ export default function CreateInventory(): JSX.Element {
       germinatingQuantity: undefined,
       notReadyQuantity: undefined,
       readyQuantity: undefined,
-    } as unknown as CreateBatchRequestPayload);
+    }) as unknown as CreateBatchRequestPayload;
 
   const [record, setRecord, onChange] = useForm<CreateBatchRequestPayload>(defaultBatch());
 
