@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import TextField from '../common/Textfield/Textfield';
+import TextField from 'src/components/common/Textfield/Textfield';
 import { PartialSubLocation } from 'src/types/Facility';
 
 export interface AddEditSubLocationProps {

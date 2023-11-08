@@ -11,7 +11,7 @@ import SubLocationsCellRenderer from './SubLocationsCellRenderer';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { Button } from '@terraware/web-components';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import AddEditSubLocationModal from '.AddEditSubLocationModal';
+import AddEditSubLocationModal from './AddEditSubLocationModal';
 import _ from 'lodash';
 
 export type FacilityType = 'seedbank' | 'nursery';
@@ -20,7 +20,7 @@ export type SublocationsProps = {
   facilityType: FacilityType;
   facilityId?: number;
   onEdit?: (subLocations: PartialSubLocation[]) => void;
-  renderLink?: (facilityId: number, subLocationId: number) => string;
+  renderLink?: (facilityId: number, subLocationName: string) => string;
 };
 
 const subLocationWith = (name: string, id: number, facilityType: FacilityType) => ({
@@ -30,20 +30,23 @@ const subLocationWith = (name: string, id: number, facilityType: FacilityType) =
   activeBatches: facilityType === 'nursery' ? 0 : undefined,
 });
 
-const baseColumn = (): TableColumnType => (
-  { key: 'name', name: strings.NAME, type: 'string' },
-);
+const baseColumn = (): TableColumnType => ({ key: 'name', name: strings.NAME, type: 'string' });
 
-const seedBankColumn = (): TableColumnType => (
-  { key: 'activeAccessions', name: strings.ACTIVE_ACCESSIONS, type: 'number' },
-);
+const seedBankColumn = (): TableColumnType => ({
+  key: 'activeAccessions',
+  name: strings.ACTIVE_ACCESSIONS,
+  type: 'number',
+});
 
-const nurseryColumn = (): TableColumnType => (
-  { key: 'activeBatches', name: strings.BATCHES, type: 'number' },
-);
+const nurseryColumn = (): TableColumnType => ({ key: 'activeBatches', name: strings.BATCHES, type: 'number' });
 
-export default function SubLocations({ faciliyType, facilityId, onEdit, renderLink }: SublocationsProps): JSX.Element | null {
-  const isSeedbank = facilityType == 'seedbank';
+export default function SubLocations({
+  facilityType,
+  facilityId,
+  onEdit,
+  renderLink,
+}: SublocationsProps): JSX.Element | null {
+  const isSeedbank = facilityType === 'seedbank';
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const numberFormatter = useNumberFormatter();
@@ -57,9 +60,7 @@ export default function SubLocations({ faciliyType, facilityId, onEdit, renderLi
     if (!activeLocale) {
       return [];
     }
-    return [
-      ...baseColumn(),
-      isSeedbank ? ...seedBankColumn() : ...nurseryColumn(),
+    return [baseColumn(), isSeedbank ? seedBankColumn() : nurseryColumn()];
   }, [activeLocale, isSeedbank]);
 
   useEffect(() => {
@@ -76,9 +77,9 @@ export default function SubLocations({ faciliyType, facilityId, onEdit, renderLi
     if (facilityId) {
       fetchSubLocations();
     } else if (isSeedbank) {
-      setSubLocations(DEFAULT_SUB_LOCATIONS().map((name, index) => subLocationWith(name, index)));
+      setSubLocations(DEFAULT_SUB_LOCATIONS().map((name, index) => subLocationWith(name, index, facilityType)));
     }
-  }, [facilityId, activeLocale, isSeedbank]);
+  }, [facilityId, activeLocale, isSeedbank, facilityType]);
 
   const getTopBarButtons = () => {
     const topBarButtons: TopBarButton[] = [
@@ -87,7 +88,8 @@ export default function SubLocations({ faciliyType, facilityId, onEdit, renderLi
         buttonText: strings.DELETE,
         // we don't want to delete locations that have active data
         disabled: selectedRows.some((location) => location.activeAccessions || location.activeBatches),
-        onButtonClick: () => deleteSubLocations(selectedRows.filter((location) => !(location.activeAccessions || location.activeBatches))),
+        onButtonClick: () =>
+          deleteSubLocations(selectedRows.filter((location) => !(location.activeAccessions || location.activeBatches))),
       },
     ];
 

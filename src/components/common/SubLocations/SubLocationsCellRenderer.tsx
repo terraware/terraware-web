@@ -2,18 +2,17 @@ import React from 'react';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
-import { ActiveStatuses } from 'src/types/Accession';
 import { NumericFormatter } from 'src/types/Number';
 
 export type SubLocationsCellRendererProps = {
   facilityId?: number;
   numericFormatter: NumericFormatter;
   editMode: boolean;
-  renderLink?: (facilityId: number, subLocationId: number) => string;
+  renderLink?: (facilityId: number, subLocationName: string) => string;
 };
 
 export default function SubLocationsCellRenderer({
-  seedBankId,
+  facilityId,
   numericFormatter,
   editMode,
   renderLink,
@@ -27,30 +26,22 @@ export default function SubLocationsCellRenderer({
       }
     };
 
-    const createLinkToAccessions = (locationName: string, data: string) => {
-      const to = [
-        `${APP_PATHS.ACCESSIONS}/?`,
-        `subLocationName=${encodeURIComponent(locationName)}`,
-        `facilityId=${seedBankId}`,
-        ...ActiveStatuses().map((status) => `stage=${status}`),
-      ].join('&');
-
-      return <Link to={to}>{data}</Link>;
+    const createLinkToData = (locationName: string, data: string) => {
+      if (!renderLink || !facilityId) {
+        return data;
+      }
+      return <Link to={renderLink(facilityId, locationName)}>{data}</Link>;
     };
 
     const createLinkToName = (locationName: string) => {
       return <Link onClick={rowClick}>{locationName}</Link>;
     };
 
-    if (column.key === 'activeAccessions') {
-      const activeAccessionsStr = numericFormatter.format(value as number);
+    if (column.key === 'activeAccessions' || column.key === 'activeBatches') {
+      const activeDataStr = numericFormatter.format(value as number);
+      const data = editMode ? activeDataStr : createLinkToData(row.name, activeDataStr);
 
-      return (
-        <CellRenderer
-          {...props}
-          value={editMode ? activeAccessionsStr : createLinkToAccessions(row.name as string, activeAccessionsStr)}
-        />
-      );
+      return <CellRenderer {...props} value={data} />;
     }
 
     if (column.key === 'name') {
