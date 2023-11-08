@@ -32,7 +32,7 @@ describe('Nursery withdrawals service', () => {
         ])
       );
 
-      expect(await NurseryWithdrawalService.listNurseryWithdrawals(1, {})).toEqual([
+      expect(await NurseryWithdrawalService.listNurseryWithdrawals(1, [])).toEqual([
         {
           id: '56',
           delivery_id: '24',
@@ -50,14 +50,14 @@ describe('Nursery withdrawals service', () => {
 
     it('should handle multiple items in the results list', async () => {
       search.mockImplementation(() => Promise.resolve(readData('nurseryWithdrawalsRaw.json')));
-      expect(await NurseryWithdrawalService.listNurseryWithdrawals(1, {})).toEqual(
+      expect(await NurseryWithdrawalService.listNurseryWithdrawals(1, [])).toEqual(
         readData('nurseryWithdrawalsProcessed.json')
       );
     });
 
     it('should return null if search returned null data due to an error', async () => {
       search.mockImplementation(() => Promise.resolve(null));
-      expect(await NurseryWithdrawalService.listNurseryWithdrawals(1, {})).toBe(null);
+      expect(await NurseryWithdrawalService.listNurseryWithdrawals(1, [])).toBe(null);
     });
   });
 

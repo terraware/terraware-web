@@ -2812,7 +2812,7 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     /** @description A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
-    SearchNodePayload: any;
+    SearchNodePayload: {operation: "and" | "field" | "not" | "or"; [key: string]: any;};
     SearchRequestPayload: {
       /**
        * Format: int32

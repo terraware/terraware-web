@@ -22,7 +22,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TextField from '../common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
-import { SearchNodePayload } from 'src/types/Search';
+import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { SearchService } from 'src/services';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { useUser, useOrganization, useLocalization } from 'src/providers/hooks';
@@ -83,7 +83,7 @@ export default function PeopleList(): JSX.Element {
 
   const search = useCallback(
     async (searchTerm: string, skipTfContact = false) => {
-      const searchField = searchTerm
+      const searchField: OrNodePayload | null = searchTerm
         ? {
             operation: 'or',
             children: [
@@ -93,7 +93,7 @@ export default function PeopleList(): JSX.Element {
           }
         : null;
 
-      const params: SearchNodePayload = {
+      const params: SearchRequestPayload = {
         prefix: 'members',
         fields: ['user_id', 'user_firstName', 'user_lastName', 'user_email', 'roleName', 'createdTime'],
         search: {

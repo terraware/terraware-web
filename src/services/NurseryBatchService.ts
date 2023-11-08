@@ -2,7 +2,7 @@ import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { Batch, CreateBatchRequestPayload } from 'src/types/Batch';
 import SearchService from './SearchService';
-import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getPromisesResponse } from './utils';
 import PhotoService from './PhotoService';
 
@@ -121,6 +121,7 @@ const getBatches = async (organizationId: number, batchIds: number[]): Promise<S
         children: {
           operation: 'field',
           field: 'id',
+          type: 'Exact',
           values: batchIds.map((id) => id.toString()),
         },
       },
@@ -147,6 +148,7 @@ const getBatchIdsForSpecies = async (
         children: {
           operation: 'field',
           field: 'species_id',
+          type: 'Exact',
           values: speciesIds.map((id) => id.toString()),
         },
       },
@@ -169,7 +171,7 @@ const getBatchesForSpeciesById = async (
   searchSortOrder?: SearchSortOrder,
   isExport?: boolean
 ): Promise<any> => {
-  const searchParams = {
+  const searchParams: SearchRequestPayload = {
     prefix: 'batches',
     search: {
       operation: 'and',

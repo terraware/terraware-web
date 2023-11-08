@@ -13,7 +13,7 @@ import fs from 'fs';
       // access to that within the formatter function. Instead, we check for a
       // keyword that's hardcoded on the server side.
       if (node.description != null && node.description.includes('TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY')) {
-        return 'any';
+        return '{operation: "and" | "field" | "not" | "or"; [key: string]: any;}';
       }
       if (node.description != null && node.description.includes('GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE')) {
         console.log(node);

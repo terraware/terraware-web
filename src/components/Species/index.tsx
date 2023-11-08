@@ -12,8 +12,14 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../common/Textfield/Textfield';
-import SearchService, { SearchRequestPayload } from 'src/services/SearchService';
-import { FieldNodePayload, FieldOptionsMap, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import SearchService from 'src/services/SearchService';
+import {
+  FieldNodePayload,
+  FieldOptionsMap,
+  SearchNodePayload,
+  SearchRequestPayload,
+  SearchSortOrder,
+} from 'src/types/Search';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
 import ImportSpeciesModal from './ImportSpeciesModal';
@@ -370,7 +376,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const { isMobile } = useDeviceInfo();
 
   const getParams = useCallback(() => {
-    const params: SearchNodePayload = {
+    const params: SearchRequestPayload = {
       prefix: 'species',
       fields: [...BE_SORTED_FIELDS, 'id', 'rare', 'ecosystemTypes.ecosystemType', 'organization_id'],
       search: {
@@ -459,7 +465,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
 
   const onApplyFilters = useCallback(
     async (reviewErrors?: boolean) => {
-      const params: SearchNodePayload = getParams();
+      const params: SearchRequestPayload = getParams();
 
       if (species) {
         // organization id filter will always exist
@@ -571,9 +577,6 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
 
   const downloadReportHandler = async () => {
     const params = getParams();
-    if (!params.search.children.length) {
-      params.search = null;
-    }
     params.fields = CSV_FIELDS;
     const apiResponse = await SearchService.searchCsv(params);
 

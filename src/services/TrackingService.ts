@@ -3,7 +3,7 @@ import HttpService, { Response } from './HttpService';
 import { Delivery, PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 import { PlantingSiteZone, Population } from 'src/types/PlantingSite';
 import SearchService from './SearchService';
-import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
+import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 /**
@@ -173,7 +173,7 @@ const reassignPlantings = async (deliveryId: number, reassignments: ReassignPost
 };
 
 // helper to get search criteria
-const getSearchCriteria = (organizationId: number, siteId: number): SearchCriteria => ({
+const getSearchNode = (organizationId: number, siteId: number): SearchNodePayload => ({
   children: [
     {
       operation: 'field',
@@ -205,7 +205,7 @@ const getTotalPlantsInZones = async (organizationId: number, siteId: number): Pr
       'id',
       'name',
     ],
-    search: getSearchCriteria(organizationId, siteId),
+    search: getSearchNode(organizationId, siteId),
     count: 0,
   })) as PlantingSiteZone[] | null;
 };
@@ -217,7 +217,7 @@ const getTotalPlantsInSite = async (organizationId: number, siteId: number): Pro
   return (await SearchService.search({
     prefix: 'plantingSites.populations',
     fields: ['species_scientificName', 'totalPlants(raw)'],
-    search: getSearchCriteria(organizationId, siteId),
+    search: getSearchNode(organizationId, siteId),
     count: 0,
   })) as unknown as Population[] | null;
 };
@@ -246,7 +246,7 @@ const getReportedPlants = async (plantingSiteId: number): Promise<SiteReportedPl
  */
 async function searchPlantingSites(
   organizationId: number,
-  searchField?: SearchFieldType,
+  searchField?: SearchNodePayload,
   sortOrder?: SearchSortOrder
 ): Promise<PlantingSiteSearchResult[] | null> {
   const defaultSortOrder = {
@@ -254,7 +254,7 @@ async function searchPlantingSites(
     direction: 'Ascending',
   } as SearchSortOrder;
 
-  const params = {
+  const params: SearchRequestPayload = {
     fields: [
       'boundary',
       'id',
@@ -281,8 +281,7 @@ async function searchPlantingSites(
   };
 
   if (searchField) {
-    const children: any = params.search.children;
-    children.push(searchField);
+    params.search.children.push(searchField);
   }
 
   return (await SearchService.search(params)) as PlantingSiteSearchResult[];
@@ -300,7 +299,7 @@ async function searchMonitoringPlots(
     direction: 'Ascending',
   } as SearchSortOrder;
 
-  const params = {
+  const params: SearchRequestPayload = {
     fields: ['id', 'fullName'],
     prefix: 'plantingSites.plantingZones.plantingSubzones.monitoringPlots',
     sortOrder: [defaultSortOrder],
