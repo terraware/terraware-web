@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/SeedBank/SubLocationsCellRenderer.tsx</title>
+    <title>Code coverage report for src/components/common/SubLocations/SubLocationsCellRenderer.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../prettify.css" />
-    <link rel="stylesheet" href="../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../sort-arrow-sprite.png);
+            background-image: url(../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/SeedBank</a> SubLocationsCellRenderer.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/common/SubLocations</a> SubLocationsCellRenderer.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -118,15 +118,7 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,11 +148,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -171,13 +159,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -190,23 +174,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
-import { ActiveStatuses } from 'src/types/Accession';
 import { NumericFormatter } from 'src/types/Number';
 &nbsp;
 export type SubLocationsCellRendererProps = {
-  seedBankId?: number;
+  facilityId?: number;
   numericFormatter: NumericFormatter;
   editMode: boolean;
+  renderLink?: (facilityId: number, subLocationName: string) =&gt; string;
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >SubLocationsCellRenderer(</span>{
-  seedBankId,
+  facilityId,
   numericFormatter,
   editMode,
+  renderLink,
 }: SubLocationsCellRendererProps) {
 <span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >(p</span>rops: RendererProps&lt;TableRowType&gt;): JSX.Element =&gt; {</span>
     const { column, value, row, onRowClick } = <span class="cstat-no" title="statement not covered" >props;</span>
@@ -217,30 +201,22 @@ export default function <span class="fstat-no" title="function not covered" >Sub
       }
     };
 &nbsp;
-    const createLinkToAccessions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocationName: string, data: string) =&gt; {</span>
-      const to = <span class="cstat-no" title="statement not covered" >[</span>
-        `${APP_PATHS.ACCESSIONS}/?`,
-        `subLocationName=${encodeURIComponent(locationName)}`,
-        `facilityId=${seedBankId}`,
-        ...ActiveStatuses().map(<span class="fstat-no" title="function not covered" >(s</span>tatus) =&gt; <span class="cstat-no" title="statement not covered" >`stage=${status}`)</span>,
-      ].join('&amp;');
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      return &lt;Link to={to}&gt;{data}&lt;/Link&gt;;</span>
+    const createLinkToData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocationName: string, data: string) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (!renderLink || !facilityId) {</span>
+<span class="cstat-no" title="statement not covered" >        return data;</span>
+      }
+<span class="cstat-no" title="statement not covered" >      return &lt;Link to={renderLink(facilityId, locationName)}&gt;{data}&lt;/Link&gt;;</span>
     };
 &nbsp;
     const createLinkToName = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>ocationName: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      return &lt;Link onClick={rowClick}&gt;{locationName}&lt;/Link&gt;;</span>
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (column.key === 'activeAccessions') {</span>
-      const activeAccessionsStr = <span class="cstat-no" title="statement not covered" >numericFormatter.format(value as number);</span>
+<span class="cstat-no" title="statement not covered" >    if (column.key === 'activeAccessions' || column.key === 'activeBatches') {</span>
+      const activeDataStr = <span class="cstat-no" title="statement not covered" >numericFormatter.format(value as number);</span>
+      const data = <span class="cstat-no" title="statement not covered" >editMode ? activeDataStr : createLinkToData(row.name, activeDataStr);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return (</span>
-        &lt;CellRenderer
-          {...props}
-          value={editMode ? activeAccessionsStr : createLinkToAccessions(row.name as string, activeAccessionsStr)}
-        /&gt;
-      );
+<span class="cstat-no" title="statement not covered" >      return &lt;CellRenderer {...props} value={data} /&gt;;</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (column.key === 'name') {</span>
@@ -259,16 +235,16 @@ export default function <span class="fstat-no" title="function not covered" >Sub
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-08T15:42:00.866Z
+                at 2023-11-08T16:26:25.901Z
             </div>
-        <script src="../../../prettify.js"></script>
+        <script src="../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../sorter.js"></script>
-        <script src="../../../block-navigation.js"></script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
     </body>
 </html>
     
