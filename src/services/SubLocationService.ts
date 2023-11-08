@@ -1,5 +1,6 @@
+import _ from 'lodash';
 import { paths } from 'src/api/types/generated-schema';
-import { SubLocation } from 'src/types/Facility';
+import { PartialSubLocation, SubLocation } from 'src/types/Facility';
 import { Id } from 'src/types/Id';
 import HttpService, { Response } from './HttpService';
 import { getPromisesResponse } from './utils';
@@ -139,6 +140,51 @@ const deleteSubLocations = async (facilityId: number, locationIds: number[]): Pr
   return getPromisesResponse<Response>(promises);
 };
 
+const saveEditedSubLocations = async (facilityId: number, editedSubLocations: PartialSubLocation[]) => {
+  const isEqual = (location1: PartialSubLocation, location2: PartialSubLocation) => {
+    return location1.id === location2.id;
+  };
+
+  const isModified = (location1: PartialSubLocation, location2: PartialSubLocation) => {
+    return location1.id === location2.id && location1.name !== location2.name;
+  };
+
+  /**
+   * Find existing locations and pick out the ones to delete, create and update.
+   * Use bulk API to delete, create, update.
+   */
+  const response = await getSubLocations(facilityId);
+  if (response.requestSucceeded) {
+    const { subLocations } = response;
+    const toDelete = _.differenceWith(subLocations, editedSubLocations, isEqual);
+    const toCreate = _.differenceWith(editedSubLocations, subLocations, isEqual);
+    const toUpdate = _.intersectionWith(editedSubLocations, subLocations, isModified);
+
+    const promises = [];
+    if (toDelete.length) {
+      promises.push(
+        deleteSubLocations(
+          facilityId,
+          toDelete.map((l) => l.id)
+        )
+      );
+    }
+    if (toUpdate.length) {
+      promises.push(updateSubLocations(facilityId, toUpdate as { name: string; id: number }[]));
+    }
+    if (toCreate.length) {
+      promises.push(
+        createSubLocations(
+          facilityId,
+          toCreate.map((l) => l.name as string)
+        )
+      );
+    }
+
+    await Promise.allSettled(promises);
+  }
+};
+
 /**
  * Exported functions
  */
@@ -151,6 +197,7 @@ const SubLocationService = {
   deleteSubLocation,
   updateSubLocations,
   deleteSubLocations,
+  saveEditedSubLocations,
 };
 
 export default SubLocationService;
