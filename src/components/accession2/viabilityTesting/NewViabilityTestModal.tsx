@@ -272,8 +272,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const CUT_MANDATORY_FIELDS = ['seedsFilled', 'seedsCompromised', 'seedsEmpty'] as const;
 
-  type MandatoryField = typeof MANDATORY_FIELDS[number];
-  type MandatoryCutField = typeof CUT_MANDATORY_FIELDS[number];
+  type MandatoryField = (typeof MANDATORY_FIELDS)[number];
+  type MandatoryCutField = (typeof CUT_MANDATORY_FIELDS)[number];
 
   const hasErrors = () => {
     if (record) {
