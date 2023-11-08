@@ -328,7 +328,13 @@
 <a name='L263'></a><a href='#L263'>263</a>
 <a name='L264'></a><a href='#L264'>264</a>
 <a name='L265'></a><a href='#L265'>265</a>
-<a name='L266'></a><a href='#L266'>266</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -427,6 +433,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -439,11 +446,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -691,25 +703,31 @@ const subzonesReverseMap = <span class="cstat-no" title="statement not covered" 
 &nbsp;
 // reverse map of id to name, boundary (for planting site, zone, subzone), optionally just name for species
 const reverseMap = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ry: any[], type: string): Record&lt;number, Value&gt; =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  ary.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; {</span>
-    const { id, name, fullName, boundary, timeZone } = <span class="cstat-no" title="statement not covered" >curr;</span>
-<span class="cstat-no" title="statement not covered" >    if (type === 'site') {</span>
-<span class="cstat-no" title="statement not covered" >      acc[id] = { name, boundary, timeZone };</span>
-    } else <span class="cstat-no" title="statement not covered" >if (type === 'subzone') {</span>
-<span class="cstat-no" title="statement not covered" >      acc[id] = { name: fullName, boundary };</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      acc[id] = { name, boundary };</span>
-    }
-<span class="cstat-no" title="statement not covered" >    return acc;</span>
-  }, {} as Record&lt;number, Value&gt;);
+<span class="cstat-no" title="statement not covered" >  ary.reduce(</span>
+<span class="fstat-no" title="function not covered" >    (a</span>cc, curr) =&gt; {
+      const { id, name, fullName, boundary, timeZone } = <span class="cstat-no" title="statement not covered" >curr;</span>
+<span class="cstat-no" title="statement not covered" >      if (type === 'site') {</span>
+<span class="cstat-no" title="statement not covered" >        acc[id] = { name, boundary, timeZone };</span>
+      } else <span class="cstat-no" title="statement not covered" >if (type === 'subzone') {</span>
+<span class="cstat-no" title="statement not covered" >        acc[id] = { name: fullName, boundary };</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        acc[id] = { name, boundary };</span>
+      }
+<span class="cstat-no" title="statement not covered" >      return acc;</span>
+    },
+    {} as Record&lt;number, Value&gt;
+  );
 &nbsp;
 // species reverse map
 const speciesReverseMap = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ry: any[]): Record&lt;number, SpeciesValue&gt; =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  ary.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; {</span>
-    const { id, commonName, scientificName } = <span class="cstat-no" title="statement not covered" >curr;</span>
-<span class="cstat-no" title="statement not covered" >    acc[id] = { commonName, scientificName };</span>
-<span class="cstat-no" title="statement not covered" >    return acc;</span>
-  }, {} as Record&lt;number, SpeciesValue&gt;);
+<span class="cstat-no" title="statement not covered" >  ary.reduce(</span>
+<span class="fstat-no" title="function not covered" >    (a</span>cc, curr) =&gt; {
+      const { id, commonName, scientificName } = <span class="cstat-no" title="statement not covered" >curr;</span>
+<span class="cstat-no" title="statement not covered" >      acc[id] = { commonName, scientificName };</span>
+<span class="cstat-no" title="statement not covered" >      return acc;</span>
+    },
+    {} as Record&lt;number, SpeciesValue&gt;
+  );
 &nbsp;
 // merge observation
 export const mergeObservations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
@@ -865,7 +883,7 @@ const mergeSpecies = <span class="cstat-no" title="statement not covered" ><span
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-08T22:59:13.469Z
+                at 2023-11-08T23:59:02.490Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
