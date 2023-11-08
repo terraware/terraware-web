@@ -3,7 +3,14 @@ import HttpService, { Response } from './HttpService';
 import { SpeciesInventorySummary } from 'src/types/Inventory';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import SearchService from './SearchService';
-import { FieldNodePayload, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import {
+  AndNodePayload,
+  FieldNodePayload,
+  OrNodePayload,
+  SearchRequestPayload,
+  SearchResponseElement,
+  SearchSortOrder,
+} from 'src/types/Search';
 
 /**
  * Nursery related services
@@ -144,9 +151,8 @@ const searchInventory = async ({
   facilityIds,
   query,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
-  let params: SearchNodePayload;
   const forSpecificFacilities = !!facilityIds && !!facilityIds.length;
-  params = {
+  const params: SearchRequestPayload = {
     prefix: forSpecificFacilities ? 'inventories.facilityInventories' : 'inventories',
     fields: forSpecificFacilities ? FACILITY_SPECIFIC_FIELDS : INVENTORY_FIELDS,
     sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
@@ -191,7 +197,7 @@ const searchInventory = async ({
     searchValueChildren.push(facilityNameNode);
   }
 
-  let nurseryFilter: FieldNodePayload;
+  let nurseryFilter: FieldNodePayload | undefined;
 
   if (forSpecificFacilities) {
     nurseryFilter = {
@@ -203,7 +209,7 @@ const searchInventory = async ({
   }
 
   if (searchValueChildren.length) {
-    const searchValueNodes: FieldNodePayload = {
+    const searchValueNodes: OrNodePayload = {
       operation: 'or',
       children: searchValueChildren,
     };
@@ -212,7 +218,7 @@ const searchInventory = async ({
       params.search.children.push({
         operation: 'and',
         children: [nurseryFilter, searchValueNodes],
-      });
+      } as AndNodePayload);
     } else {
       params.search.children.push(searchValueNodes);
     }

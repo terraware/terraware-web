@@ -5,7 +5,7 @@ import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility, SubLocation } from 'src/types/Facility';
-import { SeedBankService } from 'src/services';
+import { SubLocationService } from 'src/services';
 import { SubLocationSelector, FacilitySelector } from './';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 
@@ -35,7 +35,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
   useEffect(() => {
     const setLocation = async () => {
       if (record.facilityId && activeLocale) {
-        const response = await SeedBankService.getSubLocations(record.facilityId);
+        const response = await SubLocationService.getSubLocations(record.facilityId);
         if (response.requestSucceeded) {
           const collator = new Intl.Collator(activeLocale);
           setSubLocations(response.subLocations.sort((a, b) => collator.compare(a.name, b.name)));

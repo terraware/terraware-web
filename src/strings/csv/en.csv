@@ -102,7 +102,9 @@ BACK_OF_SEED_BANK,Back of Seed Bank
 BACK_TO_TERRAWARE,Back to Terraware
 BAG_ID,Bag ID
 BAG_IDS,Bag IDs
+BATCHES,Batches
 BATCHES_AT,Batches at {0}
+BATCHES_COLUMN_TOOLTIP,Empty batches are not counted in this column.
 BATCHES_OF,Batches of {0}
 BATCH_WITHDRAW_SUCCESS,{0} {1} for a total of {2} {3} withdrawn.
 BATCHES_PLURAL,batches
@@ -659,6 +661,7 @@ NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_TITLE,No Seedlings Available to Outplant
 NO_SPECIES_CONTRIBUTOR_MSG,"There are no species in your species list yet. Only admins can add species, so please reach out to yours for assistance."
 NO_SPECIES_DESCRIPTION,"It looks like you haven’t added any species yet. Having a master species list helps streamline your organization’s seed and plant data entry. You can either add species manually and individually, or import data from a CSV."
 NO_SUB_LOCATIONS,Edit this seed bank to add sub-locations.
+NO_SUB_LOCATIONS_NURSERY,Edit this nursery to add sub-locations.
 NONE,None
 NOT_CONNECTED,Not Connected
 NOT_READY,Not Ready

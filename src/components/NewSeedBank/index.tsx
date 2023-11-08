@@ -1,7 +1,6 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import _ from 'lodash';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import TextField from '../common/Textfield/Textfield';
@@ -9,7 +8,7 @@ import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
-import { FacilityService, SeedBankService, SubLocationService } from 'src/services';
+import { FacilityService, SubLocationService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -18,7 +17,7 @@ import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import { PartialSubLocation } from 'src/types/Facility';
-import SubLocations from 'src/components/SeedBank/SubLocations';
+import SeedBankSubLocations from 'src/components/SeedBank/SeedBankSubLocations';
 import { DatePicker } from '@terraware/web-components';
 
 export default function SeedBankView(): JSX.Element {
@@ -75,57 +74,6 @@ export default function SeedBankView(): JSX.Element {
     history.push(sitesLocation);
   };
 
-  const saveSubLocations = async (facilityId: number) => {
-    if (!editedSubLocations) {
-      return;
-    }
-
-    const isEqual = (location1: PartialSubLocation, location2: PartialSubLocation) => {
-      return location1.id === location2.id;
-    };
-
-    const isModified = (location1: PartialSubLocation, location2: PartialSubLocation) => {
-      return location1.id === location2.id && location1.name !== location2.name;
-    };
-
-    /**
-     * Find existing locations and pick out the ones to delete, create and update.
-     * Use bulk API to delete, create, update.
-     */
-    const response = await SeedBankService.getSubLocations(facilityId);
-    if (response.requestSucceeded) {
-      const { subLocations } = response;
-      const toDelete = _.differenceWith(subLocations, editedSubLocations, isEqual);
-      const toCreate = _.differenceWith(editedSubLocations, subLocations, isEqual);
-      const toUpdate = _.intersectionWith(editedSubLocations, subLocations, isModified);
-
-      const promises = [];
-      if (toDelete.length) {
-        promises.push(
-          SubLocationService.deleteSubLocations(
-            facilityId,
-            toDelete.map((l) => l.id)
-          )
-        );
-      }
-      if (toUpdate.length) {
-        promises.push(SubLocationService.updateSubLocations(facilityId, toUpdate as { name: string; id: number }[]));
-      }
-      if (toCreate.length) {
-        promises.push(
-          SeedBankService.createSubLocations(
-            facilityId,
-            toCreate.map((l) => l.name as string)
-          )
-        );
-      }
-
-      await Promise.allSettled(promises);
-    } else {
-      snackbar.toastError();
-    }
-  };
-
   const saveSeedBank = async () => {
     let id = selectedSeedBank?.id;
     if (
@@ -155,7 +103,9 @@ export default function SeedBankView(): JSX.Element {
     if (selectedSeedBank) {
       const response = await FacilityService.updateFacility({ ...record } as Facility);
       if (response.requestSucceeded) {
-        await saveSubLocations(selectedSeedBank.id as number);
+        if (editedSubLocations) {
+          await SubLocationService.saveEditedSubLocations(selectedSeedBank.id as number, editedSubLocations);
+        }
         await reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
@@ -306,7 +256,7 @@ export default function SeedBankView(): JSX.Element {
               />
             </Grid>
           </Grid>
-          <SubLocations
+          <SeedBankSubLocations
             seedBankId={selectedSeedBank?.id === -1 ? undefined : selectedSeedBank?.id}
             onEdit={(locations) => setEditedSubLocations(locations)}
           />

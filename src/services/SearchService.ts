@@ -9,48 +9,55 @@ import HttpService from './HttpService';
 // endpoint
 const SEARCH_ENDPOINT = '/api/v1/search';
 
-/**
+/*
  * Types exported from service
  */
 
-export type SearchRequestPayload = paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
+/**
+ * Payload of search request as it's defined in the OpenAPI schema.
+ *
+ * This is called RawSearchRequestPayload to distinguish it from SearchRequestPayload as defined
+ * in Search.ts. SearchRequestPayload is stricter: it requires a search filter, whereas the API
+ * doesn't. We almost always want to include a search filter, so we generally use the stricter
+ * type to catch cases where it's missing.
+ *
+ * You will generally want SearchRequestPayload instead of this.
+ */
+export type RawSearchRequestPayload =
+  paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
 export type SearchResponsePayload =
   paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 const httpSearch = HttpService.root(SEARCH_ENDPOINT);
 
-/*
- * convertToSearchNodePayload()
- * input: search criteria in the type of SearchCriteria, which is used by the application
- * output: search criteria in the type of SearchNodePayload, which is required by API modules.
- *         undefined if the input represented no search criteria.
+/**
+ * Converts a list of search criteria to an AndNodePayload that includes a filter for
+ * organization ID.
+ *
+ * @param criteria Search criteria in the type of SearchCriteria, which is used by the application,
+ *   or an array of SearchNodePayload
+ * @param organizationId ID of organization to search.
+ * @return SearchNodePayload suitable for use in a search request. This will currently always be
+ *   an AndNodePayload.
  */
-function convertToSearchNodePayload(criteria: SearchCriteria, organizationId?: number): SearchNodePayload | undefined {
-  if (Object.keys(criteria).length === 0 && !organizationId) {
-    return undefined;
-  }
-  let newCriteria = criteria;
-  if (organizationId) {
-    newCriteria = addOrgInfoToSearch(organizationId, criteria);
-  }
-  return {
-    operation: 'and',
-    children: Object.values(newCriteria),
-  };
-}
-
-function addOrgInfoToSearch(organizationId: number, previousCriteria?: SearchCriteria) {
-  const newCriteria = previousCriteria ? Object.values(previousCriteria) : [];
+function convertToSearchNodePayload(
+  criteria: SearchCriteria | SearchNodePayload[],
+  organizationId: number
+): SearchNodePayload {
+  const newCriteria = Object.values(criteria);
   newCriteria.unshift({
     field: 'facility_organization_id',
     values: [organizationId.toString()],
     operation: 'field',
-  });
-
-  return newCriteria;
+  } as SearchNodePayload);
+  return {
+    operation: 'and',
+    children: newCriteria,
+  };
 }
 
-async function search(entity: SearchRequestPayload): Promise<SearchResponseElement[] | null> {
+async function search(entity: RawSearchRequestPayload): Promise<SearchResponseElement[] | null> {
   try {
     const response: SearchResponsePayload = (await httpSearch.post({ entity })).data;
     return response.results;
@@ -59,7 +66,7 @@ async function search(entity: SearchRequestPayload): Promise<SearchResponseEleme
   }
 }
 
-async function searchCsv(entity: SearchRequestPayload): Promise<any> {
+async function searchCsv(entity: RawSearchRequestPayload): Promise<any> {
   const headers = {
     accept: 'text/csv',
   };

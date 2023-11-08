@@ -1,18 +1,15 @@
 import { paths } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
-import { SubLocation } from 'src/types/Facility';
 import HttpService, { Response } from './HttpService';
-import SearchService, { SearchRequestPayload } from './SearchService';
-import { SearchCriteria, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import SearchService from './SearchService';
+import { SearchCriteria, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
-import { getPromisesResponse } from './utils';
 
 /**
  * Seed bank related services
  */
 
 const SUMMARY_ENDPOINT = '/api/v1/seedbank/summary';
-const SUB_LOCATIONS_ENDPOINT = '/api/v1/facilities/{facilityId}/subLocations';
 const ACCESSIONS_ENDPOINT = '/api/v2/seedbank/accessions';
 const FIELD_VALUES_ENDPOINT = '/api/v1/seedbank/values';
 const ACCESSIONS_TEMPLATE_ENDPOINT = '/api/v2/seedbank/accessions/uploads/template';
@@ -22,9 +19,6 @@ const ACCESSIONS_UPLOAD_RESOLVE_ENDPOINT = '/api/v2/seedbank/accessions/uploads/
 
 type ValuesPostRequestBody = paths[typeof FIELD_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 type ValuesPostResponse = paths[typeof FIELD_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-
-type StorageLocationsResponsePayload =
-  paths[typeof SUB_LOCATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 export type FieldValuesMap = ValuesPostResponse['results'];
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
@@ -45,16 +39,6 @@ export type Summary = {
 };
 export type SummaryResponse = Response & Summary;
 
-export type SubLocationsData = {
-  subLocations: SubLocation[];
-};
-export type SubLocationsResponse = Response & SubLocationsData;
-
-export type SubLocationData = {
-  subLocation?: SubLocation;
-};
-export type SubLocationResponse = Response & SubLocationData;
-
 export type AccessionPostRequestBody =
   paths[typeof ACCESSIONS_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
@@ -68,8 +52,6 @@ export type AccessionsSearchParams = {
   searchCriteria?: SearchCriteria;
   sortOrder?: SearchSortOrder;
 };
-
-const httpSubLocations = HttpService.root(SUB_LOCATIONS_ENDPOINT);
 
 /**
  * Seed bank summary
@@ -168,9 +150,10 @@ const getPendingAccessions = async (organizationId: number): Promise<SearchRespo
     search: SearchService.convertToSearchNodePayload(
       [
         {
-          field: 'state',
-          values: [strings.AWAITING_CHECK_IN],
           operation: 'field',
+          field: 'state',
+          type: 'Exact',
+          values: [strings.AWAITING_CHECK_IN],
         },
       ],
       organizationId
@@ -241,47 +224,6 @@ const resolveAccessionsUpload = async (uploadId: number, overwriteExisting: bool
   });
 };
 
-/*
- * Returns all the sub-locations associated with a given facility or null if the API call failed.
- */
-const getSubLocations = async (facilityId: number): Promise<SubLocationsResponse> => {
-  const response: SubLocationsResponse = await httpSubLocations.get<StorageLocationsResponsePayload, SubLocationsData>(
-    {
-      urlReplacements: {
-        '{facilityId}': facilityId.toString(),
-      },
-    },
-    (data) => ({ subLocations: data?.subLocations ?? [] })
-  );
-
-  return response;
-};
-
-/**
- * Create a single sub-location
- */
-const createSubLocation = async (facilityId: number, name: string): Promise<SubLocationResponse> => {
-  const response: Response = await httpSubLocations.post({
-    urlReplacements: {
-      '{facilityId}': facilityId.toString(),
-    },
-    entity: { name },
-  });
-
-  return {
-    ...response,
-    subLocation: response.data?.subLocation,
-  };
-};
-
-/**
- * Create one or more sub-locations
- */
-const createSubLocations = async (facilityId: number, names: string[]): Promise<(SubLocationResponse | null)[]> => {
-  const promises = names.map((name) => createSubLocation(facilityId, name));
-  return getPromisesResponse<SubLocationResponse>(promises);
-};
-
 /**
  * Exported functions
  */
@@ -296,9 +238,6 @@ const SeedBankService = {
   uploadAccessions,
   getAccessionsUploadStatus,
   resolveAccessionsUpload,
-  getSubLocations,
-  createSubLocation,
-  createSubLocations,
 };
 
 export default SeedBankService;
