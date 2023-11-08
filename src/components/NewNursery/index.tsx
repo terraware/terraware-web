@@ -6,8 +6,8 @@ import strings from 'src/strings';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
-import { Facility } from 'src/types/Facility';
-import { FacilityService } from 'src/services';
+import { Facility, PartialSubLocation } from 'src/types/Facility';
+import { FacilityService, SubLocationService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -18,12 +18,14 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import { CreateFacilityResponse } from 'src/services/FacilityService';
 import { DatePicker } from '@terraware/web-components';
+import NurserySubLocations from 'src/components/Nursery/NurserySubLocations';
 
 export default function NurseryView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const [validateDates, setValidateDates] = useState(false);
+  const [editedSubLocations, setEditedSubLocations] = useState<PartialSubLocation[]>();
   const snackbar = useSnackbar();
   const theme = useTheme();
 
@@ -101,9 +103,15 @@ export default function NurseryView(): JSX.Element {
     let id = selectedNursery?.id;
     const response = selectedNursery
       ? await FacilityService.updateFacility({ ...record } as Facility)
-      : await FacilityService.createFacility(record);
+      : await FacilityService.createFacility({
+          ...record,
+          subLocationNames: editedSubLocations?.map((l) => l.name as string),
+        });
 
     if (response.requestSucceeded) {
+      if (selectedNursery && editedSubLocations) {
+        await SubLocationService.saveEditedSubLocations(id as number, editedSubLocations);
+      }
       await reloadOrganizations(selectedOrganization.id);
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
       if (!selectedNursery) {
@@ -264,6 +272,10 @@ export default function NurseryView(): JSX.Element {
               />
             </Grid>
           </Grid>
+          <NurserySubLocations
+            nurseryId={selectedNursery?.id}
+            onEdit={(subLocations: PartialSubLocation[]) => setEditedSubLocations(subLocations)}
+          />
         </Box>
       </PageForm>
     </TfMain>

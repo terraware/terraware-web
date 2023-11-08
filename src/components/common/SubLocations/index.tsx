@@ -38,7 +38,12 @@ const seedBankColumn = (): TableColumnType => ({
   type: 'number',
 });
 
-const nurseryColumn = (): TableColumnType => ({ key: 'activeBatches', name: strings.BATCHES, type: 'number' });
+const nurseryColumn = (): TableColumnType => ({
+  key: 'activeBatches',
+  name: strings.BATCHES,
+  type: 'number',
+  tooltipTitle: strings.BATCHES_COLUMN_TOOLTIP,
+});
 
 export default function SubLocations({
   facilityType,
@@ -156,7 +161,7 @@ export default function SubLocations({
             label={isMobile ? '' : strings.ADD_SUB_LOCATION}
             onClick={onAddSubLocationClick}
             size='small'
-            type='passive'
+            priority='secondary'
           />
         )}
       </Grid>
@@ -181,7 +186,7 @@ export default function SubLocations({
         {subLocations.length === 0 && !editMode && (
           <Box paddingY={isMobile ? 3 : 6} textAlign='center'>
             <Typography fontSize='14px' fontWeight={400}>
-              {strings.NO_SUB_LOCATIONS}
+              {isSeedbank ? strings.NO_SUB_LOCATIONS : strings.NO_SUB_LOCATIONS_NURSERY}
             </Typography>
           </Box>
         )}
