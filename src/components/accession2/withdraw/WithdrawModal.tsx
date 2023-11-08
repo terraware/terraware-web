@@ -24,7 +24,6 @@ import { useOrganization } from 'src/providers/hooks';
 import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { makeStyles } from '@mui/styles';
-import { convertUnits, unitAbbv } from 'src/units';
 import CountWithdrawal from 'src/components/accession2/withdraw/CountWithdrawal';
 import WeightWithdrawal from 'src/components/accession2/withdraw/WeightWithdrawal';
 

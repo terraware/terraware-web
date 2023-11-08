@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import { Box, Grid, useTheme, Theme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 import { Accession, Withdrawal } from 'src/types/Accession';
 import { convertUnits, unitAbbv } from 'src/units';
@@ -34,7 +34,7 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
         );
       }
     }
-  }, [purpose]);
+  }, [purpose, accession.subsetCount, accession.subsetWeight?.quantity]);
 
   const onChangeWithdrawnQuantity = (value: number) => {
     let estimated = 0;

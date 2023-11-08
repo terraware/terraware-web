@@ -24,7 +24,7 @@ export default function CountWithdrawal(props: CountWithdrawalProps): JSX.Elemen
     if (!accession.estimatedCount) {
       setWithdrawnQtyError(strings.MISSING_SUBSET_WEIGHT_ERROR_COUNT);
     }
-  }, []);
+  }, [accession.estimatedCount]);
 
   const onChangeWithdrawnQuantity = (value: number) => {
     let valid = false;
