@@ -28,16 +28,6 @@ type GetDeliveryResponsePayload =
 type PlantingSiteReportedPlantsPayload =
   paths[typeof REPORTED_PLANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
-type SearchFieldType = {
-  operation: string;
-  children: {
-    operation: string;
-    field: string;
-    type: string;
-    values: string[];
-  }[];
-};
-
 /**
  * exported type
  */

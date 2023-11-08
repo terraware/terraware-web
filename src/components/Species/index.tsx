@@ -16,7 +16,6 @@ import SearchService from 'src/services/SearchService';
 import {
   FieldNodePayload,
   FieldOptionsMap,
-  SearchNodePayload,
   SearchRequestPayload,
   SearchSortOrder,
 } from 'src/types/Search';

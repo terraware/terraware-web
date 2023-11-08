@@ -5,7 +5,6 @@ import { Delivery } from 'src/types/Tracking';
 import SearchService from './SearchService';
 import {
   FieldOptionsMap,
-  SearchCriteria,
   SearchNodePayload,
   SearchRequestPayload,
   SearchResponseElement,
