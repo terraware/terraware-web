@@ -9,7 +9,7 @@ import { getAllSeedBanks } from 'src/utils/organization';
 import { Accession } from 'src/types/Accession';
 import AccessionService from 'src/services/AccessionService';
 import useForm from 'src/utils/useForm';
-import { SeedBankService } from 'src/services';
+import { SubLocationService } from 'src/services';
 import { FacilitySelector, SubLocationSelector } from '../properties';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
@@ -43,7 +43,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   useEffect(() => {
     const setLocations = async () => {
       if (record.facilityId && activeLocale) {
-        const response = await SeedBankService.getSubLocations(record.facilityId);
+        const response = await SubLocationService.getSubLocations(record.facilityId);
         if (response.requestSucceeded) {
           const collator = new Intl.Collator(activeLocale);
           setSubLocations(response.subLocations.sort((a, b) => collator.compare(a.name, b.name)));
