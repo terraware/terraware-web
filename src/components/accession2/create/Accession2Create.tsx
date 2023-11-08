@@ -61,7 +61,7 @@ export default function CreateAccession(): JSX.Element {
     ({
       state: 'Awaiting Check-In',
       receivedDate: getTodaysDateFormatted(timeZone),
-    } as AccessionPostRequestBody);
+    }) as AccessionPostRequestBody;
 
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
 

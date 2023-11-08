@@ -112,8 +112,8 @@ export default function NurseryReassignment(): JSX.Element {
       const response = await TrackingService.getPlantingSite(delivery.plantingSiteId);
       if (response.requestSucceeded && response.site) {
         setSiteName(response.site.name);
-        const zone = response.site.plantingZones?.find((otherZone) =>
-          otherZone.plantingSubzones?.some((subzone) => plantingSubzoneIds.indexOf(subzone.id) !== -1)
+        const zone = response.site.plantingZones?.find(
+          (otherZone) => otherZone.plantingSubzones?.some((subzone) => plantingSubzoneIds.indexOf(subzone.id) !== -1)
         );
         if (!zone) {
           return;
