@@ -1,3 +1,4 @@
+bd56ad5dc Move sub-locations fetch/create functions into SubLocationService (#1764)
 b0c76f49d SW-4430 Remove opt-in flag for user scheduled observations (#1762)
 537cf75ff SW-4053 Show planting site name and end date in observations table, remove subzones (#1756)
 2e548db88 SW-4394 Batch Details tab (#1761)
