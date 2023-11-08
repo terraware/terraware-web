@@ -1,3 +1,4 @@
+567d85ac2 SW-4443 Add sub-locations to nursery details (#1767)
 b524f7e13 Refactor sublocations table to be reusable across seedbanks and facilities (#1765)
 bd56ad5dc Move sub-locations fetch/create functions into SubLocationService (#1764)
 b0c76f49d SW-4430 Remove opt-in flag for user scheduled observations (#1762)
