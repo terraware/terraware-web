@@ -1,6 +1,6 @@
 import { User } from 'src/types/User';
 
-export const getUserDisplayName = (user: User): string | undefined => {
+export const getUserDisplayName = (user?: User): string => {
   if (user?.firstName && user?.lastName) {
     return `${user.firstName} ${user.lastName}`;
   }
@@ -10,5 +10,5 @@ export const getUserDisplayName = (user: User): string | undefined => {
   if (user?.lastName) {
     return user.lastName;
   }
-  return user?.email;
+  return user?.email || '';
 };

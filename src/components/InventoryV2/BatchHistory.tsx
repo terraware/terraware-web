@@ -41,7 +41,7 @@ export default function BatchHistory({ batchId }: BatchHistoryProps): JSX.Elemen
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState('');
   const [results, setResults] = useState<BatchHistoryItemWithUser[] | null>();
-  const [users, setUsers] = useState<Record<number, User> | undefined>();
+  const [users, setUsers] = useState<Record<number, User> | undefined>({});
   const { selectedOrganization } = useOrganization();
   const [selectedEvent, setSelectedEvent] = useState<any>();
   const [openEventDetailsModal, setOpenEventDetailsModal] = useState<boolean>(false);
@@ -68,7 +68,7 @@ export default function BatchHistory({ batchId }: BatchHistoryProps): JSX.Elemen
           const historyItemsWithUsers =
             response.history?.map((historyItem) => {
               const userSelected = users[historyItem.createdBy];
-              return { ...historyItem, editedByName: getUserDisplayName(userSelected) || '' };
+              return { ...historyItem, editedByName: getUserDisplayName(userSelected) };
             }) || null;
           setResults(historyItemsWithUsers);
         }
