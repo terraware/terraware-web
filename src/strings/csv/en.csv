@@ -308,6 +308,7 @@ EDIT_SPECIES_MODAL_QUESTION,Would you like to apply this edit to all accessions 
 EDIT_STATUS,Edit Status
 EDIT_VIABILITY,Edit Viability
 EDIT_VIABILITY_TEST,Edit Viability Test
+EDITED_BY,Edited By
 EMAIL,Email
 EMAIL_ALREADY_EXISTS,This email already exists.
 EMAIL_REQUIRED,Email *
@@ -326,6 +327,8 @@ ESTIMATED_DRYING_END_DATE,Estimated Drying End Date
 ESTIMATED_READY_DATE,Estimated Ready Date
 ESTIMATED_SEEDS_INCOMING,Estimated Seeds Incoming
 EXISTING_SPECIES_MSG,“{0}” is already in your species list.
+EVENT,Event
+EVENT_DETAILS,Event Details
 EXPORT,Export
 EXPORT_RECORDS,Export Records
 FACILITY,Facility
@@ -382,6 +385,8 @@ GEOLOCATIONS,Geolocations
 GERMINATED,Germinated
 GERMINATING,Germinating
 GERMINATING_QUANTITY,Germinating Quantity
+GERMINATION_QUANTITY_AFTER,Germination Quantity (After)
+GERMINATION_QUANTITY_BEFORE,Germination Quantity (Before)
 GERMINATING_QUANTITY_REQUIRED,Germinating Quantity *
 GERMINATION_TESTED_BY,Germination Tested By
 GERMINATION_RATE,Germination Rate
@@ -661,6 +666,8 @@ NOT_READY_QUANTITY,Not Ready Quantity
 NOT_READY_QUANTITY_REQUIRED,Not Ready Quantity *
 NOTE_ANY_ISSUES,Does everything above look right? Note any issues.
 NOTES,Notes
+NOTES_AFTER,Notes (After)
+NOTES_BEFORE,Notes (Before)
 NOTIFICATIONS,Notifications
 NUMBER_OF_LIVE_PLANTS_PER_SPECIES,Number of Live Plants per Species
 NUMBER_OF_PACKETS,Number of Packets
@@ -1154,6 +1161,8 @@ SUBSET_WEIGHT,Weight of Seed Subset
 SUBSET_WEIGHT_ERROR,Subset weight should be less than seed weight
 SUBSHRUB,Subshrub
 SUBSTRATE,Substrate
+SUBSTRATE_AFTER,Substrate (After)
+SUBSTRATE_BEFORE,Substrate (Before)
 SUBTITLE_GET_STARTED,"To get started, please create your organization now. You'll also be able to set up and manage information on people and species."
 SUBZONE,Subzone
 SUBZONE_PLANTING_COMPLETED_SUCCESS,Subzone(s) marked as Planting Complete.

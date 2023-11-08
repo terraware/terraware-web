@@ -2,6 +2,7 @@ import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
 export type Batch = components['schemas']['BatchResponsePayload']['batch'];
+export type BatchHistoryItem = components['schemas']['BatchHistoryPayload'];
 export type CreateBatchRequestPayload = components['schemas']['CreateBatchRequestPayload'];
 export type NurseryWithdrawal = components['schemas']['GetNurseryWithdrawalResponsePayload']['withdrawal'];
 export type BatchWithdrawal = NurseryWithdrawal['batchWithdrawals'][0];
