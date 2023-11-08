@@ -85,11 +85,7 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
         );
       }
     }
-    valid = validateAmount(
-      estimated,
-      value,
-      withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams'
-    );
+    valid = validateAmount(estimated, value, withdrawnQuantity?.units || accession.remainingQuantity?.units || 'Grams');
     if (purpose === 'Nursery' || purpose === 'Viability Testing') {
       onWithdrawCtUpdate({ quantity: estimated, units: 'Seeds' }, valid);
     } else {
@@ -121,11 +117,7 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
     setWithdrawAllSelected(withdrawAll);
   };
 
-  const validateAmount = (
-    estimated: number,
-    withdrawnQty: number,
-    withdrawnUnits: string
-  ) => {
+  const validateAmount = (estimated: number, withdrawnQty: number, withdrawnUnits: string) => {
     if (withdrawnQty) {
       if (isNaN(withdrawnQty)) {
         setWithdrawnQtyError(strings.INVALID_VALUE);
