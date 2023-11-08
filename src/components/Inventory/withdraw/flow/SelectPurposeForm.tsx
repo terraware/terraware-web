@@ -18,19 +18,20 @@ import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/types/B
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { APP_PATHS } from 'src/constants';
 import Divisor from 'src/components/common/Divisor';
-import { Dropdown, Textfield, DropdownItem, IconTooltip } from '@terraware/web-components';
+import { Dropdown, Textfield, DropdownItem, IconTooltip, MultiSelect } from '@terraware/web-components';
 import DatePicker from 'src/components/common/DatePicker';
 import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
-import { SpeciesService, TrackingService } from 'src/services';
+import { SpeciesService, SubLocationService, TrackingService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import SubzoneSelector, { SubzoneInfo, ZoneInfo } from 'src/components/SubzoneSelector';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { Facility } from 'src/types/Facility';
+import { Facility, SubLocation } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
@@ -45,6 +46,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   readyQuantityWithdrawn: {
     '&> #readyQuantityWithdrawn': {
+      height: '44px',
+    },
+  },
+  germinatingQuantityWithdrawn: {
+    '&> #germinatingQuantityWithdrawn': {
       height: '44px',
     },
   },
@@ -75,7 +81,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>();
   const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>();
   const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>();
+  const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
+  const [destinationSubLocations, setDestinationSubLocations] = useState<SubLocation[]>([]);
+  const [selectedSubLocations, setSelectedSubLocations] = useState<number[]>([]);
   const [zones, setZones] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<number>();
   const snackbar = useSnackbar();
@@ -89,8 +98,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const tz = useLocationTimeZone().get(selectedNursery);
   const [timeZone, setTimeZone] = useState(tz.id);
   const { activeLocale } = useLocalization();
+  const nurseryV2 = isEnabled('Nursery Updates');
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
+
+  const destinationSubLocationsOptions = useMemo(
+    () => new Map(destinationSubLocations.map((subLocation) => [subLocation.id, subLocation.name])),
+    [destinationSubLocations]
+  );
 
   useEffect(() => {
     if (timeZone !== tz.id) {
@@ -240,20 +255,20 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return true;
   };
 
-  const validateReadyAndNotReadyQuantities = () => {
-    let bothValid = true;
+  const validateGerminatingReadyAndNotReadyQuantities = () => {
+    let allValid = true;
     if (isSingleBatch && !isOutplant) {
       if (!notReadyQuantityWithdrawn && notReadyQuantityWithdrawn !== 0) {
         setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);
-        bothValid = false;
+        allValid = false;
       } else {
         if (isNaN(notReadyQuantityWithdrawn)) {
           setIndividualError('notReadyQuantityWithdrawn', strings.INVALID_VALUE);
-          bothValid = false;
+          allValid = false;
         } else {
           if (+notReadyQuantityWithdrawn > +batches[0]['notReadyQuantity(raw)']) {
             setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
-            bothValid = false;
+            allValid = false;
           } else {
             setIndividualError('notReadyQuantityWithdrawn', '');
           }
@@ -262,22 +277,41 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
       if (!readyQuantityWithdrawn && readyQuantityWithdrawn !== 0) {
         setIndividualError('readyQuantityWithdrawn', strings.REQUIRED_FIELD);
-        bothValid = false;
+        allValid = false;
       } else {
         if (isNaN(readyQuantityWithdrawn)) {
           setIndividualError('readyQuantityWithdrawn', strings.INVALID_VALUE);
-          bothValid = false;
+          allValid = false;
         } else {
           if (+readyQuantityWithdrawn > +batches[0]['readyQuantity(raw)']) {
             setIndividualError('readyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
-            bothValid = false;
+            allValid = false;
           } else {
             setIndividualError('readyQuantityWithdrawn', '');
           }
         }
       }
+
+      if (nurseryV2) {
+        if (!germinatingQuantityWithdrawn && germinatingQuantityWithdrawn !== 0) {
+          setIndividualError('germinatingQuantityWithdrawn', strings.REQUIRED_FIELD);
+          allValid = false;
+        } else {
+          if (isNaN(germinatingQuantityWithdrawn)) {
+            setIndividualError('germinatingQuantityWithdrawn', strings.INVALID_VALUE);
+            allValid = false;
+          } else {
+            if (+germinatingQuantityWithdrawn > +batches[0]['germinatingQuantity(raw)']) {
+              setIndividualError('germinatingQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
+              allValid = false;
+            } else {
+              setIndividualError('germinatingQuantityWithdrawn', '');
+            }
+          }
+        }
+      }
     }
-    return bothValid;
+    return allValid;
   };
 
   const validatePlantingSiteSubzone = () => {
@@ -314,14 +348,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
     const plantingSiteSubzoneInvalid = !validatePlantingSiteSubzone();
-    const readyAndNotReadyInvalid = !validateReadyAndNotReadyQuantities();
+    const germinatingReadyAndNotReadyInvalid = !validateGerminatingReadyAndNotReadyQuantities();
     if (
       fieldsErrors.withdrawnDate ||
       nurseryTransferInvalid ||
       selectedNurseryInvalid ||
       withdrawnQuantityInvalid ||
       plantingSiteSubzoneInvalid ||
-      readyAndNotReadyInvalid
+      germinatingReadyAndNotReadyInvalid
     ) {
       return;
     }
@@ -343,6 +377,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         })
         .map((batch) => ({
           batchId: batch.id,
+          germinatingQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? germinatingQuantityWithdrawn || 0 : 0,
           notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
           readyQuantityWithdrawn: isSingleOutplant
             ? withdrawnQuantity || 0
@@ -414,9 +449,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   useEffect(() => {
     setWithdrawnQuantity(
       (readyQuantityWithdrawn ? +readyQuantityWithdrawn : 0) +
-        (notReadyQuantityWithdrawn ? +notReadyQuantityWithdrawn : 0)
+        (notReadyQuantityWithdrawn ? +notReadyQuantityWithdrawn : 0) +
+        (germinatingQuantityWithdrawn ? +germinatingQuantityWithdrawn : 0)
     );
-  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn]);
+  }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, germinatingQuantityWithdrawn]);
 
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
@@ -451,7 +487,22 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     };
 
     fetchSpecies();
-  }, [selectedOrganization]);
+  }, [selectedOrganization.id]);
+
+  useEffect(() => {
+    const fetchSubLocations = async () => {
+      if (localRecord.destinationFacilityId && nurseryV2) {
+        setDestinationSubLocations([]);
+        setSelectedSubLocations([]);
+        const response = await SubLocationService.getSubLocations(localRecord.destinationFacilityId);
+        if (response.requestSucceeded) {
+          setDestinationSubLocations(response.subLocations);
+        }
+      }
+    };
+
+    fetchSubLocations();
+  }, [localRecord.destinationFacilityId, nurseryV2]);
 
   const batchesFromNursery = useMemo(() => {
     return batches.filter(
@@ -550,9 +601,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             <Grid display='flex'>
               <Grid
                 item
-                xs={isNurseryTransfer && !isMobile ? 6 : 12}
-                sx={{ marginTop: theme.spacing(2) }}
-                paddingRight={1}
+                xs={isNurseryTransfer && !isMobile && !nurseryV2 ? 6 : 12}
+                sx={{ marginTop: theme.spacing(2), marginRight: isNurseryTransfer && !isMobile && !nurseryV2 ? 1 : 0 }}
               >
                 <Dropdown
                   id='fromFacilityId'
@@ -566,8 +616,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 />
               </Grid>
 
-              {isNurseryTransfer && (
-                <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={1}>
+              {isNurseryTransfer && !nurseryV2 && (
+                <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginLeft: isMobile ? 0 : 1 }}>
                   <Dropdown
                     id='destinationFacilityId'
                     placeholder={strings.SELECT}
@@ -581,6 +631,40 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 </Grid>
               )}
             </Grid>
+            {isNurseryTransfer && nurseryV2 && (
+              <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                <Grid
+                  item
+                  xs={!isMobile && destinationSubLocations.length ? 6 : 12}
+                  sx={{ marginTop: theme.spacing(2), marginRight: !isMobile && destinationSubLocations.length ? 1 : 0 }}
+                >
+                  <Dropdown
+                    id='destinationFacilityId'
+                    placeholder={strings.SELECT}
+                    label={strings.TO_NURSERY_REQUIRED}
+                    selectedValue={localRecord.destinationFacilityId?.toString()}
+                    options={destinationNurseriesOptions}
+                    onChange={(value) => updateField('destinationFacilityId', value)}
+                    errorText={fieldsErrors.destinationFacilityId}
+                    fullWidth={true}
+                  />
+                </Grid>
+                {destinationSubLocations.length > 0 && (
+                  <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2), marginLeft: isMobile ? 0 : 1 }}>
+                    <MultiSelect
+                      fullWidth={true}
+                      label={strings.SUB_LOCATION}
+                      onAdd={(val) => setSelectedSubLocations((prev) => [...prev, val])}
+                      onRemove={(val) => setSelectedSubLocations((prev) => prev.filter((v) => v !== val))}
+                      options={destinationSubLocationsOptions}
+                      valueRenderer={(name: string) => name}
+                      selectedOptions={selectedSubLocations}
+                      placeHolder={strings.SELECT}
+                    />
+                  </Grid>
+                )}
+              </Grid>
+            )}
             {isOutplant && (
               <>
                 <Divisor mt={3} />
@@ -643,6 +727,22 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             <>
               {isSingleBatch && !isOutplant && (
                 <>
+                  {nurseryV2 && (
+                    <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
+                        <Textfield
+                          label={strings.GERMINATING_QUANTITY_REQUIRED}
+                          id='germinatingQuantityWithdrawn'
+                          onChange={(value: unknown) => setGerminatingQuantityWithdrawn(value as number)}
+                          type='number'
+                          value={germinatingQuantityWithdrawn}
+                          tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+                          className={classes.germinatingQuantityWithdrawn}
+                          errorText={fieldsErrors.germinatingQuantityWithdrawn}
+                        />
+                      </Grid>
+                    </Grid>
+                  )}
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
