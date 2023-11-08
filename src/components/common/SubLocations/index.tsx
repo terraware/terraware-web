@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import strings from 'src/strings';
 import { SubLocationService } from 'src/services';
@@ -7,30 +7,46 @@ import { useLocalization } from 'src/providers';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { useNumberFormatter } from 'src/utils/useNumber';
-import SubLocationsCellRenderer from 'src/components/SeedBank/SubLocationsCellRenderer';
+import SubLocationsCellRenderer from './SubLocationsCellRenderer';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { Button } from '@terraware/web-components';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import AddEditSubLocationModal from 'src/components/SeedBank/AddEditSubLocationModal';
+import AddEditSubLocationModal from './AddEditSubLocationModal';
 import _ from 'lodash';
 
+export type FacilityType = 'seedbank' | 'nursery';
+
 export type SublocationsProps = {
-  seedBankId?: number;
+  facilityType: FacilityType;
+  facilityId?: number;
   onEdit?: (subLocations: PartialSubLocation[]) => void;
+  renderLink?: (facilityId: number, subLocationName: string) => string;
 };
 
-const subLocationWith = (name: string, id: number) => ({
+const subLocationWith = (name: string, id: number, facilityType: FacilityType) => ({
   name,
   id: -id,
-  activeAccessions: 0,
+  activeAccessions: facilityType === 'seedbank' ? 0 : undefined,
+  activeBatches: facilityType === 'nursery' ? 0 : undefined,
 });
 
-const columns = (): TableColumnType[] => [
-  { key: 'name', name: strings.NAME, type: 'string' },
-  { key: 'activeAccessions', name: strings.ACTIVE_ACCESSIONS, type: 'number' },
-];
+const baseColumn = (): TableColumnType => ({ key: 'name', name: strings.NAME, type: 'string' });
 
-export default function SubLocations({ seedBankId, onEdit }: SublocationsProps): JSX.Element | null {
+const seedBankColumn = (): TableColumnType => ({
+  key: 'activeAccessions',
+  name: strings.ACTIVE_ACCESSIONS,
+  type: 'number',
+});
+
+const nurseryColumn = (): TableColumnType => ({ key: 'activeBatches', name: strings.BATCHES, type: 'number' });
+
+export default function SubLocations({
+  facilityType,
+  facilityId,
+  onEdit,
+  renderLink,
+}: SublocationsProps): JSX.Element | null {
+  const isSeedbank = facilityType === 'seedbank';
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const numberFormatter = useNumberFormatter();
@@ -40,9 +56,16 @@ export default function SubLocations({ seedBankId, onEdit }: SublocationsProps):
   const [openSubLocationModal, setOpenSubLocationModal] = useState<boolean>(false);
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [numberFormatter, activeLocale]);
 
+  const columns = useCallback(() => {
+    if (!activeLocale) {
+      return [];
+    }
+    return [baseColumn(), isSeedbank ? seedBankColumn() : nurseryColumn()];
+  }, [activeLocale, isSeedbank]);
+
   useEffect(() => {
     const fetchSubLocations = async () => {
-      const response = await SubLocationService.getSubLocations(seedBankId!);
+      const response = await SubLocationService.getSubLocations(facilityId!);
       if (response.requestSucceeded) {
         if (activeLocale) {
           const collator = new Intl.Collator(activeLocale);
@@ -51,21 +74,22 @@ export default function SubLocations({ seedBankId, onEdit }: SublocationsProps):
       }
     };
 
-    if (seedBankId) {
+    if (facilityId) {
       fetchSubLocations();
-    } else {
-      setSubLocations(DEFAULT_SUB_LOCATIONS().map((name, index) => subLocationWith(name, index)));
+    } else if (isSeedbank) {
+      setSubLocations(DEFAULT_SUB_LOCATIONS().map((name, index) => subLocationWith(name, index, facilityType)));
     }
-  }, [seedBankId, activeLocale]);
+  }, [facilityId, activeLocale, isSeedbank, facilityType]);
 
   const getTopBarButtons = () => {
     const topBarButtons: TopBarButton[] = [
       {
         buttonType: 'destructive',
         buttonText: strings.DELETE,
-        // we don't want to delete locations that have active accessions
-        disabled: !selectedRows.some((location) => !location.activeAccessions),
-        onButtonClick: () => deleteSubLocations(selectedRows.filter((location) => !location.activeAccessions)),
+        // we don't want to delete locations that have active data
+        disabled: selectedRows.some((location) => location.activeAccessions || location.activeBatches),
+        onButtonClick: () =>
+          deleteSubLocations(selectedRows.filter((location) => !(location.activeAccessions || location.activeBatches))),
       },
     ];
 
@@ -90,7 +114,7 @@ export default function SubLocations({ seedBankId, onEdit }: SublocationsProps):
   };
 
   const addSubLocation = (name: string) => {
-    setNewSubLocations([...subLocations, subLocationWith(name, Date.now())]);
+    setNewSubLocations([...subLocations, subLocationWith(name, Date.now(), facilityType)]);
   };
 
   const editSubLocation = (location: PartialSubLocation) => {
@@ -132,6 +156,7 @@ export default function SubLocations({ seedBankId, onEdit }: SublocationsProps):
             label={isMobile ? '' : strings.ADD_SUB_LOCATION}
             onClick={onAddSubLocationClick}
             size='small'
+            type='passive'
           />
         )}
       </Grid>
@@ -142,7 +167,7 @@ export default function SubLocations({ seedBankId, onEdit }: SublocationsProps):
             columns={columns}
             rows={subLocations}
             orderBy='name'
-            Renderer={SubLocationsCellRenderer({ seedBankId, numericFormatter, editMode })}
+            Renderer={SubLocationsCellRenderer({ facilityId, numericFormatter, editMode, renderLink })}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={editMode}

@@ -18,7 +18,7 @@ import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import { PartialSubLocation } from 'src/types/Facility';
-import SubLocations from 'src/components/SeedBank/SubLocations';
+import SeedBankSubLocations from 'src/components/SeedBank/SeedBankSubLocations';
 import { DatePicker } from '@terraware/web-components';
 
 export default function SeedBankView(): JSX.Element {
@@ -306,7 +306,7 @@ export default function SeedBankView(): JSX.Element {
               />
             </Grid>
           </Grid>
-          <SubLocations
+          <SeedBankSubLocations
             seedBankId={selectedSeedBank?.id === -1 ? undefined : selectedSeedBank?.id}
             onEdit={(locations) => setEditedSubLocations(locations)}
           />
