@@ -1,5 +1,4 @@
 import React from 'react';
-import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
@@ -7,15 +6,17 @@ import { ActiveStatuses } from 'src/types/Accession';
 import { NumericFormatter } from 'src/types/Number';
 
 export type SubLocationsCellRendererProps = {
-  seedBankId?: number;
+  facilityId?: number;
   numericFormatter: NumericFormatter;
   editMode: boolean;
+  renderLink?: (facilityId: number, subLocationId: number) => string;
 };
 
 export default function SubLocationsCellRenderer({
   seedBankId,
   numericFormatter,
   editMode,
+  renderLink,
 }: SubLocationsCellRendererProps) {
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, value, row, onRowClick } = props;
