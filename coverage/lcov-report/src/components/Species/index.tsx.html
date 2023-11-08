@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/247</span>
+                <span class='fraction'>0/245</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/132</span>
+                <span class='fraction'>0/130</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/241</span>
+                <span class='fraction'>0/239</span>
             </div>
         
             
@@ -968,10 +968,7 @@
 <a name='L903'></a><a href='#L903'>903</a>
 <a name='L904'></a><a href='#L904'>904</a>
 <a name='L905'></a><a href='#L905'>905</a>
-<a name='L906'></a><a href='#L906'>906</a>
-<a name='L907'></a><a href='#L907'>907</a>
-<a name='L908'></a><a href='#L908'>908</a>
-<a name='L909'></a><a href='#L909'>909</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L906'></a><a href='#L906'>906</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1544,9 +1541,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1893,8 +1887,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../common/Textfield/Textfield';
-import SearchService, { SearchRequestPayload } from 'src/services/SearchService';
-import { FieldNodePayload, FieldOptionsMap, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import SearchService from 'src/services/SearchService';
+import { FieldNodePayload, FieldOptionsMap, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import useForm from 'src/utils/useForm';
 import Icon from '../common/icon/Icon';
 import ImportSpeciesModal from './ImportSpeciesModal';
@@ -2251,7 +2245,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
   const getParams = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const params: SearchNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
+    const params: SearchRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
       prefix: 'species',
       fields: [...BE_SORTED_FIELDS, 'id', 'rare', 'ecosystemTypes.ecosystemType', 'organization_id'],
       search: {
@@ -2340,7 +2334,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 &nbsp;
   const onApplyFilters = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    as</span>ync (reviewErrors?: boolean) =&gt; {
-      const params: SearchNodePayload = <span class="cstat-no" title="statement not covered" >getParams();</span>
+      const params: SearchRequestPayload = <span class="cstat-no" title="statement not covered" >getParams();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (species) {</span>
         // organization id filter will always exist
@@ -2452,9 +2446,6 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 &nbsp;
   const downloadReportHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
     const params = <span class="cstat-no" title="statement not covered" >getParams();</span>
-<span class="cstat-no" title="statement not covered" >    if (!params.search.children.length) {</span>
-<span class="cstat-no" title="statement not covered" >      params.search = null;</span>
-    }
 <span class="cstat-no" title="statement not covered" >    params.fields = CSV_FIELDS;</span>
     const apiResponse = <span class="cstat-no" title="statement not covered" >await SearchService.searchCsv(params);</span>
 &nbsp;
@@ -2794,7 +2785,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-08T18:55:07.318Z
+                at 2023-11-08T19:36:38.005Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

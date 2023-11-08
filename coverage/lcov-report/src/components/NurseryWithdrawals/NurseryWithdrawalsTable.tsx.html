@@ -388,7 +388,23 @@
 <a name='L323'></a><a href='#L323'>323</a>
 <a name='L324'></a><a href='#L324'>324</a>
 <a name='L325'></a><a href='#L325'>325</a>
-<a name='L326'></a><a href='#L326'>326</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -724,7 +740,15 @@ import { APP_PATHS } from 'src/constants';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { NurseryWithdrawalService } from 'src/services';
-import { FieldNodePayload, FieldOptionsMap, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import {
+  AndNodePayload,
+  FieldNodePayload,
+  FieldOptionsMap,
+  OrNodePayload,
+  SearchNodePayload,
+  SearchResponseElement,
+  SearchSortOrder,
+} from 'src/types/Search';
 import WithdrawalLogRenderer from './WithdrawalLogRenderer';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -840,7 +864,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   };
 &nbsp;
   const getSearchChildren = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const finalSearchValueChildren: FieldNodePayload[] = <span class="cstat-no" title="statement not covered" >[];</span>
+    const finalSearchValueChildren: SearchNodePayload[] = <span class="cstat-no" title="statement not covered" >[];</span>
     const searchValueChildren: FieldNodePayload[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >    if (debouncedSearchTerm) {</span>
       const fromNurseryNode: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
@@ -868,16 +892,16 @@ export default function <span class="fstat-no" title="function not covered" >Nur
 <span class="cstat-no" title="statement not covered" >      searchValueChildren.push(speciesNameNode);</span>
     }
 &nbsp;
-    const filterValueChildren: FieldNodePayload[] = <span class="cstat-no" title="statement not covered" >[...Object.values(filters)];</span>
+    const filterValueChildren: SearchNodePayload[] = <span class="cstat-no" title="statement not covered" >[...Object.values(filters)];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (searchValueChildren.length) {</span>
-      const searchValueNodes: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
+      const searchValueNodes: OrNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
         operation: 'or',
         children: searchValueChildren,
       };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (filterValueChildren.length) {</span>
-        const filterValueNodes: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
+        const filterValueNodes: AndNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
           operation: 'and',
           children: filterValueChildren,
         };
@@ -890,7 +914,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
 <span class="cstat-no" title="statement not covered" >        finalSearchValueChildren.push(searchValueNodes);</span>
       }
     } else <span class="cstat-no" title="statement not covered" >if (filterValueChildren.length) {</span>
-      const filterValueNodes: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
+      const filterValueNodes: AndNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
         operation: 'and',
         children: filterValueChildren,
       };
@@ -900,7 +924,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   }, [filters, debouncedSearchTerm]);
 &nbsp;
   const onApplyFilters = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-    const searchChildren: FieldNodePayload[] = <span class="cstat-no" title="statement not covered" >getSearchChildren();</span>
+    const searchChildren: SearchNodePayload[] = <span class="cstat-no" title="statement not covered" >getSearchChildren();</span>
     const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
 <span class="cstat-no" title="statement not covered" >    setRequestId('searchWithdrawals', requestId);</span>
     const apiSearchResults = <span class="cstat-no" title="statement not covered" >await NurseryWithdrawalService.listNurseryWithdrawals(</span>
@@ -1045,7 +1069,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-08T18:55:07.318Z
+                at 2023-11-08T19:36:38.005Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

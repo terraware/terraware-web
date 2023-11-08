@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/21</span>
+                <span class='fraction'>3/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/21</span>
+                <span class='fraction'>3/15</span>
             </div>
         
             
@@ -146,7 +146,14 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,6 +172,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,14 +193,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,8 +206,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -240,48 +254,55 @@ import HttpService from './HttpService';
 // endpoint
 const SEARCH_ENDPOINT = '/api/v1/search';
 &nbsp;
-/**
+/*
  * Types exported from service
  */
 &nbsp;
-export type SearchRequestPayload = paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
+/**
+ * Payload of search request as it's defined in the OpenAPI schema.
+ *
+ * This is called RawSearchRequestPayload to distinguish it from SearchRequestPayload as defined
+ * in Search.ts. SearchRequestPayload is stricter: it requires a search filter, whereas the API
+ * doesn't. We almost always want to include a search filter, so we generally use the stricter
+ * type to catch cases where it's missing.
+ *
+ * You will generally want SearchRequestPayload instead of this.
+ */
+export type RawSearchRequestPayload =
+  paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
+&nbsp;
 export type SearchResponsePayload =
   paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 &nbsp;
 const httpSearch = HttpService.root(SEARCH_ENDPOINT);
 &nbsp;
-/*
- * convertToSearchNodePayload()
- * input: search criteria in the type of SearchCriteria, which is used by the application
- * output: search criteria in the type of SearchNodePayload, which is required by API modules.
- *         undefined if the input represented no search criteria.
+/**
+ * Converts a list of search criteria to an AndNodePayload that includes a filter for
+ * organization ID.
+ *
+ * @param criteria Search criteria in the type of SearchCriteria, which is used by the application,
+ *   or an array of SearchNodePayload
+ * @param organizationId ID of organization to search.
+ * @return SearchNodePayload suitable for use in a search request. This will currently always be
+ *   an AndNodePayload.
  */
-function <span class="fstat-no" title="function not covered" >convertToSearchNodePayload(</span>criteria: SearchCriteria, organizationId?: number): SearchNodePayload | undefined {
-<span class="cstat-no" title="statement not covered" >  if (Object.keys(criteria).length === 0 &amp;&amp; !organizationId) {</span>
-<span class="cstat-no" title="statement not covered" >    return undefined;</span>
-  }
-  let newCriteria = <span class="cstat-no" title="statement not covered" >criteria;</span>
-<span class="cstat-no" title="statement not covered" >  if (organizationId) {</span>
-<span class="cstat-no" title="statement not covered" >    newCriteria = addOrgInfoToSearch(organizationId, criteria);</span>
-  }
-<span class="cstat-no" title="statement not covered" >  return {</span>
-    operation: 'and',
-    children: Object.values(newCriteria),
-  };
-}
-&nbsp;
-function <span class="fstat-no" title="function not covered" >addOrgInfoToSearch(</span>organizationId: number, previousCriteria?: SearchCriteria) {
-  const newCriteria = <span class="cstat-no" title="statement not covered" >previousCriteria ? Object.values(previousCriteria) : [];</span>
+function <span class="fstat-no" title="function not covered" >convertToSearchNodePayload(</span>
+  criteria: SearchCriteria | SearchNodePayload[],
+  organizationId: number
+): SearchNodePayload {
+  const newCriteria = <span class="cstat-no" title="statement not covered" >Object.values(criteria);</span>
 <span class="cstat-no" title="statement not covered" >  newCriteria.unshift({</span>
     field: 'facility_organization_id',
     values: [organizationId.toString()],
     operation: 'field',
-  });
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return newCriteria;</span>
+  } as SearchNodePayload);
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    operation: 'and',
+    children: newCriteria,
+  };
 }
 &nbsp;
-async function <span class="fstat-no" title="function not covered" >search(</span>entity: SearchRequestPayload): Promise&lt;SearchResponseElement[] | null&gt; {
+async function <span class="fstat-no" title="function not covered" >search(</span>entity: RawSearchRequestPayload): Promise&lt;SearchResponseElement[] | null&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const response: SearchResponsePayload = <span class="cstat-no" title="statement not covered" >(await httpSearch.post({ entity })).data;</span>
 <span class="cstat-no" title="statement not covered" >    return response.results;</span>
@@ -290,7 +311,7 @@ async function <span class="fstat-no" title="function not covered" >search(</spa
   }
 }
 &nbsp;
-async function <span class="fstat-no" title="function not covered" >searchCsv(</span>entity: SearchRequestPayload): Promise&lt;any&gt; {
+async function <span class="fstat-no" title="function not covered" >searchCsv(</span>entity: RawSearchRequestPayload): Promise&lt;any&gt; {
   const headers = <span class="cstat-no" title="statement not covered" >{</span>
     accept: 'text/csv',
   };
@@ -319,7 +340,7 @@ export default SearchService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-08T18:55:07.318Z
+                at 2023-11-08T19:36:38.005Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
