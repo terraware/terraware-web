@@ -23,12 +23,15 @@ export const selectObservationSchedulableSites = createSelector(
   ],
   (upcomingObservations, plantingSites, plantings) => {
     // map sites with plantings
-    const sitesWithPlantings = (plantings ?? []).reduce((acc, planting) => {
-      const siteId = planting.plantingSite.id;
-      const numPlants = planting['numPlants(raw)'];
-      acc[siteId] = (acc[siteId] ?? 0) + Number(numPlants);
-      return acc;
-    }, {} as Record<string, number>);
+    const sitesWithPlantings = (plantings ?? []).reduce(
+      (acc, planting) => {
+        const siteId = planting.plantingSite.id;
+        const numPlants = planting['numPlants(raw)'];
+        acc[siteId] = (acc[siteId] ?? 0) + Number(numPlants);
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     // find sites with zones
     const sitesWithZones = (plantingSites ?? []).filter((site) => site.plantingZones?.length);

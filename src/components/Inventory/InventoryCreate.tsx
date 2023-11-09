@@ -31,7 +31,7 @@ const MANDATORY_FIELDS = [
   'readyQuantity',
 ] as const;
 
-type MandatoryField = typeof MANDATORY_FIELDS[number];
+type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
 export default function CreateInventory(): JSX.Element {
   const { isMobile } = useDeviceInfo();
@@ -58,7 +58,7 @@ export default function CreateInventory(): JSX.Element {
       germinatingQuantity: undefined,
       notReadyQuantity: undefined,
       readyQuantity: undefined,
-    } as unknown as CreateBatchRequestPayload);
+    }) as unknown as CreateBatchRequestPayload;
 
   const [record, setRecord, onChange] = useForm<CreateBatchRequestPayload>(defaultBatch());
 
