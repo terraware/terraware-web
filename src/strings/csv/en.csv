@@ -138,6 +138,7 @@ CATALYTIC_DETAIL_INSTRUCTIONS,Please state whether Terraformation’s support ha
 CHALLENGES,Challenges and Setbacks
 CHALLENGES_INSTRUCTIONS,"Terraformation believes that the learnings from challenges and failures are often where the greatest growth happens, and sharing these challenges can have a positive global benefit. Please list any challenges or setbacks you experienced during the reporting period. What is the impact of these challenges, and what are the ways in which these setbacks can be overcome in the current project? What would you want to do differently in a future project? (One page maximum.)"
 CHALLENGES_REQUIRED,Challenges and Setbacks *
+CHANGE,Change
 CHANGE_DEFAULT_WEIGHT_SYSTEM,You can change your default weight system from {0}
 CHANGE_GERMINATING_STATUS,Change Germinating Status
 CHANGE_NOT_READY_STATUS,Change Not Ready Status
@@ -665,6 +666,8 @@ NO_SUB_LOCATIONS_NURSERY,Edit this nursery to add sub-locations.
 NONE,None
 NOT_CONNECTED,Not Connected
 NOT_READY,Not Ready
+NOT_READY_QUANTITY_AFTER,Not Ready Quantity (After)
+NOT_READY_QUANTITY_BEFORE,Not Ready Quantity (Before)
 NOT_READY_QUANTITY,Not Ready Quantity
 NOT_READY_QUANTITY_REQUIRED,Not Ready Quantity *
 NOTE_ANY_ISSUES,Does everything above look right? Note any issues.
@@ -878,6 +881,8 @@ RARE_ENDANGERED,"Rare, Endangered"
 REACH_OUT_TO_ADMIN_TITLE,Please reach out to an administrator from your organization.
 READY,Ready
 READY_QUANTITY,Ready Quantity
+READY_QUANTITY_AFTER,Ready Quantity (After)
+READY_QUANTITY_BEFORE,Ready Quantity (Before)
 READY_QUANTITY_REQUIRED,Ready Quantity *
 REASON,Reason
 REASSIGN,Reassign
@@ -1166,6 +1171,7 @@ SUBSHRUB,Subshrub
 SUBSTRATE,Substrate
 SUBSTRATE_AFTER,Substrate (After)
 SUBSTRATE_BEFORE,Substrate (Before)
+SUBSTRATE_NOTES,Substrate Notes
 SUBTITLE_GET_STARTED,"To get started, please create your organization now. You'll also be able to set up and manage information on people and species."
 SUBZONE,Subzone
 SUBZONE_PLANTING_COMPLETED_SUCCESS,Subzone(s) marked as Planting Complete.
@@ -1297,6 +1303,8 @@ TOTAL_WITHDRAWN_WEIGHT_POUNDS,Total Withdrawn (lb)
 TOTAL_WITHDRAWN_WEIGHT_QUANTITY,Total Withdrawn Weight
 TOTAL_WITHDRAWN_WEIGHT_UNITS,Total Withdrawn Weight Units
 TREATMENT,Treatment
+TREATMENT_AFTER,Treatement (After)
+TREATMENT_BEFORE,Treatment (Before)
 TREE,Tree
 TRUNCATED_TEXT_MORE_LINK,more
 TRY_AGAIN,Try Again

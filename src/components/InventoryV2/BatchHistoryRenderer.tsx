@@ -4,6 +4,8 @@ import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
 import { Link, Theme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
+import strings from 'src/strings';
+import { BatchHistoryItemForTable } from './BatchHistory';
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
@@ -15,6 +17,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '14px',
   },
 }));
+
+export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
+  if (batchHistoryItem.type === 'DetailsEdited' || batchHistoryItem.type === 'QuantityEdited') {
+    return `${batchHistoryItem.modifiedFields.join(', ')} ${strings.CHANGE}`;
+  }
+  if (batchHistoryItem.type === 'IncomingWithdrawal') {
+    return strings.NURSERY_TRANSFER;
+  }
+  if (batchHistoryItem.type === 'OutgoingWithdrawal') {
+    return strings.WITHDRAWAL;
+  }
+  return batchHistoryItem.type;
+};
 
 export default function BatchHistoryRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
@@ -39,6 +54,12 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
         }
         row={row}
       />
+    );
+  }
+
+  if (column.key === 'type') {
+    return (
+      <CellRenderer index={index} column={column} value={getEventType(row as BatchHistoryItemForTable)} row={row} />
     );
   }
 

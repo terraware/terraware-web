@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import Card from 'src/components/common/Card';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { makeStyles } from '@mui/styles';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '@terraware/web-components';
 import { NurseryBatchService, OrganizationUserService } from 'src/services';
@@ -34,13 +34,17 @@ type BatchHistoryProps = {
   batchId: number;
 };
 
-export type BatchHistoryItemWithUser = BatchHistoryItem & { editedByName: string };
+export type BatchHistoryItemForTable = BatchHistoryItem & {
+  editedByName: string;
+  previousEvent?: BatchHistoryItem;
+  modifiedFields: string[];
+};
 
 export default function BatchHistory({ batchId }: BatchHistoryProps): JSX.Element {
   const theme = useTheme();
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState('');
-  const [results, setResults] = useState<BatchHistoryItemWithUser[] | null>();
+  const [results, setResults] = useState<BatchHistoryItemForTable[] | null>();
   const [users, setUsers] = useState<Record<number, User> | undefined>({});
   const { selectedOrganization } = useOrganization();
   const [selectedEvent, setSelectedEvent] = useState<any>();
@@ -60,23 +64,76 @@ export default function BatchHistory({ batchId }: BatchHistoryProps): JSX.Elemen
     fetchUsers();
   }, [selectedOrganization.id]);
 
+  const findPreviousEvent = useCallback(
+    (batch: BatchHistoryItem, allItems: BatchHistoryItem[] | null): BatchHistoryItem | undefined => {
+      const eventsOfSameType = allItems?.filter((result) => result.type === batch.type);
+      let previousEv: BatchHistoryItem | undefined;
+      eventsOfSameType?.forEach((ev) => {
+        if (ev.version && batch.version && ev.version < batch.version && ev.version > (previousEv?.version || 0)) {
+          previousEv = ev;
+        }
+      });
+      return previousEv;
+    },
+    []
+  );
+
   useEffect(() => {
     if (users) {
       const fetchResults = async () => {
         const response = await NurseryBatchService.getBatchHistory(batchId);
         if (response.requestSucceeded) {
-          const historyItemsWithUsers =
+          const historyItemsForTable =
             response.history?.map((historyItem) => {
               const userSelected = users[historyItem.createdBy];
-              return { ...historyItem, editedByName: getUserDisplayName(userSelected) };
+              const previousEv = findPreviousEvent(historyItem, response.history);
+              const changedFields = [];
+              if (historyItem.type === 'DetailsEdited' && (previousEv?.type === 'DetailsEdited' || !previousEv)) {
+                if ((historyItem.notes || '') !== (previousEv?.notes || '')) {
+                  changedFields.push(strings.NOTES);
+                }
+                if (
+                  (historyItem.substrate || '') !== (previousEv?.substrate || '') ||
+                  (historyItem.substrateNotes || '') !== (previousEv?.substrateNotes || '')
+                ) {
+                  changedFields.push(strings.SUBSTRATE);
+                }
+                if (
+                  (historyItem.treatment || '') !== (previousEv?.treatment || '') ||
+                  (historyItem.treatmentNotes || '') !== (previousEv?.treatmentNotes || '')
+                ) {
+                  changedFields.push(strings.TREATMENT);
+                }
+                if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {
+                  changedFields.push(strings.ESTIMATED_READY_DATE);
+                }
+              }
+              if (historyItem.type === 'QuantityEdited' && (previousEv?.type === 'QuantityEdited' || !previousEv)) {
+                if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
+                  changedFields.push(strings.GERMINATING_QUANTITY);
+                }
+                if (historyItem.notReadyQuantity !== previousEv?.notReadyQuantity) {
+                  changedFields.push(strings.NOT_READY_QUANTITY);
+                }
+                if (historyItem.readyQuantity !== previousEv?.readyQuantity) {
+                  changedFields.push(strings.READY_QUANTITY);
+                }
+              }
+
+              return {
+                ...historyItem,
+                editedByName: getUserDisplayName(userSelected),
+                previousEvent: previousEv,
+                modifiedFields: changedFields,
+              };
             }) || null;
-          setResults(historyItemsWithUsers);
+          setResults(historyItemsForTable);
         }
       };
 
       fetchResults();
     }
-  }, [users, batchId]);
+  }, [users, batchId, findPreviousEvent]);
 
   const onChangeSearch = (id: string, value: unknown) => {
     setSearchValue(value as string);
