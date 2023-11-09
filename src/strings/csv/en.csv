@@ -102,6 +102,7 @@ BACK_OF_SEED_BANK,Back of Seed Bank
 BACK_TO_TERRAWARE,Back to Terraware
 BAG_ID,Bag ID
 BAG_IDS,Bag IDs
+BATCH_NUMBER,Batch Number
 BATCHES,Batches
 BATCHES_AT,Batches at {0}
 BATCHES_COLUMN_TOOLTIP,Empty batches are not counted in this column.
@@ -1215,6 +1216,7 @@ TITLE_REQUEST_FEATURE,Request a Feature
 TITLE_TEST_APP,Test our Mobile App
 TITLE_WELCOME,Welcome to Terraware
 TO,To
+TO_NURSERY,To: Nursery
 TO_NURSERY_REQUIRED,To: Nursery *
 TO_PLANTING_SITE_REQUIRED,To: Planting Site *
 TO_SUBZONE,To: Subzone
@@ -1279,6 +1281,7 @@ TOTAL_PLANTS_OBSERVED,Total Plants Observed
 TOTAL_PLANTS_PLANTED,Total Plants Planted *
 TOTAL_PLANTS_PLANTED_HELPER_TEXT,Species not classified as “trees” in the species list.
 TOTAL_QUANTITY,Total Quantity
+TOTAL_QUANTITY_MOVED,Total Quantity Moved
 TOTAL_READY_QUANTITY,Total Ready Quantity
 TOTAL_SEED_COUNT,Total Seed Count
 TOTAL_SEEDLINGS_SENT,Total Seedlings Sent

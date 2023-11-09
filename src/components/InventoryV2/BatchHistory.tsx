@@ -32,15 +32,17 @@ const columns = (): TableColumnType[] => [
 
 type BatchHistoryProps = {
   batchId: number;
+  nurseryName?: string;
 };
 
 export type BatchHistoryItemForTable = BatchHistoryItem & {
   editedByName: string;
   previousEvent?: BatchHistoryItem;
   modifiedFields: string[];
+  nurseryName?: string;
 };
 
-export default function BatchHistory({ batchId }: BatchHistoryProps): JSX.Element {
+export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps): JSX.Element {
   const theme = useTheme();
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState('');
@@ -125,6 +127,7 @@ export default function BatchHistory({ batchId }: BatchHistoryProps): JSX.Elemen
                 editedByName: getUserDisplayName(userSelected),
                 previousEvent: previousEv,
                 modifiedFields: changedFields,
+                nurseryName,
               };
             }) || null;
           setResults(historyItemsForTable);
@@ -133,7 +136,7 @@ export default function BatchHistory({ batchId }: BatchHistoryProps): JSX.Elemen
 
       fetchResults();
     }
-  }, [users, batchId, findPreviousEvent]);
+  }, [users, batchId, findPreviousEvent, nurseryName]);
 
   const onChangeSearch = (id: string, value: unknown) => {
     setSearchValue(value as string);

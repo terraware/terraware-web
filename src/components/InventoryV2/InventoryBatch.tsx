@@ -195,7 +195,11 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
                     label: strings.DETAILS,
                     children: <BatchDetails batch={batch} onUpdate={onUpdateBatch} />,
                   },
-                  { id: 'history', label: strings.HISTORY, children: <BatchHistory batchId={batch.id} /> },
+                  {
+                    id: 'history',
+                    label: strings.HISTORY,
+                    children: <BatchHistory batchId={batch.id} nurseryName={inventoryNursery?.name} />,
+                  },
                 ]}
               />
             </Box>

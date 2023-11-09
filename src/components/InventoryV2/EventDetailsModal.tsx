@@ -4,6 +4,11 @@ import strings from 'src/strings';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 import { BatchHistoryItemForTable } from './BatchHistory';
 import { getEventType } from './BatchHistoryRenderer';
+import { useEffect, useState } from 'react';
+import { NurseryBatchService } from 'src/services';
+import { Batch } from 'src/types/Batch';
+import { getNurseryById } from 'src/utils/organization';
+import { useOrganization } from 'src/providers';
 
 export interface EventDetailsModalProps {
   onClose: () => void;
@@ -12,6 +17,7 @@ export interface EventDetailsModalProps {
 
 export default function EventDetailsModal(props: EventDetailsModalProps): JSX.Element {
   const { onClose, selectedEvent } = props;
+  const { selectedOrganization } = useOrganization();
 
   const previousEvent = selectedEvent.previousEvent;
 
@@ -26,6 +32,22 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
   const marginTop = {
     marginTop: theme.spacing(2),
   };
+
+  const [relatedBatch, setRelatedBatch] = useState<Batch | null>();
+
+  useEffect(() => {
+    const fetchRelatedBatch = async () => {
+      if (selectedEvent.type === 'IncomingWithdrawal') {
+        const response = await NurseryBatchService.getBatch(selectedEvent.fromBatchId);
+        if (response.requestSucceeded) {
+          setRelatedBatch(response.batch);
+        }
+      }
+    };
+    if (selectedEvent.type === 'IncomingWithdrawal' && !relatedBatch) {
+      fetchRelatedBatch();
+    }
+  }, [selectedEvent, relatedBatch]);
 
   return (
     <DialogBox
@@ -258,6 +280,47 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                 />
               </Grid>
             )}
+          </>
+        )}
+        {selectedEvent?.type === 'IncomingWithdrawal' && relatedBatch && (
+          <>
+            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+              <Textfield
+                id='fromNursery'
+                value={getNurseryById(selectedOrganization, relatedBatch.facilityId).name || ''}
+                type='text'
+                label={strings.FROM_NURSERY}
+                display={true}
+              />
+            </Grid>
+
+            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+              <Textfield
+                id='toNursery'
+                value={selectedEvent.nurseryName || ''}
+                type='text'
+                label={strings.TO_NURSERY}
+                display={true}
+              />
+            </Grid>
+            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+              <Textfield
+                id='totalQuantityMoved'
+                value={+selectedEvent.readyQuantityAdded + +selectedEvent.notReadyQuantityAdded}
+                type='text'
+                label={strings.TOTAL_QUANTITY_MOVED}
+                display={true}
+              />
+            </Grid>
+            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+              <Textfield
+                id='fromBatchNumber'
+                value={relatedBatch.batchNumber}
+                type='text'
+                label={strings.BATCH_NUMBER}
+                display={true}
+              />
+            </Grid>
           </>
         )}
       </Grid>
