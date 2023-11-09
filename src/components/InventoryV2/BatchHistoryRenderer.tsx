@@ -26,7 +26,7 @@ export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
     return strings.NURSERY_TRANSFER;
   }
   if (batchHistoryItem.type === 'OutgoingWithdrawal') {
-    return strings.WITHDRAWAL;
+    return `${strings.WITHDRAWAL} - ${batchHistoryItem.purpose}`;
   }
   return batchHistoryItem.type;
 };
