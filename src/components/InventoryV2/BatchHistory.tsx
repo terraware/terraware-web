@@ -156,9 +156,11 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
       {openEventDetailsModal && (
         <EventDetailsModal
           onClose={() => {
+            setSelectedEvent(undefined);
             setOpenEventDetailsModal(false);
           }}
           selectedEvent={selectedEvent}
+          batchId={batchId}
         />
       )}
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>

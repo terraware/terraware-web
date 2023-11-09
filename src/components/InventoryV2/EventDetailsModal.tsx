@@ -1,4 +1,4 @@
-import { Divider, Grid, useTheme } from '@mui/material';
+import { Box, Divider, Grid, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
@@ -9,31 +9,40 @@ import { NurseryBatchService } from 'src/services';
 import { Batch } from 'src/types/Batch';
 import { getNurseryById } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
+import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
+import { makeStyles } from '@mui/styles';
 
 export interface EventDetailsModalProps {
   onClose: () => void;
   selectedEvent: BatchHistoryItemForTable;
+  batchId: number;
 }
 
+const useStyles = makeStyles(() => ({
+  thumbnail: {
+    margin: 'auto auto',
+    objectFit: 'contain',
+    display: 'flex',
+    maxWidth: '120px',
+    maxHeight: '120px',
+  },
+}));
+
 export default function EventDetailsModal(props: EventDetailsModalProps): JSX.Element {
-  const { onClose, selectedEvent } = props;
-  const { selectedOrganization } = useOrganization();
-
-  const previousEvent = selectedEvent.previousEvent;
-
+  const classes = useStyles();
+  const { onClose, selectedEvent, batchId } = props;
   const theme = useTheme();
-
+  const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
-
+  const previousEvent = selectedEvent.previousEvent;
   const gridSize = () => (isMobile ? 12 : 6);
-
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
-
   const marginTop = {
     marginTop: theme.spacing(2),
   };
 
   const [relatedBatch, setRelatedBatch] = useState<Batch | null>();
+  const [photoUrl, setPhotoUrl] = useState<string>();
 
   useEffect(() => {
     const fetchRelatedBatch = async () => {
@@ -48,6 +57,17 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
       fetchRelatedBatch();
     }
   }, [selectedEvent, relatedBatch]);
+
+  useEffect(() => {
+    if (selectedEvent.type === 'PhotoCreated' && selectedEvent.fileId) {
+      setPhotoUrl(
+        BATCH_PHOTO_ENDPOINT.replace('{batchId}', batchId.toString()).replace(
+          '{photoId}',
+          selectedEvent.fileId.toString()
+        )
+      );
+    }
+  }, [selectedEvent, batchId]);
 
   return (
     <DialogBox
@@ -322,6 +342,21 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
               />
             </Grid>
           </>
+        )}
+        {selectedEvent?.type === 'PhotoCreated' && photoUrl && (
+          <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+            <Box
+              display='flex'
+              position='relative'
+              height={122}
+              width={122}
+              marginRight={isMobile ? 2 : 3}
+              marginTop={1}
+              border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+            >
+              <img className={classes.thumbnail} src={`${photoUrl}?maxHeight=120`} alt={`new`} />
+            </Box>
+          </Grid>
         )}
       </Grid>
     </DialogBox>
