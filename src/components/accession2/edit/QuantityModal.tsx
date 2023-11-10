@@ -40,11 +40,13 @@ export interface QuantityModalProps {
   statusEdit?: boolean;
   title: string;
 }
+
 interface UnitsSelectorProps {
   onChange: (newValue: string) => void;
   selectedValue: any;
   className?: string | undefined;
 }
+
 function UnitsSelector(props: UnitsSelectorProps): JSX.Element {
   const preferredUnits = usePreferredWeightUnits();
 
@@ -70,13 +72,12 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const { userPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
   const [isByWeight, setIsByWeight] = useState(accession.remainingQuantity?.units !== 'Seeds');
-
   const [subsetError, setSubsetError] = useState('');
   const [subsetWeightError, setSubsetWeightError] = useState('');
-
   const [subsetCountError, setSubsetCountError] = useState('');
   const [totalWeightError, setTotalWeightError] = useState('');
   const classes = useStyles();
+
   const validate = () => {
     const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);
     if (isNaN(quantity) || quantity < 0) {
@@ -142,11 +143,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   };
 
   const onChangeQuantityBy = (elem: React.ChangeEvent<HTMLInputElement>, value: string) => {
-    if (value === 'count') {
-      setIsByWeight(false);
-    } else if (value === 'weight') {
-      setIsByWeight(true);
-    }
+    setIsByWeight(value === 'weight')
   };
 
   const onChangeRemainingQuantityUnit = (newValue: string) => {

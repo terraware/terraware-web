@@ -26,6 +26,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { makeStyles } from '@mui/styles';
 import CountWithdrawal from 'src/components/accession2/withdraw/CountWithdrawal';
 import WeightWithdrawal from 'src/components/accession2/withdraw/WeightWithdrawal';
+import { Unit } from 'src/units'
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdraw: {
@@ -66,9 +67,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const [isByWeight, setIsByWeight] = useState(accession.remainingQuantity?.units === 'Seeds' ? false : true);
   const classes = useStyles();
   const [withdrawalQty, setWithdrawalQty] = useState<number>(0);
-  const [withdrawalUnits, setWithdrawalUnits] = useState<
-    'Seeds' | 'Grams' | 'Milligrams' | 'Kilograms' | 'Ounces' | 'Pounds'
-  >('Grams');
+  const [withdrawalUnits, setWithdrawalUnits] = useState<Unit['value']>('Grams');
   const [withdrawalValid, setWithdrawalValid] = useState<boolean>(false);
 
   const newWithdrawal: Withdrawal = {
@@ -244,12 +243,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
 
   const onChangeWithdrawBy = (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
     setIndividualError('withdrawnQuantity', '');
-
-    if (value === 'count') {
-      setIsByWeight(false);
-    } else if (value === 'weight') {
-      setIsByWeight(true);
-    }
+    setIsByWeight(value === 'weight')
   };
 
   const setIndividualError = (id: string, error?: string) => {
