@@ -360,24 +360,33 @@ const getBatchHistory = async (
       },
     },
     (data) => {
-      if (data && filter) {
+      if (data) {
         let filtered = [...data.history];
-        if (filter.type?.values) {
-          filtered = filtered.filter((ev) => {
-            return filter.type.values.indexOf(ev.type) > -1;
-          });
+        if (filter) {
+          if (filter.type?.values) {
+            filtered = filtered.filter((ev) => {
+              return filter.type.values.indexOf(ev.type) > -1;
+            });
+          }
+          if (filter.editedByName?.values && users) {
+            filtered = filtered.filter((ev) => {
+              const evUserName = getUserDisplayName(users[ev.createdBy]);
+              return filter.editedByName.values.indexOf(evUserName) > -1;
+            });
+          }
         }
-        if (filter.editedByName?.values && users) {
+        if (search && users) {
+          const regex = new RegExp(search, 'i');
           filtered = filtered.filter((ev) => {
             const evUserName = getUserDisplayName(users[ev.createdBy]);
-            return filter.editedByName.values.indexOf(evUserName) > -1;
+            return evUserName.match(regex);
           });
         }
         return {
           history: filtered,
         };
       }
-      return { history: data?.history ?? null };
+      return { history: null };
     }
   );
 
