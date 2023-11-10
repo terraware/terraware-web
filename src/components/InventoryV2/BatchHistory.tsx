@@ -184,14 +184,6 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     }
   }, [users, batchId, findPreviousEvent, nurseryName, filters, search]);
 
-  // const onChangeSearch = (id: string, value: unknown) => {
-  //   setSearchValue(value as string);
-  // };
-
-  // const clearSearch = () => {
-  //   setSearchValue('');
-  // };
-
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     setSelectedEvent(batch);
     setOpenEventDetailsModal(true);
@@ -213,18 +205,6 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
         {strings.HISTORY}
       </Typography>
       <Grid item xs={12} className={classes.searchBar}>
-        {/* <TextField
-          placeholder={strings.SEARCH}
-          iconLeft='search'
-          label=''
-          id='search'
-          type='text'
-          className={classes.searchField}
-          onChange={(value) => onChangeSearch('search', value)}
-          value={searchValue}
-          iconRight='cancel'
-          onClickRightIcon={clearSearch}
-        /> */}
         <Search {...searchProps} />
       </Grid>
       <Grid item xs={12}>
