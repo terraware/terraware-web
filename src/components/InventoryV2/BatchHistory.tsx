@@ -1,9 +1,8 @@
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import Card from 'src/components/common/Card';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { makeStyles } from '@mui/styles';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Table from 'src/components/common/table';
 import { TableColumnType } from '@terraware/web-components';
 import { NurseryBatchService, OrganizationUserService } from 'src/services';
@@ -13,6 +12,9 @@ import { useOrganization } from 'src/providers';
 import BatchHistoryRenderer from './BatchHistoryRenderer';
 import EventDetailsModal from './EventDetailsModal';
 import { getUserDisplayName } from 'src/utils/user';
+import { FieldOptionsMap } from 'src/types/Search';
+import { FilterField } from '../common/FilterGroup';
+import Search, { SearchProps } from '../common/SearchFiltersWrapper';
 
 const useStyles = makeStyles((theme: Theme) => ({
   searchField: {
@@ -45,12 +47,56 @@ export type BatchHistoryItemForTable = BatchHistoryItem & {
 export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps): JSX.Element {
   const theme = useTheme();
   const classes = useStyles();
-  const [searchValue, setSearchValue] = useState('');
+  const [search, setSearch] = useState<string>('');
+  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [results, setResults] = useState<BatchHistoryItemForTable[] | null>();
   const [users, setUsers] = useState<Record<number, User> | undefined>({});
   const { selectedOrganization } = useOrganization();
   const [selectedEvent, setSelectedEvent] = useState<any>();
   const [openEventDetailsModal, setOpenEventDetailsModal] = useState<boolean>(false);
+
+  const filterColumns = useMemo<FilterField[]>(() => {
+    return [
+      { name: 'type', label: strings.EVENT, type: 'multiple_selection' },
+      { name: 'editedByName', label: strings.EDITED_BY, type: 'multiple_selection' },
+    ];
+  }, []);
+
+  useEffect(() => {
+    setFilterOptions({
+      type: {
+        partial: false,
+        values: [
+          'DetailsEdited',
+          'IncomingWithdrawal',
+          'OutgoingWithdrawal',
+          'PhotoCreated',
+          'PhotoDeleted',
+          'QuantityEdited',
+          'StatusChanged',
+        ],
+      },
+      editedByName: {
+        partial: false,
+        values: users ? Object.values(users).map((user) => getUserDisplayName(user)) : [],
+      },
+    });
+  }, [setFilterOptions, users]);
+
+  const searchProps = useMemo<SearchProps>(
+    () => ({
+      search,
+      onSearch: (value: string) => setSearch(value),
+      filtersProps: {
+        filters,
+        setFilters: (value: Record<string, any>) => setFilters(value),
+        filterColumns,
+        filterOptions,
+      },
+    }),
+    [filters, filterColumns, filterOptions, search]
+  );
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -83,7 +129,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
   useEffect(() => {
     if (users) {
       const fetchResults = async () => {
-        const response = await NurseryBatchService.getBatchHistory(batchId);
+        const response = await NurseryBatchService.getBatchHistory(batchId, search, filters, users);
         if (response.requestSucceeded) {
           const historyItemsForTable =
             response.history?.map((historyItem) => {
@@ -136,15 +182,15 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
 
       fetchResults();
     }
-  }, [users, batchId, findPreviousEvent, nurseryName]);
+  }, [users, batchId, findPreviousEvent, nurseryName, filters, search]);
 
-  const onChangeSearch = (id: string, value: unknown) => {
-    setSearchValue(value as string);
-  };
+  // const onChangeSearch = (id: string, value: unknown) => {
+  //   setSearchValue(value as string);
+  // };
 
-  const clearSearch = () => {
-    setSearchValue('');
-  };
+  // const clearSearch = () => {
+  //   setSearchValue('');
+  // };
 
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     setSelectedEvent(batch);
@@ -167,7 +213,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
         {strings.HISTORY}
       </Typography>
       <Grid item xs={12} className={classes.searchBar}>
-        <TextField
+        {/* <TextField
           placeholder={strings.SEARCH}
           iconLeft='search'
           label=''
@@ -178,7 +224,8 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
           value={searchValue}
           iconRight='cancel'
           onClickRightIcon={clearSearch}
-        />
+        /> */}
+        <Search {...searchProps} />
       </Grid>
       <Grid item xs={12}>
         {results && (

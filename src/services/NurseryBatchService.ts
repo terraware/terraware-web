@@ -5,6 +5,8 @@ import SearchService from './SearchService';
 import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getPromisesResponse } from './utils';
 import PhotoService from './PhotoService';
+import { User } from 'src/types/User';
+import { getUserDisplayName } from 'src/utils/user';
 
 /**
  * Nursery related services
@@ -342,7 +344,12 @@ const uploadBatchPhotos = async (batchId: number, photos: File[]): Promise<((Res
   return PhotoService.uploadPhotos(url, photos);
 };
 
-const getBatchHistory = async (batchId: number): Promise<Response & BatchHistoryData> => {
+const getBatchHistory = async (
+  batchId: number,
+  search?: string,
+  filter?: Record<string, any>,
+  users?: Record<number, User>
+): Promise<Response & BatchHistoryData> => {
   const response: Response & BatchHistoryData = await httpBatchHistory.get<
     GetBatchHistoryResponsePayload,
     BatchHistoryData
@@ -352,7 +359,26 @@ const getBatchHistory = async (batchId: number): Promise<Response & BatchHistory
         '{batchId}': batchId.toString(),
       },
     },
-    (data) => ({ history: data?.history ?? null })
+    (data) => {
+      if (data && filter) {
+        let filtered = [...data.history];
+        if (filter.type?.values) {
+          filtered = filtered.filter((ev) => {
+            return filter.type.values.indexOf(ev.type) > -1;
+          });
+        }
+        if (filter.editedByName?.values && users) {
+          filtered = filtered.filter((ev) => {
+            const evUserName = getUserDisplayName(users[ev.createdBy]);
+            return filter.editedByName.values.indexOf(evUserName) > -1;
+          });
+        }
+        return {
+          history: filtered,
+        };
+      }
+      return { history: data?.history ?? null };
+    }
   );
 
   return response;
