@@ -180,7 +180,6 @@ function AppContent() {
   const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
   const nurseryV2 = isEnabled('Nursery Updates');
-  console.log('nurseryV2', nurseryV2);
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
 
