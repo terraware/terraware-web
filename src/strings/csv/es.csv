@@ -1,447 +1,447 @@
 key_name,es,comment
-ACCEPT,Aceptar
-ACCESSION,Accesión
-ACCESSION_BY_STATUS,Accesión por Estado
-ACCESSION_CHECKED_IN,¡Accesión ingresada!
-ACCESSION_DETAIL,Detalle de la accesión
-ACCESSION_DETAILS,Detalle de las accesiones
-ACCESSION_HISTORY,HIstorial de accesiones
-ACCESSION_ID,ID de accesión
-ACCESSION_NUMBER_CHECKED_IN,¡La accesión {0} se ha ingresado correctamente!
-ACCESSION_SAVED,Accesión guardada
-ACCESSIONS,Accesiones
-ACCESSIONS_CARD_DESCRIPTION,"Recoja semillas y, a continuación, registre y visualice sus accesiones. Las accesiones de semillas se pueden ver y analizar por banco de semillas."
-ACCESSIONS_DATABASE_DESCRIPTION,Gestione sus accesiones en Terraware.
-ACCESSIONS_IMPORT_COMPLETE,¡Se ha completado la importación de datos de accesiones!
-ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,Definir los lugares de almacenamiento asignados a las accesiones de semillas
-ACCESSIONS_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de semillas
-ACCESSIONS_TO_BE_CHECKED_IN,Hay {0} accesiones para ingresar.
+ACCEPT,Aceptar,
+ACCESSION,Accesión,
+ACCESSION_BY_STATUS,Accesión por Estado,
+ACCESSION_CHECKED_IN,¡Accesión ingresada!,
+ACCESSION_DETAIL,Detalle de la accesión,
+ACCESSION_DETAILS,Detalle de las accesiones,
+ACCESSION_HISTORY,HIstorial de accesiones,
+ACCESSION_ID,ID de accesión,
+ACCESSION_NUMBER_CHECKED_IN,¡La accesión {0} se ha ingresado correctamente!,
+ACCESSION_SAVED,Accesión guardada,
+ACCESSIONS,Accesiones,
+ACCESSIONS_CARD_DESCRIPTION,"Recoja semillas y, a continuación, registre y visualice sus accesiones. Las accesiones de semillas se pueden ver y analizar por banco de semillas.",
+ACCESSIONS_DATABASE_DESCRIPTION,Gestione sus accesiones en Terraware.,
+ACCESSIONS_IMPORT_COMPLETE,¡Se ha completado la importación de datos de accesiones!,
+ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,Definir los lugares de almacenamiento asignados a las accesiones de semillas,
+ACCESSIONS_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de semillas,
+ACCESSIONS_TO_BE_CHECKED_IN,Hay {0} accesiones para ingresar.,
 ACCOUNT,Cuenta,User access to website or application typically by entering a username and password (noun)
-ACTIVE_ACCESSIONS,Accesiones activas
-ACTIVE_INACTIVE,Activo/Inactivo
-ADD,Añadir
-ADD_A_NURSERY,Añadir un vivero
-ADD_A_PLANTING_SITE,Añadir un lugar de plantación
-ADD_A_PLANTING_SITE_SUBTITLE,¿Dónde echan raíces sus plantas? Establezca su lugar de plantación para poder seguir el progreso de sus plantas.
-ADD_A_SEED_BANK,Añadir un banco de semillas
-ADD_A_SPECIES,Añadir una especie
-ADD_A_VIABILITY_TEST,Añadir una prueba de viabilidad
-ADD_A_VIABILITY_TESTING,Añadir una prueba de viabilidad
-ADD_ADDRESS,Añadir dirección
-ADD_AN_ACCESSION,Añadir una accesión
-ADD_BATCH,Añadir lote
-ADD_CONTRIBUTORS,Añadir colaboradores
-ADD_GPS_COORDINATES,Añadir coordenadas GPS
-ADD_INVENTORY,Añadir inventario
-ADD_INVENTORY_DESCRIPTION,"Añadir inventario de una nueva fuente. Para añadir inventario de una accesión de semillas existente, vaya a Accesiones y retire de una entrada de accesión."
-ADD_INVENTORY_MANUALLY_DESCRIPTION,"Introduzca especies, cantidades y otra información relevante utilizando nuestro formulario de inventario."
-ADD_MANUALLY,Añadir manualmente
-ADD_NEW,Añadir nuevo
-ADD_NOTES,Añadir notas
-ADD_NURSERIES,Añadir viveros
-ADD_NURSERY,Añadir vivero
-ADD_NURSERY_SUBTITLE,¿Cómo gestiona sus plantones? Instale su vivero de modo que pueda controlar el crecimiento de sus plantones.
-ADD_OBSERVATION,Añadir observación
-ADD_ORGANIZATION,Añadir organización
-ADD_PEOPLE_MESSAGE,"Para añadir personas a esta organización, vaya a Personas."
-ADD_PERSON,Añadir persona
-ADD_PERSON_DESC,Rellene esta página para añadir una persona a la organización.
-ADD_PERSON_GENERAL_DESC,Introduzca a continuación los datos de la persona.
-ADD_PHOTOS,Añadir fotos
-ADD_PHOTOS_DESCRIPTION,Tome una foto (o fotos) de los lotes que se plantarán en la subzona seleccionada. Asegúrese de incluir el retiro entero en la(s) foto(s).
-ADD_PHOTOS_DESCRIPTION_OPTIONAL,Tome una foto opcional (o fotos) de los lotes.
-ADD_PHOTOS_REQUIRED,Añadir Fotos *
-ADD_PHOTOS_REQUIRED_OUTPLANT,Se requieren fotos para los retiros de plantas en el campo.
-ADD_PLANT_SITE_DESCRIPTION,Añadir Planta y Descripción del Sitio
-ADD_PLANTING_SITE,Añadir Lugar de Plantado
-ADD_QUANTITY,Añadir Cantidad
-ADD_SEED_BANK,Añadir Banco de Semillas
-ADD_SEED_BANK_SUBTITLE,¿Cómo procesa y almacena sus semillas? Configure su banco de semillas para que pueda monitorear dónde guarda sus semillas.
-ADD_SEED_BANKS,Añadir Bancos de Semillas
-ADD_SEEDLING_BATCH,Añadir Lote de Plantones
-ADD_SPECIES,Añadir Especie
-ADD_SPECIES_MANUALLY_DESCRIPTION,"Ingrese el nombre científico y otros campos opcionales manualmente, una especie a la vez."
-ADD_SUB_LOCATION,Añadir Sub-Lugar
-ADD_TEST,Añadir Prueba
-ADD_VIABILITY,Añadir Viabilidad
-ADD_VIABILITY_TEST,Añadir Prueba de Viabilidad
-ADDITIONAL_NURSERY_NOTES,Notas adicionales sobre el vivero
-ADDITIONAL_PLANTING_SITES_NOTES,Notas adicionales sobre el lugar de plantación
-ADMIN,Admin
-ADMIN_INFO,"Un admin puede hacer lo anterior, así como editar el perfil de organización, administrar usuarios en la organización y administrar los bancos de semillas."
-AGAR,Agar
-AGAR_PETRI_DISH,Plato de Petri con Agar
-AGE,Edad
-AGE_MONTHS,Edad (mes)
-AGE_VALUE_1_MONTH,1 Mes
-AGE_VALUE_LESS_THAN_1_MONTH,<1 Mes
-AGE_VALUE_MONTHS,{0} Meses
-AGE_YEARS,Edad (año)
-AGROFORESTRY,Agrosilvicultura
-ALERTS,Alertas
-ALL,Todo
-ALL_SEEDS_WITHDRAWN_MSG,"Como todas las semillas ya se han retirado, los retiros nuevos se desactivan, la etapa de accesión se configura como Retirada y la accesión en sí se marca como Inactiva."
-ALL_SENSORS_FOUND,Se encontraron todos los sensores.
-ALREADY_INVITED_PERSON_ERROR,Parece que ya añadió o invitó a esta persona. Por favor ingrese un correo electrónico único o vaya al perfil existente de la persona.
-AMOUNT_REMAINING,Cantidad ({0} restantes)
-APPLY,Aplicar
-APPLY_FILTERS,Aplicar Filtros
-APPLY_RESULT,Aplicar Resultado
-APPLY_RESULT_QUESTION,¿Desea aplicar este resultado a la accesión?
-ARE_YOU_SURE,¿Está seguro(a)?
-AS_OF,A partir de
-ASSIGN,Asignar
-ASSIGN_NEW_OWNER,Asignar Dueño Nuevo
-ASSIGN_NEW_OWNER_DESC,Debe asignar un dueño nuevo para retirar el dueño actual.
-AUTOCALCULATED,(Calculado automáticamente)
-AVAILABLE,disponible
-AWAITING_CHECK_IN,Pendiente de facturación
-AWAITING_PROCESSING,Pendiente de tramitación
-BACK,Atrás
-BACK_OF_SEED_BANK,Parte de Atrás del Banco de Semillas
-BACK_TO_TERRAWARE,Volver a Terraware
-BAG_ID,ID de Bolsa
-BAG_IDS,ID de las bolsas
-BATCH_WITHDRAW_SUCCESS,{0} {1} para un total de {2} {3} retirados.
-BATCHES_PLURAL,lotes
-BATCHES_SINGULAR,lote
-BEST_MONTHS_FOR_OBSERVATIONS,Mejores meses para las observaciones
-BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS,Estás serían las estaciones en las que tiene más sentido desde el punto de vista de la capacidad del equipo y también toma en cuenta factores medioambientales como la ausencia de nieve y la habilidad para identificar con facilidad la supervivencia de los plantado. Seleccionar todos los meses que correspondan.
-BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,"Por favor, seleccionar al menos un mes."
-BOOLEAN_FALSE,falso
-BOOLEAN_TRUE,verdadero
-BOTH_WITHDRAWS_DESCRIPTION,"Ha retirado semillas tanto por recuento como por peso. Como resultado, la aplicación ha calculado para usted la cantidad de semillas retiradas por peso."
-BOUNDARIES,Límites
-BOUNDARIES_AND_ZONES,Límites y zonas
-BUDGET_DOCUMENT_XLS,Documento presupuestario (.XLS)
-BUDGET_NARRATIVE_SUMMARY,Resumen narrativo del presupuesto
-BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS,"Proporcione una descripción de alto nivel de su presupuesto en relación con los datos reales, señalando cualquier discrepancia importante y enumerando a los contribuyentes. (Media página como máximo)."
-BUDGET_NARRATIVE_SUMMARY_REQUIRED,Resumen narrativo del presupuesto *
-CANCEL,Cancelar
-CANCEL_DATA_CHECK,Cancelar comprobación de datos
-CANCEL_IMPORT,Cancelar importación
-CANNOT_EDIT,No se puede editar
-CANNOT_REMOVE,No se puede eliminar
-CANNOT_REMOVE_DELETE_MSG,No puede darse de baja porque no hay nadie más en la organización. ¿Desea eliminar la organización?
-CANNOT_REMOVE_MSG,No puede darse de baja porque no hay nadie más en la organización. ¿Desea eliminar la organización?
-CATALYTIC_CHECKBOX,El apoyo de Terraformation ha sido un catalizador para conseguir financiación adicional o asociaciones para nuestro trabajo
-CATALYTIC_DETAIL,Financiación catalizadora
-CATALYTIC_DETAIL_INSTRUCTIONS,"Por favor, indique si el apoyo de Terraformación ha sido catalizador en la obtención de financiación adicional o asociaciones para su trabajo. Proporcione detalles cuando sea posible. (Máximo un cuarto de página.)"
-CHALLENGES,Retos y contratiempos
-CHALLENGES_INSTRUCTIONS,"Terraformación considera que el aprendizaje de los retos y fracasos es a menudo donde se produce el mayor crecimiento, y compartir estos retos puede tener un beneficio global positivo. Enumere los retos o contratiempos que haya experimentado durante el periodo del informe. ¿Cuál es el impacto de estos retos y cómo se pueden superar estos contratiempos en el proyecto actual? ¿Qué le gustaría hacer de forma diferente en un proyecto futuro? (Una página como máximo)."
-CHALLENGES_REQUIRED,Desafíos y problemas *
-CHANGE_DEFAULT_WEIGHT_SYSTEM,Puede cambiar el sistema de peso por defecto de {0}
-CHANGE_GERMINATING_STATUS,Cambiar a estado de germinación
-CHANGE_NOT_READY_STATUS,"Cambiar el estado ""No listo"""
-CHANGE_TO,Cambiar a {0}
-CHANGES_SAVED,¡Cambios guardados!
-CHECK_BACK_LATER,Vuelva a comprobarlo más tarde.
-CHECK_DATA,Comprobar datos
-CHECK_DATA_DESCRIPTION,"Puede realizar una verificación de la base de datos para comparar la información de su especie con la que almacenada en la base de datos de GBIF. Esto marcará las entradas si el nombre científico de su especie está mal escrito, o falta en la base de datos. Esto puede tardar unos minutos y no se puede cancelar una vez que se inicia."
-CHECK_DATE,Comprobar fecha
-CHECK_DATE_REQUIRED,Comprobar fecha *
-CHECK_IN,Comprobar
-CHECK_IN_MESSAGE,"{0} Las nuevas accesiones deberían haber llegado al banco de semillas. Por favor, verifique su llegada y regístrelas."
-CHECKED_IN,¡Comprobado!
-CHECKIN_ACCESSIONS,Registro de entradas
-CHECKING_DATA,"Ejecutando comprobación de base de datos. Por favor espere, esto puede tardar unos minutos..."
-CHECKING_IN,Registrando...
-CHEMICAL,Química
-CHOOSE_FILE,Seleccione archivo...
-CITY,Ciudad
-CLEAR,Borrar
-CLEAR_FILTERS,Borrar filtros
-CLOSE,Cerrar
-COLLECTED_DATE,Fecha de recolección
-COLLECTED_FROM,Recolectado de
-COLLECTED_ON,Recolectado el
-COLLECTING_DATE_REQUIRED,Fecha de recolección*
-COLLECTING_LOCATION,Ubicación de recogida
-COLLECTING_SITE,Lugar de recogida
-COLLECTION_DATE,Fecha de recogida
-COLLECTION_DATE_REQUIRED,Fecha de recogida *
-COLLECTION_SITE,Lugar de recogida
-COLLECTION_SOURCE,Fuente de recogida
-COLLECTOR,Recolector
-COLLECTORS,Recolectores
-COMMON_NAME,Nombre común
-COMPLETE,Completo
-COMPLETED,Completado
-COMPROMISED_SEEDS,Semillas comprometidas
-CONNECT_FAILED,La conexión ha fallado
-CONNECTED,Conectado
-CONSERV_STATUS,Estado de conservación
-CONSERVATION_CATEGORY,Categoría de conservación de la IUCN
-CONSERVATION_STATUS,Estado de conservación
-CONTACT_US,Contáctenos
-CONTACT_US_DESCRIPTION,¿Tiene una pregunta o desea ponerse en contacto con un miembro de nuestro equipo? ¡Siempre estamos dispuestos a responder sus preguntas y a asegurarnos de que pueda sacarle provecho a Terraware! Puede ponerse en contacto con nosotros con este formulario o enviando un correo electrónico a {0}
-CONTACT_US_TO_RESOLVE_ISSUE,Contáctenos para resolver este problema.
-CONTRIBUTOR,Colaborador
-CONTRIBUTOR_INFO,"Un colaborador puede agregar entradas de datos para semillas, gestionar el inventario del vivero excepto los retiros de plantas en campo, ver los retiros, gestionar las reasignaciones del vivero y visualizar las plantaciones de un sitio de plantación en un mapa geográfico."
-CONTRIBUTORS,Colaboradores
-CONVERTED_VALUE_INFO,Este valor se calcula automáticamente con fines informativos.
-COUNT,Recuento
-COUNTRY,País
-COUNTRY_REQUIRED,País *
-CREATE,Crear
-CREATE_ACCESSION,Crear accesión
-CREATE_ENTRY,Crear entrada
-CREATE_NEW_ORGANIZATION,Crear nueva organización
-CREATE_NEW_SPECIES,Crear nueva especie
-CREATE_ORGANIZATION,Crear organización
-CREATE_SPECIES_LIST,Crear lista de especies
-CREATE_TEST,Crear prueba
-CT,ct
-CULTIVATED,Cultivado
-CULTIVATED_EX_SITU,Cultivado (ex situ)
-CULTIVATED_EX_SITU_DESCRIPTION,"Plantas que se han cultivado en un vivero, área de producción de semillas u otra instalación de propagación."
-CUSTOMIZE_TABLE_COLUMNS,Personalizar las columnas de la tabla
-CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Seleccione las columnas que desee añadir. Deseleccione las columnas que desee eliminar.
-CUT_TEST,Prueba de corte
-DASHBOARD,Panel de control
+ACTIVE_ACCESSIONS,Accesiones activas,
+ACTIVE_INACTIVE,Activo/Inactivo,
+ADD,Añadir,
+ADD_A_NURSERY,Añadir un vivero,
+ADD_A_PLANTING_SITE,Añadir un lugar de plantación,
+ADD_A_PLANTING_SITE_SUBTITLE,¿Dónde echan raíces sus plantas? Establezca su lugar de plantación para poder seguir el progreso de sus plantas.,
+ADD_A_SEED_BANK,Añadir un banco de semillas,
+ADD_A_SPECIES,Añadir una especie,
+ADD_A_VIABILITY_TEST,Añadir una prueba de viabilidad,
+ADD_A_VIABILITY_TESTING,Añadir una prueba de viabilidad,
+ADD_ADDRESS,Añadir dirección,
+ADD_AN_ACCESSION,Añadir una accesión,
+ADD_BATCH,Añadir lote,
+ADD_CONTRIBUTORS,Añadir colaboradores,
+ADD_GPS_COORDINATES,Añadir coordenadas GPS,
+ADD_INVENTORY,Añadir inventario,
+ADD_INVENTORY_DESCRIPTION,"Añadir inventario de una nueva fuente. Para añadir inventario de una accesión de semillas existente, vaya a Accesiones y retire de una entrada de accesión.",
+ADD_INVENTORY_MANUALLY_DESCRIPTION,"Introduzca especies, cantidades y otra información relevante utilizando nuestro formulario de inventario.",
+ADD_MANUALLY,Añadir manualmente,
+ADD_NEW,Añadir nuevo,
+ADD_NOTES,Añadir notas,
+ADD_NURSERIES,Añadir viveros,
+ADD_NURSERY,Añadir vivero,
+ADD_NURSERY_SUBTITLE,¿Cómo gestiona sus plantones? Instale su vivero de modo que pueda controlar el crecimiento de sus plantones.,
+ADD_OBSERVATION,Añadir observación,
+ADD_ORGANIZATION,Añadir organización,
+ADD_PEOPLE_MESSAGE,"Para añadir personas a esta organización, vaya a Personas.",
+ADD_PERSON,Añadir persona,
+ADD_PERSON_DESC,Rellene esta página para añadir una persona a la organización.,
+ADD_PERSON_GENERAL_DESC,Introduzca a continuación los datos de la persona.,
+ADD_PHOTOS,Añadir fotos,
+ADD_PHOTOS_DESCRIPTION,Tome una foto (o fotos) de los lotes que se plantarán en la subzona seleccionada. Asegúrese de incluir el retiro entero en la(s) foto(s).,
+ADD_PHOTOS_DESCRIPTION_OPTIONAL,Tome una foto opcional (o fotos) de los lotes.,
+ADD_PHOTOS_REQUIRED,Añadir Fotos *,
+ADD_PHOTOS_REQUIRED_OUTPLANT,Se requieren fotos para los retiros de plantas en el campo.,
+ADD_PLANT_SITE_DESCRIPTION,Añadir Planta y Descripción del Sitio,
+ADD_PLANTING_SITE,Añadir Lugar de Plantado,
+ADD_QUANTITY,Añadir Cantidad,
+ADD_SEED_BANK,Añadir Banco de Semillas,
+ADD_SEED_BANK_SUBTITLE,¿Cómo procesa y almacena sus semillas? Configure su banco de semillas para que pueda monitorear dónde guarda sus semillas.,
+ADD_SEED_BANKS,Añadir Bancos de Semillas,
+ADD_SEEDLING_BATCH,Añadir Lote de Plantones,
+ADD_SPECIES,Añadir Especie,
+ADD_SPECIES_MANUALLY_DESCRIPTION,"Ingrese el nombre científico y otros campos opcionales manualmente, una especie a la vez.",
+ADD_SUB_LOCATION,Añadir Sub-Lugar,
+ADD_TEST,Añadir Prueba,
+ADD_VIABILITY,Añadir Viabilidad,
+ADD_VIABILITY_TEST,Añadir Prueba de Viabilidad,
+ADDITIONAL_NURSERY_NOTES,Notas adicionales sobre el vivero,
+ADDITIONAL_PLANTING_SITES_NOTES,Notas adicionales sobre el lugar de plantación,
+ADMIN,Admin,
+ADMIN_INFO,"Un admin puede hacer lo anterior, así como editar el perfil de organización, administrar usuarios en la organización y administrar los bancos de semillas.",
+AGAR,Agar,
+AGAR_PETRI_DISH,Plato de Petri con Agar,
+AGE,Edad,
+AGE_MONTHS,Edad (mes),
+AGE_VALUE_1_MONTH,1 Mes,
+AGE_VALUE_LESS_THAN_1_MONTH,<1 Mes,
+AGE_VALUE_MONTHS,{0} Meses,
+AGE_YEARS,Edad (año),
+AGROFORESTRY,Agrosilvicultura,
+ALERTS,Alertas,
+ALL,Todo,
+ALL_SEEDS_WITHDRAWN_MSG,"Como todas las semillas ya se han retirado, los retiros nuevos se desactivan, la etapa de accesión se configura como Retirada y la accesión en sí se marca como Inactiva.",
+ALL_SENSORS_FOUND,Se encontraron todos los sensores.,
+ALREADY_INVITED_PERSON_ERROR,Parece que ya añadió o invitó a esta persona. Por favor ingrese un correo electrónico único o vaya al perfil existente de la persona.,
+AMOUNT_REMAINING,Cantidad ({0} restantes),
+APPLY,Aplicar,
+APPLY_FILTERS,Aplicar Filtros,
+APPLY_RESULT,Aplicar Resultado,
+APPLY_RESULT_QUESTION,¿Desea aplicar este resultado a la accesión?,
+ARE_YOU_SURE,¿Está seguro(a)?,
+AS_OF,A partir de,
+ASSIGN,Asignar,
+ASSIGN_NEW_OWNER,Asignar Dueño Nuevo,
+ASSIGN_NEW_OWNER_DESC,Debe asignar un dueño nuevo para retirar el dueño actual.,
+AUTOCALCULATED,(Calculado automáticamente),
+AVAILABLE,disponible,
+AWAITING_CHECK_IN,Pendiente de facturación,
+AWAITING_PROCESSING,Pendiente de tramitación,
+BACK,Atrás,
+BACK_OF_SEED_BANK,Parte de Atrás del Banco de Semillas,
+BACK_TO_TERRAWARE,Volver a Terraware,
+BAG_ID,ID de Bolsa,
+BAG_IDS,ID de las bolsas,
+BATCH_WITHDRAW_SUCCESS,{0} {1} para un total de {2} {3} retirados.,
+BATCHES_PLURAL,lotes,
+BATCHES_SINGULAR,lote,
+BEST_MONTHS_FOR_OBSERVATIONS,Mejores meses para las observaciones,
+BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS,Estás serían las estaciones en las que tiene más sentido desde el punto de vista de la capacidad del equipo y también toma en cuenta factores medioambientales como la ausencia de nieve y la habilidad para identificar con facilidad la supervivencia de los plantado. Seleccionar todos los meses que correspondan.,
+BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,"Por favor, seleccionar al menos un mes.",
+BOOLEAN_FALSE,falso,
+BOOLEAN_TRUE,verdadero,
+BOTH_WITHDRAWS_DESCRIPTION,"Ha retirado semillas tanto por recuento como por peso. Como resultado, la aplicación ha calculado para usted la cantidad de semillas retiradas por peso.",
+BOUNDARIES,Límites,
+BOUNDARIES_AND_ZONES,Límites y zonas,
+BUDGET_DOCUMENT_XLS,Documento presupuestario (.XLS),
+BUDGET_NARRATIVE_SUMMARY,Resumen narrativo del presupuesto,
+BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS,"Proporcione una descripción de alto nivel de su presupuesto en relación con los datos reales, señalando cualquier discrepancia importante y enumerando a los contribuyentes. (Media página como máximo).",
+BUDGET_NARRATIVE_SUMMARY_REQUIRED,Resumen narrativo del presupuesto *,
+CANCEL,Cancelar,
+CANCEL_DATA_CHECK,Cancelar comprobación de datos,
+CANCEL_IMPORT,Cancelar importación,
+CANNOT_EDIT,No se puede editar,
+CANNOT_REMOVE,No se puede eliminar,
+CANNOT_REMOVE_DELETE_MSG,No puede darse de baja porque no hay nadie más en la organización. ¿Desea eliminar la organización?,
+CANNOT_REMOVE_MSG,No puede darse de baja porque no hay nadie más en la organización. ¿Desea eliminar la organización?,
+CATALYTIC_CHECKBOX,El apoyo de Terraformation ha sido un catalizador para conseguir financiación adicional o asociaciones para nuestro trabajo,
+CATALYTIC_DETAIL,Financiación catalizadora,
+CATALYTIC_DETAIL_INSTRUCTIONS,"Por favor, indique si el apoyo de Terraformación ha sido catalizador en la obtención de financiación adicional o asociaciones para su trabajo. Proporcione detalles cuando sea posible. (Máximo un cuarto de página.)",
+CHALLENGES,Retos y contratiempos,
+CHALLENGES_INSTRUCTIONS,"Terraformación considera que el aprendizaje de los retos y fracasos es a menudo donde se produce el mayor crecimiento, y compartir estos retos puede tener un beneficio global positivo. Enumere los retos o contratiempos que haya experimentado durante el periodo del informe. ¿Cuál es el impacto de estos retos y cómo se pueden superar estos contratiempos en el proyecto actual? ¿Qué le gustaría hacer de forma diferente en un proyecto futuro? (Una página como máximo).",
+CHALLENGES_REQUIRED,Desafíos y problemas *,
+CHANGE_DEFAULT_WEIGHT_SYSTEM,Puede cambiar el sistema de peso por defecto de {0},
+CHANGE_GERMINATING_STATUS,Cambiar a estado de germinación,
+CHANGE_NOT_READY_STATUS,"Cambiar el estado ""No listo""",
+CHANGE_TO,Cambiar a {0},
+CHANGES_SAVED,¡Cambios guardados!,
+CHECK_BACK_LATER,Vuelva a comprobarlo más tarde.,
+CHECK_DATA,Comprobar datos,
+CHECK_DATA_DESCRIPTION,"Puede realizar una verificación de la base de datos para comparar la información de su especie con la que almacenada en la base de datos de GBIF. Esto marcará las entradas si el nombre científico de su especie está mal escrito, o falta en la base de datos. Esto puede tardar unos minutos y no se puede cancelar una vez que se inicia.",
+CHECK_DATE,Comprobar fecha,
+CHECK_DATE_REQUIRED,Comprobar fecha *,
+CHECK_IN,Comprobar,
+CHECK_IN_MESSAGE,"{0} Las nuevas accesiones deberían haber llegado al banco de semillas. Por favor, verifique su llegada y regístrelas.",
+CHECKED_IN,¡Comprobado!,
+CHECKIN_ACCESSIONS,Registro de entradas,
+CHECKING_DATA,"Ejecutando comprobación de base de datos. Por favor espere, esto puede tardar unos minutos...",
+CHECKING_IN,Registrando...,
+CHEMICAL,Química,
+CHOOSE_FILE,Seleccione archivo...,
+CITY,Ciudad,
+CLEAR,Borrar,
+CLEAR_FILTERS,Borrar filtros,
+CLOSE,Cerrar,
+COLLECTED_DATE,Fecha de recolección,
+COLLECTED_FROM,Recolectado de,
+COLLECTED_ON,Recolectado el,
+COLLECTING_DATE_REQUIRED,Fecha de recolección*,
+COLLECTING_LOCATION,Ubicación de recogida,
+COLLECTING_SITE,Lugar de recogida,
+COLLECTION_DATE,Fecha de recogida,
+COLLECTION_DATE_REQUIRED,Fecha de recogida *,
+COLLECTION_SITE,Lugar de recogida,
+COLLECTION_SOURCE,Fuente de recogida,
+COLLECTOR,Recolector,
+COLLECTORS,Recolectores,
+COMMON_NAME,Nombre común,
+COMPLETE,Completo,
+COMPLETED,Completado,
+COMPROMISED_SEEDS,Semillas comprometidas,
+CONNECT_FAILED,La conexión ha fallado,
+CONNECTED,Conectado,
+CONSERV_STATUS,Estado de conservación,
+CONSERVATION_CATEGORY,Categoría de conservación de la IUCN,
+CONSERVATION_STATUS,Estado de conservación,
+CONTACT_US,Contáctenos,
+CONTACT_US_DESCRIPTION,¿Tiene una pregunta o desea ponerse en contacto con un miembro de nuestro equipo? ¡Siempre estamos dispuestos a responder sus preguntas y a asegurarnos de que pueda sacarle provecho a Terraware! Puede ponerse en contacto con nosotros con este formulario o enviando un correo electrónico a {0},
+CONTACT_US_TO_RESOLVE_ISSUE,Contáctenos para resolver este problema.,
+CONTRIBUTOR,Colaborador,
+CONTRIBUTOR_INFO,"Un colaborador puede agregar entradas de datos para semillas, gestionar el inventario del vivero excepto los retiros de plantas en campo, ver los retiros, gestionar las reasignaciones del vivero y visualizar las plantaciones de un sitio de plantación en un mapa geográfico.",
+CONTRIBUTORS,Colaboradores,
+CONVERTED_VALUE_INFO,Este valor se calcula automáticamente con fines informativos.,
+COUNT,Recuento,
+COUNTRY,País,
+COUNTRY_REQUIRED,País *,
+CREATE,Crear,
+CREATE_ACCESSION,Crear accesión,
+CREATE_ENTRY,Crear entrada,
+CREATE_NEW_ORGANIZATION,Crear nueva organización,
+CREATE_NEW_SPECIES,Crear nueva especie,
+CREATE_ORGANIZATION,Crear organización,
+CREATE_SPECIES_LIST,Crear lista de especies,
+CREATE_TEST,Crear prueba,
+CT,ct,
+CULTIVATED,Cultivado,
+CULTIVATED_EX_SITU,Cultivado (ex situ),
+CULTIVATED_EX_SITU_DESCRIPTION,"Plantas que se han cultivado en un vivero, área de producción de semillas u otra instalación de propagación.",
+CUSTOMIZE_TABLE_COLUMNS,Personalizar las columnas de la tabla,
+CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Seleccione las columnas que desee añadir. Deseleccione las columnas que desee eliminar.,
+CUT_TEST,Prueba de corte,
+DASHBOARD,Panel de control,
 DASHBOARD_HEADER_TEXT,Los datos de este cuadro de mando se basan en una muestra de {0} hectáreas de la{1} observación., {1} date of the last observation in short format (e.g. July 2023)
-DASHBOARD_MESSAGE,Su panel de semillas se llenará automáticamente de datos a medida que añada accesiones.
-DASHBOARD_MESSAGE_TITLE,Añada accesiones para ver los datos
-DATA_CHECK_COMPLETED,Se ha completado la comprobación de la base de datos. No se ha encontrado ningún error.
-DATA_CHECK_WITH_PROBLEMS,La comprobación de la base de datos ha finalizado. Se han encontrado {0} errores potenciales.
-DATA_IMPORT_FAILED,Se ha producido un error en la importación de datos
-DATE,Fecha
-DATE_ADDED,Fecha en la que se añadió
-DATE_ADDED_REQUIRED,Fecha de adición *
-DATE_SUBMITTED,Fecha de envío
-DEAD,Muerto
-DEFAULT_LANGUAGE_SELECTED,Idioma predeterminado: {0}
-DEGREES_CELSIUS_VALUE,{0}ºC
-DELETE,Borrar
-DELETE_ACCESSION,Borrar accesión
-DELETE_ACCESSION_MESSAGE,Está a punto de borrar la accesión {0}.
-DELETE_ACCOUNT,Eliminar cuenta
-DELETE_ACCOUNT_CONFIRMATION,¿Seguro que desea eliminar su cuenta? Esta acción no puede deshacerse.
-DELETE_ACCOUNT_ERROR,Ocurrió un error al eliminar su cuenta.
-DELETE_CONFIRMATION_MODAL_MAIN_TEXT,"¿Está seguro de que quiere borrar las especies seleccionadas? Esto las eliminará de su lista, pero conservará todos los datos adjuntos a las entradas existentes."
-DELETE_ORGANIZATION,Borrar Organización
-DELETE_ORGANIZATION_MSG,¿Está seguro de que deseas borrar {0}?
-DELETE_SEEDLINGS_BATCHES,Borrar Lotes de Plántulas
-DELETE_SEEDLINGS_BATCHES_MSG,¿Está seguro de que desea eliminar los lotes de plántulas?
-DELETE_SPECIES,Borrar Especie
-DELETE_STATISTICS,Eliminar estadísticas
-DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad
-DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0}.
-DELETED_SPECIES,<deleted species>
-DESCRIPTION,Descripción
-DESCRIPTION_NOTES,Descripción/Notas
-DESCRIPTION_ORGANIZATION,Su organización podrá incluir personas y especies.
-DESCRIPTION_PEOPLE,Invite a las personas que contribuyen al éxito de la organización.
-DESCRIPTION_REPORT_PROBLEM,"Si tiene algún problema con Terraware, por favor, informe de cualquier inconveniente que tenga y lo solucionaremos. Por favor, mencione esta versión {0}."
-DESCRIPTION_REQUEST_FEATURE,Siempre trabajamos para mejorar su experiencia con Terraware y agradecemos sus comentarios sobre nuestros productos.
-DESCRIPTION_REQUIRED,Descripción
-DESCRIPTION_SPECIES,Gestione las especies que recolecte o plante.
-DESCRIPTION_TEST_APP,Sea el primero en probar nuestra novedosa aplicación móvil de eficacia probada sobre el terreno y díganos qué le parece.
-DESTINATION,Destino
-DESTINATION_REQUIRED,Destino *
-DETAILS,Detalles
-DIRECTION_OR_DESCRIPTION,Dirección o descripción
-DONE,Listo
-DOWNLOAD,Descargar
-DOWNLOAD_AS_REPORT,Descargar como informe
-DOWNLOAD_COMPLETE,Descarga completa
-DOWNLOAD_CSV_TEMPLATE,Descargue una plantilla CSV aquí.
-DOWNLOAD_FAILED,Descarga fallida
-DOWNLOAD_FAILED_DESCRIPTION,La descarga ha fallado. Envía un correo electrónico a {0} para que podamos ayudarle.
-DOWNLOAD_IN_PROGRESS,Descarga en curso...
-DOWNLOAD_ON_APP_STORE,Descárguela en Apple Store
-DOWNLOAD_ON_GOOGLE_PLAY,Consígala en Google Play
-DOWNLOAD_REPORT_DESCRIPTION,"Está a punto de descargar esta tabla de datos como informe. Este archivo csv se encuentra en la sección Descargas. Por favor, asigne un nombre a su informe."
-DOWNLOAD_THE_CSV_TEMPLATE,Descargar la plantilla CSV.
-DRIED,Seco
-DRY_CABINET,Armario de secado
-DRYING,Secando
-DRYING_END_DATE,Fecha estimada de finalización del secado
-DRYING_RACKS,Bastidores de secado
-DRYING_START_DATE,Fecha de inicio del secado
-DUPLICATE_SPECIES_FOUND,Especies duplicadas encontradas.
-DUPLICATED_ACCESSION_NUMBER,Encontramos {0} números de acceso duplicados:
-DUPLICATED_INVENTORY,Encontramos {0} inventario duplicado:
-DUPLICATED_SPECIES,Encontramos {0} especies duplicadas:
-ECOSYSTEM_BOREAL_FOREST_TAIGA,Bosques boreales/Taiga
-ECOSYSTEM_DESERT_XERIC_SHRUBLAND,Desiertos y matorrales xéricos
-ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA,Praderas y sabanas inundadas
-ECOSYSTEM_MANGROVE,Manglares
-ECOSYSTEM_MEDITERRANEAN_FOREST,Bosque y matorral mediterráneo
-ECOSYSTEM_MONTANE_GRASSLAND_SHRUBLAND,Praderas y matorrales de montaña
-ECOSYSTEM_TEMPERATE_BROADLEAF_MIXED_FOREST,Bosques templados de frondosas y mixtos
-ECOSYSTEM_TEMPERATE_CONIFEROUS_FOREST,Bosque templado de coníferas
-ECOSYSTEM_TEMPERATE_GRASSLAND_SAVANNA_SHRUBLAND,Pastizales y matorrales templados
-ECOSYSTEM_TROPICAL_CONIFEROUS_FOREST,Bosque subtropical de coníferas
-ECOSYSTEM_TROPICAL_DRY_BROADLEAF_FOREST,Bosque seco
-ECOSYSTEM_TROPICAL_GRASSLAND_SAVANNA_SHRUBLAND,"Praderas, sabanas y matorrales tropicales y subtropicales"
-ECOSYSTEM_TROPICAL_MOIST_BROADLEAF_FOREST,Pluvisilva
-ECOSYSTEM_TUNDRA,Tundra
-ECOSYSTEM_TYPE,Tipo de ecosistema
-EDIT,Editar
-EDIT_ACCESSION,Editar accesión
-EDIT_ACCESSION_DETAIL,Editar detalle de accesión
-EDIT_ACCOUNT,Editar cuenta
-EDIT_LOCATION,Editar ubicación
-EDIT_NUMBER_OF_GERMINATED_SEEDS,Editar número de semillas germinadas
-EDIT_NURSERY,Editar vivero
-EDIT_ORGANIZATION,Editar organización
-EDIT_PERSON,Editar persona
-EDIT_PLANTING_SITE,Editar lugar de plantación
-EDIT_QUANTITY,Editar cantidad
-EDIT_QUANTITY_DISABLED,"Actualmente, solo puede introducir una cantidad cuando el estado es ""Secando"" o ""En almacenamiento""."
-EDIT_SEED_BANK,Editar banco de semillas
-EDIT_SPECIES,Editar especie
-EDIT_SPECIES_MODAL_ANSWER_NO,"No, aplicable solo aquí"
-EDIT_SPECIES_MODAL_ANSWER_YES,"Sí, aplicable a todos"
-EDIT_SPECIES_MODAL_QUESTION,¿Desea aplicar esta edición a todas las accesiones con esta especie?
-EDIT_STATUS,Editar estado
-EDIT_VIABILITY,Editar viabilidad
-EDIT_VIABILITY_TEST,Editar prueba de viabilidad
-EMAIL,Correo electrónico
-EMAIL_ALREADY_EXISTS,Este correo electrónico ya existe.
-EMAIL_REQUIRED,Correo electrónico *
-EMPTY_SEEDS,Semillas vacías
-END,Fin
-END_DATE,Fecha de finalización
-END_DRYING_REMINDER,Recordatorio de final de secado
-END_DRYING_REMINDER_OFF,Recordatorio de final de secado desactivado
-ENDANGERED,En peligro de extinción
-ENTER_SIX_DIGIT_KEY,Introduzca la clave de 6 dígitos
-ENVIRONMENTAL_NOTES,Notas medioambientales
-ENVIRONMENTAL_NOTES_PLACEHOLDER,"Notas importantes sobre el paisaje, el clima y las condiciones ambientales"
-EST_READY_DATE,Fecha estimada de disponibilidad
-ESTIMATED_DRYING_END_DATE,Fecha estimada de finalización del secado
-ESTIMATED_READY_DATE,Fecha estimada de finalización
-ESTIMATED_SEEDS_INCOMING,Estimación de entrada de semillas
-EXISTING_SPECIES_MSG,"""{0}"" ya está en su lista de especies."
-EXPORT,Exportar
-EXPORT_RECORDS,Exportar los registros
-FACILITY,Instalación
-FACILITY_BUILD_COMPLETION_DATE,Fecha de finalización de la construcción
-FACILITY_BUILD_COMPLETION_DATE_INVALID,Debe estar comprendida entre las fechas de inicio de la construcción y de inicio de las operaciones.
-FACILITY_BUILD_COMPLETION_DATE_REQUIRED,Fecha de finalización de la construcción
-FACILITY_BUILD_START_DATE,Fecha de inicio de la construcción
-FACILITY_BUILD_START_DATE_INVALID,Debe ser igual o anterior a la fecha de finalización de la construcción y a la fecha de inicio de las operaciones.
-FACILITY_BUILD_START_DATE_REQUIRED,Fecha de inicio de la construcción *
-FACILITY_OPERATION_START_DATE,Fecha de inicio de la operación
-FACILITY_OPERATION_START_DATE_INVALID,Debe ser igual o posterior a las fechas de inicio y finalización de la construcción.
-FACILITY_OPERATION_START_DATE_REQUIRED,Fecha de inicio de la operación *
-FAMILY,Familia
-FERN,Helecho
-FIELD_NOTES,Notas de campo
-FIELD_NOTES_PLACEHOLDER,"Notas importantes sobre semillas, frutos o plantas"
-FILE_SELECTED,Archivo seleccionado
-FILL_OUT_ALL_FIELDS,Rellene todos los campos obligatorios.
-FILLED_SEEDS,Semillas rellenadas
-FILTER,Filtrar
-FILTERS,Filtros
-FINAL_QTY,Cantidad final
-FINISH,Finalizar
-FIRST_ADD_PLANTING_SITE,"Para ver el tablero, primero debe añadir un sitio de plantación."
-FIRST_NAME,Nombre
-FIX_HIGHLIGHTED_FIELDS,Corrija los campos resaltados a continuación.
-FLORA,Flora
-FOOTNOTE_WAIT_FOR_INVITATION_1,¿Le interesa crear su propia organización o espera una invitación?
-FOOTNOTE_WAIT_FOR_INVITATION_2,No se preocupe. Recibirá un correo electrónico cuando el administrador lo añada a la organización.
-FOR_LAB_AND_NURSERY_GERMINATION,Para laboratorio y germinación en vivero
-FOR_LAB_GERMINATION,Para germinación en laboratorio
-FOR_NURSERY_GERMINATION,Para germinación en vivero
-FORB,Para germinación
-FOUNDER_ID,ID de fundador
-FREEZER,Congelador
-FREEZER_1,Congelador 1
-FREEZER_2,Congelador 2
-FREEZER_3,Congelador 3
-FRESH,Fresco
-FRESH_SEEDS,Semillas frescas
-FRIDGE,Refrigerador
-FROM,De
-FROM_NURSERY,De: Vivero
-FROM_NURSERY_REQUIRED,De: Vivero *
-FROM_SUBZONE,De: Subzona
-FRONT_OF_SEED_BANK,Frente del banco de semillas
-FUNGUS,Hongo
-G,g
-G_GRAMS,g (gramos)
-GA3,GA3
-GENERAL,General
-GENERIC_ERROR,Se ha producido un error
-GEOLOCATIONS,Geolocalizaciones
-GERMINATED,Germinado
-GERMINATING,Germinación
-GERMINATING_QUANTITY,Capacidad de germinación
-GERMINATING_QUANTITY_REQUIRED,Capacidad de germinación *
-GERMINATION_TESTED_BY,Germinación verificada por
-GET_ACCESSION_ERROR,Se produjo un error durante la accesión.
-GET_COUNT,Obtener recuento
-GET_STARTED,Comenzar
-GO_TO,Ir a {0}
-GO_TO_DASHBOARD,Ir al panel de control
-GO_TO_DATABASE,Ir a la base de datos
-GO_TO_NURSERIES,Ir a los viveros
-GO_TO_PLANTING_SITES,Ir a Sitios de plantación
-GO_TO_PROFILE,Ir al perfil
-GO_TO_SEED_BANKS,Ir a los bancos de semilla
-GO_TO_SPECIES,Ir a las especies
-GOT_IT,¡Entendido!
-GPS_COORDINATES,Coordenadas GPS
-GRAMINOID,Gramínea
-GRAMS,Gramos
-GREATER_THAN_FIFTY_PERCENT,> 50%
-GROWTH_FORM,Forma de crecimiento
-HECTARES,Hectáreas
-HECTARES_PLANTED_CARD_TITLE,¿Qué proporción de mi terreno ha sido plantada para el {0}?
-HECTARES_PLANTED_DESCRIPTION_1,Este es el número de hectáreas que han sido plantadas en base a las subzonas que usted eligió al momento de trasplantar.
-HECTARES_PLANTED_DESCRIPTION_2,"A efectos de observación, solo se asignan parcelas de seguimiento que sabemos que pertenecen a estas subzonas."
-HIGHEST,Más alta
-HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,¿Qué zonas tienen la tasa de mortalidad más alta y más baja?
-HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,¿Qué especie tiene la tasa de mortalidad más alta y cuál la más baja?
-HISTORY,Historia
-HOME,Inicio
-HOW_MANY_PLANTS_CARD_TITLE,¿Cuantas plantas he reportado para plantar?
-HOW_MANY_PLANTS_CARD_TITLE_W_OBS,¿Cuántas plantas hay en el sitio desde {0}?
-HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION,Este es el número total de plantas con base en el tamaño del sitio y la densidad de plantación según sus últimas observaciones.
-HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION_2,"Desde entonces, ha reportado la plantación de {0} plantas. Esto es un {1} % más que el total de plantas desde la fecha de observación."
-ID,Identificación
-IF_APPLICABLE,(si aplica)
-IF_APPLIES,Solo si aplica
-IGNORE,Ignorar
-IMPERIAL,Imperial
-IMPERIAL_OZ_LB,"Imperial (oz, lb)"
-IMPORT,Importar
-IMPORT_ACCESSIONS,Importar accesiones
-IMPORT_ACCESSIONS_ALT_TITLE,¿Ya posee una base de datos de accesión de semillas?
-IMPORT_ACCESSIONS_DESC,"Buscar, o arrastrar y soltar, un formato CSV con accesiones."
-IMPORT_ACCESSIONS_WITH_TEMPLATE,Importar accesiones a través de nuestra plantilla CSV.
-IMPORT_DATA,Importar datos
-IMPORT_INVENTORY,Importar inventario
-IMPORT_INVENTORY_ALT_TITLE,¿Ya posee una base de datos de inventario?
-IMPORT_INVENTORY_DESC,"Buscar, o arrastrar y soltar, un CSV con datos de inventario."
-IMPORT_INVENTORY_DESCRIPTION,"Cargar archivo CSV con especies, cantidades y otros campos."
-IMPORT_INVENTORY_WITH_TEMPLATE,Importar inventario a través de nuestra plantilla CSV.
-IMPORT_SPECIES,Importar especies
-IMPORT_SPECIES_DESCRIPTION,Cargar archivo CSV con nombres científicos y otros campos opcionales.
-IMPORT_SPECIES_LIST,Importar lista de especies
-IMPORT_SPECIES_LIST_DESC,"Buscar, o arrastrar y soltar, archivo CSV con nombres científicos y otros campos opcionales."
-IMPORTING_ACCESSIONS,Importando accesiones... esto puede tardar unos minutos.
-IMPORTING_INVENTORY,Importando inventario... esto puede tardar unos minutos.
-IMPORTING_SPECIES,Importando especies... esto puede tardar unos minutos
-IN_PROGRESS,En curso
-IN_STORAGE,En almacén
-INCLUDE_EMPTY_FIELDS,Incluir campos vacíos
-INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.
-INITIAL_SEEDS,Semillas iniciales
-INTERMEDIATE,Intermedia
-INVALID_DATE,Fecha no válida
-INVALID_EDITOR,Este informe está siendo editado por otro usuario
-INVALID_VALUE,Valor no válido
-INVENTORY,Inventario
-INVENTORY_DATA,Datos del inventario
-INVENTORY_IMPORT_COMPLETE,¡Importación de datos del inventario finalizada!
-INVENTORY_ONBOARDING_NURSERIES_MSG,Defina los viveros asignados al inventario de plántulas
-INVENTORY_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de plántulas
-ISSUE,Problema
+DASHBOARD_MESSAGE,Su panel de semillas se llenará automáticamente de datos a medida que añada accesiones.,
+DASHBOARD_MESSAGE_TITLE,Añada accesiones para ver los datos,
+DATA_CHECK_COMPLETED,Se ha completado la comprobación de la base de datos. No se ha encontrado ningún error.,
+DATA_CHECK_WITH_PROBLEMS,La comprobación de la base de datos ha finalizado. Se han encontrado {0} errores potenciales.,
+DATA_IMPORT_FAILED,Se ha producido un error en la importación de datos,
+DATE,Fecha,
+DATE_ADDED,Fecha en la que se añadió,
+DATE_ADDED_REQUIRED,Fecha de adición *,
+DATE_SUBMITTED,Fecha de envío,
+DEAD,Muerto,
+DEFAULT_LANGUAGE_SELECTED,Idioma predeterminado: {0},
+DEGREES_CELSIUS_VALUE,{0}ºC,
+DELETE,Borrar,
+DELETE_ACCESSION,Borrar accesión,
+DELETE_ACCESSION_MESSAGE,Está a punto de borrar la accesión {0}.,
+DELETE_ACCOUNT,Eliminar cuenta,
+DELETE_ACCOUNT_CONFIRMATION,¿Seguro que desea eliminar su cuenta? Esta acción no puede deshacerse.,
+DELETE_ACCOUNT_ERROR,Ocurrió un error al eliminar su cuenta.,
+DELETE_CONFIRMATION_MODAL_MAIN_TEXT,"¿Está seguro de que quiere borrar las especies seleccionadas? Esto las eliminará de su lista, pero conservará todos los datos adjuntos a las entradas existentes.",
+DELETE_ORGANIZATION,Borrar Organización,
+DELETE_ORGANIZATION_MSG,¿Está seguro de que deseas borrar {0}?,
+DELETE_SEEDLINGS_BATCHES,Borrar Lotes de Plántulas,
+DELETE_SEEDLINGS_BATCHES_MSG,¿Está seguro de que desea eliminar los lotes de plántulas?,
+DELETE_SPECIES,Borrar Especie,
+DELETE_STATISTICS,Eliminar estadísticas,
+DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad,
+DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0}.,
+DELETED_SPECIES,<deleted species>,
+DESCRIPTION,Descripción,
+DESCRIPTION_NOTES,Descripción/Notas,
+DESCRIPTION_ORGANIZATION,Su organización podrá incluir personas y especies.,
+DESCRIPTION_PEOPLE,Invite a las personas que contribuyen al éxito de la organización.,
+DESCRIPTION_REPORT_PROBLEM,"Si tiene algún problema con Terraware, por favor, informe de cualquier inconveniente que tenga y lo solucionaremos. Por favor, mencione esta versión {0}.",
+DESCRIPTION_REQUEST_FEATURE,Siempre trabajamos para mejorar su experiencia con Terraware y agradecemos sus comentarios sobre nuestros productos.,
+DESCRIPTION_REQUIRED,Descripción,
+DESCRIPTION_SPECIES,Gestione las especies que recolecte o plante.,
+DESCRIPTION_TEST_APP,Sea el primero en probar nuestra novedosa aplicación móvil de eficacia probada sobre el terreno y díganos qué le parece.,
+DESTINATION,Destino,
+DESTINATION_REQUIRED,Destino *,
+DETAILS,Detalles,
+DIRECTION_OR_DESCRIPTION,Dirección o descripción,
+DONE,Listo,
+DOWNLOAD,Descargar,
+DOWNLOAD_AS_REPORT,Descargar como informe,
+DOWNLOAD_COMPLETE,Descarga completa,
+DOWNLOAD_CSV_TEMPLATE,Descargue una plantilla CSV aquí.,
+DOWNLOAD_FAILED,Descarga fallida,
+DOWNLOAD_FAILED_DESCRIPTION,La descarga ha fallado. Envía un correo electrónico a {0} para que podamos ayudarle.,
+DOWNLOAD_IN_PROGRESS,Descarga en curso...,
+DOWNLOAD_ON_APP_STORE,Descárguela en Apple Store,
+DOWNLOAD_ON_GOOGLE_PLAY,Consígala en Google Play,
+DOWNLOAD_REPORT_DESCRIPTION,"Está a punto de descargar esta tabla de datos como informe. Este archivo csv se encuentra en la sección Descargas. Por favor, asigne un nombre a su informe.",
+DOWNLOAD_THE_CSV_TEMPLATE,Descargar la plantilla CSV.,
+DRIED,Seco,
+DRY_CABINET,Armario de secado,
+DRYING,Secando,
+DRYING_END_DATE,Fecha estimada de finalización del secado,
+DRYING_RACKS,Bastidores de secado,
+DRYING_START_DATE,Fecha de inicio del secado,
+DUPLICATE_SPECIES_FOUND,Especies duplicadas encontradas.,
+DUPLICATED_ACCESSION_NUMBER,Encontramos {0} números de acceso duplicados:,
+DUPLICATED_INVENTORY,Encontramos {0} inventario duplicado:,
+DUPLICATED_SPECIES,Encontramos {0} especies duplicadas:,
+ECOSYSTEM_BOREAL_FOREST_TAIGA,Bosques boreales/Taiga,
+ECOSYSTEM_DESERT_XERIC_SHRUBLAND,Desiertos y matorrales xéricos,
+ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA,Praderas y sabanas inundadas,
+ECOSYSTEM_MANGROVE,Manglares,
+ECOSYSTEM_MEDITERRANEAN_FOREST,Bosque y matorral mediterráneo,
+ECOSYSTEM_MONTANE_GRASSLAND_SHRUBLAND,Praderas y matorrales de montaña,
+ECOSYSTEM_TEMPERATE_BROADLEAF_MIXED_FOREST,Bosques templados de frondosas y mixtos,
+ECOSYSTEM_TEMPERATE_CONIFEROUS_FOREST,Bosque templado de coníferas,
+ECOSYSTEM_TEMPERATE_GRASSLAND_SAVANNA_SHRUBLAND,Pastizales y matorrales templados,
+ECOSYSTEM_TROPICAL_CONIFEROUS_FOREST,Bosque subtropical de coníferas,
+ECOSYSTEM_TROPICAL_DRY_BROADLEAF_FOREST,Bosque seco,
+ECOSYSTEM_TROPICAL_GRASSLAND_SAVANNA_SHRUBLAND,"Praderas, sabanas y matorrales tropicales y subtropicales",
+ECOSYSTEM_TROPICAL_MOIST_BROADLEAF_FOREST,Pluvisilva,
+ECOSYSTEM_TUNDRA,Tundra,
+ECOSYSTEM_TYPE,Tipo de ecosistema,
+EDIT,Editar,
+EDIT_ACCESSION,Editar accesión,
+EDIT_ACCESSION_DETAIL,Editar detalle de accesión,
+EDIT_ACCOUNT,Editar cuenta,
+EDIT_LOCATION,Editar ubicación,
+EDIT_NUMBER_OF_GERMINATED_SEEDS,Editar número de semillas germinadas,
+EDIT_NURSERY,Editar vivero,
+EDIT_ORGANIZATION,Editar organización,
+EDIT_PERSON,Editar persona,
+EDIT_PLANTING_SITE,Editar lugar de plantación,
+EDIT_QUANTITY,Editar cantidad,
+EDIT_QUANTITY_DISABLED,"Actualmente, solo puede introducir una cantidad cuando el estado es ""Secando"" o ""En almacenamiento"".",
+EDIT_SEED_BANK,Editar banco de semillas,
+EDIT_SPECIES,Editar especie,
+EDIT_SPECIES_MODAL_ANSWER_NO,"No, aplicable solo aquí",
+EDIT_SPECIES_MODAL_ANSWER_YES,"Sí, aplicable a todos",
+EDIT_SPECIES_MODAL_QUESTION,¿Desea aplicar esta edición a todas las accesiones con esta especie?,
+EDIT_STATUS,Editar estado,
+EDIT_VIABILITY,Editar viabilidad,
+EDIT_VIABILITY_TEST,Editar prueba de viabilidad,
+EMAIL,Correo electrónico,
+EMAIL_ALREADY_EXISTS,Este correo electrónico ya existe.,
+EMAIL_REQUIRED,Correo electrónico *,
+EMPTY_SEEDS,Semillas vacías,
+END,Fin,
+END_DATE,Fecha de finalización,
+END_DRYING_REMINDER,Recordatorio de final de secado,
+END_DRYING_REMINDER_OFF,Recordatorio de final de secado desactivado,
+ENDANGERED,En peligro de extinción,
+ENTER_SIX_DIGIT_KEY,Introduzca la clave de 6 dígitos,
+ENVIRONMENTAL_NOTES,Notas medioambientales,
+ENVIRONMENTAL_NOTES_PLACEHOLDER,"Notas importantes sobre el paisaje, el clima y las condiciones ambientales",
+EST_READY_DATE,Fecha estimada de disponibilidad,
+ESTIMATED_DRYING_END_DATE,Fecha estimada de finalización del secado,
+ESTIMATED_READY_DATE,Fecha estimada de finalización,
+ESTIMATED_SEEDS_INCOMING,Estimación de entrada de semillas,
+EXISTING_SPECIES_MSG,"""{0}"" ya está en su lista de especies.",
+EXPORT,Exportar,
+EXPORT_RECORDS,Exportar los registros,
+FACILITY,Instalación,
+FACILITY_BUILD_COMPLETION_DATE,Fecha de finalización de la construcción,
+FACILITY_BUILD_COMPLETION_DATE_INVALID,Debe estar comprendida entre las fechas de inicio de la construcción y de inicio de las operaciones.,
+FACILITY_BUILD_COMPLETION_DATE_REQUIRED,Fecha de finalización de la construcción,
+FACILITY_BUILD_START_DATE,Fecha de inicio de la construcción,
+FACILITY_BUILD_START_DATE_INVALID,Debe ser igual o anterior a la fecha de finalización de la construcción y a la fecha de inicio de las operaciones.,
+FACILITY_BUILD_START_DATE_REQUIRED,Fecha de inicio de la construcción *,
+FACILITY_OPERATION_START_DATE,Fecha de inicio de la operación,
+FACILITY_OPERATION_START_DATE_INVALID,Debe ser igual o posterior a las fechas de inicio y finalización de la construcción.,
+FACILITY_OPERATION_START_DATE_REQUIRED,Fecha de inicio de la operación *,
+FAMILY,Familia,
+FERN,Helecho,
+FIELD_NOTES,Notas de campo,
+FIELD_NOTES_PLACEHOLDER,"Notas importantes sobre semillas, frutos o plantas",
+FILE_SELECTED,Archivo seleccionado,
+FILL_OUT_ALL_FIELDS,Rellene todos los campos obligatorios.,
+FILLED_SEEDS,Semillas rellenadas,
+FILTER,Filtrar,
+FILTERS,Filtros,
+FINAL_QTY,Cantidad final,
+FINISH,Finalizar,
+FIRST_ADD_PLANTING_SITE,"Para ver el tablero, primero debe añadir un sitio de plantación.",
+FIRST_NAME,Nombre,
+FIX_HIGHLIGHTED_FIELDS,Corrija los campos resaltados a continuación.,
+FLORA,Flora,
+FOOTNOTE_WAIT_FOR_INVITATION_1,¿Le interesa crear su propia organización o espera una invitación?,
+FOOTNOTE_WAIT_FOR_INVITATION_2,No se preocupe. Recibirá un correo electrónico cuando el administrador lo añada a la organización.,
+FOR_LAB_AND_NURSERY_GERMINATION,Para laboratorio y germinación en vivero,
+FOR_LAB_GERMINATION,Para germinación en laboratorio,
+FOR_NURSERY_GERMINATION,Para germinación en vivero,
+FORB,Para germinación,
+FOUNDER_ID,ID de fundador,
+FREEZER,Congelador,
+FREEZER_1,Congelador 1,
+FREEZER_2,Congelador 2,
+FREEZER_3,Congelador 3,
+FRESH,Fresco,
+FRESH_SEEDS,Semillas frescas,
+FRIDGE,Refrigerador,
+FROM,De,
+FROM_NURSERY,De: Vivero,
+FROM_NURSERY_REQUIRED,De: Vivero *,
+FROM_SUBZONE,De: Subzona,
+FRONT_OF_SEED_BANK,Frente del banco de semillas,
+FUNGUS,Hongo,
+G,g,
+G_GRAMS,g (gramos),
+GA3,GA3,
+GENERAL,General,
+GENERIC_ERROR,Se ha producido un error,
+GEOLOCATIONS,Geolocalizaciones,
+GERMINATED,Germinado,
+GERMINATING,Germinación,
+GERMINATING_QUANTITY,Capacidad de germinación,
+GERMINATING_QUANTITY_REQUIRED,Capacidad de germinación *,
+GERMINATION_TESTED_BY,Germinación verificada por,
+GET_ACCESSION_ERROR,Se produjo un error durante la accesión.,
+GET_COUNT,Obtener recuento,
+GET_STARTED,Comenzar,
+GO_TO,Ir a {0},
+GO_TO_DASHBOARD,Ir al panel de control,
+GO_TO_DATABASE,Ir a la base de datos,
+GO_TO_NURSERIES,Ir a los viveros,
+GO_TO_PLANTING_SITES,Ir a Sitios de plantación,
+GO_TO_PROFILE,Ir al perfil,
+GO_TO_SEED_BANKS,Ir a los bancos de semilla,
+GO_TO_SPECIES,Ir a las especies,
+GOT_IT,¡Entendido!,
+GPS_COORDINATES,Coordenadas GPS,
+GRAMINOID,Gramínea,
+GRAMS,Gramos,
+GREATER_THAN_FIFTY_PERCENT,> 50%,
+GROWTH_FORM,Forma de crecimiento,
+HECTARES,Hectáreas,
+HECTARES_PLANTED_CARD_TITLE,¿Qué proporción de mi terreno ha sido plantada para el {0}?,
+HECTARES_PLANTED_DESCRIPTION_1,Esta es la cantidad de hectáreas que se han plantado basándose en las subzonas que eligió al transplantar.,
+HECTARES_PLANTED_DESCRIPTION_2,"A efectos de observación, solo se asignan parcelas de seguimiento que sabemos que pertenecen a estas subzonas.",
+HIGHEST,Más alta,
+HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,¿Qué zonas tienen las tasas más altas y más bajas de mortalidad?,
+HIGHEST_AND_LOWEST_MORTALITY_RATE_SPECIES_CARD_TITLE,¿Qué especies tienen las tasas más altas y más bajas de mortalidad?,
+HISTORY,Historia,
+HOME,Inicio,
+HOW_MANY_PLANTS_CARD_TITLE,¿De cuántas plantas he reportado su plantación?,
+HOW_MANY_PLANTS_CARD_TITLE_W_OBS,¿Cuántas plantas hay en el sitio desde {0}?,
+HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION,Este es el número total de plantas con base en el tamaño del sitio y la densidad de plantación según sus últimas observaciones.,
+HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION_2,"Desde entonces, ha reportado la plantación de {0} plantas. Esto es {1}% mayor que su cantidad total de plantas desde la fecha de observación.",
+ID,Identificación,
+IF_APPLICABLE,(si aplica),
+IF_APPLIES,Solo si aplica,
+IGNORE,Ignorar,
+IMPERIAL,Imperial,
+IMPERIAL_OZ_LB,"Imperial (oz, lb)",
+IMPORT,Importar,
+IMPORT_ACCESSIONS,Importar accesiones,
+IMPORT_ACCESSIONS_ALT_TITLE,¿Ya posee una base de datos de accesión de semillas?,
+IMPORT_ACCESSIONS_DESC,"Buscar, o arrastrar y soltar, un formato CSV con accesiones.",
+IMPORT_ACCESSIONS_WITH_TEMPLATE,Importar accesiones a través de nuestra plantilla CSV.,
+IMPORT_DATA,Importar datos,
+IMPORT_INVENTORY,Importar inventario,
+IMPORT_INVENTORY_ALT_TITLE,¿Ya posee una base de datos de inventario?,
+IMPORT_INVENTORY_DESC,"Buscar, o arrastrar y soltar, un CSV con datos de inventario.",
+IMPORT_INVENTORY_DESCRIPTION,"Cargar archivo CSV con especies, cantidades y otros campos.",
+IMPORT_INVENTORY_WITH_TEMPLATE,Importar inventario a través de nuestra plantilla CSV.,
+IMPORT_SPECIES,Importar especies,
+IMPORT_SPECIES_DESCRIPTION,Cargar archivo CSV con nombres científicos y otros campos opcionales.,
+IMPORT_SPECIES_LIST,Importar lista de especies,
+IMPORT_SPECIES_LIST_DESC,"Buscar, o arrastrar y soltar, archivo CSV con nombres científicos y otros campos opcionales.",
+IMPORTING_ACCESSIONS,Importando accesiones... esto puede tardar unos minutos.,
+IMPORTING_INVENTORY,Importando inventario... esto puede tardar unos minutos.,
+IMPORTING_SPECIES,Importando especies... esto puede tardar unos minutos,
+IN_PROGRESS,En curso,
+IN_STORAGE,En almacén,
+INCLUDE_EMPTY_FIELDS,Incluir campos vacíos,
+INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,
+INITIAL_SEEDS,Semillas iniciales,
+INTERMEDIATE,Intermedia,
+INVALID_DATE,Fecha no válida,
+INVALID_EDITOR,Este informe está siendo editado por otro usuario,
+INVALID_VALUE,Valor no válido,
+INVENTORY,Inventario,
+INVENTORY_DATA,Datos del inventario,
+INVENTORY_IMPORT_COMPLETE,¡Importación de datos del inventario finalizada!,
+INVENTORY_ONBOARDING_NURSERIES_MSG,Defina los viveros asignados al inventario de plántulas,
+INVENTORY_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de plántulas,
+ISSUE,Problema,
 IUCN_CRITICALLY_ENDANGERED,En peligro crítico (CR),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 IUCN_DATA_DEFICIENT,Datos insuficientes (DD),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 IUCN_ENDANGERED,En peligro (EN),IUCN conservation category. Keep the two-letter code as is; only translate the description.
@@ -451,881 +451,881 @@ IUCN_LEAST_CONCERN,Preocupación baja (LC),IUCN conservation category. Keep the 
 IUCN_NEAR_THREATENED,Casi amenazada (NT),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 IUCN_NOT_EVALUATED,No evaluada (NE),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 IUCN_VULNERABLE,Vulnerable (VU),IUCN conservation category. Keep the two-letter code as is; only translate the description.
-KEEP_ORIGINAL,Conservar original
-KEY_BELONGS_TO_ANOTHER_SEED_BANK,La clave está asociada a otro banco de semillas.
-KEY_LESSONS,Lecciones clave aprendidas
-KEY_LESSONS_INSTRUCTIONS,"Proporcione detalles de las lecciones clave aprendidas durante el periodo de presentación de informes del proyecto, incluidas las consecuencias no intencionadas tanto positivas como negativas, de ser el caso. (Media página como máximo)"
-KEY_LESSONS_REQUIRED,Lecciones clave aprendidas *
-KEY_WAS_NOT_RECOGNIZED,No se reconoció la clave.
-KG,kg
-KG_KILOGRAMS,kg (kilogramos)
-KILOGRAMS,Kilogramos
-LAB,Laboratorio
-LAB_DESCRIPTION,Todos los detalles sobre las pruebas de viabilidad en laboratorio realizadas en las semillas.
-LAB_GERMINATION,Germinación en laboratorio
-LANDOWNER,Propietario
-LANGUAGE,Idioma
-LANGUAGE_AND_REGION,Idioma y región
-LAST_EDITED_BY,Última edición por
-LAST_NAME,Apellido
-LAST_OBSERVED,Última observación
-LATITUDE_LONGITUDE,"Latitud, longitud"
-LB,lb
-LB_POUNDS,lb (libras)
-LEARN_MORE,Más información
-LEARN_MORE_CONSERVATION_STATUS_ENDANGERED,Especies poco comunes y cuyas poblaciones silvestres corren un alto riesgo de extinción; consulte también las definiciones locales.
-LEARN_MORE_CONSERVATION_STATUS_RARE,"Especies con poblaciones silvestres de tamaño limitado, que a menudo se encuentran en lugares geográficos aislados; pueden cumplir los criterios de situación en peligro o bajo amenaza pero aún no se han incluido o evaluado legalmente."
-LEARN_MORE_GROWTH_FORM_FERN,"Planta vascular que no florece y se reproduce mediante esporas, que pertenece al grupo de plantas de las pteridofitas."
-LEARN_MORE_GROWTH_FORM_FORB,"Planta herbácea (no leñosa) que NO es una gramínea (césped, juncia o junco)."
-LEARN_MORE_GROWTH_FORM_FUNGUS,"Usualmente, un organismo eucariota (no vegetal) que es heterótrofo (que no puede producir su propio alimento), que crece en filamentos (hifas) y que produce esporas."
-LEARN_MORE_GROWTH_FORM_GRAMINOID,"Planta herbácea (no leñosa) cuya morfología se asemeja a la del césped, es decir culmos alargados con hojas largas en forma de cuchilla, de la familia del césped, la juncia o el junco."
-LEARN_MORE_GROWTH_FORM_LIANA,Una vid/planta trepadora con tallos leñosos alcanzando >10 m de longitud.
-LEARN_MORE_GROWTH_FORM_LICHEN,"Un grupo de hongo y alga, en el cual el hongo es el elemento dominante, debido a su forma de talo y su cuerpo fructífero."
-LEARN_MORE_GROWTH_FORM_MOSS,"Una planta no vascular y sin flores, típicamente con forma de masas o alfombrillas verdes y densas, a menudo en lugares húmedos o sombreados."
-LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS,Una planta que puede crecer en más de una forma.
-LEARN_MORE_GROWTH_FORM_SHRUB,Planta leñosa que es más pequeña que un árbol y posee varios tallos principales que nacen en el suelo o cerca de él.
-LEARN_MORE_GROWTH_FORM_SHRUB_TREE,Una planta que puede estar en forma de arbusto o árbol.
-LEARN_MORE_GROWTH_FORM_SUBSHRUB,Un arbusto enano que usualmente solo es leñoso en la base.
-LEARN_MORE_GROWTH_FORM_TREE,"Planta leñosa perenne, que suele tener un solo tallo o tronco que crece hasta una altura considerable y posee ramas laterales a cierta distancia del suelo."
-LEARN_MORE_GROWTH_FORM_VINE,"Cualquier planta con tallos largos, flexibles, trepadores (término que suele usarse para trepadoras herbáceas)"
-LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Las semillas exhiben un comportamiento intermedio entre las semillas ortodoxas y las recalcitrantes; pueden soportar la desecación parcial, soportar temperaturas frías pero no de congelación o tener una vida breve, independientemente de las condiciones de almacenamiento."
-LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"La evidencia científica sugiere este comportamiento de almacenamiento de semillas, pero se necesita más investigación para confirmar."
-LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Las semillas toleran los niveles de desecación necesarios para ser almacenadas congeladas (contenido de humedad de 5-8 %) y unas temperaturas de -20 °C o inferiores.
-LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Las semillas no toleran los niveles de desecación necesarios para su conservación ex situ (fuera del sitio).
-LEAVE_AND_SAVE,Salir y guardar
-LEAVE_ORGANIZATION,Salir de la organización
-LESS_THAN_TWENTY_FIVE_PERCENT,< 25%
+KEEP_ORIGINAL,Conservar original,
+KEY_BELONGS_TO_ANOTHER_SEED_BANK,La clave está asociada a otro banco de semillas.,
+KEY_LESSONS,Lecciones clave aprendidas,
+KEY_LESSONS_INSTRUCTIONS,"Proporcione detalles de las lecciones clave aprendidas durante el periodo de presentación de informes del proyecto, incluidas las consecuencias no intencionadas tanto positivas como negativas, de ser el caso. (Media página como máximo)",
+KEY_LESSONS_REQUIRED,Lecciones clave aprendidas *,
+KEY_WAS_NOT_RECOGNIZED,No se reconoció la clave.,
+KG,kg,
+KG_KILOGRAMS,kg (kilogramos),
+KILOGRAMS,Kilogramos,
+LAB,Laboratorio,
+LAB_DESCRIPTION,Todos los detalles sobre las pruebas de viabilidad en laboratorio realizadas en las semillas.,
+LAB_GERMINATION,Germinación en laboratorio,
+LANDOWNER,Propietario,
+LANGUAGE,Idioma,
+LANGUAGE_AND_REGION,Idioma y región,
+LAST_EDITED_BY,Última edición por,
+LAST_NAME,Apellido,
+LAST_OBSERVED,Última observación,
+LATITUDE_LONGITUDE,"Latitud, longitud",
+LB,lb,
+LB_POUNDS,lb (libras),
+LEARN_MORE,Más información,
+LEARN_MORE_CONSERVATION_STATUS_ENDANGERED,Especies poco comunes y cuyas poblaciones silvestres corren un alto riesgo de extinción; consulte también las definiciones locales.,
+LEARN_MORE_CONSERVATION_STATUS_RARE,"Especies con poblaciones silvestres de tamaño limitado, que a menudo se encuentran en lugares geográficos aislados; pueden cumplir los criterios de situación en peligro o bajo amenaza pero aún no se han incluido o evaluado legalmente.",
+LEARN_MORE_GROWTH_FORM_FERN,"Planta vascular que no florece y se reproduce mediante esporas, que pertenece al grupo de plantas de las pteridofitas.",
+LEARN_MORE_GROWTH_FORM_FORB,"Planta herbácea (no leñosa) que NO es una gramínea (césped, juncia o junco).",
+LEARN_MORE_GROWTH_FORM_FUNGUS,"Usualmente, un organismo eucariota (no vegetal) que es heterótrofo (que no puede producir su propio alimento), que crece en filamentos (hifas) y que produce esporas.",
+LEARN_MORE_GROWTH_FORM_GRAMINOID,"Planta herbácea (no leñosa) cuya morfología se asemeja a la del césped, es decir culmos alargados con hojas largas en forma de cuchilla, de la familia del césped, la juncia o el junco.",
+LEARN_MORE_GROWTH_FORM_LIANA,Una vid/planta trepadora con tallos leñosos alcanzando >10 m de longitud.,
+LEARN_MORE_GROWTH_FORM_LICHEN,"Un grupo de hongo y alga, en el cual el hongo es el elemento dominante, debido a su forma de talo y su cuerpo fructífero.",
+LEARN_MORE_GROWTH_FORM_MOSS,"Una planta no vascular y sin flores, típicamente con forma de masas o alfombrillas verdes y densas, a menudo en lugares húmedos o sombreados.",
+LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS,Una planta que puede crecer en más de una forma.,
+LEARN_MORE_GROWTH_FORM_SHRUB,Planta leñosa que es más pequeña que un árbol y posee varios tallos principales que nacen en el suelo o cerca de él.,
+LEARN_MORE_GROWTH_FORM_SHRUB_TREE,Una planta que puede estar en forma de arbusto o árbol.,
+LEARN_MORE_GROWTH_FORM_SUBSHRUB,Un arbusto enano que usualmente solo es leñoso en la base.,
+LEARN_MORE_GROWTH_FORM_TREE,"Planta leñosa perenne, que suele tener un solo tallo o tronco que crece hasta una altura considerable y posee ramas laterales a cierta distancia del suelo.",
+LEARN_MORE_GROWTH_FORM_VINE,"Cualquier planta con tallos largos, flexibles, trepadores (término que suele usarse para trepadoras herbáceas)",
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Las semillas exhiben un comportamiento intermedio entre las semillas ortodoxas y las recalcitrantes; pueden soportar la desecación parcial, soportar temperaturas frías pero no de congelación o tener una vida breve, independientemente de las condiciones de almacenamiento.",
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"La evidencia científica sugiere este comportamiento de almacenamiento de semillas, pero se necesita más investigación para confirmar.",
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Las semillas toleran los niveles de desecación necesarios para ser almacenadas congeladas (contenido de humedad de 5-8 %) y unas temperaturas de -20 °C o inferiores.,
+LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Las semillas no toleran los niveles de desecación necesarios para su conservación ex situ (fuera del sitio).,
+LEAVE_AND_SAVE,Salir y guardar,
+LEAVE_ORGANIZATION,Salir de la organización,
+LESS_THAN_TWENTY_FIVE_PERCENT,< 25%,
 LIANA,Liana,A type of plant.
-LICHEN,Liquen
-LIGHT,Luz
+LICHEN,Liquen,
+LIGHT,Luz,
 LIKELY_INTERMEDIATE,Posiblemente intermedia,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Intermediate.
 LIKELY_ORTHODOX,Posiblemente ortodoxa,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
 LIKELY_RECALCITRANT,Posiblemente recalcitrante,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
-LIST,Lista
-LIVE,Directo
-LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,¿Cuántas plantas vivas y muertas hay por especie?
-LIVE_PLANTS,Plantas vivas
-LIVE_SPECIES,Especies vivas
-LOADING,Cargando...
-LOCATION,Lugar
-LOCATION_REQUIRED,Lugar *
-LOCATIONS,Lugares
-LOCKED,Bloqueado
-LOG_OUT,Cerrar sesión
-LOSS_RATE,Tasa de pérdidas
-LOWEST,Más baja
-MANAGER,Gestor
-MANAGER_INFO,"Un administrador puede hacer lo anterior, además de editar la entradas de datos para semillas y gestionar los retiros de plantas en campo, sitios de plantación y especies."
-MAP,Mapa
-MARK_ALL_AS_READ,Marcar todo como leído
-MARK_AS_COMPLETE,Marcar como completo
-MARK_AS_READ,Marcar como leído
-MARK_AS_UNREAD,Marcar como no leído
-MAX,Máximo
-MEDIA_MIX,Mezcla de medios
-METRIC,Métrico
-METRIC_G_KG_MG,"Métrico (g, kg, mg)"
-MG,mg
-MG_MILLIGRAMS,mg (miligramos)
-MIDDLE_OF_SEED_BANK,Centro del banco de semillas
-MILLIGRAMS,Miligramos
-MIN,Mínimo
-MISSING_SUBSET_WEIGHT_ERROR_NURSERY,"Debe introducir el peso de un subconjunto para poder retirarlo a un vivero. Para ello, edite la cantidad de esta accesión."
-MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,"Para crear una prueba de viabilidad, debe introducir el peso de un subconjunto. Para ello, edite la cantidad de esta accesión."
-MONITORING,Monitorización
-MONITORING_CARD_DESCRIPTION,Añada bancos de semillas a su organización y monitorice aspectos como la temperatura y la humedad a través de sus kits de sensores.
-MONITORING_DATE_FORMAT,MMM d h:mmaaa
-MONITORING_LABEL_HUMIDITY,Humedad
-MONITORING_LABEL_HUMIDITY_THRESHOLDS,Umbrales de humedad
-MONITORING_LABEL_STATE_OF_CHARGE,Estado de carga
-MONITORING_LABEL_SYSTEM_POWER,Potencia del sistema
-MONITORING_LABEL_TEMPERATURE,Temperatura
-MONITORING_LABEL_TEMPERATURE_THRESHOLDS,Umbrales de temperatura
-MONITORING_PLOT,Parcela de vigilancia
-MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia
-MONITORING_PLOTS,Control de parcelas
-MONTH_01,Enero
-MONTH_02,Febrero
-MONTH_03,Marzo
-MONTH_04,Abril
-MONTH_05,Mayo
-MONTH_06,Junio
-MONTH_07,Julio
-MONTH_08,Agosto
-MONTH_09,Septiembre
-MONTH_10,Octubre
-MONTH_11,Noviembre
-MONTH_12,Diciembre
-MORE_OPTIONS,Más opciones
-MORTALITY_RATE,Tasa de mortalidad
-MORTALITY_RATE_BY_SPECIES,Tasa de mortalidad por especie
-MORTALITY_RATE_CARD_TITLE,¿Cuál es mi índice de mortalidad hasta el {0}?
+LIST,Lista,
+LIVE,Directo,
+LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE,¿Cuántas plantas vivas y muertas hay por especie?,
+LIVE_PLANTS,Plantas vivas,
+LIVE_SPECIES,Especies vivas,
+LOADING,Cargando...,
+LOCATION,Lugar,
+LOCATION_REQUIRED,Lugar *,
+LOCATIONS,Lugares,
+LOCKED,Bloqueado,
+LOG_OUT,Cerrar sesión,
+LOSS_RATE,Tasa de pérdidas,
+LOWEST,Más baja,
+MANAGER,Gestor,
+MANAGER_INFO,"Un administrador puede hacer lo anterior, además de editar la entradas de datos para semillas y gestionar los retiros de plantas en campo, sitios de plantación y especies.",
+MAP,Mapa,
+MARK_ALL_AS_READ,Marcar todo como leído,
+MARK_AS_COMPLETE,Marcar como completo,
+MARK_AS_READ,Marcar como leído,
+MARK_AS_UNREAD,Marcar como no leído,
+MAX,Máximo,
+MEDIA_MIX,Mezcla de medios,
+METRIC,Métrico,
+METRIC_G_KG_MG,"Métrico (g, kg, mg)",
+MG,mg,
+MG_MILLIGRAMS,mg (miligramos),
+MIDDLE_OF_SEED_BANK,Centro del banco de semillas,
+MILLIGRAMS,Miligramos,
+MIN,Mínimo,
+MISSING_SUBSET_WEIGHT_ERROR_NURSERY,"Debe introducir el peso de un subconjunto para poder retirarlo a un vivero. Para ello, edite la cantidad de esta accesión.",
+MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,"Para crear una prueba de viabilidad, debe introducir el peso de un subconjunto. Para ello, edite la cantidad de esta accesión.",
+MONITORING,Monitorización,
+MONITORING_CARD_DESCRIPTION,Añada bancos de semillas a su organización y monitorice aspectos como la temperatura y la humedad a través de sus kits de sensores.,
+MONITORING_DATE_FORMAT,MMM d h:mmaaa,
+MONITORING_LABEL_HUMIDITY,Humedad,
+MONITORING_LABEL_HUMIDITY_THRESHOLDS,Umbrales de humedad,
+MONITORING_LABEL_STATE_OF_CHARGE,Estado de carga,
+MONITORING_LABEL_SYSTEM_POWER,Potencia del sistema,
+MONITORING_LABEL_TEMPERATURE,Temperatura,
+MONITORING_LABEL_TEMPERATURE_THRESHOLDS,Umbrales de temperatura,
+MONITORING_PLOT,Parcela de vigilancia,
+MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia,
+MONITORING_PLOTS,Control de parcelas,
+MONTH_01,Enero,
+MONTH_02,Febrero,
+MONTH_03,Marzo,
+MONTH_04,Abril,
+MONTH_05,Mayo,
+MONTH_06,Junio,
+MONTH_07,Julio,
+MONTH_08,Agosto,
+MONTH_09,Septiembre,
+MONTH_10,Octubre,
+MONTH_11,Noviembre,
+MONTH_12,Diciembre,
+MORE_OPTIONS,Más opciones,
+MORTALITY_RATE,Tasa de mortalidad,
+MORTALITY_RATE_BY_SPECIES,Tasa de mortalidad por especie,
+MORTALITY_RATE_CARD_TITLE,¿Cuál es la tasa de mortalidad de mi planta desde el {0}?,
 MORTALITY_RATE_CLARIFICATION,Este es el porcentaje total de sus plantaciones que han muerto en todas las especies y zonas., calculated from your latest observations.
-MORTALITY_RATE_IN_FIELD,Tasa de mortalidad en campo (%)
-MORTALITY_RATE_IN_FIELD_REQUIRED,Tasa de mortalidad en el campo (%) *
-MORTALITY_RATE_IN_NURSERY,Tasa de mortalidad en vivero (%)
-MORTALITY_RATE_IN_NURSERY_REQUIRED,Tasa de mortalidad en el vivero (%) *
-MORTALITY_RATE_PER_SPECIES,Tasa de mortalidad por especie
-MORTALITY_RATE_PERCENT_REQUIRED,Tasa de mortalidad (%) *
-MOSS,Musgo
-MOST_RECENT_PERCENTAGE_VIABILITY,Porcentaje de viabilidad más reciente
-MOVE,Mover
+MORTALITY_RATE_IN_FIELD,Tasa de mortalidad en campo (%),
+MORTALITY_RATE_IN_FIELD_REQUIRED,Tasa de mortalidad en el campo (%) *,
+MORTALITY_RATE_IN_NURSERY,Tasa de mortalidad en vivero (%),
+MORTALITY_RATE_IN_NURSERY_REQUIRED,Tasa de mortalidad en el vivero (%) *,
+MORTALITY_RATE_PER_SPECIES,Tasa de mortalidad por especie,
+MORTALITY_RATE_PERCENT_REQUIRED,Tasa de mortalidad (%) *,
+MOSS,Musgo,
+MOST_RECENT_PERCENTAGE_VIABILITY,Porcentaje de viabilidad más reciente,
+MOVE,Mover,
 MULTIPLE_FORMS,Múltiples formas,"Describes a plant that can grow in more than one form, e.g., both a shrub and a forb."
-MY_ACCOUNT,Mi cuenta
-MY_ACCOUNT_DESC,Gestione la información de su cuenta.
-MY_ACCOUNT_NOTIFICATIONS_DESC,Las notificaciones le avisan cuando hay actualizaciones importantes sobre sus organizaciones. Las recibirá por correo electrónico.
-NAME,Nombre
-NAME_REQUIRED,Nombre *
-NAME_UNKNOWN,(nombre desconocido)
-NATIVE_FOREST_RESTORATION,Restauración de bosques nativos
-NEW,Nuevo
-NEW_ACCESSION,Añadir accesión
-NEW_ACCESSION_DESCRIPTION,"Una vez creada la accesión, se generará un número de accesión."
-NEW_ACCESSION_INFO,"La información como la concerniente a los sacos de semillas, las fotos y las geolocalizaciones solo puede añadirse a través de la aplicación para Android Seed Collector. El resto de la información sobre el procesamiento, el secado, el almacenamiento y los retiros puede añadirse después de crear la accesión."
-NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.
-NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.
-NEW_ENTRY,Nueva entrada
-NEW_SPECIES,Nuevas especies
-NEW_SUBZONE,Nueva subzona
-NEW_TEST,Nueva prueba
-NEW_WITHDRAWAL,Nuevo retiro
-NEXT,Siguiente
-NEXT_ARROW,Siguiente >
-NEXT_PROCESSING_AND_DRYING,Siguiente: Procesamiento y secado
-NEXT_STEPS,Siguientes pasos
-NEXT_STEPS_INSTRUCTIONS,Resuma las siguientes fases de su proyecto. (Un cuarto de página como máximo.)
-NEXT_STEPS_REQUIRED,Próximos pasos *
-NEXT_STORING,Siguiente: Almacenamiento
-NEXT_WITHDRAWAL,Siguiente: Retiro
-NICE,¡Muy bien!
-NO,No
-NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.
-NO_DATA_YET,Aún no hay datos.
-NO_FUTURE_DATES,No se admiten fechas futuras.
-NO_INVENTORY_DESCRIPTION,Parece que aún no ha añadido inventario. Puede importar datos desde un archivo CSV o añadir inventario mediante nuestro formulario de inventario.
-NO_MAP_DATA,No hay datos cartográficos que mostrar para este lugar de plantación.
-NO_MOBILE_SUPPORT_DESC,Acceda a terraware.io desde un dispositivo de escritorio.
-NO_MOBILE_SUPPORT_TITLE,La página web de Terraware aún no es compatible con dispositivos móviles.
-NO_NEGATIVE_NUMBERS,No se admiten números negativos.
-NO_NOTIFICATIONS,No hay notificaciones que mostrar.
-NO_NURSERIES_NON_ADMIN_MSG,"Antes de que pueda añadir y administrar su inventario de viveros, deberá tener un vivero y especies dentro de Terraware. Solo los administradores pueden añadir viveros y especies, así que comuníquese con el suyo para obtener ayuda."
-NO_PAST_DATES,No se admiten fechas pasadas.
-NO_PEOPLE_IN_ORG,No hay personas en la organización.
-NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.
-NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero."
-NO_PLANTS,No hay plantas.
-NO_REASSIGNMENTS,No hay reasignaciones.
-NO_REASSIGNMENTS_TEXT,Seleccione una nueva subzona con cantidad en al menos una fila de lotes de plántulas.
-NO_SEEDBANKS_ADMIN_MSG,"Comience por añadir un banco de semillas; luego, podrá acceder y crear nuevas accesiones."
-NO_SEEDBANKS_ADMIN_TITLE,"Un momento, añadamos primero un banco de semillas."
-NO_SEEDBANKS_MONITORING_ADMIN_MSG,"Comience por añadir un banco de semillas. Si su banco de semillas ha sido construido por Terraformation, entonces podrá monitorear aspectos como la temperatura y la humedad del banco de semillas."
-NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG,"Antes de que pueda comenzar a monitorear de forma remota aspectos como la temperatura y la humedad por medio del kit de sensores de un banco de semillas, deberá añadir un banco de semillas dentro de Terraware. Solo los administradores pueden añadir bancos de semillas, así que comuníquese con el suyo para obtener ayuda."
-NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de que pueda agregar y administrar sus accesiones, deberá tener un banco de semillas y especies dentro de Terraware. Solo los administradores pueden añadir bancos de semillas y especies, así que comuníquese con el suyo para obtener ayuda."
-NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG,"Si su banco de semillas ha sido construido por Terraformation, está equipado con un kit de sensores que puede monitorear de forma remota aspectos como la temperatura y la humedad del banco de semillas. Su banco de semillas no tiene un kit de sensores o aún no ha sido configurado por su administrador."
-NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_DESCRIPTION,"No hay lotes seleccionados con plantones que estén ""listos"". Seleccione otro propósito de retirada o cancele y seleccione un lote diferente."
-NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_TITLE,No hay plantones disponibles para trasplantar
-NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude."
-NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.
-NO_SUB_LOCATIONS,Edite este banco de semillas para añadir sublocalizaciones.
-NONE,Ninguno
-NOT_CONNECTED,Sin conexión
-NOT_READY,No está listo.
-NOT_READY_QUANTITY,Cantidad no lista
-NOT_READY_QUANTITY_REQUIRED,Cantidad no lista *
-NOTE_ANY_ISSUES,¿Todo lo anterior parece correcto? Anote cualquier problema.
-NOTES,Notas
-NOTIFICATIONS,Notificaciones
-NUMBER_OF_LIVE_PLANTS_PER_SPECIES,Número de plantas vivas por especie
-NUMBER_OF_PACKETS,Número de paquetes
-NUMBER_OF_PEOPLE,Número de personas
-NUMBER_OF_PHOTOS,Número de fotos
-NUMBER_OF_PLANTS,Número de plantas
-NUMBER_OF_PLANTS_BY_SPECIES,Número de plantas por especie
-NUMBER_OF_PLANTS_BY_SUBZONE_AND_SPECIES,Número de plantas por subzona y especie
-NUMBER_OF_SEEDS_COMPROMISED,# semillas afectadas
-NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Semillas Afectadas *
-NUMBER_OF_SEEDS_COMPROMISED_V2,# Semillas Afectadas
-NUMBER_OF_SEEDS_EMPTY,# semillas vacías
-NUMBER_OF_SEEDS_EMPTY_REQUIRED,# Semillas Vacías *
-NUMBER_OF_SEEDS_EMPTY_V2,# Semillas Vacías
-NUMBER_OF_SEEDS_FILLED,# semillas llenadas
-NUMBER_OF_SEEDS_FILLED_REQUIRED,# Semillas Rellenadas *
-NUMBER_OF_SEEDS_FILLED_V2,# Semillas Rellenadas
-NUMBER_OF_SEEDS_GERMINATED,# Semillas Germinadas
-NUMBER_OF_SEEDS_GERMINATED_REQUIRED,# Semillas Germinadas *
-NUMBER_OF_SEEDS_IN_SUBSET,# de semillas en el Subconjunto
-NUMBER_OF_SEEDS_SOWN,Número de Semillas Sembradas
-NUMBER_OF_SEEDS_TESTED,# Semillas Analizadas
-NUMBER_OF_SEEDS_TESTED_REQUIRED,# Semillas Analizadas *
-NUMBER_OF_SEEDS_WITHDRAWN,Semillas Retiradas
-NUMBER_OF_SPECIES,Número de especies
-NUMBER_OF_SPECIES_PLANTED_CARD_TITLE,¿Cuántas especies he informado para plantar?
-NUMBER_PLANTS_COLLECTED_FROM,Número de plantas recogidas de
-NURSERIES,Viveros
-NURSERY,Vivero
-NURSERY_ADDED,Vivero añadido
-NURSERY_CAPACITY,Capacidad del vivero
-NURSERY_CAPACITY_REQUIRED,Capacidad del vivero *
-NURSERY_DESCRIPTION,Todos los detalles sobre las pruebas de viabilidad en vivero realizadas a las semillas.
-NURSERY_GERMINATION,Germinación del vivero
-NURSERY_MEDIA,Medios del vivero
-NURSERY_MORTALITY_RATE,Tasa de mortalidad en el vivero
-NURSERY_REQUIRED,Vivero *
-NURSERY_TRANSFER,Traslado de vivero
-OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para {0} para el/los lugar(es) de plantación: {1},"Example: Observation event is scheduled for June 1, 2023 for planting site(s): Site-A, Site-B"
-OBSERVATION_IN_PROGRESS,Observación en progreso
-OBSERVATION_OVERDUE,Observación con atraso
-OBSERVATION_STATUS,Estado de la observación
+MY_ACCOUNT,Mi cuenta,
+MY_ACCOUNT_DESC,Gestione la información de su cuenta.,
+MY_ACCOUNT_NOTIFICATIONS_DESC,Las notificaciones le avisan cuando hay actualizaciones importantes sobre sus organizaciones. Las recibirá por correo electrónico.,
+NAME,Nombre,
+NAME_REQUIRED,Nombre *,
+NAME_UNKNOWN,(nombre desconocido),
+NATIVE_FOREST_RESTORATION,Restauración de bosques nativos,
+NEW,Nuevo,
+NEW_ACCESSION,Añadir accesión,
+NEW_ACCESSION_DESCRIPTION,"Una vez creada la accesión, se generará un número de accesión.",
+NEW_ACCESSION_INFO,"La información como la concerniente a los sacos de semillas, las fotos y las geolocalizaciones solo puede añadirse a través de la aplicación para Android Seed Collector. El resto de la información sobre el procesamiento, el secado, el almacenamiento y los retiros puede añadirse después de crear la accesión.",
+NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,
+NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,
+NEW_ENTRY,Nueva entrada,
+NEW_SPECIES,Nuevas especies,
+NEW_SUBZONE,Nueva subzona,
+NEW_TEST,Nueva prueba,
+NEW_WITHDRAWAL,Nuevo retiro,
+NEXT,Siguiente,
+NEXT_ARROW,Siguiente >,
+NEXT_PROCESSING_AND_DRYING,Siguiente: Procesamiento y secado,
+NEXT_STEPS,Siguientes pasos,
+NEXT_STEPS_INSTRUCTIONS,Resuma las siguientes fases de su proyecto. (Un cuarto de página como máximo.),
+NEXT_STEPS_REQUIRED,Próximos pasos *,
+NEXT_STORING,Siguiente: Almacenamiento,
+NEXT_WITHDRAWAL,Siguiente: Retiro,
+NICE,¡Muy bien!,
+NO,No,
+NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.,
+NO_DATA_YET,Aún no hay datos.,
+NO_FUTURE_DATES,No se admiten fechas futuras.,
+NO_INVENTORY_DESCRIPTION,Parece que aún no ha añadido inventario. Puede importar datos desde un archivo CSV o añadir inventario mediante nuestro formulario de inventario.,
+NO_MAP_DATA,No hay datos cartográficos que mostrar para este lugar de plantación.,
+NO_MOBILE_SUPPORT_DESC,Acceda a terraware.io desde un dispositivo de escritorio.,
+NO_MOBILE_SUPPORT_TITLE,La página web de Terraware aún no es compatible con dispositivos móviles.,
+NO_NEGATIVE_NUMBERS,No se admiten números negativos.,
+NO_NOTIFICATIONS,No hay notificaciones que mostrar.,
+NO_NURSERIES_NON_ADMIN_MSG,"Antes de que pueda añadir y administrar su inventario de viveros, deberá tener un vivero y especies dentro de Terraware. Solo los administradores pueden añadir viveros y especies, así que comuníquese con el suyo para obtener ayuda.",
+NO_PAST_DATES,No se admiten fechas pasadas.,
+NO_PEOPLE_IN_ORG,No hay personas en la organización.,
+NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,
+NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero.",
+NO_PLANTS,No hay plantas.,
+NO_REASSIGNMENTS,No hay reasignaciones.,
+NO_REASSIGNMENTS_TEXT,Seleccione una nueva subzona con cantidad en al menos una fila de lotes de plántulas.,
+NO_SEEDBANKS_ADMIN_MSG,"Comience por añadir un banco de semillas; luego, podrá acceder y crear nuevas accesiones.",
+NO_SEEDBANKS_ADMIN_TITLE,"Un momento, añadamos primero un banco de semillas.",
+NO_SEEDBANKS_MONITORING_ADMIN_MSG,"Comience por añadir un banco de semillas. Si su banco de semillas ha sido construido por Terraformation, entonces podrá monitorear aspectos como la temperatura y la humedad del banco de semillas.",
+NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG,"Antes de que pueda comenzar a monitorear de forma remota aspectos como la temperatura y la humedad por medio del kit de sensores de un banco de semillas, deberá añadir un banco de semillas dentro de Terraware. Solo los administradores pueden añadir bancos de semillas, así que comuníquese con el suyo para obtener ayuda.",
+NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de que pueda agregar y administrar sus accesiones, deberá tener un banco de semillas y especies dentro de Terraware. Solo los administradores pueden añadir bancos de semillas y especies, así que comuníquese con el suyo para obtener ayuda.",
+NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG,"Si su banco de semillas ha sido construido por Terraformation, está equipado con un kit de sensores que puede monitorear de forma remota aspectos como la temperatura y la humedad del banco de semillas. Su banco de semillas no tiene un kit de sensores o aún no ha sido configurado por su administrador.",
+NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_DESCRIPTION,"No hay lotes seleccionados con plantones que estén ""listos"". Seleccione otro propósito de retirada o cancele y seleccione un lote diferente.",
+NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_TITLE,No hay plantones disponibles para trasplantar,
+NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",
+NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,
+NO_SUB_LOCATIONS,Edite este banco de semillas para añadir sublocalizaciones.,
+NONE,Ninguno,
+NOT_CONNECTED,Sin conexión,
+NOT_READY,No está listo.,
+NOT_READY_QUANTITY,Cantidad no lista,
+NOT_READY_QUANTITY_REQUIRED,Cantidad no lista *,
+NOTE_ANY_ISSUES,¿Todo lo anterior parece correcto? Anote cualquier problema.,
+NOTES,Notas,
+NOTIFICATIONS,Notificaciones,
+NUMBER_OF_LIVE_PLANTS_PER_SPECIES,Número de plantas vivas por especie,
+NUMBER_OF_PACKETS,Número de paquetes,
+NUMBER_OF_PEOPLE,Número de personas,
+NUMBER_OF_PHOTOS,Número de fotos,
+NUMBER_OF_PLANTS,Número de plantas,
+NUMBER_OF_PLANTS_BY_SPECIES,Número de plantas por especie,
+NUMBER_OF_PLANTS_BY_SUBZONE_AND_SPECIES,Número de plantas por subzona y especie,
+NUMBER_OF_SEEDS_COMPROMISED,# semillas afectadas,
+NUMBER_OF_SEEDS_COMPROMISED_REQUIRED,# Semillas Afectadas *,
+NUMBER_OF_SEEDS_COMPROMISED_V2,# Semillas Afectadas,
+NUMBER_OF_SEEDS_EMPTY,# semillas vacías,
+NUMBER_OF_SEEDS_EMPTY_REQUIRED,# Semillas Vacías *,
+NUMBER_OF_SEEDS_EMPTY_V2,# Semillas Vacías,
+NUMBER_OF_SEEDS_FILLED,# semillas llenadas,
+NUMBER_OF_SEEDS_FILLED_REQUIRED,# Semillas Rellenadas *,
+NUMBER_OF_SEEDS_FILLED_V2,# Semillas Rellenadas,
+NUMBER_OF_SEEDS_GERMINATED,# Semillas Germinadas,
+NUMBER_OF_SEEDS_GERMINATED_REQUIRED,# Semillas Germinadas *,
+NUMBER_OF_SEEDS_IN_SUBSET,# de semillas en el Subconjunto,
+NUMBER_OF_SEEDS_SOWN,Número de Semillas Sembradas,
+NUMBER_OF_SEEDS_TESTED,# Semillas Analizadas,
+NUMBER_OF_SEEDS_TESTED_REQUIRED,# Semillas Analizadas *,
+NUMBER_OF_SEEDS_WITHDRAWN,Semillas Retiradas,
+NUMBER_OF_SPECIES,Número de especies,
+NUMBER_OF_SPECIES_PLANTED_CARD_TITLE,¿De cuántas especies he reportado su plantación?,
+NUMBER_PLANTS_COLLECTED_FROM,Número de plantas recogidas de,
+NURSERIES,Viveros,
+NURSERY,Vivero,
+NURSERY_ADDED,Vivero añadido,
+NURSERY_CAPACITY,Capacidad del vivero,
+NURSERY_CAPACITY_REQUIRED,Capacidad del vivero *,
+NURSERY_DESCRIPTION,Todos los detalles sobre las pruebas de viabilidad en vivero realizadas a las semillas.,
+NURSERY_GERMINATION,Germinación del vivero,
+NURSERY_MEDIA,Medios del vivero,
+NURSERY_MORTALITY_RATE,Tasa de mortalidad en el vivero,
+NURSERY_REQUIRED,Vivero *,
+NURSERY_TRANSFER,Traslado de vivero,
+OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para {0} para el/los lugar(es) de plantación: {1},"Example: Observation event is scheduled for June 1, 2023 for planting site(s): "
+OBSERVATION_IN_PROGRESS,Observación en progreso,
+OBSERVATION_OVERDUE,Observación con atraso,
+OBSERVATION_STATUS,Estado de la observación,
 OBSERVATION_STATUS_OUTSTANDING,Pendiente,Remaining to be done
-OBSERVATIONS,Observaciones
+OBSERVATIONS,Observaciones,
 OBSERVATIONS_COMPLETION_PERCENTAGE,Las observaciones para {0} de {1} parcelas de monitoreo ({2}%) se han completado.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
-OBSERVATIONS_DOWNLOAD_APP,"Para completar las observaciones, descargue la aplicación de Terraware en App Store o Google Play"
-OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Las observaciones son cuando registra datos de una plantilla de parcelas de seguimiento usando nuestra aplicación móvil en el campo. Esto nos permite calcular las tasas de mortalidad, y eventualmente el secuestro de carbono."
-OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"Recibirá una notificación cuando sea momento de llevar sus observaciones (por lo general, la próxima vez que termine una temporada de plantación). Después de completar sus primeras observaciones, verá los registros aquí."
-OBSERVATIONS_EMPTY_STATE_TITLE,Aún no hay observaciones
-OBSERVATIONS_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, por favor selecciona un solo sitio de plantación."
+OBSERVATIONS_DOWNLOAD_APP,"Para completar las observaciones, descargue la aplicación de Terraware en App Store o Google Play",
+OBSERVATIONS_EMPTY_STATE_MESSAGE_1,"Las observaciones son cuando registra datos de una plantilla de parcelas de seguimiento usando nuestra aplicación móvil en el campo. Esto nos permite calcular las tasas de mortalidad, y eventualmente el secuestro de carbono.",
+OBSERVATIONS_EMPTY_STATE_MESSAGE_2,"Recibirá una notificación cuando sea momento de llevar sus observaciones (por lo general, la próxima vez que termine una temporada de plantación). Después de completar sus primeras observaciones, verá los registros aquí.",
+OBSERVATIONS_EMPTY_STATE_TITLE,Aún no hay observaciones,
+OBSERVATIONS_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, por favor selecciona un solo sitio de plantación.",
 OBSERVATIONS_REQUIRED_BY_DATE,Los parcelas de monitoreo de {0} requieren observación por {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
-OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observaciones con la aplicación Terraware
-OBSERVED_PLANTS,Plantas observadas
-OBSERVED_PLANTS_CARD_DESCRIPTION_1,Este es el número total de especies halladas en sus observaciones más recientes.
-OBSERVED_PLANTS_CARD_DESCRIPTION_2,"Usted ha reportado que plantó un total de {0} especies. La diferencia en estas cantidades puede deberse a que no todas las especies que usted plantó se hallaron en las parcelas de seguimiento, o porque ha plantado más especies desde sus últimas observaciones."
-OBSERVED_PLANTS_CARD_TITLE,¿Cuántas especies se encuentran en el sitio desde el {0}?
-OBSERVED_SPECIES,Especies observadas
-OBSERVER,Observador
-ONBOARDING_ADMIN_TITLE,"Un momento, vamos a completar la configuración en primer lugar"
-OPPORTUNITIES,Oportunidades
-OPPORTUNITIES_INSTRUCTIONS,"Puede incluir oportunidades de expansión del proyecto, nuevos mercados, referencias, formación a otras organizaciones, etc. (Máximo un cuarto de página.)"
-OPPORTUNITIES_REQUIRED,Oportunidades *
-OPT_IN,Funciones Opt-In
-OR,O
-OR_SEED_WEIGHT,o peso de la semilla
-ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, vaya a [""Ajustes > Organización""]."
-ORGANIZATION,Organización
-ORGANIZATION_CREATE_FAILED,No se puede crear la organización.
-ORGANIZATION_CREATED_MSG,Puede acceder a las organizaciones en las que se encuentra dando clic en el menú de perfil de usuario en la esquina superior derecha.
-ORGANIZATION_CREATED_MSG_DESKTOP,"Puede acceder a las organizaciones en las que está dando clic en la flecha en la esquina superior izquierda, a un lado del logo."
-ORGANIZATION_CREATED_TITLE,¡Ha creado {0}!
-ORGANIZATION_DATA_NOT_AVAILABLE,Datos de la organización no disponibles
-ORGANIZATION_DESC,Gestione su organización.
-ORGANIZATION_NAME,Nombre de la organización
-ORGANIZATION_NAME_REQUIRED,Nombre de la organización *
-ORGANIZATIONS,Organizaciones
-ORIGINAL_QTY,Cantidad original
-ORIGINAL_SUBZONE,Subzona original
-ORTHODOX,Ortodoxo
-OTHER,Otro
-OUNCES,Onzas
-OUT_PLANTING,Replantando en el exterior
-OUTPLANT,Replantar en el exterior
-OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Las replantaciones en el exterior requieren lotes con plántulas que estén ""listas""."
-OUTSTANDING,Destacado
-OVER_WORD_LIMIT,Sobre el límite de palabras
-OVERDUE,Atrasado
-OWNER,Propietario
-OZ,oz
-OZ_OUNCES,oz (onzas)
-PAGINATION_FOOTER,{0} para {1} de {2}
-PAGINATION_FOOTER_EMPTY,0 de 0
-PAPER,Papel
-PAPER_PETRI_DISH,Placa petri de papel
-PENDING,Pendiente
-PEOPLE,Personas
-PEOPLE_CARD_DESCRIPTION,¡No podemos hacerlo solos! Añada personas a su organización y asígneles funciones.
-PEOPLE_DESCRIPTION,Gestione a las personas en Terraware.
-PERCENTAGE_OF_SITE_PLANTED,{0}% del sitio
-PERCENTAGE_OF_TARGET_PLANTING_DENSITY,{0}% del Objetivo
-PERCENTAGE_VALUE,{0}%
-PERCENTAGE_VIABILITY,% viabilidad
-PERIOD_LAST_12_HOURS,Últimas 12 horas
-PERIOD_LAST_24_HOURS,Últimas 24 horas
-PERIOD_LAST_30_DAYS,Últimos 30 días
-PERIOD_LAST_7_DAYS,Últimos 7 días
-PERLITE_VERMICULITE,Perlita/vermiculita
-PERMANENT,Permanente
-PERMANENT_PLOTS,Parcelas permanentes
-PERSON_ADDED,Se ha añadido una persona
-PHOTOS,Fotos
-PHOTOS_OUTPLANT_DESCRIPTION,Las replantaciones en el exterior requieren fotos.
-PHOTOS_REQUIRED,Se requieren fotos
-PHOTOS_TO_UPLOAD,Fotos a subir
-PHOTOS_TO_UPLOAD_LIMIT,(Límite de {0} más)
-PLANT,plantar
-PLANT_DESCRIPTION,Descripción de la planta
-PLANT_DETAIL,Detalle de la planta
-PLANT_ID,ID de la planta
-PLANT_ID_TOOLTIP,Es la identificación de una planta con fines de seguimiento o conservación. Lo ideal es que las semillas de una planta rastreada no se mezclen con otras de una misma accesión.
-PLANT_LABEL,Plantar
-PLANTING_COMPLETE,¿Plantación completa?
-PLANTING_COMPLETE_TOOLTIP,Ve a Plántulas > Retiros para actualizar el estado de finalización de la plantación.
-PLANTING_DENSITY,Densidad de siembra
-PLANTING_DENSITY_CARD_TITLE,¿Cuál es mi densidad de plantación desde el {0}?
-PLANTING_DENSITY_DESCRIPTION,Esta es la densidad de su plantación calculada a partir de sus observaciones más recientes.
-PLANTING_DENSITY_MISSING_TOOLTIP,"Una vez que hayas marcado tu sitio de plantación como terminado y completado tus observaciones, podrás visualizar la densidad de la plantación."
-PLANTING_DENSITY_PER_ZONE_CARD_TITLE,¿Cuál es mi densidad de plantación objetivo por zona?
-PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"Esta es su densidad de plantación objetivo para la zona que ha proporcionado. Si desea modificar esta densidad, póngase en contacto con Terraformation."
-PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,¿Cuál es mi densidad de plantación objetivo y la densidad de plantación por zona para el {0}?
-PLANTING_DENSITY_UPDATE_DESCRIPTION,"Desde entonces, ha reportado plantaciones nuevas que sugieren una densidad de plantación de {0} plantas/Ha."
-PLANTING_PROGRESS,Avance de plantación
-PLANTING_PROGRESS_AND_DENSITY,Progreso y densidad de plantación
-PLANTING_PROGRESS_CARD_TITLE,¿Cuál es el progreso de mi plantación?
-PLANTING_PROGRESS_DESCRIPTION_1,Se trata del progreso de plantación de tu centro calculado a partir de lo que se ha notificado en las retiradas de tu vivero.
-PLANTING_PROGRESS_DESCRIPTION_2,"Una vez que todo el lugar de plantación se haya marcado como completo para la plantación y hayas completado tus observaciones, podrás ver la densidad de plantación de tu centro."
-PLANTING_PROGRESS_MAP_DESCRIPTION,Haga clic en cada subzona para marcar las áreas en las que se completó la plantación. La densidad de plantación se calculará una vez que se haya completado la plantación de cada zona.
-PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,¿Cuál es mi progreso de plantación por zona?
-PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,Este es el progreso de plantación de su zona calculado por lo que se ha reportado en los retiros de su vivero.
-PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Cuando una zona se haya marcado como completa para plantación y usted haya completado sus observaciones, podrá ver la densidad de plantación de dicha zona."
-PLANTING_PROGRESS_TABLE_DESCRIPTION,Utiliza las casillas de verificación junto a cada subzona para marcar las áreas donde se ha completado la plantación. La densidad de plantación se calculará una vez que se haya completado la plantación en cada zona.
-PLANTING_SEASON_END,Término de temporada de plantación
-PLANTING_SEASON_START,Inicio de temporada de plantación
-PLANTING_SITE,Lugar de plantación
-PLANTING_SITE_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, seleccione un solo lugar de siembra."
-PLANTING_SITE_TYPE,Tipo de lugar de plantación
-PLANTING_SITE_WITH_MAP_HELP,"Si usted es un socio de Terraformation o un participante del acelerador, por favor [contáctenos] para crear un sitio con un mapa."
-PLANTING_SITES,Sitios de plantación
-PLANTING_ZONE,Zona de plantación
-PLANTING_ZONES,Zonas de plantación
-PLANTS,Plantas
-PLANTS_CARD_DESCRIPTION,¡Han echado raíces! Vea todas sus plantas en un solo lugar.
-PLANTS_MISSING_TOOLTIP,"Cuando marques tu sitio de plantación como completado y hayas finalizado tus observaciones, serás capaz de ver el total de las plantas."
-PLANTS_PER_HECTARE,plantas/ha
-PLEASE_TRY_AGAIN,"Por favor, inténtelo de nuevo."
-PLOT_TYPE,Tipo de terreno
-PLOTS_PERMANENT,Parcelas fijas
-PLOTS_TEMPORARY,Parcelas temporales
-POUNDS,Libras
-PREEXISTING_SPECIES,Esta especie ya existe
-PREFERRED_WEIGHT_SYSTEM,Sistema de peso preferido
-PREVIOUS, Anterior
-PREVIOUS_ARROW,< Anterior
-PRIVACY_POLICY,Política de privacidad
-PROBLEMS,Problemas
-PROBLEMS_WITH_ENTRIES,Se produjo un problema con algunas entradas de este formulario.
-PROCESSED,Procesado
-PROCESSED_AND_DRIED_BY,Procesado y secado por
-PROCESSING,Procesando
-PROCESSING_AND_DRYING,Procesamiento y secado
-PROCESSING_AND_DRYING_DESCRIPTION,Todos los detalles sobre el procesamiento y el secado de las semillas.
-PROCESSING_AND_DRYING_INFO,"Al añadir información sobre el procesamiento y el secado y guardar los cambios, usted cambiará automáticamente la etapa de esta accesión de Pendiente a En proceso, Procesada, En secado o Secada, según la información que introduzca."
-PROCESSING_METHOD,Método de procesamiento
-PROCESSING_START_DATE,Fecha de inicio del procesamiento
-PROCESSING_STATUS_REQUIRED,Estado del procesamiento *
-PROJECT_IMPACT,Impacto del proyecto
-PROJECT_IMPACT_INSTRUCTIONS,"Proporcione los detalles de su impacto durante el período del informe, incluidos los logros más importantes y los avances hacia la consecución de los objetivos declarados y las metas principales. Además de los objetivos forestales, por favor incluya los puestos de trabajo creados (a tiempo completo, a tiempo parcial y estacionales), con cifras específicas desglosadas por género. (Aproximadamente una página)."
-PROJECT_IMPACT_REQUIRED,Impacto del proyecto *
-PROJECT_INFORMATION,Información sobre el proyecto
-PROJECT_NOTES,Notas informativas adicionales sobre el proyecto
-PROJECT_PHOTOS,Fotos del proyecto (máx. 30)
-PROJECT_SUMMARY,Resumen del proyecto
-PROJECT_SUMMARY_INSTRUCTIONS,Presente una breve descripción de los progresos realizados desde su informe anterior. Este resumen debe estar escrito para un público general y ser adecuado para publicación. (Menos de 100 palabras).
-PROJECT_SUMMARY_REQUIRED,Resumen del proyecto *
-PURPOSE,Propósito
-PURPOSE_REQUIRED,Propósito *
-PV_BATTERY,Batería FV
-PV_BATTERY_CHARGE,Carga de la batería FV
-PV_SYSTEM,Sistema FV
-QUANTIFY,Cuantificar
-QUANTITY,Cantidad
-RARE,Raro/a
-RARE_ENDANGERED,"Raro/a, en peligro"
-REACH_OUT_TO_ADMIN_TITLE,"Por favor, contacte con un administrador de su organización."
-READY,Listo
-READY_QUANTITY,Cantidad lista
-READY_QUANTITY_REQUIRED,Cantidad lista *
-REASSIGN,Reasignar
-REASSIGN_SEEDLINGS,Reasignar plántulas
-REASSIGN_SEEDLINGS_DESCRIPTION,"Introduzca la nueva subzona, la nueva cantidad y las notas de las especies para las que desea reasignar las plántulas. Las plántulas de las filas que deje vacías no serán reasignadas."
-REASSIGNMENT,Reasignación
-RECALCITRANT,Recalcitrante
-RECEIVE_EMAIL_NOTIFICATIONS,Recibir notificaciones por correo electrónico
-RECEIVED_DATE,Fecha de recepción
-RECEIVED_ON,Recibido/a el
-RECEIVING_DATE_REQUIRED,Fecha de recepción *
-RECEIVING_NURSERY_REQUIRED,Vivero de recepción *
-RECORDED_PLANTS,Plantas registradas
-RECORDED_SPECIES,Especies registradas
-RECORDING_DATE,Fecha de registro
-RECORDING_DATE_ERROR,Debe ser posterior a la fecha de inicio
-REFRESH,Actualizar
-REFRESH_DATA,Actualizar datos
-REFRIGERATOR_1,Refrigerador 1
-REFRIGERATOR_2,Refrigerador 2
-REFRIGERATOR_3,Refrigerador 3
-REINTRODUCED,Reintroducida/s
-REINTRODUCED_DESCRIPTION,"Plantas que fueron trasplantadas desde un vivero, invernadero u otro sitio a un lugar de restauración."
-REMAINING,Restante/s
-REMAINING_UNITS,Unidades restantes
-REMINDER_DATE,Fecha del recordatorio
-REMOVE,Eliminar
-REMOVE_AND_SAVE,Eliminar y guardar
-REMOVE_ONLY_ONE_ORG_AT_A_TIME,Solo puede eliminarse a sí mismo de una organización a la vez.
-REMOVE_PEOPLE,Eliminar personas
-REMOVE_PEOPLE_DESC,"¿Está seguro de que desea eliminar a estas personas? Al eliminar a estas personas, las mismas ya no tendrán acceso a los datos de su organización."
-REMOVE_PERSON,Eliminar persona
-REMOVE_PERSON_DESC,"¿Está seguro de que desea eliminar a {0}? Al eliminar a {0}, esta/s persona/s ya no tendrá/n acceso a los datos de su organización."
-REMOVED_PEOPLE_WARNING_DESC,"Entre las personas que usted eliminó, se encuentra/n"
-REMOVING_ORG_WARNING,"Al eliminarse a sí mismo de {0}, ya no tendrá acceso a los datos de esta organización. ¿Está seguro de que desea guardar los cambios?"
-REPLACE,Reemplazar
-REPLACE_FILE,Reemplazar archivo...
-REPORT,Informe
-REPORT_ANNUAL_DETAILS_TITLE,Información adicional del proyecto (Informe anual)
-REPORT_BACK_WARNING,"Por favor, usar los controles de formulario al final de la página."
-REPORT_CONCURRENT_EDITOR,Editor simultáneo
-REPORT_CONCURRENT_EDITOR_WARNING_1,Hay otra persona editando este informe ({0}).
-REPORT_CONCURRENT_EDITOR_WARNING_2,"En caso de seguir editando este informe, sus cambios se descartarán. ¿Está seguro de que desea continuar?"
-REPORT_CONFIRM_SUBMIT,¿Está seguro de que desea enviar este informe? Esta acción no puede anularse.
-REPORT_COULD_NOT_EDIT,No se pudo editar el informe
-REPORT_COULD_NOT_OPEN,No se pudo abrir el informe
-REPORT_COULD_NOT_SAVE,No se pudo guardar el informe
-REPORT_COULD_NOT_SUBMIT,No se pudo enviar el informe
-REPORT_COULD_NOT_UNLOCK,No se pudo desbloquear el informe
-REPORT_EDIT,Editar informe
-REPORT_MORTALITY_RATE_INFO,"Si se conoce, indique las tasas de mortalidad de todos los árboles plantados y de otras plantas en porcentaje. Si se desconoce, ingrese 0."
-REPORT_NAME,Nombre del informe
-REPORT_NO_NURSERIES,No se incluyeron viveros en el informe.
-REPORT_NO_PLANTING_SITES,No se incluyeron lugares de siembra en el informe.
-REPORT_NO_SEEDBANKS,No se incluyeron bancos de semillas en el informe.
-REPORT_NURSERY_CAPACITY_INFO,"Por favor, enumere el número total de plantas que el vivero puede alojar según las mejores estimaciones."
-REPORT_PROBLEM,Informar problema
-REPORT_SAVE_AND_CLOSE,Guardar y cerrar
-REPORT_SEEDBANK_BUILD_COMPLETION_DATE,Fecha de finalización de la construcción del banco de semillas *
-REPORT_SEEDBANK_BUILD_START_DATE,Fecha de inicio de la construcción del banco de semillas *
-REPORT_SEEDBANK_OPERATION_START_DATE,Fecha de inicio de las operaciones del banco de semillas *
-REPORT_SUBMIT,Enviar informe
-REPORT_SUMMARY_OF_PROGRESS_INFO,"Realice un pequeño resumen del progreso, incluso del avance hacia el cumplimiento de las metas de restauración así como también los beneficios sociales y comunitarios del proyecto."
-REPORT_TOTAL_NON_TREES_PLANTED_INFO,"Por favor, incluya todas las otras plantas afiliadas añ proyecto Terraformation, no incluya árboles en esta cifra."
-REPORT_TOTAL_PAID_WORKERS_INFO,"Por favor, indique el número total de trabajadores pagos a tiempo completo o a tiempo parcial involucrados en este proyecto de plantado."
-REPORT_TOTAL_PLANTED_AREA_INFO,"Por favor, indique el número total de hectáreas ya plantadas durante el actual ciclo de vida de este proyecto."
-REPORT_TOTAL_PLANTING_SITE_AREA_INFO,"Por favor, indique el área total del proyecto en hectáreas. Si su proyecto con Terraformation no incluye tierra dedicada a la restauración, ingrese 0."
-REPORT_TOTAL_TREES_PLANTED_INFO,"Incluya todos los árboles plantados relacionados con el proyecto de terraformación; no incluya en esta cifra los que no sean árboles, como arbustos."
-REPORT_TOTAL_VOLUNTEERS_INFO,"Indique el número total de voluntarios que han participado en la plantación de este proyecto. Si no hay voluntarios, escriba 0."
-REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO,"Del total de trabajadores indicados, ¿cuántas mujeres hay en total?"
-REPORT_VIEW_ANNUAL,Ver informe anual
-REPORT_VIEW_QUARTERLY,Ver informe trimestral
-REPORTED_PLANTS_PER_SPECIES_CARD_TITLE,¿Qué cantidad de plantas sembradas por especie se reportó?
-REPORTS,Informes
-REQUEST_FEATURE,Solicitar funcionalidad
-REQUIRED,Obligatorio
-REQUIRED_FIELD,Campo obligatorio
-REQUIRED_VALUE_AND_UNITS_FIELD,Valor y unidades requeridas
-RESET,Restablecer
-REVIEW_ERRORS,Revisar errores
-REVIEW_YOUR_ACCOUNT_SETTING,Revise la configuración de su cuenta
-REVIEW_YOUR_ORGANIZATION_SETTING,Revise la configuración de su organización
-ROLE,Rol
-ROLE_REQUIRED,Tarea *
-ROLES_INFO,Seleccione un rol para esta persona
-ROWS_SELECTED,{0} seleccionados
-RUN_A_DATABASE_CHECK,Ejecute el chequeo de la Base de datos
-S_SEED_COUNT,número de semillas
-SAND,Pula
-SAND_PETRI_DISH,Pula el Disco de Petri
-SAVE,Salvar
-SAVE_ACCESSION_ERROR,Un error ocurrió al salvar la accesión
-SAVE_AND_NEXT,Salve y Continúe
-SAVE_CHANGES,Salvar los cambios
-SAVED,Guardado
-SAVING,Salvando...
-SCARIFY,Escarificar
-SCHEDULE_DATE_INFO,Programe una fecha seleccionando una fecha futura.
-SCHEDULE_DATE_TO_MOVE,Programar Fecha para Mover de los Estantes a los Gabinete Secos
-SCHEDULE_WITHDRAWAL,Programar Retiro
-SCHEDULED,(Programado)
-SCHEDULED_FOR,Programado por
-SCHEDULED_FOR_TESTING,Programado para pruebas
-SCHEDULED_SEEDS,{0} Semillas
-SCHEDULING_FOR,Programado para: {0}
-SCIENTIFIC_NAME,Nombre Científico
-SCIENTIFIC_NAME_NOT_FOUND,"""{0}"" no fue encontrado en nuestra base de datos, pero puede seguir adicionado."
-SCIENTIFIC_NAME_REQUIRED,Nombre Científico *
-SDG_01,1. No Pobreza
-SDG_02,2. Hambre Cero
-SDG_03,3. Buena salud y Bienestar
-SDG_04,4. Educación de Calidad
-SDG_05,5. Equidad de Género
-SDG_06,6. Agua limpia y Salubridad
-SDG_07,7. Energía asequible y limpia
-SDG_08,8. Trabajo digno y Crecimiento económico
-SDG_09,"9. Industria, Innovación, e Infraestructura"
-SDG_10,10. Desigualdades reducidas
-SDG_11,11. Ciudades y Comunidades Sostenibles
-SDG_12,12. Producción y Consumo Responsable
-SDG_13,13. Acción climática
-SDG_14,14. Vida debajo del agua
-SDG_15,15. Vida en la tierra
-SDG_16,"16. Paz, Justicia e Instituciones Sólidas."
-SDG_17,17. Alianzas para los Objetivos
-SEARCH,Búsqueda
-SEARCH_BY_NAME_OR_FAMILY,Búsqueda por nombre o familia...
-SEARCH_OR_SELECT,Busque o Seleccione
-SEE_ALL_ACCESSIONS,Ver todos las accesiones
-SEE_ENTRIES,Ver entradas
-SEE_WITHDRAWAL_HISTORY,Ver historial de retirada
-SEED,Semilla
-SEED_BAGS,Sacos de semillas
-SEED_BANK,Banco de semillas
-SEED_BANK_ADDED,Banco de semillas añadido
-SEED_BANK_INTERNET,Internet de bancos de semillas
-SEED_BANK_NOTES,Notas adicionales del banco de semillas
-SEED_BANKS,Bancos de semillas
-SEED_BANKS_CARD_DESCRIPTION,¿Cómo procesa y almacena sus semillas? Añada bancos de semillas a su organización.
-SEED_COLLECTION,Colección de semillas
-SEED_COLLECTION_DESCRIPTION,"Todos los detalles respecto a la especie, fecha de recolección, recolectores y ubicación del sitio."
-SEED_COLLECTION_DETAIL,Detalles de la semilla
-SEED_COLLECTION_DETAIL_DESC,Ingrese la información de la semilla de esta accesión a continuación.
-SEED_COUNT,Número de semillas
-SEED_DASHBOARD,Ver panel de control
-SEED_STORAGE_BEHAVIOR,Ver comportamiento de almacenamiento
-SEED_TYPE,Tipo de semilla
-SEED_WEIGHT,Peso de semillas
-SEEDLING_BATCH,Lote de plántula
-SEEDLING_BATCH_DETAILS,Detalles lote de plántula
-SEEDLINGS,Plántulas
-SEEDLINGS_BATCHES,Lotes de plántulas
-SEEDLINGS_PLURAL,plántulas
-SEEDLINGS_SENT,Plántulas enviadas
-SEEDLINGS_SINGULAR,plántula
-SEEDS,Semillas
-SEEDS_GERMINATED,Semillas germinadas
-SEEDS_GERMINATED_LC,semillas germinadas
-SEEDS_REMAINING,Semillas restantes
-SEEDS_SOWN,Semillas sembradas
-SEEDS_UNITS,Cantidad de semillas en unidades
-SELECT,Seleccionar...
-SELECT_BATCHES,Seleccionar lotes
-SELECT_BUTTON,Seleccionar
-SELECT_PLANTING_SITE_TYPE,Seleccionar tipo del sitio de siembra
-SELECT_PLANTING_SITE_TYPE_DESCRIPTION_1,Por favor seleccione tipo del sitio de siembra a añadir.
-SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2,Los sitios con mapa le permitirán hacer seguimiento de la localización de las plantas en el sitio y revisión de plantas vivas/muertas. Los sitios sin mapa le permitirán realizar seguimiento de cuántas y qué especies de plantas han sido plantadas en el sitio.
-SELECT_PLANTING_SITE_TYPE_DESCRIPTION_3,"Por favor tome en cuenta que si crea un sitio sin un mapa, no podrá añadirle uno posteriormente."
-SELECT_SEED_BANK,Banco de semillas seleccionado
-SELECT_SEED_BANK_INFO,Las accesiones requieren un lugar de almacenamiento en un banco de semillas. Seleccione un banco de semillas.
-SEND_TO_NURSERY,Enviar al vivero
-SENDING,Enviando...
-SENSOR_KIT,Kit de sensores
-SENSOR_KIT_HAS_BEEN_SET_UP,El kit de sensores ha sido configurado. Diríjase a la página {0} para verlos.
-SENSOR_KIT_ID_PLACEHOLDER,XXXXXX
-SENSOR_KIT_READY_TO_SET_UP,"Si tiene un banco de semillas de Terraformación, su kit de sensores está listo para ser configurado. Vaya a la página {0} para configurarlo."
-SENSOR_KIT_SET_UP_COMPLETE,¡Configuración completa!
-SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION,Ahora podrá ver la carga de la batería solar y los datos del sensor en el panel de control de su sensor.
-SENSOR_KIT_SET_UP_DESCRIPTION,"Si su banco de semillas cuenta con un kit de sensores, procedamos a configurarlo."
-SENSOR_KIT_SET_UP_DETECT_SENSORS,Detectar sensores
-SENSOR_KIT_SET_UP_DETECT_SENSORS_DESCRIPTION,"Para encender los sensores, retire las pestañas de papel que bloquean las baterías. Cuando los sensores están encendidos y dentro del alcance, el administrador de dispositivos los detectará automáticamente."
-SENSOR_KIT_SET_UP_DEVICE_MANAGER,Instalar la actualización del administrador de dispositivos
-SENSOR_KIT_SET_UP_DEVICE_MANAGER_DESCRIPTION,"Para detectar sus sensores, el administrador de dispositivos en su kit de sensores necesita descargar el código más reciente, esto puede tardar hasta 20 minutos. La descarga comienza en el momento en que su kit de sensores se conecta a Internet, por lo que es posible que ya se haya completado este paso."
-SENSOR_KIT_SET_UP_PV_SYSTEM,Seleccionar sistema fotovoltaico
-SENSOR_KIT_SET_UP_PV_SYSTEM_DESCRIPTION,"Nuestros bancos de semillas admiten múltiples tipos de sistemas fotovoltaicos, seleccione cuál posee para que podamos mostrarle con precisión la carga de la batería."
-SENSOR_KIT_SET_UP_SENSOR_KIT_ID,Introducir ID del Kit de sensores
-SENSOR_KIT_SET_UP_SENSOR_KIT_ID_DESCRIPTION,Encuentre el ID de su kit de sensores en el exterior de su kit de sensores. Este conectará el Administrador de dispositivos dentro del kit a nuestra base de datos.
-SENSOR_KIT_SET_UP_SENSOR_LOCATIONS,Asignar ubicaciones de sensores
-SENSOR_KIT_SET_UP_SENSOR_LOCATIONS_DESCRIPTION,Su kit de sensores incluye 14 sensores de temperatura y humedad. Coloque un sensor en cada ubicación. Elija qué sensor poner en cada ubicación guiándose por el menú desplegable.
-SENSOR_KIT_SET_UP_TIME,Esto podría tardar hasta 30 minutos.
-SENSOR_KIT_SET_UP_TITLE,¡Vamos a configurar su kit de sensores!
-SENSOR_LOCATION_ERROR,Cada ubicación debe tener un sensor asignado a la misma.
-SENSOR_SCAN_TIMEOUT,Tiempo de espera de escaneo de sensor
-SENSOR_SCAN_TIMEOUT_ERROR,"Solo se encontró {0}/{1} sensor(es). Asegúrese de que todos los sensores estén encendidos y dentro del rango e intente de nuevo. Si el problema persiste, puede que sus sensores estén dañados. Si piensa que ese es el caso, contáctenos por correo electrónico a {2}."
-SENSORS_FOUND,{0}/{1} sensores encontrados...
-SENT_TO_NURSERY,¡Enviado al vivero!
-SERVER_ERROR,Error de servidor
-SET_PLANTING_COMPLETE,Plantación completa
-SET_UP,Configurar
-SET_UP_YOUR_SENSOR_KIT,Configure su kit de sensor
-SET_UP_YOUR_SENSOR_KIT_MSG,"Si su banco de semillas fue construido por Terraformation, entonces está equipado con un kit de sensores con el que puede monitorear cosas como la temperatura y la humedad del banco de semillas, de forma remota. Para configurar el kit, tendrá que conectar su banco de semillas a la aplicación web de Terraware. Esto podría tardarse unos 30 minutos."
-SETTINGS,Ajustes
-SHRUB,Arbusto
-SHRUB_TREE,Arbusto/Árbol
-SILVOPASTURE,Sistema selvopastoril
-SITE,Sitio
-SITE_DETAIL,Detalle del sitio
-SITE_LOCATION,Ubicación del sitio
-SITE_MAP,Mapa del sitio
-SNACKBAR_MSG_CHANGES_SAVED,Los cambios acaban de ser guardados.
-SNACKBAR_MSG_NEW_SPECIES_ADDED,La nueva especie acaba de ser añadida.
-SNACKBAR_MSG_PLANT_DELETED,La planta acaba de ser borrada.
-SNACKBAR_MSG_SPECIES_DELETED,La especie acaba de ser borrada.
-SOAK,Remojar
-SOCIAL_IMPACT,Impacto social y beneficios para la comunidad
-SOCIAL_IMPACT_INSTRUCTIONS,"Indique los beneficios directos del proyecto para la comunidad local. Los beneficios específicos podrían incluir el impacto sobre el sustento; educación y entrenamiento para la comunidad; acceso a agua limpia; apoyo para los jóvenes, las mujeres y/o las minorías; así como otros beneficios socioeconómicos y comunitarios del proyecto. Incluya los indicadores específicos que utiliza para medir el impacto sobre la comunidad, así como los resultados que ha monitoreado a lo largo del tiempo (con una longitud de media página, como máximo)."
-SOCIAL_IMPACT_REQUIRED,Impacto social y beneficios para la comunidad *
-SOIL,Tierra
-SOMETHING_WENT_WRONG,Algo no salió como se esperaba.
-SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, infórmenos sobre los mismos y los corregiremos."
-SOMETHING_WENT_WRONG_TITLE,Algo no salió como se esperaba...
-SOWN,Sembrado
-SPECIES,Especie
-SPECIES_CARD_DESCRIPTION,Vea la especie referenciada en sus entradas de Semilla y Planta.
-SPECIES_DATA_NOT_AVAILABLE,Los datos de la especie no están disponibles
-SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes."
-SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.
-SPECIES_ERROR_SEARCH,No se pudo cargar la lista de especie para la búsqueda
-SPECIES_IMPORT_COMPLETE,¡Se completó la importación de los datos de especies!
-SPECIES_NAME,Nombre de la especie
-SPECIES_PROBLEM_NAME_IS_SYNONYM,El nombre es un sinónimo
-SPECIES_PROBLEM_NAME_MISSPELLED,El nombre está mal escrito
-SPECIES_PROBLEM_NAME_NOT_FOUND,No se encontró el nombre
-SPECIES_REQUIRED,Especie *
-SPECIES_SELECTED,Especie seleccionada
-STAFF,Personal
-STAFF_RESPONSIBLE,Personal responsable
-STAGE,Etapa
-START,Iniciar
-START_DATE,Fecha de inicio
-START_DATE_REQUIRED,Fecha de inicio *
-START_SET_UP,Iniciar configuración
-START_TESTING,Iniciar las pruebas
-STARTING_ON,Inicia en
-STATE,Estado
-STATE_PROVINCE_REGION,Estado/Provincia/Región
-STATE_REQUIRED,Estado *
-STATS_WARNING_DESCRIPTION_1,Las estadísticas de observación se han calculado después de marcar esta subzona como de plantación completa.
-STATS_WARNING_DESCRIPTION_2,Deshacer el estado de plantación completa borrará esas estadísticas. ¿Está seguro de que desea eliminarlas?
-STATUS,Estado
-STORAGE,Almacenamiento
-STORAGE_DESCRIPTION,Todos los detalles sobre el almacenamiento de las semillas.
-STORAGE_INFO,"Al añadir información sobre el almacenamiento y guardar los cambios, estará cambiando automáticamente la etapa de esta accesión de Pendiente a Almacenada."
-STORAGE_LOCATION,Lugar de almacenamiento
-STORED,Almacenado
-STORED_BY,Almacenado por
-STORED_SEEDS,Semillas almacenadas
-STORING,Almacenamiento
-STORING_START_DATE,Fecha de inicio del almacenamiento
-STRATIFICATION,Estratificación
-SUB_LOCATION,Sublocalización
-SUB_LOCATION_DETAILS,Detalles de la sublocalización
-SUB_LOCATION_EXISTS,Esta sublocalización ya existe
-SUB_LOCATIONS,Sublocalizaciones
-SUBMITTED,Enviado
-SUBMITTED_BY,Enviado por
-SUBSET_COUNT,Recuento de subconjuntos
-SUBSET_WEIGHT,Peso del subconjunto de semillas
-SUBSET_WEIGHT_ERROR,El peso del subconjunto debe ser inferior al peso de las semillas
-SUBSHRUB,Subarbusto
-SUBSTRATE,Sustrato
-SUBTITLE_GET_STARTED,"Para empezar, cree ahora su organización. También podrá configurar y gestionar información sobre personas y especies."
-SUBZONE,Subzona
-SUBZONE_PLANTING_COMPLETED_SUCCESS,Subzona(s) marcada(s) como plantación completa.
-SUBZONE_PLANTING_UNCOMPLETED_SUCCESS,Subzona(s) marcada(s) como plantación incompleta.
-SUBZONE_REQUIRED,Subzona *
-SUBZONES,Subzonas
-SUCCESS_STORIES,Casos de éxito
-SUCCESS_STORIES_INSTRUCTIONS,Presente un relato conciso de una o dos historias de éxito personalizadas. (Media página como máximo).
-SUCCESS_STORIES_REQUIRED,Casos de éxito *
-SUGGESTION,Sugerencia
-SUMMARY,Resumen
-SUMMARY_OF_PROGRESS,Resumen del progreso
-SUMMARY_OF_PROGRESS_DESCRIPTION,Haga un breve resumen de este proyecto.
-SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *
-SUSTAINABLE_DEVELOPMENT_GOALS,Objetivos de Desarrollo Sostenible
-SUSTAINABLE_TIMBER,Madera sostenible
-TAKE_ME_THERE,Llévame allí
-TARGET_DENSITY_PLANTS_PER_HECTARE,Objetivo: {0} plantas/ha
-TARGET_HECTARES_PLANTED,Objetivo: {0} hectáreas
-TARGET_PLANTING_DENSITY,Densidad de plantación objetivo
-TARGET_PLANTING_DENSITY_TOOLTIP,Densidad de plantación objetivo para la zona (plantas por hectárea).
-TARGET_RH,Objetivo %RH
-TEMPERATURE_AND_HUMIDITY_SENSOR_DATA,Datos del sensor de temperatura y humedad
-TEMPLATES,Plantillas
-TEMPORARY,Temporal
-TEMPORARY_PLOTS,Parcelas temporales
-TEST,Prueba
-TEST_DATE_REQUIRED,Fecha de la prueba *
-TEST_METHOD,Método de prueba
-TEST_METHOD_REQUIRED,Método de prueba *
-TEST_TYPE,Tipo de prueba
-TESTING_STAFF,Personal de pruebas
-TIME,Hora
-TIME_PERIOD,Periodo de tiempo
-TIME_ZONE,Zona horaria
-TIME_ZONE_REQUIRED,Zona horaria *
-TIME_ZONE_SELECTED,Zona horaria: {0}
-TITLE_REPORT_PROBLEM,Informar de un problema
-TITLE_REQUEST_FEATURE,Solicitar una funcionalidad
-TITLE_TEST_APP,Pruebe nuestra aplicación móvil
-TITLE_WELCOME,Bienvenido a Terraware
-TO,Para
-TO_NURSERY_REQUIRED,Para: Guardería *
-TO_PLANTING_SITE_REQUIRED,Para: Lugar de plantación *
-TO_SUBZONE,Para: Subzona
-TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE,El lugar donde las semillas fueron recolectadas. Se recomienda nombrarlos mediante puntos de referencia estables o características que no varíen.
-TOOLTIP_ACCESSIONS_ADD_PLANT_ID,El identificador único que se le asigna a una planta con fines de seguimiento o conservación. Lo ideal es que las semillas de una planta con un identificador se mantengan separadas de otras plantas (no agrupadas) en colecciones y accesiones.
-TOOLTIP_ACCESSIONS_COLLECTION_SOURCE,El tipo de población de plantas donde se recolectan las semillas.
-TOOLTIP_ACCESSIONS_HAS_DELIVERIES,La especie de esta accesión no puede cambiarse porque se han plantado plantas de sus semillas en un lugar de plantación.
-TOOLTIP_ACCESSIONS_ID,"Un identificador único para una colección de semillas aceptada en un banco de semillas. Cualquier colección de una nueva especie, ubicación y/o fecha se convertiría normalmente en una nueva accesión en el banco de semillas."
-TOOLTIP_ACCESSIONS_LOCATION,Lugar donde se procesan las semillas.
-TOOLTIP_ACCESSIONS_SUBLOCATION,Zona específica dentro del lugar donde las semillas son procesadas.
-TOOLTIP_COMMON_NAME,"El nombre por el que un organismo es conocido por el público general, en lugar de su nombre científico."
-TOOLTIP_COUNTRY_MY_ACCOUNT,Su país afecta cómo mostramos los números y demás información.
-TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todos los muestreos con los siguientes estados: esperando ingreso, esperando procesamiento, procesando, secando y en almacenamiento."
-TOOLTIP_ECOSYSTEM_TYPE,"Unidades relativamente grandes de tierra o agua que contienen un conjunto diferenciado de comunidades naturales que comparten una gran mayoría de especies, dinámicas y condiciones medioambientales."
-TOOLTIP_GERMINATING_QUANTITY,En germinación indica que las plántulas aún no han brotado de las semillas. La cantidad en germinación no cuenta para la cantidad total.
-TOOLTIP_NOT_READY_QUANTITY,"Lo que determina que una planta figure como ""no lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación."
-TOOLTIP_READY_QUANTITY,"Lo que determina que una planta figure como ""lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación."
-TOOLTIP_SCIENTIFIC_NAME,El nombre latino binomial (género + especie) aceptado en la actualidad en la bibliografía botánica.
-TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Categoría de conservación de la Lista Roja de la IUCN
-TOOLTIP_SPECIES_CONSERVATION_STATUS,"Riesgo de extinción de una especie, normalmente una designación legal o una valoración de la Lista Roja."
-TOOLTIP_SPECIES_FAMILY,El nombre científico de la familia de la planta aceptado en la actualidad en la bibliografía botánica.
-TOOLTIP_SPECIES_GROWTH_FORM,Una categoría estructural compuesta por individuos o especies del mismo hábito general de crecimiento pero no necesariamente relacionados.
-TOOLTIP_SPECIES_RARE,"Especies de poblaciones en estado silvestre de tamaño limitado, con frecuencia encontradas en ubicaciones geográficas aisladas; pueden cumplir con los criterios de las clasificaciones ""en peligro"" o ""amenazada"", pero todavía no han sido agregadas o evaluadas legalmente."
-TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,La capacidad de las semillas para sobrevivir a la desecación y a las temperaturas hasta los niveles necesarios para el almacenamiento ex situ (fuera del sitio).
-TOOLTIP_TIME_ZONE_MY_ACCOUNT,Usamos zonas horarias para mostrar las notificaciones en su hora local. Seleccione la zona horaria que le corresponda.
-TOOLTIP_TIME_ZONE_NURSERY,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este vivero. Todo el trabajo realizado en este vivero usará esta zona horaria.
-TOOLTIP_TIME_ZONE_ORGANIZATION,"Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a su organización en conjunto. Puede seleccionar zonas horarias para sus bancos de semillas, viveros y lugares de plantación en cada una de sus páginas de configuración."
-TOOLTIP_TIME_ZONE_PLANTING_SITE,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este lugar de plantación específico. Todo el trabajo realizado en este lugar de plantación usará esta zona horaria.
-TOOLTIP_TIME_ZONE_SEEDBANK,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este banco de semillas. Todo el trabajo realizado en este banco de semillas usará esta zona horaria.
-TOOLTIP_TOTAL_QUANTITY,La cantidad total es la suma de las cantidades no listas y listas.
-TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,Plato que contiene un medio de cultivo de agar solidificado.
-TOOLTIP_VIABILITY_TEST_CHEMICAL,Tratar las semillas con una hormona de crecimiento vegetal u otra sustancia química para romper la latencia fisiológica.
-TOOLTIP_VIABILITY_TEST_FRESH,Semillas que fueron recolectadas recientemente y no han sido almacenadas en el banco de semillas. Se recomienda establecer una línea de base de viabilidad para una nueva accesión.
-TOOLTIP_VIABILITY_TEST_MEDIA_MIX,Una mezcla de sustancias a través de la cual crecen las raíces y extraen agua y nutrientes; puede contener cualquiera de los medios siguientes.
-TOOLTIP_VIABILITY_TEST_MOSS,Una planta pequeña no floral y no vascular que puede esterilizarse y utilizarse como medio de cultivo con gran capacidad de retención de humedad.
-TOOLTIP_VIABILITY_TEST_NURSERY_MEDIA,"Sustancia a través de la cual crecen las raíces y extraen agua y nutrientes en una maceta, bandeja u otro recipiente del vivero."
-TOOLTIP_VIABILITY_TEST_PAPER_PETRI_DISH,Un plato que contiene un medio de crecimiento de papel de germinación.
-TOOLTIP_VIABILITY_TEST_PERLITE_VERMICULITE,La arena ligera sustituye a las mezclas de sustratos sin tierra para macetas que suelen utilizarse para mejorar la aireación y la textura de las mezclas de sustratos para macetas y jardines.
-TOOLTIP_VIABILITY_TEST_SAND,"Una sustancia granular suelta que resulta de la erosión de rocas silíceas y de otros tipos y que constituye uno de los principales componentes de playas, lechos fluviales, fondos marinos y desiertos."
-TOOLTIP_VIABILITY_TEST_SAND_PETRI_DISH,Un plato que contiene un medio de crecimiento de arena.
-TOOLTIP_VIABILITY_TEST_SCARIFY,"Debilitar, abrir o alterar de algún modo la cubierta de la semilla para hacerla permeable al agua, para romper la latencia física."
-TOOLTIP_VIABILITY_TEST_SEED_TYPE,Estado de las semillas a las que se les comprobará su viabilidad.
-TOOLTIP_VIABILITY_TEST_SOAK,"Un proceso de imbibición de una semilla mediante su inmersión en agua, para romper la latencia física."
-TOOLTIP_VIABILITY_TEST_SOIL,"Un material de color negro o marrón oscuro que suele consistir en una mezcla de restos orgánicos, arcilla y partículas de roca."
-TOOLTIP_VIABILITY_TEST_STORED,Semillas que han estado almacenadas durante cualquier período de tiempo. Se recomienda monitorear la viabilidad a lo largo del tiempo a fin de utilizar las semillas antes de que su viabilidad se pierda durante el almacenamiento.
-TOOLTIP_VIABILITY_TEST_STRATIFICATION,"Un proceso que consiste en exponer las semillas a temperaturas alternas, de forma que se simulen las condiciones naturales que experimentarían las semillas, para así romper la latencia fisiológica."
-TOOLTIP_VIABILITY_TEST_SUBSTRATE,"La superficie o el material del que un organismo vive, crece u obtiene su alimento."
-TOOLTIP_VIABILITY_TEST_TREATMENT,"Los agentes y técnicas biológicos, físicos y químicos utilizados para romper la latencia y/o acelerar la germinación."
-TOTAL,Total
-TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas
-TOTAL_ESTIMATED_PERCENTAGE_VIABILITY,Estimación total de viabilidad en %
-TOTAL_ESTIMATED_VIABILITY,Viabilidad total estimada
-TOTAL_NUMBER_OF_PLANTS,Número total de plantas
-TOTAL_NUMBER_OF_PLANTS_PROPAGATED,Número total de plantas propagadas
-TOTAL_OF_SEEDS_GERMINATED,Total de semillas germinadas
-TOTAL_PLANTED,Total sembrado
-TOTAL_PLANTED_AREA_HA,Superficie total sembrada (Ha) *
-TOTAL_PLANTED_REQUIRED,Plantados en total *
-TOTAL_PLANTING_SITE_AREA_HA,Superficie total de la zona de siembra (Ha) *
-TOTAL_PLANTS_AND_SPECIES,Plantas y especies totales
-TOTAL_PLANTS_PLANTED,Total de plantas sembradas *
-TOTAL_PLANTS_PLANTED_HELPER_TEXT,"Especies no clasificadas como ""árboles"" en la lista de especies."
-TOTAL_QUANTITY,Cantidad total
-TOTAL_READY_QUANTITY,Cantidad total disponible
-TOTAL_SEED_COUNT,Recuento total de semillas
-TOTAL_SEEDLINGS_SENT,Total de plántulas enviadas
-TOTAL_SEEDS_COUNT_ESTIMATION,Estimación del recuento total de semillas
-TOTAL_SEEDS_GERMINATED,Total de semillas germinadas
-TOTAL_SEEDS_GERMINATED_ERROR,La cantidad germinada no debe ser superior a la cantidad analizada.
-TOTAL_SEEDS_STORED,Número total de semillas almacenadas
-TOTAL_SEEDS_TESTED,Total de semillas analizadas
-TOTAL_SEEDS_TESTED_ERROR,Las semillas analizadas no deben superar las semillas restantes
-TOTAL_TREES_PLANTED,Total de árboles plantados
-TOTAL_TREES_PLANTED_HELPER_TEXT,"Especies clasificadas como ""árboles"" en la lista de especies."
-TOTAL_WEIGHT,Peso total
-TOTAL_WEIGHT_OF_SEEDS,Peso total de las semillas
-TOTAL_WITHDRAW,Extracción total
-TOTAL_WITHDRAWN,Total de extraídos
-TOTAL_WITHDRAWN_COUNT,Total de extraídos (semillas)
-TOTAL_WITHDRAWN_WEIGHT_GRAMS,Total de extraídos (g)
-TOTAL_WITHDRAWN_WEIGHT_KILOGRAMS,Total de extraídos (kg)
-TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,Total de extraídos (mg)
-TOTAL_WITHDRAWN_WEIGHT_OUNCES,Total de extraídos (oz)
-TOTAL_WITHDRAWN_WEIGHT_POUNDS,Total de extraídos (lb)
-TOTAL_WITHDRAWN_WEIGHT_QUANTITY,Peso total extraído
-TOTAL_WITHDRAWN_WEIGHT_UNITS,Peso total de unidades extraídas
-TREATMENT,Tratamiento
-TREE,Árbol
-TRUNCATED_TEXT_MORE_LINK,más
-TRY_AGAIN,Intente otra vez
-TURN_ON_END_DRYING_REMINDER,Activar recordatorio de final de secado
-TWENTY_FIVE_TO_FIFTY_PERCENT,De 25% a 50%
-TYPE,Escriba...
-TYPE_TO_SEARCH,Escriba para buscar...
-UNABLE_TO_ADD_PERSON,No se puede añadir una persona
-UNABLE_TO_CONNECT_TO_SENSOR_KIT,No hemos podido conectar con su kit de sensores. En ocasiones esto se debe a que no está conectado al suministro eléctrico o a Internet. Envíe un correo electrónico a {0} para que podamos ayudarle.
-UNABLE_TO_LOAD_NOTIFICATIONS,No se han podido cargar las notificaciones. Vuelva a intentarlo más tarde.
-UNDO_PLANTING_COMPLETE,Deshacer plantación completa
-UNDO_SEND_TO_NURSERY,Deshacer Enviar a la Guardería
-UNEXPECTED_ERROR,Ha ocurrido un error inesperado.
-UNITS,Unidades
-UNITS_INITIALIZED_MESSAGE,Tu Sistema de peso fue actualizado a {0}. Puedes editar esta configuración desde {1}.
-UNKNOWN,Desconocido
-UNSPECIFIED,No especificado
-UNSURE,No está seguro
-UPCOMING,Venidero
-UPDATE_STATUS_WARNING,Estás a punto de actualizar el estatus
-UPLOAD_PHOTO,Cargar foto...
-UPLOAD_PHOTO_DESCRIPTION,"Busca o arrastra y coloca aquí un archivo (JPG, PNG)."
-UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Buscar archivos (JPG, PNG)."
-UPLOAD_PHOTOS,Cargar foto(s)
-USE_ORGANIZATION_TIME_ZONE,Utilizar zona horaria de la organización
-USED_UP,Agotado
-USER_NOTIFICATION_ACTION,"Para cambiar las preferencias, ve a [“Mi cuenta”]"
-VALUE_CANT_EXCEED_100,El valor no puede sobrepasar 100%
-VIABILITY,Viabilidad
-VIABILITY_RATE,Tasa de viabilidad
-VIABILITY_RESULT,Resultado de viabilidad
-VIABILITY_START_DATE,Fecha de inicio de viabilidad
-VIABILITY_SUBSTRATE,Sustrato de viabilidad
-VIABILITY_TEST,Prueba de viabilidad
-VIABILITY_TEST_NUMBER,Prueba de viabilidad (#{0})
-VIABILITY_TEST_START_DATE_ERROR,Esto no debería ser antes de la fecha de recolección de las semillas
-VIABILITY_TEST_TYPE,Tipo de prueba de viabilidad
-VIABILITY_TEST_TYPES,Tipos de prueba de viabilidad
-VIABILITY_TEST_TYPES_INFO,"Seleccionar cualquiera de las dos desbloqueará una nueva opción en la barra lateral, una vez que se hayan guardado los cambios."
-VIABILITY_TESTING,Ensayo de viabilidad
-VIABILITY_TESTING_EMPTY_MESSAGE,"El Ensayo de viabilidad te ayuda a seguir la calidad de la semilla. Puedes conducir una prueba en vivero o de germinación en laboratorio, o llevar a cabo una prueba de corte."
-VIABILITY_TESTING_SECTION_TOOLTIP,"Cada prueba será listada por separado, lo que podría causar que una accesión aparezca más de una vez en la tabla."
-VIABILITY_TESTS,Pruebas de viabilidad
-VIABILITY_TREATMENT,Tratamiento de viabilidad
-VIEW,Ver
-VIEW_ACCESSION,Ver accesión
-VIEW_SITES_ZONES_SUBZONES,"Ver Sitios, Zonas y Subzonas en el mapa."
+OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observaciones con la aplicación Terraware,
+OBSERVED_PLANTS,Plantas observadas,
+OBSERVED_PLANTS_CARD_DESCRIPTION_1,Este es el número total de especies halladas en sus observaciones más recientes.,
+OBSERVED_PLANTS_CARD_DESCRIPTION_2,"Ha reportado la plantación de {0} en total. La diferencia en estas cantidades puede deberse a que no todas las especies que plantó se hallaron en las parcelas de seguimiento, o que ha plantado más especies desde sus últimas observaciones.",
+OBSERVED_PLANTS_CARD_TITLE,¿Cuántas especies se encuentran en el sitio desde el {0}?,
+OBSERVED_SPECIES,Especies observadas,
+OBSERVER,Observador,
+ONBOARDING_ADMIN_TITLE,"Un momento, vamos a completar la configuración en primer lugar",
+OPPORTUNITIES,Oportunidades,
+OPPORTUNITIES_INSTRUCTIONS,"Puede incluir oportunidades de expansión del proyecto, nuevos mercados, referencias, formación a otras organizaciones, etc. (Máximo un cuarto de página.)",
+OPPORTUNITIES_REQUIRED,Oportunidades *,
+OPT_IN,Funciones Opt-In,
+OR,O,
+OR_SEED_WEIGHT,o peso de la semilla,
+ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, vaya a [""Ajustes > Organización""].",
+ORGANIZATION,Organización,
+ORGANIZATION_CREATE_FAILED,No se puede crear la organización.,
+ORGANIZATION_CREATED_MSG,Puede acceder a las organizaciones en las que se encuentra dando clic en el menú de perfil de usuario en la esquina superior derecha.,
+ORGANIZATION_CREATED_MSG_DESKTOP,"Puede acceder a las organizaciones en las que está dando clic en la flecha en la esquina superior izquierda, a un lado del logo.",
+ORGANIZATION_CREATED_TITLE,¡Ha creado {0}!,
+ORGANIZATION_DATA_NOT_AVAILABLE,Datos de la organización no disponibles,
+ORGANIZATION_DESC,Gestione su organización.,
+ORGANIZATION_NAME,Nombre de la organización,
+ORGANIZATION_NAME_REQUIRED,Nombre de la organización *,
+ORGANIZATIONS,Organizaciones,
+ORIGINAL_QTY,Cantidad original,
+ORIGINAL_SUBZONE,Subzona original,
+ORTHODOX,Ortodoxo,
+OTHER,Otro,
+OUNCES,Onzas,
+OUT_PLANTING,Replantando en el exterior,
+OUTPLANT,Replantar en el exterior,
+OUTPLANTS_REQUIRE_READY_SEEDLINGS,"Las replantaciones en el exterior requieren lotes con plántulas que estén ""listas"".",
+OUTSTANDING,Destacado,
+OVER_WORD_LIMIT,Sobre el límite de palabras,
+OVERDUE,Atrasado,
+OWNER,Propietario,
+OZ,oz,
+OZ_OUNCES,oz (onzas),
+PAGINATION_FOOTER,{0} para {1} de {2},
+PAGINATION_FOOTER_EMPTY,0 de 0,
+PAPER,Papel,
+PAPER_PETRI_DISH,Placa petri de papel,
+PENDING,Pendiente,
+PEOPLE,Personas,
+PEOPLE_CARD_DESCRIPTION,¡No podemos hacerlo solos! Añada personas a su organización y asígneles funciones.,
+PEOPLE_DESCRIPTION,Gestione a las personas en Terraware.,
+PERCENTAGE_OF_SITE_PLANTED,{0}% del sitio,
+PERCENTAGE_OF_TARGET_PLANTING_DENSITY,{0}% del Objetivo,
+PERCENTAGE_VALUE,{0}%,
+PERCENTAGE_VIABILITY,% viabilidad,
+PERIOD_LAST_12_HOURS,Últimas 12 horas,
+PERIOD_LAST_24_HOURS,Últimas 24 horas,
+PERIOD_LAST_30_DAYS,Últimos 30 días,
+PERIOD_LAST_7_DAYS,Últimos 7 días,
+PERLITE_VERMICULITE,Perlita/vermiculita,
+PERMANENT,Permanente,
+PERMANENT_PLOTS,Parcelas permanentes,
+PERSON_ADDED,Se ha añadido una persona,
+PHOTOS,Fotos,
+PHOTOS_OUTPLANT_DESCRIPTION,Las replantaciones en el exterior requieren fotos.,
+PHOTOS_REQUIRED,Se requieren fotos,
+PHOTOS_TO_UPLOAD,Fotos a subir,
+PHOTOS_TO_UPLOAD_LIMIT,(Límite de {0} más),
+PLANT,plantar,
+PLANT_DESCRIPTION,Descripción de la planta,
+PLANT_DETAIL,Detalle de la planta,
+PLANT_ID,ID de la planta,
+PLANT_ID_TOOLTIP,Es la identificación de una planta con fines de seguimiento o conservación. Lo ideal es que las semillas de una planta rastreada no se mezclen con otras de una misma accesión.,
+PLANT_LABEL,Plantar,
+PLANTING_COMPLETE,¿Plantación completa?,
+PLANTING_COMPLETE_TOOLTIP,Diríjase a Plántulas > Retiros para actualizar el estado a Plantación completa.,
+PLANTING_DENSITY,Densidad de siembra,
+PLANTING_DENSITY_CARD_TITLE,¿Cuál es mi densidad de plantación desde el {0}?,
+PLANTING_DENSITY_DESCRIPTION,Esta es la densidad de su plantación calculada a partir de sus últimas observaciones.,
+PLANTING_DENSITY_MISSING_TOOLTIP,"Una vez que hayas marcado tu sitio de plantación como terminado y completado tus observaciones, podrás visualizar la densidad de la plantación.",
+PLANTING_DENSITY_PER_ZONE_CARD_TITLE,¿Cuál es mi densidad de plantación objetivo por zona?,
+PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"Esta es su densidad de plantación objetivo para la zona que ha proporcionado. Si desea modificar esta densidad, póngase en contacto con Terraformation.",
+PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,¿Cuál es mi densidad de plantación objetivo y la densidad de plantación por zona para el {0}?,
+PLANTING_DENSITY_UPDATE_DESCRIPTION,"Desde entonces, ha reportado nuevas plantaciones que sugieren una densidad de plantación de {0} plantas/ha.",
+PLANTING_PROGRESS,Avance de plantación,
+PLANTING_PROGRESS_AND_DENSITY,Progreso y densidad de plantación,
+PLANTING_PROGRESS_CARD_TITLE,¿Cuál es el progreso de mi plantación?,
+PLANTING_PROGRESS_DESCRIPTION_1,Este es el progreso de plantación de su sitio calculado a partir de lo que se ha reportado en sus retiros del vivero.,
+PLANTING_PROGRESS_DESCRIPTION_2,"Una vez que todo el lugar de plantación se haya marcado como completo para la plantación y hayas completado tus observaciones, podrás ver la densidad de plantación de tu centro.",
+PLANTING_PROGRESS_MAP_DESCRIPTION,Haga clic en cada subzona para marcar las áreas en las que se completó la plantación. La densidad de plantación se calculará una vez que se haya completado la plantación de cada zona.,
+PLANTING_PROGRESS_PER_ZONE_CARD_TITLE,¿Cuál es mi progreso de plantación por zona?,
+PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_1,Este es el progreso de plantación de su zona calculado por lo que se ha reportado en los retiros de su vivero.,
+PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Cuando una zona se haya marcado como completa para plantación y usted haya completado sus observaciones, podrá ver la densidad de plantación de dicha zona.",
+PLANTING_PROGRESS_TABLE_DESCRIPTION,Utiliza las casillas de verificación junto a cada subzona para marcar las áreas donde se ha completado la plantación. La densidad de plantación se calculará una vez que se haya completado la plantación en cada zona.,
+PLANTING_SEASON_END,Término de temporada de plantación,
+PLANTING_SEASON_START,Inicio de temporada de plantación,
+PLANTING_SITE,Lugar de plantación,
+PLANTING_SITE_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, seleccione un solo lugar de siembra.",
+PLANTING_SITE_TYPE,Tipo de lugar de plantación,
+PLANTING_SITE_WITH_MAP_HELP,"Si usted es un socio de Terraformation o un participante del acelerador, por favor [contáctenos] para crear un sitio con un mapa.",
+PLANTING_SITES,Sitios de plantación,
+PLANTING_ZONE,Zona de plantación,
+PLANTING_ZONES,Zonas de plantación,
+PLANTS,Plantas,
+PLANTS_CARD_DESCRIPTION,¡Han echado raíces! Vea todas sus plantas en un solo lugar.,
+PLANTS_MISSING_TOOLTIP,"Cuando marques tu sitio de plantación como completado y hayas finalizado tus observaciones, serás capaz de ver el total de las plantas.",
+PLANTS_PER_HECTARE,plantas/ha,
+PLEASE_TRY_AGAIN,"Por favor, inténtelo de nuevo.",
+PLOT_TYPE,Tipo de terreno,
+PLOTS_PERMANENT,Parcelas fijas,
+PLOTS_TEMPORARY,Parcelas temporales,
+POUNDS,Libras,
+PREEXISTING_SPECIES,Esta especie ya existe,
+PREFERRED_WEIGHT_SYSTEM,Sistema de peso preferido,
+PREVIOUS, Anterior,
+PREVIOUS_ARROW,< Anterior,
+PRIVACY_POLICY,Política de privacidad,
+PROBLEMS,Problemas,
+PROBLEMS_WITH_ENTRIES,Se produjo un problema con algunas entradas de este formulario.,
+PROCESSED,Procesado,
+PROCESSED_AND_DRIED_BY,Procesado y secado por,
+PROCESSING,Procesando,
+PROCESSING_AND_DRYING,Procesamiento y secado,
+PROCESSING_AND_DRYING_DESCRIPTION,Todos los detalles sobre el procesamiento y el secado de las semillas.,
+PROCESSING_AND_DRYING_INFO,"Al añadir información sobre el procesamiento y el secado y guardar los cambios, usted cambiará automáticamente la etapa de esta accesión de Pendiente a En proceso, Procesada, En secado o Secada, según la información que introduzca.",
+PROCESSING_METHOD,Método de procesamiento,
+PROCESSING_START_DATE,Fecha de inicio del procesamiento,
+PROCESSING_STATUS_REQUIRED,Estado del procesamiento *,
+PROJECT_IMPACT,Impacto del proyecto,
+PROJECT_IMPACT_INSTRUCTIONS,"Proporcione los detalles de su impacto durante el período del informe, incluidos los logros más importantes y los avances hacia la consecución de los objetivos declarados y las metas principales. Además de los objetivos forestales, por favor incluya los puestos de trabajo creados (a tiempo completo, a tiempo parcial y estacionales), con cifras específicas desglosadas por género. (Aproximadamente una página).",
+PROJECT_IMPACT_REQUIRED,Impacto del proyecto *,
+PROJECT_INFORMATION,Información sobre el proyecto,
+PROJECT_NOTES,Notas informativas adicionales sobre el proyecto,
+PROJECT_PHOTOS,Fotos del proyecto (máx. 30),
+PROJECT_SUMMARY,Resumen del proyecto,
+PROJECT_SUMMARY_INSTRUCTIONS,Presente una breve descripción de los progresos realizados desde su informe anterior. Este resumen debe estar escrito para un público general y ser adecuado para publicación. (Menos de 100 palabras).,
+PROJECT_SUMMARY_REQUIRED,Resumen del proyecto *,
+PURPOSE,Propósito,
+PURPOSE_REQUIRED,Propósito *,
+PV_BATTERY,Batería FV,
+PV_BATTERY_CHARGE,Carga de la batería FV,
+PV_SYSTEM,Sistema FV,
+QUANTIFY,Cuantificar,
+QUANTITY,Cantidad,
+RARE,Raro/a,
+RARE_ENDANGERED,"Raro/a, en peligro",
+REACH_OUT_TO_ADMIN_TITLE,"Por favor, contacte con un administrador de su organización.",
+READY,Listo,
+READY_QUANTITY,Cantidad lista,
+READY_QUANTITY_REQUIRED,Cantidad lista *,
+REASSIGN,Reasignar,
+REASSIGN_SEEDLINGS,Reasignar plántulas,
+REASSIGN_SEEDLINGS_DESCRIPTION,"Introduzca la nueva subzona, la nueva cantidad y las notas de las especies para las que desea reasignar las plántulas. Las plántulas de las filas que deje vacías no serán reasignadas.",
+REASSIGNMENT,Reasignación,
+RECALCITRANT,Recalcitrante,
+RECEIVE_EMAIL_NOTIFICATIONS,Recibir notificaciones por correo electrónico,
+RECEIVED_DATE,Fecha de recepción,
+RECEIVED_ON,Recibido/a el,
+RECEIVING_DATE_REQUIRED,Fecha de recepción *,
+RECEIVING_NURSERY_REQUIRED,Vivero de recepción *,
+RECORDED_PLANTS,Plantas registradas,
+RECORDED_SPECIES,Especies registradas,
+RECORDING_DATE,Fecha de registro,
+RECORDING_DATE_ERROR,Debe ser posterior a la fecha de inicio,
+REFRESH,Actualizar,
+REFRESH_DATA,Actualizar datos,
+REFRIGERATOR_1,Refrigerador 1,
+REFRIGERATOR_2,Refrigerador 2,
+REFRIGERATOR_3,Refrigerador 3,
+REINTRODUCED,Reintroducida/s,
+REINTRODUCED_DESCRIPTION,"Plantas que fueron trasplantadas desde un vivero, invernadero u otro sitio a un lugar de restauración.",
+REMAINING,Restante/s,
+REMAINING_UNITS,Unidades restantes,
+REMINDER_DATE,Fecha del recordatorio,
+REMOVE,Eliminar,
+REMOVE_AND_SAVE,Eliminar y guardar,
+REMOVE_ONLY_ONE_ORG_AT_A_TIME,Solo puede eliminarse a sí mismo de una organización a la vez.,
+REMOVE_PEOPLE,Eliminar personas,
+REMOVE_PEOPLE_DESC,"¿Está seguro de que desea eliminar a estas personas? Al eliminar a estas personas, las mismas ya no tendrán acceso a los datos de su organización.",
+REMOVE_PERSON,Eliminar persona,
+REMOVE_PERSON_DESC,"¿Está seguro de que desea eliminar a {0}? Al eliminar a {0}, esta/s persona/s ya no tendrá/n acceso a los datos de su organización.",
+REMOVED_PEOPLE_WARNING_DESC,"Entre las personas que usted eliminó, se encuentra/n",
+REMOVING_ORG_WARNING,"Al eliminarse a sí mismo de {0}, ya no tendrá acceso a los datos de esta organización. ¿Está seguro de que desea guardar los cambios?",
+REPLACE,Reemplazar,
+REPLACE_FILE,Reemplazar archivo...,
+REPORT,Informe,
+REPORT_ANNUAL_DETAILS_TITLE,Información adicional del proyecto (Informe anual),
+REPORT_BACK_WARNING,"Por favor, usar los controles de formulario al final de la página.",
+REPORT_CONCURRENT_EDITOR,Editor simultáneo,
+REPORT_CONCURRENT_EDITOR_WARNING_1,Hay otra persona editando este informe ({0}).,
+REPORT_CONCURRENT_EDITOR_WARNING_2,"En caso de seguir editando este informe, sus cambios se descartarán. ¿Está seguro de que desea continuar?",
+REPORT_CONFIRM_SUBMIT,¿Está seguro de que desea enviar este informe? Esta acción no puede anularse.,
+REPORT_COULD_NOT_EDIT,No se pudo editar el informe,
+REPORT_COULD_NOT_OPEN,No se pudo abrir el informe,
+REPORT_COULD_NOT_SAVE,No se pudo guardar el informe,
+REPORT_COULD_NOT_SUBMIT,No se pudo enviar el informe,
+REPORT_COULD_NOT_UNLOCK,No se pudo desbloquear el informe,
+REPORT_EDIT,Editar informe,
+REPORT_MORTALITY_RATE_INFO,"Si se conoce, indique las tasas de mortalidad de todos los árboles plantados y de otras plantas en porcentaje. Si se desconoce, ingrese 0.",
+REPORT_NAME,Nombre del informe,
+REPORT_NO_NURSERIES,No se incluyeron viveros en el informe.,
+REPORT_NO_PLANTING_SITES,No se incluyeron lugares de siembra en el informe.,
+REPORT_NO_SEEDBANKS,No se incluyeron bancos de semillas en el informe.,
+REPORT_NURSERY_CAPACITY_INFO,"Por favor, enumere el número total de plantas que el vivero puede alojar según las mejores estimaciones.",
+REPORT_PROBLEM,Informar problema,
+REPORT_SAVE_AND_CLOSE,Guardar y cerrar,
+REPORT_SEEDBANK_BUILD_COMPLETION_DATE,Fecha de finalización de la construcción del banco de semillas *,
+REPORT_SEEDBANK_BUILD_START_DATE,Fecha de inicio de la construcción del banco de semillas *,
+REPORT_SEEDBANK_OPERATION_START_DATE,Fecha de inicio de las operaciones del banco de semillas *,
+REPORT_SUBMIT,Enviar informe,
+REPORT_SUMMARY_OF_PROGRESS_INFO,"Realice un pequeño resumen del progreso, incluso del avance hacia el cumplimiento de las metas de restauración así como también los beneficios sociales y comunitarios del proyecto.",
+REPORT_TOTAL_NON_TREES_PLANTED_INFO,"Por favor, incluya todas las otras plantas afiliadas añ proyecto Terraformation, no incluya árboles en esta cifra.",
+REPORT_TOTAL_PAID_WORKERS_INFO,"Por favor, indique el número total de trabajadores pagos a tiempo completo o a tiempo parcial involucrados en este proyecto de plantado.",
+REPORT_TOTAL_PLANTED_AREA_INFO,"Por favor, indique el número total de hectáreas ya plantadas durante el actual ciclo de vida de este proyecto.",
+REPORT_TOTAL_PLANTING_SITE_AREA_INFO,"Por favor, indique el área total del proyecto en hectáreas. Si su proyecto con Terraformation no incluye tierra dedicada a la restauración, ingrese 0.",
+REPORT_TOTAL_TREES_PLANTED_INFO,"Incluya todos los árboles plantados relacionados con el proyecto de terraformación; no incluya en esta cifra los que no sean árboles, como arbustos.",
+REPORT_TOTAL_VOLUNTEERS_INFO,"Indique el número total de voluntarios que han participado en la plantación de este proyecto. Si no hay voluntarios, escriba 0.",
+REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO,"Del total de trabajadores indicados, ¿cuántas mujeres hay en total?",
+REPORT_VIEW_ANNUAL,Ver informe anual,
+REPORT_VIEW_QUARTERLY,Ver informe trimestral,
+REPORTED_PLANTS_PER_SPECIES_CARD_TITLE,¿Qué cantidad de plantas sembradas por especie se reportó?,
+REPORTS,Informes,
+REQUEST_FEATURE,Solicitar funcionalidad,
+REQUIRED,Obligatorio,
+REQUIRED_FIELD,Campo obligatorio,
+REQUIRED_VALUE_AND_UNITS_FIELD,Valor y unidades requeridas,
+RESET,Restablecer,
+REVIEW_ERRORS,Revisar errores,
+REVIEW_YOUR_ACCOUNT_SETTING,Revise la configuración de su cuenta,
+REVIEW_YOUR_ORGANIZATION_SETTING,Revise la configuración de su organización,
+ROLE,Rol,
+ROLE_REQUIRED,Tarea *,
+ROLES_INFO,Seleccione un rol para esta persona,
+ROWS_SELECTED,{0} seleccionados,
+RUN_A_DATABASE_CHECK,Ejecute el chequeo de la Base de datos,
+S_SEED_COUNT,número de semillas,
+SAND,Pula,
+SAND_PETRI_DISH,Pula el Disco de Petri,
+SAVE,Salvar,
+SAVE_ACCESSION_ERROR,Un error ocurrió al salvar la accesión,
+SAVE_AND_NEXT,Salve y Continúe,
+SAVE_CHANGES,Salvar los cambios,
+SAVED,Guardado,
+SAVING,Salvando...,
+SCARIFY,Escarificar,
+SCHEDULE_DATE_INFO,Programe una fecha seleccionando una fecha futura.,
+SCHEDULE_DATE_TO_MOVE,Programar Fecha para Mover de los Estantes a los Gabinete Secos,
+SCHEDULE_WITHDRAWAL,Programar Retiro,
+SCHEDULED,(Programado),
+SCHEDULED_FOR,Programado por,
+SCHEDULED_FOR_TESTING,Programado para pruebas,
+SCHEDULED_SEEDS,{0} Semillas,
+SCHEDULING_FOR,Programado para: {0},
+SCIENTIFIC_NAME,Nombre Científico,
+SCIENTIFIC_NAME_NOT_FOUND,"""{0}"" no fue encontrado en nuestra base de datos, pero puede seguir adicionado.",
+SCIENTIFIC_NAME_REQUIRED,Nombre Científico *,
+SDG_01,1. No Pobreza,
+SDG_02,2. Hambre Cero,
+SDG_03,3. Buena salud y Bienestar,
+SDG_04,4. Educación de Calidad,
+SDG_05,5. Equidad de Género,
+SDG_06,6. Agua limpia y Salubridad,
+SDG_07,7. Energía asequible y limpia,
+SDG_08,8. Trabajo digno y Crecimiento económico,
+SDG_09,"9. Industria, Innovación, e Infraestructura",
+SDG_10,10. Desigualdades reducidas,
+SDG_11,11. Ciudades y Comunidades Sostenibles,
+SDG_12,12. Producción y Consumo Responsable,
+SDG_13,13. Acción climática,
+SDG_14,14. Vida debajo del agua,
+SDG_15,15. Vida en la tierra,
+SDG_16,"16. Paz, Justicia e Instituciones Sólidas.",
+SDG_17,17. Alianzas para los Objetivos,
+SEARCH,Búsqueda,
+SEARCH_BY_NAME_OR_FAMILY,Búsqueda por nombre o familia...,
+SEARCH_OR_SELECT,Busque o Seleccione,
+SEE_ALL_ACCESSIONS,Ver todos las accesiones,
+SEE_ENTRIES,Ver entradas,
+SEE_WITHDRAWAL_HISTORY,Ver historial de retirada,
+SEED,Semilla,
+SEED_BAGS,Sacos de semillas,
+SEED_BANK,Banco de semillas,
+SEED_BANK_ADDED,Banco de semillas añadido,
+SEED_BANK_INTERNET,Internet de bancos de semillas,
+SEED_BANK_NOTES,Notas adicionales del banco de semillas,
+SEED_BANKS,Bancos de semillas,
+SEED_BANKS_CARD_DESCRIPTION,¿Cómo procesa y almacena sus semillas? Añada bancos de semillas a su organización.,
+SEED_COLLECTION,Colección de semillas,
+SEED_COLLECTION_DESCRIPTION,"Todos los detalles respecto a la especie, fecha de recolección, recolectores y ubicación del sitio.",
+SEED_COLLECTION_DETAIL,Detalles de la semilla,
+SEED_COLLECTION_DETAIL_DESC,Ingrese la información de la semilla de esta accesión a continuación.,
+SEED_COUNT,Número de semillas,
+SEED_DASHBOARD,Ver panel de control,
+SEED_STORAGE_BEHAVIOR,Ver comportamiento de almacenamiento,
+SEED_TYPE,Tipo de semilla,
+SEED_WEIGHT,Peso de semillas,
+SEEDLING_BATCH,Lote de plántula,
+SEEDLING_BATCH_DETAILS,Detalles lote de plántula,
+SEEDLINGS,Plántulas,
+SEEDLINGS_BATCHES,Lotes de plántulas,
+SEEDLINGS_PLURAL,plántulas,
+SEEDLINGS_SENT,Plántulas enviadas,
+SEEDLINGS_SINGULAR,plántula,
+SEEDS,Semillas,
+SEEDS_GERMINATED,Semillas germinadas,
+SEEDS_GERMINATED_LC,semillas germinadas,
+SEEDS_REMAINING,Semillas restantes,
+SEEDS_SOWN,Semillas sembradas,
+SEEDS_UNITS,Cantidad de semillas en unidades,
+SELECT,Seleccionar...,
+SELECT_BATCHES,Seleccionar lotes,
+SELECT_BUTTON,Seleccionar,
+SELECT_PLANTING_SITE_TYPE,Seleccionar tipo del sitio de siembra,
+SELECT_PLANTING_SITE_TYPE_DESCRIPTION_1,Por favor seleccione tipo del sitio de siembra a añadir.,
+SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2,Los sitios con mapa le permitirán hacer seguimiento de la localización de las plantas en el sitio y revisión de plantas vivas/muertas. Los sitios sin mapa le permitirán realizar seguimiento de cuántas y qué especies de plantas han sido plantadas en el sitio.,
+SELECT_PLANTING_SITE_TYPE_DESCRIPTION_3,"Por favor tome en cuenta que si crea un sitio sin un mapa, no podrá añadirle uno posteriormente.",
+SELECT_SEED_BANK,Banco de semillas seleccionado,
+SELECT_SEED_BANK_INFO,Las accesiones requieren un lugar de almacenamiento en un banco de semillas. Seleccione un banco de semillas.,
+SEND_TO_NURSERY,Enviar al vivero,
+SENDING,Enviando...,
+SENSOR_KIT,Kit de sensores,
+SENSOR_KIT_HAS_BEEN_SET_UP,El kit de sensores ha sido configurado. Diríjase a la página {0} para verlos.,
+SENSOR_KIT_ID_PLACEHOLDER,XXXXXX,
+SENSOR_KIT_READY_TO_SET_UP,"Si tiene un banco de semillas de Terraformación, su kit de sensores está listo para ser configurado. Vaya a la página {0} para configurarlo.",
+SENSOR_KIT_SET_UP_COMPLETE,¡Configuración completa!,
+SENSOR_KIT_SET_UP_COMPLETE_DESCRIPTION,Ahora podrá ver la carga de la batería solar y los datos del sensor en el panel de control de su sensor.,
+SENSOR_KIT_SET_UP_DESCRIPTION,"Si su banco de semillas cuenta con un kit de sensores, procedamos a configurarlo.",
+SENSOR_KIT_SET_UP_DETECT_SENSORS,Detectar sensores,
+SENSOR_KIT_SET_UP_DETECT_SENSORS_DESCRIPTION,"Para encender los sensores, retire las pestañas de papel que bloquean las baterías. Cuando los sensores están encendidos y dentro del alcance, el administrador de dispositivos los detectará automáticamente.",
+SENSOR_KIT_SET_UP_DEVICE_MANAGER,Instalar la actualización del administrador de dispositivos,
+SENSOR_KIT_SET_UP_DEVICE_MANAGER_DESCRIPTION,"Para detectar sus sensores, el administrador de dispositivos en su kit de sensores necesita descargar el código más reciente, esto puede tardar hasta 20 minutos. La descarga comienza en el momento en que su kit de sensores se conecta a Internet, por lo que es posible que ya se haya completado este paso.",
+SENSOR_KIT_SET_UP_PV_SYSTEM,Seleccionar sistema fotovoltaico,
+SENSOR_KIT_SET_UP_PV_SYSTEM_DESCRIPTION,"Nuestros bancos de semillas admiten múltiples tipos de sistemas fotovoltaicos, seleccione cuál posee para que podamos mostrarle con precisión la carga de la batería.",
+SENSOR_KIT_SET_UP_SENSOR_KIT_ID,Introducir ID del Kit de sensores,
+SENSOR_KIT_SET_UP_SENSOR_KIT_ID_DESCRIPTION,Encuentre el ID de su kit de sensores en el exterior de su kit de sensores. Este conectará el Administrador de dispositivos dentro del kit a nuestra base de datos.,
+SENSOR_KIT_SET_UP_SENSOR_LOCATIONS,Asignar ubicaciones de sensores,
+SENSOR_KIT_SET_UP_SENSOR_LOCATIONS_DESCRIPTION,Su kit de sensores incluye 14 sensores de temperatura y humedad. Coloque un sensor en cada ubicación. Elija qué sensor poner en cada ubicación guiándose por el menú desplegable.,
+SENSOR_KIT_SET_UP_TIME,Esto podría tardar hasta 30 minutos.,
+SENSOR_KIT_SET_UP_TITLE,¡Vamos a configurar su kit de sensores!,
+SENSOR_LOCATION_ERROR,Cada ubicación debe tener un sensor asignado a la misma.,
+SENSOR_SCAN_TIMEOUT,Tiempo de espera de escaneo de sensor,
+SENSOR_SCAN_TIMEOUT_ERROR,"Solo se encontró {0}/{1} sensor(es). Asegúrese de que todos los sensores estén encendidos y dentro del rango e intente de nuevo. Si el problema persiste, puede que sus sensores estén dañados. Si piensa que ese es el caso, contáctenos por correo electrónico a {2}.",
+SENSORS_FOUND,{0}/{1} sensores encontrados...,
+SENT_TO_NURSERY,¡Enviado al vivero!,
+SERVER_ERROR,Error de servidor,
+SET_PLANTING_COMPLETE,Plantación completa,
+SET_UP,Configurar,
+SET_UP_YOUR_SENSOR_KIT,Configure su kit de sensor,
+SET_UP_YOUR_SENSOR_KIT_MSG,"Si su banco de semillas fue construido por Terraformation, entonces está equipado con un kit de sensores con el que puede monitorear cosas como la temperatura y la humedad del banco de semillas, de forma remota. Para configurar el kit, tendrá que conectar su banco de semillas a la aplicación web de Terraware. Esto podría tardarse unos 30 minutos.",
+SETTINGS,Ajustes,
+SHRUB,Arbusto,
+SHRUB_TREE,Arbusto/Árbol,
+SILVOPASTURE,Sistema selvopastoril,
+SITE,Sitio,
+SITE_DETAIL,Detalle del sitio,
+SITE_LOCATION,Ubicación del sitio,
+SITE_MAP,Mapa del sitio,
+SNACKBAR_MSG_CHANGES_SAVED,Los cambios acaban de ser guardados.,
+SNACKBAR_MSG_NEW_SPECIES_ADDED,La nueva especie acaba de ser añadida.,
+SNACKBAR_MSG_PLANT_DELETED,La planta acaba de ser borrada.,
+SNACKBAR_MSG_SPECIES_DELETED,La especie acaba de ser borrada.,
+SOAK,Remojar,
+SOCIAL_IMPACT,Impacto social y beneficios para la comunidad,
+SOCIAL_IMPACT_INSTRUCTIONS,"Indique los beneficios directos del proyecto para la comunidad local. Los beneficios específicos podrían incluir el impacto sobre el sustento; educación y entrenamiento para la comunidad; acceso a agua limpia; apoyo para los jóvenes, las mujeres y/o las minorías; así como otros beneficios socioeconómicos y comunitarios del proyecto. Incluya los indicadores específicos que utiliza para medir el impacto sobre la comunidad, así como los resultados que ha monitoreado a lo largo del tiempo (con una longitud de media página, como máximo).",
+SOCIAL_IMPACT_REQUIRED,Impacto social y beneficios para la comunidad *,
+SOIL,Tierra,
+SOMETHING_WENT_WRONG,Algo no salió como se esperaba.,
+SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, infórmenos sobre los mismos y los corregiremos.",
+SOMETHING_WENT_WRONG_TITLE,Algo no salió como se esperaba...,
+SOWN,Sembrado,
+SPECIES,Especie,
+SPECIES_CARD_DESCRIPTION,Vea la especie referenciada en sus entradas de Semilla y Planta.,
+SPECIES_DATA_NOT_AVAILABLE,Los datos de la especie no están disponibles,
+SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fines de planificación, operación y elaboración de informes.",
+SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.,
+SPECIES_ERROR_SEARCH,No se pudo cargar la lista de especie para la búsqueda,
+SPECIES_IMPORT_COMPLETE,¡Se completó la importación de los datos de especies!,
+SPECIES_NAME,Nombre de la especie,
+SPECIES_PROBLEM_NAME_IS_SYNONYM,El nombre es un sinónimo,
+SPECIES_PROBLEM_NAME_MISSPELLED,El nombre está mal escrito,
+SPECIES_PROBLEM_NAME_NOT_FOUND,No se encontró el nombre,
+SPECIES_REQUIRED,Especie *,
+SPECIES_SELECTED,Especie seleccionada,
+STAFF,Personal,
+STAFF_RESPONSIBLE,Personal responsable,
+STAGE,Etapa,
+START,Iniciar,
+START_DATE,Fecha de inicio,
+START_DATE_REQUIRED,Fecha de inicio *,
+START_SET_UP,Iniciar configuración,
+START_TESTING,Iniciar las pruebas,
+STARTING_ON,Inicia en,
+STATE,Estado,
+STATE_PROVINCE_REGION,Estado/Provincia/Región,
+STATE_REQUIRED,Estado *,
+STATS_WARNING_DESCRIPTION_1,Las estadísticas de observación se calcularon después de que esta subzona fuera marcada como Plantación completa.,
+STATS_WARNING_DESCRIPTION_2,Deshacer el estado de Plantación completa eliminará dichas estadísticas. ¿Está seguro de que desea deshacerlo?,
+STATUS,Estado,
+STORAGE,Almacenamiento,
+STORAGE_DESCRIPTION,Todos los detalles sobre el almacenamiento de las semillas.,
+STORAGE_INFO,"Al añadir información sobre el almacenamiento y guardar los cambios, estará cambiando automáticamente la etapa de esta accesión de Pendiente a Almacenada.",
+STORAGE_LOCATION,Lugar de almacenamiento,
+STORED,Almacenado,
+STORED_BY,Almacenado por,
+STORED_SEEDS,Semillas almacenadas,
+STORING,Almacenamiento,
+STORING_START_DATE,Fecha de inicio del almacenamiento,
+STRATIFICATION,Estratificación,
+SUB_LOCATION,Sublocalización,
+SUB_LOCATION_DETAILS,Detalles de la sublocalización,
+SUB_LOCATION_EXISTS,Esta sublocalización ya existe,
+SUB_LOCATIONS,Sublocalizaciones,
+SUBMITTED,Enviado,
+SUBMITTED_BY,Enviado por,
+SUBSET_COUNT,Recuento de subconjuntos,
+SUBSET_WEIGHT,Peso del subconjunto de semillas,
+SUBSET_WEIGHT_ERROR,El peso del subconjunto debe ser inferior al peso de las semillas,
+SUBSHRUB,Subarbusto,
+SUBSTRATE,Sustrato,
+SUBTITLE_GET_STARTED,"Para empezar, cree ahora su organización. También podrá configurar y gestionar información sobre personas y especies.",
+SUBZONE,Subzona,
+SUBZONE_PLANTING_COMPLETED_SUCCESS,Subzona(s) marcada(s) como Plantación completa.,
+SUBZONE_PLANTING_UNCOMPLETED_SUCCESS,Subzona(s) marcada(s) como Plantación incompleta.,
+SUBZONE_REQUIRED,Subzona *,
+SUBZONES,Subzonas,
+SUCCESS_STORIES,Casos de éxito,
+SUCCESS_STORIES_INSTRUCTIONS,Presente un relato conciso de una o dos historias de éxito personalizadas. (Media página como máximo).,
+SUCCESS_STORIES_REQUIRED,Casos de éxito *,
+SUGGESTION,Sugerencia,
+SUMMARY,Resumen,
+SUMMARY_OF_PROGRESS,Resumen del progreso,
+SUMMARY_OF_PROGRESS_DESCRIPTION,Haga un breve resumen de este proyecto.,
+SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *,
+SUSTAINABLE_DEVELOPMENT_GOALS,Objetivos de Desarrollo Sostenible,
+SUSTAINABLE_TIMBER,Madera sostenible,
+TAKE_ME_THERE,Llévame allí,
+TARGET_DENSITY_PLANTS_PER_HECTARE,Objetivo: {0} plantas/ha,
+TARGET_HECTARES_PLANTED,Objetivo: {0} hectáreas,
+TARGET_PLANTING_DENSITY,Densidad de plantación objetivo,
+TARGET_PLANTING_DENSITY_TOOLTIP,Densidad de plantación objetivo para la zona (plantas por hectárea).,
+TARGET_RH,Objetivo %RH,
+TEMPERATURE_AND_HUMIDITY_SENSOR_DATA,Datos del sensor de temperatura y humedad,
+TEMPLATES,Plantillas,
+TEMPORARY,Temporal,
+TEMPORARY_PLOTS,Parcelas temporales,
+TEST,Prueba,
+TEST_DATE_REQUIRED,Fecha de la prueba *,
+TEST_METHOD,Método de prueba,
+TEST_METHOD_REQUIRED,Método de prueba *,
+TEST_TYPE,Tipo de prueba,
+TESTING_STAFF,Personal de pruebas,
+TIME,Hora,
+TIME_PERIOD,Periodo de tiempo,
+TIME_ZONE,Zona horaria,
+TIME_ZONE_REQUIRED,Zona horaria *,
+TIME_ZONE_SELECTED,Zona horaria: {0},
+TITLE_REPORT_PROBLEM,Informar de un problema,
+TITLE_REQUEST_FEATURE,Solicitar una funcionalidad,
+TITLE_TEST_APP,Pruebe nuestra aplicación móvil,
+TITLE_WELCOME,Bienvenido a Terraware,
+TO,Para,
+TO_NURSERY_REQUIRED,Para: Guardería *,
+TO_PLANTING_SITE_REQUIRED,Para: Lugar de plantación *,
+TO_SUBZONE,Para: Subzona,
+TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE,El lugar donde las semillas fueron recolectadas. Se recomienda nombrarlos mediante puntos de referencia estables o características que no varíen.,
+TOOLTIP_ACCESSIONS_ADD_PLANT_ID,El identificador único que se le asigna a una planta con fines de seguimiento o conservación. Lo ideal es que las semillas de una planta con un identificador se mantengan separadas de otras plantas (no agrupadas) en colecciones y accesiones.,
+TOOLTIP_ACCESSIONS_COLLECTION_SOURCE,El tipo de población de plantas donde se recolectan las semillas.,
+TOOLTIP_ACCESSIONS_HAS_DELIVERIES,La especie de esta accesión no puede cambiarse porque se han plantado plantas de sus semillas en un lugar de plantación.,
+TOOLTIP_ACCESSIONS_ID,"Un identificador único para una colección de semillas aceptada en un banco de semillas. Cualquier colección de una nueva especie, ubicación y/o fecha se convertiría normalmente en una nueva accesión en el banco de semillas.",
+TOOLTIP_ACCESSIONS_LOCATION,Lugar donde se procesan las semillas.,
+TOOLTIP_ACCESSIONS_SUBLOCATION,Zona específica dentro del lugar donde las semillas son procesadas.,
+TOOLTIP_COMMON_NAME,"El nombre por el que un organismo es conocido por el público general, en lugar de su nombre científico.",
+TOOLTIP_COUNTRY_MY_ACCOUNT,Su país afecta cómo mostramos los números y demás información.,
+TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todas las accesiones con los estados Pendiente de registro, Pendiente de tratamiento, Tratamiento, Deshidratación y En almacenamiento.",
+TOOLTIP_ECOSYSTEM_TYPE,"Unidades relativamente grandes de tierra o agua que contienen un conjunto diferenciado de comunidades naturales que comparten una gran mayoría de especies, dinámicas y condiciones medioambientales.",
+TOOLTIP_GERMINATING_QUANTITY,En germinación indica que las plántulas aún no han brotado de las semillas. La cantidad en germinación no cuenta para la cantidad total.,
+TOOLTIP_NOT_READY_QUANTITY,"Lo que determina que una planta figure como ""no lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación.",
+TOOLTIP_READY_QUANTITY,"Lo que determina que una planta figure como ""lista"" depende de su equipo y suele ser específico de cada especie. Por ejemplo, en función del tamaño de la planta o el tiempo de aclimatación.",
+TOOLTIP_SCIENTIFIC_NAME,El nombre latino binomial (género + especie) aceptado en la actualidad en la bibliografía botánica.,
+TOOLTIP_SPECIES_CONSERVATION_CATEGORY,Categoría de conservación de la Lista Roja de la IUCN,
+TOOLTIP_SPECIES_CONSERVATION_STATUS,"Riesgo de extinción de una especie, normalmente una designación legal o una valoración de la Lista Roja.",
+TOOLTIP_SPECIES_FAMILY,El nombre científico de la familia de la planta aceptado en la actualidad en la bibliografía botánica.,
+TOOLTIP_SPECIES_GROWTH_FORM,Una categoría estructural compuesta por individuos o especies del mismo hábito general de crecimiento pero no necesariamente relacionados.,
+TOOLTIP_SPECIES_RARE,"Especies de poblaciones en estado silvestre de tamaño limitado, con frecuencia encontradas en ubicaciones geográficas aisladas; pueden cumplir con los criterios de las clasificaciones ""en peligro"" o ""amenazada"", pero todavía no han sido agregadas o evaluadas legalmente.",
+TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR,La capacidad de las semillas para sobrevivir a la desecación y a las temperaturas hasta los niveles necesarios para el almacenamiento ex situ (fuera del sitio).,
+TOOLTIP_TIME_ZONE_MY_ACCOUNT,Usamos zonas horarias para mostrar las notificaciones en su hora local. Seleccione la zona horaria que le corresponda.,
+TOOLTIP_TIME_ZONE_NURSERY,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este vivero. Todo el trabajo realizado en este vivero usará esta zona horaria.,
+TOOLTIP_TIME_ZONE_ORGANIZATION,"Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a su organización en conjunto. Puede seleccionar zonas horarias para sus bancos de semillas, viveros y lugares de plantación en cada una de sus páginas de configuración.",
+TOOLTIP_TIME_ZONE_PLANTING_SITE,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este lugar de plantación específico. Todo el trabajo realizado en este lugar de plantación usará esta zona horaria.,
+TOOLTIP_TIME_ZONE_SEEDBANK,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este banco de semillas. Todo el trabajo realizado en este banco de semillas usará esta zona horaria.,
+TOOLTIP_TOTAL_QUANTITY,La cantidad total es la suma de las cantidades no listas y listas.,
+TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,Plato que contiene un medio de cultivo de agar solidificado.,
+TOOLTIP_VIABILITY_TEST_CHEMICAL,Tratar las semillas con una hormona de crecimiento vegetal u otra sustancia química para romper la latencia fisiológica.,
+TOOLTIP_VIABILITY_TEST_FRESH,Semillas que fueron recolectadas recientemente y no han sido almacenadas en el banco de semillas. Se recomienda establecer una línea de base de viabilidad para una nueva accesión.,
+TOOLTIP_VIABILITY_TEST_MEDIA_MIX,Una mezcla de sustancias a través de la cual crecen las raíces y extraen agua y nutrientes; puede contener cualquiera de los medios siguientes.,
+TOOLTIP_VIABILITY_TEST_MOSS,Una planta pequeña no floral y no vascular que puede esterilizarse y utilizarse como medio de cultivo con gran capacidad de retención de humedad.,
+TOOLTIP_VIABILITY_TEST_NURSERY_MEDIA,"Sustancia a través de la cual crecen las raíces y extraen agua y nutrientes en una maceta, bandeja u otro recipiente del vivero.",
+TOOLTIP_VIABILITY_TEST_PAPER_PETRI_DISH,Un plato que contiene un medio de crecimiento de papel de germinación.,
+TOOLTIP_VIABILITY_TEST_PERLITE_VERMICULITE,La arena ligera sustituye a las mezclas de sustratos sin tierra para macetas que suelen utilizarse para mejorar la aireación y la textura de las mezclas de sustratos para macetas y jardines.,
+TOOLTIP_VIABILITY_TEST_SAND,"Una sustancia granular suelta que resulta de la erosión de rocas silíceas y de otros tipos y que constituye uno de los principales componentes de playas, lechos fluviales, fondos marinos y desiertos.",
+TOOLTIP_VIABILITY_TEST_SAND_PETRI_DISH,Un plato que contiene un medio de crecimiento de arena.,
+TOOLTIP_VIABILITY_TEST_SCARIFY,"Debilitar, abrir o alterar de algún modo la cubierta de la semilla para hacerla permeable al agua, para romper la latencia física.",
+TOOLTIP_VIABILITY_TEST_SEED_TYPE,Estado de las semillas a las que se les comprobará su viabilidad.,
+TOOLTIP_VIABILITY_TEST_SOAK,"Un proceso de imbibición de una semilla mediante su inmersión en agua, para romper la latencia física.",
+TOOLTIP_VIABILITY_TEST_SOIL,"Un material de color negro o marrón oscuro que suele consistir en una mezcla de restos orgánicos, arcilla y partículas de roca.",
+TOOLTIP_VIABILITY_TEST_STORED,Semillas que han estado almacenadas durante cualquier período de tiempo. Se recomienda monitorear la viabilidad a lo largo del tiempo a fin de utilizar las semillas antes de que su viabilidad se pierda durante el almacenamiento.,
+TOOLTIP_VIABILITY_TEST_STRATIFICATION,"Un proceso que consiste en exponer las semillas a temperaturas alternas, de forma que se simulen las condiciones naturales que experimentarían las semillas, para así romper la latencia fisiológica.",
+TOOLTIP_VIABILITY_TEST_SUBSTRATE,"La superficie o el material del que un organismo vive, crece u obtiene su alimento.",
+TOOLTIP_VIABILITY_TEST_TREATMENT,"Los agentes y técnicas biológicos, físicos y químicos utilizados para romper la latencia y/o acelerar la germinación.",
+TOTAL,Total,
+TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas,
+TOTAL_ESTIMATED_PERCENTAGE_VIABILITY,Estimación total de viabilidad en %,
+TOTAL_ESTIMATED_VIABILITY,Viabilidad total estimada,
+TOTAL_NUMBER_OF_PLANTS,Número total de plantas,
+TOTAL_NUMBER_OF_PLANTS_PROPAGATED,Número total de plantas propagadas,
+TOTAL_OF_SEEDS_GERMINATED,Total de semillas germinadas,
+TOTAL_PLANTED,Total sembrado,
+TOTAL_PLANTED_AREA_HA,Superficie total sembrada (Ha) *,
+TOTAL_PLANTED_REQUIRED,Plantados en total *,
+TOTAL_PLANTING_SITE_AREA_HA,Superficie total de la zona de siembra (Ha) *,
+TOTAL_PLANTS_AND_SPECIES,Plantas y especies totales,
+TOTAL_PLANTS_PLANTED,Total de plantas sembradas *,
+TOTAL_PLANTS_PLANTED_HELPER_TEXT,"Especies no clasificadas como ""árboles"" en la lista de especies.",
+TOTAL_QUANTITY,Cantidad total,
+TOTAL_READY_QUANTITY,Cantidad total disponible,
+TOTAL_SEED_COUNT,Recuento total de semillas,
+TOTAL_SEEDLINGS_SENT,Total de plántulas enviadas,
+TOTAL_SEEDS_COUNT_ESTIMATION,Estimación del recuento total de semillas,
+TOTAL_SEEDS_GERMINATED,Total de semillas germinadas,
+TOTAL_SEEDS_GERMINATED_ERROR,La cantidad germinada no debe ser superior a la cantidad analizada.,
+TOTAL_SEEDS_STORED,Número total de semillas almacenadas,
+TOTAL_SEEDS_TESTED,Total de semillas analizadas,
+TOTAL_SEEDS_TESTED_ERROR,Las semillas analizadas no deben superar las semillas restantes,
+TOTAL_TREES_PLANTED,Total de árboles plantados,
+TOTAL_TREES_PLANTED_HELPER_TEXT,"Especies clasificadas como ""árboles"" en la lista de especies.",
+TOTAL_WEIGHT,Peso total,
+TOTAL_WEIGHT_OF_SEEDS,Peso total de las semillas,
+TOTAL_WITHDRAW,Extracción total,
+TOTAL_WITHDRAWN,Total de extraídos,
+TOTAL_WITHDRAWN_COUNT,Total de extraídos (semillas),
+TOTAL_WITHDRAWN_WEIGHT_GRAMS,Total de extraídos (g),
+TOTAL_WITHDRAWN_WEIGHT_KILOGRAMS,Total de extraídos (kg),
+TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,Total de extraídos (mg),
+TOTAL_WITHDRAWN_WEIGHT_OUNCES,Total de extraídos (oz),
+TOTAL_WITHDRAWN_WEIGHT_POUNDS,Total de extraídos (lb),
+TOTAL_WITHDRAWN_WEIGHT_QUANTITY,Peso total extraído,
+TOTAL_WITHDRAWN_WEIGHT_UNITS,Peso total de unidades extraídas,
+TREATMENT,Tratamiento,
+TREE,Árbol,
+TRUNCATED_TEXT_MORE_LINK,más,
+TRY_AGAIN,Intente otra vez,
+TURN_ON_END_DRYING_REMINDER,Activar recordatorio de final de secado,
+TWENTY_FIVE_TO_FIFTY_PERCENT,De 25% a 50%,
+TYPE,Escriba...,
+TYPE_TO_SEARCH,Escriba para buscar...,
+UNABLE_TO_ADD_PERSON,No se puede añadir una persona,
+UNABLE_TO_CONNECT_TO_SENSOR_KIT,No hemos podido conectar con su kit de sensores. En ocasiones esto se debe a que no está conectado al suministro eléctrico o a Internet. Envíe un correo electrónico a {0} para que podamos ayudarle.,
+UNABLE_TO_LOAD_NOTIFICATIONS,No se han podido cargar las notificaciones. Vuelva a intentarlo más tarde.,
+UNDO_PLANTING_COMPLETE,Deshacer plantación completa,
+UNDO_SEND_TO_NURSERY,Deshacer Enviar a la Guardería,
+UNEXPECTED_ERROR,Ha ocurrido un error inesperado.,
+UNITS,Unidades,
+UNITS_INITIALIZED_MESSAGE,Tu Sistema de peso fue actualizado a {0}. Puedes editar esta configuración desde {1}.,
+UNKNOWN,Desconocido,
+UNSPECIFIED,No especificado,
+UNSURE,No está seguro,
+UPCOMING,Venidero,
+UPDATE_STATUS_WARNING,Estás a punto de actualizar el estatus,
+UPLOAD_PHOTO,Cargar foto...,
+UPLOAD_PHOTO_DESCRIPTION,"Busca o arrastra y coloca aquí un archivo (JPG, PNG).",
+UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Buscar archivos (JPG, PNG).",
+UPLOAD_PHOTOS,Cargar foto(s),
+USE_ORGANIZATION_TIME_ZONE,Utilizar zona horaria de la organización,
+USED_UP,Agotado,
+USER_NOTIFICATION_ACTION,"Para cambiar las preferencias, ve a [“Mi cuenta”]",
+VALUE_CANT_EXCEED_100,El valor no puede sobrepasar 100%,
+VIABILITY,Viabilidad,
+VIABILITY_RATE,Tasa de viabilidad,
+VIABILITY_RESULT,Resultado de viabilidad,
+VIABILITY_START_DATE,Fecha de inicio de viabilidad,
+VIABILITY_SUBSTRATE,Sustrato de viabilidad,
+VIABILITY_TEST,Prueba de viabilidad,
+VIABILITY_TEST_NUMBER,Prueba de viabilidad (#{0}),
+VIABILITY_TEST_START_DATE_ERROR,Esto no debería ser antes de la fecha de recolección de las semillas,
+VIABILITY_TEST_TYPE,Tipo de prueba de viabilidad,
+VIABILITY_TEST_TYPES,Tipos de prueba de viabilidad,
+VIABILITY_TEST_TYPES_INFO,"Seleccionar cualquiera de las dos desbloqueará una nueva opción en la barra lateral, una vez que se hayan guardado los cambios.",
+VIABILITY_TESTING,Ensayo de viabilidad,
+VIABILITY_TESTING_EMPTY_MESSAGE,"El Ensayo de viabilidad te ayuda a seguir la calidad de la semilla. Puedes conducir una prueba en vivero o de germinación en laboratorio, o llevar a cabo una prueba de corte.",
+VIABILITY_TESTING_SECTION_TOOLTIP,"Cada prueba será listada por separado, lo que podría causar que una accesión aparezca más de una vez en la tabla.",
+VIABILITY_TESTS,Pruebas de viabilidad,
+VIABILITY_TREATMENT,Tratamiento de viabilidad,
+VIEW,Ver,
+VIEW_ACCESSION,Ver accesión,
+VIEW_SITES_ZONES_SUBZONES,"Ver Sitios, Zonas y Subzonas en el mapa.",
 VINE,Enredadera,A type of plant.
-WAITING_TO_DOWNLOAD,Esperando para descargar...
-WATTS_VALUE,{0}W
-WEIGHT_GRAMS,Peso (g)
-WEIGHT_KILOGRAMS,Peso (kg)
-WEIGHT_MILLIGRAMS,Peso (mg)
-WEIGHT_OUNCES,Peso (Oz)
-WEIGHT_POUNDS,Peso (lb)
-WEIGHT_SYSTEM_SELECTED,Sistema de pesaje: {0}
-WEIGHT_TO_COUNT_CALCULATOR,Calculadora de peso a contar
-WEIGHT_UNITS,Unidades de peso
-WELCOME,¡Bienvenido!
-WELCOME_MSG,¡Bienvenido y feliz siembra!
-WELCOME_PERSON,"¡Bienvenido, {0}!"
-WILD,Silvestre
-WILD_IN_SITU,Silvestre (in situ)
-WILD_IN_SITU_DESCRIPTION,Las plantas que crecen naturalmente en áreas silvestres y que no fueron sembradas por gente.
-WITH_MAP,Con mapa
-WITHDRAW,Retirar
-WITHDRAW_ALL,Extraer todas
-WITHDRAW_DATE_REQUIRED,Fecha de extracción *
-WITHDRAW_FROM_BATCHES,Extraer de Lotes
-WITHDRAW_INSTRUCTIONS,Seleccionar propósito de extracción e ingresar las cantidades a extraer de cada lote.
-WITHDRAW_QUANTITY,Extraer cantidad
-WITHDRAW_QUANTITY_REQUIRED,Extraer cantidad *
-WITHDRAW_REMAINING_SEEDS,Extraer todas las semillas restantes
-WITHDRAW_SEEDLINGS,Extraer plantas de semillero
-WITHDRAW_SEEDS,Extraer semillas
-WITHDRAWAL,Retirada
-WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Ingresar una cantidad en al menos una hilera de lote de plantas de semillero.
-WITHDRAWAL_DESCRIPTION,Todos los detalles acerca de la extracción de las semillas.
-WITHDRAWAL_DETAILS,Detalles de extracción
-WITHDRAWAL_HISTORY,Historial de retiros
-WITHDRAWAL_LOG,Registro de extracción
-WITHDRAWALS,Retiros
-WITHDRAWN,Retirada
-WITHDRAWN_BY,Extraída por
-WITHDRAWN_DATE,Fecha de extracción
-WITHDRAWN_ON,Extraída el
-WITHDRAWN_QUANTITY_ERROR,Excede la cantidad restante
-WITHOUT_MAP,Sin mapa
-WORDS,Palabras
-WORKERS_PAID_ENGAGED,Número total de trabajadores pagos involucrados *
-WORKERS_PAID_FEMALE,Trabajadoras mujeres pagas *
-WORKERS_VOLUNTEERS,Voluntarios *
-YES,Sí
-ZERO,Cero
-ZONE,Zona
-ZONE_LEVEL_DATA,Datos del nivel de zona
-ZONE_LEVEL_DATA_MAP_TITLE,¿Qué aspecto tiene el área de plantación según lo que reportamos que se ha plantado?
-ZONE_LEVEL_DATA_MAP_TITLE_WITH_OBSERVATION,¿Qué aspecto tiene el área de plantación a partir de {0}?
-ZONE_REQUIRED,Zona *
-ZONES,Zonas
+WAITING_TO_DOWNLOAD,Esperando para descargar...,
+WATTS_VALUE,{0}W,
+WEIGHT_GRAMS,Peso (g),
+WEIGHT_KILOGRAMS,Peso (kg),
+WEIGHT_MILLIGRAMS,Peso (mg),
+WEIGHT_OUNCES,Peso (Oz),
+WEIGHT_POUNDS,Peso (lb),
+WEIGHT_SYSTEM_SELECTED,Sistema de pesaje: {0},
+WEIGHT_TO_COUNT_CALCULATOR,Calculadora de peso a contar,
+WEIGHT_UNITS,Unidades de peso,
+WELCOME,¡Bienvenido!,
+WELCOME_MSG,¡Bienvenido y feliz siembra!,
+WELCOME_PERSON,"¡Bienvenido, {0}!",
+WILD,Silvestre,
+WILD_IN_SITU,Silvestre (in situ),
+WILD_IN_SITU_DESCRIPTION,Las plantas que crecen naturalmente en áreas silvestres y que no fueron sembradas por gente.,
+WITH_MAP,Con mapa,
+WITHDRAW,Retirar,
+WITHDRAW_ALL,Extraer todas,
+WITHDRAW_DATE_REQUIRED,Fecha de extracción *,
+WITHDRAW_FROM_BATCHES,Extraer de Lotes,
+WITHDRAW_INSTRUCTIONS,Seleccionar propósito de extracción e ingresar las cantidades a extraer de cada lote.,
+WITHDRAW_QUANTITY,Extraer cantidad,
+WITHDRAW_QUANTITY_REQUIRED,Extraer cantidad *,
+WITHDRAW_REMAINING_SEEDS,Extraer todas las semillas restantes,
+WITHDRAW_SEEDLINGS,Extraer plantas de semillero,
+WITHDRAW_SEEDS,Extraer semillas,
+WITHDRAWAL,Retirada,
+WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Ingresar una cantidad en al menos una hilera de lote de plantas de semillero.,
+WITHDRAWAL_DESCRIPTION,Todos los detalles acerca de la extracción de las semillas.,
+WITHDRAWAL_DETAILS,Detalles de extracción,
+WITHDRAWAL_HISTORY,Historial de retiros,
+WITHDRAWAL_LOG,Registro de extracción,
+WITHDRAWALS,Retiros,
+WITHDRAWN,Retirada,
+WITHDRAWN_BY,Extraída por,
+WITHDRAWN_DATE,Fecha de extracción,
+WITHDRAWN_ON,Extraída el,
+WITHDRAWN_QUANTITY_ERROR,Excede la cantidad restante,
+WITHOUT_MAP,Sin mapa,
+WORDS,Palabras,
+WORKERS_PAID_ENGAGED,Número total de trabajadores pagos involucrados *,
+WORKERS_PAID_FEMALE,Trabajadoras mujeres pagas *,
+WORKERS_VOLUNTEERS,Voluntarios *,
+YES,Sí,
+ZERO,Cero,
+ZONE,Zona,
+ZONE_LEVEL_DATA,Datos del nivel de zona,
+ZONE_LEVEL_DATA_MAP_TITLE,¿Qué aspecto tiene el área de plantación según lo que reportamos que se ha plantado?,
+ZONE_LEVEL_DATA_MAP_TITLE_WITH_OBSERVATION,¿Qué aspecto tiene el área de plantación a partir de {0}?,
+ZONE_REQUIRED,Zona *,
+ZONES,Zonas,
