@@ -2,10 +2,12 @@ import React from 'react';
 import { makeStyles } from '@mui/styles';
 import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
 import { RendererProps } from '../common/table/types';
-import { Link, Theme } from '@mui/material';
+import { Theme } from '@mui/material';
+import Link from 'src/components/common/Link';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import strings from 'src/strings';
 import { BatchHistoryItemForTable } from './BatchHistory';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
@@ -58,6 +60,23 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
   }
 
   if (column.key === 'type') {
+    if (row.type === 'OutgoingWithdrawal') {
+      return (
+        <CellRenderer
+          index={index}
+          column={column}
+          value={
+            <Link
+              to={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(':withdrawalId', row.withdrawalId)}
+              className={classes.link}
+            >
+              {getEventType(row as BatchHistoryItemForTable)}
+            </Link>
+          }
+          row={row}
+        />
+      );
+    }
     return (
       <CellRenderer index={index} column={column} value={getEventType(row as BatchHistoryItemForTable)} row={row} />
     );
