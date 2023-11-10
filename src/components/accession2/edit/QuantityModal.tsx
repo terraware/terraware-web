@@ -143,7 +143,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   };
 
   const onChangeQuantityBy = (elem: React.ChangeEvent<HTMLInputElement>, value: string) => {
-    setIsByWeight(value === 'weight')
+    setIsByWeight(value === 'weight');
   };
 
   const onChangeRemainingQuantityUnit = (newValue: string) => {
