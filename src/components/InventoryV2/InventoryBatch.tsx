@@ -10,7 +10,7 @@ import useQuery from 'src/utils/useQuery';
 import BatchSummary from './BatchSummary';
 import { NurseryBatchService } from 'src/services';
 import { Batch } from 'src/types/Batch';
-import { Tabs } from '@terraware/web-components';
+import { Button, Tabs } from '@terraware/web-components';
 import { useHistory, useParams } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { makeStyles } from '@mui/styles';
@@ -144,11 +144,16 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
               : APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId)
           }
         />
-        <Grid container>
+        <Grid
+          container
+          marginTop={theme.spacing(3)}
+          marginBottom={theme.spacing(4)}
+          justifyContent='space-between'
+          alignItems='center'
+        >
           <Box>
             <Typography
               sx={{
-                marginTop: theme.spacing(3),
                 paddingLeft: theme.spacing(3),
                 fontSize: '14px',
                 fontWeight: 400,
@@ -167,7 +172,6 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
             </Typography>
             <Typography
               sx={{
-                marginBottom: theme.spacing(4),
                 paddingLeft: theme.spacing(3),
                 fontSize: '14px',
                 fontWeight: 400,
@@ -175,6 +179,17 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
             >
               {getNurseryLabel()}
             </Typography>
+          </Box>
+          <Box>
+            <Button
+              label={strings.WITHDRAW}
+              onClick={() =>
+                history.push({
+                  pathname: APP_PATHS.BATCH_WITHDRAW,
+                  search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
+                })
+              }
+            />
           </Box>
           <Grid item xs={12}>
             <PageSnackbar />
@@ -195,7 +210,11 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
                     label: strings.DETAILS,
                     children: <BatchDetails batch={batch} onUpdate={onUpdateBatch} />,
                   },
-                  { id: 'history', label: strings.HISTORY, children: <BatchHistory /> },
+                  {
+                    id: 'history',
+                    label: strings.HISTORY,
+                    children: <BatchHistory batchId={batch.id} nurseryName={inventoryNursery?.name} />,
+                  },
                 ]}
               />
             </Box>
