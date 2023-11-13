@@ -94,7 +94,7 @@ export default function CountWithdrawal(props: CountWithdrawalProps): JSX.Elemen
         setWithdrawnQtyError(strings.INVALID_VALUE);
         return false;
       }
-      if (accession.remainingQuantity?.units && Number(accession.remainingQuantity.units === 'Seeds')) {
+      if (accession.remainingQuantity?.units === 'Seeds') {
         if (withdrawnQty > accession.remainingQuantity?.quantity) {
           setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
           return false;

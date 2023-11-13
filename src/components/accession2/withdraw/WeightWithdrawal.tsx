@@ -118,42 +118,35 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
   };
 
   const validateAmount = (estimated: number, withdrawnQty: number, withdrawnUnits: string) => {
-    if (withdrawnQty) {
-      if (isNaN(withdrawnQty)) {
-        setWithdrawnQtyError(strings.INVALID_VALUE);
-        return false;
-      }
-      if (Number(withdrawnQty) <= 0) {
-        setWithdrawnQtyError(strings.INVALID_VALUE);
-        return false;
-      }
-      if (accession.remainingQuantity?.units && Number(withdrawnUnits === accession.remainingQuantity.units)) {
-        if (accession.remainingQuantity.units === 'Seeds') {
-          if (Number(estimated) > accession.remainingQuantity?.quantity) {
-            setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
-            return false;
-          }
-        } else if (withdrawnQty > accession.remainingQuantity?.quantity) {
-          setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
-          return false;
-        }
-      }
-      if (purpose === 'Nursery' || purpose === 'Viability Testing') {
-        if (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount) {
-          setWithdrawnQtyError(
-            purpose === 'Nursery'
-              ? strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY
-              : strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST
-          );
-          return false;
-        }
-      }
-      setWithdrawnQtyError('');
-      return true;
-    } else {
+    if (!withdrawnQty) {
       setWithdrawnQtyError(strings.REQUIRED_FIELD);
       return false;
     }
+    if (isNaN(withdrawnQty) || Number(withdrawnQty) <= 0) {
+      setWithdrawnQtyError(strings.INVALID_VALUE);
+      return false;
+    }
+    if ((accession.remainingQuantity?.units === withdrawnUnits)
+      && ((accession.remainingQuantity.units === 'Seeds') && (Number(estimated) > accession.remainingQuantity?.quantity))) {
+      setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
+      return false;
+    }
+    if ((accession.remainingQuantity?.units === withdrawnUnits)
+      && (accession.remainingQuantity?.quantity && withdrawnQty > accession.remainingQuantity?.quantity)) {
+      setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
+      return false;
+    }
+    if (purpose === 'Nursery' && (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount)) {
+      setWithdrawnQtyError(strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY);
+      return false;
+    }
+    if (purpose === 'Viability Testing' && (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount)) {
+      setWithdrawnQtyError(strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST);
+      return false;
+    }
+
+    setWithdrawnQtyError('');
+    return true;
   };
 
   return (
