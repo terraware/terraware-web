@@ -90,7 +90,8 @@
     "server:prepare": "./scripts/preparedb.sh",
     "server:reset": "./scripts/resetdb.sh",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "pre-commit": "yarn format && yarn lint && yarn ts && yarn test && yarn build"
   },
   "eslintConfig": {
     "extends": [
