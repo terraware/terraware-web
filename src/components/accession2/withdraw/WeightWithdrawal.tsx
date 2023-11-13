@@ -126,21 +126,33 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
       setWithdrawnQtyError(strings.INVALID_VALUE);
       return false;
     }
-    if ((accession.remainingQuantity?.units === withdrawnUnits)
-      && ((accession.remainingQuantity.units === 'Seeds') && (Number(estimated) > accession.remainingQuantity?.quantity))) {
+    if (
+      accession.remainingQuantity?.units === withdrawnUnits &&
+      accession.remainingQuantity.units === 'Seeds' &&
+      Number(estimated) > accession.remainingQuantity?.quantity
+    ) {
       setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
       return false;
     }
-    if ((accession.remainingQuantity?.units === withdrawnUnits)
-      && (accession.remainingQuantity?.quantity && withdrawnQty > accession.remainingQuantity?.quantity)) {
+    if (
+      accession.remainingQuantity?.units === withdrawnUnits &&
+      accession.remainingQuantity?.quantity &&
+      withdrawnQty > accession.remainingQuantity?.quantity
+    ) {
       setWithdrawnQtyError(strings.WITHDRAWN_QUANTITY_ERROR);
       return false;
     }
-    if (purpose === 'Nursery' && (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount)) {
+    if (
+      purpose === 'Nursery' &&
+      (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount)
+    ) {
       setWithdrawnQtyError(strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY);
       return false;
     }
-    if (purpose === 'Viability Testing' && (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount)) {
+    if (
+      purpose === 'Viability Testing' &&
+      (!accession.estimatedCount || !accession.subsetWeight?.quantity || !accession.subsetCount)
+    ) {
       setWithdrawnQtyError(strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST);
       return false;
     }
