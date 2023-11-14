@@ -92,7 +92,7 @@ export default function OutplantWithdrawalTable({
 
       const batchesMap: BatchesRow[] = [];
 
-      if (Object.keys(batchToSpeciesMap).length > 0) {
+      if (nurseryV2 && Object.keys(batchToSpeciesMap).length > 0) {
         withdrawal?.batchWithdrawals?.forEach((batch) => {
           const { batchId, notReadyQuantityWithdrawn, readyQuantityWithdrawn } = batch;
           const { speciesId, batchNumber } = batchToSpeciesMap[batchId];

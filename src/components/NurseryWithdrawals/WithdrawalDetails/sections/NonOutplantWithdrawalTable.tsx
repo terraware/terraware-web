@@ -12,6 +12,7 @@ import isEnabled from 'src/features';
 
 type SpeciesWithdrawal = {
   name?: string;
+  germinating?: number;
   notReady: number;
   ready: number;
   total: number;
@@ -38,6 +39,7 @@ const columns = (): TableColumnType[] => [
 const nurseryV2Columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.BATCH, type: 'string' },
   { key: 'name', name: strings.SPECIES, type: 'string' },
+  { key: 'germinating', name: strings.GERMINATING, type: 'number' },
   { key: 'notReady', name: strings.NOT_READY, type: 'number' },
   { key: 'ready', name: strings.READY, type: 'number' },
   { key: 'total', name: strings.TOTAL, type: 'number' },
@@ -72,11 +74,14 @@ export default function NonOutplantWithdrawalTable({
           const ready = readyQuantityWithdrawn || 0;
           const name = species.find((sp) => sp.id === speciesId)?.scientificName;
           if (nurseryV2) {
+            const { germinatingQuantityWithdrawn } = batch;
+            const germinating = germinatingQuantityWithdrawn || 0;
             batchesMap.push({
               name,
+              germinating,
               notReady,
               ready,
-              total: notReady + ready,
+              total: notReady + ready + germinating,
               batchNumber,
               batchId,
               speciesId,
@@ -111,7 +116,7 @@ export default function NonOutplantWithdrawalTable({
           Object.values(speciesBatchMap).map((speciesInfo: any) => {
             const getFormattedValue = (key: string) => {
               const value = speciesInfo[key];
-              return isNaN(value) ? value : numericFormatter.format(value);
+              return isNaN(value) ? '' : numericFormatter.format(value);
             };
 
             const notReady = getFormattedValue('notReady');
