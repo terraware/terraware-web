@@ -1,3 +1,4 @@
+998d579ba SW-3157 Convert to new seed/weight calculator and withdraw modal logic (#1728)
 9a8464782 SW-4434 Link Location->Nursery->SubLocation->BatchCount to inventory batch view with filters set (#1772)
 9a2b7d250 SW-4406 Adding batch number to withdrawal log  (#1782)
 30292274e SW-4389 Show empty batches filter option in "batches by seedlings" view (#1774)
