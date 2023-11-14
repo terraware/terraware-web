@@ -336,6 +336,7 @@ FILL_OUT_ALL_FIELDS,Rellene todos los campos obligatorios.
 FILLED_SEEDS,Semillas rellenadas
 FILTER,Filtrar
 FILTERS,Filtros
+FILTER_SHOW_EMPTY_BATCHES,Mostrar lotes vacíos
 FINAL_QTY,Cantidad final
 FINISH,Finalizar
 FIRST_ADD_PLANTING_SITE,"Para ver el tablero, primero debe añadir un sitio de plantación."

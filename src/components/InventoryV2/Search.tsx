@@ -6,6 +6,7 @@ import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopove
 import { getNurseryName } from './FilterUtils';
 import { useOrganization } from 'src/providers/hooks';
 import { PillList } from '@terraware/web-components';
+import theme from '../../theme';
 
 interface SearchProps {
   searchValue: string;
@@ -35,7 +36,7 @@ export default function Search(props: SearchProps): JSX.Element {
 
   return (
     <>
-      <Box display='flex' flexDirection='row' alignItems='center' marginBottom='16px'>
+      <Box display='flex' flexDirection='row' alignItems='center'>
         <Box width='300px'>
           <Textfield
             placeholder={strings.SEARCH}
@@ -51,7 +52,12 @@ export default function Search(props: SearchProps): JSX.Element {
         </Box>
         <InventoryFilters filters={filters} setFilters={setFilters} />
       </Box>
-      <Grid xs={12} display='flex'>
+      <Grid
+        display='flex'
+        flexDirection='row'
+        alignItems='center'
+        sx={{ marginTop: theme.spacing(0.5), marginLeft: theme.spacing(1) }}
+      >
         <PillList data={filterPillData ?? []} onRemove={() => setFilters({})} />
       </Grid>
     </>
