@@ -75,6 +75,7 @@ export function getUnitsForSystem(system: string) {
 }
 
 export function convertValue(value: number, unit: string) {
+  // We are just switching between imperial and metric, but don't care about the output unit
   switch (unit) {
     case 'Grams': {
       return `${(value * 0.035274).toFixed(2)} ${getUnitName('Ounces')}`;
@@ -93,6 +94,110 @@ export function convertValue(value: number, unit: string) {
     }
     default: {
       return `${value} ${getUnitName(unit)}`;
+    }
+  }
+}
+
+export function convertUnits(value: number, unit: string, outputUnit: string) {
+  // We want to switch between specific units
+  switch (unit) {
+    case 'Grams': {
+      switch (outputUnit) {
+        case 'Ounces': {
+          return value * 0.035274;
+        }
+        case 'Pounds': {
+          return value * 0.002204;
+        }
+        case 'Milligrams': {
+          return value * 1000;
+        }
+        case 'Kilograms': {
+          return value * 0.001;
+        }
+        default: {
+          return value;
+        }
+      }
+    }
+    case 'Kilograms': {
+      switch (outputUnit) {
+        case 'Ounces': {
+          return value * 35.274;
+        }
+        case 'Pounds': {
+          return value * 2.20462;
+        }
+        case 'Milligrams': {
+          return value * 1000000;
+        }
+        case 'Grams': {
+          return value * 1000;
+        }
+        default: {
+          return value;
+        }
+      }
+    }
+    case 'Milligrams': {
+      switch (outputUnit) {
+        case 'Ounces': {
+          return value * 0.035274;
+        }
+        case 'Pounds': {
+          return value * 2.20462e-6;
+        }
+        case 'Grams': {
+          return value * 0.001;
+        }
+        case 'Kilograms': {
+          return value * 0.000001;
+        }
+        default: {
+          return value;
+        }
+      }
+    }
+    case 'Pounds': {
+      switch (outputUnit) {
+        case 'Ounces': {
+          return value * 16;
+        }
+        case 'Grams': {
+          return value * 453.592;
+        }
+        case 'Milligrams': {
+          return value * 453592.000004704;
+        }
+        case 'Kilograms': {
+          return value * 0.453592;
+        }
+        default: {
+          return value;
+        }
+      }
+    }
+    case 'Ounces': {
+      switch (outputUnit) {
+        case 'Grams': {
+          return value * 28.3495;
+        }
+        case 'Pounds': {
+          return value * 0.0625;
+        }
+        case 'Milligrams': {
+          return value * 28349.5;
+        }
+        case 'Kilograms': {
+          return value * 0.0283495;
+        }
+        default: {
+          return value;
+        }
+      }
+    }
+    default: {
+      return 0;
     }
   }
 }
@@ -125,3 +230,12 @@ export function getUnitName(unit: string) {
     }
   }
 }
+
+export const unitAbbv = (): Record<string, string> => ({
+  Seeds: strings.CT,
+  Grams: strings.G,
+  Milligrams: strings.MG,
+  Kilograms: strings.KG,
+  Ounces: strings.OZ,
+  Pounds: strings.LB,
+});

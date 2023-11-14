@@ -23,6 +23,7 @@ export default function WithdrawalTabPanelContent({
   withdrawal,
   withdrawalSummary,
   delivery,
+  batches,
 }: WithdrawalTabPanelContentProps): JSX.Element {
   const theme = useTheme();
 
@@ -33,7 +34,13 @@ export default function WithdrawalTabPanelContent({
       </Typography>
       <WithdrawalOverview withdrawal={withdrawal} withdrawalSummary={withdrawalSummary} />
       <Box marginTop={theme.spacing(3)}>
-        <OutplantWithdrawalTable species={species} subzoneNames={plantingSubzoneNames} delivery={delivery} />
+        <OutplantWithdrawalTable
+          species={species}
+          subzoneNames={plantingSubzoneNames}
+          delivery={delivery}
+          batches={batches}
+          withdrawal={withdrawal}
+        />
       </Box>
       <Box marginTop={theme.spacing(3)}>
         <Photos withdrawalId={withdrawal?.id} />
