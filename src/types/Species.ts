@@ -194,3 +194,5 @@ export enum SpeciesRequestError {
 }
 
 export type SpeciesDetails = components['schemas']['SpeciesLookupDetailsResponsePayload'];
+
+export type SuggestedSpecies = Partial<Species> & { scientificName: string };

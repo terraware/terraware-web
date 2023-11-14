@@ -1,7 +1,9 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, ServerData } from './HttpService';
-import { Species, SpeciesDetails } from 'src/types/Species';
+import { Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
+import SearchService from './SearchService';
+import { FieldNodePayload, SearchRequestPayload } from 'src/types/Search';
 
 /**
  * Service for species related functionality
@@ -280,6 +282,63 @@ const getSpeciesNames = async (search: string): Promise<SpeciesNamesResponse> =>
 };
 
 /**
+ * Search species for selectors
+ */
+const suggestSpecies = async (organizationId: number, query: string): Promise<SuggestedSpecies[] | null> => {
+  const params: SearchRequestPayload = {
+    prefix: 'species',
+    fields: ['scientificName', 'commonName', 'familyName', 'id'],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'organization_id',
+          type: 'Exact',
+          values: [organizationId],
+        },
+      ],
+    },
+    count: 0,
+  };
+
+  if (query) {
+    const searchValueChildren: FieldNodePayload[] = [];
+
+    const nameNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'scientificName',
+      type: 'Fuzzy',
+      values: [query],
+    };
+    searchValueChildren.push(nameNode);
+
+    const commonNameNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'commonName',
+      type: 'Fuzzy',
+      values: [query],
+    };
+    searchValueChildren.push(commonNameNode);
+
+    const familyNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'familyName',
+      type: 'Fuzzy',
+      values: [query],
+    };
+    searchValueChildren.push(familyNode);
+
+    params.search.children.push({
+      operation: 'or',
+      children: searchValueChildren,
+    });
+  }
+
+  return (await SearchService.search(params)) as SuggestedSpecies[] | null;
+};
+
+/**
  * Exported functions
  */
 const SpeciesService = {
@@ -296,6 +355,7 @@ const SpeciesService = {
   ignoreProblemSuggestion,
   getSpeciesDetails,
   getSpeciesNames,
+  suggestSpecies,
 };
 
 export default SpeciesService;

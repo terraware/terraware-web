@@ -10,9 +10,9 @@ import {
   Accession2GPS,
   CollectedReceivedDate2,
   Collectors2,
-  Species2Dropdown,
   Accession2PlantSiteDetails,
 } from '../properties';
+import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { getSeedBank } from 'src/utils/organization';
@@ -105,7 +105,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
             tooltipTitle={strings.TOOLTIP_ACCESSIONS_ID}
           />
         </Grid>
-        <Species2Dropdown
+        <SpeciesSelector
           speciesId={record.speciesId}
           record={record}
           disabled={record.hasDeliveries}
