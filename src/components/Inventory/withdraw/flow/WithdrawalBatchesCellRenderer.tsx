@@ -99,6 +99,18 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
     );
   }
 
+  if (column.key === 'germinatingQuantityWithdrawn') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={createQuantityInput('germinatingQuantityWithdrawn', 'germinatingQuantity')}
+        row={row}
+        className={`${classes.text} ${classes.cell}`}
+      />
+    );
+  }
+
   if (column.key === 'readyQuantityWithdrawn') {
     return (
       <CellRenderer
@@ -132,7 +144,9 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
       <CellRenderer
         index={index}
         column={column}
-        value={numberFormatter.format(+row.readyQuantityWithdrawn + +row.notReadyQuantityWithdrawn)}
+        value={numberFormatter.format(
+          +row.readyQuantityWithdrawn + +row.notReadyQuantityWithdrawn + +row.germinatingQuantityWithdrawn
+        )}
         row={row}
         className={classes.text}
       />
