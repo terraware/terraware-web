@@ -62,7 +62,6 @@ export default function NonOutplantWithdrawalTable({
     if (Object.keys(batchToSpecies).length > 0) {
       withdrawal?.batchWithdrawals?.forEach((batch) => {
         const { batchId, notReadyQuantityWithdrawn, readyQuantityWithdrawn } = batch;
-        console.log(batchToSpecies);
         const { speciesId, batchNumber } = batchToSpecies[batchId];
         const notReady = notReadyQuantityWithdrawn || 0;
         const ready = readyQuantityWithdrawn || 0;
