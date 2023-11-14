@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1699969649117" clover="3.2.0">
-  <project timestamp="1699969649117" name="All files">
+<coverage generated="1699983497785" clover="3.2.0">
+  <project timestamp="1699983497785" name="All files">
     <metrics statements="13472" coveredstatements="364" conditionals="8610" coveredconditionals="90" methods="4230" coveredmethods="77" elements="26312" coveredelements="531" complexity="0" loc="13472" ncloc="13472" packages="108" files="522" classes="522"/>
     <package name="src">
       <metrics statements="212" coveredstatements="0" conditionals="174" coveredconditionals="0" methods="67" coveredmethods="0"/>
@@ -4900,12 +4900,12 @@
       <metrics statements="29" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="7" coveredmethods="0"/>
       <file name="NurserySubLocations.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Nursery/NurserySubLocations.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Nursery/index.tsx">
         <metrics statements="23" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="5" coveredmethods="0"/>
