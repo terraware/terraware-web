@@ -15,6 +15,7 @@ import SelectBatchesWithdrawnQuantity from './flow/SelectBatchesWithdrawnQuantit
 import SelectPurposeForm from './flow/SelectPurposeForm';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
+import isEnabled from 'src/features';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
@@ -38,6 +39,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const [batches, setBatches] = useState<any[]>();
   const snackbar = useSnackbar();
   const history = useHistory();
+  const nurseryV2 = isEnabled('Nursery Updates');
 
   useEffect(() => {
     const populateBatches = async () => {
@@ -75,16 +77,26 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     // first create the withdrawal
     record.batchWithdrawals = record.batchWithdrawals
       .map((batchWithdrawal) => {
-        const { readyQuantityWithdrawn, notReadyQuantityWithdrawn } = batchWithdrawal;
+        const { readyQuantityWithdrawn, notReadyQuantityWithdrawn, germinatingQuantityWithdrawn } = batchWithdrawal;
 
         return {
           ...batchWithdrawal,
           readyQuantityWithdrawn: isNaN(readyQuantityWithdrawn) ? 0 : readyQuantityWithdrawn,
           notReadyQuantityWithdrawn: isNaN(notReadyQuantityWithdrawn) ? 0 : notReadyQuantityWithdrawn,
+          // germinating quantity can be undefined in the payload, hence different handling
+          germinatingQuantityWithdrawn:
+            germinatingQuantityWithdrawn && isNaN(germinatingQuantityWithdrawn)
+              ? 0
+              : germinatingQuantityWithdrawn,
         };
       })
       .filter((batchWithdrawal) => {
-        return batchWithdrawal.readyQuantityWithdrawn + batchWithdrawal.notReadyQuantityWithdrawn > 0;
+        return (
+          batchWithdrawal.readyQuantityWithdrawn +
+            batchWithdrawal.notReadyQuantityWithdrawn +
+            (nurseryV2 ? batchWithdrawal.germinatingQuantityWithdrawn ?? 0 : 0) >
+          0
+        );
       });
 
     if (record.batchWithdrawals.length === 0) {

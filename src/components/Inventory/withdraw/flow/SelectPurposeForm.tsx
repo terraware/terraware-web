@@ -18,16 +18,16 @@ import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/types/B
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { APP_PATHS } from 'src/constants';
 import Divisor from 'src/components/common/Divisor';
-import { Dropdown, Textfield, DropdownItem, IconTooltip, MultiSelect } from '@terraware/web-components';
+import { Dropdown, Textfield, DropdownItem, IconTooltip } from '@terraware/web-components';
 import DatePicker from 'src/components/common/DatePicker';
 import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
-import { SpeciesService, SubLocationService, TrackingService } from 'src/services';
+import { SpeciesService, TrackingService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import SubzoneSelector, { SubzoneInfo, ZoneInfo } from 'src/components/SubzoneSelector';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { Facility, SubLocation } from 'src/types/Facility';
+import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
@@ -83,8 +83,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>();
   const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
-  const [destinationSubLocations, setDestinationSubLocations] = useState<SubLocation[]>([]);
-  const [selectedSubLocations, setSelectedSubLocations] = useState<number[]>([]);
   const [zones, setZones] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<number>();
   const snackbar = useSnackbar();
@@ -101,11 +99,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const nurseryV2 = isEnabled('Nursery Updates');
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
-
-  const destinationSubLocationsOptions = useMemo(
-    () => new Map(destinationSubLocations.map((subLocation) => [subLocation.id, subLocation.name])),
-    [destinationSubLocations]
-  );
 
   useEffect(() => {
     if (timeZone !== tz.id) {
@@ -221,6 +214,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       if (!localRecord.destinationFacilityId) {
         setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
         return false;
+      } else {
+        setIndividualError('destinationFacilityId', '');
       }
     }
     return true;
@@ -230,8 +225,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     if (!selectedNursery) {
       setIndividualError('fromFacilityId', strings.REQUIRED_FIELD);
       return false;
+    } else {
+      setIndividualError('fromFacilityId', '');
+      return true;
     }
-    return true;
   };
 
   const validateWithdrawnQuantity = () => {
@@ -489,21 +486,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     fetchSpecies();
   }, [selectedOrganization.id]);
 
-  useEffect(() => {
-    const fetchSubLocations = async () => {
-      if (localRecord.destinationFacilityId && nurseryV2) {
-        setDestinationSubLocations([]);
-        setSelectedSubLocations([]);
-        const response = await SubLocationService.getSubLocations(localRecord.destinationFacilityId);
-        if (response.requestSucceeded) {
-          setDestinationSubLocations(response.subLocations);
-        }
-      }
-    };
-
-    fetchSubLocations();
-  }, [localRecord.destinationFacilityId, nurseryV2]);
-
   const batchesFromNursery = useMemo(() => {
     return batches.filter(
       (batch) => !selectedNursery || batch.facility_id.toString() === selectedNursery.id.toString()
@@ -615,29 +597,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   errorText={fieldsErrors.fromFacilityId}
                 />
               </Grid>
-
-              {isNurseryTransfer && !nurseryV2 && (
-                <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginLeft: isMobile ? 0 : 1 }}>
-                  <Dropdown
-                    id='destinationFacilityId'
-                    placeholder={strings.SELECT}
-                    label={strings.TO_NURSERY_REQUIRED}
-                    selectedValue={localRecord.destinationFacilityId?.toString()}
-                    options={destinationNurseriesOptions}
-                    onChange={(value) => updateField('destinationFacilityId', value)}
-                    errorText={fieldsErrors.destinationFacilityId}
-                    fullWidth={true}
-                  />
-                </Grid>
-              )}
             </Grid>
-            {isNurseryTransfer && nurseryV2 && (
+            {isNurseryTransfer && (
               <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
-                <Grid
-                  item
-                  xs={!isMobile && destinationSubLocations.length ? 6 : 12}
-                  sx={{ marginTop: theme.spacing(2), marginRight: !isMobile && destinationSubLocations.length ? 1 : 0 }}
-                >
+                <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
                   <Dropdown
                     id='destinationFacilityId'
                     placeholder={strings.SELECT}
@@ -649,20 +612,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     fullWidth={true}
                   />
                 </Grid>
-                {destinationSubLocations.length > 0 && (
-                  <Grid item xs={isMobile ? 12 : 6} sx={{ marginTop: theme.spacing(2), marginLeft: isMobile ? 0 : 1 }}>
-                    <MultiSelect
-                      fullWidth={true}
-                      label={strings.SUB_LOCATION}
-                      onAdd={(val) => setSelectedSubLocations((prev) => [...prev, val])}
-                      onRemove={(val) => setSelectedSubLocations((prev) => prev.filter((v) => v !== val))}
-                      options={destinationSubLocationsOptions}
-                      valueRenderer={(name: string) => name}
-                      selectedOptions={selectedSubLocations}
-                      placeHolder={strings.SELECT}
-                    />
-                  </Grid>
-                )}
               </Grid>
             )}
             {isOutplant && (
