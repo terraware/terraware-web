@@ -30,6 +30,7 @@ type NonOutplantWithdrawalTableProps = {
 };
 
 const columns = (): TableColumnType[] => [
+  { key: 'batchNumber', name: strings.BATCH, type: 'string' },
   { key: 'name', name: strings.SPECIES, type: 'string' },
   { key: 'notReady', name: strings.NOT_READY, type: 'number' },
   { key: 'ready', name: strings.READY, type: 'number' },
