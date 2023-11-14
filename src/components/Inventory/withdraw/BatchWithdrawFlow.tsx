@@ -85,9 +85,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           notReadyQuantityWithdrawn: isNaN(notReadyQuantityWithdrawn) ? 0 : notReadyQuantityWithdrawn,
           // germinating quantity can be undefined in the payload, hence different handling
           germinatingQuantityWithdrawn:
-            germinatingQuantityWithdrawn && isNaN(germinatingQuantityWithdrawn)
-              ? 0
-              : germinatingQuantityWithdrawn,
+            germinatingQuantityWithdrawn && isNaN(germinatingQuantityWithdrawn) ? 0 : germinatingQuantityWithdrawn,
         };
       })
       .filter((batchWithdrawal) => {
