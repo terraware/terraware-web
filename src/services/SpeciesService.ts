@@ -287,7 +287,7 @@ const getSpeciesNames = async (search: string): Promise<SpeciesNamesResponse> =>
 const suggestSpecies = async (organizationId: number, query: string): Promise<SuggestedSpecies[] | null> => {
   const params: SearchRequestPayload = {
     prefix: 'species',
-    fields: ['scientificName', 'commonName', 'familyName', 'id'],
+    fields: ['scientificName', 'commonName', 'id'],
     search: {
       operation: 'and',
       children: [
@@ -320,14 +320,6 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
       values: [query],
     };
     searchValueChildren.push(commonNameNode);
-
-    const familyNode: FieldNodePayload = {
-      operation: 'field',
-      field: 'familyName',
-      type: 'Fuzzy',
-      values: [query],
-    };
-    searchValueChildren.push(familyNode);
 
     params.search.children.push({
       operation: 'or',
