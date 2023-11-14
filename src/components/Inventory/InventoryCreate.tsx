@@ -10,7 +10,7 @@ import PageForm from 'src/components/common/PageForm';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import useSnackbar from 'src/utils/useSnackbar';
 import DatePicker from 'src/components/common/DatePicker';
-import { Species2Dropdown } from '../accession2/properties';
+import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import { CreateBatchRequestPayload } from 'src/types/Batch';
 import NurseryBatchService from 'src/services/NurseryBatchService';
 import NurseryDropdown from './NurseryDropdown';
@@ -172,7 +172,7 @@ export default function CreateInventory(): JSX.Element {
           <Box marginTop={theme.spacing(3)}>
             <Grid container padding={0}>
               <Grid item xs={12} sx={marginTop}>
-                <Species2Dropdown record={record} setRecord={setRecord} validate={validateFields} />
+                <SpeciesSelector record={record} setRecord={setRecord} validate={validateFields} />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
                 <NurseryDropdown
