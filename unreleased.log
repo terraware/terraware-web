@@ -1,3 +1,4 @@
+0af68230f SW-4397 Nursery updates to single batch withdraw flow (#1770)
 ea6d45215 SW-4406 Create withdrawal history table by batch (#1783)
 998d579ba SW-3157 Convert to new seed/weight calculator and withdraw modal logic (#1728)
 9a8464782 SW-4434 Link Location->Nursery->SubLocation->BatchCount to inventory batch view with filters set (#1772)
