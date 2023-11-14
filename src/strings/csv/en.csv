@@ -103,6 +103,7 @@ BACK_TO_TERRAWARE,Back to Terraware
 BAG_ID,Bag ID
 BAG_IDS,Bag IDs
 BATCH_NUMBER,Batch Number
+BATCH,Batch
 BATCHES,Batches
 BATCHES_AT,Batches at {0}
 BATCHES_COLUMN_TOOLTIP,Empty batches are not counted in this column.
