@@ -12,6 +12,7 @@ import { Option } from '@terraware/web-components/components/table/types';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import FilterBoolean from './filters/FilterBoolean';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export type FilterField = {
   name: string;
   label: string;
+  showLabel?: boolean;
   type:
     | 'multiple_selection'
     | 'single_selection'
@@ -39,13 +41,14 @@ export type FilterField = {
     | 'date_range'
     | 'number_range'
     | 'count_weight'
-    | 'hidden';
+    | 'hidden'
+    | 'boolean';
 };
 
 export type FilterGroupProps = {
   initialFilters: Record<string, SearchNodePayload>;
   fields: FilterField[];
-  values: FieldValuesPayload;
+  values?: FieldValuesPayload;
   onConfirm: (filters: Record<string, SearchNodePayload>) => void;
   onCancel: () => void;
   noScroll?: boolean;
@@ -59,7 +62,6 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
 
   // the filters defined by this filter group
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>(initialFilters);
-
   const onFilterChange = (key: string, filter: SearchNodePayload) => {
     if (filter.values.length) {
       setFilters({ ...filters, [key]: filter });
@@ -92,19 +94,22 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
           {strings.FILTERS}
         </Typography>
       </Box>
+
       <Box flex='1 1 auto' overflow={noScroll ? 'visible' : 'auto'} maxHeight='380px'>
         {fields.map((f, index) => (
           <Box key={f.name}>
             {index > 0 && <hr className={classes.divider} />}
-            <Typography fontSize='14px' fontWeight={600} margin={theme.spacing(2, 2, 0, 2)}>
-              {f.label}
-            </Typography>
+            {f.showLabel !== false ? (
+              <Typography fontSize='14px' fontWeight={600} margin={theme.spacing(2, 2, 0, 2)}>
+                {f.label}
+              </Typography>
+            ) : null}
             {f.type === 'multiple_selection' && (
               <MultipleSelection
                 field={f.name}
                 values={filters[f.name]?.values ?? []}
                 onChange={(filter) => onFilterChange(f.name, filter)}
-                options={getOptions(f.name, values)}
+                options={getOptions(f.name, values || {})}
               />
             )}
             {f.type === 'single_selection' && (
@@ -112,7 +117,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
                 field={f.name}
                 value={filters[f.name]?.values[0]}
                 onChange={(filter) => onFilterChange(f.name, filter)}
-                options={getOptions(f.name, values)}
+                options={getOptions(f.name, values || {})}
                 isBoolean={false}
               />
             )}
@@ -148,9 +153,18 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
                 payloads={filters[f.name]?.children ?? []}
               />
             )}
+            {f.type === 'boolean' && (
+              <FilterBoolean
+                field={f.name}
+                label={f.label}
+                value={filters[f.name]?.values[0] === 'true'}
+                onChange={(filter) => onFilterChange(f.name, filter)}
+              />
+            )}
           </Box>
         ))}
       </Box>
+
       <Box
         display='flex'
         flexDirection={isMobile ? 'column-reverse' : 'row'}

@@ -1,10 +1,12 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
-import { Batch, CreateBatchRequestPayload } from 'src/types/Batch';
+import { Batch, BatchHistoryItem, CreateBatchRequestPayload } from 'src/types/Batch';
 import SearchService from './SearchService';
 import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getPromisesResponse } from './utils';
 import PhotoService from './PhotoService';
+import { User } from 'src/types/User';
+import { getUserDisplayName } from 'src/utils/user';
 
 /**
  * Nursery related services
@@ -15,6 +17,7 @@ const BATCH_CHANGE_STATUSES_ENDPOINT = '/api/v1/nursery/batches/{id}/changeStatu
 const BATCH_ID_ENDPOINT = '/api/v1/nursery/batches/{id}';
 const BATCH_QUANTITIES_ENDPOINT = '/api/v1/nursery/batches/{id}/quantities';
 const LIST_BATCH_PHOTOS_ENDPOINT = '/api/v1/nursery/batches/{batchId}/photos';
+const BATCH_HISTORY_ENDPOINT = '/api/v1/nursery/batches/{batchId}/history';
 export const BATCH_PHOTO_ENDPOINT = '/api/v1/nursery/batches/{batchId}/photos/{photoId}';
 
 const DEFAULT_BATCH_FIELDS = [
@@ -57,7 +60,9 @@ export type BatchId = {
 export type BatchData = {
   batch: Batch | null;
 };
-
+export type BatchHistoryData = {
+  history: BatchHistoryItem[] | null;
+};
 export type BatchPhotosIds = {
   photoIds?: { id: number }[];
 };
@@ -74,12 +79,13 @@ export type UpdateBatchQuantitiesRequestPayload =
   paths[typeof BATCH_QUANTITIES_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
 type GetBatchResponsePayload = paths[typeof BATCH_ID_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
+type GetBatchHistoryResponsePayload =
+  paths[typeof BATCH_HISTORY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type GetBatchListPhotosResponsePayload =
   paths[typeof LIST_BATCH_PHOTOS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 const httpBatch = HttpService.root(BATCH_ID_ENDPOINT);
-
+const httpBatchHistory = HttpService.root(BATCH_HISTORY_ENDPOINT);
 const httpBatchPhoto = HttpService.root(BATCH_PHOTO_ENDPOINT);
 
 /**
@@ -337,6 +343,56 @@ const uploadBatchPhotos = async (batchId: number, photos: File[]): Promise<((Res
   const url = LIST_BATCH_PHOTOS_ENDPOINT.replace('{batchId}', batchId.toString());
   return PhotoService.uploadPhotos(url, photos);
 };
+
+const getBatchHistory = async (
+  batchId: number,
+  search?: string,
+  filter?: Record<string, any>,
+  users?: Record<number, User>
+): Promise<Response & BatchHistoryData> => {
+  const response: Response & BatchHistoryData = await httpBatchHistory.get<
+    GetBatchHistoryResponsePayload,
+    BatchHistoryData
+  >(
+    {
+      urlReplacements: {
+        '{batchId}': batchId.toString(),
+      },
+    },
+    (data) => {
+      if (data) {
+        let filtered = [...data.history];
+        if (filter) {
+          if (filter.type?.values) {
+            filtered = filtered.filter((ev) => {
+              return filter.type.values.indexOf(ev.type) > -1;
+            });
+          }
+          if (filter.editedByName?.values && users) {
+            filtered = filtered.filter((ev) => {
+              const evUserName = getUserDisplayName(users[ev.createdBy]);
+              return filter.editedByName.values.indexOf(evUserName) > -1;
+            });
+          }
+        }
+        if (search && users) {
+          const regex = new RegExp(search, 'i');
+          filtered = filtered.filter((ev) => {
+            const evUserName = getUserDisplayName(users[ev.createdBy]);
+            return evUserName.match(regex);
+          });
+        }
+        return {
+          history: filtered,
+        };
+      }
+      return { history: null };
+    }
+  );
+
+  return response;
+};
+
 /**
  * Exported functions
  */
@@ -354,6 +410,7 @@ const NurseryBatchService = {
   getBatchPhotosList,
   deleteBatchPhotos,
   uploadBatchPhotos,
+  getBatchHistory,
 };
 
 export default NurseryBatchService;

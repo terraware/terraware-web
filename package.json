@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@dnd-kit/core": "^6.0.5",
-    "@dnd-kit/sortable": "^7.0.1",
+    "@dnd-kit/sortable": "^8.0.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mapbox/mapbox-gl-draw": "^1.4.2",
@@ -75,7 +75,7 @@
     "eject": "craco eject",
     "generate-collateral": "yarn build-version-file && yarn generate-strings",
     "generate-strings": "node scripts/generate-strings.js",
-    "generate-types": "node -r esm scripts/openapi-typescript-formatter.js",
+    "generate-types": "node scripts/openapi-typescript-formatter.mjs",
     "cy:run": "TZ=UTC cypress run",
     "cy": "TZ=UTC cypress open",
     "e2e": "NODE_OPTIONS=--max-old-space-size=3172 start-server-and-test start:dev http://127.0.0.1:3000 cy:run && yarn e2e:report",
@@ -90,7 +90,8 @@
     "server:prepare": "./scripts/preparedb.sh",
     "server:reset": "./scripts/resetdb.sh",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "pre-commit": "yarn format && yarn lint && yarn ts && yarn test && yarn build"
   },
   "eslintConfig": {
     "extends": [
@@ -139,7 +140,8 @@
     "jest-mock-axios": "^4.4.1",
     "jest-mock-extended": "^3.0.1",
     "nyc": "^15.1.0",
-    "openapi-typescript": "^4.0.2",
+    "openapi-typescript": "^6.7.0",
+    "prettier": "^3.0.3",
     "prop-types": "^15.8.1",
     "start-server-and-test": "^2.0.0",
     "storybook": "^7.0.12",

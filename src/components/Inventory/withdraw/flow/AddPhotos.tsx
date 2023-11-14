@@ -46,7 +46,7 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
         <SelectPhotos
           onPhotosChanged={onPhotosChanged}
           title={strings.ADD_PHOTOS}
-          description={strings.ADD_PHOTOS_DESCRIPTION}
+          description={strings.ADD_PHOTOS_DESCRIPTION_OPTIONAL}
           multipleSelection={true}
         />
       </Container>
