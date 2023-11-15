@@ -44,6 +44,17 @@ export const FACILITY_SPECIFIC_FIELDS = [
   'totalQuantity(raw)',
 ];
 
+const NURSERY_SUMMARY_FIELDS = [
+  'facility_id',
+  'facility_name',
+  'germinatingQuantity',
+  'notReadyQuantity',
+  'readyQuantity',
+  'totalQuantity',
+  'totalSpecies',
+  'totalQuantityWithdrawn',
+];
+
 /**
  * exported types
  */
@@ -229,11 +240,37 @@ const searchInventory = async ({
   return await SearchService.search(params);
 };
 
+const getSummaryForNursery = (organizationId: number, nurseryId: number): Promise<SearchResponseElement[] | null> => {
+  return SearchService.search({
+    prefix: 'facilities.facilityInventoryTotals',
+    fields: NURSERY_SUMMARY_FIELDS,
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'organization_id',
+          type: 'Exact',
+          values: [organizationId],
+        },
+        {
+          operation: 'field',
+          field: 'facility_id',
+          type: 'Exact',
+          values: [nurseryId],
+        },
+      ],
+    },
+    count: 1,
+  });
+};
+
 /**
  * Exported functions
  */
 const NurseryInventoryService = {
   getSummary,
+  getSummaryForNursery,
   downloadInventoryTemplate,
   getInventoryUploadStatus,
   uploadInventory,

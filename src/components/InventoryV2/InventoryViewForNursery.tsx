@@ -1,29 +1,26 @@
 import { useTheme, Grid, Typography } from '@mui/material';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
-import { Species } from 'src/types/Species';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
+import { getNurseryName } from './FilterUtils';
+import { useParams } from 'react-router-dom';
+import { useOrganization } from '../../providers';
+import InventorySummaryForNursery from './view/InventorySummaryForNursery';
+import InventorySeedlingsForNurseryTable from './view/InventorySeedlingsForNurseryTable';
 
 export default function InventoryViewForNursery(): JSX.Element {
-  const [inventorySpecies] = useState<Species>();
+  const pathParams = useParams<{ nurseryId: string }>();
+  const { selectedOrganization } = useOrganization();
   const contentRef = useRef(null);
   const theme = useTheme();
 
-  const getSpeciesLabel = () => {
-    const { scientificName, commonName } = inventorySpecies || {};
+  const [modified, setModified] = useState<number>(Date.now());
 
-    if (!scientificName && !commonName) {
-      return '';
-    } else if (!commonName) {
-      return scientificName;
-    } else {
-      return `${scientificName} (${commonName})`;
-    }
-  };
+  const nurseryId = Number(pathParams.nurseryId);
 
   return (
     <TfMain>
@@ -37,10 +34,10 @@ export default function InventoryViewForNursery(): JSX.Element {
               paddingLeft: theme.spacing(3),
               fontSize: '20px',
               fontWeight: 600,
-              fontStyle: 'italic',
+              fontStyle: 'bold',
             }}
           >
-            {getSpeciesLabel()}
+            Batches at {getNurseryName(nurseryId, selectedOrganization)}
           </Typography>
           <Grid item xs={12}>
             <PageSnackbar />
@@ -48,7 +45,22 @@ export default function InventoryViewForNursery(): JSX.Element {
         </Grid>
       </PageHeaderWrapper>
       <Grid container ref={contentRef}>
-        TODO: Inventory View by Nursery
+        <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
+          <InventorySummaryForNursery
+            modified={modified}
+            organizationId={selectedOrganization.id}
+            nurseryId={nurseryId}
+          />
+          <InventorySeedlingsForNurseryTable
+            nurseryId={nurseryId}
+            modified={modified}
+            setModified={setModified}
+            // TODO in SW-4392
+            onUpdateOpenBatch={() => {}}
+            openBatchNumber={null}
+            //////////////////
+          />
+        </Grid>
       </Grid>
     </TfMain>
   );

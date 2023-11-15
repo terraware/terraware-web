@@ -11,6 +11,7 @@ import { Facility } from 'src/types/Facility';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
+  speciesIds?: number[];
   // Has to match up with SearchNodePayload['values']
   showEmptyBatches?: (string | null)[];
 };

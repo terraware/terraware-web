@@ -30,7 +30,16 @@ export default function Search(props: SearchProps): JSX.Element {
           value: filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization))?.join(', ') ?? '',
         },
       ];
+    } else if ((filters.speciesIds?.length ?? 0) > 0) {
+      data = [
+        {
+          id: 'filterPillData',
+          label: strings.SPECIES,
+          value: filters.speciesIds?.map((id) => id)?.join(', ') ?? '',
+        },
+      ];
     }
+
     setFilterPillData(data);
   }, [selectedOrganization, filters.facilityIds]);
 
