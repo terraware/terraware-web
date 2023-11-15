@@ -210,8 +210,9 @@ export default function CreateInventory(): JSX.Element {
                 />
               </Grid>
               {sublocations.length > 0 && (
-                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Grid item xs={gridSize()} sx={marginTop}>
                   <MultiSelect
+                    fullWidth={true}
                     label={strings.SUB_LOCATION}
                     onAdd={(val) => setSelectedSubLocations((prev) => [...prev, val])}
                     onRemove={(val) => setSelectedSubLocations((prev) => prev.filter((v) => v !== val))}
