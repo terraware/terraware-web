@@ -1,3 +1,5 @@
+4bd9004f0 Revert "SW-3157 Address QA findings"
+b8aaad4f7 SW-3157 Address QA findings
 5c9e92086 Updated translations from Phrase (#1773)
 a01add438 SW-4448 Species selector dropdown uses BE search endpoint for querying (#1784)
 0af68230f SW-4397 Nursery updates to single batch withdraw flow (#1770)
