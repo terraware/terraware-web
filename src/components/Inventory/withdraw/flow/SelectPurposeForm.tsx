@@ -600,11 +600,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               </FormControl>
             </Grid>
             <Grid display='flex'>
-              <Grid
-                item
-                xs={isNurseryTransfer && !isMobile && !nurseryV2 ? 6 : 12}
-                sx={{ marginTop: theme.spacing(2), marginRight: isNurseryTransfer && !isMobile && !nurseryV2 ? 1 : 0 }}
-              >
+              <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
                 <Dropdown
                   id='fromFacilityId'
                   placeholder={strings.SELECT}
