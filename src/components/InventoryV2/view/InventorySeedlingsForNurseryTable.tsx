@@ -121,20 +121,19 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
 
     const populateResults = async () => {
       const searchFields = getSearchFields();
-      console.log('searchFields', searchFields);
+
       const searchResponse = await NurseryBatchService.getBatchesForNursery(
         selectedOrganization.id,
         nurseryId,
+        filters,
         searchSortOrder
       );
 
-      console.log('searchResponse', searchResponse);
-
       if (activeRequests) {
-        const batchesResults = searchResponse?.map((sr: SearchResponseElement) => {
-          return { ...sr, facilityId: sr.facility_id };
-        });
-        console.log('batchesResults', batchesResults);
+        const batchesResults = searchResponse?.map((sr: SearchResponseElement) => ({
+          ...sr,
+          facilityId: sr.facility_id,
+        }));
         setBatches(batchesResults || []);
       }
     };
@@ -271,6 +270,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
     [activeLocale]
   );
 
+  console.log('filters', filters);
   return (
     <>
       <Grid
@@ -344,6 +344,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
               onSearch={(val) => setTemporalSearchValue(val)}
               filters={filters}
               setFilters={setFilters}
+              origin={'Nursery'}
             />
 
             <Box sx={{ marginTop: theme.spacing(0.5) }}>

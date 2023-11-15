@@ -49,7 +49,7 @@ export default function InventorySummaryForNursery({
     const germinationRate = 0;
     const lossRate = 0;
     const totalWithdrawn = 0;
-    const species = [];
+    const species: Species[] = [];
 
     return [
       {
@@ -96,7 +96,7 @@ export default function InventorySummaryForNursery({
       },
       {
         label: strings.SPECIES,
-        value: species.map((s: Species) => s.commonName).join(', '),
+        value: species.map((s: Species) => s.commonName || s.scientificName).join(', '),
         tooltipTitle: '',
         gridColumns,
       },

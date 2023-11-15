@@ -412,6 +412,7 @@ const getBatchHistory = async (
 const getBatchesForNursery = (
   organizationId: number,
   nurseryId: number,
+  filters?: { speciesIds?: number[] },
   searchSortOrder?: SearchSortOrder
 ): Promise<SearchResponseElement[] | null> => {
   const payload: SearchRequestPayload = {
@@ -428,7 +429,6 @@ const getBatchesForNursery = (
           operation: 'field',
           field: 'species_organization_id',
           values: [organizationId],
-          type: 'Exact',
         },
       ],
     },
@@ -441,6 +441,14 @@ const getBatchesForNursery = (
     // TODO figure out pagination / count / etc...
     count: 1000,
   };
+
+  if (filters && filters.speciesIds) {
+    payload.search.children.push({
+      operation: 'field',
+      field: 'species_id',
+      values: filters.speciesIds.map((id) => `${id}`),
+    } as SearchNodePayload);
+  }
 
   return SearchService.search(payload);
 };

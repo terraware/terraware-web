@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Grid, Box } from '@mui/material';
 import { PillListItem, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
@@ -6,19 +6,35 @@ import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopove
 import { getNurseryName } from './FilterUtils';
 import { useOrganization } from 'src/providers/hooks';
 import { PillList } from '@terraware/web-components';
-import theme from '../../theme';
+import theme from 'src/theme';
+import { OriginPage } from './InventoryBatch';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { requestSpecies } from '../../redux/features/species/speciesThunks';
 
 interface SearchProps {
   searchValue: string;
   onSearch: (value: string) => void;
   filters: InventoryFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
+  origin?: OriginPage;
 }
 
-export default function Search(props: SearchProps): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+export default function Search(props: SearchProps): JSX.Element | null {
   const { searchValue, onSearch, filters, setFilters } = props;
+  const origin = props.origin || 'Species';
+
+  const { selectedOrganization } = useOrganization();
+  const dispatch = useAppDispatch();
+
+  const species = useAppSelector(selectSpecies);
+
   const [filterPillData, setFilterPillData] = useState<PillListItem<string>[]>();
+
+  const getSpeciesName = useCallback(
+    (speciesId: number) => (species || []).find((s) => s.id === speciesId)?.commonName,
+    [species]
+  );
 
   useEffect(() => {
     let data: PillListItem<string>[] = [];
@@ -27,7 +43,7 @@ export default function Search(props: SearchProps): JSX.Element {
         {
           id: 'filterPillData',
           label: strings.NURSERY,
-          value: filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization))?.join(', ') ?? '',
+          value: filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization)).join(', ') ?? '',
         },
       ];
     } else if ((filters.speciesIds?.length ?? 0) > 0) {
@@ -35,13 +51,23 @@ export default function Search(props: SearchProps): JSX.Element {
         {
           id: 'filterPillData',
           label: strings.SPECIES,
-          value: filters.speciesIds?.map((id) => id)?.join(', ') ?? '',
+          value: filters.speciesIds?.map(getSpeciesName).join(', ') ?? '',
         },
       ];
     }
 
     setFilterPillData(data);
-  }, [selectedOrganization, filters.facilityIds]);
+  }, [selectedOrganization, filters.facilityIds, filters.speciesIds, getSpeciesName]);
+
+  useEffect(() => {
+    if (origin === 'Nursery') {
+      void dispatch(requestSpecies(selectedOrganization.id));
+    }
+  }, [origin, dispatch, selectedOrganization.id]);
+
+  if (origin === 'Nursery' && !species) {
+    return null;
+  }
 
   return (
     <>
@@ -59,7 +85,7 @@ export default function Search(props: SearchProps): JSX.Element {
             onClickRightIcon={() => onSearch('')}
           />
         </Box>
-        <InventoryFilters filters={filters} setFilters={setFilters} />
+        <InventoryFilters filters={filters} setFilters={setFilters} origin={origin} />
       </Box>
       <Grid
         display='flex'

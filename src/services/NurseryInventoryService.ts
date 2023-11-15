@@ -52,7 +52,6 @@ const NURSERY_SUMMARY_FIELDS = [
   'readyQuantity',
   'totalQuantity',
   'totalSpecies',
-  'totalQuantityWithdrawn',
 ];
 
 /**
