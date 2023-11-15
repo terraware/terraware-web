@@ -16,11 +16,14 @@ import NurseryBatchService from 'src/services/NurseryBatchService';
 import NurseryDropdown from './NurseryDropdown';
 import TfMain from 'src/components/common/TfMain';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { Facility } from 'src/types/Facility';
+import { Facility, SubLocation } from 'src/types/Facility';
 import { getNurseryById } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
+import isEnabled from 'src/features';
+import { SubLocationService } from 'src/services';
+import { MultiSelect } from '@terraware/web-components';
 
 const MANDATORY_FIELDS = [
   'speciesId',
@@ -47,8 +50,15 @@ export default function CreateInventory(): JSX.Element {
   const tz = useLocationTimeZone().get(selectedNursery);
   const [timeZone, setTimeZone] = useState(tz.id);
   const [addedDateChanged, setAddedDateChanged] = useState(false);
-
+  const [sublocations, setSubLocations] = useState<SubLocation[]>([]);
+  const [selectedSubLocations, setSelectedSubLocations] = useState<number[]>([]);
+  const nurseryV2 = isEnabled('Nursery Updates');
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
+
+  const subLocationsOptions = useMemo(
+    () => new Map(sublocations.map((subLocation) => [subLocation.id, subLocation.name])),
+    [sublocations]
+  );
 
   const defaultBatch = (): CreateBatchRequestPayload =>
     ({
@@ -68,6 +78,21 @@ export default function CreateInventory(): JSX.Element {
       setSelectedNursery(batchNursery);
     }
   }, [record.facilityId, selectedOrganization]);
+
+  useEffect(() => {
+    const fetchSubLocations = async () => {
+      if (record.facilityId && nurseryV2) {
+        setSubLocations([]);
+        setSelectedSubLocations([]);
+        const response = await SubLocationService.getSubLocations(record.facilityId);
+        if (response.requestSucceeded) {
+          setSubLocations(response.subLocations);
+        }
+      }
+    };
+
+    fetchSubLocations();
+  }, [record.facilityId, nurseryV2]);
 
   useEffect(() => {
     if (timeZone !== tz.id) {
@@ -121,6 +146,7 @@ export default function CreateInventory(): JSX.Element {
       readyQuantity: isNaN(readyQuantity) ? 0 : readyQuantity,
       notReadyQuantity: isNaN(notReadyQuantity) ? 0 : notReadyQuantity,
       germinatingQuantity: isNaN(germinatingQuantity) ? 0 : germinatingQuantity,
+      subLocationIds: selectedSubLocations,
     });
     if (response.requestSucceeded) {
       history.replace(inventoryLocation);
@@ -183,7 +209,21 @@ export default function CreateInventory(): JSX.Element {
                   label={strings.RECEIVING_NURSERY_REQUIRED}
                 />
               </Grid>
-              <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+              {sublocations.length > 0 && (
+                <Grid item xs={gridSize()} sx={marginTop}>
+                  <MultiSelect
+                    fullWidth={true}
+                    label={strings.SUB_LOCATION}
+                    onAdd={(val) => setSelectedSubLocations((prev) => [...prev, val])}
+                    onRemove={(val) => setSelectedSubLocations((prev) => prev.filter((v) => v !== val))}
+                    options={subLocationsOptions}
+                    valueRenderer={(name: string) => name}
+                    selectedOptions={selectedSubLocations}
+                    placeHolder={strings.SELECT}
+                  />
+                </Grid>
+              )}
+              <Grid item xs={12} sx={marginTop}>
                 <DatePicker
                   id='addedDate'
                   label={strings.DATE_ADDED_REQUIRED}
