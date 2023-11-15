@@ -55,13 +55,15 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
         accession.remainingQuantity?.units === 'Seeds' &&
         accession.estimatedWeight?.units
       ) {
-        estimated =
+        estimated = Math.round(
           convertUnits(value, accession.estimatedWeight?.units, accession.subsetWeight.units) *
-          (accession.subsetCount / accession.subsetWeight.quantity);
+            (accession.subsetCount / accession.subsetWeight.quantity)
+        );
       } else if (accession.remainingQuantity?.units) {
-        estimated =
+        estimated = Math.round(
           convertUnits(value, accession.remainingQuantity?.units, accession.subsetWeight.units) *
-          (accession.subsetCount / accession.subsetWeight.quantity);
+            (accession.subsetCount / accession.subsetWeight.quantity)
+        );
       }
       setEstimatedWithdrawnCt(estimated);
     }
@@ -136,6 +138,7 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
     }
     if (
       accession.remainingQuantity?.units === withdrawnUnits &&
+      accession.remainingQuantity.units !== 'Seeds' &&
       accession.remainingQuantity?.quantity &&
       withdrawnQty > accession.remainingQuantity?.quantity
     ) {
