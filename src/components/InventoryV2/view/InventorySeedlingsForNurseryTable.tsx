@@ -1,29 +1,26 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme, Theme, Popover } from '@mui/material';
-import { Button, DropdownItem, TableColumnType, Tooltip } from '@terraware/web-components';
+import { makeStyles } from '@mui/styles';
+import { Button, TableColumnType, Tooltip } from '@terraware/web-components';
+import { TopBarButton } from '@terraware/web-components/components/table';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import { FieldNodePayload, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import BatchesCellRenderer from './BatchesCellRenderer';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import { InventoryFiltersType } from '../InventoryFiltersPopover';
-import DeleteBatchesModal from './DeleteBatchesModal';
-import { NurseryBatchService, NurseryInventoryService } from 'src/services';
+import { NurseryBatchService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
-import BatchDetailsModal from './BatchDetailsModal';
-import Search from '../Search';
 import { APP_PATHS } from 'src/constants';
-import { TopBarButton } from '@terraware/web-components/components/table';
 import { useLocalization, useOrganization } from 'src/providers';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
-import OptionsMenu from 'src/components/common/OptionsMenu';
-import BatchesExportModal from './BatchesExportModal';
-import { makeStyles } from '@mui/styles';
-import FilterGroup, { FilterField } from '../../common/FilterGroup';
-import { convertFilterGroupToMap, isBatchEmpty } from '../FilterUtils';
+import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+import { convertFilterGroupToMap, isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
+import Search from 'src/components/InventoryV2/Search';
+import DeleteBatchesModal from './DeleteBatchesModal';
+import BatchesCellRenderer from './BatchesCellRenderer';
 
 interface InventorySeedlingsForNurseryTableProps {
   nurseryId: number;
@@ -98,7 +95,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
       ? [
           {
             operation: 'field',
-            field: 'species_name',
+            field: 'species_commonName',
             type: 'Fuzzy',
             values: [debouncedSearchTerm],
           },
@@ -125,7 +122,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
       const searchResponse = await NurseryBatchService.getBatchesForNursery(
         selectedOrganization.id,
         nurseryId,
-        filters,
+        searchFields,
         searchSortOrder
       );
 
@@ -156,10 +153,6 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
   }, [openBatchNumber, batches]);
 
   useEffect(() => {
-    if (batches.length === 0) {
-      return;
-    }
-
     // Because the field group filters have their values
     // set as SearchNodePayload['values'] (which is (string | null[]), we gotta boolean-ify it
     // If there is no value set (initial form state), this defaults to false
@@ -270,7 +263,6 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
     [activeLocale]
   );
 
-  console.log('filters', filters);
   return (
     <>
       <Grid
@@ -343,7 +335,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
               searchValue={temporalSearchValue}
               onSearch={(val) => setTemporalSearchValue(val)}
               filters={filters}
-              setFilters={setFilters}
+              setFilters={(_filters) => setFilters({ ...filters, ..._filters })}
               origin={'Nursery'}
             />
 

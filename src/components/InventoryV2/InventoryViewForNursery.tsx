@@ -1,16 +1,16 @@
-import { useTheme, Grid, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
+import { useTheme, Grid, Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
-import { getNurseryName } from './FilterUtils';
-import { useParams } from 'react-router-dom';
-import { useOrganization } from '../../providers';
+import { useOrganization } from 'src/providers';
 import InventorySummaryForNursery from './view/InventorySummaryForNursery';
 import InventorySeedlingsForNurseryTable from './view/InventorySeedlingsForNurseryTable';
+import { getNurseryName } from './FilterUtils';
 
 export default function InventoryViewForNursery(): JSX.Element {
   const pathParams = useParams<{ nurseryId: string }>();
@@ -46,11 +46,7 @@ export default function InventoryViewForNursery(): JSX.Element {
       </PageHeaderWrapper>
       <Grid container ref={contentRef}>
         <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
-          <InventorySummaryForNursery
-            modified={modified}
-            organizationId={selectedOrganization.id}
-            nurseryId={nurseryId}
-          />
+          <InventorySummaryForNursery modified={modified} nurseryId={nurseryId} />
           <InventorySeedlingsForNurseryTable
             nurseryId={nurseryId}
             modified={modified}

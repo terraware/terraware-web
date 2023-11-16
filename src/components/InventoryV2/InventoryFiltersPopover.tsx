@@ -8,10 +8,10 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useOrganization } from 'src/providers/hooks';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import { Facility } from 'src/types/Facility';
-import { OriginPage } from './InventoryBatch';
 import { Species } from 'src/types/Species';
 import { useAppSelector } from 'src/redux/store';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { OriginPage } from './InventoryBatch';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];

@@ -25,9 +25,9 @@ const unknownToInt = (input: unknown): number => parseInt(`${input}`, 10);
 // This is necessary because the Batch type is not hydrated as expected when it comes back within a search response
 export const isBatchEmpty = (batch: SearchResponseElement): boolean => {
   return (
-    unknownToInt(batch.readyQuantity) +
-      unknownToInt(batch.notReadyQuantity) +
-      unknownToInt(batch.germinatingQuantity) ===
+    unknownToInt(batch['readyQuantity(raw)']) +
+      unknownToInt(batch['notReadyQuantity(raw)']) +
+      unknownToInt(batch['germinatingQuantity(raw)']) ===
     0
   );
 };

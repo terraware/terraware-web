@@ -3,38 +3,35 @@ import { Grid } from '@mui/material';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
-import OverviewItemCard from '../../common/OverviewItemCard';
-import { SearchResponseElement } from '../../../types/Search';
-import { Species } from 'src/types/Species';
-import NurseryInventoryService from '../../../services/NurseryInventoryService';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import NurseryFacilitiesService, {
+  NurserySummaryPayload,
+  NurserySummarySpecies,
+} from 'src/services/NurseryFacilitiesService';
 
 type InventorySummaryForNurseryProps = {
-  organizationId: number;
   nurseryId: number;
   modified: number;
 };
 
-export default function InventorySummaryForNursery({
-  organizationId,
-  nurseryId,
-}: InventorySummaryForNurseryProps): JSX.Element {
-  const [summary, setSummary] = useState<SearchResponseElement | null>();
+export default function InventorySummaryForNursery({ nurseryId }: InventorySummaryForNurseryProps): JSX.Element {
+  const [summary, setSummary] = useState<NurserySummaryPayload | undefined>();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const reloadData = async () => {
-      const results = await NurseryInventoryService.getSummaryForNursery(organizationId, nurseryId);
-      if (!results) {
+      const summaryResponse = await NurseryFacilitiesService.getNurserySummary(nurseryId);
+      if (!summaryResponse || !summaryResponse.requestSucceeded) {
         snackbar.toastError();
         return;
       }
 
-      setSummary(results[0]);
+      setSummary(summaryResponse);
     };
 
     void reloadData();
-  }, []);
+  }, [nurseryId, snackbar]);
 
   const getData = () => {
     if (!summary) {
@@ -43,13 +40,16 @@ export default function InventorySummaryForNursery({
 
     const gridColumns = isMobile ? 12 : 3;
 
-    const { germinatingQuantity, notReadyQuantity, readyQuantity, totalQuantity } = summary;
-
-    /// These are going to come from a new API coming soon
-    const germinationRate = 0;
-    const lossRate = 0;
-    const totalWithdrawn = 0;
-    const species: Species[] = [];
+    const {
+      germinatingQuantity,
+      notReadyQuantity,
+      readyQuantity,
+      totalQuantity,
+      germinationRate,
+      lossRate,
+      totalWithdrawn,
+      species,
+    } = summary;
 
     return [
       {
@@ -96,7 +96,7 @@ export default function InventorySummaryForNursery({
       },
       {
         label: strings.SPECIES,
-        value: species.map((s: Species) => s.commonName || s.scientificName).join(', '),
+        value: (species || []).map((s: NurserySummarySpecies) => s.scientificName).join(', '),
         tooltipTitle: '',
         gridColumns,
       },
