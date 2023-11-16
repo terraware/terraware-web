@@ -239,37 +239,11 @@ const searchInventory = async ({
   return await SearchService.search(params);
 };
 
-const getSummaryForNursery = (organizationId: number, nurseryId: number): Promise<SearchResponseElement[] | null> => {
-  return SearchService.search({
-    prefix: 'facilities.facilityInventoryTotals',
-    fields: NURSERY_SUMMARY_FIELDS,
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          type: 'Exact',
-          values: [organizationId],
-        },
-        {
-          operation: 'field',
-          field: 'facility_id',
-          type: 'Exact',
-          values: [nurseryId],
-        },
-      ],
-    },
-    count: 1,
-  });
-};
-
 /**
  * Exported functions
  */
 const NurseryInventoryService = {
   getSummary,
-  getSummaryForNursery,
   downloadInventoryTemplate,
   getInventoryUploadStatus,
   uploadInventory,

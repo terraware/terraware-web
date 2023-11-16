@@ -48,7 +48,7 @@ export const OPT_IN_FEATURES: Feature[] = [
     name: 'Nursery Updates',
     preferenceName: 'enableNurseryV2',
     active: true,
-    enabled: true,
+    enabled: false,
     allowInternalProduction: false,
     description: ['Updates to Nursery Feature.'],
     disclosure: ['This is WIP'],
