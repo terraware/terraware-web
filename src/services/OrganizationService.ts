@@ -2,7 +2,7 @@ import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import CachedUserService from './CachedUserService';
 import PreferencesService from './PreferencesService';
-import { OrganizationRoleInfo, Organization } from 'src/types/Organization';
+import { ManagedLocationType, OrganizationRoleInfo, Organization } from 'src/types/Organization';
 import { InitializedTimeZone } from 'src/types/TimeZones';
 import { isAdmin } from 'src/utils/organization';
 
@@ -103,14 +103,31 @@ const getOrganizationRoles = async (organizationId: number): Promise<Organizatio
 /**
  * create an organization
  */
-const createOrganization = async (organization: Omit<Organization, 'id'>): Promise<OrganizationResponse> => {
-  const { name, description, countryCode, countrySubdivisionCode, timeZone } = organization;
+const createOrganization = async (
+  organization: Omit<Organization, 'id'>,
+  managedLocationTypes?: ManagedLocationType[]
+): Promise<OrganizationResponse> => {
+  const {
+    name,
+    description,
+    countryCode,
+    countrySubdivisionCode,
+    organizationType,
+    organizationTypeDetails,
+    timeZone,
+    website,
+  } = organization;
+
   const request: CreateOrganizationRequestPayload = {
     name,
     description,
     countryCode,
     countrySubdivisionCode,
+    managedLocationTypes,
+    organizationType,
+    organizationTypeDetails,
     timeZone,
+    website,
   };
 
   const response: OrganizationResponse = await httpOrganizations.post({ entity: request });
@@ -127,13 +144,26 @@ const createOrganization = async (organization: Omit<Organization, 'id'>): Promi
  * update an organization
  */
 const updateOrganization = async (organization: Organization, options: UpdateOptions = {}): Promise<Response> => {
-  const { name, description, countryCode, countrySubdivisionCode, timeZone } = organization;
+  const {
+    name,
+    description,
+    countryCode,
+    countrySubdivisionCode,
+    organizationType,
+    organizationTypeDetails,
+    timeZone,
+    website,
+  } = organization;
+
   const request: UpdateOrganizationRequestPayload = {
     name,
     description,
     countryCode,
     countrySubdivisionCode,
+    organizationType,
+    organizationTypeDetails,
     timeZone,
+    website,
   };
 
   const response: Response = await httpOrganization.put({
