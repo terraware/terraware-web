@@ -24,8 +24,8 @@ const getNurserySummary = (nurseryId: number): Promise<Response & NurserySummary
 /**
  * Exported functions
  */
-const NurseryFacilityService = {
+const NurseryFacilitiesService = {
   getNurserySummary,
 };
 
-export default NurseryFacilityService;
+export default NurseryFacilitiesService;

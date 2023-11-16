@@ -22,6 +22,10 @@ export default function InventoryViewForNursery(): JSX.Element {
 
   const nurseryId = Number(pathParams.nurseryId);
 
+  // TODO in SW-4392
+  // tslint:disable-next-line:no-empty
+  const onUpdateOpenBatch = () => {};
+
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
@@ -52,7 +56,7 @@ export default function InventoryViewForNursery(): JSX.Element {
             modified={modified}
             setModified={setModified}
             // TODO in SW-4392
-            onUpdateOpenBatch={() => {}}
+            onUpdateOpenBatch={onUpdateOpenBatch}
             openBatchNumber={null}
             //////////////////
           />
