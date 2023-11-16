@@ -4,7 +4,18 @@ import { components } from 'src/api/types/generated-schema';
 
 export type ManagedLocationType = 'SeedBank' | 'Nursery' | 'PlantingSite';
 
+export const ManagedLocationTypes: ManagedLocationType[] = ['SeedBank', 'Nursery', 'PlantingSite'];
+
 export type OrganizationType = components['schemas']['OrganizationPayload']['organizationType'];
+
+export const OrganizationTypes: OrganizationType[] = [
+  'Government',
+  'NGO',
+  'Arboreta',
+  'Academia',
+  'ForProfit',
+  'Other',
+];
 
 export type Organization = {
   canSubmitReports?: boolean;
