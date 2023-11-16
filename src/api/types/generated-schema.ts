@@ -200,6 +200,10 @@ export interface paths {
      */
     put: operations["updateBatchQuantities"];
   };
+  "/api/v1/nursery/facilities/{facilityId}/summary": {
+    /** Gets a summary of the numbers of plants in a nursery. */
+    get: operations["getNurserySummary"];
+  };
   "/api/v1/nursery/species/{speciesId}/summary": {
     /** Gets a summary of the numbers of plants of each species in all nurseries. */
     get: operations["getSpeciesSummary"];
@@ -1839,6 +1843,10 @@ export interface components {
       notifications: components["schemas"]["NotificationPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetNurserySummaryResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      summary: components["schemas"]["NurserySummaryPayload"];
+    };
     GetNurseryV1: {
       /** Format: date */
       buildCompletedDate?: string;
@@ -2377,6 +2385,43 @@ export interface components {
       /** Format: int64 */
       organizationId?: number;
       title: string;
+    };
+    NurserySummaryPayload: {
+      /** Format: int64 */
+      germinatingQuantity: number;
+      /** Format: int32 */
+      germinationRate?: number;
+      /**
+       * Format: int32
+       * @description Percentage of current and past inventory that was withdrawn due to death.
+       */
+      lossRate?: number;
+      /** Format: int64 */
+      notReadyQuantity: number;
+      /** Format: int64 */
+      readyQuantity: number;
+      /** @description Species currently present in the nursery. */
+      species: components["schemas"]["NurserySummarySpeciesPayload"][];
+      /**
+       * Format: int64
+       * @description Total number of plants that have been withdrawn due to death.
+       */
+      totalDead: number;
+      /**
+       * Format: int64
+       * @description Total number of germinated plants currently in inventory.
+       */
+      totalQuantity: number;
+      /**
+       * Format: int64
+       * @description Total number of plants that have been withdrawn in the past.
+       */
+      totalWithdrawn: number;
+    };
+    NurserySummarySpeciesPayload: {
+      /** Format: int64 */
+      id: number;
+      scientificName: string;
     };
     NurseryWithdrawalPayload: {
       batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
@@ -4689,6 +4734,22 @@ export interface operations {
       412: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a summary of the numbers of plants in a nursery. */
+  getNurserySummary: {
+    parameters: {
+      path: {
+        facilityId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetNurserySummaryResponsePayload"];
         };
       };
     };
