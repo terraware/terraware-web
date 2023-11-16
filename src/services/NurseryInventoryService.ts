@@ -44,16 +44,6 @@ export const FACILITY_SPECIFIC_FIELDS = [
   'totalQuantity(raw)',
 ];
 
-const NURSERY_SUMMARY_FIELDS = [
-  'facility_id',
-  'facility_name',
-  'germinatingQuantity',
-  'notReadyQuantity',
-  'readyQuantity',
-  'totalQuantity',
-  'totalSpecies',
-];
-
 /**
  * exported types
  */
