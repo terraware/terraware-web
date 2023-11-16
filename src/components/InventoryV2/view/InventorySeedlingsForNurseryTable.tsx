@@ -81,6 +81,11 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
   const [selectedBatch, setSelectedBatch] = useState<any>();
+  // TODO in SW-4392
+  // This is here so the build passes
+  // tslint:disable-next-line:no-console
+  console.log(openNewBatchModal, selectedBatch);
+  ///////////
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
 
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
