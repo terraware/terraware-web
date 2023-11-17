@@ -97,7 +97,7 @@ export default function InventoryListByNursery() {
       const resultTyped = result as FacilityInventoryResult;
       const indexFound = acc.findIndex((savedResult) => savedResult.facility_id === resultTyped.facility_id);
 
-      if (indexFound !== undefined && indexFound !== -1) {
+      if (indexFound > -1) {
         const existingFacility = acc[indexFound];
         acc[indexFound] = {
           ...existingFacility,
