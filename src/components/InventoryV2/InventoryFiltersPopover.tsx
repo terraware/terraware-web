@@ -8,9 +8,14 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useOrganization } from 'src/providers/hooks';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import { Facility } from 'src/types/Facility';
+import { Species } from 'src/types/Species';
+import { useAppSelector } from 'src/redux/store';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { OriginPage } from './InventoryBatch';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
+  speciesIds?: number[];
   // Has to match up with SearchNodePayload['values']
   showEmptyBatches?: (string | null)[];
 };
@@ -54,15 +59,23 @@ const useStyles = makeStyles((theme: Theme) => ({
 type InventoryFiltersPopoverProps = {
   filters: InventoryFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
+  origin: OriginPage;
 };
 
-export default function InventoryFiltersPopover({ filters, setFilters }: InventoryFiltersPopoverProps): JSX.Element {
+export default function InventoryFiltersPopover(props: InventoryFiltersPopoverProps): JSX.Element {
+  const { filters, setFilters } = props;
+  const origin = props.origin || 'Species';
+
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
+
+  const species = useAppSelector(selectSpecies);
+
   const [nurseries, setNurseries] = useState<Facility[]>([]);
   const [options, setOptions] = useState<number[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -71,25 +84,45 @@ export default function InventoryFiltersPopover({ filters, setFilters }: Invento
   };
 
   useEffect(() => {
-    setNurseries(getAllNurseries(selectedOrganization));
-  }, [selectedOrganization]);
+    // This looks confusing, but it is intentional. On the nursery view you are filtering by species and vice versa
+    if (origin === 'Species') {
+      setNurseries(getAllNurseries(selectedOrganization));
+    }
+  }, [selectedOrganization, origin]);
 
   useEffect(() => {
-    setOptions(nurseries.map((n) => n.id));
+    setOptions(nurseries.map((n: Facility) => n.id));
   }, [nurseries]);
+
+  useEffect(() => {
+    setOptions((species || []).map((n: Species) => n.id));
+  }, [species]);
+
+  // Default origin is 'Species', which filters based on nurseries
+  let label = strings.NURSERY;
+  let initialSelection = filters.facilityIds ?? [];
+  let filterKey = 'facilityIds';
+  let renderOption = (id: number) => nurseries.find((n) => n.id === id)?.name ?? '';
+
+  if (origin === 'Nursery') {
+    label = strings.SPECIES;
+    initialSelection = filters.speciesIds ?? [];
+    filterKey = 'speciesIds';
+    renderOption = (id: number) => (species || []).find((n) => n.id === id)?.scientificName ?? '';
+  }
 
   const renderFilterMultiSelect = () => {
     return (
       <FilterMultiSelect
-        label={strings.NURSERIES}
-        initialSelection={filters.facilityIds ?? []}
+        label={label}
+        initialSelection={initialSelection}
         onCancel={handleClose}
         onConfirm={(selectedIds: number[]) => {
           handleClose();
-          setFilters({ facilityIds: selectedIds });
+          setFilters({ [filterKey]: selectedIds });
         }}
         options={options}
-        renderOption={(id: number) => nurseries.find((n) => n.id === id)?.name ?? ''}
+        renderOption={renderOption}
       />
     );
   };
@@ -97,7 +130,7 @@ export default function InventoryFiltersPopover({ filters, setFilters }: Invento
   return (
     <div>
       <div className={classes.dropdown} onClick={handleClick}>
-        <Typography>{strings.NURSERIES}</Typography>
+        <Typography>{label}</Typography>
         <Icon name={Boolean(anchorEl) ? 'chevronUp' : 'chevronDown'} className={classes.dropdownIconRight} />
       </div>
       {isMobile && Boolean(anchorEl) ? (

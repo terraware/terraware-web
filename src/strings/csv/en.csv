@@ -1263,6 +1263,7 @@ TOOLTIP_TIME_ZONE_ORGANIZATION,"We use time zones for notifications and to deter
 TOOLTIP_TIME_ZONE_PLANTING_SITE,We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to this specific planting site. All work done in this planting site will use this time zone.,
 TOOLTIP_TIME_ZONE_SEEDBANK,We use time zones for notifications and to determine the correct date for your region. Select the time zone that applies to this seed bank. All work done in this seed bank will use this time zone.,
 TOOLTIP_TOTAL_QUANTITY,Total quantity is the sum of the not ready and ready quantities.,
+TOOLTIP_TOTAL_WITHDRAWN,The total number of plants withdrawn for any purpose.,
 TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,A dish that contains a growth medium of solidified agar.,
 TOOLTIP_VIABILITY_TEST_CHEMICAL,Treating seeds with a plant growth hormone or other chemical to break physiological dormancy.,
 TOOLTIP_VIABILITY_TEST_FRESH,Seeds which were recently collected and have not been stored in the seed bank; recommended to establish a baseline of viability for a new accession.,

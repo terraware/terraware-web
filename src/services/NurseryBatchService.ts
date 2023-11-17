@@ -54,6 +54,22 @@ const EXPORT_BATCH_FIELDS = [
   'addedDate',
 ];
 
+const NURSERY_BATCHES_FIELDS = [
+  'addedDate',
+  'batchNumber',
+  'germinatingQuantity',
+  'germinatingQuantity(raw)',
+  'id',
+  'notReadyQuantity',
+  'notReadyQuantity(raw)',
+  'readyQuantity',
+  'readyQuantity(raw)',
+  'readyByDate',
+  'species_commonName',
+  'totalQuantity',
+  'totalQuantity(raw)',
+];
+
 export type BatchId = {
   batchId: number | null;
 };
@@ -168,7 +184,7 @@ const getBatchIdsForSpecies = async (
 };
 
 /**
- * Get batches for a single species by it's id
+ * Get batches for a single species by its id
  */
 const getBatchesForSpeciesById = async (
   organizationId: number,
@@ -393,6 +409,46 @@ const getBatchHistory = async (
   return response;
 };
 
+const getBatchesForNursery = (
+  organizationId: number,
+  nurseryId: number,
+  searchFields?: SearchNodePayload[],
+  searchSortOrder?: SearchSortOrder
+): Promise<SearchResponseElement[] | null> => {
+  const payload: SearchRequestPayload = {
+    prefix: 'batches',
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'facility_id',
+          values: [nurseryId],
+        },
+        {
+          operation: 'field',
+          field: 'species_organization_id',
+          values: [organizationId],
+        },
+      ],
+    },
+    fields: NURSERY_BATCHES_FIELDS,
+    sortOrder: [
+      searchSortOrder ?? {
+        field: 'batchNumber',
+      },
+    ],
+    // TODO figure out pagination / count / etc...
+    count: 1000,
+  };
+
+  if (searchFields) {
+    searchFields.forEach((searchField) => payload.search.children.push(searchField));
+  }
+
+  return SearchService.search(payload);
+};
+
 /**
  * Exported functions
  */
@@ -411,6 +467,7 @@ const NurseryBatchService = {
   deleteBatchPhotos,
   uploadBatchPhotos,
   getBatchHistory,
+  getBatchesForNursery,
 };
 
 export default NurseryBatchService;

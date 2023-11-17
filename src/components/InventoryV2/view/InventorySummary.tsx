@@ -75,7 +75,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
       {
         label: strings.TOTAL_WITHDRAWN,
         value: totalWithdrawn.toString(),
-        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+        tooltipTitle: strings.TOOLTIP_TOTAL_WITHDRAWN,
         gridColumns: isMobile ? 12 : 4,
       },
       {
