@@ -19,12 +19,14 @@ import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import NurseryInventoryService from 'src/services/NurseryInventoryService';
 import { useOrganization } from 'src/providers';
 import InventoryListBySpecies from 'src/components/InventoryV2/InventoryListBySpecies';
+import InventoryListByNursery from './InventoryListByNursery';
 
 export type FacilityName = {
   facility_name: string;
 };
 
 export type InventoryResult = {
+  facility_id: string;
   species_id: string;
   species_scientificName: string;
   species_commonName?: string;
@@ -39,7 +41,13 @@ export type InventoryResultWithFacilityNames = Omit<InventoryResult, 'facilityIn
   facilityInventories: string;
 };
 
+export type InventoryResultWithSpeciesNames = Omit<InventoryResult, 'facilityInventories'> & {
+  facility_name: string;
+  speciesNames: string;
+};
+
 export type FacilityInventoryResult = {
+  facility_id: string;
   facility_name: string;
   species_id: string;
   species_scientificName: string;
@@ -223,7 +231,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               {
                 id: 'batches_by_nursery',
                 label: strings.BY_NURSERY,
-                children: 'TODO: Inventory List by Nursery',
+                children: <InventoryListByNursery />,
               },
               {
                 id: 'batches_by_batch',

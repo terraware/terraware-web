@@ -20,41 +20,20 @@ interface InventoryTableProps {
   setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
   setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
   isPresorted: boolean;
+  columns: () => TableColumnType[];
 }
 
-const columns = (): TableColumnType[] => [
-  {
-    key: 'species_scientificName',
-    name: strings.SPECIES,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
-  },
-  {
-    key: 'species_commonName',
-    name: strings.COMMON_NAME,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_COMMON_NAME,
-  },
-  { key: 'facilityInventories', name: strings.NURSERIES, type: 'string' },
-  {
-    key: 'germinatingQuantity',
-    name: strings.GERMINATING,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-  },
-  {
-    key: 'notReadyQuantity',
-    name: strings.NOT_READY,
-    type: 'string',
-    tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-  },
-  { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
-  { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
-];
-
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
-  const { results, setTemporalSearchValue, temporalSearchValue, filters, setFilters, setSearchSortOrder, isPresorted } =
-    props;
+  const {
+    results,
+    setTemporalSearchValue,
+    temporalSearchValue,
+    filters,
+    setFilters,
+    setSearchSortOrder,
+    isPresorted,
+    columns,
+  } = props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
 
