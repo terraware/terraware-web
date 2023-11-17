@@ -54,7 +54,7 @@ export default function InventorySummaryForNursery({ nurseryId }: InventorySumma
     return [
       {
         label: strings.GERMINATING_QUANTITY,
-        value: germinatingQuantity,
+        value: germinatingQuantity || 0,
         tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
         gridColumns,
       },
@@ -78,20 +78,20 @@ export default function InventorySummaryForNursery({ nurseryId }: InventorySumma
       },
       {
         label: strings.GERMINATION_RATE,
-        value: germinationRate,
+        value: `${germinationRate || 0}%`,
         tooltipTitle: '',
         gridColumns,
       },
       {
         label: strings.LOSS_RATE,
-        value: `${lossRate}%`,
+        value: `${lossRate || 0}%`,
         tooltipTitle: '',
         gridColumns,
       },
       {
         label: strings.TOTAL_WITHDRAWN,
         value: totalWithdrawn,
-        tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+        tooltipTitle: strings.TOOLTIP_TOTAL_WITHDRAWN,
         gridColumns,
       },
       {
