@@ -230,6 +230,77 @@ const searchInventory = async ({
 };
 
 /**
+ * Search inventory by nursery
+ */
+const searchInventoryByNursery = async ({
+  organizationId,
+  searchSortOrder,
+  facilityIds,
+  query,
+}: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
+  const params: SearchRequestPayload = {
+    prefix: 'inventories.facilityInventories',
+    fields: [...FACILITY_SPECIFIC_FIELDS, 'facility_id'],
+    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'organization_id',
+          values: [organizationId],
+        },
+        {
+          operation: 'field',
+          field: 'facility_id',
+          values: facilityIds,
+        },
+      ],
+    },
+    count: 0,
+  };
+
+  const searchValueChildren: FieldNodePayload[] = [];
+
+  if (query) {
+    const scientificNameNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'species_scientificName',
+      type: 'Fuzzy',
+      values: [query],
+    };
+    searchValueChildren.push(scientificNameNode);
+
+    const commonNameNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'species_commonName',
+      type: 'Fuzzy',
+      values: [query],
+    };
+    searchValueChildren.push(commonNameNode);
+
+    const facilityNameNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'facility_name',
+      type: 'Fuzzy',
+      values: [query],
+    };
+    searchValueChildren.push(facilityNameNode);
+  }
+
+  if (searchValueChildren.length) {
+    const searchValueNodes: OrNodePayload = {
+      operation: 'or',
+      children: searchValueChildren,
+    };
+
+    params.search.children.push(searchValueNodes);
+  }
+
+  return await SearchService.search(params);
+};
+
+/**
  * Exported functions
  */
 const NurseryInventoryService = {
@@ -238,6 +309,7 @@ const NurseryInventoryService = {
   getInventoryUploadStatus,
   uploadInventory,
   searchInventory,
+  searchInventoryByNursery,
 };
 
 export default NurseryInventoryService;
