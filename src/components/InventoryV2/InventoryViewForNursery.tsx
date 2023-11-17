@@ -41,7 +41,7 @@ export default function InventoryViewForNursery(): JSX.Element {
               fontStyle: 'bold',
             }}
           >
-            Batches at {getNurseryName(nurseryId, selectedOrganization)}
+            {strings.formatString(strings.BATCHES_AT, getNurseryName(nurseryId, selectedOrganization))}
           </Typography>
           <Grid item xs={12}>
             <PageSnackbar />
