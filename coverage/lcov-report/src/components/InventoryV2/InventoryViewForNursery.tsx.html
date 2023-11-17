@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -118,7 +118,23 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,18 +148,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -173,32 +186,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useTheme, Grid, Typography } from '@mui/material';
-import { useRef, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useRef, useState } from 'react';
+import { useTheme, Grid, Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
-import { Species } from 'src/types/Species';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
+import { useOrganization } from 'src/providers';
+import InventorySummaryForNursery from './view/InventorySummaryForNursery';
+import InventorySeedlingsForNurseryTable from './view/InventorySeedlingsForNurseryTable';
+import { getNurseryName } from './FilterUtils';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >InventoryViewForNursery(</span>): JSX.Element {
-  const [inventorySpecies] = <span class="cstat-no" title="statement not covered" >useState&lt;Species&gt;();</span>
+  const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ nurseryId: string }&gt;();</span>
+  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
-  const getSpeciesLabel = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const { scientificName, commonName } = <span class="cstat-no" title="statement not covered" >inventorySpecies || {};</span>
+  const [modified, setModified] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(Date.now());</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!scientificName &amp;&amp; !commonName) {</span>
-<span class="cstat-no" title="statement not covered" >      return '';</span>
-    } else <span class="cstat-no" title="statement not covered" >if (!commonName) {</span>
-<span class="cstat-no" title="statement not covered" >      return scientificName;</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      return `${scientificName} (${commonName})`;</span>
-    }
-  };
+  const nurseryId = <span class="cstat-no" title="statement not covered" >Number(pathParams.nurseryId);</span>
+&nbsp;
+  // TODO in SW-4392
+  // tslint:disable-next-line:no-empty
+  const onUpdateOpenBatch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {};</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain&gt;
@@ -212,10 +237,10 @@ export default function <span class="fstat-no" title="function not covered" >Inv
               paddingLeft: theme.spacing(3),
               fontSize: '20px',
               fontWeight: 600,
-              fontStyle: 'italic',
+              fontStyle: 'bold',
             }}
           &gt;
-            {getSpeciesLabel()}
+            {strings.formatString(strings.BATCHES_AT, getNurseryName(nurseryId, selectedOrganization))}
           &lt;/Typography&gt;
           &lt;Grid item xs={12}&gt;
             &lt;PageSnackbar /&gt;
@@ -223,7 +248,18 @@ export default function <span class="fstat-no" title="function not covered" >Inv
         &lt;/Grid&gt;
       &lt;/PageHeaderWrapper&gt;
       &lt;Grid container ref={contentRef}&gt;
-        TODO: Inventory View by Nursery
+        &lt;Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}&gt;
+          &lt;InventorySummaryForNursery modified={modified} nurseryId={nurseryId} /&gt;
+          &lt;InventorySeedlingsForNurseryTable
+            nurseryId={nurseryId}
+            modified={modified}
+            setModified={setModified}
+            // TODO in SW-4392
+            onUpdateOpenBatch={onUpdateOpenBatch}
+            openBatchNumber={null}
+            //////////////////
+          /&gt;
+        &lt;/Grid&gt;
       &lt;/Grid&gt;
     &lt;/TfMain&gt;
   );
@@ -235,7 +271,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-17T20:20:47.960Z
+                at 2023-11-17T22:14:27.622Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
