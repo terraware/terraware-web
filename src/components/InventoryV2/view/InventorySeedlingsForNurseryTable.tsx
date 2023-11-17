@@ -32,7 +32,7 @@ interface InventorySeedlingsForNurseryTableProps {
 
 const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
-  { key: 'species_commonName', name: strings.SPECIES, type: 'string' },
+  { key: 'species_scientificName', name: strings.SPECIES, type: 'string' },
   { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
   { key: 'readyQuantity', name: strings.READY, type: 'string' },
   { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
@@ -100,7 +100,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
       ? [
           {
             operation: 'field',
-            field: 'species_commonName',
+            field: 'species_scientificName',
             type: 'Fuzzy',
             values: [debouncedSearchTerm],
           },

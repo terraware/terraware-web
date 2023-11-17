@@ -108,7 +108,7 @@ export default function InventoryFiltersPopover(props: InventoryFiltersPopoverPr
     label = strings.SPECIES;
     initialSelection = filters.speciesIds ?? [];
     filterKey = 'speciesIds';
-    renderOption = (id: number) => (species || []).find((n) => n.id === id)?.commonName ?? '';
+    renderOption = (id: number) => (species || []).find((n) => n.id === id)?.scientificName ?? '';
   }
 
   const renderFilterMultiSelect = () => {

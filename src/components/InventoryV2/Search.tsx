@@ -34,7 +34,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
   const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
 
   const getSpeciesName = useCallback(
-    (speciesId: number) => (species || []).find((s) => s.id === speciesId)?.commonName,
+    (speciesId: number) => (species || []).find((s) => s.id === speciesId)?.scientificName,
     [species]
   );
 
