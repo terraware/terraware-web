@@ -13,8 +13,8 @@ import {
   CollectedReceivedDate2,
   Collectors2,
   SeedBank2Selector,
-  Species2Dropdown,
 } from '../properties';
+import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import PageForm from 'src/components/common/PageForm';
 import { accessionCreateStates } from 'src/types/Accession';
@@ -153,7 +153,7 @@ export default function CreateAccession(): JSX.Element {
               </Typography>
             </Grid>
             <Grid item xs={12} sx={marginTop}>
-              <Species2Dropdown record={record} setRecord={setRecord} validate={validateFields} />
+              <SpeciesSelector record={record} setRecord={setRecord} validate={validateFields} />
             </Grid>
             <CollectedReceivedDate2
               onChange={onChange}

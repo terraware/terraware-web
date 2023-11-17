@@ -103,7 +103,6 @@ BACK_TO_TERRAWARE,Back to Terraware
 BAG_ID,Bag ID
 BAG_IDS,Bag IDs
 BATCH_NUMBER,Batch Number
-BATCH,Batch
 BATCHES,Batches
 BATCHES_AT,Batches at {0}
 BATCHES_COLUMN_TOOLTIP,Empty batches are not counted in this column.
@@ -355,7 +354,6 @@ FILL_OUT_ALL_FIELDS,Please fill out all required fields.
 FILLED_SEEDS,Filled Seeds
 FILTER,Filter
 FILTERS,Filters
-FILTER_SHOW_EMPTY_BATCHES,Show Empty Batches
 FINAL_QTY,Final Qty
 FINISH,Finish
 FIRST_ADD_PLANTING_SITE,"To view the dashboard, you first need to add a planting site."

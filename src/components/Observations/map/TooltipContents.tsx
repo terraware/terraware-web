@@ -6,7 +6,6 @@ import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
 import { ObservationState, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import { useOrganization } from 'src/providers';
-import isEnabled from 'src/features';
 import { isManagerOrHigher } from 'src/utils/organization';
 import ReplaceObservationPlotModal from 'src/components/Observations/replacePlot/ReplaceObservationPlotModal';
 import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
@@ -36,8 +35,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   const { selectedOrganization } = useOrganization();
   const [showReplacePlotModal, setShowReplacePlotModal] = useState<boolean>(false);
 
-  const replaceObservationPlotEnabled =
-    isEnabled('Replace Observation Plot') && isManagerOrHigher(selectedOrganization);
+  const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
 
   const observationInProgress = observationState === 'InProgress';
   const observationOverdue = observationState === 'Overdue';

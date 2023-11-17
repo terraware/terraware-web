@@ -5,7 +5,6 @@ import CollectedReceivedDate2 from './CollectedReceivedDate2';
 import CollectionSource from './CollectionSource';
 import Collectors2 from './Collectors2';
 import SeedBank2Selector from './SeedBank2Selector';
-import Species2Dropdown from './Species2Dropdown';
 import FacilitySelector from 'src/components/accession2/properties/FacilitySelector';
 import SubLocationSelector from 'src/components/accession2/properties/SubLocationSelector';
 
@@ -17,7 +16,6 @@ export {
   CollectionSource,
   Collectors2,
   SeedBank2Selector,
-  Species2Dropdown,
   FacilitySelector,
   SubLocationSelector,
 };

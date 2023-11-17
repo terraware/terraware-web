@@ -17,7 +17,6 @@ import Search, { SearchFiltersProps } from 'src/components/common/SearchFiltersW
 import DetailsPage from 'src/components/Observations/common/DetailsPage';
 import AggregatedPlantsStats from 'src/components/Observations/common/AggregatedPlantsStats';
 import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
-import isEnabled from 'src/features';
 import { isManagerOrHigher } from 'src/utils/organization';
 import ReplaceObservationPlotModal from 'src/components/Observations/replacePlot/ReplaceObservationPlotModal';
 
@@ -55,8 +54,7 @@ export default function ObservationPlantingZone(): JSX.Element {
   const [replaceObservationPlot, setReplaceObservationPlot] = useState<
     ObservationMonitoringPlotResultsPayload | undefined
   >();
-  const replaceObservationPlotEnabled =
-    isEnabled('Replace Observation Plot') && isManagerOrHigher(selectedOrganization);
+  const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
 
   const columns = useCallback((): TableColumnType[] => {
     if (!activeLocale) {

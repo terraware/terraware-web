@@ -10,6 +10,7 @@ import useForm from 'src/utils/useForm';
 import { makeStyles } from '@mui/styles';
 import { useOrganization } from 'src/providers';
 import Table from 'src/components/common/table';
+import isEnabled from 'src/features';
 
 type SelectBatchesWithdrawnQuantityProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
@@ -23,9 +24,12 @@ type BatchWithdrawalForTable = {
   batchId: number;
   batchNumber: string;
   notReadyQuantityWithdrawn: number;
+  germinatingQuantityWithdrawn: number;
   readyQuantityWithdrawn: number;
+  germinatingQuantity: number;
   notReadyQuantity: number;
   readyQuantity: number;
+  'germinatingQuantity(raw)': number;
   'notReadyQuantity(raw)': number;
   'readyQuantity(raw)': number;
   totalQuantity: number;
@@ -42,7 +46,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const tableColumns = (): TableColumnType[] => [
+const defaultTableColumns = (): TableColumnType[] => [
   {
     key: 'batchNumber',
     name: strings.SEEDLING_BATCH,
@@ -51,6 +55,11 @@ const tableColumns = (): TableColumnType[] => [
   {
     key: 'facilityName',
     name: strings.NURSERY,
+    type: 'string',
+  },
+  {
+    key: 'germinatingQuantityWithdrawn',
+    name: strings.GERMINATING_QUANTITY,
     type: 'string',
   },
   {
@@ -66,6 +75,16 @@ const tableColumns = (): TableColumnType[] => [
     type: 'string',
   },
 ];
+
+const tableColumns = (nurseryV2: boolean) => () => {
+  const columns = defaultTableColumns();
+
+  if (!nurseryV2) {
+    columns.splice(2, 1); // remove germinating quantity column
+  }
+
+  return columns;
+};
 
 const outplantTableColumns = (): TableColumnType[] => [
   {
@@ -96,6 +115,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   const [record, setRecord] = useForm<BatchWithdrawalForTable[]>([]);
   const [errorPageMessage, setErrorPageMessage] = useState('');
   const classes = useStyles();
+  const nurseryV2 = isEnabled('Nursery Updates');
 
   useEffect(() => {
     const transformBatchesForTable = () => {
@@ -105,10 +125,13 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         if (associatedBatch) {
           acc.push({
             batchId: bw.batchId,
+            germinatingQuantityWithdrawn: bw.germinatingQuantityWithdrawn ?? 0,
             notReadyQuantityWithdrawn: bw.notReadyQuantityWithdrawn,
             readyQuantityWithdrawn: bw.readyQuantityWithdrawn,
+            germinatingQuantity: associatedBatch.germinatingQuantity,
             notReadyQuantity: associatedBatch.notReadyQuantity,
             readyQuantity: associatedBatch.readyQuantity,
+            'germinatingQuantity(raw)': +associatedBatch['germinatingQuantity(raw)'],
             'notReadyQuantity(raw)': +associatedBatch['notReadyQuantity(raw)'],
             'readyQuantity(raw)': +associatedBatch['readyQuantity(raw)'],
             totalQuantity: associatedBatch.totalQuantity,
@@ -189,8 +212,28 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
     } else {
       let unsetValues = 0;
       newRecords = record.map((rec) => {
+        let germinatingQuantityWithdrawnError = '';
         let readyQuantityWithdrawnError = '';
         let notReadyQuantityWithdrawnError = '';
+
+        if (nurseryV2) {
+          if (rec.germinatingQuantityWithdrawn) {
+            if (isInvalidQuantity(rec.germinatingQuantityWithdrawn)) {
+              germinatingQuantityWithdrawnError = strings.INVALID_VALUE;
+              noErrors = false;
+            } else {
+              if (+rec.germinatingQuantityWithdrawn > +rec['germinatingQuantity(raw)']) {
+                germinatingQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
+                noErrors = false;
+              } else {
+                germinatingQuantityWithdrawnError = '';
+              }
+            }
+          } else {
+            unsetValues++;
+          }
+        }
+
         if (rec.readyQuantityWithdrawn) {
           if (isInvalidQuantity(rec.readyQuantityWithdrawn)) {
             readyQuantityWithdrawnError = strings.INVALID_VALUE;
@@ -206,6 +249,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         } else {
           unsetValues++;
         }
+
         if (rec.notReadyQuantityWithdrawn) {
           if (isInvalidQuantity(rec.notReadyQuantityWithdrawn)) {
             notReadyQuantityWithdrawnError = strings.INVALID_VALUE;
@@ -222,7 +266,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           unsetValues++;
         }
 
-        if (unsetValues === record.length * 2) {
+        if (unsetValues === record.length * (nurseryV2 ? 3 : 2)) {
           setErrorPageMessage(strings.WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR);
           noErrors = false;
         } else {
@@ -232,6 +276,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         return {
           ...rec,
           error: {
+            germinatingQuantityWithdrawn: germinatingQuantityWithdrawnError,
             readyQuantityWithdrawn: readyQuantityWithdrawnError,
             notReadyQuantityWithdrawn: notReadyQuantityWithdrawnError,
           },
@@ -251,6 +296,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       const newBatchWithdrawals = record.map((rec) => {
         return {
           batchId: rec.batchId,
+          germinatingQuantityWithdrawn: rec.germinatingQuantityWithdrawn,
           notReadyQuantityWithdrawn: rec.notReadyQuantityWithdrawn,
           readyQuantityWithdrawn: rec.readyQuantityWithdrawn,
         };
@@ -312,7 +358,9 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                     {record.length > 0 && (
                       <Table
                         id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}
-                        columns={nurseryWithdrawal.purpose === OUTPLANT ? outplantTableColumns : tableColumns}
+                        columns={
+                          nurseryWithdrawal.purpose === OUTPLANT ? outplantTableColumns : tableColumns(nurseryV2)
+                        }
                         rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
                         Renderer={WithdrawalBatchesCellRenderer}
                         orderBy={'batchId'}

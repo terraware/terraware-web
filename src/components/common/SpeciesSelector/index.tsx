@@ -2,14 +2,14 @@ import { Grid, Typography } from '@mui/material';
 import React, { useEffect, useState, useCallback } from 'react';
 import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
-import { Species } from 'src/types/Species';
 import { SelectT } from '@terraware/web-components';
 import useDebounce from 'src/utils/useDebounce';
 import { useOrganization } from 'src/providers/hooks';
-import { removeDiacritics } from 'src/utils/text';
 import { SpeciesService } from 'src/services';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { SuggestedSpecies } from 'src/types/Species';
 
-interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
+interface SpeciesSelectorProps<T extends AccessionPostRequestBody> {
   speciesId?: number;
   record: T;
   setRecord: React.Dispatch<React.SetStateAction<T>>;
@@ -18,52 +18,51 @@ interface SpeciesDropdownProps<T extends AccessionPostRequestBody> {
   tooltipTitle?: string;
 }
 
-export default function Species2Dropdown<T extends AccessionPostRequestBody>(
-  props: SpeciesDropdownProps<T>
+export default function SpeciesSelector<T extends AccessionPostRequestBody>(
+  props: SpeciesSelectorProps<T>
 ): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { speciesId, record, setRecord, disabled, validate, tooltipTitle } = props;
-  const [speciesList, setSpeciesList] = useState<Species[]>([]);
-  const [selectedValue, setSelectedValue] = useState<Species>();
+  const [speciesList, setSpeciesList] = useState<SuggestedSpecies[]>([]);
+  const [selectedValue, setSelectedValue] = useState<SuggestedSpecies>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
-  const populateSpecies = useCallback(async () => {
-    const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
-    if (response.requestSucceeded && response.species) {
-      const searchValue = debouncedSearchTerm ? removeDiacritics(debouncedSearchTerm).toLowerCase() : '';
-      const speciesToUse = searchValue
-        ? response.species.filter((species) => {
-            return (
-              species.scientificName.toLowerCase().includes(searchValue) ||
-              (species.commonName && removeDiacritics(species.commonName).toLowerCase().includes(searchValue))
-            );
-          })
-        : response.species;
-      setSpeciesList(speciesToUse.sort((a, b) => a.scientificName.localeCompare(b.scientificName)));
-    }
-  }, [selectedOrganization, debouncedSearchTerm]);
+  const populateSpecies = useCallback(
+    async (searchTerm: string) => {
+      const requestId = Math.random().toString();
+      setRequestId('speciesSelectorSearch', requestId);
+      const response: SuggestedSpecies[] | null = await SpeciesService.suggestSpecies(
+        selectedOrganization.id,
+        searchTerm
+      );
+      if (response && getRequestId('speciesSelectorSearch') === requestId) {
+        setSpeciesList(response.sort((a, b) => a.scientificName.localeCompare(b.scientificName)));
+      }
+    },
+    [selectedOrganization.id]
+  );
 
   useEffect(() => {
-    populateSpecies();
-  }, [selectedOrganization, populateSpecies]);
+    populateSpecies(debouncedSearchTerm);
+  }, [populateSpecies, debouncedSearchTerm]);
 
   useEffect(() => {
     if (speciesId && !selectedValue) {
-      const foundSpecies = speciesList.find((species) => species.id === speciesId);
+      const foundSpecies = speciesList.find((species) => species?.id?.toString() === speciesId.toString());
       if (foundSpecies) {
         setSelectedValue(foundSpecies);
       }
     }
   }, [speciesList, selectedValue, speciesId]);
 
-  const onChangeHandler = (value: Species) => {
+  const onChangeHandler = (value: SuggestedSpecies) => {
     setSelectedValue(value);
     if (value?.id) {
       setRecord((previousRecord: T): T => {
         return {
           ...previousRecord,
-          speciesId: value.id,
+          speciesId: Number(value.id),
         };
       });
     } else if (value.scientificName !== undefined) {
@@ -71,15 +70,15 @@ export default function Species2Dropdown<T extends AccessionPostRequestBody>(
     }
   };
 
-  const isEqual = (A: Species, B: Species) => {
+  const isEqual = (A: SuggestedSpecies, B: SuggestedSpecies) => {
     return A?.scientificName === B?.scientificName && A.id !== undefined && B.id !== undefined;
   };
 
   const toT = (option: string) => {
-    return { scientificName: option } as Species;
+    return { scientificName: option } as SuggestedSpecies;
   };
 
-  const renderOption = (option: Species) => {
+  const renderOption = (option: SuggestedSpecies) => {
     return (
       <div>
         <Typography component='p' sx={{ fontStyle: 'italic', display: 'inline-block' }}>
@@ -98,8 +97,8 @@ export default function Species2Dropdown<T extends AccessionPostRequestBody>(
   return (
     <>
       <Grid item xs={12}>
-        <SelectT<Species>
-          id='species'
+        <SelectT<SuggestedSpecies>
+          id='speciesSelector'
           label={strings.SPECIES_REQUIRED}
           disabled={disabled}
           placeholder={strings.SEARCH_OR_SELECT}
