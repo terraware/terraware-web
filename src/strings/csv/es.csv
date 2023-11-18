@@ -1263,6 +1263,7 @@ TOOLTIP_TIME_ZONE_ORGANIZATION,"Usamos zonas horarias para notificaciones y para
 TOOLTIP_TIME_ZONE_PLANTING_SITE,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este lugar de plantación específico. Todo el trabajo realizado en este lugar de plantación usará esta zona horaria.,
 TOOLTIP_TIME_ZONE_SEEDBANK,Usamos zonas horarias para notificaciones y para determinar la fecha correcta para su región. Seleccione la zona horaria que corresponda a este banco de semillas. Todo el trabajo realizado en este banco de semillas usará esta zona horaria.,
 TOOLTIP_TOTAL_QUANTITY,La cantidad total es la suma de las cantidades no listas y listas.,
+TOOLTIP_TOTAL_WITHDRAWN,El número total de plantas extraídas para cualquier fin.,
 TOOLTIP_VIABILITY_TEST_AGAR_PETRI_DISH,Plato que contiene un medio de cultivo de agar solidificado.,
 TOOLTIP_VIABILITY_TEST_CHEMICAL,Tratar las semillas con una hormona de crecimiento vegetal u otra sustancia química para romper la latencia fisiológica.,
 TOOLTIP_VIABILITY_TEST_FRESH,Semillas que fueron recolectadas recientemente y no han sido almacenadas en el banco de semillas. Se recomienda establecer una línea de base de viabilidad para una nueva accesión.,
