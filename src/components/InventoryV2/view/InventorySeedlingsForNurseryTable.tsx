@@ -21,6 +21,9 @@ import { convertFilterGroupToMap, isBatchEmpty } from 'src/components/InventoryV
 import Search from 'src/components/InventoryV2/Search';
 import DeleteBatchesModal from './DeleteBatchesModal';
 import BatchesCellRenderer from './BatchesCellRenderer';
+import BatchDetailsModalForNursery from './BatchDetailsModalForNursery';
+import { Batch } from '../../../types/Batch';
+import { NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
 
 interface InventorySeedlingsForNurseryTableProps {
   nurseryId: number;
@@ -80,12 +83,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
-  const [selectedBatch, setSelectedBatch] = useState<any>();
-  // TODO in SW-4392
-  // This is here so the build passes
-  // tslint:disable-next-line:no-console
-  console.log(openNewBatchModal, selectedBatch);
-  ///////////
+  const [selectedBatch, setSelectedBatch] = useState<NurseryBatchesSearchResponseElement>();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
 
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
@@ -136,6 +134,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
           ...sr,
           facilityId: sr.facility_id,
         }));
+        console.log('batchesResults', batchesResults);
         setBatches(batchesResults || []);
       }
     };
@@ -153,6 +152,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
     if (batch) {
       setSelectedBatch(batch);
+      console.log('open modal');
       setOpenNewBatchModal(true);
     }
   }, [openBatchNumber, batches]);
@@ -193,7 +193,8 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
     return;
   };
 
-  const onBatchSelected = (batch: any, fromColumn?: string) => {
+  const onBatchSelected = (batch: NurseryBatchesSearchResponseElement, fromColumn?: string) => {
+    console.log('select batch', batch);
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
       history.push({
@@ -281,18 +282,18 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
           padding: theme.spacing(3),
         }}
       >
-        {/* TODO in SW-4390 */}
-        {/*{openNewBatchModal && (*/}
-        {/*  <BatchDetailsModal*/}
-        {/*    reload={reloadData}*/}
-        {/*    onClose={() => {*/}
-        {/*      onUpdateOpenBatch(null);*/}
-        {/*      setOpenNewBatchModal(false);*/}
-        {/*    }}*/}
-        {/*    speciesId={speciesId}*/}
-        {/*    selectedBatch={selectedBatch}*/}
-        {/*  />*/}
-        {/*)}*/}
+        {openNewBatchModal && (
+          <BatchDetailsModalForNursery
+            reload={reloadData}
+            onClose={() => {
+              onUpdateOpenBatch(null);
+              console.log('close modal');
+              setOpenNewBatchModal(false);
+            }}
+            nurseryId={nurseryId}
+            selectedBatch={selectedBatch}
+          />
+        )}
         <DeleteBatchesModal
           open={openDeleteModal}
           onClose={() => setOpenDeleteModal(false)}

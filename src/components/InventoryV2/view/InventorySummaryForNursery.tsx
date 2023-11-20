@@ -14,10 +14,14 @@ type InventorySummaryForNurseryProps = {
   modified: number;
 };
 
-export default function InventorySummaryForNursery({ nurseryId }: InventorySummaryForNurseryProps): JSX.Element {
-  const [summary, setSummary] = useState<NurserySummaryPayload | undefined>();
+export default function InventorySummaryForNursery({
+  nurseryId,
+  modified,
+}: InventorySummaryForNurseryProps): JSX.Element {
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
+
+  const [summary, setSummary] = useState<NurserySummaryPayload | undefined>();
 
   useEffect(() => {
     const reloadData = async () => {
@@ -31,7 +35,7 @@ export default function InventorySummaryForNursery({ nurseryId }: InventorySumma
     };
 
     void reloadData();
-  }, [nurseryId, snackbar]);
+  }, [nurseryId, snackbar, modified]);
 
   const getData = () => {
     if (!summary) {
