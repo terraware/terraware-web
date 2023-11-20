@@ -134,7 +134,6 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
           ...sr,
           facilityId: sr.facility_id,
         }));
-        console.log('batchesResults', batchesResults);
         setBatches(batchesResults || []);
       }
     };
@@ -152,7 +151,6 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
     if (batch) {
       setSelectedBatch(batch);
-      console.log('open modal');
       setOpenNewBatchModal(true);
     }
   }, [openBatchNumber, batches]);
@@ -194,7 +192,6 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
   };
 
   const onBatchSelected = (batch: NurseryBatchesSearchResponseElement, fromColumn?: string) => {
-    console.log('select batch', batch);
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
       history.push({
@@ -287,7 +284,6 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
             reload={reloadData}
             onClose={() => {
               onUpdateOpenBatch(null);
-              console.log('close modal');
               setOpenNewBatchModal(false);
             }}
             nurseryId={nurseryId}
