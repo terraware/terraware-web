@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1700495634428" clover="3.2.0">
-  <project timestamp="1700495634428" name="All files">
-    <metrics statements="13842" coveredstatements="370" conditionals="8887" coveredconditionals="90" methods="4320" coveredmethods="78" elements="27049" coveredelements="538" complexity="0" loc="13842" ncloc="13842" packages="109" files="528" classes="528"/>
+<coverage generated="1700506281160" clover="3.2.0">
+  <project timestamp="1700506281160" name="All files">
+    <metrics statements="13846" coveredstatements="370" conditionals="8891" coveredconditionals="90" methods="4321" coveredmethods="78" elements="27058" coveredelements="538" complexity="0" loc="13846" ncloc="13846" packages="109" files="528" classes="528"/>
     <package name="src">
       <metrics statements="245" coveredstatements="0" conditionals="205" coveredconditionals="0" methods="69" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2362,7 +2362,7 @@
       </file>
     </package>
     <package name="src.components.InventoryV2">
-      <metrics statements="621" coveredstatements="0" conditionals="466" coveredconditionals="0" methods="195" coveredmethods="0"/>
+      <metrics statements="625" coveredstatements="0" conditionals="470" coveredconditionals="0" methods="196" coveredmethods="0"/>
       <file name="BatchDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchDetails.tsx">
         <metrics statements="23" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
@@ -2745,7 +2745,7 @@
         <line num="187" count="0" type="stmt"/>
       </file>
       <file name="InventoryCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/InventoryCellRenderer.tsx">
-        <metrics statements="15" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="19" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
@@ -2756,11 +2756,15 @@
         <line num="29" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
-        <line num="50" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
+        <line num="58" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
       </file>
       <file name="InventoryFiltersPopover.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/InventoryFiltersPopover.tsx">
         <metrics statements="35" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="15" coveredmethods="0"/>
