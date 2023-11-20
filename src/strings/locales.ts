@@ -11,7 +11,7 @@ export const supportedLocales: LocaleDetails[] = [
 
 const supportedLocaleIds = supportedLocales.map((locale: LocaleDetails) => locale.id);
 
-export type SupportedLocaleId = (typeof supportedLocaleIds)[number];
+export type SupportedLocaleId = typeof supportedLocaleIds[number];
 
 export const useSupportedLocales = (): LocaleDetails[] => {
   const { isProduction } = useEnvironment();

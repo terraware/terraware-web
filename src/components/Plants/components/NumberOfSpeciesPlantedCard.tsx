@@ -86,31 +86,29 @@ const SiteWithZonesCard = ({ plantingSiteId }: NumberOfSpeciesPlantedCardProps):
         [strings.ENDANGERED]: 0,
         [strings.OTHER]: 0,
       };
-      populationSelector?.forEach(
-        (zone) =>
-          zone.plantingSubzones?.forEach(
-            (subzone) =>
-              subzone.populations?.forEach((population) => {
-                if (speciesNames.includes(population.species_scientificName)) {
-                  return;
-                }
-                speciesNames.push(population.species_scientificName);
-                const species = speciesSelector?.find((s) => s.scientificName === population.species_scientificName);
-                if (species) {
-                  let endangered = false;
-                  let rare = false;
-                  if (species.conservationCategory === 'EN' || species.conservationCategory === 'CR') {
-                    endangered = true;
-                  }
-                  if (species.rare) {
-                    rare = true;
-                  }
-                  speciesByCategory[strings.RARE] += rare ? 1 : 0;
-                  speciesByCategory[strings.ENDANGERED] += endangered ? 1 : 0;
-                  speciesByCategory[strings.OTHER] += !(rare || endangered) ? 1 : 0;
-                }
-              })
-          )
+      populationSelector?.forEach((zone) =>
+        zone.plantingSubzones?.forEach((subzone) =>
+          subzone.populations?.forEach((population) => {
+            if (speciesNames.includes(population.species_scientificName)) {
+              return;
+            }
+            speciesNames.push(population.species_scientificName);
+            const species = speciesSelector?.find((s) => s.scientificName === population.species_scientificName);
+            if (species) {
+              let endangered = false;
+              let rare = false;
+              if (species.conservationCategory === 'EN' || species.conservationCategory === 'CR') {
+                endangered = true;
+              }
+              if (species.rare) {
+                rare = true;
+              }
+              speciesByCategory[strings.RARE] += rare ? 1 : 0;
+              speciesByCategory[strings.ENDANGERED] += endangered ? 1 : 0;
+              speciesByCategory[strings.OTHER] += !(rare || endangered) ? 1 : 0;
+            }
+          })
+        )
       );
       const speciesCount = speciesNames.length;
       setTotalSpecies(speciesCount);

@@ -144,7 +144,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     'readyQuantity',
     'addedDate',
   ] as const;
-  type MandatoryField = (typeof MANDATORY_FIELDS)[number];
+  type MandatoryField = typeof MANDATORY_FIELDS[number];
 
   const hasErrors = () => {
     if (record) {

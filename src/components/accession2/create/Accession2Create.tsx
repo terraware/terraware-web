@@ -34,7 +34,7 @@ const SubTitleStyle = {
 
 const MANDATORY_FIELDS = ['speciesId', 'collectedDate', 'receivedDate', 'state', 'facilityId'] as const;
 
-type MandatoryField = (typeof MANDATORY_FIELDS)[number];
+type MandatoryField = typeof MANDATORY_FIELDS[number];
 
 export default function CreateAccession(): JSX.Element {
   const { isMobile } = useDeviceInfo();
@@ -61,7 +61,7 @@ export default function CreateAccession(): JSX.Element {
     ({
       state: 'Awaiting Check-In',
       receivedDate: getTodaysDateFormatted(timeZone),
-    }) as AccessionPostRequestBody;
+    } as AccessionPostRequestBody);
 
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
 

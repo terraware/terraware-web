@@ -116,13 +116,10 @@ export default function OrgObservationsListView({
 
   const endDates = useMemo<Record<number, string>>(
     () =>
-      (observations ?? []).reduce(
-        (acc, observation) => {
-          acc[observation.id] = observation.endDate;
-          return acc;
-        },
-        {} as Record<number, string>
-      ),
+      (observations ?? []).reduce((acc, observation) => {
+        acc[observation.id] = observation.endDate;
+        return acc;
+      }, {} as Record<number, string>),
     [observations]
   );
 

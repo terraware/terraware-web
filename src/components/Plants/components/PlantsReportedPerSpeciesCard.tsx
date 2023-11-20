@@ -65,22 +65,20 @@ const SiteWithZonesCard = ({ plantingSiteId }: { plantingSiteId: number }): JSX.
   useEffect(() => {
     if (populationSelector) {
       const speciesQuantities: Record<string, number> = {};
-      populationSelector?.forEach(
-        (zone) =>
-          zone.plantingSubzones?.forEach(
-            (subzone) =>
-              subzone.populations?.forEach((population) => {
-                const numPlants = +population['totalPlants(raw)'];
-                if (isNaN(numPlants)) {
-                  return;
-                }
-                if (speciesQuantities[population.species_scientificName]) {
-                  speciesQuantities[population.species_scientificName] += numPlants;
-                } else {
-                  speciesQuantities[population.species_scientificName] = numPlants;
-                }
-              })
-          )
+      populationSelector?.forEach((zone) =>
+        zone.plantingSubzones?.forEach((subzone) =>
+          subzone.populations?.forEach((population) => {
+            const numPlants = +population['totalPlants(raw)'];
+            if (isNaN(numPlants)) {
+              return;
+            }
+            if (speciesQuantities[population.species_scientificName]) {
+              speciesQuantities[population.species_scientificName] += numPlants;
+            } else {
+              speciesQuantities[population.species_scientificName] = numPlants;
+            }
+          })
+        )
       );
       setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
       setValues(Object.values(speciesQuantities));

@@ -27,7 +27,7 @@ export interface Accession2EditModalProps {
 
 const MANDATORY_FIELDS = ['speciesId', 'collectedDate'] as const;
 
-type MandatoryField = (typeof MANDATORY_FIELDS)[number];
+type MandatoryField = typeof MANDATORY_FIELDS[number];
 
 export default function Accession2EditModal(props: Accession2EditModalProps): JSX.Element {
   const { onClose, open, accession, reload } = props;

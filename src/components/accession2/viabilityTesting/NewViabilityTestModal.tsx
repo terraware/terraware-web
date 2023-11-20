@@ -272,8 +272,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const CUT_MANDATORY_FIELDS = ['seedsFilled', 'seedsCompromised', 'seedsEmpty'] as const;
 
-  type MandatoryField = (typeof MANDATORY_FIELDS)[number];
-  type MandatoryCutField = (typeof CUT_MANDATORY_FIELDS)[number];
+  type MandatoryField = typeof MANDATORY_FIELDS[number];
+  type MandatoryCutField = typeof CUT_MANDATORY_FIELDS[number];
 
   const hasErrors = () => {
     if (record) {
@@ -569,7 +569,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
               renderOption={(option) => renderUser(option, user, contributor)}
               displayLabel={(option) => renderUser(option, user, contributor)}
               selectedValue={users?.find((userSel) => userSel.id === record?.withdrawnByUserId)}
-              toT={(firstName: string) => ({ firstName }) as OrganizationUser}
+              toT={(firstName: string) => ({ firstName } as OrganizationUser)}
               fullWidth={true}
               disabled={contributor || readOnly}
             />

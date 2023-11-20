@@ -164,14 +164,11 @@ export function orderedColumnNames(): string[] {
 }
 
 export function columnsIndexed(): Record<string, DatabaseColumn> {
-  return columns().reduce(
-    (acum, value) => {
-      acum[value.key] = value;
+  return columns().reduce((acum, value) => {
+    acum[value.key] = value;
 
-      return acum;
-    },
-    {} as Record<string, DatabaseColumn>
-  );
+    return acum;
+  }, {} as Record<string, DatabaseColumn>);
 }
 
 export interface Preset {

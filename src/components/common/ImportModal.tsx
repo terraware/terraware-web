@@ -401,7 +401,9 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
           <div className={classes.warningContent}>
             <p>{strings.formatString(duplicatedLabel, fileStatus?.details.warnings?.length)}</p>
             <ul>
-              {fileStatus?.details.warnings?.map((wr, index) => <li key={`duplicate-sp-${index}`}>{wr.value}</li>)}
+              {fileStatus?.details.warnings?.map((wr, index) => (
+                <li key={`duplicate-sp-${index}`}>{wr.value}</li>
+              ))}
             </ul>
           </div>
         )}
