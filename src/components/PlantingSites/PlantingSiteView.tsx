@@ -14,8 +14,6 @@ import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones'
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import Card from 'src/components/common/Card';
-import { getMonth } from 'src/utils/dateFormatter';
-import { useLocalization } from 'src/providers';
 import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -29,7 +27,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function PlantingSiteView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const { activeLocale } = useLocalization();
   const classes = useStyles();
   const theme = useTheme();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
@@ -95,24 +92,6 @@ export default function PlantingSiteView(): JSX.Element {
               type='text'
               value={tz.longName}
               tooltipTitle={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
-              display={true}
-            />
-          </Grid>
-          <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
-            <TextField
-              label={strings.PLANTING_SEASON_START}
-              id='planting-season-start'
-              type='text'
-              value={getMonth(plantingSite?.plantingSeasonStartMonth, activeLocale)}
-              display={true}
-            />
-          </Grid>
-          <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
-            <TextField
-              label={strings.PLANTING_SEASON_END}
-              id='planting-season-end'
-              type='text'
-              value={getMonth(plantingSite?.plantingSeasonEndMonth, activeLocale)}
               display={true}
             />
           </Grid>
