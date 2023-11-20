@@ -39,9 +39,17 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     );
   };
 
-  const createLinkToInventoryDetail = (iValue: React.ReactNode | unknown[]) => {
+  const createLinkToInventorySpeciesDetail = (iValue: React.ReactNode | unknown[]) => {
     return (
       <Link to={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', row.species_id.toString())}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
+  };
+
+  const createLinkToInventoryNurseryDetail = (iValue: React.ReactNode | unknown[]) => {
+    return (
+      <Link to={APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', row.facility_id.toString())}>
         {iValue as React.ReactNode}
       </Link>
     );
@@ -58,7 +66,19 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
       <CellRenderer
         index={index}
         column={column}
-        value={row.species_id ? createLinkToInventoryDetail(value) : strings.DELETED_SPECIES}
+        value={row.species_id ? createLinkToInventorySpeciesDetail(value) : strings.DELETED_SPECIES}
+        row={row}
+        className={classes.text}
+      />
+    );
+  }
+
+  if (column.key === 'facility_name') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={row.facility_id ? createLinkToInventoryNurseryDetail(value) : undefined}
         row={row}
         className={classes.text}
       />
