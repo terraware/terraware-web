@@ -20,8 +20,6 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import { PlantingSiteId } from 'src/services/TrackingService';
 import Card from 'src/components/common/Card';
-import { getMonth } from 'src/utils/dateFormatter';
-import { useLocalization } from 'src/providers';
 import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';
 import { makeStyles } from '@mui/styles';
 import { MultiPolygon } from 'geojson';
@@ -39,7 +37,6 @@ const useStyles = makeStyles(() => ({
 
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
@@ -207,28 +204,6 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                         tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
                       />
                     </Grid>
-                    {selectedPlantingSite && (
-                      <>
-                        <Grid item xs={gridSize()} marginTop={isMobile ? 1 : 0}>
-                          <TextField
-                            label={strings.PLANTING_SEASON_START}
-                            id='planting-season-start'
-                            type='text'
-                            value={getMonth(selectedPlantingSite?.plantingSeasonStartMonth, activeLocale)}
-                            display={true}
-                          />
-                        </Grid>
-                        <Grid item xs={gridSize()}>
-                          <TextField
-                            label={strings.PLANTING_SEASON_END}
-                            id='planting-season-end'
-                            type='text'
-                            value={getMonth(selectedPlantingSite?.plantingSeasonEndMonth, activeLocale)}
-                            display={true}
-                          />
-                        </Grid>
-                      </>
-                    )}
                   </Grid>
                   <Grid container flexGrow={1}>
                     <Grid item xs={12} display='flex'>
