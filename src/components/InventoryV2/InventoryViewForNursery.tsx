@@ -8,11 +8,11 @@ import { APP_PATHS } from 'src/constants';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers';
-import InventorySummaryForNursery from './view/InventorySummaryForNursery';
-import InventorySeedlingsForNurseryTable from './view/InventorySeedlingsForNurseryTable';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useQuery from 'src/utils/useQuery';
+import InventorySummaryForNursery from 'src/components/InventoryV2/view/InventorySummaryForNursery';
+import InventorySeedlingsForNurseryTable from 'src/components/InventoryV2/view/InventorySeedlingsForNurseryTable';
 import { getNurseryName } from './FilterUtils';
-import useStateLocation, { getLocation } from '../../utils/useStateLocation';
-import useQuery from '../../utils/useQuery';
 
 export default function InventoryViewForNursery(): JSX.Element {
   const query = useQuery();
