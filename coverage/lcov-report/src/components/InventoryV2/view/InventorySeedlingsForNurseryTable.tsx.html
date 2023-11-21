@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/115</span>
+                <span class='fraction'>0/116</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/106</span>
             </div>
         
             
@@ -469,11 +469,7 @@
 <a name='L404'></a><a href='#L404'>404</a>
 <a name='L405'></a><a href='#L405'>405</a>
 <a name='L406'></a><a href='#L406'>406</a>
-<a name='L407'></a><a href='#L407'>407</a>
-<a name='L408'></a><a href='#L408'>408</a>
-<a name='L409'></a><a href='#L409'>409</a>
-<a name='L410'></a><a href='#L410'>410</a>
-<a name='L411'></a><a href='#L411'>411</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L407'></a><a href='#L407'>407</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -505,6 +501,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -549,18 +547,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -744,8 +737,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -762,7 +753,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -904,8 +896,10 @@ import { SortOrder } from 'src/components/common/table/sort';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { convertFilterGroupToMap, isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
 import Search from 'src/components/InventoryV2/Search';
+import { NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
 import DeleteBatchesModal from './DeleteBatchesModal';
 import BatchesCellRenderer from './BatchesCellRenderer';
+import BatchDetailsModalForNursery from './BatchDetailsModalForNursery';
 &nbsp;
 interface InventorySeedlingsForNurseryTableProps {
   nurseryId: number;
@@ -965,12 +959,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;any[]&gt;([]);</span>
   const [openDeleteModal, setOpenDeleteModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [openNewBatchModal, setOpenNewBatchModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-  const [selectedBatch, setSelectedBatch] = <span class="cstat-no" title="statement not covered" >useState&lt;any&gt;();</span>
-  // TODO in SW-4392
-  // This is here so the build passes
-  // tslint:disable-next-line:no-console
-<span class="cstat-no" title="statement not covered" >  console.log(openNewBatchModal, selectedBatch);</span>
-  ///////////
+  const [selectedBatch, setSelectedBatch] = <span class="cstat-no" title="statement not covered" >useState&lt;NurseryBatchesSearchResponseElement&gt;();</span>
   const [searchSortOrder, setSearchSortOrder] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchSortOrder&gt;();</span>
 &nbsp;
   const [filters, setFilters] = <span class="cstat-no" title="statement not covered" >useForm&lt;InventoryFiltersType&gt;({});</span>
@@ -1078,7 +1067,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 <span class="cstat-no" title="statement not covered" >    return;</span>
   };
 &nbsp;
-  const onBatchSelected = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(b</span>atch: any, fromColumn?: string) =&gt; {</span>
+  const onBatchSelected = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(b</span>atch: NurseryBatchesSearchResponseElement, fromColumn?: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedBatch(batch);</span>
 <span class="cstat-no" title="statement not covered" >    if (fromColumn === 'withdraw') {</span>
 <span class="cstat-no" title="statement not covered" >      history.push({</span>
@@ -1166,18 +1155,17 @@ export default function <span class="fstat-no" title="function not covered" >Inv
           padding: theme.spacing(3),
         }}
       &gt;
-        {/* TODO in SW-4390 */}
-        {/*{openNewBatchModal &amp;&amp; (*/}
-        {/*  &lt;BatchDetailsModal*/}
-        {/*    reload={reloadData}*/}
-        {/*    onClose={() =&gt; {*/}
-        {/*      onUpdateOpenBatch(null);*/}
-        {/*      setOpenNewBatchModal(false);*/}
-        {/*    }}*/}
-        {/*    speciesId={speciesId}*/}
-        {/*    selectedBatch={selectedBatch}*/}
-        {/*  /&gt;*/}
-        {/*)}*/}
+        {openNewBatchModal &amp;&amp; (
+          &lt;BatchDetailsModalForNursery
+            reload={reloadData}
+            onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >              onUpdateOpenBatch(null);</span>
+<span class="cstat-no" title="statement not covered" >              setOpenNewBatchModal(false);</span>
+            }}
+            nurseryId={nurseryId}
+            selectedBatch={selectedBatch}
+          /&gt;
+        )}
         &lt;DeleteBatchesModal
           open={openDeleteModal}
           onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setOpenDeleteModal(false)}</span>
@@ -1300,7 +1288,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-21T18:51:06.879Z
+                at 2023-11-21T21:45:01.059Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

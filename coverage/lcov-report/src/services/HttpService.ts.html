@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95% </span>
+                <span class="strong">88.63% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>38/40</span>
+                <span class='fraction'>39/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.25% </span>
+                <span class="strong">52.94% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/16</span>
+                <span class='fraction'>9/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.66% </span>
+                <span class="strong">76.47% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>13/15</span>
+                <span class='fraction'>13/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.59% </span>
+                <span class="strong">87.8% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>35/37</span>
+                <span class='fraction'>36/41</span>
             </div>
         
             
@@ -236,7 +236,32 @@
 <a name='L171'></a><a href='#L171'>171</a>
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -351,6 +376,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -458,6 +492,14 @@ export type Response = {
   requestSucceeded: boolean;
 };
 &nbsp;
+export type Response2&lt;T&gt; = {
+  e?: Error;
+  error?: string;
+  data?: T;
+  statusCode?: number;
+  requestSucceeded: boolean;
+};
+&nbsp;
 /**
  * Utility to populate an error string from server response
  */
@@ -523,6 +565,15 @@ function RequestsHandler(url: string = '') {
     return await handleRequest(axios.post(replace(url, request), entity, { params, headers }), (data) =&gt; ({ data }));
   };
 &nbsp;
+  const post2 = <span class="fstat-no" title="function not covered" >as</span>ync &lt;T extends ServerData&gt;(request: PostRequest = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span>: Promise&lt;Response2&lt;T&gt;&gt; =&gt; {
+    const { entity, params, headers } = <span class="cstat-no" title="statement not covered" >request;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return await handleRequest&lt;T, { data: T | undefined }&gt;(</span>
+      axios.post&lt;T&gt;(replace(url, request), entity, { params, headers }),
+<span class="fstat-no" title="function not covered" >      (d</span>ata: T | undefined) =&gt; (<span class="cstat-no" title="statement not covered" >{ data })</span>
+    );
+  };
+&nbsp;
   const put = async (request: PutRequest = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span>: Promise&lt;Response&gt; =&gt; {
     const { entity, params, headers } = request;
 &nbsp;
@@ -537,7 +588,7 @@ function RequestsHandler(url: string = '') {
     }));
   };
 &nbsp;
-  return { get, post, put, delete: _delete };
+  return { get, post, post2, put, delete: _delete };
 }
 &nbsp;
 /**
@@ -589,7 +640,7 @@ export default HttpService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-21T18:51:06.879Z
+                at 2023-11-21T21:45:01.059Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

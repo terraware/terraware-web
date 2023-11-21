@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -130,7 +130,18 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -149,18 +160,25 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,7 +217,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useRef, useState } from 'react';
 import { useTheme, Grid, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -207,11 +225,16 @@ import { APP_PATHS } from 'src/constants';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers';
-import InventorySummaryForNursery from './view/InventorySummaryForNursery';
-import InventorySeedlingsForNurseryTable from './view/InventorySeedlingsForNurseryTable';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useQuery from 'src/utils/useQuery';
+import InventorySummaryForNursery from 'src/components/InventoryV2/view/InventorySummaryForNursery';
+import InventorySeedlingsForNurseryTable from 'src/components/InventoryV2/view/InventorySeedlingsForNurseryTable';
 import { getNurseryName } from './FilterUtils';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >InventoryViewForNursery(</span>): JSX.Element {
+  const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
+  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ nurseryId: string }&gt;();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
@@ -220,10 +243,16 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   const [modified, setModified] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(Date.now());</span>
 &nbsp;
   const nurseryId = <span class="cstat-no" title="statement not covered" >Number(pathParams.nurseryId);</span>
+  const openBatchNumber = <span class="cstat-no" title="statement not covered" >(query.get('batch') || '').toLowerCase();</span>
 &nbsp;
-  // TODO in SW-4392
-  // tslint:disable-next-line:no-empty
-  const onUpdateOpenBatch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {};</span>
+  const setBatchNumber = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(b</span>atchNum: string | null) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (batchNum === null) {</span>
+<span class="cstat-no" title="statement not covered" >      query.delete('batch');</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      query.set('batch', batchNum);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    history.replace(getLocation(location.pathname, location, query.toString()));</span>
+  };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain&gt;
@@ -254,10 +283,8 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             nurseryId={nurseryId}
             modified={modified}
             setModified={setModified}
-            // TODO in SW-4392
-            onUpdateOpenBatch={onUpdateOpenBatch}
-            openBatchNumber={null}
-            //////////////////
+            onUpdateOpenBatch={setBatchNumber}
+            openBatchNumber={openBatchNumber}
           /&gt;
         &lt;/Grid&gt;
       &lt;/Grid&gt;
@@ -271,7 +298,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-21T18:51:06.879Z
+                at 2023-11-21T21:45:01.059Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
