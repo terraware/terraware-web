@@ -7,6 +7,7 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import TextField from '../common/Textfield/Textfield';
 import Button from '../common/button/Button';
+import { organizationTypeLabel } from 'src/types/Organization';
 import { Country } from 'src/types/Country';
 import { LocationService, OrganizationUserService } from 'src/services';
 import { OrganizationUser } from 'src/types/User';
@@ -132,7 +133,7 @@ export default function OrganizationView(): JSX.Element {
         <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
           <TextField label={strings.DATE_ADDED} id='dateAdded' type='text' value={getDateAdded()} display={true} />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
           <TextField
             label={strings.COUNTRY}
             id='country'
@@ -150,7 +151,7 @@ export default function OrganizationView(): JSX.Element {
             <TextField label={strings.STATE} id='state' type='text' value={organizationState()} display={true} />
           </Grid>
         )}
-        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
           <TextField
             label={strings.NUMBER_OF_PEOPLE}
             id='numberOfPeople'
@@ -159,7 +160,7 @@ export default function OrganizationView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
           <TextField
             label={strings.TIME_ZONE}
             id='timeZone'
@@ -167,6 +168,35 @@ export default function OrganizationView(): JSX.Element {
             value={currentTimeZone || utcTimeZone.longName}
             display={true}
             tooltipTitle={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
+          />
+        </Grid>
+        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+          <TextField
+            label={strings.ORGANIZATION_TYPE}
+            id='org-type'
+            type='text'
+            value={organizationTypeLabel(selectedOrganization.organizationType)}
+            display={true}
+          />
+        </Grid>
+        {selectedOrganization.organizationType === 'Other' && (
+          <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+            <TextField
+              label={strings.ORGANIZATION_TYPE_DESCRIPTION}
+              id='org-type-description'
+              type='text'
+              value={selectedOrganization.organizationTypeDetails}
+              display={true}
+            />
+          </Grid>
+        )}
+        <Grid item xs={gridSize()}>
+          <TextField
+            label={strings.ORGANIZATION_WEBSITE}
+            id='org-website'
+            type='text'
+            value={selectedOrganization.website}
+            display={true}
           />
         </Grid>
       </Grid>
