@@ -215,10 +215,8 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     const onWindowBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
 
-      // This message does not seem to make it to the alert
-      event.returnValue = window.confirm(
-        'There is a request in flight, are you sure you want to navigate away from this page?'
-      );
+      // This message does not seem to always make it to the alert
+      event.returnValue = window.confirm(strings.CONFIRM_IN_FLIGHT_REQUEST);
     };
 
     if (multiStepRequestInFlight) {
@@ -440,27 +438,25 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 </Grid>
 
                 <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
-                  <MultiSelect
+                  <MultiSelect<number, string>
                     fullWidth={true}
                     label={strings.SUB_LOCATION}
-                    onAdd={(subLocationId: string) => {
+                    onAdd={(subLocationId: number) => {
                       setRecord((previousValue) => ({
                         ...previousValue,
                         subLocationIds: [...(previousValue?.subLocationIds || []), Number(subLocationId)],
                       }));
                     }}
-                    onRemove={(subLocationId: string) => {
+                    onRemove={(subLocationId: number) => {
                       setRecord((previousValue) => ({
                         ...previousValue,
                         subLocationIds:
-                          previousValue?.subLocationIds?.filter((id: number) => `${id}` !== subLocationId) || [],
+                          previousValue?.subLocationIds?.filter((id: number) => id !== subLocationId) || [],
                       }));
                     }}
-                    options={
-                      new Map(availableSubLocations.map((subLocation) => [`${subLocation.id}`, subLocation.name]))
-                    }
+                    options={new Map(availableSubLocations.map((subLocation) => [subLocation.id, subLocation.name]))}
                     valueRenderer={(val: string) => val}
-                    selectedOptions={(record.subLocationIds || []).map((id: number) => `${id}`)}
+                    selectedOptions={record.subLocationIds || []}
                     placeHolder={strings.SELECT}
                   />
                 </Grid>
