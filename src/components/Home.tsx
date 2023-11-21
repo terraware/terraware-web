@@ -75,6 +75,7 @@ export default function Home(): JSX.Element {
             <>
               <Grid item xs={primaryGridSize()}>
                 <PageCard
+                  id='peopleHomeCard'
                   name={strings.PEOPLE}
                   icon='person'
                   description={strings.PEOPLE_CARD_DESCRIPTION}
@@ -85,6 +86,7 @@ export default function Home(): JSX.Element {
               </Grid>
               <Grid item xs={primaryGridSize()}>
                 <PageCard
+                  id='seedbankHomeCard'
                   name={strings.SEED_BANKS}
                   icon='seedbankNav'
                   description={strings.SEED_BANKS_CARD_DESCRIPTION}
@@ -97,6 +99,7 @@ export default function Home(): JSX.Element {
           )}
           <Grid item xs={secondaryGridSize()}>
             <PageCard
+              id='speciesHomeCard'
               name={strings.SPECIES}
               icon='species'
               description={strings.SPECIES_CARD_DESCRIPTION}
@@ -107,6 +110,7 @@ export default function Home(): JSX.Element {
           </Grid>
           <Grid item xs={secondaryGridSize()}>
             <PageCard
+              id='accessionsHomeCard'
               name={strings.ACCESSIONS}
               icon='seeds'
               description={strings.ACCESSIONS_CARD_DESCRIPTION}
@@ -117,6 +121,7 @@ export default function Home(): JSX.Element {
           </Grid>
           <Grid item xs={secondaryGridSize()}>
             <PageCard
+              id='monitoringHomeCard'
               name={strings.MONITORING}
               icon='monitoringNav'
               description={strings.MONITORING_CARD_DESCRIPTION}
