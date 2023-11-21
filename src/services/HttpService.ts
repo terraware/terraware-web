@@ -47,6 +47,14 @@ export type Response = {
   requestSucceeded: boolean;
 };
 
+export type Response2<T> = {
+  e?: Error;
+  error?: string;
+  data?: T;
+  statusCode?: number;
+  requestSucceeded: boolean;
+};
+
 /**
  * Utility to populate an error string from server response
  */
@@ -112,6 +120,15 @@ function RequestsHandler(url: string = '') {
     return await handleRequest(axios.post(replace(url, request), entity, { params, headers }), (data) => ({ data }));
   };
 
+  const post2 = async <T extends ServerData>(request: PostRequest = {}): Promise<Response2<T>> => {
+    const { entity, params, headers } = request;
+
+    return await handleRequest<T, { data: T | undefined }>(
+      axios.post<T>(replace(url, request), entity, { params, headers }),
+      (data: T | undefined) => ({ data })
+    );
+  };
+
   const put = async (request: PutRequest = {}): Promise<Response> => {
     const { entity, params, headers } = request;
 
@@ -126,7 +143,7 @@ function RequestsHandler(url: string = '') {
     }));
   };
 
-  return { get, post, put, delete: _delete };
+  return { get, post, post2, put, delete: _delete };
 }
 
 /**

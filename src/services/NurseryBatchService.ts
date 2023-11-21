@@ -55,20 +55,54 @@ const EXPORT_BATCH_FIELDS = [
 ];
 
 const NURSERY_BATCHES_FIELDS = [
+  'accession_id',
+  'accession_accessionNumber',
   'addedDate',
   'batchNumber',
+  'facility_id',
   'germinatingQuantity',
   'germinatingQuantity(raw)',
   'id',
+  'notes',
   'notReadyQuantity',
   'notReadyQuantity(raw)',
   'readyQuantity',
   'readyQuantity(raw)',
   'readyByDate',
+  'species_id',
+  'species_scientificName',
   'species_commonName',
+  'subLocations.subLocation_id',
+  'subLocations.subLocation_name',
   'totalQuantity',
   'totalQuantity(raw)',
+  'version',
 ];
+
+export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
+  accession_id?: string;
+  accession_accessionNumber?: string;
+  addedDate: string;
+  batchNumber: string;
+  facility_id: string;
+  germinatingQuantity: string;
+  'germinatingQuantity(raw)': string;
+  id: string;
+  notes: string;
+  notReadyQuantity: string;
+  'notReadyQuantity(raw)': string;
+  readyQuantity: string;
+  'readyQuantity(raw)': string;
+  readyByDate: string;
+  species_id: string;
+  species_scientificName: string;
+  species_commonName: string;
+  subLocations?: { subLocation_id: string; subLocation_name: string }[];
+  totalQuantity: string;
+  'totalQuantity(raw)': string;
+  totalWithdrawn: string;
+  version: string;
+};
 
 export type BatchId = {
   batchId: number | null;
@@ -262,6 +296,7 @@ export const updateBatch = async (batch: Batch): Promise<Response & BatchData> =
     notes: batch.notes,
     readyByDate: batch.readyByDate,
     version: batch.version,
+    subLocationIds: batch.subLocationIds,
     substrate: batch.substrate,
     substrateNotes: batch.substrateNotes,
     treatment: batch.treatment,

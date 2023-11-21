@@ -1,8 +1,8 @@
 import React from 'react';
 import { Organization } from 'src/types/Organization';
 import { getAllNurseries } from 'src/utils/organization';
+import { SearchNodePayload, SearchResponseElement } from 'src/types/Search';
 import { InventoryFiltersType } from './InventoryFiltersPopover';
-import { SearchNodePayload, SearchResponseElement } from '../../types/Search';
 
 export const getNurseryName = (facilityId: number, organization: Organization) => {
   const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
@@ -21,13 +21,12 @@ export const removeFilter = (id: number, setFilters: React.Dispatch<React.SetSta
   });
 };
 
-const unknownToInt = (input: unknown): number => parseInt(`${input}`, 10);
 // This is necessary because the Batch type is not hydrated as expected when it comes back within a search response
 export const isBatchEmpty = (batch: SearchResponseElement): boolean => {
   return (
-    unknownToInt(batch['readyQuantity(raw)']) +
-      unknownToInt(batch['notReadyQuantity(raw)']) +
-      unknownToInt(batch['germinatingQuantity(raw)']) ===
+    Number(batch['readyQuantity(raw)']) +
+      Number(batch['notReadyQuantity(raw)']) +
+      Number(batch['germinatingQuantity(raw)']) ===
     0
   );
 };

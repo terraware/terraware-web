@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useTheme, Grid, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -8,11 +8,16 @@ import { APP_PATHS } from 'src/constants';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers';
-import InventorySummaryForNursery from './view/InventorySummaryForNursery';
-import InventorySeedlingsForNurseryTable from './view/InventorySeedlingsForNurseryTable';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useQuery from 'src/utils/useQuery';
+import InventorySummaryForNursery from 'src/components/InventoryV2/view/InventorySummaryForNursery';
+import InventorySeedlingsForNurseryTable from 'src/components/InventoryV2/view/InventorySeedlingsForNurseryTable';
 import { getNurseryName } from './FilterUtils';
 
 export default function InventoryViewForNursery(): JSX.Element {
+  const query = useQuery();
+  const history = useHistory();
+  const location = useStateLocation();
   const pathParams = useParams<{ nurseryId: string }>();
   const { selectedOrganization } = useOrganization();
   const contentRef = useRef(null);
@@ -21,10 +26,16 @@ export default function InventoryViewForNursery(): JSX.Element {
   const [modified, setModified] = useState<number>(Date.now());
 
   const nurseryId = Number(pathParams.nurseryId);
+  const openBatchNumber = (query.get('batch') || '').toLowerCase();
 
-  // TODO in SW-4392
-  // tslint:disable-next-line:no-empty
-  const onUpdateOpenBatch = () => {};
+  const setBatchNumber = (batchNum: string | null) => {
+    if (batchNum === null) {
+      query.delete('batch');
+    } else {
+      query.set('batch', batchNum);
+    }
+    history.replace(getLocation(location.pathname, location, query.toString()));
+  };
 
   return (
     <TfMain>
@@ -55,10 +66,8 @@ export default function InventoryViewForNursery(): JSX.Element {
             nurseryId={nurseryId}
             modified={modified}
             setModified={setModified}
-            // TODO in SW-4392
-            onUpdateOpenBatch={onUpdateOpenBatch}
-            openBatchNumber={null}
-            //////////////////
+            onUpdateOpenBatch={setBatchNumber}
+            openBatchNumber={openBatchNumber}
           />
         </Grid>
       </Grid>
