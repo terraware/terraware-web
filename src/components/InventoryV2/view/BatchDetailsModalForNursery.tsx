@@ -81,6 +81,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [addedDateChanged, setAddedDateChanged] = useState(false);
   const [validateFields, setValidateFields] = useState<boolean>(false);
+  const [multiStepRequestInFlight, setMultiStepRequestInFlight] = useState<boolean>(false);
 
   const facility = FacilityService.getFacility({
     organization: selectedOrganization,
@@ -192,9 +193,9 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       addedDate: getTodaysDateFormatted(),
       facilityId: nurseryId,
       speciesId: undefined,
-      germinatingQuantity: undefined,
-      notReadyQuantity: undefined,
-      readyQuantity: undefined,
+      germinatingQuantity: 0,
+      notReadyQuantity: 0,
+      readyQuantity: 0,
     };
     const initBatch = () =>
       selectedBatch
@@ -209,6 +210,25 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
     setRecord(initBatch());
   }, [selectedBatch, nurseryId, setRecord, selectedOrganization]);
+
+  useEffect(() => {
+    const onWindowBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+
+      if (multiStepRequestInFlight) {
+        // This message does not seem to make it to the alert
+        event.returnValue = window.confirm(
+          'There is a request in flight, are you sure you want to navigate away from this page?'
+        );
+      } else {
+        event.returnValue = true;
+      }
+    };
+
+    window.addEventListener('beforeunload', onWindowBeforeUnload);
+
+    return () => window.removeEventListener('beforeunload', onWindowBeforeUnload);
+  }, [multiStepRequestInFlight]);
 
   const MANDATORY_FIELDS = [
     'facilityId',
@@ -237,15 +257,17 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       let responseQuantities: Partial<Response> = { requestSucceeded: true, error: undefined };
 
       if (record.id === -1) {
-        if (record.accessionId && isBatch(record)) {
+        if (record.accessionId) {
+          setMultiStepRequestInFlight(true);
+
           const nurseryTransferRecord: NurseryTransfer = {
             date: getTodaysDateFormatted(timeZone),
-            destinationFacilityId: record.facilityId,
-            germinatingQuantity: record.germinatingQuantity,
-            notReadyQuantity: record.notReadyQuantity,
+            destinationFacilityId: Number(record.facilityId),
+            germinatingQuantity: Number(record.germinatingQuantity),
+            notReadyQuantity: Number(record.notReadyQuantity),
             notes: record.notes,
             readyByDate: record.readyByDate,
-            readyQuantity: record.readyQuantity,
+            readyQuantity: Number(record.readyQuantity),
           };
           const accessionResponse = await AccessionService.transferToNursery(nurseryTransferRecord, record.accessionId);
           if (!accessionResponse.requestSucceeded || !accessionResponse.data) {
@@ -257,13 +279,15 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           record.version = accessionResponse.data.batch.version;
 
           // This is where the sub locations are associated to the batch created through the nursery transfer
-          response = await NurseryBatchService.updateBatch(record);
+          response = await NurseryBatchService.updateBatch(record as Batch);
           if (response.batch) {
             responseQuantities = await NurseryBatchService.updateBatchQuantities({
-              ...record,
+              ...(record as Batch),
               version: response.batch.version,
             });
           }
+
+          setMultiStepRequestInFlight(false);
         } else {
           response = await NurseryBatchService.createBatch(record as CreateBatchRequestPayload);
         }
