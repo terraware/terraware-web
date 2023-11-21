@@ -769,6 +769,8 @@ ORGANIZATION_DATA_NOT_AVAILABLE,Organization Data Not Available,
 ORGANIZATION_DESC,Manage your organization.,
 ORGANIZATION_NAME,Organization Name,
 ORGANIZATION_NAME_REQUIRED,Organization Name *,
+ORGANIZATION_TYPE_DESCRIPTION,Organization Description
+ORGANIZATION_TYPE,Organization Type
 ORGANIZATION_TYPE_GOVERNMENT,Governmental Agency
 ORGANIZATION_TYPE_NGO,Non-Governmental Organizations(NGO)
 ORGANIZATION_TYPE_ARBORETA,Botanical Gardens or Arboreta
