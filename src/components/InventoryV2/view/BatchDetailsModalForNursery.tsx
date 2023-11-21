@@ -246,8 +246,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             notes: record.notes,
             readyByDate: record.readyByDate,
             readyQuantity: record.readyQuantity,
-            // TODO figure out if I need this or if is auto populated by auth
-            // withdrawnByUserId: 0
           };
           const accessionResponse = await AccessionService.transferToNursery(nurseryTransferRecord, record.accessionId);
           if (!accessionResponse.requestSucceeded || !accessionResponse.data) {
