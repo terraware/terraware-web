@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Divider, Grid, Typography, useTheme } from '@mui/material';
-import { Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
+import { Button, DialogBox, Dropdown, MultiSelect, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import DatePicker from 'src/components/common/DatePicker';
@@ -215,17 +215,15 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     const onWindowBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
 
-      if (multiStepRequestInFlight) {
-        // This message does not seem to make it to the alert
-        event.returnValue = window.confirm(
-          'There is a request in flight, are you sure you want to navigate away from this page?'
-        );
-      } else {
-        event.returnValue = true;
-      }
+      // This message does not seem to make it to the alert
+      event.returnValue = window.confirm(
+        'There is a request in flight, are you sure you want to navigate away from this page?'
+      );
     };
 
-    window.addEventListener('beforeunload', onWindowBeforeUnload);
+    if (multiStepRequestInFlight) {
+      window.addEventListener('beforeunload', onWindowBeforeUnload);
+    }
 
     return () => window.removeEventListener('beforeunload', onWindowBeforeUnload);
   }, [multiStepRequestInFlight]);
@@ -442,21 +440,28 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 </Grid>
 
                 <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
-                  <Dropdown
-                    id='subLocationIds'
+                  <MultiSelect
+                    fullWidth={true}
                     label={strings.SUB_LOCATION}
-                    selectedValue={record.subLocationIds ? record.subLocationIds[0] : record.subLocationIds}
-                    options={availableSubLocations.map((subLocation) => ({
-                      label: subLocation.name,
-                      value: subLocation.id,
-                    }))}
-                    onChange={(subLocationId: string) =>
+                    onAdd={(subLocationId: string) => {
                       setRecord((previousValue) => ({
                         ...previousValue,
-                        subLocationIds: [Number(subLocationId)],
-                      }))
+                        subLocationIds: [...(previousValue?.subLocationIds || []), Number(subLocationId)],
+                      }));
+                    }}
+                    onRemove={(subLocationId: string) => {
+                      setRecord((previousValue) => ({
+                        ...previousValue,
+                        subLocationIds:
+                          previousValue?.subLocationIds?.filter((id: number) => `${id}` !== subLocationId) || [],
+                      }));
+                    }}
+                    options={
+                      new Map(availableSubLocations.map((subLocation) => [`${subLocation.id}`, subLocation.name]))
                     }
-                    fullWidth
+                    valueRenderer={(val: string) => val}
+                    selectedOptions={(record.subLocationIds || []).map((id: number) => `${id}`)}
+                    placeHolder={strings.SELECT}
                   />
                 </Grid>
               </>
