@@ -19,11 +19,10 @@ import { SortOrder } from 'src/components/common/table/sort';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { convertFilterGroupToMap, isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
 import Search from 'src/components/InventoryV2/Search';
+import { NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
 import DeleteBatchesModal from './DeleteBatchesModal';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import BatchDetailsModalForNursery from './BatchDetailsModalForNursery';
-import { Batch } from '../../../types/Batch';
-import { NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
 
 interface InventorySeedlingsForNurseryTableProps {
   nurseryId: number;
