@@ -23,7 +23,7 @@ import { useUser } from 'src/providers';
 export interface BatchDetailsModalProps {
   onClose: () => void;
   reload: () => void;
-  selectedBatch: Batch & { [key: string]: string | number | undefined | string[] | number[] };
+  selectedBatch: any;
   speciesId: number;
 }
 
@@ -83,7 +83,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   }, [tz.id, timeZone]);
 
   useEffect(() => {
-    setRecord((previousRecord: Batch): Batch => {
+    setRecord((previousRecord: CreateBatchRequestPayload): CreateBatchRequestPayload => {
       return {
         ...previousRecord,
         addedDate: addedDateChanged ? previousRecord.addedDate : getTodaysDateFormatted(timeZone),
@@ -92,14 +92,14 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   }, [timeZone, setRecord, addedDateChanged]);
 
   useEffect(() => {
-    const newBatch: Partial<CreateBatchRequestPayload> = {
+    const newBatch: CreateBatchRequestPayload = {
       addedDate: getTodaysDateFormatted(),
       facilityId: undefined,
       speciesId,
       germinatingQuantity: undefined,
       notReadyQuantity: undefined,
       readyQuantity: undefined,
-    };
+    } as unknown as CreateBatchRequestPayload;
     const initBatch = () => {
       if (selectedBatch) {
         const batchData: any = Object.keys(selectedBatch).reduce((data, key) => {
