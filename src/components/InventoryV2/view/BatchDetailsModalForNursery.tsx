@@ -251,7 +251,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           };
           const accessionResponse = await AccessionService.transferToNursery(nurseryTransferRecord, record.accessionId);
           if (!accessionResponse.requestSucceeded || !accessionResponse.data) {
-            snackbar.toastError(accessionResponse.error || strings.GENERIC_ERROR);
+            snackbar.toastError(strings.GENERIC_ERROR);
             return;
           }
 
@@ -283,7 +283,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         reload();
         onCloseHandler();
       } else {
-        snackbar.toastError((response && response.error) || responseQuantities.error || strings.GENERIC_ERROR);
+        snackbar.toastError(strings.GENERIC_ERROR);
       }
     }
   };
