@@ -289,7 +289,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         <Grid item xs={12}>
           <TextField
             type='text'
-            label={strings.CREATE_ORGANIZATION_QUESTION_WEBSITE}
+            label={strings.ORGANIZATION_WEBSITE}
             id='create-org-question-website'
             display={false}
             onChange={(value) => onChange('website', value)}
