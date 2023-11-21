@@ -547,6 +547,9 @@ LOG_OUT,Log Out,
 LONG_TERM_PERMANENT,Long-Term/Permanent,
 LOSS_RATE,Loss Rate,
 LOWEST,Lowest,
+MANAGED_LOCATION_TYPE_SEED_BANK,Seed Bank/Seed Collection
+MANAGED_LOCATION_TYPE_NURSERY,Nursery
+MANAGED_LOCATION_TYPE_PLANTING_SITE,Planting Site
 MANAGER,Manager,
 MANAGER_INFO,"A manager can do the above as well as edit data entries for seeds and manage outplant withdrawals, planting sites and species.",
 MAP,Map,
@@ -763,6 +766,12 @@ ORGANIZATION_DATA_NOT_AVAILABLE,Organization Data Not Available,
 ORGANIZATION_DESC,Manage your organization.,
 ORGANIZATION_NAME,Organization Name,
 ORGANIZATION_NAME_REQUIRED,Organization Name *,
+ORGANIZATION_TYPE_GOVERNMENT,Governmental Agency
+ORGANIZATION_TYPE_NGO,Non-Governmental Organizations(NGO)
+ORGANIZATION_TYPE_ARBORETA,Botanical Gardens or Arboreta
+ORGANIZATION_TYPE_ACADEMIA,University or Other Academic Institution
+ORGANIZATION_TYPE_FOR_PROFIT,For-Profit Organization
+ORGANIZATION_TYPE_OTHER,Other
 ORGANIZATIONS,Organizations,
 ORIGINAL_QTY,Original Qty,
 ORIGINAL_SUBZONE,Original Subzone,

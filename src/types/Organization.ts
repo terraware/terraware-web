@@ -1,18 +1,37 @@
 import { Facility } from './Facility';
 import strings from 'src/strings';
+import { components } from 'src/api/types/generated-schema';
+
+export type ManagedLocationType = 'SeedBank' | 'Nursery' | 'PlantingSite';
+
+export const ManagedLocationTypes: ManagedLocationType[] = ['SeedBank', 'Nursery', 'PlantingSite'];
+
+export type OrganizationType = components['schemas']['OrganizationPayload']['organizationType'];
+
+export const OrganizationTypes: OrganizationType[] = [
+  'Government',
+  'NGO',
+  'Arboreta',
+  'Academia',
+  'ForProfit',
+  'Other',
+];
 
 export type Organization = {
-  id: number;
-  name: string;
-  role: OrganizationRole;
-  facilities?: Facility[];
+  canSubmitReports?: boolean;
   countryCode?: string;
   countrySubdivisionCode?: string;
-  description?: string;
   createdTime?: string;
+  description?: string;
+  facilities?: Facility[];
+  id: number;
+  name: string;
+  organizationType?: OrganizationType;
+  organizationTypeDetails?: string;
+  role: OrganizationRole;
   totalUsers: number;
   timeZone?: string;
-  canSubmitReports?: boolean;
+  website?: string;
 };
 
 export type HighOrganizationRoles = 'Admin' | 'Owner' | 'Terraformation Contact';
@@ -42,3 +61,31 @@ export type OrganizationRoleInfo = {
   role: OrganizationRole;
   totalUsers: number;
 };
+
+export function managedLocationTypeLabel(managedLocationType: ManagedLocationType) {
+  switch (managedLocationType) {
+    case 'SeedBank':
+      return strings.MANAGED_LOCATION_TYPE_SEED_BANK;
+    case 'Nursery':
+      return strings.MANAGED_LOCATION_TYPE_NURSERY;
+    case 'PlantingSite':
+      return strings.MANAGED_LOCATION_TYPE_PLANTING_SITE;
+  }
+}
+
+export function organizationTypeLabel(organizationType: OrganizationType) {
+  switch (organizationType) {
+    case 'Government':
+      return strings.ORGANIZATION_TYPE_GOVERNMENT;
+    case 'NGO':
+      return strings.ORGANIZATION_TYPE_NGO;
+    case 'Arboreta':
+      return strings.ORGANIZATION_TYPE_ARBORETA;
+    case 'Academia':
+      return strings.ORGANIZATION_TYPE_ACADEMIA;
+    case 'ForProfit':
+      return strings.ORGANIZATION_TYPE_FOR_PROFIT;
+    case 'Other':
+      return strings.ORGANIZATION_TYPE_OTHER;
+  }
+}

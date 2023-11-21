@@ -1459,12 +1459,19 @@ export interface components {
        */
       countrySubdivisionCode?: string;
       description?: string;
+      managedLocationTypes?: ("SeedBank" | "Nursery" | "PlantingSite")[];
       name: string;
+      /** @enum {string} */
+      organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
+      /** @description Non-empty additional description of organization when type is Other. */
+      organizationTypeDetails?: string;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
        */
       timeZone?: string;
+      /** @description Website of organization, no restrictions on format. */
+      website?: string;
     };
     CreateOrganizationUserResponsePayload: {
       /**
@@ -2665,6 +2672,9 @@ export interface components {
        * @description The current user's role in the organization.
        * @enum {string}
        */
+      organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
+      organizationTypeDetails?: string;
+      /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
       /**
        * @description Time zone name in IANA tz database format
@@ -2676,6 +2686,7 @@ export interface components {
        * @description The total number of users in the organization, including the current user.
        */
       totalUsers: number;
+      website?: string;
     };
     OrganizationRolePayload: {
       /** @enum {string} */
@@ -3490,11 +3501,16 @@ export interface components {
       countrySubdivisionCode?: string;
       description?: string;
       name: string;
+      /** @enum {string} */
+      organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
+      /** @description Non-empty additional description of organization when type is Other. */
+      organizationTypeDetails?: string;
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
        */
       timeZone?: string;
+      website?: string;
     };
     UpdateOrganizationUserRequestPayload: {
       /** @enum {string} */
