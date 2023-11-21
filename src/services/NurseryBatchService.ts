@@ -2,7 +2,13 @@ import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { Batch, BatchHistoryItem, CreateBatchRequestPayload } from 'src/types/Batch';
 import SearchService from './SearchService';
-import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import {
+  FieldNodePayload,
+  SearchNodePayload,
+  SearchRequestPayload,
+  SearchResponseElement,
+  SearchSortOrder,
+} from 'src/types/Search';
 import { getPromisesResponse } from './utils';
 import PhotoService from './PhotoService';
 import { User } from 'src/types/User';
@@ -154,6 +160,85 @@ const getBatches = async (organizationId: number, batchIds: number[]): Promise<S
   });
 
   return searchResponse;
+};
+
+/**
+ * Get all batches
+ */
+const getAllBatches = async (
+  organizationId: number,
+  searchSortOrder?: SearchSortOrder,
+  facilityIds?: number[],
+  query?: string
+): Promise<SearchResponseElement[] | null> => {
+  const params: SearchRequestPayload = {
+    prefix: 'batches',
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'facility_organization_id',
+          type: 'Exact',
+          values: [organizationId.toString()],
+        },
+      ],
+    },
+    fields: [...DEFAULT_BATCH_FIELDS, 'species_id', 'species_scientificName', 'species_commonName'],
+    sortOrder: [
+      searchSortOrder ?? {
+        field: 'batchNumber',
+      },
+    ],
+    count: 1000,
+  };
+
+  if (facilityIds && facilityIds.length > 0) {
+    params.search.children.push({
+      operation: 'field',
+      field: 'facility_id',
+      type: 'Exact',
+      values: facilityIds.map((id) => id.toString()),
+    } as SearchNodePayload);
+  }
+
+  if (query) {
+    const searchValueChildren: FieldNodePayload[] = [];
+    searchValueChildren.push({
+      operation: 'field',
+      field: 'batchNumber',
+      type: 'Fuzzy',
+      values: [query],
+    });
+
+    searchValueChildren.push({
+      operation: 'field',
+      field: 'species_scientificName',
+      type: 'Fuzzy',
+      values: [query],
+    });
+
+    searchValueChildren.push({
+      operation: 'field',
+      field: 'species_commonName',
+      type: 'Fuzzy',
+      values: [query],
+    });
+
+    searchValueChildren.push({
+      operation: 'field',
+      field: 'facility_name',
+      type: 'Fuzzy',
+      values: [query],
+    });
+
+    params.search.children.push({
+      operation: 'or',
+      children: searchValueChildren,
+    } as SearchNodePayload);
+  }
+
+  return await SearchService.search(params);
 };
 
 /**
@@ -457,6 +542,7 @@ const NurseryBatchService = {
   createBatch,
   getBatch,
   getBatches,
+  getAllBatches,
   getBatchIdsForSpecies,
   getBatchesForSpeciesById,
   deleteBatch,

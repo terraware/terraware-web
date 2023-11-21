@@ -1,0 +1,160 @@
+import InventoryTable from 'src/components/InventoryV2/InventoryTable';
+import { Box, CircularProgress, Container, Theme, useTheme } from '@mui/material';
+import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
+import { useOrganization, useUser } from 'src/providers';
+import { useNumberFormatter } from 'src/utils/useNumber';
+import useDebounce from 'src/utils/useDebounce';
+import useForm from 'src/utils/useForm';
+import { InventoryFiltersType } from 'src/components/Inventory/InventoryFiltersPopover';
+import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/components/InventoryV2';
+import { makeStyles } from '@mui/styles';
+import strings from 'src/strings';
+import { TableColumnType } from '@terraware/web-components';
+import { NurseryBatchService } from 'src/services';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    padding: '32px 0',
+  },
+  spinnerContainer: {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+  },
+}));
+
+const columns = (): TableColumnType[] => [
+  { key: 'batchNumber', name: strings.BATCH_NUMBER, type: 'string', tooltipTitle: strings.TOOLTIP_BATCH_NUMBER },
+  {
+    key: 'species_scientificName_noLink',
+    name: strings.SPECIES,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
+  },
+  {
+    key: 'species_commonName',
+    name: strings.COMMON_NAME,
+    type: 'string',
+  },
+  {
+    key: 'facility_name_noLink',
+    name: strings.NURSERY,
+    type: 'string',
+  },
+  {
+    key: 'germinatingQuantity',
+    name: strings.GERMINATING,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+  },
+  {
+    key: 'notReadyQuantity',
+    name: strings.NOT_READY,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+  },
+  { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
+  { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
+];
+
+export default function InventoryListByBatch() {
+  const theme = useTheme();
+  const classes = useStyles();
+  const { selectedOrganization } = useOrganization();
+  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
+  const [unfilteredInventory, setUnfilteredInventory] = useState<SearchResponseElement[] | null>(null);
+  const [temporalSearchValue, setTemporalSearchValue] = useState('');
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
+    field: 'batchNumber',
+    direction: 'Ascending',
+  });
+  const [filters, setFilters] = useForm<InventoryFiltersType>({});
+
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
+
+  const onSearchSortOrder = (order: SearchSortOrder) => {
+    const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
+    setSearchSortOrder(isClientSorted ? undefined : order);
+  };
+
+  const onApplyFilters = useCallback(async () => {
+    const requestId = Math.random().toString();
+    setRequestId('searchInventory', requestId);
+    const apiSearchResults = await NurseryBatchService.getAllBatches(
+      selectedOrganization.id,
+      searchSortOrder,
+      filters.facilityIds,
+      debouncedSearchTerm
+    );
+
+    let updatedResult: InventoryResultWithBatchNumber[] | undefined = [];
+
+    // format results
+    updatedResult = apiSearchResults?.map((uR) => {
+      const resultTyped = uR as BatchInventoryResult;
+      return {
+        ...resultTyped,
+        batchId: resultTyped.id,
+        species_scientificName_noLink: resultTyped.species_scientificName,
+        facility_name_noLink: resultTyped.facility_name,
+        germinatingQuantity: numericFormatter.format(resultTyped['germinatingQuantity(raw)']),
+        notReadyQuantity: numericFormatter.format(resultTyped['notReadyQuantity(raw)']),
+        readyQuantity: numericFormatter.format(resultTyped['readyQuantity(raw)']),
+        totalQuantity: numericFormatter.format(resultTyped['totalQuantity(raw)']),
+      } as InventoryResultWithBatchNumber;
+    });
+
+    if (updatedResult) {
+      if (!debouncedSearchTerm && !filters.facilityIds?.length) {
+        setUnfilteredInventory(updatedResult);
+      }
+      if (getRequestId('searchInventory') === requestId) {
+        setSearchResults(updatedResult);
+      }
+    }
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter]);
+
+  useEffect(() => {
+    onApplyFilters();
+  }, [filters, onApplyFilters]);
+
+  return (
+    <Box
+      sx={{
+        backgroundColor: theme.palette.TwClrBg,
+        borderRadius: '32px',
+        padding: theme.spacing(3),
+        minWidth: 'fit-content',
+      }}
+    >
+      {unfilteredInventory && unfilteredInventory.length > 0 ? (
+        <InventoryTable
+          results={searchResults || []}
+          temporalSearchValue={temporalSearchValue}
+          setTemporalSearchValue={setTemporalSearchValue}
+          filters={filters}
+          setFilters={setFilters}
+          setSearchSortOrder={onSearchSortOrder}
+          isPresorted={!!searchSortOrder}
+          columns={columns}
+        />
+      ) : unfilteredInventory === null ? (
+        <div className={classes.spinnerContainer}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <Container maxWidth={false} className={classes.mainContainer}>
+          <EmptyStatePage backgroundImageVisible={false} pageName={'Inventory'} reloadData={onApplyFilters} />
+        </Container>
+      )}
+    </Box>
+  );
+}
