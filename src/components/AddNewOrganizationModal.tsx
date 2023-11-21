@@ -274,7 +274,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               required
               className={classes.otherDetails}
               type='text'
-              label={strings.CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE_DETAILS}
+              label={strings.DESCRIBE_ORGANIZATION_TYPE_DETAILS}
               id='create-org-question-website'
               display={false}
               onChange={(value) => {
