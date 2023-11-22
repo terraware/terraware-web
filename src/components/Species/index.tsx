@@ -41,6 +41,7 @@ import _ from 'lodash';
 import useQuery from 'src/utils/useQuery';
 import { useHistory } from 'react-router';
 import { APP_PATHS } from 'src/constants';
+import { SpeciesSearchResultRow } from './types';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -107,17 +108,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
 }));
-
-type SpeciesSearchResultRow = Omit<
-  Species,
-  'growthForm' | 'seedStorageBehavior' | 'ecosystemTypes' | 'conservationCategory' | 'rare'
-> & {
-  conservationCategory?: string;
-  growthForm?: string;
-  rare?: string;
-  seedStorageBehavior?: string;
-  ecosystemTypes?: string[];
-};
 
 const BE_SORTED_FIELDS = [
   'scientificName',
@@ -557,12 +547,10 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     setSearchValue(value as string);
   };
 
-  const deleteSelectedSpecies = async () => {
-    if (selectedSpeciesRows.length > 0) {
-      await Promise.all(
-        selectedSpeciesRows.map(async (iSelectedSpecies) => {
-          await SpeciesService.deleteSpecies(iSelectedSpecies.id, selectedOrganization.id);
-        })
+  const deleteSelectedSpecies = async (speciesIds: number[]) => {
+    if (speciesIds.length > 0) {
+      await Promise.allSettled(
+        speciesIds.map((id: number) => SpeciesService.deleteSpecies(id, selectedOrganization.id))
       );
       setDeleteSpeciesModalOpen(false);
       reloadData();
@@ -735,7 +723,8 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
       <DeleteSpeciesModal
         open={deleteSpeciesModalOpen}
         onClose={() => setDeleteSpeciesModalOpen(false)}
-        onSubmit={deleteSelectedSpecies}
+        onSubmit={(toDelete: number[]) => deleteSelectedSpecies(toDelete)}
+        speciesToDelete={selectedSpeciesRows}
       />
       {editSpeciesModalOpen && (
         <AddSpeciesModal
@@ -865,7 +854,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
                     selectedSpeciesRows.length === 1
                       ? [
                           {
-                            buttonType: 'passive',
+                            buttonType: 'destructive',
                             ...(!isMobile && { buttonText: strings.DELETE }),
                             onButtonClick: OnDeleteSpecies,
                             icon: 'iconTrashCan',
@@ -879,7 +868,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
                         ]
                       : [
                           {
-                            buttonType: 'passive',
+                            buttonType: 'destructive',
                             ...(!isMobile && { buttonText: strings.DELETE }),
                             onButtonClick: OnDeleteSpecies,
                             icon: 'iconTrashCan',

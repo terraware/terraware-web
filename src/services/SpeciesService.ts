@@ -330,6 +330,49 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
   return (await SearchService.search(params)) as SuggestedSpecies[] | null;
 };
 
+// find species that are used in the org
+const getInUseSpecies = async (organizationId: number): Promise<number[]> => {
+  type WithSpeciesId = { species_id: string };
+  type AccessionFacility = { accessions: WithSpeciesId[] };
+  type PlantingSitePopulation = { populations: WithSpeciesId[] };
+
+  const params: SearchRequestPayload = {
+    prefix: '',
+    fields: ['facilities.accessions.species_id', 'batches.species_id', 'plantingSites.populations.species_id'],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'id',
+          type: 'Exact',
+          values: [organizationId],
+        },
+      ],
+    },
+    count: 0,
+  };
+
+  const results = await SearchService.search(params);
+
+  if (results && results.length) {
+    const speciesIds = new Set<string>();
+    const { batches, facilities, plantingSites } = results[0];
+
+    (batches as WithSpeciesId[] | undefined)?.forEach((batch: WithSpeciesId) => speciesIds.add(batch.species_id));
+    (facilities as AccessionFacility[] | undefined)
+      ?.flatMap((f: AccessionFacility) => f.accessions)
+      .forEach((accession: WithSpeciesId) => speciesIds.add(accession.species_id));
+    (plantingSites as PlantingSitePopulation[] | undefined)
+      ?.flatMap((p: PlantingSitePopulation) => p.populations)
+      .forEach((population: WithSpeciesId) => speciesIds.add(population.species_id));
+
+    return Array.from(speciesIds).map((id: string) => Number(id));
+  } else {
+    return [];
+  }
+};
+
 /**
  * Exported functions
  */
@@ -348,6 +391,7 @@ const SpeciesService = {
   getSpeciesDetails,
   getSpeciesNames,
   suggestSpecies,
+  getInUseSpecies,
 };
 
 export default SpeciesService;
