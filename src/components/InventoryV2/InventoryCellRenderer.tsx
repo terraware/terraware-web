@@ -55,6 +55,14 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     );
   };
 
+  const createLinkToInventoryBatchDetail = (iValue: React.ReactNode | unknown[]) => {
+    return (
+      <Link to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', row.batchId.toString())}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
+  };
+
   if (column.key === 'facilityInventories' && typeof value === 'string') {
     return (
       <CellRenderer index={index} column={column} value={getNurseriesNames(value)} row={row} className={classes.text} />
@@ -79,6 +87,18 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
         index={index}
         column={column}
         value={row.facility_id ? createLinkToInventoryNurseryDetail(value) : undefined}
+        row={row}
+        className={classes.text}
+      />
+    );
+  }
+
+  if (column.key === 'batchNumber') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={row.batchId ? createLinkToInventoryBatchDetail(value) : undefined}
         row={row}
         className={classes.text}
       />

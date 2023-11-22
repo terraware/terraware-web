@@ -21,7 +21,7 @@ import { useOrganization } from 'src/providers';
 import { Species } from 'src/types/Species';
 import { Facility } from 'src/types/Facility';
 
-export type OriginPage = 'Nursery' | 'Species';
+export type OriginPage = 'Nursery' | 'Species' | 'Inventory';
 
 type InventoryBatchProps = {
   origin: OriginPage;
@@ -133,15 +133,21 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
       <PageHeaderWrapper nextElement={contentRef.current}>
         <BackToLink
           id='back'
-          name={`${strings.INVENTORY} / ${
-            origin === 'Species'
-              ? strings.formatString(strings.BATCHES_OF, getSpeciesLabel())
-              : strings.formatString(strings.BATCHES_AT, getNurseryLabel())
-          } `}
+          name={`${strings.INVENTORY}${
+            origin !== 'Inventory'
+              ? ` / ${
+                  origin === 'Species'
+                    ? strings.formatString(strings.BATCHES_OF, getSpeciesLabel())
+                    : strings.formatString(strings.BATCHES_AT, getNurseryLabel())
+                }`
+              : ''
+          }`}
           to={
             origin === 'Species'
               ? APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', speciesId)
-              : APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId)
+              : origin === 'Nursery'
+              ? APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId)
+              : `${APP_PATHS.INVENTORY}?tab=batches_by_batch`
           }
         />
         <Grid

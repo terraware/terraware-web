@@ -18,9 +18,10 @@ import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { useOrganization } from 'src/providers';
-import InventoryListBySpecies from 'src/components/InventoryV2/InventoryListBySpecies';
+import InventoryListBySpecies from './InventoryListBySpecies';
 import InventoryListByNursery from './InventoryListByNursery';
 import DownloadReportModal from './DownloadReportModal';
+import InventoryListByBatch from './InventoryListByBatch';
 
 export type FacilityName = {
   facility_name: string;
@@ -56,12 +57,37 @@ export type InventoryResultWithFacilityNames = Omit<InventoryResult, 'facilityIn
   facilityInventories: string;
 };
 
+export type InventoryResultWithBatchNumber = Omit<InventoryResult, 'facilityInventories'> & {
+  batchId: string;
+  batchNumber: string;
+  facility_name_noLink: string;
+  species_scientificName_noLink: string;
+};
+
 export type FacilityInventoryResult = {
   facility_id: string;
   facility_name: string;
   species_id: string;
   species_scientificName: string;
   species_commonName?: string;
+  'germinatingQuantity(raw)': string;
+  'readyQuantity(raw)': string;
+  'notReadyQuantity(raw)': string;
+  'totalQuantity(raw)': string;
+};
+
+export type BatchInventoryResult = {
+  id: string;
+  batchNumber: string;
+  facility_id: string;
+  facility_name: string;
+  species_id: string;
+  species_scientificName: string;
+  species_commonName?: string;
+  germinatingQuantity: string;
+  notReadyQuantity: string;
+  readyQuantity: string;
+  totalQuantity: string;
   'germinatingQuantity(raw)': string;
   'readyQuantity(raw)': string;
   'notReadyQuantity(raw)': string;
@@ -264,7 +290,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               {
                 id: 'batches_by_batch',
                 label: strings.BY_BATCH,
-                children: 'TODO: Inventory List by Batch',
+                children: <InventoryListByBatch />,
               },
             ]}
           />

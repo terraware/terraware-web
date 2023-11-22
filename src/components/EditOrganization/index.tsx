@@ -1,9 +1,10 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Dropdown } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { Organization } from 'src/types/Organization';
+import { Organization, OrganizationType, OrganizationTypes, organizationTypeLabel } from 'src/types/Organization';
 import TextField from '../common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
 import PageForm from '../common/PageForm';
@@ -15,26 +16,40 @@ import TfMain from 'src/components/common/TfMain';
 import { getUTC, useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import { useTimeZones } from 'src/providers';
+import { useLocalization, useTimeZones } from 'src/providers';
 import RegionSelector from 'src/components/RegionSelector';
 
 type OrganizationViewProps = {
   organization: Organization;
-  reloadOrganizationData: () => void;
+  reloadOrganizationData: (id: number) => void;
 };
 
 export default function OrganizationView({ organization, reloadOrganizationData }: OrganizationViewProps): JSX.Element {
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const [organizationRecord, setOrganizationRecord, onChange] = useForm<Organization>(organization);
   const [nameError, setNameError] = useState('');
   const [countryError, setCountryError] = useState('');
   const [subdivisionError, setSubdivisionError] = useState('');
+  const [organizationTypeError, setOrganizationTypeError] = useState('');
+  const [organizationTypeDetailsError, setOrganizationTypeDetailsError] = useState('');
   const [requireSubdivision, setRequireSubdivisions] = useState(!!organization.countrySubdivisionCode);
   const history = useHistory();
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
+
+  const organizationTypeOptions = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return OrganizationTypes.map((organizationType: OrganizationType) => ({
+      label: organizationTypeLabel(organizationType) ?? '',
+      value: organizationType,
+    }));
+  }, [activeLocale]);
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
     setOrganizationRecord((previousRecord: Organization): Organization => {
@@ -43,6 +58,12 @@ export default function OrganizationView({ organization, reloadOrganizationData 
         timeZone: newTimeZone ? newTimeZone.id : undefined,
       };
     });
+  };
+
+  const onChangeOrganizationType = (value: any) => {
+    onChange('organizationTypeDetails', undefined);
+    onChange('organizationType', value);
+    setOrganizationTypeError('');
   };
 
   const goToOrganization = () => {
@@ -69,6 +90,14 @@ export default function OrganizationView({ organization, reloadOrganizationData 
       hasErrors = true;
     }
 
+    if (!organizationRecord.organizationType) {
+      setOrganizationTypeError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    } else if (organizationRecord.organizationType === 'Other' && !organizationRecord.organizationTypeDetails?.trim()) {
+      setOrganizationTypeDetailsError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    }
+
     if (hasErrors) {
       return;
     }
@@ -76,7 +105,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     const response = await OrganizationService.updateOrganization(organizationRecord);
     if (response.requestSucceeded) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      reloadOrganizationData();
+      reloadOrganizationData(organizationRecord.id);
     } else {
       snackbar.toastError();
     }
@@ -149,7 +178,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             countryError={countryError}
             countrySubdivisionError={subdivisionError}
           />
-          <Grid item xs={gridSize()}>
+          <Grid item xs={gridSize()} marginTop={isMobile ? 4 : 0}>
             <TimeZoneSelector
               selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
               countryCode={organizationRecord.countryCode}
@@ -157,6 +186,48 @@ export default function OrganizationView({ organization, reloadOrganizationData 
               label={strings.TIME_ZONE_REQUIRED}
               tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
             />
+          </Grid>
+          <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} marginTop={4}>
+            <Grid item xs={gridSize()}>
+              <Dropdown
+                required
+                label={strings.ORGANIZATION_TYPE}
+                onChange={onChangeOrganizationType}
+                selectedValue={organizationRecord.organizationType}
+                options={organizationTypeOptions}
+                fullWidth={true}
+                errorText={organizationTypeError}
+              />
+            </Grid>
+            {organizationRecord.organizationType === 'Other' && (
+              <Grid item xs={gridSize()} marginLeft={isMobile ? 0 : 2} marginTop={isMobile ? 2 : 0}>
+                <TextField
+                  required
+                  type='text'
+                  label={strings.DESCRIBE_ORGANIZATION_TYPE_DETAILS}
+                  id='edit-org-question-website'
+                  display={false}
+                  onChange={(value) => {
+                    onChange('organizationTypeDetails', value);
+                    setOrganizationTypeDetailsError('');
+                  }}
+                  errorText={organizationTypeDetailsError}
+                  value={organizationRecord.organizationTypeDetails}
+                />
+              </Grid>
+            )}
+          </Grid>
+          <Grid item xs={12} display='flex' marginTop={4}>
+            <Grid item xs={gridSize()}>
+              <TextField
+                type='text'
+                label={strings.ORGANIZATION_WEBSITE}
+                id='org-website'
+                display={false}
+                onChange={(value) => onChange('website', value)}
+                value={organizationRecord.website}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </PageForm>

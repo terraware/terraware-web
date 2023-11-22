@@ -1,7 +1,7 @@
 import Coordinates from 'coordinate-parser';
 import { paths } from 'src/api/types/generated-schema';
 import { Accession, ACCESSION_2_STATES, AccessionState, Geolocation } from 'src/types/Accession';
-import HttpService, { Response } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 
 /**
  * Service for accessions related functionality
@@ -41,6 +41,8 @@ type WithdrawalsPostRequest = paths[typeof WITHDRAWALS_ENDPOINT]['post']['reques
 
 type TransferToNurseryRequestBody =
   paths[typeof TRANSFER_TO_NURSERY_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type TransferToNurseryResponseBody =
+  paths[typeof TRANSFER_TO_NURSERY_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 const httpAccession = HttpService.root(ACCESSION_ENDPOINT);
 const httpAccessionHistory = HttpService.root(ACCESSION_HISTORY_ENDPOINT);
@@ -176,14 +178,16 @@ const createWithdrawal = async (withdrawal: WithdrawalsPostRequest, accessionId:
  * Create a nursery withdrawal/transfer
  */
 
-const transferToNursery = async (entity: TransferToNurseryRequestBody, accessionId: number): Promise<Response> => {
-  return await httpNurseryTransfer.post({
+const transferToNursery = async (
+  entity: TransferToNurseryRequestBody,
+  accessionId: number
+): Promise<Response2<TransferToNurseryResponseBody>> =>
+  httpNurseryTransfer.post2<TransferToNurseryResponseBody>({
     entity,
     urlReplacements: {
       '{accessionId}': accessionId.toString(),
     },
   });
-};
 
 /**
  * Get allowed transition-to states from current state

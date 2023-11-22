@@ -1,12 +1,12 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
+import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
-import { useDeviceInfo } from '@terraware/web-components/utils';
-import NurseryDropdown from '../NurseryDropdown';
 import { Batch, CreateBatchRequestPayload } from 'src/types/Batch';
 import { NurseryBatchService, SpeciesService } from 'src/services';
 import { Species } from 'src/types/Species';
@@ -16,9 +16,9 @@ import { useOrganization } from 'src/providers/hooks';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { Facility } from 'src/types/Facility';
 import { getNurseryById } from 'src/utils/organization';
-import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import { useUser } from 'src/providers';
+import NurseryDropdown from 'src/components/InventoryV2/NurseryDropdown';
 
 export interface BatchDetailsModalProps {
   onClose: () => void;
