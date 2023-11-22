@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -207,7 +207,19 @@
 <a name='L142'></a><a href='#L142'>142</a>
 <a name='L143'></a><a href='#L143'>143</a>
 <a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,6 +283,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -292,6 +308,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -357,7 +381,7 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useState } from 'react';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
+import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
@@ -414,7 +438,11 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
   { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
 ];
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >InventoryListByBatch(</span>) {
+type InventoryListByBatchProps = {
+  setReportData: (data: SearchInventoryParams) =&gt; void;
+};
+&nbsp;
+export default function <span class="fstat-no" title="function not covered" >InventoryListByBatch(</span>{ setReportData }: InventoryListByBatchProps) {
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const [searchResults, setSearchResults] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchResponseElement[] | null&gt;(null);</span>
@@ -436,6 +464,14 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   const onApplyFilters = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
     const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
 <span class="cstat-no" title="statement not covered" >    setRequestId('searchInventory', requestId);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    setReportData({</span>
+      organizationId: selectedOrganization.id,
+      query: debouncedSearchTerm,
+      facilityIds: filters.facilityIds,
+      searchSortOrder,
+    });
+&nbsp;
     const apiSearchResults = <span class="cstat-no" title="statement not covered" >await NurseryBatchService.getAllBatches(</span>
       selectedOrganization.id,
       searchSortOrder,
@@ -464,7 +500,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 <span class="cstat-no" title="statement not covered" >        setSearchResults(updatedResult);</span>
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    onApplyFilters();</span>
@@ -502,7 +538,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-22T20:24:16.321Z
+                at 2023-11-22T21:06:02.050Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

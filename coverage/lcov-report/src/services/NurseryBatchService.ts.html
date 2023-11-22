@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/100</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/98</span>
+                <span class='fraction'>0/99</span>
             </div>
         
             
@@ -657,7 +657,19 @@
 <a name='L592'></a><a href='#L592'>592</a>
 <a name='L593'></a><a href='#L593'>593</a>
 <a name='L594'></a><a href='#L594'>594</a>
-<a name='L595'></a><a href='#L595'>595</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L595'></a><a href='#L595'>595</a>
+<a name='L596'></a><a href='#L596'>596</a>
+<a name='L597'></a><a href='#L597'>597</a>
+<a name='L598'></a><a href='#L598'>598</a>
+<a name='L599'></a><a href='#L599'>599</a>
+<a name='L600'></a><a href='#L600'>600</a>
+<a name='L601'></a><a href='#L601'>601</a>
+<a name='L602'></a><a href='#L602'>602</a>
+<a name='L603'></a><a href='#L603'>603</a>
+<a name='L604'></a><a href='#L604'>604</a>
+<a name='L605'></a><a href='#L605'>605</a>
+<a name='L606'></a><a href='#L606'>606</a>
+<a name='L607'></a><a href='#L607'>607</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -730,6 +742,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -859,6 +882,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1302,6 +1326,17 @@ const DEFAULT_BATCH_FIELDS = <span class="cstat-no" title="statement not covered
   'notes',
 ];
 &nbsp;
+const REPORT_BATCH_FIELDS = <span class="cstat-no" title="statement not covered" >[</span>
+  'batchNumber',
+  'species_scientificName',
+  'species_commonName',
+  'facility_name',
+  'germinatingQuantity',
+  'notReadyQuantity',
+  'readyQuantity',
+  'totalQuantity',
+];
+&nbsp;
 const EXPORT_BATCH_FIELDS = <span class="cstat-no" title="statement not covered" >[</span>
   'batchNumber',
   'species_scientificName',
@@ -1456,7 +1491,8 @@ const getAllBatches = <span class="cstat-no" title="statement not covered" ><spa
   organizationId: number,
   searchSortOrder?: SearchSortOrder,
   facilityIds?: number[],
-  query?: string
+  query?: string,
+  isCsvExport?: boolean
 ): Promise&lt;SearchResponseElement[] | null&gt; =&gt; {
   const params: SearchRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
     prefix: 'batches',
@@ -1471,7 +1507,7 @@ const getAllBatches = <span class="cstat-no" title="statement not covered" ><spa
         },
       ],
     },
-    fields: [...DEFAULT_BATCH_FIELDS, 'species_id', 'species_scientificName', 'species_commonName'],
+    fields: isCsvExport ? [...REPORT_BATCH_FIELDS] : [...NURSERY_BATCHES_FIELDS],
     sortOrder: [
       searchSortOrder ?? {
         field: 'batchNumber',
@@ -1525,7 +1561,7 @@ const getAllBatches = <span class="cstat-no" title="statement not covered" ><spa
     } as SearchNodePayload);
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return await SearchService.search(params);</span>
+<span class="cstat-no" title="statement not covered" >  return isCsvExport ? await SearchService.searchCsv(params) : await SearchService.search(params);</span>
 };
 &nbsp;
 /**
@@ -1852,7 +1888,7 @@ export default NurseryBatchService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-22T20:24:16.321Z
+                at 2023-11-22T21:06:02.050Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
