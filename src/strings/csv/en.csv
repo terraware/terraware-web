@@ -1264,6 +1264,7 @@ TOOLTIP_ACCESSIONS_HAS_DELIVERIES,This accession's species cannot be changed bec
 TOOLTIP_ACCESSIONS_ID,"A unique identifier for a seed collection accepted into a seed bank. Any collection from a new species, location, and/or date would typically become a new accession in the seed bank.",
 TOOLTIP_ACCESSIONS_LOCATION,Place where seeds are being processed.,
 TOOLTIP_ACCESSIONS_SUBLOCATION,Specific area within the place where seeds are being processed.,
+TOOLTIP_BATCH_NUMBER,"Batch numbers with the format YY-L-N-XXX can be can be broken down as: YY = Year, L = 1 (Seed Bank) / 2 - (Nursery), N = Seed Bank / Nursery number, and XXX = Batch.",
 TOOLTIP_COMMON_NAME,"The name an organism is known by to the general public, rather than its scientific name.",
 TOOLTIP_COUNTRY_MY_ACCOUNT,Your country affects how we display numbers and other information.,
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"This number represents all accessions with the statuses Awaiting Check In, Awaiting Processing, Processing, Drying, and In Storage.",

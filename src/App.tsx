@@ -463,6 +463,11 @@ function AppContent() {
               <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
             </Route>
             {nurseryV2 && (
+              <Route path={APP_PATHS.INVENTORY_BATCH}>
+                <InventoryBatch origin='Inventory' species={species} />
+              </Route>
+            )}
+            {nurseryV2 && (
               <Route path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}>
                 <InventoryBatch origin='Nursery' species={species} />
               </Route>
