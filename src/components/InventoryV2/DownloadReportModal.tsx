@@ -5,12 +5,16 @@ interface DownloadReportModalProps {
   reportData: SearchInventoryParams;
   open: boolean;
   onClose: () => void;
+  tab: string;
 }
 
 export default function DownloadReportModal(props: DownloadReportModalProps): JSX.Element {
-  const { reportData, open, onClose } = props;
+  const { reportData, open, onClose, tab } = props;
 
   const onExport = async () => {
+    if (tab === 'batches_by_nursery') {
+      return await NurseryInventoryService.searchInventoryByNursery({ ...reportData, isDowloading: true });
+    }
     return await NurseryInventoryService.downloadInventory(reportData);
   };
 

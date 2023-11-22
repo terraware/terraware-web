@@ -38,6 +38,10 @@ export const FACILITY_SPECIFIC_FIELDS = [
   'species_scientificName',
   'species_commonName',
   'facility_name',
+  'germinatingQuantity',
+  'notReadyQuantity',
+  'readyQuantity',
+  'totalQuantity',
   'germinatingQuantity(raw)',
   'readyQuantity(raw)',
   'notReadyQuantity(raw)',
@@ -67,6 +71,7 @@ export type SearchInventoryParams = {
   searchSortOrder?: SearchSortOrder;
   query?: string;
   facilityIds?: number[];
+  isDowloading?: boolean;
 };
 
 type GetSummaryResponsePayload =
@@ -237,10 +242,19 @@ const searchInventoryByNursery = async ({
   searchSortOrder,
   facilityIds,
   query,
+  isDowloading,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
   const params: SearchRequestPayload = {
-    prefix: 'inventories.facilityInventories',
-    fields: [...FACILITY_SPECIFIC_FIELDS, 'facility_id'],
+    prefix: 'facilities.facilityInventoryTotals',
+    fields: [
+      'facility_id',
+      'facility_name',
+      'facilityInventories.species_scientificName',
+      'germinatingQuantity',
+      'notReadyQuantity',
+      'readyQuantity',
+      'totalQuantity',
+    ],
     sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
     search: {
       operation: 'and',
@@ -250,34 +264,20 @@ const searchInventoryByNursery = async ({
           field: 'organization_id',
           values: [organizationId],
         },
-        {
-          operation: 'field',
-          field: 'facility_id',
-          values: facilityIds,
-        },
       ],
     },
     count: 0,
   };
-
   const searchValueChildren: FieldNodePayload[] = [];
 
   if (query) {
     const scientificNameNode: FieldNodePayload = {
       operation: 'field',
-      field: 'species_scientificName',
+      field: 'facilityInventories.species_scientificName',
       type: 'Fuzzy',
       values: [query],
     };
     searchValueChildren.push(scientificNameNode);
-
-    const commonNameNode: FieldNodePayload = {
-      operation: 'field',
-      field: 'species_commonName',
-      type: 'Fuzzy',
-      values: [query],
-    };
-    searchValueChildren.push(commonNameNode);
 
     const facilityNameNode: FieldNodePayload = {
       operation: 'field',
@@ -297,7 +297,15 @@ const searchInventoryByNursery = async ({
     params.search.children.push(searchValueNodes);
   }
 
-  return await SearchService.search(params);
+  if (facilityIds?.length) {
+    params.search.children.push({
+      operation: 'field',
+      field: 'facility_id',
+      values: facilityIds,
+    });
+  }
+
+  return isDowloading ? await SearchService.searchCsv(params) : await SearchService.search(params);
 };
 
 /**

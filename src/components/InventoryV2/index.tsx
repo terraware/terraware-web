@@ -26,6 +26,10 @@ export type FacilityName = {
   facility_name: string;
 };
 
+export type SpeciesName = {
+  species_scientificName: string;
+};
+
 export type InventoryResult = {
   facility_id: string;
   species_id: string;
@@ -38,13 +42,18 @@ export type InventoryResult = {
   facilityInventories: FacilityName[];
 };
 
-export type InventoryResultWithFacilityNames = Omit<InventoryResult, 'facilityInventories'> & {
-  facilityInventories: string;
+export type FacilitySpeciesInventoryResult = {
+  facility_id: string;
+  facility_name: string;
+  germinatingQuantity: string;
+  readyQuantity: string;
+  notReadyQuantity: string;
+  totalQuantity: string;
+  facilityInventories: SpeciesName[];
 };
 
-export type InventoryResultWithSpeciesNames = Omit<InventoryResult, 'facilityInventories'> & {
-  facility_name: string;
-  speciesNames: string;
+export type InventoryResultWithFacilityNames = Omit<InventoryResult, 'facilityInventories'> & {
+  facilityInventories: string;
 };
 
 export type FacilityInventoryResult = {
@@ -191,7 +200,12 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     <TfMain backgroundImageVisible={!isOnboarded}>
       <ImportInventoryModal open={importInventoryModalOpen} onClose={() => setImportInventoryModalOpen(false)} />
       {reportData && (
-        <DownloadReportModal reportData={reportData} open={reportModalOpen} onClose={onCloseDownloadReportModal} />
+        <DownloadReportModal
+          reportData={reportData}
+          open={reportModalOpen}
+          onClose={onCloseDownloadReportModal}
+          tab={activeTab}
+        />
       )}
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}>
