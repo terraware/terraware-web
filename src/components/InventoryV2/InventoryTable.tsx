@@ -76,7 +76,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           <Grid container spacing={4} marginTop={0}>
             <Grid item xs={12}>
               <Table
-                id='inventory-table'
+                id='inventory-table-v2'
                 columns={columns}
                 rows={results}
                 orderBy='species_scientificName'

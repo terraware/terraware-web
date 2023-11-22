@@ -381,7 +381,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
 
           <Box marginTop={theme.spacing(2)}>
             <Table
-              id='batches-table'
+              id='inventory-seedlings-for-nursery-table'
               columns={columns}
               rows={filteredBatches}
               orderBy='batchNumber'
