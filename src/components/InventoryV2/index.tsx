@@ -190,7 +190,9 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   return (
     <TfMain backgroundImageVisible={!isOnboarded}>
       <ImportInventoryModal open={importInventoryModalOpen} onClose={() => setImportInventoryModalOpen(false)} />
-      <DownloadReportModal reportData={reportData} open={reportModalOpen} onClose={onCloseDownloadReportModal} />
+      {reportData && (
+        <DownloadReportModal reportData={reportData} open={reportModalOpen} onClose={onCloseDownloadReportModal} />
+      )}
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}>
           <Grid container>
