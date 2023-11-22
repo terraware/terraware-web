@@ -4,7 +4,7 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useState } from 'react';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
+import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
@@ -61,7 +61,11 @@ const columns = (): TableColumnType[] => [
   { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
 ];
 
-export default function InventoryListByBatch() {
+type InventoryListByBatchProps = {
+  setReportData: (data: SearchInventoryParams) => void;
+};
+
+export default function InventoryListByBatch({ setReportData }: InventoryListByBatchProps) {
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -83,6 +87,14 @@ export default function InventoryListByBatch() {
   const onApplyFilters = useCallback(async () => {
     const requestId = Math.random().toString();
     setRequestId('searchInventory', requestId);
+
+    setReportData({
+      organizationId: selectedOrganization.id,
+      query: debouncedSearchTerm,
+      facilityIds: filters.facilityIds,
+      searchSortOrder,
+    });
+
     const apiSearchResults = await NurseryBatchService.getAllBatches(
       selectedOrganization.id,
       searchSortOrder,
@@ -111,7 +123,7 @@ export default function InventoryListByBatch() {
         setSearchResults(updatedResult);
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
 
   useEffect(() => {
     onApplyFilters();

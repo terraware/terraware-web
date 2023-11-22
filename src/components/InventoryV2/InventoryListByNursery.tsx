@@ -1,21 +1,18 @@
 import InventoryTable from 'src/components/InventoryV2/InventoryTable';
 import { CircularProgress, Container, Theme } from '@mui/material';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import NurseryInventoryService, { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
-import { useOrganization, useUser } from 'src/providers';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
+import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { InventoryFiltersType } from 'src/components/Inventory/InventoryFiltersPopover';
-import { FacilityInventoryResult, InventoryResultWithSpeciesNames } from 'src/components/InventoryV2';
+import { FacilitySpeciesInventoryResult } from 'src/components/InventoryV2';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
-import { getAllNurseries } from 'src/utils/organization';
-import { Facility } from 'src/types/Facility';
 import Card from 'src/components/common/Card';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -32,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 const columns = (): TableColumnType[] => [
   { key: 'facility_name', name: strings.NURSERY, type: 'string' },
   {
-    key: 'speciesNames',
+    key: 'facilityInventories',
     name: strings.SPECIES,
     type: 'string',
     tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
@@ -53,7 +50,11 @@ const columns = (): TableColumnType[] => [
   { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
 ];
 
-export default function InventoryListByNursery() {
+type InventoryListByNurseryProps = {
+  setReportData: (data: SearchInventoryParams) => void;
+};
+
+export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -61,20 +62,11 @@ export default function InventoryListByNursery() {
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
-  const [nurseries, setNurseries] = useState<Facility[]>([]);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
-    field: 'species_scientificName',
+    field: 'facility_name',
     direction: 'Ascending',
   });
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
-
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
-
-  useEffect(() => {
-    setNurseries(getAllNurseries(selectedOrganization));
-  }, [selectedOrganization]);
 
   const onSearchSortOrder = (order: SearchSortOrder) => {
     const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
@@ -84,65 +76,25 @@ export default function InventoryListByNursery() {
   const onApplyFilters = useCallback(async () => {
     const requestId = Math.random().toString();
     setRequestId('searchInventory', requestId);
-    const apiSearchResults = await NurseryInventoryService.searchInventoryByNursery({
+
+    setReportData({
       organizationId: selectedOrganization.id,
       query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds || nurseries.map((nr) => nr.id),
+      facilityIds: filters.facilityIds,
       searchSortOrder,
     });
 
-    let updatedResult: InventoryResultWithSpeciesNames[] | undefined = [];
+    const apiSearchResults = await NurseryInventoryService.searchInventoryByNursery({
+      organizationId: selectedOrganization.id,
+      query: debouncedSearchTerm,
+      facilityIds: filters.facilityIds,
+      searchSortOrder,
+    });
 
-    const nextResults = apiSearchResults?.reduce((acc, result) => {
-      const resultTyped = result as FacilityInventoryResult;
-      const indexFound = acc.findIndex((savedResult) => savedResult.facility_id === resultTyped.facility_id);
-
-      if (indexFound > -1) {
-        const existingFacility = acc[indexFound];
-        acc[indexFound] = {
-          ...existingFacility,
-          germinatingQuantity: (
-            Number(existingFacility.germinatingQuantity) + Number(resultTyped['germinatingQuantity(raw)'])
-          ).toString(),
-          notReadyQuantity: (
-            Number(existingFacility.notReadyQuantity) + Number(resultTyped['notReadyQuantity(raw)'])
-          ).toString(),
-          readyQuantity: (
-            Number(existingFacility.readyQuantity) + Number(resultTyped['readyQuantity(raw)'])
-          ).toString(),
-          totalQuantity: (
-            Number(existingFacility.totalQuantity) + Number(resultTyped['totalQuantity(raw)'])
-          ).toString(),
-          speciesNames: `${existingFacility.speciesNames}, ${resultTyped.species_scientificName}`,
-        };
-      } else {
-        const transformedResult: InventoryResultWithSpeciesNames = {
-          facility_id: resultTyped.facility_id,
-          facility_name: resultTyped.facility_name,
-          species_id: resultTyped.species_id,
-          species_scientificName: resultTyped.species_scientificName,
-          species_commonName: resultTyped.species_commonName,
-          germinatingQuantity: resultTyped['germinatingQuantity(raw)'],
-          notReadyQuantity: resultTyped['notReadyQuantity(raw)'],
-          readyQuantity: resultTyped['readyQuantity(raw)'],
-          totalQuantity: resultTyped['totalQuantity(raw)'],
-          speciesNames: resultTyped.species_scientificName,
-        };
-
-        acc.push(transformedResult);
-      }
-      return acc;
-    }, [] as InventoryResultWithSpeciesNames[]);
-
-    // format results
-    updatedResult = nextResults?.map((uR) => {
-      return {
-        ...uR,
-        germinatingQuantity: numericFormatter.format(uR.germinatingQuantity),
-        notReadyQuantity: numericFormatter.format(uR.notReadyQuantity),
-        readyQuantity: numericFormatter.format(uR.readyQuantity),
-        totalQuantity: numericFormatter.format(uR.totalQuantity),
-      };
+    const updatedResult = apiSearchResults?.map((result) => {
+      const resultTyped = result as FacilitySpeciesInventoryResult;
+      const speciesNames = resultTyped.facilityInventories.map((species) => species.species_scientificName);
+      return { ...resultTyped, facilityInventories: speciesNames.join('\r') };
     });
 
     if (updatedResult) {
@@ -153,7 +105,7 @@ export default function InventoryListByNursery() {
         setSearchResults(updatedResult);
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter, nurseries]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
 
   useEffect(() => {
     onApplyFilters();
