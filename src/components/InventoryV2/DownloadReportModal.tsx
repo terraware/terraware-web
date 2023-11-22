@@ -1,4 +1,5 @@
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
+import { NurseryBatchService } from 'src/services';
 import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
 
 interface DownloadReportModalProps {
@@ -13,7 +14,16 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
 
   const onExport = async () => {
     if (tab === 'batches_by_nursery') {
-      return await NurseryInventoryService.searchInventoryByNursery({ ...reportData, isDowloading: true });
+      return await NurseryInventoryService.searchInventoryByNursery({ ...reportData, isCsvExport: true });
+    }
+    if (tab === 'batches_by_batch') {
+      return await NurseryBatchService.getAllBatches(
+        reportData.organizationId,
+        reportData.searchSortOrder,
+        reportData.facilityIds,
+        reportData.query,
+        true
+      );
     }
     return await NurseryInventoryService.downloadInventory(reportData);
   };

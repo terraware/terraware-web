@@ -71,7 +71,7 @@ export type SearchInventoryParams = {
   searchSortOrder?: SearchSortOrder;
   query?: string;
   facilityIds?: number[];
-  isDowloading?: boolean;
+  isCsvExport?: boolean;
 };
 
 type GetSummaryResponsePayload =
@@ -242,7 +242,7 @@ const searchInventoryByNursery = async ({
   searchSortOrder,
   facilityIds,
   query,
-  isDowloading,
+  isCsvExport,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
   const params: SearchRequestPayload = {
     prefix: 'facilities.facilityInventoryTotals',
@@ -305,7 +305,7 @@ const searchInventoryByNursery = async ({
     });
   }
 
-  return isDowloading ? await SearchService.searchCsv(params) : await SearchService.search(params);
+  return isCsvExport ? await SearchService.searchCsv(params) : await SearchService.search(params);
 };
 
 /**

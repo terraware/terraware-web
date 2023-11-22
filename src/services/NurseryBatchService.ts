@@ -49,6 +49,17 @@ const DEFAULT_BATCH_FIELDS = [
   'notes',
 ];
 
+const REPORT_BATCH_FIELDS = [
+  'batchNumber',
+  'species_scientificName',
+  'species_commonName',
+  'facility_name',
+  'germinatingQuantity',
+  'notReadyQuantity',
+  'readyQuantity',
+  'totalQuantity',
+];
+
 const EXPORT_BATCH_FIELDS = [
   'batchNumber',
   'species_scientificName',
@@ -203,7 +214,8 @@ const getAllBatches = async (
   organizationId: number,
   searchSortOrder?: SearchSortOrder,
   facilityIds?: number[],
-  query?: string
+  query?: string,
+  isCsvExport?: boolean
 ): Promise<SearchResponseElement[] | null> => {
   const params: SearchRequestPayload = {
     prefix: 'batches',
@@ -218,7 +230,9 @@ const getAllBatches = async (
         },
       ],
     },
-    fields: [...DEFAULT_BATCH_FIELDS, 'species_id', 'species_scientificName', 'species_commonName'],
+    fields: isCsvExport
+      ? [...REPORT_BATCH_FIELDS]
+      : [...DEFAULT_BATCH_FIELDS, 'species_id', 'species_scientificName', 'species_commonName'],
     sortOrder: [
       searchSortOrder ?? {
         field: 'batchNumber',
@@ -272,7 +286,7 @@ const getAllBatches = async (
     } as SearchNodePayload);
   }
 
-  return await SearchService.search(params);
+  return isCsvExport ? await SearchService.searchCsv(params) : await SearchService.search(params);
 };
 
 /**

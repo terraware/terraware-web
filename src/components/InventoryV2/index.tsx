@@ -290,7 +290,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               {
                 id: 'batches_by_batch',
                 label: strings.BY_BATCH,
-                children: <InventoryListByBatch />,
+                children: <InventoryListByBatch setReportData={setReportData} />,
               },
             ]}
           />
