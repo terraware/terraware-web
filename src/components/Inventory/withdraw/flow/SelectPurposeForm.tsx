@@ -496,8 +496,22 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const getOutplantLabel = () => {
     return (
       <>
-        {OUTPLANT}
+        {strings.OUTPLANT}
         {noReadySeedlings && <IconTooltip placement='top' title={strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS} />}
+        {!noReadySeedlings && outplantDisabled && (
+          <IconTooltip placement='top' title={strings.OUTPLANTS_REQUIRE_PLANTING_SITES} />
+        )}
+      </>
+    );
+  };
+
+  const getNurseryTransferLabel = () => {
+    return (
+      <>
+        {strings.NURSERY_TRANSFER}
+        {nurseryTransferDisabled && (
+          <IconTooltip placement='top' title={strings.NURSERY_TRANSFERS_REQUIRE_DESTINATIONS} />
+        )}
       </>
     );
   };
@@ -591,7 +605,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   <FormControlLabel
                     value={NURSERY_TRANSFER}
                     control={<Radio />}
-                    label={strings.NURSERY_TRANSFER}
+                    label={getNurseryTransferLabel()}
                     disabled={nurseryTransferDisabled}
                   />
                   <FormControlLabel value={DEAD} control={<Radio />} label={strings.DEAD} />
