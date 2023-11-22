@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1700660427583" clover="3.2.0">
-  <project timestamp="1700660427583" name="All files">
-    <metrics statements="14067" coveredstatements="373" conditionals="9062" coveredconditionals="90" methods="4405" coveredmethods="78" elements="27534" coveredelements="541" complexity="0" loc="14067" ncloc="14067" packages="109" files="530" classes="530"/>
+<coverage generated="1700665547320" clover="3.2.0">
+  <project timestamp="1700665547320" name="All files">
+    <metrics statements="14069" coveredstatements="373" conditionals="9067" coveredconditionals="90" methods="4406" coveredmethods="78" elements="27542" coveredelements="541" complexity="0" loc="14069" ncloc="14069" packages="109" files="530" classes="530"/>
     <package name="src">
       <metrics statements="245" coveredstatements="0" conditionals="205" coveredconditionals="0" methods="69" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1989,7 +1989,7 @@
       </file>
     </package>
     <package name="src.components.Inventory.withdraw.flow">
-      <metrics statements="411" coveredstatements="0" conditionals="315" coveredconditionals="0" methods="95" coveredmethods="0"/>
+      <metrics statements="413" coveredstatements="0" conditionals="320" coveredconditionals="0" methods="96" coveredmethods="0"/>
       <file name="AddPhotos.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Inventory/withdraw/flow/AddPhotos.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -2119,7 +2119,7 @@
         <line num="364" count="0" type="stmt"/>
       </file>
       <file name="SelectPurposeForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Inventory/withdraw/flow/SelectPurposeForm.tsx">
-        <metrics statements="258" coveredstatements="0" conditionals="217" coveredconditionals="0" methods="64" coveredmethods="0"/>
+        <metrics statements="260" coveredstatements="0" conditionals="222" coveredconditionals="0" methods="65" coveredmethods="0"/>
         <line num="37" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
@@ -2353,31 +2353,33 @@
         <line num="493" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="496" count="0" type="stmt"/>
         <line num="497" count="0" type="stmt"/>
-        <line num="505" count="0" type="stmt"/>
-        <line num="506" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="507" count="0" type="stmt"/>
-        <line num="510" count="0" type="stmt"/>
-        <line num="513" count="0" type="stmt"/>
-        <line num="514" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="515" count="0" type="stmt"/>
-        <line num="517" count="0" type="stmt"/>
-        <line num="520" count="0" type="stmt"/>
-        <line num="521" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="522" count="0" type="stmt"/>
-        <line num="523" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="508" count="0" type="stmt"/>
+        <line num="509" count="0" type="stmt"/>
+        <line num="519" count="0" type="stmt"/>
+        <line num="520" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="521" count="0" type="stmt"/>
         <line num="524" count="0" type="stmt"/>
-        <line num="528" count="0" type="stmt"/>
-        <line num="610" count="0" type="stmt"/>
-        <line num="625" count="0" type="stmt"/>
-        <line num="642" count="0" type="stmt"/>
-        <line num="672" count="0" type="stmt"/>
-        <line num="700" count="0" type="stmt"/>
-        <line num="715" count="0" type="stmt"/>
+        <line num="527" count="0" type="stmt"/>
+        <line num="528" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="529" count="0" type="stmt"/>
+        <line num="531" count="0" type="stmt"/>
+        <line num="534" count="0" type="stmt"/>
+        <line num="535" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="536" count="0" type="stmt"/>
+        <line num="537" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="538" count="0" type="stmt"/>
+        <line num="542" count="0" type="stmt"/>
+        <line num="624" count="0" type="stmt"/>
+        <line num="639" count="0" type="stmt"/>
+        <line num="656" count="0" type="stmt"/>
+        <line num="686" count="0" type="stmt"/>
+        <line num="714" count="0" type="stmt"/>
         <line num="729" count="0" type="stmt"/>
-        <line num="739" count="0" type="stmt"/>
-        <line num="751" count="0" type="stmt"/>
-        <line num="766" count="0" type="stmt"/>
-        <line num="776" count="0" type="stmt"/>
+        <line num="743" count="0" type="stmt"/>
+        <line num="753" count="0" type="stmt"/>
+        <line num="765" count="0" type="stmt"/>
+        <line num="780" count="0" type="stmt"/>
+        <line num="790" count="0" type="stmt"/>
       </file>
       <file name="WithdrawalBatchesCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Inventory/withdraw/flow/WithdrawalBatchesCellRenderer.tsx">
         <metrics statements="31" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="7" coveredmethods="0"/>
