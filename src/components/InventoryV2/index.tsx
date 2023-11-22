@@ -16,10 +16,11 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { isAdmin } from 'src/utils/organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
-import NurseryInventoryService from 'src/services/NurseryInventoryService';
+import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { useOrganization } from 'src/providers';
 import InventoryListBySpecies from 'src/components/InventoryV2/InventoryListBySpecies';
 import InventoryListByNursery from './InventoryListByNursery';
+import DownloadReportModal from './DownloadReportModal';
 
 export type FacilityName = {
   facility_name: string;
@@ -109,6 +110,8 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const query = useQuery();
   const tab = query.get('tab') || 'batches_by_species';
   const [activeTab, setActiveTab] = useState<string>(tab);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [reportData, setReportData] = useState<SearchInventoryParams>();
 
   const onTabChange = useCallback(
     (newTab: string) => {
@@ -129,13 +132,21 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     history.push(appPathLocation);
   };
 
+  const onCloseDownloadReportModal = () => {
+    setReportModalOpen(false);
+  };
+
+  const onDownloadReport = () => {
+    setReportModalOpen(true);
+  };
+
   const isOnboarded = hasNurseries && hasSpecies;
   const onOptionItemClick = (optionItem: DropdownItem) => {
     if (optionItem.value === 'import') {
       setImportInventoryModalOpen(true);
     }
     if (optionItem.value === 'export') {
-      // TODO: Export current view
+      onDownloadReport();
     }
   };
 
@@ -179,6 +190,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   return (
     <TfMain backgroundImageVisible={!isOnboarded}>
       <ImportInventoryModal open={importInventoryModalOpen} onClose={() => setImportInventoryModalOpen(false)} />
+      <DownloadReportModal reportData={reportData} open={reportModalOpen} onClose={onCloseDownloadReportModal} />
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}>
           <Grid container>
@@ -226,12 +238,12 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               {
                 id: 'batches_by_species',
                 label: strings.BY_SPECIES,
-                children: <InventoryListBySpecies />,
+                children: <InventoryListBySpecies setReportData={setReportData} />,
               },
               {
                 id: 'batches_by_nursery',
                 label: strings.BY_NURSERY,
-                children: <InventoryListByNursery />,
+                children: <InventoryListByNursery setReportData={setReportData} />,
               },
               {
                 id: 'batches_by_batch',

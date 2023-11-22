@@ -4,7 +4,7 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import NurseryInventoryService, { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
+import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { useOrganization, useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import useDebounce from 'src/utils/useDebounce';
@@ -56,7 +56,11 @@ const columns = (): TableColumnType[] => [
   { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
 ];
 
-export default function InventoryListBySpecies() {
+type InventoryListBySpeciesProps = {
+  setReportData: (data: SearchInventoryParams) => void;
+};
+
+export default function InventoryListBySpecies({ setReportData }: InventoryListBySpeciesProps) {
   const theme = useTheme();
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
@@ -82,6 +86,12 @@ export default function InventoryListBySpecies() {
   const onApplyFilters = useCallback(async () => {
     const requestId = Math.random().toString();
     setRequestId('searchInventory', requestId);
+    setReportData({
+      organizationId: selectedOrganization.id,
+      query: debouncedSearchTerm,
+      facilityIds: filters.facilityIds,
+      searchSortOrder,
+    });
     const apiSearchResults = await NurseryInventoryService.searchInventory({
       organizationId: selectedOrganization.id,
       query: debouncedSearchTerm,
@@ -156,7 +166,7 @@ export default function InventoryListBySpecies() {
         setSearchResults(updatedResult);
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter, setReportData]);
 
   useEffect(() => {
     onApplyFilters();
