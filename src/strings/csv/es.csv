@@ -1264,6 +1264,7 @@ TOOLTIP_ACCESSIONS_HAS_DELIVERIES,La especie de esta accesión no puede cambiars
 TOOLTIP_ACCESSIONS_ID,"Un identificador único para una colección de semillas aceptada en un banco de semillas. Cualquier colección de una nueva especie, ubicación y/o fecha se convertiría normalmente en una nueva accesión en el banco de semillas.",
 TOOLTIP_ACCESSIONS_LOCATION,Lugar donde se procesan las semillas.,
 TOOLTIP_ACCESSIONS_SUBLOCATION,Zona específica dentro del lugar donde las semillas son procesadas.,
+TOOLTIP_BATCH_NUMBER,"Los números de lote con el formato YY-L-N-XXX pueden desglosarse como: YY = año, L = 1 (banco de semillas) / 2 - (vivero), N = número de banco de semillas / vivero, y XXX = lote.",
 TOOLTIP_COMMON_NAME,"El nombre por el que un organismo es conocido por el público general, en lugar de su nombre científico.",
 TOOLTIP_COUNTRY_MY_ACCOUNT,Su país afecta cómo mostramos los números y demás información.,
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todas las accesiones con los estados Pendiente de registro, Pendiente de tratamiento, Tratamiento, Deshidratación y En almacenamiento.",
