@@ -113,6 +113,7 @@ export default function SpeciesSelector<T extends AccessionPostRequestBody>(
           editable={true}
           errorText={validate && !record.speciesId ? strings.REQUIRED_FIELD : ''}
           tooltipTitle={tooltipTitle}
+          fixedMenu={true}
         />
       </Grid>
     </>
