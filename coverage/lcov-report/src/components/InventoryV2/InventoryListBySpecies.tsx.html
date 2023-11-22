@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
@@ -252,20 +252,25 @@
 <a name='L187'></a><a href='#L187'>187</a>
 <a name='L188'></a><a href='#L188'>188</a>
 <a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a>
-<a name='L195'></a><a href='#L195'>195</a>
-<a name='L196'></a><a href='#L196'>196</a>
-<a name='L197'></a><a href='#L197'>197</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L190'></a><a href='#L190'>190</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -287,7 +292,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -308,17 +312,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -424,13 +417,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -456,7 +442,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import InventoryTable from 'src/components/InventoryV2/InventoryTable';
-import { Box, CircularProgress, Container, Theme, useTheme } from '@mui/material';
+import { CircularProgress, Container, Theme } from '@mui/material';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
@@ -471,6 +457,7 @@ import { InventoryResult, FacilityInventoryResult, InventoryResultWithFacilityNa
 import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
+import Card from 'src/components/common/Card';
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   mainContainer: {
@@ -514,11 +501,10 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
 ];
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >InventoryListBySpecies(</span>) {
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const [searchResults, setSearchResults] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchResponseElement[] | null&gt;();</span>
-  const [unfilteredInventory, setUnfilteredInventory] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchResponseElement[] | null&gt;(null);</span>
+  const [searchResults, setSearchResults] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchResponseElement[] | null&gt;(null);</span>
+  const [showResults, setShowResults] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [temporalSearchValue, setTemporalSearchValue] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const debouncedSearchTerm = <span class="cstat-no" title="statement not covered" >useDebounce(temporalSearchValue, 250);</span>
   const [searchSortOrder, setSearchSortOrder] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchSortOrder | undefined&gt;({</span>
@@ -607,7 +593,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
     }
 <span class="cstat-no" title="statement not covered" >    if (updatedResult) {</span>
 <span class="cstat-no" title="statement not covered" >      if (!debouncedSearchTerm &amp;&amp; !filters.facilityIds?.length) {</span>
-<span class="cstat-no" title="statement not covered" >        setUnfilteredInventory(updatedResult);</span>
+<span class="cstat-no" title="statement not covered" >        setShowResults(updatedResult.length &gt; 0);</span>
       }
 <span class="cstat-no" title="statement not covered" >      if (getRequestId('searchInventory') === requestId) {</span>
 <span class="cstat-no" title="statement not covered" >        setSearchResults(updatedResult);</span>
@@ -620,15 +606,8 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   }, [filters, onApplyFilters]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Box
-      sx={{
-        backgroundColor: theme.palette.TwClrBg,
-        borderRadius: '32px',
-        padding: theme.spacing(3),
-        minWidth: 'fit-content',
-      }}
-    &gt;
-      {unfilteredInventory &amp;&amp; unfilteredInventory.length &gt; 0 ? (
+    &lt;Card&gt;
+      {showResults ? (
         &lt;InventoryTable
           results={searchResults || []}
           temporalSearchValue={temporalSearchValue}
@@ -639,7 +618,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
           isPresorted={!!searchSortOrder}
           columns={columns}
         /&gt;
-      ) : unfilteredInventory === null ? (
+      ) : searchResults === null ? (
         &lt;div className={classes.spinnerContainer}&gt;
           &lt;CircularProgress /&gt;
         &lt;/div&gt;
@@ -648,7 +627,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
           &lt;EmptyStatePage backgroundImageVisible={false} pageName={'Inventory'} reloadData={onApplyFilters} /&gt;
         &lt;/Container&gt;
       )}
-    &lt;/Box&gt;
+    &lt;/Card&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -658,7 +637,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-22T19:07:51.667Z
+                at 2023-11-22T19:51:50.526Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
