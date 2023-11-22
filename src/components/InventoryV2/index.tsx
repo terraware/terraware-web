@@ -74,6 +74,10 @@ export type BatchInventoryResult = {
   species_id: string;
   species_scientificName: string;
   species_commonName?: string;
+  germinatingQuantity: string;
+  notReadyQuantity: string;
+  readyQuantity: string;
+  totalQuantity: string;
   'germinatingQuantity(raw)': string;
   'readyQuantity(raw)': string;
   'notReadyQuantity(raw)': string;

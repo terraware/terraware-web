@@ -135,7 +135,7 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
           id='back'
           name={`${strings.INVENTORY}${
             origin !== 'Inventory'
-              ? `/ ${
+              ? ` / ${
                   origin === 'Species'
                     ? strings.formatString(strings.BATCHES_OF, getSpeciesLabel())
                     : strings.formatString(strings.BATCHES_AT, getNurseryLabel())

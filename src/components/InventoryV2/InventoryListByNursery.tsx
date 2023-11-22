@@ -1,5 +1,5 @@
 import InventoryTable from 'src/components/InventoryV2/InventoryTable';
-import { Box, CircularProgress, Container, Theme, useTheme } from '@mui/material';
+import { CircularProgress, Container, Theme } from '@mui/material';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
@@ -16,6 +16,7 @@ import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
 import { getAllNurseries } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
+import Card from 'src/components/common/Card';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -53,11 +54,10 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function InventoryListByNursery() {
-  const theme = useTheme();
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
-  const [unfilteredInventory, setUnfilteredInventory] = useState<SearchResponseElement[] | null>(null);
+  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
+  const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
@@ -147,7 +147,7 @@ export default function InventoryListByNursery() {
 
     if (updatedResult) {
       if (!debouncedSearchTerm && !filters.facilityIds?.length) {
-        setUnfilteredInventory(updatedResult);
+        setShowResults(updatedResult.length > 0);
       }
       if (getRequestId('searchInventory') === requestId) {
         setSearchResults(updatedResult);
@@ -160,15 +160,8 @@ export default function InventoryListByNursery() {
   }, [filters, onApplyFilters]);
 
   return (
-    <Box
-      sx={{
-        backgroundColor: theme.palette.TwClrBg,
-        borderRadius: '32px',
-        padding: theme.spacing(3),
-        minWidth: 'fit-content',
-      }}
-    >
-      {unfilteredInventory && unfilteredInventory.length > 0 ? (
+    <Card>
+      {showResults ? (
         <InventoryTable
           results={searchResults || []}
           temporalSearchValue={temporalSearchValue}
@@ -179,7 +172,7 @@ export default function InventoryListByNursery() {
           isPresorted={!!searchSortOrder}
           columns={columns}
         />
-      ) : unfilteredInventory === null ? (
+      ) : searchResults === null ? (
         <div className={classes.spinnerContainer}>
           <CircularProgress />
         </div>
@@ -188,6 +181,6 @@ export default function InventoryListByNursery() {
           <EmptyStatePage backgroundImageVisible={false} pageName={'Inventory'} reloadData={onApplyFilters} />
         </Container>
       )}
-    </Box>
+    </Card>
   );
 }

@@ -1,12 +1,11 @@
 import InventoryTable from 'src/components/InventoryV2/InventoryTable';
-import { Box, CircularProgress, Container, Theme, useTheme } from '@mui/material';
+import { CircularProgress, Container, Theme } from '@mui/material';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
-import { useOrganization, useUser } from 'src/providers';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { InventoryFiltersType } from 'src/components/Inventory/InventoryFiltersPopover';
@@ -15,6 +14,7 @@ import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
 import { NurseryBatchService } from 'src/services';
+import Card from 'src/components/common/Card';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -62,11 +62,10 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function InventoryListByBatch() {
-  const theme = useTheme();
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
-  const [unfilteredInventory, setUnfilteredInventory] = useState<SearchResponseElement[] | null>(null);
+  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
+  const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
@@ -75,10 +74,6 @@ export default function InventoryListByBatch() {
     direction: 'Ascending',
   });
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
-
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
 
   const onSearchSortOrder = (order: SearchSortOrder) => {
     const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
@@ -95,7 +90,7 @@ export default function InventoryListByBatch() {
       debouncedSearchTerm
     );
 
-    let updatedResult: InventoryResultWithBatchNumber[] | undefined = [];
+    let updatedResult: InventoryResultWithBatchNumber[] | undefined;
 
     // format results
     updatedResult = apiSearchResults?.map((uR) => {
@@ -105,37 +100,26 @@ export default function InventoryListByBatch() {
         batchId: resultTyped.id,
         species_scientificName_noLink: resultTyped.species_scientificName,
         facility_name_noLink: resultTyped.facility_name,
-        germinatingQuantity: numericFormatter.format(resultTyped['germinatingQuantity(raw)']),
-        notReadyQuantity: numericFormatter.format(resultTyped['notReadyQuantity(raw)']),
-        readyQuantity: numericFormatter.format(resultTyped['readyQuantity(raw)']),
-        totalQuantity: numericFormatter.format(resultTyped['totalQuantity(raw)']),
       } as InventoryResultWithBatchNumber;
     });
 
     if (updatedResult) {
       if (!debouncedSearchTerm && !filters.facilityIds?.length) {
-        setUnfilteredInventory(updatedResult);
+        setShowResults(updatedResult.length > 0);
       }
       if (getRequestId('searchInventory') === requestId) {
         setSearchResults(updatedResult);
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
 
   useEffect(() => {
     onApplyFilters();
   }, [filters, onApplyFilters]);
 
   return (
-    <Box
-      sx={{
-        backgroundColor: theme.palette.TwClrBg,
-        borderRadius: '32px',
-        padding: theme.spacing(3),
-        minWidth: 'fit-content',
-      }}
-    >
-      {unfilteredInventory && unfilteredInventory.length > 0 ? (
+    <Card>
+      {showResults ? (
         <InventoryTable
           results={searchResults || []}
           temporalSearchValue={temporalSearchValue}
@@ -146,7 +130,7 @@ export default function InventoryListByBatch() {
           isPresorted={!!searchSortOrder}
           columns={columns}
         />
-      ) : unfilteredInventory === null ? (
+      ) : searchResults === null ? (
         <div className={classes.spinnerContainer}>
           <CircularProgress />
         </div>
@@ -155,6 +139,6 @@ export default function InventoryListByBatch() {
           <EmptyStatePage backgroundImageVisible={false} pageName={'Inventory'} reloadData={onApplyFilters} />
         </Container>
       )}
-    </Box>
+    </Card>
   );
 }
