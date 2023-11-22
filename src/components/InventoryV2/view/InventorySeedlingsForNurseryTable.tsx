@@ -22,7 +22,7 @@ import Search from 'src/components/InventoryV2/Search';
 import { NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
 import DeleteBatchesModal from './DeleteBatchesModal';
 import BatchesCellRenderer from './BatchesCellRenderer';
-import BatchDetailsModalForNursery from './BatchDetailsModalForNursery';
+import BatchDetailsModal from './BatchDetailsModal';
 
 interface InventorySeedlingsForNurseryTableProps {
   nurseryId: number;
@@ -279,14 +279,15 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
         }}
       >
         {openNewBatchModal && (
-          <BatchDetailsModalForNursery
+          <BatchDetailsModal
             reload={reloadData}
             onClose={() => {
               onUpdateOpenBatch(null);
               setOpenNewBatchModal(false);
             }}
-            nurseryId={nurseryId}
             selectedBatch={selectedBatch}
+            originNurseryId={nurseryId}
+            origin={'Nursery'}
           />
         )}
         <DeleteBatchesModal
