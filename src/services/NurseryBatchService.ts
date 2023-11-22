@@ -230,9 +230,7 @@ const getAllBatches = async (
         },
       ],
     },
-    fields: isCsvExport
-      ? [...REPORT_BATCH_FIELDS]
-      : [...DEFAULT_BATCH_FIELDS, 'species_id', 'species_scientificName', 'species_commonName'],
+    fields: isCsvExport ? [...REPORT_BATCH_FIELDS] : [...NURSERY_BATCHES_FIELDS],
     sortOrder: [
       searchSortOrder ?? {
         field: 'batchNumber',
