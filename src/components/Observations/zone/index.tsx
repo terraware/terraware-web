@@ -149,7 +149,7 @@ export default function ObservationPlantingZone(): JSX.Element {
               <Search search={search} onSearch={(value: string) => onSearch(value)} filtersProps={filtersProps} />
               <Box marginTop={2}>
                 <Table
-                  id='observation-details-table'
+                  id='observation-zone-table'
                   columns={columns}
                   rows={plantingZone?.plantingSubzones?.flatMap((subzone) => subzone.monitoringPlots) ?? []}
                   orderBy='plantingZoneName'
