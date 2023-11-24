@@ -391,148 +391,150 @@ const MyAccountContent = ({
             minWidth: 'fit-content',
           }}
         >
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Typography fontSize='20px' fontWeight={600}>
-                {strings.GENERAL}
-              </Typography>
-            </Grid>
-            <Grid item xs={isMobile ? 12 : 4}>
-              <TextField
-                label={strings.FIRST_NAME}
-                id='firstName'
-                type='text'
-                value={record.firstName}
-                display={!edit}
-                onChange={(value) => onChange('firstName', value)}
-              />
-            </Grid>
-            <Grid item xs={isMobile ? 12 : 4}>
-              <TextField
-                label={strings.LAST_NAME}
-                id='lastName'
-                type='text'
-                value={record.lastName}
-                display={!edit}
-                onChange={(value) => onChange('lastName', value)}
-              />
-            </Grid>
-            <Grid item xs={isMobile ? 12 : 4}>
-              <TextField
-                label={strings.EMAIL}
-                id='email'
-                type='text'
-                value={record.email}
-                display={!edit}
-                readonly={true}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography fontSize='20px' fontWeight={600}>
-                {strings.LANGUAGE_AND_REGION}
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={isMobile ? 12 : 3}
-              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-            >
-              {edit ? (
-                <LocaleSelector
-                  onChangeLocale={(newValue) => setLocaleSelected(newValue)}
-                  localeSelected={localeSelected}
-                  fullWidth={true}
-                />
-              ) : (
+          <Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Typography fontSize='20px' fontWeight={600}>
+                  {strings.GENERAL}
+                </Typography>
+              </Grid>
+              <Grid item xs={isMobile ? 12 : 4}>
                 <TextField
-                  label={strings.LANGUAGE}
-                  id='locale'
+                  label={strings.FIRST_NAME}
+                  id='firstName'
                   type='text'
-                  value={findLocaleDetails(supportedLocales, selectedLocale).name}
-                  display={true}
+                  value={record.firstName}
+                  display={!edit}
+                  onChange={(value) => onChange('firstName', value)}
                 />
-              )}
-            </Grid>
-            <Grid
-              item
-              xs={isMobile ? 12 : 3}
-              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-            >
-              {edit ? (
-                <RegionSelector
-                  selectedCountryCode={countryCodeSelected}
-                  onChangeCountryCode={setCountryCodeSelected}
-                  hideCountrySubdivisions={true}
-                  countryLabel={strings.COUNTRY}
-                  countryTooltip={strings.TOOLTIP_COUNTRY_MY_ACCOUNT}
-                />
-              ) : (
+              </Grid>
+              <Grid item xs={isMobile ? 12 : 4}>
                 <TextField
-                  label={strings.COUNTRY}
-                  id='country'
+                  label={strings.LAST_NAME}
+                  id='lastName'
                   type='text'
-                  value={countries && user.countryCode ? getCountryByCode(countries, user.countryCode)?.name : ''}
-                  display={true}
+                  value={record.lastName}
+                  display={!edit}
+                  onChange={(value) => onChange('lastName', value)}
                 />
-              )}
-            </Grid>
-            <Grid
-              item
-              xs={isMobile ? 12 : 3}
-              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-            >
-              {edit ? (
-                <WeightSystemSelector
-                  onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
-                  selectedWeightSystem={preferredWeightSystemSelected}
-                  fullWidth={true}
-                />
-              ) : (
+              </Grid>
+              <Grid item xs={isMobile ? 12 : 4}>
                 <TextField
-                  label={strings.PREFERRED_WEIGHT_SYSTEM}
-                  id='preferredWeightSystem'
+                  label={strings.EMAIL}
+                  id='email'
                   type='text'
-                  value={weightSystems().find((ws) => ws.value === preferredWeightSystemSelected)?.label}
-                  display={true}
+                  value={record.email}
+                  display={!edit}
+                  readonly={true}
                 />
-              )}
-            </Grid>
-            <Grid item xs={isMobile ? 12 : 3} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
-              {edit ? (
-                <TimeZoneSelector
-                  onTimeZoneSelected={onTimeZoneChange}
-                  selectedTimeZone={record.timeZone}
-                  tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
-                  label={strings.TIME_ZONE}
+              </Grid>
+              <Grid item xs={12}>
+                <Typography fontSize='20px' fontWeight={600}>
+                  {strings.LANGUAGE_AND_REGION}
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                xs={isMobile ? 12 : 3}
+                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+              >
+                {edit ? (
+                  <LocaleSelector
+                    onChangeLocale={(newValue) => setLocaleSelected(newValue)}
+                    localeSelected={localeSelected}
+                    fullWidth={true}
+                  />
+                ) : (
+                  <TextField
+                    label={strings.LANGUAGE}
+                    id='locale'
+                    type='text'
+                    value={findLocaleDetails(supportedLocales, selectedLocale).name}
+                    display={true}
+                  />
+                )}
+              </Grid>
+              <Grid
+                item
+                xs={isMobile ? 12 : 3}
+                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+              >
+                {edit ? (
+                  <RegionSelector
+                    selectedCountryCode={countryCodeSelected}
+                    onChangeCountryCode={setCountryCodeSelected}
+                    hideCountrySubdivisions={true}
+                    countryLabel={strings.COUNTRY}
+                    countryTooltip={strings.TOOLTIP_COUNTRY_MY_ACCOUNT}
+                  />
+                ) : (
+                  <TextField
+                    label={strings.COUNTRY}
+                    id='country'
+                    type='text'
+                    value={countries && user.countryCode ? getCountryByCode(countries, user.countryCode)?.name : ''}
+                    display={true}
+                  />
+                )}
+              </Grid>
+              <Grid
+                item
+                xs={isMobile ? 12 : 3}
+                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+              >
+                {edit ? (
+                  <WeightSystemSelector
+                    onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
+                    selectedWeightSystem={preferredWeightSystemSelected}
+                    fullWidth={true}
+                  />
+                ) : (
+                  <TextField
+                    label={strings.PREFERRED_WEIGHT_SYSTEM}
+                    id='preferredWeightSystem'
+                    type='text'
+                    value={weightSystems().find((ws) => ws.value === preferredWeightSystemSelected)?.label}
+                    display={true}
+                  />
+                )}
+              </Grid>
+              <Grid item xs={isMobile ? 12 : 3} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+                {edit ? (
+                  <TimeZoneSelector
+                    onTimeZoneSelected={onTimeZoneChange}
+                    selectedTimeZone={record.timeZone}
+                    tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                    label={strings.TIME_ZONE}
+                  />
+                ) : (
+                  <TextField
+                    label={strings.TIME_ZONE}
+                    id='timezone'
+                    type='text'
+                    value={tz.longName}
+                    tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                    display={true}
+                  />
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
+                  {strings.NOTIFICATIONS}
+                </Typography>
+                <Typography fontSize='14px'>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Checkbox
+                  disabled={!edit}
+                  id='emailNotificationsEnabled'
+                  name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+                  label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+                  value={record.emailNotificationsEnabled}
+                  onChange={(value) => onChange('emailNotificationsEnabled', value)}
                 />
-              ) : (
-                <TextField
-                  label={strings.TIME_ZONE}
-                  id='timezone'
-                  type='text'
-                  value={tz.longName}
-                  tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
-                  display={true}
-                />
-              )}
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
-                {strings.NOTIFICATIONS}
-              </Typography>
-              <Typography fontSize='14px'>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Checkbox
-                disabled={!edit}
-                id='emailNotificationsEnabled'
-                name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
-                label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
-                value={record.emailNotificationsEnabled}
-                onChange={(value) => onChange('emailNotificationsEnabled', value)}
-              />
-            </Grid>
-          </Grid>
+          </Box>
           {organizations && organizations.length > 0 ? (
             <Grid container spacing={4}>
               <Grid item xs={12} />
