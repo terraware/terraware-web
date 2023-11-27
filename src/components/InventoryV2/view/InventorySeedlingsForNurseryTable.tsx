@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme, Theme, Popover } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, TableColumnType, Tooltip } from '@terraware/web-components';
@@ -73,7 +73,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
   const theme = useTheme();
   const classes = useStyles();
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { activeLocale } = useLocalization();
 
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
@@ -193,7 +193,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
   const onBatchSelected = (batch: NurseryBatchesSearchResponseElement, fromColumn?: string) => {
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
-      history.push({
+      navigate({
         pathname: APP_PATHS.BATCH_WITHDRAW,
         search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
       });
@@ -215,7 +215,7 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
   };
 
   const bulkWithdrawSelectedRows = () => {
-    history.push({
+    navigate({
       pathname: APP_PATHS.BATCH_WITHDRAW,
       search: getSelectedRowsAsQueryParams(),
     });

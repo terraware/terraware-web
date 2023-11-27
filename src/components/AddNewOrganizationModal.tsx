@@ -18,7 +18,7 @@ import useForm from 'src/utils/useForm';
 import TextField from './common/Textfield/Textfield';
 import { APP_PATHS } from '../constants';
 import DialogBox from './common/ScrollableDialogBox';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useOrganization, useLocalization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
@@ -43,7 +43,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const classes = useStyles();
   const { reloadOrganizations } = useOrganization();
   const { activeLocale } = useLocalization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { onCancel, open } = props;
   const snackbar = useSnackbar();
   const { isDesktop } = useDeviceInfo();
@@ -151,7 +151,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
       );
       reloadOrganizations();
-      history.push({ pathname: APP_PATHS.HOME });
+      navigate({ pathname: APP_PATHS.HOME });
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);
     }

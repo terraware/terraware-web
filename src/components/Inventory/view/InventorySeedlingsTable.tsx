@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme } from '@mui/material';
 import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
@@ -60,7 +60,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const getSearchFields = useCallback(() => {
     // Skip fuzzy search on empty strings since the query will be
@@ -150,7 +150,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
-      history.push({
+      navigate({
         pathname: APP_PATHS.BATCH_WITHDRAW,
         search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
       });
@@ -182,7 +182,7 @@ export default function InventorySeedslingsTable(props: InventorySeedslingsTable
   };
 
   const bulkWithdrawSelectedRows = () => {
-    history.push({
+    navigate({
       pathname: APP_PATHS.BATCH_WITHDRAW,
       search: getSelectedRowsAsQueryParams(),
     });

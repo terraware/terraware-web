@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
@@ -65,7 +65,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
   const defaultTimeZone = useDefaultTimeZone().get();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>([]);
@@ -76,7 +76,7 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
     const newSeedBankLocation = {
       pathname: APP_PATHS.SEED_BANKS_NEW,
     };
-    history.push(newSeedBankLocation);
+    navigate(newSeedBankLocation);
   };
 
   const clearSearch = () => {

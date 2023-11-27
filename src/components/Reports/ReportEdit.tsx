@@ -7,7 +7,7 @@ import ReportForm from 'src/components/Reports/ReportForm';
 import { Box, Typography, useTheme } from '@mui/material';
 import ReportService from 'src/services/ReportService';
 import { Report, ReportFile } from 'src/types/Report';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -33,14 +33,14 @@ const useStyles = makeStyles((theme) => ({
 export default function ReportEdit(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { reportId } = useParams<{ reportId: string }>();
-  const reportIdInt = parseInt(reportId, 10);
+  const reportIdInt = reportId ? parseInt(reportId, 10) : undefined;
   const { user } = useUser();
 
   const theme = useTheme();
 
   const classes = useStyles();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const snackbar = useSnackbar();
 
@@ -67,11 +67,13 @@ export default function ReportEdit(): JSX.Element {
 
   useEffect(() => {
     const getReport = async () => {
-      const result = await ReportService.getReport(reportIdInt);
-      if (result.requestSucceeded && result.report) {
-        setReport(result.report);
-      } else {
-        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
+      if (reportIdInt) {
+        const result = await ReportService.getReport(reportIdInt);
+        if (result.requestSucceeded && result.report) {
+          setReport(result.report);
+        } else {
+          snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
+        }
       }
     };
 
@@ -89,23 +91,27 @@ export default function ReportEdit(): JSX.Element {
   const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
 
   const updateFiles = async () => {
-    await Promise.all(
-      initialReportFiles?.map((f) => {
-        if (!updatedReportFiles?.includes(f)) {
-          return ReportService.deleteReportFile(reportIdInt, f.id);
-        }
-        return undefined;
-      }) ?? []
-    );
-    await Promise.all(newReportFiles?.map((f) => ReportService.uploadReportFile(reportIdInt, f)) ?? []);
+    if (reportIdInt) {
+      await Promise.all(
+        initialReportFiles?.map((f) => {
+          if (!updatedReportFiles?.includes(f)) {
+            return ReportService.deleteReportFile(reportIdInt, f.id);
+          }
+          return undefined;
+        }) ?? []
+      );
+      await Promise.all(newReportFiles?.map((f) => ReportService.uploadReportFile(reportIdInt, f)) ?? []);
+    }
   };
 
   const [currentUserEditing, setCurrentUserEditing] = useState(true);
   useEffect(() => {
     const getReport = async () => {
-      const result = await ReportService.getReport(reportIdInt);
-      if (result.requestSucceeded && result.report) {
-        setCurrentUserEditing(result.report.lockedByUserId === user?.id);
+      if (reportIdInt) {
+        const result = await ReportService.getReport(reportIdInt);
+        if (result.requestSucceeded && result.report) {
+          setCurrentUserEditing(result.report.lockedByUserId === user?.id);
+        }
       }
     };
 
@@ -153,7 +159,7 @@ export default function ReportEdit(): JSX.Element {
       setBusyState(false);
     }
 
-    if (!saveResult || saveResult.requestSucceeded) {
+    if ((!saveResult || saveResult.requestSucceeded) && reportIdInt) {
       // unlock the report
       const unlockResult = await ReportService.unlockReport(reportIdInt);
       if (!unlockResult.requestSucceeded) {
@@ -161,7 +167,9 @@ export default function ReportEdit(): JSX.Element {
       }
 
       // then navigate to view
-      history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
+      if (reportId) {
+        navigate({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
+      }
     }
   };
 
@@ -350,13 +358,13 @@ export default function ReportEdit(): JSX.Element {
     if (report) {
       setBusyState(true);
       const saveResult = await ReportService.updateReport(report);
-      if (saveResult.requestSucceeded) {
+      if (saveResult.requestSucceeded && reportIdInt) {
         await updateFiles();
         await updatePhotos(report.id);
         const submitResult = await ReportService.submitReport(reportIdInt);
-        if (submitResult.requestSucceeded) {
+        if (submitResult.requestSucceeded && reportId) {
           reloadOrganizations(selectedOrganization.id);
-          history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
+          navigate({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
         } else {
           snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
         }
@@ -398,7 +406,9 @@ export default function ReportEdit(): JSX.Element {
   });
 
   const redirectToReportView = () => {
-    history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId));
+    if (reportId) {
+      navigate(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId));
+    }
   };
 
   /**

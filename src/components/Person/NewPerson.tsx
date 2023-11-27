@@ -1,7 +1,7 @@
 import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import strings from 'src/strings';
 import { OrganizationUser } from 'src/types/User';
 import TextField from '../common/Textfield/Textfield';
@@ -37,7 +37,7 @@ export default function PersonView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
   const [repeatedEmail, setRepeatedEmail] = useState('');
@@ -70,7 +70,7 @@ export default function PersonView(): JSX.Element {
   useEffect(() => {
     const populatePeople = async () => {
       const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
+      if (personId && response.requestSucceeded) {
         setPeople(response.users);
         setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
       }
@@ -83,11 +83,11 @@ export default function PersonView(): JSX.Element {
   };
 
   const goToPeople = () => {
-    history.push({ pathname: APP_PATHS.PEOPLE });
+    navigate({ pathname: APP_PATHS.PEOPLE });
   };
 
   const goToViewPerson = (userId: string) => {
-    history.push({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
+    navigate({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
   };
 
   const saveUser = async () => {
@@ -156,7 +156,7 @@ export default function PersonView(): JSX.Element {
         const profileLocation = {
           pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', profile.id.toString()),
         };
-        history.push(profileLocation);
+        navigate(profileLocation);
       }
     }
   };

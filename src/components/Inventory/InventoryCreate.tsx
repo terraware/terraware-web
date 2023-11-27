@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import useForm from 'src/utils/useForm';
@@ -39,7 +39,7 @@ type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 export default function CreateInventory(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
@@ -125,7 +125,7 @@ export default function CreateInventory(): JSX.Element {
   };
 
   const goToInventory = () => {
-    history.push(inventoryLocation);
+    navigate(inventoryLocation);
   };
 
   const hasErrors = () => {
@@ -149,8 +149,8 @@ export default function CreateInventory(): JSX.Element {
       subLocationIds: selectedSubLocations,
     });
     if (response.requestSucceeded) {
-      history.replace(inventoryLocation);
-      history.push({
+      navigate(inventoryLocation, {replace: true});
+      navigate({
         pathname: `${APP_PATHS.INVENTORY}/${record.speciesId}`,
       });
     } else {

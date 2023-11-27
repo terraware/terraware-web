@@ -13,7 +13,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import AccessionByStatus from './AccessionByStatus';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
 import { AccessionState, stateName } from '../../../types/Accession';
@@ -56,7 +56,7 @@ Cookies.defaults = {
 export default function SeedSummary(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<SummaryResponse>();
@@ -160,7 +160,7 @@ export default function SeedSummary(): JSX.Element {
                       {strings.DASHBOARD_MESSAGE}
                     </Typography>
                     <Box sx={{ alignSelf: 'end' }}>
-                      <Button label={strings.GET_STARTED} onClick={() => history.push(APP_PATHS.ACCESSIONS)} />
+                      <Button label={strings.GET_STARTED} onClick={() => navigate(APP_PATHS.ACCESSIONS)} />
                     </Box>
                   </Box>
                 </Box>

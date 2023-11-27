@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
 import { Box, Grid } from '@mui/material';
@@ -56,7 +56,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const { results, setTemporalSearchValue, temporalSearchValue, filters, setFilters, setSearchSortOrder, isPresorted } =
     props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const withdrawInventory = () => {
     const speciesIds = selectedRows.filter((row) => row.species_id).map((row) => `speciesId=${row.species_id}`);
@@ -65,7 +65,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       return;
     }
 
-    history.push({
+    navigate({
       pathname: APP_PATHS.INVENTORY_WITHDRAW,
       search: `?${speciesIds.join('&')}&source=${window.location.pathname}`,
     });

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { APP_PATHS } from 'src/constants';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -29,7 +29,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(defaultSelectedOrg.id);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const [organizations, setOrganizations] = useState<Organization[]>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
@@ -118,17 +118,17 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           }
           if (queryOrganizationId !== orgToUse.id.toString()) {
             query.set('organizationId', orgToUse.id.toString());
-            history.replace(getLocation(location.pathname, location, query.toString()));
+            navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
           }
         }
       }
       if (!orgToUse && queryOrganizationId) {
         // user does not belong to any orgs, clear the url param org id
         query.delete('organizationId');
-        history.replace(getLocation(location.pathname, location, query.toString()));
+        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       }
     }
-  }, [organizations, selectedOrganization, query, location, history, userPreferences, userBootstrapped]);
+  }, [organizations, selectedOrganization, query, location, navigate, userPreferences, userBootstrapped]);
 
   useEffect(() => {
     if (selectedOrganization?.id && userPreferences.lastVisitedOrg !== selectedOrganization.id) {
@@ -142,7 +142,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [selectedOrganization?.id]);
 
   if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
-    history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+    navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
   }
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({

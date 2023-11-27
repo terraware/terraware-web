@@ -6,7 +6,7 @@ import { APP_PATHS } from 'src/constants';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Report } from 'src/types/Report';
 import ReportService from 'src/services/ReportService';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@terraware/web-components';
 import BackToLink from 'src/components/common/BackToLink';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
@@ -18,29 +18,29 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
 
-  const reportIdInt = parseInt(reportId, 10);
+  const reportIdInt = reportId ? parseInt(reportId, 10) : undefined;
 
   const theme = useTheme();
 
   const { isMobile } = useDeviceInfo();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const snackbar = useSnackbar();
 
   const [report, setReport] = useState<Report>();
 
   useEffect(() => {
-    const getReport = async () => {
-      const result = await ReportService.getReport(reportIdInt);
-      if (result.requestSucceeded) {
-        setReport(result.report);
-      } else {
-        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
-      }
-    };
-
     if (reportIdInt) {
+      const getReport = async () => {
+        const result = await ReportService.getReport(reportIdInt);
+        if (result.requestSucceeded) {
+          setReport(result.report);
+        } else {
+          snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
+        }
+      };
+
       getReport();
     }
   }, [reportIdInt, snackbar]);
@@ -61,13 +61,15 @@ export default function ReportView(): JSX.Element {
 
   const confirmEdit = async () => {
     // lock the report
-    const lockResult = await ReportService.forceLockReport(reportIdInt);
+    if (reportIdInt) {
+      const lockResult = await ReportService.forceLockReport(reportIdInt);
 
-    if (lockResult.requestSucceeded) {
-      // then navigate to editing
-      history.replace({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', reportId) });
-    } else {
-      snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
+      if (lockResult.requestSucceeded && reportId) {
+        // then navigate to editing
+        navigate({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', reportId) });
+      } else {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
+      }
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
@@ -70,14 +70,14 @@ export default function EmptyStatePage({
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
 
   const goToNewLocation = () => {
     const newLocation = {
       pathname: content.linkLocation,
     };
-    history.push(newLocation);
+    navigate(newLocation);
   };
 
   const downloadCsvTemplateHandler = () => {
@@ -146,7 +146,7 @@ export default function EmptyStatePage({
         buttonText: strings.ADD_INVENTORY,
         buttonIcon: 'plus',
         onClickButton: () => {
-          history.push(APP_PATHS.INVENTORY_NEW);
+          navigate(APP_PATHS.INVENTORY_NEW);
         },
       },
     ],
@@ -231,7 +231,7 @@ export default function EmptyStatePage({
       if (reloadData) {
         reloadData();
       }
-      history.push({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
+      navigate({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
     }
     setAddSpeciesModalOpened(false);
     if (snackbarMessage) {
@@ -244,7 +244,7 @@ export default function EmptyStatePage({
       if (reloadData) {
         reloadData();
       }
-      history.push({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
+      navigate({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
     }
     setImportSpeciesModalOpened(false);
     if (snackbarMessage) {
@@ -257,7 +257,7 @@ export default function EmptyStatePage({
       if (reloadData) {
         reloadData();
       }
-      history.push(APP_PATHS.INVENTORY);
+      navigate(APP_PATHS.INVENTORY);
     }
     setImportInventoryModalOpened(false);
     if (snackbarMessage) {

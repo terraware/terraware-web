@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import TextField from '../common/Textfield/Textfield';
@@ -38,7 +38,7 @@ export default function SeedBankView(): JSX.Element {
   });
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility | null>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const gridSize = () => {
     if (isMobile) {
@@ -48,8 +48,10 @@ export default function SeedBankView(): JSX.Element {
   };
 
   useEffect(() => {
-    const seedBanks = getAllSeedBanks(selectedOrganization);
-    setSelectedSeedBank(seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10)));
+    if (seedBankId) {
+      const seedBanks = getAllSeedBanks(selectedOrganization);
+      setSelectedSeedBank(seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10)));
+    }
   }, [seedBankId, selectedOrganization]);
 
   useEffect(() => {
@@ -71,7 +73,7 @@ export default function SeedBankView(): JSX.Element {
     const sitesLocation = {
       pathname: APP_PATHS.SEED_BANKS + (id ? `/${id}` : ''),
     };
-    history.push(sitesLocation);
+    navigate(sitesLocation);
   };
 
   const saveSeedBank = async () => {

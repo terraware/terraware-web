@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { CircularProgress, Grid } from '@mui/material';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -28,7 +28,7 @@ export type ObservationsHomeProps = SearchProps & {
 };
 
 export default function ObservationsHome(props: ObservationsHomeProps): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -54,9 +54,9 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
 
   useEffect(() => {
     if (plantingSites?.length === 0) {
-      history.push(APP_PATHS.HOME);
+      navigate(APP_PATHS.HOME);
     }
-  }, [history, plantingSites?.length]);
+  }, [navigate, plantingSites?.length]);
 
   useEffect(() => {
     dispatch(requestPlantings(selectedOrganization.id));
@@ -68,10 +68,10 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     }
     return {
       title: strings.SCHEDULE_OBSERVATION,
-      onClick: () => history.push(APP_PATHS.SCHEDULE_OBSERVATION),
+      onClick: () => navigate(APP_PATHS.SCHEDULE_OBSERVATION),
       icon: 'plus',
     };
-  }, [activeLocale, history, newObservationsSchedulable, scheduleObservationsEnabled]);
+  }, [activeLocale, navigate, newObservationsSchedulable, scheduleObservationsEnabled]);
 
   return (
     <PlantsPrimaryPage

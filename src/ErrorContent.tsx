@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { makeStyles } from '@mui/styles';
@@ -33,7 +33,7 @@ interface ErrorContentProps {
 export default function ErrorContent({ text, inApp }: ErrorContentProps) {
   const classes = useStyles({ inApp });
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const docLinks = useDocLinks();
 
   return (
@@ -48,7 +48,7 @@ export default function ErrorContent({ text, inApp }: ErrorContentProps) {
           <Button
             label={strings.BACK_TO_TERRAWARE}
             size='medium'
-            onClick={() => history.push(APP_PATHS.WELCOME)}
+            onClick={() => navigate(APP_PATHS.WELCOME)}
             className={classes.buttonLeft}
             type='passive'
           />

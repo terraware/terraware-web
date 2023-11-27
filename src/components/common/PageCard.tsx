@@ -2,7 +2,7 @@ import { Box, Theme, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -78,7 +78,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
   const { name, isNameBold, icon, description, linkText, link, linkStyle } = props;
   const classes = useStyles({ linkStyle });
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
 
   const stopBubblingEvent = (event?: React.MouseEvent) => {
@@ -91,7 +91,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
     if (linkStyle === 'button') {
       return;
     }
-    history.push({ pathname: link });
+    navigate({ pathname: link });
   };
 
   return (

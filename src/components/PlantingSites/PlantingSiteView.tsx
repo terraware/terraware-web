@@ -5,7 +5,7 @@ import { Button, DropdownItem } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { APP_PATHS } from 'src/constants';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
@@ -34,7 +34,7 @@ export default function PlantingSiteView(): JSX.Element {
   const theme = useTheme();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
-  const history = useHistory();
+  const navigate = useNavigate();
   const tz = useLocationTimeZone().get(plantingSite);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
@@ -46,10 +46,12 @@ export default function PlantingSiteView(): JSX.Element {
   };
 
   const goToEditPlantingSite = () => {
-    const editPlantingSiteLocation = {
-      pathname: APP_PATHS.PLANTING_SITES_EDIT.replace(':plantingSiteId', plantingSiteId),
-    };
-    history.push(editPlantingSiteLocation);
+    if (plantingSiteId) {
+      const editPlantingSiteLocation = {
+        pathname: APP_PATHS.PLANTING_SITES_EDIT.replace(':plantingSiteId', plantingSiteId),
+      };
+      navigate(editPlantingSiteLocation);
+    }
   };
 
   return (

@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import TextField from '../common/Textfield/Textfield';
@@ -38,7 +38,7 @@ export default function NurseryView(): JSX.Element {
   });
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [selectedNursery, setSelectedNursery] = useState<Facility | null>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const gridSize = () => {
     if (isMobile) {
@@ -48,8 +48,10 @@ export default function NurseryView(): JSX.Element {
   };
 
   useEffect(() => {
-    const seedBanks = getAllNurseries(selectedOrganization);
-    setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
+    if (nurseryId) {
+      const seedBanks = getAllNurseries(selectedOrganization);
+      setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
+    }
   }, [nurseryId, selectedOrganization]);
 
   useEffect(() => {
@@ -72,7 +74,7 @@ export default function NurseryView(): JSX.Element {
     const nurseriesLocation = {
       pathname: APP_PATHS.NURSERIES + (id ? `/${id}` : ''),
     };
-    history.push(nurseriesLocation);
+    navigate(nurseriesLocation);
   };
 
   const saveNursery = async () => {

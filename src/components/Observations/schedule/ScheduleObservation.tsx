@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { useAppSelector, useAppDispatch } from 'src/redux/store';
@@ -13,7 +13,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import ScheduleObservationForm from './ScheduleObservationForm';
 
 export default function ScheduleObservation(): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
@@ -36,7 +36,7 @@ export default function ScheduleObservation(): JSX.Element {
     return Promise.resolve(true);
   };
 
-  const goToObservations = useCallback(() => history.push(APP_PATHS.OBSERVATIONS), [history]);
+  const goToObservations = useCallback(() => navigate(APP_PATHS.OBSERVATIONS), [navigate]);
 
   const onErrors = useCallback((errors: boolean) => {
     setHasErrors(errors);

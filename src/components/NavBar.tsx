@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NavItem from 'src/components/common/Navbar/NavItem';
@@ -30,36 +30,36 @@ export default function NavBar({
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
   const { isDesktop } = useDeviceInfo();
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
-  const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
-  const isCheckinRoute = useRouteMatch(APP_PATHS.CHECKIN + '/');
-  const isContactUsRoute = useRouteMatch(APP_PATHS.CONTACT_US + '/');
-  const isHomeRoute = useRouteMatch(APP_PATHS.HOME + '/');
-  const isPeopleRoute = useRouteMatch(APP_PATHS.PEOPLE + '/');
-  const isSpeciesRoute = useRouteMatch(APP_PATHS.SPECIES + '/');
-  const isOrganizationRoute = useRouteMatch(APP_PATHS.ORGANIZATION + '/');
-  const isMonitoringRoute = useRouteMatch(APP_PATHS.MONITORING + '/');
-  const isSeedbanksRoute = useRouteMatch(APP_PATHS.SEED_BANKS + '/');
-  const isNurseriesRoute = useRouteMatch(APP_PATHS.NURSERIES + '/');
-  const isInventoryRoute = useRouteMatch(APP_PATHS.INVENTORY + '/');
-  const isBatchWithdrawRoute = useRouteMatch(APP_PATHS.BATCH_WITHDRAW + '/');
-  const isPlantingSitesRoute = useRouteMatch(APP_PATHS.PLANTING_SITES + '/');
-  const isPlantsDashboardRoute = useRouteMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
-  const isWithdrawalLogRoute = useRouteMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
-  const isReassignmentRoute = useRouteMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
-  const isReportsRoute = useRouteMatch(APP_PATHS.REPORTS + '/');
-  const isObservationsRoute = useRouteMatch(APP_PATHS.OBSERVATIONS + '/');
+  const isAccessionDashboardRoute = useMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
+  const isAccessionsRoute = useMatch(APP_PATHS.ACCESSIONS + '/');
+  const isCheckinRoute = useMatch(APP_PATHS.CHECKIN + '/');
+  const isContactUsRoute = useMatch(APP_PATHS.CONTACT_US + '/');
+  const isHomeRoute = useMatch(APP_PATHS.HOME + '/');
+  const isPeopleRoute = useMatch(APP_PATHS.PEOPLE + '/');
+  const isSpeciesRoute = useMatch(APP_PATHS.SPECIES + '/');
+  const isOrganizationRoute = useMatch(APP_PATHS.ORGANIZATION + '/');
+  const isMonitoringRoute = useMatch(APP_PATHS.MONITORING + '/');
+  const isSeedbanksRoute = useMatch(APP_PATHS.SEED_BANKS + '/');
+  const isNurseriesRoute = useMatch(APP_PATHS.NURSERIES + '/');
+  const isInventoryRoute = useMatch(APP_PATHS.INVENTORY + '/');
+  const isBatchWithdrawRoute = useMatch(APP_PATHS.BATCH_WITHDRAW + '/');
+  const isPlantingSitesRoute = useMatch(APP_PATHS.PLANTING_SITES + '/');
+  const isPlantsDashboardRoute = useMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
+  const isWithdrawalLogRoute = useMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
+  const isReassignmentRoute = useMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
+  const isReportsRoute = useMatch(APP_PATHS.REPORTS + '/');
+  const isObservationsRoute = useMatch(APP_PATHS.OBSERVATIONS + '/');
 
-  const navigate = (url: string) => {
-    history.push(url);
+  const navigateTo = (url: string) => {
+    navigate(url);
   };
 
   const closeAndNavigateTo = (path: string) => {
     closeNavBar();
     if (path) {
-      navigate(path);
+      navigateTo(path);
     }
   };
 

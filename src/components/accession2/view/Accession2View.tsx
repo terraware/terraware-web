@@ -4,7 +4,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useTheme, Box, Link as LinkMUI, Tab, Theme, Typography, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, DropdownItem, Icon } from '@terraware/web-components';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Accession } from 'src/types/Accession';
 import { AccessionService, FacilityService } from 'src/services';
 import strings from 'src/strings';
@@ -79,7 +79,7 @@ export default function Accession2View(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { userPreferences } = useUser();
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const tab = (query.get('tab') || '').toLowerCase();
   const preselectedTab = TABS.indexOf(tab) === -1 ? 'detail' : tab;
@@ -123,16 +123,18 @@ export default function Accession2View(): JSX.Element {
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
-      const response = await AccessionService.getAccession(parseInt(accessionId, 10));
-      if (response.requestSucceeded) {
-        if (!_.isEqual(response.accession, accession)) {
-          setAccession(response.accession);
-          setHasPendingTests(
-            response.accession?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false
-          );
+      if (accessionId) {
+        const response = await AccessionService.getAccession(parseInt(accessionId, 10));
+        if (response.requestSucceeded) {
+          if (!_.isEqual(response.accession, accession)) {
+            setAccession(response.accession);
+            setHasPendingTests(
+              response.accession?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false
+            );
+          }
+        } else {
+          snackbar.toastError();
         }
-      } else {
-        snackbar.toastError();
       }
     };
 
@@ -190,7 +192,7 @@ export default function Accession2View(): JSX.Element {
 
   const handleChange = (newValue: string) => {
     query.set('tab', newValue);
-    history.push(getLocation(location.pathname, location, query.toString()));
+    navigate(getLocation(location.pathname, location, query.toString()));
   };
 
   const tabStyles = {

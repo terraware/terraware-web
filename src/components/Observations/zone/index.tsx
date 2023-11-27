@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -48,7 +48,7 @@ export default function ObservationPlantingZone(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [search, onSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [replaceObservationPlot, setReplaceObservationPlot] = useState<
@@ -113,14 +113,14 @@ export default function ObservationPlantingZone(): JSX.Element {
 
   useEffect(() => {
     if (!plantingZone) {
-      history.push(
+      navigate(
         APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', Number(plantingSiteId).toString()).replace(
           ':observationId',
           Number(observationId).toString()
         )
       );
     }
-  }, [history, observationId, plantingSiteId, plantingZone]);
+  }, [navigate, observationId, plantingSiteId, plantingZone]);
 
   return (
     <>

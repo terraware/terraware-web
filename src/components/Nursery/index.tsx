@@ -1,6 +1,6 @@
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { FacilityService } from 'src/services';
@@ -30,11 +30,11 @@ export default function NurseryDetails(): JSX.Element {
   const theme = useTheme();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const tz = useLocationTimeZone().get(nursery);
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && nurseryId) {
       const selectedNursery = FacilityService.getFacility({
         organization: selectedOrganization,
         facilityId: nurseryId,
@@ -43,18 +43,20 @@ export default function NurseryDetails(): JSX.Element {
       if (selectedNursery) {
         setNursery(selectedNursery);
       } else {
-        history.push(APP_PATHS.NURSERIES);
+        navigate(APP_PATHS.NURSERIES);
       }
     }
-  }, [nurseryId, selectedOrganization, history]);
+  }, [nurseryId, selectedOrganization, navigate]);
 
   const classes = useStyles();
 
   const goToEditNursery = () => {
-    const editNurseryLocation = {
-      pathname: APP_PATHS.NURSERIES_EDIT.replace(':nurseryId', nurseryId),
-    };
-    history.push(editNurseryLocation);
+    if (nurseryId) {
+      const editNurseryLocation = {
+        pathname: APP_PATHS.NURSERIES_EDIT.replace(':nurseryId', nurseryId),
+      };
+      navigate(editNurseryLocation);
+    }
   };
 
   const { isMobile } = useDeviceInfo();

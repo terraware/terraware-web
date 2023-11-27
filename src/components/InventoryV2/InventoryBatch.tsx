@@ -11,7 +11,7 @@ import BatchSummary from './BatchSummary';
 import { NurseryBatchService } from 'src/services';
 import { Batch } from 'src/types/Batch';
 import { Button, Tabs } from '@terraware/web-components';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { makeStyles } from '@mui/styles';
 import BatchDetails from './BatchDetails';
@@ -57,7 +57,7 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
   const [batch, setBatch] = useState<Batch | null>();
   const tab = query.get('tab') || 'details';
   const [activeTab, setActiveTab] = useState<string>(tab);
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [inventoryNursery, setInventoryNursery] = useState<Facility>();
@@ -119,9 +119,9 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
-      history.push(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()));
     },
-    [query, history, location]
+    [query, navigate, location]
   );
 
   const onUpdateBatch = () => {
@@ -144,9 +144,9 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
           }`}
           to={
             origin === 'Species'
-              ? APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', speciesId)
+              ? APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', speciesId || '')
               : origin === 'Nursery'
-              ? APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId)
+              ? APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId || '')
               : `${APP_PATHS.INVENTORY}?tab=batches_by_batch`
           }
         />
@@ -190,9 +190,9 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
             <Button
               label={strings.WITHDRAW}
               onClick={() =>
-                history.push({
+                navigate({
                   pathname: APP_PATHS.BATCH_WITHDRAW,
-                  search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
+                  search: `?batchId=${batchId?.toString()}&source=${window.location.pathname}`,
                 })
               }
             />

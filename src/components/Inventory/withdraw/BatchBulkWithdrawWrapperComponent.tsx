@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useQuery from 'src/utils/useQuery';
 import { APP_PATHS } from 'src/constants';
 import BatchWithdrawFlow from './BatchWithdrawFlow';
@@ -14,7 +14,7 @@ export default function BatchBulkWithdrawWrapperComponent(
   const [batchIds, setBatchIds] = useState<string[]>();
   const [source, setSource] = useState<string | null>();
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (query.getAll('batchId').length > 0) {
@@ -22,9 +22,9 @@ export default function BatchBulkWithdrawWrapperComponent(
       setSource(query.get('source'));
     } else {
       // invalid url params
-      history.push({ pathname: APP_PATHS.INVENTORY });
+      navigate({ pathname: APP_PATHS.INVENTORY });
     }
-  }, [query, history]);
+  }, [query, navigate]);
 
   return batchIds ? (
     <BatchWithdrawFlow

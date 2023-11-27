@@ -2,7 +2,7 @@ import moment from 'moment';
 import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { NotificationsService } from 'src/services';
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
@@ -149,7 +149,7 @@ type NotificationsDropdownProps = {
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const classes = useStyles({});
-  const history = useHistory();
+  const navigate = useNavigate();
   const { organizationId, reloadOrganizationData } = props;
   // notificationsInterval value is only being used when it is set.
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
@@ -227,7 +227,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   };
 
   const goToSettings = () => {
-    history.push({ pathname: APP_PATHS.MY_ACCOUNT });
+    navigate({ pathname: APP_PATHS.MY_ACCOUNT });
     onPopoverClose();
   };
 

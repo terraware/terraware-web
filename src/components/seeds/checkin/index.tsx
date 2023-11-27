@@ -2,7 +2,7 @@ import { Box, Container, Grid, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { SeedBankService } from 'src/services';
 import { SearchResponseElement } from 'src/types/Search';
 import Button from 'src/components/common/button/Button';
@@ -50,7 +50,7 @@ export default function CheckIn(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const contentRef = useRef(null);
@@ -92,7 +92,7 @@ export default function CheckIn(): JSX.Element {
       // eslint-disable-next-line no-restricted-globals
       state: { from: location.pathname },
     };
-    history.push(accessionLocation);
+    navigate(accessionLocation);
   };
 
   const pendingAccessionsById = transformPendingAccessions();

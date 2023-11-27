@@ -7,7 +7,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import useForm from 'src/utils/useForm';
 import TrackingService, { PlantingSitePostRequestBody, PlantingSitePutRequestBody } from 'src/services/TrackingService';
 import { APP_PATHS } from 'src/constants';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useAppSelector } from 'src/redux/store';
@@ -42,7 +42,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const classes = useStyles();
   const { reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const [nameError, setNameError] = useState('');
   const [loaded, setLoaded] = useState(false);
@@ -76,7 +76,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     const plantingSitesLocation = {
       pathname: APP_PATHS.PLANTING_SITES + (id && id !== -1 ? `/${id}` : ''),
     };
-    history.push(plantingSitesLocation);
+    navigate(plantingSitesLocation);
   };
 
   const savePlantingSite = async () => {

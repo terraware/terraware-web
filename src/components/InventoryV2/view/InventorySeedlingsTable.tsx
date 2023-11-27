@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme, Theme, Popover } from '@mui/material';
 import { Button, DropdownItem, TableColumnType, Tooltip } from '@terraware/web-components';
 import strings from 'src/strings';
@@ -87,7 +87,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { activeLocale } = useLocalization();
 
   const getSearchFields = useCallback(() => {
@@ -195,7 +195,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
-      history.push({
+      navigate({
         pathname: APP_PATHS.BATCH_WITHDRAW,
         search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
       });
@@ -227,7 +227,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   };
 
   const bulkWithdrawSelectedRows = () => {
-    history.push({
+    navigate({
       pathname: APP_PATHS.BATCH_WITHDRAW,
       search: getSelectedRowsAsQueryParams(),
     });
