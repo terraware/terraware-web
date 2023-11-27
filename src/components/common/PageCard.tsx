@@ -72,10 +72,11 @@ export interface PageCardProps {
   linkText: string;
   link: string;
   linkStyle: LinkStyle;
+  id?: string;
 }
 
 export default function PageCard(props: PageCardProps): JSX.Element {
-  const { name, isNameBold, icon, description, linkText, link, linkStyle } = props;
+  const { name, isNameBold, icon, description, id, linkText, link, linkStyle } = props;
   const classes = useStyles({ linkStyle });
   const theme = useTheme();
   const history = useHistory();
@@ -95,7 +96,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
   };
 
   return (
-    <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`} onClick={goToPage}>
+    <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`} onClick={goToPage} id={id ?? ''}>
       <div className={classes.title}>
         <Icon name={icon} size='medium' className={classes.icon} />
         <Typography
