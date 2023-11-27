@@ -89,7 +89,6 @@ export default function InventorySeedlingsForNurseryTable(props: InventorySeedli
   const [filterGroupFilters, setFilterGroupFilters] = useForm<Record<string, SearchNodePayload>>(initialFilters);
 
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
-
   const getSearchFields = useCallback(() => {
     // Skip fuzzy search on empty strings since the query will be
     // expensive and results will be the same as not adding the fuzzy search
