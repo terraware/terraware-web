@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1700696935156" clover="3.2.0">
-  <project timestamp="1700696935156" name="All files">
-    <metrics statements="14162" coveredstatements="373" conditionals="9140" coveredconditionals="90" methods="4426" coveredmethods="78" elements="27728" coveredelements="541" complexity="0" loc="14162" ncloc="14162" packages="109" files="533" classes="533"/>
+<coverage generated="1701101622175" clover="3.2.0">
+  <project timestamp="1701101622175" name="All files">
+    <metrics statements="14162" coveredstatements="373" conditionals="9142" coveredconditionals="90" methods="4426" coveredmethods="78" elements="27730" coveredelements="541" complexity="0" loc="14162" ncloc="14162" packages="109" files="533" classes="533"/>
     <package name="src">
       <metrics statements="245" coveredstatements="0" conditionals="207" coveredconditionals="0" methods="69" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11272,7 +11272,7 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="442" coveredstatements="0" conditionals="349" coveredconditionals="0" methods="151" coveredmethods="0"/>
+      <metrics statements="442" coveredstatements="0" conditionals="351" coveredconditionals="0" methods="151" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
@@ -11620,23 +11620,23 @@
         <line num="84" count="0" type="cond" truecount="0" falsecount="3"/>
       </file>
       <file name="PageCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PageCard.tsx">
-        <metrics statements="16" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="16" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="78" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
         <line num="82" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="85" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="91" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="92" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="129" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="92" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
       </file>
       <file name="PageForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PageForm.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
