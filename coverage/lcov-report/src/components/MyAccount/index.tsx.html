@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/125</span>
+                <span class='fraction'>0/127</span>
             </div>
         
             
@@ -634,7 +634,9 @@
 <a name='L569'></a><a href='#L569'>569</a>
 <a name='L570'></a><a href='#L570'>570</a>
 <a name='L571'></a><a href='#L571'>571</a>
-<a name='L572'></a><a href='#L572'>572</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L572'></a><a href='#L572'>572</a>
+<a name='L573'></a><a href='#L573'>573</a>
+<a name='L574'></a><a href='#L574'>574</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1040,6 +1042,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1166,6 +1169,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1598,148 +1602,150 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
             minWidth: 'fit-content',
           }}
         &gt;
-          &lt;Grid container spacing={3}&gt;
-            &lt;Grid item xs={12}&gt;
-              &lt;Typography fontSize='20px' fontWeight={600}&gt;
-                {strings.GENERAL}
-              &lt;/Typography&gt;
-            &lt;/Grid&gt;
-            &lt;Grid item xs={isMobile ? 12 : 4}&gt;
-              &lt;TextField
-                label={strings.FIRST_NAME}
-                id='firstName'
-                type='text'
-                value={record.firstName}
-                display={!edit}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('firstName', value)}</span>
-              /&gt;
-            &lt;/Grid&gt;
-            &lt;Grid item xs={isMobile ? 12 : 4}&gt;
-              &lt;TextField
-                label={strings.LAST_NAME}
-                id='lastName'
-                type='text'
-                value={record.lastName}
-                display={!edit}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('lastName', value)}</span>
-              /&gt;
-            &lt;/Grid&gt;
-            &lt;Grid item xs={isMobile ? 12 : 4}&gt;
-              &lt;TextField
-                label={strings.EMAIL}
-                id='email'
-                type='text'
-                value={record.email}
-                display={!edit}
-                readonly={true}
-              /&gt;
-            &lt;/Grid&gt;
-            &lt;Grid item xs={12}&gt;
-              &lt;Typography fontSize='20px' fontWeight={600}&gt;
-                {strings.LANGUAGE_AND_REGION}
-              &lt;/Typography&gt;
-            &lt;/Grid&gt;
-            &lt;Grid
-              item
-              xs={isMobile ? 12 : 3}
-              sx={{ '&amp;.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-            &gt;
-              {edit ? (
-                &lt;LocaleSelector
-                  onChangeLocale={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setLocaleSelected(newValue)}</span>
-                  localeSelected={localeSelected}
-                  fullWidth={true}
-                /&gt;
-              ) : (
+          &lt;Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}&gt;
+            &lt;Grid container spacing={3}&gt;
+              &lt;Grid item xs={12}&gt;
+                &lt;Typography fontSize='20px' fontWeight={600}&gt;
+                  {strings.GENERAL}
+                &lt;/Typography&gt;
+              &lt;/Grid&gt;
+              &lt;Grid item xs={isMobile ? 12 : 4}&gt;
                 &lt;TextField
-                  label={strings.LANGUAGE}
-                  id='locale'
+                  label={strings.FIRST_NAME}
+                  id='firstName'
                   type='text'
-                  value={findLocaleDetails(supportedLocales, selectedLocale).name}
-                  display={true}
+                  value={record.firstName}
+                  display={!edit}
+                  onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('firstName', value)}</span>
                 /&gt;
-              )}
-            &lt;/Grid&gt;
-            &lt;Grid
-              item
-              xs={isMobile ? 12 : 3}
-              sx={{ '&amp;.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-            &gt;
-              {edit ? (
-                &lt;RegionSelector
-                  selectedCountryCode={countryCodeSelected}
-                  onChangeCountryCode={setCountryCodeSelected}
-                  hideCountrySubdivisions={true}
-                  countryLabel={strings.COUNTRY}
-                  countryTooltip={strings.TOOLTIP_COUNTRY_MY_ACCOUNT}
-                /&gt;
-              ) : (
+              &lt;/Grid&gt;
+              &lt;Grid item xs={isMobile ? 12 : 4}&gt;
                 &lt;TextField
-                  label={strings.COUNTRY}
-                  id='country'
+                  label={strings.LAST_NAME}
+                  id='lastName'
                   type='text'
-                  value={countries &amp;&amp; user.countryCode ? getCountryByCode(countries, user.countryCode)?.name : ''}
-                  display={true}
+                  value={record.lastName}
+                  display={!edit}
+                  onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('lastName', value)}</span>
                 /&gt;
-              )}
-            &lt;/Grid&gt;
-            &lt;Grid
-              item
-              xs={isMobile ? 12 : 3}
-              sx={{ '&amp;.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-            &gt;
-              {edit ? (
-                &lt;WeightSystemSelector
-                  onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setPreferredWeightSystemSelected(newValue)}</span>
-                  selectedWeightSystem={preferredWeightSystemSelected}
-                  fullWidth={true}
-                /&gt;
-              ) : (
+              &lt;/Grid&gt;
+              &lt;Grid item xs={isMobile ? 12 : 4}&gt;
                 &lt;TextField
-                  label={strings.PREFERRED_WEIGHT_SYSTEM}
-                  id='preferredWeightSystem'
+                  label={strings.EMAIL}
+                  id='email'
                   type='text'
-                  value={weightSystems().find(<span class="fstat-no" title="function not covered" >(w</span>s) =&gt; <span class="cstat-no" title="statement not covered" >ws.value === preferredWeightSystemSelected)</span>?.label}
-                  display={true}
+                  value={record.email}
+                  display={!edit}
+                  readonly={true}
                 /&gt;
-              )}
-            &lt;/Grid&gt;
-            &lt;Grid item xs={isMobile ? 12 : 3} sx={{ '&amp;.MuiGrid-item': { paddingTop: theme.spacing(2) } }}&gt;
-              {edit ? (
-                &lt;TimeZoneSelector
-                  onTimeZoneSelected={onTimeZoneChange}
-                  selectedTimeZone={record.timeZone}
-                  tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
-                  label={strings.TIME_ZONE}
+              &lt;/Grid&gt;
+              &lt;Grid item xs={12}&gt;
+                &lt;Typography fontSize='20px' fontWeight={600}&gt;
+                  {strings.LANGUAGE_AND_REGION}
+                &lt;/Typography&gt;
+              &lt;/Grid&gt;
+              &lt;Grid
+                item
+                xs={isMobile ? 12 : 3}
+                sx={{ '&amp;.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+              &gt;
+                {edit ? (
+                  &lt;LocaleSelector
+                    onChangeLocale={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setLocaleSelected(newValue)}</span>
+                    localeSelected={localeSelected}
+                    fullWidth={true}
+                  /&gt;
+                ) : (
+                  &lt;TextField
+                    label={strings.LANGUAGE}
+                    id='locale'
+                    type='text'
+                    value={findLocaleDetails(supportedLocales, selectedLocale).name}
+                    display={true}
+                  /&gt;
+                )}
+              &lt;/Grid&gt;
+              &lt;Grid
+                item
+                xs={isMobile ? 12 : 3}
+                sx={{ '&amp;.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+              &gt;
+                {edit ? (
+                  &lt;RegionSelector
+                    selectedCountryCode={countryCodeSelected}
+                    onChangeCountryCode={setCountryCodeSelected}
+                    hideCountrySubdivisions={true}
+                    countryLabel={strings.COUNTRY}
+                    countryTooltip={strings.TOOLTIP_COUNTRY_MY_ACCOUNT}
+                  /&gt;
+                ) : (
+                  &lt;TextField
+                    label={strings.COUNTRY}
+                    id='country'
+                    type='text'
+                    value={countries &amp;&amp; user.countryCode ? getCountryByCode(countries, user.countryCode)?.name : ''}
+                    display={true}
+                  /&gt;
+                )}
+              &lt;/Grid&gt;
+              &lt;Grid
+                item
+                xs={isMobile ? 12 : 3}
+                sx={{ '&amp;.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+              &gt;
+                {edit ? (
+                  &lt;WeightSystemSelector
+                    onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >setPreferredWeightSystemSelected(newValue)}</span>
+                    selectedWeightSystem={preferredWeightSystemSelected}
+                    fullWidth={true}
+                  /&gt;
+                ) : (
+                  &lt;TextField
+                    label={strings.PREFERRED_WEIGHT_SYSTEM}
+                    id='preferredWeightSystem'
+                    type='text'
+                    value={weightSystems().find(<span class="fstat-no" title="function not covered" >(w</span>s) =&gt; <span class="cstat-no" title="statement not covered" >ws.value === preferredWeightSystemSelected)</span>?.label}
+                    display={true}
+                  /&gt;
+                )}
+              &lt;/Grid&gt;
+              &lt;Grid item xs={isMobile ? 12 : 3} sx={{ '&amp;.MuiGrid-item': { paddingTop: theme.spacing(2) } }}&gt;
+                {edit ? (
+                  &lt;TimeZoneSelector
+                    onTimeZoneSelected={onTimeZoneChange}
+                    selectedTimeZone={record.timeZone}
+                    tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                    label={strings.TIME_ZONE}
+                  /&gt;
+                ) : (
+                  &lt;TextField
+                    label={strings.TIME_ZONE}
+                    id='timezone'
+                    type='text'
+                    value={tz.longName}
+                    tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                    display={true}
+                  /&gt;
+                )}
+              &lt;/Grid&gt;
+              &lt;Grid item xs={12}&gt;
+                &lt;Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}&gt;
+                  {strings.NOTIFICATIONS}
+                &lt;/Typography&gt;
+                &lt;Typography fontSize='14px'&gt;{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}&lt;/Typography&gt;
+              &lt;/Grid&gt;
+              &lt;Grid item xs={12}&gt;
+                &lt;Checkbox
+                  disabled={!edit}
+                  id='emailNotificationsEnabled'
+                  name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+                  label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+                  value={record.emailNotificationsEnabled}
+                  onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('emailNotificationsEnabled', value)}</span>
                 /&gt;
-              ) : (
-                &lt;TextField
-                  label={strings.TIME_ZONE}
-                  id='timezone'
-                  type='text'
-                  value={tz.longName}
-                  tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
-                  display={true}
-                /&gt;
-              )}
+              &lt;/Grid&gt;
             &lt;/Grid&gt;
-            &lt;Grid item xs={12}&gt;
-              &lt;Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}&gt;
-                {strings.NOTIFICATIONS}
-              &lt;/Typography&gt;
-              &lt;Typography fontSize='14px'&gt;{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}&lt;/Typography&gt;
-            &lt;/Grid&gt;
-            &lt;Grid item xs={12}&gt;
-              &lt;Checkbox
-                disabled={!edit}
-                id='emailNotificationsEnabled'
-                name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
-                label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
-                value={record.emailNotificationsEnabled}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('emailNotificationsEnabled', value)}</span>
-              /&gt;
-            &lt;/Grid&gt;
-          &lt;/Grid&gt;
+          &lt;/Box&gt;
           {organizations &amp;&amp; organizations.length &gt; 0 ? (
             &lt;Grid container spacing={4}&gt;
               &lt;Grid item xs={12} /&gt;
@@ -1783,7 +1789,7 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-27T16:13:41.754Z
+                at 2023-11-27T17:30:57.159Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1701101622175" clover="3.2.0">
-  <project timestamp="1701101622175" name="All files">
-    <metrics statements="14162" coveredstatements="373" conditionals="9142" coveredconditionals="90" methods="4426" coveredmethods="78" elements="27730" coveredelements="541" complexity="0" loc="14162" ncloc="14162" packages="109" files="533" classes="533"/>
+<coverage generated="1701106257593" clover="3.2.0">
+  <project timestamp="1701106257593" name="All files">
+    <metrics statements="14162" coveredstatements="373" conditionals="9144" coveredconditionals="90" methods="4426" coveredmethods="78" elements="27732" coveredelements="541" complexity="0" loc="14162" ncloc="14162" packages="109" files="533" classes="533"/>
     <package name="src">
       <metrics statements="245" coveredstatements="0" conditionals="207" coveredconditionals="0" methods="69" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5069,7 +5069,7 @@
       </file>
     </package>
     <package name="src.components.MyAccount">
-      <metrics statements="177" coveredstatements="0" conditionals="129" coveredconditionals="0" methods="51" coveredmethods="0"/>
+      <metrics statements="177" coveredstatements="0" conditionals="131" coveredconditionals="0" methods="51" coveredmethods="0"/>
       <file name="AssignNewOwnerModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/MyAccount/AssignNewOwnerModal.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
@@ -5108,7 +5108,7 @@
         <line num="16" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/MyAccount/index.tsx">
-        <metrics statements="155" coveredstatements="0" conditionals="125" coveredconditionals="0" methods="41" coveredmethods="0"/>
+        <metrics statements="155" coveredstatements="0" conditionals="127" coveredconditionals="0" methods="41" coveredmethods="0"/>
         <line num="53" count="0" type="stmt"/>
         <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="56" count="0" type="stmt"/>
@@ -5258,12 +5258,12 @@
         <line num="351" count="0" type="stmt"/>
         <line num="368" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="373" count="0" type="stmt"/>
-        <line num="407" count="0" type="stmt"/>
-        <line num="417" count="0" type="stmt"/>
-        <line num="442" count="0" type="stmt"/>
-        <line num="486" count="0" type="stmt"/>
-        <line num="495" count="0" type="stmt"/>
-        <line num="532" count="0" type="stmt"/>
+        <line num="408" count="0" type="stmt"/>
+        <line num="418" count="0" type="stmt"/>
+        <line num="443" count="0" type="stmt"/>
+        <line num="487" count="0" type="stmt"/>
+        <line num="496" count="0" type="stmt"/>
+        <line num="533" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.NewNursery">
