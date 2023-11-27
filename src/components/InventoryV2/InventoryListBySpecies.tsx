@@ -1,10 +1,10 @@
 import InventoryTable from 'src/components/InventoryV2/InventoryTable';
-import { Box, CircularProgress, Container, Theme, useTheme } from '@mui/material';
+import { CircularProgress, Container, Theme } from '@mui/material';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import NurseryInventoryService, { BE_SORTED_FIELDS } from 'src/services/NurseryInventoryService';
+import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { useOrganization, useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import useDebounce from 'src/utils/useDebounce';
@@ -14,6 +14,7 @@ import { InventoryResult, FacilityInventoryResult, InventoryResultWithFacilityNa
 import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
+import Card from 'src/components/common/Card';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -56,12 +57,15 @@ const columns = (): TableColumnType[] => [
   { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
 ];
 
-export default function InventoryListBySpecies() {
-  const theme = useTheme();
+type InventoryListBySpeciesProps = {
+  setReportData: (data: SearchInventoryParams) => void;
+};
+
+export default function InventoryListBySpecies({ setReportData }: InventoryListBySpeciesProps) {
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
-  const [unfilteredInventory, setUnfilteredInventory] = useState<SearchResponseElement[] | null>(null);
+  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
+  const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
@@ -82,6 +86,12 @@ export default function InventoryListBySpecies() {
   const onApplyFilters = useCallback(async () => {
     const requestId = Math.random().toString();
     setRequestId('searchInventory', requestId);
+    setReportData({
+      organizationId: selectedOrganization.id,
+      query: debouncedSearchTerm,
+      facilityIds: filters.facilityIds,
+      searchSortOrder,
+    });
     const apiSearchResults = await NurseryInventoryService.searchInventory({
       organizationId: selectedOrganization.id,
       query: debouncedSearchTerm,
@@ -150,28 +160,21 @@ export default function InventoryListBySpecies() {
     }
     if (updatedResult) {
       if (!debouncedSearchTerm && !filters.facilityIds?.length) {
-        setUnfilteredInventory(updatedResult);
+        setShowResults(updatedResult.length > 0);
       }
       if (getRequestId('searchInventory') === requestId) {
         setSearchResults(updatedResult);
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter, setReportData]);
 
   useEffect(() => {
     onApplyFilters();
   }, [filters, onApplyFilters]);
 
   return (
-    <Box
-      sx={{
-        backgroundColor: theme.palette.TwClrBg,
-        borderRadius: '32px',
-        padding: theme.spacing(3),
-        minWidth: 'fit-content',
-      }}
-    >
-      {unfilteredInventory && unfilteredInventory.length > 0 ? (
+    <Card>
+      {showResults ? (
         <InventoryTable
           results={searchResults || []}
           temporalSearchValue={temporalSearchValue}
@@ -182,7 +185,7 @@ export default function InventoryListBySpecies() {
           isPresorted={!!searchSortOrder}
           columns={columns}
         />
-      ) : unfilteredInventory === null ? (
+      ) : searchResults === null ? (
         <div className={classes.spinnerContainer}>
           <CircularProgress />
         </div>
@@ -191,6 +194,6 @@ export default function InventoryListBySpecies() {
           <EmptyStatePage backgroundImageVisible={false} pageName={'Inventory'} reloadData={onApplyFilters} />
         </Container>
       )}
-    </Box>
+    </Card>
   );
 }

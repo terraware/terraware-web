@@ -604,6 +604,11 @@ export interface paths {
     get: operations["getPlantingSite"];
     /** Updates information about an existing planting site. */
     put: operations["updatePlantingSite"];
+    /**
+     * Deletes a planting site.
+     * @description Planting site should not have any plantings.
+     */
+    delete: operations["deletePlantingSite"];
   };
   "/api/v1/tracking/sites/{id}/reportedPlants": {
     /**
@@ -1487,16 +1492,6 @@ export interface components {
       name: string;
       /** Format: int64 */
       organizationId: number;
-      /**
-       * Format: int32
-       * @description What month this site's planting season ends. 1=January.
-       */
-      plantingSeasonEndMonth?: number;
-      /**
-       * Format: int32
-       * @description What month this site's planting season starts. 1=January.
-       */
-      plantingSeasonStartMonth?: number;
       /** Format: int64 */
       projectId?: number;
       /**
@@ -2740,16 +2735,6 @@ export interface components {
       name: string;
       /** Format: int64 */
       organizationId: number;
-      /**
-       * Format: int32
-       * @description What month this site's planting season ends. 1=January.
-       */
-      plantingSeasonEndMonth?: number;
-      /**
-       * Format: int32
-       * @description What month this site's planting season starts. 1=January.
-       */
-      plantingSeasonStartMonth?: number;
       plantingZones?: components["schemas"]["PlantingZonePayload"][];
       /** Format: int64 */
       projectId?: number;
@@ -3521,16 +3506,6 @@ export interface components {
       boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       name: string;
-      /**
-       * Format: int32
-       * @description What month this site's planting season ends. 1=January.
-       */
-      plantingSeasonEndMonth?: number;
-      /**
-       * Format: int32
-       * @description What month this site's planting season starts. 1=January.
-       */
-      plantingSeasonStartMonth?: number;
       /** Format: int64 */
       projectId?: number;
       /**
@@ -6768,6 +6743,31 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Deletes a planting site.
+   * @description Planting site should not have any plantings.
+   */
+  deletePlantingSite: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The planting site is in use, e.g., there are plantings allocated to the site. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

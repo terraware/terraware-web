@@ -132,6 +132,17 @@ const updatePlantingSite = async (siteId: number, plantingSite: PlantingSitePutR
 };
 
 /**
+ * Delete a planting site by id
+ */
+const deletePlantingSite = async (siteId: number): Promise<Response> => {
+  return await httpPlantingSite.delete({
+    urlReplacements: {
+      '{id}': siteId.toString(),
+    },
+  });
+};
+
+/**
  * Get a delivery by id
  */
 const getDelivery = async (deliveryId: number): Promise<DeliveryData & Response> => {
@@ -322,6 +333,7 @@ const TrackingService = {
   createPlantingSite,
   getPlantingSite,
   updatePlantingSite,
+  deletePlantingSite,
   getDelivery,
   reassignPlantings,
   getTotalPlantsInZones,

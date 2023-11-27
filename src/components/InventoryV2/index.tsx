@@ -16,13 +16,19 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { isAdmin } from 'src/utils/organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
-import NurseryInventoryService from 'src/services/NurseryInventoryService';
+import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { useOrganization } from 'src/providers';
-import InventoryListBySpecies from 'src/components/InventoryV2/InventoryListBySpecies';
+import InventoryListBySpecies from './InventoryListBySpecies';
 import InventoryListByNursery from './InventoryListByNursery';
+import DownloadReportModal from './DownloadReportModal';
+import InventoryListByBatch from './InventoryListByBatch';
 
 export type FacilityName = {
   facility_name: string;
+};
+
+export type SpeciesName = {
+  species_scientificName: string;
 };
 
 export type InventoryResult = {
@@ -37,13 +43,25 @@ export type InventoryResult = {
   facilityInventories: FacilityName[];
 };
 
+export type FacilitySpeciesInventoryResult = {
+  facility_id: string;
+  facility_name: string;
+  germinatingQuantity: string;
+  readyQuantity: string;
+  notReadyQuantity: string;
+  totalQuantity: string;
+  facilityInventories: SpeciesName[];
+};
+
 export type InventoryResultWithFacilityNames = Omit<InventoryResult, 'facilityInventories'> & {
   facilityInventories: string;
 };
 
-export type InventoryResultWithSpeciesNames = Omit<InventoryResult, 'facilityInventories'> & {
-  facility_name: string;
-  speciesNames: string;
+export type InventoryResultWithBatchNumber = Omit<InventoryResult, 'facilityInventories'> & {
+  batchId: string;
+  batchNumber: string;
+  facility_name_noLink: string;
+  species_scientificName_noLink: string;
 };
 
 export type FacilityInventoryResult = {
@@ -52,6 +70,24 @@ export type FacilityInventoryResult = {
   species_id: string;
   species_scientificName: string;
   species_commonName?: string;
+  'germinatingQuantity(raw)': string;
+  'readyQuantity(raw)': string;
+  'notReadyQuantity(raw)': string;
+  'totalQuantity(raw)': string;
+};
+
+export type BatchInventoryResult = {
+  id: string;
+  batchNumber: string;
+  facility_id: string;
+  facility_name: string;
+  species_id: string;
+  species_scientificName: string;
+  species_commonName?: string;
+  germinatingQuantity: string;
+  notReadyQuantity: string;
+  readyQuantity: string;
+  totalQuantity: string;
   'germinatingQuantity(raw)': string;
   'readyQuantity(raw)': string;
   'notReadyQuantity(raw)': string;
@@ -109,6 +145,8 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const query = useQuery();
   const tab = query.get('tab') || 'batches_by_species';
   const [activeTab, setActiveTab] = useState<string>(tab);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [reportData, setReportData] = useState<SearchInventoryParams>();
 
   const onTabChange = useCallback(
     (newTab: string) => {
@@ -129,13 +167,21 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     history.push(appPathLocation);
   };
 
+  const onCloseDownloadReportModal = () => {
+    setReportModalOpen(false);
+  };
+
+  const onDownloadReport = () => {
+    setReportModalOpen(true);
+  };
+
   const isOnboarded = hasNurseries && hasSpecies;
   const onOptionItemClick = (optionItem: DropdownItem) => {
     if (optionItem.value === 'import') {
       setImportInventoryModalOpen(true);
     }
     if (optionItem.value === 'export') {
-      // TODO: Export current view
+      onDownloadReport();
     }
   };
 
@@ -179,6 +225,14 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   return (
     <TfMain backgroundImageVisible={!isOnboarded}>
       <ImportInventoryModal open={importInventoryModalOpen} onClose={() => setImportInventoryModalOpen(false)} />
+      {reportData && (
+        <DownloadReportModal
+          reportData={reportData}
+          open={reportModalOpen}
+          onClose={onCloseDownloadReportModal}
+          tab={activeTab}
+        />
+      )}
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}>
           <Grid container>
@@ -226,17 +280,17 @@ export default function Inventory(props: InventoryProps): JSX.Element {
               {
                 id: 'batches_by_species',
                 label: strings.BY_SPECIES,
-                children: <InventoryListBySpecies />,
+                children: <InventoryListBySpecies setReportData={setReportData} />,
               },
               {
                 id: 'batches_by_nursery',
                 label: strings.BY_NURSERY,
-                children: <InventoryListByNursery />,
+                children: <InventoryListByNursery setReportData={setReportData} />,
               },
               {
                 id: 'batches_by_batch',
                 label: strings.BY_BATCH,
-                children: 'TODO: Inventory List by Batch',
+                children: <InventoryListByBatch setReportData={setReportData} />,
               },
             ]}
           />

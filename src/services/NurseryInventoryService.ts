@@ -38,6 +38,10 @@ export const FACILITY_SPECIFIC_FIELDS = [
   'species_scientificName',
   'species_commonName',
   'facility_name',
+  'germinatingQuantity',
+  'notReadyQuantity',
+  'readyQuantity',
+  'totalQuantity',
   'germinatingQuantity(raw)',
   'readyQuantity(raw)',
   'notReadyQuantity(raw)',
@@ -67,6 +71,7 @@ export type SearchInventoryParams = {
   searchSortOrder?: SearchSortOrder;
   query?: string;
   facilityIds?: number[];
+  isCsvExport?: boolean;
 };
 
 type GetSummaryResponsePayload =
@@ -237,10 +242,19 @@ const searchInventoryByNursery = async ({
   searchSortOrder,
   facilityIds,
   query,
+  isCsvExport,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
   const params: SearchRequestPayload = {
-    prefix: 'inventories.facilityInventories',
-    fields: [...FACILITY_SPECIFIC_FIELDS, 'facility_id'],
+    prefix: 'facilities.facilityInventoryTotals',
+    fields: [
+      'facility_id',
+      'facility_name',
+      'facilityInventories.species_scientificName',
+      'germinatingQuantity',
+      'notReadyQuantity',
+      'readyQuantity',
+      'totalQuantity',
+    ],
     sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
     search: {
       operation: 'and',
@@ -250,14 +264,77 @@ const searchInventoryByNursery = async ({
           field: 'organization_id',
           values: [organizationId],
         },
-        {
-          operation: 'field',
-          field: 'facility_id',
-          values: facilityIds,
-        },
       ],
     },
     count: 0,
+  };
+  const searchValueChildren: FieldNodePayload[] = [];
+
+  if (query) {
+    const scientificNameNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'facilityInventories.species_scientificName',
+      type: 'Fuzzy',
+      values: [query],
+    };
+    searchValueChildren.push(scientificNameNode);
+
+    const facilityNameNode: FieldNodePayload = {
+      operation: 'field',
+      field: 'facility_name',
+      type: 'Fuzzy',
+      values: [query],
+    };
+    searchValueChildren.push(facilityNameNode);
+  }
+
+  if (searchValueChildren.length) {
+    const searchValueNodes: OrNodePayload = {
+      operation: 'or',
+      children: searchValueChildren,
+    };
+
+    params.search.children.push(searchValueNodes);
+  }
+
+  if (facilityIds?.length) {
+    params.search.children.push({
+      operation: 'field',
+      field: 'facility_id',
+      values: facilityIds,
+    });
+  }
+
+  return isCsvExport ? await SearchService.searchCsv(params) : await SearchService.search(params);
+};
+
+/**
+ * Search inventory
+ */
+const downloadInventory = async ({
+  organizationId,
+  searchSortOrder,
+  facilityIds,
+  query,
+}: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
+  const forSpecificFacilities = !!facilityIds && !!facilityIds.length;
+  const params: SearchRequestPayload = {
+    prefix: forSpecificFacilities ? 'inventories.facilityInventories' : 'inventories',
+    fields: forSpecificFacilities
+      ? FACILITY_SPECIFIC_FIELDS.filter((field) => !field.includes('raw'))
+      : INVENTORY_FIELDS.filter((field) => !field.includes('raw')),
+    sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'organization_id',
+          values: [organizationId],
+        },
+      ],
+    },
+    count: 1000,
   };
 
   const searchValueChildren: FieldNodePayload[] = [];
@@ -281,11 +358,22 @@ const searchInventoryByNursery = async ({
 
     const facilityNameNode: FieldNodePayload = {
       operation: 'field',
-      field: 'facility_name',
+      field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
       type: 'Fuzzy',
       values: [query],
     };
     searchValueChildren.push(facilityNameNode);
+  }
+
+  let nurseryFilter: FieldNodePayload | undefined;
+
+  if (forSpecificFacilities) {
+    nurseryFilter = {
+      operation: 'field',
+      field: 'facility_id',
+      type: 'Exact',
+      values: facilityIds.map((id) => id.toString()),
+    };
   }
 
   if (searchValueChildren.length) {
@@ -294,10 +382,19 @@ const searchInventoryByNursery = async ({
       children: searchValueChildren,
     };
 
-    params.search.children.push(searchValueNodes);
+    if (nurseryFilter) {
+      params.search.children.push({
+        operation: 'and',
+        children: [nurseryFilter, searchValueNodes],
+      } as AndNodePayload);
+    } else {
+      params.search.children.push(searchValueNodes);
+    }
+  } else if (nurseryFilter) {
+    params.search.children.push(nurseryFilter);
   }
 
-  return await SearchService.search(params);
+  return await SearchService.searchCsv(params);
 };
 
 /**
@@ -309,6 +406,7 @@ const NurseryInventoryService = {
   getInventoryUploadStatus,
   uploadInventory,
   searchInventory,
+  downloadInventory,
   searchInventoryByNursery,
 };
 

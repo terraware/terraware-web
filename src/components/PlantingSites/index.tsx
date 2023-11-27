@@ -5,6 +5,7 @@ import { CircularProgress } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import {
   selectPlantingSiteObservationsResults,
@@ -59,6 +60,7 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
     const siteId = Number(plantingSiteId);
     if (!isNaN(siteId)) {
       dispatch(requestPlantingSiteObservationsResults(selectedOrganization.id, siteId));
+      dispatch(requestPlantings(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id, plantingSiteId]);
 
