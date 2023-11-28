@@ -49,8 +49,6 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
       searchFields: FieldNodePayload[],
       searchSortOrder: SearchSortOrder | undefined
     ): Promise<SearchResponseElement[] | null> => {
-      console.log('searchFields', searchFields);
-      console.log('searchSortOrder', searchSortOrder);
       const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatchesForSpeciesById(
         orgId,
         originId,
