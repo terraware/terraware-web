@@ -8,7 +8,7 @@ export const requestProjects = (organizationId: number, locale?: string | null) 
     try {
       const response = await ProjectsService.listProjects(organizationId, locale);
       const { error, projects } = response;
-      dispatch(setProjectsAction({ error, projects: projects }));
+      dispatch(setProjectsAction({ error, projects }));
     } catch (e) {
       // should not happen, the response above captures any http request errors
       // tslint:disable-next-line: no-console
