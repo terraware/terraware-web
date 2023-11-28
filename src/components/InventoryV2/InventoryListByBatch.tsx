@@ -59,6 +59,7 @@ const columns = (): TableColumnType[] => [
   },
   { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
   { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
+  { key: 'quantitiesMenu', name: '', type: 'string' },
 ];
 
 type InventoryListByBatchProps = {
@@ -130,7 +131,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   }, [filters, onApplyFilters]);
 
   return (
-    <Card>
+    <Card style={{ minWidth: 'fit-content' }}>
       {showResults ? (
         <InventoryTable
           results={searchResults || []}
@@ -141,6 +142,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           setSearchSortOrder={onSearchSortOrder}
           isPresorted={!!searchSortOrder}
           columns={columns}
+          reloadData={onApplyFilters}
         />
       ) : searchResults === null ? (
         <div className={classes.spinnerContainer}>
