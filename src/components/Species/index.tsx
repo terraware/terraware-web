@@ -31,7 +31,7 @@ import TooltipLearnMoreModal, {
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { DropdownItem, SortOrder } from '@terraware/web-components';
+import { BusySpinner, DropdownItem, SortOrder } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
@@ -42,6 +42,7 @@ import useQuery from 'src/utils/useQuery';
 import { useHistory } from 'react-router';
 import { APP_PATHS } from 'src/constants';
 import { SpeciesSearchResultRow } from './types';
+import { handlePromises } from 'src/services/utils';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -143,6 +144,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
+  const [isBusy, setIsBusy] = useState<boolean>(false);
   const query = useQuery();
   const history = useHistory();
 
@@ -549,9 +551,14 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
 
   const deleteSelectedSpecies = async (speciesIds: number[]) => {
     if (speciesIds.length > 0) {
-      await Promise.allSettled(
+      setIsBusy(true);
+      const success = await handlePromises(
         speciesIds.map((id: number) => SpeciesService.deleteSpecies(id, selectedOrganization.id))
       );
+      setIsBusy(false);
+      if (!success) {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
       setDeleteSpeciesModalOpen(false);
       reloadData();
     }
@@ -713,6 +720,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
 
   return (
     <TfMain>
+      {isBusy && <BusySpinner withSkrim={true} />}
       <CheckDataModal
         open={checkDataModalOpen}
         onClose={() => setCheckDataModalOpen(false)}

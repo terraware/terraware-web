@@ -331,14 +331,21 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
 };
 
 // find species that are used in the org
-const getInUseSpecies = async (organizationId: number): Promise<number[]> => {
-  type WithSpeciesId = { species_id: string };
-  type AccessionFacility = { accessions: WithSpeciesId[] };
-  type PlantingSitePopulation = { populations: WithSpeciesId[] };
+const getInUseSpecies = async (organizationId: number): Promise<Record<number, string>> => {
+  type WithSpecies = { species_id: number; species_scientificName: string };
+  type AccessionFacility = { accessions: WithSpecies[] };
+  type PlantingSitePopulation = { populations: WithSpecies[] };
 
   const params: SearchRequestPayload = {
     prefix: '',
-    fields: ['facilities.accessions.species_id', 'batches.species_id', 'plantingSites.populations.species_id'],
+    fields: [
+      'facilities.accessions.species_id',
+      'facilities.accessions.species_scientificName',
+      'batches.species_id',
+      'batches.species_scientificName',
+      'plantingSites.populations.species_id',
+      'plantingSites.populations.species_scientificName',
+    ],
     search: {
       operation: 'and',
       children: [
@@ -353,24 +360,30 @@ const getInUseSpecies = async (organizationId: number): Promise<number[]> => {
     count: 0,
   };
 
+  const inUseSpecies: Record<number, string> = {};
   const results = await SearchService.search(params);
 
   if (results && results.length) {
-    const speciesIds = new Set<string>();
     const { batches, facilities, plantingSites } = results[0];
 
-    (batches as WithSpeciesId[] | undefined)?.forEach((batch: WithSpeciesId) => speciesIds.add(batch.species_id));
+    (batches as WithSpecies[] | undefined)?.forEach(
+      (batch: WithSpecies) => (inUseSpecies[Number(batch.species_id)] = batch.species_scientificName)
+    );
+
     (facilities as AccessionFacility[] | undefined)
       ?.flatMap((f: AccessionFacility) => f.accessions)
-      .forEach((accession: WithSpeciesId) => speciesIds.add(accession.species_id));
+      .forEach(
+        (accession: WithSpecies) => (inUseSpecies[Number(accession.species_id)] = accession.species_scientificName)
+      );
+
     (plantingSites as PlantingSitePopulation[] | undefined)
       ?.flatMap((p: PlantingSitePopulation) => p.populations)
-      .forEach((population: WithSpeciesId) => speciesIds.add(population.species_id));
-
-    return Array.from(speciesIds).map((id: string) => Number(id));
-  } else {
-    return [];
+      .forEach(
+        (population: WithSpecies) => (inUseSpecies[Number(population.species_id)] = population.species_scientificName)
+      );
   }
+
+  return inUseSpecies;
 };
 
 /**

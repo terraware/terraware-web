@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Typography } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
+import { BusySpinner, Button, DialogBox, TextTruncated } from '@terraware/web-components';
 import { SpeciesService } from 'src/services';
 import { SpeciesSearchResultRow } from './types';
 import { useOrganization } from 'src/providers';
@@ -13,30 +13,32 @@ export interface DeleteSpeciesDialogProps {
   speciesToDelete: SpeciesSearchResultRow[];
 }
 
-export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JSX.Element {
+export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JSX.Element | null {
   const { onClose, open, onSubmit, speciesToDelete } = props;
+  const theme = useTheme();
   const { selectedOrganization } = useOrganization();
-  const [inUseSpecies, setInUseSpecies] = useState<number[]>();
+  const [inUseSpecies, setInUseSpecies] = useState<Record<number, string>>();
   const [toDelete, setToDelete] = useState<number[]>();
   const [cannotDelete, setCannotDelete] = useState<number[]>();
 
   useEffect(() => {
     const fetchInUseSpecies = async () => {
-      const speciesIds = await SpeciesService.getInUseSpecies(selectedOrganization.id);
-      setInUseSpecies(speciesIds);
+      const species = await SpeciesService.getInUseSpecies(selectedOrganization.id);
+      setInUseSpecies(species);
     };
 
-    fetchInUseSpecies();
-  }, [selectedOrganization.id]);
+    if (open) {
+      fetchInUseSpecies();
+    }
+  }, [selectedOrganization.id, open]);
 
   useEffect(() => {
     if (inUseSpecies) {
-      const ids = new Set(inUseSpecies);
       const forDeletion = speciesToDelete
-        .filter((species) => !ids.has(Number(species.id)))
+        .filter((species) => !inUseSpecies[Number(species.id)])
         .map((species) => species.id);
       const avoidDeletion = speciesToDelete
-        .filter((species) => ids.has(Number(species.id)))
+        .filter((species) => inUseSpecies[Number(species.id)])
         .map((species) => species.id);
       setToDelete(forDeletion);
       setCannotDelete(avoidDeletion);
@@ -47,6 +49,25 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
     onSubmit(toDelete ?? []);
   };
 
+  const getTruncated = (speciesIds: number[]): JSX.Element | null => {
+    if (!inUseSpecies) {
+      return null;
+    }
+    const inputValues = speciesIds.map((id) => inUseSpecies[id]);
+
+    return (
+      <TextTruncated
+        stringList={inputValues}
+        maxLengthPx={250}
+        textStyle={{ fontSize: 16 }}
+        showAllStyle={{ padding: theme.spacing(2), fontSize: 16 }}
+        listSeparator={strings.LIST_SEPARATOR}
+        moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
+        moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+      />
+    );
+  };
+
   const getMessage = (): string | JSX.Element => {
     if (cannotDelete?.length && !toDelete?.length) {
       return strings.SELECTED_SPECIES_IN_USE;
@@ -54,13 +75,17 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
     if (cannotDelete?.length && toDelete?.length) {
       return (
         <>
-          <Typography>{strings.formatString(strings.SELECTED_SPECIES_SOME_IN_USE_1, cannotDelete?.length)}</Typography>
-          <Typography>{strings.formatString(strings.SELECTED_SPECIES_SOME_IN_USE_2, toDelete?.length)}</Typography>
+          <Typography marginBottom={1}>{strings.SELECTED_SPECIES_SOME_IN_USE}</Typography>
+          {getTruncated(cannotDelete)}
         </>
       );
     }
     return strings.SELECTED_SPECIES_UNUSED;
   };
+
+  if (!open) {
+    return null;
+  }
 
   if (!toDelete) {
     return <BusySpinner withSkrim={true} />;
@@ -94,7 +119,7 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
     >
       <>
         {getMessage()}
-        <Typography>
+        <Typography marginTop={2}>
           {toDelete.length ? strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT : strings.SELECTED_SPECIES_NOTHING_TO_DELETE}
         </Typography>
       </>
