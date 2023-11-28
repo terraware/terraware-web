@@ -104,7 +104,7 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
     if (!selectedZone?.plantingSubzones) {
       return [];
     }
-    return selectedZone.plantingSubzones
+    return [...selectedZone.plantingSubzones]
       .sort((a, b) => a.fullName.localeCompare(b.fullName, undefined, { numeric: true }))
       .map((subzone) => subzoneToDropdownItem(subzone));
   }, [selectedZone]);
