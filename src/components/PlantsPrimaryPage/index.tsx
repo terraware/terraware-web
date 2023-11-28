@@ -28,6 +28,7 @@ const allSitesOption = (organizationId: number): PlantingSite => ({
   name: strings.ALL,
   id: -1,
   organizationId,
+  plantingSeasons: [],
 });
 
 export default function PlantsPrimaryPage({

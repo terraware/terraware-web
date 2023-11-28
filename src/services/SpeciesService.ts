@@ -150,8 +150,13 @@ const deleteSpecies = async (speciesId: number, organizationId: number): Promise
 /**
  * Get all species
  */
-const getAllSpecies = async (organizationId: number): Promise<AllSpeciesResponse> => {
-  const params = { organizationId: organizationId.toString() };
+const getAllSpecies = async (organizationId: number, inUse?: boolean): Promise<AllSpeciesResponse> => {
+  const params: any = { organizationId: organizationId.toString() };
+
+  if (inUse) {
+    params.inUse = inUse.toString();
+  }
+
   const response: AllSpeciesResponse = await httpSpecies.get<SpeciesResponsePayload, AllSpeciesData>(
     { params },
     (data) => ({
@@ -330,62 +335,6 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
   return (await SearchService.search(params)) as SuggestedSpecies[] | null;
 };
 
-// find species that are used in the org
-const getInUseSpecies = async (organizationId: number): Promise<Record<number, string>> => {
-  type WithSpecies = { species_id: number; species_scientificName: string };
-  type AccessionFacility = { accessions: WithSpecies[] };
-  type PlantingSitePopulation = { populations: WithSpecies[] };
-
-  const params: SearchRequestPayload = {
-    prefix: '',
-    fields: [
-      'facilities.accessions.species_id',
-      'facilities.accessions.species_scientificName',
-      'batches.species_id',
-      'batches.species_scientificName',
-      'plantingSites.populations.species_id',
-      'plantingSites.populations.species_scientificName',
-    ],
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'id',
-          type: 'Exact',
-          values: [organizationId],
-        },
-      ],
-    },
-    count: 0,
-  };
-
-  const inUseSpecies: Record<number, string> = {};
-  const results = await SearchService.search(params);
-
-  if (results && results.length) {
-    const { batches, facilities, plantingSites } = results[0];
-
-    (batches as WithSpecies[] | undefined)?.forEach(
-      (batch: WithSpecies) => (inUseSpecies[Number(batch.species_id)] = batch.species_scientificName)
-    );
-
-    (facilities as AccessionFacility[] | undefined)
-      ?.flatMap((f: AccessionFacility) => f.accessions)
-      .forEach(
-        (accession: WithSpecies) => (inUseSpecies[Number(accession.species_id)] = accession.species_scientificName)
-      );
-
-    (plantingSites as PlantingSitePopulation[] | undefined)
-      ?.flatMap((p: PlantingSitePopulation) => p.populations)
-      .forEach(
-        (population: WithSpecies) => (inUseSpecies[Number(population.species_id)] = population.species_scientificName)
-      );
-  }
-
-  return inUseSpecies;
-};
-
 /**
  * Exported functions
  */
@@ -404,7 +353,6 @@ const SpeciesService = {
   getSpeciesDetails,
   getSpeciesNames,
   suggestSpecies,
-  getInUseSpecies,
 };
 
 export default SpeciesService;

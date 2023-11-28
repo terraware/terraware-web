@@ -5,6 +5,7 @@ import { BusySpinner, Button, DialogBox, TextTruncated } from '@terraware/web-co
 import { SpeciesService } from 'src/services';
 import { SpeciesSearchResultRow } from './types';
 import { useOrganization } from 'src/providers';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteSpeciesDialogProps {
   open: boolean;
@@ -16,29 +17,40 @@ export interface DeleteSpeciesDialogProps {
 export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JSX.Element | null {
   const { onClose, open, onSubmit, speciesToDelete } = props;
   const theme = useTheme();
+  const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
-  const [inUseSpecies, setInUseSpecies] = useState<Record<number, string>>();
+  const [inUseSpecies, setInUseSpecies] = useState<Record<string, string>>();
   const [toDelete, setToDelete] = useState<number[]>();
   const [cannotDelete, setCannotDelete] = useState<number[]>();
 
   useEffect(() => {
     const fetchInUseSpecies = async () => {
-      const species = await SpeciesService.getInUseSpecies(selectedOrganization.id);
-      setInUseSpecies(species);
+      const response = await SpeciesService.getAllSpecies(selectedOrganization.id, true);
+      if (response.requestSucceeded && response.species) {
+        setInUseSpecies(
+          response.species.reduce(
+            (acc, species) => ({ ...acc, [species.id.toString()]: species.scientificName }),
+            {} as Record<string, string>
+          )
+        );
+      } else {
+        snackbar.toastError(strings.GENERIC_ERROR);
+        onClose();
+      }
     };
 
     if (open) {
       fetchInUseSpecies();
     }
-  }, [selectedOrganization.id, open]);
+  }, [selectedOrganization.id, open, onClose, snackbar]);
 
   useEffect(() => {
     if (inUseSpecies) {
       const forDeletion = speciesToDelete
-        .filter((species) => !inUseSpecies[Number(species.id)])
+        .filter((species) => !inUseSpecies[species.id.toString()])
         .map((species) => species.id);
       const avoidDeletion = speciesToDelete
-        .filter((species) => inUseSpecies[Number(species.id)])
+        .filter((species) => inUseSpecies[species.id.toString()])
         .map((species) => species.id);
       setToDelete(forDeletion);
       setCannotDelete(avoidDeletion);
@@ -53,7 +65,7 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
     if (!inUseSpecies) {
       return null;
     }
-    const inputValues = speciesIds.map((id) => inUseSpecies[id]);
+    const inputValues = speciesIds.map((id) => inUseSpecies[id.toString()]);
 
     return (
       <TextTruncated
