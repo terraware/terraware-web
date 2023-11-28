@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
@@ -7,6 +7,9 @@ import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
 import { TextTruncated } from '@terraware/web-components';
 import strings from 'src/strings';
+import ChangeQuantityModal from './view/ChangeQuantityModal';
+import { Batch } from 'src/types/Batch';
+import QuantitiesMenu from './view/QuantitiesMenu';
 
 const COLUMN_WIDTH = 250;
 
@@ -22,7 +25,8 @@ const useStyles = makeStyles(() => ({
 export default function InventoryCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
-  const { column, row, value, index } = props;
+  const { column, row, value, index, reloadData } = props;
+  const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
 
   const getNurseriesNames = (nurseries: string) => {
     const nurseriesArray = nurseries.split('\r');
@@ -55,6 +59,14 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     );
   };
 
+  const createLinkToInventoryBatchDetail = (iValue: React.ReactNode | unknown[]) => {
+    return (
+      <Link to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', row.batchId.toString())}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
+  };
+
   if (column.key === 'facilityInventories' && typeof value === 'string') {
     return (
       <CellRenderer index={index} column={column} value={getNurseriesNames(value)} row={row} className={classes.text} />
@@ -81,6 +93,41 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
         value={row.facility_id ? createLinkToInventoryNurseryDetail(value) : undefined}
         row={row}
         className={classes.text}
+      />
+    );
+  }
+
+  if (column.key === 'batchNumber') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={row.batchId ? createLinkToInventoryBatchDetail(value) : undefined}
+        row={row}
+        className={classes.text}
+      />
+    );
+  }
+
+  if (column.key === 'quantitiesMenu') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        row={row}
+        value={
+          <>
+            {modalValues.openChangeQuantityModal && (
+              <ChangeQuantityModal
+                onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
+                modalValues={modalValues}
+                row={row as Batch}
+                reload={reloadData}
+              />
+            )}
+            <QuantitiesMenu setModalValues={setModalValues} batch={row} />
+          </>
+        }
       />
     );
   }

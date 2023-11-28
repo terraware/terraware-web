@@ -4,15 +4,16 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useState } from 'react';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
+import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { InventoryFiltersType } from 'src/components/Inventory/InventoryFiltersPopover';
-import { FacilitySpeciesInventoryResult } from 'src/components/InventoryV2';
+import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/components/InventoryV2';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
+import { NurseryBatchService } from 'src/services';
 import Card from 'src/components/common/Card';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -27,12 +28,22 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const columns = (): TableColumnType[] => [
-  { key: 'facility_name', name: strings.NURSERY, type: 'string' },
+  { key: 'batchNumber', name: strings.BATCH_NUMBER, type: 'string', tooltipTitle: strings.TOOLTIP_BATCH_NUMBER },
   {
-    key: 'facilityInventories',
+    key: 'species_scientificName_noLink',
     name: strings.SPECIES,
     type: 'string',
     tooltipTitle: strings.TOOLTIP_SCIENTIFIC_NAME,
+  },
+  {
+    key: 'species_commonName',
+    name: strings.COMMON_NAME,
+    type: 'string',
+  },
+  {
+    key: 'facility_name_noLink',
+    name: strings.NURSERY,
+    type: 'string',
   },
   {
     key: 'germinatingQuantity',
@@ -48,13 +59,14 @@ const columns = (): TableColumnType[] => [
   },
   { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
   { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
+  { key: 'quantitiesMenu', name: '', type: 'string' },
 ];
 
-type InventoryListByNurseryProps = {
+type InventoryListByBatchProps = {
   setReportData: (data: SearchInventoryParams) => void;
 };
 
-export default function InventoryListByNursery({ setReportData }: InventoryListByNurseryProps) {
+export default function InventoryListByBatch({ setReportData }: InventoryListByBatchProps) {
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -63,7 +75,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
-    field: 'facility_name',
+    field: 'batchNumber',
     direction: 'Ascending',
   });
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
@@ -84,17 +96,24 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
       searchSortOrder,
     });
 
-    const apiSearchResults = await NurseryInventoryService.searchInventoryByNursery({
-      organizationId: selectedOrganization.id,
-      query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds,
+    const apiSearchResults = await NurseryBatchService.getAllBatches(
+      selectedOrganization.id,
       searchSortOrder,
-    });
+      filters.facilityIds,
+      debouncedSearchTerm
+    );
 
-    const updatedResult = apiSearchResults?.map((result) => {
-      const resultTyped = result as FacilitySpeciesInventoryResult;
-      const speciesNames = resultTyped.facilityInventories.map((species) => species.species_scientificName);
-      return { ...resultTyped, facilityInventories: speciesNames.join('\r') };
+    let updatedResult: InventoryResultWithBatchNumber[] | undefined;
+
+    // format results
+    updatedResult = apiSearchResults?.map((uR) => {
+      const resultTyped = uR as BatchInventoryResult;
+      return {
+        ...resultTyped,
+        batchId: resultTyped.id,
+        species_scientificName_noLink: resultTyped.species_scientificName,
+        facility_name_noLink: resultTyped.facility_name,
+      } as InventoryResultWithBatchNumber;
     });
 
     if (updatedResult) {
@@ -123,6 +142,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
           setSearchSortOrder={onSearchSortOrder}
           isPresorted={!!searchSortOrder}
           columns={columns}
+          reloadData={onApplyFilters}
         />
       ) : searchResults === null ? (
         <div className={classes.spinnerContainer}>

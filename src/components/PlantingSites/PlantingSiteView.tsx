@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import TfMain from 'src/components/common/TfMain';
-import { Typography, Grid, Theme, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Box, Typography, Grid, Theme, useTheme } from '@mui/material';
+import { Button, DropdownItem } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { APP_PATHS } from 'src/constants';
@@ -14,7 +15,9 @@ import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones'
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import Card from 'src/components/common/Card';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
+import DeletePlantingSiteModal from './DeletePlantingSiteModal';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -33,6 +36,7 @@ export default function PlantingSiteView(): JSX.Element {
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
   const history = useHistory();
   const tz = useLocationTimeZone().get(plantingSite);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   const gridSize = () => {
     if (isMobile) {
@@ -50,6 +54,9 @@ export default function PlantingSiteView(): JSX.Element {
 
   return (
     <TfMain>
+      {deleteModalOpen && plantingSite && (
+        <DeletePlantingSiteModal plantingSite={plantingSite} onClose={() => setDeleteModalOpen(false)} />
+      )}
       <Grid container padding={theme.spacing(0, 0, 4, 0)}>
         <Grid item xs={12} marginBottom={theme.spacing(3)}>
           <BackToLink id='back' to={APP_PATHS.PLANTING_SITES} name={strings.PLANTING_SITES} />
@@ -58,13 +65,24 @@ export default function PlantingSiteView(): JSX.Element {
           <Typography fontSize='20px' fontWeight={600}>
             {plantingSite?.name}
           </Typography>
-          <Button
-            icon='iconEdit'
-            label={isMobile ? undefined : strings.EDIT_PLANTING_SITE}
-            priority='primary'
-            size='medium'
-            onClick={goToEditPlantingSite}
-          />
+          <Box display='flex' alignItems='center'>
+            <Button
+              icon='iconEdit'
+              label={isMobile ? undefined : strings.EDIT_PLANTING_SITE}
+              priority='primary'
+              size='medium'
+              onClick={goToEditPlantingSite}
+            />
+            <OptionsMenu
+              size='small'
+              onOptionItemClick={(item: DropdownItem) => {
+                if (item.value === 'delete-planting-site') {
+                  setDeleteModalOpen(true);
+                }
+              }}
+              optionItems={[{ label: strings.DELETE, value: 'delete-planting-site', type: 'destructive' }]}
+            />
+          </Box>
         </Grid>
         <Grid item xs={12}>
           <PageSnackbar />
