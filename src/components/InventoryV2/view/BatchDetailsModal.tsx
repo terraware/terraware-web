@@ -1,89 +1,116 @@
-import { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
-import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
-import { Batch, CreateBatchRequestPayload } from 'src/types/Batch';
-import { NurseryBatchService, SpeciesService } from 'src/services';
-import { Species } from 'src/types/Species';
-import { APP_PATHS } from 'src/constants';
-import Link from 'src/components/common/Link';
+import { Batch, CreateBatchRequestPayload, isBatch, NurseryTransfer } from 'src/types/Batch';
+import { NurseryBatchService } from 'src/services';
 import { useOrganization } from 'src/providers/hooks';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { Facility } from 'src/types/Facility';
-import { getNurseryById } from 'src/utils/organization';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import { useUser } from 'src/providers';
-import NurseryDropdown from 'src/components/InventoryV2/NurseryDropdown';
+import FacilityService from 'src/services/FacilityService';
+import { APP_PATHS } from 'src/constants';
+import Link from 'src/components/common/Link';
+import { Response } from 'src/services/HttpService';
+import AccessionService from 'src/services/AccessionService';
+import { BatchData, BatchId, NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
+import SubLocationsDropdown from 'src/components/InventoryV2/form/SubLocationsDropdown';
+import { useSubLocations } from 'src/components/InventoryV2/form/useSubLocations';
+import { useAccessions } from 'src/components/InventoryV2/form/useAccessions';
+import AccessionsDropdown from 'src/components/InventoryV2/form/AccessionsDropdown';
+import { useSpecies } from 'src/components/InventoryV2/form/useSpecies';
+import SpeciesDropdown from 'src/components/InventoryV2/form/SpeciesDropdown';
+import NurseryDropdownV2 from 'src/components/InventoryV2/form/NurseryDropdownV2';
+import { useNurseries } from 'src/components/InventoryV2/form/useNurseries';
+import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 
 export interface BatchDetailsModalProps {
   onClose: () => void;
   reload: () => void;
-  selectedBatch: any;
-  speciesId: number;
+  selectedBatch: NurseryBatchesSearchResponseElement | undefined;
+  originNurseryId?: number;
+  originSpeciesId?: number;
+  origin: OriginPage;
 }
 
+type FormRecord = Partial<CreateBatchRequestPayload & Batch> | undefined;
+
+const convertSelectedBatchToFormRecord = (input: NurseryBatchesSearchResponseElement | undefined): FormRecord =>
+  !input
+    ? input
+    : ({
+        facilityId: Number(input.facility_id),
+        accessionId: input.accession_id ? Number(input.accession_id) : undefined,
+        addedDate: input.addedDate,
+        batchNumber: input.batchNumber,
+        germinatingQuantity: Number(input['germinatingQuantity(raw)']),
+        id: Number(input.id),
+        notes: input.notes,
+        notReadyQuantity: Number(input['notReadyQuantity(raw)']),
+        readyQuantity: Number(input['readyQuantity(raw)']),
+        readyByDate: input.readyByDate,
+        speciesId: Number(input.species_id),
+        subLocationIds: (input.subLocations || []).map((subLocation) => Number(subLocation.subLocation_id)),
+        version: Number(input.version),
+      } as Partial<CreateBatchRequestPayload>);
+
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
+  const { onClose, reload, selectedBatch, originNurseryId, originSpeciesId, origin } = props;
+
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
-  const { onClose, reload, selectedBatch, speciesId } = props;
-
-  const [record, setRecord, onChange] = useForm(selectedBatch);
   const snackbar = useSnackbar();
   const theme = useTheme();
-  const [validateFields, setValidateFields] = useState<boolean>(false);
-
   const { isMobile } = useDeviceInfo();
+  const locationTimezone = useLocationTimeZone();
+  const [record, setRecord, onChange] = useForm<FormRecord>(undefined);
+  const { availableSubLocations, selectedSubLocations } = useSubLocations(originNurseryId, record);
+  const { availableAccessions, selectedAccession } = useAccessions(record);
+  const { availableSpecies, selectedSpecies } = useSpecies(record);
+  const { availableNurseries, selectedNursery } = useNurseries(record);
+
   const [totalQuantity, setTotalQuantity] = useState(0);
-  const [speciesSelected, setSpeciesSelected] = useState<Species>();
-  const [facility, setFacility] = useState<Facility>();
-
-  const tz = useLocationTimeZone().get(facility);
-  const [timeZone, setTimeZone] = useState(tz.id);
-
   const [addedDateChanged, setAddedDateChanged] = useState(false);
-
+  const [validateFields, setValidateFields] = useState<boolean>(false);
+  const [multiStepRequestInFlight, setMultiStepRequestInFlight] = useState<boolean>(false);
+  const [timeZone, setTimeZone] = useState('');
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   useEffect(() => {
-    if (record) {
-      const populateSpecies = async () => {
-        const speciesResponse = await SpeciesService.getSpecies(speciesId, selectedOrganization.id);
-        if (speciesResponse.requestSucceeded) {
-          setSpeciesSelected(speciesResponse.species);
-        }
-      };
+    const facilityId = originNurseryId || record?.facilityId;
+    if (!facilityId) {
+      return;
+    }
 
+    const facility = FacilityService.getFacility({
+      organization: selectedOrganization,
+      facilityId,
+      type: 'Nursery',
+    });
+
+    const tz = locationTimezone.get(facility);
+    setTimeZone(tz.id);
+  }, [originNurseryId, record?.facilityId, locationTimezone, selectedOrganization]);
+
+  useEffect(() => {
+    if (record) {
       const notReadyQuantity = record?.notReadyQuantity ?? 0;
       const readyQuantity = record?.readyQuantity ?? 0;
       setTotalQuantity(+notReadyQuantity + +readyQuantity);
-
-      populateSpecies();
     }
-  }, [record, selectedOrganization, speciesId]);
+  }, [record]);
 
   useEffect(() => {
-    if (record?.facilityId) {
-      const newFacility = getNurseryById(selectedOrganization, record.facilityId);
-      if (newFacility.id.toString() !== facility?.id.toString()) {
-        setFacility(newFacility);
+    setRecord((previousRecord: FormRecord): FormRecord => {
+      if (!previousRecord) {
+        return previousRecord;
       }
-    }
-  }, [record?.facilityId, selectedOrganization, facility?.id]);
-
-  useEffect(() => {
-    if (timeZone !== tz.id) {
-      setTimeZone(tz.id);
-    }
-  }, [tz.id, timeZone]);
-
-  useEffect(() => {
-    setRecord((previousRecord: CreateBatchRequestPayload): CreateBatchRequestPayload => {
       return {
         ...previousRecord,
         addedDate: addedDateChanged ? previousRecord.addedDate : getTodaysDateFormatted(timeZone),
@@ -92,50 +119,48 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   }, [timeZone, setRecord, addedDateChanged]);
 
   useEffect(() => {
-    const newBatch: CreateBatchRequestPayload = {
+    const newBatch: Partial<CreateBatchRequestPayload> = {
       addedDate: getTodaysDateFormatted(),
-      facilityId: undefined,
-      speciesId,
-      germinatingQuantity: undefined,
-      notReadyQuantity: undefined,
-      readyQuantity: undefined,
-    } as unknown as CreateBatchRequestPayload;
-    const initBatch = () => {
-      if (selectedBatch) {
-        const batchData: any = Object.keys(selectedBatch).reduce((data, key) => {
-          if (key.endsWith('(raw)')) {
-            return data;
-          }
-          data[key] = selectedBatch[key];
-          return data;
-        }, {} as any);
-
-        return {
-          ...batchData,
-          readyQuantity: selectedBatch['readyQuantity(raw)'],
-          notReadyQuantity: selectedBatch['notReadyQuantity(raw)'],
-          germinatingQuantity: selectedBatch['germinatingQuantity(raw)'],
-        };
-      } else {
-        return {
-          ...newBatch,
-          id: -1,
-          batchNumber: '',
-          latestObservedTime: '',
-          version: 0,
-        };
-      }
+      germinatingQuantity: 0,
+      notReadyQuantity: 0,
+      readyQuantity: 0,
     };
+    if (origin === 'Nursery') {
+      newBatch.facilityId = originNurseryId;
+      newBatch.speciesId = undefined;
+    } else if (origin === 'Species') {
+      newBatch.facilityId = undefined;
+      newBatch.speciesId = originSpeciesId;
+    }
+
+    const initBatch = () =>
+      selectedBatch
+        ? convertSelectedBatchToFormRecord(selectedBatch)
+        : {
+            ...newBatch,
+            id: -1,
+            batchNumber: '',
+            latestObservedTime: '',
+            version: 0,
+          };
 
     setRecord(initBatch());
+  }, [selectedBatch, setRecord, selectedOrganization, origin, originSpeciesId, originNurseryId]);
 
-    const foundFacility = selectedOrganization.facilities?.find(
-      (f) => f.id.toString() === selectedBatch?.facilityId.toString()
-    );
-    if (foundFacility) {
-      setFacility(foundFacility);
+  useEffect(() => {
+    const onWindowBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+
+      // This message does not seem to always make it to the alert
+      event.returnValue = window.confirm(strings.CONFIRM_IN_FLIGHT_REQUEST);
+    };
+
+    if (multiStepRequestInFlight) {
+      window.addEventListener('beforeunload', onWindowBeforeUnload);
     }
-  }, [selectedBatch, speciesId, setRecord, selectedOrganization]);
+
+    return () => window.removeEventListener('beforeunload', onWindowBeforeUnload);
+  }, [multiStepRequestInFlight]);
 
   const MANDATORY_FIELDS = [
     'facilityId',
@@ -148,8 +173,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const hasErrors = () => {
     if (record) {
-      const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
-      return missingRequiredField;
+      return MANDATORY_FIELDS.some((field: MandatoryField) => record[field] === '' || record[field] === undefined);
     }
     return true;
   };
@@ -161,12 +185,45 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         return;
       }
 
-      let response;
-      let responseQuantities = { requestSucceeded: true };
+      let response: (Response & BatchData) | (Response & BatchId) | undefined;
+      let responseQuantities: Partial<Response> = { requestSucceeded: true, error: undefined };
 
       if (record.id === -1) {
-        response = await NurseryBatchService.createBatch(record);
-      } else {
+        if (record.accessionId) {
+          setMultiStepRequestInFlight(true);
+
+          const nurseryTransferRecord: NurseryTransfer = {
+            date: getTodaysDateFormatted(timeZone),
+            destinationFacilityId: Number(record.facilityId),
+            germinatingQuantity: Number(record.germinatingQuantity),
+            notReadyQuantity: Number(record.notReadyQuantity),
+            notes: record.notes,
+            readyByDate: record.readyByDate,
+            readyQuantity: Number(record.readyQuantity),
+          };
+          const accessionResponse = await AccessionService.transferToNursery(nurseryTransferRecord, record.accessionId);
+          if (!accessionResponse.requestSucceeded || !accessionResponse.data) {
+            snackbar.toastError(strings.GENERIC_ERROR);
+            return;
+          }
+
+          record.id = accessionResponse.data.batch.id;
+          record.version = accessionResponse.data.batch.version;
+
+          // This is where the sub locations are associated to the batch created through the nursery transfer
+          response = await NurseryBatchService.updateBatch(record as Batch);
+          if (response.batch) {
+            responseQuantities = await NurseryBatchService.updateBatchQuantities({
+              ...(record as Batch),
+              version: response.batch.version,
+            });
+          }
+
+          setMultiStepRequestInFlight(false);
+        } else {
+          response = await NurseryBatchService.createBatch(record as CreateBatchRequestPayload);
+        }
+      } else if (isBatch(record)) {
         response = await NurseryBatchService.updateBatch(record);
         if (response.batch) {
           responseQuantities = await NurseryBatchService.updateBatchQuantities({
@@ -175,11 +232,12 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           });
         }
       }
-      if (response.requestSucceeded && responseQuantities.requestSucceeded) {
+
+      if (response && response.requestSucceeded && responseQuantities.requestSucceeded) {
         reload();
         onCloseHandler();
       } else {
-        snackbar.toastError();
+        snackbar.toastError(strings.GENERIC_ERROR);
       }
     }
   };
@@ -195,7 +253,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const changeDate = (id: string, value?: any) => {
     setAddedDateChanged(id === 'addedDate');
-    const date = value ? getDateDisplayValue(value.getTime(), tz.id) : null;
+    const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
     onChange(id, date);
   };
 
@@ -209,7 +267,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         <DialogBox
           onClose={onCloseHandler}
           open={true}
-          title={record.id === -1 ? strings.ADD_SEEDLING_BATCH : strings.SEEDLING_BATCH_DETAILS}
+          title={record.id === -1 ? strings.ADD_BATCH : strings.BATCH_DETAILS}
           size='large'
           middleButtons={[
             <Button
@@ -227,132 +285,111 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           {record.id !== -1 && (
             <Grid container item xs={12} spacing={2} textAlign='left'>
               <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                <Textfield
-                  id='scientificName'
-                  value={speciesSelected?.scientificName}
-                  type='text'
-                  label={strings.SPECIES}
-                  display={true}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-                <Textfield
-                  id='commonName'
-                  value={speciesSelected?.commonName}
-                  type='text'
-                  label={strings.COMMON_NAME}
-                  display={true}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                <Textfield
-                  id='seedlingsBatch'
-                  value={record.batchNumber}
-                  type='text'
-                  label={strings.SEEDLING_BATCH}
-                  display={true}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-                <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
-                  {strings.ACCESSION_ID}
-                </Typography>
-                {record.accession_id && (
-                  <Link
-                    to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', record.accession_id.toString())}
-                    target='_blank'
-                  >
-                    {record.accession_accessionNumber}
-                  </Link>
+                {selectedSpecies && (
+                  <Textfield
+                    id='scientificName'
+                    value={selectedSpecies?.scientificName}
+                    type='text'
+                    label={strings.SPECIES}
+                    display={true}
+                  />
                 )}
               </Grid>
-              <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                <Textfield id='nursery' value={facility?.name} type='text' label={strings.NURSERY} display={true} />
+              <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+                {selectedSpecies && (
+                  <Textfield
+                    id='commonName'
+                    value={selectedSpecies?.commonName}
+                    type='text'
+                    label={strings.COMMON_NAME}
+                    display={true}
+                  />
+                )}
               </Grid>
+
+              {selectedAccession && (
+                <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+                  <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
+                    {strings.ACCESSION}
+                  </Typography>
+
+                  <Link
+                    to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', selectedAccession.id.toString())}
+                    target='_blank'
+                  >
+                    {selectedAccession.accessionNumber}
+                  </Link>
+                </Grid>
+              )}
+
+              {selectedNursery && (
+                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                  <Textfield
+                    id='facilityId'
+                    value={selectedNursery.name}
+                    type='text'
+                    label={strings.NURSERY}
+                    display={true}
+                  />
+                </Grid>
+              )}
+
+              {selectedSubLocations && (
+                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                  <Textfield
+                    id='subLocationIds'
+                    value={selectedSubLocations.map((selectedSubLocation) => selectedSubLocation.name).join(', ')}
+                    type='text'
+                    label={strings.SUB_LOCATIONS}
+                    display={true}
+                  />
+                </Grid>
+              )}
             </Grid>
           )}
 
           <Grid container item xs={12} spacing={2} textAlign='left'>
             {record.id === -1 && (
-              <Grid xs={12} padding={theme.spacing(1, 0, 1, 2)}>
-                <NurseryDropdown
-                  label={strings.NURSERY_REQUIRED}
-                  record={record}
-                  setRecord={setRecord as unknown as React.Dispatch<React.SetStateAction<Batch>>}
-                  validate={validateFields}
-                  isSelectionValid={(r) => !!r?.facilityId}
-                />
-              </Grid>
-            )}
-            <Grid item xs={12} sx={marginTop}>
-              <Divider />
-            </Grid>
-            <Grid
-              item
-              xs={gridSize()}
-              paddingRight={paddingSeparator}
-              sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
-            >
-              <Textfield
-                id='germinatingQuantity'
-                value={record.germinatingQuantity}
-                onChange={(value) => onChange('germinatingQuantity', value)}
-                type='number'
-                label={strings.GERMINATING_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-                errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
-                min={0}
-              />
-            </Grid>
-            <Grid item xs={12} sx={marginTop}>
-              <Divider />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-              <Textfield
-                id='notReadyQuantity'
-                value={record.notReadyQuantity}
-                onChange={(value) => onChange('notReadyQuantity', value)}
-                type='number'
-                label={strings.NOT_READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
-                min={0}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-              <DatePicker
-                id='readyByDate'
-                label={strings.ESTIMATED_READY_DATE}
-                aria-label={strings.ESTIMATED_READY_DATE}
-                value={record.readyByDate}
-                onChange={(value) => changeDate('readyByDate', value)}
-                defaultTimeZone={timeZone}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-              <Textfield
-                id='readyQuantity'
-                value={record.readyQuantity}
-                onChange={(value) => onChange('readyQuantity', value)}
-                type='number'
-                label={strings.READY_QUANTITY_REQUIRED}
-                tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-                errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}
-                min={0}
-              />
-            </Grid>
+              <>
+                {origin === 'Nursery' && (
+                  <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                    <SpeciesDropdown<FormRecord>
+                      availableSpecies={availableSpecies}
+                      record={record}
+                      setRecord={setRecord}
+                      validateFields={validateFields}
+                    />
+                  </Grid>
+                )}
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator} />
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-              <Textfield
-                id='totalQuantity'
-                value={numericFormatter.format(totalQuantity)}
-                type='text'
-                label={strings.TOTAL_QUANTITY}
-                display={true}
-                tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
-              />
-            </Grid>
+                <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                  <AccessionsDropdown<FormRecord>
+                    availableAccessions={availableAccessions}
+                    record={record}
+                    setRecord={setRecord}
+                  />
+                </Grid>
+
+                {origin === 'Species' && (
+                  <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                    <NurseryDropdownV2
+                      availableNurseries={availableNurseries}
+                      record={record}
+                      setRecord={setRecord}
+                      validateFields={validateFields}
+                    />
+                  </Grid>
+                )}
+
+                <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                  <SubLocationsDropdown<FormRecord>
+                    availableSubLocations={availableSubLocations}
+                    record={record}
+                    setRecord={(value) => setRecord(value)}
+                  />
+                </Grid>
+              </>
+            )}
 
             <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
               <DatePicker
@@ -364,7 +401,84 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 defaultTimeZone={timeZone}
               />
             </Grid>
-            <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
+
+            <Grid item xs={12} sx={marginTop}>
+              <Divider />
+            </Grid>
+
+            <Grid
+              item
+              xs={gridSize()}
+              paddingRight={paddingSeparator}
+              sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
+            >
+              <Textfield
+                id='germinatingQuantity'
+                value={record.germinatingQuantity}
+                onChange={(value) => onChange('germinatingQuantity', Number(value))}
+                type='number'
+                label={strings.GERMINATING_QUANTITY_REQUIRED}
+                tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+                errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
+                min={0}
+              />
+            </Grid>
+
+            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+              <Textfield
+                id='notReadyQuantity'
+                value={record.notReadyQuantity}
+                onChange={(value) => onChange('notReadyQuantity', Number(value))}
+                type='number'
+                label={strings.NOT_READY_QUANTITY_REQUIRED}
+                tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
+                errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
+                min={0}
+              />
+            </Grid>
+
+            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+              <DatePicker
+                id='readyByDate'
+                label={strings.ESTIMATED_READY_DATE}
+                aria-label={strings.ESTIMATED_READY_DATE}
+                value={record.readyByDate}
+                onChange={(value) => changeDate('readyByDate', value)}
+                defaultTimeZone={timeZone}
+              />
+            </Grid>
+
+            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+              <Textfield
+                id='readyQuantity'
+                value={record.readyQuantity}
+                onChange={(value) => onChange('readyQuantity', Number(value))}
+                type='number'
+                label={strings.READY_QUANTITY_REQUIRED}
+                tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
+                errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}
+                min={0}
+              />
+            </Grid>
+
+            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator} />
+
+            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+              <Textfield
+                id='totalQuantity'
+                value={numericFormatter.format(totalQuantity)}
+                type='text'
+                label={strings.TOTAL_QUANTITY}
+                display={true}
+                tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
+              />
+            </Grid>
+
+            <Grid item xs={12} sx={marginTop}>
+              <Divider />
+            </Grid>
+
+            <Grid item xs={12} padding={theme.spacing(3, 0, 1, 2)}>
               <Textfield
                 id='notes'
                 value={record?.notes}

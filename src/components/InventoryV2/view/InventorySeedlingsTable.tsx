@@ -1,29 +1,29 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme, Theme, Popover } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Button, DropdownItem, TableColumnType, Tooltip } from '@terraware/web-components';
+import { TopBarButton } from '@terraware/web-components/components/table';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import { FieldNodePayload, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import BatchesCellRenderer from './BatchesCellRenderer';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
-import { InventoryFiltersType } from '../InventoryFiltersPopover';
-import DeleteBatchesModal from './DeleteBatchesModal';
 import { NurseryBatchService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
-import BatchDetailsModal from './BatchDetailsModal';
-import Search from '../Search';
 import { APP_PATHS } from 'src/constants';
-import { TopBarButton } from '@terraware/web-components/components/table';
 import { useLocalization, useOrganization } from 'src/providers';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+import { convertFilterGroupToMap, isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
+import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFiltersPopover';
+import Search from 'src/components/InventoryV2/Search';
+import BatchesCellRenderer from './BatchesCellRenderer';
+import BatchDetailsModal from './BatchDetailsModal';
 import BatchesExportModal from './BatchesExportModal';
-import { makeStyles } from '@mui/styles';
-import FilterGroup, { FilterField } from '../../common/FilterGroup';
-import { convertFilterGroupToMap, isBatchEmpty } from '../FilterUtils';
+import DeleteBatchesModal from './DeleteBatchesModal';
 
 interface InventorySeedlingsTableProps {
   speciesId: number;
@@ -129,7 +129,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
       if (activeRequests) {
         const batchesResults = searchResponse?.map((sr: SearchResponseElement) => {
-          return { ...sr, facilityId: sr.facility_id };
+          return { ...sr, facilityId: sr.facility_id, species_id: speciesId };
         });
         setBatches(batchesResults || []);
       }
@@ -312,8 +312,9 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               onUpdateOpenBatch(null);
               setOpenNewBatchModal(false);
             }}
-            speciesId={speciesId}
             selectedBatch={selectedBatch}
+            originSpeciesId={speciesId}
+            origin={'Species'}
           />
         )}
         <DeleteBatchesModal

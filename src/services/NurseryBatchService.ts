@@ -47,6 +47,8 @@ const DEFAULT_BATCH_FIELDS = [
   'accession_id',
   'accession_accessionNumber',
   'notes',
+  'subLocations.subLocation_id',
+  'subLocations.subLocation_name',
 ];
 
 const REPORT_BATCH_FIELDS = [
