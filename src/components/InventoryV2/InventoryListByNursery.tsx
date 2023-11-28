@@ -112,7 +112,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
   }, [filters, onApplyFilters]);
 
   return (
-    <Card>
+    <Card style={{ minWidth: 'fit-content' }}>
       {showResults ? (
         <InventoryTable
           results={searchResults || []}
