@@ -3,7 +3,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FacilityService } from 'src/services';
 import { Facility } from 'src/types/Facility';
 import { APP_PATHS } from 'src/constants';
@@ -35,7 +35,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
   const { isMobile } = useDeviceInfo();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
@@ -45,7 +45,7 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
     const newNurseryLocation = {
       pathname: APP_PATHS.NURSERIES_NEW,
     };
-    history.push(newNurseryLocation);
+    navigate(newNurseryLocation);
   };
 
   const clearSearch = () => {

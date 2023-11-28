@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import strings from '../../src/strings';
 import { APP_PATHS } from 'src/constants';
 import { Theme } from '@mui/material';
@@ -25,7 +25,7 @@ export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Eleme
   const classes = useStyles();
   const { user } = useUser();
   const { isProduction } = useEnvironment();
-  const history = useHistory();
+  const navigate = useNavigate();
   const docLinks = useDocLinks();
 
   const onHandleLogout = () => {
@@ -43,7 +43,7 @@ export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Eleme
         break;
       }
       default: {
-        history.push(selectedItem.value);
+        navigate(selectedItem.value);
         break;
       }
     }

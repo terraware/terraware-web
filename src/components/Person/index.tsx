@@ -1,7 +1,7 @@
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from 'src/components/common/button/Button';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
@@ -36,7 +36,7 @@ export default function PersonDetails(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
   const { isMobile } = useDeviceInfo();
@@ -49,12 +49,12 @@ export default function PersonDetails(): JSX.Element {
         if (selectedUser) {
           setPerson(selectedUser);
         } else {
-          history.push(APP_PATHS.PEOPLE);
+          navigate(APP_PATHS.PEOPLE);
         }
       }
     };
     populatePersonData();
-  }, [personId, selectedOrganization, history]);
+  }, [personId, selectedOrganization, navigate]);
 
   const getDateAdded = () => {
     if (person?.addedTime) {
@@ -63,10 +63,12 @@ export default function PersonDetails(): JSX.Element {
   };
 
   const goToEditPerson = () => {
-    const newLocation = {
-      pathname: APP_PATHS.PEOPLE_EDIT.replace(':personId', personId),
-    };
-    history.push(newLocation);
+    if (personId) {
+      const newLocation = {
+        pathname: APP_PATHS.PEOPLE_EDIT.replace(':personId', personId),
+      };
+      navigate(newLocation);
+    }
   };
 
   const gridSize = (defaultSize?: number) => {

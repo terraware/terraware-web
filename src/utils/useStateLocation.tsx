@@ -7,9 +7,7 @@ type State = {
 type StateLocation = Location<State>;
 
 export default function useStateLocation(): StateLocation {
-  const location = useLocation<{
-    from?: string;
-  }>();
+  const location = useLocation();
 
   return location;
 }

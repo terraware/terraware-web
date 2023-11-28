@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, CircularProgress, Grid, Theme, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
 import useQuery from 'src/utils/useQuery';
@@ -47,7 +47,7 @@ export default function NurseryReassignment(): JSX.Element {
   const numberFormatter = useNumberFormatter();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const { deliveryId } = useParams<{ deliveryId: string }>();
   const snackbar = useSnackbar();
@@ -130,7 +130,7 @@ export default function NurseryReassignment(): JSX.Element {
 
   const goToWithdrawals = () => {
     const withdrawalId = query.has('fromWithdrawal') ? delivery?.withdrawalId : undefined;
-    history.push({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
+    navigate({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
   };
 
   const reassign = async () => {

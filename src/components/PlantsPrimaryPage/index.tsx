@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import _ from 'lodash';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { CachedUserService, PreferencesService, TrackingService } from 'src/services';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
@@ -48,7 +48,7 @@ export default function PlantsPrimaryPage({
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
 
@@ -91,10 +91,10 @@ export default function PlantsPrimaryPage({
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
       if (site) {
-        history.push(pagePath.replace(':plantingSiteId', site.id.toString()));
+        navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
       }
     },
-    [history, pagePath]
+    [navigate, pagePath]
   );
 
   useEffect(() => {

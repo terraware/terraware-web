@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import useForm from 'src/utils/useForm';
@@ -39,7 +39,7 @@ type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 export default function CreateAccession(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
@@ -94,7 +94,7 @@ export default function CreateAccession(): JSX.Element {
   };
 
   const goToAccessions = () => {
-    history.push(accessionsDatabase);
+    navigate(accessionsDatabase);
   };
 
   const hasErrors = () => {
@@ -109,8 +109,8 @@ export default function CreateAccession(): JSX.Element {
     }
     const response = await SeedBankService.createAccession(record);
     if (response.requestSucceeded) {
-      history.replace(accessionsDatabase);
-      history.push({
+      navigate(accessionsDatabase, { replace: true });
+      navigate({
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
       });
     } else {

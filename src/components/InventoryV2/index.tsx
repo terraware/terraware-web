@@ -1,6 +1,6 @@
 import { Box, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
@@ -137,7 +137,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles({ isMobile });
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const { hasNurseries, hasSpecies } = props;
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
@@ -151,9 +151,9 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
-      history.push(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()));
     },
-    [query, history, location]
+    [query, navigate, location]
   );
 
   useEffect(() => {
@@ -164,7 +164,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     const appPathLocation = {
       pathname: appPath,
     };
-    history.push(appPathLocation);
+    navigate(appPathLocation);
   };
 
   const onCloseDownloadReportModal = () => {

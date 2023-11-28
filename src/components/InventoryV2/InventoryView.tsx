@@ -1,6 +1,6 @@
 import { useTheme, Grid, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -19,7 +19,7 @@ interface InventoryViewProps {
 
 export default function InventoryView(props: InventoryViewProps): JSX.Element {
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const openBatchNumber = (query.get('batch') || '').toLowerCase();
   const { species } = props;
@@ -51,7 +51,7 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
     } else {
       query.set('batch', batchNum);
     }
-    history.replace(getLocation(location.pathname, location, query.toString()));
+    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
   };
 
   return (

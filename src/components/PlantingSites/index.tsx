@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
@@ -27,17 +27,14 @@ export type PlantingSitesProps = {
 
 export default function PlantingSites({ reloadTracking }: PlantingSitesProps): JSX.Element {
   return (
-    <Switch>
-      <Route path={APP_PATHS.PLANTING_SITES_NEW}>
-        <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
-      </Route>
-      <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
-        <PlantingSitesWrapper reloadTracking={reloadTracking} />
-      </Route>
-      <Route path={'*'}>
-        <PlantingSitesList />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path={APP_PATHS.PLANTING_SITES_NEW}
+        element={<PlantingSiteCreate reloadPlantingSites={reloadTracking} />}
+      />
+      <Route path={APP_PATHS.PLANTING_SITES_VIEW} element={<PlantingSitesWrapper reloadTracking={reloadTracking} />} />
+      <Route path={'*'} element={<PlantingSitesList />} />
+    </Routes>
   );
 }
 
@@ -73,19 +70,14 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
   }
 
   return (
-    <Switch>
-      <Route path={APP_PATHS.PLANTING_SITES_SUBZONE_VIEW}>
-        <PlantingSiteSubzoneView />
-      </Route>
-      <Route path={APP_PATHS.PLANTING_SITES_ZONE_VIEW}>
-        <PlantingSiteZoneView />
-      </Route>
-      <Route path={APP_PATHS.PLANTING_SITES_EDIT}>
-        <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
-      </Route>
-      <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
-        <PlantingSiteView />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={APP_PATHS.PLANTING_SITES_SUBZONE_VIEW} element={<PlantingSiteSubzoneView />} />
+      <Route path={APP_PATHS.PLANTING_SITES_ZONE_VIEW} element={<PlantingSiteZoneView />} />
+      <Route
+        path={APP_PATHS.PLANTING_SITES_EDIT}
+        element={<PlantingSiteCreate reloadPlantingSites={reloadTracking} />}
+      />
+      <Route path={APP_PATHS.PLANTING_SITES_VIEW} element={<PlantingSiteView />} />
+    </Routes>
   );
 }

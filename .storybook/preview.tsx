@@ -21,6 +21,7 @@ export default preview;
 import theme from '../src/theme';
 import { useState } from 'react';
 import { LocalizationProvider } from '../src/providers';
+import React from 'react';
 
 export const decorators = [
   (Story) => {
@@ -28,22 +29,24 @@ export const decorators = [
     const [activeLocale, setActiveLocale] = useState<string | null>(null);
 
     return (
-      <ThemeProvider theme={theme}>
-        <LocalizationProvider
-          selectedLocale={selectedLocale}
-          setSelectedLocale={setSelectedLocale}
-          activeLocale={activeLocale}
-          setActiveLocale={setActiveLocale}
-        >
-          <StyledEngineProvider injectFirst>
-            <MemoryRouter initialEntries={['/']}>
-              <Provider store={store}>
-                <Story />
-              </Provider>
-            </MemoryRouter>
-          </StyledEngineProvider>
-        </LocalizationProvider>
-      </ThemeProvider>
+      <>
+        <ThemeProvider theme={theme}>
+          <LocalizationProvider
+            selectedLocale={selectedLocale}
+            setSelectedLocale={setSelectedLocale}
+            activeLocale={activeLocale}
+            setActiveLocale={setActiveLocale}
+          >
+            <StyledEngineProvider injectFirst>
+              <MemoryRouter initialEntries={['/']}>
+                <Provider store={store}>
+                  <Story />
+                </Provider>
+              </MemoryRouter>
+            </StyledEngineProvider>
+          </LocalizationProvider>
+        </ThemeProvider>
+      </>
     );
   },
 ];

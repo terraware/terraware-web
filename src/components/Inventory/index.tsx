@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import strings from 'src/strings';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
@@ -87,7 +87,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { hasNurseries, hasSpecies } = props;
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [unfilteredInventory, setUnfilteredInventory] = useState<SearchResponseElement[] | null>(null);
@@ -109,7 +109,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
     const appPathLocation = {
       pathname: appPath,
     };
-    history.push(appPathLocation);
+    navigate(appPathLocation);
   };
 
   const importInventory = () => {

@@ -1,7 +1,7 @@
 import PlantingSiteSelectTypeModal from './PlantingSiteSelectTypeModal';
 import { APP_PATHS } from 'src/constants';
 import DetailedPlantingSiteHelpModal from 'src/components/PlantingSites/DetailedPlantingSiteHelpModal';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 export type PlantingSiteTypeSelectProps = {
@@ -13,7 +13,7 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
   const { open, onClose } = props;
   const [plantingSiteTypeModalOpen, setPlantingSiteTypeModalOpen] = useState(false);
   const [plantingSiteTypeHelpModalOpen, setPlantingSiteTypeHelpModalOpen] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setPlantingSiteTypeModalOpen(open);
@@ -23,7 +23,7 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
     const appPathLocation = {
       pathname: appPath,
     };
-    history.push(appPathLocation);
+    navigate(appPathLocation);
   };
 
   return (

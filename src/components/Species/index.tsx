@@ -39,7 +39,7 @@ import { SpeciesService } from 'src/services';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import _ from 'lodash';
 import useQuery from 'src/utils/useQuery';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { APP_PATHS } from 'src/constants';
 
 type SpeciesListProps = {
@@ -154,7 +154,7 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -504,9 +504,9 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
     if (shouldCheckData) {
       query.delete('checkData');
       setCheckDataModalOpen(true);
-      history.replace({ pathname: APP_PATHS.SPECIES, search: query.toString() });
+      navigate({ pathname: APP_PATHS.SPECIES, search: query.toString() }, { replace: true });
     }
-  }, [query, setCheckDataModalOpen, history]);
+  }, [query, setCheckDataModalOpen, navigate]);
 
   useEffect(() => {
     onApplyFilters();

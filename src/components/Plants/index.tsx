@@ -32,7 +32,7 @@ import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard'
 import { getShortDate } from 'src/utils/dateFormatter';
 import HectaresPlantedCard from './components/HectaresPlantedCard';
 import EmptyMessage from '../common/EmptyMessage';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PlantingSiteDensityCard from 'src/components/Plants/components/PlantingSiteDensityCard';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import FormattedNumber from '../common/FormattedNumber';
@@ -47,7 +47,7 @@ export default function PlantsDashboard(): JSX.Element {
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState(-1);
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const locale = useLocalization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const theme = useTheme();
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
@@ -294,7 +294,7 @@ export default function PlantsDashboard(): JSX.Element {
             title={strings.NO_PLANTING_SITES_TITLE}
             text={strings.NO_PLANTING_SITES_DESCRIPTION}
             buttonText={strings.GO_TO_PLANTING_SITES}
-            onClick={() => history.push(APP_PATHS.PLANTING_SITES)}
+            onClick={() => navigate(APP_PATHS.PLANTING_SITES)}
           />
         </Box>
       )}

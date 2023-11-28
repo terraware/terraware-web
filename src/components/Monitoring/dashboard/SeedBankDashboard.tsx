@@ -11,7 +11,7 @@ import TemperatureHumidityChart from './TemperatureHumidityChart';
 import PVBatteryChart from './PVBatteryChart';
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 import { DeviceManager } from 'src/types/DeviceManager';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useQuery from '../../../utils/useQuery';
 import { timePeriods } from './Common';
@@ -56,7 +56,7 @@ type SeedBankDashboardProps = {
 export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const stateLocation = useStateLocation();
   const { seedBank, monitoringPreferences, updatePreferences } = props;
@@ -165,7 +165,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
 
     // clear url param if necessary
     if (urlDeviceId || urlTimePeriod) {
-      history.push(getLocation(stateLocation.pathname, stateLocation, query.toString()));
+      navigate(getLocation(stateLocation.pathname, stateLocation, query.toString()));
     }
 
     if (location || timePeriod) {
@@ -174,7 +174,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
         ...updates,
       });
     }
-  }, [availableLocations, history, query, stateLocation, monitoringPreferences, updatePreferences]);
+  }, [availableLocations, navigate, query, stateLocation, monitoringPreferences, updatePreferences]);
 
   useEffect(() => {
     const populateLocations = async () => {

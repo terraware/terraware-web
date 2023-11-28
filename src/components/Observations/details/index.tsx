@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { Message, TableColumnType } from '@terraware/web-components';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -52,7 +52,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }>();
   const { activeLocale } = useLocalization();
   const defaultTimeZone = useDefaultTimeZone();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const details = useAppSelector((state) =>
     searchObservationDetails(
@@ -112,9 +112,9 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   useEffect(() => {
     if (!details) {
-      history.push(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', Number(plantingSiteId).toString()));
+      navigate(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', Number(plantingSiteId).toString()));
     }
-  }, [details, history, plantingSiteId]);
+  }, [details, navigate, plantingSiteId]);
 
   useEffect(() => {
     const initialZones = searchProps.filtersProps?.filters?.zone?.values ?? [];

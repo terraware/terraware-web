@@ -2,7 +2,7 @@ import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material'
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
 import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
 import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/types/Search';
@@ -149,7 +149,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const {
@@ -365,7 +365,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
 
     if (stage.length || (facilityId && selectedOrganization) || subLocationName) {
-      history.replace(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setSearchCriteria(newSearchCriteria);
 
       // add seed bank and sub-location columns to show the filtered values as needed
@@ -385,7 +385,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [
     query,
     location,
-    history,
+    navigate,
     setSearchCriteria,
     selectedOrganization,
     searchCriteria,
@@ -493,7 +493,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
-      history.push(seedCollectionLocation);
+      navigate(seedCollectionLocation);
     }
   };
 
@@ -532,19 +532,19 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const handleViewCollections = () => {
-    history.push(APP_PATHS.CHECKIN);
+    navigate(APP_PATHS.CHECKIN);
   };
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
       pathname: appPath,
     };
-    history.push(appPathLocation);
+    navigate(appPathLocation);
   };
 
   const goToNewAccession = () => {
     const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS2_NEW, location);
-    history.push(newAccessionLocation);
+    navigate(newAccessionLocation);
   };
 
   const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {

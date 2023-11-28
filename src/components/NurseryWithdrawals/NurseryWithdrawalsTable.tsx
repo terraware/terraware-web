@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Grid, Popover, Theme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { makeStyles } from '@mui/styles';
@@ -56,7 +56,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const classes = useStyles();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
@@ -127,7 +127,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   );
 
   const onWithdrawalClicked = (withdrawal: any) => {
-    history.push({
+    navigate({
       pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
     });
   };
@@ -218,7 +218,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   useEffect(() => {
     if (siteParam) {
       query.delete('siteName');
-      history.replace(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
         destinationName: {
@@ -229,12 +229,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         },
       }));
     }
-  }, [siteParam, query, history, location]);
+  }, [siteParam, query, navigate, location]);
 
   useEffect(() => {
     if (subzoneParam) {
       query.delete('subzoneName');
-      history.replace(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
         plantingSubzoneNames: {
@@ -245,7 +245,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         },
       }));
     }
-  }, [subzoneParam, query, history, location]);
+  }, [subzoneParam, query, navigate, location]);
 
   useEffect(() => {
     onApplyFilters();

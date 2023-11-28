@@ -1,6 +1,6 @@
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { FacilityService } from 'src/services';
@@ -30,11 +30,11 @@ export default function SeedBankDetails(): JSX.Element {
   const theme = useTheme();
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [seedBank, setSeedBank] = useState<Facility>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const tz = useLocationTimeZone().get(seedBank);
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && seedBankId) {
       const selectedSeedBank = FacilityService.getFacility({
         organization: selectedOrganization,
         facilityId: seedBankId,
@@ -43,18 +43,20 @@ export default function SeedBankDetails(): JSX.Element {
       if (selectedSeedBank) {
         setSeedBank(selectedSeedBank);
       } else {
-        history.push(APP_PATHS.SEED_BANKS);
+        navigate(APP_PATHS.SEED_BANKS);
       }
     }
-  }, [seedBankId, selectedOrganization, history]);
+  }, [seedBankId, selectedOrganization, navigate]);
 
   const classes = useStyles();
 
   const goToEditSeedBank = () => {
-    const editSeedBankLocation = {
-      pathname: APP_PATHS.SEED_BANKS_EDIT.replace(':seedBankId', seedBankId),
-    };
-    history.push(editSeedBankLocation);
+    if (seedBankId) {
+      const editSeedBankLocation = {
+        pathname: APP_PATHS.SEED_BANKS_EDIT.replace(':seedBankId', seedBankId),
+      };
+      navigate(editSeedBankLocation);
+    }
   };
 
   const { isMobile } = useDeviceInfo();

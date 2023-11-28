@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { BusySpinner, theme } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
@@ -38,7 +38,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   });
   const [batches, setBatches] = useState<any[]>();
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
   const nurseryV2 = isEnabled('Nursery Updates');
 
   useEffect(() => {
@@ -150,9 +150,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   const goToInventory = () => {
     if (sourcePage && sourcePage.startsWith(APP_PATHS.INVENTORY)) {
-      history.push({ pathname: sourcePage });
+      navigate({ pathname: sourcePage });
     } else {
-      history.push({ pathname: APP_PATHS.INVENTORY });
+      navigate({ pathname: APP_PATHS.INVENTORY });
     }
   };
 

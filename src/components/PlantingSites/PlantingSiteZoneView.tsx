@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/material';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
@@ -47,7 +47,7 @@ const columns = (): TableColumnType[] => [
 export default function PlantingSiteZoneView(): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
@@ -64,11 +64,11 @@ export default function PlantingSiteZoneView(): JSX.Element {
   );
 
   if (!plantingSite) {
-    history.push(APP_PATHS.PLANTING_SITES);
+    navigate(APP_PATHS.PLANTING_SITES);
   }
 
-  if (!plantingZone) {
-    history.push(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
+  if (plantingSiteId && !plantingZone) {
+    navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
   }
 
   const crumbs: Crumb[] = useMemo(

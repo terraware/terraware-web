@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import { FieldOptionsMap } from 'src/types/Search';
 import strings from 'src/strings';
@@ -120,32 +120,22 @@ const ObservationsWrapper = (): JSX.Element => {
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
 
   return (
-    <Switch>
+    <Routes>
       {scheduleObservationsEnabled && (
-        <Route path={APP_PATHS.RESCHEDULE_OBSERVATION}>
-          <RescheduleObservation />
-        </Route>
+        <Route path={APP_PATHS.RESCHEDULE_OBSERVATION} element={<RescheduleObservation />} />
       )}
-      {scheduleObservationsEnabled && (
-        <Route path={APP_PATHS.SCHEDULE_OBSERVATION}>
-          <ScheduleObservation />
-        </Route>
-      )}
-      <Route path={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS}>
-        <ObservationMonitoringPlotDetails />
-      </Route>
-      <Route path={APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS}>
-        <ObservationPlantingZoneDetails />
-      </Route>
-      <Route path={APP_PATHS.OBSERVATION_DETAILS}>
-        <ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} />
-      </Route>
-      <Route path={APP_PATHS.OBSERVATIONS_SITE}>
-        <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
-      </Route>
-      <Route path={'*'}>
-        <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
-      </Route>
-    </Switch>
+      {scheduleObservationsEnabled && <Route path={APP_PATHS.SCHEDULE_OBSERVATION} element={<ScheduleObservation />} />}
+      <Route path={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS} element={<ObservationMonitoringPlotDetails />} />
+      <Route path={APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS} element={<ObservationPlantingZoneDetails />} />
+      <Route
+        path={APP_PATHS.OBSERVATION_DETAILS}
+        element={<ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} />}
+      />
+      <Route
+        path={APP_PATHS.OBSERVATIONS_SITE}
+        element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />}
+      />
+      <Route path={'*'} element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />} />
+    </Routes>
   );
 };
