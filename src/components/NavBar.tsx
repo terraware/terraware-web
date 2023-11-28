@@ -51,6 +51,7 @@ export default function NavBar({
   const isReassignmentRoute = useRouteMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
   const isReportsRoute = useRouteMatch(APP_PATHS.REPORTS + '/');
   const isObservationsRoute = useRouteMatch(APP_PATHS.OBSERVATIONS + '/');
+  const isProjectsRoute = useRouteMatch(APP_PATHS.PROJECTS + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -235,6 +236,15 @@ export default function NavBar({
               closeAndNavigateTo(APP_PATHS.PEOPLE);
             }}
             id='people'
+          />
+          <NavItem
+            label={strings.PROJECTS}
+            icon='iconFolder'
+            selected={!!isProjectsRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.PROJECTS);
+            }}
+            id='projects'
           />
           <NavItem label={strings.LOCATIONS} icon='iconMyLocation' id='locations'>
             <SubNavbar>
