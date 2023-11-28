@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { useTheme, Grid, Typography } from '@mui/material';
 import { useHistory, useParams } from 'react-router-dom';
+import { useTheme, Grid, Typography } from '@mui/material';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -11,7 +11,7 @@ import { useOrganization } from 'src/providers';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useQuery from 'src/utils/useQuery';
 import InventorySummaryForNursery from 'src/components/InventoryV2/view/InventorySummaryForNursery';
-import InventorySeedlingsForNurseryTable from 'src/components/InventoryV2/view/InventorySeedlingsForNurseryTable';
+import InventorySeedlingsTableForNursery from 'src/components/InventoryV2/view/InventorySeedlingsTableForNursery';
 import { getNurseryName } from './FilterUtils';
 
 export default function InventoryViewForNursery(): JSX.Element {
@@ -62,12 +62,13 @@ export default function InventoryViewForNursery(): JSX.Element {
       <Grid container ref={contentRef}>
         <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
           <InventorySummaryForNursery modified={modified} nurseryId={nurseryId} />
-          <InventorySeedlingsForNurseryTable
+          <InventorySeedlingsTableForNursery
             nurseryId={nurseryId}
             modified={modified}
             setModified={setModified}
             onUpdateOpenBatch={setBatchNumber}
             openBatchNumber={openBatchNumber}
+            origin={'Nursery'}
           />
         </Grid>
       </Grid>

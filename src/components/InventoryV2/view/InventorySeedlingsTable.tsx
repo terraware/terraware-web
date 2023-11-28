@@ -24,28 +24,33 @@ import BatchesCellRenderer from './BatchesCellRenderer';
 import BatchDetailsModal from './BatchDetailsModal';
 import BatchesExportModal from './BatchesExportModal';
 import DeleteBatchesModal from './DeleteBatchesModal';
+import { OriginPage } from '../InventoryBatch';
 
-interface InventorySeedlingsTableProps {
-  speciesId: number;
+export interface InventorySeedlingsTableProps {
+  speciesId?: number;
+  facilityId?: number;
   modified: number;
   setModified: (val: number) => void;
   openBatchNumber: string | null;
   onUpdateOpenBatch: (batchNum: string | null) => void;
+  origin: OriginPage;
+  columns: TableColumnType[];
+  isSelectionBulkWithdrawable: (selectedRows: SearchResponseElement[]) => boolean;
+  getFuzzySearchFields: (debouncedSearchTerm: string) => FieldNodePayload[];
+  // Origin ID is either the facility ID or the species ID
+  getBatchesSearch: (
+    orgId: number,
+    originId: number,
+    searchFields: FieldNodePayload[],
+    searchSortOrder: SearchSortOrder | undefined
+  ) => Promise<SearchResponseElement[] | null>;
+  getBatchesExport: (
+    orgId: number,
+    originId: number,
+    searchFields: FieldNodePayload[],
+    searchSortOrder: SearchSortOrder | undefined
+  ) => Promise<SearchResponseElement[] | null>;
 }
-
-const columns = (): TableColumnType[] => [
-  { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
-  { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
-  { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
-  { key: 'readyQuantity', name: strings.READY, type: 'string' },
-  { key: 'totalQuantity', name: strings.TOTAL, type: 'string' },
-  { key: 'totalQuantityWithdrawn', name: strings.WITHDRAWN, type: 'string' },
-  { key: 'facility_name', name: strings.NURSERY, type: 'string' },
-  { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
-  { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
-  { key: 'withdraw', name: '', type: 'string' },
-  { key: 'quantitiesMenu', name: '', type: 'string' },
-];
 
 const useStyles = makeStyles((theme: Theme) => ({
   popoverContainer: {
@@ -67,14 +72,31 @@ const initialFilters: Record<string, SearchNodePayload> = {
 };
 
 export default function InventorySeedlingsTable(props: InventorySeedlingsTableProps): JSX.Element {
+  const {
+    modified,
+    setModified,
+    openBatchNumber,
+    onUpdateOpenBatch,
+    origin,
+    columns,
+    isSelectionBulkWithdrawable,
+    getFuzzySearchFields,
+    getBatchesSearch,
+    getBatchesExport,
+  } = props;
+  const originId: number | undefined = props.facilityId || props.speciesId;
+
   const { selectedOrganization } = useOrganization();
-  const { speciesId, modified, setModified, openBatchNumber, onUpdateOpenBatch } = props;
   const { isMobile, isDesktop } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
+  const snackbar = useSnackbar();
+  const history = useHistory();
+  const { activeLocale } = useLocalization();
+
   const [openExportModal, setOpenExportModal] = useState<boolean>(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
-  const [batches, setBatches] = useState<any[]>([]);
+  const [batches, setBatches] = useState<SearchResponseElement[]>([]);
   // The main distinction here is that the filtered batches are filtered in the view, whereas `batches` is
   // the filtered-by-search batches list that comes back from the API
   const [filteredBatches, setFilteredBatches] = useState<any[]>([]);
@@ -85,24 +107,13 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
   const [selectedBatch, setSelectedBatch] = useState<any>();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
+
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
-  const snackbar = useSnackbar();
-  const history = useHistory();
-  const { activeLocale } = useLocalization();
 
   const getSearchFields = useCallback(() => {
     // Skip fuzzy search on empty strings since the query will be
     // expensive and results will be the same as not adding the fuzzy search
-    const fields: FieldNodePayload[] = debouncedSearchTerm
-      ? [
-          {
-            operation: 'field',
-            field: 'facility_name',
-            type: 'Fuzzy',
-            values: [debouncedSearchTerm],
-          },
-        ]
-      : [];
+    const fields: FieldNodePayload[] = debouncedSearchTerm ? getFuzzySearchFields(debouncedSearchTerm) : [];
 
     if (filters.facilityIds && filters.facilityIds.length > 0) {
       fields.push({
@@ -112,37 +123,55 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         values: filters.facilityIds.map((id) => id.toString()),
       });
     }
+
+    if (filters.speciesIds && filters.speciesIds.length > 0) {
+      fields.push({
+        operation: 'field',
+        field: 'species_id',
+        type: 'Exact',
+        values: filters.speciesIds.map((id) => id.toString()),
+      });
+    }
+
     return fields;
-  }, [debouncedSearchTerm, filters?.facilityIds]);
+  }, [getFuzzySearchFields, debouncedSearchTerm, filters?.facilityIds, filters?.speciesIds]);
 
   useEffect(() => {
     let activeRequests = true;
 
     const populateResults = async () => {
-      const searchFields = getSearchFields();
-      const searchResponse = await NurseryBatchService.getBatchesForSpeciesById(
+      if (!originId) {
+        return;
+      }
+
+      const batchesResults = await getBatchesSearch(
         selectedOrganization.id,
-        speciesId,
-        searchFields,
+        originId,
+        getSearchFields(),
         searchSortOrder
       );
 
       if (activeRequests) {
-        const batchesResults = searchResponse?.map((sr: SearchResponseElement) => {
-          return { ...sr, facilityId: sr.facility_id, species_id: speciesId };
-        });
         setBatches(batchesResults || []);
       }
     };
 
-    if (!isNaN(speciesId)) {
+    if (!originId || !isNaN(originId)) {
       void populateResults();
     }
 
     return () => {
       activeRequests = false;
     };
-  }, [getSearchFields, selectedOrganization, speciesId, filters.facilityIds, modified, searchSortOrder]);
+  }, [
+    getSearchFields,
+    getBatchesSearch,
+    selectedOrganization,
+    originId,
+    filters.facilityIds,
+    modified,
+    searchSortOrder,
+  ]);
 
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
@@ -153,10 +182,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   }, [openBatchNumber, batches]);
 
   useEffect(() => {
-    if (batches.length === 0) {
-      return;
-    }
-
     // Because the field group filters have their values
     // set as SearchNodePayload['values'] (which is (string | null[]), we gotta boolean-ify it
     // If there is no value set (initial form state), this defaults to false
@@ -207,20 +232,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     }
   };
 
-  const areAllFromSameNursery = () => {
-    const initialNurseryId = selectedRows[0].facilityId;
-    const otherNursery = selectedRows.some((row) => row.facilityId.toString() !== initialNurseryId.toString());
-    return !otherNursery;
-  };
-
-  const selectionHasWithdrawableQuantities = () => {
-    return selectedRows.some((row) => +row['totalQuantity(raw)'] > 0);
-  };
-
-  const isSelectionBulkWithdrawable = () => {
-    return areAllFromSameNursery() && selectionHasWithdrawableQuantities();
-  };
-
   const getSelectedRowsAsQueryParams = () => {
     const batchIds = selectedRows.map((row) => `batchId=${row.id}`);
     return `?${batchIds.join('&')}&source=${window.location.pathname}`;
@@ -241,7 +252,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       onButtonClick: () => setOpenDeleteModal(true),
     });
 
-    if (selectedRows.length > 1 && isSelectionBulkWithdrawable()) {
+    if (selectedRows.length > 1 && isSelectionBulkWithdrawable(selectedRows)) {
       topBarButtons.push({
         buttonType: 'passive',
         buttonText: strings.WITHDRAW,
@@ -283,16 +294,18 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     [activeLocale]
   );
 
+  const batchesExport = useCallback(() => {
+    if (!originId) {
+      return Promise.resolve([] as SearchResponseElement[]);
+    }
+
+    return getBatchesExport(selectedOrganization.id, originId, getSearchFields(), searchSortOrder);
+  }, [getBatchesExport, selectedOrganization.id, originId, getSearchFields, searchSortOrder]);
+
   return (
     <>
       {openExportModal && (
-        <BatchesExportModal
-          speciesId={speciesId}
-          organizationId={selectedOrganization.id}
-          searchFields={getSearchFields()}
-          searchSortOrder={searchSortOrder}
-          onClose={() => setOpenExportModal(false)}
-        />
+        <BatchesExportModal batchesExport={batchesExport} onClose={() => setOpenExportModal(false)} />
       )}
       <Grid
         item
@@ -313,8 +326,8 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               setOpenNewBatchModal(false);
             }}
             selectedBatch={selectedBatch}
-            originSpeciesId={speciesId}
-            origin={'Species'}
+            originSpeciesId={originId}
+            origin={origin}
           />
         )}
         <DeleteBatchesModal
@@ -370,12 +383,13 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               onSearch={(val) => setTemporalSearchValue(val)}
               filters={filters}
               setFilters={setFilters}
+              origin={origin}
             />
 
             <Box sx={{ marginTop: theme.spacing(0.5) }}>
               <Tooltip title={strings.FILTER}>
                 <Button
-                  id='filterSpecies'
+                  id='batchFilters'
                   onClick={(event) => event && handleFilterClick(event)}
                   type='passive'
                   priority='ghost'
@@ -414,7 +428,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
           <Box marginTop={theme.spacing(2)}>
             <Table
               id='inventory-seedlings-table'
-              columns={columns}
+              columns={() => columns}
               rows={filteredBatches}
               orderBy='batchNumber'
               Renderer={BatchesCellRenderer}
