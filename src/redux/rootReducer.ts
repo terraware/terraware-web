@@ -24,6 +24,7 @@ import {
 import { snackbarReducer } from './features/snackbar/snackbarSlice';
 import { messageReducer } from './features/message/messageSlice';
 import { userAnalyticsReducer } from './features/user/userAnalyticsSlice';
+import { projectsReducer } from './features/projects/projectsSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -46,6 +47,7 @@ export const reducers = {
   updatePlantingCompleted: updatePlantingCompletedReducer,
   updatePlantingsCompleted: updatePlantingsCompletedReducer,
   userAnalytics: userAnalyticsReducer,
+  projects: projectsReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

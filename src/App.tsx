@@ -71,6 +71,9 @@ import { getRgbaFromHex } from 'src/utils/color';
 import PlantsDashboard from 'src/components/Plants';
 import PlantingSites from 'src/components/PlantingSites';
 import isEnabled from 'src/features';
+import Projects from './components/Projects';
+import { Project } from './types/Project';
+import { selectProjects } from './redux/features/projects/projectsSelectors';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -178,6 +181,7 @@ function AppContent() {
   const [species, setSpecies] = useState<Species[]>([]);
   const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
+  const projects: Project[] | undefined = useAppSelector(selectProjects);
   const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
   const nurseryV2 = isEnabled('Nursery Updates');
@@ -269,6 +273,8 @@ function AppContent() {
 
   const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType('Nursery');
 
+  const selectedOrgHasProjects = (): boolean => projects !== undefined && projects.length > 0;
+
   const selectedOrgHasPlantingSites = (): boolean => plantingSites !== undefined && plantingSites.length > 0;
 
   const getSeedBanksView = (): JSX.Element => {
@@ -285,6 +291,13 @@ function AppContent() {
     return <EmptyStatePage pageName={'Nurseries'} />;
   };
 
+  const getProjectsView = (): JSX.Element => {
+    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasProjects()) {
+      return <Projects />;
+    }
+    return <EmptyStatePage pageName={'Projects'} />;
+  };
+
   const viewHasBackgroundImage = (): boolean => {
     if (
       location.pathname.startsWith(APP_PATHS.HOME) ||
@@ -296,7 +309,8 @@ function AppContent() {
       (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
       (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
       (location.pathname.startsWith(APP_PATHS.OBSERVATIONS) && !hasObservationsResults) ||
-      (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites())
+      (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites()) ||
+      (location.pathname.startsWith(APP_PATHS.PROJECTS) && !selectedOrgHasProjects())
     ) {
       return true;
     }
@@ -418,6 +432,9 @@ function AppContent() {
             </Route>
             <Route exact path={APP_PATHS.PEOPLE}>
               <People />
+            </Route>
+            <Route exact path={APP_PATHS.PROJECTS}>
+              {getProjectsView()}
             </Route>
             <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
               <NewSeedBank />
@@ -552,6 +569,9 @@ function AppContent() {
             </Route>
             <Route exact path={APP_PATHS.PEOPLE + '/'}>
               <Redirect to={APP_PATHS.PEOPLE} />
+            </Route>
+            <Route exact path={APP_PATHS.PROJECTS + '/'}>
+              <Redirect to={APP_PATHS.PROJECTS} />
             </Route>
             <Route path={APP_PATHS.SEEDS_DASHBOARD + '/'}>
               <Redirect to={APP_PATHS.SEEDS_DASHBOARD} />
