@@ -34,7 +34,7 @@ export interface InventorySeedlingsTableProps {
   openBatchNumber: string | null;
   onUpdateOpenBatch: (batchNum: string | null) => void;
   origin: OriginPage;
-  columns: TableColumnType[];
+  columns: () => TableColumnType[];
   isSelectionBulkWithdrawable: (selectedRows: SearchResponseElement[]) => boolean;
   getFuzzySearchFields: (debouncedSearchTerm: string) => FieldNodePayload[];
   // Origin ID is either the facility ID or the species ID
@@ -430,7 +430,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
           <Box marginTop={theme.spacing(2)}>
             <Table
               id={`inventory-seedlings-table-${origin.toLowerCase()}`}
-              columns={() => columns}
+              columns={columns}
               rows={filteredBatches}
               orderBy='batchNumber'
               Renderer={BatchesCellRenderer}
