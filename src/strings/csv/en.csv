@@ -1112,7 +1112,6 @@ SELECT_PLANTING_SITE_TYPE_DESCRIPTION_3,"Please note that if you create a simple
 SELECT_SEED_BANK,Select Seed Bank,
 SELECT_SEED_BANK_INFO,Accessions require a seed bank storage location. Please select a seed bank.,
 SELECTED_SPECIES_IN_USE,Selected species are all in use and cannot be deleted.,
-SELECTED_SPECIES_NOTHING_TO_DELETE,Nothing to delete.,
 SELECTED_SPECIES_SOME_IN_USE,The following selected species are in use and cannot be deleted:,
 SELECTED_SPECIES_UNUSED,Selected species are not in use and can be deleted.,
 SEND_REQUEST,Send Request,
