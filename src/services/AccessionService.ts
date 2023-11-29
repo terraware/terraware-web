@@ -69,10 +69,14 @@ const getAccession = async (accessionId: number): Promise<AccessionResponse> => 
 /**
  * Update an accession by id
  */
-const updateAccession = async (entity: Accession, simulate?: boolean): Promise<AccessionResponse> => {
+const updateAccession = async (
+  entity: Accession,
+  simulate?: boolean,
+  remainingQuantityNotes?: string
+): Promise<AccessionResponse> => {
   const params = { simulate: simulate !== undefined ? simulate.toString() : 'false' };
   const serverResponse: Response = await httpAccession.put({
-    entity,
+    entity: { ...entity, remainingQuantityNotes },
     params,
     urlReplacements: { '{id}': entity.id.toString() },
   });

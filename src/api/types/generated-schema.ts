@@ -3350,6 +3350,8 @@ export interface components {
       receivedDate?: string;
       /** @description Quantity of seeds remaining in the accession. If this is different than the existing value, it is considered a new observation, and the new value will override any previously-calculated remaining quantities. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** @description Notes associated with remaining quantity updates if any. */
+      remainingQuantityNotes?: string;
       /** Format: int64 */
       speciesId?: number;
       /** @enum {string} */
@@ -6207,10 +6209,6 @@ export interface operations {
    */
   deleteSpecies: {
     parameters: {
-      query: {
-        /** @description Organization from which the species should be deleted. */
-        organizationId: string;
-      };
       path: {
         speciesId: number;
       };

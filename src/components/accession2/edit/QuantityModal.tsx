@@ -76,6 +76,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const [subsetWeightError, setSubsetWeightError] = useState('');
   const [subsetCountError, setSubsetCountError] = useState('');
   const [totalWeightError, setTotalWeightError] = useState('');
+  const [remainingQuantityNotes, setRemainingQuantityNotes] = useState<string>();
   const classes = useStyles();
 
   const validate = () => {
@@ -91,7 +92,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     if (!validate()) {
       return;
     }
-    const response = await AccessionService.updateAccession(record);
+    const response = await AccessionService.updateAccession(record, false, remainingQuantityNotes || undefined);
     if (response.requestSucceeded) {
       reload();
       onCloseHandler();
