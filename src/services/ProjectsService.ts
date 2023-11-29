@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { Project } from 'src/types/Project';
-import { OrNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
+import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import SearchService from './SearchService';
 
 /**
@@ -43,7 +43,7 @@ const listProjects = async (organizationId: number, locale?: string | null): Pro
 /**
  * Search projects
  */
-const searchProjects = async (organizationId: number, query?: string): Promise<SearchResponseElement[] | null> => {
+const searchProjects = async (organizationId: number, query?: string): Promise<Project[] | null> => {
   const searchField: OrNodePayload | null = query
     ? {
         operation: 'or',
@@ -80,7 +80,8 @@ const searchProjects = async (organizationId: number, query?: string): Promise<S
     searchParams.search.children.push(searchField);
   }
 
-  return await SearchService.search(searchParams);
+  const response = await SearchService.search(searchParams);
+  return response ? (response as Project[]) : null;
 };
 
 /**
