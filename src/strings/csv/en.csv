@@ -898,6 +898,7 @@ PROCESSING_AND_DRYING_INFO,"By adding information about processing/drying and sa
 PROCESSING_METHOD,Processing Method,
 PROCESSING_START_DATE,Processing Start Date,
 PROCESSING_STATUS_REQUIRED,Processing Status *,
+PROJECT_ADDED,{0} Added,
 PROJECT_IMPACT,Project Impact,
 PROJECT_IMPACT_INSTRUCTIONS,"Provide the details of your impact during the reporting period, including key accomplishments and progress toward meeting stated goals and key milestones. In addition to forestry goals, please include jobs created (full-time, part-time, and seasonal), using specific figures disaggregated by gender. (Approximately one page.)",
 PROJECT_IMPACT_REQUIRED,Project Impact *,

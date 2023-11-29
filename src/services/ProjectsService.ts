@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
-import { Project } from 'src/types/Project';
+import { CreateProjectRequest, Project } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import SearchService from './SearchService';
 
@@ -85,11 +85,21 @@ const searchProjects = async (organizationId: number, query?: string): Promise<P
 };
 
 /**
+ * Create a project
+ */
+const createProject = async (project: CreateProjectRequest): Promise<Response> => {
+  return await httpProjects.post({
+    entity: project,
+  });
+};
+
+/**
  * Exported functions
  */
 const ProjectsService = {
   listProjects,
   searchProjects,
+  createProject,
 };
 
 export default ProjectsService;
