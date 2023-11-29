@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
@@ -7,6 +7,9 @@ import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
 import { TextTruncated } from '@terraware/web-components';
 import strings from 'src/strings';
+import ChangeQuantityModal from './view/ChangeQuantityModal';
+import { Batch } from 'src/types/Batch';
+import QuantitiesMenu from './view/QuantitiesMenu';
 
 const COLUMN_WIDTH = 250;
 
@@ -22,7 +25,8 @@ const useStyles = makeStyles(() => ({
 export default function InventoryCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
-  const { column, row, value, index } = props;
+  const { column, row, value, index, reloadData } = props;
+  const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
 
   const getNurseriesNames = (nurseries: string) => {
     const nurseriesArray = nurseries.split('\r');
@@ -101,6 +105,29 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
         value={row.batchId ? createLinkToInventoryBatchDetail(value) : undefined}
         row={row}
         className={classes.text}
+      />
+    );
+  }
+
+  if (column.key === 'quantitiesMenu') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        row={row}
+        value={
+          <>
+            {modalValues.openChangeQuantityModal && (
+              <ChangeQuantityModal
+                onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
+                modalValues={modalValues}
+                row={row as Batch}
+                reload={reloadData}
+              />
+            )}
+            <QuantitiesMenu setModalValues={setModalValues} batch={row} />
+          </>
+        }
       />
     );
   }

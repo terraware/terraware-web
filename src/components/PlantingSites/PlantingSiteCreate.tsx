@@ -52,6 +52,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     id: -1,
     name: '',
     organizationId: selectedOrganization.id,
+    plantingSeasons: [],
   });
 
   const [record, setRecord, onChange] = useForm<PlantingSite>(defaultPlantingSite());
@@ -69,6 +70,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       plantingZones: selectedPlantingSite?.plantingZones,
       timeZone: selectedPlantingSite?.timeZone,
       organizationId: selectedOrganization.id,
+      plantingSeasons: [],
     });
   }, [selectedPlantingSite, setRecord, selectedOrganization.id]);
 

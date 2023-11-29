@@ -58,7 +58,7 @@ type PageContent = {
 
 type EmptyStatePageProps = {
   backgroundImageVisible?: boolean;
-  pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites';
+  pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites' | 'Projects';
   reloadData?: () => void;
 };
 
@@ -205,6 +205,20 @@ export default function EmptyStatePage({
     linkLocation: APP_PATHS.NURSERIES_NEW,
   };
 
+  const NO_PROJECTS_CONTENT: PageContent = {
+    title1: strings.PROJECTS,
+    title2: strings.ADD_A_PROJECT,
+    subtitle: strings.ADD_PROJECT_SUBTITLE,
+    listItems: [
+      {
+        icon: 'blobbyIconFolder',
+      },
+    ],
+    buttonText: strings.ADD_PROJECT,
+    buttonIcon: 'plus',
+    linkLocation: APP_PATHS.PROJECTS_NEW,
+  };
+
   const pageContent = (): PageContent => {
     const contributor = selectedOrganization && isContributor(selectedOrganization);
 
@@ -219,6 +233,8 @@ export default function EmptyStatePage({
         return NO_INVENTORY_CONTENT;
       case 'PlantingSites':
         return NO_PLANTING_SITES_CONTENT;
+      case 'Projects':
+        return NO_PROJECTS_CONTENT;
       default:
         return NO_SEEDBANKS_CONTENT;
     }

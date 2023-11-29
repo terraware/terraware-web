@@ -1492,6 +1492,7 @@ export interface components {
       name: string;
       /** Format: int64 */
       organizationId: number;
+      plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -2361,6 +2362,12 @@ export interface components {
       /** @enum {string} */
       type?: "MultiPolygon";
     }, "coordinates" | "type">;
+    NewPlantingSeasonPayload: {
+      /** Format: date */
+      endDate: string;
+      /** Format: date */
+      startDate: string;
+    };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: WithRequired<{
       operation: "not";
@@ -2725,6 +2732,14 @@ export interface components {
       /** @enum {string} */
       type: "Delivery" | "Reassignment From" | "Reassignment To";
     };
+    PlantingSeasonPayload: {
+      /** Format: date */
+      endDate: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: date */
+      startDate: string;
+    };
     PlantingSitePayload: {
       /** @description Area of planting site in hectares. Only present if the site has planting zones. */
       areaHa?: number;
@@ -2735,6 +2750,7 @@ export interface components {
       name: string;
       /** Format: int64 */
       organizationId: number;
+      plantingSeasons: components["schemas"]["PlantingSeasonPayload"][];
       plantingZones?: components["schemas"]["PlantingZonePayload"][];
       /** Format: int64 */
       projectId?: number;
@@ -3506,6 +3522,7 @@ export interface components {
       boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       name: string;
+      plantingSeasons?: components["schemas"]["UpdatedPlantingSeasonPayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -3602,6 +3619,17 @@ export interface components {
       withdrawnByUserId?: number;
       /** @description Quantity of seeds withdrawn. For viability testing withdrawals, this is always the same as the test's "seedsTested" value. Otherwise, it is a user-supplied value. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
+    };
+    UpdatedPlantingSeasonPayload: {
+      /** Format: date */
+      endDate: string;
+      /**
+       * Format: int64
+       * @description If present, the start and end dates of an existing planting season will be updated. Otherwise a new planting season will be created.
+       */
+      id?: number;
+      /** Format: date */
+      startDate: string;
     };
     UploadFileResponsePayload: {
       /**
@@ -5848,6 +5876,8 @@ export interface operations {
       query: {
         /** @description Organization whose species should be listed. */
         organizationId: string;
+        /** @description Only list species that are currently used in the organization's inventory, accessions or planting sites. */
+        inUse?: string;
       };
     };
     responses: {

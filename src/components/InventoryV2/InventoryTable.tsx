@@ -21,6 +21,7 @@ interface InventoryTableProps {
   setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
   isPresorted: boolean;
   columns: () => TableColumnType[];
+  reloadData?: () => void;
 }
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
@@ -33,6 +34,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setSearchSortOrder,
     isPresorted,
     columns,
+    reloadData,
   } = props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
@@ -81,7 +83,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 rows={results}
                 orderBy='species_scientificName'
                 Renderer={InventoryCellRenderer}
-                isClickable={(row) => row.species_id}
+                isClickable={() => false}
                 selectedRows={selectedRows}
                 setSelectedRows={setSelectedRows}
                 showCheckbox={true}
@@ -96,6 +98,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 ]}
                 sortHandler={onSortChange}
                 isPresorted={isPresorted}
+                reloadData={reloadData}
               />
             </Grid>
           </Grid>
