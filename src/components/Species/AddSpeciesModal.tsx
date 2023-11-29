@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Dropdown, MultiSelect } from '@terraware/web-components';
+import { BusySpinner, Dropdown, MultiSelect } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import {
@@ -69,6 +69,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const [optionsForName, setOptionsForName] = useState<string[]>();
   const [optionsForCommonName, setOptionsForCommonName] = useState<string[]>();
   const [newScientificName, setNewScientificName] = useState(false);
+  const [isBusy, setIsBusy] = useState<boolean>(false);
   // Debounce search term so that it only gives us latest value if searchTerm has not been updated within last 500ms.
   const debouncedSearchTerm = useDebounce(record.scientificName, 250);
   const [showWarning, setShowWarning] = useState(false);
@@ -155,7 +156,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
+      setIsBusy(true);
       const response = await SpeciesService.createSpecies(record, organizationId);
+      setIsBusy(false);
       if (response.requestSucceeded) {
         onClose(true);
       } else {
@@ -170,7 +173,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
+      setIsBusy(true);
       const response = await SpeciesService.updateSpecies(record, organizationId);
+      setIsBusy(false);
       if (response.requestSucceeded) {
         onClose(true);
       }
@@ -211,6 +216,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
         />,
       ]}
     >
+      {isBusy && <BusySpinner withSkrim={true} />}
       <TooltipLearnMoreModal
         content={tooltipLearnMoreModalData?.content}
         onClose={handleTooltipLearnMoreModalClose}
