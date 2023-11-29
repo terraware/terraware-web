@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -369,7 +369,23 @@
 <a name='L304'></a><a href='#L304'>304</a>
 <a name='L305'></a><a href='#L305'>305</a>
 <a name='L306'></a><a href='#L306'>306</a>
-<a name='L307'></a><a href='#L307'>307</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -577,6 +593,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -735,7 +767,7 @@ type PageContent = {
 &nbsp;
 type EmptyStatePageProps = {
   backgroundImageVisible?: boolean;
-  pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites';
+  pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites' | 'Projects';
   reloadData?: () =&gt; void;
 };
 &nbsp;
@@ -882,6 +914,20 @@ export default function <span class="fstat-no" title="function not covered" >Emp
     linkLocation: APP_PATHS.NURSERIES_NEW,
   };
 &nbsp;
+  const NO_PROJECTS_CONTENT: PageContent = <span class="cstat-no" title="statement not covered" >{</span>
+    title1: strings.PROJECTS,
+    title2: strings.ADD_A_PROJECT,
+    subtitle: strings.ADD_PROJECT_SUBTITLE,
+    listItems: [
+      {
+        icon: 'blobbyIconFolder',
+      },
+    ],
+    buttonText: strings.ADD_PROJECT,
+    buttonIcon: 'plus',
+    linkLocation: APP_PATHS.PROJECTS_NEW,
+  };
+&nbsp;
   const pageContent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: PageContent =&gt; {</span>
     const contributor = <span class="cstat-no" title="statement not covered" >selectedOrganization &amp;&amp; isContributor(selectedOrganization);</span>
 &nbsp;
@@ -896,6 +942,8 @@ export default function <span class="fstat-no" title="function not covered" >Emp
 <span class="cstat-no" title="statement not covered" >        return NO_INVENTORY_CONTENT;</span>
       case 'PlantingSites':
 <span class="cstat-no" title="statement not covered" >        return NO_PLANTING_SITES_CONTENT;</span>
+      case 'Projects':
+<span class="cstat-no" title="statement not covered" >        return NO_PROJECTS_CONTENT;</span>
       default:
 <span class="cstat-no" title="statement not covered" >        return NO_SEEDBANKS_CONTENT;</span>
     }
@@ -988,7 +1036,7 @@ export default function <span class="fstat-no" title="function not covered" >Emp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-29T15:32:57.140Z
+                at 2023-11-29T15:50:55.384Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
