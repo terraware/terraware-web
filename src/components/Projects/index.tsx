@@ -13,11 +13,10 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import TextField from '../common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
-import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
-import { SearchService } from 'src/services';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { useOrganization, useLocalization } from 'src/providers/hooks';
 import { Project } from 'src/types/Project';
+import ProjectsService from 'src/services/ProjectsService';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -60,54 +59,9 @@ export default function ProjectsList(): JSX.Element {
   const { activeLocale } = useLocalization();
 
   const search = useCallback(
-    async (searchTerm: string, skipTfContact = false) => {
-      const searchField: OrNodePayload | null = searchTerm
-        ? {
-            operation: 'or',
-            children: [
-              { operation: 'field', field: 'name', type: 'Fuzzy', values: [searchTerm] },
-              { operation: 'field', field: 'description', type: 'Fuzzy', values: [searchTerm] },
-            ],
-          }
-        : null;
-
-      const params: SearchRequestPayload = {
-        prefix: 'projects',
-        fields: ['name', 'description', 'id', 'organization_id'],
-        search: {
-          operation: 'and',
-          children: [
-            {
-              operation: 'field',
-              field: 'organization_id',
-              type: 'Exact',
-              values: [selectedOrganization.id],
-            },
-          ],
-        },
-        sortOrder: [
-          {
-            field: 'name',
-          },
-        ],
-        count: 0,
-      };
-
-      if (searchField) {
-        params.search.children.push(searchField);
-      }
-
-      const searchResults = await SearchService.search(params);
-      const projectResults: Project[] = [];
-      searchResults?.forEach((result) => {
-        projectResults.push({
-          name: result.name as string,
-          description: result.description as string,
-          id: result.id as number,
-          organizationId: result.organizationId as number,
-        });
-      });
-      return projectResults;
+    async (searchTerm: string) => {
+      const searchResults = await ProjectsService.searchProjects(selectedOrganization.id, searchTerm);
+      return searchResults as Project[];
     },
     [selectedOrganization.id]
   );
