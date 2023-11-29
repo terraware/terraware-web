@@ -76,23 +76,36 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const [subsetWeightError, setSubsetWeightError] = useState('');
   const [subsetCountError, setSubsetCountError] = useState('');
   const [totalWeightError, setTotalWeightError] = useState('');
-  const [remainingQuantityNotes, setRemainingQuantityNotes] = useState<string>();
+  const [remainingQuantityNotes, setRemainingQuantityNotes] = useState<string>('');
+  const [remainingQuantityNotesError, setRemainingQuantityNotesError] = useState<boolean>(false);
   const classes = useStyles();
 
   const validate = () => {
+    let hasErrors = false;
+
     const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);
     if (isNaN(quantity) || quantity < 0) {
       setQuantityError(true);
-      return false;
+      hasErrors = true;
+    } else {
+      setQuantityError(false);
     }
-    return true;
+
+    if (!remainingQuantityNotes.trim()) {
+      setRemainingQuantityNotesError(true);
+      hasErrors = true;
+    } else {
+      setRemainingQuantityNotesError(false);
+    }
+
+    return !hasErrors;
   };
 
   const saveQuantity = async () => {
     if (!validate()) {
       return;
     }
-    const response = await AccessionService.updateAccession(record, false, remainingQuantityNotes || undefined);
+    const response = await AccessionService.updateAccession(record, false, remainingQuantityNotes);
     if (response.requestSucceeded) {
       reload();
       onCloseHandler();
@@ -104,6 +117,12 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   useEffect(() => {
     setRecord(accession);
   }, [accession, setRecord]);
+
+  useEffect(() => {
+    if (open) {
+      setRemainingQuantityNotes('');
+    }
+  }, [open]);
 
   const onChangeRemainingQuantity = (id: string, value: any) => {
     if (record) {
@@ -349,6 +368,17 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 </Grid>
               </Box>
             )}
+          </Grid>
+          <Grid item xs={12} textAlign='left'>
+            <Textfield
+              id='notes'
+              value={record?.notes}
+              onChange={(value) => setRemainingQuantityNotes(value as string)}
+              type='textarea'
+              label={strings.NOTES}
+              errorText={remainingQuantityNotesError ? strings.REQUIRED_FIELD : ''}
+              required
+            />
           </Grid>
         </Grid>
       </DialogBox>
