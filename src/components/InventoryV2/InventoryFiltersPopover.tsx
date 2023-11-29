@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '176px',
     height: '40px',
     padding: theme.spacing(1, 2, 1, 1),
-    margin: theme.spacing(0.5, 0, 0, 1),
+    marginTop: theme.spacing(0.5),
     display: 'flex',
     justifyContent: 'space-between',
   },
