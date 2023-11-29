@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -76,24 +76,7 @@
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
-<a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L14'></a><a href='#L14'>14</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -105,41 +88,19 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { NurseryBatchService } from 'src/services';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { SearchResponseElement } from 'src/types/Search';
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
 &nbsp;
 interface BatchesExportModalProps {
-  organizationId: number;
-  speciesId: number;
-  searchFields: SearchNodePayload[];
-  searchSortOrder?: SearchSortOrder;
+  batchesExport: () =&gt; Promise&lt;SearchResponseElement[] | null&gt;;
   onClose: () =&gt; void;
 }
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >BatchesExportModal(</span>props: BatchesExportModalProps): JSX.Element {
-  const { organizationId, speciesId, searchFields, searchSortOrder, onClose } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { batchesExport, onClose } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
-  const onExport = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return await NurseryBatchService.exportBatchesForSpeciesById(</span>
-      organizationId,
-      speciesId,
-      searchFields,
-      searchSortOrder
-    );
-  };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;ExportCsvModal open={true} onExport={onExport} onClose={onClose} /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >  return &lt;ExportCsvModal open={true} onExport={batchesExport} onClose={onClose} /&gt;;</span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -148,7 +109,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-29T18:02:26.969Z
+                at 2023-11-29T19:45:18.213Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
