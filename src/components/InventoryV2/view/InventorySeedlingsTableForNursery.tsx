@@ -60,27 +60,6 @@ export default function InventorySeedlingsTableForNursery(props: InventorySeedli
     [facilityId]
   );
 
-  const getBatchesExport = useCallback(
-    (
-      orgId: number,
-      originId: number,
-      searchFields: FieldNodePayload[],
-      searchSortOrder: SearchSortOrder | undefined
-    ): Promise<SearchResponseElement[] | null> => {
-      // TODO it seems this was not implemented
-      // tslint:disable-next-line:no-console
-      console.log(
-        'TODO - implement batches export for inventory by nursery',
-        orgId,
-        originId,
-        searchFields,
-        searchSortOrder
-      );
-      return Promise.resolve([] as SearchResponseElement[]);
-    },
-    []
-  );
-
   const isSelectionBulkWithdrawable = useCallback((selectedRows: SearchResponseElement[]) => {
     return selectedRows.some((row) => Number(row['totalQuantity(raw)']) > 0);
   }, []);
@@ -93,7 +72,6 @@ export default function InventorySeedlingsTableForNursery(props: InventorySeedli
       isSelectionBulkWithdrawable={isSelectionBulkWithdrawable}
       getFuzzySearchFields={getFuzzySearchFields}
       getBatchesSearch={getBatchesSearch}
-      getBatchesExport={getBatchesExport}
     />
   );
 }

@@ -44,7 +44,7 @@ export interface InventorySeedlingsTableProps {
     searchFields: FieldNodePayload[],
     searchSortOrder: SearchSortOrder | undefined
   ) => Promise<SearchResponseElement[] | null>;
-  getBatchesExport: (
+  getBatchesExport?: (
     orgId: number,
     originId: number,
     searchFields: FieldNodePayload[],
@@ -295,7 +295,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   );
 
   const batchesExport = useCallback(() => {
-    if (!originId) {
+    if (!originId || !getBatchesExport) {
       return Promise.resolve([] as SearchResponseElement[]);
     }
 
@@ -362,11 +362,13 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
                 onClick={addBatch}
                 size='small'
               />
-              <OptionsMenu
-                onOptionItemClick={onOptionItemClick}
-                optionItems={[{ label: strings.EXPORT, value: 'export' }]}
-                size='small'
-              />
+              {getBatchesExport && (
+                <OptionsMenu
+                  onOptionItemClick={onOptionItemClick}
+                  optionItems={[{ label: strings.EXPORT, value: 'export' }]}
+                  size='small'
+                />
+              )}
             </Box>
           </Box>
 
@@ -427,7 +429,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
           <Box marginTop={theme.spacing(2)}>
             <Table
-              id='inventory-seedlings-table'
+              id={`inventory-seedlings-table-${origin.toLowerCase()}`}
               columns={() => columns}
               rows={filteredBatches}
               orderBy='batchNumber'
