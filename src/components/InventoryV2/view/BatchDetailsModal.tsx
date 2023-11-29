@@ -19,14 +19,16 @@ import Link from 'src/components/common/Link';
 import { Response } from 'src/services/HttpService';
 import AccessionService from 'src/services/AccessionService';
 import { BatchData, BatchId, NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
-import SubLocationsDropdown from 'src/components/InventoryV2/form/SubLocationsDropdown';
 import { useSubLocations } from 'src/components/InventoryV2/form/useSubLocations';
+import SubLocationsDropdown from 'src/components/InventoryV2/form/SubLocationsDropdown';
 import { useAccessions } from 'src/components/InventoryV2/form/useAccessions';
 import AccessionsDropdown from 'src/components/InventoryV2/form/AccessionsDropdown';
 import { useSpecies } from 'src/components/InventoryV2/form/useSpecies';
 import SpeciesDropdown from 'src/components/InventoryV2/form/SpeciesDropdown';
-import NurseryDropdownV2 from 'src/components/InventoryV2/form/NurseryDropdownV2';
 import { useNurseries } from 'src/components/InventoryV2/form/useNurseries';
+import NurseryDropdownV2 from 'src/components/InventoryV2/form/NurseryDropdownV2';
+import { useProjects } from 'src/components/InventoryV2/form/useProjects';
+import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 
 export interface BatchDetailsModalProps {
@@ -74,6 +76,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const { availableAccessions, selectedAccession } = useAccessions(record);
   const { availableSpecies, selectedSpecies } = useSpecies(record);
   const { availableNurseries, selectedNursery } = useNurseries(record);
+  const { availableProjects, selectedProject } = useProjects(record);
 
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [addedDateChanged, setAddedDateChanged] = useState(false);
@@ -345,6 +348,18 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                   />
                 </Grid>
               )}
+
+              {selectedProject && (
+                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                  <Textfield
+                    id='projectId'
+                    value={selectedProject.name}
+                    type='text'
+                    label={strings.PROJECT}
+                    display={true}
+                  />
+                </Grid>
+              )}
             </Grid>
           )}
 
@@ -385,7 +400,15 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                   <SubLocationsDropdown<FormRecord>
                     availableSubLocations={availableSubLocations}
                     record={record}
-                    setRecord={(value) => setRecord(value)}
+                    setRecord={setRecord}
+                  />
+                </Grid>
+
+                <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                  <ProjectsDropdown<FormRecord>
+                    availableProjects={availableProjects}
+                    record={record}
+                    setRecord={setRecord}
                   />
                 </Grid>
               </>
