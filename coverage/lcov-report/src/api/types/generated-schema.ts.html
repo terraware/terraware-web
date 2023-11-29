@@ -7394,7 +7394,67 @@
 <a name='L7329'></a><a href='#L7329'>7329</a>
 <a name='L7330'></a><a href='#L7330'>7330</a>
 <a name='L7331'></a><a href='#L7331'>7331</a>
-<a name='L7332'></a><a href='#L7332'>7332</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L7332'></a><a href='#L7332'>7332</a>
+<a name='L7333'></a><a href='#L7333'>7333</a>
+<a name='L7334'></a><a href='#L7334'>7334</a>
+<a name='L7335'></a><a href='#L7335'>7335</a>
+<a name='L7336'></a><a href='#L7336'>7336</a>
+<a name='L7337'></a><a href='#L7337'>7337</a>
+<a name='L7338'></a><a href='#L7338'>7338</a>
+<a name='L7339'></a><a href='#L7339'>7339</a>
+<a name='L7340'></a><a href='#L7340'>7340</a>
+<a name='L7341'></a><a href='#L7341'>7341</a>
+<a name='L7342'></a><a href='#L7342'>7342</a>
+<a name='L7343'></a><a href='#L7343'>7343</a>
+<a name='L7344'></a><a href='#L7344'>7344</a>
+<a name='L7345'></a><a href='#L7345'>7345</a>
+<a name='L7346'></a><a href='#L7346'>7346</a>
+<a name='L7347'></a><a href='#L7347'>7347</a>
+<a name='L7348'></a><a href='#L7348'>7348</a>
+<a name='L7349'></a><a href='#L7349'>7349</a>
+<a name='L7350'></a><a href='#L7350'>7350</a>
+<a name='L7351'></a><a href='#L7351'>7351</a>
+<a name='L7352'></a><a href='#L7352'>7352</a>
+<a name='L7353'></a><a href='#L7353'>7353</a>
+<a name='L7354'></a><a href='#L7354'>7354</a>
+<a name='L7355'></a><a href='#L7355'>7355</a>
+<a name='L7356'></a><a href='#L7356'>7356</a>
+<a name='L7357'></a><a href='#L7357'>7357</a>
+<a name='L7358'></a><a href='#L7358'>7358</a>
+<a name='L7359'></a><a href='#L7359'>7359</a>
+<a name='L7360'></a><a href='#L7360'>7360</a>
+<a name='L7361'></a><a href='#L7361'>7361</a>
+<a name='L7362'></a><a href='#L7362'>7362</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -16219,6 +16279,7 @@ export interface components {
       name: string;
       /** Format: int64 */
       organizationId: number;
+      plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -17088,6 +17149,12 @@ export interface components {
       /** @enum {string} */
       type?: "MultiPolygon";
     }, "coordinates" | "type"&gt;;
+    NewPlantingSeasonPayload: {
+      /** Format: date */
+      endDate: string;
+      /** Format: date */
+      startDate: string;
+    };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: WithRequired&lt;{
       operation: "not";
@@ -17452,6 +17519,14 @@ export interface components {
       /** @enum {string} */
       type: "Delivery" | "Reassignment From" | "Reassignment To";
     };
+    PlantingSeasonPayload: {
+      /** Format: date */
+      endDate: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: date */
+      startDate: string;
+    };
     PlantingSitePayload: {
       /** @description Area of planting site in hectares. Only present if the site has planting zones. */
       areaHa?: number;
@@ -17462,6 +17537,7 @@ export interface components {
       name: string;
       /** Format: int64 */
       organizationId: number;
+      plantingSeasons: components["schemas"]["PlantingSeasonPayload"][];
       plantingZones?: components["schemas"]["PlantingZonePayload"][];
       /** Format: int64 */
       projectId?: number;
@@ -18233,6 +18309,7 @@ export interface components {
       boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       name: string;
+      plantingSeasons?: components["schemas"]["UpdatedPlantingSeasonPayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -18329,6 +18406,17 @@ export interface components {
       withdrawnByUserId?: number;
       /** @description Quantity of seeds withdrawn. For viability testing withdrawals, this is always the same as the test's "seedsTested" value. Otherwise, it is a user-supplied value. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
+    };
+    UpdatedPlantingSeasonPayload: {
+      /** Format: date */
+      endDate: string;
+      /**
+       * Format: int64
+       * @description If present, the start and end dates of an existing planting season will be updated. Otherwise a new planting season will be created.
+       */
+      id?: number;
+      /** Format: date */
+      startDate: string;
     };
     UploadFileResponsePayload: {
       /**
@@ -20575,6 +20663,8 @@ export interface operations {
       query: {
         /** @description Organization whose species should be listed. */
         organizationId: string;
+        /** @description Only list species that are currently used in the organization's inventory, accessions or planting sites. */
+        inUse?: string;
       };
     };
     responses: {
@@ -22063,7 +22153,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-28T22:12:56.679Z
+                at 2023-11-29T15:32:57.140Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

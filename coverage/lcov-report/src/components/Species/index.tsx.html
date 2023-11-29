@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/245</span>
+                <span class='fraction'>0/251</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/130</span>
+                <span class='fraction'>0/134</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/239</span>
+                <span class='fraction'>0/245</span>
             </div>
         
             
@@ -965,10 +965,7 @@
 <a name='L900'></a><a href='#L900'>900</a>
 <a name='L901'></a><a href='#L901'>901</a>
 <a name='L902'></a><a href='#L902'>902</a>
-<a name='L903'></a><a href='#L903'>903</a>
-<a name='L904'></a><a href='#L904'>904</a>
-<a name='L905'></a><a href='#L905'>905</a>
-<a name='L906'></a><a href='#L906'>906</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L903'></a><a href='#L903'>903</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1017,18 +1014,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1125,6 +1113,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1530,9 +1519,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1697,6 +1689,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1704,6 +1697,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1906,7 +1900,7 @@ import TooltipLearnMoreModal, {
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { DropdownItem, SortOrder } from '@terraware/web-components';
+import { BusySpinner, DropdownItem, SortOrder } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
@@ -1916,6 +1910,8 @@ import _ from 'lodash';
 import useQuery from 'src/utils/useQuery';
 import { useHistory } from 'react-router';
 import { APP_PATHS } from 'src/constants';
+import { SpeciesSearchResultRow } from './types';
+import { handlePromises } from 'src/services/utils';
 &nbsp;
 type SpeciesListProps = {
   reloadData: () =&gt; void;
@@ -1983,17 +1979,6 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
   },
 }));
 &nbsp;
-type SpeciesSearchResultRow = Omit&lt;
-  Species,
-  'growthForm' | 'seedStorageBehavior' | 'ecosystemTypes' | 'conservationCategory' | 'rare'
-&gt; &amp; {
-  conservationCategory?: string;
-  growthForm?: string;
-  rare?: string;
-  seedStorageBehavior?: string;
-  ecosystemTypes?: string[];
-};
-&nbsp;
 const BE_SORTED_FIELDS = <span class="cstat-no" title="statement not covered" >[</span>
   'scientificName',
   'commonName',
@@ -2028,6 +2013,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   const [searchValue, setSearchValue] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const debouncedSearchTerm = <span class="cstat-no" title="statement not covered" >useDebounce(searchValue, 250);</span>
   const [results, setResults] = <span class="cstat-no" title="statement not covered" >useState&lt;SpeciesSearchResultRow[]&gt;();</span>
+  const [isBusy, setIsBusy] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
 &nbsp;
@@ -2432,13 +2418,16 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 <span class="cstat-no" title="statement not covered" >    setSearchValue(value as string);</span>
   };
 &nbsp;
-  const deleteSelectedSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedSpeciesRows.length &gt; 0) {</span>
-<span class="cstat-no" title="statement not covered" >      await Promise.all(</span>
-        selectedSpeciesRows.map(<span class="fstat-no" title="function not covered" >as</span>ync (iSelectedSpecies) =&gt; {
-<span class="cstat-no" title="statement not covered" >          await SpeciesService.deleteSpecies(iSelectedSpecies.id, selectedOrganization.id);</span>
-        })
+  const deleteSelectedSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (speciesIds: number[]) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (speciesIds.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      setIsBusy(true);</span>
+      const success = <span class="cstat-no" title="statement not covered" >await handlePromises(</span>
+        speciesIds.map(<span class="fstat-no" title="function not covered" >(i</span>d: number) =&gt; <span class="cstat-no" title="statement not covered" >SpeciesService.deleteSpecies(id, selectedOrganization.id))</span>
       );
+<span class="cstat-no" title="statement not covered" >      setIsBusy(false);</span>
+<span class="cstat-no" title="statement not covered" >      if (!success) {</span>
+<span class="cstat-no" title="statement not covered" >        snackbar.toastError(strings.GENERIC_ERROR);</span>
+      }
 <span class="cstat-no" title="statement not covered" >      setDeleteSpeciesModalOpen(false);</span>
 <span class="cstat-no" title="statement not covered" >      reloadData();</span>
     }
@@ -2600,6 +2589,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain&gt;
+      {isBusy &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
       &lt;CheckDataModal
         open={checkDataModalOpen}
         onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setCheckDataModalOpen(false)}</span>
@@ -2610,7 +2600,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
       &lt;DeleteSpeciesModal
         open={deleteSpeciesModalOpen}
         onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDeleteSpeciesModalOpen(false)}</span>
-        onSubmit={deleteSelectedSpecies}
+        onSubmit={<span class="fstat-no" title="function not covered" >(t</span>oDelete: number[]) =&gt; <span class="cstat-no" title="statement not covered" >deleteSelectedSpecies(toDelete)}</span>
+        speciesToDelete={selectedSpeciesRows}
       /&gt;
       {editSpeciesModalOpen &amp;&amp; (
         &lt;AddSpeciesModal
@@ -2740,7 +2731,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
                     selectedSpeciesRows.length === 1
                       ? [
                           {
-                            buttonType: 'passive',
+                            buttonType: 'destructive',
                             ...(!isMobile &amp;&amp; { buttonText: strings.DELETE }),
                             onButtonClick: OnDeleteSpecies,
                             icon: 'iconTrashCan',
@@ -2754,7 +2745,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
                         ]
                       : [
                           {
-                            buttonType: 'passive',
+                            buttonType: 'destructive',
                             ...(!isMobile &amp;&amp; { buttonText: strings.DELETE }),
                             onButtonClick: OnDeleteSpecies,
                             icon: 'iconTrashCan',
@@ -2785,7 +2776,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-28T22:12:56.679Z
+                at 2023-11-29T15:32:57.140Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

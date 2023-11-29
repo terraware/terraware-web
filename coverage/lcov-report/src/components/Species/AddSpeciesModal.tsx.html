@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/102</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/99</span>
             </div>
         
             
@@ -448,7 +448,13 @@
 <a name='L383'></a><a href='#L383'>383</a>
 <a name='L384'></a><a href='#L384'>384</a>
 <a name='L385'></a><a href='#L385'>385</a>
-<a name='L386'></a><a href='#L386'>386</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -519,6 +525,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -605,6 +612,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -623,6 +632,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -637,6 +648,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -836,7 +848,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Dropdown, MultiSelect } from '@terraware/web-components';
+import { BusySpinner, Dropdown, MultiSelect } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import {
@@ -904,6 +916,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
   const [optionsForName, setOptionsForName] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
   const [optionsForCommonName, setOptionsForCommonName] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
   const [newScientificName, setNewScientificName] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const [isBusy, setIsBusy] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   // Debounce search term so that it only gives us latest value if searchTerm has not been updated within last 500ms.
   const debouncedSearchTerm = <span class="cstat-no" title="statement not covered" >useDebounce(record.scientificName, 250);</span>
   const [showWarning, setShowWarning] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
@@ -990,7 +1003,9 @@ export default function <span class="fstat-no" title="function not covered" >Add
 <span class="cstat-no" title="statement not covered" >    if (!record.scientificName) {</span>
 <span class="cstat-no" title="statement not covered" >      setNameFormatError(strings.REQUIRED_FIELD);</span>
     } else {
+<span class="cstat-no" title="statement not covered" >      setIsBusy(true);</span>
       const response = <span class="cstat-no" title="statement not covered" >await SpeciesService.createSpecies(record, organizationId);</span>
+<span class="cstat-no" title="statement not covered" >      setIsBusy(false);</span>
 <span class="cstat-no" title="statement not covered" >      if (response.requestSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >        onClose(true);</span>
       } else {
@@ -1005,7 +1020,9 @@ export default function <span class="fstat-no" title="function not covered" >Add
 <span class="cstat-no" title="statement not covered" >    if (!record.scientificName) {</span>
 <span class="cstat-no" title="statement not covered" >      setNameFormatError(strings.REQUIRED_FIELD);</span>
     } else {
+<span class="cstat-no" title="statement not covered" >      setIsBusy(true);</span>
       const response = <span class="cstat-no" title="statement not covered" >await SpeciesService.updateSpecies(record, organizationId);</span>
+<span class="cstat-no" title="statement not covered" >      setIsBusy(false);</span>
 <span class="cstat-no" title="statement not covered" >      if (response.requestSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >        onClose(true);</span>
       }
@@ -1046,6 +1063,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
         /&gt;,
       ]}
     &gt;
+      {isBusy &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
       &lt;TooltipLearnMoreModal
         content={tooltipLearnMoreModalData?.content}
         onClose={handleTooltipLearnMoreModalClose}
@@ -1225,7 +1243,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-28T22:12:56.679Z
+                at 2023-11-29T15:32:57.140Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
