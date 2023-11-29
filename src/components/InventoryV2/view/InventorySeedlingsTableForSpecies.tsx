@@ -13,7 +13,7 @@ interface InventorySeedlingsTableForSpeciesProps
   speciesId: number;
 }
 
-const columns: TableColumnType[] = [
+const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
   { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
   { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
