@@ -15,6 +15,7 @@ import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
 import { NurseryBatchService } from 'src/services';
 import Card from 'src/components/common/Card';
+import { isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -116,6 +117,9 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
       } as InventoryResultWithBatchNumber;
     });
 
+    const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
+    updatedResult = updatedResult?.filter((result) => showEmptyBatches || !isBatchEmpty(result));
+
     if (updatedResult) {
       if (!debouncedSearchTerm && !filters.facilityIds?.length) {
         setShowResults(updatedResult.length > 0);
@@ -143,6 +147,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           isPresorted={!!searchSortOrder}
           columns={columns}
           reloadData={onApplyFilters}
+          origin='Batches'
         />
       ) : searchResults === null ? (
         <div className={classes.spinnerContainer}>

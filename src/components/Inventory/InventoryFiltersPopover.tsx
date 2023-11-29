@@ -11,6 +11,7 @@ import { Facility } from 'src/types/Facility';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
+  showEmptyBatches?: (string | null)[];
 };
 
 const useStyles = makeStyles((theme: Theme) => ({

@@ -21,7 +21,7 @@ import { useOrganization } from 'src/providers';
 import { Species } from 'src/types/Species';
 import { Facility } from 'src/types/Facility';
 
-export type OriginPage = 'Nursery' | 'Species' | 'Inventory';
+export type OriginPage = 'Nursery' | 'Species' | 'Batches';
 
 type InventoryBatchProps = {
   origin: OriginPage;
@@ -134,7 +134,7 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
         <BackToLink
           id='back'
           name={`${strings.INVENTORY}${
-            origin !== 'Inventory'
+            origin !== 'Batches'
               ? ` / ${
                   origin === 'Species'
                     ? strings.formatString(strings.BATCHES_OF, getSpeciesLabel())
