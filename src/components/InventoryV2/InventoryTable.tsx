@@ -11,6 +11,7 @@ import Search from './Search';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { SearchSortOrder } from 'src/types/Search';
+import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 
 interface InventoryTableProps {
   results: SearchResponseElement[];
@@ -22,6 +23,7 @@ interface InventoryTableProps {
   isPresorted: boolean;
   columns: () => TableColumnType[];
   reloadData?: () => void;
+  origin?: OriginPage;
 }
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
@@ -35,6 +37,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     isPresorted,
     columns,
     reloadData,
+    origin,
   } = props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
@@ -71,6 +74,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           onSearch={(val) => setTemporalSearchValue(val)}
           filters={filters}
           setFilters={setFilters}
+          origin={origin}
         />
       </Box>
       <Grid item xs={12}>

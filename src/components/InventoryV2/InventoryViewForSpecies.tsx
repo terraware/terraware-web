@@ -1,23 +1,23 @@
-import { useTheme, Grid, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { useTheme, Grid, Typography } from '@mui/material';
 import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
 import { Species } from 'src/types/Species';
-import useQuery from '../../utils/useQuery';
-import useStateLocation, { getLocation } from '../../utils/useStateLocation';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
-import InventorySummary from './view/InventorySummary';
-import InventorySeedlingsTable from './view/InventorySeedlingsTable';
+import InventorySummary from 'src/components/InventoryV2/view/InventorySummary';
+import InventorySeedlingsTableForSpecies from 'src/components/InventoryV2/view/InventorySeedlingsTableForSpecies';
 
-interface InventoryViewProps {
+interface InventoryViewForSpeciesProps {
   species: Species[];
 }
 
-export default function InventoryView(props: InventoryViewProps): JSX.Element {
+export default function InventoryViewForSpecies(props: InventoryViewForSpeciesProps): JSX.Element {
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();
@@ -80,12 +80,13 @@ export default function InventoryView(props: InventoryViewProps): JSX.Element {
         {speciesId && (
           <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
             <InventorySummary speciesId={Number(speciesId)} modified={modified} />
-            <InventorySeedlingsTable
+            <InventorySeedlingsTableForSpecies
               speciesId={Number(speciesId)}
               modified={modified}
               setModified={setModified}
               openBatchNumber={openBatchNumber}
               onUpdateOpenBatch={setBatchNumber}
+              origin={'Species'}
             />
           </Grid>
         )}

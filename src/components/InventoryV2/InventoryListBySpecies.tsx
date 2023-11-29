@@ -184,6 +184,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
           setSearchSortOrder={onSearchSortOrder}
           isPresorted={!!searchSortOrder}
           columns={columns}
+          origin='Species'
         />
       ) : searchResults === null ? (
         <div className={classes.spinnerContainer}>

@@ -49,7 +49,7 @@ import InventoryV2 from './components/InventoryV2';
 import NurseryDetails from './components/Nursery';
 import InventoryCreate from './components/Inventory/InventoryCreate';
 import InventoryView from './components/Inventory/InventoryView';
-import InventoryViewV2 from './components/InventoryV2/InventoryView';
+import InventoryViewForSpecies from './components/InventoryV2/InventoryViewForSpecies';
 import InventoryViewForNursery from './components/InventoryV2/InventoryViewForNursery';
 import InventoryBatch from './components/InventoryV2/InventoryBatch';
 import {
@@ -481,7 +481,7 @@ function AppContent() {
             </Route>
             {nurseryV2 && (
               <Route path={APP_PATHS.INVENTORY_BATCH}>
-                <InventoryBatch origin='Inventory' species={species} />
+                <InventoryBatch origin='Batches' species={species} />
               </Route>
             )}
             {nurseryV2 && (
@@ -500,7 +500,7 @@ function AppContent() {
               </Route>
             )}
             <Route path={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES}>
-              {nurseryV2 ? <InventoryViewV2 species={species} /> : <InventoryView species={species} />}
+              {nurseryV2 ? <InventoryViewForSpecies species={species} /> : <InventoryView species={species} />}
             </Route>
             <Route path={APP_PATHS.BATCH_WITHDRAW}>
               <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />

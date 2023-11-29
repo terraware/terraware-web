@@ -70,7 +70,7 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
     return (
       <TextTruncated
         stringList={inputValues}
-        maxLengthPx={250}
+        maxLengthPx={350}
         textStyle={{ fontSize: 16 }}
         showAllStyle={{ padding: theme.spacing(2), fontSize: 16 }}
         listSeparator={strings.LIST_SEPARATOR}
@@ -131,9 +131,7 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
     >
       <>
         {getMessage()}
-        <Typography marginTop={2}>
-          {toDelete.length ? strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT : strings.SELECTED_SPECIES_NOTHING_TO_DELETE}
-        </Typography>
+        {toDelete.length > 0 && <Typography marginTop={2}>{strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT}</Typography>}
       </>
     </DialogBox>
   );
