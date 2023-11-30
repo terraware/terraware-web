@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/72</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/72</span>
             </div>
         
             
@@ -358,7 +358,11 @@
 <a name='L293'></a><a href='#L293'>293</a>
 <a name='L294'></a><a href='#L294'>294</a>
 <a name='L295'></a><a href='#L295'>295</a>
-<a name='L296'></a><a href='#L296'>296</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -386,6 +390,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -602,7 +608,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -668,6 +676,7 @@ import { useOrganization } from 'src/providers/hooks';
 import LocaleSelector from './LocaleSelector';
 import ReportService, { Reports } from 'src/services/ReportService';
 import { isAdmin } from 'src/utils/organization';
+import isEnabled from '../features';
 &nbsp;
 type NavBarProps = {
   setShowNavBar: React.Dispatch&lt;React.SetStateAction&lt;boolean&gt;&gt;;
@@ -686,6 +695,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
   const [reports, setReports] = <span class="cstat-no" title="statement not covered" >useState&lt;Reports&gt;([]);</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
 &nbsp;
   const isAccessionDashboardRoute = <span class="cstat-no" title="statement not covered" >useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');</span>
   const isAccessionsRoute = <span class="cstat-no" title="statement not covered" >useRouteMatch(APP_PATHS.ACCESSIONS + '/');</span>
@@ -892,15 +902,17 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             }}
             id='people'
           /&gt;
-          &lt;NavItem
-            label={strings.PROJECTS}
-            icon='iconFolder'
-            selected={!!isProjectsRoute}
-            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >              closeAndNavigateTo(APP_PATHS.PROJECTS);</span>
-            }}
-            id='projects'
-          /&gt;
+          {featureFlagProjects &amp;&amp; (
+            &lt;NavItem
+              label={strings.PROJECTS}
+              icon='iconFolder'
+              selected={!!isProjectsRoute}
+              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >                closeAndNavigateTo(APP_PATHS.PROJECTS);</span>
+              }}
+              id='projects'
+            /&gt;
+          )}
           &lt;NavItem label={strings.LOCATIONS} icon='iconMyLocation' id='locations'&gt;
             &lt;SubNavbar&gt;
               &lt;NavItem
@@ -955,7 +967,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-30T19:33:59.811Z
+                at 2023-11-30T22:22:16.654Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
