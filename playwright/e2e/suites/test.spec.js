@@ -9,7 +9,7 @@ const waitFor = async (page, selector, timeout = 3000) => {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 test('Login', async ({ page }) => {
-  await page.goto('https://staging.terraware.io');
+  await page.goto(process.env.TEST_APP_URL);
   await waitFor(page, '#username');
   await waitFor(page, '#password');
   await waitFor(page, '#kc-login');
@@ -17,10 +17,10 @@ test('Login', async ({ page }) => {
   await page.screenshot({ path: `test-0.png` });
 
   await page.focus('#username');
-  await page.keyboard.type('nick@terraformation.com', { delay: 100 });
+  await page.keyboard.type(process.env.TEST_USERNAME, { delay: 100 });
 
   await page.focus('#password');
-  await page.keyboard.type('admin', { delay: 100 });
+  await page.keyboard.type(process.env.TEST_PASSWORD, { delay: 100 });
 
   await page.screenshot({ path: `test-1.png` });
 
