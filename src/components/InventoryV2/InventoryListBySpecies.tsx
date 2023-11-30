@@ -121,7 +121,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
             totalQuantity: (
               Number(existingSpecies.totalQuantity) + Number(resultTyped['totalQuantity(raw)'])
             ).toString(),
-            facilityInventories: `${existingSpecies.facilityInventories}, ${resultTyped.facility_name}`,
+            facilityInventories: `${existingSpecies.facilityInventories}\r${resultTyped.facility_name}`,
           };
         } else {
           const transformedResult: InventoryResultWithFacilityNames = {

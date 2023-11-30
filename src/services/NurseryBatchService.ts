@@ -79,6 +79,7 @@ const NURSERY_BATCHES_FIELDS = [
   'addedDate',
   'batchNumber',
   'facility_id',
+  'facility_name',
   'germinatingQuantity',
   'germinatingQuantity(raw)',
   'id',

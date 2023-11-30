@@ -47,6 +47,11 @@ const columns = (): TableColumnType[] => [
     type: 'string',
   },
   {
+    key: 'subLocations',
+    name: strings.SUB_LOCATIONS,
+    type: 'string',
+  },
+  {
     key: 'germinatingQuantity',
     name: strings.GERMINATING,
     type: 'string',
@@ -104,10 +109,26 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
       debouncedSearchTerm
     );
 
+    const processedResults = apiSearchResults?.map((result) => {
+      let subLocations = '';
+      (result.subLocations as any[])?.forEach((sl, index) => {
+        if (index === 0) {
+          subLocations = sl.subLocation_name;
+        } else {
+          subLocations += `\r${sl.subLocation_name}`;
+        }
+      });
+
+      return {
+        ...result,
+        subLocations,
+      };
+    });
+
     let updatedResult: InventoryResultWithBatchNumber[] | undefined;
 
     // format results
-    updatedResult = apiSearchResults?.map((uR) => {
+    updatedResult = processedResults?.map((uR) => {
       const resultTyped = uR as BatchInventoryResult;
       return {
         ...resultTyped,
