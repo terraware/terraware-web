@@ -87,6 +87,7 @@ export type BatchInventoryResult = {
   germinatingQuantity: string;
   notReadyQuantity: string;
   readyQuantity: string;
+  subLocations: string;
   totalQuantity: string;
   'germinatingQuantity(raw)': string;
   'readyQuantity(raw)': string;

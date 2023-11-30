@@ -28,11 +28,11 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
   const { column, row, value, index, reloadData } = props;
   const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
 
-  const getNurseriesNames = (nurseries: string) => {
-    const nurseriesArray = nurseries.split('\r');
+  const getNamesList = (names: string) => {
+    const namesArray = names.split('\r');
     return (
       <TextTruncated
-        stringList={nurseriesArray}
+        stringList={namesArray}
         maxLengthPx={COLUMN_WIDTH}
         textStyle={{ fontSize: 14 }}
         showAllStyle={{ padding: theme.spacing(2), fontSize: 14 }}
@@ -69,7 +69,13 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
 
   if (column.key === 'facilityInventories' && typeof value === 'string') {
     return (
-      <CellRenderer index={index} column={column} value={getNurseriesNames(value)} row={row} className={classes.text} />
+      <CellRenderer index={index} column={column} value={getNamesList(value)} row={row} className={classes.text} />
+    );
+  }
+
+  if (column.key === 'subLocations' && typeof value === 'string') {
+    return (
+      <CellRenderer index={index} column={column} value={getNamesList(value)} row={row} className={classes.text} />
     );
   }
 
