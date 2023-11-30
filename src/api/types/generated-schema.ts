@@ -6207,10 +6207,6 @@ export interface operations {
    */
   deleteSpecies: {
     parameters: {
-      query: {
-        /** @description Organization from which the species should be deleted. */
-        organizationId: string;
-      };
       path: {
         speciesId: number;
       };

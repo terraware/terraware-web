@@ -49,6 +49,7 @@ const DEFAULT_BATCH_FIELDS = [
   'notes',
   'subLocations.subLocation_id',
   'subLocations.subLocation_name',
+  'version',
 ];
 
 const REPORT_BATCH_FIELDS = [
@@ -97,6 +98,7 @@ const NURSERY_BATCHES_FIELDS = [
   'totalQuantity',
   'totalQuantity(raw)',
   'version',
+  'project_name',
 ];
 
 export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
@@ -398,10 +400,12 @@ const deleteBatch = async (batchId: number): Promise<Response> => {
   });
 };
 
+export type UpdateBatchRequestPayloadWithId = UpdateBatchRequestPayload & { id: number };
+
 /**
  * Update a batch by id
  */
-export const updateBatch = async (batch: Batch): Promise<Response & BatchData> => {
+export const updateBatch = async (batch: UpdateBatchRequestPayloadWithId): Promise<Response & BatchData> => {
   const entity: UpdateBatchRequestPayload = {
     notes: batch.notes,
     readyByDate: batch.readyByDate,
@@ -411,6 +415,7 @@ export const updateBatch = async (batch: Batch): Promise<Response & BatchData> =
     substrateNotes: batch.substrateNotes,
     treatment: batch.treatment,
     treatmentNotes: batch.treatmentNotes,
+    projectId: batch.projectId,
   };
 
   const response: Response = await httpBatch.put({
