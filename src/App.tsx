@@ -185,6 +185,7 @@ function AppContent() {
   const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
   const nurseryV2 = isEnabled('Nursery Updates');
+  const featureFlagProjects = isEnabled('Projects');
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
 
@@ -433,9 +434,11 @@ function AppContent() {
             <Route exact path={APP_PATHS.PEOPLE}>
               <People />
             </Route>
-            <Route exact path={APP_PATHS.PROJECTS}>
-              {getProjectsView()}
-            </Route>
+            {featureFlagProjects && (
+              <Route exact path={APP_PATHS.PROJECTS}>
+                {getProjectsView()}
+              </Route>
+            )}
             <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
               <NewSeedBank />
             </Route>
@@ -570,9 +573,11 @@ function AppContent() {
             <Route exact path={APP_PATHS.PEOPLE + '/'}>
               <Redirect to={APP_PATHS.PEOPLE} />
             </Route>
-            <Route exact path={APP_PATHS.PROJECTS + '/'}>
-              <Redirect to={APP_PATHS.PROJECTS} />
-            </Route>
+            {featureFlagProjects && (
+              <Route exact path={APP_PATHS.PROJECTS + '/'}>
+                <Redirect to={APP_PATHS.PROJECTS} />
+              </Route>
+            )}
             <Route path={APP_PATHS.SEEDS_DASHBOARD + '/'}>
               <Redirect to={APP_PATHS.SEEDS_DASHBOARD} />
             </Route>
