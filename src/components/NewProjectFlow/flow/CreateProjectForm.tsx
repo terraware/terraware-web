@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import strings from 'src/strings';
-import { Container, Grid, Theme, useTheme } from '@mui/material';
+import { Container, Grid, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Textfield } from '@terraware/web-components';
 import PageForm from 'src/components/common/PageForm';

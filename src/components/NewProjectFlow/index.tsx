@@ -181,8 +181,8 @@ export default function NewProjectFlow({ reloadData }: NewProjectFlowProps): JSX
     } else {
       snackbar.toastSuccess(
         [
-          <p>{strings.formatString(strings.PROJECT_ADDED_DETAILS, record.name)}</p>,
-          <ul>
+          <p key='msg-title'>{strings.formatString(strings.PROJECT_ADDED_DETAILS, record.name)}</p>,
+          <ul key='msg-body'>
             {!!projectAccessions?.length && (
               <li>{strings.formatString(strings.PROJECT_ADDED_ACCESSIONS, projectAccessions.length.toString())}</li>
             )}
