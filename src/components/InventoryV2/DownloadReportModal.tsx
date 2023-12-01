@@ -21,6 +21,7 @@ export default function DownloadReportModal(props: DownloadReportModalProps): JS
         reportData.organizationId,
         reportData.searchSortOrder,
         reportData.facilityIds,
+        reportData.subLocationIds,
         reportData.query,
         true
       );

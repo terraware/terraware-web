@@ -217,6 +217,7 @@ const getAllBatches = async (
   organizationId: number,
   searchSortOrder?: SearchSortOrder,
   facilityIds?: number[],
+  subLocationIds?: number[],
   query?: string,
   isCsvExport?: boolean
 ): Promise<SearchResponseElement[] | null> => {
@@ -248,6 +249,15 @@ const getAllBatches = async (
       field: 'facility_id',
       type: 'Exact',
       values: facilityIds.map((id) => id.toString()),
+    } as SearchNodePayload);
+  }
+
+  if (subLocationIds && subLocationIds.length > 0) {
+    params.search.children.push({
+      operation: 'field',
+      field: 'subLocations.subLocation_id',
+      type: 'Exact',
+      values: subLocationIds.map((id) => id.toString()),
     } as SearchNodePayload);
   }
 

@@ -1,21 +1,14 @@
 import { Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Icon from 'src/components/common/icon/Icon';
-import strings from 'src/strings';
-import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useOrganization } from 'src/providers/hooks';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
-import { Facility } from 'src/types/Facility';
-import { Species } from 'src/types/Species';
-import { useAppSelector } from 'src/redux/store';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { OriginPage } from './InventoryBatch';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
   speciesIds?: number[];
+  subLocationsIds?: number[];
   // Has to match up with SearchNodePayload['values']
   showEmptyBatches?: (string | null)[];
 };
@@ -31,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(0.5),
     display: 'flex',
     justifyContent: 'space-between',
+  },
+  dropdownDisabled: {
+    color: theme.palette.TwClrTxtTertiary,
   },
   dropdownIconRight: {
     height: '24px',
@@ -56,60 +52,32 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type InventoryFiltersPopoverProps = {
+type InventoryFilterProps = {
   filters: InventoryFiltersType;
   setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
-  origin: OriginPage;
+  label: string;
+  disabled?: boolean;
+  filterKey: keyof Omit<InventoryFiltersType, 'showEmptyBatches'>;
+  options: number[];
+  renderOption: (id: number) => string;
 };
 
-export default function InventoryFiltersPopover(props: InventoryFiltersPopoverProps): JSX.Element {
-  const { filters, setFilters } = props;
-  const origin = props.origin || 'Species';
-
-  const { selectedOrganization } = useOrganization();
+export default function InventoryFilter(props: InventoryFilterProps): JSX.Element {
+  const { filters, setFilters, label, disabled, filterKey, options, renderOption } = props;
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
 
-  const species = useAppSelector(selectSpecies);
-
-  const [nurseries, setNurseries] = useState<Facility[]>([]);
-  const [options, setOptions] = useState<number[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    if (!disabled) {
+      setAnchorEl(event.currentTarget);
+    }
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    // This looks confusing, but it is intentional. On the nursery view you are filtering by species and vice versa
-    if (origin === 'Species') {
-      setNurseries(getAllNurseries(selectedOrganization));
-    }
-  }, [selectedOrganization, origin]);
-
-  useEffect(() => {
-    setOptions(nurseries.map((n: Facility) => n.id));
-  }, [nurseries]);
-
-  useEffect(() => {
-    setOptions((species || []).map((n: Species) => n.id));
-  }, [species]);
-
-  // Default origin is 'Species', which filters based on nurseries
-  let label = strings.NURSERY;
-  let initialSelection = filters.facilityIds ?? [];
-  let filterKey = 'facilityIds';
-  let renderOption = (id: number) => nurseries.find((n) => n.id === id)?.name ?? '';
-
-  if (origin === 'Nursery') {
-    label = strings.SPECIES;
-    initialSelection = filters.speciesIds ?? [];
-    filterKey = 'speciesIds';
-    renderOption = (id: number) => (species || []).find((n) => n.id === id)?.scientificName ?? '';
-  }
+  const initialSelection = filters[filterKey] || [];
 
   const renderFilterMultiSelect = () => {
     return (
@@ -119,7 +87,7 @@ export default function InventoryFiltersPopover(props: InventoryFiltersPopoverPr
         onCancel={handleClose}
         onConfirm={(selectedIds: number[]) => {
           handleClose();
-          setFilters({ [filterKey]: selectedIds });
+          setFilters({ ...filters, [filterKey]: selectedIds });
         }}
         options={options}
         renderOption={renderOption}
@@ -129,7 +97,7 @@ export default function InventoryFiltersPopover(props: InventoryFiltersPopoverPr
 
   return (
     <div>
-      <div className={classes.dropdown} onClick={handleClick}>
+      <div className={`${classes.dropdown}${disabled ? ` ${classes.dropdownDisabled}` : ''}`} onClick={handleClick}>
         <Typography>{label}</Typography>
         <Icon name={Boolean(anchorEl) ? 'chevronUp' : 'chevronDown'} className={classes.dropdownIconRight} />
       </div>

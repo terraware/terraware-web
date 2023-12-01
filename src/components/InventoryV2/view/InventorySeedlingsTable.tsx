@@ -18,7 +18,7 @@ import { SortOrder } from 'src/components/common/table/sort';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { convertFilterGroupToMap, isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
-import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFiltersPopover';
+import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import Search from 'src/components/InventoryV2/Search';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import BatchDetailsModal from './BatchDetailsModal';

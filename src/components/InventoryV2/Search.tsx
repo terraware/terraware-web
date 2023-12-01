@@ -8,12 +8,16 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { convertFilterGroupToMap, getNurseryName } from './FilterUtils';
-import InventoryFilters, { InventoryFiltersType } from './InventoryFiltersPopover';
+import InventoryFilters, { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import { OriginPage } from './InventoryBatch';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { SearchNodePayload } from 'src/types/Search';
 import useForm from 'src/utils/useForm';
 import { makeStyles } from '@mui/styles';
+import { Facility, SubLocation } from 'src/types/Facility';
+import { Species } from 'src/types/Species';
+import { getAllNurseries } from 'src/utils/organization';
+import SubLocationService from 'src/services/SubLocationService';
 
 const useStyles = makeStyles(() => ({
   popoverContainer: {
@@ -42,7 +46,10 @@ interface SearchProps {
   origin?: OriginPage;
 }
 
-type PillListItemWithEmptyValue = PillListItem<string> & { emptyValue: unknown };
+type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
+  id: keyof Omit<InventoryFiltersType, 'showEmptyBatches'>;
+  emptyValue: unknown;
+};
 
 export default function Search(props: SearchProps): JSX.Element | null {
   const theme = useTheme();
@@ -55,6 +62,26 @@ export default function Search(props: SearchProps): JSX.Element | null {
   const dispatch = useAppDispatch();
 
   const species = useAppSelector(selectSpecies);
+  const [nurseries, setNurseries] = useState<Facility[]>([]);
+  const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
+
+  useEffect(() => {
+    setNurseries(getAllNurseries(selectedOrganization));
+  }, [selectedOrganization]);
+
+  useEffect(() => {
+    const fetchSubLocations = async () => {
+      const resultPromises = filters.facilityIds!.map((f) => SubLocationService.getSubLocations(f));
+      const results = await Promise.all(resultPromises);
+      setSubLocations(results.flatMap((r) => r.subLocations));
+    };
+    if (!filters.facilityIds?.length) {
+      setSubLocations([]);
+    } else {
+      fetchSubLocations();
+    }
+    setFilters({ ...filters, subLocationsIds: [] });
+  }, [filters, setFilters]);
 
   const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
 
@@ -82,30 +109,49 @@ export default function Search(props: SearchProps): JSX.Element | null {
     [species]
   );
 
+  const getSubLocationName = useCallback(
+    (subLocationId: number) => subLocations.find((sl) => subLocationId === sl.id)?.name ?? '',
+    [subLocations]
+  );
+
   useEffect(() => {
-    let data: PillListItemWithEmptyValue[] = [];
-    if ((filters.facilityIds?.length ?? 0) > 0) {
-      data = [
-        {
-          id: 'facilityIds',
-          label: strings.NURSERY,
-          value: filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization)).join(', ') ?? '',
-          emptyValue: [],
-        },
-      ];
-    } else if ((filters.speciesIds?.length ?? 0) > 0) {
-      data = [
-        {
-          id: 'speciesIds',
-          label: strings.SPECIES,
-          value: filters.speciesIds?.map(getSpeciesName).join(', ') ?? '',
-          emptyValue: [],
-        },
-      ];
+    const data: PillListItemWithEmptyValue[] = [];
+    if (filters.facilityIds?.length) {
+      data.push({
+        id: 'facilityIds',
+        label: strings.NURSERY,
+        value: filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization)).join(', ') ?? '',
+        emptyValue: [],
+      });
+    }
+
+    if (filters.speciesIds?.length) {
+      data.push({
+        id: 'speciesIds',
+        label: strings.SPECIES,
+        value: filters.speciesIds?.map(getSpeciesName).join(', ') ?? '',
+        emptyValue: [],
+      });
+    }
+
+    if (filters.subLocationsIds?.length) {
+      data.push({
+        id: 'subLocationsIds',
+        label: strings.SUB_LOCATIONS,
+        value: filters.subLocationsIds?.map(getSubLocationName).join(', ') ?? '',
+        emptyValue: [],
+      });
     }
 
     setFilterPillData(data);
-  }, [selectedOrganization, filters.facilityIds, filters.speciesIds, getSpeciesName]);
+  }, [
+    selectedOrganization,
+    filters.facilityIds,
+    filters.speciesIds,
+    filters.subLocationsIds,
+    getSpeciesName,
+    getSubLocationName,
+  ]);
 
   useEffect(() => {
     if (origin === 'Nursery') {
@@ -116,9 +162,9 @@ export default function Search(props: SearchProps): JSX.Element | null {
   const onRemovePillList = useCallback(
     (filterId: string) => {
       const filter = filterPillData?.find((filterPillDatum) => filterPillDatum.id === filterId);
-      setFilters({ [filterId]: filter?.emptyValue || null });
+      setFilters({ ...filters, [filterId]: filter?.emptyValue || null });
     },
-    [filterPillData, setFilters]
+    [filterPillData, filters, setFilters]
   );
 
   if (origin === 'Nursery' && !species) {
@@ -141,45 +187,83 @@ export default function Search(props: SearchProps): JSX.Element | null {
             onClickRightIcon={() => onSearch('')}
           />
         </Box>
-        <InventoryFilters filters={filters} setFilters={setFilters} origin={origin} />
+        {origin === 'Species' && (
+          <InventoryFilters
+            filters={filters}
+            setFilters={setFilters}
+            label={strings.NURSERY}
+            filterKey='facilityIds'
+            options={nurseries.map((n: Facility) => n.id)}
+            renderOption={(id: number) => nurseries.find((n) => n.id === id)?.name ?? ''}
+          />
+        )}
+        {origin === 'Nursery' && (
+          <InventoryFilters
+            filters={filters}
+            setFilters={setFilters}
+            label={strings.SPECIES}
+            filterKey='speciesIds'
+            options={(species || []).map((n: Species) => n.id)}
+            renderOption={(id: number) => (species || []).find((n) => n.id === id)?.scientificName ?? ''}
+          />
+        )}
         {origin === 'Batches' && (
-          <Box sx={{ marginTop: theme.spacing(0.5) }}>
-            <Tooltip title={strings.FILTER}>
-              <Button
-                id='filterSpecies'
-                onClick={(event) => event && handleFilterClick(event)}
-                type='passive'
-                priority='ghost'
-                icon='filter'
-              />
-            </Tooltip>
-            <Popover
-              id='simple-popover'
-              open={Boolean(filterAnchorEl)}
-              anchorEl={filterAnchorEl}
-              onClose={handleFilterClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-              className={classes.popoverContainer}
-            >
-              <FilterGroup
-                initialFilters={filterGroupFilters}
-                fields={filterGroupColumns}
-                onConfirm={(_filterGroupFilters: Record<string, SearchNodePayload>) => {
-                  handleFilterClose();
-                  setFilterGroupFilters(_filterGroupFilters);
-                  setFilters({ ...filters, ...convertFilterGroupToMap(_filterGroupFilters) });
+          <>
+            <InventoryFilters
+              filters={filters}
+              setFilters={setFilters}
+              label={strings.NURSERY}
+              filterKey='facilityIds'
+              options={nurseries.map((n: Facility) => n.id)}
+              renderOption={(id: number) => nurseries.find((n) => n.id === id)?.name ?? ''}
+            />
+            <InventoryFilters
+              filters={filters}
+              setFilters={setFilters}
+              disabled={!filters.facilityIds?.length}
+              label={strings.SUB_LOCATIONS}
+              filterKey='subLocationsIds'
+              options={subLocations.map((sl: SubLocation) => sl.id)}
+              renderOption={(id: number) => subLocations.find((sl) => sl.id === id)?.name ?? ''}
+            />
+            <Box sx={{ marginTop: theme.spacing(0.5) }}>
+              <Tooltip title={strings.FILTER}>
+                <Button
+                  id='filterSpecies'
+                  onClick={(event) => event && handleFilterClick(event)}
+                  type='passive'
+                  priority='ghost'
+                  icon='filter'
+                />
+              </Tooltip>
+              <Popover
+                id='simple-popover'
+                open={Boolean(filterAnchorEl)}
+                anchorEl={filterAnchorEl}
+                onClose={handleFilterClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
                 }}
-                onCancel={handleFilterClose}
-              />
-            </Popover>
-          </Box>
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                className={classes.popoverContainer}
+              >
+                <FilterGroup
+                  initialFilters={filterGroupFilters}
+                  fields={filterGroupColumns}
+                  onConfirm={(_filterGroupFilters: Record<string, SearchNodePayload>) => {
+                    handleFilterClose();
+                    setFilterGroupFilters(_filterGroupFilters);
+                    setFilters({ ...filters, ...convertFilterGroupToMap(_filterGroupFilters) });
+                  }}
+                  onCancel={handleFilterClose}
+                />
+              </Popover>
+            </Box>
+          </>
         )}
       </Box>
       <Grid

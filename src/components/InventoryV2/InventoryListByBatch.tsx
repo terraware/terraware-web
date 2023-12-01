@@ -8,7 +8,7 @@ import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInv
 import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { InventoryFiltersType } from 'src/components/Inventory/InventoryFiltersPopover';
+import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/components/InventoryV2';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
@@ -99,6 +99,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
       organizationId: selectedOrganization.id,
       query: debouncedSearchTerm,
       facilityIds: filters.facilityIds,
+      subLocationIds: filters.subLocationsIds,
       searchSortOrder,
     });
 
@@ -106,6 +107,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
       selectedOrganization.id,
       searchSortOrder,
       filters.facilityIds,
+      filters.subLocationsIds,
       debouncedSearchTerm
     );
 
