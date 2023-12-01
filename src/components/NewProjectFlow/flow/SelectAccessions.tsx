@@ -136,7 +136,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
             type='page'
             title={strings.EXISTING_PROJECT_ACCESSIONS_TITLE}
             priority={'info'}
-            body={strings.EXISTING_PROJECT_ACCESSIONS_BODY.replace('{projectName}', project.name)}
+            body={strings.formatString(strings.EXISTING_PROJECT_ACCESSIONS_BODY, project.name)}
           />
         </Box>
       )}

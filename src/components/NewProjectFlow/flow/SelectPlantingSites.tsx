@@ -103,7 +103,7 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
             type='page'
             title={strings.EXISTING_PROJECT_PLANTING_SITES_TITLE}
             priority={'info'}
-            body={strings.EXISTING_PROJECT_PLANTING_SITES_BODY.replace('{projectName}', project.name)}
+            body={strings.formatString(strings.EXISTING_PROJECT_PLANTING_SITES_BODY, project.name)}
           />
         </Box>
       )}

@@ -124,7 +124,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
             type='page'
             title={strings.EXISTING_PROJECT_BATCHES_TITLE}
             priority={'info'}
-            body={strings.EXISTING_PROJECT_BATCHES_BODY.replace('{projectName}', project.name)}
+            body={strings.formatString(strings.EXISTING_PROJECT_BATCHES_BODY, project.name)}
           />
         </Box>
       )}
