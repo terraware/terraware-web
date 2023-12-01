@@ -209,25 +209,25 @@ function AppContent() {
         }
       }
     };
-    populateSpecies();
+    void populateSpecies();
   }, [selectedOrganization]);
 
   const reloadTracking = useCallback(() => {
     const populatePlantingSites = () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        dispatch(requestPlantingSites(selectedOrganization.id, activeLocale || undefined));
+        void dispatch(requestPlantingSites(selectedOrganization.id, activeLocale || undefined));
       }
     };
     populatePlantingSites();
   }, [dispatch, selectedOrganization.id, activeLocale]);
 
   const reloadProjects = useCallback(() => {
-    const pupulateProjects = () => {
+    const populateProjects = () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+        void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
       }
     };
-    pupulateProjects();
+    populateProjects();
   }, [dispatch, selectedOrganization.id, activeLocale]);
 
   useEffect(() => {
