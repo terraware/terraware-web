@@ -2,7 +2,7 @@ import React from 'react';
 import { Organization } from 'src/types/Organization';
 import { getAllNurseries } from 'src/utils/organization';
 import { SearchNodePayload, SearchResponseElement } from 'src/types/Search';
-import { InventoryFiltersType } from './InventoryFiltersPopover';
+import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 
 export const getNurseryName = (facilityId: number, organization: Organization) => {
   const found = getAllNurseries(organization).find((n) => n.id.toString() === facilityId.toString());
