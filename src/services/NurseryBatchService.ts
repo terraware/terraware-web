@@ -63,6 +63,17 @@ const REPORT_BATCH_FIELDS = [
   'totalQuantity',
 ];
 
+export type NurseryBatchesReportSearchResponseElement = SearchResponseElement & {
+  batchNumber: string;
+  species_scientificName: string;
+  species_commonName: string;
+  facility_name: string;
+  germinatingQuantity: string;
+  notReadyQuantity: string;
+  readyQuantity: string;
+  totalQuantity: string;
+};
+
 const EXPORT_BATCH_FIELDS = [
   'batchNumber',
   'species_scientificName',
@@ -122,8 +133,8 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   subLocations?: { subLocation_id: string; subLocation_name: string }[];
   totalQuantity: string;
   'totalQuantity(raw)': string;
-  totalWithdrawn: string;
   version: string;
+  project_name?: string;
 };
 
 export type BatchId = {
@@ -212,6 +223,8 @@ const getBatches = async (organizationId: number, batchIds: number[]): Promise<S
   return searchResponse;
 };
 
+export type SearchResponseBatches = NurseryBatchesSearchResponseElement | NurseryBatchesReportSearchResponseElement;
+
 /**
  * Get all batches
  */
@@ -222,7 +235,7 @@ const getAllBatches = async (
   subLocationIds?: number[],
   query?: string,
   isCsvExport?: boolean
-): Promise<SearchResponseElement[] | null> => {
+): Promise<SearchResponseBatches[] | null> => {
   const params: SearchRequestPayload = {
     prefix: 'batches',
     search: {

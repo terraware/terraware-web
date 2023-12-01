@@ -15,9 +15,11 @@ type SelectPurposeFormProps = {
 
 export default function CreateProjectForm(props: SelectPurposeFormProps): JSX.Element {
   const { onNext, onCancel, saveText, project } = props;
-  const [localRecord, setLocalRecord] = useState<CreateProjectRequest>(project);
+
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+
+  const [localRecord, setLocalRecord] = useState<CreateProjectRequest>(project);
 
   const updateField = (field: keyof CreateProjectRequest, value: any) => {
     setLocalRecord((prev) => ({

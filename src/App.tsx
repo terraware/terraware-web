@@ -188,6 +188,7 @@ function AppContent() {
   const [showNavBar, setShowNavBar] = useState(true);
   const nurseryV2 = isEnabled('Nursery Updates');
   const featureFlagProjects = isEnabled('Projects');
+
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
 

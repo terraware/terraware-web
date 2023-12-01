@@ -1,4 +1,4 @@
-import { paths } from 'src/api/types/generated-schema';
+import { components, paths } from 'src/api/types/generated-schema';
 import HttpService, { Response } from './HttpService';
 import { CreateProjectRequest, Project } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
@@ -9,6 +9,7 @@ import SearchService from './SearchService';
  */
 
 const PROJECTS_ENDPOINT = '/api/v1/projects';
+const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
 
 type ListProjectsResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -93,6 +94,15 @@ const createProject = async (project: CreateProjectRequest): Promise<Response> =
   });
 };
 
+type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
+
+const assignProjectToEntities = async (projectId: number, entities: AssignProjectRequestPayload) =>
+  httpProjects.post({
+    url: PROJECT_ASSIGN_ENDPOINT,
+    urlReplacements: { '{id}': `${projectId}` },
+    entity: entities,
+  });
+
 /**
  * Exported functions
  */
@@ -100,6 +110,7 @@ const ProjectsService = {
   listProjects,
   searchProjects,
   createProject,
+  assignProjectToEntities,
 };
 
 export default ProjectsService;
