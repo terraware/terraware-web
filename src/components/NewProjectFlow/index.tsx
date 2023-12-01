@@ -1,6 +1,6 @@
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useHistory } from 'react-router-dom';
-import { ErrorBox, FormButton, Message, theme } from '@terraware/web-components';
+import { FormButton, theme } from '@terraware/web-components';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
@@ -13,10 +13,10 @@ import ProjectsService from 'src/services/ProjectsService';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
 import CreateProjectForm from './flow/CreateProjectForm';
+import { getFormattedSuccessMessages } from './toasts';
 import SelectAccessions, { SearchResponseAccession } from './flow/SelectAccessions';
 import SelectBatches from './flow/SelectBatches';
 import SelectPlantingSites from './flow/SelectPlantingSites';
-import { getFormattedSuccessMessages } from './toasts';
 import { getSaveText } from './flow/util';
 
 export type FlowStates = 'label' | 'accessions' | 'batches' | 'plantingSites';
