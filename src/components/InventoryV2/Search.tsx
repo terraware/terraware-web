@@ -17,7 +17,7 @@ import { makeStyles } from '@mui/styles';
 import { Facility, SubLocation } from 'src/types/Facility';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
-import SubLocationService from 'src/services/SubLocationService';
+import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
 
 const useStyles = makeStyles(() => ({
   popoverContainer: {
@@ -42,7 +42,7 @@ interface SearchProps {
   searchValue: string;
   onSearch: (value: string) => void;
   filters: InventoryFiltersType;
-  setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
+  setFilters: (f: InventoryFiltersType) => void;
   origin?: OriginPage;
 }
 
@@ -63,25 +63,12 @@ export default function Search(props: SearchProps): JSX.Element | null {
 
   const species = useAppSelector(selectSpecies);
   const [nurseries, setNurseries] = useState<Facility[]>([]);
-  const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
 
   useEffect(() => {
     setNurseries(getAllNurseries(selectedOrganization));
   }, [selectedOrganization]);
 
-  useEffect(() => {
-    const fetchSubLocations = async () => {
-      const resultPromises = filters.facilityIds!.map((f) => SubLocationService.getSubLocations(f));
-      const results = await Promise.all(resultPromises);
-      setSubLocations(results.flatMap((r) => r.subLocations));
-    };
-    if (!filters.facilityIds?.length) {
-      setSubLocations([]);
-    } else {
-      fetchSubLocations();
-    }
-    setFilters({ ...filters, subLocationsIds: [] });
-  }, [filters, setFilters]);
+  const subLocations = useAppSelector(selectSubLocations);
 
   const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
 
@@ -110,7 +97,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
   );
 
   const getSubLocationName = useCallback(
-    (subLocationId: number) => subLocations.find((sl) => subLocationId === sl.id)?.name ?? '',
+    (subLocationId: number) => subLocations?.find((sl) => subLocationId === sl.id)?.name ?? '',
     [subLocations]
   );
 
@@ -160,9 +147,13 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [origin, dispatch, selectedOrganization.id]);
 
   const onRemovePillList = useCallback(
-    (filterId: string) => {
+    (filterId: keyof Omit<InventoryFiltersType, 'showEmptyBatches'>) => {
       const filter = filterPillData?.find((filterPillDatum) => filterPillDatum.id === filterId);
-      setFilters({ ...filters, [filterId]: filter?.emptyValue || null });
+      if (filterId === 'facilityIds') {
+        setFilters({ ...filters, facilityIds: [], subLocationsIds: [] });
+      } else {
+        setFilters({ ...filters, [filterId]: filter?.emptyValue || null });
+      }
     },
     [filterPillData, filters, setFilters]
   );
@@ -223,8 +214,8 @@ export default function Search(props: SearchProps): JSX.Element | null {
               disabled={!filters.facilityIds?.length}
               label={strings.SUB_LOCATIONS}
               filterKey='subLocationsIds'
-              options={subLocations.map((sl: SubLocation) => sl.id)}
-              renderOption={(id: number) => subLocations.find((sl) => sl.id === id)?.name ?? ''}
+              options={subLocations?.map((sl: SubLocation) => sl.id) ?? []}
+              renderOption={(id: number) => subLocations?.find((sl) => sl.id === id)?.name ?? ''}
             />
             <Box sx={{ marginTop: theme.spacing(0.5) }}>
               <Tooltip title={strings.FILTER}>

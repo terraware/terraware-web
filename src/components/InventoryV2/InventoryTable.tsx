@@ -18,7 +18,7 @@ interface InventoryTableProps {
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
   filters: InventoryFiltersType;
-  setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
+  setFilters: (f: InventoryFiltersType) => void;
   setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
   isPresorted: boolean;
   columns: () => TableColumnType[];

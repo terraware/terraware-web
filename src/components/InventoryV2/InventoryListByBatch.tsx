@@ -16,6 +16,12 @@ import { TableColumnType } from '@terraware/web-components';
 import { NurseryBatchService } from 'src/services';
 import Card from 'src/components/common/Card';
 import { isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
+import useQuery from 'src/utils/useQuery';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
+import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
+import { useHistory } from 'react-router-dom';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -86,6 +92,56 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   });
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
 
+  const dispatch = useAppDispatch();
+  const subLocations = useAppSelector(selectSubLocations);
+  const [subLocationNames, setSubLocationNames] = useState<string[]>([]);
+  const [nurseryIds, setNurseryIds] = useState<number[]>([]);
+  const query = useQuery();
+  useEffect(() => {
+    const querySubLocationNames = query
+      .get('subLocationName')
+      ?.trim()
+      ?.split(',')
+      ?.filter((s) => s !== '');
+    setSubLocationNames(querySubLocationNames ?? []);
+    const queryNurseryIds = query
+      .get('facilityId')
+      ?.trim()
+      ?.split(',')
+      ?.filter((n) => n !== '')
+      ?.map((id) => Number(id));
+    setNurseryIds(queryNurseryIds ?? []);
+  }, [query]);
+
+  useEffect(() => {
+    setFilters((f) => ({ ...f, facilityIds: nurseryIds }));
+  }, [nurseryIds, setFilters]);
+
+  useEffect(() => {
+    dispatch(requestSubLocations(filters.facilityIds ?? []));
+  }, [filters.facilityIds, dispatch]);
+
+  useEffect(() => {
+    const subLocationsIds = subLocationNames
+      .map((name) => subLocations?.find((sl) => sl.name === name)?.id)
+      .filter((id) => id !== undefined) as number[];
+    setFilters((f) => ({ ...f, subLocationsIds }));
+  }, [subLocationNames, subLocations, setFilters]);
+
+  const history = useHistory();
+  const location = useStateLocation();
+  const updateFilterQueryParams = useCallback(
+    (f: InventoryFiltersType) => {
+      query.set('facilityId', f.facilityIds?.map((n) => n.toString())?.join(',') ?? '');
+      query.set(
+        'subLocationName',
+        f.subLocationsIds?.map((id) => subLocations?.find((sl) => sl.id === id)?.name ?? '')?.join(',') ?? ''
+      );
+      history.replace(getLocation(location.pathname, location, query.toString()));
+    },
+    [query, history, location, subLocations]
+  );
+
   const onSearchSortOrder = (order: SearchSortOrder) => {
     const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
     setSearchSortOrder(isClientSorted ? undefined : order);
@@ -112,18 +168,18 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
     );
 
     const processedResults = apiSearchResults?.map((result) => {
-      let subLocations = '';
+      let subLocationsList = '';
       (result.subLocations as any[])?.forEach((sl, index) => {
         if (index === 0) {
-          subLocations = sl.subLocation_name;
+          subLocationsList = sl.subLocation_name;
         } else {
-          subLocations += `\r${sl.subLocation_name}`;
+          subLocationsList += `\r${sl.subLocation_name}`;
         }
       });
 
       return {
         ...result,
-        subLocations,
+        subLocations: subLocationsList,
       };
     });
 
@@ -165,7 +221,10 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           temporalSearchValue={temporalSearchValue}
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}
-          setFilters={setFilters}
+          setFilters={(f) => {
+            setFilters(f);
+            updateFilterQueryParams(f);
+          }}
           setSearchSortOrder={onSearchSortOrder}
           isPresorted={!!searchSortOrder}
           columns={columns}
