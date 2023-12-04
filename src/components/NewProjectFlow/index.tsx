@@ -149,7 +149,6 @@ export default function NewProjectFlow({ reloadData }: NewProjectFlowProps): JSX
 
       <SelectAccessions
         project={record}
-        organizationId={selectedOrganization.id}
         flowState={flowState}
         onNext={onNext}
         onCancel={goToProjects}
@@ -161,7 +160,6 @@ export default function NewProjectFlow({ reloadData }: NewProjectFlowProps): JSX
 
       <SelectBatches
         project={record}
-        organizationId={selectedOrganization.id}
         flowState={flowState}
         onNext={onNext}
         onCancel={goToProjects}
@@ -173,7 +171,6 @@ export default function NewProjectFlow({ reloadData }: NewProjectFlowProps): JSX
 
       <SelectPlantingSites
         project={record}
-        organizationId={selectedOrganization.id}
         flowState={flowState}
         onNext={onNext}
         onCancel={goToProjects}

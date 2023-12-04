@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
@@ -9,10 +9,12 @@ import { CreateProjectRequest } from 'src/types/Project';
 import { NurseryBatchService } from 'src/services';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
 import { FlowStates } from '../index';
+import Search from './Search';
+import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from '../../../types/Search';
+import { useProjectEntitySelection } from './useProjectEntitySelection';
 
 type SelectBatchesProps = {
   project: CreateProjectRequest;
-  organizationId: number;
   flowState: FlowStates;
   onNext: () => void;
   onCancel: () => void;
@@ -67,50 +69,51 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function SelectBatches(props: SelectBatchesProps): JSX.Element | null {
-  const {
-    project,
-    organizationId,
-    flowState,
-    onNext,
-    onCancel,
-    saveText,
-    pageFormRightButtons,
-    setProjectBatches,
-    setHasBatches,
-  } = props;
+  const { project, flowState, onNext, onCancel, saveText, pageFormRightButtons, setProjectBatches, setHasBatches } =
+    props;
 
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
-  const [batches, setBatches] = useState<SearchResponseBatches[]>([]);
-  const [selectedRows, setSelectedRows] = useState<SearchResponseBatches[]>([]);
-  const [showAssignmentWarning, setShowAssignmentWarning] = useState<boolean>(false);
+  const getSearchResults = useCallback(
+    (organizationId: number, searchFields: SearchNodePayload[], searchSortOrder?: SearchSortOrder) => {
+      const facilityIds = undefined;
+      const query = searchFields[0]?.values[0] || '';
+      return NurseryBatchService.getAllBatches(organizationId, searchSortOrder, facilityIds, query);
+    },
+    []
+  );
 
-  useEffect(() => {
-    const populate = async () => {
-      const searchResponse = await NurseryBatchService.getAllBatches(organizationId);
-      if (searchResponse && searchResponse.length > 0) {
-        setBatches(searchResponse);
-        if (searchResponse.find((element) => !!element.project_name)) {
-          setShowAssignmentWarning(true);
-        }
-      } else {
-        setHasBatches(false);
-      }
-    };
+  const getSearchFields = useCallback(
+    (debouncedSearchTerm: string): FieldNodePayload[] => [
+      {
+        operation: 'field',
+        field: 'batchNumber',
+        type: 'Fuzzy',
+        values: [debouncedSearchTerm],
+      },
+    ],
+    []
+  );
 
-    void populate();
-  }, [setHasBatches, organizationId]);
-
-  useEffect(() => {
-    setProjectBatches(selectedRows);
-  }, [setProjectBatches, selectedRows]);
-
-  useEffect(() => {
-    if (flowState === 'batches' && batches.length === 0) {
-      onNext();
-    }
-  }, [batches, flowState, onNext]);
+  const {
+    entities,
+    selectedRows,
+    setSelectedRows,
+    showAssignmentWarning,
+    temporalSearchValue,
+    setTemporalSearchValue,
+    filters,
+    setFilters,
+  } = useProjectEntitySelection<SearchResponseBatches>({
+    currentFlowState: flowState,
+    thisFlowState: 'accessions',
+    setHasEntities: setHasBatches,
+    setProjectEntities: setProjectBatches,
+    onNext,
+    getSearchResults,
+    getSearchFields,
+  });
 
   if (flowState !== 'batches') {
     return null;
@@ -162,15 +165,36 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                 {strings.formatString(strings.SELECT_SEEDLINGS_BATCHES_FOR_PROJECT_DESCRIPTION, project.name)}
               </Typography>
             </Grid>
-            <Table
-              columns={columns}
-              rows={batches}
-              selectedRows={selectedRows}
-              setSelectedRows={setSelectedRows}
-              id={'selectBatchesTable'}
-              orderBy={'batchNumber'}
-              showCheckbox={true}
-            />
+
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  marginBottom: theme.spacing(2),
+                }}
+              >
+                <Search
+                  searchValue={temporalSearchValue || ''}
+                  onSearch={(val) => setTemporalSearchValue(val)}
+                  filters={filters}
+                  setFilters={setFilters}
+                />
+              </Box>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Table
+                columns={columns}
+                rows={entities}
+                selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+                id={'selectBatchesTable'}
+                orderBy={'batchNumber'}
+                showCheckbox={true}
+              />
+            </Grid>
           </Grid>
         </Container>
       </PageForm>

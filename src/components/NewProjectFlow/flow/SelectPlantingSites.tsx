@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
@@ -9,10 +9,12 @@ import { CreateProjectRequest } from 'src/types/Project';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 import { TrackingService } from 'src/services';
 import { FlowStates } from '../index';
+import { useProjectEntitySelection } from './useProjectEntitySelection';
+import Search from './Search';
+import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from '../../../types/Search';
 
 type SelectPlantingSitesProps = {
   project: CreateProjectRequest;
-  organizationId: number;
   flowState: FlowStates;
   onNext: () => void;
   onCancel: () => void;
@@ -48,7 +50,6 @@ const columns = (): TableColumnType[] => [
 export default function SelectPlantingSites(props: SelectPlantingSitesProps): JSX.Element | null {
   const {
     project,
-    organizationId,
     flowState,
     onNext,
     onCancel,
@@ -61,35 +62,43 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
-  const [plantingSites, setPlantingSites] = useState<PlantingSiteSearchResult[]>([]);
-  const [selectedRows, setSelectedRows] = useState<PlantingSiteSearchResult[]>([]);
-  const [showAssignmentWarning, setShowAssignmentWarning] = useState<boolean>(false);
+  const getSearchResults = useCallback(
+    (organizationId: number, searchFields: SearchNodePayload[], searchSortOrder?: SearchSortOrder) => {
+      return TrackingService.searchPlantingSites(organizationId, searchFields[0], searchSortOrder);
+    },
+    []
+  );
 
-  useEffect(() => {
-    const populate = async () => {
-      const searchResponse = await TrackingService.searchPlantingSites(organizationId);
-      if (searchResponse && searchResponse.length > 0) {
-        setPlantingSites(searchResponse);
-        if (searchResponse.find((element) => !!element.project_name)) {
-          setShowAssignmentWarning(true);
-        }
-      } else {
-        setHasPlantingSites(false);
-      }
-    };
+  const getSearchFields = useCallback(
+    (debouncedSearchTerm: string): FieldNodePayload[] => [
+      {
+        operation: 'field',
+        field: 'name',
+        type: 'Fuzzy',
+        values: [debouncedSearchTerm],
+      },
+    ],
+    []
+  );
 
-    void populate();
-  }, [setHasPlantingSites, organizationId]);
-
-  useEffect(() => {
-    setProjectPlantingSites(selectedRows);
-  }, [setProjectPlantingSites, selectedRows]);
-
-  useEffect(() => {
-    if (flowState === 'plantingSites' && plantingSites.length === 0) {
-      onNext();
-    }
-  }, [plantingSites, flowState, onNext]);
+  const {
+    entities,
+    selectedRows,
+    setSelectedRows,
+    showAssignmentWarning,
+    temporalSearchValue,
+    setTemporalSearchValue,
+    filters,
+    setFilters,
+  } = useProjectEntitySelection<PlantingSiteSearchResult>({
+    currentFlowState: flowState,
+    thisFlowState: 'accessions',
+    setHasEntities: setHasPlantingSites,
+    setProjectEntities: setProjectPlantingSites,
+    onNext,
+    getSearchResults,
+    getSearchFields,
+  });
 
   if (flowState !== 'plantingSites') {
     return null;
@@ -142,15 +151,36 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
                 {strings.formatString(strings.SELECT_PLANTING_SITES_FOR_PROJECT_DESCRIPTION, project.name)}
               </Typography>
             </Grid>
-            <Table
-              columns={columns}
-              rows={plantingSites}
-              selectedRows={selectedRows}
-              setSelectedRows={setSelectedRows}
-              id={'selectPlantingSitesTable'}
-              orderBy={'name'}
-              showCheckbox={true}
-            />
+
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  marginBottom: theme.spacing(2),
+                }}
+              >
+                <Search
+                  searchValue={temporalSearchValue || ''}
+                  onSearch={(val) => setTemporalSearchValue(val)}
+                  filters={filters}
+                  setFilters={setFilters}
+                />
+              </Box>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Table
+                columns={columns}
+                rows={entities}
+                selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+                id={'selectPlantingSitesTable'}
+                orderBy={'name'}
+                showCheckbox={true}
+              />
+            </Grid>
           </Grid>
         </Container>
       </PageForm>
