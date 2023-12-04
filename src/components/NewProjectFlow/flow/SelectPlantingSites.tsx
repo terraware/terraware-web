@@ -8,10 +8,10 @@ import Table from 'src/components/common/table';
 import { CreateProjectRequest } from 'src/types/Project';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 import { TrackingService } from 'src/services';
-import { FlowStates } from '../index';
-import { useProjectEntitySelection } from './useProjectEntitySelection';
-import Search from './Search';
-import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from '../../../types/Search';
+import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { FlowStates } from 'src/components/NewProjectFlow';
+import { useProjectEntitySelection } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
+import Search from 'src/components/NewProjectFlow/flow/Search';
 
 type SelectPlantingSitesProps = {
   project: CreateProjectRequest;

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
@@ -15,9 +15,9 @@ import {
   SearchSortOrder,
 } from 'src/types/Search';
 import { AccessionState } from 'src/types/Accession';
-import { FlowStates } from '../index';
-import { useProjectEntitySelection } from './useProjectEntitySelection';
-import Search from './Search';
+import { FlowStates } from 'src/components/NewProjectFlow';
+import { useProjectEntitySelection } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
+import Search from 'src/components/NewProjectFlow/flow/Search';
 
 type SelectAccessionsProps = {
   project: CreateProjectRequest;

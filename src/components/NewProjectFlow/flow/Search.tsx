@@ -3,23 +3,7 @@ import { Grid, Box, useTheme } from '@mui/material';
 import { PillListItem, Textfield } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
 import strings from 'src/strings';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { makeStyles } from '@mui/styles';
-import { ProjectEntitiesFilters } from './useProjectEntitySelection';
-import { selectProjects } from '../../../redux/features/projects/projectsSelectors';
-import { getAllNurseries } from '../../../utils/organization';
-import { ACCESSION_2_STATES } from '../../../types/Accession';
-
-const useStyles = makeStyles(() => ({
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: '480px',
-    },
-  },
-}));
+import { ProjectEntitiesFilters } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
 
 interface SearchProps {
   searchValue: string;
@@ -32,17 +16,8 @@ type PillListItemWithEmptyValue = PillListItem<string> & { emptyValue: unknown }
 
 export default function Search(props: SearchProps): JSX.Element | null {
   const { searchValue, onSearch, filters, setFilters } = props;
-  // const { selectedOrganization } = useOrganization();
 
   const theme = useTheme();
-  // const classes = useStyles();
-  // const { activeLocale } = useLocalization();
-  //
-  // const dispatch = useAppDispatch();
-  //
-  // const projects = useAppSelector(selectProjects);
-  // const statuses = ACCESSION_2_STATES;
-  // const nurseries = getAllNurseries(selectedOrganization);
 
   const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
 
