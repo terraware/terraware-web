@@ -124,7 +124,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   useEffect(() => {
     const subLocationsIds = subLocationNames
       .map((name) => subLocations?.find((sl) => sl.name === name)?.id)
-      .filter((id) => id !== undefined) as number[];
+      .filter((id): id is number => id !== undefined);
     setFilters((f) => ({ ...f, subLocationsIds }));
   }, [subLocationNames, subLocations, setFilters]);
 
