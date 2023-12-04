@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type InventoryFilterProps = {
   filters: InventoryFiltersType;
-  setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
+  setFilters: (f: InventoryFiltersType) => void;
   label: string;
   disabled?: boolean;
   filterKey: keyof Omit<InventoryFiltersType, 'showEmptyBatches'>;
