@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/52</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/60</span>
             </div>
         
             
@@ -333,16 +333,7 @@
 <a name='L268'></a><a href='#L268'>268</a>
 <a name='L269'></a><a href='#L269'>269</a>
 <a name='L270'></a><a href='#L270'>270</a>
-<a name='L271'></a><a href='#L271'>271</a>
-<a name='L272'></a><a href='#L272'>272</a>
-<a name='L273'></a><a href='#L273'>273</a>
-<a name='L274'></a><a href='#L274'>274</a>
-<a name='L275'></a><a href='#L275'>275</a>
-<a name='L276'></a><a href='#L276'>276</a>
-<a name='L277'></a><a href='#L277'>277</a>
-<a name='L278'></a><a href='#L278'>278</a>
-<a name='L279'></a><a href='#L279'>279</a>
-<a name='L280'></a><a href='#L280'>280</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L271'></a><a href='#L271'>271</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -407,25 +398,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -507,6 +485,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -640,7 +622,7 @@ import { makeStyles } from '@mui/styles';
 import { Facility, SubLocation } from 'src/types/Facility';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
-import SubLocationService from 'src/services/SubLocationService';
+import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   popoverContainer: {
@@ -665,7 +647,7 @@ interface SearchProps {
   searchValue: string;
   onSearch: (value: string) =&gt; void;
   filters: InventoryFiltersType;
-  setFilters: React.Dispatch&lt;React.SetStateAction&lt;InventoryFiltersType&gt;&gt;;
+  setFilters: (f: InventoryFiltersType) =&gt; void;
   origin?: OriginPage;
 }
 &nbsp;
@@ -686,25 +668,12 @@ export default function <span class="fstat-no" title="function not covered" >Sea
 &nbsp;
   const species = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies);</span>
   const [nurseries, setNurseries] = <span class="cstat-no" title="statement not covered" >useState&lt;Facility[]&gt;([]);</span>
-  const [subLocations, setSubLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;SubLocation[]&gt;([]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setNurseries(getAllNurseries(selectedOrganization));</span>
   }, [selectedOrganization]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const fetchSubLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-      const resultPromises = <span class="cstat-no" title="statement not covered" >filters.facilityIds!.map(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >SubLocationService.getSubLocations(f))</span>;</span>
-      const results = <span class="cstat-no" title="statement not covered" >await Promise.all(resultPromises);</span>
-<span class="cstat-no" title="statement not covered" >      setSubLocations(results.flatMap(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.subLocations)</span>);</span>
-    };
-<span class="cstat-no" title="statement not covered" >    if (!filters.facilityIds?.length) {</span>
-<span class="cstat-no" title="statement not covered" >      setSubLocations([]);</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      fetchSubLocations();</span>
-    }
-<span class="cstat-no" title="statement not covered" >    setFilters({ ...filters, subLocationsIds: [] });</span>
-  }, [filters, setFilters]);
+  const subLocations = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSubLocations);</span>
 &nbsp;
   const [filterPillData, setFilterPillData] = <span class="cstat-no" title="statement not covered" >useState&lt;PillListItemWithEmptyValue[]&gt;([]);</span>
 &nbsp;
@@ -733,7 +702,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
   );
 &nbsp;
   const getSubLocationName = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (s</span>ubLocationId: number) =&gt; <span class="cstat-no" title="statement not covered" >subLocations.find(<span class="fstat-no" title="function not covered" >(s</span>l) =&gt; <span class="cstat-no" title="statement not covered" >subLocationId === sl.id)</span>?.name ?? '',</span>
+<span class="fstat-no" title="function not covered" >    (s</span>ubLocationId: number) =&gt; <span class="cstat-no" title="statement not covered" >subLocations?.find(<span class="fstat-no" title="function not covered" >(s</span>l) =&gt; <span class="cstat-no" title="statement not covered" >subLocationId === sl.id)</span>?.name ?? '',</span>
     [subLocations]
   );
 &nbsp;
@@ -783,9 +752,13 @@ export default function <span class="fstat-no" title="function not covered" >Sea
   }, [origin, dispatch, selectedOrganization.id]);
 &nbsp;
   const onRemovePillList = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (f</span>ilterId: string) =&gt; {
+<span class="fstat-no" title="function not covered" >    (f</span>ilterId: keyof Omit&lt;InventoryFiltersType, 'showEmptyBatches'&gt;) =&gt; {
       const filter = <span class="cstat-no" title="statement not covered" >filterPillData?.find(<span class="fstat-no" title="function not covered" >(f</span>ilterPillDatum) =&gt; <span class="cstat-no" title="statement not covered" >filterPillDatum.id === filterId)</span>;</span>
-<span class="cstat-no" title="statement not covered" >      setFilters({ ...filters, [filterId]: filter?.emptyValue || null });</span>
+<span class="cstat-no" title="statement not covered" >      if (filterId === 'facilityIds') {</span>
+<span class="cstat-no" title="statement not covered" >        setFilters({ ...filters, facilityIds: [], subLocationsIds: [] });</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        setFilters({ ...filters, [filterId]: filter?.emptyValue || null });</span>
+      }
     },
     [filterPillData, filters, setFilters]
   );
@@ -846,8 +819,8 @@ export default function <span class="fstat-no" title="function not covered" >Sea
               disabled={!filters.facilityIds?.length}
               label={strings.SUB_LOCATIONS}
               filterKey='subLocationsIds'
-              options={subLocations.map(<span class="fstat-no" title="function not covered" >(s</span>l: SubLocation) =&gt; <span class="cstat-no" title="statement not covered" >sl.id)</span>}
-              renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: number) =&gt; <span class="cstat-no" title="statement not covered" >subLocations.find(<span class="fstat-no" title="function not covered" >(s</span>l) =&gt; <span class="cstat-no" title="statement not covered" >sl.id === id)</span>?.name ?? ''}</span>
+              options={subLocations?.map(<span class="fstat-no" title="function not covered" >(s</span>l: SubLocation) =&gt; <span class="cstat-no" title="statement not covered" >sl.id)</span> ?? []}
+              renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: number) =&gt; <span class="cstat-no" title="statement not covered" >subLocations?.find(<span class="fstat-no" title="function not covered" >(s</span>l) =&gt; <span class="cstat-no" title="statement not covered" >sl.id === id)</span>?.name ?? ''}</span>
             /&gt;
             &lt;Box sx={{ marginTop: theme.spacing(0.5) }}&gt;
               &lt;Tooltip title={strings.FILTER}&gt;
@@ -907,7 +880,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-01T20:49:57.496Z
+                at 2023-12-04T19:24:43.399Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
