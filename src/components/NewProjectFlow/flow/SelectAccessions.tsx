@@ -16,7 +16,10 @@ import {
 } from 'src/types/Search';
 import { AccessionState } from 'src/types/Accession';
 import { FlowStates } from 'src/components/NewProjectFlow';
-import { useProjectEntitySelection } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
+import {
+  ProjectEntitiesFilters,
+  useProjectEntitySelection,
+} from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
 import Search from 'src/components/NewProjectFlow/flow/Search';
 
 type SelectAccessionsProps = {
@@ -93,7 +96,12 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
   const { isMobile } = useDeviceInfo();
 
   const getSearchResults = useCallback(
-    (organizationId: number, searchFields: SearchNodePayload[], searchSortOrder?: SearchSortOrder) => {
+    (
+      organizationId: number,
+      searchFields: SearchNodePayload[],
+      searchSortOrder?: SearchSortOrder,
+      searchFilters?: ProjectEntitiesFilters
+    ) => {
       const searchCriteria: SearchCriteria = searchFields.reduce(
         (acc, curr) => ({
           ...acc,
@@ -101,6 +109,26 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
         }),
         {} as SearchCriteria
       );
+
+      const searchStatuses = searchFilters?.statuses || [];
+      if (searchStatuses.length > 0) {
+        searchCriteria.state = {
+          field: 'state',
+          operation: 'field',
+          type: 'Exact',
+          values: searchStatuses,
+        };
+      }
+
+      const searchProjectIds = searchFilters?.projectIds || [];
+      if (searchProjectIds.length > 0) {
+        searchCriteria.project_id = {
+          field: 'project_id',
+          operation: 'field',
+          type: 'Exact',
+          values: searchProjectIds.map((id: number) => `${id}`),
+        };
+      }
 
       return SeedBankService.searchAccessions<SearchResponseAccession>({
         organizationId,
@@ -205,6 +233,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
                 }}
               >
                 <Search
+                  flowState={flowState}
                   searchValue={temporalSearchValue || ''}
                   onSearch={(val) => setTemporalSearchValue(val)}
                   filters={filters}

@@ -10,7 +10,10 @@ import { PlantingSiteSearchResult } from 'src/types/Tracking';
 import { TrackingService } from 'src/services';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { FlowStates } from 'src/components/NewProjectFlow';
-import { useProjectEntitySelection } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
+import {
+  ProjectEntitiesFilters,
+  useProjectEntitySelection,
+} from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
 import Search from 'src/components/NewProjectFlow/flow/Search';
 
 type SelectPlantingSitesProps = {
@@ -63,8 +66,25 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
   const { isMobile } = useDeviceInfo();
 
   const getSearchResults = useCallback(
-    (organizationId: number, searchFields: SearchNodePayload[], searchSortOrder?: SearchSortOrder) => {
-      return TrackingService.searchPlantingSites(organizationId, searchFields[0], searchSortOrder);
+    (
+      organizationId: number,
+      searchFields: SearchNodePayload[],
+      searchSortOrder?: SearchSortOrder,
+      searchFilters?: ProjectEntitiesFilters
+    ) => {
+      const fields = [...searchFields];
+      const projectIds = searchFilters?.projectIds || [];
+
+      if (projectIds.length > 0) {
+        fields.push({
+          field: 'project_id',
+          operation: 'field',
+          type: 'Exact',
+          values: projectIds.map((projectId: number) => `${projectId}`),
+        });
+      }
+
+      return TrackingService.searchPlantingSites(organizationId, fields, searchSortOrder);
     },
     []
   );
@@ -162,6 +182,7 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
                 }}
               >
                 <Search
+                  flowState={flowState}
                   searchValue={temporalSearchValue || ''}
                   onSearch={(val) => setTemporalSearchValue(val)}
                   filters={filters}
