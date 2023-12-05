@@ -174,7 +174,6 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
             {
               id: 'nurseryIds',
               label: strings.NURSERY,
-              // TODO
               value: (filters.nurseryIds || [])
                 .map((nurseryId: number) => nurseries.find((nursery) => nursery.id === nurseryId))
                 .map((nursery) => nursery?.name)

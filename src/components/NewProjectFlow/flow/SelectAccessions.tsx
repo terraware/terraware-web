@@ -192,7 +192,6 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
             {
               id: 'statuses',
               label: strings.STATUS,
-              // TODO
               value: statuses.join(','),
               emptyValue: [],
             },
