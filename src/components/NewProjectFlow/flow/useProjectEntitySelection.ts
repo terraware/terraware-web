@@ -15,7 +15,8 @@ interface UseProjectEntitySelectionProps<T extends SearchResponseElement> {
   getSearchResults: (
     organizationId: number,
     searchFields: FieldNodePayload[],
-    searchSortOrder?: SearchSortOrder
+    searchSortOrder?: SearchSortOrder,
+    filters?: ProjectEntitiesFilters
   ) => Promise<T[] | null>;
   getSearchFields: (debouncedSearchTerm: string) => FieldNodePayload[];
 }
@@ -43,6 +44,7 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
   const [temporalSearchValue, setTemporalSearchValue] = useState<string | null>(null);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
   const [filters, setFilters] = useForm<ProjectEntitiesFilters>({});
+  const [isSearchDirty, setIsSearchDirty] = useForm<boolean>(false);
 
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
@@ -51,7 +53,8 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
       const searchResponse = await getSearchResults(
         selectedOrganization.id,
         getSearchFields(debouncedSearchTerm || ''),
-        searchSortOrder
+        searchSortOrder,
+        filters
       );
 
       if (searchResponse) {
@@ -62,7 +65,7 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
         }
       }
 
-      if (!searchResponse && !temporalSearchValue) {
+      if (!isSearchDirty && !searchResponse) {
         setHasEntities(false);
         return;
       }
@@ -76,18 +79,29 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
     setHasEntities,
     selectedOrganization.id,
     searchSortOrder,
-    temporalSearchValue,
+    filters,
+    isSearchDirty,
   ]);
 
   useEffect(() => {
-    if (currentFlowState === thisFlowState && temporalSearchValue === null && entities.length === 0) {
+    if (currentFlowState === thisFlowState && !isSearchDirty && entities.length === 0) {
       onNext();
     }
-  }, [entities, currentFlowState, thisFlowState, temporalSearchValue, onNext]);
+  }, [entities, currentFlowState, thisFlowState, temporalSearchValue, onNext, isSearchDirty]);
 
   useEffect(() => {
     setProjectEntities(selectedRows);
   }, [setProjectEntities, selectedRows]);
+
+  const _setTemporalSearchValue = (value: string) => {
+    setIsSearchDirty(true);
+    setTemporalSearchValue(value);
+  };
+
+  const _setFilters = (value: ProjectEntitiesFilters) => {
+    setIsSearchDirty(true);
+    setFilters({ ...filters, ...value });
+  };
 
   return {
     entities,
@@ -96,9 +110,9 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
     showAssignmentWarning,
     setShowAssignmentWarning,
     temporalSearchValue,
-    setTemporalSearchValue,
+    setTemporalSearchValue: _setTemporalSearchValue,
     filters,
-    setFilters,
+    setFilters: _setFilters,
     setSearchSortOrder,
   };
 };

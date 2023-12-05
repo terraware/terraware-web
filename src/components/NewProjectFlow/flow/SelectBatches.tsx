@@ -11,7 +11,10 @@ import { SearchResponseBatches } from 'src/services/NurseryBatchService';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { FlowStates } from 'src/components/NewProjectFlow';
 import Search from 'src/components/NewProjectFlow/flow/Search';
-import { useProjectEntitySelection } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
+import {
+  ProjectEntitiesFilters,
+  useProjectEntitySelection,
+} from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
 
 type SelectBatchesProps = {
   project: CreateProjectRequest;
@@ -76,10 +79,40 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
   const { isMobile } = useDeviceInfo();
 
   const getSearchResults = useCallback(
-    (organizationId: number, searchFields: SearchNodePayload[], searchSortOrder?: SearchSortOrder) => {
-      const facilityIds = undefined;
-      const query = searchFields[0]?.values[0] || '';
-      return NurseryBatchService.getAllBatches(organizationId, searchSortOrder, facilityIds, query);
+    (
+      organizationId: number,
+      searchFields: SearchNodePayload[],
+      searchSortOrder?: SearchSortOrder,
+      searchFilters?: ProjectEntitiesFilters
+    ) => {
+      let facilityIds;
+      const query = undefined;
+      const fields = [...searchFields];
+
+      const nurseryIds = searchFilters?.nurseryIds || [];
+      if (nurseryIds.length > 0) {
+        facilityIds = nurseryIds;
+      }
+
+      const projectIds = searchFilters?.projectIds || [];
+      if (projectIds.length > 0) {
+        fields.push({
+          field: 'project_id',
+          operation: 'field',
+          type: 'Exact',
+          values: projectIds.map((projectId: number) => `${projectId}`),
+        });
+      }
+
+      return NurseryBatchService.getAllBatches(
+        organizationId,
+        searchSortOrder,
+        facilityIds,
+        undefined,
+        query,
+        false,
+        fields
+      );
     },
     []
   );
@@ -176,6 +209,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                 }}
               >
                 <Search
+                  flowState={flowState}
                   searchValue={temporalSearchValue || ''}
                   onSearch={(val) => setTemporalSearchValue(val)}
                   filters={filters}

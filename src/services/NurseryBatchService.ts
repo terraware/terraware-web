@@ -234,7 +234,8 @@ const getAllBatches = async (
   facilityIds?: number[],
   subLocationIds?: number[],
   query?: string,
-  isCsvExport?: boolean
+  isCsvExport?: boolean,
+  searchFields?: SearchNodePayload[]
 ): Promise<SearchResponseBatches[] | null> => {
   const params: SearchRequestPayload = {
     prefix: 'batches',
@@ -274,6 +275,12 @@ const getAllBatches = async (
       type: 'Exact',
       values: subLocationIds.map((id) => id.toString()),
     } as SearchNodePayload);
+  }
+
+  if (searchFields) {
+    for (const field of searchFields) {
+      params.search.children.push(field);
+    }
   }
 
   if (query) {
