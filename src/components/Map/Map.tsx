@@ -267,11 +267,10 @@ export default function Map(props: MapProps): JSX.Element {
         if (!foundSource || !foundSource.data) {
           return;
         }
-        const feature = foundSource.data.features.find((featureData: any) => featureData.id === entity.id);
-        if (!feature) {
-          return;
-        }
-        coordinates.push(feature.geometry.coordinates);
+        const features = foundSource.data.features.filter((featureData: any) => featureData.id === entity.id);
+        features.forEach((feature: any) => {
+          coordinates.push(feature.geometry.coordinates);
+        });
       });
       if (coordinates.length > 0) {
         const bbox = MapService.getBoundingBox([coordinates]);
