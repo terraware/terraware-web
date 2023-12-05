@@ -79,7 +79,6 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
     setHasEntities,
     selectedOrganization.id,
     searchSortOrder,
-    temporalSearchValue,
     filters,
     isSearchDirty,
   ]);
