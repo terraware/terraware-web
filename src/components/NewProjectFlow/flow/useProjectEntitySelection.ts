@@ -16,12 +16,12 @@ interface UseProjectEntitySelectionProps<T extends SearchResponseElement> {
     organizationId: number,
     searchFields: FieldNodePayload[],
     searchSortOrder?: SearchSortOrder,
-    filters?: ProjectEntitiesFilters
+    filters?: ProjectEntityFilters
   ) => Promise<T[] | null>;
   getSearchFields: (debouncedSearchTerm: string) => FieldNodePayload[];
 }
 
-export type ProjectEntitiesFilters = {
+export type ProjectEntityFilters = {
   projectIds?: number[];
   statuses?: AccessionState[];
   nurseryIds?: number[];
@@ -43,7 +43,7 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
   const [showAssignmentWarning, setShowAssignmentWarning] = useState<boolean>(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState<string | null>(null);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
-  const [filters, setFilters] = useForm<ProjectEntitiesFilters>({});
+  const [filters, setFilters] = useForm<ProjectEntityFilters>({});
   const [isSearchDirty, setIsSearchDirty] = useForm<boolean>(false);
 
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
@@ -98,7 +98,7 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
     setTemporalSearchValue(value);
   };
 
-  const _setFilters = (value: ProjectEntitiesFilters) => {
+  const _setFilters = (value: ProjectEntityFilters) => {
     setIsSearchDirty(true);
     setFilters({ ...filters, ...value });
   };
