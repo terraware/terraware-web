@@ -1,5 +1,5 @@
 import Coordinates from 'coordinate-parser';
-import { paths } from 'src/api/types/generated-schema';
+import { components, paths } from 'src/api/types/generated-schema';
 import { Accession, ACCESSION_2_STATES, AccessionState, Geolocation } from 'src/types/Accession';
 import HttpService, { Response, Response2 } from './HttpService';
 
@@ -30,6 +30,8 @@ export type AccessionData = { accession?: Accession };
 export type AccessionResponse = Response & AccessionData;
 export type HistoryData = { history?: AccessionHistoryEntry[] };
 export type AccessionHistoryResponse = Response & HistoryData;
+
+export type UpdateAccession = components['schemas']['UpdateAccessionRequestPayloadV2'] & { id: number };
 
 export type ViabilityTestPostRequest =
   paths[typeof VIABILITY_TESTS_ENDPOINT]['post']['requestBody']['content']['application/json'];

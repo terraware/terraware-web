@@ -5,6 +5,7 @@ import { PlantingSiteZone, Population } from 'src/types/PlantingSite';
 import SearchService from './SearchService';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
+import { isArray } from '../types/utils';
 
 /**
  * Tracking related services
@@ -247,7 +248,7 @@ const getReportedPlants = async (plantingSiteId: number): Promise<SiteReportedPl
  */
 async function searchPlantingSites(
   organizationId: number,
-  searchField?: SearchNodePayload,
+  searchField?: SearchNodePayload | SearchNodePayload[],
   sortOrder?: SearchSortOrder
 ): Promise<PlantingSiteSearchResult[] | null> {
   const defaultSortOrder = {
@@ -265,6 +266,7 @@ async function searchPlantingSites(
       'description',
       'timeZone',
       'totalPlants(raw)',
+      'project_name',
     ],
     prefix: 'plantingSites',
     sortOrder: [sortOrder || defaultSortOrder],
@@ -282,7 +284,13 @@ async function searchPlantingSites(
   };
 
   if (searchField) {
-    params.search.children.push(searchField);
+    if (isArray(searchField)) {
+      for (const field of searchField) {
+        params.search.children.push(field);
+      }
+    } else {
+      params.search.children.push(searchField);
+    }
   }
 
   return (await SearchService.search(params)) as PlantingSiteSearchResult[];

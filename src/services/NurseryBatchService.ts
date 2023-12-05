@@ -49,6 +49,7 @@ const DEFAULT_BATCH_FIELDS = [
   'notes',
   'subLocations.subLocation_id',
   'subLocations.subLocation_name',
+  'version',
 ];
 
 const REPORT_BATCH_FIELDS = [
@@ -61,6 +62,17 @@ const REPORT_BATCH_FIELDS = [
   'readyQuantity',
   'totalQuantity',
 ];
+
+export type NurseryBatchesReportSearchResponseElement = SearchResponseElement & {
+  batchNumber: string;
+  species_scientificName: string;
+  species_commonName: string;
+  facility_name: string;
+  germinatingQuantity: string;
+  notReadyQuantity: string;
+  readyQuantity: string;
+  totalQuantity: string;
+};
 
 const EXPORT_BATCH_FIELDS = [
   'batchNumber',
@@ -97,6 +109,7 @@ const NURSERY_BATCHES_FIELDS = [
   'totalQuantity',
   'totalQuantity(raw)',
   'version',
+  'project_name',
 ];
 
 export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
@@ -120,8 +133,8 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   subLocations?: { subLocation_id: string; subLocation_name: string }[];
   totalQuantity: string;
   'totalQuantity(raw)': string;
-  totalWithdrawn: string;
   version: string;
+  project_name?: string;
 };
 
 export type BatchId = {
@@ -210,6 +223,8 @@ const getBatches = async (organizationId: number, batchIds: number[]): Promise<S
   return searchResponse;
 };
 
+export type SearchResponseBatches = NurseryBatchesSearchResponseElement | NurseryBatchesReportSearchResponseElement;
+
 /**
  * Get all batches
  */
@@ -219,8 +234,9 @@ const getAllBatches = async (
   facilityIds?: number[],
   subLocationIds?: number[],
   query?: string,
-  isCsvExport?: boolean
-): Promise<SearchResponseElement[] | null> => {
+  isCsvExport?: boolean,
+  searchFields?: SearchNodePayload[]
+): Promise<SearchResponseBatches[] | null> => {
   const params: SearchRequestPayload = {
     prefix: 'batches',
     search: {
@@ -259,6 +275,12 @@ const getAllBatches = async (
       type: 'Exact',
       values: subLocationIds.map((id) => id.toString()),
     } as SearchNodePayload);
+  }
+
+  if (searchFields) {
+    for (const field of searchFields) {
+      params.search.children.push(field);
+    }
   }
 
   if (query) {
@@ -398,10 +420,12 @@ const deleteBatch = async (batchId: number): Promise<Response> => {
   });
 };
 
+export type UpdateBatchRequestPayloadWithId = UpdateBatchRequestPayload & { id: number };
+
 /**
  * Update a batch by id
  */
-export const updateBatch = async (batch: Batch): Promise<Response & BatchData> => {
+export const updateBatch = async (batch: UpdateBatchRequestPayloadWithId): Promise<Response & BatchData> => {
   const entity: UpdateBatchRequestPayload = {
     notes: batch.notes,
     readyByDate: batch.readyByDate,
@@ -411,6 +435,7 @@ export const updateBatch = async (batch: Batch): Promise<Response & BatchData> =
     substrateNotes: batch.substrateNotes,
     treatment: batch.treatment,
     treatmentNotes: batch.treatmentNotes,
+    projectId: batch.projectId,
   };
 
   const response: Response = await httpBatch.put({

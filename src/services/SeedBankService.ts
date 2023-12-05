@@ -83,12 +83,12 @@ const createAccession = async (entity: AccessionPostRequestBody): Promise<Create
 /**
  * Search accessions
  */
-const searchAccessions = async ({
+const searchAccessions = async <T extends SearchResponseElement>({
   organizationId,
   fields,
   searchCriteria,
   sortOrder,
-}: AccessionsSearchParams): Promise<SearchResponseElement[] | null> => {
+}: AccessionsSearchParams): Promise<T[] | null> => {
   const params: SearchRequestPayload = {
     prefix: 'facilities.accessions',
     fields,
@@ -100,7 +100,7 @@ const searchAccessions = async ({
     params.sortOrder = [sortOrder];
   }
 
-  return await SearchService.search(params);
+  return SearchService.search<T>(params);
 };
 
 /**
