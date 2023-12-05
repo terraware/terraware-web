@@ -76,6 +76,7 @@ import { Project } from './types/Project';
 import { selectProjects } from './redux/features/projects/projectsSelectors';
 import NewProjectFlow from './components/NewProjectFlow';
 import { requestProjects } from './redux/features/projects/projectsThunks';
+import ProjectView from 'src/components/ProjectView';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -455,9 +456,11 @@ function AppContent() {
                 <Route exact path={APP_PATHS.PROJECTS}>
                   {getProjectsView()}
                 </Route>
-
                 <Route exact path={APP_PATHS.PROJECTS_NEW}>
                   <NewProjectFlow reloadData={reloadProjects} />
+                </Route>
+                <Route exact path={APP_PATHS.PROJECT_VIEW}>
+                  <ProjectView />
                 </Route>
               </>
             )}
