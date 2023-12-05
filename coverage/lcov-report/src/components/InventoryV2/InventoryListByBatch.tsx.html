@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/72</span>
             </div>
         
             
@@ -305,10 +305,8 @@
 <a name='L240'></a><a href='#L240'>240</a>
 <a name='L241'></a><a href='#L241'>241</a>
 <a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L243'></a><a href='#L243'>243</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -409,14 +407,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -444,9 +436,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -577,6 +571,7 @@ import { selectSubLocations } from 'src/redux/features/subLocations/subLocations
 import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { SubLocation } from 'src/types/Facility';
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   mainContainer: {
@@ -648,21 +643,15 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   const [filters, setFilters] = <span class="cstat-no" title="statement not covered" >useForm&lt;InventoryFiltersType&gt;({});</span>
 &nbsp;
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const subLocations = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSubLocations);</span>
+  const subLocations: SubLocation[] | undefined = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSubLocations);</span>
   const [subLocationNames, setSubLocationNames] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;([]);</span>
   const [nurseryIds, setNurseryIds] = <span class="cstat-no" title="statement not covered" >useState&lt;number[]&gt;([]);</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const querySubLocationNames = <span class="cstat-no" title="statement not covered" >query</span>
-      .get('subLocationName')
-      ?.trim()
-      ?.split(',')
-      ?.filter(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s !== '')</span>;
+    const querySubLocationNames = <span class="cstat-no" title="statement not covered" >query.getAll('subLocationName')?.filter(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s !== '')</span>;</span>
 <span class="cstat-no" title="statement not covered" >    setSubLocationNames(querySubLocationNames ?? []);</span>
     const queryNurseryIds = <span class="cstat-no" title="statement not covered" >query</span>
-      .get('facilityId')
-      ?.trim()
-      ?.split(',')
+      .getAll('facilityId')
       ?.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n !== '')</span>
       ?.map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >Number(id))</span>;
 <span class="cstat-no" title="statement not covered" >    setNurseryIds(queryNurseryIds ?? []);</span>
@@ -687,14 +676,16 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const updateFilterQueryParams = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (f</span>: InventoryFiltersType) =&gt; {
-<span class="cstat-no" title="statement not covered" >      query.set('facilityId', f.facilityIds?.map(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.toString())</span>?.join(',') ?? '');</span>
-<span class="cstat-no" title="statement not covered" >      query.set(</span>
-        'subLocationName',
-        f.subLocationsIds?.map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >subLocations?.find(<span class="fstat-no" title="function not covered" >(s</span>l) =&gt; <span class="cstat-no" title="statement not covered" >sl.id === id)</span>?.name ?? '')</span>?.join(',') ?? ''
-      );
-<span class="cstat-no" title="statement not covered" >      history.replace(getLocation(location.pathname, location, query.toString()));</span>
+      const newQuery = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
+<span class="cstat-no" title="statement not covered" >      f.facilityIds?.forEach(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >newQuery.append('facilityId', n.toString()))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      f.subLocationsIds</span>
+        ?.map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >subLocations?.find(<span class="fstat-no" title="function not covered" >(s</span>l) =&gt; <span class="cstat-no" title="statement not covered" >sl.id === id)</span>?.name ?? '')</span>
+        ?.filter(<span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; <span class="cstat-no" title="statement not covered" >name !== '')</span>
+        ?.forEach(<span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; <span class="cstat-no" title="statement not covered" >newQuery.append('subLocationName', name))</span>;
+<span class="cstat-no" title="statement not covered" >      newQuery.append('tab', 'batches_by_batch');</span>
+<span class="cstat-no" title="statement not covered" >      history.replace(getLocation(location.pathname, location, newQuery.toString()));</span>
     },
-    [query, history, location, subLocations]
+    [history, location, subLocations]
   );
 &nbsp;
   const onSearchSortOrder = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rder: SearchSortOrder) =&gt; {</span>
@@ -805,7 +796,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-05T21:38:53.401Z
+                at 2023-12-05T21:55:42.862Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
