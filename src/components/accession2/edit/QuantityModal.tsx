@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -80,6 +80,13 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const [remainingQuantityNotesError, setRemainingQuantityNotesError] = useState<boolean>(false);
   const classes = useStyles();
 
+  const quantityChanged = useMemo(() => {
+    return (
+      record.remainingQuantity?.quantity?.toString() !== accession.remainingQuantity?.quantity?.toString() ||
+      record.remainingQuantity?.units !== accession.remainingQuantity?.units
+    );
+  }, [record.remainingQuantity, accession.remainingQuantity]);
+
   const validate = () => {
     let hasErrors = false;
 
@@ -91,7 +98,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       setQuantityError(false);
     }
 
-    if (!remainingQuantityNotes.trim()) {
+    if (quantityChanged && !remainingQuantityNotes.trim()) {
       setRemainingQuantityNotesError(true);
       hasErrors = true;
     } else {
@@ -105,7 +112,11 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     if (!validate()) {
       return;
     }
-    const response = await AccessionService.updateAccession(record, false, remainingQuantityNotes);
+    const response = await AccessionService.updateAccession(
+      record,
+      false,
+      quantityChanged ? remainingQuantityNotes : undefined
+    );
     if (response.requestSucceeded) {
       reload();
       onCloseHandler();
@@ -197,6 +208,13 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const onChangeSubsetCount = (value: number) => {
     setSubsetCountError('');
     onChange('subsetCount', value);
+  };
+
+  const onChangeRemainingQuantityNotes = (value: string) => {
+    if (value.trim()) {
+      setRemainingQuantityNotesError(false);
+    }
+    setRemainingQuantityNotes(value);
   };
 
   const hasChanged =
@@ -320,6 +338,20 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 />
               </Grid>
             )}
+          {quantityChanged && (
+            <Grid item xs={12} textAlign='left'>
+              <Textfield
+                id='notes'
+                value={record?.notes}
+                onChange={(value) => onChangeRemainingQuantityNotes(value as string)}
+                type='textarea'
+                label={strings.NOTES}
+                errorText={remainingQuantityNotesError ? strings.REQUIRED_FIELD : ''}
+                placeholder={strings.REMAINING_QUANTITY_NOTES_PLACEHOLDER}
+                required
+              />
+            </Grid>
+          )}
           <Grid item xs={12}>
             {!isSubsetOpen ? (
               <Box display='flex' justifyContent='flex-start'>
@@ -368,17 +400,6 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 </Grid>
               </Box>
             )}
-          </Grid>
-          <Grid item xs={12} textAlign='left'>
-            <Textfield
-              id='notes'
-              value={record?.notes}
-              onChange={(value) => setRemainingQuantityNotes(value as string)}
-              type='textarea'
-              label={strings.NOTES}
-              errorText={remainingQuantityNotesError ? strings.REQUIRED_FIELD : ''}
-              required
-            />
           </Grid>
         </Grid>
       </DialogBox>

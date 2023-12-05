@@ -957,6 +957,7 @@ REFRIGERATOR_3,Refrigerator 3,
 REINTRODUCED,Reintroduced,
 REINTRODUCED_DESCRIPTION,"Plants that have been transplanted from a nursery, greenhouse, or other location to a restoration site.",
 REMAINING,Remaining,
+REMAINING_QUANTITY_NOTES_PLACEHOLDER,Notes required for quantity changes
 REMAINING_UNITS,Remaining Units,
 REMINDER_DATE,Reminder Date,
 REMOVE,Remove,
