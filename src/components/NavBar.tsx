@@ -13,6 +13,7 @@ import { useOrganization } from 'src/providers/hooks';
 import LocaleSelector from './LocaleSelector';
 import ReportService, { Reports } from 'src/services/ReportService';
 import { isAdmin } from 'src/utils/organization';
+import isEnabled from '../features';
 
 type NavBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,6 +32,7 @@ export default function NavBar({
   const [reports, setReports] = useState<Reports>([]);
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
+  const featureFlagProjects = isEnabled('Projects');
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
   const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
@@ -237,15 +239,17 @@ export default function NavBar({
             }}
             id='people'
           />
-          <NavItem
-            label={strings.PROJECTS}
-            icon='iconFolder'
-            selected={!!isProjectsRoute}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.PROJECTS);
-            }}
-            id='projects'
-          />
+          {featureFlagProjects && (
+            <NavItem
+              label={strings.PROJECTS}
+              icon='iconFolder'
+              selected={!!isProjectsRoute}
+              onClick={() => {
+                closeAndNavigateTo(APP_PATHS.PROJECTS);
+              }}
+              id='projects'
+            />
+          )}
           <NavItem label={strings.LOCATIONS} icon='iconMyLocation' id='locations'>
             <SubNavbar>
               <NavItem

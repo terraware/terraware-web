@@ -8,7 +8,7 @@ import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from
 import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { InventoryFiltersType } from 'src/components/Inventory/InventoryFiltersPopover';
+import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import { FacilitySpeciesInventoryResult } from 'src/components/InventoryV2';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
@@ -81,6 +81,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
       organizationId: selectedOrganization.id,
       query: debouncedSearchTerm,
       facilityIds: filters.facilityIds,
+      speciesIds: filters.speciesIds,
       searchSortOrder,
     });
 
@@ -88,6 +89,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
       organizationId: selectedOrganization.id,
       query: debouncedSearchTerm,
       facilityIds: filters.facilityIds,
+      speciesIds: filters.speciesIds,
       searchSortOrder,
     });
 

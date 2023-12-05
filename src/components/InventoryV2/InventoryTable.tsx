@@ -5,7 +5,7 @@ import { TableColumnType } from '@terraware/web-components';
 import { Box, Grid } from '@mui/material';
 import { SearchResponseElement } from 'src/types/Search';
 import InventoryCellRenderer from './InventoryCellRenderer';
-import { InventoryFiltersType } from './InventoryFiltersPopover';
+import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import { APP_PATHS } from 'src/constants';
 import Search from './Search';
 import Table from 'src/components/common/table';
@@ -18,7 +18,7 @@ interface InventoryTableProps {
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
   filters: InventoryFiltersType;
-  setFilters: React.Dispatch<React.SetStateAction<InventoryFiltersType>>;
+  setFilters: (f: InventoryFiltersType) => void;
   setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
   isPresorted: boolean;
   columns: () => TableColumnType[];

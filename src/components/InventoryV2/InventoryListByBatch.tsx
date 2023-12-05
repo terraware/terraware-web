@@ -8,7 +8,7 @@ import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInv
 import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { InventoryFiltersType } from 'src/components/Inventory/InventoryFiltersPopover';
+import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/components/InventoryV2';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
@@ -16,6 +16,12 @@ import { TableColumnType } from '@terraware/web-components';
 import { NurseryBatchService } from 'src/services';
 import Card from 'src/components/common/Card';
 import { isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
+import useQuery from 'src/utils/useQuery';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
+import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
+import { useHistory } from 'react-router-dom';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -44,6 +50,11 @@ const columns = (): TableColumnType[] => [
   {
     key: 'facility_name_noLink',
     name: strings.NURSERY,
+    type: 'string',
+  },
+  {
+    key: 'subLocations',
+    name: strings.SUB_LOCATIONS,
     type: 'string',
   },
   {
@@ -81,6 +92,56 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   });
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
 
+  const dispatch = useAppDispatch();
+  const subLocations = useAppSelector(selectSubLocations);
+  const [subLocationNames, setSubLocationNames] = useState<string[]>([]);
+  const [nurseryIds, setNurseryIds] = useState<number[]>([]);
+  const query = useQuery();
+  useEffect(() => {
+    const querySubLocationNames = query
+      .get('subLocationName')
+      ?.trim()
+      ?.split(',')
+      ?.filter((s) => s !== '');
+    setSubLocationNames(querySubLocationNames ?? []);
+    const queryNurseryIds = query
+      .get('facilityId')
+      ?.trim()
+      ?.split(',')
+      ?.filter((n) => n !== '')
+      ?.map((id) => Number(id));
+    setNurseryIds(queryNurseryIds ?? []);
+  }, [query]);
+
+  useEffect(() => {
+    setFilters((f) => ({ ...f, facilityIds: nurseryIds }));
+  }, [nurseryIds, setFilters]);
+
+  useEffect(() => {
+    dispatch(requestSubLocations(filters.facilityIds ?? []));
+  }, [filters.facilityIds, dispatch]);
+
+  useEffect(() => {
+    const subLocationsIds = subLocationNames
+      .map((name) => subLocations?.find((sl) => sl.name === name)?.id)
+      .filter((id): id is number => id !== undefined);
+    setFilters((f) => ({ ...f, subLocationsIds }));
+  }, [subLocationNames, subLocations, setFilters]);
+
+  const history = useHistory();
+  const location = useStateLocation();
+  const updateFilterQueryParams = useCallback(
+    (f: InventoryFiltersType) => {
+      query.set('facilityId', f.facilityIds?.map((n) => n.toString())?.join(',') ?? '');
+      query.set(
+        'subLocationName',
+        f.subLocationsIds?.map((id) => subLocations?.find((sl) => sl.id === id)?.name ?? '')?.join(',') ?? ''
+      );
+      history.replace(getLocation(location.pathname, location, query.toString()));
+    },
+    [query, history, location, subLocations]
+  );
+
   const onSearchSortOrder = (order: SearchSortOrder) => {
     const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
     setSearchSortOrder(isClientSorted ? undefined : order);
@@ -94,6 +155,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
       organizationId: selectedOrganization.id,
       query: debouncedSearchTerm,
       facilityIds: filters.facilityIds,
+      subLocationIds: filters.subLocationsIds,
       searchSortOrder,
     });
 
@@ -101,13 +163,30 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
       selectedOrganization.id,
       searchSortOrder,
       filters.facilityIds,
+      filters.subLocationsIds,
       debouncedSearchTerm
     );
+
+    const processedResults = apiSearchResults?.map((result) => {
+      let subLocationsList = '';
+      (result.subLocations as any[])?.forEach((sl, index) => {
+        if (index === 0) {
+          subLocationsList = sl.subLocation_name;
+        } else {
+          subLocationsList += `\r${sl.subLocation_name}`;
+        }
+      });
+
+      return {
+        ...result,
+        subLocations: subLocationsList,
+      };
+    });
 
     let updatedResult: InventoryResultWithBatchNumber[] | undefined;
 
     // format results
-    updatedResult = apiSearchResults?.map((uR) => {
+    updatedResult = processedResults?.map((uR) => {
       const resultTyped = uR as BatchInventoryResult;
       return {
         ...resultTyped,
@@ -142,7 +221,10 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           temporalSearchValue={temporalSearchValue}
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}
-          setFilters={setFilters}
+          setFilters={(f) => {
+            setFilters(f);
+            updateFilterQueryParams(f);
+          }}
           setSearchSortOrder={onSearchSortOrder}
           isPresorted={!!searchSortOrder}
           columns={columns}

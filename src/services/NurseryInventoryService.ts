@@ -7,6 +7,7 @@ import {
   AndNodePayload,
   FieldNodePayload,
   OrNodePayload,
+  SearchNodePayload,
   SearchRequestPayload,
   SearchResponseElement,
   SearchSortOrder,
@@ -71,6 +72,8 @@ export type SearchInventoryParams = {
   searchSortOrder?: SearchSortOrder;
   query?: string;
   facilityIds?: number[];
+  subLocationIds?: number[];
+  speciesIds?: number[];
   isCsvExport?: boolean;
 };
 
@@ -241,6 +244,7 @@ const searchInventoryByNursery = async ({
   organizationId,
   searchSortOrder,
   facilityIds,
+  speciesIds,
   query,
   isCsvExport,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
@@ -249,6 +253,7 @@ const searchInventoryByNursery = async ({
     fields: [
       'facility_id',
       'facility_name',
+      'facilityInventories.species_id',
       'facilityInventories.species_scientificName',
       'germinatingQuantity',
       'notReadyQuantity',
@@ -301,8 +306,16 @@ const searchInventoryByNursery = async ({
     params.search.children.push({
       operation: 'field',
       field: 'facility_id',
-      values: facilityIds,
-    });
+      values: facilityIds.map((f) => f.toString()),
+    } as SearchNodePayload);
+  }
+
+  if (speciesIds?.length) {
+    params.search.children.push({
+      operation: 'field',
+      field: 'facilityInventories.species_id',
+      values: speciesIds.map((s) => s.toString()),
+    } as SearchNodePayload);
   }
 
   return isCsvExport ? await SearchService.searchCsv(params) : await SearchService.search(params);
