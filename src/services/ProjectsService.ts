@@ -96,7 +96,7 @@ const createProject = async (project: CreateProjectRequest): Promise<Response> =
 
 type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
 
-const assignProjectToEntities = async (projectId: number, entities: AssignProjectRequestPayload) =>
+const assignProjectToEntities = (projectId: number, entities: AssignProjectRequestPayload) =>
   httpProjects.post({
     url: PROJECT_ASSIGN_ENDPOINT,
     urlReplacements: { '{id}': `${projectId}` },

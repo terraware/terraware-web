@@ -190,8 +190,8 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                 rows={entities}
                 selectedRows={selectedRows}
                 setSelectedRows={setSelectedRows}
-                id={'selectBatchesTable'}
-                orderBy={'batchNumber'}
+                id='selectBatchesTable'
+                orderBy='batchNumber'
                 showCheckbox={true}
               />
             </Grid>

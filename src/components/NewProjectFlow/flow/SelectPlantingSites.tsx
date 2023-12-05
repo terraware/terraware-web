@@ -176,8 +176,8 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
                 rows={entities}
                 selectedRows={selectedRows}
                 setSelectedRows={setSelectedRows}
-                id={'selectPlantingSitesTable'}
-                orderBy={'name'}
+                id='selectPlantingSitesTable'
+                orderBy='name'
                 showCheckbox={true}
               />
             </Grid>

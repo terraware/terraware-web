@@ -220,8 +220,8 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
                   rows={entities}
                   selectedRows={selectedRows}
                   setSelectedRows={setSelectedRows}
-                  id={'selectAccessionsTable'}
-                  orderBy={'accessionNumber'}
+                  id='selectAccessionsTable'
+                  orderBy='accessionNumber'
                   showCheckbox={true}
                 />
               </Box>
