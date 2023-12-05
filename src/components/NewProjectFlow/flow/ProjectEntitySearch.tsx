@@ -90,8 +90,8 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
             onClickRightIcon={() => onSearch('')}
           />
         </Box>
-        {entitySpecificFilterConfigs.map((filterConfig) => (
-          <ProjectEntityFilter filterConfig={filterConfig} setFilters={setFilters} />
+        {entitySpecificFilterConfigs.map((filterConfig, index) => (
+          <ProjectEntityFilter filterConfig={filterConfig} setFilters={setFilters} key={index} />
         ))}
         <ProjectEntityFilter filterConfig={projectEntityFilterConfig} setFilters={setFilters} />
       </Box>
