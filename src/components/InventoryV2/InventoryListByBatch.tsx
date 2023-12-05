@@ -129,9 +129,10 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
     (f: InventoryFiltersType) => {
       const newQuery = new URLSearchParams();
       f.facilityIds?.forEach((n) => newQuery.append('facilityId', n.toString()));
-      f.subLocationsIds?.forEach((id) =>
-        newQuery.append('subLocationName', subLocations?.find((sl) => sl.id === id)?.name ?? '')
-      );
+      f.subLocationsIds
+        ?.map((id) => subLocations?.find((sl) => sl.id === id)?.name ?? '')
+        ?.filter((name) => name !== '')
+        ?.forEach((name) => newQuery.append('subLocationName', name));
       newQuery.append('tab', 'batches_by_batch');
       history.replace(getLocation(location.pathname, location, newQuery.toString()));
     },
