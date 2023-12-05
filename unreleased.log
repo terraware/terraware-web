@@ -1,3 +1,4 @@
+bd061c319 SW-4483 Add mandatory notes to accession quantity edits (#1831)
 84a152e8e SW-4490 Stub out ProjectView and routing (#1845)
 6b9bc23a0 SW-4489 Add new project entity filtering, entity specific and project multi-select filters (#1843)
 ca07a7b4f SW-4489 Create project flow (#1829)
