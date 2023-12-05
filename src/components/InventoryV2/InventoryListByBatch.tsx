@@ -22,6 +22,7 @@ import { selectSubLocations } from 'src/redux/features/subLocations/subLocations
 import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { SubLocation } from 'src/types/Facility';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -93,21 +94,15 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
 
   const dispatch = useAppDispatch();
-  const subLocations = useAppSelector(selectSubLocations);
+  const subLocations: SubLocation[] | undefined = useAppSelector(selectSubLocations);
   const [subLocationNames, setSubLocationNames] = useState<string[]>([]);
   const [nurseryIds, setNurseryIds] = useState<number[]>([]);
   const query = useQuery();
   useEffect(() => {
-    const querySubLocationNames = query
-      .get('subLocationName')
-      ?.trim()
-      ?.split(',')
-      ?.filter((s) => s !== '');
+    const querySubLocationNames = query.getAll('subLocationName')?.filter((s) => s !== '');
     setSubLocationNames(querySubLocationNames ?? []);
     const queryNurseryIds = query
-      .get('facilityId')
-      ?.trim()
-      ?.split(',')
+      .getAll('facilityId')
       ?.filter((n) => n !== '')
       ?.map((id) => Number(id));
     setNurseryIds(queryNurseryIds ?? []);
@@ -132,14 +127,15 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   const location = useStateLocation();
   const updateFilterQueryParams = useCallback(
     (f: InventoryFiltersType) => {
-      query.set('facilityId', f.facilityIds?.map((n) => n.toString())?.join(',') ?? '');
-      query.set(
-        'subLocationName',
-        f.subLocationsIds?.map((id) => subLocations?.find((sl) => sl.id === id)?.name ?? '')?.join(',') ?? ''
+      const newQuery = new URLSearchParams();
+      f.facilityIds?.forEach((n) => newQuery.append('facilityId', n.toString()));
+      f.subLocationsIds?.forEach((id) =>
+        newQuery.append('subLocationName', subLocations?.find((sl) => sl.id === id)?.name ?? '')
       );
-      history.replace(getLocation(location.pathname, location, query.toString()));
+      newQuery.append('tab', 'batches_by_batch');
+      history.replace(getLocation(location.pathname, location, newQuery.toString()));
     },
-    [query, history, location, subLocations]
+    [history, location, subLocations]
   );
 
   const onSearchSortOrder = (order: SearchSortOrder) => {
