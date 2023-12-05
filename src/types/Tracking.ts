@@ -4,13 +4,16 @@ import { components } from 'src/api/types/generated-schema';
 export type PlantingSite = components['schemas']['PlantingSitePayload'];
 export type PlantingZone = components['schemas']['PlantingZonePayload'];
 export type PlantingSubzone = components['schemas']['PlantingSubzonePayload'];
+
+// Search API always returns strings
 export type PlantingSiteSearchResult = {
   boundary?: components['schemas']['MultiPolygon'];
-  id: number;
+  id: string;
   name: string;
-  numPlantingZones: number;
-  numPlantingSubzones: number;
-  'totalPlants(raw)': number;
+  numPlantingZones: string;
+  numPlantingSubzones: string;
+  'totalPlants(raw)': string;
+  project_name: string;
 };
 
 // geometry and types of geometries

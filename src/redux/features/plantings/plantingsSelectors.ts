@@ -27,7 +27,7 @@ export const getTotalPlantsBySubzone = (plantings: PlantingSearchData[]) => {
 export const getTotalPlantsBySite = (plantingsSites: PlantingSiteSearchResult[]) => {
   return plantingsSites?.reduce((totalPlantsBySite: { [key: string]: number }, plantingSite) => {
     const plantingSiteId = plantingSite.id;
-    totalPlantsBySite[plantingSiteId] = plantingSite['totalPlants(raw)'];
+    totalPlantsBySite[plantingSiteId] = Number(plantingSite['totalPlants(raw)']);
     return totalPlantsBySite;
   }, {});
 };

@@ -265,6 +265,7 @@ async function searchPlantingSites(
       'description',
       'timeZone',
       'totalPlants(raw)',
+      'project_name',
     ],
     prefix: 'plantingSites',
     sortOrder: [sortOrder || defaultSortOrder],

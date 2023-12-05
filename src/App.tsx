@@ -74,6 +74,8 @@ import isEnabled from 'src/features';
 import Projects from './components/Projects';
 import { Project } from './types/Project';
 import { selectProjects } from './redux/features/projects/projectsSelectors';
+import NewProjectFlow from './components/NewProjectFlow';
+import { requestProjects } from './redux/features/projects/projectsThunks';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -186,6 +188,7 @@ function AppContent() {
   const [showNavBar, setShowNavBar] = useState(true);
   const nurseryV2 = isEnabled('Nursery Updates');
   const featureFlagProjects = isEnabled('Projects');
+
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
 
@@ -207,16 +210,25 @@ function AppContent() {
         }
       }
     };
-    populateSpecies();
+    void populateSpecies();
   }, [selectedOrganization]);
 
   const reloadTracking = useCallback(() => {
     const populatePlantingSites = () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        dispatch(requestPlantingSites(selectedOrganization.id, activeLocale || undefined));
+        void dispatch(requestPlantingSites(selectedOrganization.id, activeLocale || undefined));
       }
     };
     populatePlantingSites();
+  }, [dispatch, selectedOrganization.id, activeLocale]);
+
+  const reloadProjects = useCallback(() => {
+    const populateProjects = () => {
+      if (!isPlaceholderOrg(selectedOrganization.id)) {
+        void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+      }
+    };
+    populateProjects();
   }, [dispatch, selectedOrganization.id, activeLocale]);
 
   useEffect(() => {
@@ -230,6 +242,10 @@ function AppContent() {
   useEffect(() => {
     reloadTracking();
   }, [reloadTracking]);
+
+  useEffect(() => {
+    reloadProjects();
+  }, [reloadProjects]);
 
   useEffect(() => {
     const subzones: Record<number, string> = {};
@@ -435,9 +451,15 @@ function AppContent() {
               <People />
             </Route>
             {featureFlagProjects && (
-              <Route exact path={APP_PATHS.PROJECTS}>
-                {getProjectsView()}
-              </Route>
+              <>
+                <Route exact path={APP_PATHS.PROJECTS}>
+                  {getProjectsView()}
+                </Route>
+
+                <Route exact path={APP_PATHS.PROJECTS_NEW}>
+                  <NewProjectFlow reloadData={reloadProjects} />
+                </Route>
+              </>
             )}
             <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
               <NewSeedBank />
