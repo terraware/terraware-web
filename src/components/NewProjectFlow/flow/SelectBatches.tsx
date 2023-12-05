@@ -104,7 +104,15 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
         });
       }
 
-      return NurseryBatchService.getAllBatches(organizationId, searchSortOrder, facilityIds, query, false, fields);
+      return NurseryBatchService.getAllBatches(
+        organizationId,
+        searchSortOrder,
+        facilityIds,
+        undefined,
+        query,
+        false,
+        fields
+      );
     },
     []
   );
