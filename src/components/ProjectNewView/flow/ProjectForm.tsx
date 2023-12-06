@@ -1,27 +1,29 @@
 import React, { useState } from 'react';
-import strings from 'src/strings';
 import { Container, Grid, useTheme } from '@mui/material';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Textfield } from '@terraware/web-components';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageForm from 'src/components/common/PageForm';
-import { CreateProjectRequest } from 'src/types/Project';
+import { CreateProjectRequest, UpdateProjectRequest } from 'src/types/Project';
 
-type SelectPurposeFormProps = {
-  onNext: (project: CreateProjectRequest) => void;
-  project: CreateProjectRequest;
+type ProjectFormProps<T extends CreateProjectRequest | UpdateProjectRequest> = {
+  onNext: (project: T) => void;
+  project: T;
   onCancel: () => void;
   saveText: string;
 };
 
-export default function ProjectForm(props: SelectPurposeFormProps): JSX.Element {
+export default function ProjectForm<T extends CreateProjectRequest | UpdateProjectRequest>(
+  props: ProjectFormProps<T>
+): JSX.Element {
   const { onNext, onCancel, saveText, project } = props;
 
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const [localRecord, setLocalRecord] = useState<CreateProjectRequest>(project);
+  const [localRecord, setLocalRecord] = useState<T>(project);
 
-  const updateField = (field: keyof CreateProjectRequest, value: any) => {
+  const updateField = (field: keyof T, value: any) => {
     setLocalRecord((prev) => ({
       ...prev,
       [field]: value,

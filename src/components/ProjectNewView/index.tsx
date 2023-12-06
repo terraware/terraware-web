@@ -139,7 +139,12 @@ export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX
       </Typography>
 
       {flowState === 'label' && (
-        <ProjectForm onNext={onProjectConfigured} project={record} onCancel={goToProjects} saveText={strings.NEXT} />
+        <ProjectForm<CreateProjectRequest>
+          onNext={onProjectConfigured}
+          project={record}
+          onCancel={goToProjects}
+          saveText={strings.NEXT}
+        />
       )}
 
       <SelectAccessions
