@@ -1,3 +1,4 @@
+5f774f1b5 Stub out project edit view and add to routing, behind feature flag for projects feature (#1855)
 cb7934c20 Pull project data into project view and render name and description (#1854)
 953d118a0 Add request for single project and redux thunk to get project and put into state (#1853)
 e98934a89 Add single project selector and action to put project into state (#1852)
