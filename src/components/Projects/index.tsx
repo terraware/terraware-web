@@ -1,22 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Grid, Theme, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import TfMain from '../common/TfMain';
+import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
-import { Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import TextField from '../common/Textfield/Textfield';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TextField from 'src/components/common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { useOrganization, useLocalization } from 'src/providers/hooks';
 import { Project } from 'src/types/Project';
 import ProjectsService from 'src/services/ProjectsService';
+import ProjectCellRenderer from 'src/components/Projects/ProjectCellRenderer';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -135,7 +136,19 @@ export default function ProjectsList(): JSX.Element {
           <div>
             <Grid container spacing={4}>
               <Grid item xs={12}>
-                {results && <Table id='projects-table' columns={columns} rows={results} orderBy='name' />}
+                {results && (
+                  <Table
+                    id='projects-table'
+                    columns={columns}
+                    rows={results}
+                    orderBy='name'
+                    Renderer={ProjectCellRenderer}
+                    showCheckbox
+                    selectedRows={[]}
+                    setSelectedRows={() => undefined}
+                    controlledOnSelect={false}
+                  />
+                )}
               </Grid>
             </Grid>
           </div>
