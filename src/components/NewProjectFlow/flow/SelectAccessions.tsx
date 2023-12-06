@@ -14,7 +14,7 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
+import { ACCESSION_2_STATES, AccessionState }stateName,  from 'src/types/Accession';
 import { FlowStates } from 'src/components/NewProjectFlow';
 import {
   ProjectEntityFilters,
@@ -24,6 +24,8 @@ import ProjectEntitySearch, {
   PillListItemWithEmptyValue,
 } from 'src/components/NewProjectFlow/flow/ProjectEntitySearch';
 import { EntitySpecificFilterConfig } from 'src/components/NewProjectFlow/flow/ProjectEntityFilter';
+import { stateName } from '../../../types/Accession';
+import { useLocalization } from '../../../providers';
 
 type SelectAccessionsProps = {
   project: CreateProjectRequest;
@@ -97,6 +99,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
 
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const { activeLocale } = useLocalization();
 
   const getSearchResults = useCallback(
     (
@@ -181,7 +184,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
         initialSelection: filters.statuses || [],
         filterKey: 'statuses',
         options: ACCESSION_2_STATES,
-        renderOption: (value: string | number) => `${value}`,
+        renderOption: (value: string | number) => stateName(`${value}` as ACCESSION_2_STATES),
         pillModifier: (): PillListItemWithEmptyValue[] => {
           const statuses: AccessionState[] = filters.statuses || [];
           if (statuses.length === 0) {
@@ -199,7 +202,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
         },
       },
     ],
-    [filters]
+    [filters, activeLocale]
   );
 
   if (flowState !== 'accessions') {
