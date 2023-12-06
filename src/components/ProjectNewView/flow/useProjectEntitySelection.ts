@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import { FlowStates } from 'src/components/NewProjectFlow';
+import { FlowStates } from 'src/components/ProjectNewView';
 import { useOrganization } from 'src/providers';
 import useForm from 'src/utils/useForm';
 import { AccessionState } from 'src/types/Accession';

@@ -74,7 +74,7 @@ import isEnabled from 'src/features';
 import Projects from './components/Projects';
 import { Project } from './types/Project';
 import { selectProjects } from './redux/features/projects/projectsSelectors';
-import NewProjectFlow from './components/NewProjectFlow';
+import ProjectNewView from './components/ProjectNewView';
 import { requestProjects } from './redux/features/projects/projectsThunks';
 import ProjectView from 'src/components/ProjectView';
 import ProjectEditView from 'src/components/ProjectEditView';
@@ -458,7 +458,7 @@ function AppContent() {
                   {getProjectsView()}
                 </Route>
                 <Route exact path={APP_PATHS.PROJECTS_NEW}>
-                  <NewProjectFlow reloadData={reloadProjects} />
+                  <ProjectNewView reloadData={reloadProjects} />
                 </Route>
                 <Route exact path={APP_PATHS.PROJECT_VIEW}>
                   <ProjectView />

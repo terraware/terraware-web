@@ -13,7 +13,7 @@ type SelectPurposeFormProps = {
   saveText: string;
 };
 
-export default function CreateProjectForm(props: SelectPurposeFormProps): JSX.Element {
+export default function ProjectForm(props: SelectPurposeFormProps): JSX.Element {
   const { onNext, onCancel, saveText, project } = props;
 
   const { isMobile } = useDeviceInfo();

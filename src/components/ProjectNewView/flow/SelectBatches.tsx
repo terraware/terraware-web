@@ -9,14 +9,14 @@ import { CreateProjectRequest } from 'src/types/Project';
 import { NurseryBatchService } from 'src/services';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { FlowStates } from 'src/components/NewProjectFlow';
+import { FlowStates } from 'src/components/ProjectNewView';
 import ProjectEntitySearch, {
   PillListItemWithEmptyValue,
-} from 'src/components/NewProjectFlow/flow/ProjectEntitySearch';
+} from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
 import {
   ProjectEntityFilters,
   useProjectEntitySelection,
-} from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
+} from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
 import { getAllNurseries } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
 import { EntitySpecificFilterConfig } from './ProjectEntityFilter';

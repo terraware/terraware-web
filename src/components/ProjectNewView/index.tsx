@@ -12,7 +12,7 @@ import { CreateProjectRequest } from 'src/types/Project';
 import ProjectsService from 'src/services/ProjectsService';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
-import CreateProjectForm from './flow/CreateProjectForm';
+import ProjectForm from './flow/ProjectForm';
 import { getFormattedSuccessMessages } from './toasts';
 import SelectAccessions, { SearchResponseAccession } from './flow/SelectAccessions';
 import SelectBatches from './flow/SelectBatches';
@@ -22,11 +22,11 @@ import { getSaveText } from './flow/util';
 export type FlowStates = 'label' | 'accessions' | 'batches' | 'plantingSites';
 const STATE_ORDER: FlowStates[] = ['label', 'accessions', 'batches', 'plantingSites'];
 
-type NewProjectFlowProps = {
+type ProjectNewViewProps = {
   reloadData: () => void;
 };
 
-export default function NewProjectFlow({ reloadData }: NewProjectFlowProps): JSX.Element {
+export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const snackbar = useSnackbar();
   const history = useHistory();
@@ -139,12 +139,7 @@ export default function NewProjectFlow({ reloadData }: NewProjectFlowProps): JSX
       </Typography>
 
       {flowState === 'label' && (
-        <CreateProjectForm
-          onNext={onProjectConfigured}
-          project={record}
-          onCancel={goToProjects}
-          saveText={strings.NEXT}
-        />
+        <ProjectForm onNext={onProjectConfigured} project={record} onCancel={goToProjects} saveText={strings.NEXT} />
       )}
 
       <SelectAccessions

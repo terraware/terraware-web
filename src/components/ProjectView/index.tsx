@@ -16,13 +16,6 @@ import Button from 'src/components/common/button/Button';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-const crumbs: Crumb[] = [
-  {
-    name: strings.PROJECTS,
-    to: APP_PATHS.PROJECTS,
-  },
-];
-
 export default function ProjectView(): JSX.Element {
   const dispatch = useAppDispatch();
 
@@ -83,6 +76,16 @@ export default function ProjectView(): JSX.Element {
       </>
     ),
     [goToEditProject, onOptionItemClick, activeLocale]
+  );
+
+  const crumbs: Crumb[] = useMemo(
+    () => [
+      {
+        name: activeLocale ? strings.PROJECTS : '',
+        to: APP_PATHS.PROJECTS,
+      },
+    ],
+    [activeLocale]
   );
 
   return (

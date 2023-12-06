@@ -15,15 +15,15 @@ import {
   SearchSortOrder,
 } from 'src/types/Search';
 import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
-import { FlowStates } from 'src/components/NewProjectFlow';
+import { FlowStates } from 'src/components/ProjectNewView';
 import {
   ProjectEntityFilters,
   useProjectEntitySelection,
-} from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
+} from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
 import ProjectEntitySearch, {
   PillListItemWithEmptyValue,
-} from 'src/components/NewProjectFlow/flow/ProjectEntitySearch';
-import { EntitySpecificFilterConfig } from 'src/components/NewProjectFlow/flow/ProjectEntityFilter';
+} from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
+import { EntitySpecificFilterConfig } from 'src/components/ProjectNewView/flow/ProjectEntityFilter';
 import { stateName } from 'src/types/Accession';
 import { useLocalization } from 'src/providers';
 

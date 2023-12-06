@@ -9,12 +9,12 @@ import { CreateProjectRequest } from 'src/types/Project';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 import { TrackingService } from 'src/services';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { FlowStates } from 'src/components/NewProjectFlow';
+import { FlowStates } from 'src/components/ProjectNewView';
 import {
   ProjectEntityFilters,
   useProjectEntitySelection,
-} from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
-import ProjectEntitySearch from 'src/components/NewProjectFlow/flow/ProjectEntitySearch';
+} from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
+import ProjectEntitySearch from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
 
 type SelectPlantingSitesProps = {
   project: CreateProjectRequest;
