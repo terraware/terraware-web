@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
@@ -10,11 +10,16 @@ import { NurseryBatchService } from 'src/services';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { FlowStates } from 'src/components/NewProjectFlow';
-import Search from 'src/components/NewProjectFlow/flow/Search';
+import ProjectEntitySearch, {
+  PillListItemWithEmptyValue,
+} from 'src/components/NewProjectFlow/flow/ProjectEntitySearch';
 import {
-  ProjectEntitiesFilters,
+  ProjectEntityFilters,
   useProjectEntitySelection,
 } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
+import { getAllNurseries } from 'src/utils/organization';
+import { useOrganization } from 'src/providers';
+import { EntitySpecificFilterConfig } from './ProjectEntityFilter';
 
 type SelectBatchesProps = {
   project: CreateProjectRequest;
@@ -75,15 +80,18 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
   const { project, flowState, onNext, onCancel, saveText, pageFormRightButtons, setProjectBatches, setHasBatches } =
     props;
 
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+
+  const nurseries = useMemo(() => getAllNurseries(selectedOrganization), [selectedOrganization]);
 
   const getSearchResults = useCallback(
     (
       organizationId: number,
       searchFields: SearchNodePayload[],
       searchSortOrder?: SearchSortOrder,
-      searchFilters?: ProjectEntitiesFilters
+      searchFilters?: ProjectEntityFilters
     ) => {
       let facilityIds;
       const query = undefined;
@@ -148,6 +156,37 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
     getSearchFields,
   });
 
+  const entitySpecificFilterConfigs: EntitySpecificFilterConfig[] = useMemo(
+    () => [
+      {
+        label: strings.NURSERY,
+        initialSelection: filters.nurseryIds || [],
+        filterKey: 'nurseryIds',
+        options: nurseries.map((nursery) => nursery.id),
+        renderOption: (nurseryId: string | number) => nurseries.find((nursery) => nursery.id === nurseryId)?.name || '',
+        pillModifier: (): PillListItemWithEmptyValue[] => {
+          const nurseryIds = filters.nurseryIds || [];
+          if (nurseryIds.length === 0) {
+            return [];
+          }
+
+          return [
+            {
+              id: 'nurseryIds',
+              label: strings.NURSERY,
+              value: (filters.nurseryIds || [])
+                .map((nurseryId: number) => nurseries.find((nursery) => nursery.id === nurseryId))
+                .map((nursery) => nursery?.name)
+                .join(','),
+              emptyValue: [],
+            },
+          ];
+        },
+      },
+    ],
+    [filters, nurseries]
+  );
+
   if (flowState !== 'batches') {
     return null;
   }
@@ -208,10 +247,10 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                   marginBottom: theme.spacing(2),
                 }}
               >
-                <Search
-                  flowState={flowState}
+                <ProjectEntitySearch
                   searchValue={temporalSearchValue || ''}
-                  onSearch={(val) => setTemporalSearchValue(val)}
+                  onSearch={(value: string) => setTemporalSearchValue(value)}
+                  entitySpecificFilterConfigs={entitySpecificFilterConfigs}
                   filters={filters}
                   setFilters={setFilters}
                 />

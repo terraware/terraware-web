@@ -11,10 +11,10 @@ import { TrackingService } from 'src/services';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { FlowStates } from 'src/components/NewProjectFlow';
 import {
-  ProjectEntitiesFilters,
+  ProjectEntityFilters,
   useProjectEntitySelection,
 } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
-import Search from 'src/components/NewProjectFlow/flow/Search';
+import ProjectEntitySearch from 'src/components/NewProjectFlow/flow/ProjectEntitySearch';
 
 type SelectPlantingSitesProps = {
   project: CreateProjectRequest;
@@ -70,7 +70,7 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
       organizationId: number,
       searchFields: SearchNodePayload[],
       searchSortOrder?: SearchSortOrder,
-      searchFilters?: ProjectEntitiesFilters
+      searchFilters?: ProjectEntityFilters
     ) => {
       const fields = [...searchFields];
       const projectIds = searchFilters?.projectIds || [];
@@ -181,10 +181,10 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
                   marginBottom: theme.spacing(2),
                 }}
               >
-                <Search
-                  flowState={flowState}
+                <ProjectEntitySearch
                   searchValue={temporalSearchValue || ''}
-                  onSearch={(val) => setTemporalSearchValue(val)}
+                  onSearch={(value: string) => setTemporalSearchValue(value)}
+                  entitySpecificFilterConfigs={[]}
                   filters={filters}
                   setFilters={setFilters}
                 />

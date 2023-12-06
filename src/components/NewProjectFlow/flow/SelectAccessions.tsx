@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
@@ -14,13 +14,18 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import { AccessionState } from 'src/types/Accession';
+import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
 import { FlowStates } from 'src/components/NewProjectFlow';
 import {
-  ProjectEntitiesFilters,
+  ProjectEntityFilters,
   useProjectEntitySelection,
 } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
-import Search from 'src/components/NewProjectFlow/flow/Search';
+import ProjectEntitySearch, {
+  PillListItemWithEmptyValue,
+} from 'src/components/NewProjectFlow/flow/ProjectEntitySearch';
+import { EntitySpecificFilterConfig } from 'src/components/NewProjectFlow/flow/ProjectEntityFilter';
+import { stateName } from 'src/types/Accession';
+import { useLocalization } from 'src/providers';
 
 type SelectAccessionsProps = {
   project: CreateProjectRequest;
@@ -94,13 +99,14 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
 
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const { activeLocale } = useLocalization();
 
   const getSearchResults = useCallback(
     (
       organizationId: number,
       searchFields: SearchNodePayload[],
       searchSortOrder?: SearchSortOrder,
-      searchFilters?: ProjectEntitiesFilters
+      searchFilters?: ProjectEntityFilters
     ) => {
       const searchCriteria: SearchCriteria = searchFields.reduce(
         (acc, curr) => ({
@@ -171,6 +177,36 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
     getSearchFields,
   });
 
+  const entitySpecificFilterConfigs: EntitySpecificFilterConfig[] = useMemo(
+    () => [
+      {
+        label: strings.STATUS,
+        initialSelection: filters.statuses || [],
+        filterKey: 'statuses',
+        options: ACCESSION_2_STATES,
+        renderOption: (value: string | number) => stateName(`${value}` as AccessionState),
+        pillModifier: (): PillListItemWithEmptyValue[] => {
+          const statuses: AccessionState[] = filters.statuses || [];
+          if (statuses.length === 0) {
+            return [];
+          }
+
+          return activeLocale
+            ? [
+                {
+                  id: 'statuses',
+                  label: strings.STATUS,
+                  value: statuses.join(','),
+                  emptyValue: [],
+                },
+              ]
+            : [];
+        },
+      },
+    ],
+    [filters, activeLocale]
+  );
+
   if (flowState !== 'accessions') {
     return null;
   }
@@ -232,10 +268,10 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
                   marginBottom: theme.spacing(2),
                 }}
               >
-                <Search
-                  flowState={flowState}
+                <ProjectEntitySearch
                   searchValue={temporalSearchValue || ''}
-                  onSearch={(val) => setTemporalSearchValue(val)}
+                  onSearch={(value: string) => setTemporalSearchValue(value)}
+                  entitySpecificFilterConfigs={entitySpecificFilterConfigs}
                   filters={filters}
                   setFilters={setFilters}
                 />
