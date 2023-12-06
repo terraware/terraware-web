@@ -77,6 +77,7 @@ import { selectProjects } from './redux/features/projects/projectsSelectors';
 import NewProjectFlow from './components/NewProjectFlow';
 import { requestProjects } from './redux/features/projects/projectsThunks';
 import ProjectView from 'src/components/ProjectView';
+import ProjectEditView from 'src/components/ProjectEditView';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -461,6 +462,9 @@ function AppContent() {
                 </Route>
                 <Route exact path={APP_PATHS.PROJECT_VIEW}>
                   <ProjectView />
+                </Route>
+                <Route exact path={APP_PATHS.PROJECT_EDIT}>
+                  <ProjectEditView />
                 </Route>
               </>
             )}
