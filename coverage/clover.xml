@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1701886565562" clover="3.2.0">
-  <project timestamp="1701886565562" name="All files">
-    <metrics statements="14552" coveredstatements="374" conditionals="9382" coveredconditionals="91" methods="4575" coveredmethods="78" elements="28509" coveredelements="543" complexity="0" loc="14552" ncloc="14552" packages="116" files="562" classes="562"/>
+<coverage generated="1701887094783" clover="3.2.0">
+  <project timestamp="1701887094783" name="All files">
+    <metrics statements="14563" coveredstatements="374" conditionals="9386" coveredconditionals="91" methods="4578" coveredmethods="78" elements="28527" coveredelements="543" complexity="0" loc="14563" ncloc="14563" packages="116" files="562" classes="562"/>
     <package name="src">
       <metrics statements="259" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8529,11 +8529,22 @@
       </file>
     </package>
     <package name="src.components.ProjectView">
-      <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="13" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectView/index.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
+        <metrics statements="13" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.Projects">
