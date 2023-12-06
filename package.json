@@ -21,6 +21,8 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@turf/bbox": "^6.5.0",
+    "@turf/difference": "^6.5.0",
+    "@turf/intersect": "^6.5.0",
     "@types/geojson": "^7946.0.10",
     "@types/jest": "^29.4.0",
     "@types/lodash": "^4.14.184",

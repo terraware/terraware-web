@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Feature } from 'geojson';
 import { Box, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -23,6 +24,7 @@ import {
 } from 'src/types/Map';
 import { MapService } from 'src/services';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
+import SplitPolygonDraw from './SplitPolygonDraw';
 
 /**
  * The following is needed to deal with a mapbox bug
@@ -66,8 +68,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   topRightControl: {
     height: 'max-content',
     position: 'absolute',
-    right: theme.spacing(2),
-    top: theme.spacing(2),
+    right: theme.spacing(1),
+    top: theme.spacing(6),
     width: 'max-content',
     zIndex: 1000,
   },
@@ -424,8 +426,8 @@ export default function Map(props: MapProps): JSX.Element {
             id: `${source.id}-outline`,
             type: 'line',
             paint: {
-              'line-color': source.lineColor,
-              'line-width': source.lineWidth,
+              'line-color': '#eee',
+              'line-width': 1,
             },
           },
           textAnnotation: source.annotation
@@ -475,7 +477,6 @@ export default function Map(props: MapProps): JSX.Element {
         {geo.layer && <Layer {...geo.layer} />}
       </Source>
     ));
-
     return sources;
   }, [geoData]);
 
@@ -507,7 +508,8 @@ export default function Map(props: MapProps): JSX.Element {
     if (!popupInfo || !popupRenderer) {
       return null;
     }
-    return popupRenderer.render(popupInfo.properties);
+    const ab = popupRenderer.render(popupInfo.properties);
+    return ab ? null : null;
   }, [popupInfo, popupRenderer]);
 
   // keep track of map being destroyed, this is not bound by react event loop
@@ -566,8 +568,20 @@ export default function Map(props: MapProps): JSX.Element {
               {renderedPopup}
             </Popup>
           )}
-          {topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
+          {false && topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
           {bottomLeftMapControl && <div className={classes.bottomLeftControl}>{bottomLeftMapControl}</div>}
+          {geoData && (
+            <SplitPolygon
+              geoData={geoData}
+              setGeoData={(data) => {
+                setGeoData(data);
+                const sites = data.find((d) => d.id === 'sites');
+                if (mapRef.current && sites) {
+                  (mapRef.current.getSource('sites') as any)?.setData(sites.data);
+                }
+              }}
+            />
+          )}
         </ReactMapGL>
       )}
     </Box>
@@ -601,4 +615,25 @@ const ZoomToFitControl = ({ onClick }: ZoomToFitControlProps): JSX.Element => {
       </button>
     </Box>
   );
+};
+
+type SplitPolygonProps = {
+  geoData: any[];
+  setGeoData: (data: any[]) => void;
+};
+
+const SplitPolygon = (props: SplitPolygonProps): JSX.Element => {
+  const features = props.geoData.find((f) => f.id === 'sites')!.data!.features;
+
+  const setFeatures = (f: Feature[]) => {
+    const data = [...props.geoData];
+    data.forEach((d) => {
+      if (d.id === 'sites') {
+        d.data.features = [...f];
+      }
+    });
+    props.setGeoData(data);
+  };
+
+  return <SplitPolygonDraw features={features} setFeatures={setFeatures} />;
 };

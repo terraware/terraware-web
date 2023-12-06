@@ -57,9 +57,11 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
   return (
     <Box display='flex' flexGrow={plantingSite?.boundary ? 1 : 0} flexDirection='column' paddingTop={theme.spacing(3)}>
       <Box display='flex' flexGrow={0}>
-        <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
-          {strings.BOUNDARIES_AND_ZONES}
-        </Typography>
+        {false && (
+          <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
+            {strings.BOUNDARIES_AND_ZONES}
+          </Typography>
+        )}
       </Box>
       {plantingSite.boundary && (
         <ListMapView
@@ -84,7 +86,7 @@ type PlantingSiteMapViewProps = {
 function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapViewProps): JSX.Element | null {
   const classes = useMapTooltipStyles();
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
-  const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
+  const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site']);
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
 
@@ -127,7 +129,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot']} />
+      {false && <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot']} />}
       <PlantingSiteMap
         mapData={mapData}
         style={{ borderRadius: '24px' }}
