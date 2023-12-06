@@ -49,7 +49,7 @@ export default function ProjectView(): JSX.Element {
 
   return (
     <Page crumbs={crumbs} title={project?.name || ''}>
-      <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }} borderRadius={6}>
+      <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
         <Grid container>
           <Grid item xs={4}>
             {makeFieldLabel(strings.NAME)}
