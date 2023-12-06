@@ -71,13 +71,10 @@ import { getRgbaFromHex } from 'src/utils/color';
 import PlantsDashboard from 'src/components/Plants';
 import PlantingSites from 'src/components/PlantingSites';
 import isEnabled from 'src/features';
-import Projects from './components/Projects';
 import { Project } from './types/Project';
 import { selectProjects } from './redux/features/projects/projectsSelectors';
-import ProjectNewView from 'src/components/ProjectNewView';
+import ProjectsRouter from 'src/components/Projects/Router';
 import { requestProjects } from './redux/features/projects/projectsThunks';
-import ProjectView from 'src/components/ProjectView';
-import ProjectEditView from 'src/components/ProjectEditView';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -310,13 +307,6 @@ function AppContent() {
     return <EmptyStatePage pageName={'Nurseries'} />;
   };
 
-  const getProjectsView = (): JSX.Element => {
-    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasProjects()) {
-      return <Projects />;
-    }
-    return <EmptyStatePage pageName={'Projects'} />;
-  };
-
   const viewHasBackgroundImage = (): boolean => {
     if (
       location.pathname.startsWith(APP_PATHS.HOME) ||
@@ -453,20 +443,11 @@ function AppContent() {
               <People />
             </Route>
             {featureFlagProjects && (
-              <>
-                <Route exact path={APP_PATHS.PROJECTS}>
-                  {getProjectsView()}
-                </Route>
-                <Route exact path={APP_PATHS.PROJECTS_NEW}>
-                  <ProjectNewView reloadData={reloadProjects} />
-                </Route>
-                <Route exact path={APP_PATHS.PROJECT_VIEW}>
-                  <ProjectView />
-                </Route>
-                <Route exact path={APP_PATHS.PROJECT_EDIT}>
-                  <ProjectEditView />
-                </Route>
-              </>
+              <ProjectsRouter
+                reloadProjects={reloadProjects}
+                isPlaceholderOrg={() => isPlaceholderOrg(selectedOrganization.id)}
+                selectedOrgHasProjects={selectedOrgHasProjects}
+              />
             )}
             <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
               <NewSeedBank />
