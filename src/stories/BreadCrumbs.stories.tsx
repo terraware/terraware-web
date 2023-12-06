@@ -1,7 +1,7 @@
 import { Story } from '@storybook/react';
 import BreadCrumbs, { BreadCrumbsProps, Page, PageProps } from 'src/components/BreadCrumbs';
-import Button from '../components/common/button/Button';
-import OptionsMenu from '../components/common/OptionsMenu';
+import Button from 'src/components/common/button/Button';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 
 const BreadCrumbsTemplate: Story<BreadCrumbsProps> = (args: BreadCrumbsProps) => {
   return <BreadCrumbs {...args} />;
