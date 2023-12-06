@@ -19,8 +19,20 @@ export const projectsSlice = createSlice({
       state.error = data.error;
       state.projects = data.projects;
     },
+    setProjectAction: (state, action: PayloadAction<Data>) => {
+      const data: Data = action.payload;
+      const payloadProjects = data.projects || [];
+      state.error = data.error;
+      state.projects = [
+        // Filter out the newly fetched project from state, if it exists
+        ...(state.projects || []).filter(
+          (project) => !payloadProjects.map((_project) => _project.id).includes(project.id)
+        ),
+        ...payloadProjects,
+      ];
+    },
   },
 });
 
-export const { setProjectsAction } = projectsSlice.actions;
+export const { setProjectsAction, setProjectAction } = projectsSlice.actions;
 export const projectsReducer = projectsSlice.reducer;
