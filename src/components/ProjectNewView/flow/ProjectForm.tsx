@@ -6,7 +6,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageForm from 'src/components/common/PageForm';
 import { CreateProjectRequest, UpdateProjectRequest } from 'src/types/Project';
 
-type SelectPurposeFormProps<T extends CreateProjectRequest | UpdateProjectRequest> = {
+type ProjectFormProps<T extends CreateProjectRequest | UpdateProjectRequest> = {
   onNext: (project: T) => void;
   project: T;
   onCancel: () => void;
@@ -14,7 +14,7 @@ type SelectPurposeFormProps<T extends CreateProjectRequest | UpdateProjectReques
 };
 
 export default function ProjectForm<T extends CreateProjectRequest | UpdateProjectRequest>(
-  props: SelectPurposeFormProps<T>
+  props: ProjectFormProps<T>
 ): JSX.Element {
   const { onNext, onCancel, saveText, project } = props;
 
