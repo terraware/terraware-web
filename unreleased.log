@@ -1,3 +1,7 @@
+66f218231 Add generic support for ProjectForm so we can use it in the ProjectEditView later (#1860)
+9d82635cd Add cell renderer to projects table to display link to project. Add checkboxes (per UI, currently a noop) to the projects table. (#1859)
+555c7e86f Rename NewProjectFlow -> ProjectNewView to keep consistent with other Project view naming. Renamed the CreateProjectForm to ProjectForm since we will be using it for the 'edit project' view later (#1858)
+0f530562c Add right component with button to go to project edit and options menu with delete option to project view (#1857)
 2c5bfd48b Add optional right component to Page component so we can easily pass right buttons in (#1856)
 5f774f1b5 Stub out project edit view and add to routing, behind feature flag for projects feature (#1855)
 cb7934c20 Pull project data into project view and render name and description (#1854)

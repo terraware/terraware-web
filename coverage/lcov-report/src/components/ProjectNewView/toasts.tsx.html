@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/NewProjectFlow/flow/util.ts</title>
+    <title>Code coverage report for src/components/ProjectNewView/toasts.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/NewProjectFlow/flow</a> util.ts</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/ProjectNewView</a> toasts.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -94,12 +94,10 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -112,64 +110,51 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import strings from 'src/strings';
-import { FlowStates } from '../index';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import strings from 'src/strings';
+import { SearchResponseBatches } from 'src/services/NurseryBatchService';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
+import { SearchResponseAccession } from './flow/SelectAccessions';
 &nbsp;
-export const getSaveText = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
-  flowState: FlowStates,
-  hasAccessions: boolean,
-  hasBatches: boolean,
-  hasPlantingSites: boolean
-): string =&gt; {
-  let saveText = <span class="cstat-no" title="statement not covered" >strings.NEXT;</span>
-<span class="cstat-no" title="statement not covered" >  switch (flowState) {</span>
-    case 'label': {
-<span class="cstat-no" title="statement not covered" >      if (!hasAccessions &amp;&amp; !hasBatches &amp;&amp; !hasPlantingSites) {</span>
-<span class="cstat-no" title="statement not covered" >        saveText = strings.SAVE;</span>
-      }
-<span class="cstat-no" title="statement not covered" >      break;</span>
-    }
-    case 'accessions': {
-<span class="cstat-no" title="statement not covered" >      if (!hasBatches &amp;&amp; !hasPlantingSites) {</span>
-<span class="cstat-no" title="statement not covered" >        saveText = strings.SAVE;</span>
-      }
-<span class="cstat-no" title="statement not covered" >      break;</span>
-    }
-    case 'batches': {
-<span class="cstat-no" title="statement not covered" >      if (!hasPlantingSites) {</span>
-<span class="cstat-no" title="statement not covered" >        saveText = strings.SAVE;</span>
-      }
-<span class="cstat-no" title="statement not covered" >      break;</span>
-    }
-    case 'plantingSites': {
-<span class="cstat-no" title="statement not covered" >      saveText = strings.SAVE;</span>
-<span class="cstat-no" title="statement not covered" >      break;</span>
-    }
+export const getFormattedSuccessMessages = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
+  projectName: string,
+  projectAccessions: SearchResponseAccession[],
+  projectBatches: SearchResponseBatches[],
+  projectPlantingSites: PlantingSiteSearchResult[]
+): (JSX.Element | string)[] =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (!projectAccessions?.length &amp;&amp; !projectBatches?.length &amp;&amp; !projectPlantingSites?.length) {</span>
+<span class="cstat-no" title="statement not covered" >    return [''];</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    return [</span>
+      &lt;p key='msg-title'&gt;{strings.formatString(strings.PROJECT_ADDED_DETAILS, projectName)}&lt;/p&gt;,
+      &lt;ul key='msg-body'&gt;
+        {!!projectAccessions?.length &amp;&amp; (
+          &lt;li&gt;{strings.formatString(strings.PROJECT_ADDED_ACCESSIONS, projectAccessions.length.toString())}&lt;/li&gt;
+        )}
+        {!!projectBatches?.length &amp;&amp; (
+          &lt;li&gt;{strings.formatString(strings.PROJECT_ADDED_BATCHES, projectBatches.length.toString())}&lt;/li&gt;
+        )}
+        {!!projectPlantingSites?.length &amp;&amp; (
+          &lt;li&gt;{strings.formatString(strings.PROJECT_ADDED_PLANTING_SITES, projectPlantingSites.length.toString())}&lt;/li&gt;
+        )}
+      &lt;/ul&gt;,
+    ];
   }
-<span class="cstat-no" title="statement not covered" >  return saveText;</span>
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -178,16 +163,16 @@ export const getSaveText = <span class="cstat-no" title="statement not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-06T23:13:46.790Z
+                at 2023-12-06T23:35:07.534Z
             </div>
-        <script src="../../../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../sorter.js"></script>
-        <script src="../../../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     

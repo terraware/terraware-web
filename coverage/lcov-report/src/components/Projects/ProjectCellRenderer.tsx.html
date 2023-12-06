@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/NewProjectFlow/toasts.tsx</title>
+    <title>Code coverage report for src/components/Projects/ProjectCellRenderer.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/NewProjectFlow</a> toasts.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Projects</a> ProjectCellRenderer.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -85,16 +85,8 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -102,60 +94,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import strings from 'src/strings';
-import { SearchResponseBatches } from 'src/services/NurseryBatchService';
-import { PlantingSiteSearchResult } from 'src/types/Tracking';
-import { SearchResponseAccession } from './flow/SelectAccessions';
+import { APP_PATHS } from 'src/constants';
+import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import { RendererProps } from 'src/components/common/table/types';
+import Link from 'src/components/common/Link';
 &nbsp;
-export const getFormattedSuccessMessages = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
-  projectName: string,
-  projectAccessions: SearchResponseAccession[],
-  projectBatches: SearchResponseBatches[],
-  projectPlantingSites: PlantingSiteSearchResult[]
-): (JSX.Element | string)[] =&gt; {
-<span class="cstat-no" title="statement not covered" >  if (!projectAccessions?.length &amp;&amp; !projectBatches?.length &amp;&amp; !projectPlantingSites?.length) {</span>
-<span class="cstat-no" title="statement not covered" >    return [''];</span>
-  } else {
-<span class="cstat-no" title="statement not covered" >    return [</span>
-      &lt;p key='msg-title'&gt;{strings.formatString(strings.PROJECT_ADDED_DETAILS, projectName)}&lt;/p&gt;,
-      &lt;ul key='msg-body'&gt;
-        {!!projectAccessions?.length &amp;&amp; (
-          &lt;li&gt;{strings.formatString(strings.PROJECT_ADDED_ACCESSIONS, projectAccessions.length.toString())}&lt;/li&gt;
-        )}
-        {!!projectBatches?.length &amp;&amp; (
-          &lt;li&gt;{strings.formatString(strings.PROJECT_ADDED_BATCHES, projectBatches.length.toString())}&lt;/li&gt;
-        )}
-        {!!projectPlantingSites?.length &amp;&amp; (
-          &lt;li&gt;{strings.formatString(strings.PROJECT_ADDED_PLANTING_SITES, projectPlantingSites.length.toString())}&lt;/li&gt;
-        )}
-      &lt;/ul&gt;,
-    ];
+export default function <span class="fstat-no" title="function not covered" >ProjectCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
+  const { column, row, index } = <span class="cstat-no" title="statement not covered" >props;</span>
+&nbsp;
+  const createProjectLink = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const projectLocation = <span class="cstat-no" title="statement not covered" >{</span>
+      pathname: APP_PATHS.PROJECT_VIEW.replace(':projectId', row.id.toString()),
+    };
+<span class="cstat-no" title="statement not covered" >    return &lt;Link to={projectLocation.pathname}&gt;{row.name}&lt;/Link&gt;;</span>
+  };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (column.key === 'name') {</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer index={index} column={column} value={createProjectLink()} row={row} /&gt;;</span>
   }
-};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return &lt;CellRenderer {...props} /&gt;;</span>
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -163,7 +136,7 @@ export const getFormattedSuccessMessages = <span class="cstat-no" title="stateme
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-06T23:13:46.790Z
+                at 2023-12-06T23:35:07.534Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
