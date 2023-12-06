@@ -1,18 +1,21 @@
 import { components, paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
+import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import { CreateProjectRequest, Project } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
-import SearchService from './SearchService';
+import SearchService from 'src/services/SearchService';
 
 /**
  * Projects related services
  */
 
 const PROJECTS_ENDPOINT = '/api/v1/projects';
+const PROJECT_ENDPOINT = '/api/v1/projects/{id}';
 const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
 
 type ListProjectsResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type GetProjectResponsePayload = paths[typeof PROJECT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * exported type
@@ -88,11 +91,19 @@ const searchProjects = async (organizationId: number, query?: string): Promise<P
 /**
  * Create a project
  */
-const createProject = async (project: CreateProjectRequest): Promise<Response> => {
-  return await httpProjects.post({
+const createProject = (project: CreateProjectRequest): Promise<Response> =>
+  httpProjects.post({
     entity: project,
   });
-};
+
+const getProject = (projectId: number): Promise<Response2<Project>> =>
+  httpProjects.get<GetProjectResponsePayload, { data: Project | undefined }>(
+    {
+      url: PROJECT_ENDPOINT,
+      urlReplacements: { '{id}': `${projectId}` },
+    },
+    (response) => ({ data: response?.project })
+  );
 
 type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
 
@@ -111,6 +122,7 @@ const ProjectsService = {
   searchProjects,
   createProject,
   assignProjectToEntities,
+  getProject,
 };
 
 export default ProjectsService;
