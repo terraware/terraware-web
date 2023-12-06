@@ -3,7 +3,7 @@ import { Grid, Box, useTheme } from '@mui/material';
 import { PillListItem, Textfield } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
 import strings from 'src/strings';
-import { ProjectEntityFilters } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
+import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
 import { useAppSelector } from 'src/redux/store';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import ProjectEntityFilter, { EntitySpecificFilterConfig } from './ProjectEntityFilter';

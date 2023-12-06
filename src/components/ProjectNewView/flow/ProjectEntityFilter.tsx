@@ -4,8 +4,8 @@ import { makeStyles } from '@mui/styles';
 import Icon from 'src/components/common/icon/Icon';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
-import { ProjectEntityFilters } from 'src/components/NewProjectFlow/flow/useProjectEntitySelection';
-import { PillListItemWithEmptyValue } from 'src/components/NewProjectFlow/flow/ProjectEntitySearch';
+import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
+import { PillListItemWithEmptyValue } from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
 
 const useStyles = makeStyles((theme: Theme) => ({
   dropdown: {
