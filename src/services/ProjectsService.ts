@@ -1,6 +1,6 @@
 import { components, paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
-import { CreateProjectRequest, Project } from 'src/types/Project';
+import { CreateProjectRequest, Project, UpdateProjectRequest } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import SearchService from 'src/services/SearchService';
 
@@ -16,6 +16,8 @@ type ListProjectsResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type GetProjectResponsePayload = paths[typeof PROJECT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+export type UpdateProjectResponsePayload =
+  paths[typeof PROJECT_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
 /**
  * exported type
@@ -114,6 +116,13 @@ const assignProjectToEntities = (projectId: number, entities: AssignProjectReque
     entity: entities,
   });
 
+const updateProject = (projectId: number, payload: UpdateProjectRequest) =>
+  httpProjects.put2<UpdateProjectResponsePayload>({
+    url: PROJECT_ENDPOINT,
+    urlReplacements: { '{id}': `${projectId}` },
+    entity: payload,
+  });
+
 /**
  * Exported functions
  */
@@ -123,6 +132,7 @@ const ProjectsService = {
   createProject,
   assignProjectToEntities,
   getProject,
+  updateProject,
 };
 
 export default ProjectsService;
