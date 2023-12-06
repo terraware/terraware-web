@@ -74,7 +74,7 @@ import isEnabled from 'src/features';
 import Projects from './components/Projects';
 import { Project } from './types/Project';
 import { selectProjects } from './redux/features/projects/projectsSelectors';
-import ProjectNewView from './components/ProjectNewView';
+import ProjectNewView from 'src/components/ProjectNewView';
 import { requestProjects } from './redux/features/projects/projectsThunks';
 import ProjectView from 'src/components/ProjectView';
 import ProjectEditView from 'src/components/ProjectEditView';
