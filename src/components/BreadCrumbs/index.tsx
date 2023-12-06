@@ -56,12 +56,13 @@ export type PageProps = {
   crumbs: Crumb[];
   title: string;
   children: React.ReactNode;
+  rightComponent?: React.ReactNode;
 };
 
 /**
  * A generic page structure with bread crumbs, title, header wrapper and instantiated children.
  */
-export function Page({ crumbs, title, children }: PageProps): JSX.Element {
+export function Page({ crumbs, title, children, rightComponent }: PageProps): JSX.Element {
   const contentRef = useRef(null);
   const theme = useTheme();
 
@@ -69,19 +70,26 @@ export function Page({ crumbs, title, children }: PageProps): JSX.Element {
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <BreadCrumbs crumbs={crumbs} hierarchical={true} />
-        <Grid container>
-          <Typography
-            sx={{
-              marginTop: theme.spacing(3),
-              marginBottom: theme.spacing(4),
-              paddingLeft: theme.spacing(3),
-              fontSize: '20px',
-              fontWeight: 600,
-              color: theme.palette.TwClrBaseGray800,
-            }}
-          >
-            {title}
-          </Typography>
+        <Grid container justifyContent={'space-between'}>
+          <Grid item xs={8}>
+            <Typography
+              sx={{
+                marginTop: theme.spacing(3),
+                marginBottom: theme.spacing(4),
+                paddingLeft: theme.spacing(3),
+                fontSize: '20px',
+                fontWeight: 600,
+                color: theme.palette.TwClrBaseGray800,
+              }}
+            >
+              {title}
+            </Typography>
+          </Grid>
+          {rightComponent && (
+            <Grid item xs={4} sx={{ textAlign: 'right' }}>
+              {rightComponent}
+            </Grid>
+          )}
           <Grid item xs={12}>
             <PageSnackbar />
           </Grid>
