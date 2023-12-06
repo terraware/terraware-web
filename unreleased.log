@@ -1,3 +1,4 @@
+2c5bfd48b Add optional right component to Page component so we can easily pass right buttons in (#1856)
 5f774f1b5 Stub out project edit view and add to routing, behind feature flag for projects feature (#1855)
 cb7934c20 Pull project data into project view and render name and description (#1854)
 953d118a0 Add request for single project and redux thunk to get project and put into state (#1853)
