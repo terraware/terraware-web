@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Project } from 'src/types/Project';
+import { buildReducers } from '../asyncUtils';
+import { MonitoringPlotsResponse, requestMonitoringPlots } from '../tracking/trackingAsyncThunks';
+import { requestProjectUpdate } from './projectsThunks';
+import { UpdateProjectResponsePayload } from '../../../services/ProjectsService';
 
 // Define a type for the slice state
 type Data = {
@@ -32,6 +36,7 @@ export const projectsSlice = createSlice({
       ];
     },
   },
+  extraReducers: buildReducers<UpdateProjectResponsePayload>(requestProjectUpdate),
 });
 
 export const { setProjectsAction, setProjectAction } = projectsSlice.actions;
