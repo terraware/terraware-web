@@ -73,6 +73,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: 'max-content',
     zIndex: 1000,
   },
+  mapRoot: {
+    '& .mapbox-gl-draw_polygon': {
+      backgroundImage: 'url("/logo.svg")',
+      backgroundColor: 'white',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      height: '20px',
+      width: '20px',
+      margin: '5px',
+    },
+  },
 }));
 
 type FeatureStateId = Record<string, Record<string, number | undefined>>;
@@ -516,7 +528,11 @@ export default function Map(props: MapProps): JSX.Element {
   let destroying = false;
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }} ref={containerRef}>
+    <Box
+      sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }}
+      ref={containerRef}
+      className={classes.mapRoot}
+    >
       {bannerMessage && <MapBanner message={bannerMessage} />}
       {firstVisible && (
         <ReactMapGL
