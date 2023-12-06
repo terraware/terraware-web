@@ -6,16 +6,18 @@ export type CardProps = {
   children?: ReactNode;
   style?: object;
   flushMobile?: boolean;
+  borderRadius?: number;
 };
 
-export default function Card({ children, style, flushMobile }: CardProps): JSX.Element {
+export default function Card({ children, style, flushMobile, borderRadius }: CardProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const flush = isMobile && flushMobile;
+  const radius = borderRadius || 3;
 
   return (
     <Box
-      borderRadius={flush ? 0 : 3}
+      borderRadius={flush ? 0 : radius}
       padding={3}
       margin={flush ? theme.spacing(0, -3) : 0}
       sx={{
