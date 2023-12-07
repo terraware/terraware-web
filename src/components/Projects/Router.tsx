@@ -1,13 +1,11 @@
-import { Route, Switch } from 'react-router-dom';
-import { APP_PATHS } from '../../constants';
-import PlantingSiteCreate from '../PlantingSites/PlantingSiteCreate';
-import PlantingSitesList from '../PlantingSites/PlantingSitesList';
-import ProjectNewView from '../ProjectNewView';
-import ProjectView from '../ProjectView';
-import ProjectEditView from '../ProjectEditView';
 import React from 'react';
-import Projects from './index';
-import EmptyStatePage from '../emptyStatePages/EmptyStatePage';
+import { Route, Switch } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
+import ProjectNewView from 'src/components/ProjectNewView';
+import ProjectView from 'src/components/ProjectView';
+import ProjectEditView from 'src/components/ProjectEditView';
+import Projects from 'src/components/Projects';
+import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 
 export type ProjectsRouterProps = {
   isPlaceholderOrg: () => boolean;
