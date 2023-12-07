@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Project } from 'src/types/Project';
-import { buildReducers } from '../asyncUtils';
-import { MonitoringPlotsResponse, requestMonitoringPlots } from '../tracking/trackingAsyncThunks';
-import { requestProjectUpdate } from './projectsThunks';
-import { UpdateProjectResponsePayload } from '../../../services/ProjectsService';
+import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
+import { UpdateProjectResponsePayload } from 'src/services/ProjectsService';
+import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 
 // Define a type for the slice state
 type Data = {
@@ -36,8 +35,22 @@ export const projectsSlice = createSlice({
       ];
     },
   },
-  extraReducers: buildReducers<UpdateProjectResponsePayload>(requestProjectUpdate),
 });
 
 export const { setProjectsAction, setProjectAction } = projectsSlice.actions;
 export const projectsReducer = projectsSlice.reducer;
+
+// createAsyncThunk(s) reducer
+type ProjectsResponsesUnion = UpdateProjectResponsePayload;
+type ProjectsRequestsState = Record<string, StatusT<ProjectsResponsesUnion>>;
+
+const initialProjectsRequestsState: ProjectsRequestsState = {};
+
+export const projectsRequestsSlice = createSlice({
+  name: 'projectsRequestsSlice',
+  initialState: initialProjectsRequestsState,
+  reducers: {},
+  extraReducers: buildReducers<ProjectsResponsesUnion>(requestProjectUpdate),
+});
+
+export const projectsRequestsReducer = projectsRequestsSlice.reducer;

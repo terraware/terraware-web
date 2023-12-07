@@ -1,11 +1,11 @@
 import { Dispatch } from 'redux';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'src/redux/rootReducer';
 import ProjectsService, { UpdateProjectResponsePayload } from 'src/services/ProjectsService';
-import { setProjectAction, setProjectsAction } from './projectsSlice';
-import { UpdateProjectRequest } from '../../../types/Project';
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import strings from '../../../strings';
-import { Response2 } from '../../../services/HttpService';
+import { UpdateProjectRequest } from 'src/types/Project';
+import strings from 'src/strings';
+import { Response2 } from 'src/services/HttpService';
+import { setProjectAction, setProjectsAction } from 'src/redux/features/projects/projectsSlice';
 
 export const requestProjects = (organizationId: number, locale?: string | null) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
@@ -34,19 +34,3 @@ export const requestProject = (projectId: number) => async (dispatch: Dispatch, 
     console.error('Error dispatching projects', e);
   }
 };
-
-export const requestProjectUpdate = createAsyncThunk(
-  'requestProjectUpdate',
-  async (request: { projectId: number; project: UpdateProjectRequest }, { rejectWithValue }) => {
-    const response: Response2<UpdateProjectResponsePayload> = await ProjectsService.updateProject(
-      request.projectId,
-      request.project
-    );
-    console.log('response', response);
-    if (response !== null) {
-      return response.data;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
