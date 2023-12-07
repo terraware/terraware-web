@@ -1,3 +1,4 @@
+bd8af5722 Updated translations from Phrase (#1864)
 0216586c2 Updated translations from Phrase (#1863)
 66f218231 Add generic support for ProjectForm so we can use it in the ProjectEditView later (#1860)
 9d82635cd Add cell renderer to projects table to display link to project. Add checkboxes (per UI, currently a noop) to the projects table. (#1859)
