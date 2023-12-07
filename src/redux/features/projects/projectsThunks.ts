@@ -1,10 +1,6 @@
 import { Dispatch } from 'redux';
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'src/redux/rootReducer';
-import ProjectsService, { UpdateProjectResponsePayload } from 'src/services/ProjectsService';
-import { UpdateProjectRequest } from 'src/types/Project';
-import strings from 'src/strings';
-import { Response2 } from 'src/services/HttpService';
+import ProjectsService from 'src/services/ProjectsService';
 import { setProjectAction, setProjectsAction } from 'src/redux/features/projects/projectsSlice';
 
 export const requestProjects = (organizationId: number, locale?: string | null) => {
