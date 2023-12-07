@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
 import ProjectsService from 'src/services/ProjectsService';
-import { setProjectAction, setProjectsAction } from './projectsSlice';
+import { setProjectAction, setProjectsAction } from 'src/redux/features/projects/projectsSlice';
 
 export const requestProjects = (organizationId: number, locale?: string | null) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
