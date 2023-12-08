@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Grid } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import { Grid, useTheme } from '@mui/material';
+import { TextTruncated } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -20,6 +21,7 @@ export default function InventorySummaryForNursery({
 }: InventorySummaryForNurseryProps): JSX.Element {
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
 
   const [summary, setSummary] = useState<NurserySummaryPayload | undefined>();
 
@@ -37,7 +39,7 @@ export default function InventorySummaryForNursery({
     void reloadData();
   }, [nurseryId, snackbar, modified]);
 
-  const getData = () => {
+  const cards = useMemo(() => {
     if (!summary) {
       return [];
     }
@@ -100,22 +102,32 @@ export default function InventorySummaryForNursery({
       },
       {
         label: strings.SPECIES,
-        value: (species || []).map((s: NurserySummarySpecies) => s.scientificName).join(', '),
+        valueComponent: (
+          <TextTruncated
+            stringList={(species || []).map((s: NurserySummarySpecies) => s.scientificName)}
+            maxLengthPx={350}
+            textStyle={{ fontSize: 16 }}
+            showAllStyle={{ padding: theme.spacing(2), fontSize: 16 }}
+            listSeparator={strings.LIST_SEPARATOR}
+            moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
+            moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+          />
+        ),
         tooltipTitle: '',
         gridColumns,
       },
     ];
-  };
+  }, [isMobile, summary, theme]);
 
   return (
     <Grid container spacing={3}>
-      {getData().map((datum) => (
-        <Grid key={datum.label} item xs={datum.gridColumns}>
+      {cards.map((card) => (
+        <Grid key={card.label} item xs={card.gridColumns}>
           <OverviewItemCard
             isEditable={false}
-            title={datum.label}
-            titleInfoTooltip={datum.tooltipTitle}
-            contents={`${datum.value}`}
+            title={card.label}
+            titleInfoTooltip={card.tooltipTitle}
+            contents={card.valueComponent ?? `${card.value}`}
           />
         </Grid>
       ))}
