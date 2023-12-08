@@ -1,3 +1,5 @@
+08ec17f29 Get rid of isBatch typeguard which was breaking the save process in the modal. Extended the FormRecord type to include the UpdateBatchRequestPayloadWithId type which is used for updates (#1876)
+5a03f08a8 Add delete confirmation dialog for project delete, hook up to redux and API call (#1867)
 5ae6160dc Add project delete API call. Use createAsyncThunk for project delete, combine with project update async thunk in redux (#1866)
 dc1b0ad4a Implement TextTruncated component so species list within nursery view summary is truncated (#1877)
 94ceb49d5 Add delete2 function with type generics (#1865)
