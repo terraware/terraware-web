@@ -80,7 +80,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
       },
       {
         label: strings.LOSS_RATE,
-        value: `${lossRate}%`,
+        value: `${lossRate || 0}%`,
         tooltipTitle: '',
         gridColumns: isMobile ? 12 : 4,
       },
