@@ -443,11 +443,13 @@ function AppContent() {
               <People />
             </Route>
             {featureFlagProjects && (
-              <ProjectsRouter
-                reloadProjects={reloadProjects}
-                isPlaceholderOrg={() => isPlaceholderOrg(selectedOrganization.id)}
-                selectedOrgHasProjects={selectedOrgHasProjects}
-              />
+              <Route path={APP_PATHS.PROJECTS}>
+                <ProjectsRouter
+                  reloadProjects={reloadProjects}
+                  isPlaceholderOrg={() => isPlaceholderOrg(selectedOrganization.id)}
+                  selectedOrgHasProjects={selectedOrgHasProjects}
+                />
+              </Route>
             )}
             <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
               <NewSeedBank />
