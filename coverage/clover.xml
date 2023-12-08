@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1701989673328" clover="3.2.0">
-  <project timestamp="1701989673328" name="All files">
+<coverage generated="1702052878886" clover="3.2.0">
+  <project timestamp="1702052878886" name="All files">
     <metrics statements="14629" coveredstatements="375" conditionals="9410" coveredconditionals="91" methods="4600" coveredmethods="78" elements="28639" coveredelements="544" complexity="0" loc="14629" ncloc="14629" packages="117" files="566" classes="566"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="219" coveredconditionals="0" methods="74" coveredmethods="0"/>
@@ -111,12 +111,12 @@
         <line num="331" count="0" type="stmt"/>
         <line num="356" count="0" type="stmt"/>
         <line num="357" count="0" type="stmt"/>
-        <line num="448" count="0" type="stmt"/>
-        <line num="493" count="0" type="stmt"/>
-        <line num="519" count="0" type="stmt"/>
-        <line num="608" count="0" type="stmt"/>
+        <line num="449" count="0" type="stmt"/>
+        <line num="495" count="0" type="stmt"/>
+        <line num="521" count="0" type="stmt"/>
         <line num="610" count="0" type="stmt"/>
-        <line num="623" count="0" type="stmt"/>
+        <line num="612" count="0" type="stmt"/>
+        <line num="625" count="0" type="stmt"/>
       </file>
       <file name="AppBootstrap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/AppBootstrap.tsx">
         <metrics statements="14" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
