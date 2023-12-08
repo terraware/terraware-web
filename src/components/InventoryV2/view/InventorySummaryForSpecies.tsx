@@ -13,7 +13,7 @@ interface InventorySummaryProps {
   modified: number;
 }
 
-export default function InventorySummary(props: InventorySummaryProps): JSX.Element {
+export default function InventorySummaryForSpecies(props: InventorySummaryProps): JSX.Element {
   const { speciesId, modified } = props;
   const [summary, setSummary] = useState<SpeciesInventorySummary>();
   const snackbar = useSnackbar();

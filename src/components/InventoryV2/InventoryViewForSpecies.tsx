@@ -10,7 +10,7 @@ import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
-import InventorySummary from 'src/components/InventoryV2/view/InventorySummary';
+import InventorySummaryForSpecies from 'src/components/InventoryV2/view/InventorySummaryForSpecies';
 import InventorySeedlingsTableForSpecies from 'src/components/InventoryV2/view/InventorySeedlingsTableForSpecies';
 
 interface InventoryViewForSpeciesProps {
@@ -79,7 +79,7 @@ export default function InventoryViewForSpecies(props: InventoryViewForSpeciesPr
       <Grid container ref={contentRef}>
         {speciesId && (
           <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <InventorySummary speciesId={Number(speciesId)} modified={modified} />
+            <InventorySummaryForSpecies speciesId={Number(speciesId)} modified={modified} />
             <InventorySeedlingsTableForSpecies
               speciesId={Number(speciesId)}
               modified={modified}
