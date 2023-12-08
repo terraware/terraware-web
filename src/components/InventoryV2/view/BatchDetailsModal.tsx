@@ -35,6 +35,7 @@ import NurseryDropdownV2 from 'src/components/InventoryV2/form/NurseryDropdownV2
 import { useProjects } from 'src/components/InventoryV2/form/useProjects';
 import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
+import isEnabled from '../../../features';
 
 export interface BatchDetailsModalProps {
   onClose: () => void;
@@ -77,6 +78,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const locationTimezone = useLocationTimeZone();
   const [record, setRecord, onChange] = useForm<FormRecord>(undefined);
+  const featureFlagProjects = isEnabled('Projects');
 
   const facilityId = origin === 'Nursery' ? originId : record?.facilityId;
   const speciesId = origin === 'Species' ? originId : record?.speciesId;
@@ -353,7 +355,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 </Grid>
               )}
 
-              {selectedProject && (
+              {featureFlagProjects && selectedProject && (
                 <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
                   <Textfield
                     id='projectId'
@@ -408,13 +410,15 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                   />
                 </Grid>
 
-                <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
-                  <ProjectsDropdown<FormRecord>
-                    availableProjects={availableProjects}
-                    record={record}
-                    setRecord={setRecord}
-                  />
-                </Grid>
+                {featureFlagProjects && (
+                  <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                    <ProjectsDropdown<FormRecord>
+                      availableProjects={availableProjects}
+                      record={record}
+                      setRecord={setRecord}
+                    />
+                  </Grid>
+                )}
               </>
             )}
 
