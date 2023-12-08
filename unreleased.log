@@ -1,3 +1,4 @@
+94ceb49d5 Add delete2 function with type generics (#1865)
 1dd84c5f3 Add Projects featured filter to the 'inventory batches' view (#1874)
 0180f0d43 Add the Projects featured filter to the 'Inventory by Species|Nursery' views (#1873)
 673cdc6a7 Add showProjectsFilter to Search component used within all the inventory tables, show Projects featured filter when the property is true (#1872)
