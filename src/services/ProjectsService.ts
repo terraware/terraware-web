@@ -18,6 +18,8 @@ type ListProjectsResponsePayload =
 type GetProjectResponsePayload = paths[typeof PROJECT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 export type UpdateProjectResponsePayload =
   paths[typeof PROJECT_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+export type DeleteProjectResponsePayload =
+  paths[typeof PROJECT_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
 /**
  * exported type
@@ -123,6 +125,12 @@ const updateProject = (projectId: number, payload: UpdateProjectRequest) =>
     entity: payload,
   });
 
+const deleteProject = (projectId: number) =>
+  httpProjects.delete2<DeleteProjectResponsePayload>({
+    url: PROJECT_ENDPOINT,
+    urlReplacements: { '{id}': `${projectId}` },
+  });
+
 /**
  * Exported functions
  */
@@ -133,6 +141,7 @@ const ProjectsService = {
   assignProjectToEntities,
   getProject,
   updateProject,
+  deleteProject,
 };
 
 export default ProjectsService;

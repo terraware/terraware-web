@@ -2,7 +2,7 @@ import InventoryTable from 'src/components/InventoryV2/InventoryTable';
 import { CircularProgress, Container, Theme } from '@mui/material';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useState } from 'react';
-import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { useOrganization } from 'src/providers';
@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.BATCH_NUMBER, type: 'string', tooltipTitle: strings.TOOLTIP_BATCH_NUMBER },
+  { key: 'project_name', name: strings.PROJECT, type: 'string' },
   {
     key: 'species_scientificName_noLink',
     name: strings.SPECIES,
@@ -156,12 +157,24 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
       searchSortOrder,
     });
 
+    const searchFields = [];
+    if (filters.projectIds && filters.projectIds.length > 0) {
+      searchFields.push({
+        operation: 'field',
+        field: 'project_id',
+        type: 'Exact',
+        values: filters.projectIds.map((id) => id.toString()),
+      } as SearchNodePayload);
+    }
+
     const apiSearchResults = await NurseryBatchService.getAllBatches(
       selectedOrganization.id,
       searchSortOrder,
       filters.facilityIds,
       filters.subLocationsIds,
-      debouncedSearchTerm
+      debouncedSearchTerm,
+      undefined,
+      searchFields
     );
 
     const processedResults = apiSearchResults?.map((result) => {

@@ -13,7 +13,7 @@ interface InventorySummaryProps {
   modified: number;
 }
 
-export default function InventorySummary(props: InventorySummaryProps): JSX.Element {
+export default function InventorySummaryForSpecies(props: InventorySummaryProps): JSX.Element {
   const { speciesId, modified } = props;
   const [summary, setSummary] = useState<SpeciesInventorySummary>();
   const snackbar = useSnackbar();
@@ -80,7 +80,7 @@ export default function InventorySummary(props: InventorySummaryProps): JSX.Elem
       },
       {
         label: strings.LOSS_RATE,
-        value: `${lossRate}%`,
+        value: `${lossRate || 0}%`,
         tooltipTitle: '',
         gridColumns: isMobile ? 12 : 4,
       },

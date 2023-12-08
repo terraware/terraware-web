@@ -133,8 +133,17 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       });
     }
 
+    if (filters.projectIds && filters.projectIds.length > 0) {
+      fields.push({
+        operation: 'field',
+        field: 'project_id',
+        type: 'Exact',
+        values: filters.projectIds.map((id) => id.toString()),
+      });
+    }
+
     return fields;
-  }, [getFuzzySearchFields, debouncedSearchTerm, filters?.facilityIds, filters?.speciesIds]);
+  }, [getFuzzySearchFields, debouncedSearchTerm, filters]);
 
   useEffect(() => {
     let activeRequests = true;
@@ -326,7 +335,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               setOpenNewBatchModal(false);
             }}
             selectedBatch={selectedBatch}
-            originSpeciesId={originId}
+            originId={originId}
             origin={origin}
           />
         )}
@@ -386,6 +395,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               filters={filters}
               setFilters={setFilters}
               origin={origin}
+              showProjectsFilter
             />
 
             <Box sx={{ marginTop: theme.spacing(0.5) }}>
