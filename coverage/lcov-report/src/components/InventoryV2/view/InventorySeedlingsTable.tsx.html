@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/122</span>
+                <span class='fraction'>0/125</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/115</span>
+                <span class='fraction'>0/118</span>
             </div>
         
             
@@ -517,7 +517,17 @@
 <a name='L452'></a><a href='#L452'>452</a>
 <a name='L453'></a><a href='#L453'>453</a>
 <a name='L454'></a><a href='#L454'>454</a>
-<a name='L455'></a><a href='#L455'>455</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -653,8 +663,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -902,6 +921,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1106,8 +1126,17 @@ export default function <span class="fstat-no" title="function not covered" >Inv
       });
     }
 &nbsp;
+<span class="cstat-no" title="statement not covered" >    if (filters.projectIds &amp;&amp; filters.projectIds.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      fields.push({</span>
+        operation: 'field',
+        field: 'project_id',
+        type: 'Exact',
+        values: filters.projectIds.map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >id.toString())</span>,
+      });
+    }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return fields;</span>
-  }, [getFuzzySearchFields, debouncedSearchTerm, filters?.facilityIds, filters?.speciesIds]);
+  }, [getFuzzySearchFields, debouncedSearchTerm, filters]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     let activeRequests = <span class="cstat-no" title="statement not covered" >true;</span>
@@ -1299,7 +1328,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 <span class="cstat-no" title="statement not covered" >              setOpenNewBatchModal(false);</span>
             }}
             selectedBatch={selectedBatch}
-            originSpeciesId={originId}
+            originId={originId}
             origin={origin}
           /&gt;
         )}
@@ -1359,6 +1388,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
               filters={filters}
               setFilters={setFilters}
               origin={origin}
+              showProjectsFilter
             /&gt;
 &nbsp;
             &lt;Box sx={{ marginTop: theme.spacing(0.5) }}&gt;
@@ -1432,7 +1462,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-08T16:27:58.411Z
+                at 2023-12-08T21:45:57.078Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
