@@ -41,13 +41,10 @@ export default function ProjectEditView(): JSX.Element {
     [dispatch, projectId]
   );
 
-  const goToProject = useCallback(() => {
-    const editProjectLocation = getLocation(
-      APP_PATHS.PROJECT_EDIT.replace(':projectId', pathParams.projectId),
-      location
-    );
-    history.push(editProjectLocation);
-  }, [history, location, pathParams.projectId]);
+  const goToProject = useCallback(
+    () => history.push(getLocation(APP_PATHS.PROJECT_VIEW.replace(':projectId', pathParams.projectId), location)),
+    [history, location, pathParams.projectId]
+  );
 
   useEffect(() => {
     if (!projectUpdateRequest) {
