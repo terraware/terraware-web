@@ -15,6 +15,7 @@ interface InventorySeedlingsTableForSpeciesProps
 
 const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
+  { key: 'project_name', name: strings.PROJECT, type: 'string' },
   { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
   { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
   { key: 'readyQuantity', name: strings.READY, type: 'string' },

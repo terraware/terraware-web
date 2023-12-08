@@ -39,6 +39,7 @@ const DEFAULT_BATCH_FIELDS = [
   'notes',
   'notReadyQuantity',
   'notReadyQuantity(raw)',
+  'project_name',
   'project_id',
   'readyByDate',
   'readyQuantity',
