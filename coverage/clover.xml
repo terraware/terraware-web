@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1702077689319" clover="3.2.0">
-  <project timestamp="1702077689319" name="All files">
-    <metrics statements="14687" coveredstatements="376" conditionals="9460" coveredconditionals="91" methods="4626" coveredmethods="78" elements="28773" coveredelements="545" complexity="0" loc="14687" ncloc="14687" packages="117" files="569" classes="569"/>
+<coverage generated="1702077845237" clover="3.2.0">
+  <project timestamp="1702077845237" name="All files">
+    <metrics statements="14696" coveredstatements="376" conditionals="9464" coveredconditionals="91" methods="4629" coveredmethods="78" elements="28789" coveredelements="545" complexity="0" loc="14696" ncloc="14696" packages="117" files="569" classes="569"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="221" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -14461,14 +14461,19 @@
       </file>
     </package>
     <package name="src.redux.features.projects">
-      <metrics statements="39" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="14" coveredmethods="0"/>
+      <metrics statements="46" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="16" coveredmethods="0"/>
       <file name="projectsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/projects/projectsAsyncThunks.ts">
-        <metrics statements="5" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="7" count="0" type="stmt"/>
+        <metrics statements="10" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
-        <line num="15" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="16" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="18" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="19" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
       </file>
       <file name="projectsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/projects/projectsSelectors.ts">
         <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
@@ -14479,7 +14484,7 @@
         <line num="11" count="0" type="stmt"/>
       </file>
       <file name="projectsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/projects/projectsSlice.ts">
-        <metrics statements="15" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="17" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
@@ -14492,9 +14497,11 @@
         <line num="32" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
       </file>
       <file name="projectsThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/projects/projectsThunks.ts">
         <metrics statements="14" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
@@ -14751,7 +14758,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1179" coveredstatements="329" conditionals="423" coveredconditionals="83" methods="325" coveredmethods="67"/>
+      <metrics statements="1181" coveredstatements="329" conditionals="423" coveredconditionals="83" methods="326" coveredmethods="67"/>
       <file name="AccessionService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AccessionService.ts">
         <metrics statements="56" coveredstatements="39" conditionals="8" coveredconditionals="6" methods="17" coveredmethods="5"/>
         <line num="10" count="1" type="stmt"/>
@@ -15544,33 +15551,35 @@
         <line num="121" count="2" type="stmt"/>
       </file>
       <file name="ProjectsService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/ProjectsService.ts">
-        <metrics statements="26" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <metrics statements="28" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="85" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="90" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="112" count="0" type="stmt"/>
-        <line num="113" count="0" type="stmt"/>
-        <line num="119" count="0" type="stmt"/>
-        <line num="120" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="87" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="92" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
         <line num="129" count="0" type="stmt"/>
+        <line num="137" count="0" type="stmt"/>
       </file>
       <file name="ReportService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/ReportService.ts">
         <metrics statements="86" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="24" coveredmethods="0"/>

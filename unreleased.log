@@ -1,3 +1,4 @@
+5ae6160dc Add project delete API call. Use createAsyncThunk for project delete, combine with project update async thunk in redux (#1866)
 dc1b0ad4a Implement TextTruncated component so species list within nursery view summary is truncated (#1877)
 94ceb49d5 Add delete2 function with type generics (#1865)
 1dd84c5f3 Add Projects featured filter to the 'inventory batches' view (#1874)
