@@ -47,7 +47,7 @@ interface SearchProps {
 }
 
 type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
-  id: keyof Omit<InventoryFiltersType, 'showEmptyBatches'>;
+  id: keyof InventoryFiltersType;
   emptyValue: unknown;
 };
 
@@ -130,12 +130,21 @@ export default function Search(props: SearchProps): JSX.Element | null {
       });
     }
 
+    if (filters.showEmptyBatches && filters.showEmptyBatches[0] === 'true') {
+      data.push({
+        id: 'showEmptyBatches',
+        value: strings.FILTER_SHOW_EMPTY_BATCHES,
+        emptyValue: ['false'],
+      });
+    }
+
     setFilterPillData(data);
   }, [
     selectedOrganization,
     filters.facilityIds,
     filters.speciesIds,
     filters.subLocationsIds,
+    filters.showEmptyBatches,
     getSpeciesName,
     getSubLocationName,
   ]);
@@ -147,15 +156,20 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [origin, dispatch, selectedOrganization.id]);
 
   const onRemovePillList = useCallback(
-    (filterId: keyof Omit<InventoryFiltersType, 'showEmptyBatches'>) => {
+    (filterId: keyof InventoryFiltersType) => {
       const filter = filterPillData?.find((filterPillDatum) => filterPillDatum.id === filterId);
       if (filterId === 'facilityIds') {
         setFilters({ ...filters, facilityIds: [], subLocationsIds: [] });
+      } else if (filterId === 'showEmptyBatches') {
+        setFilterGroupFilters({
+          showEmptyBatches: { ...initialFilters.showEmptyBatches, values: ['false'] },
+        });
+        setFilters({ ...filters, showEmptyBatches: ['false'] });
       } else {
         setFilters({ ...filters, [filterId]: filter?.emptyValue || null });
       }
     },
-    [filterPillData, filters, setFilters]
+    [filterPillData, filters, setFilters, setFilterGroupFilters]
   );
 
   if (origin === 'Nursery' && !species) {
