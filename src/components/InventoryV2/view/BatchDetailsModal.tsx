@@ -7,7 +7,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
-import { Batch, CreateBatchRequestPayload, isBatch, NurseryTransfer } from 'src/types/Batch';
+import { Batch, CreateBatchRequestPayload, NurseryTransfer } from 'src/types/Batch';
 import { NurseryBatchService } from 'src/services';
 import { useOrganization } from 'src/providers/hooks';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -18,7 +18,13 @@ import { APP_PATHS } from 'src/constants';
 import Link from 'src/components/common/Link';
 import { Response } from 'src/services/HttpService';
 import AccessionService from 'src/services/AccessionService';
-import { BatchData, BatchId, NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
+import {
+  BatchData,
+  BatchId,
+  NurseryBatchesSearchResponseElement,
+  UpdateBatchRequestPayload,
+  UpdateBatchRequestPayloadWithId,
+} from 'src/services/NurseryBatchService';
 import { useSubLocations } from 'src/components/InventoryV2/form/useSubLocations';
 import SubLocationsDropdown from 'src/components/InventoryV2/form/SubLocationsDropdown';
 import { useAccessions } from 'src/components/InventoryV2/form/useAccessions';
@@ -39,7 +45,7 @@ export interface BatchDetailsModalProps {
   origin: OriginPage;
 }
 
-type FormRecord = Partial<CreateBatchRequestPayload & Batch> | undefined;
+type FormRecord = Partial<(CreateBatchRequestPayload | UpdateBatchRequestPayloadWithId) & Batch> | undefined;
 
 const convertSelectedBatchToFormRecord = (input: NurseryBatchesSearchResponseElement | undefined): FormRecord =>
   !input
@@ -59,7 +65,7 @@ const convertSelectedBatchToFormRecord = (input: NurseryBatchesSearchResponseEle
         speciesId: Number(input.species_id),
         subLocationIds: (input.subLocations || []).map((subLocation) => Number(subLocation.subLocation_id)),
         version: Number(input.version),
-      } as Partial<CreateBatchRequestPayload>);
+      } as Partial<CreateBatchRequestPayload | UpdateBatchRequestPayloadWithId>);
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
   const { onClose, reload, selectedBatch, originId, origin } = props;
@@ -225,13 +231,13 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         } else {
           response = await NurseryBatchService.createBatch(record as CreateBatchRequestPayload);
         }
-      } else if (isBatch(record)) {
-        response = await NurseryBatchService.updateBatch(record);
+      } else if (record) {
+        response = await NurseryBatchService.updateBatch(record as UpdateBatchRequestPayloadWithId);
         if (response.batch) {
           responseQuantities = await NurseryBatchService.updateBatchQuantities({
             ...record,
             version: response.batch.version,
-          });
+          } as Batch);
         }
       }
 
