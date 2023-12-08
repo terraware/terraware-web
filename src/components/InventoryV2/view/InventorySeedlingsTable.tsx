@@ -326,7 +326,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               setOpenNewBatchModal(false);
             }}
             selectedBatch={selectedBatch}
-            originSpeciesId={originId}
+            originId={originId}
             origin={origin}
           />
         )}

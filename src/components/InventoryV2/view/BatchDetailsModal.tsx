@@ -35,8 +35,7 @@ export interface BatchDetailsModalProps {
   onClose: () => void;
   reload: () => void;
   selectedBatch: NurseryBatchesSearchResponseElement | undefined;
-  originNurseryId?: number;
-  originSpeciesId?: number;
+  originId?: number;
   origin: OriginPage;
 }
 
@@ -46,14 +45,15 @@ const convertSelectedBatchToFormRecord = (input: NurseryBatchesSearchResponseEle
   !input
     ? input
     : ({
-        facilityId: Number(input.facility_id),
         accessionId: input.accession_id ? Number(input.accession_id) : undefined,
         addedDate: input.addedDate,
         batchNumber: input.batchNumber,
+        facilityId: Number(input.facility_id),
         germinatingQuantity: Number(input['germinatingQuantity(raw)']),
         id: Number(input.id),
         notes: input.notes,
         notReadyQuantity: Number(input['notReadyQuantity(raw)']),
+        projectId: Number(input.project_id),
         readyQuantity: Number(input['readyQuantity(raw)']),
         readyByDate: input.readyByDate,
         speciesId: Number(input.species_id),
@@ -62,7 +62,7 @@ const convertSelectedBatchToFormRecord = (input: NurseryBatchesSearchResponseEle
       } as Partial<CreateBatchRequestPayload>);
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
-  const { onClose, reload, selectedBatch, originNurseryId, originSpeciesId, origin } = props;
+  const { onClose, reload, selectedBatch, originId, origin } = props;
 
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
@@ -72,7 +72,11 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const locationTimezone = useLocationTimeZone();
   const [record, setRecord, onChange] = useForm<FormRecord>(undefined);
-  const { availableSubLocations, selectedSubLocations } = useSubLocations(originNurseryId, record);
+
+  const facilityId = origin === 'Nursery' ? originId : record?.facilityId;
+  const speciesId = origin === 'Species' ? originId : record?.speciesId;
+
+  const { availableSubLocations, selectedSubLocations } = useSubLocations(facilityId, record);
   const { availableAccessions, selectedAccession } = useAccessions(record);
   const { availableSpecies, selectedSpecies } = useSpecies(record);
   const { availableNurseries, selectedNursery } = useNurseries(record);
@@ -86,7 +90,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   useEffect(() => {
-    const facilityId = originNurseryId || record?.facilityId;
     if (!facilityId) {
       return;
     }
@@ -99,7 +102,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
     const tz = locationTimezone.get(facility);
     setTimeZone(tz.id);
-  }, [originNurseryId, record?.facilityId, locationTimezone, selectedOrganization]);
+  }, [facilityId, record?.facilityId, locationTimezone, selectedOrganization]);
 
   useEffect(() => {
     if (record) {
@@ -127,14 +130,9 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       germinatingQuantity: 0,
       notReadyQuantity: 0,
       readyQuantity: 0,
+      facilityId,
+      speciesId,
     };
-    if (origin === 'Nursery') {
-      newBatch.facilityId = originNurseryId;
-      newBatch.speciesId = undefined;
-    } else if (origin === 'Species') {
-      newBatch.facilityId = undefined;
-      newBatch.speciesId = originSpeciesId;
-    }
 
     const initBatch = () =>
       selectedBatch
@@ -148,7 +146,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           };
 
     setRecord(initBatch());
-  }, [selectedBatch, setRecord, selectedOrganization, origin, originSpeciesId, originNurseryId]);
+  }, [selectedBatch, setRecord, selectedOrganization, facilityId, speciesId]);
 
   useEffect(() => {
     const onWindowBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -167,6 +165,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const MANDATORY_FIELDS = [
     'facilityId',
+    'speciesId',
     'germinatingQuantity',
     'notReadyQuantity',
     'readyQuantity',
@@ -442,7 +441,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 type='number'
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-                errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
+                errorText={validateFields && record.germinatingQuantity === undefined ? strings.REQUIRED_FIELD : ''}
                 min={0}
               />
             </Grid>
@@ -455,7 +454,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 type='number'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
+                errorText={validateFields && record.notReadyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
                 min={0}
               />
             </Grid>
@@ -479,7 +478,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                 type='number'
                 label={strings.READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-                errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}
+                errorText={validateFields && record.readyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
                 min={0}
               />
             </Grid>
