@@ -22,7 +22,6 @@ import {
   BatchData,
   BatchId,
   NurseryBatchesSearchResponseElement,
-  UpdateBatchRequestPayload,
   UpdateBatchRequestPayloadWithId,
 } from 'src/services/NurseryBatchService';
 import { useSubLocations } from 'src/components/InventoryV2/form/useSubLocations';

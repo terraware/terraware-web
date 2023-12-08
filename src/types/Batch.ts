@@ -1,6 +1,5 @@
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
-import { isArrayOfT, isNumber, isObject, isOptionalNumber, isString } from './utils';
 
 export type Batch = components['schemas']['BatchResponsePayload']['batch'];
 export type BatchHistoryItem = components['schemas']['BatchHistoryPayload'];
