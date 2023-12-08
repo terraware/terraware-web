@@ -75,6 +75,7 @@ import { Project } from './types/Project';
 import { selectProjects } from './redux/features/projects/projectsSelectors';
 import ProjectsRouter from 'src/components/Projects/Router';
 import { requestProjects } from './redux/features/projects/projectsThunks';
+import ReportListV2 from 'src/components/Reports/ReportListV2';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -544,7 +545,7 @@ function AppContent() {
 
             {selectedOrganization.canSubmitReports && (
               <Route exact path={APP_PATHS.REPORTS}>
-                <ReportList />
+                {featureFlagProjects ? <ReportListV2 /> : <ReportList />}
               </Route>
             )}
             {selectedOrganization.canSubmitReports && (
