@@ -113,7 +113,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
       <Grid container>
         {overviewCardData.map((item) => (
           <Grid item xs={isMobile || item.fullWidth ? 12 : 6} key={item.title}>
-            <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
+            <OverviewItemCard isEditable={false} title={item.title} contents={item.data} grid={true}/>
           </Grid>
         ))}
       </Grid>

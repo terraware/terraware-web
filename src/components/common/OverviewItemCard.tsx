@@ -12,6 +12,7 @@ type OverviewItemCardProps = {
   titleInfoTooltip?: React.ReactNode;
   contents: JSX.Element | string | number | null;
   className?: string;
+  grid?: boolean;
 };
 
 export default function OverviewItemCard({
@@ -23,6 +24,7 @@ export default function OverviewItemCard({
   titleInfoTooltip,
   contents,
   className,
+  grid,
 }: OverviewItemCardProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -37,7 +39,7 @@ export default function OverviewItemCard({
         display: 'flex',
         height: '100%',
         justifyContent: 'space-between',
-        padding: theme.spacing(3),
+        padding: (grid) ? theme.spacing(1.5, 0) : theme.spacing(3),
         width: '100%',
       }}
     >

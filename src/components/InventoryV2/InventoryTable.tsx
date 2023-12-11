@@ -80,7 +80,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       </Box>
       <Grid item xs={12}>
         <div>
-          <Grid container spacing={4} marginTop={0}>
+          <Grid container spacing={0} marginTop={0}>
             <Grid item xs={12}>
               <Table
                 id={`inventory-table-v2-${origin ?? ''}`}
