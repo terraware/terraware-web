@@ -58,7 +58,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       <DialogBox
         onClose={onClose}
         open={true}
-        title={selectedBatch?.id ? strings.ADD_BATCH : strings.BATCH_DETAILS}
+        title={!selectedBatch?.id ? strings.ADD_BATCH : strings.BATCH_DETAILS}
         size='large'
         middleButtons={[
           <Button
