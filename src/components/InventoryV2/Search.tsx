@@ -20,6 +20,7 @@ import { Project } from 'src/types/Project';
 import InventoryFilters, { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 import { convertFilterGroupToMap, getNurseryName } from 'src/components/InventoryV2/FilterUtils';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles(() => ({
   popoverContainer: {
@@ -55,14 +56,16 @@ type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
 };
 
 export default function Search(props: SearchProps): JSX.Element | null {
+  const { searchValue, onSearch, filters, setFilters, showProjectsFilter } = props;
+
+  const dispatch = useAppDispatch();
   const theme = useTheme();
   const classes = useStyles();
   const { activeLocale } = useLocalization();
-  const { searchValue, onSearch, filters, setFilters, showProjectsFilter } = props;
-  const origin = props.origin || 'Species';
-
   const { selectedOrganization } = useOrganization();
-  const dispatch = useAppDispatch();
+  const featureFlagProjects = isEnabled('Projects');
+
+  const origin = props.origin || 'Species';
 
   const species = useAppSelector(selectSpecies);
   const projects = useAppSelector(selectProjects);
@@ -256,7 +259,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
           </>
         )}
 
-        {showProjectsFilter && (
+        {featureFlagProjects && showProjectsFilter && (
           <InventoryFilters
             filters={filters}
             setFilters={setFilters}
