@@ -228,12 +228,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       scrolled={true}
     >
       <Grid container item xs={12} spacing={2} textAlign='left'>
-        <Grid
-          item
-          xs={12}
-          paddingRight={paddingSeparator}
-          sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
-        >
+        <Grid item xs={12} sx={marginTop}>
           <Textfield
             id='germinatingQuantity'
             value={record.germinatingQuantity}
