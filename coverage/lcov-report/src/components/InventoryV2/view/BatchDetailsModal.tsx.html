@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/110</span>
+                <span class='fraction'>0/111</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/106</span>
             </div>
         
             
@@ -585,7 +585,11 @@
 <a name='L520'></a><a href='#L520'>520</a>
 <a name='L521'></a><a href='#L521'>521</a>
 <a name='L522'></a><a href='#L522'>522</a>
-<a name='L523'></a><a href='#L523'>523</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L523'></a><a href='#L523'>523</a>
+<a name='L524'></a><a href='#L524'>524</a>
+<a name='L525'></a><a href='#L525'>525</a>
+<a name='L526'></a><a href='#L526'>526</a>
+<a name='L527'></a><a href='#L527'>527</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -633,6 +637,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -656,6 +661,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -933,6 +939,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1144,6 +1152,7 @@ import NurseryDropdownV2 from 'src/components/InventoryV2/form/NurseryDropdownV2
 import { useProjects } from 'src/components/InventoryV2/form/useProjects';
 import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
+import isEnabled from '../../../features';
 &nbsp;
 export interface BatchDetailsModalProps {
   onClose: () =&gt; void;
@@ -1186,6 +1195,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const locationTimezone = <span class="cstat-no" title="statement not covered" >useLocationTimeZone();</span>
   const [record, setRecord, onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;FormRecord&gt;(undefined);</span>
+  const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
 &nbsp;
   const facilityId = <span class="cstat-no" title="statement not covered" >origin === 'Nursery' ? originId : record?.facilityId;</span>
   const speciesId = <span class="cstat-no" title="statement not covered" >origin === 'Species' ? originId : record?.speciesId;</span>
@@ -1462,7 +1472,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                 &lt;/Grid&gt;
               )}
 &nbsp;
-              {selectedProject &amp;&amp; (
+              {featureFlagProjects &amp;&amp; selectedProject &amp;&amp; (
                 &lt;Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}&gt;
                   &lt;Textfield
                     id='projectId'
@@ -1517,13 +1527,15 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                   /&gt;
                 &lt;/Grid&gt;
 &nbsp;
-                &lt;Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}&gt;
-                  &lt;ProjectsDropdown&lt;FormRecord&gt;
-                    availableProjects={availableProjects}
-                    record={record}
-                    setRecord={setRecord}
-                  /&gt;
-                &lt;/Grid&gt;
+                {featureFlagProjects &amp;&amp; (
+                  &lt;Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}&gt;
+                    &lt;ProjectsDropdown&lt;FormRecord&gt;
+                      availableProjects={availableProjects}
+                      record={record}
+                      setRecord={setRecord}
+                    /&gt;
+                  &lt;/Grid&gt;
+                )}
               &lt;/&gt;
             )}
 &nbsp;
@@ -1636,7 +1648,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-11T15:41:37.543Z
+                at 2023-12-11T16:07:37.388Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
