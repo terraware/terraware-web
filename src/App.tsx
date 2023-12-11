@@ -76,6 +76,7 @@ import { selectProjects } from './redux/features/projects/projectsSelectors';
 import ProjectsRouter from 'src/components/Projects/Router';
 import { requestProjects } from './redux/features/projects/projectsThunks';
 import ReportListV2 from 'src/components/Reports/ReportListV2';
+import InventoryCreateView from './components/InventoryV2/InventoryCreateView';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -490,7 +491,7 @@ function AppContent() {
               )}
             </Route>
             <Route exact path={APP_PATHS.INVENTORY_NEW}>
-              <InventoryCreate />
+              {nurseryV2 ? <InventoryCreateView /> : <InventoryCreate />}
             </Route>
             <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
               <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
