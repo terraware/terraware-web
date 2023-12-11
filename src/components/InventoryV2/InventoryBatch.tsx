@@ -21,7 +21,7 @@ import { useOrganization } from 'src/providers';
 import { Species } from 'src/types/Species';
 import { Facility } from 'src/types/Facility';
 
-export type OriginPage = 'Nursery' | 'Species' | 'Batches';
+export type OriginPage = 'Nursery' | 'Species' | 'Batches' | 'InventoryAdd';
 
 type InventoryBatchProps = {
   origin: OriginPage;
