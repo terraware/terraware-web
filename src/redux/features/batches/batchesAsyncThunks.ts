@@ -60,7 +60,10 @@ export const requestSaveBatch = createAsyncThunk(
     }
 
     if (response && response.requestSucceeded && responseQuantities.requestSucceeded) {
-      return response.data;
+      return {
+        ...response.data,
+        speciesId: batch.speciesId,
+      };
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
