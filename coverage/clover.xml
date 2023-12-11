@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1702337804561" clover="3.2.0">
-  <project timestamp="1702337804561" name="All files">
-    <metrics statements="14747" coveredstatements="376" conditionals="9480" coveredconditionals="91" methods="4646" coveredmethods="78" elements="28873" coveredelements="545" complexity="0" loc="14747" ncloc="14747" packages="118" files="574" classes="574"/>
+<coverage generated="1702338083241" clover="3.2.0">
+  <project timestamp="1702338083241" name="All files">
+    <metrics statements="14747" coveredstatements="376" conditionals="9478" coveredconditionals="91" methods="4646" coveredmethods="78" elements="28871" coveredelements="545" complexity="0" loc="14747" ncloc="14747" packages="118" files="574" classes="574"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="221" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2431,7 +2431,7 @@
       </file>
     </package>
     <package name="src.components.InventoryV2">
-      <metrics statements="747" coveredstatements="0" conditionals="564" coveredconditionals="0" methods="246" coveredmethods="0"/>
+      <metrics statements="747" coveredstatements="0" conditionals="562" coveredconditionals="0" methods="246" coveredmethods="0"/>
       <file name="BatchDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchDetails.tsx">
         <metrics statements="23" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
@@ -2459,7 +2459,7 @@
         <line num="115" count="0" type="cond" truecount="0" falsecount="4"/>
       </file>
       <file name="BatchDetailsModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchDetailsModal.tsx">
-        <metrics statements="103" coveredstatements="0" conditionals="62" coveredconditionals="0" methods="33" coveredmethods="0"/>
+        <metrics statements="103" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="33" coveredmethods="0"/>
         <line num="29" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
@@ -2552,17 +2552,17 @@
         <line num="204" count="0" type="stmt"/>
         <line num="207" count="0" type="stmt"/>
         <line num="211" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="240" count="0" type="stmt"/>
-        <line num="252" count="0" type="stmt"/>
-        <line num="266" count="0" type="stmt"/>
-        <line num="274" count="0" type="stmt"/>
-        <line num="304" count="0" type="stmt"/>
-        <line num="316" count="0" type="stmt"/>
-        <line num="326" count="0" type="stmt"/>
-        <line num="337" count="0" type="stmt"/>
-        <line num="348" count="0" type="stmt"/>
-        <line num="360" count="0" type="stmt"/>
-        <line num="373" count="0" type="stmt"/>
+        <line num="235" count="0" type="stmt"/>
+        <line num="247" count="0" type="stmt"/>
+        <line num="261" count="0" type="stmt"/>
+        <line num="269" count="0" type="stmt"/>
+        <line num="299" count="0" type="stmt"/>
+        <line num="311" count="0" type="stmt"/>
+        <line num="321" count="0" type="stmt"/>
+        <line num="332" count="0" type="stmt"/>
+        <line num="343" count="0" type="stmt"/>
+        <line num="355" count="0" type="stmt"/>
+        <line num="368" count="0" type="stmt"/>
       </file>
       <file name="BatchHistory.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchHistory.tsx">
         <metrics statements="70" coveredstatements="0" conditionals="76" coveredconditionals="0" methods="19" coveredmethods="0"/>
