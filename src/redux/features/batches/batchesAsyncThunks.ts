@@ -49,7 +49,7 @@ export const requestSaveBatch = createAsyncThunk(
       } else {
         response = await NurseryBatchService.createBatch(batch as CreateBatchRequestPayload);
       }
-    } else if (batch) {
+    } else {
       response = await NurseryBatchService.updateBatch(batch as UpdateBatchRequestPayloadWithId);
       if (response.batch) {
         responseQuantities = await NurseryBatchService.updateBatchQuantities({
