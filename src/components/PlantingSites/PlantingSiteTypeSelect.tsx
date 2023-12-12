@@ -1,8 +1,11 @@
-import PlantingSiteSelectTypeModal from './PlantingSiteSelectTypeModal';
-import { APP_PATHS } from 'src/constants';
-import DetailedPlantingSiteHelpModal from 'src/components/PlantingSites/DetailedPlantingSiteHelpModal';
-import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
+import { SiteType } from 'src/types/PlantingSite';
+import isEnabled from 'src/features';
+import DetailedPlantingSiteHelpModal from 'src/components/PlantingSites/DetailedPlantingSiteHelpModal';
+import PlantingSiteSelectTypeModal from './PlantingSiteSelectTypeModal';
+import PlantingSiteSelectTypeModal2 from './PlantingSiteSelectTypeModal2';
 
 export type PlantingSiteTypeSelectProps = {
   open: boolean;
@@ -14,6 +17,7 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
   const [plantingSiteTypeModalOpen, setPlantingSiteTypeModalOpen] = useState(false);
   const [plantingSiteTypeHelpModalOpen, setPlantingSiteTypeHelpModalOpen] = useState(false);
   const history = useHistory();
+  const userDrawnDetailedSites = isEnabled('User Detailed Sites');
 
   useEffect(() => {
     setPlantingSiteTypeModalOpen(open);
@@ -26,12 +30,27 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
     history.push(appPathLocation);
   };
 
+  if (userDrawnDetailedSites) {
+    return (
+      <PlantingSiteSelectTypeModal2
+        open={plantingSiteTypeModalOpen}
+        onNext={(siteType: SiteType) =>
+          void goTo(siteType === 'simple' ? APP_PATHS.PLANTING_SITES_SIMPLE_NEW : APP_PATHS.PLANTING_SITES_DETAILED_NEW)
+        }
+        onClose={() => {
+          setPlantingSiteTypeModalOpen(false);
+          onClose();
+        }}
+      />
+    );
+  }
+
   return (
     <>
       <PlantingSiteSelectTypeModal
         open={plantingSiteTypeModalOpen}
-        onNext={(goToCreate) => {
-          if (goToCreate) {
+        onNext={(siteType: SiteType) => {
+          if (siteType === 'simple') {
             goTo(APP_PATHS.PLANTING_SITES_NEW);
           } else {
             setPlantingSiteTypeHelpModalOpen(true);

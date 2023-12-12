@@ -30,3 +30,5 @@ export type PlantingProgressSubzone = {
 };
 
 export type UpdatePlantingSubzonePayload = components['schemas']['UpdatePlantingSubzoneRequestPayload'];
+
+export type SiteType = 'simple' | 'detailed';

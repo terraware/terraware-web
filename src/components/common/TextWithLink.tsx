@@ -1,3 +1,5 @@
+import Link from './Link';
+
 export interface TextWithLinkProps {
   className?: string;
   href?: string;
@@ -34,9 +36,9 @@ export default function TextWithLink({ className, href, onClick, text }: TextWit
   return (
     <>
       {prefix}
-      <a className={className} href={href} onClick={onClick}>
+      <Link className={className} to={href} onClick={onClick} fontSize='16px'>
         {linkText}
-      </a>
+      </Link>
       {suffix}
     </>
   );
