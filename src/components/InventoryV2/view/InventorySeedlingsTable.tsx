@@ -236,8 +236,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     } else if (fromColumn === 'quantitiesMenu') {
       reloadData();
     } else {
-      onUpdateOpenBatch(batch.batchNumber);
-      setOpenNewBatchModal(true);
+      history.push(APP_PATHS.INVENTORY_BATCH.replace(':batchId', batch.id));
     }
   };
 
