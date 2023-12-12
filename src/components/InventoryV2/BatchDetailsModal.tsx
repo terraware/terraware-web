@@ -147,8 +147,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const hasErrors = () => {
     if (record) {
-      const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
-      return missingRequiredField;
+      return MANDATORY_FIELDS.some((field: MandatoryField) => record[field] === '' || record[field] === undefined);
     }
     return true;
   };
@@ -236,7 +235,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             type='number'
             label={strings.GERMINATING_QUANTITY_REQUIRED}
             tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-            errorText={validateFields && !record.germinatingQuantity ? strings.REQUIRED_FIELD : ''}
+            errorText={validateFields && record?.germinatingQuantity === undefined ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
         </Grid>
@@ -248,7 +247,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             type='number'
             label={strings.NOT_READY_QUANTITY_REQUIRED}
             tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-            errorText={validateFields && !record.notReadyQuantity ? strings.REQUIRED_FIELD : ''}
+            errorText={validateFields && record?.notReadyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
         </Grid>
@@ -270,7 +269,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             type='number'
             label={strings.READY_QUANTITY_REQUIRED}
             tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-            errorText={validateFields && !record.readyQuantity ? strings.REQUIRED_FIELD : ''}
+            errorText={validateFields && record?.readyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
         </Grid>
