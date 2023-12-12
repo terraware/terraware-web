@@ -1,3 +1,6 @@
+121f3c55a Hide sub locations filter in 'inventory by batches' view when a nursery is not selected (#1891)
+68f310462 SW-4567 Require notes only when the quantity is modified (#1892)
+4932c84b3 Fix number validation in batch details modal (#1890)
 22e829725 Send user to batch details page when they click on a batch in the inventory by species or inventory by nursery views (#1889)
 9962eff17 Fix add batch / batch details title display (#1887)
 8b24f1ee4 Implement InventoryCreateView which uses the new BatchDetailsForm (#1886)
