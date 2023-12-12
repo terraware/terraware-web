@@ -301,6 +301,12 @@ export interface paths {
     /** Lists an organization's reports. */
     get: operations["listReports"];
   };
+  "/api/v1/reports/settings": {
+    /** Gets the report settings for an organization. */
+    get: operations["getReportSettings"];
+    /** Updates the report settings for an organization. */
+    put: operations["updateReportSettings"];
+  };
   "/api/v1/reports/{id}": {
     /** Retrieves the contents of a report. */
     get: operations["getReport"];
@@ -1983,6 +1989,14 @@ export interface components {
       report: components["schemas"]["GetReportPayloadV1"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetReportSettingsResponsePayload: {
+      /** @description If false, settings have not been configured yet and the values in the rest of the payload are the defaults. */
+      isConfigured: boolean;
+      /** @description If true, organization-level reports are enabled. */
+      organizationEnabled: boolean;
+      /** @description Per-project report settings. */
+      projects: components["schemas"]["ProjectReportSettingsPayload"][];
+    };
     GetSeedBankV1: {
       /** Format: date */
       buildCompletedDate?: string;
@@ -2841,6 +2855,12 @@ export interface components {
       /** Format: int64 */
       organizationId: number;
     };
+    ProjectReportSettingsPayload: {
+      /** @description If true, reports are enabled for this project. */
+      isEnabled: boolean;
+      /** Format: int64 */
+      projectId: number;
+    };
     PutNurseryV1: {
       /** Format: date */
       buildCompletedDate?: string;
@@ -3546,6 +3566,14 @@ export interface components {
     };
     UpdateReportPhotoRequestPayload: {
       caption?: string;
+    };
+    UpdateReportSettingsRequestPayload: {
+      /** @description If true, enable organization-level reports. */
+      organizationEnabled: boolean;
+      /** Format: int64 */
+      organizationId: number;
+      /** @description Per-project report settings. If a project is missing from this list, its settings will revert to the defaults. */
+      projects: components["schemas"]["ProjectReportSettingsPayload"][];
     };
     UpdateSubLocationRequestPayload: {
       name: string;
@@ -5269,6 +5297,38 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListReportsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the report settings for an organization. */
+  getReportSettings: {
+    parameters: {
+      query: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetReportSettingsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates the report settings for an organization. */
+  updateReportSettings: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateReportSettingsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
