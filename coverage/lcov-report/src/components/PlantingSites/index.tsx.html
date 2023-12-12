@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -154,7 +154,25 @@
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,6 +201,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -260,10 +290,13 @@ import {
 } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
 import PlantingSiteCreate from './PlantingSiteCreate';
+import PlantingSiteSimpleCreate from './PlantingSiteSimpleCreate';
+import PlantingSiteDetailedCreate from './PlantingSiteDetailedCreate';
 import PlantingSitesList from './PlantingSitesList';
 import PlantingSiteView from './PlantingSiteView';
 import PlantingSiteSubzoneView from './PlantingSiteSubzoneView';
 import PlantingSiteZoneView from './PlantingSiteZoneView';
+import isEnabled from 'src/features';
 &nbsp;
 /**
  * This page will route to the correct component based on url params
@@ -273,11 +306,23 @@ export type PlantingSitesProps = {
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >PlantingSites(</span>{ reloadTracking }: PlantingSitesProps): JSX.Element {
+  const userDrawnDetailedSites = <span class="cstat-no" title="statement not covered" >isEnabled('User Detailed Sites');</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Switch&gt;
       &lt;Route path={APP_PATHS.PLANTING_SITES_NEW}&gt;
         &lt;PlantingSiteCreate reloadPlantingSites={reloadTracking} /&gt;
       &lt;/Route&gt;
+      {userDrawnDetailedSites &amp;&amp; (
+        &lt;Route path={APP_PATHS.PLANTING_SITES_SIMPLE_NEW}&gt;
+          &lt;PlantingSiteSimpleCreate reloadPlantingSites={reloadTracking} /&gt;
+        &lt;/Route&gt;
+      )}
+      {userDrawnDetailedSites &amp;&amp; (
+        &lt;Route path={APP_PATHS.PLANTING_SITES_DETAILED_NEW}&gt;
+          &lt;PlantingSiteDetailedCreate reloadPlantingSites={reloadTracking} /&gt;
+        &lt;/Route&gt;
+      )}
       &lt;Route path={APP_PATHS.PLANTING_SITES_VIEW}&gt;
         &lt;PlantingSitesWrapper reloadTracking={reloadTracking} /&gt;
       &lt;/Route&gt;
@@ -343,7 +388,7 @@ export function <span class="fstat-no" title="function not covered" >PlantingSit
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-12T22:35:11.170Z
+                at 2023-12-12T23:21:02.931Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
