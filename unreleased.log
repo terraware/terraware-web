@@ -1,3 +1,4 @@
+9962eff17 Fix add batch / batch details title display (#1887)
 8b24f1ee4 Implement InventoryCreateView which uses the new BatchDetailsForm (#1886)
 cedb4232d Fix issue with germinatingQuantity width in edit batch view modal (#1888)
 c6f453108 Refactor BatchDetailsModal (#1885)
