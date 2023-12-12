@@ -1,7 +1,7 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName = 'Show Production View' | 'Nursery Updates' | 'Projects';
+export type FeatureName = 'Show Production View' | 'Nursery Updates' | 'Projects' | 'User Detailed Sites';
 
 export type Feature = {
   name: FeatureName;
@@ -51,6 +51,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Projects functionality'],
+    disclosure: ['This is WIP'],
+  },
+  {
+    name: 'User Detailed Sites',
+    preferenceName: 'enableUserDetailedSites',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['User drawn detailed sites'],
     disclosure: ['This is WIP'],
   },
 ];

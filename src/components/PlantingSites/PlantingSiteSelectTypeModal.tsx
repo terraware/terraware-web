@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { FormControlLabel, Radio, RadioGroup, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, DialogBox } from '@terraware/web-components';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   buttonSpacing: {
@@ -21,6 +22,7 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
   const classes = useStyles();
   const theme = useTheme();
   const [detailed, setDetailed] = useState<boolean | null>(null);
+  const userDrawnDetailedSites = isEnabled('User Detailed Sites');
 
   const handleClose = () => {
     setDetailed(null);
@@ -60,23 +62,28 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
         <Button onClick={handleNext} id='next' label={strings.NEXT} key='button-2' disabled={detailed === null} />,
       ]}
     >
-      <Typography marginBottom={theme.spacing(3)} justifyContent='center'>
-        {strings.SELECT_PLANTING_SITE_TYPE_DESCRIPTION_1}
-      </Typography>
-      <Typography marginBottom={theme.spacing(3)} justifyContent='center'>
-        {strings.SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2}
-      </Typography>
-      <Typography marginBottom={theme.spacing(3)} justifyContent='center'>
-        {strings.SELECT_PLANTING_SITE_TYPE_DESCRIPTION_3}
-      </Typography>
+      {userDrawnDetailedSites && <h2>WIP</h2>}
+      {!userDrawnDetailedSites && (
+        <>
+          <Typography marginBottom={theme.spacing(3)} justifyContent='center'>
+            {strings.SELECT_PLANTING_SITE_TYPE_DESCRIPTION_1}
+          </Typography>
+          <Typography marginBottom={theme.spacing(3)} justifyContent='center'>
+            {strings.SELECT_PLANTING_SITE_TYPE_DESCRIPTION_2}
+          </Typography>
+          <Typography marginBottom={theme.spacing(3)} justifyContent='center'>
+            {strings.SELECT_PLANTING_SITE_TYPE_DESCRIPTION_3}
+          </Typography>
 
-      <Typography color={theme.palette.TwClrTxtSecondary} display='flex' fontSize={14}>
-        {strings.PLANTING_SITE_TYPE}
-      </Typography>
-      <RadioGroup defaultValue={null} name='radio-buttons-group' onChange={handleTypeChange}>
-        <FormControlLabel value='simple' control={<Radio />} label={strings.PLANTING_SITE_TYPE_SIMPLE} />
-        <FormControlLabel value='detailed' control={<Radio />} label={strings.PLANTING_SITE_TYPE_DETAILED} />
-      </RadioGroup>
+          <Typography color={theme.palette.TwClrTxtSecondary} display='flex' fontSize={14}>
+            {strings.PLANTING_SITE_TYPE}
+          </Typography>
+          <RadioGroup defaultValue={null} name='radio-buttons-group' onChange={handleTypeChange}>
+            <FormControlLabel value='simple' control={<Radio />} label={strings.PLANTING_SITE_TYPE_SIMPLE} />
+            <FormControlLabel value='detailed' control={<Radio />} label={strings.PLANTING_SITE_TYPE_DETAILED} />
+          </RadioGroup>
+        </>
+      )}
     </DialogBox>
   );
 }
