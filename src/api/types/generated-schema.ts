@@ -1106,6 +1106,8 @@ export interface components {
        * @description If this batch was created via a seed withdrawal, the ID of the seed accession it came from.
        */
       accessionId?: number;
+      /** @description If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. */
+      accessionNumber?: string;
       /** Format: date */
       addedDate: string;
       batchNumber: string;
