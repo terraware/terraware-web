@@ -5,7 +5,6 @@ import { makeStyles } from '@mui/styles';
 import { Button, DialogBox, Icon, IconName } from '@terraware/web-components';
 import { SiteType } from 'src/types/PlantingSite';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import TextWithLink from 'src/components/common/TextWithLink';
 
 const useStyles = makeStyles((theme: Theme) => ({
   buttonSpacing: {
@@ -73,7 +72,7 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
             title={strings.SIMPLE_SITE}
           />
           <SiteTypeButton
-            description={<TextWithLink href='tbd' text={strings.ADD_PLANTING_SITE_DETAILED_SITE} />}
+            description={strings.ADD_PLANTING_SITE_DETAILED_SITE}
             icon='blobbyIconSeedBank'
             isSelected={detailed === true}
             onClick={() => setDetailed(true)}
@@ -86,7 +85,7 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
 }
 
 type SiteTypeButtonProps = {
-  description: React.ReactNode;
+  description: string;
   icon: IconName;
   isSelected: boolean;
   onClick: () => void;
@@ -99,7 +98,7 @@ const SiteTypeButton = ({ description, icon, isSelected, onClick, title }: SiteT
   const { isMobile } = useDeviceInfo();
 
   return (
-    <Box minWidth={isMobile ? 'auto' : '350px'} display='flex' flexDirection='column' onClick={onClick}>
+    <Box minWidth={isMobile ? 'auto' : '350px'} display='flex' flexDirection='column'>
       <Box
         width='192px'
         height='192px'
@@ -109,6 +108,8 @@ const SiteTypeButton = ({ description, icon, isSelected, onClick, title }: SiteT
           isSelected ? `4px solid ${theme.palette.TwClrBrdrSelected}` : `2px solid ${theme.palette.TwClrBrdrTertiary}`
         }
         margin='0 auto'
+        sx={{ cursor: 'pointer' }}
+        onClick={onClick}
       >
         <Box width='160px' height='160px' borderRadius='8px'>
           <Icon name={icon} size='xlarge' className={classes.icon} />

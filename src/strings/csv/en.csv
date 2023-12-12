@@ -55,7 +55,7 @@ ADD_PHOTOS_REQUIRED,Add Photos *,
 ADD_PHOTOS_REQUIRED_OUTPLANT,Photos are required for Outplant withdrawals.,
 ADD_PLANT_SITE_DESCRIPTION,Add Plant and Site Description,
 ADD_PLANTING_SITE,Add Planting Site,
-ADD_PLANTING_SITE_DETAILED_SITE,"If you have a large site with multiple [strata] and growing conditions, you will want to go with a detailed site and create zones and subzones within your planting site boundary.",
+ADD_PLANTING_SITE_DETAILED_SITE,"If you have a large site with multiple strata and growing conditions, you will want to go with a detailed site and create zones and subzones within your planting site boundary.",
 ADD_PLANTING_SITE_SIMPLE_SITE,"If your planting site is less than TBD ha, you are probably good with a simple site.",
 ADD_PLANTING_SITE_TITLE,Before You Start
 ADD_PROJECT,Add Project,
