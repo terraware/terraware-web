@@ -7,6 +7,7 @@ import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
+  projectIds?: number[];
   speciesIds?: number[];
   subLocationsIds?: number[];
   // Has to match up with SearchNodePayload['values']

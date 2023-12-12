@@ -135,6 +135,15 @@ function RequestsHandler(url: string = '') {
     return await handleRequest(axios.put(replace(url, request), entity, { params, headers }), (data) => ({ data }));
   };
 
+  const put2 = async <T extends ServerData>(request: PutRequest = {}): Promise<Response2<T>> => {
+    const { entity, params, headers } = request;
+
+    return await handleRequest<T, { data: T | undefined }>(
+      axios.put<T>(replace(url, request), entity, { params, headers }),
+      (data: T | undefined) => ({ data })
+    );
+  };
+
   const _delete = async (request: DeleteRequest = {}): Promise<Response> => {
     const { entity, params, headers } = request;
 
@@ -143,7 +152,18 @@ function RequestsHandler(url: string = '') {
     }));
   };
 
-  return { get, post, post2, put, delete: _delete };
+  const delete2 = async <T extends ServerData>(request: DeleteRequest = {}): Promise<Response2<T>> => {
+    const { entity, params, headers } = request;
+
+    return await handleRequest<T, { data: T | undefined }>(
+      axios.delete<T>(replace(url, request), { params, headers, data: entity }),
+      (data: T | undefined) => ({
+        data,
+      })
+    );
+  };
+
+  return { get, post, post2, put, put2, delete: _delete, delete2 };
 }
 
 /**

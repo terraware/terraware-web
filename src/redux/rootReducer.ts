@@ -24,12 +24,14 @@ import {
 import { snackbarReducer } from './features/snackbar/snackbarSlice';
 import { messageReducer } from './features/message/messageSlice';
 import { userAnalyticsReducer } from './features/user/userAnalyticsSlice';
-import { projectsReducer } from './features/projects/projectsSlice';
+import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/projects/projectsSlice';
 import { subLocationsReducer } from './features/subLocations/subLocationsSlice';
+import { batchesRequestsReducer } from './features/batches/batchesSlice';
 
 // assembly of app reducers
 export const reducers = {
   appVersion: appVersionReducer,
+  batchesRequests: batchesRequestsReducer,
   message: messageReducer,
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,
@@ -49,6 +51,7 @@ export const reducers = {
   updatePlantingsCompleted: updatePlantingsCompletedReducer,
   userAnalytics: userAnalyticsReducer,
   projects: projectsReducer,
+  projectsRequests: projectsRequestsReducer,
   subLocations: subLocationsReducer,
 };
 const combinedReducers = combineReducers(reducers);

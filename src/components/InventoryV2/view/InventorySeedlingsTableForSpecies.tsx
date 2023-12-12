@@ -3,7 +3,10 @@ import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { NurseryBatchService } from 'src/services';
-import InventorySeedlingsTable, { InventorySeedlingsTableProps } from './InventorySeedlingsTable';
+import isEnabled from 'src/features';
+import InventorySeedlingsTable, {
+  InventorySeedlingsTableProps,
+} from 'src/components/InventoryV2/view/InventorySeedlingsTable';
 
 interface InventorySeedlingsTableForSpeciesProps
   extends Omit<
@@ -15,6 +18,7 @@ interface InventorySeedlingsTableForSpeciesProps
 
 const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
+  { key: 'project_name', name: strings.PROJECT, type: 'string' },
   { key: 'germinatingQuantity', name: strings.GERMINATING, type: 'string' },
   { key: 'notReadyQuantity', name: strings.NOT_READY, type: 'string' },
   { key: 'readyQuantity', name: strings.READY, type: 'string' },
@@ -28,6 +32,8 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function InventorySeedlingsTableForSpecies(props: InventorySeedlingsTableForSpeciesProps): JSX.Element {
+  const featureFlagProjects = isEnabled('Projects');
+
   const speciesId = props.speciesId;
 
   const getFuzzySearchFields = useCallback(
@@ -96,7 +102,7 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
   return (
     <InventorySeedlingsTable
       {...props}
-      columns={columns}
+      columns={() => (featureFlagProjects ? columns() : columns().filter((column) => column.key !== 'project_name'))}
       isSelectionBulkWithdrawable={isSelectionBulkWithdrawable}
       getFuzzySearchFields={getFuzzySearchFields}
       getBatchesSearch={getBatchesSearch}

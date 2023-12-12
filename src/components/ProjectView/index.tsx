@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { Grid, Typography } from '@mui/material';
@@ -10,15 +10,19 @@ import { APP_PATHS } from 'src/constants';
 import theme from 'src/theme';
 import { useLocalization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { selectProject } from 'src/redux/features/projects/projectsSelectors';
+import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { requestProject } from 'src/redux/features/projects/projectsThunks';
 import Button from 'src/components/common/button/Button';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useSnackbar from 'src/utils/useSnackbar';
+import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncThunks';
+import DeleteConfirmationDialog from 'src/components/ProjectView/DeleteConfirmationDialog';
 
 export default function ProjectView(): JSX.Element {
   const dispatch = useAppDispatch();
 
+  const snackbar = useSnackbar();
   const history = useHistory();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
@@ -26,6 +30,10 @@ export default function ProjectView(): JSX.Element {
   const projectId = Number(pathParams.projectId);
 
   const project = useAppSelector(selectProject(projectId));
+
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState<boolean>(false);
+  const [requestId, setRequestId] = useState<string>('');
+  const projectDeleteRequest = useAppSelector((state) => selectProjectRequest(state, requestId));
 
   useEffect(() => {
     if (!project) {
@@ -52,18 +60,35 @@ export default function ProjectView(): JSX.Element {
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     switch (optionItem.value) {
       case 'delete': {
-        // TODO open up delete confirmation
+        setIsDeleteConfirmationOpen(true);
       }
     }
   }, []);
 
-  const goToEditProject = useCallback(() => {
-    const editProjectLocation = getLocation(
-      APP_PATHS.PROJECT_EDIT.replace(':projectId', pathParams.projectId),
-      location
-    );
-    history.push(editProjectLocation);
-  }, [history, location, pathParams.projectId]);
+  const onDeleteConfirmationDialogClose = useCallback(() => setIsDeleteConfirmationOpen(false), []);
+  const onDeleteConfirmationDialogSubmit = useCallback(() => {
+    const dispatched = dispatch(requestProjectDelete({ projectId }));
+    setRequestId(dispatched.requestId);
+  }, [dispatch, projectId]);
+
+  const goToEditProject = useCallback(
+    () => history.push(getLocation(APP_PATHS.PROJECT_EDIT.replace(':projectId', pathParams.projectId), location)),
+    [history, location, pathParams.projectId]
+  );
+
+  const goToProjects = useCallback(() => history.push(getLocation(APP_PATHS.PROJECTS, location)), [history, location]);
+
+  useEffect(() => {
+    if (!projectDeleteRequest) {
+      return;
+    }
+
+    if (projectDeleteRequest.status === 'error') {
+      snackbar.toastError();
+    } else if (projectDeleteRequest.status === 'success') {
+      goToProjects();
+    }
+  }, [projectDeleteRequest, snackbar, goToProjects]);
 
   const rightComponent = useMemo(
     () => (
@@ -102,6 +127,12 @@ export default function ProjectView(): JSX.Element {
           </Grid>
         </Grid>
       </Card>
+      <DeleteConfirmationDialog
+        open={isDeleteConfirmationOpen}
+        onClose={onDeleteConfirmationDialogClose}
+        onCancel={onDeleteConfirmationDialogClose}
+        onSubmit={onDeleteConfirmationDialogSubmit}
+      />
     </Page>
   );
 }
