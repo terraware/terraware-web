@@ -13,10 +13,13 @@ import {
 } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
 import PlantingSiteCreate from './PlantingSiteCreate';
+import PlantingSiteSimpleCreate from './PlantingSiteSimpleCreate';
+import PlantingSiteDetailedCreate from './PlantingSiteDetailedCreate';
 import PlantingSitesList from './PlantingSitesList';
 import PlantingSiteView from './PlantingSiteView';
 import PlantingSiteSubzoneView from './PlantingSiteSubzoneView';
 import PlantingSiteZoneView from './PlantingSiteZoneView';
+import isEnabled from 'src/features';
 
 /**
  * This page will route to the correct component based on url params
@@ -26,11 +29,23 @@ export type PlantingSitesProps = {
 };
 
 export default function PlantingSites({ reloadTracking }: PlantingSitesProps): JSX.Element {
+  const userDrawnDetailedSites = isEnabled('User Detailed Sites');
+
   return (
     <Switch>
       <Route path={APP_PATHS.PLANTING_SITES_NEW}>
         <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
       </Route>
+      {userDrawnDetailedSites && (
+        <Route path={APP_PATHS.PLANTING_SITES_SIMPLE_NEW}>
+          <PlantingSiteSimpleCreate reloadPlantingSites={reloadTracking} />
+        </Route>
+      )}
+      {userDrawnDetailedSites && (
+        <Route path={APP_PATHS.PLANTING_SITES_DETAILED_NEW}>
+          <PlantingSiteDetailedCreate reloadPlantingSites={reloadTracking} />
+        </Route>
+      )}
       <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
         <PlantingSitesWrapper reloadTracking={reloadTracking} />
       </Route>
