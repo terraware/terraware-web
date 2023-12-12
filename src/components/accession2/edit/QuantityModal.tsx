@@ -81,6 +81,10 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const classes = useStyles();
 
   const quantityChanged = useMemo(() => {
+    if (!accession.remainingQuantity) {
+      // this is a first time quantity set and not considered a change of existing value
+      return false;
+    }
     return (
       record.remainingQuantity?.quantity?.toString() !== accession.remainingQuantity?.quantity?.toString() ||
       record.remainingQuantity?.units !== accession.remainingQuantity?.units
