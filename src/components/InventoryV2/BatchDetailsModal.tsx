@@ -19,6 +19,7 @@ import { nurserySubstrates, treatments } from 'src/types/Accession';
 import SelectPhotos from '../common/SelectPhotos';
 import { makeStyles } from '@mui/styles';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
+import { isNumber } from 'src/types/utils';
 
 export interface BatchDetailsModalProps {
   onClose: () => void;
@@ -235,7 +236,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             type='number'
             label={strings.GERMINATING_QUANTITY_REQUIRED}
             tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-            errorText={validateFields && record?.germinatingQuantity === undefined ? strings.REQUIRED_FIELD : ''}
+            errorText={validateFields && !isNumber(record?.germinatingQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
         </Grid>
@@ -247,7 +248,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             type='number'
             label={strings.NOT_READY_QUANTITY_REQUIRED}
             tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-            errorText={validateFields && record?.notReadyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
+            errorText={validateFields && !isNumber(record?.notReadyQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
         </Grid>
@@ -269,7 +270,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             type='number'
             label={strings.READY_QUANTITY_REQUIRED}
             tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-            errorText={validateFields && record?.readyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
+            errorText={validateFields && !isNumber(record?.readyQuantity) ? strings.REQUIRED_FIELD : ''}
             min={0}
           />
         </Grid>
