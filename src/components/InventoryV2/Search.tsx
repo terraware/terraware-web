@@ -247,15 +247,17 @@ export default function Search(props: SearchProps): JSX.Element | null {
               options={nurseries.map((n: Facility) => n.id)}
               renderOption={(id: number) => nurseries.find((n) => n.id === id)?.name ?? ''}
             />
-            <InventoryFilters
-              filters={filters}
-              setFilters={setFilters}
-              disabled={!filters.facilityIds?.length}
-              label={strings.SUB_LOCATIONS}
-              filterKey='subLocationsIds'
-              options={subLocations?.map((sl: SubLocation) => sl.id) ?? []}
-              renderOption={(id: number) => subLocations?.find((sl) => sl.id === id)?.name ?? ''}
-            />
+            {filters.facilityIds && filters.facilityIds.length > 0 && (
+              <InventoryFilters
+                filters={filters}
+                setFilters={setFilters}
+                disabled={!filters.facilityIds?.length}
+                label={strings.SUB_LOCATIONS}
+                filterKey='subLocationsIds'
+                options={subLocations?.map((sl: SubLocation) => sl.id) ?? []}
+                renderOption={(id: number) => subLocations?.find((sl) => sl.id === id)?.name ?? ''}
+              />
+            )}
           </>
         )}
 
