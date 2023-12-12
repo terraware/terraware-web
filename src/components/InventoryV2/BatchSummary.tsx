@@ -3,7 +3,9 @@ import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
 import OverviewItemCard from '../common/OverviewItemCard';
 import { SubLocationService } from 'src/services';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Link from '../common/Link';
+import { APP_PATHS } from '../../constants';
 
 interface BatchSummaryProps {
   batch: Batch;
@@ -48,7 +50,15 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
         <OverviewItemCard isEditable={false} title={strings.TOTAL_WITHDRAWN} contents={batch.totalWithdrawn} />
       </Grid>
       <Grid item xs={2}>
-        <OverviewItemCard isEditable={false} title={strings.ACCESSION_ID} contents={batch.accessionId || ''} />
+        <OverviewItemCard
+          isEditable={false}
+          title={strings.ACCESSION_ID}
+          contents={
+            <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${batch.accessionId || ''}`)}>
+              {batch.accessionNumber || ''}
+            </Link>
+          }
+        />
       </Grid>
       <Grid item xs={2}>
         <OverviewItemCard isEditable={false} title={strings.DATE_ADDED} contents={batch.addedDate} />
