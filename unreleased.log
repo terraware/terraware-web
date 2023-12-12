@@ -1,3 +1,4 @@
+3f67a8649 Update server types (#1897)
 4c7edffee SW-4541 Feature flag + split code paths for user drawn detailed sites  (#1896)
 cfaf6a6df Update with latest server types (#1894)
 0272eb4e6 SW-4568 Fix redundant sublocation column in accessions table (#1893)
