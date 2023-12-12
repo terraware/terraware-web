@@ -1,3 +1,4 @@
+22e829725 Send user to batch details page when they click on a batch in the inventory by species or inventory by nursery views (#1889)
 9962eff17 Fix add batch / batch details title display (#1887)
 8b24f1ee4 Implement InventoryCreateView which uses the new BatchDetailsForm (#1886)
 cedb4232d Fix issue with germinatingQuantity width in edit batch view modal (#1888)

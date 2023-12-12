@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1702339375767" clover="3.2.0">
-  <project timestamp="1702339375767" name="All files">
-    <metrics statements="14776" coveredstatements="376" conditionals="9488" coveredconditionals="91" methods="4652" coveredmethods="78" elements="28916" coveredelements="545" complexity="0" loc="14776" ncloc="14776" packages="118" files="575" classes="575"/>
+<coverage generated="1702397925827" clover="3.2.0">
+  <project timestamp="1702397925828" name="All files">
+    <metrics statements="14775" coveredstatements="376" conditionals="9488" coveredconditionals="91" methods="4652" coveredmethods="78" elements="28915" coveredelements="545" complexity="0" loc="14775" ncloc="14775" packages="118" files="575" classes="575"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3489,7 +3489,7 @@
       </file>
     </package>
     <package name="src.components.InventoryV2.view">
-      <metrics statements="293" coveredstatements="0" conditionals="171" coveredconditionals="0" methods="99" coveredmethods="0"/>
+      <metrics statements="292" coveredstatements="0" conditionals="171" coveredconditionals="0" methods="99" coveredmethods="0"/>
       <file name="BatchDetailsModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/view/BatchDetailsModal.tsx">
         <metrics statements="21" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
@@ -3588,7 +3588,7 @@
         <line num="15" count="0" type="stmt"/>
       </file>
       <file name="InventorySeedlingsTable.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/view/InventorySeedlingsTable.tsx">
-        <metrics statements="118" coveredstatements="0" conditionals="66" coveredconditionals="0" methods="39" coveredmethods="0"/>
+        <metrics statements="117" coveredstatements="0" conditionals="66" coveredconditionals="0" methods="39" coveredmethods="0"/>
         <line num="55" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
@@ -3668,45 +3668,44 @@
         <line num="236" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="237" count="0" type="stmt"/>
         <line num="239" count="0" type="stmt"/>
-        <line num="240" count="0" type="stmt"/>
+        <line num="243" count="0" type="stmt"/>
         <line num="244" count="0" type="stmt"/>
         <line num="245" count="0" type="stmt"/>
-        <line num="246" count="0" type="stmt"/>
+        <line num="248" count="0" type="stmt"/>
         <line num="249" count="0" type="stmt"/>
-        <line num="250" count="0" type="stmt"/>
+        <line num="255" count="0" type="stmt"/>
         <line num="256" count="0" type="stmt"/>
         <line num="257" count="0" type="stmt"/>
-        <line num="258" count="0" type="stmt"/>
-        <line num="261" count="0" type="stmt"/>
-        <line num="264" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="265" count="0" type="stmt"/>
-        <line num="268" count="0" type="stmt"/>
-        <line num="271" count="0" type="stmt"/>
+        <line num="260" count="0" type="stmt"/>
+        <line num="263" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="264" count="0" type="stmt"/>
+        <line num="267" count="0" type="stmt"/>
+        <line num="270" count="0" type="stmt"/>
+        <line num="273" count="0" type="stmt"/>
         <line num="274" count="0" type="stmt"/>
-        <line num="275" count="0" type="stmt"/>
-        <line num="281" count="0" type="stmt"/>
-        <line num="282" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="283" count="0" type="stmt"/>
+        <line num="280" count="0" type="stmt"/>
+        <line num="281" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="282" count="0" type="stmt"/>
+        <line num="286" count="0" type="stmt"/>
         <line num="287" count="0" type="stmt"/>
         <line num="288" count="0" type="stmt"/>
-        <line num="289" count="0" type="stmt"/>
-        <line num="291" count="0" type="stmt"/>
-        <line num="293" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="306" count="0" type="stmt"/>
-        <line num="307" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="308" count="0" type="stmt"/>
-        <line num="311" count="0" type="stmt"/>
-        <line num="314" count="0" type="stmt"/>
-        <line num="317" count="0" type="stmt"/>
+        <line num="290" count="0" type="stmt"/>
+        <line num="292" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="305" count="0" type="stmt"/>
+        <line num="306" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="307" count="0" type="stmt"/>
+        <line num="310" count="0" type="stmt"/>
+        <line num="313" count="0" type="stmt"/>
+        <line num="316" count="0" type="stmt"/>
+        <line num="333" count="0" type="stmt"/>
         <line num="334" count="0" type="stmt"/>
-        <line num="335" count="0" type="stmt"/>
-        <line num="344" count="0" type="stmt"/>
-        <line num="394" count="0" type="stmt"/>
-        <line num="405" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="343" count="0" type="stmt"/>
+        <line num="393" count="0" type="stmt"/>
+        <line num="404" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="429" count="0" type="stmt"/>
         <line num="430" count="0" type="stmt"/>
         <line num="431" count="0" type="stmt"/>
-        <line num="432" count="0" type="stmt"/>
-        <line num="451" count="0" type="stmt"/>
+        <line num="450" count="0" type="stmt"/>
       </file>
       <file name="InventorySeedlingsTableForNursery.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/view/InventorySeedlingsTableForNursery.tsx">
         <metrics statements="12" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="9" coveredmethods="0"/>
