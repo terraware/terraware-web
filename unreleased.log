@@ -1,3 +1,4 @@
+cfaf6a6df Update with latest server types (#1894)
 0272eb4e6 SW-4568 Fix redundant sublocation column in accessions table (#1893)
 121f3c55a Hide sub locations filter in 'inventory by batches' view when a nursery is not selected (#1891)
 68f310462 SW-4567 Require notes only when the quantity is modified (#1892)
