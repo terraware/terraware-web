@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
 import useSnackbar from 'src/utils/useSnackbar';
+import { BatchData } from 'src/services/NurseryBatchService';
 
 interface BatchSummaryProps {
   batch: Batch;
@@ -51,10 +52,15 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   }, [batch, dispatch, props.batch, showSubLocationEdit]);
 
   useEffect(() => {
-    if (batchesRequest?.status === 'error') {
+    if (batchesRequest?.status === 'success' && batchesRequest.data) {
+      const nextBatch = (batchesRequest.data as BatchData).batch;
+      if (nextBatch) {
+        setBatch(nextBatch);
+      }
+    } else if (batchesRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [batchesRequest?.status, snackbar]);
+  }, [batchesRequest.data, batchesRequest?.status, snackbar]);
 
   return (
     <Grid container spacing={3} marginBottom={theme.spacing(4)}>
