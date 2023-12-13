@@ -15,15 +15,15 @@ export type RedoFn = (() => void) | undefined;
  *  undo is a callback function to undo last change, if function is 'undefined', undo is no longer possible (beginning of history)
  *  redo is a callback function to redo last change, if function is 'undefined', redo is no longer possible (end of history)
  */
-export default function useUndoRedoState<T>(initialValue?: T): [T, SetFn<T>, UndoFn, RedoFn] {
-  const [history, setHistory] = useState<T[]>(initialValue !== undefined ? [initialValue] : []);
+export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, SetFn<T>, UndoFn, RedoFn] {
+  const [history, setHistory] = useState<(T | undefined)[]>([initialValue]);
   const [historyIndex, setHistoryIndex] = useState<number>(0);
 
-  const data = useMemo<T>(() => history[historyIndex], [historyIndex]);
+  const data = useMemo<T | undefined>(() => history[historyIndex], [historyIndex]);
 
   const setData = useCallback(
     (value: T) => {
-      setHistory((curr: T[]) => {
+      setHistory((curr: (T | undefined)[]) => {
         const truncatedHistory = curr.splice(0, historyIndex + 1);
         truncatedHistory.push(value);
         return truncatedHistory;

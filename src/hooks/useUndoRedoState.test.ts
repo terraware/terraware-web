@@ -54,6 +54,16 @@ describe('useUndoRedoState', () => {
     expect(undoWith(result)).toBeUndefined();
   });
 
+  test('should allow undoing data even with uninitialized value', () => {
+    const { result } = renderHook(() => useUndoRedoState<Person>());
+
+    act(() => void setDataWith(result)({ name: 'bunny', age: 5 }));
+    act(() => void undoWith(result)());
+
+    expect(dataWith(result)).toBeUndefined();
+    expect(undoWith(result)).toBeUndefined();
+  });
+
   test('should allow redoing data', () => {
     const { result } = renderHook(() => useUndoRedoState<Person>({ name: 'bugs', age: 25 }));
 
