@@ -69,7 +69,7 @@ export default function AddEditSubLocationModal(props: AddEditSubLocationProps):
         <Button
           id={selectedSubLocation ? 'editSubLocation' : 'saveSubLocation'}
           onClick={saveSubLocation}
-          label={strings.SAVE}
+          label={selectedSubLocation ? strings.UPDATE : strings.ADD}
           key='button-2'
         />,
       ]}
