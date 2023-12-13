@@ -41,6 +41,7 @@ import { getUnitName, isUnitInPreferredSystem } from 'src/units';
 import ConvertedValue from 'src/components/ConvertedValue';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import isEnabled from '../../../features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -108,6 +109,7 @@ export default function Accession2View(): JSX.Element {
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
+  const featureFlagProjects = isEnabled('Projects');
 
   const seedBankTimeZone = useMemo(() => {
     const facility = accession?.facilityId
@@ -589,9 +591,11 @@ export default function Accession2View(): JSX.Element {
           </Grid>
         )}
 
-        <Grid item flexBasis={overviewGridSize} flexGrow={1}>
-          <OverviewItemCard isEditable={false} title={strings.PROJECT} contents={'TODO projects dropdown'} />
-        </Grid>
+        {featureFlagProjects && (
+          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+            <OverviewItemCard isEditable={false} title={strings.PROJECT} contents={'TODO projects dropdown'} />
+          </Grid>
+        )}
 
         {isAwaitingCheckin && accession?.bagNumbers !== undefined && (
           <Grid item flexBasis={overviewGridSize} flexGrow={1}>
