@@ -41,7 +41,7 @@ import { getUnitName, isUnitInPreferredSystem } from 'src/units';
 import ConvertedValue from 'src/components/ConvertedValue';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import isEnabled from '../../../features';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
