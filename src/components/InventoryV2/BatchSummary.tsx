@@ -54,9 +54,11 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
           isEditable={false}
           title={strings.ACCESSION_ID}
           contents={
-            <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${batch.accessionId || ''}`)}>
-              {batch.accessionNumber || ''}
-            </Link>
+            batch.accessionId ? (
+              <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${batch.accessionId}`)}>
+                {batch.accessionNumber || ''}
+              </Link>
+            ) : null
           }
         />
       </Grid>
