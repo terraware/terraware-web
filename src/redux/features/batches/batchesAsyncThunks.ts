@@ -11,7 +11,7 @@ export type SavableBatch = (CreateBatchRequestPayload | UpdateBatchRequestPayloa
 
 export const requestSaveBatch = createAsyncThunk(
   'batches/save',
-  async (request: { batch: SavableBatch; timezone: string }, { rejectWithValue }) => {
+  async (request: { batch: SavableBatch; timezone?: string }, { rejectWithValue }) => {
     const { batch, timezone } = request;
 
     let response: (Response & BatchData) | (Response & BatchId) | undefined;
