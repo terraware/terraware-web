@@ -21,7 +21,6 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const [showSubLocationEdit, setShowSubLocationEdit] = useState<boolean>(false);
 
   const handleSubLocationEdit = useCallback(() => {
-    console.log('edit');
     setShowSubLocationEdit(!showSubLocationEdit);
   }, [showSubLocationEdit]);
 
@@ -47,7 +46,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
                 minimal
               />
             ) : (
-              (selectedSubLocations || []).map((subLocation) => subLocation.name).join(',')
+              (selectedSubLocations || []).map((subLocation) => subLocation.name).join(', ')
             )
           }
           isEditable
