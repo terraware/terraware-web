@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -189,7 +189,16 @@
 <a name='L124'></a><a href='#L124'>124</a>
 <a name='L125'></a><a href='#L125'>125</a>
 <a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -286,9 +295,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -319,7 +337,7 @@
 import React, { useState } from 'react';
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, DialogBox, Icon, IconName } from '@terraware/web-components';
+import { Button, DialogBox } from '@terraware/web-components';
 import { SiteType } from 'src/types/PlantingSite';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
@@ -382,15 +400,15 @@ export default function <span class="fstat-no" title="function not covered" >Pla
         &lt;/Typography&gt;
         &lt;Box display='flex' flexDirection={isMobile ? 'column' : 'row'} gap={3}&gt;
           &lt;SiteTypeButton
+            imageName='select-planting-site-simple@2x.png'
             description={strings.ADD_PLANTING_SITE_SIMPLE_SITE}
-            icon='blobbyIconLeaf'
             isSelected={detailed === false}
             onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDetailed(false)}</span>
             title={strings.SIMPLE_SITE}
           /&gt;
           &lt;SiteTypeButton
+            imageName='select-planting-site-detailed@2x.png'
             description={strings.ADD_PLANTING_SITE_DETAILED_SITE}
-            icon='blobbyIconSeedBank'
             isSelected={detailed === true}
             onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDetailed(true)}</span>
             title={strings.DETAILED_SITE}
@@ -402,16 +420,15 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 }
 &nbsp;
 type SiteTypeButtonProps = {
+  imageName: string;
   description: string;
-  icon: IconName;
   isSelected: boolean;
   onClick: () =&gt; void;
   title: string;
 };
 &nbsp;
-const SiteTypeButton = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> description, icon, isSelected, onClick, title }: SiteTypeButtonProps): JSX.Element =&gt; {</span>
+const SiteTypeButton = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> imageName, description, isSelected, onClick, title }: SiteTypeButtonProps): JSX.Element =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -425,12 +442,22 @@ const SiteTypeButton = <span class="cstat-no" title="statement not covered" ><sp
           isSelected ? `4px solid ${theme.palette.TwClrBrdrSelected}` : `2px solid ${theme.palette.TwClrBrdrTertiary}`
         }
         margin='0 auto'
+        display='flex'
+        justifyContent='center'
         sx={{ cursor: 'pointer' }}
         onClick={onClick}
       &gt;
-        &lt;Box width='160px' height='160px' borderRadius='8px'&gt;
-          &lt;Icon name={icon} size='xlarge' className={classes.icon} /&gt;
-        &lt;/Box&gt;
+        &lt;Box
+          width='160px'
+          height='160px'
+          margin='auto'
+          borderRadius='8px'
+          sx={{
+            backgroundImage: `url(/assets/${imageName})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+          }}
+        /&gt;
       &lt;/Box&gt;
       &lt;Typography fontSize='20px' lineHeight='28px' fontWeight={600} textAlign='center' margin={theme.spacing(2, 0, 3)}&gt;
         {title}
@@ -448,7 +475,7 @@ const SiteTypeButton = <span class="cstat-no" title="statement not covered" ><sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-13T17:55:03.791Z
+                at 2023-12-13T18:11:21.059Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
