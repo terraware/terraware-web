@@ -4,8 +4,8 @@ import { Batch } from 'src/types/Batch';
 import OverviewItemCard from '../common/OverviewItemCard';
 import { SubLocationService } from 'src/services';
 import React, { useEffect, useState } from 'react';
-import Link from '../common/Link';
-import { APP_PATHS } from '../../constants';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 
 interface BatchSummaryProps {
   batch: Batch;
