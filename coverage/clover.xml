@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1702481600712" clover="3.2.0">
-  <project timestamp="1702481600712" name="All files">
-    <metrics statements="14805" coveredstatements="376" conditionals="9513" coveredconditionals="91" methods="4663" coveredmethods="78" elements="28981" coveredelements="545" complexity="0" loc="14805" ncloc="14805" packages="118" files="578" classes="578"/>
+<coverage generated="1702487496866" clover="3.2.0">
+  <project timestamp="1702487496866" name="All files">
+    <metrics statements="14823" coveredstatements="394" conditionals="9517" coveredconditionals="95" methods="4674" coveredmethods="89" elements="29014" coveredelements="578" complexity="0" loc="14823" ncloc="14823" packages="118" files="579" classes="579"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -13813,7 +13813,7 @@
       </file>
     </package>
     <package name="src.hooks">
-      <metrics statements="17" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="0"/>
+      <metrics statements="35" coveredstatements="18" conditionals="6" coveredconditionals="4" methods="18" coveredmethods="11"/>
       <file name="useAppVersion.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useAppVersion.ts">
         <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
@@ -13836,6 +13836,27 @@
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
+      </file>
+      <file name="useUndoRedoState.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useUndoRedoState.ts">
+        <metrics statements="18" coveredstatements="18" conditionals="4" coveredconditionals="4" methods="11" coveredmethods="11"/>
+        <line num="19" count="26" type="stmt"/>
+        <line num="20" count="26" type="stmt"/>
+        <line num="22" count="26" type="stmt"/>
+        <line num="24" count="26" type="stmt"/>
+        <line num="26" count="9" type="stmt"/>
+        <line num="27" count="9" type="stmt"/>
+        <line num="28" count="9" type="stmt"/>
+        <line num="29" count="9" type="stmt"/>
+        <line num="31" count="9" type="stmt"/>
+        <line num="36" count="26" type="stmt"/>
+        <line num="37" count="26" type="cond" truecount="2" falsecount="0"/>
+        <line num="38" count="14" type="stmt"/>
+        <line num="40" count="12" type="stmt"/>
+        <line num="44" count="26" type="stmt"/>
+        <line num="45" count="26" type="cond" truecount="2" falsecount="0"/>
+        <line num="46" count="7" type="stmt"/>
+        <line num="48" count="19" type="stmt"/>
+        <line num="52" count="26" type="stmt"/>
       </file>
     </package>
     <package name="src.providers">
