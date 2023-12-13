@@ -2,7 +2,7 @@ import strings from 'src/strings';
 import React, { useState } from 'react';
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, DialogBox, Icon, IconName } from '@terraware/web-components';
+import { Button, DialogBox } from '@terraware/web-components';
 import { SiteType } from 'src/types/PlantingSite';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -65,15 +65,15 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
         </Typography>
         <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} gap={3}>
           <SiteTypeButton
+            imageName='select-planting-site-simple@2x.png'
             description={strings.ADD_PLANTING_SITE_SIMPLE_SITE}
-            icon='blobbyIconLeaf'
             isSelected={detailed === false}
             onClick={() => setDetailed(false)}
             title={strings.SIMPLE_SITE}
           />
           <SiteTypeButton
+            imageName='select-planting-site-detailed@2x.png'
             description={strings.ADD_PLANTING_SITE_DETAILED_SITE}
-            icon='blobbyIconSeedBank'
             isSelected={detailed === true}
             onClick={() => setDetailed(true)}
             title={strings.DETAILED_SITE}
@@ -85,16 +85,15 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
 }
 
 type SiteTypeButtonProps = {
+  imageName: string;
   description: string;
-  icon: IconName;
   isSelected: boolean;
   onClick: () => void;
   title: string;
 };
 
-const SiteTypeButton = ({ description, icon, isSelected, onClick, title }: SiteTypeButtonProps): JSX.Element => {
+const SiteTypeButton = ({ imageName, description, isSelected, onClick, title }: SiteTypeButtonProps): JSX.Element => {
   const theme = useTheme();
-  const classes = useStyles();
   const { isMobile } = useDeviceInfo();
 
   return (
@@ -108,12 +107,22 @@ const SiteTypeButton = ({ description, icon, isSelected, onClick, title }: SiteT
           isSelected ? `4px solid ${theme.palette.TwClrBrdrSelected}` : `2px solid ${theme.palette.TwClrBrdrTertiary}`
         }
         margin='0 auto'
+        display='flex'
+        justifyContent='center'
         sx={{ cursor: 'pointer' }}
         onClick={onClick}
       >
-        <Box width='160px' height='160px' borderRadius='8px'>
-          <Icon name={icon} size='xlarge' className={classes.icon} />
-        </Box>
+        <Box
+          width='160px'
+          height='160px'
+          margin='auto'
+          borderRadius='8px'
+          sx={{
+            backgroundImage: `url(/assets/${imageName})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+          }}
+        />
       </Box>
       <Typography fontSize='20px' lineHeight='28px' fontWeight={600} textAlign='center' margin={theme.spacing(2, 0, 3)}>
         {title}
