@@ -60,7 +60,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
     } else if (batchesRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [batchesRequest.data, batchesRequest?.status, snackbar]);
+  }, [batchesRequest, snackbar]);
 
   return (
     <Grid container spacing={3} marginBottom={theme.spacing(4)}>
