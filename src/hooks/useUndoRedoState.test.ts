@@ -77,7 +77,7 @@ describe('useUndoRedoState', () => {
     expect(dataWith(result)).toEqual({ name: 'bunny', age: 5 });
   });
 
-  test('should allow multiple undo/redo across history', () => {
+  test('should allow multiple undo/redo across stack', () => {
     const { result } = renderHook(() => useUndoRedoState<Person>({ name: 'bugs', age: 25 }));
 
     act(() => void setDataWith(result)({ name: 'bunny', age: 5 }));
