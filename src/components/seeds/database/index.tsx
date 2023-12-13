@@ -39,6 +39,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectMessage } from 'src/redux/features/message/messageSelectors';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
+import isEnabled from '../../../features';
 
 interface StyleProps {
   isMobile: boolean;
@@ -152,6 +153,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const history = useHistory();
   const query = useQuery();
   const location = useStateLocation();
+  const featureFlagProjects = isEnabled('Projects');
   const {
     searchCriteria,
     setSearchCriteria,
@@ -166,19 +168,21 @@ export default function Database(props: DatabaseProps): JSX.Element {
     reloadData,
   } = props;
   const columns = columnsIndexed();
-  const displayColumnDetails = displayColumnNames.map((name) => {
-    const detail = { ...columns[name] };
+  const displayColumnDetails = displayColumnNames
+    .filter((name) => (featureFlagProjects ? true : name !== 'project_name'))
+    .map((name) => {
+      const detail = { ...columns[name] };
 
-    // set the classname for right aligned columns
-    if (RIGHT_ALIGNED_COLUMNS.indexOf(name) !== -1) {
-      detail.className = classes.rightAligned;
-    }
+      // set the classname for right aligned columns
+      if (RIGHT_ALIGNED_COLUMNS.indexOf(name) !== -1) {
+        detail.className = classes.rightAligned;
+      }
 
-    return detail;
-  });
-  const filterColumns = displayColumnDetails.filter((col) => col.key !== 'state');
+      return detail;
+    });
+  const filterColumns = displayColumnDetails.filter((col) => !['state', 'project_name'].includes(col.key));
   const searchTermColumns = [columns.accessionNumber, columns.speciesName, columns.collectionSiteName];
-  const preExpFilterColumn = columns.state;
+  const preExpFilterColumns = featureFlagProjects ? [columns.state, columns.project_name] : [columns.state];
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
@@ -712,15 +716,17 @@ export default function Database(props: DatabaseProps): JSX.Element {
                       }}
                     >
                       {isOnboarded && availableFieldOptions && fieldOptions && (
-                        <Filters
-                          filters={searchCriteria}
-                          availableValues={availableFieldOptions}
-                          allValues={fieldOptions}
-                          columns={filterColumns}
-                          searchColumns={searchTermColumns}
-                          preExpFilterColumn={preExpFilterColumn}
-                          onChange={onFilterChange}
-                        />
+                        <>
+                          <Filters
+                            filters={searchCriteria}
+                            availableValues={availableFieldOptions}
+                            allValues={fieldOptions}
+                            columns={filterColumns}
+                            searchColumns={searchTermColumns}
+                            preExpFilterColumns={preExpFilterColumns}
+                            onChange={onFilterChange}
+                          />
+                        </>
                       )}
                       {searchResults && (
                         <Table

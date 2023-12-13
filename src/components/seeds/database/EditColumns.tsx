@@ -180,7 +180,11 @@ function sections(system?: string): Section[] {
   const columnsSections = [
     {
       name: strings.GENERAL,
-      options: [[{ ...columns.accessionNumber, disabled: true }], [{ ...columns.state, disabled: true }]],
+      options: [
+        [{ ...columns.accessionNumber, disabled: true }],
+        [{ ...columns.state, disabled: true }],
+        [{ ...columns.project_name, disabled: true }],
+      ],
     },
     {
       name: strings.STORING,
