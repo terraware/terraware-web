@@ -9,7 +9,7 @@ type SubLocationsDropdownProps<T extends { subLocationIds?: number[] } | undefin
   availableSubLocations: SubLocation[] | undefined;
   record: T;
   setRecord: (setFn: (previousValue: T) => T) => void;
-  minimal: boolean;
+  minimal?: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
