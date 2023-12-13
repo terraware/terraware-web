@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1702491081494" clover="3.2.0">
-  <project timestamp="1702491081494" name="All files">
-    <metrics statements="14822" coveredstatements="394" conditionals="9519" coveredconditionals="95" methods="4674" coveredmethods="89" elements="29015" coveredelements="578" complexity="0" loc="14822" ncloc="14822" packages="118" files="579" classes="579"/>
+<coverage generated="1702509075605" clover="3.2.0">
+  <project timestamp="1702509075606" name="All files">
+    <metrics statements="14822" coveredstatements="394" conditionals="9521" coveredconditionals="95" methods="4674" coveredmethods="89" elements="29017" coveredelements="578" complexity="0" loc="14822" ncloc="14822" packages="118" files="579" classes="579"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2431,7 +2431,7 @@
       </file>
     </package>
     <package name="src.components.InventoryV2">
-      <metrics statements="775" coveredstatements="0" conditionals="577" coveredconditionals="0" methods="252" coveredmethods="0"/>
+      <metrics statements="775" coveredstatements="0" conditionals="579" coveredconditionals="0" methods="252" coveredmethods="0"/>
       <file name="BatchDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchDetails.tsx">
         <metrics statements="23" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
@@ -3069,7 +3069,7 @@
         <line num="175" count="0" type="stmt"/>
       </file>
       <file name="InventoryTable.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/InventoryTable.tsx">
-        <metrics statements="15" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
