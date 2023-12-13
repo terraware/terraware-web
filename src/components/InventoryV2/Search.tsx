@@ -20,6 +20,7 @@ import { Project } from 'src/types/Project';
 import InventoryFilters, { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 import { convertFilterGroupToMap, getNurseryName } from 'src/components/InventoryV2/FilterUtils';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles(() => ({
   popoverContainer: {
@@ -50,19 +51,21 @@ interface SearchProps {
 }
 
 type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
-  id: keyof Omit<InventoryFiltersType, 'showEmptyBatches'>;
+  id: keyof InventoryFiltersType;
   emptyValue: unknown;
 };
 
 export default function Search(props: SearchProps): JSX.Element | null {
+  const { searchValue, onSearch, filters, setFilters, showProjectsFilter } = props;
+
+  const dispatch = useAppDispatch();
   const theme = useTheme();
   const classes = useStyles();
   const { activeLocale } = useLocalization();
-  const { searchValue, onSearch, filters, setFilters, showProjectsFilter } = props;
-  const origin = props.origin || 'Species';
-
   const { selectedOrganization } = useOrganization();
-  const dispatch = useAppDispatch();
+  const featureFlagProjects = isEnabled('Projects');
+
+  const origin = props.origin || 'Species';
 
   const species = useAppSelector(selectSpecies);
   const projects = useAppSelector(selectProjects);
@@ -148,8 +151,26 @@ export default function Search(props: SearchProps): JSX.Element | null {
       });
     }
 
+    if (filters.showEmptyBatches && filters.showEmptyBatches[0] === 'true') {
+      data.push({
+        id: 'showEmptyBatches',
+        value: strings.FILTER_SHOW_EMPTY_BATCHES,
+        emptyValue: ['false'],
+      });
+    }
+
     setFilterPillData(data);
-  }, [selectedOrganization, filters, getSpeciesName, getSubLocationName, getProjectName]);
+  }, [
+    selectedOrganization,
+    filters.facilityIds,
+    filters.speciesIds,
+    filters.subLocationsIds,
+    filters.projectIds,
+    filters.showEmptyBatches,
+    getSpeciesName,
+    getSubLocationName,
+    getProjectName,
+  ]);
 
   useEffect(() => {
     if (origin === 'Nursery') {
@@ -158,15 +179,20 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [origin, dispatch, selectedOrganization.id]);
 
   const onRemovePillList = useCallback(
-    (filterId: keyof Omit<InventoryFiltersType, 'showEmptyBatches'>) => {
+    (filterId: keyof InventoryFiltersType) => {
       const filter = filterPillData?.find((filterPillDatum) => filterPillDatum.id === filterId);
       if (filterId === 'facilityIds') {
         setFilters({ ...filters, facilityIds: [], subLocationsIds: [] });
+      } else if (filterId === 'showEmptyBatches') {
+        setFilterGroupFilters({
+          showEmptyBatches: { ...initialFilters.showEmptyBatches, values: ['false'] },
+        });
+        setFilters({ ...filters, showEmptyBatches: ['false'] });
       } else {
         setFilters({ ...filters, [filterId]: filter?.emptyValue || null });
       }
     },
-    [filterPillData, filters, setFilters]
+    [filterPillData, filters, setFilters, setFilterGroupFilters]
   );
 
   if (origin === 'Nursery' && !species && !projects) {
@@ -221,19 +247,21 @@ export default function Search(props: SearchProps): JSX.Element | null {
               options={nurseries.map((n: Facility) => n.id)}
               renderOption={(id: number) => nurseries.find((n) => n.id === id)?.name ?? ''}
             />
-            <InventoryFilters
-              filters={filters}
-              setFilters={setFilters}
-              disabled={!filters.facilityIds?.length}
-              label={strings.SUB_LOCATIONS}
-              filterKey='subLocationsIds'
-              options={subLocations?.map((sl: SubLocation) => sl.id) ?? []}
-              renderOption={(id: number) => subLocations?.find((sl) => sl.id === id)?.name ?? ''}
-            />
+            {filters.facilityIds && filters.facilityIds.length > 0 && (
+              <InventoryFilters
+                filters={filters}
+                setFilters={setFilters}
+                disabled={!filters.facilityIds?.length}
+                label={strings.SUB_LOCATIONS}
+                filterKey='subLocationsIds'
+                options={subLocations?.map((sl: SubLocation) => sl.id) ?? []}
+                renderOption={(id: number) => subLocations?.find((sl) => sl.id === id)?.name ?? ''}
+              />
+            )}
           </>
         )}
 
-        {showProjectsFilter && (
+        {featureFlagProjects && showProjectsFilter && (
           <InventoryFilters
             filters={filters}
             setFilters={setFilters}
@@ -283,16 +311,15 @@ export default function Search(props: SearchProps): JSX.Element | null {
             </Popover>
           </Box>
         )}
-
-        <Grid
-          display='flex'
-          flexDirection='row'
-          alignItems='center'
-          sx={{ marginTop: theme.spacing(0.5), marginLeft: theme.spacing(1) }}
-        >
-          <PillList data={filterPillData} onRemove={onRemovePillList} />
-        </Grid>
       </Box>
+      <Grid
+        display='flex'
+        flexDirection='row'
+        alignItems='center'
+        sx={{ marginTop: theme.spacing(0.5), marginLeft: theme.spacing(1) }}
+      >
+        <PillList data={filterPillData} onRemove={onRemovePillList} />
+      </Grid>
     </>
   );
 }

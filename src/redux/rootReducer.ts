@@ -26,10 +26,12 @@ import { messageReducer } from './features/message/messageSlice';
 import { userAnalyticsReducer } from './features/user/userAnalyticsSlice';
 import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/projects/projectsSlice';
 import { subLocationsReducer } from './features/subLocations/subLocationsSlice';
+import { batchesRequestsReducer } from './features/batches/batchesSlice';
 
 // assembly of app reducers
 export const reducers = {
   appVersion: appVersionReducer,
+  batchesRequests: batchesRequestsReducer,
   message: messageReducer,
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,

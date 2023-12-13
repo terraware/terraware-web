@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { FormControlLabel, Radio, RadioGroup, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, DialogBox } from '@terraware/web-components';
+import { SiteType } from 'src/types/PlantingSite';
 
 const useStyles = makeStyles((theme: Theme) => ({
   buttonSpacing: {
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export type PlantingSiteSelectTypeModalProps = {
   open: boolean;
-  onNext: (goToCreate: boolean) => void;
+  onNext: (siteType: SiteType) => void;
   onClose: () => void;
 };
 
@@ -28,7 +29,7 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
   };
 
   const handleNext = () => {
-    onNext(detailed === false);
+    onNext(detailed ? 'detailed' : 'simple');
     handleClose();
   };
 

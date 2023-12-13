@@ -375,7 +375,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
             if (facilityId && name === 'facility_name') {
               return false;
             }
-            return name !== 'subeLocation_name';
+            return name !== 'subLocation_name';
           })
           .concat(facilityId ? ['facility_name'] : [])
           .concat(subLocationName ? ['subLocation_name'] : []);

@@ -23,6 +23,7 @@ import { requestSubLocations } from 'src/redux/features/subLocations/subLocation
 import { useHistory } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { SubLocation } from 'src/types/Facility';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -87,6 +88,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+  const featureFlagProjects = isEnabled('Projects');
 
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
     field: 'batchNumber',
@@ -237,7 +239,9 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           }}
           setSearchSortOrder={onSearchSortOrder}
           isPresorted={!!searchSortOrder}
-          columns={columns}
+          columns={() =>
+            featureFlagProjects ? columns() : columns().filter((column) => column.key !== 'project_name')
+          }
           reloadData={onApplyFilters}
           origin='Batches'
         />
