@@ -41,6 +41,7 @@ import { getUnitName, isUnitInPreferredSystem } from 'src/units';
 import ConvertedValue from 'src/components/ConvertedValue';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -108,6 +109,7 @@ export default function Accession2View(): JSX.Element {
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
+  const featureFlagProjects = isEnabled('Projects');
 
   const seedBankTimeZone = useMemo(() => {
     const facility = accession?.facilityId
@@ -366,19 +368,9 @@ export default function Accession2View(): JSX.Element {
     (accession?.state === 'Awaiting Check-In' && accession?.bagNumbers !== undefined ? 1 : 0) +
     (accession?.facilityId !== undefined ? 1 : 0) +
     (accession?.state === 'Drying' ? 1 : 0) +
-    3;
+    4;
 
-  const getOverviewGridSize = (row: number) => {
-    if (isMobile) {
-      return 12;
-    } else if (isTablet) {
-      if (overviewItemCount < 6 && row === 2) {
-        return 6;
-      }
-      return 4;
-    }
-    return 1;
-  };
+  const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
 
   const quantityEditable = userCanEdit && (accession?.state === 'Drying' || accession?.state === 'In Storage');
   const viabilityEditable = userCanEdit && accession?.state !== 'Used Up';
@@ -540,11 +532,11 @@ export default function Accession2View(): JSX.Element {
         container
         ref={contentRef}
         spacing={themeObj.spacing(3)}
-        columns={!isMobile && !isTablet ? overviewItemCount : 12}
         marginBottom={themeObj.spacing(3)}
+        alignItems={'stretch'}
       >
         {accession?.state && (
-          <Grid item xs={getOverviewGridSize(1)}>
+          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
             <OverviewItemCard
               isEditable={!(isAwaitingCheckin || !userCanEdit)}
               handleEdit={() => setOpenEditStateModal(true)}
@@ -566,13 +558,9 @@ export default function Accession2View(): JSX.Element {
             />
           </Grid>
         )}
-        {isAwaitingCheckin && accession?.bagNumbers !== undefined && (
-          <Grid item xs={getOverviewGridSize(1)}>
-            <OverviewItemCard isEditable={false} title={strings.BAG_ID} contents={accession.bagNumbers.join(', ')} />
-          </Grid>
-        )}
+
         {accession?.facilityId !== undefined && (
-          <Grid item xs={getOverviewGridSize(1)}>
+          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
             <OverviewItemCard
               isEditable={userCanEdit}
               handleEdit={() => setOpenEditLocationModal(true)}
@@ -586,8 +574,9 @@ export default function Accession2View(): JSX.Element {
             />
           </Grid>
         )}
+
         {accession?.state === 'Drying' && (
-          <Grid item xs={getOverviewGridSize(1)}>
+          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
             <OverviewItemCard
               isEditable={userCanEdit}
               handleEdit={() => setOpenEndDryingReminderModal(true)}
@@ -601,7 +590,20 @@ export default function Accession2View(): JSX.Element {
             />
           </Grid>
         )}
-        <Grid item xs={getOverviewGridSize(1)}>
+
+        {featureFlagProjects && (
+          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+            <OverviewItemCard isEditable={false} title={strings.PROJECT} contents={'TODO projects dropdown'} />
+          </Grid>
+        )}
+
+        {isAwaitingCheckin && accession?.bagNumbers !== undefined && (
+          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+            <OverviewItemCard isEditable={false} title={strings.BAG_ID} contents={accession.bagNumbers.join(', ')} />
+          </Grid>
+        )}
+
+        <Grid item flexBasis={overviewGridSize} flexGrow={1}>
           <OverviewItemCard
             isEditable={quantityEditable}
             handleEdit={() => setOpenQuantityModal(true)}
@@ -632,10 +634,12 @@ export default function Accession2View(): JSX.Element {
             }
           />
         </Grid>
-        <Grid item xs={getOverviewGridSize(2)}>
+
+        <Grid item flexBasis={overviewGridSize} flexGrow={1}>
           <OverviewItemCard isEditable={false} title={strings.AGE} contents={age} />
         </Grid>
-        <Grid item xs={getOverviewGridSize(2)}>
+
+        <Grid item flexBasis={overviewGridSize} flexGrow={1}>
           <OverviewItemCard
             isEditable={viabilityEditable}
             handleEdit={() => setOpenViabilityModal(true)}
