@@ -42,6 +42,9 @@ import ConvertedValue from 'src/components/ConvertedValue';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import isEnabled from 'src/features';
+import ProjectSelectorModal from './ProjectSelectorModal';
+import { useAppSelector } from '../../../redux/store';
+import { selectProjects } from '../../../redux/features/projects/projectsSelectors';
 
 const useStyles = makeStyles((theme: Theme) => ({
   iconStyle: {
@@ -110,6 +113,9 @@ export default function Accession2View(): JSX.Element {
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
   const featureFlagProjects = isEnabled('Projects');
+
+  const projects = useAppSelector(selectProjects);
+  const accessionProject = projects?.find((project) => project.id === accession?.projectId);
 
   const seedBankTimeZone = useMemo(() => {
     const facility = accession?.facilityId
@@ -591,9 +597,13 @@ export default function Accession2View(): JSX.Element {
           </Grid>
         )}
 
-        {featureFlagProjects && (
+        {featureFlagProjects && accession && (
           <Grid item flexBasis={overviewGridSize} flexGrow={1}>
-            <OverviewItemCard isEditable={false} title={strings.PROJECT} contents={'TODO projects dropdown'} />
+            <OverviewItemCard
+              isEditable={false}
+              title={strings.PROJECT}
+              contents={accessionProject?.name ?? <ProjectSelectorModal accession={accession} />}
+            />
           </Grid>
         )}
 
