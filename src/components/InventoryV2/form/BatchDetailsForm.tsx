@@ -378,6 +378,7 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
                 errorText={validateFields && record.germinatingQuantity === undefined ? strings.REQUIRED_FIELD : ''}
                 min={0}
+                disabledCharacters={['.']}
               />
             </Grid>
 
@@ -391,6 +392,7 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                 errorText={validateFields && record.notReadyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
                 min={0}
+                disabledCharacters={['.']}
               />
             </Grid>
 
@@ -415,6 +417,7 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
                 errorText={validateFields && record.readyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
                 min={0}
+                disabledCharacters={['.']}
               />
             </Grid>
 
