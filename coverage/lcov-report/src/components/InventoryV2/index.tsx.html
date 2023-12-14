@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -381,7 +381,12 @@
 <a name='L316'></a><a href='#L316'>316</a>
 <a name='L317'></a><a href='#L317'>317</a>
 <a name='L318'></a><a href='#L318'>318</a>
-<a name='L319'></a><a href='#L319'>319</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -531,9 +536,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -718,11 +726,12 @@ import { isAdmin } from 'src/utils/organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
-import { useOrganization } from 'src/providers';
+import { useOrganization, useUser } from 'src/providers';
 import InventoryListBySpecies from './InventoryListBySpecies';
 import InventoryListByNursery from './InventoryListByNursery';
 import DownloadReportModal from './DownloadReportModal';
 import InventoryListByBatch from './InventoryListByBatch';
+import { PreferencesService } from 'src/services';
 &nbsp;
 export type FacilityName = {
   facility_name: string;
@@ -844,18 +853,21 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   const { hasNurseries, hasSpecies } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [importInventoryModalOpen, setImportInventoryModalOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
+  const { userPreferences, reloadUserPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
-  const tab = <span class="cstat-no" title="statement not covered" >query.get('tab') || 'batches_by_species';</span>
+  const tab = <span class="cstat-no" title="statement not covered" >query.get('tab') || (userPreferences.inventoryListType as string) || 'batches_by_species';</span>
   const [activeTab, setActiveTab] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;(tab);</span>
   const [reportModalOpen, setReportModalOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [reportData, setReportData] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchInventoryParams&gt;();</span>
 &nbsp;
   const onTabChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (n</span>ewTab: string) =&gt; {
+<span class="fstat-no" title="function not covered" >    as</span>ync (newTab: string) =&gt; {
+<span class="cstat-no" title="statement not covered" >      await PreferencesService.updateUserPreferences({ inventoryListType: newTab });</span>
+<span class="cstat-no" title="statement not covered" >      reloadUserPreferences();</span>
 <span class="cstat-no" title="statement not covered" >      query.set('tab', newTab);</span>
 <span class="cstat-no" title="statement not covered" >      history.push(getLocation(location.pathname, location, query.toString()));</span>
     },
-    [query, history, location]
+    [query, history, location, reloadUserPreferences]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1024,7 +1036,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-14T16:39:03.663Z
+                at 2023-12-14T16:53:09.445Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
