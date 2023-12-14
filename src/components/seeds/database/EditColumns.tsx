@@ -10,7 +10,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useUser } from 'src/providers';
 import { IconTooltip } from '@terraware/web-components';
-import isEnabled from '../../../features';
+import isEnabled from 'src/features';
 
 export interface Props {
   open: boolean;
