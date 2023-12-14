@@ -70,6 +70,7 @@ ADD_SPECIES_MANUALLY_DESCRIPTION,"Enter scientific name and other optional field
 ADD_SUB_LOCATION,Add Sub-Location,
 ADD_SUBSET_WEIGHT_AND_COUNT,Add Subset Weight And Count,
 ADD_TEST,Add Test,
+ADD_TO_PROJECT,Add to Project,
 ADD_VIABILITY,Add Viability,
 ADD_VIABILITY_TEST,Add Viability Test,
 ADDITIONAL_NURSERY_NOTES,Additional Nursery Notes,
