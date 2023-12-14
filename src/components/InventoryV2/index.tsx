@@ -17,11 +17,12 @@ import { isAdmin } from 'src/utils/organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
-import { useOrganization } from 'src/providers';
+import { useOrganization, useUser } from 'src/providers';
 import InventoryListBySpecies from './InventoryListBySpecies';
 import InventoryListByNursery from './InventoryListByNursery';
 import DownloadReportModal from './DownloadReportModal';
 import InventoryListByBatch from './InventoryListByBatch';
+import { PreferencesService } from 'src/services';
 
 export type FacilityName = {
   facility_name: string;
@@ -143,18 +144,21 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const { hasNurseries, hasSpecies } = props;
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
   const contentRef = useRef(null);
+  const { userPreferences, reloadUserPreferences } = useUser();
   const query = useQuery();
-  const tab = query.get('tab') || 'batches_by_species';
+  const tab = query.get('tab') || (userPreferences.inventoryListType as string) || 'batches_by_species';
   const [activeTab, setActiveTab] = useState<string>(tab);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [reportData, setReportData] = useState<SearchInventoryParams>();
 
   const onTabChange = useCallback(
-    (newTab: string) => {
+    async (newTab: string) => {
+      await PreferencesService.updateUserPreferences({ inventoryListType: newTab });
+      reloadUserPreferences();
       query.set('tab', newTab);
       history.push(getLocation(location.pathname, location, query.toString()));
     },
-    [query, history, location]
+    [query, history, location, reloadUserPreferences]
   );
 
   useEffect(() => {
