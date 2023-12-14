@@ -39,7 +39,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectMessage } from 'src/redux/features/message/messageSelectors';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
-import isEnabled from '../../../features';
+import isEnabled from 'src/features';
 
 interface StyleProps {
   isMobile: boolean;
@@ -716,17 +716,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
                       }}
                     >
                       {isOnboarded && availableFieldOptions && fieldOptions && (
-                        <>
-                          <Filters
-                            filters={searchCriteria}
-                            availableValues={availableFieldOptions}
-                            allValues={fieldOptions}
-                            columns={filterColumns}
-                            searchColumns={searchTermColumns}
-                            preExpFilterColumns={preExpFilterColumns}
-                            onChange={onFilterChange}
-                          />
-                        </>
+                        <Filters
+                          filters={searchCriteria}
+                          availableValues={availableFieldOptions}
+                          allValues={fieldOptions}
+                          columns={filterColumns}
+                          searchColumns={searchTermColumns}
+                          preExpFilterColumns={preExpFilterColumns}
+                          onChange={onFilterChange}
+                        />
                       )}
                       {searchResults && (
                         <Table
