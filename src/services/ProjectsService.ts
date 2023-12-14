@@ -21,6 +21,9 @@ export type UpdateProjectResponsePayload =
 export type DeleteProjectResponsePayload =
   paths[typeof PROJECT_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
+export type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
+export type AssignProjectResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
+
 /**
  * exported type
  */
@@ -109,10 +112,8 @@ const getProject = (projectId: number): Promise<Response2<Project>> =>
     (response) => ({ data: response?.project })
   );
 
-type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
-
 const assignProjectToEntities = (projectId: number, entities: AssignProjectRequestPayload) =>
-  httpProjects.post({
+  httpProjects.post2<AssignProjectResponsePayload>({
     url: PROJECT_ASSIGN_ENDPOINT,
     urlReplacements: { '{id}': `${projectId}` },
     entity: entities,
