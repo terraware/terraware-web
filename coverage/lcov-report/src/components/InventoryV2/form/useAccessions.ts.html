@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -108,7 +108,22 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,6 +143,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -157,6 +185,7 @@
 import { SearchResponseElement } from 'src/types/Search';
 import SeedBankService from 'src/services/SeedBankService';
 import { useOrganization } from 'src/providers';
+import strings from 'src/strings';
 &nbsp;
 const SEARCH_FIELDS_ACCESSIONS = <span class="cstat-no" title="statement not covered" >['id', 'accessionNumber', 'speciesName'];</span>
 export type SearchResponseAccession = {
@@ -165,7 +194,7 @@ export type SearchResponseAccession = {
   speciesName: string;
 };
 &nbsp;
-export const useAccessions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>ecord?: { accessionId?: number }) =&gt; {</span>
+export const useAccessions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>ecord?: { accessionId?: number }, excludeUsedUp?: boolean) =&gt; {</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
 &nbsp;
   const [availableAccessions, setAvailableAccessions] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchResponseAccession[]&gt;();</span>
@@ -175,6 +204,19 @@ export const useAccessions = <span class="cstat-no" title="statement not covered
     const results: SearchResponseElement[] | null = <span class="cstat-no" title="statement not covered" >await SeedBankService.searchAccessions({</span>
       organizationId: selectedOrganization.id,
       fields: SEARCH_FIELDS_ACCESSIONS,
+      searchCriteria: excludeUsedUp
+        ? {
+            excludeUsedUp: {
+              operation: 'not',
+              child: {
+                operation: 'field',
+                field: 'state',
+                type: 'Exact',
+                values: [strings.USED_UP],
+              },
+            },
+          }
+        : undefined,
     });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!results?.length) {</span>
@@ -182,7 +224,7 @@ export const useAccessions = <span class="cstat-no" title="statement not covered
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    setAvailableAccessions(results as SearchResponseAccession[]);</span>
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization.id, excludeUsedUp]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (availableAccessions &amp;&amp; record?.accessionId) {</span>
@@ -205,7 +247,7 @@ export const useAccessions = <span class="cstat-no" title="statement not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-14T17:22:28.337Z
+                at 2023-12-14T22:13:42.604Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
