@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { SearchResponseElement } from 'src/types/Search';
 import SeedBankService from 'src/services/SeedBankService';
 import { useOrganization } from 'src/providers';
+import strings from 'src/strings';
 
 const SEARCH_FIELDS_ACCESSIONS = ['id', 'accessionNumber', 'speciesName'];
 export type SearchResponseAccession = {
@@ -10,7 +11,7 @@ export type SearchResponseAccession = {
   speciesName: string;
 };
 
-export const useAccessions = (record?: { accessionId?: number }) => {
+export const useAccessions = (record?: { accessionId?: number }, excludeUsedUp?: boolean) => {
   const { selectedOrganization } = useOrganization();
 
   const [availableAccessions, setAvailableAccessions] = useState<SearchResponseAccession[]>();
@@ -20,6 +21,19 @@ export const useAccessions = (record?: { accessionId?: number }) => {
     const results: SearchResponseElement[] | null = await SeedBankService.searchAccessions({
       organizationId: selectedOrganization.id,
       fields: SEARCH_FIELDS_ACCESSIONS,
+      searchCriteria: excludeUsedUp
+        ? {
+            excludeUsedUp: {
+              operation: 'not',
+              child: {
+                operation: 'field',
+                field: 'state',
+                type: 'Exact',
+                values: [strings.USED_UP],
+              },
+            },
+          }
+        : undefined,
     });
 
     if (!results?.length) {
@@ -27,7 +41,7 @@ export const useAccessions = (record?: { accessionId?: number }) => {
     }
 
     setAvailableAccessions(results as SearchResponseAccession[]);
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization.id, excludeUsedUp]);
 
   useEffect(() => {
     if (availableAccessions && record?.accessionId) {
