@@ -1,5 +1,5 @@
 import { Checkbox } from '@terraware/web-components';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -12,23 +12,40 @@ type TimeZoneEntity = {
 
 type LocationTimeZoneSelectorProps = {
   onChangeTimeZone: (tzSelected: TimeZoneDescription | undefined) => void;
+  /**
+   * Called with  the time zone that will be used for the location. If the location has no time
+   * zone, this will be the organization's time zone. This is called at component initialization
+   * time and again whenever the user changes the location's time zone.
+   */
+  onEffectiveTimeZone?: (timeZone: TimeZoneDescription | undefined) => void;
   location: TimeZoneEntity;
   tooltip?: string;
 };
 
 export default function LocationTimeZoneSelector(props: LocationTimeZoneSelectorProps): JSX.Element {
   const timeZoneFetcher = useLocationTimeZone();
-  const { onChangeTimeZone, location, tooltip } = props;
+  const { onChangeTimeZone, onEffectiveTimeZone, location, tooltip } = props;
   const [lastSelected, setLastSelected] = useState<TimeZoneEntity>(location);
   const [orgTZChecked, setOrgTZChecked] = useState<boolean>(!!location.timeZone);
   const [timeZone, setTimeZone] = useState<TimeZoneDescription>(timeZoneFetcher.get(lastSelected));
 
+  const setEffectiveTimeZone = useCallback(
+    (value: TimeZoneDescription | undefined) => {
+      if (onEffectiveTimeZone) {
+        onEffectiveTimeZone(value);
+      }
+    },
+    [onEffectiveTimeZone]
+  );
+
   useEffect(() => {
     if (location?.id && location?.id !== -1) {
+      const fetchedTimeZone = timeZoneFetcher.get(location);
       setLastSelected(location);
-      setTimeZone(timeZoneFetcher.get(location));
+      setTimeZone(fetchedTimeZone);
+      setEffectiveTimeZone(fetchedTimeZone);
     }
-  }, [location, timeZoneFetcher]);
+  }, [location, timeZoneFetcher, setEffectiveTimeZone]);
 
   useEffect(() => {
     if (!location?.timeZone) {
@@ -42,13 +59,16 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
 
   const onOrgTimeZoneChecked = (checked: boolean) => {
     if (checked) {
+      const newTz = timeZoneFetcher.get(undefined, false);
       setOrgTZChecked(true);
-      onChangeTimeZone(undefined);
-      setTimeZone(timeZoneFetcher.get(undefined, false));
-    } else {
-      setOrgTZChecked(false);
-      const newTz = timeZoneFetcher.get(lastSelected, true);
       setTimeZone(newTz);
+      setEffectiveTimeZone(newTz);
+      onChangeTimeZone(undefined);
+    } else {
+      const newTz = timeZoneFetcher.get(lastSelected, true);
+      setOrgTZChecked(false);
+      setTimeZone(newTz);
+      setEffectiveTimeZone(newTz);
       onChangeTimeZone(newTz);
     }
   };
@@ -59,6 +79,7 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
         selectedTimeZone={timeZone.id}
         onTimeZoneSelected={(value) => {
           setTimeZone(value);
+          setEffectiveTimeZone(value);
           setLastSelected({ timeZone: value.id });
           onChangeTimeZone(value);
         }}
