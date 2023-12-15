@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1702671667162" clover="3.2.0">
-  <project timestamp="1702671667162" name="All files">
-    <metrics statements="14932" coveredstatements="394" conditionals="9596" coveredconditionals="95" methods="4706" coveredmethods="89" elements="29234" coveredelements="578" complexity="0" loc="14932" ncloc="14932" packages="118" files="580" classes="580"/>
+<coverage generated="1702673318680" clover="3.2.0">
+  <project timestamp="1702673318680" name="All files">
+    <metrics statements="14936" coveredstatements="394" conditionals="9598" coveredconditionals="95" methods="4707" coveredmethods="89" elements="29241" coveredelements="578" complexity="0" loc="14936" ncloc="14936" packages="118" files="580" classes="580"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2440,7 +2440,7 @@
       </file>
     </package>
     <package name="src.components.InventoryV2">
-      <metrics statements="778" coveredstatements="0" conditionals="580" coveredconditionals="0" methods="252" coveredmethods="0"/>
+      <metrics statements="780" coveredstatements="0" conditionals="582" coveredconditionals="0" methods="252" coveredmethods="0"/>
       <file name="BatchDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchDetails.tsx">
         <metrics statements="23" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
@@ -3153,7 +3153,7 @@
         <line num="37" count="0" type="stmt"/>
       </file>
       <file name="Search.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/Search.tsx">
-        <metrics statements="73" coveredstatements="0" conditionals="79" coveredconditionals="0" methods="36" coveredmethods="0"/>
+        <metrics statements="75" coveredstatements="0" conditionals="81" coveredconditionals="0" methods="36" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
@@ -3226,7 +3226,9 @@
         <line num="280" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="305" count="0" type="stmt"/>
         <line num="306" count="0" type="stmt"/>
-        <line num="307" count="0" type="stmt"/>
+        <line num="307" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="308" count="0" type="stmt"/>
+        <line num="310" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/index.tsx">
         <metrics statements="54" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="18" coveredmethods="0"/>
@@ -12692,17 +12694,19 @@
       </file>
     </package>
     <package name="src.components.common.FilterGroup.filters">
-      <metrics statements="198" coveredstatements="0" conditionals="149" coveredconditionals="0" methods="54" coveredmethods="0"/>
+      <metrics statements="200" coveredstatements="0" conditionals="149" coveredconditionals="0" methods="55" coveredmethods="0"/>
       <file name="FilterBoolean.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/FilterGroup/filters/FilterBoolean.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
       </file>
       <file name="FilterCountWeight.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/FilterGroup/filters/FilterCountWeight.tsx">
         <metrics statements="75" coveredstatements="0" conditionals="57" coveredconditionals="0" methods="11" coveredmethods="0"/>
