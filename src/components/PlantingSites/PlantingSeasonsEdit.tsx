@@ -222,7 +222,7 @@ export default function PlantingSeasonsEdit(props: Props): JSX.Element {
 
   const onDeletePlantingSeason = useCallback(
     (index: number) => {
-      setRows(rows.slice(0, index).concat(rows.slice(index + 1)));
+      setRows(rows.filter((_row, _index) => _index !== index));
     },
     [rows, setRows]
   );
