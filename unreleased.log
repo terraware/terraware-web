@@ -1,3 +1,6 @@
+cdfb87d1d SW-4587 Do not show withdraw button if the batch is not withdrawable (#1920)
+beddb0494 SW-4494 Add the ProjectAssignModal to the Accession summary view, behind feature flag (#1912)
+8cba4cd70 SW-4494 Create ProjectAssignModal which allows for assigning entity to project (#1911)
 60ceddb60 SW-4583 Inventory Batches Filter Reset (#1918)
 02c79f59f SW-4416 Add planting season editor (#1917)
 dd5262f40 SW-4415 Show planting seasons in site details (#1916)
