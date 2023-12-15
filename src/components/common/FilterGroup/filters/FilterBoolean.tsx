@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FieldNodePayload } from 'src/types/Search';
 import { Checkbox, theme } from '@terraware/web-components';
 import { Box } from '@mui/material';
@@ -23,6 +23,10 @@ interface Props {
 export default function FilterBoolean(props: Props): JSX.Element {
   const classes = useStyles();
   const [value, setValue] = useState(props.value);
+
+  useEffect(() => {
+    setValue(props.value);
+  }, [props.value]);
 
   const onChange = (_value: boolean) => {
     setValue(_value);
