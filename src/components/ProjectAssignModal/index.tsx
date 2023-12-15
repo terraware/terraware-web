@@ -6,12 +6,12 @@ import strings from 'src/strings';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { useProjects } from 'src/components/InventoryV2/form/useProjects';
-import { Accession } from 'src/types/Accession';
 import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import useSnackbar from 'src/utils/useSnackbar';
 import { requestProjectAssign } from 'src/redux/features/projects/projectsAsyncThunks';
+import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
 
 const useStyles = makeStyles((theme: Theme) => ({
   addIcon: {
@@ -22,20 +22,22 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface ProjectSelectorModalProps {
-  accession: Accession;
+type ProjectAssignableEntity = { id: number; projectId?: number };
+interface ProjectAssignModalProps<T extends ProjectAssignableEntity> {
+  entity: T;
+  assignPayloadCreator: () => AssignProjectRequestPayload;
 }
 
-const ProjectSelectorModal = (props: ProjectSelectorModalProps) => {
+function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAssignModalProps<T>) {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const classes = useStyles();
   const snackbar = useSnackbar();
 
-  const { availableProjects } = useProjects(props.accession);
+  const { availableProjects } = useProjects(props.entity);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [accession, setAccession] = useState(props.accession);
+  const [entity, setEntity] = useState(props.entity);
 
   const [requestId, setRequestId] = useState('');
   const projectRequest = useAppSelector((state) => selectProjectRequest(state, requestId));
@@ -45,22 +47,22 @@ const ProjectSelectorModal = (props: ProjectSelectorModalProps) => {
   }, []);
 
   const handleSave = useCallback(() => {
-    if (accession.projectId && props.accession.projectId !== accession.projectId) {
+    if (entity.projectId && props.entity.projectId !== entity.projectId) {
       const request = dispatch(
-        requestProjectAssign({ projectId: accession.projectId, entities: { accessionIds: [accession.id] } })
+        requestProjectAssign({ projectId: entity.projectId, entities: props.assignPayloadCreator() })
       );
       setRequestId(request.requestId);
     }
 
     setIsOpen(false);
-  }, [accession, dispatch, props.accession.projectId]);
+  }, [entity, dispatch, props.entity.projectId]);
 
   const handleUpdateProject = useCallback(
-    (setFn: (previousAccession: Accession) => Accession) => {
-      const nextAccession = setFn(accession);
-      setAccession(nextAccession);
+    (setFn: (previousEntity: T) => T) => {
+      const nextEntity = setFn(entity);
+      setEntity(nextEntity);
     },
-    [accession]
+    [entity]
   );
 
   useEffect(() => {
@@ -107,10 +109,10 @@ const ProjectSelectorModal = (props: ProjectSelectorModalProps) => {
           <Button label={strings.SAVE} onClick={handleSave} key='button-2' id='saveButton' />,
         ]}
       >
-        <ProjectsDropdown availableProjects={availableProjects} record={accession} setRecord={handleUpdateProject} />
+        <ProjectsDropdown availableProjects={availableProjects} record={entity} setRecord={handleUpdateProject} />
       </DialogBox>
     </>
   );
-};
+}
 
-export default ProjectSelectorModal;
+export default ProjectAssignModal;
