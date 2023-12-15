@@ -2,7 +2,11 @@ import { ActionReducerMapBuilder, createSlice, PayloadAction } from '@reduxjs/to
 import { Project } from 'src/types/Project';
 import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
 import { UpdateProjectResponsePayload } from 'src/services/ProjectsService';
-import { requestProjectDelete, requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
+import {
+  requestProjectAssign,
+  requestProjectDelete,
+  requestProjectUpdate,
+} from 'src/redux/features/projects/projectsAsyncThunks';
 
 // Define a type for the slice state
 type Data = {
@@ -52,6 +56,7 @@ export const projectsRequestsSlice = createSlice({
   extraReducers: (builder: ActionReducerMapBuilder<ProjectsRequestsState>) => {
     buildReducers(requestProjectUpdate)(builder);
     buildReducers(requestProjectDelete)(builder);
+    buildReducers(requestProjectAssign)(builder);
   },
 });
 
