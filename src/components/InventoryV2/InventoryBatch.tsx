@@ -63,6 +63,8 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
   const [inventoryNursery, setInventoryNursery] = useState<Facility>();
   const { selectedOrganization } = useOrganization();
 
+  const isWithdrawable = Number(batch?.readyQuantity) + Number(batch?.notReadyQuantity) > 0;
+
   useEffect(() => {
     if (speciesId) {
       setInventorySpecies(species.find((s) => s.id === Number(speciesId)));
@@ -186,17 +188,19 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
               {getNurseryLabel()}
             </Typography>
           </Box>
-          <Box>
-            <Button
-              label={strings.WITHDRAW}
-              onClick={() =>
-                history.push({
-                  pathname: APP_PATHS.BATCH_WITHDRAW,
-                  search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
-                })
-              }
-            />
-          </Box>
+          {isWithdrawable && (
+            <Box>
+              <Button
+                label={strings.WITHDRAW}
+                onClick={() =>
+                  history.push({
+                    pathname: APP_PATHS.BATCH_WITHDRAW,
+                    search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
+                  })
+                }
+              />
+            </Box>
+          )}
           <Grid item xs={12}>
             <PageSnackbar />
           </Grid>
