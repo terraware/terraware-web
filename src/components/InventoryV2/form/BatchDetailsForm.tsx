@@ -86,8 +86,8 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
   const speciesId = origin === 'Species' ? originId : record?.speciesId;
 
   const { availableSubLocations, selectedSubLocations } = useSubLocations(facilityId, record);
-  const { availableAccessions, selectedAccession } = useAccessions(record, speciesId, true);
   const { availableSpecies, selectedSpecies } = useSpecies(record);
+  const { availableAccessions, selectedAccession } = useAccessions(record, selectedSpecies?.id ?? speciesId, true);
   const { availableNurseries, selectedNursery } = useNurseries(record);
   const { availableProjects, selectedProject } = useProjects(record);
 

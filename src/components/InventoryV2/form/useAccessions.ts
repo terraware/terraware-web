@@ -59,10 +59,8 @@ export const useAccessions = (record?: { accessionId?: number }, speciesId?: num
   }, [availableAccessions, record?.accessionId]);
 
   useEffect(() => {
-    if (!availableAccessions) {
-      void initAccessions();
-    }
-  }, [availableAccessions, initAccessions]);
+    void initAccessions();
+  }, [initAccessions, speciesId]);
 
   return { availableAccessions, selectedAccession };
 };
