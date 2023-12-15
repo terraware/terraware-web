@@ -3,7 +3,7 @@ import _ from 'lodash';
 import strings from 'src/strings';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
-import { requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
+import { requestFetchBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { BatchData } from 'src/services/NurseryBatchService';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Batch } from 'src/types/Batch';
@@ -60,10 +60,12 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
       if (nextBatch) {
         setBatch(nextBatch);
       }
+      // Since we've updated the batch, we want to make sure any consumers are updated
+      dispatch(requestFetchBatch({ batchId: batch.id }));
     } else if (batchesRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [batchesRequest, snackbar]);
+  }, [batch.id, batchesRequest, dispatch, snackbar]);
 
   return (
     <OverviewItemCard
