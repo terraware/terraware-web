@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TfMain from 'src/components/common/TfMain';
-import { Box, Typography, Grid, Theme, useTheme } from '@mui/material';
+import { Box, Typography, Grid, Theme, useTheme, List, ListItem } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -18,6 +18,8 @@ import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
 import DeletePlantingSiteModal from './DeletePlantingSiteModal';
+import { PlantingSeason } from 'src/types/Tracking';
+import { DateTime } from 'luxon';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -37,6 +39,7 @@ export default function PlantingSiteView(): JSX.Element {
   const history = useHistory();
   const tz = useLocationTimeZone().get(plantingSite);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [plantingSeasons, setPlantingSeasons] = useState<PlantingSeason[]>([]);
 
   const gridSize = () => {
     if (isMobile) {
@@ -51,6 +54,15 @@ export default function PlantingSiteView(): JSX.Element {
     };
     history.push(editPlantingSiteLocation);
   };
+
+  useEffect(() => {
+    if (plantingSite?.plantingSeasons) {
+      // Only show upcoming planting seasons.
+      const today = DateTime.fromJSDate(new Date(), { zone: tz.id }).toISODate();
+      const upcomingSeasons = plantingSite.plantingSeasons.filter((plantingSeason) => plantingSeason.endDate >= today);
+      setPlantingSeasons(upcomingSeasons);
+    }
+  }, [plantingSite, tz.id]);
 
   return (
     <TfMain>
@@ -113,6 +125,23 @@ export default function PlantingSiteView(): JSX.Element {
               display={true}
             />
           </Grid>
+          {plantingSite?.plantingZones && (
+            <Grid item xs={gridSize()}>
+              <TextField
+                label={strings.UPCOMING_PLANTING_SEASONS}
+                id='upcomingPlantingSeasons'
+                type='text'
+                display={true}
+              />
+              <List dense={true}>
+                {plantingSeasons.map((plantingSeason) => (
+                  <ListItem disableGutters={true} key={plantingSeason.id}>
+                    {strings.formatString(strings.DATE_RANGE, plantingSeason.startDate, plantingSeason.endDate)}
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+          )}
         </Grid>
         {plantingSite?.boundary && (
           <Grid container flexGrow={1}>

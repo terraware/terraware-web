@@ -31,3 +31,6 @@ export type MonitoringPlotSearchResult = {
   id: number;
   fullName: string;
 };
+
+// planting seasons
+export type PlantingSeason = components['schemas']['PlantingSeasonPayload'];
