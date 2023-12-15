@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme, Theme, Popover } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, DropdownItem, TableColumnType, Tooltip } from '@terraware/web-components';
+import { Button, DropdownItem, PillList, PillListItem, TableColumnType, Tooltip } from '@terraware/web-components';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
@@ -13,11 +13,15 @@ import { NurseryBatchService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useAppSelector } from 'src/redux/store';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
-import { convertFilterGroupToMap, isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
+import { convertFilterGroupToMap, getNurseryName, isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
 import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import Search from 'src/components/InventoryV2/Search';
 import BatchesCellRenderer from './BatchesCellRenderer';
@@ -71,6 +75,11 @@ const initialFilters: Record<string, SearchNodePayload> = {
   },
 };
 
+type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
+  id: keyof InventoryFiltersType;
+  emptyValue: unknown;
+};
+
 export default function InventorySeedlingsTable(props: InventorySeedlingsTableProps): JSX.Element {
   const {
     modified,
@@ -94,6 +103,10 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const history = useHistory();
   const { activeLocale } = useLocalization();
 
+  const species = useAppSelector(selectSpecies);
+  const projects = useAppSelector(selectProjects);
+  const subLocations = useAppSelector(selectSubLocations);
+
   const [openExportModal, setOpenExportModal] = useState<boolean>(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
   const [batches, setBatches] = useState<SearchResponseElement[]>([]);
@@ -107,6 +120,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
   const [selectedBatch, setSelectedBatch] = useState<any>();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
+  const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
 
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
@@ -310,6 +324,97 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     return getBatchesExport(selectedOrganization.id, originId, getSearchFields(), searchSortOrder);
   }, [getBatchesExport, selectedOrganization.id, originId, getSearchFields, searchSortOrder]);
 
+  const onRemovePillList = useCallback(
+    (filterId: keyof InventoryFiltersType) => {
+      const filter = filterPillData?.find((filterPillDatum) => filterPillDatum.id === filterId);
+      if (filterId === 'facilityIds') {
+        setFilters({ ...filters, facilityIds: [], subLocationsIds: [] });
+      } else if (filterId === 'showEmptyBatches') {
+        setFilterGroupFilters({
+          showEmptyBatches: { ...initialFilters.showEmptyBatches, values: ['false'] },
+        });
+        setFilters({ ...filters, showEmptyBatches: ['false'] });
+      } else {
+        setFilters({ ...filters, [filterId]: filter?.emptyValue || null });
+      }
+    },
+    [filterPillData, filters, setFilters, setFilterGroupFilters]
+  );
+
+  const getSpeciesName = useCallback(
+    (speciesId: number) => (species || []).find((s) => s.id === speciesId)?.scientificName,
+    [species]
+  );
+
+  const getSubLocationName = useCallback(
+    (subLocationId: number) => subLocations?.find((sl) => subLocationId === sl.id)?.name ?? '',
+    [subLocations]
+  );
+
+  const getProjectName = useCallback(
+    (projectId: number) => (projects || []).find((p) => p.id === projectId)?.name,
+    [projects]
+  );
+
+  useEffect(() => {
+    const data: PillListItemWithEmptyValue[] = [];
+    if (filters.facilityIds?.length) {
+      data.push({
+        id: 'facilityIds',
+        label: strings.NURSERY,
+        value: filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization)).join(', ') ?? '',
+        emptyValue: [],
+      });
+    }
+
+    if (filters.speciesIds?.length) {
+      data.push({
+        id: 'speciesIds',
+        label: strings.SPECIES,
+        value: filters.speciesIds?.map(getSpeciesName).join(', ') ?? '',
+        emptyValue: [],
+      });
+    }
+
+    if (filters.subLocationsIds?.length) {
+      data.push({
+        id: 'subLocationsIds',
+        label: strings.SUB_LOCATIONS,
+        value: filters.subLocationsIds?.map(getSubLocationName).join(', ') ?? '',
+        emptyValue: [],
+      });
+    }
+
+    if (filters.projectIds?.length) {
+      data.push({
+        id: 'projectIds',
+        label: strings.PROJECTS,
+        value: filters.projectIds?.map(getProjectName).join(', ') ?? '',
+        emptyValue: [],
+      });
+    }
+
+    if (filters.showEmptyBatches && filters.showEmptyBatches[0] === 'true') {
+      data.push({
+        id: 'showEmptyBatches',
+        value: strings.FILTER_SHOW_EMPTY_BATCHES,
+        emptyValue: ['false'],
+      });
+    }
+
+    setFilterPillData(data);
+  }, [
+    selectedOrganization,
+    filters.facilityIds,
+    filters.speciesIds,
+    filters.subLocationsIds,
+    filters.projectIds,
+    filters.showEmptyBatches,
+    getSpeciesName,
+    getSubLocationName,
+    getProjectName,
+  ]);
+
   return (
     <>
       {openExportModal && (
@@ -435,6 +540,15 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               </Popover>
             </Box>
           </Box>
+
+          <Grid
+            display='flex'
+            flexDirection='row'
+            alignItems='center'
+            sx={{ marginTop: theme.spacing(0.5), marginLeft: theme.spacing(1) }}
+          >
+            <PillList data={filterPillData} onRemove={onRemovePillList} />
+          </Grid>
 
           <Box marginTop={theme.spacing(2)}>
             <Table
