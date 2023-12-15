@@ -304,7 +304,11 @@ export default function Search(props: SearchProps): JSX.Element | null {
                 onConfirm={(_filterGroupFilters: Record<string, SearchNodePayload>) => {
                   handleFilterClose();
                   setFilterGroupFilters(_filterGroupFilters);
-                  setFilters({ ...filters, ...convertFilterGroupToMap(_filterGroupFilters) });
+                  if (Object.keys(_filterGroupFilters).length === 0) {
+                    setFilters({});
+                  } else {
+                    setFilters({ ...filters, ...convertFilterGroupToMap(_filterGroupFilters) });
+                  }
                 }}
                 onCancel={handleFilterClose}
               />
