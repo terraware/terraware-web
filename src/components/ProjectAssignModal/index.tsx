@@ -26,6 +26,7 @@ type ProjectAssignableEntity = { id: number; projectId?: number };
 interface ProjectAssignModalProps<T extends ProjectAssignableEntity> {
   entity: T;
   assignPayloadCreator: () => AssignProjectRequestPayload;
+  reloadEntity?: () => void;
 }
 
 function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAssignModalProps<T>) {
@@ -55,7 +56,7 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
     }
 
     setIsOpen(false);
-  }, [entity, dispatch, props.entity.projectId]);
+  }, [entity.projectId, props, dispatch]);
 
   const handleUpdateProject = useCallback(
     (setFn: (previousEntity: T) => T) => {
@@ -68,12 +69,14 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
   useEffect(() => {
     if (projectRequest?.status === 'success') {
       setRequestId('');
+
+      if (props.reloadEntity) {
+        props.reloadEntity();
+      }
     } else if (projectRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-
-    return () => setRequestId('');
-  }, [projectRequest, snackbar]);
+  }, [projectRequest, props, snackbar]);
 
   const linkStyle = {
     color: theme.palette.TwClrTxtBrand,
