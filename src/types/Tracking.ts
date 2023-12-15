@@ -34,3 +34,4 @@ export type MonitoringPlotSearchResult = {
 
 // planting seasons
 export type PlantingSeason = components['schemas']['PlantingSeasonPayload'];
+export type UpdatedPlantingSeason = components['schemas']['UpdatedPlantingSeasonPayload'];
