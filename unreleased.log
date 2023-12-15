@@ -1,3 +1,4 @@
+dd5262f40 SW-4415 Show planting seasons in site details (#1916)
 c9686d372 Expose effective time zone from selector (#1915)
 8322938b6 SW-4580 Disallow Floating Point Quantities in Add Inventory (#1909)
 6f206c703 SW-4494 Add project assign request to redux (#1910)
