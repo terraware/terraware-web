@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1702675419065" clover="3.2.0">
-  <project timestamp="1702675419065" name="All files">
-    <metrics statements="14970" coveredstatements="394" conditionals="9613" coveredconditionals="95" methods="4717" coveredmethods="89" elements="29300" coveredelements="578" complexity="0" loc="14970" ncloc="14970" packages="119" files="581" classes="581"/>
+<coverage generated="1702676025389" clover="3.2.0">
+  <project timestamp="1702676025390" name="All files">
+    <metrics statements="14970" coveredstatements="394" conditionals="9615" coveredconditionals="95" methods="4717" coveredmethods="89" elements="29302" coveredelements="578" complexity="0" loc="14970" ncloc="14970" packages="119" files="581" classes="581"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -12028,7 +12028,7 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="442" coveredstatements="0" conditionals="351" coveredconditionals="0" methods="151" coveredmethods="0"/>
+      <metrics statements="442" coveredstatements="0" conditionals="353" coveredconditionals="0" methods="151" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
@@ -12369,11 +12369,11 @@
         <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="OverviewItemCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/OverviewItemCard.tsx">
-        <metrics statements="4" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
+        <metrics statements="4" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
-        <line num="84" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="3"/>
       </file>
       <file name="PageCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PageCard.tsx">
         <metrics statements="16" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="6" coveredmethods="0"/>
