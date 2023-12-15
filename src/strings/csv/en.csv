@@ -876,7 +876,11 @@ PLANTING_PROGRESS_PER_ZONE_DESCRIPTION_2,"Once a zone has been marked as complet
 PLANTING_PROGRESS_PERCENT,Planting Progress (%),
 PLANTING_PROGRESS_TABLE_DESCRIPTION,Use the checkboxes next to each subzone to mark areas where planting has been completed. Planting density will be calculated once planting has been completed for each zone.,
 PLANTING_SEASON_END,Planting Season End,
+PLANTING_SEASON_END_IN_PAST,End date may not be in the past.,
+PLANTING_SEASON_END_OUT_OF_RANGE,Must be between 4 weeks and 1 year from start date.,
+PLANTING_SEASON_NO_OVERLAP,Overlaps planting season {0} - {1},{0} and {1} are both dates.
 PLANTING_SEASON_START,Planting Season Start,
+PLANTING_SEASON_START_OUT_OF_RANGE,Must be within 1 year of current date.,
 PLANTING_SITE,Planting Site,
 PLANTING_SITE_CREATE_DETAILED_HELP,"If you are a Terraformation partner or accelerator participant, please [contact us] to create a detailed planting site.",
 PLANTING_SITE_DELETED,Planting site deleted!,
