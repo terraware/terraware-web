@@ -312,12 +312,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
           </Box>
         )}
       </Box>
-      <Grid
-        display='flex'
-        flexDirection='row'
-        alignItems='center'
-        sx={{ marginTop: theme.spacing(2) }}
-      >
+      <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
         <PillList data={filterPillData} onRemove={onRemovePillList} />
       </Grid>
     </>

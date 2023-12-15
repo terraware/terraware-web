@@ -39,7 +39,7 @@ export default function OverviewItemCard({
         display: 'flex',
         height: '100%',
         justifyContent: 'space-between',
-        padding: (grid) ? theme.spacing(1.5, 0) : theme.spacing(3),
+        padding: grid ? theme.spacing(1.5, 0) : theme.spacing(3),
         width: '100%',
       }}
     >
