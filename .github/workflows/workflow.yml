@@ -78,23 +78,23 @@ jobs:
           SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
 
-      - name: Run end-to-end cypress tests
+      - name: Run end-to-end playwright tests
         # Skip tests on main and releases because of Cypress hanging bug
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-        run: yarn e2e
-        # If Cypress hangs, don't let the job sit there for the default 6-hour timeout.
+        run: yarn test:e2egh
+        # Legacy Cypress timeout override.
         timeout-minutes: 60
         env:
           REACT_APP_TERRAWARE_API: 'http://localhost:8080'
           REACT_APP_SNACKBAR_TIMEOUT: 1000
           REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
 
-      - name: save screenshots of e2e test failures
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
+      #- name: save screenshots of e2e test failures
+      #  uses: actions/upload-artifact@v3
+      #  if: failure()
+      #  with:
+      #    name: cypress-screenshots
+      #    path: cypress/screenshots
 
       - name: build
         run: yarn build
