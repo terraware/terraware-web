@@ -70,6 +70,7 @@ ADD_SPECIES_MANUALLY_DESCRIPTION,"Ingrese el nombre científico y otros campos o
 ADD_SUB_LOCATION,Añadir Sub-Lugar,
 ADD_SUBSET_WEIGHT_AND_COUNT,Agregar peso y recuento del subconjunto,
 ADD_TEST,Añadir Prueba,
+ADD_TO_PROJECT,Añadir al proyecto,
 ADD_VIABILITY,Añadir Viabilidad,
 ADD_VIABILITY_TEST,Añadir Prueba de Viabilidad,
 ADDITIONAL_NURSERY_NOTES,Notas adicionales sobre el vivero,
