@@ -22,4 +22,6 @@ test('Test GH Actions', async ({ page }, testInfo) => {
   await waitFor(page, '#home');
 
   await testInfo.attach('Test-0', { body: await page.screenshot(), contentType: 'image/png' });
+
+  await waitFor(page, '#thisShouldCauseAFailure');
 });
