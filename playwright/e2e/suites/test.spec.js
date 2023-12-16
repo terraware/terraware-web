@@ -8,15 +8,16 @@ const waitFor = async (page, selector, timeout = 3000) => {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-
-test.beforeEach( async ({ context }, testInfo) => {
+test.beforeEach(async ({ context }, testInfo) => {
   // Make all requests look like they are associated with an existing login session
   // so we don't have to depend on a Keycloak server to run the test suite. The
   // session value here is the base64-encoded session ID from dump/session.sql.
-  await context.addCookies([{name: 'SESSION', value: 'Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh', url: 'http://127.0.0.1:3000'}]);
- });
+  await context.addCookies([
+    { name: 'SESSION', value: 'Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh', url: 'http://127.0.0.1:3000' },
+  ]);
+});
 
-test('Test GH Actions', async ({ page }, testInfo ) => {
+test('Test GH Actions', async ({ page }, testInfo) => {
   await page.goto('http://127.0.0.1:3000');
   await waitFor(page, '#home');
 
