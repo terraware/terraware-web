@@ -93,12 +93,13 @@ jobs:
           REACT_APP_SNACKBAR_TIMEOUT: 1000
           REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
 
-      #- name: save screenshots of e2e test failures
-      #  uses: actions/upload-artifact@v3
-      #  if: failure()
-      #  with:
-      #    name: cypress-screenshots
-      #    path: cypress/screenshots
+      - name: save screenshots of e2e test failures
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
 
       - name: build
         run: yarn build
