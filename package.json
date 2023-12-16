@@ -92,7 +92,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "pre-commit": "yarn format && yarn lint && yarn ts && yarn test && yarn build",
-    "test:e2e": "yarn run playwright test playwright/e2e"
+    "test:e2e": "yarn run playwright test playwright/e2e",
+    "test:e2egh": "start-server-and-test start http://127.0.0.1:3000 test:e2e"
   },
   "eslintConfig": {
     "extends": [
@@ -145,6 +146,7 @@
     "jest-mock-extended": "^3.0.1",
     "nyc": "^15.1.0",
     "openapi-typescript": "^6.7.0",
+    "playwright": "^1.40.1",
     "prettier": "^3.0.3",
     "prop-types": "^15.8.1",
     "react-test-renderer": "17.0.2",

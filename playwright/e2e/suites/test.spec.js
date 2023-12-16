@@ -8,24 +8,17 @@ const waitFor = async (page, selector, timeout = 3000) => {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-test('Login', async ({ page }) => {
-  await page.goto(process.env.TEST_APP_URL);
-  await waitFor(page, '#username');
-  await waitFor(page, '#password');
-  await waitFor(page, '#kc-login');
 
-  await page.screenshot({ path: `test-0.png` });
+test.beforeEach( async ({ context }, testInfo) => {
+  // Make all requests look like they are associated with an existing login session
+  // so we don't have to depend on a Keycloak server to run the test suite. The
+  // session value here is the base64-encoded session ID from dump/session.sql.
+  await context.addCookies([{name: 'SESSION', value: 'Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh', url: 'http://127.0.0.1:3000'}]);
+ });
 
-  await page.focus('#username');
-  await page.keyboard.type(process.env.TEST_USERNAME, { delay: 100 });
+test('Test GH Actions', async ({ page }, testInfo ) => {
+  await page.goto('http://127.0.0.1:3000');
+  await waitFor(page, '#home');
 
-  await page.focus('#password');
-  await page.keyboard.type(process.env.TEST_PASSWORD, { delay: 100 });
-
-  await page.screenshot({ path: `test-1.png` });
-
-  await page.keyboard.press('Enter');
-
-  await sleep(4000);
-  await page.screenshot({ path: `test-2.png` });
+  await testInfo.attach('Test-0', { body: await page.screenshot(), contentType: 'image/png' });
 });
