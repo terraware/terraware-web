@@ -79,6 +79,9 @@ jobs:
           SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
 
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+        
       - name: Run end-to-end playwright tests
         # Skip tests on main and releases because of Cypress hanging bug
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
