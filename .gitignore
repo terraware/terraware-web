@@ -42,7 +42,6 @@ src/strings/strings-*.js
 
 # ignore .vim swap files
 *.swp
-/test-results/
+
+# playwright
 /playwright-report/
-/blob-report/
-/playwright/.cache/
