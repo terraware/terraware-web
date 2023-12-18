@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { SearchResponseElement } from 'src/types/Search';
+import { SearchNodePayload, SearchResponseElement } from 'src/types/Search';
 import SeedBankService from 'src/services/SeedBankService';
 import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
@@ -11,29 +11,38 @@ export type SearchResponseAccession = {
   speciesName: string;
 };
 
-export const useAccessions = (record?: { accessionId?: number }, excludeUsedUp?: boolean) => {
+export const useAccessions = (record?: { accessionId?: number }, speciesId?: number, excludeUsedUp?: boolean) => {
   const { selectedOrganization } = useOrganization();
 
   const [availableAccessions, setAvailableAccessions] = useState<SearchResponseAccession[]>();
   const [selectedAccession, setSelectedAccession] = useState<SearchResponseAccession>();
 
   const initAccessions = useCallback(async () => {
+    const searchCriteria: { [key: string]: SearchNodePayload } = {};
+    if (excludeUsedUp) {
+      searchCriteria.excludeUsedUp = {
+        operation: 'not',
+        child: {
+          operation: 'field',
+          field: 'state',
+          type: 'Exact',
+          values: [strings.USED_UP],
+        },
+      };
+    }
+    if (speciesId !== undefined) {
+      searchCriteria.speciesIds = {
+        operation: 'field',
+        field: 'species_id',
+        type: 'Exact',
+        values: [speciesId.toString()],
+      };
+    }
+
     const results: SearchResponseElement[] | null = await SeedBankService.searchAccessions({
       organizationId: selectedOrganization.id,
       fields: SEARCH_FIELDS_ACCESSIONS,
-      searchCriteria: excludeUsedUp
-        ? {
-            excludeUsedUp: {
-              operation: 'not',
-              child: {
-                operation: 'field',
-                field: 'state',
-                type: 'Exact',
-                values: [strings.USED_UP],
-              },
-            },
-          }
-        : undefined,
+      searchCriteria,
     });
 
     if (!results?.length) {
@@ -41,7 +50,7 @@ export const useAccessions = (record?: { accessionId?: number }, excludeUsedUp?:
     }
 
     setAvailableAccessions(results as SearchResponseAccession[]);
-  }, [selectedOrganization.id, excludeUsedUp]);
+  }, [selectedOrganization.id, speciesId, excludeUsedUp]);
 
   useEffect(() => {
     if (availableAccessions && record?.accessionId) {
@@ -50,10 +59,8 @@ export const useAccessions = (record?: { accessionId?: number }, excludeUsedUp?:
   }, [availableAccessions, record?.accessionId]);
 
   useEffect(() => {
-    if (!availableAccessions) {
-      void initAccessions();
-    }
-  }, [availableAccessions, initAccessions]);
+    void initAccessions();
+  }, [initAccessions, speciesId]);
 
   return { availableAccessions, selectedAccession };
 };
