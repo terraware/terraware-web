@@ -1,3 +1,5 @@
+4a337a34fb SW-4590 Implement search fields for filtering out empty batches in 'inventory batches' view export (#1925)
+3b9c151e46 SW-4589 Move the filter pills below the search and filter row in the inventory seedlings tables (#1919)
 55623f352b SW-4581 Restrict Accessions Species if Adding Batch from Species Page (#1914)
 e1567b4a41 SW-4584 Display localized substrate values and send enum value to server when updated in batch details. Show substrate notes when the substrate is 'Other' (#1921)
 b90c8d4940 Updated translations from Phrase (#1922)
