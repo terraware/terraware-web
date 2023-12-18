@@ -173,6 +173,26 @@ const httpBatch = HttpService.root(BATCH_ID_ENDPOINT);
 const httpBatchHistory = HttpService.root(BATCH_HISTORY_ENDPOINT);
 const httpBatchPhoto = HttpService.root(BATCH_PHOTO_ENDPOINT);
 
+export const SEARCH_FIELDS_NON_EMPTY_BATCHES: SearchNodePayload[] = [
+  {
+    operation: 'or',
+    children: [
+      {
+        operation: 'field',
+        field: 'totalQuantity',
+        type: 'Range',
+        values: [1, null],
+      },
+      {
+        operation: 'field',
+        field: 'germinatingQuantity',
+        type: 'Range',
+        values: [1, null],
+      },
+    ],
+  },
+];
+
 /**
  * Create a batch
  */
