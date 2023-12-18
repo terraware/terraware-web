@@ -1,23 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Typography, Grid, Box, useTheme, Theme, Popover } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Button, DropdownItem, TableColumnType, Tooltip } from '@terraware/web-components';
+import { Typography, Grid, Box, useTheme } from '@mui/material';
+import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
-import { FieldNodePayload, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import { NurseryBatchService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
-import { convertFilterGroupToMap, isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
+import { isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
 import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import Search from 'src/components/InventoryV2/Search';
 import BatchesCellRenderer from './BatchesCellRenderer';
@@ -52,25 +50,6 @@ export interface InventorySeedlingsTableProps {
   ) => Promise<SearchResponseElement[] | null>;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-      borderRadius: '8px',
-      width: '480px',
-    },
-  },
-}));
-
-const initialFilters: Record<string, SearchNodePayload> = {
-  showEmptyBatches: {
-    field: 'showEmptyBatches',
-    values: ['false'],
-    type: 'Exact',
-    operation: 'field',
-  },
-};
-
 export default function InventorySeedlingsTable(props: InventorySeedlingsTableProps): JSX.Element {
   const {
     modified,
@@ -89,10 +68,8 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const { selectedOrganization } = useOrganization();
   const { isMobile, isDesktop } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles();
   const snackbar = useSnackbar();
   const history = useHistory();
-  const { activeLocale } = useLocalization();
 
   const [openExportModal, setOpenExportModal] = useState<boolean>(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
@@ -101,7 +78,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   // the filtered-by-search batches list that comes back from the API
   const [filteredBatches, setFilteredBatches] = useState<any[]>([]);
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
-  const [filterGroupFilters, setFilterGroupFilters] = useForm<Record<string, SearchNodePayload>>(initialFilters);
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
@@ -283,25 +259,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     }
   };
 
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
-  const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => setFilterAnchorEl(event.currentTarget);
-  const handleFilterClose = () => setFilterAnchorEl(null);
-
-  const filterGroupColumns = useMemo<FilterField[]>(
-    () =>
-      activeLocale
-        ? [
-            {
-              name: 'showEmptyBatches',
-              label: strings.FILTER_SHOW_EMPTY_BATCHES,
-              showLabel: false,
-              type: 'boolean',
-            },
-          ]
-        : [],
-    [activeLocale]
-  );
-
   const batchesExport = useCallback(() => {
     if (!originId || !getBatchesExport) {
       return Promise.resolve([] as SearchResponseElement[]);
@@ -380,14 +337,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
             </Box>
           </Box>
 
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              marginBottom: theme.spacing(2),
-            }}
-          >
+          <Box>
             <Search
               searchValue={temporalSearchValue}
               onSearch={(val) => setTemporalSearchValue(val)}
@@ -395,45 +345,8 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               setFilters={setFilters}
               origin={origin}
               showProjectsFilter
+              showEmptyBatchesFilter
             />
-
-            <Box sx={{ marginTop: theme.spacing(0.5) }}>
-              <Tooltip title={strings.FILTER}>
-                <Button
-                  id='batchFilters'
-                  onClick={(event) => event && handleFilterClick(event)}
-                  type='passive'
-                  priority='ghost'
-                  icon='filter'
-                />
-              </Tooltip>
-              <Popover
-                id='simple-popover'
-                open={Boolean(filterAnchorEl)}
-                anchorEl={filterAnchorEl}
-                onClose={handleFilterClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
-                }}
-                className={classes.popoverContainer}
-              >
-                <FilterGroup
-                  initialFilters={filterGroupFilters}
-                  fields={filterGroupColumns}
-                  onConfirm={(_filterGroupFilters: Record<string, SearchNodePayload>) => {
-                    handleFilterClose();
-                    setFilterGroupFilters(_filterGroupFilters);
-                    setFilters({ ...filters, ...convertFilterGroupToMap(_filterGroupFilters) });
-                  }}
-                  onCancel={handleFilterClose}
-                />
-              </Popover>
-            </Box>
           </Box>
 
           <Box marginTop={theme.spacing(2)}>

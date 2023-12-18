@@ -48,6 +48,7 @@ interface SearchProps {
   setFilters: (f: InventoryFiltersType) => void;
   origin?: OriginPage;
   showProjectsFilter?: boolean;
+  showEmptyBatchesFilter?: boolean;
 }
 
 type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
@@ -56,7 +57,7 @@ type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
 };
 
 export default function Search(props: SearchProps): JSX.Element | null {
-  const { searchValue, onSearch, filters, setFilters, showProjectsFilter } = props;
+  const { searchValue, onSearch, filters, setFilters, showProjectsFilter, showEmptyBatchesFilter } = props;
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -272,7 +273,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
           />
         )}
 
-        {origin === 'Batches' && (
+        {showEmptyBatchesFilter && (
           <Box sx={{ marginTop: theme.spacing(0.5) }}>
             <Tooltip title={strings.FILTER}>
               <Button
