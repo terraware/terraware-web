@@ -10,6 +10,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useUser } from 'src/providers';
 import { IconTooltip } from '@terraware/web-components';
+import isEnabled from 'src/features';
 
 export interface Props {
   open: boolean;
@@ -22,6 +23,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const [preset, setPreset] = React.useState<Preset>();
   const { isMobile } = useDeviceInfo();
   const { userPreferences } = useUser();
+  const featureFlagProjects = isEnabled('Projects');
 
   const [value, setValue] = React.useState(props.value);
 
@@ -61,6 +63,21 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     }
     return 4;
   };
+
+  let userSections = sections(userPreferences.preferredWeightSystem as string);
+  if (!featureFlagProjects) {
+    userSections = userSections.map(
+      (section: Section): Section =>
+        section.name !== strings.GENERAL
+          ? section
+          : {
+              ...section,
+              options: section.options.filter((optionArray: Option[]) =>
+                optionArray.find((option: Option) => option.key !== 'project_name')
+              ),
+            }
+    );
+  }
 
   return (
     <DialogBox
@@ -104,7 +121,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
           </Grid>
         </Grid>
 
-        {sections(userPreferences.preferredWeightSystem as string).map(({ name, tooltip, options }) => (
+        {userSections.map(({ name, tooltip, options }) => (
           <React.Fragment key={name}>
             <Divisor />
             <Typography component='p'>
@@ -180,7 +197,11 @@ function sections(system?: string): Section[] {
   const columnsSections = [
     {
       name: strings.GENERAL,
-      options: [[{ ...columns.accessionNumber, disabled: true }], [{ ...columns.state, disabled: true }]],
+      options: [
+        [{ ...columns.accessionNumber, disabled: true }],
+        [{ ...columns.state, disabled: true }],
+        [{ ...columns.project_name, disabled: true }],
+      ],
     },
     {
       name: strings.STORING,

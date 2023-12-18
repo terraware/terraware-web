@@ -89,7 +89,7 @@ const getSearchTermFromFilters = (filters: Record<string, SearchNodePayload>): s
 interface Props {
   columns: DatabaseColumn[];
   searchColumns: DatabaseColumn[];
-  preExpFilterColumn: DatabaseColumn;
+  preExpFilterColumns: DatabaseColumn[];
   filters: Record<string, SearchNodePayload>;
   availableValues: FieldValuesPayload;
   allValues: FieldValuesPayload;
@@ -97,10 +97,9 @@ interface Props {
 }
 
 export default function Filters(props: Props): JSX.Element {
-  const { columns, searchColumns, preExpFilterColumn, filters, availableValues, allValues, onChange } = props;
+  const { columns, searchColumns, preExpFilterColumns, filters, availableValues, allValues, onChange } = props;
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
-  const preExpFilterKey = preExpFilterColumn.key;
   const [searchTerm, setSearchTerm] = React.useState(getSearchTermFromFilters(filters));
   const searchTermCallback = useCallback(
     (value: string) => {
@@ -117,12 +116,12 @@ export default function Filters(props: Props): JSX.Element {
   );
   useDebounce(searchTerm, 250, searchTermCallback);
 
-  const [preExpAnchorEl, setPreExpAnchorEl] = useState<null | HTMLElement>(null);
-  const handlePreExpFilterClick = (event: React.MouseEvent<HTMLElement>) => {
-    setPreExpAnchorEl(event.currentTarget);
+  const [preExpAnchorEls, setPreExpAnchorEls] = useState<{ [key: string]: null | HTMLElement }>({});
+  const handlePreExpFilterClick = (event: React.MouseEvent<HTMLElement>, key: string) => {
+    setPreExpAnchorEls({ ...preExpAnchorEls, [key]: event.currentTarget });
   };
-  const handlePreExpFilterClose = () => {
-    setPreExpAnchorEl(null);
+  const handlePreExpFilterClose = (key: string) => {
+    setPreExpAnchorEls({ ...preExpAnchorEls, [key]: null });
   };
 
   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
@@ -135,14 +134,18 @@ export default function Filters(props: Props): JSX.Element {
 
   const filterPillItems = useMemo(() => {
     const result: PillListItem<string>[] = [];
-    const preExpFilterPill: PillListItem<string> = filters[preExpFilterKey] && {
-      id: preExpFilterKey,
-      label: preExpFilterColumn.name as string,
-      value: filters[preExpFilterKey].values.join(', '),
-    };
-    if (preExpFilterPill) {
-      result.push(preExpFilterPill);
-    }
+
+    preExpFilterColumns.forEach((preExpFilterColumn) => {
+      const key = preExpFilterColumn.key;
+      if (filters[key]) {
+        result.push({
+          id: key,
+          label: preExpFilterColumn.name as string,
+          value: filters[key].values.join(', '),
+        });
+      }
+    });
+
     for (const col of columns) {
       const filter = filters[col.key];
       if (filter) {
@@ -154,13 +157,13 @@ export default function Filters(props: Props): JSX.Element {
       }
     }
     return result;
-  }, [filters, columns, preExpFilterColumn.name, preExpFilterKey]);
+  }, [filters, columns, preExpFilterColumns]);
 
-  const onChangePreExpFilter = (selectedValues: string[]) => {
+  const onChangePreExpFilter = (preExpFilterColumn: DatabaseColumn, selectedValues: string[]) => {
     let newFilters;
     if (selectedValues.length === 0) {
       newFilters = { ...filters };
-      delete newFilters[preExpFilterKey];
+      delete newFilters[preExpFilterColumn.key];
     } else {
       newFilters = { ...filters, ...getPreExpFilter(preExpFilterColumn, selectedValues) };
     }
@@ -169,7 +172,7 @@ export default function Filters(props: Props): JSX.Element {
 
   const onUpdateFilters = (newFilters: Record<string, SearchNodePayload>) => {
     const keepFilters = Object.entries(filters).filter(
-      (ent) => ent[0] === 'searchTermFilter' || ent[0] === preExpFilterKey
+      (ent) => ent[0] === 'searchTermFilter' || preExpFilterColumns.some((col) => ent[0] === col.key)
     );
     onChange({ ...Object.fromEntries(keepFilters), ...newFilters });
   };
@@ -188,20 +191,19 @@ export default function Filters(props: Props): JSX.Element {
     setSearchTerm('');
   };
 
-  const preExpFilterOptions = getOptions(preExpFilterColumn, availableValues, allValues).filter(
-    (opt) => opt.value !== null
-  );
-  const numPreExpSelected = getCurrentPreExpFilterValues(preExpFilterColumn, filters).length;
+  const renderFilterMultiSelect = (preExpFilterColumn: DatabaseColumn) => {
+    const preExpFilterOptions = getOptions(preExpFilterColumn, availableValues, allValues).filter(
+      (opt) => opt.value !== null
+    );
 
-  const renderFilterMultiSelect = () => {
     return (
       <FilterMultiSelect
-        label={strings.NURSERIES}
+        label={preExpFilterColumn.name as string}
         initialSelection={getCurrentPreExpFilterValues(preExpFilterColumn, filters)}
-        onCancel={handlePreExpFilterClose}
+        onCancel={() => handlePreExpFilterClose(preExpFilterColumn.key)}
         onConfirm={(selectedValues: string[]) => {
-          handlePreExpFilterClose();
-          onChangePreExpFilter(selectedValues);
+          handlePreExpFilterClose(preExpFilterColumn.key);
+          onChangePreExpFilter(preExpFilterColumn, selectedValues);
         }}
         options={preExpFilterOptions.map((opt) => opt.value!)}
         renderOption={(val) => preExpFilterOptions.find((opt) => opt.value === val)?.label ?? ''}
@@ -224,40 +226,47 @@ export default function Filters(props: Props): JSX.Element {
           iconRight='cancel'
           onClickRightIcon={onClearSearch}
         />
-        {preExpFilterColumn && (
-          <>
-            <div className={classes.preExpFilterDropdown} onClick={handlePreExpFilterClick}>
-              <Typography>
-                {`${preExpFilterColumn.name}${numPreExpSelected > 0 ? ' (' + numPreExpSelected + ')' : ''}`}
-              </Typography>
-              <Icon
-                name={Boolean(preExpAnchorEl) ? 'chevronUp' : 'chevronDown'}
-                className={classes.preExpFilterIconRight}
-              />
-            </div>
-            {isMobile && Boolean(preExpAnchorEl) ? (
-              <div className={classes.mobileContainer}>{renderFilterMultiSelect()}</div>
-            ) : (
-              <Popover
-                id='pre-exposed-filter-popover'
-                open={Boolean(preExpAnchorEl)}
-                onClose={handlePreExpFilterClose}
-                anchorEl={preExpAnchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                className={classes.popoverContainer}
+        {preExpFilterColumns.map((preExpFilterColumn, index) => {
+          const numPreExpSelected = getCurrentPreExpFilterValues(preExpFilterColumn, filters).length;
+
+          return (
+            <div key={index}>
+              <div
+                className={classes.preExpFilterDropdown}
+                onClick={(event) => handlePreExpFilterClick(event, preExpFilterColumn.key)}
               >
-                {renderFilterMultiSelect()}
-              </Popover>
-            )}
-          </>
-        )}
+                <Typography>
+                  {`${preExpFilterColumn.name}${numPreExpSelected > 0 ? ' (' + numPreExpSelected + ')' : ''}`}
+                </Typography>
+                <Icon
+                  name={Boolean(preExpAnchorEls[preExpFilterColumn.key]) ? 'chevronUp' : 'chevronDown'}
+                  className={classes.preExpFilterIconRight}
+                />
+              </div>
+              {isMobile && Boolean(preExpAnchorEls[preExpFilterColumn.key]) ? (
+                <div className={classes.mobileContainer}>{renderFilterMultiSelect(preExpFilterColumn)}</div>
+              ) : (
+                <Popover
+                  id='pre-exposed-filter-popover'
+                  open={Boolean(preExpAnchorEls[preExpFilterColumn.key])}
+                  onClose={() => handlePreExpFilterClose(preExpFilterColumn.key)}
+                  anchorEl={preExpAnchorEls[preExpFilterColumn.key]}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  className={classes.popoverContainer}
+                >
+                  {renderFilterMultiSelect(preExpFilterColumn)}
+                </Popover>
+              )}
+            </div>
+          );
+        })}
         <Tooltip title={strings.FILTER}>
           <Button
             id='filter'

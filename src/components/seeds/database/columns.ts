@@ -35,6 +35,12 @@ function columns(): DatabaseColumn[] {
       filter: { type: 'search' },
     },
     {
+      key: 'project_name',
+      name: strings.PROJECT,
+      type: 'string',
+      filter: { type: 'multiple_selection' },
+    },
+    {
       key: 'species_commonName',
       name: strings.COMMON_NAME,
       type: 'string',
@@ -185,6 +191,7 @@ export const defaultPreset = (system?: string): Preset => {
     fields: [
       'accessionNumber',
       'speciesName',
+      'project_name',
       'state',
       'collectionSiteName',
       'collectedDate',
@@ -197,12 +204,28 @@ export const defaultPreset = (system?: string): Preset => {
 
 const generalInventoryPreset: Preset = {
   name: 'General Inventory',
-  fields: ['accessionNumber', 'speciesName', 'collectionSiteName', 'collectionSiteLandowner', 'state', 'collectedDate'],
+  fields: [
+    'accessionNumber',
+    'speciesName',
+    'project_name',
+    'collectionSiteName',
+    'collectionSiteLandowner',
+    'state',
+    'collectedDate',
+  ],
 };
 
 const seedStoragePreset: Preset = {
   name: 'Seed Storage Status',
-  fields: ['accessionNumber', 'speciesName', 'state', 'collectedDate', 'facility_name', 'subLocation_name'],
+  fields: [
+    'accessionNumber',
+    'speciesName',
+    'project_name',
+    'state',
+    'collectedDate',
+    'facility_name',
+    'subLocation_name',
+  ],
 };
 
 export const searchPresets = (preferredWeightSystem: string) => {
