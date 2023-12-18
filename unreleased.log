@@ -1,3 +1,4 @@
+e393f83085 Bump tough-cookie from 4.1.2 to 4.1.3 (#1733)
 dd90b4e387 SW-4493 Add project_name column and multi select filter to the accession table (#1901)
 a9b47110f4 SW-4558 Add sublocation edit functionality to batch details view (#1898)
 4a337a34fb SW-4590 Implement search fields for filtering out empty batches in 'inventory batches' view export (#1925)
