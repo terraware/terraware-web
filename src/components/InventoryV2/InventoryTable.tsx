@@ -76,6 +76,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           setFilters={setFilters}
           origin={origin}
           showProjectsFilter={origin === 'Batches'}
+          showEmptyBatchesFilter={origin === 'Batches'}
         />
       </Box>
       <Grid item xs={12}>

@@ -346,6 +346,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               setFilters={setFilters}
               origin={origin}
               showProjectsFilter
+              showEmptyBatchesFilter
             />
           </Box>
 
