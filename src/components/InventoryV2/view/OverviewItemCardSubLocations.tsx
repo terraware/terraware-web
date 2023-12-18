@@ -54,6 +54,11 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
     setShowSubLocationEdit(nextShowSubLocationEdit);
   }, [showSubLocationEdit, syncSubLocations]);
 
+  const handleOnBlur = useCallback(() => {
+    syncSubLocations();
+    setShowSubLocationEdit(false);
+  }, [syncSubLocations]);
+
   useEffect(() => {
     if (batchesRequest?.status === 'success' && batchesRequest.data) {
       const nextBatch = (batchesRequest.data as BatchData).batch;
@@ -75,7 +80,7 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
           <SubLocationsDropdown<Batch>
             availableSubLocations={availableSubLocations}
             minimal
-            onBlur={syncSubLocations}
+            onBlur={handleOnBlur}
             record={batch}
             setRecord={handleUpdateSubLocations}
           />
