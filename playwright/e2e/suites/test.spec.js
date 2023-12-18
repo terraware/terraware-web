@@ -49,4 +49,11 @@ test('Add A Species', async ({ page }, testInfo) => {
 
   await expect(page.getByText('Acacia koa')).toBeVisible();
   await expect(page.getByText('Koa', { exact: true })).toBeVisible();
+
+  await page.getByRole('row', { name: 'Acacia koa' }).getByRole('checkbox').check();
+  await page.getByRole('button', { name: 'Delete' }).click();
+  await page.getByRole('button', { name: 'Delete' }).first().click();
+
+  await expect(page.getByText('Acacia koa')).toBeHidden();
+  await expect(page.getByText('Koa', { exact: true })).toBeHidden();
 });
