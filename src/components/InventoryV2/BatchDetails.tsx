@@ -11,6 +11,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { Button } from '@terraware/web-components';
 import BatchDetailsModal from './BatchDetailsModal';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
+import { batchSubstrateEnumToLocalized } from 'src/types/Accession';
 
 interface BatchDetailsProps {
   batch: Batch;
@@ -46,8 +47,16 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
     },
     {
       title: strings.SUBSTRATE,
-      data: batch.substrate || '',
+      data: batchSubstrateEnumToLocalized(batch.substrate) || '',
     },
+    ...(batch.substrate === 'Other'
+      ? [
+          {
+            title: strings.SUBSTRATE_NOTES,
+            data: batch.substrateNotes || '',
+          },
+        ]
+      : []),
     {
       title: strings.TREATMENT,
       data: batch.treatment || '',

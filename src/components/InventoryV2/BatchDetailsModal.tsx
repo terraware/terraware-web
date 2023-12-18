@@ -15,7 +15,12 @@ import { getNurseryById } from 'src/utils/organization';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import { useUser } from 'src/providers';
-import { nurserySubstrates, treatments } from 'src/types/Accession';
+import {
+  batchSubstrateEnumToLocalized,
+  batchSubstrateLocalizedToEnum,
+  nurserySubstratesLocalized,
+  treatments,
+} from 'src/types/Accession';
 import SelectPhotos from '../common/SelectPhotos';
 import { makeStyles } from '@mui/styles';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
@@ -294,9 +299,9 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           <Dropdown
             id='substrate'
             label={strings.SUBSTRATE}
-            selectedValue={record.substrate}
-            options={nurserySubstrates()}
-            onChange={(value) => onChange('substrate', value)}
+            selectedValue={batchSubstrateEnumToLocalized(record.substrate)}
+            options={nurserySubstratesLocalized()}
+            onChange={(value) => onChange('substrate', batchSubstrateLocalizedToEnum(value))}
             fullWidth={true}
           />
         </Grid>
