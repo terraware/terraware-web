@@ -1,3 +1,4 @@
+55623f352b SW-4581 Restrict Accessions Species if Adding Batch from Species Page (#1914)
 e1567b4a41 SW-4584 Display localized substrate values and send enum value to server when updated in batch details. Show substrate notes when the substrate is 'Other' (#1921)
 b90c8d4940 Updated translations from Phrase (#1922)
 21cb0a6513 Bump eslint-plugin-storybook from 0.6.12 to 0.6.15 (#1738)
