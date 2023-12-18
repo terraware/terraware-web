@@ -14,7 +14,7 @@ export const buildReducers =
       .addCase(asyncThunk.fulfilled, setStatus<T>('success'))
       .addCase(asyncThunk.rejected, setStatus<T>('error'));
 
-const setStatus =
+export const setStatus =
   <T>(status: Statuses) =>
   (state: any, action: any) => {
     const requestId = action.meta.requestId;

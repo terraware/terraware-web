@@ -8,8 +8,6 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import PageSnackbar from '../PageSnackbar';
 import useQuery from 'src/utils/useQuery';
 import BatchSummary from './BatchSummary';
-import { NurseryBatchService } from 'src/services';
-import { Batch } from 'src/types/Batch';
 import { Button, Tabs } from '@terraware/web-components';
 import { useHistory, useParams } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -20,6 +18,9 @@ import { getNurseryById } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
 import { Species } from 'src/types/Species';
 import { Facility } from 'src/types/Facility';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestFetchBatch } from 'src/redux/features/batches/batchesAsyncThunks';
+import { selectBatch } from 'src/redux/features/batches/batchesSelectors';
 
 export type OriginPage = 'Nursery' | 'Species' | 'Batches' | 'InventoryAdd';
 
@@ -47,6 +48,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function InventoryBatch({ origin, species }: InventoryBatchProps) {
+  const dispatch = useAppDispatch();
   const classes = useStyles();
   const contentRef = useRef(null);
   const theme = useTheme();
@@ -54,7 +56,7 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
   const { batchId } = useParams<{ batchId: string }>();
   const { speciesId } = useParams<{ speciesId: string }>();
   const { nurseryId } = useParams<{ nurseryId: string }>();
-  const [batch, setBatch] = useState<Batch | null>();
+  const batch = useAppSelector(selectBatch(batchId));
   const tab = query.get('tab') || 'details';
   const [activeTab, setActiveTab] = useState<string>(tab);
   const history = useHistory();
@@ -103,21 +105,6 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
     return inventoryNursery?.name || '';
   };
 
-  const reloadData = useCallback(() => {
-    const populateBatch = async () => {
-      const response = await NurseryBatchService.getBatch(Number(batchId));
-      setBatch(response.batch);
-    };
-
-    if (batchId !== undefined) {
-      populateBatch();
-    }
-  }, [batchId]);
-
-  useEffect(() => {
-    reloadData();
-  }, [batchId, reloadData]);
-
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
@@ -126,9 +113,13 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
     [query, history, location]
   );
 
-  const onUpdateBatch = () => {
-    reloadData();
-  };
+  const fetchBatch = useCallback(() => {
+    dispatch(requestFetchBatch({ batchId }));
+  }, [batchId, dispatch]);
+
+  useEffect(() => {
+    fetchBatch();
+  }, [batchId, fetchBatch]);
 
   return (
     <TfMain>
@@ -218,7 +209,7 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
                   {
                     id: 'details',
                     label: strings.DETAILS,
-                    children: <BatchDetails batch={batch} onUpdate={onUpdateBatch} />,
+                    children: <BatchDetails batch={batch} onUpdate={fetchBatch} />,
                   },
                   {
                     id: 'history',

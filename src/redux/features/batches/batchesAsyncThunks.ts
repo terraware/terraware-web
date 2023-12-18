@@ -11,7 +11,7 @@ export type SavableBatch = (CreateBatchRequestPayload | UpdateBatchRequestPayloa
 
 export const requestSaveBatch = createAsyncThunk(
   'batches/save',
-  async (request: { batch: SavableBatch; timezone: string }, { rejectWithValue }) => {
+  async (request: { batch: SavableBatch; timezone?: string }, { rejectWithValue }) => {
     const { batch, timezone } = request;
 
     let response: (Response & BatchData) | (Response & BatchId) | undefined;
@@ -64,6 +64,20 @@ export const requestSaveBatch = createAsyncThunk(
         ...response.data,
         speciesId: batch.speciesId,
       };
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestFetchBatch = createAsyncThunk(
+  'batches/fetch-one',
+  async (request: { batchId: number | string }, { rejectWithValue }) => {
+    const { batchId } = request;
+
+    const response = await NurseryBatchService.getBatch(Number(`${batchId}`));
+    if (response && response.requestSucceeded) {
+      return response.batch;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

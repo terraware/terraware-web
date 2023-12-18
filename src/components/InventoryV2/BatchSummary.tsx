@@ -1,11 +1,11 @@
+import React from 'react';
 import { Grid, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
-import OverviewItemCard from '../common/OverviewItemCard';
-import { SubLocationService } from 'src/services';
-import React, { useEffect, useState } from 'react';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import OverviewItemCardSubLocations from './view/OverviewItemCardSubLocations';
 
 interface BatchSummaryProps {
   batch: Batch;
@@ -13,32 +13,13 @@ interface BatchSummaryProps {
 
 export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const { batch } = props;
-  const theme = useTheme();
-  const [batchSubLocations, setBatchSubLocations] = useState<string[]>([]);
 
-  useEffect(() => {
-    const setLocations = async () => {
-      if (batch?.facilityId) {
-        const response = await SubLocationService.getSubLocations(Number(batch.facilityId));
-        if (response.requestSucceeded) {
-          const nurserySLs: string[] = [];
-          batch.subLocationIds.forEach((subLocId) => {
-            const found = response.subLocations.find((iSublocation) => iSublocation.id === subLocId);
-            if (found) {
-              nurserySLs.push(found.name);
-            }
-          });
-          setBatchSubLocations(nurserySLs);
-        }
-      }
-    };
-    setLocations();
-  }, [batch]);
+  const theme = useTheme();
 
   return (
     <Grid container spacing={3} marginBottom={theme.spacing(4)}>
       <Grid item xs={2}>
-        <OverviewItemCard isEditable={false} title={strings.SUB_LOCATION} contents={batchSubLocations.join(',')} />
+        <OverviewItemCardSubLocations batch={batch} />
       </Grid>
       <Grid item xs={2}>
         <OverviewItemCard isEditable={false} title={strings.GERMINATION_RATE} contents={batch.germinationRate || '%'} />
