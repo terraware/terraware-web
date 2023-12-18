@@ -151,12 +151,15 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
     const requestId = Math.random().toString();
     setRequestId('searchInventory', requestId);
 
+    const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
+
     setReportData({
       organizationId: selectedOrganization.id,
       query: debouncedSearchTerm,
       facilityIds: filters.facilityIds,
       subLocationIds: filters.subLocationsIds,
       searchSortOrder,
+      showEmptyBatches,
     });
 
     const searchFields = [];
@@ -208,7 +211,6 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
       } as InventoryResultWithBatchNumber;
     });
 
-    const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
     updatedResult = updatedResult?.filter((result) => showEmptyBatches || !isBatchEmpty(result));
 
     if (updatedResult) {

@@ -75,6 +75,7 @@ export type SearchInventoryParams = {
   subLocationIds?: number[];
   speciesIds?: number[];
   isCsvExport?: boolean;
+  showEmptyBatches?: boolean;
 };
 
 type GetSummaryResponsePayload =
