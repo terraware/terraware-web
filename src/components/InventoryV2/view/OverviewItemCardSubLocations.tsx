@@ -36,28 +36,34 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
     [batch]
   );
 
-  const syncSubLocations = useCallback(() => {
-    if (!_.isEqual(props.batch.subLocationIds, batch.subLocationIds)) {
-      const request = dispatch(requestSaveBatch({ batch }));
-      setRequestId(request.requestId);
-    }
-  }, [batch, dispatch, props.batch.subLocationIds]);
+  const syncSubLocations = useCallback(
+    (_batch: Batch) => {
+      if (!_.isEqual(props.batch.subLocationIds, _batch.subLocationIds)) {
+        const request = dispatch(requestSaveBatch({ batch: _batch }));
+        setRequestId(request.requestId);
+      }
+    },
+    [dispatch, props.batch.subLocationIds]
+  );
 
   const toggleSubLocationEdit = useCallback(() => {
     const nextShowSubLocationEdit = !showSubLocationEdit;
 
     // If we're "turning off" the edit mode, and the sub locations aren't the same, we need to update the batch
     if (!nextShowSubLocationEdit) {
-      syncSubLocations();
+      syncSubLocations(batch);
     }
 
     setShowSubLocationEdit(nextShowSubLocationEdit);
-  }, [showSubLocationEdit, syncSubLocations]);
+  }, [batch, showSubLocationEdit, syncSubLocations]);
 
-  const handleOnBlur = useCallback(() => {
-    syncSubLocations();
-    setShowSubLocationEdit(false);
-  }, [syncSubLocations]);
+  const handleOnBlur = useCallback(
+    (_batch: Batch) => {
+      syncSubLocations(_batch);
+      setShowSubLocationEdit(false);
+    },
+    [syncSubLocations]
+  );
 
   useEffect(() => {
     if (batchesRequest?.status === 'success' && batchesRequest.data) {
