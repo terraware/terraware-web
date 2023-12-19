@@ -1,3 +1,4 @@
+7958b9ab9c Hide project dropdown in accessions create flow when projects feature is turned off (#1933)
 b0cef99991 SW-4606 Add tooltips to inventory seedlings table column headers (#1931)
 e34a618422 SW-4607 Allow withdrawals on batches that only have non-zero germinating quantity (#1934)
 fcee601ea7 Fix planting site type selected button background color on hover/active states (#1926)
