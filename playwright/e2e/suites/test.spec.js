@@ -15,67 +15,69 @@ test.beforeEach(async ({ context }, testInfo) => {
   // so we don't have to depend on a Keycloak server to run the test suite. The
   // session value here is the base64-encoded session ID from dump/session.sql.
   await context.addCookies([
-    { name: 'SESSION', value: 'Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh', url: 'http://127.0.0.1:3000' },
+    { name: 'SESSION', value: 'YTVhOGIzODQtNDRiMi00NjIzLWIwNzgtZjk5NzI1NDFjOWU4', url: 'https://staging.terraware.io' },
   ]);
 });
 
 test('Add A Species', async ({ page }, testInfo) => {
-  await page.goto('http://127.0.0.1:3000');
+  await page.setViewportSize({ width: 1600, height: 1200 });
+
+  await page.goto('https://staging.terraware.io');
   await waitFor(page, '#home');
 
-  await page.waitForTimeout(5000);
+  const newSpeciesName = `Acacia koa-${new Date().getTime()}`;
+
   await page.getByRole('button', { name: 'Species' }).click();
-  await page.waitForTimeout(5000);
-  await page.getByRole('button', { name: 'Add Species' }).click();
-  await page.waitForTimeout(5000);
+
+  while (!(await page.locator('.dialog-box--opened').isVisible())) {
+    await sleep(1000);
+    await page.getByRole('button', { name: 'Add Species' }).click();
+  }
+
   await page.locator('#scientificName').getByRole('textbox').click();
-  await page.waitForTimeout(5000);
-  await page.locator('#scientificName').getByRole('textbox').fill('Acacia koa');
-  await page.waitForTimeout(5000);
+  await page.locator('#scientificName').getByRole('textbox').fill(newSpeciesName);
+
+  while (await page.locator('.options-container').isVisible()) {
+    await sleep(1000);
+    await page.locator('.dialog-box--header p.title').click();
+  }
 
   await page.locator('#commonName').getByRole('textbox').click();
-  await page.waitForTimeout(5000);
   await page.locator('#commonName').getByRole('textbox').fill('Koa');
-  await page.waitForTimeout(5000);
+
   await page.locator('#growthForm').getByPlaceholder('Select...').click();
-  await page.waitForTimeout(5000);
+
   await page
     .locator('li')
     .filter({ hasText: /^Tree$/ })
     .click();
-  await page.waitForTimeout(10000);
+
   await page.locator('#seedStorageBehavior').getByPlaceholder('Select...').click();
-  await page.waitForTimeout(5000);
+
   await page
     .locator('li')
     .filter({ hasText: /^Orthodox$/ })
     .click();
-  await page.waitForTimeout(5000);
+
   await page
     .locator('div')
     .filter({ hasText: /^Select\.\.\.$/ })
     .nth(1)
     .click();
-  await page.waitForTimeout(5000);
+
   await page.getByText('Tropical and subtropical dry').click();
-  await page.waitForTimeout(5000);
+
   await page.getByRole('button', { name: 'Save' }).click();
-  await page.waitForTimeout(5000);
 
-  await expect(page.getByText('Acacia koa')).toBeVisible();
-  await page.waitForTimeout(5000);
-  await expect(page.getByText('Koa', { exact: true })).toBeVisible();
-  await page.waitForTimeout(5000);
+  await expect(page.getByText(newSpeciesName)).toBeVisible();
+  await expect(page.locator(`tr:has(> td[title="${newSpeciesName}"]) td[title="Koa"]`)).toBeVisible();
 
-  await page.getByRole('row', { name: 'Acacia koa' }).getByRole('checkbox').check();
-  await page.waitForTimeout(5000);
-  await page.getByRole('button', { name: 'Delete' }).click();
-  await page.waitForTimeout(5000);
-  await page.getByRole('button', { name: 'Delete' }).first().click();
-  await page.waitForTimeout(5000);
+  await page.getByRole('row', { name: newSpeciesName }).getByRole('checkbox').check();
 
-  await expect(page.getByText('Acacia koa')).toBeHidden();
-  await page.waitForTimeout(5000);
-  await expect(page.getByText('Koa', { exact: true })).toBeHidden();
-  await page.waitForTimeout(5000);
+  // Toolbar delete
+  await page.locator('.MuiToolbar-gutters .button.destructive-secondary').click();
+  // Dialog delete
+  await page.locator('.dialog-box--actions-container .button.destructive-primary').click();
+
+  await expect(page.getByText(newSpeciesName)).toBeHidden();
 });
