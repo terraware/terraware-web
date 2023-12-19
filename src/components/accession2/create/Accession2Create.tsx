@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import useForm from 'src/utils/useForm';
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import SeedBankService, { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import {
@@ -26,6 +26,8 @@ import { useOrganization } from 'src/providers';
 import { getSeedBank } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
+import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
+import { useProjects } from 'src/components/InventoryV2/form/useProjects';
 
 const SubTitleStyle = {
   fontSize: '20px',
@@ -64,6 +66,23 @@ export default function CreateAccession(): JSX.Element {
     }) as AccessionPostRequestBody;
 
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
+
+  const { availableProjects } = useProjects();
+
+  // If there's only 1 project, auto apply it
+  useEffect(() => {
+    if (!availableProjects || availableProjects.length !== 1) {
+      return;
+    }
+
+    const projectId = availableProjects[0].id;
+    if (projectId && record.projectId !== projectId) {
+      setRecord({
+        ...record,
+        projectId,
+      });
+    }
+  }, [record, availableProjects, setRecord]);
 
   useEffect(() => {
     if (record.facilityId) {
@@ -199,6 +218,15 @@ export default function CreateAccession(): JSX.Element {
             <Accession2GPS record={record} onChange={onChange} />
             <Accession2PlantSiteDetails record={record} onChange={onChange} />
           </Grid>
+
+          <Box sx={marginTop}>
+            <ProjectsDropdown<AccessionPostRequestBody>
+              record={record}
+              setRecord={setRecord}
+              availableProjects={availableProjects}
+            />
+          </Box>
+
           <Grid container>
             <CollectedReceivedDate2
               onChange={onChange}
