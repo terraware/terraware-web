@@ -71,7 +71,7 @@ export default function CreateAccession(): JSX.Element {
 
   // If there's only 1 project, auto apply it
   useEffect(() => {
-    if (!availableProjects || availableProjects.length > 1) {
+    if (!availableProjects || availableProjects.length !== 1) {
       return;
     }
 
