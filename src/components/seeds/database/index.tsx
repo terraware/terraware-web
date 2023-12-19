@@ -306,9 +306,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   useEffect(() => {
     if (orgPreferences?.accessionsColumns) {
+      if (featureFlagProjects && !(orgPreferences.accessionsColumns as string[]).includes('project_name')) {
+        (orgPreferences.accessionsColumns as string[]).push('project_name');
+      }
       updateSearchColumnsBootstrap(orgPreferences.accessionsColumns as string[]);
     }
-  }, [orgPreferences, updateSearchColumnsBootstrap]);
+  }, [featureFlagProjects, orgPreferences, updateSearchColumnsBootstrap]);
 
   useEffect(() => {
     // if url has stage=<accession state>, apply that filter
