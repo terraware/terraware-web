@@ -67,7 +67,7 @@ export default function CreateAccession(): JSX.Element {
 
   const [record, setRecord, onChange] = useForm<AccessionPostRequestBody>(defaultAccession());
 
-  const { availableProjects } = useProjects(record);
+  const { availableProjects } = useProjects();
 
   // If there's only 1 project, auto apply it
   useEffect(() => {
