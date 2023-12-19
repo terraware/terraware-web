@@ -115,9 +115,9 @@ const SiteTypeButton = ({ imageName, isSelected, onClick }: SiteTypeButtonProps)
       justifyContent='center'
       sx={{
         cursor: 'pointer',
-        backgroundColor: isSelected ? rgb(100) : rgb(0),
-        '&:hover': { backgroundColor: rgb(10) },
-        '&:active': { backgroundColor: rgb(20) },
+        backgroundColor: rgb(isSelected ? 100 : 0),
+        '&:hover': { backgroundColor: rgb(isSelected ? 100 : 10) },
+        '&:active': { backgroundColor: rgb(isSelected ? 100 : 20) },
       }}
       onClick={onClick}
     >
