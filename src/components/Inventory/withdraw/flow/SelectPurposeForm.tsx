@@ -378,15 +378,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const nurseriesOptions = useMemo(() => {
     const nurseries = batches
       .filter((batchData) => {
-        const batch = {
-          ...batchData,
-          readyQuantity: +batchData['readyQuantity(raw)'],
-          totalQuantity: +batchData['totalQuantity(raw)'],
-        };
         if (isOutplant) {
-          return +batch.readyQuantity > 0;
+          return +batchData['readyQuantity(raw)'] > 0;
         }
-        return +batch.totalQuantity > 0;
+        return +batchData['totalQuantity(raw)'] + +batchData['germinatingQuantity(raw)'] > 0;
       })
       .reduce((acc, batch) => {
         if (!acc[batch.facility_id.toString()]) {

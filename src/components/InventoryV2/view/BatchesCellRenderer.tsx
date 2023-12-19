@@ -55,7 +55,7 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
               size='small'
               priority='secondary'
               className={classes.text}
-              disabled={Number(row.totalQuantity) === 0}
+              disabled={Number(row.totalQuantity) + Number(row.germinatingQuantity) === 0}
             />
           }
         />
