@@ -28,6 +28,7 @@ import { Facility } from 'src/types/Facility';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
 import { useProjects } from 'src/components/InventoryV2/form/useProjects';
+import isEnabled from 'src/features';
 
 const SubTitleStyle = {
   fontSize: '20px',
@@ -50,6 +51,7 @@ export default function CreateAccession(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [collectedDateError, setCollectedDateError] = useState<string>();
   const [receivedDateError, setReceivedDateError] = useState<string>();
+  const featureFlagProjects = isEnabled('Projects');
 
   const onCollectedDateError = (error?: string) => {
     setCollectedDateError(error);
@@ -219,13 +221,15 @@ export default function CreateAccession(): JSX.Element {
             <Accession2PlantSiteDetails record={record} onChange={onChange} />
           </Grid>
 
-          <Box sx={marginTop}>
-            <ProjectsDropdown<AccessionPostRequestBody>
-              record={record}
-              setRecord={setRecord}
-              availableProjects={availableProjects}
-            />
-          </Box>
+          {featureFlagProjects && (
+            <Box sx={marginTop}>
+              <ProjectsDropdown<AccessionPostRequestBody>
+                record={record}
+                setRecord={setRecord}
+                availableProjects={availableProjects}
+              />
+            </Box>
+          )}
 
           <Grid container>
             <CollectedReceivedDate2
