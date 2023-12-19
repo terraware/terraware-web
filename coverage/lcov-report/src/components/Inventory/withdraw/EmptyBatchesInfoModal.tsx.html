@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/redux/features/user/userAnalyticsSlice.ts</title>
+    <title>Code coverage report for src/components/Inventory/withdraw/EmptyBatchesInfoModal.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/redux/features/user</a> userAnalyticsSlice.ts</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/Inventory/withdraw</a> EmptyBatchesInfoModal.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -87,7 +87,23 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -95,46 +111,63 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import strings from 'src/strings';
+import Button from 'src/components/common/button/Button';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
 &nbsp;
-type UserAnalyticsState = {
-  gtmInstrumented: boolean;
-};
+export interface EmptyBatchesInfoModalProps {
+  open: boolean;
+  onClose: () =&gt; void;
+}
 &nbsp;
-const initialState: UserAnalyticsState = <span class="cstat-no" title="statement not covered" >{</span>
-  gtmInstrumented: false,
-};
+export default function <span class="fstat-no" title="function not covered" >EmptyBatchesInfoModal(</span>props: EmptyBatchesInfoModalProps): JSX.Element {
+  const { open, onClose } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
-export const userAnalyticsSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
-  name: 'userAnalytics',
-  initialState,
-  reducers: {
-    updateGtmInstrumented: <span class="fstat-no" title="function not covered" >(s</span>tate, action: PayloadAction&lt;UserAnalyticsState&gt;) =&gt; {
-      const userAnalyticsState = <span class="cstat-no" title="statement not covered" >action.payload;</span>
-<span class="cstat-no" title="statement not covered" >      state.gtmInstrumented = userAnalyticsState.gtmInstrumented;</span>
-    },
-  },
-});
-&nbsp;
-export const { updateGtmInstrumented } = <span class="cstat-no" title="statement not covered" >userAnalyticsSlice.actions;</span>
-&nbsp;
-export const userAnalyticsReducer = <span class="cstat-no" title="statement not covered" >userAnalyticsSlice.reducer;</span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;DialogBox
+      onClose={onClose}
+      open={open}
+      title={strings.EMPTY_BATCH}
+      size='medium'
+      middleButtons={[
+        &lt;Button
+          id='acknowledge-button'
+          label={strings.GOT_IT}
+          priority='primary'
+          type='productive'
+          onClick={onClose}
+          size='medium'
+          key='button-1'
+        /&gt;,
+      ]}
+      skrim={true}
+      message={strings.EMPTY_BATCHES_AFTER_WITHDRAW}
+    /&gt;
+  );
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
