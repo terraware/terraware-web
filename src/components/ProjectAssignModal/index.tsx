@@ -38,7 +38,7 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
     }
 
     onClose();
-  }, [entity.projectId, props, dispatch]);
+  }, [entity.projectId, props.entity.projectId, onClose, dispatch, assignPayloadCreator]);
 
   const handleUpdateProject = useCallback(
     (setFn: (previousEntity: T) => T) => {
@@ -58,7 +58,7 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
     } else if (projectRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [projectRequest, props, snackbar]);
+  }, [projectRequest, props, reloadEntity, snackbar]);
 
   return (
     <DialogBox
