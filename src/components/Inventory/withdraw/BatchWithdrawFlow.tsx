@@ -16,6 +16,7 @@ import SelectPurposeForm from './flow/SelectPurposeForm';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
 import isEnabled from 'src/features';
+import EmptyBatchesInfoModal from './EmptyBatchesInfoModal';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
@@ -37,6 +38,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     withdrawnDate: getTodaysDateFormatted(),
   });
   const [batches, setBatches] = useState<any[]>();
+  const [showEmptyBatchesModalFor, setShowEmptyBatchesModalFor] = useState<NurseryWithdrawal | null>(null);
   const snackbar = useSnackbar();
   const history = useHistory();
   const nurseryV2 = isEnabled('Nursery Updates');
@@ -117,8 +119,32 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     if (withdrawalCreatedCallback) {
       withdrawalCreatedCallback();
     }
-    // set snackbar with status
-    snackbar.toastSuccess(getFormattedSuccessMessage(withdrawal as NurseryWithdrawal));
+
+    const hasEmptyBatchesAfterWithdrawal = record.batchWithdrawals.some((batchWithdrawal) => {
+      const { batchId, germinatingQuantityWithdrawn, notReadyQuantityWithdrawn, readyQuantityWithdrawn } =
+        batchWithdrawal;
+      const sourceBatch = batches && batches.find((batch) => batch.id === batchId);
+      return (
+        sourceBatch &&
+        Number(sourceBatch['germinatingQuantity(raw)']) === Number(germinatingQuantityWithdrawn) &&
+        Number(sourceBatch['notReadyQuantity(raw)']) === Number(notReadyQuantityWithdrawn) &&
+        Number(sourceBatch['readyQuantity(raw)']) === Number(readyQuantityWithdrawn)
+      );
+    });
+
+    if (hasEmptyBatchesAfterWithdrawal) {
+      setShowEmptyBatchesModalFor(withdrawal);
+    } else {
+      onWithdrawSuccess(withdrawal);
+    }
+  };
+
+  const onWithdrawSuccess = (withdrawal: NurseryWithdrawal | null) => {
+    setShowEmptyBatchesModalFor(null);
+    if (withdrawal) {
+      // set snackbar with status
+      snackbar.toastSuccess(getFormattedSuccessMessage(withdrawal));
+    }
     // redirect to inventory
     goToInventory();
   };
@@ -185,6 +211,10 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
         />
       )}
       {flowState === 'photos' && <AddPhotos onNext={withdraw} onCancel={goToInventory} saveText={strings.WITHDRAW} />}
+      <EmptyBatchesInfoModal
+        open={showEmptyBatchesModalFor !== null}
+        onClose={() => onWithdrawSuccess(showEmptyBatchesModalFor)}
+      />
     </TfMain>
   );
 }
