@@ -51,7 +51,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       );
 
       if (searchResponse) {
-        const withdrawable = searchResponse.filter((batch: any) => +batch['totalQuantity(raw)'] > 0);
+        const withdrawable = searchResponse.filter(
+          (batch: any) => +batch['totalQuantity(raw)'] + +batch['germinatingQuantity(raw)'] > 0
+        );
         if (!withdrawable.length) {
           snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
         }
