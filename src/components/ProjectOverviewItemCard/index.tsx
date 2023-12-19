@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Theme, useTheme, Box } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Icon } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useAppSelector } from 'src/redux/store';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -7,9 +10,7 @@ import { isContributor } from 'src/utils/organization';
 import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { Link as LinkMUI, Theme, useTheme, Box } from '@mui/material';
-import { Icon } from '@terraware/web-components';
-import { makeStyles } from '@mui/styles';
+import Link from 'src/components/common/Link';
 
 interface OverviewItemCardProjectProps<T extends { id: number; projectId?: number }> {
   entity: T;
@@ -41,14 +42,6 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
 
   const [isProjectAssignModalOpen, setIsProjectAssignModalOpen] = useState<boolean>(false);
 
-  const linkStyle = {
-    color: theme.palette.TwClrTxtBrand,
-    fontWeight: 500,
-    textDecoration: 'none',
-    cursor: 'pointer',
-    fontSize: '14px',
-  };
-
   return (
     <OverviewItemCard
       isEditable={userCanEdit}
@@ -57,12 +50,12 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
       contents={
         <>
           {entityProject?.name ?? (
-            <LinkMUI sx={linkStyle} onClick={() => setIsProjectAssignModalOpen(true)}>
+            <Link onClick={() => setIsProjectAssignModalOpen(true)}>
               <Box display='flex' alignItems='center'>
                 <Icon name='iconAdd' className={classes.addIcon} />
                 {strings.ADD_TO_PROJECT}
               </Box>
-            </LinkMUI>
+            </Link>
           )}
 
           <ProjectAssignModal<T>
