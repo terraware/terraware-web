@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Theme, useTheme, Box } from '@mui/material';
+import { Theme, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Icon } from '@terraware/web-components';
 import strings from 'src/strings';
@@ -32,7 +32,6 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
   reloadData,
   projectAssignPayloadCreator,
 }: OverviewItemCardProjectProps<T>) => {
-  const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const userCanEdit = !isContributor(selectedOrganization);
   const classes = useStyles();
