@@ -76,10 +76,10 @@ export default function CreateAccession(): JSX.Element {
     }
 
     const projectId = availableProjects[0].id;
-    if (record.projectId !== projectId) {
+    if (projectId && record.projectId !== projectId) {
       setRecord({
         ...record,
-        projectId: availableProjects[0].id,
+        projectId,
       });
     }
   }, [record, availableProjects, setRecord]);
