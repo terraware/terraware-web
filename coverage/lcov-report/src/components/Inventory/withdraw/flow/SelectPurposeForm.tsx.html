@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/269</span>
+                <span class='fraction'>0/270</span>
             </div>
         
             
@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -858,7 +858,10 @@
 <a name='L793'></a><a href='#L793'>793</a>
 <a name='L794'></a><a href='#L794'>794</a>
 <a name='L795'></a><a href='#L795'>795</a>
-<a name='L796'></a><a href='#L796'>796</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L796'></a><a href='#L796'>796</a>
+<a name='L797'></a><a href='#L797'>797</a>
+<a name='L798'></a><a href='#L798'>798</a>
+<a name='L799'></a><a href='#L799'>799</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -894,6 +897,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1217,7 +1221,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1251,6 +1257,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1334,8 +1342,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1669,7 +1675,7 @@ import {
   useTheme,
 } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/types/Batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes, BatchWithdrawalPayload } from 'src/types/Batch';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { APP_PATHS } from 'src/constants';
 import { useAppSelector } from 'src/redux/store';
@@ -1688,6 +1694,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import isEnabled from 'src/features';
+import { SearchResponseElement } from 'src/types/Search';
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   withdrawnQuantity: {
@@ -1714,7 +1721,7 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
 &nbsp;
 type SelectPurposeFormProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) =&gt; void;
-  batches: any[];
+  batches: SearchResponseElement[];
   nurseryWithdrawal: NurseryWithdrawalRequest;
   onCancel: () =&gt; void;
   saveText: string;
@@ -1878,7 +1885,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 <span class="cstat-no" title="statement not covered" >          setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);</span>
 <span class="cstat-no" title="statement not covered" >          return false;</span>
         } else {
-<span class="cstat-no" title="statement not covered" >          if (withdrawnQuantity &gt; +batches[0]['readyQuantity(raw)']) {</span>
+<span class="cstat-no" title="statement not covered" >          if (withdrawnQuantity &gt; Number(batches[0]['readyQuantity(raw)'])) {</span>
 <span class="cstat-no" title="statement not covered" >            setIndividualError('withdrawnQuantity', strings.WITHDRAWN_QUANTITY_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >            return false;</span>
           }
@@ -1903,7 +1910,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 <span class="cstat-no" title="statement not covered" >          setIndividualError('notReadyQuantityWithdrawn', strings.INVALID_VALUE);</span>
 <span class="cstat-no" title="statement not covered" >          allValid = false;</span>
         } else {
-<span class="cstat-no" title="statement not covered" >          if (+notReadyQuantityWithdrawn &gt; +batches[0]['notReadyQuantity(raw)']) {</span>
+<span class="cstat-no" title="statement not covered" >          if (Number(notReadyQuantityWithdrawn) &gt; Number(batches[0]['notReadyQuantity(raw)'])) {</span>
 <span class="cstat-no" title="statement not covered" >            setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >            allValid = false;</span>
           } else {
@@ -1920,7 +1927,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 <span class="cstat-no" title="statement not covered" >          setIndividualError('readyQuantityWithdrawn', strings.INVALID_VALUE);</span>
 <span class="cstat-no" title="statement not covered" >          allValid = false;</span>
         } else {
-<span class="cstat-no" title="statement not covered" >          if (+readyQuantityWithdrawn &gt; +batches[0]['readyQuantity(raw)']) {</span>
+<span class="cstat-no" title="statement not covered" >          if (Number(readyQuantityWithdrawn) &gt; Number(batches[0]['readyQuantity(raw)'])) {</span>
 <span class="cstat-no" title="statement not covered" >            setIndividualError('readyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >            allValid = false;</span>
           } else {
@@ -1938,7 +1945,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 <span class="cstat-no" title="statement not covered" >            setIndividualError('germinatingQuantityWithdrawn', strings.INVALID_VALUE);</span>
 <span class="cstat-no" title="statement not covered" >            allValid = false;</span>
           } else {
-<span class="cstat-no" title="statement not covered" >            if (+germinatingQuantityWithdrawn &gt; +batches[0]['germinatingQuantity(raw)']) {</span>
+<span class="cstat-no" title="statement not covered" >            if (Number(germinatingQuantityWithdrawn) &gt; Number(batches[0]['germinatingQuantity(raw)'])) {</span>
 <span class="cstat-no" title="statement not covered" >              setIndividualError('germinatingQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >              allValid = false;</span>
             } else {
@@ -2006,22 +2013,24 @@ export default function <span class="fstat-no" title="function not covered" >Sel
       plantingSubzoneId: isOutplant ? localRecord.plantingSubzoneId : undefined,
       facilityId: Number(selectedNursery?.id || -1),
       batchWithdrawals: batches
-        .filter(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; {
+        .filter(<span class="fstat-no" title="function not covered" >(b</span>atch: SearchResponseElement) =&gt; {
 <span class="cstat-no" title="statement not covered" >          return (</span>
-            batch.facility_id.toString() === selectedNursery?.id.toString() &amp;&amp;
-            (!isOutplant || +batch['readyQuantity(raw)'] &gt; 0)
+            `${batch.facility_id}` === selectedNursery?.id.toString() &amp;&amp;
+            (!isOutplant || Number(batch['readyQuantity(raw)']) &gt; 0)
           );
         })
-        .map(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-          batchId: batch.id,
-          germinatingQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? germinatingQuantityWithdrawn || 0 : 0,
-          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
-          readyQuantityWithdrawn: isSingleOutplant
-            ? withdrawnQuantity || 0
-            : isSingleBatch
-            ? readyQuantityWithdrawn || 0
-            : 0,
-        })),
+        .map(
+<span class="fstat-no" title="function not covered" >          (b</span>atch: SearchResponseElement): BatchWithdrawalPayload =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+            batchId: Number(batch.id),
+            germinatingQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? germinatingQuantityWithdrawn || 0 : 0,
+            notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
+            readyQuantityWithdrawn: isSingleOutplant
+              ? withdrawnQuantity || 0
+              : isSingleBatch
+              ? readyQuantityWithdrawn || 0
+              : 0,
+          })
+        ),
     });
   };
 &nbsp;
@@ -2032,20 +2041,22 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 &nbsp;
   const nurseriesOptions = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const nurseries = <span class="cstat-no" title="statement not covered" >batches</span>
-      .filter(<span class="fstat-no" title="function not covered" >(b</span>atchData) =&gt; {
+      .filter(<span class="fstat-no" title="function not covered" >(b</span>atchData: SearchResponseElement) =&gt; {
 <span class="cstat-no" title="statement not covered" >        if (isOutplant) {</span>
-<span class="cstat-no" title="statement not covered" >          return +batchData['readyQuantity(raw)'] &gt; 0;</span>
+<span class="cstat-no" title="statement not covered" >          return Number(batchData['readyQuantity(raw)']) &gt; 0;</span>
         }
-<span class="cstat-no" title="statement not covered" >        return +batchData['totalQuantity(raw)'] + +batchData['germinatingQuantity(raw)'] &gt; 0;</span>
+<span class="cstat-no" title="statement not covered" >        return Number(batchData['totalQuantity(raw)']) + Number(batchData['germinatingQuantity(raw)']) &gt; 0;</span>
       })
-      .reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, batch) =&gt; {
-<span class="cstat-no" title="statement not covered" >        if (!acc[batch.facility_id.toString()]) {</span>
-<span class="cstat-no" title="statement not covered" >          acc[batch.facility_id.toString()] = { label: batch.facility_name, value: batch.facility_id };</span>
+      .reduce(<span class="fstat-no" title="function not covered" >(a</span>cc: Record&lt;string, DropdownItem&gt;, batch: SearchResponseElement) =&gt; {
+<span class="cstat-no" title="statement not covered" >        if (!acc[`${batch.facility_id}`]) {</span>
+<span class="cstat-no" title="statement not covered" >          acc[`${batch.facility_id}`] = { label: `${batch.facility_name}`, value: batch.facility_id };</span>
         }
 <span class="cstat-no" title="statement not covered" >        return acc;</span>
       }, {});
 &nbsp;
-    const options: DropdownItem[] = <span class="cstat-no" title="statement not covered" >Object.values(nurseries);</span>
+    const options: DropdownItem[] = <span class="cstat-no" title="statement not covered" >Object.values(nurseries).sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      `${a.label}`.toLowerCase().localeCompare(`${b.label}`.toLowerCase())</span>
+    );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (options.length === 1 &amp;&amp; !selectedNursery) {</span>
 <span class="cstat-no" title="statement not covered" >      setSelectedNursery(getNurseryById(selectedOrganization, Number(options[0].value)));</span>
@@ -2077,19 +2088,19 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setWithdrawnQuantity(</span>
-      (readyQuantityWithdrawn ? +readyQuantityWithdrawn : 0) +
-        (notReadyQuantityWithdrawn ? +notReadyQuantityWithdrawn : 0) +
-        (germinatingQuantityWithdrawn ? +germinatingQuantityWithdrawn : 0)
+      (readyQuantityWithdrawn ? Number(readyQuantityWithdrawn) : 0) +
+        (notReadyQuantityWithdrawn ? Number(notReadyQuantityWithdrawn) : 0) +
+        (germinatingQuantityWithdrawn ? Number(germinatingQuantityWithdrawn) : 0)
     );
   }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, germinatingQuantityWithdrawn]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (localRecord.purpose === OUTPLANT) {</span>
       const hasReadyQuantities = <span class="cstat-no" title="statement not covered" >batches.some(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        if (selectedNursery &amp;&amp; batch.facility_id.toString() !== selectedNursery.id.toString()) {</span>
+<span class="cstat-no" title="statement not covered" >        if (selectedNursery &amp;&amp; `${batch.facility_id}` !== selectedNursery.id.toString()) {</span>
 <span class="cstat-no" title="statement not covered" >          return false;</span>
         }
-<span class="cstat-no" title="statement not covered" >        return +batch['readyQuantity(raw)'] &gt; 0;</span>
+<span class="cstat-no" title="statement not covered" >        return Number(batch['readyQuantity(raw)']) &gt; 0;</span>
       });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!hasReadyQuantities) {</span>
@@ -2128,19 +2139,17 @@ export default function <span class="fstat-no" title="function not covered" >Sel
   }, [selectedOrganization.id]);
 &nbsp;
   const batchesFromNursery = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return batches.filter(</span>
-<span class="fstat-no" title="function not covered" >      (b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >!selectedNursery || batch.facility_id.toString() === selectedNursery.id.toString()</span>
-    );
+<span class="cstat-no" title="statement not covered" >    return batches.filter(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >!selectedNursery || `${batch.facility_id}` === selectedNursery.id.toString())</span>;</span>
   }, [batches, selectedNursery]);
 &nbsp;
   const batchSpeciesNames = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const batchSpeciesIds = <span class="cstat-no" title="statement not covered" >batchesFromNursery.map(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >batch.species_id.toString())</span>;</span>
+    const batchSpeciesIds = <span class="cstat-no" title="statement not covered" >batchesFromNursery.map(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >`${batch.species_id}`)</span>;</span>
     const speciesIds: string[] = <span class="cstat-no" title="statement not covered" >Array.from(new Set(batchSpeciesIds));</span>
 <span class="cstat-no" title="statement not covered" >    return speciesIds.map(<span class="fstat-no" title="function not covered" >(s</span>peciesId: string) =&gt; <span class="cstat-no" title="statement not covered" >speciesMap[speciesId] || strings.NAME_UNKNOWN)</span>;</span>
   }, [batchesFromNursery, speciesMap]);
 &nbsp;
   const totalReadyQuantity = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return batchesFromNursery.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, batch) =&gt; <span class="cstat-no" title="statement not covered" >acc + (+batch['readyQuantity(raw)'] || 0),</span> 0);</span>
+<span class="cstat-no" title="statement not covered" >    return batchesFromNursery.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, batch) =&gt; <span class="cstat-no" title="statement not covered" >acc + (Number(batch['readyQuantity(raw)']) || 0),</span> 0);</span>
   }, [batchesFromNursery]);
 &nbsp;
   const getOutplantLabel = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -2455,7 +2464,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-20T18:48:24.811Z
+                at 2023-12-20T20:09:43.237Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
