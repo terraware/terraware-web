@@ -3,17 +3,22 @@ import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { TrackingService } from 'src/services';
-import { OrNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import PlantingSitesTable from './PlantingSitesTable';
-import PlantingSiteTypeSelect from './PlantingSiteTypeSelect';
+import PlantingSitesTable from 'src/components/PlantingSites/PlantingSitesTable';
+import PlantingSiteTypeSelect from 'src/components/PlantingSites/PlantingSiteTypeSelect';
 import { useOrganization, useTimeZones } from 'src/providers/hooks';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import useForm from 'src/utils/useForm';
+
+export type PlantingSitesFilters = {
+  projectIds?: number[];
+};
 
 export default function PlantingSitesList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -27,23 +32,38 @@ export default function PlantingSitesList(): JSX.Element {
     field: 'name',
     direction: 'Ascending',
   });
+  const [filters, setFilters] = useForm<PlantingSitesFilters>({});
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const { isMobile } = useDeviceInfo();
 
+  const filtersEmpty = useCallback(() => !filters.projectIds || filters.projectIds.length === 0, [filters]);
+
   const onSearch = useCallback(async () => {
-    const searchField: OrNodePayload | undefined = debouncedSearchTerm
-      ? {
-          operation: 'or',
-          children: [
-            { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
-            { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
-          ],
-        }
-      : undefined;
+    const searchFields: SearchNodePayload[] = [];
+
+    if (debouncedSearchTerm) {
+      searchFields.push({
+        operation: 'or',
+        children: [
+          { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
+          { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
+        ],
+      });
+    }
+
+    if (filters.projectIds && filters.projectIds.length > 0) {
+      searchFields.push({
+        field: 'project_id',
+        operation: 'field',
+        type: 'Exact',
+        values: filters.projectIds.map((projectId: number) => `${projectId}`),
+      });
+    }
+
     const apiSearchResults = await TrackingService.searchPlantingSites(
       selectedOrganization.id,
-      searchField,
+      searchFields,
       searchSortOrder
     );
 
@@ -52,13 +72,13 @@ export default function PlantingSitesList(): JSX.Element {
       setPlantingSites(transformedResults);
     }
     setSearchResults(transformedResults);
-  }, [selectedOrganization, debouncedSearchTerm, searchSortOrder, timeZones, defaultTimeZone]);
+  }, [debouncedSearchTerm, filters.projectIds, selectedOrganization.id, searchSortOrder, timeZones, defaultTimeZone]);
 
   useEffect(() => {
     onSearch();
   }, [selectedOrganization, onSearch]);
 
-  if (plantingSites && !plantingSites.length) {
+  if (plantingSites && filtersEmpty() && !plantingSites.length) {
     return <EmptyStatePage backgroundImageVisible={true} pageName={'PlantingSites'} />;
   }
 
@@ -105,6 +125,8 @@ export default function PlantingSitesList(): JSX.Element {
               temporalSearchValue={temporalSearchValue}
               setTemporalSearchValue={setTemporalSearchValue}
               setSearchSortOrder={(order: SearchSortOrder) => setSearchSortOrder(order)}
+              filters={filters}
+              setFilters={setFilters}
             />
           </Box>
         ) : (
