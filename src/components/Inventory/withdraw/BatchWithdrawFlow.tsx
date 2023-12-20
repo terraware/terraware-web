@@ -17,7 +17,7 @@ import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
 import isEnabled from 'src/features';
 import EmptyBatchesInfoModal from './EmptyBatchesInfoModal';
-import { SearchResponseElement } from '../../../types/Search';
+import { SearchResponseElement } from 'src/types/Search';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 

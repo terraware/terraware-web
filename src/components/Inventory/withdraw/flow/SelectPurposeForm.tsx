@@ -33,7 +33,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import isEnabled from 'src/features';
-import { SearchResponseElement } from '../../../../types/Search';
+import { SearchResponseElement } from 'src/types/Search';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
