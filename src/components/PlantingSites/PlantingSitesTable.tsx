@@ -7,7 +7,6 @@ import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { SearchSortOrder } from 'src/types/Search';
-import isEnabled from 'src/features';
 
 interface PlantingSitesTableProps {
   results: SearchResponseElement[];
@@ -36,7 +35,6 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder } = props;
   const [isPresorted, setIsPresorted] = useState<boolean>(false);
   const theme = useTheme();
-  const featureFlagProjects = isEnabled('Projects');
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
     const isTimeZone = orderBy === 'timeZone';
