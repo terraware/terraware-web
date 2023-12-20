@@ -19,6 +19,7 @@ export const NurseryWithdrawalPurposesValues = Object.values(NurseryWithdrawalPu
 
 export type NurseryTransfer = components['schemas']['CreateNurseryTransferRequestPayload'];
 export type NurseryWithdrawalRequest = components['schemas']['CreateNurseryWithdrawalRequestPayload'];
+export type BatchWithdrawalPayload = components['schemas']['BatchWithdrawalPayload'];
 
 export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
   switch (purpose) {
