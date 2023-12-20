@@ -138,7 +138,9 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             <Grid item xs={12}>
               <Table
                 id='planting-sites-table'
-                columns={columns}
+                columns={() =>
+                  featureFlagProjects ? columns() : columns().filter((column) => column.key === 'project_name')
+                }
                 rows={results}
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}
