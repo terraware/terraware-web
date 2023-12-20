@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export type InstructionsModalProps = {
   open: boolean;
-  onClose: (dontShowAgain: boolean) => void;
+  onClose: (dontShowAgain?: boolean) => void;
 };
 
 export default function InstructionsModal(props: InstructionsModalProps): JSX.Element {
@@ -27,7 +27,7 @@ export default function InstructionsModal(props: InstructionsModalProps): JSX.El
   return (
     <DialogBox
       scrolled
-      onClose={() => onClose(false)}
+      onClose={() => onClose()}
       open={open}
       title={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       size={'large'}
@@ -41,7 +41,7 @@ export default function InstructionsModal(props: InstructionsModalProps): JSX.El
           className={classes.buttonSpacing}
           key='button-1'
         />,
-        <Button onClick={() => onClose(false)} id='next' label={strings.CLOSE} key='button-2' />,
+        <Button onClick={() => onClose()} id='next' label={strings.CLOSE} key='button-2' />,
       ]}
     >
       <Box display='flex' flexDirection='column'>

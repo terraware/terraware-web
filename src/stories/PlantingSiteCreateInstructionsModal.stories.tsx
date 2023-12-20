@@ -7,8 +7,8 @@ const InstructionsModalTemplate: Story<InstructionsModalProps> = (args) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isDontShowAgain, setIsDontShowAgain] = useState<boolean>(false);
 
-  const onClose = (dontShowAgain: boolean) => {
-    setIsDontShowAgain(dontShowAgain);
+  const onClose = (dontShowAgain?: boolean) => {
+    setIsDontShowAgain(dontShowAgain ?? false);
     setIsOpen(false);
   };
 
