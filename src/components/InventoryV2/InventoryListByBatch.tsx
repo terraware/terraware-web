@@ -8,7 +8,7 @@ import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInv
 import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
+import { InventoryFiltersType, InventoryFiltersUnion } from 'src/components/InventoryV2/InventoryFilter';
 import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/components/InventoryV2';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
@@ -94,7 +94,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
     field: 'batchNumber',
     direction: 'Ascending',
   });
-  const [filters, setFilters] = useForm<InventoryFiltersType>({});
+  const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
 
   const dispatch = useAppDispatch();
   const subLocations: SubLocation[] | undefined = useAppSelector(selectSubLocations);

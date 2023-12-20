@@ -17,7 +17,7 @@ import { getAllNurseries } from 'src/utils/organization';
 import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { Project } from 'src/types/Project';
-import InventoryFilters, { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
+import InventoryFilters, { InventoryFiltersUnion } from 'src/components/InventoryV2/InventoryFilter';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 import { convertFilterGroupToMap, getNurseryName } from 'src/components/InventoryV2/FilterUtils';
 import isEnabled from 'src/features';
@@ -44,15 +44,15 @@ const initialFilters: Record<string, SearchNodePayload> = {
 interface SearchProps {
   searchValue: string;
   onSearch: (value: string) => void;
-  filters: InventoryFiltersType;
-  setFilters: (f: InventoryFiltersType) => void;
+  filters: InventoryFiltersUnion;
+  setFilters: (f: InventoryFiltersUnion) => void;
   origin?: OriginPage;
   showProjectsFilter?: boolean;
   showEmptyBatchesFilter?: boolean;
 }
 
 type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
-  id: keyof InventoryFiltersType;
+  id: keyof InventoryFiltersUnion;
   emptyValue: unknown;
 };
 
@@ -180,7 +180,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [origin, dispatch, selectedOrganization.id]);
 
   const onRemovePillList = useCallback(
-    (filterId: keyof InventoryFiltersType) => {
+    (filterId: keyof InventoryFiltersUnion) => {
       const filter = filterPillData?.find((filterPillDatum) => filterPillDatum.id === filterId);
       if (filterId === 'facilityIds') {
         setFilters({ ...filters, facilityIds: [], subLocationsIds: [] });
