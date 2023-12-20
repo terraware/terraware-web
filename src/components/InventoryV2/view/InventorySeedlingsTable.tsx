@@ -16,7 +16,7 @@ import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
-import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
+import { InventoryFiltersUnion } from 'src/components/InventoryV2/InventoryFilter';
 import Search from 'src/components/InventoryV2/Search';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import BatchDetailsModal from './BatchDetailsModal';
@@ -77,7 +77,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   // The main distinction here is that the filtered batches are filtered in the view, whereas `batches` is
   // the filtered-by-search batches list that comes back from the API
   const [filteredBatches, setFilteredBatches] = useState<any[]>([]);
-  const [filters, setFilters] = useForm<InventoryFiltersType>({});
+  const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
