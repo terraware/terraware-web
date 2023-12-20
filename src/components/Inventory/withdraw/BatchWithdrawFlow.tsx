@@ -126,7 +126,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     const hasEmptyBatchesAfterWithdrawal = record.batchWithdrawals.some((batchWithdrawal) => {
       const { batchId, germinatingQuantityWithdrawn, notReadyQuantityWithdrawn, readyQuantityWithdrawn } =
         batchWithdrawal;
-      const sourceBatch = batches && batches.find((batch) => batch.id === batchId);
+      const sourceBatch = batches && batches.find((batch) => Number(batch.id) === Number(batchId));
       return (
         sourceBatch &&
         Number(sourceBatch['germinatingQuantity(raw)']) === Number(germinatingQuantityWithdrawn) &&

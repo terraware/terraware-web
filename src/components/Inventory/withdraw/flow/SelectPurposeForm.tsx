@@ -249,7 +249,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           setIndividualError('notReadyQuantityWithdrawn', strings.INVALID_VALUE);
           allValid = false;
         } else {
-          if (+notReadyQuantityWithdrawn > Number(batches[0]['notReadyQuantity(raw)'])) {
+          if (Number(notReadyQuantityWithdrawn) > Number(batches[0]['notReadyQuantity(raw)'])) {
             setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
             allValid = false;
           } else {
@@ -266,7 +266,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           setIndividualError('readyQuantityWithdrawn', strings.INVALID_VALUE);
           allValid = false;
         } else {
-          if (+readyQuantityWithdrawn > Number(batches[0]['readyQuantity(raw)'])) {
+          if (Number(readyQuantityWithdrawn) > Number(batches[0]['readyQuantity(raw)'])) {
             setIndividualError('readyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
             allValid = false;
           } else {
@@ -284,7 +284,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             setIndividualError('germinatingQuantityWithdrawn', strings.INVALID_VALUE);
             allValid = false;
           } else {
-            if (+germinatingQuantityWithdrawn > Number(batches[0]['germinatingQuantity(raw)'])) {
+            if (Number(germinatingQuantityWithdrawn) > Number(batches[0]['germinatingQuantity(raw)'])) {
               setIndividualError('germinatingQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
               allValid = false;
             } else {
@@ -427,9 +427,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   useEffect(() => {
     setWithdrawnQuantity(
-      (readyQuantityWithdrawn ? +readyQuantityWithdrawn : 0) +
-        (notReadyQuantityWithdrawn ? +notReadyQuantityWithdrawn : 0) +
-        (germinatingQuantityWithdrawn ? +germinatingQuantityWithdrawn : 0)
+      (readyQuantityWithdrawn ? Number(readyQuantityWithdrawn) : 0) +
+        (notReadyQuantityWithdrawn ? Number(notReadyQuantityWithdrawn) : 0) +
+        (germinatingQuantityWithdrawn ? Number(germinatingQuantityWithdrawn) : 0)
     );
   }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, germinatingQuantityWithdrawn]);
 
