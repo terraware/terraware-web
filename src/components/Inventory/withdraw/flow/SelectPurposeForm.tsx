@@ -14,7 +14,7 @@ import {
   useTheme,
 } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/types/Batch';
+import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes, BatchWithdrawalPayload } from 'src/types/Batch';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 import { APP_PATHS } from 'src/constants';
 import { useAppSelector } from 'src/redux/store';
@@ -33,6 +33,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import isEnabled from 'src/features';
+import { SearchResponseElement } from 'src/types/Search';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type SelectPurposeFormProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
-  batches: any[];
+  batches: SearchResponseElement[];
   nurseryWithdrawal: NurseryWithdrawalRequest;
   onCancel: () => void;
   saveText: string;
@@ -223,7 +224,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           setIndividualError('withdrawnQuantity', strings.INVALID_VALUE);
           return false;
         } else {
-          if (withdrawnQuantity > +batches[0]['readyQuantity(raw)']) {
+          if (withdrawnQuantity > Number(batches[0]['readyQuantity(raw)'])) {
             setIndividualError('withdrawnQuantity', strings.WITHDRAWN_QUANTITY_ERROR);
             return false;
           }
@@ -248,7 +249,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           setIndividualError('notReadyQuantityWithdrawn', strings.INVALID_VALUE);
           allValid = false;
         } else {
-          if (+notReadyQuantityWithdrawn > +batches[0]['notReadyQuantity(raw)']) {
+          if (Number(notReadyQuantityWithdrawn) > Number(batches[0]['notReadyQuantity(raw)'])) {
             setIndividualError('notReadyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
             allValid = false;
           } else {
@@ -265,7 +266,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
           setIndividualError('readyQuantityWithdrawn', strings.INVALID_VALUE);
           allValid = false;
         } else {
-          if (+readyQuantityWithdrawn > +batches[0]['readyQuantity(raw)']) {
+          if (Number(readyQuantityWithdrawn) > Number(batches[0]['readyQuantity(raw)'])) {
             setIndividualError('readyQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
             allValid = false;
           } else {
@@ -283,7 +284,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             setIndividualError('germinatingQuantityWithdrawn', strings.INVALID_VALUE);
             allValid = false;
           } else {
-            if (+germinatingQuantityWithdrawn > +batches[0]['germinatingQuantity(raw)']) {
+            if (Number(germinatingQuantityWithdrawn) > Number(batches[0]['germinatingQuantity(raw)'])) {
               setIndividualError('germinatingQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
               allValid = false;
             } else {
@@ -351,22 +352,24 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       plantingSubzoneId: isOutplant ? localRecord.plantingSubzoneId : undefined,
       facilityId: Number(selectedNursery?.id || -1),
       batchWithdrawals: batches
-        .filter((batch) => {
+        .filter((batch: SearchResponseElement) => {
           return (
-            batch.facility_id.toString() === selectedNursery?.id.toString() &&
-            (!isOutplant || +batch['readyQuantity(raw)'] > 0)
+            `${batch.facility_id}` === selectedNursery?.id.toString() &&
+            (!isOutplant || Number(batch['readyQuantity(raw)']) > 0)
           );
         })
-        .map((batch) => ({
-          batchId: batch.id,
-          germinatingQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? germinatingQuantityWithdrawn || 0 : 0,
-          notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
-          readyQuantityWithdrawn: isSingleOutplant
-            ? withdrawnQuantity || 0
-            : isSingleBatch
-            ? readyQuantityWithdrawn || 0
-            : 0,
-        })),
+        .map(
+          (batch: SearchResponseElement): BatchWithdrawalPayload => ({
+            batchId: Number(batch.id),
+            germinatingQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? germinatingQuantityWithdrawn || 0 : 0,
+            notReadyQuantityWithdrawn: isSingleOutplant ? 0 : isSingleBatch ? notReadyQuantityWithdrawn || 0 : 0,
+            readyQuantityWithdrawn: isSingleOutplant
+              ? withdrawnQuantity || 0
+              : isSingleBatch
+              ? readyQuantityWithdrawn || 0
+              : 0,
+          })
+        ),
     });
   };
 
@@ -377,20 +380,22 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   const nurseriesOptions = useMemo(() => {
     const nurseries = batches
-      .filter((batchData) => {
+      .filter((batchData: SearchResponseElement) => {
         if (isOutplant) {
-          return +batchData['readyQuantity(raw)'] > 0;
+          return Number(batchData['readyQuantity(raw)']) > 0;
         }
-        return +batchData['totalQuantity(raw)'] + +batchData['germinatingQuantity(raw)'] > 0;
+        return Number(batchData['totalQuantity(raw)']) + Number(batchData['germinatingQuantity(raw)']) > 0;
       })
-      .reduce((acc, batch) => {
-        if (!acc[batch.facility_id.toString()]) {
-          acc[batch.facility_id.toString()] = { label: batch.facility_name, value: batch.facility_id };
+      .reduce((acc: Record<string, DropdownItem>, batch: SearchResponseElement) => {
+        if (!acc[`${batch.facility_id}`]) {
+          acc[`${batch.facility_id}`] = { label: `${batch.facility_name}`, value: batch.facility_id };
         }
         return acc;
       }, {});
 
-    const options: DropdownItem[] = Object.values(nurseries);
+    const options: DropdownItem[] = Object.values(nurseries).sort((a, b) =>
+      `${a.label}`.toLowerCase().localeCompare(`${b.label}`.toLowerCase())
+    );
 
     if (options.length === 1 && !selectedNursery) {
       setSelectedNursery(getNurseryById(selectedOrganization, Number(options[0].value)));
@@ -422,19 +427,19 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   useEffect(() => {
     setWithdrawnQuantity(
-      (readyQuantityWithdrawn ? +readyQuantityWithdrawn : 0) +
-        (notReadyQuantityWithdrawn ? +notReadyQuantityWithdrawn : 0) +
-        (germinatingQuantityWithdrawn ? +germinatingQuantityWithdrawn : 0)
+      (readyQuantityWithdrawn ? Number(readyQuantityWithdrawn) : 0) +
+        (notReadyQuantityWithdrawn ? Number(notReadyQuantityWithdrawn) : 0) +
+        (germinatingQuantityWithdrawn ? Number(germinatingQuantityWithdrawn) : 0)
     );
   }, [readyQuantityWithdrawn, notReadyQuantityWithdrawn, germinatingQuantityWithdrawn]);
 
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
       const hasReadyQuantities = batches.some((batch) => {
-        if (selectedNursery && batch.facility_id.toString() !== selectedNursery.id.toString()) {
+        if (selectedNursery && `${batch.facility_id}` !== selectedNursery.id.toString()) {
           return false;
         }
-        return +batch['readyQuantity(raw)'] > 0;
+        return Number(batch['readyQuantity(raw)']) > 0;
       });
 
       if (!hasReadyQuantities) {
@@ -473,19 +478,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [selectedOrganization.id]);
 
   const batchesFromNursery = useMemo(() => {
-    return batches.filter(
-      (batch) => !selectedNursery || batch.facility_id.toString() === selectedNursery.id.toString()
-    );
+    return batches.filter((batch) => !selectedNursery || `${batch.facility_id}` === selectedNursery.id.toString());
   }, [batches, selectedNursery]);
 
   const batchSpeciesNames = useMemo(() => {
-    const batchSpeciesIds = batchesFromNursery.map((batch) => batch.species_id.toString());
+    const batchSpeciesIds = batchesFromNursery.map((batch) => `${batch.species_id}`);
     const speciesIds: string[] = Array.from(new Set(batchSpeciesIds));
     return speciesIds.map((speciesId: string) => speciesMap[speciesId] || strings.NAME_UNKNOWN);
   }, [batchesFromNursery, speciesMap]);
 
   const totalReadyQuantity = useMemo(() => {
-    return batchesFromNursery.reduce((acc, batch) => acc + (+batch['readyQuantity(raw)'] || 0), 0);
+    return batchesFromNursery.reduce((acc, batch) => acc + (Number(batch['readyQuantity(raw)']) || 0), 0);
   }, [batchesFromNursery]);
 
   const getOutplantLabel = () => {

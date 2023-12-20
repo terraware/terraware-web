@@ -17,6 +17,7 @@ import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
 import isEnabled from 'src/features';
 import EmptyBatchesInfoModal from './EmptyBatchesInfoModal';
+import { SearchResponseElement } from 'src/types/Search';
 
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
@@ -37,7 +38,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     purpose: isContributor(selectedOrganization) ? NURSERY_TRANSFER : OUTPLANT,
     withdrawnDate: getTodaysDateFormatted(),
   });
-  const [batches, setBatches] = useState<any[]>();
+  const [batches, setBatches] = useState<SearchResponseElement[]>();
   const [showEmptyBatchesModalFor, setShowEmptyBatchesModalFor] = useState<NurseryWithdrawal | null>(null);
   const snackbar = useSnackbar();
   const history = useHistory();
@@ -45,7 +46,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   useEffect(() => {
     const populateBatches = async () => {
-      const searchResponse = await NurseryBatchService.getBatches(
+      const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatches(
         selectedOrganization.id,
         batchIds.map((id) => Number(id))
       );
@@ -125,7 +126,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     const hasEmptyBatchesAfterWithdrawal = record.batchWithdrawals.some((batchWithdrawal) => {
       const { batchId, germinatingQuantityWithdrawn, notReadyQuantityWithdrawn, readyQuantityWithdrawn } =
         batchWithdrawal;
-      const sourceBatch = batches && batches.find((batch) => batch.id === batchId);
+      const sourceBatch = batches && batches.find((batch) => Number(batch.id) === Number(batchId));
       return (
         sourceBatch &&
         Number(sourceBatch['germinatingQuantity(raw)']) === Number(germinatingQuantityWithdrawn) &&
