@@ -139,7 +139,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
               <Table
                 id='planting-sites-table'
                 columns={() =>
-                  featureFlagProjects ? columns() : columns().filter((column) => column.key === 'project_name')
+                  featureFlagProjects ? columns() : columns().filter((column) => column.key !== 'project_name')
                 }
                 rows={results}
                 orderBy='name'
