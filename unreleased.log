@@ -1,3 +1,5 @@
+f48a229daa SW-4501 Add projects filter and project name column to planting sites table (#1938)
+80c3d034f2 SW-4501 Refactor the InventoryFilter into FilterMultiSelectContainer (#1937)
 bc71eec288 nvmrc for node20 (#1932)
 4a7dfd7624 Updated translations from Phrase (#1936)
 c215d8e3a2 Inject the project_name column into the accessions columns (coming from org preferences) when the feature is on and it isn't present in the saved columns (#1935)
