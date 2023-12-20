@@ -1,3 +1,4 @@
+4a7dfd7624 Updated translations from Phrase (#1936)
 c215d8e3a2 Inject the project_name column into the accessions columns (coming from org preferences) when the feature is on and it isn't present in the saved columns (#1935)
 7958b9ab9c Hide project dropdown in accessions create flow when projects feature is turned off (#1933)
 b0cef99991 SW-4606 Add tooltips to inventory seedlings table column headers (#1931)
