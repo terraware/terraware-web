@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
 import { Box, Grid } from '@mui/material';
-import { SearchResponseElement } from 'src/types/Search';
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import InventoryCellRenderer from './InventoryCellRenderer';
 import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import { APP_PATHS } from 'src/constants';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
-import { SearchSortOrder } from 'src/types/Search';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 import Search from 'src/components/InventoryV2/Search';
 
@@ -41,23 +40,49 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   } = props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
+  const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
 
   const withdrawInventory = () => {
+    const path = origin === 'Species' ? APP_PATHS.INVENTORY_WITHDRAW : APP_PATHS.BATCH_WITHDRAW;
+
     const speciesIds = selectedRows.filter((row) => row.species_id).map((row) => `speciesId=${row.species_id}`);
-    if (!speciesIds.length) {
+    if (origin === 'Species' && !speciesIds.length) {
       // we can't handle deleted inventory today
       return;
     }
 
+    const batchIds =
+      origin === 'Nursery'
+        ? selectedRows.flatMap((row) => row.batchIds).map((b) => `batchId=${b}`)
+        : selectedRows.filter((r) => r.species_id).map((row) => `batchId=${row.batchId}`);
+    const searchParams = origin === 'Species' ? speciesIds.join('&') : batchIds.join('&');
+
     history.push({
-      pathname: APP_PATHS.INVENTORY_WITHDRAW,
-      search: `?${speciesIds.join('&')}&source=${window.location.pathname}`,
+      pathname: path,
+      search: `?${searchParams}&source=${window.location.pathname}`,
     });
   };
 
   const isSelectionWithdrawable = () => {
-    return selectedRows.some((row) => row.species_id && +row['totalQuantity(raw)'] > 0);
+    switch (origin) {
+      case 'Species':
+        return selectedRows.some((row) => row.species_id && +row['totalQuantity(raw)'] > 0);
+      case 'Nursery':
+        return selectedRows.length === 1 && selectedRows.some((row) => +row['totalQuantity(raw)'] > 0);
+      case 'Batches':
+        const nurseries = new Set(selectedRows.map((row) => row.facility_id));
+        return nurseries.size === 1 && selectedRows.some((row) => row.species_id && +row['totalQuantity(raw)'] > 0);
+    }
   };
+
+  useEffect(() => {
+    const nurseries = new Set(selectedRows.map((row) => row.facility_id));
+    if ((origin === 'Nursery' && selectedRows.length > 1) || (origin === 'Batches' && nurseries.size > 1)) {
+      setWithdrawTooltip(strings.WITHDRAW_SINGLE_NURSERY);
+    } else {
+      setWithdrawTooltip(undefined);
+    }
+  }, [origin, selectedRows]);
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
     setSearchSortOrder({
@@ -100,6 +125,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     buttonText: strings.WITHDRAW,
                     onButtonClick: withdrawInventory,
                     disabled: !isSelectionWithdrawable(),
+                    tooltipTitle: withdrawTooltip,
                   },
                 ]}
                 sortHandler={onSortChange}

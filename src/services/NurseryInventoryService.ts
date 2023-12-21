@@ -256,10 +256,12 @@ const searchInventoryByNursery = async ({
       'facility_name',
       'facilityInventories.species_id',
       'facilityInventories.species_scientificName',
+      'facilityInventories.batches.id',
       'germinatingQuantity',
       'notReadyQuantity',
       'readyQuantity',
       'totalQuantity',
+      'totalQuantity(raw)',
     ],
     sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
     search: {
