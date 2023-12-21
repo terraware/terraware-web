@@ -233,7 +233,9 @@ export default function Search(props: SearchProps): JSX.Element | null {
             setFilters={setFilters}
             label={strings.SPECIES}
             filterKey='speciesIds'
-            options={(species || []).map((n: Species) => n.id)}
+            options={[...(species || [])]
+              .sort((a, b) => a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))
+              .map((n: Species) => n.id)}
             renderOption={(id: number) => (species || []).find((n) => n.id === id)?.scientificName ?? ''}
           />
         )}
