@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
@@ -40,6 +40,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   } = props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
+  const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
 
   const withdrawInventory = () => {
     const path = origin === 'Species' ? APP_PATHS.INVENTORY_WITHDRAW : APP_PATHS.BATCH_WITHDRAW;
@@ -65,12 +66,23 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const isSelectionWithdrawable = () => {
     switch (origin) {
       case 'Species':
-      case 'Batches':
         return selectedRows.some((row) => row.species_id && +row['totalQuantity(raw)'] > 0);
       case 'Nursery':
-        return selectedRows.some((row) => +row['totalQuantity(raw)'] > 0);
+        return selectedRows.length === 1 && selectedRows.some((row) => +row['totalQuantity(raw)'] > 0);
+      case 'Batches':
+        const nurseries = new Set(selectedRows.map((row) => row.facility_id));
+        return nurseries.size === 1 && selectedRows.some((row) => row.species_id && +row['totalQuantity(raw)'] > 0);
     }
   };
+
+  useEffect(() => {
+    const nurseries = new Set(selectedRows.map((row) => row.facility_id));
+    if ((origin === 'Nursery' && selectedRows.length > 1) || (origin === 'Batches' && nurseries.size > 1)) {
+      setWithdrawTooltip(strings.WITHDRAW_SINGLE_NURSERY);
+    } else {
+      setWithdrawTooltip(undefined);
+    }
+  }, [origin, selectedRows]);
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
     setSearchSortOrder({
@@ -113,6 +125,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     buttonText: strings.WITHDRAW,
                     onButtonClick: withdrawInventory,
                     disabled: !isSelectionWithdrawable(),
+                    tooltipTitle: withdrawTooltip,
                   },
                 ]}
                 sortHandler={onSortChange}
