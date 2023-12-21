@@ -213,6 +213,8 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
     marginTop: theme.spacing(2),
   };
 
+  const isUndefinedQuantity = (val?: string | number) => val === undefined || val === '';
+
   return (
     <>
       {record && (
@@ -372,11 +374,13 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
               <Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
-                onChange={(value) => onChange('germinatingQuantity', Number(value))}
+                onChange={(value) => onChange('germinatingQuantity', value)}
                 type='number'
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-                errorText={validateFields && record.germinatingQuantity === undefined ? strings.REQUIRED_FIELD : ''}
+                errorText={
+                  validateFields && isUndefinedQuantity(record.germinatingQuantity) ? strings.REQUIRED_FIELD : ''
+                }
                 min={0}
                 disabledCharacters={['.']}
               />
@@ -386,11 +390,11 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
               <Textfield
                 id='notReadyQuantity'
                 value={record.notReadyQuantity}
-                onChange={(value) => onChange('notReadyQuantity', Number(value))}
+                onChange={(value) => onChange('notReadyQuantity', value)}
                 type='number'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                errorText={validateFields && record.notReadyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
+                errorText={validateFields && isUndefinedQuantity(record.notReadyQuantity) ? strings.REQUIRED_FIELD : ''}
                 min={0}
                 disabledCharacters={['.']}
               />
@@ -411,11 +415,11 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
               <Textfield
                 id='readyQuantity'
                 value={record.readyQuantity}
-                onChange={(value) => onChange('readyQuantity', Number(value))}
+                onChange={(value) => onChange('readyQuantity', value)}
                 type='number'
                 label={strings.READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-                errorText={validateFields && record.readyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
+                errorText={validateFields && isUndefinedQuantity(record.readyQuantity) ? strings.REQUIRED_FIELD : ''}
                 min={0}
                 disabledCharacters={['.']}
               />
