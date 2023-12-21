@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/83</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
@@ -518,7 +518,11 @@
 <a name='L453'></a><a href='#L453'>453</a>
 <a name='L454'></a><a href='#L454'>454</a>
 <a name='L455'></a><a href='#L455'>455</a>
-<a name='L456'></a><a href='#L456'>456</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -735,6 +739,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -893,6 +899,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1188,6 +1196,8 @@ export default function <span class="fstat-no" title="function not covered" >Bat
     marginTop: theme.spacing(2),
   };
 &nbsp;
+  const isUndefinedQuantity = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>al?: string | number) =&gt; <span class="cstat-no" title="statement not covered" >val === undefined || val === '';</span></span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       {record &amp;&amp; (
@@ -1347,11 +1357,13 @@ export default function <span class="fstat-no" title="function not covered" >Bat
               &lt;Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('germinatingQuantity', Number(value))}</span>
+                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('germinatingQuantity', value)}</span>
                 type='number'
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-                errorText={validateFields &amp;&amp; record.germinatingQuantity === undefined ? strings.REQUIRED_FIELD : ''}
+                errorText={
+                  validateFields &amp;&amp; isUndefinedQuantity(record.germinatingQuantity) ? strings.REQUIRED_FIELD : ''
+                }
                 min={0}
                 disabledCharacters={['.']}
               /&gt;
@@ -1361,11 +1373,11 @@ export default function <span class="fstat-no" title="function not covered" >Bat
               &lt;Textfield
                 id='notReadyQuantity'
                 value={record.notReadyQuantity}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('notReadyQuantity', Number(value))}</span>
+                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('notReadyQuantity', value)}</span>
                 type='number'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                errorText={validateFields &amp;&amp; record.notReadyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
+                errorText={validateFields &amp;&amp; isUndefinedQuantity(record.notReadyQuantity) ? strings.REQUIRED_FIELD : ''}
                 min={0}
                 disabledCharacters={['.']}
               /&gt;
@@ -1386,11 +1398,11 @@ export default function <span class="fstat-no" title="function not covered" >Bat
               &lt;Textfield
                 id='readyQuantity'
                 value={record.readyQuantity}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('readyQuantity', Number(value))}</span>
+                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('readyQuantity', value)}</span>
                 type='number'
                 label={strings.READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-                errorText={validateFields &amp;&amp; record.readyQuantity === undefined ? strings.REQUIRED_FIELD : ''}
+                errorText={validateFields &amp;&amp; isUndefinedQuantity(record.readyQuantity) ? strings.REQUIRED_FIELD : ''}
                 min={0}
                 disabledCharacters={['.']}
               /&gt;
@@ -1435,7 +1447,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-20T22:51:49.727Z
+                at 2023-12-21T00:59:44.272Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -1,3 +1,4 @@
+9f3f2a3c4c SW-4620 Allow clearing zero values in inventory create form (#1944)
 7fe508a1bc Updated translations from Phrase (#1941)
 34bd496a68 SW-4539 Add instructions modal with placeholder content (#1940)
 38ed1d3372 SW-4610 Sort nurseries in withdrawal form, plumb SearchResponseElement type down through BatchWithdrawalFlow and SelectPurposeForm (#1939)
