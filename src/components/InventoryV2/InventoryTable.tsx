@@ -3,13 +3,12 @@ import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
 import { Box, Grid } from '@mui/material';
-import { SearchResponseElement } from 'src/types/Search';
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import InventoryCellRenderer from './InventoryCellRenderer';
 import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
 import { APP_PATHS } from 'src/constants';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
-import { SearchSortOrder } from 'src/types/Search';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 import Search from 'src/components/InventoryV2/Search';
 
@@ -43,20 +42,34 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const history = useHistory();
 
   const withdrawInventory = () => {
+    const path = origin === 'Species' ? APP_PATHS.INVENTORY_WITHDRAW : APP_PATHS.BATCH_WITHDRAW;
+
     const speciesIds = selectedRows.filter((row) => row.species_id).map((row) => `speciesId=${row.species_id}`);
-    if (!speciesIds.length) {
+    if (origin === 'Species' && !speciesIds.length) {
       // we can't handle deleted inventory today
       return;
     }
 
+    const batchIds =
+      origin === 'Nursery'
+        ? selectedRows.flatMap((row) => row.batchIds).map((b) => `batchId=${b}`)
+        : selectedRows.filter((r) => r.species_id).map((row) => `batchId=${row.batchId}`);
+    const searchParams = origin === 'Species' ? speciesIds.join('&') : batchIds.join('&');
+
     history.push({
-      pathname: APP_PATHS.INVENTORY_WITHDRAW,
-      search: `?${speciesIds.join('&')}&source=${window.location.pathname}`,
+      pathname: path,
+      search: `?${searchParams}&source=${window.location.pathname}`,
     });
   };
 
   const isSelectionWithdrawable = () => {
-    return selectedRows.some((row) => row.species_id && +row['totalQuantity(raw)'] > 0);
+    switch (origin) {
+      case 'Species':
+      case 'Batches':
+        return selectedRows.some((row) => row.species_id && +row['totalQuantity(raw)'] > 0);
+      case 'Nursery':
+        return selectedRows.some((row) => +row['totalQuantity(raw)'] > 0);
+    }
   };
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
