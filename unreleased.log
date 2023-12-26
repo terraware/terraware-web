@@ -1,3 +1,4 @@
+96344ae493 Updated translations from Phrase (#1956)
 440f174c1b SW-4622 Show localized values but use enum values in the batch history filters (#1950)
 d802dda571 SW-4614 Only include species that are available within the table results for the 'inventory by nursery' tab (#1947)
 6672db289b SW-4622 Implement options and pill values renderers into the SearchFiltersWrapper so we can easily swap between user-facing localized values and enums (#1949)
