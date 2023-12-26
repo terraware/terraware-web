@@ -6,8 +6,8 @@ import { Batch, CreateBatchRequestPayload, NurseryTransfer } from 'src/types/Bat
 import { BatchData, BatchId, UpdateBatchRequestPayloadWithId } from 'src/services/NurseryBatchService';
 import AccessionService from 'src/services/AccessionService';
 import { NurseryBatchService } from 'src/services';
-import { RootState } from '../../rootReducer';
-import { SearchResponseAccession } from '../accessions/accessionsThunks';
+import { RootState } from 'src/redux/rootReducer';
+import { SearchResponseAccession } from 'src/redux/features/accessions/accessionsThunks';
 
 export type SavableBatch = (CreateBatchRequestPayload | UpdateBatchRequestPayloadWithId) & Batch;
 
