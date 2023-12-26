@@ -152,50 +152,56 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
         const response = await NurseryBatchService.getBatchHistory(batchId, search, filters, users);
         if (response.requestSucceeded) {
           const historyItemsForTable =
-            response.history?.map((historyItem) => {
-              const userSelected = users[historyItem.createdBy];
-              const previousEv = findPreviousEvent(historyItem, response.history);
-              const changedFields = [];
-              if (historyItem.type === 'DetailsEdited' && (previousEv?.type === 'DetailsEdited' || !previousEv)) {
-                if ((historyItem.notes || '') !== (previousEv?.notes || '')) {
-                  changedFields.push(strings.NOTES);
+            response.history
+              ?.filter((historyItem) => {
+                // Filter out the first, "empty" result
+                return historyItem.type === 'DetailsEdited' ? findPreviousEvent(historyItem, response.history) : true;
+              })
+              .map((historyItem) => {
+                const userSelected = users[historyItem.createdBy];
+                const previousEv = findPreviousEvent(historyItem, response.history);
+                const changedFields = [];
+                if (historyItem.type === 'DetailsEdited' && (previousEv?.type === 'DetailsEdited' || !previousEv)) {
+                  if ((historyItem.notes || '') !== (previousEv?.notes || '')) {
+                    changedFields.push(strings.NOTES);
+                  }
+                  if (
+                    (historyItem.substrate || '') !== (previousEv?.substrate || '') ||
+                    (historyItem.substrateNotes || '') !== (previousEv?.substrateNotes || '')
+                  ) {
+                    changedFields.push(strings.SUBSTRATE);
+                  }
+                  if (
+                    (historyItem.treatment || '') !== (previousEv?.treatment || '') ||
+                    (historyItem.treatmentNotes || '') !== (previousEv?.treatmentNotes || '')
+                  ) {
+                    changedFields.push(strings.TREATMENT);
+                  }
+                  if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {
+                    changedFields.push(strings.ESTIMATED_READY_DATE);
+                  }
                 }
-                if (
-                  (historyItem.substrate || '') !== (previousEv?.substrate || '') ||
-                  (historyItem.substrateNotes || '') !== (previousEv?.substrateNotes || '')
-                ) {
-                  changedFields.push(strings.SUBSTRATE);
+                if (historyItem.type === 'QuantityEdited' && (previousEv?.type === 'QuantityEdited' || !previousEv)) {
+                  if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
+                    changedFields.push(strings.GERMINATING_QUANTITY);
+                  }
+                  if (historyItem.notReadyQuantity !== previousEv?.notReadyQuantity) {
+                    changedFields.push(strings.NOT_READY_QUANTITY);
+                  }
+                  if (historyItem.readyQuantity !== previousEv?.readyQuantity) {
+                    changedFields.push(strings.READY_QUANTITY);
+                  }
                 }
-                if (
-                  (historyItem.treatment || '') !== (previousEv?.treatment || '') ||
-                  (historyItem.treatmentNotes || '') !== (previousEv?.treatmentNotes || '')
-                ) {
-                  changedFields.push(strings.TREATMENT);
-                }
-                if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {
-                  changedFields.push(strings.ESTIMATED_READY_DATE);
-                }
-              }
-              if (historyItem.type === 'QuantityEdited' && (previousEv?.type === 'QuantityEdited' || !previousEv)) {
-                if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
-                  changedFields.push(strings.GERMINATING_QUANTITY);
-                }
-                if (historyItem.notReadyQuantity !== previousEv?.notReadyQuantity) {
-                  changedFields.push(strings.NOT_READY_QUANTITY);
-                }
-                if (historyItem.readyQuantity !== previousEv?.readyQuantity) {
-                  changedFields.push(strings.READY_QUANTITY);
-                }
-              }
 
-              return {
-                ...historyItem,
-                editedByName: getUserDisplayName(userSelected),
-                previousEvent: previousEv,
-                modifiedFields: changedFields,
-                nurseryName,
-              };
-            }) || null;
+                return {
+                  ...historyItem,
+                  editedByName: getUserDisplayName(userSelected),
+                  previousEvent: previousEv,
+                  modifiedFields: changedFields,
+                  nurseryName,
+                };
+              }) || null;
+
           setResults(historyItemsForTable);
         }
       };
