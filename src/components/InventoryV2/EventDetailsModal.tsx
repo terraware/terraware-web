@@ -38,7 +38,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
   const gridSize = () => (isMobile ? 12 : 6);
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
   const marginTop = {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(0.5),
   };
 
   const [relatedBatch, setRelatedBatch] = useState<Batch | null>();
