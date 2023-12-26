@@ -1,66 +1,32 @@
-import { useCallback, useEffect, useState } from 'react';
-import { SearchNodePayload, SearchResponseElement } from 'src/types/Search';
-import SeedBankService from 'src/services/SeedBankService';
+import { useEffect, useMemo, useState } from 'react';
 import { useOrganization } from 'src/providers';
-import strings from 'src/strings';
-
-const SEARCH_FIELDS_ACCESSIONS = ['id', 'accessionNumber', 'speciesName'];
-export type SearchResponseAccession = {
-  id: string;
-  accessionNumber: string;
-  speciesName: string;
-};
+import { requestAccessions, SearchResponseAccession } from 'src/redux/features/accessions/accessionsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectAccessions } from 'src/redux/features/accessions/accessionsSelectors';
 
 export const useAccessions = (record?: { accessionId?: number }, speciesId?: number, excludeUsedUp?: boolean) => {
+  const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
 
-  const [availableAccessions, setAvailableAccessions] = useState<SearchResponseAccession[]>();
+  const accessionsResponseData = useAppSelector(selectAccessions(selectedOrganization.id, speciesId));
+  const availableAccessions = useMemo(
+    () => (accessionsResponseData && accessionsResponseData.accessions) || [],
+    [accessionsResponseData]
+  );
+
   const [selectedAccession, setSelectedAccession] = useState<SearchResponseAccession>();
-
-  const initAccessions = useCallback(async () => {
-    const searchCriteria: { [key: string]: SearchNodePayload } = {};
-    if (excludeUsedUp) {
-      searchCriteria.excludeUsedUp = {
-        operation: 'not',
-        child: {
-          operation: 'field',
-          field: 'state',
-          type: 'Exact',
-          values: [strings.USED_UP],
-        },
-      };
-    }
-    if (speciesId !== undefined) {
-      searchCriteria.speciesIds = {
-        operation: 'field',
-        field: 'species_id',
-        type: 'Exact',
-        values: [speciesId.toString()],
-      };
-    }
-
-    const results: SearchResponseElement[] | null = await SeedBankService.searchAccessions({
-      organizationId: selectedOrganization.id,
-      fields: SEARCH_FIELDS_ACCESSIONS,
-      searchCriteria,
-    });
-
-    if (!results?.length) {
-      return;
-    }
-
-    setAvailableAccessions(results as SearchResponseAccession[]);
-  }, [selectedOrganization.id, speciesId, excludeUsedUp]);
 
   useEffect(() => {
     if (availableAccessions && record?.accessionId) {
-      setSelectedAccession(availableAccessions.find((accession) => accession.id === `${record.accessionId}`));
+      setSelectedAccession(
+        availableAccessions.find((accession: SearchResponseAccession) => accession.id === `${record.accessionId}`)
+      );
     }
   }, [availableAccessions, record?.accessionId]);
 
   useEffect(() => {
-    void initAccessions();
-  }, [initAccessions, speciesId]);
+    void dispatch(requestAccessions(selectedOrganization.id, speciesId));
+  }, [dispatch, selectedOrganization, speciesId]);
 
   return { availableAccessions, selectedAccession };
 };
