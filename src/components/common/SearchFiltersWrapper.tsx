@@ -2,7 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { Box, Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, PillList, Textfield, Tooltip } from '@terraware/web-components';
-import { FieldOptionsMap } from 'src/types/Search';
+import { Option } from '@terraware/web-components/components/table/types';
+import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
 import strings from 'src/strings';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -28,6 +29,8 @@ export type SearchFiltersProps = {
   setFilters: (filters: Record<string, any>) => void;
   filterOptions: FieldOptionsMap;
   filterColumns: FilterField[];
+  optionsRenderer?: (filterName: string, values: FieldValuesPayload) => Option[] | undefined;
+  pillValuesRenderer?: (filterName: string, values: unknown[]) => string | undefined;
 };
 
 export type SearchProps = SearchInputProps & {
@@ -57,10 +60,13 @@ export default function Search({ search, onSearch, filtersProps }: SearchProps):
               filtersProps.setFilters(result);
             };
 
+            const pillValue =
+              filtersProps.pillValuesRenderer && filtersProps.pillValuesRenderer(key, filtersProps.filters[key].values);
+
             return {
               id: key,
               label: filtersProps.filterColumns.find((f) => key === f.name)?.label ?? '',
-              value: filtersProps.filters[key].values.join(', '),
+              value: pillValue ?? filtersProps.filters[key].values.join(', '),
               onRemove: () => removeFilter(key),
             };
           })
@@ -121,6 +127,7 @@ export default function Search({ search, onSearch, filtersProps }: SearchProps):
                   }}
                   onCancel={handleFilterClose}
                   noScroll={true}
+                  optionsRenderer={filtersProps.optionsRenderer}
                 />
               </Popover>
             </>
