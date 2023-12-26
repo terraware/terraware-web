@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown } from '@terraware/web-components';
 import strings from 'src/strings';
-import { SearchResponseAccession } from 'src/redux/features/accessions/accessionsThunks';
+import { SearchResponseAccession } from './useAccessions';
 
 type AccessionsDropdownProps<T extends { accessionId?: number } | undefined> = {
   availableAccessions: SearchResponseAccession[] | undefined;

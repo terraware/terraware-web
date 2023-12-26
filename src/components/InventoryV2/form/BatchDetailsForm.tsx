@@ -32,7 +32,7 @@ import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 
 export interface BatchDetailsModalProps {
   doValidateBatch: boolean;
-  onBatchValidated: (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => void;
+  onBatchValidated: (batchDetails: { batch: SavableBatch; timezone: string } | false) => void;
   origin: OriginPage;
   originId?: number;
   selectedBatch?: NurseryBatchesSearchResponseElement;
@@ -124,13 +124,9 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
         return;
       }
 
-      onBatchValidated({
-        batch: savableRecord as SavableBatch,
-        organizationId: selectedOrganization.id,
-        timezone: timeZone,
-      });
+      onBatchValidated({ batch: savableRecord as SavableBatch, timezone: timeZone });
     },
-    [hasErrors, onBatchValidated, selectedOrganization.id, timeZone]
+    [hasErrors, onBatchValidated, timeZone]
   );
 
   useEffect(() => {
@@ -220,15 +216,6 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
   const dropdownPadding = theme.spacing(0.5, 0, 1, 2);
 
   const isUndefinedQuantity = (val?: string | number) => val === undefined || val === '';
-
-  // Make sure the selected accession is represented in the record, this will clear
-  // out an "impossible" accession selection
-  useEffect(() => {
-    const accessionId = selectedAccession?.id ? Number(selectedAccession?.id) : undefined;
-    if (accessionId !== record?.accessionId) {
-      setRecord({ ...record, accessionId });
-    }
-  }, [record, selectedAccession, setRecord]);
 
   return (
     <>

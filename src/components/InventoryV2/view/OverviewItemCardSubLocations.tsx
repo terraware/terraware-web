@@ -10,7 +10,6 @@ import { Batch } from 'src/types/Batch';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useSubLocations } from 'src/components/InventoryV2/form/useSubLocations';
 import SubLocationsDropdown from 'src/components/InventoryV2/form/SubLocationsDropdown';
-import { useOrganization } from 'src/providers';
 
 interface OverviewItemCardSubLocationsProps {
   batch: Batch;
@@ -19,7 +18,6 @@ interface OverviewItemCardSubLocationsProps {
 const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const { selectedOrganization } = useOrganization();
 
   const [batch, setBatch] = useState<Batch>(props.batch);
 
@@ -41,11 +39,11 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
   const syncSubLocations = useCallback(
     (_batch: Batch) => {
       if (!_.isEqual(props.batch.subLocationIds, _batch.subLocationIds)) {
-        const request = dispatch(requestSaveBatch({ batch: _batch, organizationId: selectedOrganization.id }));
+        const request = dispatch(requestSaveBatch({ batch: _batch }));
         setRequestId(request.requestId);
       }
     },
-    [dispatch, props.batch.subLocationIds, selectedOrganization.id]
+    [dispatch, props.batch.subLocationIds]
   );
 
   const toggleSubLocationEdit = useCallback(() => {
