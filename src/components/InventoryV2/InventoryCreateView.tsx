@@ -23,7 +23,7 @@ export default function InventoryCreateView(): JSX.Element {
   const batchesRequest = useAppSelector(selectBatchesRequest(requestId));
 
   const onBatchValidated = useCallback(
-    (batchDetails: { batch: SavableBatch; timezone: string } | false) => {
+    (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => {
       setDoValidateBatch(false);
       if (batchDetails) {
         const request = dispatch(requestSaveBatch(batchDetails));

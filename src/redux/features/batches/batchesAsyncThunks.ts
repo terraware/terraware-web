@@ -6,19 +6,38 @@ import { Batch, CreateBatchRequestPayload, NurseryTransfer } from 'src/types/Bat
 import { BatchData, BatchId, UpdateBatchRequestPayloadWithId } from 'src/services/NurseryBatchService';
 import AccessionService from 'src/services/AccessionService';
 import { NurseryBatchService } from 'src/services';
+import { RootState } from '../../rootReducer';
+import { SearchResponseAccession } from '../accessions/accessionsThunks';
 
 export type SavableBatch = (CreateBatchRequestPayload | UpdateBatchRequestPayloadWithId) & Batch;
 
 export const requestSaveBatch = createAsyncThunk(
   'batches/save',
-  async (request: { batch: SavableBatch; timezone?: string }, { rejectWithValue }) => {
-    const { batch, timezone } = request;
+  async (
+    request: { batch: SavableBatch; organizationId: number; timezone?: string },
+    { rejectWithValue, getState }
+  ) => {
+    const { batch, organizationId, timezone } = request;
 
     let response: (Response & BatchData) | (Response & BatchId) | undefined;
     let responseQuantities: Partial<Response> = { requestSucceeded: true, error: undefined };
 
     if (batch.id === -1) {
       if (batch.accessionId) {
+        // Extra validation to ensure an accession ID matches the given species
+        if (batch.accessionId && batch.speciesId) {
+          const orgIdSpeciedId = `${organizationId}-${batch.speciesId}`;
+          const accessionsResponseData = (getState() as RootState).accessions[orgIdSpeciedId] || {};
+          if (
+            !(accessionsResponseData.accessions || []).find(
+              (accession: SearchResponseAccession) => Number(accession.id) === batch.accessionId
+            )
+          ) {
+            // The species requested does not apply to this accession
+            return rejectWithValue(strings.GENERIC_ERROR);
+          }
+        }
+
         const nurseryTransferRecord: NurseryTransfer = {
           date: getTodaysDateFormatted(timezone),
           destinationFacilityId: Number(batch.facilityId),
