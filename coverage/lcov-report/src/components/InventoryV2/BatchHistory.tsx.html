@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>0/82</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/90</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/78</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
@@ -308,7 +308,13 @@
 <a name='L243'></a><a href='#L243'>243</a>
 <a name='L244'></a><a href='#L244'>244</a>
 <a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -463,6 +469,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -499,6 +510,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -707,50 +719,56 @@ export default function <span class="fstat-no" title="function not covered" >Bat
         const response = <span class="cstat-no" title="statement not covered" >await NurseryBatchService.getBatchHistory(batchId, search, filters, users);</span>
 <span class="cstat-no" title="statement not covered" >        if (response.requestSucceeded) {</span>
           const historyItemsForTable =
-<span class="cstat-no" title="statement not covered" >            response.history?.map(<span class="fstat-no" title="function not covered" >(h</span>istoryItem) =&gt; {</span>
-              const userSelected = <span class="cstat-no" title="statement not covered" >users[historyItem.createdBy];</span>
-              const previousEv = <span class="cstat-no" title="statement not covered" >findPreviousEvent(historyItem, response.history);</span>
-              const changedFields = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >              if (historyItem.type === 'DetailsEdited' &amp;&amp; (previousEv?.type === 'DetailsEdited' || !previousEv)) {</span>
-<span class="cstat-no" title="statement not covered" >                if ((historyItem.notes || '') !== (previousEv?.notes || '')) {</span>
-<span class="cstat-no" title="statement not covered" >                  changedFields.push(strings.NOTES);</span>
+<span class="cstat-no" title="statement not covered" >            response.history</span>
+              ?.filter(<span class="fstat-no" title="function not covered" >(h</span>istoryItem) =&gt; {
+                // Filter out the first, "empty" result
+<span class="cstat-no" title="statement not covered" >                return historyItem.type === 'DetailsEdited' ? findPreviousEvent(historyItem, response.history) : true;</span>
+              })
+              .map(<span class="fstat-no" title="function not covered" >(h</span>istoryItem) =&gt; {
+                const userSelected = <span class="cstat-no" title="statement not covered" >users[historyItem.createdBy];</span>
+                const previousEv = <span class="cstat-no" title="statement not covered" >findPreviousEvent(historyItem, response.history);</span>
+                const changedFields = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >                if (historyItem.type === 'DetailsEdited' &amp;&amp; (previousEv?.type === 'DetailsEdited' || !previousEv)) {</span>
+<span class="cstat-no" title="statement not covered" >                  if ((historyItem.notes || '') !== (previousEv?.notes || '')) {</span>
+<span class="cstat-no" title="statement not covered" >                    changedFields.push(strings.NOTES);</span>
+                  }
+<span class="cstat-no" title="statement not covered" >                  if (</span>
+                    (historyItem.substrate || '') !== (previousEv?.substrate || '') ||
+                    (historyItem.substrateNotes || '') !== (previousEv?.substrateNotes || '')
+                  ) {
+<span class="cstat-no" title="statement not covered" >                    changedFields.push(strings.SUBSTRATE);</span>
+                  }
+<span class="cstat-no" title="statement not covered" >                  if (</span>
+                    (historyItem.treatment || '') !== (previousEv?.treatment || '') ||
+                    (historyItem.treatmentNotes || '') !== (previousEv?.treatmentNotes || '')
+                  ) {
+<span class="cstat-no" title="statement not covered" >                    changedFields.push(strings.TREATMENT);</span>
+                  }
+<span class="cstat-no" title="statement not covered" >                  if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {</span>
+<span class="cstat-no" title="statement not covered" >                    changedFields.push(strings.ESTIMATED_READY_DATE);</span>
+                  }
                 }
-<span class="cstat-no" title="statement not covered" >                if (</span>
-                  (historyItem.substrate || '') !== (previousEv?.substrate || '') ||
-                  (historyItem.substrateNotes || '') !== (previousEv?.substrateNotes || '')
-                ) {
-<span class="cstat-no" title="statement not covered" >                  changedFields.push(strings.SUBSTRATE);</span>
+<span class="cstat-no" title="statement not covered" >                if (historyItem.type === 'QuantityEdited' &amp;&amp; (previousEv?.type === 'QuantityEdited' || !previousEv)) {</span>
+<span class="cstat-no" title="statement not covered" >                  if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {</span>
+<span class="cstat-no" title="statement not covered" >                    changedFields.push(strings.GERMINATING_QUANTITY);</span>
+                  }
+<span class="cstat-no" title="statement not covered" >                  if (historyItem.notReadyQuantity !== previousEv?.notReadyQuantity) {</span>
+<span class="cstat-no" title="statement not covered" >                    changedFields.push(strings.NOT_READY_QUANTITY);</span>
+                  }
+<span class="cstat-no" title="statement not covered" >                  if (historyItem.readyQuantity !== previousEv?.readyQuantity) {</span>
+<span class="cstat-no" title="statement not covered" >                    changedFields.push(strings.READY_QUANTITY);</span>
+                  }
                 }
-<span class="cstat-no" title="statement not covered" >                if (</span>
-                  (historyItem.treatment || '') !== (previousEv?.treatment || '') ||
-                  (historyItem.treatmentNotes || '') !== (previousEv?.treatmentNotes || '')
-                ) {
-<span class="cstat-no" title="statement not covered" >                  changedFields.push(strings.TREATMENT);</span>
-                }
-<span class="cstat-no" title="statement not covered" >                if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {</span>
-<span class="cstat-no" title="statement not covered" >                  changedFields.push(strings.ESTIMATED_READY_DATE);</span>
-                }
-              }
-<span class="cstat-no" title="statement not covered" >              if (historyItem.type === 'QuantityEdited' &amp;&amp; (previousEv?.type === 'QuantityEdited' || !previousEv)) {</span>
-<span class="cstat-no" title="statement not covered" >                if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {</span>
-<span class="cstat-no" title="statement not covered" >                  changedFields.push(strings.GERMINATING_QUANTITY);</span>
-                }
-<span class="cstat-no" title="statement not covered" >                if (historyItem.notReadyQuantity !== previousEv?.notReadyQuantity) {</span>
-<span class="cstat-no" title="statement not covered" >                  changedFields.push(strings.NOT_READY_QUANTITY);</span>
-                }
-<span class="cstat-no" title="statement not covered" >                if (historyItem.readyQuantity !== previousEv?.readyQuantity) {</span>
-<span class="cstat-no" title="statement not covered" >                  changedFields.push(strings.READY_QUANTITY);</span>
-                }
-              }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >              return {</span>
-                ...historyItem,
-                editedByName: getUserDisplayName(userSelected),
-                previousEvent: previousEv,
-                modifiedFields: changedFields,
-                nurseryName,
-              };
-            }) || null;
+<span class="cstat-no" title="statement not covered" >                return {</span>
+                  ...historyItem,
+                  editedByName: getUserDisplayName(userSelected),
+                  previousEvent: previousEv,
+                  modifiedFields: changedFields,
+                  nurseryName,
+                };
+              }) || null;
+&nbsp;
 <span class="cstat-no" title="statement not covered" >          setResults(historyItemsForTable);</span>
         }
       };
@@ -805,7 +823,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-27T16:53:05.443Z
+                at 2023-12-27T17:03:42.586Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

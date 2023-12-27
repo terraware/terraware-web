@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1703695985895" clover="3.2.0">
-  <project timestamp="1703695985895" name="All files">
-    <metrics statements="15172" coveredstatements="396" conditionals="9792" coveredconditionals="95" methods="4792" coveredmethods="89" elements="29756" coveredelements="580" complexity="0" loc="15172" ncloc="15172" packages="122" files="587" classes="587"/>
+<coverage generated="1703696623029" clover="3.2.0">
+  <project timestamp="1703696623029" name="All files">
+    <metrics statements="15173" coveredstatements="396" conditionals="9794" coveredconditionals="95" methods="4793" coveredmethods="89" elements="29760" coveredelements="580" complexity="0" loc="15173" ncloc="15173" packages="122" files="587" classes="587"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2457,7 +2457,7 @@
       </file>
     </package>
     <package name="src.components.InventoryV2">
-      <metrics statements="786" coveredstatements="0" conditionals="614" coveredconditionals="0" methods="262" coveredmethods="0"/>
+      <metrics statements="787" coveredstatements="0" conditionals="616" coveredconditionals="0" methods="263" coveredmethods="0"/>
       <file name="BatchDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchDetails.tsx">
         <metrics statements="23" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
@@ -2590,7 +2590,7 @@
         <line num="373" count="0" type="stmt"/>
       </file>
       <file name="BatchHistory.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchHistory.tsx">
-        <metrics statements="78" coveredstatements="0" conditionals="88" coveredconditionals="0" methods="23" coveredmethods="0"/>
+        <metrics statements="79" coveredstatements="0" conditionals="90" coveredconditionals="0" methods="24" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
@@ -2641,34 +2641,35 @@
         <line num="152" count="0" type="stmt"/>
         <line num="153" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="155" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="157" count="0" type="stmt"/>
-        <line num="158" count="0" type="stmt"/>
-        <line num="159" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="160" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="158" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="161" count="0" type="stmt"/>
-        <line num="163" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="167" count="0" type="stmt"/>
-        <line num="169" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="173" count="0" type="stmt"/>
-        <line num="175" count="0" type="cond" truecount="0" falsecount="6"/>
-        <line num="176" count="0" type="stmt"/>
-        <line num="179" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="180" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="162" count="0" type="stmt"/>
+        <line num="163" count="0" type="stmt"/>
+        <line num="164" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="165" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="166" count="0" type="stmt"/>
+        <line num="168" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="174" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="178" count="0" type="stmt"/>
+        <line num="180" count="0" type="cond" truecount="0" falsecount="6"/>
         <line num="181" count="0" type="stmt"/>
-        <line num="183" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="184" count="0" type="stmt"/>
-        <line num="186" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="187" count="0" type="stmt"/>
-        <line num="191" count="0" type="stmt"/>
-        <line num="199" count="0" type="stmt"/>
-        <line num="203" count="0" type="stmt"/>
-        <line num="207" count="0" type="stmt"/>
-        <line num="208" count="0" type="stmt"/>
+        <line num="184" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="185" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="186" count="0" type="stmt"/>
+        <line num="188" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="189" count="0" type="stmt"/>
+        <line num="191" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="192" count="0" type="stmt"/>
+        <line num="196" count="0" type="stmt"/>
+        <line num="205" count="0" type="stmt"/>
         <line num="209" count="0" type="stmt"/>
-        <line num="212" count="0" type="stmt"/>
-        <line num="217" count="0" type="stmt"/>
+        <line num="213" count="0" type="stmt"/>
+        <line num="214" count="0" type="stmt"/>
+        <line num="215" count="0" type="stmt"/>
         <line num="218" count="0" type="stmt"/>
+        <line num="223" count="0" type="stmt"/>
+        <line num="224" count="0" type="stmt"/>
       </file>
       <file name="BatchHistoryRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchHistoryRenderer.tsx">
         <metrics statements="21" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="4" coveredmethods="0"/>
