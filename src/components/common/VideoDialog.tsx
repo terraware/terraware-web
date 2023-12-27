@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export type BoundaryInstructionsModalProps = {
+export type VideoDialogProps = {
   description: string;
   link: string;
   open: boolean;
@@ -22,7 +22,7 @@ export type BoundaryInstructionsModalProps = {
   title: string;
 };
 
-export default function BoundaryInstructionsModal(props: BoundaryInstructionsModalProps): JSX.Element {
+export default function VideoDialog(props: VideoDialogProps): JSX.Element {
   const { description, link, open, onClose, onDontShowAgain, title } = props;
   const classes = useStyles();
 

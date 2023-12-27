@@ -1,36 +1,27 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import StepTitleDescription from './StepTitleDescription';
 
-export type PlantingSiteInclusionsProps = {
+export type PlantingSiteExclusionsProps = {
   onChange: (id: string, value: unknown) => void;
   site: PlantingSite;
 };
 
-export default function PlantingSiteInclusions(props: PlantingSiteInclusionsProps): JSX.Element {
-  const theme = useTheme();
-
+export default function PlantingSiteExclusions(props: PlantingSiteExclusionsProps): JSX.Element {
   return (
     <Box display='flex' flexDirection='column'>
-      <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
-        {strings.SITE_EXCLUSION_AREAS_OPTIONAL}
-      </Typography>
-      {[
-        strings.SITE_EXCLUSION_AREAS_DESCRIPTION_0,
-        strings.SITE_EXCLUSION_AREAS_DESCRIPTION_1,
-        strings.SITE_EXCLUSION_AREAS_DESCRIPTION_2,
-      ].map((description: string, index: number) => (
-        <Typography
-          key={index}
-          fontSize='14px'
-          fontWeight={400}
-          lineHeight='20px'
-          color={theme.palette.TwClrTxt}
-          margin={theme.spacing(1, 0)}
-        >
-          {description}
-        </Typography>
-      ))}
+      <StepTitleDescription
+        description={[
+          { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_0 },
+          { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_1, hasTutorial: true },
+          { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_2 },
+        ]}
+        title={strings.SITE_EXCLUSION_AREAS_OPTIONAL}
+        tutorialDescription={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION}
+        tutorialDocLinkKey='planting_site_create_exclusions_boundary_instructions_video'
+        tutorialTitle={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE}
+      />
     </Box>
   );
 }

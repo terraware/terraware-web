@@ -2,6 +2,7 @@ import Link from './Link';
 
 export interface TextWithLinkProps {
   className?: string;
+  fontSize?: string | number;
   href?: string;
   onClick?: () => void;
   text: string;
@@ -16,7 +17,7 @@ export interface TextWithLinkProps {
  * no square brackets, [text] is rendered as a link. For example, `'See Jane run'` would be rendered
  * as, `<a href=...>See Jane run</a>`.
  */
-export default function TextWithLink({ className, href, onClick, text }: TextWithLinkProps): JSX.Element {
+export default function TextWithLink({ className, fontSize, href, onClick, text }: TextWithLinkProps): JSX.Element {
   const linkStart = text.indexOf('[');
   const linkEnd = text.indexOf(']');
   let prefix: string;
@@ -36,7 +37,7 @@ export default function TextWithLink({ className, href, onClick, text }: TextWit
   return (
     <>
       {prefix}
-      <Link className={className} to={href} onClick={onClick} fontSize='16px'>
+      <Link className={className} to={href} onClick={onClick} fontSize={fontSize ?? '16px'}>
         {linkText}
       </Link>
       {suffix}

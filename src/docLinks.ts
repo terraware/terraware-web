@@ -4,6 +4,7 @@ import { SupportedLocaleId } from 'src/strings/locales';
 export type DocType =
   | 'contact_us'
   | 'planting_site_create_boundary_instructions_video'
+  | 'planting_site_create_exclusions_boundary_instructions_video'
   | 'planting_site_create_subzone_boundary_instructions_video'
   | 'planting_site_create_zone_boundary_instructions_video'
   | 'privacy_policy'
@@ -16,6 +17,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
   en: {
     contact_us: 'https://www.terraformation.com/contact-us/terraware-support-contact-us',
     planting_site_create_boundary_instructions_video: 'https://www.youtube.com/embed/kfPlGeiFebw', // placeholder, SW-4538
+    planting_site_create_exclusions_boundary_instructions_video: 'https://www.youtube.com/embed/kfPlGeiFebw', // placeholder, SW-4538
     planting_site_create_subzone_boundary_instructions_video: 'https://www.youtube.com/embed/kfPlGeiFebw', // placeholder, SW-4538
     planting_site_create_zone_boundary_instructions_video: 'https://www.youtube.com/embed/kfPlGeiFebw', // placeholder, SW-4538
     privacy_policy: 'https://www.terraformation.com/privacy-policy',
@@ -25,6 +27,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
   es: {
     contact_us: 'https://www.terraformation.com/contact-us/soporte-terraware-contactenos',
     planting_site_create_boundary_instructions_video: 'https://www.youtube.com/embed/kfPlGeiFebw', // placeholder, SW-4538
+    planting_site_create_exclusions_boundary_instructions_video: 'https://www.youtube.com/embed/kfPlGeiFebw', // placeholder, SW-4538
     planting_site_create_subzone_boundary_instructions_video: 'https://www.youtube.com/embed/kfPlGeiFebw', // placeholder, SW-4538
     planting_site_create_zone_boundary_instructions_video: 'https://www.youtube.com/embed/kfPlGeiFebw', // placeholder, SW-4538
     privacy_policy: 'https://www.terraformation.com/politica-de-privacidad',
