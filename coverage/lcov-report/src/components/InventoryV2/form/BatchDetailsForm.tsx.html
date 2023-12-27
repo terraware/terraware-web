@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/89</span>
+                <span class='fraction'>0/90</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
@@ -522,7 +522,9 @@
 <a name='L457'></a><a href='#L457'>457</a>
 <a name='L458'></a><a href='#L458'>458</a>
 <a name='L459'></a><a href='#L459'>459</a>
-<a name='L460'></a><a href='#L460'>460</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -736,6 +738,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1193,8 +1197,10 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   };
 &nbsp;
   const marginTop = <span class="cstat-no" title="statement not covered" >{</span>
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(0.5),
   };
+&nbsp;
+  const dropdownPadding = <span class="cstat-no" title="statement not covered" >theme.spacing(0.5, 0, 1, 2);</span>
 &nbsp;
   const isUndefinedQuantity = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>al?: string | number) =&gt; <span class="cstat-no" title="statement not covered" >val === undefined || val === '';</span></span>
 &nbsp;
@@ -1280,11 +1286,11 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             &lt;/Grid&gt;
           )}
 &nbsp;
-          &lt;Grid container item xs={12} spacing={2} textAlign='left'&gt;
+          &lt;Grid container item xs={12} spacing={1} textAlign='left'&gt;
             {record.id === -1 &amp;&amp; (
               &lt;&gt;
                 {['InventoryAdd', 'Nursery'].includes(origin) &amp;&amp; (
-                  &lt;Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}&gt;
+                  &lt;Grid item xs={12} padding={dropdownPadding}&gt;
                     &lt;SpeciesDropdown&lt;FormRecord&gt;
                       availableSpecies={availableSpecies}
                       record={record}
@@ -1294,7 +1300,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                   &lt;/Grid&gt;
                 )}
 &nbsp;
-                &lt;Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}&gt;
+                &lt;Grid item xs={12} padding={dropdownPadding}&gt;
                   &lt;AccessionsDropdown&lt;FormRecord&gt;
                     availableAccessions={availableAccessions}
                     record={record}
@@ -1303,7 +1309,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                 &lt;/Grid&gt;
 &nbsp;
                 {['InventoryAdd', 'Species'].includes(origin) &amp;&amp; (
-                  &lt;Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}&gt;
+                  &lt;Grid item xs={12} padding={dropdownPadding}&gt;
                     &lt;NurseryDropdownV2
                       availableNurseries={availableNurseries}
                       record={record}
@@ -1313,7 +1319,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                   &lt;/Grid&gt;
                 )}
 &nbsp;
-                &lt;Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}&gt;
+                &lt;Grid item xs={12} padding={dropdownPadding}&gt;
                   &lt;SubLocationsDropdown&lt;FormRecord&gt;
                     availableSubLocations={availableSubLocations}
                     record={record}
@@ -1322,7 +1328,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                 &lt;/Grid&gt;
 &nbsp;
                 {featureFlagProjects &amp;&amp; (
-                  &lt;Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}&gt;
+                  &lt;Grid item xs={12} padding={dropdownPadding}&gt;
                     &lt;ProjectsDropdown&lt;FormRecord&gt;
                       availableProjects={availableProjects}
                       record={record}
@@ -1333,7 +1339,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
               &lt;/&gt;
             )}
 &nbsp;
-            &lt;Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}&gt;
+            &lt;Grid item xs={gridSize()} paddingLeft={paddingSeparator}&gt;
               &lt;DatePicker
                 id='addedDate'
                 label={strings.DATE_ADDED_REQUIRED}
@@ -1447,7 +1453,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-27T14:56:12.146Z
+                at 2023-12-27T16:53:05.443Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

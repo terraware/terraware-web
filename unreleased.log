@@ -1,3 +1,6 @@
+cc8b2ada4a SW-4618 Decrease vertical margin in batch event details modal (#1959)
+d2887f3ee9 SW-4621 Reduce spacing between items in the batch details form (#1960)
+637fe75710 SW-4615 Send to nursery / species specific batch view so the breadcrumbs bring the user back to the page they came from (#1962)
 e55e6d1078 SW-4616 Fix batch details view for mobile (#1943)
 96344ae493 Updated translations from Phrase (#1956)
 440f174c1b SW-4622 Show localized values but use enum values in the batch history filters (#1950)
