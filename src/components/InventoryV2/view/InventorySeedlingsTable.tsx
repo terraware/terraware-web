@@ -212,7 +212,15 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     } else if (fromColumn === 'quantitiesMenu') {
       reloadData();
     } else {
-      history.push(APP_PATHS.INVENTORY_BATCH.replace(':batchId', batch.id));
+      let to: string = APP_PATHS.INVENTORY_BATCH;
+
+      if (origin === 'Nursery') {
+        to = APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${originId}`);
+      } else if (origin === 'Species') {
+        to = APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`);
+      }
+
+      history.push(to.replace(':batchId', batch.id));
     }
   };
 
