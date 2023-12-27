@@ -51,7 +51,14 @@ export type FacilitySpeciesInventoryResult = {
   readyQuantity: string;
   notReadyQuantity: string;
   totalQuantity: string;
-  facilityInventories: SpeciesName[];
+  'totalQuantity(raw)': string;
+  facilityInventories: {
+    species_id: string;
+    species_scientificName: string;
+    batches: {
+      id: string;
+    }[];
+  }[];
 };
 
 export type InventoryResultWithFacilityNames = Omit<InventoryResult, 'facilityInventories'> & {

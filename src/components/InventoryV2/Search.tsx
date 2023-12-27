@@ -41,7 +41,7 @@ const initialFilters: Record<string, SearchNodePayload> = {
   },
 };
 
-interface SearchProps {
+interface SearchProps<T> {
   searchValue: string;
   onSearch: (value: string) => void;
   filters: InventoryFiltersUnion;
@@ -49,6 +49,7 @@ interface SearchProps {
   origin?: OriginPage;
   showProjectsFilter?: boolean;
   showEmptyBatchesFilter?: boolean;
+  tableResults?: T[];
 }
 
 type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
@@ -56,8 +57,9 @@ type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
   emptyValue: unknown;
 };
 
-export default function Search(props: SearchProps): JSX.Element | null {
-  const { searchValue, onSearch, filters, setFilters, showProjectsFilter, showEmptyBatchesFilter } = props;
+export default function Search<T extends { facilityInventories?: string }>(props: SearchProps<T>): JSX.Element | null {
+  const { searchValue, onSearch, filters, setFilters, showProjectsFilter, showEmptyBatchesFilter, tableResults } =
+    props;
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -71,10 +73,20 @@ export default function Search(props: SearchProps): JSX.Element | null {
   const species = useAppSelector(selectSpecies);
   const projects = useAppSelector(selectProjects);
   const [nurseries, setNurseries] = useState<Facility[]>([]);
+  const [availableSpecies, setAvailableSpecies] = useState<Species[]>([]);
 
   useEffect(() => {
     setNurseries(getAllNurseries(selectedOrganization));
   }, [selectedOrganization]);
+
+  useEffect(() => {
+    if (origin !== 'Nursery' || !species?.length || !tableResults) {
+      return;
+    }
+
+    const speciesWithinResults = tableResults.map((result) => result.facilityInventories?.split('\r')).flat();
+    setAvailableSpecies(species.filter((singleSpecies) => speciesWithinResults.includes(singleSpecies.scientificName)));
+  }, [species, origin, tableResults]);
 
   const subLocations = useAppSelector(selectSubLocations);
 
@@ -100,8 +112,8 @@ export default function Search(props: SearchProps): JSX.Element | null {
   );
 
   const getSpeciesName = useCallback(
-    (speciesId: number) => (species || []).find((s) => s.id === speciesId)?.scientificName,
-    [species]
+    (speciesId: number) => (availableSpecies || []).find((s) => s.id === speciesId)?.scientificName,
+    [availableSpecies]
   );
 
   const getSubLocationName = useCallback(
@@ -196,7 +208,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
     [filterPillData, filters, setFilters, setFilterGroupFilters]
   );
 
-  if (origin === 'Nursery' && !species && !projects) {
+  if (origin === 'Nursery' && !availableSpecies && !projects) {
     return null;
   }
 
@@ -233,8 +245,10 @@ export default function Search(props: SearchProps): JSX.Element | null {
             setFilters={setFilters}
             label={strings.SPECIES}
             filterKey='speciesIds'
-            options={(species || []).map((n: Species) => n.id)}
-            renderOption={(id: number) => (species || []).find((n) => n.id === id)?.scientificName ?? ''}
+            options={[...(availableSpecies || [])]
+              .sort((a, b) => a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))
+              .map((n: Species) => n.id)}
+            renderOption={(id: number) => (availableSpecies || []).find((n) => n.id === id)?.scientificName ?? ''}
           />
         )}
 

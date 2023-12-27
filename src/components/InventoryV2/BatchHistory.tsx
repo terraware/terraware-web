@@ -1,20 +1,26 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Option } from '@terraware/web-components/components/table/types';
+import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import Card from 'src/components/common/Card';
-import { makeStyles } from '@mui/styles';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import Table from 'src/components/common/table';
-import { TableColumnType } from '@terraware/web-components';
 import { NurseryBatchService, OrganizationUserService } from 'src/services';
-import { BatchHistoryItem } from 'src/types/Batch';
+import {
+  batchHistoryEventEnumToLocalized,
+  BatchHistoryItem,
+  BatchHistoryPayload,
+  getBatchHistoryTypesEnum,
+} from 'src/types/Batch';
 import { User } from 'src/types/User';
 import { useOrganization } from 'src/providers';
+import { getUserDisplayName } from 'src/utils/user';
+import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
+import { FilterField } from 'src/components/common/FilterGroup';
+import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import BatchHistoryRenderer from './BatchHistoryRenderer';
 import EventDetailsModal from './EventDetailsModal';
-import { getUserDisplayName } from 'src/utils/user';
-import { FieldOptionsMap } from 'src/types/Search';
-import { FilterField } from '../common/FilterGroup';
-import Search, { SearchProps } from '../common/SearchFiltersWrapper';
 
 const useStyles = makeStyles((theme: Theme) => ({
   searchField: {
@@ -67,15 +73,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     setFilterOptions({
       type: {
         partial: false,
-        values: [
-          'DetailsEdited',
-          'IncomingWithdrawal',
-          'OutgoingWithdrawal',
-          'PhotoCreated',
-          'PhotoDeleted',
-          'QuantityEdited',
-          'StatusChanged',
-        ],
+        values: getBatchHistoryTypesEnum(),
       },
       editedByName: {
         partial: false,
@@ -93,6 +91,28 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
         setFilters: (value: Record<string, any>) => setFilters(value),
         filterColumns,
         filterOptions,
+        optionsRenderer: (filterName: string, fieldValues: FieldValuesPayload): Option[] | undefined => {
+          if (filterName !== 'type') {
+            return;
+          }
+
+          return fieldValues[filterName].values.map(
+            (value): Option => ({
+              label: batchHistoryEventEnumToLocalized((value as BatchHistoryPayload['type']) || '') || '',
+              value,
+              disabled: false,
+            })
+          );
+        },
+        pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
+          if (filterName !== 'type') {
+            return;
+          }
+
+          return values
+            .map((value) => batchHistoryEventEnumToLocalized((value as BatchHistoryPayload['type']) || '') || '')
+            .join(', ');
+        },
       },
     }),
     [filters, filterColumns, filterOptions, search]
