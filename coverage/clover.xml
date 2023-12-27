@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1703612365139" clover="3.2.0">
-  <project timestamp="1703612365139" name="All files">
-    <metrics statements="15164" coveredstatements="396" conditionals="9786" coveredconditionals="95" methods="4792" coveredmethods="89" elements="29742" coveredelements="580" complexity="0" loc="15164" ncloc="15164" packages="122" files="587" classes="587"/>
+<coverage generated="1703688972591" clover="3.2.0">
+  <project timestamp="1703688972592" name="All files">
+    <metrics statements="15166" coveredstatements="396" conditionals="9788" coveredconditionals="95" methods="4792" coveredmethods="89" elements="29746" coveredelements="580" complexity="0" loc="15166" ncloc="15166" packages="122" files="587" classes="587"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2457,7 +2457,7 @@
       </file>
     </package>
     <package name="src.components.InventoryV2">
-      <metrics statements="784" coveredstatements="0" conditionals="612" coveredconditionals="0" methods="262" coveredmethods="0"/>
+      <metrics statements="786" coveredstatements="0" conditionals="614" coveredconditionals="0" methods="262" coveredmethods="0"/>
       <file name="BatchDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchDetails.tsx">
         <metrics statements="23" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
@@ -2695,10 +2695,12 @@
         <line num="85" count="0" type="stmt"/>
       </file>
       <file name="BatchSummary.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchSummary.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="15" count="0" type="stmt"/>
+        <metrics statements="5" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="23" count="0" type="stmt"/>
       </file>
       <file name="DownloadReportModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/DownloadReportModal.tsx">
         <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>

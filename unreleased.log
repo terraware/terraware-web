@@ -1,3 +1,4 @@
+e55e6d1078 SW-4616 Fix batch details view for mobile (#1943)
 96344ae493 Updated translations from Phrase (#1956)
 440f174c1b SW-4622 Show localized values but use enum values in the batch history filters (#1950)
 d802dda571 SW-4614 Only include species that are available within the table results for the 'inventory by nursery' tab (#1947)
