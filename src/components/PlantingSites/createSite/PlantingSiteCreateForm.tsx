@@ -7,7 +7,15 @@ export type OptionalStep = {
   completed: boolean;
 };
 
+export type PlantingSiteCreateStepType =
+  | 'details'
+  | 'site_boundary'
+  | 'exclusion_areas'
+  | 'zone_boundaries'
+  | 'subzone_boundaries';
+
 export type PlantingSiteCreateStep = {
+  type: PlantingSiteCreateStepType;
   label: string;
   // to govern optional steps and their status
   optional?: OptionalStep;
@@ -16,7 +24,7 @@ export type PlantingSiteCreateStep = {
 export type PlantingSiteCreateFormProps = {
   children: React.ReactNode;
   className?: string;
-  currentStep: number;
+  currentStep: PlantingSiteCreateStepType;
   onCancel: () => void;
   onSaveAndNext: () => void;
   onSaveAndClose: () => void;
@@ -35,7 +43,20 @@ export default function PlantingSiteCreateForm({
   steps,
 }: PlantingSiteCreateFormProps): JSX.Element {
   const theme = useTheme();
-  const isLastStep = useMemo(() => currentStep === steps.length - 1, [currentStep, steps.length]);
+
+  const currentStepIndex = useMemo<number>(() => {
+    let stepIndex = 0;
+
+    steps.forEach((step: PlantingSiteCreateStep, index: number) => {
+      if (currentStep === step.type) {
+        stepIndex = index;
+      }
+    });
+
+    return stepIndex;
+  }, [currentStep, steps]);
+
+  const isLastStep = useMemo<boolean>(() => currentStepIndex === steps.length - 1, [currentStepIndex, steps.length]);
 
   const pageFormRightButtons: FormButton[] = useMemo(() => {
     const startOverButton: FormButton = {
@@ -68,7 +89,7 @@ export default function PlantingSiteCreateForm({
       additionalRightButtons={pageFormRightButtons}
       className={className}
     >
-      <Stepper activeStep={currentStep}>
+      <Stepper activeStep={currentStepIndex}>
         {steps.map((step: PlantingSiteCreateStep, index: number) => {
           const stepProps: { completed?: boolean } = {};
           const labelProps: { optional?: React.ReactNode } = {};

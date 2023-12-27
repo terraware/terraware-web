@@ -4,17 +4,24 @@ import { useHistory } from 'react-router-dom';
 import TfMain from 'src/components/common/TfMain';
 import { Box, Container, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
 import { SiteType } from 'src/types/PlantingSite';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import useSnackbar from 'src/utils/useSnackbar';
+import useForm from 'src/utils/useForm';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import InstructionsModal from './InstructionsModal';
-import PlantingSiteCreateForm, { PlantingSiteCreateStep } from './PlantingSiteCreateForm';
+import PlantingSiteCreateForm, { PlantingSiteCreateStep, PlantingSiteCreateStepType } from './PlantingSiteCreateForm';
+import PlantingSiteDetails from './PlantingSiteDetails';
+import PlantingSiteBoundary from './PlantingSiteBoundary';
+import PlantingSiteExclusions from './PlantingSiteExclusions';
+import PlantingSiteZoneBoundaries from './PlantingSiteZoneBoundaries';
+import PlantingSiteSubzoneBoundaries from './PlantingSiteSubzoneBoundaries';
 
 type PlantingSiteCreateFlowProps = {
-  siteType: SiteType;
   reloadPlantingSites: () => void;
+  site: PlantingSite;
+  siteType: SiteType;
 };
 
 const useStyles = makeStyles(() => ({
@@ -26,7 +33,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProps): JSX.Element {
-  const { reloadPlantingSites, siteType } = props;
+  const { reloadPlantingSites, site, siteType } = props;
   const { activeLocale } = useLocalization();
   const contentRef = useRef(null);
   const history = useHistory();
@@ -34,35 +41,53 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
   const snackbar = useSnackbar();
   const classes = useStyles();
 
-  // this is a placeholder for the instructions modal trigger
-  const [showModal, setShowModal] = useState<boolean>(true);
-  const [currentStep, setCurrentStep] = useState<number>(0);
-
-  const onClose = () => {
-    setShowModal(false);
-  };
+  const [currentStep, setCurrentStep] = useState<PlantingSiteCreateStepType>('details');
+  const [completedOptionalSteps] = useState<Record<PlantingSiteCreateStepType, boolean>>(
+    {} as Record<PlantingSiteCreateStepType, boolean>
+  );
+  const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
 
   const steps = useMemo<PlantingSiteCreateStep[]>(() => {
     if (!activeLocale) {
       return [];
     }
 
+    const isCompleted = (optionalStep: PlantingSiteCreateStepType) => completedOptionalSteps[optionalStep] ?? false;
+
+    const simpleSiteSteps: PlantingSiteCreateStep[] = [
+      {
+        type: 'details',
+        label: strings.DETAILS,
+      },
+      {
+        type: 'site_boundary',
+        label: strings.SITE_BOUNDARY,
+      },
+      {
+        type: 'exclusion_areas',
+        label: strings.EXCLUSION_AREAS,
+        optional: { completed: isCompleted('exclusion_areas') },
+      },
+    ];
+
     if (siteType === 'simple') {
-      return [
-        { label: strings.DETAILS },
-        { label: strings.SITE_BOUNDARY },
-        { label: strings.EXCLUSION_AREAS, optional: { completed: false } },
-      ];
+      return simpleSiteSteps;
     }
 
     return [
-      { label: strings.DETAILS },
-      { label: strings.SITE_BOUNDARY },
-      { label: strings.EXCLUSION_AREAS, optional: { completed: false } },
-      { label: strings.ZONE_BOUNDARIES, optional: { completed: false } },
-      { label: strings.SUBZONE_BOUNDARIES, optional: { completed: false } },
+      ...simpleSiteSteps,
+      {
+        type: 'zone_boundaries',
+        label: strings.ZONE_BOUNDARIES,
+        optional: { completed: isCompleted('zone_boundaries') },
+      },
+      {
+        type: 'subzone_boundaries',
+        label: strings.SUBZONE_BOUNDARIES,
+        optional: { completed: isCompleted('subzone_boundaries') },
+      },
     ];
-  }, [activeLocale, siteType]);
+  }, [activeLocale, siteType, completedOptionalSteps]);
 
   const goToPlantingSites = () => {
     history.push(APP_PATHS.PLANTING_SITES);
@@ -75,11 +100,17 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
 
   const onSaveAndNext = () => {
     // TODO: save data here, alert user if data is missing
-    if (currentStep === steps.length - 1) {
+    if (currentStep === steps[steps.length - 1].type) {
       // this is the final step
       onSaveAndClose();
     } else {
-      setCurrentStep(currentStep + 1);
+      let stepIndex = 0;
+      steps.forEach((step: PlantingSiteCreateStep, index: number) => {
+        if (currentStep === step.type) {
+          stepIndex = index;
+        }
+      });
+      setCurrentStep(steps[stepIndex + 1].type);
     }
   };
 
@@ -93,12 +124,12 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
 
   const onStartOver = () => {
     // TODO: reset data here, confirm with user?
-    setCurrentStep(0);
+    setCurrentStep(steps[0].type);
+    setPlantingSite({ ...site });
   };
 
   return (
     <TfMain>
-      <InstructionsModal open={showModal} onClose={onClose} />
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ padding: theme.spacing(0, 0, 4, 3), display: 'flex' }}>
           <Typography fontSize='24px' fontWeight={600}>
@@ -116,11 +147,13 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
         className={classes.container}
       >
         <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
-          <Box display='flex' margin='auto auto'>
-            <Typography fontSize='24px' fontWeight='bold'>
-              Site Creation Flow WIP - site type {siteType}, current step {steps[currentStep]?.label}
-            </Typography>
-          </Box>
+          {currentStep === 'details' && <PlantingSiteDetails onChange={onChange} site={plantingSite} />}
+          {currentStep === 'site_boundary' && <PlantingSiteBoundary onChange={onChange} site={plantingSite} />}
+          {currentStep === 'exclusion_areas' && <PlantingSiteExclusions onChange={onChange} site={plantingSite} />}
+          {currentStep === 'zone_boundaries' && <PlantingSiteZoneBoundaries onChange={onChange} site={plantingSite} />}
+          {currentStep === 'subzone_boundaries' && (
+            <PlantingSiteSubzoneBoundaries onChange={onChange} site={plantingSite} />
+          )}
         </Container>
       </PlantingSiteCreateForm>
     </TfMain>

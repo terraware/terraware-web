@@ -1,4 +1,5 @@
 import { components } from 'src/api/types/generated-schema';
+import { PlantingSite } from './Tracking';
 
 export type Population = {
   species_scientificName: string;
@@ -32,3 +33,5 @@ export type PlantingProgressSubzone = {
 export type UpdatePlantingSubzonePayload = components['schemas']['UpdatePlantingSubzoneRequestPayload'];
 
 export type SiteType = 'simple' | 'detailed';
+
+export type NewPlantingSite = Omit<PlantingSite, 'id'>;
