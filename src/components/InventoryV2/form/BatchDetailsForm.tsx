@@ -210,8 +210,10 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
   };
 
   const marginTop = {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(0.5),
   };
+
+  const dropdownPadding = theme.spacing(0.5, 0, 1, 2);
 
   const isUndefinedQuantity = (val?: string | number) => val === undefined || val === '';
 
@@ -297,11 +299,11 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
             </Grid>
           )}
 
-          <Grid container item xs={12} spacing={2} textAlign='left'>
+          <Grid container item xs={12} spacing={1} textAlign='left'>
             {record.id === -1 && (
               <>
                 {['InventoryAdd', 'Nursery'].includes(origin) && (
-                  <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                  <Grid item xs={12} padding={dropdownPadding}>
                     <SpeciesDropdown<FormRecord>
                       availableSpecies={availableSpecies}
                       record={record}
@@ -311,7 +313,7 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
                   </Grid>
                 )}
 
-                <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                <Grid item xs={12} padding={dropdownPadding}>
                   <AccessionsDropdown<FormRecord>
                     availableAccessions={availableAccessions}
                     record={record}
@@ -320,7 +322,7 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
                 </Grid>
 
                 {['InventoryAdd', 'Species'].includes(origin) && (
-                  <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                  <Grid item xs={12} padding={dropdownPadding}>
                     <NurseryDropdownV2
                       availableNurseries={availableNurseries}
                       record={record}
@@ -330,7 +332,7 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
                   </Grid>
                 )}
 
-                <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                <Grid item xs={12} padding={dropdownPadding}>
                   <SubLocationsDropdown<FormRecord>
                     availableSubLocations={availableSubLocations}
                     record={record}
@@ -339,7 +341,7 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
                 </Grid>
 
                 {featureFlagProjects && (
-                  <Grid item xs={12} padding={theme.spacing(1, 0, 1, 2)}>
+                  <Grid item xs={12} padding={dropdownPadding}>
                     <ProjectsDropdown<FormRecord>
                       availableProjects={availableProjects}
                       record={record}
@@ -350,7 +352,7 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
               </>
             )}
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+            <Grid item xs={gridSize()} paddingLeft={paddingSeparator}>
               <DatePicker
                 id='addedDate'
                 label={strings.DATE_ADDED_REQUIRED}
