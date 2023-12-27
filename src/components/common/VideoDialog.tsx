@@ -2,7 +2,6 @@ import strings from 'src/strings';
 import { Box, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, DialogBox } from '@terraware/web-components';
-import { useDocLinks } from 'src/docLinks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   buttonSpacing: {
@@ -14,22 +13,24 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export type InstructionsModalProps = {
+export type BoundaryInstructionsModalProps = {
+  description: string;
+  link: string;
   open: boolean;
   onClose: (dontShowAgain?: boolean) => void;
+  title: string;
 };
 
-export default function InstructionsModal(props: InstructionsModalProps): JSX.Element {
-  const { open, onClose } = props;
+export default function BoundaryInstructionsModal(props: BoundaryInstructionsModalProps): JSX.Element {
+  const { description, link, open, onClose, title } = props;
   const classes = useStyles();
-  const docLinks = useDocLinks();
 
   return (
     <DialogBox
       scrolled
       onClose={() => onClose()}
       open={open}
-      title={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
+      title={title}
       size={'large'}
       middleButtons={[
         <Button
@@ -46,13 +47,13 @@ export default function InstructionsModal(props: InstructionsModalProps): JSX.El
     >
       <Box display='flex' flexDirection='column'>
         <Typography textAlign='center' marginBottom={2}>
-          {strings.PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION}
+          {description}
         </Typography>
         <iframe
           width='100%'
           height='320px'
-          src={docLinks.planting_site_create_instructions_video}
-          title={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
+          src={link}
+          title={title}
           frameBorder='0'
           allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
           allowFullScreen

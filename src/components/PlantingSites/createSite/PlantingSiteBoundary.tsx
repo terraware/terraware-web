@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
-import InstructionsModal from './InstructionsModal';
+import BoundaryInstructionsModal from './BoundaryInstructionsModal';
 
 export type PlantingSiteBoundaryProps = {
   onChange: (id: string, value: unknown) => void;
@@ -9,6 +10,7 @@ export type PlantingSiteBoundaryProps = {
 };
 
 export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): JSX.Element {
+  const theme = useTheme();
   // this is a placeholder for the instructions modal trigger
   const [showModal, setShowModal] = useState<boolean>(true);
 
@@ -17,11 +19,27 @@ export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): 
   };
 
   return (
-    <Box display='flex' margin='auto auto'>
-      <InstructionsModal open={showModal} onClose={onClose} />
-      <Typography fontSize='24px' fontWeight='bold'>
-        Site Creation Flow WIP - Site Boundary
+    <Box display='flex' flexDirection='column'>
+      <BoundaryInstructionsModal open={showModal} onClose={onClose} />
+      <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
+        {strings.SITE_BOUNDARY}
       </Typography>
+      {[
+        strings.SITE_BOUNDARY_DESCRIPTION_0,
+        strings.SITE_BOUNDARY_DESCRIPTION_1,
+        strings.SITE_BOUNDARY_DESCRIPTION_2,
+      ].map((description: string, index: number) => (
+        <Typography
+          key={index}
+          fontSize='14px'
+          fontWeight={400}
+          lineHeight='20px'
+          color={theme.palette.TwClrTxt}
+          margin={theme.spacing(1, 0)}
+        >
+          {description}
+        </Typography>
+      ))}
     </Box>
   );
 }

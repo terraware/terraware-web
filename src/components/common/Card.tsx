@@ -15,7 +15,7 @@ export default function Card({ children, style, flushMobile }: CardProps): JSX.E
 
   return (
     <Box
-      borderRadius={flush ? 0 : 3}
+      borderRadius={flush ? 0 : theme.spacing(3)}
       padding={3}
       margin={flush ? theme.spacing(0, -3) : 0}
       sx={{

@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 import TfMain from 'src/components/common/TfMain';
-import { Box, Container, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { SiteType } from 'src/types/PlantingSite';
@@ -10,6 +10,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
+import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PlantingSiteCreateForm, { PlantingSiteCreateStep, PlantingSiteCreateStepType } from './PlantingSiteCreateForm';
 import PlantingSiteDetails from './PlantingSiteDetails';
@@ -42,7 +43,7 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
   const classes = useStyles();
 
   const [currentStep, setCurrentStep] = useState<PlantingSiteCreateStepType>('details');
-  const [completedOptionalSteps] = useState<Record<PlantingSiteCreateStepType, boolean>>(
+  const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<PlantingSiteCreateStepType, boolean>>(
     {} as Record<PlantingSiteCreateStepType, boolean>
   );
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
@@ -126,6 +127,7 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
     // TODO: reset data here, confirm with user?
     setCurrentStep(steps[0].type);
     setPlantingSite({ ...site });
+    setCompletedOptionalSteps({} as Record<PlantingSiteCreateStepType, boolean>);
   };
 
   return (
@@ -146,7 +148,7 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
         steps={steps}
         className={classes.container}
       >
-        <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
+        <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}>
           {currentStep === 'details' && <PlantingSiteDetails onChange={onChange} site={plantingSite} />}
           {currentStep === 'site_boundary' && <PlantingSiteBoundary onChange={onChange} site={plantingSite} />}
           {currentStep === 'exclusion_areas' && <PlantingSiteExclusions onChange={onChange} site={plantingSite} />}
@@ -154,7 +156,7 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
           {currentStep === 'subzone_boundaries' && (
             <PlantingSiteSubzoneBoundaries onChange={onChange} site={plantingSite} />
           )}
-        </Container>
+        </Card>
       </PlantingSiteCreateForm>
     </TfMain>
   );

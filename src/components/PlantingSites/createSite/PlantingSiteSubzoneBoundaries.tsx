@@ -1,17 +1,43 @@
-import { Box, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Box, Typography, useTheme } from '@mui/material';
+import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import SubzoneInstructionsModal from './SubzoneInstructionsModal';
 
-export type PlantingSiteSubzoneBoundariesProps = {
+export type PlantingSiteBoundaryProps = {
   onChange: (id: string, value: unknown) => void;
   site: PlantingSite;
 };
 
-export default function PlantingSiteSubzoneBoundaries(props: PlantingSiteSubzoneBoundariesProps): JSX.Element {
+export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): JSX.Element {
+  const theme = useTheme();
+  // this is a placeholder for the instructions modal trigger
+  const [showModal, setShowModal] = useState<boolean>(true);
+
+  const onClose = () => {
+    setShowModal(false);
+  };
+
   return (
-    <Box display='flex' margin='auto auto'>
-      <Typography fontSize='24px' fontWeight='bold'>
-        Site Creation Flow WIP - Site SubzoneBoundaries
+    <Box display='flex' flexDirection='column'>
+      <SubzoneInstructionsModal open={showModal} onClose={onClose} />
+      <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
+        {strings.SITE_SUBZONE_BOUNDARIES}
       </Typography>
+      {[strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_0, strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1].map(
+        (description: string, index: number) => (
+          <Typography
+            key={index}
+            fontSize='14px'
+            fontWeight={400}
+            lineHeight='20px'
+            color={theme.palette.TwClrTxt}
+            margin={theme.spacing(1, 0)}
+          >
+            {description}
+          </Typography>
+        )
+      )}
     </Box>
   );
 }

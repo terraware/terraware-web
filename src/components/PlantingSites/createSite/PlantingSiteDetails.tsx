@@ -1,4 +1,5 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
 export type PlantingSiteDetailsProps = {
@@ -7,10 +8,12 @@ export type PlantingSiteDetailsProps = {
 };
 
 export default function PlantingSiteDetails(props: PlantingSiteDetailsProps): JSX.Element {
+  const theme = useTheme();
+
   return (
-    <Box display='flex' margin='auto auto'>
-      <Typography fontSize='24px' fontWeight='bold'>
-        Site Creation Flow WIP - Site Details
+    <Box display='flex' flexDirection='column'>
+      <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
+        {strings.DETAILS}
       </Typography>
     </Box>
   );
