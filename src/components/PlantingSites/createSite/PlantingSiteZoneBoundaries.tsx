@@ -13,14 +13,18 @@ export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): 
   const theme = useTheme();
   // this is a placeholder for the instructions modal trigger
   const [showModal, setShowModal] = useState<boolean>(true);
+  const [dontShowModalAgain, setDontShowModalAgain] = useState<boolean>(false);
 
-  const onClose = () => {
+  const onClose = (dontShowAgain?: boolean) => {
     setShowModal(false);
+    if (dontShowAgain) {
+      setDontShowModalAgain(true);
+    }
   };
 
   return (
     <Box display='flex' flexDirection='column'>
-      <ZoneInstructionsModal open={showModal} onClose={onClose} />
+      <ZoneInstructionsModal force={dontShowModalAgain === true} open={showModal} onClose={onClose} />
       <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
         {strings.SITE_ZONE_BOUNDARIES}
       </Typography>

@@ -17,34 +17,39 @@ export type BoundaryInstructionsModalProps = {
   description: string;
   link: string;
   open: boolean;
-  onClose: (dontShowAgain?: boolean) => void;
+  onClose: () => void;
+  onDontShowAgain?: () => void;
   title: string;
 };
 
 export default function BoundaryInstructionsModal(props: BoundaryInstructionsModalProps): JSX.Element {
-  const { description, link, open, onClose, title } = props;
+  const { description, link, open, onClose, onDontShowAgain, title } = props;
   const classes = useStyles();
 
+  const buttons = (): JSX.Element[] => {
+    const dontShowAgainButton: JSX.Element = (
+      <Button
+        onClick={() => {
+          if (onDontShowAgain) {
+            onDontShowAgain();
+          }
+        }}
+        id='dont-show-again'
+        label={strings.DONT_SHOW_AGAIN}
+        priority='secondary'
+        type='passive'
+        className={classes.buttonSpacing}
+        key='button-1'
+      />
+    );
+
+    const closeButton: JSX.Element = <Button onClick={onClose} id='close' label={strings.CLOSE} key='button-2' />;
+
+    return onDontShowAgain ? [dontShowAgainButton, closeButton] : [closeButton];
+  };
+
   return (
-    <DialogBox
-      scrolled
-      onClose={() => onClose()}
-      open={open}
-      title={title}
-      size={'large'}
-      middleButtons={[
-        <Button
-          onClick={() => onClose(true)}
-          id='dont-show-again'
-          label={strings.DONT_SHOW_AGAIN}
-          priority='secondary'
-          type='passive'
-          className={classes.buttonSpacing}
-          key='button-1'
-        />,
-        <Button onClick={() => onClose()} id='next' label={strings.CLOSE} key='button-2' />,
-      ]}
-    >
+    <DialogBox scrolled onClose={onClose} open={open} title={title} size={'large'} middleButtons={buttons()}>
       <Box display='flex' flexDirection='column'>
         <Typography textAlign='center' marginBottom={2}>
           {description}
