@@ -742,10 +742,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           isInactive={isInactive}
                           onReorderEnd={reorderSearchColumns}
                           isPresorted
-                          selectedRows={selectedRows}
-                          setSelectedRows={setSelectedRows}
-                          showCheckbox
-                          isClickable={() => false}
+                          {...(featureFlagProjects
+                            ? {
+                                selectedRows,
+                                setSelectedRows,
+                                showCheckbox: true,
+                                isClickable: () => false,
+                              }
+                            : {})}
                         />
                       )}
                       {searchResults === undefined && <CircularProgress />}
