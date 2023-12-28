@@ -57,7 +57,7 @@ export default function InventoryViewForSpecies(props: InventoryViewForSpeciesPr
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <BackToLink id='back' name={strings.INVENTORY} to={APP_PATHS.INVENTORY} />
+        <BackToLink id='back' name={strings.INVENTORY} to={`${APP_PATHS.INVENTORY}?${query.toString()}`} />
         <Grid container>
           <Typography
             sx={{

@@ -40,7 +40,11 @@ export default function InventoryViewForNursery(): JSX.Element {
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <BackToLink id='back' name={strings.INVENTORY} to={`${APP_PATHS.INVENTORY}?tab=batches_by_nursery`} />
+        <BackToLink
+          id='back'
+          name={strings.INVENTORY}
+          to={`${APP_PATHS.INVENTORY}?tab=batches_by_nursery&${query.toString()}`}
+        />
         <Grid container>
           <Typography
             sx={{
