@@ -76,9 +76,7 @@ export default function InventorySeedlingsTableForNursery(props: InventorySeedli
     [facilityId]
   );
 
-  const isSelectionBulkWithdrawable = useCallback((selectedRows: SearchResponseElement[]) => {
-    return selectedRows.some((row) => Number(row['totalQuantity(raw)']) > 0);
-  }, []);
+  const isSelectionBulkWithdrawable = useCallback(() => true, []);
 
   return (
     <InventorySeedlingsTable

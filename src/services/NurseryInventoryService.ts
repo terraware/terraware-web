@@ -258,6 +258,7 @@ const searchInventoryByNursery = async ({
       'facilityInventories.species_scientificName',
       'facilityInventories.batches.id',
       'germinatingQuantity',
+      'germinatingQuantity(raw)',
       'notReadyQuantity',
       'readyQuantity',
       'totalQuantity',

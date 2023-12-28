@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme } from '@mui/material';
 import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
@@ -236,6 +236,15 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     });
   };
 
+  const totalSelectedQuantity = useMemo<number>(
+    () =>
+      selectedRows.reduce(
+        (total, row) => total + Number(row['totalQuantity(raw)']) + Number(row['germinatingQuantity(raw)']),
+        0
+      ),
+    [selectedRows]
+  );
+
   const getTopBarButtons = () => {
     const topBarButtons: TopBarButton[] = [];
     topBarButtons.push({
@@ -244,13 +253,23 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       onButtonClick: () => setOpenDeleteModal(true),
     });
 
-    if (selectedRows.length > 1 && isSelectionBulkWithdrawable(selectedRows)) {
-      topBarButtons.push({
-        buttonType: 'passive',
-        buttonText: strings.WITHDRAW,
-        onButtonClick: () => bulkWithdrawSelectedRows(),
-      });
+    const bulkWithdrawable = isSelectionBulkWithdrawable(selectedRows);
+
+    let withdrawTooltip;
+
+    if (!bulkWithdrawable) {
+      withdrawTooltip = strings.WITHDRAW_SINGLE_NURSERY;
+    } else if (totalSelectedQuantity === 0) {
+      withdrawTooltip = strings.NO_WITHDRAWABLE_QUANTITIES_FOUND;
     }
+
+    topBarButtons.push({
+      buttonType: 'passive',
+      buttonText: strings.WITHDRAW,
+      onButtonClick: () => bulkWithdrawSelectedRows(),
+      disabled: !bulkWithdrawable || !totalSelectedQuantity,
+      tooltipTitle: withdrawTooltip,
+    });
     return topBarButtons;
   };
 
