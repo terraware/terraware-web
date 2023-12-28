@@ -1,17 +1,7 @@
 import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
-import { SearchNodePayload } from 'src/types/Search';
-import strings from 'src/strings';
-import SeedBankService from 'src/services/SeedBankService';
-import { setAccessionsAction } from './accessionsSlice';
-
-const SEARCH_FIELDS_ACCESSIONS = ['id', 'accessionNumber', 'speciesName'];
-
-export type SearchResponseAccession = {
-  id: string;
-  accessionNumber: string;
-  speciesName: string;
-};
+import SeedBankService, { SearchResponseAccession } from 'src/services/SeedBankService';
+import { setAccessionsAction } from 'src/redux/features/accessions/accessionsSlice';
 
 export const requestAccessions = (organizationId: number, speciesId?: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
@@ -19,31 +9,10 @@ export const requestAccessions = (organizationId: number, speciesId?: number) =>
     const orgIdSpeciesId = `${organizationId}-${stateSpeciesId}`;
 
     try {
-      const searchCriteria: { [key: string]: SearchNodePayload } = {};
-      searchCriteria.excludeUsedUp = {
-        operation: 'not',
-        child: {
-          operation: 'field',
-          field: 'state',
-          type: 'Exact',
-          values: [strings.USED_UP],
-        },
-      };
-
-      if (stateSpeciesId !== -1) {
-        searchCriteria.speciesIds = {
-          operation: 'field',
-          field: 'species_id',
-          type: 'Exact',
-          values: [stateSpeciesId.toString()],
-        };
-      }
-
-      const results: SearchResponseAccession[] | null = await SeedBankService.searchAccessions({
+      const results: SearchResponseAccession[] | null = await SeedBankService.getAccessionForSpecies(
         organizationId,
-        fields: SEARCH_FIELDS_ACCESSIONS,
-        searchCriteria,
-      });
+        stateSpeciesId
+      );
 
       if (!results?.length) {
         dispatch(setAccessionsAction({ orgIdSpeciesId, data: { error: true } }));
