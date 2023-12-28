@@ -98,19 +98,27 @@ export const useQueryFilters = () => {
   // Sync from query
   useEffect(() => {
     const currentQueryFilters: FiltersType = {};
-    const queryKeys = [...query.keys()].sort((a, b) => a.localeCompare(b));
 
-    queryKeys.forEach((key) => {
-      if (isFilterKey(key)) {
-        const value = query.get(key);
-        if (!value) {
-          return;
-        }
-
-        const filterKey = scrubFilterKey(key);
-        currentQueryFilters[filterKey] = denormalizeValue(value);
+    const queryKeys: string[] = [];
+    for (const key in query.keys()) {
+      if (query.get(key)) {
+        queryKeys.push(key);
       }
-    });
+    }
+
+    queryKeys
+      .sort((a, b) => a.localeCompare(b))
+      .forEach((key) => {
+        if (isFilterKey(key)) {
+          const value = query.get(key);
+          if (!value) {
+            return;
+          }
+
+          const filterKey = scrubFilterKey(key);
+          currentQueryFilters[filterKey] = denormalizeValue(value);
+        }
+      });
 
     if (!filtersEqual(queryFilters, currentQueryFilters)) {
       setQueryFilters(currentQueryFilters);
