@@ -1,3 +1,4 @@
+f4207754da SW-4540 Planting site create stepper flow with placeholder content (#1942)
 b3e4eadf62 SW-4619 Filter out the first, "empty" result from the batch history list (#1961)
 cc8b2ada4a SW-4618 Decrease vertical margin in batch event details modal (#1959)
 d2887f3ee9 SW-4621 Reduce spacing between items in the batch details form (#1960)

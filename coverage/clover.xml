@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1703696623029" clover="3.2.0">
-  <project timestamp="1703696623029" name="All files">
-    <metrics statements="15173" coveredstatements="396" conditionals="9794" coveredconditionals="95" methods="4793" coveredmethods="89" elements="29760" coveredelements="580" complexity="0" loc="15173" ncloc="15173" packages="122" files="587" classes="587"/>
+<coverage generated="1703721922928" clover="3.2.0">
+  <project timestamp="1703721922928" name="All files">
+    <metrics statements="15260" coveredstatements="396" conditionals="9832" coveredconditionals="95" methods="4823" coveredmethods="89" elements="29915" coveredelements="580" complexity="0" loc="15260" ncloc="15260" packages="122" files="596" classes="596"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -175,11 +175,11 @@
       </file>
       <file name="docLinks.ts" path="/home/runner/work/terraware-web/terraware-web/src/docLinks.ts">
         <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="34" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="43" count="0" type="stmt"/>
       </file>
       <file name="features.ts" path="/home/runner/work/terraware-web/terraware-web/src/features.ts">
         <metrics statements="24" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -7952,28 +7952,127 @@
       </file>
     </package>
     <package name="src.components.PlantingSites.createSite">
-      <metrics statements="13" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
-      <file name="InstructionsModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/InstructionsModal.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-      </file>
-      <file name="PlantingSiteDetailedCreate.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/PlantingSiteDetailedCreate.tsx">
-        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="12" count="0" type="stmt"/>
+      <metrics statements="88" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="32" coveredmethods="0"/>
+      <file name="NewPlantingSiteCreate.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/NewPlantingSiteCreate.tsx">
+        <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+      </file>
+      <file name="PlantingSiteBoundary.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/PlantingSiteBoundary.tsx">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+      </file>
+      <file name="PlantingSiteCreateFlow.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/PlantingSiteCreateFlow.tsx">
+        <metrics statements="40" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="74" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="110" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="129" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+      </file>
+      <file name="PlantingSiteCreateForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/PlantingSiteCreateForm.tsx">
+        <metrics statements="19" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="97" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+      </file>
+      <file name="PlantingSiteDetailedCreate.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/PlantingSiteDetailedCreate.tsx">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+      </file>
+      <file name="PlantingSiteDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/PlantingSiteDetails.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+      </file>
+      <file name="PlantingSiteExclusions.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/PlantingSiteExclusions.tsx">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteSimpleCreate.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/PlantingSiteSimpleCreate.tsx">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="9" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+      </file>
+      <file name="PlantingSiteSubzoneBoundaries.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/PlantingSiteSubzoneBoundaries.tsx">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+      </file>
+      <file name="PlantingSiteZoneBoundaries.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/PlantingSiteZoneBoundaries.tsx">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+      </file>
+      <file name="StepTitleDescription.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/createSite/StepTitleDescription.tsx">
+        <metrics statements="16" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.Plants">
@@ -12151,7 +12250,7 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="443" coveredstatements="0" conditionals="357" coveredconditionals="0" methods="151" coveredmethods="0"/>
+      <metrics statements="453" coveredstatements="0" conditionals="363" coveredconditionals="0" methods="155" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
@@ -12677,17 +12776,17 @@
         <line num="36" count="0" type="stmt"/>
       </file>
       <file name="TextWithLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/TextWithLink.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="20" count="0" type="stmt"/>
+        <metrics statements="10" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="26" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="27" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
       </file>
       <file name="TfMain.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/TfMain.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="5" coveredmethods="0"/>
@@ -12720,6 +12819,19 @@
         <metrics statements="2" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
+      </file>
+      <file name="VideoDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/VideoDialog.tsx">
+        <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="51" count="0" type="stmt"/>
       </file>
       <file name="types.ts" path="/home/runner/work/terraware-web/terraware-web/src/components/common/types.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -16576,7 +16688,7 @@
       </file>
     </package>
     <package name="src.stories">
-      <metrics statements="74" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="23" coveredmethods="0"/>
+      <metrics statements="76" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="25" coveredmethods="0"/>
       <file name="BreadCrumbs.stories.tsx" path="/home/runner/work/terraware-web/terraware-web/src/stories/BreadCrumbs.stories.tsx">
         <metrics statements="16" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
@@ -16632,19 +16744,6 @@
         <line num="4" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
       </file>
-      <file name="PlantingSiteCreateInstructionsModal.stories.tsx" path="/home/runner/work/terraware-web/terraware-web/src/stories/PlantingSiteCreateInstructionsModal.stories.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-      </file>
       <file name="PlantsPrimaryPage.stories.tsx" path="/home/runner/work/terraware-web/terraware-web/src/stories/PlantsPrimaryPage.stories.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
@@ -16680,6 +16779,21 @@
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
+      </file>
+      <file name="VideoDialog.stories.tsx" path="/home/runner/work/terraware-web/terraware-web/src/stories/VideoDialog.stories.tsx">
+        <metrics statements="12" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.strings">
