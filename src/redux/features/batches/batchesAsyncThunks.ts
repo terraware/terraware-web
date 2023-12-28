@@ -7,7 +7,7 @@ import { BatchData, BatchId, UpdateBatchRequestPayloadWithId } from 'src/service
 import AccessionService from 'src/services/AccessionService';
 import { NurseryBatchService } from 'src/services';
 import { RootState } from 'src/redux/rootReducer';
-import { SearchResponseAccession } from 'src/redux/features/accessions/accessionsThunks';
+import { SearchResponseAccession } from 'src/services/SeedBankService';
 
 export type SavableBatch = (CreateBatchRequestPayload | UpdateBatchRequestPayloadWithId) & Batch;
 

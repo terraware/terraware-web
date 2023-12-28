@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useOrganization } from 'src/providers';
-import { requestAccessions, SearchResponseAccession } from 'src/redux/features/accessions/accessionsThunks';
+import { requestAccessions } from 'src/redux/features/accessions/accessionsThunks';
+import { SearchResponseAccession } from 'src/services/SeedBankService';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectAccessions } from 'src/redux/features/accessions/accessionsSelectors';
 
