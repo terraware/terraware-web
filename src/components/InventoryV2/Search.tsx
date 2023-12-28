@@ -21,6 +21,7 @@ import InventoryFilters, { InventoryFiltersUnion } from 'src/components/Inventor
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 import { convertFilterGroupToMap, getNurseryName } from 'src/components/InventoryV2/FilterUtils';
 import isEnabled from 'src/features';
+import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
 
 const useStyles = makeStyles(() => ({
   popoverContainer: {
@@ -80,6 +81,10 @@ export default function Search<T extends { facilityInventories?: string }>(props
   }, [selectedOrganization]);
 
   useEffect(() => {
+    void dispatch(requestSubLocations(filters.facilityIds ?? []));
+  }, [filters.facilityIds, dispatch]);
+
+  useEffect(() => {
     if (origin !== 'Nursery' || !species?.length || !tableResults) {
       return;
     }
@@ -128,34 +133,28 @@ export default function Search<T extends { facilityInventories?: string }>(props
 
   useEffect(() => {
     const data: PillListItemWithEmptyValue[] = [];
-    if (filters.facilityIds?.length) {
-      data.push({
-        id: 'facilityIds',
-        label: strings.NURSERY,
-        value: filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization)).join(', ') ?? '',
-        emptyValue: [],
-      });
+
+    if (['Batches', 'Species'].includes(origin)) {
+      if (filters.facilityIds?.length) {
+        data.push({
+          id: 'facilityIds',
+          label: strings.NURSERY,
+          value: filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization)).join(', ') ?? '',
+          emptyValue: [],
+        });
+      }
+
+      if (filters.subLocationsIds?.length) {
+        data.push({
+          id: 'subLocationsIds',
+          label: strings.SUB_LOCATIONS,
+          value: filters.subLocationsIds?.map(getSubLocationName).join(', ') ?? '',
+          emptyValue: [],
+        });
+      }
     }
 
-    if (filters.speciesIds?.length) {
-      data.push({
-        id: 'speciesIds',
-        label: strings.SPECIES,
-        value: filters.speciesIds?.map(getSpeciesName).join(', ') ?? '',
-        emptyValue: [],
-      });
-    }
-
-    if (filters.subLocationsIds?.length) {
-      data.push({
-        id: 'subLocationsIds',
-        label: strings.SUB_LOCATIONS,
-        value: filters.subLocationsIds?.map(getSubLocationName).join(', ') ?? '',
-        emptyValue: [],
-      });
-    }
-
-    if (filters.projectIds?.length) {
+    if (showProjectsFilter && filters.projectIds?.length) {
       data.push({
         id: 'projectIds',
         label: strings.PROJECTS,
@@ -164,7 +163,16 @@ export default function Search<T extends { facilityInventories?: string }>(props
       });
     }
 
-    if (filters.showEmptyBatches && filters.showEmptyBatches[0] === 'true') {
+    if ('Nursery' === origin && filters.speciesIds?.length) {
+      data.push({
+        id: 'speciesIds',
+        label: strings.SPECIES,
+        value: filters.speciesIds?.map(getSpeciesName).join(', ') ?? '',
+        emptyValue: [],
+      });
+    }
+
+    if (showEmptyBatchesFilter && filters.showEmptyBatches && filters.showEmptyBatches[0] === 'true') {
       data.push({
         id: 'showEmptyBatches',
         value: strings.FILTER_SHOW_EMPTY_BATCHES,
@@ -183,6 +191,9 @@ export default function Search<T extends { facilityInventories?: string }>(props
     getSpeciesName,
     getSubLocationName,
     getProjectName,
+    origin,
+    showProjectsFilter,
+    showEmptyBatchesFilter,
   ]);
 
   useEffect(() => {
