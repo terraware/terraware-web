@@ -204,6 +204,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
    */
   const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
+  const [selectedRows, setSelectedRows] = useState<SearchResponseElement[]>([]);
   const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
   const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState<boolean>(false);
   const [openImportModal, setOpenImportModal] = useState<boolean>(false);
@@ -740,7 +741,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           sortHandler={onSortChange}
                           isInactive={isInactive}
                           onReorderEnd={reorderSearchColumns}
-                          isPresorted={true}
+                          isPresorted
+                          selectedRows={selectedRows}
+                          setSelectedRows={setSelectedRows}
+                          showCheckbox
+                          isClickable={() => false}
                         />
                       )}
                       {searchResults === undefined && <CircularProgress />}
