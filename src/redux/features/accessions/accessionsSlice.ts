@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SearchResponseAccession } from './accessionsThunks';
+import { SearchResponseAccession } from 'src/services/SeedBankService';
 
 type OrgIdSpeciesId = string;
 
