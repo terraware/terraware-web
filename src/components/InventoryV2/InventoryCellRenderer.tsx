@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material';
+import { TextTruncated } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
-import { TextTruncated } from '@terraware/web-components';
 import strings from 'src/strings';
-import ChangeQuantityModal from './view/ChangeQuantityModal';
 import { Batch } from 'src/types/Batch';
-import QuantitiesMenu from './view/QuantitiesMenu';
+import useQuery from 'src/utils/useQuery';
+import ChangeQuantityModal from 'src/components/InventoryV2/view/ChangeQuantityModal';
+import QuantitiesMenu from 'src/components/InventoryV2/view/QuantitiesMenu';
 
 const COLUMN_WIDTH = 250;
 
@@ -25,6 +26,7 @@ const useStyles = makeStyles(() => ({
 export default function InventoryCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
+  const query = useQuery();
   const { column, row, value, index, reloadData } = props;
   const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
 
@@ -43,29 +45,18 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     );
   };
 
-  const createLinkToInventorySpeciesDetail = (iValue: React.ReactNode | unknown[]) => {
-    return (
-      <Link to={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', row.species_id.toString())}>
-        {iValue as React.ReactNode}
-      </Link>
-    );
-  };
+  const createLinkWithQuery = (path: string, iValue: React.ReactNode | unknown[]) => (
+    <Link to={`${path}?${query.toString()}`}>{iValue as React.ReactNode}</Link>
+  );
 
-  const createLinkToInventoryNurseryDetail = (iValue: React.ReactNode | unknown[]) => {
-    return (
-      <Link to={APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', row.facility_id.toString())}>
-        {iValue as React.ReactNode}
-      </Link>
-    );
-  };
+  const createLinkToInventorySpeciesDetail = (iValue: React.ReactNode | unknown[]) =>
+    createLinkWithQuery(APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', row.species_id.toString()), iValue);
 
-  const createLinkToInventoryBatchDetail = (iValue: React.ReactNode | unknown[]) => {
-    return (
-      <Link to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', row.batchId.toString())}>
-        {iValue as React.ReactNode}
-      </Link>
-    );
-  };
+  const createLinkToInventoryNurseryDetail = (iValue: React.ReactNode | unknown[]) =>
+    createLinkWithQuery(APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', row.facility_id.toString()), iValue);
+
+  const createLinkToInventoryBatchDetail = (iValue: React.ReactNode | unknown[]) =>
+    createLinkWithQuery(APP_PATHS.INVENTORY_BATCH.replace(':batchId', row.batchId.toString()), iValue);
 
   if (column.key === 'facilityInventories' && typeof value === 'string') {
     return (
