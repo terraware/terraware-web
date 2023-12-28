@@ -15,7 +15,7 @@ export type SearchResponseAccession = {
 
 export const requestAccessions = (organizationId: number, speciesId?: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
-    const stateSpeciesId = speciesId ?? 0;
+    const stateSpeciesId = speciesId ?? -1;
     const orgIdSpeciesId = `${organizationId}-${stateSpeciesId}`;
 
     try {
@@ -30,7 +30,7 @@ export const requestAccessions = (organizationId: number, speciesId?: number) =>
         },
       };
 
-      if (stateSpeciesId) {
+      if (stateSpeciesId !== -1) {
         searchCriteria.speciesIds = {
           operation: 'field',
           field: 'species_id',
