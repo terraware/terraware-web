@@ -42,3 +42,7 @@ src/strings/strings-*.js
 
 # ignore .vim swap files
 *.swp
+
+# playwright
+/playwright-report/
+/playwright/test-results/

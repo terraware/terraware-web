@@ -91,7 +91,9 @@
     "server:reset": "./scripts/resetdb.sh",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "pre-commit": "yarn format && yarn lint && yarn ts && yarn test && yarn build"
+    "pre-commit": "yarn format && yarn lint && yarn ts && yarn test && yarn build",
+    "playwright:run": "yarn run playwright test playwright/e2e",
+    "test:e2e": "start-server-and-test start http://127.0.0.1:3000 playwright:run"
   },
   "eslintConfig": {
     "extends": [
@@ -121,6 +123,7 @@
     "@craco/craco": "^7.0.0",
     "@cypress/code-coverage": "^3.10.0",
     "@cypress/instrument-cra": "^1.4.0",
+    "@playwright/test": "^1.40.1",
     "@storybook/addon-essentials": "^7.0.12",
     "@storybook/addon-interactions": "^7.0.12",
     "@storybook/addon-links": "^7.0.12",
@@ -143,6 +146,7 @@
     "jest-mock-extended": "^3.0.1",
     "nyc": "^15.1.0",
     "openapi-typescript": "^6.7.3",
+    "playwright": "^1.40.1",
     "prettier": "^3.0.3",
     "prop-types": "^15.8.1",
     "react-test-renderer": "17.0.2",
