@@ -112,7 +112,7 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
     top: debouncedSticky ? (debouncedScrollDown ? `${TOP_BAR_HEIGHT - height}px` : `${TOP_BAR_HEIGHT}px`) : undefined,
     visibility: debouncedSticky && debouncedScrollDown ? 'hidden' : 'visible',
     animation: anim,
-    width: '-webkit-fill-available',
+    width: '100%',
     zIndex: debouncedSticky ? 100 : undefined,
   };
 
