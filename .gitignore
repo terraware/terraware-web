@@ -26,14 +26,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# cypress
-cypress/videos
-cypress/screenshots
-.eslintcache
-out.json
-photo-data
-report.csv
-
 # build version file
 public/build-version.txt
 

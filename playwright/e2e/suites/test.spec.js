@@ -28,15 +28,14 @@ test('Add A Species', async ({ page }, testInfo) => {
 
   await page.getByRole('button', { name: 'Species' }).click();
 
+  await page.waitForTimeout(1000); //Wait for modal to load and be hydrated before interacting
   await page.getByRole('button', { name: 'Add Species' }).click();
-  await page.waitForTimeout(1000); //This is still needed
 
   await page.locator('#scientificName').getByRole('textbox').click();
 
   await page.locator('#scientificName').getByRole('textbox').fill(newSpeciesName);
 
   await page.locator('.dialog-box--header p.title').click();
-  await page.waitForTimeout(1000); //This is still needed
 
   await page.locator('#commonName').getByRole('textbox').click();
   await page.locator('#commonName').getByRole('textbox').fill('Koa');
@@ -64,7 +63,9 @@ test('Add A Species', async ({ page }, testInfo) => {
   await page.getByRole('row', { name: newSpeciesName }).getByRole('checkbox').check();
 
   await page.getByRole('button', { name: 'Delete' }).click();
+  await page.waitForTimeout(1000); //Wait for modal to load and be hydrated before interacting
   await page.locator('button.destructive-primary').click();
 
+  await page.waitForTimeout(1000); //Test is slow here for some reason???
   await expect(page.getByText(newSpeciesName)).toBeHidden();
 });

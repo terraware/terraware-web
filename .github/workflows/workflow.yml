@@ -27,7 +27,7 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: e2e2
 
     steps:
       - uses: actions/checkout@v4
@@ -95,7 +95,6 @@ jobs:
 
       - name: save screenshots of e2e test failures
         uses: actions/upload-artifact@v3
-        if: failure()
         with:
           name: playwright-report
           path: playwright-report/
