@@ -4,6 +4,7 @@ import { Button } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import strings from 'src/strings';
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
+import { makeStyles } from '@mui/styles';
 
 interface ProjectAssignBulkProps<T extends { id: number | string }> {
   selectedRows: T[];
@@ -12,6 +13,12 @@ interface ProjectAssignBulkProps<T extends { id: number | string }> {
   reloadData?: () => void;
 }
 
+const useStyles = makeStyles(() => ({
+  selectAllRows: {
+    verticalAlign: 'inherit',
+  },
+}));
+
 function ProjectAssignBulk<T extends { id: number | string }>({
   selectedRows,
   totalResultsCount,
@@ -19,6 +26,7 @@ function ProjectAssignBulk<T extends { id: number | string }>({
   reloadData,
 }: ProjectAssignBulkProps<T>) {
   const theme = useTheme();
+  const classes = useStyles();
 
   const [entityStub, setEntityStub] = useState({ id: -1, projectId: undefined });
   const [isProjectAssignModalOpen, setIsProjectAssignModalOpen] = useState<boolean>(false);
@@ -46,10 +54,13 @@ function ProjectAssignBulk<T extends { id: number | string }>({
         <Grid container justifyContent={'space-between'} alignItems={'center'}>
           <Grid item>
             <Typography>
-              {selectedRows.length} rows on this page selected.{' '}
-              <Link onClick={selectAllRows}>Select all {totalResultsCount} rows.</Link>
+              {strings.formatString(strings.TABLE_SELECTED_ROWS, selectedRows.length)}{' '}
+              <Link onClick={selectAllRows} fontSize={'1rem'} className={classes.selectAllRows}>
+                {strings.formatString(strings.TABLE_SELECT_ALL_ROWS, `${totalResultsCount || 0}`)}
+              </Link>
             </Typography>
           </Grid>
+
           <Grid item>
             <Button onClick={onClickHandler} label={strings.ADD_TO_PROJECT} priority={'secondary'} type={'passive'} />
           </Grid>
