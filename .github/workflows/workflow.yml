@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - qa
+      - edwardsa/SW-4643
     tags:
       # Semver (these are glob-like patterns, not regexes; the "." has no special meaning)
       - v[0-9].[0-9]+.[0-9]+
@@ -78,11 +79,14 @@ jobs:
           SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
 
-      - name: Run end-to-end cypress tests
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+
+      - name: Run end-to-end playwright tests
         # Skip tests on main and releases because of Cypress hanging bug
         if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
-        run: yarn e2e
-        # If Cypress hangs, don't let the job sit there for the default 6-hour timeout.
+        run: yarn test:e2e
+        # Legacy Cypress timeout override.
         timeout-minutes: 60
         env:
           REACT_APP_TERRAWARE_API: 'http://localhost:8080'
@@ -91,10 +95,10 @@ jobs:
 
       - name: save screenshots of e2e test failures
         uses: actions/upload-artifact@v3
-        if: failure()
         with:
-          name: cypress-screenshots
-          path: cypress/screenshots
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
 
       - name: build
         run: yarn build
