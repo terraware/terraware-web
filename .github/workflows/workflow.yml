@@ -27,7 +27,7 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: e2e2
+    runs-on: e2e3
 
     steps:
       - uses: actions/checkout@v4
