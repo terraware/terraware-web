@@ -18,6 +18,7 @@ type SelectBatchesWithdrawnQuantityProps = {
   saveText: string;
   batches: any[];
   nurseryWithdrawal: NurseryWithdrawalRequest;
+  filterProjectId?: number;
 };
 
 type BatchWithdrawalForTable = {
@@ -35,6 +36,7 @@ type BatchWithdrawalForTable = {
   totalQuantity: number;
   speciesId: number;
   facilityName: string;
+  projectId: number;
   projectName: string;
   error: { [key: string]: string | undefined };
 };
@@ -116,25 +118,30 @@ const outplantTableColumns = (): TableColumnType[] => [
   { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string' },
 ];
 
+const { OUTPLANT } = NurseryWithdrawalPurposes;
+
 export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
+  const { onNext, onCancel, saveText, batches, nurseryWithdrawal, filterProjectId } = props;
+
+  const classes = useStyles();
   const { selectedOrganization } = useOrganization();
-  const { onNext, onCancel, saveText, batches, nurseryWithdrawal } = props;
-  const { OUTPLANT } = NurseryWithdrawalPurposes;
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const [species, setSpecies] = useState<any>([]);
   const [record, setRecord] = useForm<BatchWithdrawalForTable[]>([]);
-  const [errorPageMessage, setErrorPageMessage] = useState('');
-  const classes = useStyles();
   const nurseryV2 = isEnabled('Nursery Updates');
   const featureFlagProjects = isEnabled('Projects');
+
+  const [species, setSpecies] = useState<any>([]);
+  const [errorPageMessage, setErrorPageMessage] = useState('');
 
   useEffect(() => {
     const transformBatchesForTable = () => {
       const speciesFromBatches: { [x: string]: { id: number; scientificName: string; commonName: string } } = {};
+
       const batchesForTable: BatchWithdrawalForTable[] = nurseryWithdrawal.batchWithdrawals.reduce((acc, bw) => {
         const associatedBatch = batches.find((batch) => batch.id.toString() === bw.batchId.toString());
-        if (associatedBatch) {
+
+        if (associatedBatch && (filterProjectId ? Number(associatedBatch.project_id) === filterProjectId : true)) {
           acc.push({
             batchId: bw.batchId,
             germinatingQuantityWithdrawn: bw.germinatingQuantityWithdrawn ?? 0,
@@ -150,6 +157,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
             batchNumber: associatedBatch.batchNumber,
             speciesId: associatedBatch.species_id,
             facilityName: associatedBatch.facility_name,
+            projectId: Number(associatedBatch.project_id),
             projectName: associatedBatch.project_name,
             error: {},
           });
@@ -170,7 +178,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
     };
 
     transformBatchesForTable();
-  }, [batches, nurseryWithdrawal, selectedOrganization, setRecord]);
+  }, [batches, filterProjectId, nurseryWithdrawal, selectedOrganization, setRecord]);
 
   const onEditHandler = (batch: BatchWithdrawalForTable, fromColumn?: string, value?: string) => {
     setRecord((previousRecord: BatchWithdrawalForTable[]): BatchWithdrawalForTable[] => {

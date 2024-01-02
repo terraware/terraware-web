@@ -40,6 +40,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   });
   const [batches, setBatches] = useState<SearchResponseElement[]>();
   const [showEmptyBatchesModalFor, setShowEmptyBatchesModalFor] = useState<NurseryWithdrawal | null>(null);
+  const [filterProjectId, setFilterProjectId] = useState<number>();
   const snackbar = useSnackbar();
   const history = useHistory();
   const nurseryV2 = isEnabled('Nursery Updates');
@@ -61,7 +62,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
         setBatches(withdrawable);
       }
     };
-    populateBatches();
+    void populateBatches();
   }, [batchIds, snackbar, selectedOrganization.id]);
 
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {
@@ -202,6 +203,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           nurseryWithdrawal={record}
           onCancel={goToInventory}
           saveText={strings.NEXT}
+          setFilterProjectId={setFilterProjectId}
         />
       )}
       {flowState === 'select batches' && (
@@ -211,6 +213,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           saveText={strings.NEXT}
           batches={batches}
           nurseryWithdrawal={record}
+          filterProjectId={filterProjectId}
         />
       )}
       {flowState === 'photos' && <AddPhotos onNext={withdraw} onCancel={goToInventory} saveText={strings.WITHDRAW} />}
