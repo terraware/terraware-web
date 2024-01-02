@@ -5,7 +5,6 @@ import { LocalizationProps, Props } from '@terraware/web-components/components/t
 import { useLocalization, useOrganization } from 'src/providers';
 import { PreferencesService } from 'src/services';
 import _ from 'lodash';
-import { makeStyles } from '@mui/styles';
 
 function renderPaginationText(from: number, to: number, total: number): string {
   if (total > 0) {
