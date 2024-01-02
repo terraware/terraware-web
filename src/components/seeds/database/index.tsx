@@ -40,7 +40,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectMessage } from 'src/redux/features/message/messageSelectors';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
 import isEnabled from 'src/features';
-import ProjectAssignBulk from 'src/components/ProjectAssignBulk';
+import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 
 interface StyleProps {
   isMobile: boolean;
@@ -755,15 +755,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         />
                       )}
 
-                      {featureFlagProjects && selectedRows.length ? (
-                        <ProjectAssignBulk
-                          selectedRows={selectedRows}
-                          totalResultsCount={searchResults?.length}
-                          selectAllRows={selectAllRows}
-                          reloadData={reloadAccessions}
-                        />
-                      ) : null}
-
                       {searchResults && (
                         <Table
                           columns={displayColumnDetails}
@@ -782,6 +773,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
                                 setSelectedRows,
                                 showCheckbox: true,
                                 isClickable: () => false,
+                                showTopBar: true,
+                                topBarButtons: [
+                                  <ProjectAssignTopBarButton
+                                    key={1}
+                                    selectedRows={selectedRows}
+                                    totalResultsCount={searchResults?.length}
+                                    selectAllRows={selectAllRows}
+                                    reloadData={reloadAccessions}
+                                  />,
+                                ],
                               }
                             : {})}
                         />
