@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
-import { AssignProjectRequestPayload } from '../../services/ProjectsService';
+import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
 
 interface ProjectAssignBulkProps<T extends { id: number | string }> {
   totalResultsCount: number | undefined;

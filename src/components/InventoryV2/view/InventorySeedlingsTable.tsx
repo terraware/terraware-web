@@ -23,8 +23,8 @@ import BatchDetailsModal from './BatchDetailsModal';
 import BatchesExportModal from './BatchesExportModal';
 import DeleteBatchesModal from './DeleteBatchesModal';
 import { OriginPage } from '../InventoryBatch';
-import ProjectAssignTopBarButton from '../../ProjectAssignTopBarButton';
-import isEnabled from '../../../features';
+import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
+import isEnabled from 'src/features';
 
 export interface InventorySeedlingsTableProps {
   speciesId?: number;
