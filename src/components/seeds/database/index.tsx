@@ -777,10 +777,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
                                 topBarButtons: [
                                   <ProjectAssignTopBarButton
                                     key={1}
-                                    selectedRows={selectedRows}
                                     totalResultsCount={searchResults?.length}
                                     selectAllRows={selectAllRows}
                                     reloadData={reloadAccessions}
+                                    projectAssignPayloadCreator={() => ({
+                                      accessionIds: selectedRows.map((row) => Number(row.id)),
+                                    })}
                                   />,
                                 ],
                               }

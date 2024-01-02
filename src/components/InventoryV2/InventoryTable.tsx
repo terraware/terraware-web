@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { TableColumnType } from '@terraware/web-components';
 import { Box, Grid } from '@mui/material';
@@ -13,6 +13,8 @@ import { SortOrder } from 'src/components/common/table/sort';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 import Search from 'src/components/InventoryV2/Search';
 import InventoryCellRenderer from './InventoryCellRenderer';
+import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
+import isEnabled from 'src/features';
 
 interface InventoryTableProps {
   results: SearchResponseElement[];
@@ -25,6 +27,7 @@ interface InventoryTableProps {
   columns: () => TableColumnType[];
   reloadData?: () => void;
   origin?: OriginPage;
+  allowSelectionProjectAssign?: boolean;
 }
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
@@ -39,11 +42,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     columns,
     reloadData,
     origin,
+    allowSelectionProjectAssign,
   } = props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
   const { queryFilters, setQueryFilters } = useQueryFilters();
   const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
+  const featureFlagProjects = isEnabled('Projects');
 
   // Sync query filters into view
   useEffect(() => {
@@ -133,6 +138,10 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     });
   };
 
+  const selectAllRows = useCallback(() => {
+    setSelectedRows(results);
+  }, [results]);
+
   return (
     <>
       <Box>
@@ -173,6 +182,17 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     disabled: !isSelectionWithdrawable(),
                     tooltipTitle: withdrawTooltip,
                   },
+                  ...(featureFlagProjects && allowSelectionProjectAssign
+                    ? [
+                        <ProjectAssignTopBarButton
+                          key={1}
+                          totalResultsCount={results?.length}
+                          selectAllRows={selectAllRows}
+                          reloadData={reloadData}
+                          projectAssignPayloadCreator={() => ({ batchIds: selectedRows.map((row) => Number(row.id)) })}
+                        />,
+                      ]
+                    : []),
                 ]}
                 sortHandler={onSortChange}
                 isPresorted={isPresorted}

@@ -190,6 +190,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           }
           reloadData={onApplyFilters}
           origin='Batches'
+          allowSelectionProjectAssign
         />
       ) : searchResults === null ? (
         <div className={classes.spinnerContainer}>

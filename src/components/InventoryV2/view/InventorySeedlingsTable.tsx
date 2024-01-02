@@ -23,6 +23,8 @@ import BatchDetailsModal from './BatchDetailsModal';
 import BatchesExportModal from './BatchesExportModal';
 import DeleteBatchesModal from './DeleteBatchesModal';
 import { OriginPage } from '../InventoryBatch';
+import ProjectAssignTopBarButton from '../../ProjectAssignTopBarButton';
+import isEnabled from '../../../features';
 
 export interface InventorySeedlingsTableProps {
   speciesId?: number;
@@ -70,6 +72,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const theme = useTheme();
   const snackbar = useSnackbar();
   const history = useHistory();
+  const featureFlagProjects = isEnabled('Projects');
 
   const [openExportModal, setOpenExportModal] = useState<boolean>(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
@@ -202,6 +205,10 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     return;
   };
 
+  const selectAllRows = useCallback(() => {
+    setSelectedRows(batches);
+  }, [batches]);
+
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
@@ -246,7 +253,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   );
 
   const getTopBarButtons = () => {
-    const topBarButtons: TopBarButton[] = [];
+    const topBarButtons: (TopBarButton | JSX.Element)[] = [];
     topBarButtons.push({
       buttonType: 'destructive',
       buttonText: strings.DELETE,
@@ -263,13 +270,18 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       withdrawTooltip = strings.NO_WITHDRAWABLE_QUANTITIES_FOUND;
     }
 
-    topBarButtons.push({
-      buttonType: 'passive',
-      buttonText: strings.WITHDRAW,
-      onButtonClick: () => bulkWithdrawSelectedRows(),
-      disabled: !bulkWithdrawable || !totalSelectedQuantity,
-      tooltipTitle: withdrawTooltip,
-    });
+    if (featureFlagProjects) {
+      topBarButtons.push(
+        <ProjectAssignTopBarButton
+          key={1}
+          totalResultsCount={batches?.length}
+          selectAllRows={selectAllRows}
+          reloadData={reloadData}
+          projectAssignPayloadCreator={() => ({ batchIds: selectedRows.map((row) => Number(row.id)) })}
+        />
+      );
+    }
+
     return topBarButtons;
   };
 

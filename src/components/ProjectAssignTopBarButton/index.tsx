@@ -2,19 +2,20 @@ import React, { useCallback, useState } from 'react';
 import { Button } from '@terraware/web-components';
 import strings from 'src/strings';
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
+import { AssignProjectRequestPayload } from '../../services/ProjectsService';
 
 interface ProjectAssignBulkProps<T extends { id: number | string }> {
-  selectedRows: T[];
   totalResultsCount: number | undefined;
   selectAllRows: () => void;
   reloadData?: () => void;
+  projectAssignPayloadCreator: () => AssignProjectRequestPayload;
 }
 
 function ProjectAssignTopBarButton<T extends { id: number | string }>({
-  selectedRows,
   totalResultsCount,
   selectAllRows,
   reloadData,
+  projectAssignPayloadCreator,
 }: ProjectAssignBulkProps<T>) {
   const [entityStub, setEntityStub] = useState({ id: -1, projectId: undefined });
   const [isProjectAssignModalOpen, setIsProjectAssignModalOpen] = useState<boolean>(false);
@@ -22,11 +23,6 @@ function ProjectAssignTopBarButton<T extends { id: number | string }>({
   const onClickHandler = useCallback(() => {
     setIsProjectAssignModalOpen(true);
   }, []);
-
-  const projectAssignPayloadCreator = useCallback(
-    () => ({ accessionIds: selectedRows.map((row) => Number(row.id)) }),
-    [selectedRows]
-  );
 
   return (
     <>
