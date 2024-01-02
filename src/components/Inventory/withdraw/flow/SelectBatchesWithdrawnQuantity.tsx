@@ -35,6 +35,7 @@ type BatchWithdrawalForTable = {
   totalQuantity: number;
   speciesId: number;
   facilityName: string;
+  projectName: string;
   error: { [key: string]: string | undefined };
 };
 
@@ -55,6 +56,11 @@ const defaultTableColumns = (): TableColumnType[] => [
   {
     key: 'facilityName',
     name: strings.NURSERY,
+    type: 'string',
+  },
+  {
+    key: 'projectName',
+    name: strings.PROJECT,
     type: 'string',
   },
   {
@@ -98,6 +104,11 @@ const outplantTableColumns = (): TableColumnType[] => [
     type: 'string',
   },
   {
+    key: 'projectName',
+    name: strings.PROJECT,
+    type: 'string',
+  },
+  {
     key: 'readyQuantity',
     name: strings.READY_QUANTITY,
     type: 'string',
@@ -138,6 +149,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
             batchNumber: associatedBatch.batchNumber,
             speciesId: associatedBatch.species_id,
             facilityName: associatedBatch.facility_name,
+            projectName: associatedBatch.project_name,
             error: {},
           });
 
