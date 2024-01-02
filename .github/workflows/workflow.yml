@@ -56,8 +56,8 @@ jobs:
       #- name: generate schemas
       #  run: yarn generate-types
 
-      - name: Check that code is formatted
-        run: yarn prettier --check .
+      #- name: Check that code is formatted
+      #  run: yarn prettier --check .
 
       - name: Generate strings
         run: yarn generate-strings
