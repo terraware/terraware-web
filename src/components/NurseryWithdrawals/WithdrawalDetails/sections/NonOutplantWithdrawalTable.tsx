@@ -8,7 +8,6 @@ import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import WithdrawalRenderer from './WithdrawalRenderer';
 import { batchToSpecies } from 'src/utils/batch';
-import isEnabled from 'src/features';
 
 type SpeciesWithdrawal = {
   name?: string;
@@ -32,14 +31,6 @@ type NonOutplantWithdrawalTableProps = {
 const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.BATCH, type: 'string' },
   { key: 'name', name: strings.SPECIES, type: 'string' },
-  { key: 'notReady', name: strings.NOT_READY, type: 'number' },
-  { key: 'ready', name: strings.READY, type: 'number' },
-  { key: 'total', name: strings.TOTAL, type: 'number' },
-];
-
-const nurseryV2Columns = (): TableColumnType[] => [
-  { key: 'batchNumber', name: strings.BATCH, type: 'string' },
-  { key: 'name', name: strings.SPECIES, type: 'string' },
   { key: 'germinating', name: strings.GERMINATING, type: 'number' },
   { key: 'notReady', name: strings.NOT_READY, type: 'number' },
   { key: 'ready', name: strings.READY, type: 'number' },
@@ -54,7 +45,6 @@ export default function NonOutplantWithdrawalTable({
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
-  const nurseryV2 = isEnabled('Nursery Updates');
   const [rowData, setRowData] = useState<SpeciesWithdrawal[]>([]);
 
   useEffect(() => {
@@ -74,72 +64,30 @@ export default function NonOutplantWithdrawalTable({
           const notReady = notReadyQuantityWithdrawn || 0;
           const ready = readyQuantityWithdrawn || 0;
           const name = species.find((sp) => sp.id === speciesId)?.scientificName;
-          if (nurseryV2) {
-            const { germinatingQuantityWithdrawn } = batch;
-            const germinating = germinatingQuantityWithdrawn || 0;
-            batchesMap.push({
-              name,
-              germinating,
-              notReady,
-              ready,
-              total: notReady + ready + germinating,
-              batchNumber,
-              batchId,
-              speciesId,
-            });
-          } else {
-            if (!speciesBatchMap[speciesId]) {
-              speciesBatchMap[speciesId] = {
-                name,
-                notReady,
-                ready,
-                total: notReady + ready,
-                batchNumber,
-                batchId,
-                speciesId,
-              };
-            } else {
-              speciesBatchMap[speciesId].notReady += notReady;
-              speciesBatchMap[speciesId].ready += ready;
-              speciesBatchMap[speciesId].total += notReady + ready;
-              speciesBatchMap[speciesId].batchNumber = batchNumber;
-              speciesBatchMap[speciesId].batchId = batchId;
-              speciesBatchMap[speciesId].speciesId = speciesId;
-            }
-          }
+
+          const { germinatingQuantityWithdrawn } = batch;
+          const germinating = germinatingQuantityWithdrawn || 0;
+          batchesMap.push({
+            name,
+            germinating,
+            notReady,
+            ready,
+            total: notReady + ready + germinating,
+            batchNumber,
+            batchId,
+            speciesId,
+          });
         });
       }
 
-      if (nurseryV2) {
-        setRowData(batchesMap);
-      } else {
-        setRowData(
-          Object.values(speciesBatchMap).map((speciesInfo: any) => {
-            const getFormattedValue = (key: string) => {
-              const value = speciesInfo[key];
-              return isNaN(value) ? '' : numericFormatter.format(value);
-            };
-
-            const notReady = getFormattedValue('notReady');
-            const ready = getFormattedValue('ready');
-            const total = getFormattedValue('total');
-
-            return {
-              ...speciesInfo,
-              notReady,
-              ready,
-              total,
-            };
-          })
-        );
-      }
+      setRowData(batchesMap);
     }
-  }, [species, batches, withdrawal, numericFormatter, nurseryV2]);
+  }, [species, batches, withdrawal, numericFormatter]);
 
   return (
     <Table
       id='non-outplant-withdrawal-table'
-      columns={nurseryV2 ? nurseryV2Columns : columns}
+      columns={columns}
       rows={rowData}
       orderBy={'name'}
       Renderer={WithdrawalRenderer}

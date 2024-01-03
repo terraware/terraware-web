@@ -1,7 +1,7 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName = 'Show Production View' | 'Nursery Updates' | 'Projects' | 'User Detailed Sites';
+export type FeatureName = 'Show Production View' | 'Projects' | 'User Detailed Sites';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Nursery Updates',
-    preferenceName: 'enableNurseryV2',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Updates to Nursery Feature.'],
-    disclosure: ['This is WIP'],
   },
   {
     name: 'Projects',

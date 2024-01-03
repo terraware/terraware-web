@@ -21,7 +21,6 @@ import { getNurseryById } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
-import isEnabled from 'src/features';
 import { SubLocationService } from 'src/services';
 import { MultiSelect } from '@terraware/web-components';
 
@@ -52,7 +51,6 @@ export default function CreateInventory(): JSX.Element {
   const [addedDateChanged, setAddedDateChanged] = useState(false);
   const [sublocations, setSubLocations] = useState<SubLocation[]>([]);
   const [selectedSubLocations, setSelectedSubLocations] = useState<number[]>([]);
-  const nurseryV2 = isEnabled('Nursery Updates');
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
 
   const subLocationsOptions = useMemo(
@@ -81,7 +79,7 @@ export default function CreateInventory(): JSX.Element {
 
   useEffect(() => {
     const fetchSubLocations = async () => {
-      if (record.facilityId && nurseryV2) {
+      if (record.facilityId) {
         setSubLocations([]);
         setSelectedSubLocations([]);
         const response = await SubLocationService.getSubLocations(record.facilityId);
@@ -91,8 +89,8 @@ export default function CreateInventory(): JSX.Element {
       }
     };
 
-    fetchSubLocations();
-  }, [record.facilityId, nurseryV2]);
+    void fetchSubLocations();
+  }, [record.facilityId]);
 
   useEffect(() => {
     if (timeZone !== tz.id) {
