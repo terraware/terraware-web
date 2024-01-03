@@ -7,6 +7,7 @@ import {
   SearchNodePayload,
   SearchRequestPayload,
   SearchResponseElement,
+  SearchResponseElementWithId,
   SearchSortOrder,
 } from 'src/types/Search';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
@@ -156,7 +157,7 @@ const getCollectors = async (organizationId: number): Promise<string[] | undefin
 /**
  * Get accessions awaiting check-in
  */
-const getPendingAccessions = async (organizationId: number): Promise<SearchResponseElement[] | null> => {
+const getPendingAccessions = async (organizationId: number): Promise<SearchResponseElementWithId[] | null> => {
   const searchParams: SearchRequestPayload = {
     prefix: 'facilities.accessions',
     fields: ['accessionNumber', 'speciesName', 'collectionSiteName', 'collectedDate', 'receivedDate', 'id'],

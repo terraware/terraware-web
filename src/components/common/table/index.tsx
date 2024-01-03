@@ -18,6 +18,14 @@ function renderNumSelectedText(numSelected: number): string {
   return strings.formatString(strings.ROWS_SELECTED, numSelected) as string;
 }
 
+const enhancedTopBarSelectionConfig = {
+  renderEnhancedNumSelectedText: (selectedCount: number, pageCount: number): string =>
+    strings.formatString<string>(strings.TABLE_SELECTED_ROWS, `${selectedCount}`, `${pageCount}`) as string,
+  renderSelectAllText: (rowsCount: number): string =>
+    strings.formatString(strings.TABLE_SELECT_ALL_ROWS, `${rowsCount}`) as string,
+  renderSelectNoneText: (): string => strings.TABLE_SELECT_NONE,
+};
+
 interface TableProps<T> extends Omit<Props<T>, keyof LocalizationProps> {
   showPagination?: boolean;
 }
@@ -30,6 +38,7 @@ export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Ele
     editText: strings.EDIT,
     renderNumSelectedText,
     ...(props.showPagination !== false ? { renderPaginationText } : {}),
+    enhancedTopBarSelectionConfig,
   });
 }
 

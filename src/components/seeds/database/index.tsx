@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import useQuery from '../../../utils/useQuery';
 import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
-import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/types/Search';
+import { SearchNodePayload, SearchCriteria, SearchSortOrder, SearchResponseElementWithId } from 'src/types/Search';
 import Button from 'src/components/common/button/Button';
 import { BaseTable as Table } from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
@@ -40,6 +40,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectMessage } from 'src/redux/features/message/messageSelectors';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
 import isEnabled from 'src/features';
+import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 
 interface StyleProps {
   isMobile: boolean;
@@ -185,7 +186,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const preExpFilterColumns = featureFlagProjects ? [columns.state, columns.project_name] : [columns.state];
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
-  const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
+  const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElementWithId[] | null>();
   const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
   const contentRef = useRef(null);
   const searchedLocaleRef = useRef<string | null>(activeLocale);
@@ -203,9 +204,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
    * filtered out by searchCriteria.
    */
   const [availableFieldOptions, setAvailableFieldOptions] = useState<FieldValuesMap | null>();
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
-  const [selectedRows, setSelectedRows] = useState<SearchResponseElement[]>([]);
-  const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElement[] | null>();
+  const [searchResults, setSearchResults] = useState<SearchResponseElementWithId[] | null>();
+  const [selectedRows, setSelectedRows] = useState<SearchResponseElementWithId[]>([]);
+  const [unfilteredResults, setUnfilteredResults] = useState<SearchResponseElementWithId[] | null>();
   const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState<boolean>(false);
   const [openImportModal, setOpenImportModal] = useState<boolean>(false);
   const [showDefaultSystemSnackbar, setShowDefaultSystemSnackbar] = useState(false);
@@ -222,7 +223,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     };
     if (closeMessageSelector) {
       dispatch(sendMessage({ key: `seeds.${SNACKBAR_PAGE_CLOSE_KEY}.dismissPageMessage`, data: undefined }));
-      updatePreferences();
+      void updatePreferences();
     }
   }, [closeMessageSelector, dispatch, reloadUserPreferences]);
 
@@ -387,7 +388,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           })
           .concat(facilityId ? ['facility_name'] : [])
           .concat(subLocationName ? ['subLocation_name'] : []);
-        saveUpdateSearchColumns(newColumns);
+        void saveUpdateSearchColumns(newColumns);
       }
     }
   }, [
@@ -403,85 +404,98 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   useEffect(() => {
     const populateUnfilteredResults = async () => {
-      const apiResponse = await SeedBankService.searchAccessions({
+      const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
         organizationId: selectedOrganization.id,
         fields: ['id'],
       });
 
       setUnfilteredResults(apiResponse);
     };
+
     const populatePendingAccessions = async () => {
-      const data = await SeedBankService.getPendingAccessions(selectedOrganization.id);
+      const data: SearchResponseElementWithId[] | null = await SeedBankService.getPendingAccessions(
+        selectedOrganization.id
+      );
       setPendingAccessions(data);
     };
-    populateUnfilteredResults();
-    populatePendingAccessions();
+
+    void populateUnfilteredResults();
+    void populatePendingAccessions();
   }, [selectedOrganization.id]);
+
+  const initAccessions = useCallback(
+    (activeRequests: boolean) => {
+      const getFieldsFromSearchColumns = () => {
+        let columnsNamesToSearch: string[];
+        if (searchColumns.includes('active')) {
+          columnsNamesToSearch = [...searchColumns, 'id'];
+        } else {
+          columnsNamesToSearch = [...searchColumns, 'active', 'id'];
+        }
+
+        return columnsNamesToSearch;
+      };
+
+      if (selectedOrganization) {
+        const populateSearchResults = async () => {
+          const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
+            organizationId: selectedOrganization.id,
+            fields: getFieldsFromSearchColumns(),
+            sortOrder: searchSortOrder,
+            searchCriteria,
+          });
+
+          if (activeRequests) {
+            setSearchResults(apiResponse);
+          }
+        };
+
+        const populateAvailableFieldOptions = async () => {
+          const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+          const data = await SeedBankService.searchFieldValues(
+            singleAndMultiChoiceFields,
+            searchCriteria,
+            selectedOrganization.id
+          );
+
+          if (activeRequests) {
+            setAvailableFieldOptions(data);
+          }
+        };
+
+        const populateFieldOptions = async () => {
+          const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+          const allValues = await SeedBankService.searchFieldValues(
+            singleAndMultiChoiceFields,
+            {},
+            selectedOrganization.id
+          );
+
+          if (activeRequests) {
+            setFieldOptions(allValues);
+          }
+        };
+
+        if (searchCriteria) {
+          void populateSearchResults();
+        }
+
+        void populateAvailableFieldOptions();
+        void populateFieldOptions();
+      }
+    },
+    [searchColumns, searchCriteria, searchSortOrder, selectedOrganization]
+  );
 
   useEffect(() => {
     let activeRequests = true;
-    const getFieldsFromSearchColumns = () => {
-      let columnsNamesToSearch = Array<string>();
-      if (searchColumns.includes('active')) {
-        columnsNamesToSearch = [...searchColumns, 'id'];
-      } else {
-        columnsNamesToSearch = [...searchColumns, 'active', 'id'];
-      }
 
-      return columnsNamesToSearch;
-    };
-
-    if (selectedOrganization) {
-      const populateSearchResults = async () => {
-        const apiResponse = await SeedBankService.searchAccessions({
-          organizationId: selectedOrganization.id,
-          fields: getFieldsFromSearchColumns(),
-          sortOrder: searchSortOrder,
-          searchCriteria,
-        });
-
-        if (activeRequests) {
-          setSearchResults(apiResponse);
-        }
-      };
-
-      const populateAvailableFieldOptions = async () => {
-        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        const data = await SeedBankService.searchFieldValues(
-          singleAndMultiChoiceFields,
-          searchCriteria,
-          selectedOrganization.id
-        );
-
-        if (activeRequests) {
-          setAvailableFieldOptions(data);
-        }
-      };
-
-      const populateFieldOptions = async () => {
-        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-        const allValues = await SeedBankService.searchFieldValues(
-          singleAndMultiChoiceFields,
-          {},
-          selectedOrganization.id
-        );
-
-        if (activeRequests) {
-          setFieldOptions(allValues);
-        }
-      };
-      if (searchCriteria) {
-        populateSearchResults();
-      }
-      populateAvailableFieldOptions();
-
-      populateFieldOptions();
-    }
+    void initAccessions(activeRequests);
 
     return () => {
       activeRequests = false;
     };
-  }, [searchCriteria, searchSortOrder, searchColumns, selectedOrganization]);
+  }, [initAccessions]);
 
   useEffect(() => {
     if (searchedLocaleRef.current && activeLocale && searchedLocaleRef.current !== activeLocale) {
@@ -494,7 +508,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     searchedLocaleRef.current = activeLocale;
   }, [activeLocale, setSearchCriteria]);
 
-  const onSelect = (row: SearchResponseElement) => {
+  const onSelect = (row: SearchResponseElementWithId) => {
     if (row.id) {
       const seedCollectionLocation = {
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', row.id as string),
@@ -526,7 +540,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const onCloseEditColumnsModal = (columnNames?: string[]) => {
     if (columnNames) {
-      saveUpdateSearchColumns(columnNames);
+      void saveUpdateSearchColumns(columnNames);
     }
     setEditColumnsModalOpen(false);
   };
@@ -535,7 +549,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setReportModalOpen(false);
   };
 
-  const isInactive = (row: SearchResponseElement) => {
+  const isInactive = (row: SearchResponseElementWithId) => {
     return false;
   };
 
@@ -622,6 +636,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const emptyStateSpacer = () => {
     return <Grid item xs={12} padding={theme.spacing(3)} />;
   };
+
+  const selectAllRows = useCallback(() => {
+    if (searchResults) {
+      setSelectedRows(searchResults);
+    }
+  }, [searchResults]);
+
+  const reloadAccessions = useCallback(() => {
+    void initAccessions(true);
+  }, [initAccessions]);
 
   return (
     <>
@@ -730,6 +754,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                           onChange={onFilterChange}
                         />
                       )}
+
                       {searchResults && (
                         <Table
                           columns={displayColumnDetails}
@@ -748,6 +773,16 @@ export default function Database(props: DatabaseProps): JSX.Element {
                                 setSelectedRows,
                                 showCheckbox: true,
                                 isClickable: () => false,
+                                showTopBar: true,
+                                topBarButtons: [
+                                  <ProjectAssignTopBarButton
+                                    key={1}
+                                    selectedRows={selectedRows}
+                                    totalResultsCount={searchResults?.length}
+                                    selectAllRows={selectAllRows}
+                                    reloadData={reloadAccessions}
+                                  />,
+                                ],
                               }
                             : {})}
                         />
