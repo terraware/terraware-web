@@ -54,6 +54,24 @@ export const FACILITY_SPECIFIC_FIELDS = [
   'totalQuantity(raw)',
 ];
 
+const INVENTORY_BY_NURSERY_EXPORT_FIELDS = [
+  'facility_name',
+  'facilityInventories.species_scientificName',
+  'germinatingQuantity',
+  'notReadyQuantity',
+  'readyQuantity',
+  'totalQuantity',
+];
+
+const INVENTORY_BY_NURSERY_SEARCH_FIELDS = [
+  ...INVENTORY_BY_NURSERY_EXPORT_FIELDS,
+  'facility_id',
+  'facilityInventories.species_id',
+  'facilityInventories.batches.id',
+  'germinatingQuantity(raw)',
+  'totalQuantity(raw)',
+];
+
 /**
  * exported types
  */
@@ -256,19 +274,7 @@ const searchInventoryByNursery = async ({
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
   const params: SearchRequestPayload = {
     prefix: 'facilities.facilityInventoryTotals',
-    fields: [
-      'facility_id',
-      'facility_name',
-      'facilityInventories.species_id',
-      'facilityInventories.species_scientificName',
-      'facilityInventories.batches.id',
-      'germinatingQuantity',
-      'germinatingQuantity(raw)',
-      'notReadyQuantity',
-      'readyQuantity',
-      'totalQuantity',
-      'totalQuantity(raw)',
-    ],
+    fields: isCsvExport ? INVENTORY_BY_NURSERY_EXPORT_FIELDS : INVENTORY_BY_NURSERY_SEARCH_FIELDS,
     sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
     search: {
       operation: 'and',
