@@ -2,7 +2,13 @@ import { paths } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 import HttpService, { Response } from './HttpService';
 import SearchService from './SearchService';
-import { SearchCriteria, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import {
+  SearchCriteria,
+  SearchNodePayload,
+  SearchRequestPayload,
+  SearchResponseElement,
+  SearchSortOrder,
+} from 'src/types/Search';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 
 /**
@@ -52,6 +58,13 @@ export type AccessionsSearchParams = {
   searchCriteria?: SearchCriteria;
   sortOrder?: SearchSortOrder;
 };
+
+export type SearchResponseAccession = {
+  id: string;
+  accessionNumber: string;
+  speciesName: string;
+};
+const SEARCH_FIELDS_ACCESSIONS = ['id', 'accessionNumber', 'speciesName'];
 
 /**
  * Seed bank summary
@@ -224,6 +237,38 @@ const resolveAccessionsUpload = async (uploadId: number, overwriteExisting: bool
   });
 };
 
+const getAccessionForSpecies = (
+  organizationId: number,
+  speciesId: number
+): Promise<SearchResponseAccession[] | null> => {
+  const searchCriteria: { [key: string]: SearchNodePayload } = {};
+
+  searchCriteria.excludeUsedUp = {
+    operation: 'not',
+    child: {
+      operation: 'field',
+      field: 'state',
+      type: 'Exact',
+      values: [strings.USED_UP],
+    },
+  };
+
+  if (speciesId !== -1) {
+    searchCriteria.speciesIds = {
+      operation: 'field',
+      field: 'species_id',
+      type: 'Exact',
+      values: [speciesId.toString()],
+    };
+  }
+
+  return SeedBankService.searchAccessions({
+    organizationId,
+    fields: SEARCH_FIELDS_ACCESSIONS,
+    searchCriteria,
+  });
+};
+
 /**
  * Exported functions
  */
@@ -238,6 +283,7 @@ const SeedBankService = {
   uploadAccessions,
   getAccessionsUploadStatus,
   resolveAccessionsUpload,
+  getAccessionForSpecies,
 };
 
 export default SeedBankService;

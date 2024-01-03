@@ -27,9 +27,11 @@ import { userAnalyticsReducer } from './features/user/userAnalyticsSlice';
 import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/projects/projectsSlice';
 import { subLocationsReducer } from './features/subLocations/subLocationsSlice';
 import { batchesReducer, batchesRequestsReducer } from './features/batches/batchesSlice';
+import { accessionsReducer } from './features/accessions/accessionsSlice';
 
 // assembly of app reducers
 export const reducers = {
+  accessions: accessionsReducer,
   appVersion: appVersionReducer,
   batches: batchesReducer,
   batchesRequests: batchesRequestsReducer,
