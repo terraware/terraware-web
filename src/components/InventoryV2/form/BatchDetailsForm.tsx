@@ -221,15 +221,6 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
 
   const isUndefinedQuantity = (val?: string | number) => val === undefined || val === '';
 
-  // Make sure the selected accession is represented in the record, this will clear
-  // out an "impossible" accession selection
-  useEffect(() => {
-    const accessionId = selectedAccession?.id ? Number(selectedAccession?.id) : undefined;
-    if (accessionId !== record?.accessionId) {
-      setRecord({ ...record, accessionId });
-    }
-  }, [record, selectedAccession, setRecord]);
-
   // when sublocations change, clear current sublocations in the record
   useEffect(() => {
     // if this is a read-only view of an existing batch, don't update the sublocations
