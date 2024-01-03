@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
@@ -250,7 +250,27 @@
 <a name='L185'></a><a href='#L185'>185</a>
 <a name='L186'></a><a href='#L186'>186</a>
 <a name='L187'></a><a href='#L187'>187</a>
-<a name='L188'></a><a href='#L188'>188</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -291,6 +311,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -386,6 +411,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -432,12 +461,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { TableColumnType } from '@terraware/web-components';
 import { Box, Grid } from '@mui/material';
@@ -452,6 +492,8 @@ import { SortOrder } from 'src/components/common/table/sort';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 import Search from 'src/components/InventoryV2/Search';
 import InventoryCellRenderer from './InventoryCellRenderer';
+import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
+import isEnabled from 'src/features';
 &nbsp;
 interface InventoryTableProps {
   results: SearchResponseElement[];
@@ -464,6 +506,7 @@ interface InventoryTableProps {
   columns: () =&gt; TableColumnType[];
   reloadData?: () =&gt; void;
   origin?: OriginPage;
+  allowSelectionProjectAssign?: boolean;
 }
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >InventoryTable(</span>props: InventoryTableProps): JSX.Element {
@@ -478,11 +521,13 @@ export default function <span class="fstat-no" title="function not covered" >Inv
     columns,
     reloadData,
     origin,
+    allowSelectionProjectAssign,
   } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;any[]&gt;([]);</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
   const { queryFilters, setQueryFilters } = <span class="cstat-no" title="statement not covered" >useQueryFilters();</span>
   const [withdrawTooltip, setWithdrawTooltip] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;();</span>
+  const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
 &nbsp;
   // Sync query filters into view
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -572,6 +617,10 @@ export default function <span class="fstat-no" title="function not covered" >Inv
     });
   };
 &nbsp;
+  const selectAllRows = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setSelectedRows(results);</span>
+  }, [results]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       &lt;Box&gt;
@@ -612,6 +661,17 @@ export default function <span class="fstat-no" title="function not covered" >Inv
                     disabled: !isSelectionWithdrawable(),
                     tooltipTitle: withdrawTooltip,
                   },
+                  ...(featureFlagProjects &amp;&amp; allowSelectionProjectAssign
+                    ? [
+                        &lt;ProjectAssignTopBarButton
+                          key={1}
+                          totalResultsCount={results?.length}
+                          selectAllRows={selectAllRows}
+                          reloadData={reloadData}
+                          projectAssignPayloadCreator={<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ batchIds: selectedRows.map(<span class="fstat-no" title="function not covered" >(r</span>ow) =&gt; <span class="cstat-no" title="statement not covered" >Number(row.id))</span> })</span>}
+                        /&gt;,
+                      ]
+                    : []),
                 ]}
                 sortHandler={onSortChange}
                 isPresorted={isPresorted}
@@ -631,7 +691,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-03T21:05:01.720Z
+                at 2024-01-03T21:24:41.559Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

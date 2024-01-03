@@ -1,3 +1,4 @@
+6b6a34bb1e SW-4504 Implement bulk project assign modal to all 3 batches tables (#1978)
 8131c5c21f SW-4503 Implement the 'enhanced selection' functionality in the table component, add project assign functionality to accessions table (#1977)
 e90a7a2d04 SW-4503 Add selection to accessions table (#1970)
 3f8e97800e SW-4617 Implement the new query params filter hook in the InventoryTable (#1969)
