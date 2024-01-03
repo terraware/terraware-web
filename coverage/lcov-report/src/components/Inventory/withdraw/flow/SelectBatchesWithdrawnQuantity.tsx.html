@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
@@ -459,7 +459,17 @@
 <a name='L394'></a><a href='#L394'>394</a>
 <a name='L395'></a><a href='#L395'>395</a>
 <a name='L396'></a><a href='#L396'>396</a>
-<a name='L397'></a><a href='#L397'>397</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -577,6 +587,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -585,18 +599,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -875,6 +891,7 @@ type SelectBatchesWithdrawnQuantityProps = {
   saveText: string;
   batches: any[];
   nurseryWithdrawal: NurseryWithdrawalRequest;
+  filterProjectId?: number;
 };
 &nbsp;
 type BatchWithdrawalForTable = {
@@ -892,6 +909,7 @@ type BatchWithdrawalForTable = {
   totalQuantity: number;
   speciesId: number;
   facilityName: string;
+  projectId: number;
   projectName: string;
   error: { [key: string]: string | undefined };
 };
@@ -973,25 +991,30 @@ const outplantTableColumns = <span class="cstat-no" title="statement not covered
   { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string' },
 ];
 &nbsp;
+const { OUTPLANT } = <span class="cstat-no" title="statement not covered" >NurseryWithdrawalPurposes;</span>
+&nbsp;
 export default function <span class="fstat-no" title="function not covered" >SelectBatches(</span>props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
+  const { onNext, onCancel, saveText, batches, nurseryWithdrawal, filterProjectId } = <span class="cstat-no" title="statement not covered" >props;</span>
+&nbsp;
+  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const { onNext, onCancel, saveText, batches, nurseryWithdrawal } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const { OUTPLANT } = <span class="cstat-no" title="statement not covered" >NurseryWithdrawalPurposes;</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const [species, setSpecies] = <span class="cstat-no" title="statement not covered" >useState&lt;any&gt;([]);</span>
   const [record, setRecord] = <span class="cstat-no" title="statement not covered" >useForm&lt;BatchWithdrawalForTable[]&gt;([]);</span>
-  const [errorPageMessage, setErrorPageMessage] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const nurseryV2 = <span class="cstat-no" title="statement not covered" >isEnabled('Nursery Updates');</span>
   const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
+&nbsp;
+  const [species, setSpecies] = <span class="cstat-no" title="statement not covered" >useState&lt;any&gt;([]);</span>
+  const [errorPageMessage, setErrorPageMessage] = <span class="cstat-no" title="statement not covered" >useState('');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const transformBatchesForTable = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
       const speciesFromBatches: { [x: string]: { id: number; scientificName: string; commonName: string } } = <span class="cstat-no" title="statement not covered" >{};</span>
+&nbsp;
       const batchesForTable: BatchWithdrawalForTable[] = <span class="cstat-no" title="statement not covered" >nurseryWithdrawal.batchWithdrawals.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, bw) =&gt; {</span>
         const associatedBatch = <span class="cstat-no" title="statement not covered" >batches.find(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >batch.id.toString() === bw.batchId.toString())</span>;</span>
-<span class="cstat-no" title="statement not covered" >        if (associatedBatch) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (associatedBatch &amp;&amp; (filterProjectId ? Number(associatedBatch.project_id) === filterProjectId : true)) {</span>
 <span class="cstat-no" title="statement not covered" >          acc.push({</span>
             batchId: bw.batchId,
             germinatingQuantityWithdrawn: bw.germinatingQuantityWithdrawn ?? 0,
@@ -1007,6 +1030,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             batchNumber: associatedBatch.batchNumber,
             speciesId: associatedBatch.species_id,
             facilityName: associatedBatch.facility_name,
+            projectId: Number(associatedBatch.project_id),
             projectName: associatedBatch.project_name,
             error: {},
           });
@@ -1027,7 +1051,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
     };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    transformBatchesForTable();</span>
-  }, [batches, nurseryWithdrawal, selectedOrganization, setRecord]);
+  }, [batches, filterProjectId, nurseryWithdrawal, selectedOrganization, setRecord]);
 &nbsp;
   const onEditHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(b</span>atch: BatchWithdrawalForTable, fromColumn?: string, value?: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setRecord(<span class="fstat-no" title="function not covered" >(p</span>reviousRecord: BatchWithdrawalForTable[]): BatchWithdrawalForTable[] =&gt; {</span>
@@ -1258,7 +1282,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-03T20:29:52.480Z
+                at 2024-01-03T20:36:09.038Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
