@@ -1,3 +1,4 @@
+090493d686 SW-4616 Remove extra margin during scroll in batch details view (#1982)
 34399d22c2 SW-4578 / SW-4646 Hide sublocations when there are no selections (#1983)
 4efbcf692f SW-4652 Only export visible inventory-by-nursery fields (#1984)
 39b96c5cf1 SW-4623 Validate accession and species when saving a new batch  (#1958)
