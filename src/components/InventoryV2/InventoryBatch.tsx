@@ -1,17 +1,18 @@
-import TfMain from 'src/components/common/TfMain';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import BackToLink from '../common/BackToLink';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import PageSnackbar from '../PageSnackbar';
+import { makeStyles } from '@mui/styles';
+import TfMain from 'src/components/common/TfMain';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import BackToLink from 'src/components/common/BackToLink';
+import strings from 'src/strings';
+import { APP_PATHS } from 'src/constants';
+import PageSnackbar from 'src/components/PageSnackbar';
 import useQuery from 'src/utils/useQuery';
 import BatchSummary from './BatchSummary';
 import { Button, Tabs } from '@terraware/web-components';
 import { useHistory, useParams } from 'react-router-dom';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { makeStyles } from '@mui/styles';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import BatchDetails from './BatchDetails';
 import BatchHistory from './BatchHistory';
 import { getNurseryById } from 'src/utils/organization';
@@ -30,6 +31,9 @@ type InventoryBatchProps = {
 };
 
 const useStyles = makeStyles(() => ({
+  fullWidth: {
+    width: '100%',
+  },
   tabs: {
     '& .MuiTabPanel-root[hidden]': {
       flexGrow: 0,
@@ -64,6 +68,7 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [inventoryNursery, setInventoryNursery] = useState<Facility>();
   const { selectedOrganization } = useOrganization();
+  const { isMobile } = useDeviceInfo();
 
   const isWithdrawable = Number(batch?.readyQuantity) + Number(batch?.notReadyQuantity) > 0;
 
@@ -180,8 +185,9 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
             </Typography>
           </Box>
           {isWithdrawable && (
-            <Box>
+            <Box margin={isMobile ? theme.spacing(2, 2, 0, 2) : 0} display='flex' flexGrow={isMobile ? 1 : 0}>
               <Button
+                className={isMobile ? classes.fullWidth : ''}
                 label={strings.WITHDRAW}
                 onClick={() =>
                   history.push({
