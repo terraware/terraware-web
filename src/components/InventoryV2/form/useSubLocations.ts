@@ -37,10 +37,8 @@ export const useSubLocations = (nurseryId?: number, record?: { subLocationIds?: 
   }, [availableSubLocations, record?.subLocationIds]);
 
   useEffect(() => {
-    if (!availableSubLocations) {
-      void initSubLocations();
-    }
-  }, [availableSubLocations, initSubLocations]);
+    void initSubLocations();
+  }, [initSubLocations]);
 
   return { availableSubLocations, selectedSubLocations };
 };
