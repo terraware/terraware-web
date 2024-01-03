@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/112</span>
+                <span class='fraction'>0/119</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/68</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/108</span>
+                <span class='fraction'>0/115</span>
             </div>
         
             
@@ -447,7 +447,26 @@
 <a name='L382'></a><a href='#L382'>382</a>
 <a name='L383'></a><a href='#L383'>383</a>
 <a name='L384'></a><a href='#L384'>384</a>
-<a name='L385'></a><a href='#L385'>385</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -686,6 +705,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -694,10 +722,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -831,7 +869,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Typography, Grid, Box, useTheme } from '@mui/material';
 import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
@@ -1069,6 +1107,15 @@ export default function <span class="fstat-no" title="function not covered" >Inv
     });
   };
 &nbsp;
+  const totalSelectedQuantity = <span class="cstat-no" title="statement not covered" >useMemo&lt;number&gt;(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >      selectedRows.reduce(</span>
+<span class="fstat-no" title="function not covered" >        (t</span>otal, row) =&gt; <span class="cstat-no" title="statement not covered" >total + Number(row['totalQuantity(raw)']) + Number(row['germinatingQuantity(raw)']),</span>
+        0
+      ),
+    [selectedRows]
+  );
+&nbsp;
   const getTopBarButtons = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const topBarButtons: TopBarButton[] = <span class="cstat-no" title="statement not covered" >[];</span>
 <span class="cstat-no" title="statement not covered" >    topBarButtons.push({</span>
@@ -1077,13 +1124,23 @@ export default function <span class="fstat-no" title="function not covered" >Inv
       onButtonClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setOpenDeleteModal(true),</span>
     });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (selectedRows.length &gt; 1 &amp;&amp; isSelectionBulkWithdrawable(selectedRows)) {</span>
-<span class="cstat-no" title="statement not covered" >      topBarButtons.push({</span>
-        buttonType: 'passive',
-        buttonText: strings.WITHDRAW,
-        onButtonClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >bulkWithdrawSelectedRows(),</span>
-      });
+    const bulkWithdrawable = <span class="cstat-no" title="statement not covered" >isSelectionBulkWithdrawable(selectedRows);</span>
+&nbsp;
+    let withdrawTooltip;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (!bulkWithdrawable) {</span>
+<span class="cstat-no" title="statement not covered" >      withdrawTooltip = strings.WITHDRAW_SINGLE_NURSERY;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (totalSelectedQuantity === 0) {</span>
+<span class="cstat-no" title="statement not covered" >      withdrawTooltip = strings.NO_WITHDRAWABLE_QUANTITIES_FOUND;</span>
     }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    topBarButtons.push({</span>
+      buttonType: 'passive',
+      buttonText: strings.WITHDRAW,
+      onButtonClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >bulkWithdrawSelectedRows(),</span>
+      disabled: !bulkWithdrawable || !totalSelectedQuantity,
+      tooltipTitle: withdrawTooltip,
+    });
 <span class="cstat-no" title="statement not covered" >    return topBarButtons;</span>
   };
 &nbsp;
@@ -1222,7 +1279,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-28T00:05:22.459Z
+                at 2024-01-03T14:51:44.136Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
