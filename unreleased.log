@@ -1,3 +1,6 @@
+1be24e5529 SW-4651 Clear accession when species changes in a better place, to avoid infinite rerender (#1988)
+30d6285977 SW-4616 Use full width withdraw button in mobile mode batch details view (#1987)
+d5c45849b7 SW-4648 Redirect to batch detail view after inventory create (#1986)
 6b6a34bb1e SW-4504 Implement bulk project assign modal to all 3 batches tables (#1978)
 8131c5c21f SW-4503 Implement the 'enhanced selection' functionality in the table component, add project assign functionality to accessions table (#1977)
 e90a7a2d04 SW-4503 Add selection to accessions table (#1970)
