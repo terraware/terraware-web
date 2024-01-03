@@ -1879,6 +1879,8 @@ export interface components {
       selected: boolean;
       /** Format: int64 */
       totalPlantsPropagated: number;
+      /** Format: int64 */
+      totalPlantsPropagatedForProject?: number;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
     GetNurseryWithdrawalResponsePayload: {
@@ -1978,6 +1980,9 @@ export interface components {
       nurseries?: components["schemas"]["GetNurseryV1"][];
       organizationName?: string;
       plantingSites?: components["schemas"]["GetPlantingSiteV1"][];
+      /** Format: int64 */
+      projectId?: number;
+      projectName?: string;
       seedBanks?: components["schemas"]["GetSeedBankV1"][];
       summaryOfProgress?: string;
       /** Format: int32 */
@@ -2016,6 +2021,8 @@ export interface components {
       selected: boolean;
       /** Format: int64 */
       totalSeedsStored: number;
+      /** Format: int64 */
+      totalSeedsStoredForProject?: number;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
     GetSpeciesProblemResponsePayload: {
