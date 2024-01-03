@@ -270,6 +270,14 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       withdrawTooltip = strings.NO_WITHDRAWABLE_QUANTITIES_FOUND;
     }
 
+    topBarButtons.push({
+      buttonType: 'passive',
+      buttonText: strings.WITHDRAW,
+      onButtonClick: () => bulkWithdrawSelectedRows(),
+      disabled: !bulkWithdrawable || !totalSelectedQuantity,
+      tooltipTitle: withdrawTooltip,
+    });
+
     if (featureFlagProjects) {
       topBarButtons.push(
         <ProjectAssignTopBarButton
