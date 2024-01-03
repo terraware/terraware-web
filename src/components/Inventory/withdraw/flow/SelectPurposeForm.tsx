@@ -149,19 +149,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }));
   };
 
-  const updatePurpose = useCallback(
-    (value: string) => {
-      updateField('purpose', value);
-      if (value === NURSERY_TRANSFER) {
-        setIsNurseryTransfer(true);
-      } else {
-        setIsNurseryTransfer(false);
-      }
-      const outplant = value === OUTPLANT;
-      setIsOutplant(outplant);
-    },
-    [NURSERY_TRANSFER, OUTPLANT]
-  );
+  const updatePurpose = useCallback((value: string) => {
+    updateField('purpose', value);
+    if (value === NURSERY_TRANSFER) {
+      setIsNurseryTransfer(true);
+    } else {
+      setIsNurseryTransfer(false);
+    }
+    const outplant = value === OUTPLANT;
+    setIsOutplant(outplant);
+  }, []);
 
   const onChangePurpose = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = (event.target as HTMLInputElement).value;
@@ -476,16 +473,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         return;
       }
     }
-  }, [
-    localRecord.purpose,
-    noReadySeedlings,
-    snackbar,
-    selectedNursery,
-    NURSERY_TRANSFER,
-    OUTPLANT,
-    batches,
-    updatePurpose,
-  ]);
+  }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, batches, updatePurpose]);
 
   useEffect(() => {
     const fetchSpecies = async () => {
@@ -561,7 +549,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     } else if (localRecord.purpose === NURSERY_TRANSFER && nurseryTransferDisabled) {
       updatePurpose(DEAD);
     }
-  }, [localRecord.purpose, outplantDisabled, nurseryTransferDisabled, updatePurpose, OUTPLANT, NURSERY_TRANSFER, DEAD]);
+  }, [localRecord.purpose, outplantDisabled, nurseryTransferDisabled, updatePurpose]);
 
   return (
     <PageForm
