@@ -1,3 +1,4 @@
+4efbcf692f SW-4652 Only export visible inventory-by-nursery fields (#1984)
 39b96c5cf1 SW-4623 Validate accession and species when saving a new batch  (#1958)
 d801ada4fa SW-4645 Set PageHeaderWrapper width to 100% to fix inconsistency between Firefox and Chrome (#1973)
 5da5d6edf5 SW-4623 Add accessions search functionality to redux (#1957)
