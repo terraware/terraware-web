@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { buildReducers, setStatus, StatusT } from 'src/redux/features/asyncUtils';
-import { BatchData, BatchId } from 'src/services/NurseryBatchService';
+import { BatchData } from 'src/services/NurseryBatchService';
 import { requestFetchBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { Batch } from 'src/types/Batch';
 
 // Since the save batch request might not have a species ID, since one of the requests only returns a batch ID,
 // we are going to ensure the species ID is sent back
-type SaveBatchResponse = ((Response & BatchData) | (Response & BatchId)) & { speciesId: number };
+type SaveBatchResponse = Response & BatchData;
 
 // New responses will be added to this union
 type BatchesResponseUnion = SaveBatchResponse;
