@@ -45,9 +45,16 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     );
   };
 
-  const createLinkWithQuery = (path: string, iValue: React.ReactNode | unknown[]) => (
-    <Link to={`${path}?${query.toString()}`}>{iValue as React.ReactNode}</Link>
-  );
+  const createLinkWithQuery = (path: string, iValue: React.ReactNode | unknown[]) => {
+    const queryString = query.toString();
+
+    let to = path;
+    if (queryString) {
+      to += `?${queryString}`;
+    }
+
+    return <Link to={to}>{iValue as React.ReactNode}</Link>;
+  };
 
   const createLinkToInventorySpeciesDetail = (iValue: React.ReactNode | unknown[]) =>
     createLinkWithQuery(APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', row.species_id.toString()), iValue);
