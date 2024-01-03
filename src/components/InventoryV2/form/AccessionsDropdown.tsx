@@ -1,19 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dropdown } from '@terraware/web-components';
 import strings from 'src/strings';
 import { SearchResponseAccession } from 'src/services/SeedBankService';
 
-type AccessionsDropdownProps<T extends { accessionId?: number } | undefined> = {
+type AccessionsDropdownProps<T extends { accessionId?: number; speciesId?: number } | undefined> = {
   availableAccessions: SearchResponseAccession[] | undefined;
   record: T;
   setRecord: (setFn: (previousValue: T) => T) => void;
 };
 
-function AccessionsDropdown<T extends { accessionId?: number } | undefined>({
+function AccessionsDropdown<T extends { accessionId?: number; speciesId?: number } | undefined>({
   availableAccessions,
   record,
   setRecord,
 }: AccessionsDropdownProps<T>) {
+  // Since accession is dependent on species, if the record's species has changed, reset the accession
+  useEffect(() => {
+    setRecord((previousValue) => ({
+      ...previousValue,
+      accessionId: undefined,
+    }));
+  }, [record?.speciesId, setRecord]);
+
   return (
     <Dropdown
       id='accessionId'
