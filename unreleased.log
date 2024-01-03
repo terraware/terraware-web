@@ -1,3 +1,4 @@
+8131c5c21f SW-4503 Implement the 'enhanced selection' functionality in the table component, add project assign functionality to accessions table (#1977)
 e90a7a2d04 SW-4503 Add selection to accessions table (#1970)
 3f8e97800e SW-4617 Implement the new query params filter hook in the InventoryTable (#1969)
 4981648ea8 SW-4617 Remove the query param and sub location filtering within the inventory list of batches (#1968)
