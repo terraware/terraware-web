@@ -254,21 +254,26 @@ const searchInventoryByNursery = async ({
   query,
   isCsvExport,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
+  const exportedFields = [
+    'facility_name',
+    'facilityInventories.species_scientificName',
+    'germinatingQuantity',
+    'notReadyQuantity',
+    'readyQuantity',
+    'totalQuantity',
+  ];
+  const nonExportedFields = [
+    'facility_id',
+    'facilityInventories.species_id',
+    'facilityInventories.batches.id',
+    'germinatingQuantity(raw)',
+    'totalQuantity(raw)',
+  ];
+  const fields = isCsvExport ? exportedFields : exportedFields.concat(nonExportedFields);
+
   const params: SearchRequestPayload = {
     prefix: 'facilities.facilityInventoryTotals',
-    fields: [
-      'facility_id',
-      'facility_name',
-      'facilityInventories.species_id',
-      'facilityInventories.species_scientificName',
-      'facilityInventories.batches.id',
-      'germinatingQuantity',
-      'germinatingQuantity(raw)',
-      'notReadyQuantity',
-      'readyQuantity',
-      'totalQuantity',
-      'totalQuantity(raw)',
-    ],
+    fields,
     sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
     search: {
       operation: 'and',
