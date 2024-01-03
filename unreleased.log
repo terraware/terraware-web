@@ -1,3 +1,4 @@
+34399d22c2 SW-4578 / SW-4646 Hide sublocations when there are no selections (#1983)
 4efbcf692f SW-4652 Only export visible inventory-by-nursery fields (#1984)
 39b96c5cf1 SW-4623 Validate accession and species when saving a new batch  (#1958)
 d801ada4fa SW-4645 Set PageHeaderWrapper width to 100% to fix inconsistency between Firefox and Chrome (#1973)

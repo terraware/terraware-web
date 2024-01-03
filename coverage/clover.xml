@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1704309375045" clover="3.2.0">
-  <project timestamp="1704309375045" name="All files">
-    <metrics statements="15307" coveredstatements="396" conditionals="9861" coveredconditionals="95" methods="4833" coveredmethods="89" elements="30001" coveredelements="580" complexity="0" loc="15307" ncloc="15307" packages="123" files="599" classes="599"/>
+<coverage generated="1704309539330" clover="3.2.0">
+  <project timestamp="1704309539330" name="All files">
+    <metrics statements="15313" coveredstatements="396" conditionals="9866" coveredconditionals="95" methods="4835" coveredmethods="89" elements="30014" coveredelements="580" complexity="0" loc="15313" ncloc="15313" packages="123" files="599" classes="599"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3320,7 +3320,7 @@
       </file>
     </package>
     <package name="src.components.InventoryV2.form">
-      <metrics statements="189" coveredstatements="0" conditionals="164" coveredconditionals="0" methods="77" coveredmethods="0"/>
+      <metrics statements="195" coveredstatements="0" conditionals="169" coveredconditionals="0" methods="79" coveredmethods="0"/>
       <file name="AccessionsDropdown.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/form/AccessionsDropdown.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
@@ -3328,7 +3328,7 @@
         <line num="27" count="0" type="stmt"/>
       </file>
       <file name="BatchDetailsForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/form/BatchDetailsForm.tsx">
-        <metrics statements="89" coveredstatements="0" conditionals="93" coveredconditionals="0" methods="27" coveredmethods="0"/>
+        <metrics statements="96" coveredstatements="0" conditionals="100" coveredconditionals="0" methods="29" coveredmethods="0"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -3410,14 +3410,21 @@
         <line num="227" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="228" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="229" count="0" type="stmt"/>
-        <line num="233" count="0" type="stmt"/>
-        <line num="293" count="0" type="stmt"/>
-        <line num="374" count="0" type="stmt"/>
-        <line num="392" count="0" type="stmt"/>
-        <line num="408" count="0" type="stmt"/>
-        <line num="424" count="0" type="stmt"/>
-        <line num="433" count="0" type="stmt"/>
-        <line num="464" count="0" type="stmt"/>
+        <line num="234" count="0" type="stmt"/>
+        <line num="236" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="237" count="0" type="stmt"/>
+        <line num="239" count="0" type="stmt"/>
+        <line num="240" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="241" count="0" type="stmt"/>
+        <line num="244" count="0" type="stmt"/>
+        <line num="251" count="0" type="stmt"/>
+        <line num="311" count="0" type="stmt"/>
+        <line num="394" count="0" type="stmt"/>
+        <line num="412" count="0" type="stmt"/>
+        <line num="428" count="0" type="stmt"/>
+        <line num="444" count="0" type="stmt"/>
+        <line num="453" count="0" type="stmt"/>
+        <line num="484" count="0" type="stmt"/>
       </file>
       <file name="NurseryDropdownV2.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/form/NurseryDropdownV2.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
@@ -3520,7 +3527,7 @@
         <line num="38" count="0" type="stmt"/>
       </file>
       <file name="useSubLocations.ts" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/form/useSubLocations.ts">
-        <metrics statements="21" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="20" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
@@ -3539,9 +3546,8 @@
         <line num="31" count="0" type="stmt"/>
         <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.InventoryV2.view">

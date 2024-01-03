@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/93</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/89</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
@@ -537,7 +537,27 @@
 <a name='L472'></a><a href='#L472'>472</a>
 <a name='L473'></a><a href='#L473'>473</a>
 <a name='L474'></a><a href='#L474'>474</a>
-<a name='L475'></a><a href='#L475'>475</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a>
+<a name='L483'></a><a href='#L483'>483</a>
+<a name='L484'></a><a href='#L484'>484</a>
+<a name='L485'></a><a href='#L485'>485</a>
+<a name='L486'></a><a href='#L486'>486</a>
+<a name='L487'></a><a href='#L487'>487</a>
+<a name='L488'></a><a href='#L488'>488</a>
+<a name='L489'></a><a href='#L489'>489</a>
+<a name='L490'></a><a href='#L490'>490</a>
+<a name='L491'></a><a href='#L491'>491</a>
+<a name='L492'></a><a href='#L492'>492</a>
+<a name='L493'></a><a href='#L493'>493</a>
+<a name='L494'></a><a href='#L494'>494</a>
+<a name='L495'></a><a href='#L495'>495</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -769,6 +789,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -830,6 +868,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1043,7 +1083,7 @@ import { useProjects } from 'src/components/InventoryV2/form/useProjects';
 import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 &nbsp;
-export interface BatchDetailsModalProps {
+export interface BatchDetailsFormProps {
   doValidateBatch: boolean;
   onBatchValidated: (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) =&gt; void;
   origin: OriginPage;
@@ -1082,7 +1122,7 @@ const MANDATORY_FIELDS = <span class="cstat-no" title="statement not covered" >[
 &nbsp;
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >BatchDetailsForm(</span>props: BatchDetailsModalProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >BatchDetailsForm(</span>props: BatchDetailsFormProps): JSX.Element {
   const { onBatchValidated, doValidateBatch, selectedBatch, originId, origin } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
   const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
@@ -1243,6 +1283,24 @@ export default function <span class="fstat-no" title="function not covered" >Bat
     }
   }, [record, selectedAccession, setRecord]);
 &nbsp;
+  // when sublocations change, clear current sublocations in the record
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    // if this is a read-only view of an existing batch, don't update the sublocations
+<span class="cstat-no" title="statement not covered" >    if (record?.id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    setRecord(<span class="fstat-no" title="function not covered" >(p</span>reviousRecord: FormRecord): FormRecord =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (!previousRecord) {</span>
+<span class="cstat-no" title="statement not covered" >        return previousRecord;</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return {</span>
+        ...previousRecord,
+        subLocationIds: [],
+      };
+    });
+  }, [availableSubLocations, record?.id, setRecord]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       {record &amp;&amp; (
@@ -1358,13 +1416,15 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                   &lt;/Grid&gt;
                 )}
 &nbsp;
-                &lt;Grid item xs={12} padding={dropdownPadding}&gt;
-                  &lt;SubLocationsDropdown&lt;FormRecord&gt;
-                    availableSubLocations={availableSubLocations}
-                    record={record}
-                    setRecord={setRecord}
-                  /&gt;
-                &lt;/Grid&gt;
+                {availableSubLocations &amp;&amp; availableSubLocations.length &gt; 0 &amp;&amp; (
+                  &lt;Grid item xs={12} padding={dropdownPadding}&gt;
+                    &lt;SubLocationsDropdown&lt;FormRecord&gt;
+                      availableSubLocations={availableSubLocations}
+                      record={record}
+                      setRecord={setRecord}
+                    /&gt;
+                  &lt;/Grid&gt;
+                )}
 &nbsp;
                 {featureFlagProjects &amp;&amp; (
                   &lt;Grid item xs={12} padding={dropdownPadding}&gt;
@@ -1492,7 +1552,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-03T19:16:14.599Z
+                at 2024-01-03T19:18:58.839Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
