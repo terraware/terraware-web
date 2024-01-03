@@ -201,7 +201,7 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
         {batch && (
           <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
             <BatchSummary batch={batch} />
-            <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
+            <Box display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
               <Tabs
                 activeTab={activeTab}
                 onTabChange={onTabChange}
