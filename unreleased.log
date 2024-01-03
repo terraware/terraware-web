@@ -1,3 +1,4 @@
+b008101431 SW-4617 Only show sub locations relevant to the filtered facility in the inventory search component (#1967)
 0e3d9c9847 SW-4518 Add project name column to 'select batch quantites for withdrawal' table (#1980)
 4b1442c75a SW-4617 Keep the query in the address bar when navigating to species, nursery, or batch from inventory (#1966)
 730b980106 Update types from back end (#1979)
