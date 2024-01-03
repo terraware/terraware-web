@@ -34,6 +34,9 @@ import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import isEnabled from 'src/features';
 import { SearchResponseElement } from 'src/types/Search';
+import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { Project } from 'src/types/Project';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {
@@ -64,15 +67,28 @@ type SelectPurposeFormProps = {
   nurseryWithdrawal: NurseryWithdrawalRequest;
   onCancel: () => void;
   saveText: string;
+  setFilterProjectId: (projectId: number) => void;
 };
 
+const { OUTPLANT, NURSERY_TRANSFER, DEAD, OTHER } = NurseryWithdrawalPurposes;
+
 export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.Element {
+  const { nurseryWithdrawal, onNext, batches, onCancel, saveText, setFilterProjectId } = props;
+
   const { selectedOrganization } = useOrganization();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
-  const { nurseryWithdrawal, onNext, batches, onCancel, saveText } = props;
-  const { OUTPLANT, NURSERY_TRANSFER, DEAD, OTHER } = NurseryWithdrawalPurposes;
   const contributor = isContributor(selectedOrganization);
+  const snackbar = useSnackbar();
+  const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
+  const classes = useStyles();
+  const nurseryV2 = isEnabled('Nursery Updates');
+  const featureFlagProjects = isEnabled('Projects');
+
+  const plantingSites = useAppSelector(selectPlantingSites);
+  const projects = useAppSelector(selectProjects);
+
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
   const [isOutplant, setIsOutplant] = useState(nurseryWithdrawal.purpose === OUTPLANT);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
@@ -86,20 +102,30 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>();
   const [zones, setZones] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<number>();
-  const snackbar = useSnackbar();
   const [noReadySeedlings, setNoReadySeedlings] = useState<boolean>(false);
-  const { isMobile } = useDeviceInfo();
-  const theme = useTheme();
-  const classes = useStyles();
   const [selectedSubzone, setSelectedSubzone] = useState<SubzoneInfo>();
   const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
   const [speciesMap, setSpeciesMap] = useState<{ [key: string]: string }>({});
+  const [projectRecord, setProjectRecord] = useState<{ projectId?: number }>({});
+
   const tz = useLocationTimeZone().get(selectedNursery);
   const [timeZone, setTimeZone] = useState(tz.id);
-  const nurseryV2 = isEnabled('Nursery Updates');
-  const plantingSites = useAppSelector(selectPlantingSites);
 
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
+
+  const availableProjects = useMemo(
+    () =>
+      projects?.filter((project: Project) =>
+        batches.some(
+          (batch: SearchResponseElement) =>
+            // Only show projects that are represented within the available batches
+            Number(batch.project_id) === project.id &&
+            // And apply to the selected facility
+            (selectedNursery ? Number(batch.facility_id) === selectedNursery.id : true)
+        )
+      ),
+    [projects, batches, selectedNursery]
+  );
 
   useEffect(() => {
     if (timeZone !== tz.id) {
@@ -123,19 +149,16 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }));
   };
 
-  const updatePurpose = useCallback(
-    (value: string) => {
-      updateField('purpose', value);
-      if (value === NURSERY_TRANSFER) {
-        setIsNurseryTransfer(true);
-      } else {
-        setIsNurseryTransfer(false);
-      }
-      const outplant = value === OUTPLANT;
-      setIsOutplant(outplant);
-    },
-    [NURSERY_TRANSFER, OUTPLANT]
-  );
+  const updatePurpose = useCallback((value: string) => {
+    updateField('purpose', value);
+    if (value === NURSERY_TRANSFER) {
+      setIsNurseryTransfer(true);
+    } else {
+      setIsNurseryTransfer(false);
+    }
+    const outplant = value === OUTPLANT;
+    setIsOutplant(outplant);
+  }, []);
 
   const onChangePurpose = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = (event.target as HTMLInputElement).value;
@@ -450,16 +473,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         return;
       }
     }
-  }, [
-    localRecord.purpose,
-    noReadySeedlings,
-    snackbar,
-    selectedNursery,
-    NURSERY_TRANSFER,
-    OUTPLANT,
-    batches,
-    updatePurpose,
-  ]);
+  }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, batches, updatePurpose]);
 
   useEffect(() => {
     const fetchSpecies = async () => {
@@ -535,7 +549,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     } else if (localRecord.purpose === NURSERY_TRANSFER && nurseryTransferDisabled) {
       updatePurpose(DEAD);
     }
-  }, [localRecord.purpose, outplantDisabled, nurseryTransferDisabled, updatePurpose, OUTPLANT, NURSERY_TRANSFER, DEAD]);
+  }, [localRecord.purpose, outplantDisabled, nurseryTransferDisabled, updatePurpose]);
 
   return (
     <PageForm
@@ -611,6 +625,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 </RadioGroup>
               </FormControl>
             </Grid>
+
             <Grid display='flex'>
               <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
                 <Dropdown
@@ -625,6 +640,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 />
               </Grid>
             </Grid>
+
             {isNurseryTransfer && (
               <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                 <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -641,6 +657,25 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 </Grid>
               </Grid>
             )}
+
+            {featureFlagProjects && (
+              <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+                  <ProjectsDropdown<{ projectId?: number }>
+                    availableProjects={availableProjects}
+                    record={projectRecord}
+                    setRecord={(setFn) => {
+                      const nextRecord = setFn(projectRecord);
+                      setProjectRecord(nextRecord);
+                      if (nextRecord.projectId) {
+                        setFilterProjectId(nextRecord.projectId);
+                      }
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            )}
+
             {isOutplant && (
               <>
                 <Divisor mt={3} />
