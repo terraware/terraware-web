@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1704312437951" clover="3.2.0">
-  <project timestamp="1704312437951" name="All files">
-    <metrics statements="15375" coveredstatements="430" conditionals="9906" coveredconditionals="118" methods="4856" coveredmethods="100" elements="30137" coveredelements="648" complexity="0" loc="15375" ncloc="15375" packages="123" files="600" classes="600"/>
+<coverage generated="1704313150949" clover="3.2.0">
+  <project timestamp="1704313150949" name="All files">
+    <metrics statements="15382" coveredstatements="430" conditionals="9908" coveredconditionals="118" methods="4857" coveredmethods="100" elements="30147" coveredelements="648" complexity="0" loc="15382" ncloc="15382" packages="123" files="600" classes="600"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2457,7 +2457,7 @@
       </file>
     </package>
     <package name="src.components.InventoryV2">
-      <metrics statements="794" coveredstatements="0" conditionals="620" coveredconditionals="0" methods="266" coveredmethods="0"/>
+      <metrics statements="801" coveredstatements="0" conditionals="622" coveredconditionals="0" methods="267" coveredmethods="0"/>
       <file name="BatchDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchDetails.tsx">
         <metrics statements="23" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
@@ -2843,36 +2843,43 @@
         <line num="187" count="0" type="stmt"/>
       </file>
       <file name="InventoryCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/InventoryCellRenderer.tsx">
-        <metrics statements="29" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
+        <metrics statements="36" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="76" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="106" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="118" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="119" count="0" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
-        <line num="141" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="68" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="74" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="80" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="92" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="116" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
       </file>
       <file name="InventoryCreateView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/InventoryCreateView.tsx">
         <metrics statements="29" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>

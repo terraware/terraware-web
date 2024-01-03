@@ -1,3 +1,5 @@
+4b1442c75a SW-4617 Keep the query in the address bar when navigating to species, nursery, or batch from inventory (#1966)
+730b980106 Update types from back end (#1979)
 c4073b0ecd SW-4617 Added useQueryFilter hook that syncs between a consumer's filters and the query string in the address bar (#1965)
 090493d686 SW-4616 Remove extra margin during scroll in batch details view (#1982)
 34399d22c2 SW-4578 / SW-4646 Hide sublocations when there are no selections (#1983)
