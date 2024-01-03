@@ -96,18 +96,18 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
   );
 
   const areAllFromSameNursery = (selectedRows: SearchResponseElement[]) => {
+    if (!selectedRows.length) {
+      return false;
+    }
     const initialNurseryId = selectedRows[0].facilityId;
     const otherNursery = selectedRows.some((row) => `${row.facilityId}` !== `${initialNurseryId}`);
     return !otherNursery;
   };
 
-  const selectionHasWithdrawableQuantities = (selectedRows: SearchResponseElement[]) => {
-    return selectedRows.some((row) => Number(row['totalQuantity(raw)']) > 0);
-  };
-
-  const isSelectionBulkWithdrawable = useCallback((selectedRows: SearchResponseElement[]) => {
-    return areAllFromSameNursery(selectedRows) && selectionHasWithdrawableQuantities(selectedRows);
-  }, []);
+  const isSelectionBulkWithdrawable = useCallback(
+    (selectedRows: SearchResponseElement[]) => areAllFromSameNursery(selectedRows),
+    []
+  );
 
   return (
     <InventorySeedlingsTable

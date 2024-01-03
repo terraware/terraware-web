@@ -32,7 +32,12 @@ export const BE_SORTED_FIELDS = [
   'totalQuantity',
 ];
 
-export const INVENTORY_FIELDS = [...BE_SORTED_FIELDS, 'species_commonName', 'totalQuantity(raw)'];
+export const INVENTORY_FIELDS = [
+  ...BE_SORTED_FIELDS,
+  'germinatingQuantity(raw)',
+  'species_commonName',
+  'totalQuantity(raw)',
+];
 
 export const FACILITY_SPECIFIC_FIELDS = [
   'species_id',
@@ -258,6 +263,7 @@ const searchInventoryByNursery = async ({
       'facilityInventories.species_scientificName',
       'facilityInventories.batches.id',
       'germinatingQuantity',
+      'germinatingQuantity(raw)',
       'notReadyQuantity',
       'readyQuantity',
       'totalQuantity',

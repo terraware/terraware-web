@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
@@ -64,25 +64,40 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   };
 
   const isSelectionWithdrawable = () => {
+    // we are woring with 'any' type rows in this table
+    const hasWithdrawableQuantity = (row: any) =>
+      Number(row['totalQuantity(raw)']) > 0 || Number(row['germinatingQuantity(raw)']) > 0;
+
     switch (origin) {
       case 'Species':
-        return selectedRows.some((row) => row.species_id && +row['totalQuantity(raw)'] > 0);
+        return selectedRows.some((row) => row.species_id && hasWithdrawableQuantity(row));
       case 'Nursery':
-        return selectedRows.length === 1 && selectedRows.some((row) => +row['totalQuantity(raw)'] > 0);
+        return selectedRows.length === 1 && selectedRows.some((row) => hasWithdrawableQuantity(row));
       case 'Batches':
         const nurseries = new Set(selectedRows.map((row) => row.facility_id));
-        return nurseries.size === 1 && selectedRows.some((row) => row.species_id && +row['totalQuantity(raw)'] > 0);
+        return nurseries.size === 1 && selectedRows.some((row) => row.species_id && hasWithdrawableQuantity(row));
     }
   };
+
+  const totalSelectedQuantity = useMemo<number>(
+    () =>
+      selectedRows.reduce(
+        (total, row) => total + Number(row['totalQuantity(raw)']) + Number(row['germinatingQuantity(raw)']),
+        0
+      ),
+    [selectedRows]
+  );
 
   useEffect(() => {
     const nurseries = new Set(selectedRows.map((row) => row.facility_id));
     if ((origin === 'Nursery' && selectedRows.length > 1) || (origin === 'Batches' && nurseries.size > 1)) {
       setWithdrawTooltip(strings.WITHDRAW_SINGLE_NURSERY);
+    } else if (totalSelectedQuantity === 0) {
+      setWithdrawTooltip(strings.NO_WITHDRAWABLE_QUANTITIES_FOUND);
     } else {
       setWithdrawTooltip(undefined);
     }
-  }, [origin, selectedRows]);
+  }, [origin, selectedRows, totalSelectedQuantity]);
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
     setSearchSortOrder({
