@@ -30,7 +30,7 @@ import { useProjects } from 'src/components/InventoryV2/form/useProjects';
 import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 
-export interface BatchDetailsModalProps {
+export interface BatchDetailsFormProps {
   doValidateBatch: boolean;
   onBatchValidated: (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => void;
   origin: OriginPage;
@@ -69,7 +69,7 @@ const MANDATORY_FIELDS = ['addedDate', 'facilityId', ...QUANTITY_FIELDS, 'specie
 
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
-export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Element {
+export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Element {
   const { onBatchValidated, doValidateBatch, selectedBatch, originId, origin } = props;
 
   const numberFormatter = useNumberFormatter();
@@ -230,6 +230,24 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
     }
   }, [record, selectedAccession, setRecord]);
 
+  // when sublocations change, clear current sublocations in the record
+  useEffect(() => {
+    // if this is a read-only view of an existing batch, don't update the sublocations
+    if (record?.id !== -1) {
+      return;
+    }
+    setRecord((previousRecord: FormRecord): FormRecord => {
+      if (!previousRecord) {
+        return previousRecord;
+      }
+
+      return {
+        ...previousRecord,
+        subLocationIds: [],
+      };
+    });
+  }, [availableSubLocations, record?.id, setRecord]);
+
   return (
     <>
       {record && (
@@ -345,13 +363,15 @@ export default function BatchDetailsForm(props: BatchDetailsModalProps): JSX.Ele
                   </Grid>
                 )}
 
-                <Grid item xs={12} padding={dropdownPadding}>
-                  <SubLocationsDropdown<FormRecord>
-                    availableSubLocations={availableSubLocations}
-                    record={record}
-                    setRecord={setRecord}
-                  />
-                </Grid>
+                {availableSubLocations && availableSubLocations.length > 0 && (
+                  <Grid item xs={12} padding={dropdownPadding}>
+                    <SubLocationsDropdown<FormRecord>
+                      availableSubLocations={availableSubLocations}
+                      record={record}
+                      setRecord={setRecord}
+                    />
+                  </Grid>
+                )}
 
                 {featureFlagProjects && (
                   <Grid item xs={12} padding={dropdownPadding}>
