@@ -4370,7 +4370,7 @@ SELECT pg_catalog.setval('public.photos_id_seq', 1003, false);
 -- Name: site_module_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.site_module_id_seq', 102, false);
+SELECT pg_catalog.setval('public.site_module_id_seq', 103, false);
 
 
 --

@@ -40,4 +40,9 @@ test('Add A Nursery', async ({ page }, testInfo) => {
   await page.getByRole('spinbutton').click();
   await page.getByRole('spinbutton').fill('5000');
   await page.getByRole('button', { name: 'Save' }).click();
+
+  // Add sublocations once nursery feature is released
+
+  await expect(page.getByRole('main')).toContainText('My Nursery');
+  await expect(page.getByRole('main')).toContainText('My Nursery is very nice!!!!');
 });
