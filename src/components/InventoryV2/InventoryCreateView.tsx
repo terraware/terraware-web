@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
+import { useUser } from 'src/providers';
 import PageForm from 'src/components/common/PageForm';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
@@ -10,12 +11,16 @@ import BatchDetailsForm from 'src/components/InventoryV2/form/BatchDetailsForm';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
 import { requestSaveBatch, SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
+import { InventoryListType, InventoryListTypes } from './';
 
 export default function InventoryCreateView(): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const history = useHistory();
   const snackbar = useSnackbar();
+  const { userPreferences } = useUser();
+  const originInventoryViewType: InventoryListType =
+    (userPreferences.inventoryListType as InventoryListType) || InventoryListTypes.BATCHES_BY_SPECIES;
 
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
@@ -52,19 +57,36 @@ export default function InventoryCreateView(): JSX.Element {
     if (batchesRequest?.status === 'success') {
       history.replace(inventoryLocation);
 
-      const speciesId = batchesRequest?.data?.speciesId;
-      if (speciesId) {
+      const batchId = batchesRequest?.data?.batch?.id;
+      const facilityId = batchesRequest?.data?.batch?.facilityId;
+      const speciesId = batchesRequest?.data?.batch?.speciesId;
+
+      // we can assume the batchId, facilityId and speciesId will be valid upon a successful create
+
+      if (originInventoryViewType === InventoryListTypes.BATCHES_BY_NURSERY) {
         history.push({
-          pathname: APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', `${speciesId}`),
+          pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${facilityId}`).replace(
+            ':batchId',
+            `${batchId}`
+          ),
+        });
+      } else if (originInventoryViewType === InventoryListTypes.BATCHES_BY_BATCH) {
+        history.push({
+          pathname: APP_PATHS.INVENTORY_BATCH.replace(':batchId', `${batchId}`),
         });
       } else {
-        goToInventory();
+        history.push({
+          pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${speciesId}`).replace(
+            ':batchId',
+            `${batchId}`
+          ),
+        });
       }
     } else if (batchesRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
       setDoValidateBatch(false);
     }
-  }, [batchesRequest, goToInventory, history, inventoryLocation, snackbar]);
+  }, [batchesRequest, history, inventoryLocation, originInventoryViewType, snackbar]);
 
   return (
     <TfMain>

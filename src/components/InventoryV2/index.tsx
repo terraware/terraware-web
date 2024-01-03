@@ -24,6 +24,15 @@ import DownloadReportModal from './DownloadReportModal';
 import InventoryListByBatch from './InventoryListByBatch';
 import { PreferencesService } from 'src/services';
 
+export const InventoryListTypes: Record<string, string> = {
+  BATCHES_BY_SPECIES: 'batches_by_species',
+  BATCHES_BY_NURSERY: 'batches_by_nursery',
+  BATCHES_BY_BATCH: 'batches_by_batch',
+} as const;
+
+type InventoryListTypeKeys = keyof typeof InventoryListTypes;
+export type InventoryListType = (typeof InventoryListTypes)[InventoryListTypeKeys];
+
 export type FacilityName = {
   facility_name: string;
 };
@@ -153,8 +162,11 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const contentRef = useRef(null);
   const { userPreferences, reloadUserPreferences } = useUser();
   const query = useQuery();
-  const tab = query.get('tab') || (userPreferences.inventoryListType as string) || 'batches_by_species';
-  const [activeTab, setActiveTab] = useState<string>(tab);
+  const tab =
+    query.get('tab') ||
+    (userPreferences.inventoryListType as InventoryListType) ||
+    InventoryListTypes.BATCHES_BY_SPECIES;
+  const [activeTab, setActiveTab] = useState<InventoryListType>(tab);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [reportData, setReportData] = useState<SearchInventoryParams>();
 
@@ -290,17 +302,17 @@ export default function Inventory(props: InventoryProps): JSX.Element {
             onTabChange={onTabChange}
             tabs={[
               {
-                id: 'batches_by_species',
+                id: InventoryListTypes.BATCHES_BY_SPECIES,
                 label: strings.BY_SPECIES,
                 children: <InventoryListBySpecies setReportData={setReportData} />,
               },
               {
-                id: 'batches_by_nursery',
+                id: InventoryListTypes.BATCHES_BY_NURSERY,
                 label: strings.BY_NURSERY,
                 children: <InventoryListByNursery setReportData={setReportData} />,
               },
               {
-                id: 'batches_by_batch',
+                id: InventoryListTypes.BATCHES_BY_BATCH,
                 label: strings.BY_BATCH,
                 children: <InventoryListByBatch setReportData={setReportData} />,
               },

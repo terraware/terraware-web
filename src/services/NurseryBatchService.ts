@@ -139,15 +139,14 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   project_name?: string;
 };
 
-export type BatchId = {
-  batchId: number | null;
-};
 export type BatchData = {
   batch: Batch | null;
 };
+
 export type BatchHistoryData = {
   history: BatchHistoryItem[] | null;
 };
+
 export type BatchPhotosIds = {
   photoIds?: { id: number }[];
 };
@@ -196,12 +195,12 @@ export const SEARCH_FIELDS_NON_EMPTY_BATCHES: SearchNodePayload[] = [
 /**
  * Create a batch
  */
-const createBatch = async (batch: CreateBatchRequestPayload): Promise<Response & BatchId> => {
+const createBatch = async (batch: CreateBatchRequestPayload): Promise<Response & BatchData> => {
   const response: Response = await HttpService.root(BATCHES_ENDPOINT).post({ entity: batch });
 
   return {
     ...response,
-    batchId: response?.data?.batch?.id ?? null,
+    batch: response?.data?.batch ?? null,
   };
 };
 

@@ -3,7 +3,7 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { Response } from 'src/services/HttpService';
 import strings from 'src/strings';
 import { Batch, CreateBatchRequestPayload, NurseryTransfer } from 'src/types/Batch';
-import { BatchData, BatchId, UpdateBatchRequestPayloadWithId } from 'src/services/NurseryBatchService';
+import { BatchData, UpdateBatchRequestPayloadWithId } from 'src/services/NurseryBatchService';
 import AccessionService from 'src/services/AccessionService';
 import { NurseryBatchService } from 'src/services';
 import { RootState } from 'src/redux/rootReducer';
@@ -19,7 +19,7 @@ export const requestSaveBatch = createAsyncThunk(
   ) => {
     const { batch, organizationId, timezone } = request;
 
-    let response: (Response & BatchData) | (Response & BatchId) | undefined;
+    let response: (Response & BatchData) | undefined;
     let responseQuantities: Partial<Response> = { requestSucceeded: true, error: undefined };
 
     if (batch.id === -1) {
@@ -81,7 +81,6 @@ export const requestSaveBatch = createAsyncThunk(
     if (response && response.requestSucceeded && responseQuantities.requestSucceeded) {
       return {
         ...response.data,
-        speciesId: batch.speciesId,
       };
     }
 
