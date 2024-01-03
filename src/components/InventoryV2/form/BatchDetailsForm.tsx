@@ -232,6 +232,10 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
 
   // when sublocations change, clear current sublocations in the record
   useEffect(() => {
+    // if this is a read-only view of an existing batch, don't update the sublocations
+    if (record?.id !== -1) {
+      return;
+    }
     setRecord((previousRecord: FormRecord): FormRecord => {
       if (!previousRecord) {
         return previousRecord;
@@ -242,7 +246,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
         subLocationIds: [],
       };
     });
-  }, [availableSubLocations, setRecord]);
+  }, [availableSubLocations, record?.id, setRecord]);
 
   return (
     <>
