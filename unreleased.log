@@ -1,1 +1,3 @@
+d801ada4fa SW-4645 Set PageHeaderWrapper width to 100% to fix inconsistency between Firefox and Chrome (#1973)
+5da5d6edf5 SW-4623 Add accessions search functionality to redux (#1957)
 a99572cb99 SW-4642 / SW-4586 Allow withdrawal of germinating quantities in inventory views + add tooltips (#1964)
