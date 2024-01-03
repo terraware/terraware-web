@@ -116,7 +116,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const availableProjects = useMemo(
     () =>
       projects?.filter((project: Project) =>
-        batches.find(
+        batches.some(
           (batch: SearchResponseElement) =>
             // Only show projects that are represented within the available batches
             Number(batch.project_id) === project.id &&
