@@ -1,23 +1,25 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';
 import { Box, Grid } from '@mui/material';
+import _, { isArray } from 'lodash';
+import strings from 'src/strings';
+import { useQueryFilters } from 'src/utils/useQueryFilters';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import InventoryCellRenderer from './InventoryCellRenderer';
-import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
+import { InventoryFiltersUnion } from 'src/components/InventoryV2/InventoryFilter';
 import { APP_PATHS } from 'src/constants';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 import Search from 'src/components/InventoryV2/Search';
+import InventoryCellRenderer from './InventoryCellRenderer';
 
 interface InventoryTableProps {
   results: SearchResponseElement[];
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
-  filters: InventoryFiltersType;
-  setFilters: (f: InventoryFiltersType) => void;
+  filters: InventoryFiltersUnion;
+  setFilters: (f: InventoryFiltersUnion) => void;
   setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
   isPresorted: boolean;
   columns: () => TableColumnType[];
@@ -40,7 +42,32 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   } = props;
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
+  const { queryFilters, setQueryFilters } = useQueryFilters();
   const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
+
+  // Sync query filters into view
+  useEffect(() => {
+    const { showEmptyBatches: filterShowEmptyBatches, ...restFilters } = filters;
+    const { showEmptyBatches: queryFilterShowEmptyBatches, ...restQueryFilters } = queryFilters;
+
+    let nextFilters: InventoryFiltersUnion = { ...restQueryFilters };
+    if (!_.isEqual(restFilters, restQueryFilters)) {
+      nextFilters = { ...restQueryFilters };
+    }
+
+    // Since showEmptyBatches is a super special filter that unfortunately needs to
+    // conform to SearchNodePayload (or refactor the ./Search and src/common/FilterGroup components), we need to change
+    // the `true` and `false` values to `['true']` and `['false']`
+    if (queryFilterShowEmptyBatches) {
+      nextFilters.showEmptyBatches = isArray(queryFilterShowEmptyBatches)
+        ? queryFilterShowEmptyBatches.map((value) => `${value}`)
+        : [`${queryFilterShowEmptyBatches}`];
+    }
+
+    if (!_.isEqual(filters, nextFilters)) {
+      setFilters(nextFilters);
+    }
+  }, [filters, queryFilters, setFilters]);
 
   const withdrawInventory = () => {
     const path = origin === 'Species' ? APP_PATHS.INVENTORY_WITHDRAW : APP_PATHS.BATCH_WITHDRAW;
@@ -113,7 +140,10 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           searchValue={temporalSearchValue}
           onSearch={(val) => setTemporalSearchValue(val)}
           filters={filters}
-          setFilters={setFilters}
+          setFilters={(f) => {
+            setFilters(f);
+            setQueryFilters(f);
+          }}
           origin={origin}
           showProjectsFilter={origin === 'Batches'}
           showEmptyBatchesFilter={origin === 'Batches'}
