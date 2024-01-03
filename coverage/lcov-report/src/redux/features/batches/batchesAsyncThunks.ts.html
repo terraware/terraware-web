@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -148,7 +148,28 @@
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -162,6 +183,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,6 +193,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -241,19 +279,38 @@ import { Batch, CreateBatchRequestPayload, NurseryTransfer } from 'src/types/Bat
 import { BatchData, BatchId, UpdateBatchRequestPayloadWithId } from 'src/services/NurseryBatchService';
 import AccessionService from 'src/services/AccessionService';
 import { NurseryBatchService } from 'src/services';
+import { RootState } from 'src/redux/rootReducer';
+import { SearchResponseAccession } from 'src/services/SeedBankService';
 &nbsp;
 export type SavableBatch = (CreateBatchRequestPayload | UpdateBatchRequestPayloadWithId) &amp; Batch;
 &nbsp;
 export const requestSaveBatch = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'batches/save',
-<span class="fstat-no" title="function not covered" >  as</span>ync (request: { batch: SavableBatch; timezone?: string }, { rejectWithValue }) =&gt; {
-    const { batch, timezone } = <span class="cstat-no" title="statement not covered" >request;</span>
+<span class="fstat-no" title="function not covered" >  as</span>ync (
+    request: { batch: SavableBatch; organizationId: number; timezone?: string },
+    { rejectWithValue, getState }
+  ) =&gt; {
+    const { batch, organizationId, timezone } = <span class="cstat-no" title="statement not covered" >request;</span>
 &nbsp;
     let response: (Response &amp; BatchData) | (Response &amp; BatchId) | undefined;
     let responseQuantities: Partial&lt;Response&gt; = <span class="cstat-no" title="statement not covered" >{ requestSucceeded: true, error: undefined };</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (batch.id === -1) {</span>
 <span class="cstat-no" title="statement not covered" >      if (batch.accessionId) {</span>
+        // Extra validation to ensure an accession ID matches the given species
+<span class="cstat-no" title="statement not covered" >        if (batch.accessionId &amp;&amp; batch.speciesId) {</span>
+          const orgIdSpeciedId = <span class="cstat-no" title="statement not covered" >`${organizationId}-${batch.speciesId}`;</span>
+          const accessionsResponseData = <span class="cstat-no" title="statement not covered" >(getState() as RootState).accessions[orgIdSpeciedId] || {};</span>
+<span class="cstat-no" title="statement not covered" >          if (</span>
+            !(accessionsResponseData.accessions || []).find(
+<span class="fstat-no" title="function not covered" >              (a</span>ccession: SearchResponseAccession) =&gt; <span class="cstat-no" title="statement not covered" >Number(accession.id) === batch.accessionId</span>
+            )
+          ) {
+            // The species requested does not apply to this accession
+<span class="cstat-no" title="statement not covered" >            return rejectWithValue(strings.GENERIC_ERROR);</span>
+          }
+        }
+&nbsp;
         const nurseryTransferRecord: NurseryTransfer = <span class="cstat-no" title="statement not covered" >{</span>
           date: getTodaysDateFormatted(timezone),
           destinationFacilityId: Number(batch.facilityId),
@@ -325,7 +382,7 @@ export const requestFetchBatch = <span class="cstat-no" title="statement not cov
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-03T16:02:17.429Z
+                at 2024-01-03T16:13:08.505Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
