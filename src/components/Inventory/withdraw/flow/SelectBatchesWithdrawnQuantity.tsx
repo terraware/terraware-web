@@ -127,6 +127,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   const [errorPageMessage, setErrorPageMessage] = useState('');
   const classes = useStyles();
   const nurseryV2 = isEnabled('Nursery Updates');
+  const featureFlagProjects = isEnabled('Projects');
 
   useEffect(() => {
     const transformBatchesForTable = () => {
@@ -370,8 +371,11 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                     {record.length > 0 && (
                       <Table
                         id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}
-                        columns={
-                          nurseryWithdrawal.purpose === OUTPLANT ? outplantTableColumns : tableColumns(nurseryV2)
+                        columns={() =>
+                          (nurseryWithdrawal.purpose === OUTPLANT
+                            ? outplantTableColumns()
+                            : tableColumns(nurseryV2)()
+                          ).filter((column) => (featureFlagProjects ? column : column.key !== 'projectName'))
                         }
                         rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
                         Renderer={WithdrawalBatchesCellRenderer}
