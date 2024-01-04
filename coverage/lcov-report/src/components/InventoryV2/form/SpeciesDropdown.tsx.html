@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
@@ -81,28 +81,7 @@
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,54 +96,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import { Dropdown } from '@terraware/web-components';
-import strings from 'src/strings';
-import { Species } from 'src/types/Species';
+import Dropdown from 'src/components/common/SpeciesSelector';
 &nbsp;
 type SpeciesDropdownProps&lt;T extends { speciesId?: number } | undefined&gt; = {
-  availableSpecies: Species[] | undefined;
   record: T;
   setRecord: (setFn: (previousValue: T) =&gt; T) =&gt; void;
   validateFields: boolean;
 };
 &nbsp;
 function <span class="fstat-no" title="function not covered" >SpeciesDropdown&lt;</span>T extends { speciesId?: number } | undefined&gt;({
-  availableSpecies,
   record,
   setRecord,
   validateFields,
 }: SpeciesDropdownProps&lt;T&gt;) {
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Dropdown
-      id='speciesId'
-      label={strings.SPECIES}
-      selectedValue={record?.speciesId}
-      options={(availableSpecies || []).map(<span class="fstat-no" title="function not covered" >(s</span>pecies) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: species.scientificName, value: species.id })</span>)}
-      onChange={<span class="fstat-no" title="function not covered" >(s</span>peciesId: string) =&gt;
-<span class="cstat-no" title="statement not covered" >        setRecord(<span class="fstat-no" title="function not covered" >(p</span>reviousValue) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...previousValue, speciesId: Number(speciesId) })</span>)</span>
-      }
-      errorText={validateFields &amp;&amp; !record?.speciesId ? strings.REQUIRED_FIELD : ''}
-      fullWidth
-      required
-    /&gt;
-  );
+<span class="cstat-no" title="statement not covered" >  return &lt;Dropdown record={record} setRecord={setRecord} validate={validateFields} /&gt;;</span>
 }
 &nbsp;
 export default SpeciesDropdown;
@@ -175,7 +124,7 @@ export default SpeciesDropdown;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-03T23:05:06.993Z
+                at 2024-01-04T00:51:56.933Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

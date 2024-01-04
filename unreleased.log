@@ -1,3 +1,4 @@
+cba0f7cd79 SW-4657 Reuse interactive species dropdown in inventory create form (#1990)
 1be24e5529 SW-4651 Clear accession when species changes in a better place, to avoid infinite rerender (#1988)
 30d6285977 SW-4616 Use full width withdraw button in mobile mode batch details view (#1987)
 d5c45849b7 SW-4648 Redirect to batch detail view after inventory create (#1986)
