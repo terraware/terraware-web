@@ -152,14 +152,14 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
 
     if (selectedAccession.remainingUnits === 'Seeds') {
       return {
-        value: Number(selectedAccession.remainingQuantity),
-        display: selectedAccession['remainingQuantity(raw)'],
+        value: Number(selectedAccession['remainingQuantity(raw)']),
+        display: selectedAccession.remainingQuantity,
       };
     }
 
     return {
-      value: Number(selectedAccession.estimatedCount),
-      display: selectedAccession['estimatedCount(raw)'],
+      value: Number(selectedAccession['estimatedCount(raw)']),
+      display: selectedAccession.estimatedCount,
     };
   }, [selectedAccession]);
 
