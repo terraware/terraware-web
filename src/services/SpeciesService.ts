@@ -3,7 +3,7 @@ import HttpService, { Response, ServerData } from './HttpService';
 import { Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import SearchService from './SearchService';
-import { FieldNodePayload, SearchRequestPayload } from 'src/types/Search';
+import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
 
 /**
  * Service for species related functionality
@@ -39,6 +39,12 @@ export type SpeciesIdData = { species?: Species };
 export type SpeciesDetailsData = { speciesDetails?: SpeciesDetails };
 
 export type SpeciesNamesData = { names?: string[] };
+
+export type SpeciesProjectsSearchResponse = SearchResponseElement & {
+  projects: {
+    project_name: string;
+  }[];
+};
 
 const SPECIES_ENDPOINT = '/api/v1/species';
 const SPECIES_ID_ENDPOINT = '/api/v1/species/{speciesId}';
@@ -336,24 +342,56 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
   return (await SearchService.search(params)) as SuggestedSpecies[] | null;
 };
 
+const getSpeciesProjects = async (
+  organizationId: number,
+  speciesId: number
+): Promise<SpeciesProjectsSearchResponse[] | null> => {
+  const params: SearchRequestPayload = {
+    prefix: 'inventories',
+    fields: ['projects.project_name'],
+    sortOrder: [{ field: 'projects.project_name', direction: 'Ascending' }],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'organization_id',
+          type: 'Exact',
+          values: [organizationId],
+        },
+        {
+          operation: 'field',
+          field: 'species_id',
+          type: 'Exact',
+          values: [`${speciesId}`],
+        },
+      ],
+    },
+    count: 0,
+  };
+
+  return SearchService.search<SpeciesProjectsSearchResponse>(params);
+};
+
 /**
  * Exported functions
  */
 const SpeciesService = {
-  createSpecies,
-  getSpecies,
-  updateSpecies,
-  deleteSpecies,
-  getAllSpecies,
-  downloadSpeciesTemplate,
-  uploadSpecies,
-  getSpeciesUploadStatus,
-  resolveSpeciesUpload,
   acceptProblemSuggestion,
-  ignoreProblemSuggestion,
+  createSpecies,
+  deleteSpecies,
+  downloadSpeciesTemplate,
+  getAllSpecies,
+  getSpecies,
   getSpeciesDetails,
   getSpeciesNames,
+  getSpeciesProjects,
+  getSpeciesUploadStatus,
+  ignoreProblemSuggestion,
+  resolveSpeciesUpload,
   suggestSpecies,
+  updateSpecies,
+  uploadSpecies,
 };
 
 export default SpeciesService;
