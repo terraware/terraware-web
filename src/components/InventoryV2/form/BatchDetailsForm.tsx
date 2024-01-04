@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { Divider, Grid, Typography, useTheme } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { ErrorBox, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import DatePicker from 'src/components/common/DatePicker';
@@ -14,6 +15,7 @@ import { useUser } from 'src/providers';
 import FacilityService from 'src/services/FacilityService';
 import { APP_PATHS } from 'src/constants';
 import Link from 'src/components/common/Link';
+import { stateName } from 'src/types/Accession';
 import { NurseryBatchesSearchResponseElement, UpdateBatchRequestPayloadWithId } from 'src/services/NurseryBatchService';
 import isEnabled from 'src/features';
 import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
@@ -29,6 +31,18 @@ import NurseryDropdownV2 from 'src/components/InventoryV2/form/NurseryDropdownV2
 import { useProjects } from 'src/components/InventoryV2/form/useProjects';
 import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
+
+const useStyles = makeStyles(() => ({
+  error: {
+    '& .error-box--container': {
+      alignItems: 'center',
+      width: 'auto',
+    },
+    '&.error-box': {
+      width: 'auto',
+    },
+  },
+}));
 
 export interface BatchDetailsFormProps {
   doValidateBatch: boolean;
@@ -72,6 +86,7 @@ type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Element {
   const { onBatchValidated, doValidateBatch, selectedBatch, originId, origin } = props;
 
+  const classes = useStyles();
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
@@ -97,8 +112,15 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const [timeZone, setTimeZone] = useState('');
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
+  const [errorPageMessage, setErrorPageMessage] = useState('');
+
   const hasErrors = useCallback(() => {
     if (record) {
+      // if we have a pre-determined error
+      if (errorPageMessage) {
+        return true;
+      }
+
       // There must be at least 1 seed in the batch
       const seedCount = QUANTITY_FIELDS.reduce(
         (acc: number, field: QuantityField): number => acc + (record[field] ? Number(record[field]) : 0),
@@ -114,7 +136,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     }
 
     return true;
-  }, [record, snackBar]);
+  }, [errorPageMessage, record, snackBar]);
 
   const handleBatchValidation = useCallback(
     (savableRecord: SavableFormRecord) => {
@@ -132,6 +154,24 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     },
     [hasErrors, onBatchValidated, selectedOrganization.id, timeZone]
   );
+
+  const accessionQuantity = useMemo<{ value: number; display?: string } | undefined>(() => {
+    if (!selectedAccession || selectedAccession.remainingQuantity === undefined) {
+      return undefined;
+    }
+
+    if (selectedAccession.remainingUnits === 'Seeds') {
+      return {
+        value: Number(selectedAccession.remainingQuantity),
+        display: selectedAccession['remainingQuantity(raw)'],
+      };
+    }
+
+    return {
+      value: Number(selectedAccession.estimatedCount),
+      display: selectedAccession['estimatedCount(raw)'],
+    };
+  }, [selectedAccession]);
 
   useEffect(() => {
     if (!facilityId) {
@@ -239,6 +279,20 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     });
   }, [availableSubLocations, record?.id, setRecord]);
 
+  useEffect(() => {
+    if (selectedAccession) {
+      if (accessionQuantity === undefined) {
+        setErrorPageMessage(strings.ACCESSION_NO_SEEDS_TO_WITHDRAW);
+        return;
+      }
+      if (totalQuantity > accessionQuantity.value) {
+        setErrorPageMessage(strings.ACCESSION_NOT_ENOUGH_SEEDS_TO_WITHDRAW);
+        return;
+      }
+    }
+    setErrorPageMessage('');
+  }, [accessionQuantity, selectedAccession, totalQuantity]);
+
   return (
     <>
       {record && (
@@ -341,6 +395,23 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                     record={record}
                     setRecord={setRecord}
                   />
+                  {selectedAccession && (
+                    <Box display='flex' justifyContent='space-between'>
+                      <Typography fontSize='14px' fontWeight={400} marginTop={1}>
+                        {strings.ACCESSION_STATE}: {stateName(selectedAccession.state)}
+                      </Typography>
+                      {accessionQuantity === undefined && (
+                        <Typography fontSize='14px' fontWeight={400} marginTop={1}>
+                          {strings.NO_QUANTITY_SET}
+                        </Typography>
+                      )}
+                      {accessionQuantity !== undefined && (
+                        <Typography fontSize='14px' fontWeight={400} marginTop={1}>
+                          {strings.REMAINING_SEEDS}: {accessionQuantity.display}
+                        </Typography>
+                      )}
+                    </Box>
+                  )}
                 </Grid>
 
                 {['InventoryAdd', 'Species'].includes(origin) && (
@@ -390,6 +461,12 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
             <Grid item xs={12} sx={marginTop}>
               <Divider />
             </Grid>
+
+            {errorPageMessage && (
+              <Box display='flex' flexGrow={1} margin={theme.spacing(2, 0)}>
+                <ErrorBox text={errorPageMessage} className={classes.error} />
+              </Box>
+            )}
 
             <Grid
               item
