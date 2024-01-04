@@ -20,8 +20,6 @@ type SpeciesWithdrawal = {
   speciesId: number;
 };
 
-type SpeciesBatchMap = { [key: string]: SpeciesWithdrawal };
-
 type NonOutplantWithdrawalTableProps = {
   species: Species[];
   withdrawal?: NurseryWithdrawal;
