@@ -117,7 +117,7 @@ export default function UserNotification(): Notification | null {
               </li>
             </ul>
             <Box paddingTop={1}>
-              <TextWithLink text={strings.USER_NOTIFICATION_ACTION} href={APP_PATHS.MY_ACCOUNT} />
+              <TextWithLink text={strings.USER_NOTIFICATION_ACTION} href={APP_PATHS.MY_ACCOUNT} fontSize='14px' />
             </Box>
           </Box>
         ),
