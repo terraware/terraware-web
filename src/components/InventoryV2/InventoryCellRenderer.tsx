@@ -46,6 +46,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
   };
 
   const createLinkWithQuery = (path: string, iValue: React.ReactNode | unknown[]) => {
+    query.delete('tab');
     const queryString = query.toString();
 
     let to = path;
