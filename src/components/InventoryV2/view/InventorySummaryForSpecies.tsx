@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
+import _ from 'lodash';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { SpeciesInventorySummary } from 'src/types/Inventory';
 import { NurseryInventoryService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
-import _ from 'lodash';
-import OverviewItemCard from '../../common/OverviewItemCard';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import isEnabled from 'src/features';
+import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
+import { useOrganization } from 'src/providers';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
+import { SpeciesProjectsSearchResponse } from 'src/services/SpeciesService';
 
 interface InventorySummaryProps {
   speciesId: number;
@@ -15,9 +21,15 @@ interface InventorySummaryProps {
 
 export default function InventorySummaryForSpecies(props: InventorySummaryProps): JSX.Element {
   const { speciesId, modified } = props;
-  const [summary, setSummary] = useState<SpeciesInventorySummary>();
+
+  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
+  const { selectedOrganization } = useOrganization();
+  const featureFlagProjects = isEnabled('Projects');
+
+  const speciesProjects = useAppSelector(selectSpeciesProjects(speciesId));
+  const [summary, setSummary] = useState<SpeciesInventorySummary>();
 
   const reloadData = useCallback(() => {
     const populateSummary = async () => {
@@ -30,11 +42,14 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
     };
 
     if (speciesId !== undefined) {
-      populateSummary();
+      void populateSummary();
+      if (featureFlagProjects) {
+        void dispatch(requestSpeciesProjects(selectedOrganization.id, speciesId));
+      }
     } else {
       setSummary(undefined);
     }
-  }, [speciesId, summary, snackbar]);
+  }, [speciesId, summary, snackbar, featureFlagProjects, dispatch, selectedOrganization.id]);
 
   useEffect(() => {
     reloadData();
@@ -47,49 +62,63 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
     const { germinatingQuantity, notReadyQuantity, readyQuantity, totalQuantity, nurseries, lossRate, totalWithdrawn } =
       summary;
 
+    const topRowColumns = isMobile ? 12 : 3;
+
+    const showProjectsOverviewCard = !!(featureFlagProjects && speciesProjects);
+    const bottomRowColumns = isMobile ? 12 : showProjectsOverviewCard ? 3 : 4;
+
     return [
       {
         label: strings.GERMINATING_QUANTITY,
         value: germinatingQuantity.toString(),
         tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-        gridColumns: isMobile ? 12 : 3,
+        gridColumns: topRowColumns,
       },
       {
         label: strings.NOT_READY_QUANTITY,
         value: notReadyQuantity.toString(),
         tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-        gridColumns: isMobile ? 12 : 3,
+        gridColumns: topRowColumns,
       },
       {
         label: strings.READY_QUANTITY,
         value: readyQuantity.toString(),
         tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-        gridColumns: isMobile ? 12 : 3,
+        gridColumns: topRowColumns,
       },
       {
         label: strings.TOTAL_QUANTITY,
         value: totalQuantity.toString(),
         tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
-        gridColumns: isMobile ? 12 : 3,
+        gridColumns: topRowColumns,
       },
       {
         label: strings.TOTAL_WITHDRAWN,
         value: totalWithdrawn.toString(),
         tooltipTitle: strings.TOOLTIP_TOTAL_WITHDRAWN,
-        gridColumns: isMobile ? 12 : 4,
+        gridColumns: bottomRowColumns,
       },
       {
         label: strings.LOSS_RATE,
         value: `${lossRate || 0}%`,
         tooltipTitle: '',
-        gridColumns: isMobile ? 12 : 4,
+        gridColumns: bottomRowColumns,
       },
       {
         label: strings.NURSERIES,
         value: nurseries.map((i) => i.name).join(', '),
         tooltipTitle: '',
-        gridColumns: isMobile ? 12 : 4,
+        gridColumns: bottomRowColumns,
       },
+      ...(showProjectsOverviewCard
+        ? [
+            {
+              label: strings.PROJECTS,
+              value: speciesProjects.map((project) => project.project_name).join(', '),
+              gridColumns: bottomRowColumns,
+            },
+          ]
+        : []),
     ];
   };
 
