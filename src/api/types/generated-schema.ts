@@ -2003,6 +2003,7 @@ export interface components {
       organizationEnabled: boolean;
       /** @description Per-project report settings. */
       projects: components["schemas"]["ProjectReportSettingsPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetSeedBankV1: {
       /** Format: date */
