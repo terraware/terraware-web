@@ -86,7 +86,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const speciesId = origin === 'Species' ? originId : record?.speciesId;
 
   const { availableSubLocations, selectedSubLocations } = useSubLocations(facilityId, record);
-  const { availableSpecies, selectedSpecies } = useSpecies(record);
+  const { selectedSpecies } = useSpecies(record);
   const { availableAccessions, selectedAccession } = useAccessions(record, selectedSpecies?.id ?? speciesId, true);
   const { availableNurseries, selectedNursery } = useNurseries(record);
   const { availableProjects, selectedProject } = useProjects(record);
@@ -336,7 +336,6 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                 {['InventoryAdd', 'Nursery'].includes(origin) && (
                   <Grid item xs={12} padding={dropdownPadding}>
                     <SpeciesDropdown<FormRecord>
-                      availableSpecies={availableSpecies}
                       record={record}
                       setRecord={setRecord}
                       validateFields={validateFields}
