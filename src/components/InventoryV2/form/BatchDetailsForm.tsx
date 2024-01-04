@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { ErrorBox, Textfield } from '@terraware/web-components';
+import { Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import DatePicker from 'src/components/common/DatePicker';
@@ -32,20 +31,10 @@ import { useProjects } from 'src/components/InventoryV2/form/useProjects';
 import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 
-const useStyles = makeStyles(() => ({
-  error: {
-    '& .error-box--container': {
-      alignItems: 'center',
-      width: 'auto',
-    },
-    '&.error-box': {
-      width: 'auto',
-    },
-  },
-}));
-
 export interface BatchDetailsFormProps {
   doValidateBatch: boolean;
+  errorPageMessage?: string;
+  setErrorPageMessage?: (errorMessage: string) => void;
   onBatchValidated: (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => void;
   origin: OriginPage;
   originId?: number;
@@ -84,9 +73,9 @@ const MANDATORY_FIELDS = ['addedDate', 'facilityId', ...QUANTITY_FIELDS, 'specie
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
 export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Element {
-  const { onBatchValidated, doValidateBatch, selectedBatch, originId, origin } = props;
+  const { doValidateBatch, errorPageMessage, setErrorPageMessage, onBatchValidated, originId, origin, selectedBatch } =
+    props;
 
-  const classes = useStyles();
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
@@ -112,7 +101,11 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const [timeZone, setTimeZone] = useState('');
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
-  const [errorPageMessage, setErrorPageMessage] = useState('');
+  const [invalidFields, setInvalidFields] = useState<Record<'germinating' | 'notReady' | 'ready', string>>({
+    germinating: '',
+    notReady: '',
+    ready: '',
+  });
 
   const hasErrors = useCallback(() => {
     if (record) {
@@ -280,18 +273,42 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   }, [availableSubLocations, record?.id, setRecord]);
 
   useEffect(() => {
+    const invalid = { germinating: '', notReady: '', ready: '' };
+    let errorMessage = '';
     if (selectedAccession) {
-      if (accessionQuantity === undefined) {
-        setErrorPageMessage(strings.ACCESSION_NO_SEEDS_TO_WITHDRAW);
-        return;
-      }
-      if (totalQuantity > accessionQuantity.value) {
-        setErrorPageMessage(strings.ACCESSION_NOT_ENOUGH_SEEDS_TO_WITHDRAW);
-        return;
+      const germinatingQuantity = Number(record?.germinatingQuantity ?? 0);
+      const notReadyQuantity = Number(record?.notReadyQuantity ?? 0);
+      const readyQuantity = Number(record?.readyQuantity ?? 0);
+
+      if (accessionQuantity === undefined || accessionQuantity.value === 0) {
+        errorMessage = strings.ACCESSION_NO_SEEDS_TO_WITHDRAW;
+      } else if (germinatingQuantity + totalQuantity > accessionQuantity.value) {
+        // a L -> R analysis of which inputs to mark as invalid
+        if (germinatingQuantity && germinatingQuantity > accessionQuantity.value) {
+          invalid.germinating = strings.INVALID_VALUE;
+        }
+        if (notReadyQuantity && germinatingQuantity + notReadyQuantity > accessionQuantity.value) {
+          invalid.notReady = strings.INVALID_VALUE;
+        }
+        if (readyQuantity && germinatingQuantity + notReadyQuantity + readyQuantity > accessionQuantity.value) {
+          invalid.ready = strings.INVALID_VALUE;
+        }
+        errorMessage = strings.ACCESSION_NOT_ENOUGH_SEEDS_TO_WITHDRAW;
       }
     }
-    setErrorPageMessage('');
-  }, [accessionQuantity, selectedAccession, totalQuantity]);
+    if (setErrorPageMessage) {
+      setErrorPageMessage(errorMessage);
+    }
+    setInvalidFields(invalid);
+  }, [
+    accessionQuantity,
+    record?.germinatingQuantity,
+    record?.notReadyQuantity,
+    record?.readyQuantity,
+    selectedAccession,
+    setErrorPageMessage,
+    totalQuantity,
+  ]);
 
   return (
     <>
@@ -396,9 +413,9 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                     setRecord={setRecord}
                   />
                   {selectedAccession && (
-                    <Box display='flex' justifyContent='space-between'>
+                    <Box display='flex' justifyContent='space-between' flexDirection={isMobile ? 'column' : 'row'}>
                       <Typography fontSize='14px' fontWeight={400} marginTop={1}>
-                        {strings.ACCESSION_STATE}: {stateName(selectedAccession.state)}
+                        {strings.STATE}: {stateName(selectedAccession.state)}
                       </Typography>
                       {accessionQuantity === undefined && (
                         <Typography fontSize='14px' fontWeight={400} marginTop={1}>
@@ -462,12 +479,6 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
               <Divider />
             </Grid>
 
-            {errorPageMessage && (
-              <Box display='flex' flexGrow={1} margin={theme.spacing(2, 0)}>
-                <ErrorBox text={errorPageMessage} className={classes.error} />
-              </Box>
-            )}
-
             <Grid
               item
               xs={gridSize()}
@@ -482,7 +493,9 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
                 errorText={
-                  validateFields && isUndefinedQuantity(record.germinatingQuantity) ? strings.REQUIRED_FIELD : ''
+                  validateFields && isUndefinedQuantity(record.germinatingQuantity)
+                    ? strings.REQUIRED_FIELD
+                    : invalidFields.germinating
                 }
                 min={0}
                 disabledCharacters={['.']}
@@ -497,7 +510,11 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                 type='number'
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                errorText={validateFields && isUndefinedQuantity(record.notReadyQuantity) ? strings.REQUIRED_FIELD : ''}
+                errorText={
+                  validateFields && isUndefinedQuantity(record.notReadyQuantity)
+                    ? strings.REQUIRED_FIELD
+                    : invalidFields.notReady
+                }
                 min={0}
                 disabledCharacters={['.']}
               />
@@ -522,7 +539,11 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                 type='number'
                 label={strings.READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-                errorText={validateFields && isUndefinedQuantity(record.readyQuantity) ? strings.REQUIRED_FIELD : ''}
+                errorText={
+                  validateFields && isUndefinedQuantity(record.readyQuantity)
+                    ? strings.REQUIRED_FIELD
+                    : invalidFields.ready
+                }
                 min={0}
                 disabledCharacters={['.']}
               />

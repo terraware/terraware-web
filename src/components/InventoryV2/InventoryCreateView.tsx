@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { ErrorBox } from '@terraware/web-components';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
@@ -13,15 +15,29 @@ import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelector
 import { requestSaveBatch, SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { InventoryListType, InventoryListTypes } from './';
 
+const useStyles = makeStyles(() => ({
+  error: {
+    '& .error-box--container': {
+      alignItems: 'center',
+      width: 'auto',
+    },
+    '&.error-box': {
+      width: 'auto',
+    },
+  },
+}));
+
 export default function InventoryCreateView(): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const history = useHistory();
   const snackbar = useSnackbar();
+  const classes = useStyles();
   const { userPreferences } = useUser();
   const originInventoryViewType: InventoryListType =
     (userPreferences.inventoryListType as InventoryListType) || InventoryListTypes.BATCHES_BY_SPECIES;
 
+  const [errorPageMessage, setErrorPageMessage] = useState<string>('');
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
 
@@ -88,6 +104,11 @@ export default function InventoryCreateView(): JSX.Element {
     }
   }, [batchesRequest, history, inventoryLocation, originInventoryViewType, snackbar]);
 
+  const setErrorMessage = useCallback(
+    (errorMessage: string) => setErrorPageMessage(errorMessage),
+    [setErrorPageMessage]
+  );
+
   return (
     <TfMain>
       <PageForm
@@ -100,6 +121,13 @@ export default function InventoryCreateView(): JSX.Element {
         <Typography sx={{ paddingLeft: theme.spacing(3), fontWeight: 600, fontSize: '24px' }}>
           {strings.ADD_INVENTORY}
         </Typography>
+
+        {errorPageMessage && (
+          <Box display='flex' flexGrow={1} marginTop={theme.spacing(2)}>
+            <ErrorBox text={errorPageMessage} className={classes.error} />
+          </Box>
+        )}
+
         <Box
           display='flex'
           flexDirection='column'
@@ -120,6 +148,8 @@ export default function InventoryCreateView(): JSX.Element {
               onBatchValidated={onBatchValidated}
               doValidateBatch={doValidateBatch}
               origin={'InventoryAdd'}
+              errorPageMessage={errorPageMessage}
+              setErrorPageMessage={setErrorMessage}
             />
           </Box>
         </Box>

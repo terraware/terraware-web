@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Button, DialogBox } from '@terraware/web-components';
+import { Box, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Button, DialogBox, ErrorBox } from '@terraware/web-components';
 import strings from 'src/strings';
 import { NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
@@ -8,6 +10,18 @@ import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { requestSaveBatch, SavableBatch } from '../../../redux/features/batches/batchesAsyncThunks';
 import { selectBatchesRequest } from '../../../redux/features/batches/batchesSelectors';
 import useSnackbar from '../../../utils/useSnackbar';
+
+const useStyles = makeStyles(() => ({
+  error: {
+    '& .error-box--container': {
+      alignItems: 'center',
+      width: 'auto',
+    },
+    '&.error-box': {
+      width: 'auto',
+    },
+  },
+}));
 
 export interface BatchDetailsModalProps {
   onClose: () => void;
@@ -20,11 +34,19 @@ export interface BatchDetailsModalProps {
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
   const { onClose, reload, selectedBatch, originId, origin } = props;
 
+  const classes = useStyles();
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
+  const [errorPageMessage, setErrorPageMessage] = useState<string>('');
+
+  const setErrorMessage = useCallback(
+    (errorMessage: string) => setErrorPageMessage(errorMessage),
+    [setErrorPageMessage]
+  );
 
   const batchesRequest = useAppSelector(selectBatchesRequest(requestId));
 
@@ -73,12 +95,19 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         ]}
         scrolled={true}
       >
+        {errorPageMessage && (
+          <Box display='flex' flexGrow={1} marginBottom={theme.spacing(2)}>
+            <ErrorBox text={errorPageMessage} className={classes.error} />
+          </Box>
+        )}
         <BatchDetailsForm
-          onBatchValidated={onBatchValidated}
           doValidateBatch={doValidateBatch}
-          selectedBatch={selectedBatch}
+          errorPageMessage={errorPageMessage}
+          onBatchValidated={onBatchValidated}
           originId={originId}
           origin={origin}
+          selectedBatch={selectedBatch}
+          setErrorPageMessage={setErrorMessage}
         />
       </DialogBox>
     </>
