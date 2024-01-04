@@ -8,8 +8,6 @@ import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { requestSaveBatch, SavableBatch } from '../../../redux/features/batches/batchesAsyncThunks';
 import { selectBatchesRequest } from '../../../redux/features/batches/batchesSelectors';
 import useSnackbar from 'src/utils/useSnackbar';
-import useErrorMessage from 'src/components/InventoryV2/form/useErrorMessage';
-import ErrorMessage from 'src/components/InventoryV2/form/ErrorMessage';
 
 export interface BatchDetailsModalProps {
   onClose: () => void;
@@ -27,7 +25,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
-  const [errorMessage, setErrorMessage] = useErrorMessage();
   const [busy, setBusy] = useState<boolean>(false);
 
   const batchesRequest = useAppSelector(selectBatchesRequest(requestId));
@@ -81,15 +78,11 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         ]}
         scrolled={true}
       >
-        <ErrorMessage errorMessage={errorMessage} />
         <BatchDetailsForm
           doValidateBatch={doValidateBatch}
-          errorPageMessage={errorMessage}
           onBatchValidated={onBatchValidated}
           originId={originId}
           origin={origin}
-          selectedBatch={selectedBatch}
-          setErrorPageMessage={setErrorMessage}
         />
       </DialogBox>
     </>

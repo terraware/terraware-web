@@ -33,8 +33,6 @@ import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 
 export interface BatchDetailsFormProps {
   doValidateBatch: boolean;
-  errorPageMessage?: string;
-  setErrorPageMessage?: (errorMessage: string) => void;
   onBatchValidated: (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => void;
   origin: OriginPage;
   originId?: number;
@@ -73,8 +71,7 @@ const MANDATORY_FIELDS = ['addedDate', 'facilityId', ...QUANTITY_FIELDS, 'specie
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
 export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Element {
-  const { doValidateBatch, errorPageMessage, setErrorPageMessage, onBatchValidated, originId, origin, selectedBatch } =
-    props;
+  const { doValidateBatch, onBatchValidated, originId, origin, selectedBatch } = props;
 
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
@@ -110,7 +107,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const hasErrors = useCallback(() => {
     if (record) {
       // if we have a pre-determined error
-      if (errorPageMessage) {
+      if (Object.values(invalidFields).some((val: string) => val !== '')) {
         return true;
       }
 
@@ -129,7 +126,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     }
 
     return true;
-  }, [errorPageMessage, record, snackBar]);
+  }, [invalidFields, record, snackBar]);
 
   const handleBatchValidation = useCallback(
     (savableRecord: SavableFormRecord) => {
@@ -274,30 +271,24 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
 
   useEffect(() => {
     const invalid = { germinating: '', notReady: '', ready: '' };
-    let errorMessage = '';
     if (selectedAccession) {
       const germinatingQuantity = Number(record?.germinatingQuantity ?? 0);
       const notReadyQuantity = Number(record?.notReadyQuantity ?? 0);
       const readyQuantity = Number(record?.readyQuantity ?? 0);
+      const remainingSeeds = accessionQuantity?.value ?? 0;
 
-      if (accessionQuantity === undefined || accessionQuantity.value === 0) {
-        errorMessage = strings.ACCESSION_NO_SEEDS_TO_WITHDRAW;
-      } else if (germinatingQuantity + totalQuantity > accessionQuantity.value) {
+      if (germinatingQuantity + totalQuantity > remainingSeeds) {
         // a L -> R analysis of which inputs to mark as invalid
-        if (germinatingQuantity && germinatingQuantity > accessionQuantity.value) {
-          invalid.germinating = strings.INVALID_VALUE;
+        if (germinatingQuantity && germinatingQuantity > remainingSeeds) {
+          invalid.germinating = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
         }
-        if (notReadyQuantity && germinatingQuantity + notReadyQuantity > accessionQuantity.value) {
-          invalid.notReady = strings.INVALID_VALUE;
+        if (notReadyQuantity && germinatingQuantity + notReadyQuantity > remainingSeeds) {
+          invalid.notReady = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
         }
-        if (readyQuantity && germinatingQuantity + notReadyQuantity + readyQuantity > accessionQuantity.value) {
-          invalid.ready = strings.INVALID_VALUE;
+        if (readyQuantity && germinatingQuantity + notReadyQuantity + readyQuantity > remainingSeeds) {
+          invalid.ready = strings.NOT_ENOUGH_SEEDS_IN_ACCESSION;
         }
-        errorMessage = strings.ACCESSION_NOT_ENOUGH_SEEDS_TO_WITHDRAW;
       }
-    }
-    if (setErrorPageMessage) {
-      setErrorPageMessage(errorMessage);
     }
     setInvalidFields(invalid);
   }, [
@@ -306,7 +297,6 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     record?.notReadyQuantity,
     record?.readyQuantity,
     selectedAccession,
-    setErrorPageMessage,
     totalQuantity,
   ]);
 
@@ -492,9 +482,11 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                 label={strings.GERMINATING_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
                 errorText={
-                  validateFields && isUndefinedQuantity(record.germinatingQuantity)
-                    ? strings.REQUIRED_FIELD
-                    : invalidFields.germinating
+                  validateFields
+                    ? isUndefinedQuantity(record.germinatingQuantity)
+                      ? strings.REQUIRED_FIELD
+                      : invalidFields.germinating
+                    : ''
                 }
                 min={0}
                 disabledCharacters={['.']}
@@ -510,9 +502,11 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                 label={strings.NOT_READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                 errorText={
-                  validateFields && isUndefinedQuantity(record.notReadyQuantity)
-                    ? strings.REQUIRED_FIELD
-                    : invalidFields.notReady
+                  validateFields
+                    ? isUndefinedQuantity(record.notReadyQuantity)
+                      ? strings.REQUIRED_FIELD
+                      : invalidFields.notReady
+                    : ''
                 }
                 min={0}
                 disabledCharacters={['.']}
@@ -539,9 +533,11 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
                 label={strings.READY_QUANTITY_REQUIRED}
                 tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
                 errorText={
-                  validateFields && isUndefinedQuantity(record.readyQuantity)
-                    ? strings.REQUIRED_FIELD
-                    : invalidFields.ready
+                  validateFields
+                    ? isUndefinedQuantity(record.readyQuantity)
+                      ? strings.REQUIRED_FIELD
+                      : invalidFields.ready
+                    : ''
                 }
                 min={0}
                 disabledCharacters={['.']}
