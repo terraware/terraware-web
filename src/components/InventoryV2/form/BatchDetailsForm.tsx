@@ -12,8 +12,6 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import { useUser } from 'src/providers';
 import FacilityService from 'src/services/FacilityService';
-import { APP_PATHS } from 'src/constants';
-import Link from 'src/components/common/Link';
 import { stateName } from 'src/types/Accession';
 import { NurseryBatchesSearchResponseElement, UpdateBatchRequestPayloadWithId } from 'src/services/NurseryBatchService';
 import isEnabled from 'src/features';
@@ -89,11 +87,11 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const facilityId = origin === 'Nursery' ? originId : record?.facilityId;
   const speciesId = origin === 'Species' ? originId : record?.speciesId;
 
-  const { availableSubLocations, selectedSubLocations } = useSubLocations(facilityId, record);
+  const { availableSubLocations } = useSubLocations(facilityId, record);
   const { selectedSpecies } = useSpecies(record);
   const { availableAccessions, selectedAccession } = useAccessions(record, selectedSpecies?.id ?? speciesId, true);
-  const { availableNurseries, selectedNursery } = useNurseries(record);
-  const { availableProjects, selectedProject } = useProjects(record);
+  const { availableNurseries } = useNurseries(record);
+  const { availableProjects } = useProjects(record);
 
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [addedDateChanged, setAddedDateChanged] = useState(false);
@@ -314,153 +312,67 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     <>
       {record && (
         <>
-          {record.id !== -1 && (
-            <Grid container item xs={12} spacing={2} textAlign='left'>
-              <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                {selectedSpecies && (
-                  <Textfield
-                    id='scientificName'
-                    value={selectedSpecies?.scientificName}
-                    type='text'
-                    label={strings.SPECIES}
-                    display={true}
-                  />
-                )}
+          <Grid container item xs={12} spacing={1} textAlign='left'>
+            {['InventoryAdd', 'Nursery'].includes(origin) && (
+              <Grid item xs={12} padding={dropdownPadding}>
+                <SpeciesDropdown<FormRecord> record={record} setRecord={setRecord} validateFields={validateFields} />
               </Grid>
-              <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-                {selectedSpecies && (
-                  <Textfield
-                    id='commonName'
-                    value={selectedSpecies?.commonName}
-                    type='text'
-                    label={strings.COMMON_NAME}
-                    display={true}
-                  />
-                )}
-              </Grid>
+            )}
 
+            <Grid item xs={12} padding={dropdownPadding}>
+              <AccessionsDropdown<FormRecord>
+                availableAccessions={availableAccessions}
+                record={record}
+                setRecord={setRecord}
+              />
               {selectedAccession && (
-                <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
-                  <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px' }}>
-                    {strings.ACCESSION}
+                <Box display='flex' justifyContent='space-between' flexDirection={isMobile ? 'column' : 'row'}>
+                  <Typography fontSize='14px' fontWeight={400} marginTop={1}>
+                    {strings.STATE}: {stateName(selectedAccession.state)}
                   </Typography>
-
-                  <Link
-                    to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', selectedAccession.id.toString())}
-                    target='_blank'
-                  >
-                    {selectedAccession.accessionNumber}
-                  </Link>
-                </Grid>
-              )}
-
-              {selectedNursery && (
-                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                  <Textfield
-                    id='facilityId'
-                    value={selectedNursery.name}
-                    type='text'
-                    label={strings.NURSERY}
-                    display={true}
-                  />
-                </Grid>
-              )}
-
-              {selectedSubLocations && (
-                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                  <Textfield
-                    id='subLocationIds'
-                    value={selectedSubLocations.map((selectedSubLocation) => selectedSubLocation.name).join(', ')}
-                    type='text'
-                    label={strings.SUB_LOCATIONS}
-                    display={true}
-                  />
-                </Grid>
-              )}
-
-              {featureFlagProjects && selectedProject && (
-                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
-                  <Textfield
-                    id='projectId'
-                    value={selectedProject.name}
-                    type='text'
-                    label={strings.PROJECT}
-                    display={true}
-                  />
-                </Grid>
+                  {accessionQuantity === undefined && (
+                    <Typography fontSize='14px' fontWeight={400} marginTop={1}>
+                      {strings.NO_QUANTITY_SET}
+                    </Typography>
+                  )}
+                  {accessionQuantity !== undefined && (
+                    <Typography fontSize='14px' fontWeight={400} marginTop={1}>
+                      {strings.REMAINING_SEEDS}: {accessionQuantity.display}
+                    </Typography>
+                  )}
+                </Box>
               )}
             </Grid>
-          )}
 
-          <Grid container item xs={12} spacing={1} textAlign='left'>
-            {record.id === -1 && (
-              <>
-                {['InventoryAdd', 'Nursery'].includes(origin) && (
-                  <Grid item xs={12} padding={dropdownPadding}>
-                    <SpeciesDropdown<FormRecord>
-                      record={record}
-                      setRecord={setRecord}
-                      validateFields={validateFields}
-                    />
-                  </Grid>
-                )}
+            {['InventoryAdd', 'Species'].includes(origin) && (
+              <Grid item xs={12} padding={dropdownPadding}>
+                <NurseryDropdownV2
+                  availableNurseries={availableNurseries}
+                  record={record}
+                  setRecord={setRecord}
+                  validateFields={validateFields}
+                />
+              </Grid>
+            )}
 
-                <Grid item xs={12} padding={dropdownPadding}>
-                  <AccessionsDropdown<FormRecord>
-                    availableAccessions={availableAccessions}
-                    record={record}
-                    setRecord={setRecord}
-                  />
-                  {selectedAccession && (
-                    <Box display='flex' justifyContent='space-between' flexDirection={isMobile ? 'column' : 'row'}>
-                      <Typography fontSize='14px' fontWeight={400} marginTop={1}>
-                        {strings.STATE}: {stateName(selectedAccession.state)}
-                      </Typography>
-                      {accessionQuantity === undefined && (
-                        <Typography fontSize='14px' fontWeight={400} marginTop={1}>
-                          {strings.NO_QUANTITY_SET}
-                        </Typography>
-                      )}
-                      {accessionQuantity !== undefined && (
-                        <Typography fontSize='14px' fontWeight={400} marginTop={1}>
-                          {strings.REMAINING_SEEDS}: {accessionQuantity.display}
-                        </Typography>
-                      )}
-                    </Box>
-                  )}
-                </Grid>
+            {availableSubLocations && availableSubLocations.length > 0 && (
+              <Grid item xs={12} padding={dropdownPadding}>
+                <SubLocationsDropdown<FormRecord>
+                  availableSubLocations={availableSubLocations}
+                  record={record}
+                  setRecord={setRecord}
+                />
+              </Grid>
+            )}
 
-                {['InventoryAdd', 'Species'].includes(origin) && (
-                  <Grid item xs={12} padding={dropdownPadding}>
-                    <NurseryDropdownV2
-                      availableNurseries={availableNurseries}
-                      record={record}
-                      setRecord={setRecord}
-                      validateFields={validateFields}
-                    />
-                  </Grid>
-                )}
-
-                {availableSubLocations && availableSubLocations.length > 0 && (
-                  <Grid item xs={12} padding={dropdownPadding}>
-                    <SubLocationsDropdown<FormRecord>
-                      availableSubLocations={availableSubLocations}
-                      record={record}
-                      setRecord={setRecord}
-                    />
-                  </Grid>
-                )}
-
-                {featureFlagProjects && (
-                  <Grid item xs={12} padding={dropdownPadding}>
-                    <ProjectsDropdown<FormRecord>
-                      availableProjects={availableProjects}
-                      record={record}
-                      setRecord={setRecord}
-                    />
-                  </Grid>
-                )}
-              </>
+            {featureFlagProjects && (
+              <Grid item xs={12} padding={dropdownPadding}>
+                <ProjectsDropdown<FormRecord>
+                  availableProjects={availableProjects}
+                  record={record}
+                  setRecord={setRecord}
+                />
+              </Grid>
             )}
 
             <Grid item xs={gridSize()} paddingLeft={paddingSeparator}>

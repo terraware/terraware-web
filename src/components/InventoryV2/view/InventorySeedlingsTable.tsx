@@ -164,10 +164,23 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
     if (batch) {
-      setSelectedBatch(batch);
-      setOpenNewBatchModal(true);
+      if (origin === 'Nursery') {
+        history.push({
+          pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${originId}`).replace(
+            ':batchId',
+            `${batch.id}`
+          ),
+        });
+      } else {
+        history.push({
+          pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`).replace(
+            ':batchId',
+            `${batch.id}`
+          ),
+        });
+      }
     }
-  }, [openBatchNumber, batches]);
+  }, [batches, history, openBatchNumber, origin, originId]);
 
   useEffect(() => {
     // Because the field group filters have their values
