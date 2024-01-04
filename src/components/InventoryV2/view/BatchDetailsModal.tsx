@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Button, DialogBox } from '@terraware/web-components';
+import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 import strings from 'src/strings';
 import { NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
@@ -25,6 +25,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
+  const [busy, setBusy] = useState<boolean>(false);
 
   const batchesRequest = useAppSelector(selectBatchesRequest(requestId));
 
@@ -32,6 +33,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
     (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => {
       setDoValidateBatch(false);
       if (batchDetails) {
+        setBusy(true);
         const request = dispatch(requestSaveBatch(batchDetails));
         setRequestId(request.requestId);
       }
@@ -45,9 +47,11 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   useEffect(() => {
     if (batchesRequest?.status === 'success') {
+      setBusy(false);
       reload();
       onClose();
     } else if (batchesRequest?.status === 'error') {
+      setBusy(false);
       snackbar.toastError(strings.GENERIC_ERROR);
       setDoValidateBatch(false);
     }
@@ -55,6 +59,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   return (
     <>
+      {busy && <BusySpinner withSkrim={true} />}
       <DialogBox
         onClose={onClose}
         open={true}
