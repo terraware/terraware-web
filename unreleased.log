@@ -1,3 +1,4 @@
+6334035742 SW-4670 Redirect inventory batch view by query param to the batch page view (#1998)
 e52235671b SW-4647 Redo error message / quantity validation for inventory create (#1997)
 2f0722d58c SW-4663 Strip tab query param from inventory links (#1994)
 3405e2525e SW-4647 Validate accession quantity when creating inventory (#1991)
