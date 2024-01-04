@@ -1,6 +1,5 @@
 import { Grid, Typography } from '@mui/material';
 import React, { useEffect, useState, useCallback } from 'react';
-import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { SelectT } from '@terraware/web-components';
 import useDebounce from 'src/utils/useDebounce';
@@ -9,16 +8,16 @@ import { SpeciesService } from 'src/services';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { SuggestedSpecies } from 'src/types/Species';
 
-interface SpeciesSelectorProps<T extends AccessionPostRequestBody> {
+interface SpeciesSelectorProps<T extends { speciesId?: number } | undefined> {
   speciesId?: number;
   record: T;
-  setRecord: React.Dispatch<React.SetStateAction<T>>;
+  setRecord: React.Dispatch<React.SetStateAction<T>> | ((setFn: (previousValue: T) => T) => void);
   disabled?: boolean;
   validate?: boolean;
   tooltipTitle?: string;
 }
 
-export default function SpeciesSelector<T extends AccessionPostRequestBody>(
+export default function SpeciesSelector<T extends { speciesId?: number } | undefined>(
   props: SpeciesSelectorProps<T>
 ): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -111,7 +110,7 @@ export default function SpeciesSelector<T extends AccessionPostRequestBody>(
           toT={toT}
           fullWidth={true}
           editable={true}
-          errorText={validate && !record.speciesId ? strings.REQUIRED_FIELD : ''}
+          errorText={validate && !record?.speciesId ? strings.REQUIRED_FIELD : ''}
           tooltipTitle={tooltipTitle}
           fixedMenu={true}
         />
