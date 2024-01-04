@@ -12,7 +12,6 @@ import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjec
 import { useOrganization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
-import { SpeciesProjectsSearchResponse } from 'src/services/SpeciesService';
 
 interface InventorySummaryProps {
   speciesId: number;
