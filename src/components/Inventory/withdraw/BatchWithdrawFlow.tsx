@@ -15,7 +15,6 @@ import SelectBatchesWithdrawnQuantity from './flow/SelectBatchesWithdrawnQuantit
 import SelectPurposeForm from './flow/SelectPurposeForm';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
-import isEnabled from 'src/features';
 import EmptyBatchesInfoModal from './EmptyBatchesInfoModal';
 import { SearchResponseElement } from 'src/types/Search';
 
@@ -43,7 +42,6 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const [filterProjectId, setFilterProjectId] = useState<number>();
   const snackbar = useSnackbar();
   const history = useHistory();
-  const nurseryV2 = isEnabled('Nursery Updates');
 
   useEffect(() => {
     const populateBatches = async () => {
@@ -98,7 +96,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
         return (
           batchWithdrawal.readyQuantityWithdrawn +
             batchWithdrawal.notReadyQuantityWithdrawn +
-            (nurseryV2 ? batchWithdrawal.germinatingQuantityWithdrawn ?? 0 : 0) >
+            (batchWithdrawal.germinatingQuantityWithdrawn ?? 0) >
           0
         );
       });

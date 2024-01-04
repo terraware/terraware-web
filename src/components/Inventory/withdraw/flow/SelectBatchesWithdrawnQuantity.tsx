@@ -84,16 +84,6 @@ const defaultTableColumns = (): TableColumnType[] => [
   },
 ];
 
-const tableColumns = (nurseryV2: boolean) => () => {
-  const columns = defaultTableColumns();
-
-  if (!nurseryV2) {
-    columns.splice(2, 1); // remove germinating quantity column
-  }
-
-  return columns;
-};
-
 const outplantTableColumns = (): TableColumnType[] => [
   {
     key: 'batchNumber',
@@ -128,7 +118,6 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [record, setRecord] = useForm<BatchWithdrawalForTable[]>([]);
-  const nurseryV2 = isEnabled('Nursery Updates');
   const featureFlagProjects = isEnabled('Projects');
 
   const [species, setSpecies] = useState<any>([]);
@@ -237,22 +226,20 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
         let readyQuantityWithdrawnError = '';
         let notReadyQuantityWithdrawnError = '';
 
-        if (nurseryV2) {
-          if (rec.germinatingQuantityWithdrawn) {
-            if (isInvalidQuantity(rec.germinatingQuantityWithdrawn)) {
-              germinatingQuantityWithdrawnError = strings.INVALID_VALUE;
+        if (rec.germinatingQuantityWithdrawn) {
+          if (isInvalidQuantity(rec.germinatingQuantityWithdrawn)) {
+            germinatingQuantityWithdrawnError = strings.INVALID_VALUE;
+            noErrors = false;
+          } else {
+            if (+rec.germinatingQuantityWithdrawn > +rec['germinatingQuantity(raw)']) {
+              germinatingQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
               noErrors = false;
             } else {
-              if (+rec.germinatingQuantityWithdrawn > +rec['germinatingQuantity(raw)']) {
-                germinatingQuantityWithdrawnError = strings.WITHDRAWN_QUANTITY_ERROR;
-                noErrors = false;
-              } else {
-                germinatingQuantityWithdrawnError = '';
-              }
+              germinatingQuantityWithdrawnError = '';
             }
-          } else {
-            unsetValues++;
           }
+        } else {
+          unsetValues++;
         }
 
         if (rec.readyQuantityWithdrawn) {
@@ -287,7 +274,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           unsetValues++;
         }
 
-        if (unsetValues === record.length * (nurseryV2 ? 3 : 2)) {
+        if (unsetValues === record.length * 3) {
           setErrorPageMessage(strings.WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR);
           noErrors = false;
         } else {
@@ -382,7 +369,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                         columns={() =>
                           (nurseryWithdrawal.purpose === OUTPLANT
                             ? outplantTableColumns()
-                            : tableColumns(nurseryV2)()
+                            : defaultTableColumns()
                           ).filter((column) => (featureFlagProjects ? column : column.key !== 'projectName'))
                         }
                         rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
