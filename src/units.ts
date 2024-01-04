@@ -1,9 +1,11 @@
 import strings from 'src/strings';
 import { useUser } from './providers';
 
+export type UnitType = 'Grams' | 'Milligrams' | 'Kilograms' | 'Pounds' | 'Seeds' | 'Ounces';
+
 export interface Unit {
   label: string;
-  value: 'Grams' | 'Milligrams' | 'Kilograms' | 'Pounds' | 'Seeds' | 'Ounces';
+  value: UnitType;
 }
 
 export function weightUnits() {

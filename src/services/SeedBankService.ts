@@ -10,6 +10,8 @@ import {
   SearchResponseElementWithId,
   SearchSortOrder,
 } from 'src/types/Search';
+import { AccessionState } from 'src/types/Accession';
+import { UnitType } from 'src/units';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 
 /**
@@ -63,9 +65,26 @@ export type AccessionsSearchParams = {
 export type SearchResponseAccession = {
   id: string;
   accessionNumber: string;
+  estimatedCount?: string;
+  'estimatedCount(raw)'?: string;
+  remainingQuantity?: string;
+  'remainingQuantity(raw)'?: string;
+  remainingUnits?: UnitType;
   speciesName: string;
+  state: AccessionState;
 };
-const SEARCH_FIELDS_ACCESSIONS = ['id', 'accessionNumber', 'speciesName'];
+
+const SEARCH_FIELDS_ACCESSIONS = [
+  'id',
+  'accessionNumber',
+  'estimatedCount',
+  'estimatedCount(raw)',
+  'remainingQuantity',
+  'remainingQuantity(raw)',
+  'remainingUnits',
+  'speciesName',
+  'state',
+];
 
 /**
  * Seed bank summary
