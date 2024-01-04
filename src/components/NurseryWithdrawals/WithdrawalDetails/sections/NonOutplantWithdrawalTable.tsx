@@ -54,7 +54,6 @@ export default function NonOutplantWithdrawalTable({
     if (batches) {
       const batchToSpeciesMap = batchToSpecies(batches);
 
-      const speciesBatchMap: SpeciesBatchMap = {};
       const batchesMap: SpeciesWithdrawal[] = [];
 
       if (Object.keys(batchToSpeciesMap).length > 0) {
