@@ -84,7 +84,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
-  const [selectedBatch, setSelectedBatch] = useState<any>();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
 
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
@@ -207,7 +206,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   };
 
   const addBatch = () => {
-    setSelectedBatch(undefined);
     setOpenNewBatchModal(true);
     reloadData();
     return;
@@ -223,7 +221,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   }, [batches]);
 
   const onBatchSelected = (batch: any, fromColumn?: string) => {
-    setSelectedBatch(batch);
     if (fromColumn === 'withdraw') {
       history.push({
         pathname: APP_PATHS.BATCH_WITHDRAW,
@@ -350,7 +347,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               onUpdateOpenBatch(null);
               setOpenNewBatchModal(false);
             }}
-            selectedBatch={selectedBatch}
             originId={originId}
             origin={origin}
           />

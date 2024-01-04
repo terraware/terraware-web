@@ -13,7 +13,6 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 import { useUser } from 'src/providers';
 import FacilityService from 'src/services/FacilityService';
 import { stateName } from 'src/types/Accession';
-import { NurseryBatchesSearchResponseElement, UpdateBatchRequestPayloadWithId } from 'src/services/NurseryBatchService';
 import isEnabled from 'src/features';
 import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -34,31 +33,10 @@ export interface BatchDetailsFormProps {
   onBatchValidated: (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => void;
   origin: OriginPage;
   originId?: number;
-  selectedBatch?: NurseryBatchesSearchResponseElement;
 }
 
 type FormRecord = Partial<SavableBatch> | undefined;
 type SavableFormRecord = Partial<SavableBatch>;
-
-const convertSelectedBatchToFormRecord = (input: NurseryBatchesSearchResponseElement | undefined): FormRecord =>
-  !input
-    ? input
-    : ({
-        accessionId: input.accession_id ? Number(input.accession_id) : undefined,
-        addedDate: input.addedDate,
-        batchNumber: input.batchNumber,
-        facilityId: Number(input.facility_id),
-        germinatingQuantity: Number(input['germinatingQuantity(raw)']),
-        id: Number(input.id),
-        notes: input.notes,
-        notReadyQuantity: Number(input['notReadyQuantity(raw)']),
-        projectId: Number(input.project_id),
-        readyQuantity: Number(input['readyQuantity(raw)']),
-        readyByDate: input.readyByDate,
-        speciesId: Number(input.species_id),
-        subLocationIds: (input.subLocations || []).map((subLocation) => Number(subLocation.subLocation_id)),
-        version: Number(input.version),
-      } as Partial<CreateBatchRequestPayload | UpdateBatchRequestPayloadWithId>);
 
 const QUANTITY_FIELDS = ['germinatingQuantity', 'notReadyQuantity', 'readyQuantity'] as const;
 
@@ -69,7 +47,7 @@ const MANDATORY_FIELDS = ['addedDate', 'facilityId', ...QUANTITY_FIELDS, 'specie
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
 export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Element {
-  const { doValidateBatch, onBatchValidated, originId, origin, selectedBatch } = props;
+  const { doValidateBatch, onBatchValidated, originId, origin } = props;
 
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
@@ -211,19 +189,16 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
       speciesId,
     };
 
-    const initBatch = () =>
-      selectedBatch
-        ? convertSelectedBatchToFormRecord(selectedBatch)
-        : {
-            ...newBatch,
-            id: -1,
-            batchNumber: '',
-            latestObservedTime: '',
-            version: 0,
-          };
+    const initBatch = () => ({
+      ...newBatch,
+      id: -1,
+      batchNumber: '',
+      latestObservedTime: '',
+      version: 0,
+    });
 
     setRecord(initBatch());
-  }, [selectedBatch, setRecord, selectedOrganization, facilityId, speciesId, record]);
+  }, [setRecord, selectedOrganization, facilityId, speciesId, record]);
 
   useEffect(() => {
     if (record && doValidateBatch) {
