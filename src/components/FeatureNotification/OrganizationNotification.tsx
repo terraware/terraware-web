@@ -84,7 +84,7 @@ export default function OrganizationNotification(): Notification | null {
               <li>{strings.formatString(strings.TIME_ZONE_SELECTED, orgTimeZone || '')}</li>
             </ul>
             <Box paddingTop={1}>
-              <TextWithLink text={strings.ORG_NOTIFICATION_ACTION} href={APP_PATHS.ORGANIZATION} />
+              <TextWithLink text={strings.ORG_NOTIFICATION_ACTION} href={APP_PATHS.ORGANIZATION} fontSize='14px' />
             </Box>
           </div>
         ),
