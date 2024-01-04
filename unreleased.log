@@ -1,3 +1,4 @@
+3405e2525e SW-4647 Validate accession quantity when creating inventory (#1991)
 ca95409655 SW-4666 Add spinners to show busy state when creating nursery inventory (#1993)
 9d5dbd3fd7 SW-4660 Remove the nursery v2 flag, remove all checks for the flag (#1989)
 4066f89e95 SW-4659 Sort species entries for dropdown values (#1992)
