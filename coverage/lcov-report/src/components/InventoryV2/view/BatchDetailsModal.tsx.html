@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -149,7 +149,12 @@
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
 <a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -176,26 +181,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -204,7 +195,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -236,7 +246,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState, useCallback, useEffect } from 'react';
-import { Button, DialogBox } from '@terraware/web-components';
+import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 import strings from 'src/strings';
 import { NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
@@ -262,6 +272,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 &nbsp;
   const [doValidateBatch, setDoValidateBatch] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  const [busy, setBusy] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
 &nbsp;
   const batchesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectBatchesRequest(requestId));</span>
 &nbsp;
@@ -269,6 +280,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 <span class="fstat-no" title="function not covered" >    (b</span>atchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) =&gt; {
 <span class="cstat-no" title="statement not covered" >      setDoValidateBatch(false);</span>
 <span class="cstat-no" title="statement not covered" >      if (batchDetails) {</span>
+<span class="cstat-no" title="statement not covered" >        setBusy(true);</span>
         const request = <span class="cstat-no" title="statement not covered" >dispatch(requestSaveBatch(batchDetails));</span>
 <span class="cstat-no" title="statement not covered" >        setRequestId(request.requestId);</span>
       }
@@ -282,9 +294,11 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (batchesRequest?.status === 'success') {</span>
+<span class="cstat-no" title="statement not covered" >      setBusy(false);</span>
 <span class="cstat-no" title="statement not covered" >      reload();</span>
 <span class="cstat-no" title="statement not covered" >      onClose();</span>
     } else <span class="cstat-no" title="statement not covered" >if (batchesRequest?.status === 'error') {</span>
+<span class="cstat-no" title="statement not covered" >      setBusy(false);</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >      setDoValidateBatch(false);</span>
     }
@@ -292,6 +306,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
+      {busy &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
       &lt;DialogBox
         onClose={onClose}
         open={true}
@@ -328,7 +343,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-04T16:06:36.106Z
+                at 2024-01-04T16:27:49.857Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

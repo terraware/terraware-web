@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/281</span>
+                <span class='fraction'>0/279</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/232</span>
+                <span class='fraction'>0/228</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/270</span>
+                <span class='fraction'>0/268</span>
             </div>
         
             
@@ -892,11 +892,7 @@
 <a name='L827'></a><a href='#L827'>827</a>
 <a name='L828'></a><a href='#L828'>828</a>
 <a name='L829'></a><a href='#L829'>829</a>
-<a name='L830'></a><a href='#L830'>830</a>
-<a name='L831'></a><a href='#L831'>831</a>
-<a name='L832'></a><a href='#L832'>832</a>
-<a name='L833'></a><a href='#L833'>833</a>
-<a name='L834'></a><a href='#L834'>834</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L830'></a><a href='#L830'>830</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -982,7 +978,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1196,7 +1191,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1214,7 +1208,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1615,7 +1608,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1814,7 +1806,6 @@ export default function <span class="fstat-no" title="function not covered" >Sel
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
-  const nurseryV2 = <span class="cstat-no" title="statement not covered" >isEnabled('Nursery Updates');</span>
   const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
 &nbsp;
   const plantingSites = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
@@ -2029,21 +2020,19 @@ export default function <span class="fstat-no" title="function not covered" >Sel
         }
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (nurseryV2) {</span>
-<span class="cstat-no" title="statement not covered" >        if (!germinatingQuantityWithdrawn &amp;&amp; germinatingQuantityWithdrawn !== 0) {</span>
-<span class="cstat-no" title="statement not covered" >          setIndividualError('germinatingQuantityWithdrawn', strings.REQUIRED_FIELD);</span>
+<span class="cstat-no" title="statement not covered" >      if (!germinatingQuantityWithdrawn &amp;&amp; germinatingQuantityWithdrawn !== 0) {</span>
+<span class="cstat-no" title="statement not covered" >        setIndividualError('germinatingQuantityWithdrawn', strings.REQUIRED_FIELD);</span>
+<span class="cstat-no" title="statement not covered" >        allValid = false;</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        if (isNaN(germinatingQuantityWithdrawn)) {</span>
+<span class="cstat-no" title="statement not covered" >          setIndividualError('germinatingQuantityWithdrawn', strings.INVALID_VALUE);</span>
 <span class="cstat-no" title="statement not covered" >          allValid = false;</span>
         } else {
-<span class="cstat-no" title="statement not covered" >          if (isNaN(germinatingQuantityWithdrawn)) {</span>
-<span class="cstat-no" title="statement not covered" >            setIndividualError('germinatingQuantityWithdrawn', strings.INVALID_VALUE);</span>
+<span class="cstat-no" title="statement not covered" >          if (Number(germinatingQuantityWithdrawn) &gt; Number(batches[0]['germinatingQuantity(raw)'])) {</span>
+<span class="cstat-no" title="statement not covered" >            setIndividualError('germinatingQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >            allValid = false;</span>
           } else {
-<span class="cstat-no" title="statement not covered" >            if (Number(germinatingQuantityWithdrawn) &gt; Number(batches[0]['germinatingQuantity(raw)'])) {</span>
-<span class="cstat-no" title="statement not covered" >              setIndividualError('germinatingQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);</span>
-<span class="cstat-no" title="statement not covered" >              allValid = false;</span>
-            } else {
-<span class="cstat-no" title="statement not covered" >              setIndividualError('germinatingQuantityWithdrawn', '');</span>
-            }
+<span class="cstat-no" title="statement not covered" >            setIndividualError('germinatingQuantityWithdrawn', '');</span>
           }
         }
       }
@@ -2469,22 +2458,21 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             &lt;&gt;
               {isSingleBatch &amp;&amp; !isOutplant &amp;&amp; (
                 &lt;&gt;
-                  {nurseryV2 &amp;&amp; (
-                    &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
-                      &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}&gt;
-                        &lt;Textfield
-                          label={strings.GERMINATING_QUANTITY_REQUIRED}
-                          id='germinatingQuantityWithdrawn'
-                          onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; <span class="cstat-no" title="statement not covered" >setGerminatingQuantityWithdrawn(value as number)}</span>
-                          type='number'
-                          value={germinatingQuantityWithdrawn}
-                          tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-                          className={classes.germinatingQuantityWithdrawn}
-                          errorText={fieldsErrors.germinatingQuantityWithdrawn}
-                        /&gt;
-                      &lt;/Grid&gt;
+                  &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
+                    &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}&gt;
+                      &lt;Textfield
+                        label={strings.GERMINATING_QUANTITY_REQUIRED}
+                        id='germinatingQuantityWithdrawn'
+                        onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; <span class="cstat-no" title="statement not covered" >setGerminatingQuantityWithdrawn(value as number)}</span>
+                        type='number'
+                        value={germinatingQuantityWithdrawn}
+                        tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+                        className={classes.germinatingQuantityWithdrawn}
+                        errorText={fieldsErrors.germinatingQuantityWithdrawn}
+                      /&gt;
                     &lt;/Grid&gt;
-                  )}
+                  &lt;/Grid&gt;
+&nbsp;
                   &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
                     &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}&gt;
                       &lt;Textfield
@@ -2569,7 +2557,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-04T16:06:36.106Z
+                at 2024-01-04T16:27:49.857Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

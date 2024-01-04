@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/86</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/78</span>
             </div>
         
             
@@ -379,10 +379,7 @@
 <a name='L314'></a><a href='#L314'>314</a>
 <a name='L315'></a><a href='#L315'>315</a>
 <a name='L316'></a><a href='#L316'>316</a>
-<a name='L317'></a><a href='#L317'>317</a>
-<a name='L318'></a><a href='#L318'>318</a>
-<a name='L319'></a><a href='#L319'>319</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L317'></a><a href='#L317'>317</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -420,7 +417,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -722,7 +718,6 @@ import { getNurseryById } from 'src/utils/organization';
 import { useOrganization } from 'src/providers';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
-import isEnabled from 'src/features';
 import { SubLocationService } from 'src/services';
 import { MultiSelect } from '@terraware/web-components';
 &nbsp;
@@ -753,7 +748,6 @@ export default function <span class="fstat-no" title="function not covered" >Cre
   const [addedDateChanged, setAddedDateChanged] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [sublocations, setSubLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;SubLocation[]&gt;([]);</span>
   const [selectedSubLocations, setSelectedSubLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;number[]&gt;([]);</span>
-  const nurseryV2 = <span class="cstat-no" title="statement not covered" >isEnabled('Nursery Updates');</span>
   const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(user?.locale),</span> [user?.locale, numberFormatter]);</span>
 &nbsp;
   const subLocationsOptions = <span class="cstat-no" title="statement not covered" >useMemo(</span>
@@ -782,7 +776,7 @@ export default function <span class="fstat-no" title="function not covered" >Cre
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const fetchSubLocations = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (record.facilityId &amp;&amp; nurseryV2) {</span>
+<span class="cstat-no" title="statement not covered" >      if (record.facilityId) {</span>
 <span class="cstat-no" title="statement not covered" >        setSubLocations([]);</span>
 <span class="cstat-no" title="statement not covered" >        setSelectedSubLocations([]);</span>
         const response = <span class="cstat-no" title="statement not covered" >await SubLocationService.getSubLocations(record.facilityId);</span>
@@ -792,8 +786,8 @@ export default function <span class="fstat-no" title="function not covered" >Cre
       }
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    fetchSubLocations();</span>
-  }, [record.facilityId, nurseryV2]);
+<span class="cstat-no" title="statement not covered" >    void fetchSubLocations();</span>
+  }, [record.facilityId]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (timeZone !== tz.id) {</span>
@@ -1024,7 +1018,7 @@ export default function <span class="fstat-no" title="function not covered" >Cre
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-04T16:06:36.106Z
+                at 2024-01-04T16:27:49.857Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
