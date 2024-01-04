@@ -27,6 +27,7 @@ export default function InventoryCreateView(): JSX.Element {
   const [errorMessage, setErrorMessage] = useErrorMessage();
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
+  const [busy, setBusy] = useState<boolean>(false);
 
   const batchesRequest = useAppSelector(selectBatchesRequest(requestId));
 
@@ -34,6 +35,7 @@ export default function InventoryCreateView(): JSX.Element {
     (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => {
       setDoValidateBatch(false);
       if (batchDetails) {
+        setBusy(true);
         const request = dispatch(requestSaveBatch(batchDetails));
         setRequestId(request.requestId);
       }
@@ -58,6 +60,7 @@ export default function InventoryCreateView(): JSX.Element {
 
   useEffect(() => {
     if (batchesRequest?.status === 'success') {
+      setBusy(false);
       history.replace(inventoryLocation);
 
       const batchId = batchesRequest?.data?.batch?.id;
@@ -86,6 +89,7 @@ export default function InventoryCreateView(): JSX.Element {
         });
       }
     } else if (batchesRequest?.status === 'error') {
+      setBusy(false);
       snackbar.toastError(strings.GENERIC_ERROR);
       setDoValidateBatch(false);
     }
@@ -94,6 +98,7 @@ export default function InventoryCreateView(): JSX.Element {
   return (
     <TfMain>
       <PageForm
+        busy={busy}
         cancelID='cancelAddInventory'
         saveID='saveAddInventory'
         onCancel={goToInventory}

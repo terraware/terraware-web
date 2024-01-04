@@ -293,6 +293,7 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
   const params: SearchRequestPayload = {
     prefix: 'species',
     fields: ['scientificName', 'commonName', 'id'],
+    sortOrder: [{ field: 'scientificName', direction: 'Ascending' }],
     search: {
       operation: 'and',
       children: [

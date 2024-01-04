@@ -44,11 +44,8 @@ import { Accession2Create, Accession2View } from './components/accession2';
 import OptInFeatures from './components/OptInFeatures';
 import Nurseries from './components/Nurseries';
 import NewNursery from './components/NewNursery';
-import Inventory from './components/Inventory';
 import InventoryV2 from './components/InventoryV2';
 import NurseryDetails from './components/Nursery';
-import InventoryCreate from './components/Inventory/InventoryCreate';
-import InventoryView from './components/Inventory/InventoryView';
 import InventoryViewForSpecies from './components/InventoryV2/InventoryViewForSpecies';
 import InventoryViewForNursery from './components/InventoryV2/InventoryViewForNursery';
 import InventoryBatch from './components/InventoryV2/InventoryBatch';
@@ -187,7 +184,6 @@ function AppContent() {
   const projects: Project[] | undefined = useAppSelector(selectProjects);
   const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
-  const nurseryV2 = isEnabled('Nursery Updates');
   const featureFlagProjects = isEnabled('Projects');
 
   const dispatch = useAppDispatch();
@@ -484,40 +480,28 @@ function AppContent() {
               {getNurseriesView()}
             </Route>
             <Route exact path={APP_PATHS.INVENTORY}>
-              {nurseryV2 ? (
-                <InventoryV2 hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
-              ) : (
-                <Inventory hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
-              )}
+              <InventoryV2 hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
             </Route>
             <Route exact path={APP_PATHS.INVENTORY_NEW}>
-              {nurseryV2 ? <InventoryCreateView /> : <InventoryCreate />}
+              <InventoryCreateView />
             </Route>
             <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
               <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
             </Route>
-            {nurseryV2 && (
-              <Route path={APP_PATHS.INVENTORY_BATCH}>
-                <InventoryBatch origin='Batches' species={species} />
-              </Route>
-            )}
-            {nurseryV2 && (
-              <Route path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}>
-                <InventoryBatch origin='Nursery' species={species} />
-              </Route>
-            )}
-            {nurseryV2 && (
-              <Route path={APP_PATHS.INVENTORY_BATCH_FOR_SPECIES}>
-                <InventoryBatch origin='Species' species={species} />
-              </Route>
-            )}
-            {nurseryV2 && (
-              <Route path={APP_PATHS.INVENTORY_ITEM_FOR_NURSERY}>
-                <InventoryViewForNursery />
-              </Route>
-            )}
+            <Route path={APP_PATHS.INVENTORY_BATCH}>
+              <InventoryBatch origin='Batches' species={species} />
+            </Route>
+            <Route path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}>
+              <InventoryBatch origin='Nursery' species={species} />
+            </Route>
+            <Route path={APP_PATHS.INVENTORY_BATCH_FOR_SPECIES}>
+              <InventoryBatch origin='Species' species={species} />
+            </Route>
+            <Route path={APP_PATHS.INVENTORY_ITEM_FOR_NURSERY}>
+              <InventoryViewForNursery />
+            </Route>
             <Route path={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES}>
-              {nurseryV2 ? <InventoryViewForSpecies species={species} /> : <InventoryView species={species} />}
+              <InventoryViewForSpecies species={species} />
             </Route>
             <Route path={APP_PATHS.BATCH_WITHDRAW}>
               <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />

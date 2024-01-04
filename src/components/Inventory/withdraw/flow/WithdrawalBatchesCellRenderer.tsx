@@ -8,7 +8,6 @@ import Link from 'src/components/common/Link';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import { useUser } from 'src/providers';
-import isEnabled from 'src/features';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -37,7 +36,6 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   const { user } = useUser();
   const numberFormatter = useNumberFormatter()(user?.locale);
   const { column, row, value, index, onRowClick } = props;
-  const nurseryV2 = isEnabled('Nursery Updates');
 
   const createLinkToBatchDetail = (iValue: React.ReactNode | unknown[]) => {
     return (
@@ -147,9 +145,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         index={index}
         column={column}
         value={numberFormatter.format(
-          +row.readyQuantityWithdrawn +
-            +row.notReadyQuantityWithdrawn +
-            (nurseryV2 ? +row.germinatingQuantityWithdrawn : 0)
+          +row.readyQuantityWithdrawn + +row.notReadyQuantityWithdrawn + +row.germinatingQuantityWithdrawn
         )}
         row={row}
         className={classes.text}

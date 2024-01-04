@@ -83,7 +83,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
-  const nurseryV2 = isEnabled('Nursery Updates');
   const featureFlagProjects = isEnabled('Projects');
 
   const plantingSites = useAppSelector(selectPlantingSites);
@@ -298,21 +297,19 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         }
       }
 
-      if (nurseryV2) {
-        if (!germinatingQuantityWithdrawn && germinatingQuantityWithdrawn !== 0) {
-          setIndividualError('germinatingQuantityWithdrawn', strings.REQUIRED_FIELD);
+      if (!germinatingQuantityWithdrawn && germinatingQuantityWithdrawn !== 0) {
+        setIndividualError('germinatingQuantityWithdrawn', strings.REQUIRED_FIELD);
+        allValid = false;
+      } else {
+        if (isNaN(germinatingQuantityWithdrawn)) {
+          setIndividualError('germinatingQuantityWithdrawn', strings.INVALID_VALUE);
           allValid = false;
         } else {
-          if (isNaN(germinatingQuantityWithdrawn)) {
-            setIndividualError('germinatingQuantityWithdrawn', strings.INVALID_VALUE);
+          if (Number(germinatingQuantityWithdrawn) > Number(batches[0]['germinatingQuantity(raw)'])) {
+            setIndividualError('germinatingQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
             allValid = false;
           } else {
-            if (Number(germinatingQuantityWithdrawn) > Number(batches[0]['germinatingQuantity(raw)'])) {
-              setIndividualError('germinatingQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_ERROR);
-              allValid = false;
-            } else {
-              setIndividualError('germinatingQuantityWithdrawn', '');
-            }
+            setIndividualError('germinatingQuantityWithdrawn', '');
           }
         }
       }
@@ -738,22 +735,21 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             <>
               {isSingleBatch && !isOutplant && (
                 <>
-                  {nurseryV2 && (
-                    <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
-                      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
-                        <Textfield
-                          label={strings.GERMINATING_QUANTITY_REQUIRED}
-                          id='germinatingQuantityWithdrawn'
-                          onChange={(value: unknown) => setGerminatingQuantityWithdrawn(value as number)}
-                          type='number'
-                          value={germinatingQuantityWithdrawn}
-                          tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-                          className={classes.germinatingQuantityWithdrawn}
-                          errorText={fieldsErrors.germinatingQuantityWithdrawn}
-                        />
-                      </Grid>
+                  <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
+                    <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
+                      <Textfield
+                        label={strings.GERMINATING_QUANTITY_REQUIRED}
+                        id='germinatingQuantityWithdrawn'
+                        onChange={(value: unknown) => setGerminatingQuantityWithdrawn(value as number)}
+                        type='number'
+                        value={germinatingQuantityWithdrawn}
+                        tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
+                        className={classes.germinatingQuantityWithdrawn}
+                        errorText={fieldsErrors.germinatingQuantityWithdrawn}
+                      />
                     </Grid>
-                  )}
+                  </Grid>
+
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
