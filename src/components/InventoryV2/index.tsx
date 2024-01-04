@@ -150,6 +150,19 @@ type InventoryProps = {
   hasNurseries: boolean;
   hasSpecies: boolean;
 };
+
+const initializeTab = (queryTab: string | null, userPrefValue: string | undefined): InventoryListType => {
+  if (Object.values(InventoryListTypes).some((val: InventoryListType) => val === queryTab)) {
+    return queryTab as InventoryListType;
+  }
+
+  if (Object.values(InventoryListTypes).some((val: InventoryListType) => val === userPrefValue)) {
+    return userPrefValue as InventoryListType;
+  }
+
+  return InventoryListTypes.BATCHES_BY_SPECIES;
+};
+
 export default function Inventory(props: InventoryProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
@@ -162,10 +175,7 @@ export default function Inventory(props: InventoryProps): JSX.Element {
   const contentRef = useRef(null);
   const { userPreferences, reloadUserPreferences } = useUser();
   const query = useQuery();
-  const tab =
-    query.get('tab') ||
-    (userPreferences.inventoryListType as InventoryListType) ||
-    InventoryListTypes.BATCHES_BY_SPECIES;
+  const tab = initializeTab(query.get('tab'), userPreferences.inventoryListType as string);
   const [activeTab, setActiveTab] = useState<InventoryListType>(tab);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [reportData, setReportData] = useState<SearchInventoryParams>();
