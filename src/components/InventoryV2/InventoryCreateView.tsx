@@ -12,8 +12,6 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
 import { requestSaveBatch, SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { InventoryListType, InventoryListTypes } from './';
-import useErrorMessage from './form/useErrorMessage';
-import ErrorMessage from './form/ErrorMessage';
 
 export default function InventoryCreateView(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -24,7 +22,6 @@ export default function InventoryCreateView(): JSX.Element {
   const originInventoryViewType: InventoryListType =
     (userPreferences.inventoryListType as InventoryListType) || InventoryListTypes.BATCHES_BY_SPECIES;
 
-  const [errorMessage, setErrorMessage] = useErrorMessage();
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
@@ -109,8 +106,6 @@ export default function InventoryCreateView(): JSX.Element {
           {strings.ADD_INVENTORY}
         </Typography>
 
-        <ErrorMessage errorMessage={errorMessage} />
-
         <Box
           display='flex'
           flexDirection='column'
@@ -131,8 +126,6 @@ export default function InventoryCreateView(): JSX.Element {
               onBatchValidated={onBatchValidated}
               doValidateBatch={doValidateBatch}
               origin={'InventoryAdd'}
-              errorPageMessage={errorMessage}
-              setErrorPageMessage={setErrorMessage}
             />
           </Box>
         </Box>
