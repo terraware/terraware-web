@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1704329517396" clover="3.2.0">
-  <project timestamp="1704329517396" name="All files">
+<coverage generated="1704384396587" clover="3.2.0">
+  <project timestamp="1704384396587" name="All files">
     <metrics statements="15419" coveredstatements="430" conditionals="9947" coveredconditionals="118" methods="4866" coveredmethods="100" elements="30232" coveredelements="648" complexity="0" loc="15419" ncloc="15419" packages="124" files="601" classes="601"/>
     <package name="src">
       <metrics statements="256" coveredstatements="0" conditionals="223" coveredconditionals="0" methods="74" coveredmethods="0"/>
@@ -16543,15 +16543,15 @@
         <line num="286" count="2" type="stmt"/>
         <line num="292" count="1" type="stmt"/>
         <line num="293" count="0" type="stmt"/>
-        <line num="310" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="311" count="0" type="stmt"/>
-        <line num="313" count="0" type="stmt"/>
-        <line num="319" count="0" type="stmt"/>
-        <line num="321" count="0" type="stmt"/>
-        <line num="327" count="0" type="stmt"/>
-        <line num="329" count="0" type="stmt"/>
-        <line num="335" count="0" type="stmt"/>
-        <line num="341" count="1" type="stmt"/>
+        <line num="311" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="312" count="0" type="stmt"/>
+        <line num="314" count="0" type="stmt"/>
+        <line num="320" count="0" type="stmt"/>
+        <line num="322" count="0" type="stmt"/>
+        <line num="328" count="0" type="stmt"/>
+        <line num="330" count="0" type="stmt"/>
+        <line num="336" count="0" type="stmt"/>
+        <line num="342" count="1" type="stmt"/>
       </file>
       <file name="SubLocationService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/SubLocationService.ts">
         <metrics statements="50" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="18" coveredmethods="0"/>
