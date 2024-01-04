@@ -342,7 +342,7 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
   return (await SearchService.search(params)) as SuggestedSpecies[] | null;
 };
 
-const getSpeciesProjects = async (
+const getSpeciesProjects = (
   organizationId: number,
   speciesId: number
 ): Promise<SpeciesProjectsSearchResponse[] | null> => {
