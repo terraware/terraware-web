@@ -1,3 +1,5 @@
+586509cfc4 SW-4647 Fix display versus comparsion values for accession remaining quantity in inventory create validation (#2000)
+a46441b64f Use a more robust way to initialize tab values in inventory views (#2001)
 6334035742 SW-4670 Redirect inventory batch view by query param to the batch page view (#1998)
 e52235671b SW-4647 Redo error message / quantity validation for inventory create (#1997)
 2f0722d58c SW-4663 Strip tab query param from inventory links (#1994)
