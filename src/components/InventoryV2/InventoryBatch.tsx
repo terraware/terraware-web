@@ -51,6 +51,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const initializeTab = (tab: string | null): 'details' | 'history' => {
+  if (tab === 'history') {
+    return 'history';
+  }
+  return 'details';
+};
+
 export default function InventoryBatch({ origin, species }: InventoryBatchProps) {
   const dispatch = useAppDispatch();
   const classes = useStyles();
@@ -61,7 +68,7 @@ export default function InventoryBatch({ origin, species }: InventoryBatchProps)
   const { speciesId } = useParams<{ speciesId: string }>();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const batch = useAppSelector(selectBatch(batchId));
-  const tab = query.get('tab') || 'details';
+  const tab = initializeTab(query.get('tab'));
   const [activeTab, setActiveTab] = useState<string>(tab);
   const history = useHistory();
   const location = useStateLocation();
