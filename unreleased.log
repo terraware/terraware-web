@@ -1,3 +1,4 @@
+4441ab0281 Make the project name a required field in the project creation flow (#2009)
 7c1cf671cf SW-4521 When projects feature is on, add org name for non-project reports in report table. Show project name and org name in report table (#2008)
 867c89f22f Update backend types (#2007)
 caa60d7da3 SW-4520 Reports settings view and edit (#2006)

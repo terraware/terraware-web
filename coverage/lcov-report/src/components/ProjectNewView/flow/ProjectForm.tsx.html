@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -152,7 +152,15 @@
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -176,6 +184,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -186,6 +195,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -223,6 +237,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -265,6 +281,7 @@ export default function <span class="fstat-no" title="function not covered" >Pro
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const [localRecord, setLocalRecord] = <span class="cstat-no" title="statement not covered" >useState&lt;T&gt;(project);</span>
+  const [validateFields, setValidateFields] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
 &nbsp;
   const updateField = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(f</span>ield: keyof T, value: any) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setLocalRecord(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
@@ -274,6 +291,11 @@ export default function <span class="fstat-no" title="function not covered" >Pro
   };
 &nbsp;
   const onNextHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!localRecord.name) {</span>
+<span class="cstat-no" title="statement not covered" >      setValidateFields(true);</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    onNext({</span>
       ...localRecord,
     });
@@ -313,7 +335,9 @@ export default function <span class="fstat-no" title="function not covered" >Pro
               value={localRecord.name}
               onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >updateField('name', value)}</span>
               type='text'
-              label={strings.NAME_REQUIRED}
+              label={strings.NAME}
+              errorText={validateFields &amp;&amp; !localRecord?.name ? strings.REQUIRED_FIELD : ''}
+              required
             /&gt;
           &lt;/Grid&gt;
           &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
@@ -337,7 +361,7 @@ export default function <span class="fstat-no" title="function not covered" >Pro
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-05T23:04:39.234Z
+                at 2024-01-05T23:23:11.245Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

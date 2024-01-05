@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1704495879701" clover="3.2.0">
-  <project timestamp="1704495879702" name="All files">
-    <metrics statements="15547" coveredstatements="431" conditionals="9961" coveredconditionals="118" methods="4901" coveredmethods="100" elements="30409" coveredelements="649" complexity="0" loc="15547" ncloc="15547" packages="125" files="613" classes="613"/>
+<coverage generated="1704496991740" clover="3.2.0">
+  <project timestamp="1704496991740" name="All files">
+    <metrics statements="15551" coveredstatements="431" conditionals="9967" coveredconditionals="118" methods="4901" coveredmethods="100" elements="30419" coveredelements="649" complexity="0" loc="15551" ncloc="15551" packages="125" files="613" classes="613"/>
     <package name="src">
       <metrics statements="255" coveredstatements="0" conditionals="201" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8861,7 +8861,7 @@
       </file>
     </package>
     <package name="src.components.ProjectNewView.flow">
-      <metrics statements="182" coveredstatements="0" conditionals="128" coveredconditionals="0" methods="69" coveredmethods="0"/>
+      <metrics statements="186" coveredstatements="0" conditionals="134" coveredconditionals="0" methods="69" coveredmethods="0"/>
       <file name="ProjectEntityFilter.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectNewView/flow/ProjectEntityFilter.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
@@ -8909,18 +8909,22 @@
         <line num="94" count="0" type="stmt"/>
       </file>
       <file name="ProjectForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectNewView/flow/ProjectForm.tsx">
-        <metrics statements="11" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
       </file>
       <file name="SelectAccessions.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectNewView/flow/SelectAccessions.tsx">
         <metrics statements="31" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="10" coveredmethods="0"/>
