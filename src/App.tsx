@@ -527,7 +527,9 @@ function AppContent() {
               <MyAccount organizations={organizations} edit={false} />
             </Route>
 
-            <ReportsRouter />
+            <Route path={APP_PATHS.REPORTS}>
+              <ReportsRouter />
+            </Route>
 
             <Route path={APP_PATHS.OBSERVATIONS}>
               <Observations />
