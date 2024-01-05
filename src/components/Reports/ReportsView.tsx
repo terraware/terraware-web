@@ -48,7 +48,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   const reportsSettings = useAppSelector(selectReportsSettings);
 
   const [selectedTab, setSelectedTab] = useState(tab);
-  const [results, setResults] = useState<ListReport[]>([]);
+  const [results, setResults] = useState<(ListReport & { organizationName?: string })[]>([]);
 
   useEffect(() => {
     void dispatch(requestReportsSettings(selectedOrganization.id));
@@ -57,11 +57,19 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   useEffect(() => {
     const refreshSearch = async () => {
       const reportsResults = await ReportService.getReports(selectedOrganization.id);
-      setResults(reportsResults.reports || []);
+      setResults(
+        (reportsResults.reports || []).map((report) => {
+          if (report.projectName) {
+            return report;
+          }
+          // Reports without a project name are for the organization
+          return { ...report, organizationName: selectedOrganization.name };
+        })
+      );
     };
 
     void refreshSearch();
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization.id, selectedOrganization.name]);
 
   const handleTabChange = useCallback(
     (newValue: string) => {

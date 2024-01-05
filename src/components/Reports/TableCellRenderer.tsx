@@ -13,7 +13,17 @@ export default function ReportsCellRenderer(props: RendererProps<TableRowType>):
     const reportLocation = {
       pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', row.id.toString()),
     };
-    return <Link to={reportLocation.pathname}>{`${row.year}-Q${row.quarter}` as React.ReactNode}</Link>;
+
+    let reportName = `${row.year}-Q${row.quarter}`;
+    if (row.projectName) {
+      reportName += ` ${row.projectName}`;
+    }
+
+    if (row.organizationName) {
+      reportName += ` ${row.organizationName} [Org]`;
+    }
+
+    return <Link to={reportLocation.pathname}>{reportName}</Link>;
   };
 
   if (column.key === 'name') {
