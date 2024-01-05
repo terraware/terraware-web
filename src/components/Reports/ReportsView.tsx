@@ -19,6 +19,7 @@ import { requestReportsSettings } from 'src/redux/features/reportsSettings/repor
 import PreSetupView from 'src/components/Reports/PreSetupView';
 import { APP_PATHS } from 'src/constants';
 import ReportSettingsEditFormFields from './ReportSettingsEditFormFields';
+import isEnabled from '../../features';
 
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.REPORT, type: 'string' },
@@ -44,11 +45,12 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
+  const featureFlagProjects = isEnabled('Projects');
 
   const reportsSettings = useAppSelector(selectReportsSettings);
 
   const [selectedTab, setSelectedTab] = useState(tab);
-  const [results, setResults] = useState<ListReport[]>([]);
+  const [results, setResults] = useState<(ListReport & { organizationName?: string })[]>([]);
 
   useEffect(() => {
     void dispatch(requestReportsSettings(selectedOrganization.id));
@@ -57,11 +59,19 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   useEffect(() => {
     const refreshSearch = async () => {
       const reportsResults = await ReportService.getReports(selectedOrganization.id);
-      setResults(reportsResults.reports || []);
+      setResults(
+        (reportsResults.reports || []).map((report) => {
+          if (!featureFlagProjects || report.projectName) {
+            return report;
+          }
+          // Reports without a project name are for the organization
+          return { ...report, organizationName: selectedOrganization.name };
+        })
+      );
     };
 
     void refreshSearch();
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization.id, selectedOrganization.name]);
 
   const handleTabChange = useCallback(
     (newValue: string) => {
