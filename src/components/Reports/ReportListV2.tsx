@@ -15,6 +15,10 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import ReportsCellRenderer from 'src/components/Reports/TableCellRenderer';
 import TfMain from 'src/components/common/TfMain';
 import PageHeader from 'src/components/seeds/PageHeader';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsSelectors';
+import { requestReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsThunks';
+import PreSetupView from 'src/components/Reports/PreSetupView';
 
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.REPORT, type: 'string' },
@@ -28,6 +32,7 @@ const DEFAULT_TAB = 'reports';
 const TABS = ['reports', 'settings'];
 
 export default function ReportListV2(): JSX.Element {
+  const dispatch = useAppDispatch();
   const contentRef = useRef(null);
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -36,11 +41,17 @@ export default function ReportListV2(): JSX.Element {
   const history = useHistory();
   const location = useStateLocation();
 
+  const reportsSettings = useAppSelector(selectReportsSettings);
+
   const tab = (query.get('tab') || '').toLowerCase();
   const preselectedTab = TABS.indexOf(tab) === -1 ? DEFAULT_TAB : tab;
 
   const [selectedTab, setSelectedTab] = useState(preselectedTab);
   const [results, setResults] = useState<ListReport[]>([]);
+
+  useEffect(() => {
+    void dispatch(requestReportsSettings(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
     const refreshSearch = async () => {
@@ -105,7 +116,9 @@ export default function ReportListV2(): JSX.Element {
     [theme]
   );
 
-  return (
+  return reportsSettings && !reportsSettings?.isConfigured ? (
+    <PreSetupView />
+  ) : (
     <TfMain>
       <PageHeader title={strings.REPORTS} />
       <TabContext value={selectedTab}>
