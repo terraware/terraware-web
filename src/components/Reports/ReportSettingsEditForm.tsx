@@ -55,13 +55,14 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
 
       setLocalReportsSettings({
         ...localReportsSettings,
-        projects: [
-          ...localReportsSettings?.projects.filter((project) => project.projectId !== Number(key)),
-          {
-            ...currentProjectSetting,
-            isEnabled: value,
-          },
-        ],
+        projects: localReportsSettings?.projects.map((project) =>
+          project.projectId !== Number(key)
+            ? project
+            : {
+                ...currentProjectSetting,
+                isEnabled: value,
+              }
+        ),
       });
     },
     [localReportsSettings]
