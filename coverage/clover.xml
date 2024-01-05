@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1704405109772" clover="3.2.0">
-  <project timestamp="1704405109772" name="All files">
-    <metrics statements="15416" coveredstatements="430" conditionals="9919" coveredconditionals="118" methods="4864" coveredmethods="100" elements="30199" coveredelements="648" complexity="0" loc="15416" ncloc="15416" packages="124" files="601" classes="601"/>
+<coverage generated="1704485289372" clover="3.2.0">
+  <project timestamp="1704485289372" name="All files">
+    <metrics statements="15419" coveredstatements="430" conditionals="9919" coveredconditionals="118" methods="4864" coveredmethods="100" elements="30202" coveredelements="648" complexity="0" loc="15419" ncloc="15419" packages="124" files="601" classes="601"/>
     <package name="src">
       <metrics statements="255" coveredstatements="0" conditionals="209" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -17209,7 +17209,7 @@
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="295" coveredstatements="35" conditionals="162" coveredconditionals="23" methods="114" coveredmethods="10"/>
+      <metrics statements="298" coveredstatements="35" conditionals="162" coveredconditionals="23" methods="114" coveredmethods="10"/>
       <file name="batch.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/batch.ts">
         <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
@@ -17428,7 +17428,7 @@
         <line num="9" count="0" type="stmt"/>
       </file>
       <file name="useQueryFilters.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/useQueryFilters.ts">
-        <metrics statements="62" coveredstatements="26" conditionals="40" coveredconditionals="23" methods="21" coveredmethods="10"/>
+        <metrics statements="65" coveredstatements="26" conditionals="40" coveredconditionals="23" methods="21" coveredmethods="10"/>
         <line num="13" count="1" type="stmt"/>
         <line num="14" count="24" type="cond" truecount="2" falsecount="0"/>
         <line num="15" count="23" type="stmt"/>
@@ -17477,20 +17477,23 @@
         <line num="99" count="0" type="stmt"/>
         <line num="100" count="0" type="stmt"/>
         <line num="102" count="0" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
-        <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="104" count="0" type="stmt"/>
         <line num="105" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="108" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="109" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="112" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="113" count="0" type="stmt"/>
-        <line num="114" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
         <line num="115" count="0" type="stmt"/>
+        <line num="117" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="118" count="0" type="stmt"/>
-        <line num="119" count="0" type="stmt"/>
-        <line num="123" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="119" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
         <line num="124" count="0" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
+        <line num="128" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="129" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
       </file>
       <file name="useSnackbar.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/useSnackbar.ts">
         <metrics statements="18" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="12" coveredmethods="0"/>
