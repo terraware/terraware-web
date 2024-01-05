@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Container, Grid, useTheme } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useOrganization } from 'src/providers';
 import PageForm from 'src/components/common/PageForm';
@@ -16,7 +16,6 @@ interface ReportSettingsEditFormProps {
 }
 
 const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEditFormProps) => {
-  const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const history = useHistory();
