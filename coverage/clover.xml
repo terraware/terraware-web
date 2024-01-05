@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1704487631241" clover="3.2.0">
-  <project timestamp="1704487631241" name="All files">
-    <metrics statements="15467" coveredstatements="431" conditionals="9925" coveredconditionals="118" methods="4877" coveredmethods="100" elements="30269" coveredelements="649" complexity="0" loc="15467" ncloc="15467" packages="125" files="608" classes="608"/>
+<coverage generated="1704488310179" clover="3.2.0">
+  <project timestamp="1704488310179" name="All files">
+    <metrics statements="15480" coveredstatements="431" conditionals="9931" coveredconditionals="118" methods="4882" coveredmethods="100" elements="30293" coveredelements="649" complexity="0" loc="15480" ncloc="15480" packages="125" files="609" classes="609"/>
     <package name="src">
       <metrics statements="255" coveredstatements="0" conditionals="209" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9251,7 +9251,7 @@
       </file>
     </package>
     <package name="src.components.Reports">
-      <metrics statements="755" coveredstatements="0" conditionals="779" coveredconditionals="0" methods="240" coveredmethods="0"/>
+      <metrics statements="768" coveredstatements="0" conditionals="785" coveredconditionals="0" methods="245" coveredmethods="0"/>
       <file name="ConcurrentEditorWarningDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/ConcurrentEditorWarningDialog.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
@@ -9451,6 +9451,18 @@
         <line num="85" count="0" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
         <line num="100" count="0" type="stmt"/>
+      </file>
+      <file name="PreSetupView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/PreSetupView.tsx">
+        <metrics statements="9" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
       </file>
       <file name="ReportEdit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/ReportEdit.tsx">
         <metrics statements="227" coveredstatements="0" conditionals="190" coveredconditionals="0" methods="51" coveredmethods="0"/>
@@ -9872,41 +9884,45 @@
         <line num="36" count="0" type="stmt"/>
       </file>
       <file name="ReportListV2.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/ReportListV2.tsx">
-        <metrics statements="34" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="11" coveredmethods="0"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
+        <metrics statements="38" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <line num="23" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="98" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
         <line num="108" count="0" type="stmt"/>
-        <line num="115" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="119" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="128" count="0" type="stmt"/>
       </file>
       <file name="ReportView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/ReportView.tsx">
         <metrics statements="39" coveredstatements="0" conditionals="38" coveredconditionals="0" methods="13" coveredmethods="0"/>

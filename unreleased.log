@@ -1,3 +1,4 @@
+b5c9ad24cd SW-4520 Create reports settings pre-setup page, show in reports v2 view when the reports settings have not been configured (#2004)
 c96c2514d1 SW-4520 Create Reports Settings API service, wire into redux (#2003)
 30893b0971 SW-4498 Add Projects overview card on species page (#1996)
 d3dbb51379 SW-4498 Add search API call to get projects for given species, add to redux (#1995)
