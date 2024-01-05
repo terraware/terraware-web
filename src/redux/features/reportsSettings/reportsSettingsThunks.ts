@@ -1,12 +1,12 @@
 import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
-import ReportSettingsService, { ReportsSettingsResponse } from 'src/services/ReportSettingsService';
+import ReportSettingsService, { GetReportsSettingsResponse } from 'src/services/ReportSettingsService';
 import { setReportsSettingsAction } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
 
 export const requestReportsSettings = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
-      const response: ReportsSettingsResponse = await ReportSettingsService.getReportsSettings(organizationId);
+      const response: GetReportsSettingsResponse = await ReportSettingsService.getReportsSettings(organizationId);
 
       dispatch(setReportsSettingsAction({ settings: response }));
     } catch (e) {

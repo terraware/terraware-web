@@ -10,8 +10,6 @@ import strings from 'src/strings';
 import { ListReport } from 'src/types/Report';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { useOrganization } from 'src/providers';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import ReportsCellRenderer from 'src/components/Reports/TableCellRenderer';
 import TfMain from 'src/components/common/TfMain';
 import PageHeader from 'src/components/seeds/PageHeader';
@@ -19,6 +17,8 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsSelectors';
 import { requestReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsThunks';
 import PreSetupView from 'src/components/Reports/PreSetupView';
+import { APP_PATHS } from 'src/constants';
+import ReportSettingsEditFormFields from './ReportSettingsEditFormFields';
 
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.REPORT, type: 'string' },
@@ -29,24 +29,25 @@ const columns = (): TableColumnType[] => [
 ];
 
 const DEFAULT_TAB = 'reports';
-const TABS = ['reports', 'settings'];
+type ReportsViewTabs = 'reports' | 'settings';
 
-export default function ReportListV2(): JSX.Element {
+interface ReportsViewProps {
+  tab?: ReportsViewTabs;
+}
+
+export default function ReportsView(props: ReportsViewProps): JSX.Element {
+  const tab = props.tab || DEFAULT_TAB;
+
   const dispatch = useAppDispatch();
   const contentRef = useRef(null);
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const query = useQuery();
   const history = useHistory();
-  const location = useStateLocation();
 
   const reportsSettings = useAppSelector(selectReportsSettings);
 
-  const tab = (query.get('tab') || '').toLowerCase();
-  const preselectedTab = TABS.indexOf(tab) === -1 ? DEFAULT_TAB : tab;
-
-  const [selectedTab, setSelectedTab] = useState(preselectedTab);
+  const [selectedTab, setSelectedTab] = useState(tab);
   const [results, setResults] = useState<ListReport[]>([]);
 
   useEffect(() => {
@@ -62,16 +63,21 @@ export default function ReportListV2(): JSX.Element {
     void refreshSearch();
   }, [selectedOrganization.id]);
 
-  useEffect(() => {
-    setSelectedTab((query.get('tab') || DEFAULT_TAB) as string);
-  }, [query]);
-
   const handleTabChange = useCallback(
     (newValue: string) => {
-      query.set('tab', newValue);
-      history.push(getLocation(location.pathname, location, query.toString()));
+      switch (newValue) {
+        case 'reports': {
+          history.push(APP_PATHS.REPORTS);
+          break;
+        }
+        case 'settings': {
+          history.push(APP_PATHS.REPORTS_SETTINGS);
+        }
+      }
+
+      setSelectedTab(newValue as ReportsViewTabs);
     },
-    [query, history, location]
+    [history]
   );
 
   const tabHeaderProps = useMemo(
@@ -121,6 +127,7 @@ export default function ReportListV2(): JSX.Element {
   ) : (
     <TfMain>
       <PageHeader title={strings.REPORTS} />
+
       <TabContext value={selectedTab}>
         <Box sx={tabHeaderProps}>
           <TabList
@@ -132,6 +139,7 @@ export default function ReportListV2(): JSX.Element {
             <Tab label={strings.SETTINGS} value='settings' sx={tabStyles} />
           </TabList>
         </Box>
+
         <TabPanel value='reports' sx={tabPanelProps}>
           <Grid container>
             <PageHeaderWrapper nextElement={contentRef.current}>
@@ -156,8 +164,11 @@ export default function ReportListV2(): JSX.Element {
             </Container>
           </Grid>
         </TabPanel>
+
         <TabPanel value='settings' sx={tabPanelProps}>
-          TODO
+          <Grid container width={'100%'} sx={{ padding: '0' }}>
+            {reportsSettings && <ReportSettingsEditFormFields reportsSettings={reportsSettings} isEditing={false} />}
+          </Grid>
         </TabPanel>
       </TabContext>
     </TfMain>

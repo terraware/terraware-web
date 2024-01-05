@@ -62,7 +62,6 @@ import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
-import { ReportList, ReportView, ReportEdit } from './components/Reports';
 import Observations from 'src/components/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
 import PlantsDashboard from 'src/components/Plants';
@@ -72,8 +71,8 @@ import { Project } from './types/Project';
 import { selectProjects } from './redux/features/projects/projectsSelectors';
 import ProjectsRouter from 'src/components/Projects/Router';
 import { requestProjects } from './redux/features/projects/projectsThunks';
-import ReportListV2 from 'src/components/Reports/ReportListV2';
 import InventoryCreateView from './components/InventoryV2/InventoryCreateView';
+import ReportsRouter from 'src/components/Reports/Router';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -528,21 +527,7 @@ function AppContent() {
               <MyAccount organizations={organizations} edit={false} />
             </Route>
 
-            {selectedOrganization.canSubmitReports && (
-              <Route exact path={APP_PATHS.REPORTS}>
-                {featureFlagProjects ? <ReportListV2 /> : <ReportList />}
-              </Route>
-            )}
-            {selectedOrganization.canSubmitReports && (
-              <Route path={APP_PATHS.REPORTS_EDIT}>
-                <ReportEdit />
-              </Route>
-            )}
-            {selectedOrganization.canSubmitReports && (
-              <Route path={APP_PATHS.REPORTS_VIEW}>
-                <ReportView />
-              </Route>
-            )}
+            <ReportsRouter />
 
             <Route path={APP_PATHS.OBSERVATIONS}>
               <Observations />

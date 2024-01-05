@@ -1,11 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ReportsSettingsResponsePayload } from 'src/services/ReportSettingsService';
+import { ReportsSettings, GetReportsSettingsResponse } from 'src/services/ReportSettingsService';
 
 type Payload = {
-  settings?: ReportsSettingsResponsePayload;
+  settings?: GetReportsSettingsResponse;
 };
 
-const initialState: Payload = {};
+type State = {
+  settings?: ReportsSettings;
+};
+
+const initialState: State = {};
 
 export const reportsSettingsSlice = createSlice({
   name: 'reportsSettingsSlice',
@@ -13,7 +17,9 @@ export const reportsSettingsSlice = createSlice({
   reducers: {
     setReportsSettingsAction: (state, action: PayloadAction<Payload>) => {
       if (action.payload.settings) {
-        state.settings = action.payload.settings;
+        // Leaving these here in case we want to do something with invalid responses
+        const { status, requestSucceeded, statusCode, ...rest } = action.payload.settings;
+        state.settings = rest;
       }
     },
   },
