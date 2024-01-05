@@ -28,6 +28,7 @@ import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/pro
 import { subLocationsReducer } from './features/subLocations/subLocationsSlice';
 import { batchesReducer, batchesRequestsReducer } from './features/batches/batchesSlice';
 import { accessionsReducer } from './features/accessions/accessionsSlice';
+import { speciesProjectsReducer } from 'src/redux/features/species/speciesProjectsSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -48,6 +49,7 @@ export const reducers = {
   sitePopulation: sitePopulationReducer,
   siteReportedPlantsResults: siteReportedPlantsReducer,
   species: speciesReducer,
+  speciesProjects: speciesProjectsReducer,
   snackbar: snackbarReducer,
   tracking: trackingReducer,
   updatePlantingCompleted: updatePlantingCompletedReducer,
