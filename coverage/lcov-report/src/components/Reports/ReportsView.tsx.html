@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -239,7 +239,15 @@
 <a name='L174'></a><a href='#L174'>174</a>
 <a name='L175'></a><a href='#L175'>175</a>
 <a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -299,6 +307,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -465,7 +481,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
   const reportsSettings = <span class="cstat-no" title="statement not covered" >useAppSelector(selectReportsSettings);</span>
 &nbsp;
   const [selectedTab, setSelectedTab] = <span class="cstat-no" title="statement not covered" >useState(tab);</span>
-  const [results, setResults] = <span class="cstat-no" title="statement not covered" >useState&lt;ListReport[]&gt;([]);</span>
+  const [results, setResults] = <span class="cstat-no" title="statement not covered" >useState&lt;(ListReport &amp; { organizationName?: string })[]&gt;([]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    void dispatch(requestReportsSettings(selectedOrganization.id));</span>
@@ -474,11 +490,19 @@ export default function <span class="fstat-no" title="function not covered" >Rep
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const refreshSearch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
       const reportsResults = <span class="cstat-no" title="statement not covered" >await ReportService.getReports(selectedOrganization.id);</span>
-<span class="cstat-no" title="statement not covered" >      setResults(reportsResults.reports || []);</span>
+<span class="cstat-no" title="statement not covered" >      setResults(</span>
+        (reportsResults.reports || []).map(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; {
+<span class="cstat-no" title="statement not covered" >          if (report.projectName) {</span>
+<span class="cstat-no" title="statement not covered" >            return report;</span>
+          }
+          // Reports without a project name are for the organization
+<span class="cstat-no" title="statement not covered" >          return { ...report, organizationName: selectedOrganization.name };</span>
+        })
+      );
     };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    void refreshSearch();</span>
-  }, [selectedOrganization.id]);
+  }, [selectedOrganization.id, selectedOrganization.name]);
 &nbsp;
   const handleTabChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (n</span>ewValue: string) =&gt; {
@@ -598,7 +622,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-05T22:27:14.713Z
+                at 2024-01-05T23:04:39.234Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
