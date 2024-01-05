@@ -22,13 +22,16 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
   const snackbar = useSnackbar();
 
   const [localReportsSettings, setLocalReportsSettings] = useState(reportsSettings);
+  const [isBusy, setIsBusy] = useState<boolean>(false);
 
   const onSave = useCallback(async () => {
+    setIsBusy(true);
     const result = await ReportSettingsService.updateSettings({
       organizationId: selectedOrganization.id,
       ...localReportsSettings,
     });
 
+    setIsBusy(false);
     if (!result.requestSucceeded) {
       snackbar.toastError();
       return;
@@ -74,6 +77,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
       saveID='saveReportsSettings'
       onCancel={() => history.push(APP_PATHS.REPORTS_SETTINGS)}
       onSave={onSave}
+      busy={isBusy}
     >
       <Container
         maxWidth={false}
