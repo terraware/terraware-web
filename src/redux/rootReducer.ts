@@ -28,6 +28,7 @@ import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/pro
 import { subLocationsReducer } from './features/subLocations/subLocationsSlice';
 import { batchesReducer, batchesRequestsReducer } from './features/batches/batchesSlice';
 import { accessionsReducer } from './features/accessions/accessionsSlice';
+import { reportsSettingsReducer } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
 import { speciesProjectsReducer } from 'src/redux/features/species/speciesProjectsSlice';
 
 // assembly of app reducers
@@ -44,6 +45,7 @@ export const reducers = {
   plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,
   plantingSitesSearchResults: plantingSitesSearchResultsReducer,
   replaceObservationPlot: replaceObservationPlotReducer,
+  reportsSettings: reportsSettingsReducer,
   rescheduleObservation: rescheduleObservationReducer,
   scheduleObservation: scheduleObservationReducer,
   sitePopulation: sitePopulationReducer,
