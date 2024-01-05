@@ -22,6 +22,7 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
   const theme = useTheme();
 
   const [localRecord, setLocalRecord] = useState<T>(project);
+  const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const updateField = (field: keyof T, value: any) => {
     setLocalRecord((prev) => ({
@@ -31,6 +32,11 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
   };
 
   const onNextHandler = () => {
+    if (!localRecord.name) {
+      setValidateFields(true);
+      return;
+    }
+
     onNext({
       ...localRecord,
     });
@@ -70,7 +76,9 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
               value={localRecord.name}
               onChange={(value) => updateField('name', value)}
               type='text'
-              label={strings.NAME_REQUIRED}
+              label={strings.NAME}
+              errorText={validateFields && !localRecord?.name ? strings.REQUIRED_FIELD : ''}
+              required
             />
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
