@@ -8,6 +8,7 @@ import { APP_PATHS } from 'src/constants';
 import ReportSettingsService, { ReportsSettings } from 'src/services/ReportSettingsService';
 import useSnackbar from 'src/utils/useSnackbar';
 import ReportSettingsEditFormFields from './ReportSettingsEditFormFields';
+import Card from '../common/Card';
 
 interface ReportSettingsEditFormProps {
   reportsSettings: ReportsSettings;
@@ -79,33 +80,17 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
       onSave={onSave}
       busy={isBusy}
     >
-      <Container
-        maxWidth={false}
-        sx={{
-          display: 'flex',
-          margin: '0 auto',
-          width: isMobile ? '100%' : '700px',
-          paddingLeft: theme.spacing(isMobile ? 0 : 4),
-          paddingRight: theme.spacing(isMobile ? 0 : 4),
-          paddingTop: theme.spacing(5),
-        }}
-      >
-        <Grid
-          container
-          width={isMobile ? '100%' : '700px'}
-          sx={{
-            backgroundColor: theme.palette.TwClrBg,
-            borderRadius: theme.spacing(4),
-            padding: theme.spacing(3),
-          }}
-        >
-          <ReportSettingsEditFormFields
-            reportsSettings={localReportsSettings}
-            onChange={onChange}
-            isEditing={isEditing}
-          />
+      <Grid container justifyContent={'center'}>
+        <Grid item>
+          <Card style={{ width: isMobile ? '100%' : '700px' }}>
+            <ReportSettingsEditFormFields
+              reportsSettings={localReportsSettings}
+              onChange={onChange}
+              isEditing={isEditing}
+            />
+          </Card>
         </Grid>
-      </Container>
+      </Grid>
     </PageForm>
   );
 };
