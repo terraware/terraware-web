@@ -37,6 +37,8 @@ function AccessionsDropdown<T extends { accessionId?: number; speciesId?: number
           accessionId: Number(accessionId),
         }))
       }
+      tooltipTitle={strings.TOOLTIP_INVENTORY_ADD_ACCESSION_ID}
+      disabled={(availableAccessions && availableAccessions.length === 0) || (record && record.speciesId === undefined)}
       fullWidth
     />
   );
