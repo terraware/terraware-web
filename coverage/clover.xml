@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1704487319972" clover="3.2.0">
-  <project timestamp="1704487319972" name="All files">
-    <metrics statements="15448" coveredstatements="431" conditionals="9923" coveredconditionals="118" methods="4871" coveredmethods="100" elements="30242" coveredelements="649" complexity="0" loc="15448" ncloc="15448" packages="124" files="604" classes="604"/>
+<coverage generated="1704487631241" clover="3.2.0">
+  <project timestamp="1704487631241" name="All files">
+    <metrics statements="15467" coveredstatements="431" conditionals="9925" coveredconditionals="118" methods="4877" coveredmethods="100" elements="30269" coveredelements="649" complexity="0" loc="15467" ncloc="15467" packages="125" files="608" classes="608"/>
     <package name="src">
       <metrics statements="255" coveredstatements="0" conditionals="209" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -14535,12 +14535,12 @@
       <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="rootReducer.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/rootReducer.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
+        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
       </file>
       <file name="store.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/store.ts">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -15239,6 +15239,31 @@
         <line num="30" count="0" type="stmt"/>
       </file>
     </package>
+    <package name="src.redux.features.reportsSettings">
+      <metrics statements="13" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <file name="reportsSettingsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/reportsSettings/reportsSettingsSelectors.ts">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+      </file>
+      <file name="reportsSettingsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/reportsSettings/reportsSettingsSlice.ts">
+        <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+      </file>
+      <file name="reportsSettingsThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/reportsSettings/reportsSettingsThunks.ts">
+        <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+      </file>
+    </package>
     <package name="src.redux.features.snackbar">
       <metrics statements="12" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
       <file name="snackbarSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/snackbar/snackbarSelectors.ts">
@@ -15501,7 +15526,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1195" coveredstatements="330" conditionals="427" coveredconditionals="83" methods="328" coveredmethods="67"/>
+      <metrics statements="1201" coveredstatements="330" conditionals="427" coveredconditionals="83" methods="330" coveredmethods="67"/>
       <file name="AccessionService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AccessionService.ts">
         <metrics statements="56" coveredstatements="39" conditionals="8" coveredconditionals="6" methods="17" coveredmethods="5"/>
         <line num="10" count="1" type="stmt"/>
@@ -16416,6 +16441,15 @@
         <line num="352" count="0" type="stmt"/>
         <line num="353" count="0" type="stmt"/>
         <line num="364" count="0" type="stmt"/>
+      </file>
+      <file name="ReportSettingsService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/ReportSettingsService.ts">
+        <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
       </file>
       <file name="SearchService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/SearchService.ts">
         <metrics statements="15" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
