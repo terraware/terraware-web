@@ -2,12 +2,12 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import EmptyStateContent from '../emptyStatePages/EmptyStateContent';
-import TfMain from '../common/TfMain';
-import useDeviceInfo from '../../utils/useDeviceInfo';
-import { APP_PATHS } from '../../constants';
-import strings from '../../strings';
-import PageHeader from '../seeds/PageHeader';
+import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
+import TfMain from 'src/components/common/TfMain';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
+import PageHeader from 'src/components/seeds/PageHeader';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
