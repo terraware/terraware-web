@@ -17,6 +17,28 @@ test.beforeEach(async ({ context }, testInfo) => {
   await context.addCookies([
     { name: 'SESSION', value: 'Mjc2NzE0YWQtYWIwYS00OGFhLThlZjgtZGI2NWVjMmU5NTBh', url: 'http://127.0.0.1:3000' },
   ]);
+
+  // Pick the new/fake "now" for the test.
+  const testDate = new Date("January 1 2024 12:00:00Z-08:00").valueOf();
+
+  // Update the Date accordingly in your test pages
+  await context.addInitScript(`{
+    // Extend Date constructor to default to testDate
+    Date = class extends Date {
+      constructor(...args) {
+        if (args.length === 0) {
+          super(${testDate});
+        } else {
+          super(...args);
+        }
+      }
+    }
+    // Override Date.now() to start from testDate
+    const __DateNowOffset = ${testDate} - Date.now();
+    const __DateNow = Date.now;
+    Date.now = () => __DateNow() + __DateNowOffset;
+  }`);
+
 });
 
 test('Add An Accession', async ({ page }, testInfo) => {
@@ -52,7 +74,7 @@ test('Add An Accession', async ({ page }, testInfo) => {
   await page.locator('#sub-location path').click();
   await page.getByRole('button', { name: 'Save' }).click();
 
-  await expect(page.getByRole('main')).toContainText('24-1-2-001');
+  await expect(page.getByRole('main')).toContainText('24-1-1-001');
   await expect(page.getByRole('main')).toContainText('Coconut');
   await expect(page.getByRole('main')).toContainText('Awaiting Check-In');
   await expect(page.getByRole('main')).toContainText('garage');
@@ -80,6 +102,7 @@ test('Add An Accession', async ({ page }, testInfo) => {
   await page.getByLabel('Choose date').click();
   await page.getByRole('gridcell', { name: '31' }).click();
   await page.getByRole('button', { name: 'Save' }).click();
+  await page.waitForTimeout(1000); //Wait for modal to close
   await expect(page.getByRole('main')).toContainText('in 28 days (2024-01-31)');
   await page.locator('a').nth(2).click();
   await page.getByRole('spinbutton').click();
@@ -126,4 +149,12 @@ test('Add An Accession', async ({ page }, testInfo) => {
   await expect(page.locator('#row1-accessionNumber')).toContainText('24-1-2-001');
   await page.getByText('-1-2-001').click();
   await expect(page.getByRole('main')).toContainText('Coconut');
+});
+
+test('Withdraw to Nursery', async ({ page }, testInfo) => {
+  await page.goto('http://127.0.0.1:3000');
+
+  await waitFor(page, '#home');
+
+
 });
