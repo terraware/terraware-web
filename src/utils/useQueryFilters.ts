@@ -100,10 +100,15 @@ export const useQueryFilters = () => {
     const currentQueryFilters: FiltersType = {};
 
     const queryKeys: string[] = [];
-    for (const key in query.keys()) {
-      if (query.get(key)) {
-        queryKeys.push(key);
+
+    const keysIter = query.keys();
+    let keyPos = keysIter.next();
+
+    while (!keyPos.done) {
+      if (query.get(keyPos.value)) {
+        queryKeys.push(keyPos.value);
       }
+      keyPos = keysIter.next();
     }
 
     queryKeys

@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 import strings from 'src/strings';
-import { NurseryBatchesSearchResponseElement } from 'src/services/NurseryBatchService';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 import BatchDetailsForm from 'src/components/InventoryV2/form/BatchDetailsForm';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
@@ -12,13 +11,12 @@ import useSnackbar from 'src/utils/useSnackbar';
 export interface BatchDetailsModalProps {
   onClose: () => void;
   reload: () => void;
-  selectedBatch: NurseryBatchesSearchResponseElement | undefined;
   originId?: number;
   origin: OriginPage;
 }
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
-  const { onClose, reload, selectedBatch, originId, origin } = props;
+  const { onClose, reload, originId, origin } = props;
 
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -63,7 +61,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       <DialogBox
         onClose={onClose}
         open={true}
-        title={!selectedBatch?.id ? strings.ADD_BATCH : strings.BATCH_DETAILS}
+        title={strings.ADD_BATCH}
         size='large'
         middleButtons={[
           <Button
