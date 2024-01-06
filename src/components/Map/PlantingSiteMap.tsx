@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box, CircularProgress, useTheme } from '@mui/material';
 import useSnackbar from 'src/utils/useSnackbar';
 import GenericMap from './GenericMap';
@@ -7,7 +7,6 @@ import {
   MapData,
   MapEntityId,
   MapEntityOptions,
-  MapObject,
   MapOptions,
   MapPopupRenderer,
   MapSource,
@@ -15,7 +14,7 @@ import {
 import { MapService } from 'src/services';
 import _ from 'lodash';
 import { MapLayer } from 'src/components/common/MapLayerSelect';
-import { getRgbaFromHex } from 'src/utils/color';
+import useRenderAttributes from './useRenderAttributes';
 
 const mapImages = [
   {
@@ -43,65 +42,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const theme = useTheme();
   const snackbar = useSnackbar();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
-
-  const getRenderAttributes = useCallback(
-    (objectType: MapObject) => {
-      if (objectType === 'site') {
-        return {
-          fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
-          hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.4),
-          selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.6),
-          highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.6),
-          lineColor: theme.palette.TwClrBaseGreen300 as string,
-          lineWidth: 2,
-        };
-      } else if (objectType === 'zone') {
-        return {
-          fillColor: 'transparent',
-          hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseLightGreen300 as string, 0.4),
-          selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseLightGreen300 as string, 0.6),
-          highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseLightGreen300 as string, 0.2),
-          lineColor: theme.palette.TwClrBaseLightGreen300 as string,
-          lineWidth: 4,
-        };
-      } else if (objectType === 'subzone') {
-        return {
-          fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
-          hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.4),
-          selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
-          highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
-          lineColor: theme.palette.TwClrBaseBlue300 as string,
-          lineWidth: 2,
-        };
-      } else if (objectType === 'permanentPlot') {
-        return {
-          fillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.2),
-          hoverFillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.4),
-          selectFillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.6),
-          highlightFillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.6),
-          lineColor: theme.palette.TwClrBasePink300 as string,
-          lineWidth: 2,
-        };
-      } else {
-        // temporary plot
-        return {
-          fillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.2),
-          hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.4),
-          selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.6),
-          highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.6),
-          lineColor: theme.palette.TwClrBaseYellow300 as string,
-          lineWidth: 2,
-        };
-      }
-    },
-    [
-      theme.palette.TwClrBaseGreen300,
-      theme.palette.TwClrBaseLightGreen300,
-      theme.palette.TwClrBaseBlue300,
-      theme.palette.TwClrBasePink300,
-      theme.palette.TwClrBaseYellow300,
-    ]
-  );
+  const getRenderAttributes = useRenderAttributes();
 
   // fetch polygons and boundaries
   useEffect(() => {

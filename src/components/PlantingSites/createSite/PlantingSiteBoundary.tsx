@@ -1,16 +1,17 @@
 import { Box } from '@mui/material';
+import { FeatureCollection } from 'geojson';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
+import EditableMap from 'src/components/Map/EditableMapV2';
 import StepTitleDescription from './StepTitleDescription';
 
 export type PlantingSiteBoundaryProps = {
-  onChange: (id: string, value: unknown) => void;
-  site: PlantingSite;
+  boundary?: FeatureCollection;
+  setBoundary: (boundary?: FeatureCollection) => void;
 };
 
-export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): JSX.Element {
+export default function PlantingSiteBoundary({ boundary, setBoundary }: PlantingSiteBoundaryProps): JSX.Element {
   return (
-    <Box display='flex' flexDirection='column'>
+    <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={[
           { text: strings.SITE_BOUNDARY_DESCRIPTION_0 },
@@ -23,6 +24,7 @@ export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): 
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       />
+      <EditableMap onBoundaryChanged={setBoundary} boundary={boundary} />
     </Box>
   );
 }

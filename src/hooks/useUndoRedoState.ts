@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 
 export type SetFn<T> = (data: T) => void;
-export type UndoFn = (() => void) | undefined;
-export type RedoFn = (() => void) | undefined;
+export type UndoFn<T> = (() => T | undefined) | undefined;
+export type RedoFn<T> = (() => T | undefined) | undefined;
 
 /**
  * A useState like functionality that keeps track of changes
@@ -15,11 +15,11 @@ export type RedoFn = (() => void) | undefined;
  *  undo is a callback function to undo last change, if function is 'undefined', undo is no longer possible (beginning of stack)
  *  redo is a callback function to redo last change, if function is 'undefined', redo is no longer possible (end of stack)
  */
-export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, SetFn<T>, UndoFn, RedoFn] {
+export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, SetFn<T>, UndoFn<T>, RedoFn<T>] {
   const [stack, setStack] = useState<(T | undefined)[]>([initialValue]);
   const [stackIndex, setStackIndex] = useState<number>(0);
 
-  const data = useMemo<T | undefined>(() => stack[stackIndex], [stackIndex]);
+  const data = useMemo<T | undefined>(() => stack[stackIndex], [stackIndex, stack]);
 
   const setData = useCallback(
     (value: T) => {
@@ -35,19 +35,27 @@ export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, S
 
   const undo = useMemo(() => {
     if (stackIndex > 0) {
-      return () => void setStackIndex((curr: number) => curr - 1);
+      return () => {
+        const undoneData = stack[stackIndex - 1];
+        setStackIndex((curr: number) => curr - 1);
+        return undoneData;
+      };
     } else {
       return undefined;
     }
-  }, [stackIndex, setStackIndex]);
+  }, [stack, stackIndex, setStackIndex]);
 
   const redo = useMemo(() => {
     if (stackIndex < stack.length - 1) {
-      return () => void setStackIndex((curr: number) => curr + 1);
+      return () => {
+        const redoneData = stack[stackIndex + 1];
+        setStackIndex((curr: number) => curr + 1);
+        return redoneData;
+      };
     } else {
       return undefined;
     }
-  }, [stack.length, stackIndex, setStackIndex]);
+  }, [stack, stackIndex, setStackIndex]);
 
   return [data, setData, undo, redo];
 }
