@@ -2,15 +2,21 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
-import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
 import strings from 'src/strings';
+import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import SelectPhotos from 'src/components/common/SelectPhotos';
 import { ReportSeedBank } from 'src/types/Report';
 import ReportService from 'src/services/ReportService';
-import ViewPhotos from './ViewPhotos';
-import LocationSection from './LocationSection';
+import { useOrganization } from 'src/providers';
+import { useAppDispatch } from 'src/redux/store';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import SelectPhotos from 'src/components/common/SelectPhotos';
+import ViewPhotos from 'src/components/Reports/ViewPhotos';
+import LocationSection from 'src/components/Reports/LocationSelection';
 
 const MAX_PHOTOS = 30;
 
@@ -65,9 +71,11 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     validate,
   } = props;
 
+  const dispatch = useAppDispatch();
   const theme = useTheme();
   const classes = useStyles();
   const { isMobile, isTablet } = useDeviceInfo();
+  const { selectedOrganization } = useOrganization();
 
   const [summaryOfProgress, setSummaryOfProgress] = useState(draftReport.summaryOfProgress ?? '');
   const [projectNotes, setProjectNotes] = useState(draftReport.notes ?? '');
@@ -97,6 +105,16 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     },
     [onUpdateLocation]
   );
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void dispatch(requestObservations(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestSpecies(selectedOrganization.id));
+      void dispatch(requestPlantings(selectedOrganization.id));
+      void dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
+    }
+  }, [dispatch, selectedOrganization]);
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
   const mediumItemGridWidth = () => (isMobile || isTablet ? 12 : 8);
