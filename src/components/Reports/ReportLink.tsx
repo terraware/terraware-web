@@ -1,7 +1,7 @@
-import { APP_PATHS } from '../../constants';
-import Link from '../common/Link';
 import React from 'react';
-import { ListReport } from '../../types/Report';
+import { APP_PATHS } from 'src/constants';
+import Link from 'src/common/Link';
+import { ListReport } from 'src/types/Report';
 
 interface ReportLinkProps {
   report: ListReport & { organizationName?: string };
