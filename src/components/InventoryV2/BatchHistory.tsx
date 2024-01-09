@@ -239,10 +239,12 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
             id='batch-history-table'
             columns={columns}
             rows={results}
-            orderBy={'date'}
+            orderBy={'createdTime'}
+            order={'desc'}
             Renderer={BatchHistoryRenderer}
             onSelect={onBatchSelected}
             controlledOnSelect={true}
+            isPresorted={false}
           />
         )}
       </Grid>
