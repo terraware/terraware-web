@@ -108,7 +108,7 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
       <Box
         display='flex'
         flexDirection={isMobile ? 'column-reverse' : 'row'}
-        justifyContent='space-between'
+        justifyContent='flex-end'
         width='100%'
         borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
         borderRadius={theme.spacing(0, 0, 1, 1)}
