@@ -134,7 +134,11 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
 
   const findPreviousEvent = useCallback(
     (batch: BatchHistoryItem, allItems: BatchHistoryItem[] | null): BatchHistoryItem | undefined => {
-      const eventsOfSameType = allItems?.filter((result) => result.type === batch.type);
+      const eventsOfSameType = allItems?.filter((result) =>
+        batch.type === 'QuantityEdited' || batch.type === 'StatusChanged'
+          ? result.type === 'QuantityEdited' || result.type === 'StatusChanged'
+          : result.type === batch.type
+      );
       let previousEv: BatchHistoryItem | undefined;
       eventsOfSameType?.forEach((ev) => {
         if (ev.version && batch.version && ev.version < batch.version && ev.version > (previousEv?.version || 0)) {
@@ -181,7 +185,10 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
                     changedFields.push(strings.ESTIMATED_READY_DATE);
                   }
                 }
-                if (historyItem.type === 'QuantityEdited' && (previousEv?.type === 'QuantityEdited' || !previousEv)) {
+                if (
+                  (historyItem.type === 'QuantityEdited' || historyItem.type === 'StatusChanged') &&
+                  (previousEv?.type === 'QuantityEdited' || previousEv?.type === 'StatusChanged' || !previousEv)
+                ) {
                   if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
                     changedFields.push(strings.GERMINATING_QUANTITY);
                   }
@@ -192,7 +199,6 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
                     changedFields.push(strings.READY_QUANTITY);
                   }
                 }
-
                 return {
                   ...historyItem,
                   editedByName: getUserDisplayName(userSelected),
