@@ -1371,6 +1371,7 @@ TOOLTIP_COUNTRY_MY_ACCOUNT,Your country affects how we display numbers and other
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"This number represents all accessions with the statuses Awaiting Check In, Awaiting Processing, Processing, Drying, and In Storage.",
 TOOLTIP_ECOSYSTEM_TYPE,"Relatively large units of land or water containing a distinct assemblage of natural communities sharing a large majority of species, dynamics, and environmental conditions.",
 TOOLTIP_GERMINATING_QUANTITY,Germinating indicates that seedlings have not yet emerged from seeds. Germinating quantity does not count toward the total quantity.,
+TOOLTIP_INVENTORY_ADD_ACCESSION_ID,"The ID of the accession used to create this batch.  Unavailable for species that don't have any accessions."
 TOOLTIP_NOT_READY_QUANTITY,What determines a plant as “not ready” is up to your team and is often species specific. For example: size of plant or amount of time acclimated.,
 TOOLTIP_READY_QUANTITY,What determines a plant as “ready” is up to your team and is often species specific. For example: size of plant or amount of time acclimated.,
 TOOLTIP_SCIENTIFIC_NAME,The binomial Latin name (genus + species) currently accepted in the botanical literature.,
