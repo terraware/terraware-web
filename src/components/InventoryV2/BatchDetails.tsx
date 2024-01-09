@@ -12,6 +12,7 @@ import { Button } from '@terraware/web-components';
 import BatchDetailsModal from './BatchDetailsModal';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
 import { batchSubstrateEnumToLocalized } from 'src/types/Accession';
+import ChangeQuantityModal from 'src/components/InventoryV2/view/ChangeQuantityModal';
 
 interface BatchDetailsProps {
   batch: Batch;
@@ -22,50 +23,14 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
+  const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
 
-  const overviewCardData = [
-    {
-      title: strings.GERMINATING_QUANTITY,
-      data: batch.germinatingQuantity,
-      fullWidth: true,
-    },
-    {
-      title: strings.NOT_READY_QUANTITY,
-      data: batch.notReadyQuantity,
-    },
-    {
-      title: strings.EST_READY_DATE,
-      data: batch.readyByDate || '',
-    },
-    {
-      title: strings.READY_QUANTITY,
-      data: batch.readyQuantity,
-    },
-    {
-      title: strings.TOTAL_QUANTITY,
-      data: batch.readyQuantity + batch.notReadyQuantity,
-    },
-    {
-      title: strings.SUBSTRATE,
-      data: batchSubstrateEnumToLocalized(batch.substrate) || '',
-    },
-    ...(batch.substrate === 'Other'
-      ? [
-          {
-            title: strings.SUBSTRATE_NOTES,
-            data: batch.substrateNotes || '',
-          },
-        ]
-      : []),
-    {
-      title: strings.TREATMENT,
-      data: batch.treatment || '',
-    },
-    {
-      title: strings.NOTES,
-      data: batch.notes || '',
-    },
-  ];
+  const batchWithRawQtys = {
+    ...batch,
+    'germinatingQuantity(raw)': batch.germinatingQuantity,
+    'readyQuantity(raw)': batch.readyQuantity,
+    'notReadyQuantity(raw)': batch.notReadyQuantity,
+  };
 
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [openEditBatchModal, setOpenEditBatchModal] = useState(false);
@@ -119,12 +84,82 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
           onClick={openEditModal}
         />
       </Box>
+      {modalValues.openChangeQuantityModal && (
+        <ChangeQuantityModal
+          reload={onUpdate}
+          onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
+          modalValues={modalValues}
+          row={batchWithRawQtys}
+        />
+      )}
       <Grid container>
-        {overviewCardData.map((item) => (
-          <Grid item xs={isMobile || item.fullWidth ? 12 : 6} key={item.title}>
-            <OverviewItemCard isEditable={false} title={item.title} contents={item.data} grid={true} />
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard
+            isEditable={true}
+            title={strings.GERMINATING_QUANTITY}
+            contents={batch.germinatingQuantity}
+            grid={true}
+            handleEdit={() => setModalValues({ openChangeQuantityModal: true, type: 'germinating' })}
+          />
+        </Grid>
+        {!isMobile && <Grid item xs={6} paddingRight={theme.spacing(3)} />}
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard
+            isEditable={true}
+            title={strings.NOT_READY_QUANTITY}
+            contents={batch.notReadyQuantity}
+            grid={true}
+            handleEdit={() => setModalValues({ openChangeQuantityModal: true, type: 'not-ready' })}
+          />
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.EST_READY_DATE}
+            contents={batch.readyByDate || ''}
+            grid={true}
+          />
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.READY_QUANTITY}
+            contents={batch.readyQuantity}
+            grid={true}
+          />
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.TOTAL_QUANTITY}
+            contents={batch.readyQuantity + batch.notReadyQuantity}
+            grid={true}
+          />
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.SUBSTRATE}
+            contents={batchSubstrateEnumToLocalized(batch.substrate) || ''}
+            grid={true}
+          />
+        </Grid>
+        {batch.substrate === 'Other' && (
+          <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+            <OverviewItemCard
+              isEditable={false}
+              title={strings.SUBSTRATE_NOTES}
+              contents={batch.substrateNotes || ''}
+              grid={true}
+            />
           </Grid>
-        ))}
+        )}
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard isEditable={false} title={strings.TREATMENT} contents={batch.treatment || ''} grid={true} />
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <OverviewItemCard isEditable={false} title={strings.NOTES} contents={batch.notes || ''} grid={true} />
+        </Grid>
       </Grid>
       <Grid>
         <Typography fontSize='20px' fontWeight={600}>
