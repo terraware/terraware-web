@@ -84,6 +84,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
           onClick={openEditModal}
         />
       </Box>
+      {modalValues.openChangeQuantityModal && (
         <ChangeQuantityModal
           reload={onUpdate}
           onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
