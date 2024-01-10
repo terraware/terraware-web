@@ -72,6 +72,9 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
  * @param boundary
  *  Initial boundary. If this is specified, the editor will start out in EditingBoundary mode;
  *  otherwise it will start out in CreatingBoundary mode.
+ * @param editMultiplePolygons
+ *  Whether to allow draw/creation of more than one polygon, otherwise clears previous polygon
+ *  upon a new one.
  * @param onBoundaryChanged
  *  Called when the user adds, edits, or deletes the boundary. The boundary is always a
  *  MultiPolygon containing a single polygon.
