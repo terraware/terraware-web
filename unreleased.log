@@ -1,3 +1,4 @@
+f71269ed47 SW-4544 Editable map intermediate effort with undo/redo (#2010)
 59b35d2131 SW-4678 Shift alignment of filter multiselect popover buttons (#2022)
 17774f18c8 SW-4661 Disable accession dropdown on inventory add form (#2019)
 bec4b13e80 SW-4650 Add the ability to change status of plants from batch details (#2021)
