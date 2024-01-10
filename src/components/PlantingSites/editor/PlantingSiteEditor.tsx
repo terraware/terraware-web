@@ -20,6 +20,7 @@ import PlantingSiteBoundary from './PlantingSiteBoundary';
 import PlantingSiteExclusions from './PlantingSiteExclusions';
 import PlantingSiteZoneBoundaries from './PlantingSiteZoneBoundaries';
 import PlantingSiteSubzoneBoundaries from './PlantingSiteSubzoneBoundaries';
+import StartOverConfirmation from './StartOverConfirmation';
 
 type PlantingSiteEditorProps = {
   reloadPlantingSites: () => void;
@@ -44,6 +45,7 @@ export default function PlantingSiteEditor(props: PlantingSiteEditorProps): JSX.
   const snackbar = useSnackbar();
   const classes = useStyles();
 
+  const [showStartOver, setShowStartOver] = useState<boolean>(false);
   const [siteBoundary, setSiteBoundary] = useState<FeatureCollection | undefined>();
   const [exclusions, setExclusions] = useState<FeatureCollection | undefined>();
   const [currentStep, setCurrentStep] = useState<PlantingSiteStepType>('details');
@@ -127,7 +129,13 @@ export default function PlantingSiteEditor(props: PlantingSiteEditorProps): JSX.
     return true;
   };
 
-  const saveExclusionAreas = (): boolean => true;
+  const saveExclusionAreas = (): boolean => {
+    setCompletedOptionalSteps((current: Record<PlantingSiteStepType, boolean>) => ({
+      ...current,
+      exclusion_areas: exclusions ? true : false,
+    }));
+    return true;
+  };
 
   const onSaveAndNext = () => {
     // TODO: save data here, alert user if data is missing
@@ -155,13 +163,21 @@ export default function PlantingSiteEditor(props: PlantingSiteEditorProps): JSX.
 
   const onStartOver = () => {
     // TODO: reset data here, confirm with user?
-    setCurrentStep(steps[0].type);
-    setPlantingSite({ ...site });
+    setCurrentStep('site_boundary');
+    setSiteBoundary(undefined);
+    setExclusions(undefined);
+    setPlantingSite((current: PlantingSite) => ({
+      ...current,
+      boundary: undefined,
+      plantingZones: undefined,
+    }));
     setCompletedOptionalSteps({} as Record<PlantingSiteStepType, boolean>);
+    setShowStartOver(false);
   };
 
   return (
     <TfMain>
+      {showStartOver && <StartOverConfirmation onClose={() => setShowStartOver(false)} onConfirm={onStartOver} />}
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ padding: theme.spacing(0, 0, 4, 3), display: 'flex' }}>
           <Typography fontSize='24px' fontWeight={600}>
@@ -174,7 +190,7 @@ export default function PlantingSiteEditor(props: PlantingSiteEditorProps): JSX.
         onCancel={onCancel}
         onSaveAndNext={onSaveAndNext}
         onSaveAndClose={onSaveAndClose}
-        onStartOver={onStartOver}
+        onStartOver={() => setShowStartOver(true)}
         steps={steps}
         className={classes.container}
       >
