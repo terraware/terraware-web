@@ -66,7 +66,7 @@ export type MapSourceBaseData = {
   entities: MapEntity[];
 };
 
-export type MapSource = MapSourceBaseData & {
+export type MapSourceRenderProperties = {
   fillColor: string;
   lineColor: string;
   lineWidth: number;
@@ -78,6 +78,8 @@ export type MapSource = MapSourceBaseData & {
   selectFillColor?: string;
   patternFill?: MapPatternFill;
 };
+
+export type MapSource = MapSourceBaseData & MapSourceRenderProperties;
 
 export type MapBoundingBox = {
   lowerLeft: [number, number];

@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
+import { FeatureCollection } from 'geojson';
 import TfMain from 'src/components/common/TfMain';
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
@@ -11,6 +12,7 @@ import { useLocalization } from 'src/providers';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
 import Card from 'src/components/common/Card';
+import { toMultiPolygonArray } from 'src/components/Map/utils';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PlantingSiteCreateForm, { PlantingSiteCreateStep, PlantingSiteCreateStepType } from './PlantingSiteCreateForm';
 import PlantingSiteDetails from './PlantingSiteDetails';
@@ -42,6 +44,8 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
   const snackbar = useSnackbar();
   const classes = useStyles();
 
+  const [siteBoundary, setSiteBoundary] = useState<FeatureCollection | undefined>();
+  const [exclusions, setExclusions] = useState<FeatureCollection | undefined>();
   const [currentStep, setCurrentStep] = useState<PlantingSiteCreateStepType>('details');
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<PlantingSiteCreateStepType, boolean>>(
     {} as Record<PlantingSiteCreateStepType, boolean>
@@ -94,10 +98,36 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
     history.push(APP_PATHS.PLANTING_SITES);
   };
 
+  const getCurrentStepIndex = (): number => {
+    let stepIndex = 0;
+    steps.find((step: PlantingSiteCreateStep, index: number) => {
+      if (currentStep === step.type) {
+        stepIndex = index;
+        return true;
+      }
+      return false;
+    });
+
+    return stepIndex;
+  };
+
   const onCancel = () => {
     // TODO: confirm with user?
     goToPlantingSites();
   };
+
+  const saveSiteBoundary = (): boolean => {
+    if (!siteBoundary) {
+      // string is wip
+      snackbar.toastError('please draw a site boundary');
+      return false;
+    }
+    onChange('boundary', toMultiPolygonArray(siteBoundary)?.[0]);
+    setSiteBoundary(undefined);
+    return true;
+  };
+
+  const saveExclusionAreas = (): boolean => true;
 
   const onSaveAndNext = () => {
     // TODO: save data here, alert user if data is missing
@@ -105,13 +135,13 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
       // this is the final step
       onSaveAndClose();
     } else {
-      let stepIndex = 0;
-      steps.forEach((step: PlantingSiteCreateStep, index: number) => {
-        if (currentStep === step.type) {
-          stepIndex = index;
-        }
-      });
-      setCurrentStep(steps[stepIndex + 1].type);
+      if (currentStep === 'site_boundary' && !saveSiteBoundary()) {
+        return;
+      }
+      if (currentStep === 'exclusion_areas' && !saveExclusionAreas()) {
+        return;
+      }
+      setCurrentStep(steps[getCurrentStepIndex() + 1].type);
     }
   };
 
@@ -150,8 +180,12 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
       >
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}>
           {currentStep === 'details' && <PlantingSiteDetails onChange={onChange} site={plantingSite} />}
-          {currentStep === 'site_boundary' && <PlantingSiteBoundary onChange={onChange} site={plantingSite} />}
-          {currentStep === 'exclusion_areas' && <PlantingSiteExclusions onChange={onChange} site={plantingSite} />}
+          {currentStep === 'site_boundary' && (
+            <PlantingSiteBoundary boundary={siteBoundary} setBoundary={setSiteBoundary} />
+          )}
+          {currentStep === 'exclusion_areas' && (
+            <PlantingSiteExclusions boundary={exclusions} setBoundary={setExclusions} site={plantingSite} />
+          )}
           {currentStep === 'zone_boundaries' && <PlantingSiteZoneBoundaries onChange={onChange} site={plantingSite} />}
           {currentStep === 'subzone_boundaries' && (
             <PlantingSiteSubzoneBoundaries onChange={onChange} site={plantingSite} />
