@@ -3,6 +3,8 @@ import Link from './Link';
 export interface TextWithLinkProps {
   className?: string;
   fontSize?: string | number;
+  handlePrefix?: (prefix: string) => string | JSX.Element[];
+  handleSuffix?: (suffix: string) => string | JSX.Element[];
   href?: string;
   onClick?: () => void;
   text: string;
@@ -17,7 +19,15 @@ export interface TextWithLinkProps {
  * no square brackets, [text] is rendered as a link. For example, `'See Jane run'` would be rendered
  * as, `<a href=...>See Jane run</a>`.
  */
-export default function TextWithLink({ className, fontSize, href, onClick, text }: TextWithLinkProps): JSX.Element {
+export default function TextWithLink({
+  className,
+  fontSize,
+  handlePrefix,
+  handleSuffix,
+  href,
+  onClick,
+  text,
+}: TextWithLinkProps): JSX.Element {
   const linkStart = text.indexOf('[');
   const linkEnd = text.indexOf(']');
   let prefix: string;
@@ -36,11 +46,11 @@ export default function TextWithLink({ className, fontSize, href, onClick, text 
 
   return (
     <>
-      {prefix}
+      {handlePrefix ? handlePrefix(prefix) : prefix}
       <Link className={className} to={href} onClick={onClick} fontSize={fontSize ?? '16px'}>
         {linkText}
       </Link>
-      {suffix}
+      {handleSuffix ? handleSuffix(suffix) : suffix}
     </>
   );
 }

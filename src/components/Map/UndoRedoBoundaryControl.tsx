@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       background: theme.palette.TwClrBaseWhite,
       color: theme.palette.TwClrTxt,
     },
+    '&:focus': {
+      outline: 'none',
+    },
   },
 }));
 

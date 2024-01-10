@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Theme, Typography, useTheme } from '@mui/material';
+import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import TextWithLink from 'src/components/common/TextWithLink';
 import VideoDialog from 'src/components/common/VideoDialog';
@@ -12,13 +12,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export type Description = {
-  text: string;
+  text: string | JSX.Element[];
+  handlePrefix?: (prefix: string) => string | JSX.Element[];
+  handleSuffix?: (suffix: string) => string | JSX.Element[];
   hasTutorial?: boolean;
 };
 
 export type StepTitleDescriptionProps = {
   description: Description[];
   dontShowAgainPreferenceName?: string;
+  minHeight?: string;
   title: string;
   tutorialDescription: string;
   tutorialDocLinkKey: DocType;
@@ -26,8 +29,15 @@ export type StepTitleDescriptionProps = {
 };
 
 export default function StepTitleDescription(props: StepTitleDescriptionProps): JSX.Element {
-  const { description, dontShowAgainPreferenceName, title, tutorialDescription, tutorialDocLinkKey, tutorialTitle } =
-    props;
+  const {
+    description,
+    dontShowAgainPreferenceName,
+    minHeight,
+    title,
+    tutorialDescription,
+    tutorialDocLinkKey,
+    tutorialTitle,
+  } = props;
   const theme = useTheme();
   const classes = useStyles();
   const docLinks = useDocLinks();
@@ -44,7 +54,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
   };
 
   return (
-    <>
+    <Box marginBottom={theme.spacing(2)} display='flex' flexDirection='column' minHeight={minHeight}>
       <VideoDialog
         description={tutorialDescription}
         link={docLinks[tutorialDocLinkKey]}
@@ -71,8 +81,10 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
             <TextWithLink
               className={classes.clickableText}
               fontSize='14px'
+              handlePrefix={line.handlePrefix}
+              handleSuffix={line.handleSuffix}
               onClick={() => setShowModal(true)}
-              text={line.text}
+              text={line.text as string}
               key={index}
             />
           ) : (
@@ -80,6 +92,6 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           )}
         </Typography>
       ))}
-    </>
+    </Box>
   );
 }
