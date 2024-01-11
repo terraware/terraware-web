@@ -8,11 +8,14 @@ import useMapIcons from 'src/components/Map/useMapIcons';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
 export type PlantingSiteBoundaryProps = {
-  boundary?: FeatureCollection;
-  setBoundary: (boundary?: FeatureCollection) => void;
+  setSiteBoundary: (siteBoundary?: FeatureCollection) => void;
+  siteBoundary?: FeatureCollection;
 };
 
-export default function PlantingSiteBoundary({ boundary, setBoundary }: PlantingSiteBoundaryProps): JSX.Element {
+export default function PlantingSiteBoundary({
+  setSiteBoundary,
+  siteBoundary,
+}: PlantingSiteBoundaryProps): JSX.Element {
   const [description, setDescription] = useState<Description[]>([]);
   const [mode, setMode] = useState<MapEditorMode>();
   const mapIcons = useMapIcons();
@@ -50,7 +53,7 @@ export default function PlantingSiteBoundary({ boundary, setBoundary }: Planting
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       />
-      <EditableMap onBoundaryChanged={setBoundary} boundary={boundary} setMode={setMode} />
+      <EditableMap onEditableBoundaryChanged={setSiteBoundary} editableBoundary={siteBoundary} setMode={setMode} />
     </Box>
   );
 }

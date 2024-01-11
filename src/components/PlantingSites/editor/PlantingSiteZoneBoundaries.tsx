@@ -1,17 +1,48 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Box } from '@mui/material';
+import { Feature, FeatureCollection } from 'geojson';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import { ReadOnlyBoundary } from 'src/components/Map/types';
+import EditableMap, { RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
+import { toFeature } from 'src/components/Map/utils';
+import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import useMapIcons from 'src/components/Map/useMapIcons';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
 export type PlantingSiteBoundaryProps = {
-  onChange: (id: string, value: unknown) => void;
+  zones?: FeatureCollection;
+  setZones: (zones?: FeatureCollection) => void;
   site: PlantingSite;
 };
 
 export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): JSX.Element {
+  const { zones, setZones, site } = props;
   const mapIcons = useMapIcons();
+  const getRenderAttributes = useRenderAttributes();
+
+  const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
+    if (!zones) {
+      return undefined;
+    }
+    return [
+      {
+        featureCollection: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
+        id: 'site',
+        renderProperties: getRenderAttributes('site'),
+      },
+      {
+        featureCollection: {
+          type: 'FeatureCollection',
+          // TODO: fetch id from existing feature if we came from an edit vs create site path
+          // the id should be stored in the feature's properties, and retrieved from there
+          features: zones!.features.map((feature: Feature, index: number) => ({ ...feature, id: `zone_${index}` })),
+        },
+        id: 'zone',
+        renderProperties: getRenderAttributes('zone'),
+      },
+    ];
+  }, [getRenderAttributes, site.boundary, site.id, zones]);
 
   const description = useMemo<Description[]>(
     () => [
@@ -25,8 +56,17 @@ export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): 
     [mapIcons]
   );
 
+  // TODO: split here
+  const onEditableBoundaryChanged = useCallback((featureCollection?: FeatureCollection, isUndoRedo?: boolean) => {
+    return;
+  }, []);
+
+  const onUndoRedoReadOnlyBoundary = useCallback((currentReadOnlyBoundary?: ReadOnlyBoundary[]) => {
+    return;
+  }, []);
+
   return (
-    <Box display='flex' flexDirection='column'>
+    <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-zone-boundaries-instructions'
@@ -34,6 +74,11 @@ export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): 
         tutorialDescription={strings.ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION}
         tutorialDocLinkKey='planting_site_create_zone_boundary_instructions_video'
         tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}
+      />
+      <EditableMap
+        onEditableBoundaryChanged={onEditableBoundaryChanged}
+        onUndoRedoReadOnlyBoundary={onUndoRedoReadOnlyBoundary}
+        readOnlyBoundary={readOnlyBoundary}
       />
     </Box>
   );

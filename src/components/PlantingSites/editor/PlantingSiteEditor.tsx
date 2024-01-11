@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 import { FeatureCollection } from 'geojson';
@@ -48,6 +48,7 @@ export default function PlantingSiteEditor(props: PlantingSiteEditorProps): JSX.
   const [showStartOver, setShowStartOver] = useState<boolean>(false);
   const [siteBoundary, setSiteBoundary] = useState<FeatureCollection | undefined>();
   const [exclusions, setExclusions] = useState<FeatureCollection | undefined>();
+  const [zones, setZones] = useState<FeatureCollection | undefined>();
   const [currentStep, setCurrentStep] = useState<PlantingSiteStepType>('details');
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<PlantingSiteStepType, boolean>>(
     {} as Record<PlantingSiteStepType, boolean>
@@ -175,6 +176,13 @@ export default function PlantingSiteEditor(props: PlantingSiteEditorProps): JSX.
     setShowStartOver(false);
   };
 
+  useEffect(() => {
+    if (siteBoundary && !site.plantingZones?.length) {
+      // TODO: process properties etc here
+      setZones(siteBoundary);
+    }
+  }, [siteBoundary, site.plantingZones?.length]);
+
   return (
     <TfMain>
       {showStartOver && <StartOverConfirmation onClose={() => setShowStartOver(false)} onConfirm={onStartOver} />}
@@ -197,12 +205,14 @@ export default function PlantingSiteEditor(props: PlantingSiteEditorProps): JSX.
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}>
           {currentStep === 'details' && <PlantingSiteDetails onChange={onChange} site={plantingSite} />}
           {currentStep === 'site_boundary' && (
-            <PlantingSiteBoundary boundary={siteBoundary} setBoundary={setSiteBoundary} />
+            <PlantingSiteBoundary siteBoundary={siteBoundary} setSiteBoundary={setSiteBoundary} />
           )}
           {currentStep === 'exclusion_areas' && (
-            <PlantingSiteExclusions boundary={exclusions} setBoundary={setExclusions} site={plantingSite} />
+            <PlantingSiteExclusions exclusions={exclusions} setExclusions={setExclusions} site={plantingSite} />
           )}
-          {currentStep === 'zone_boundaries' && <PlantingSiteZoneBoundaries onChange={onChange} site={plantingSite} />}
+          {currentStep === 'zone_boundaries' && (
+            <PlantingSiteZoneBoundaries zones={zones} setZones={setZones} site={plantingSite} />
+          )}
           {currentStep === 'subzone_boundaries' && (
             <PlantingSiteSubzoneBoundaries onChange={onChange} site={plantingSite} />
           )}

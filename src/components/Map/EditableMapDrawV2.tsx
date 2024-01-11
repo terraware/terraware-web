@@ -26,8 +26,8 @@ export type MapEditorMode =
   | 'ReplacingBoundary';
 
 type MapEditorProps = ConstructorParameters<typeof MapboxDraw>[0] & {
+  allowEditMultiplePolygons?: boolean;
   boundary?: FeatureCollection;
-  editMultiplePolygons?: boolean;
   onBoundaryChanged?: (boundary?: FeatureCollection) => void;
   setMode?: (mode: MapEditorMode) => void;
 };
@@ -72,7 +72,7 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
  * @param boundary
  *  Initial boundary. If this is specified, the editor will start out in EditingBoundary mode;
  *  otherwise it will start out in CreatingBoundary mode.
- * @param editMultiplePolygons
+ * @param allowEditMultiplePolygons
  *  Whether to allow draw/creation of more than one polygon, otherwise clears previous polygon
  *  upon a new one.
  * @param onBoundaryChanged
@@ -83,8 +83,8 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
  *  Additional properties to pass to the MapboxDraw control.
  */
 export default function EditableMapDraw({
+  allowEditMultiplePolygons,
   boundary,
-  editMultiplePolygons,
   onBoundaryChanged,
   setMode,
   ...otherProps
@@ -120,7 +120,7 @@ export default function EditableMapDraw({
 
   const fetchUpdatedFeatures = useCallback(
     (newFeatures: Feature[]): FeatureCollection | undefined => {
-      const existingFeatures = editMultiplePolygons
+      const existingFeatures = allowEditMultiplePolygons
         ? draw
             .getAll()
             .features.filter(
@@ -132,7 +132,7 @@ export default function EditableMapDraw({
       const features = [...existingFeatures, ...newFeatures];
       return features.length ? { type: 'FeatureCollection', features } : undefined;
     },
-    [draw, editMultiplePolygons]
+    [draw, allowEditMultiplePolygons]
   );
 
   const updateNotification = useCallback(

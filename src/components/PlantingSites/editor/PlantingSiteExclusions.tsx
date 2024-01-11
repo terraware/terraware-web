@@ -3,27 +3,27 @@ import { Box } from '@mui/material';
 import { FeatureCollection } from 'geojson';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
-import EditableMap, { ReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
+import EditableMap, { RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
 import { toFeature } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import useMapIcons from 'src/components/Map/useMapIcons';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
 export type PlantingSiteExclusionsProps = {
-  boundary?: FeatureCollection;
-  setBoundary: (boundary?: FeatureCollection) => void;
+  exclusions?: FeatureCollection;
+  setExclusions: (exclusions?: FeatureCollection) => void;
   site: PlantingSite;
 };
 
 export default function PlantingSiteExclusions({
-  boundary,
-  setBoundary,
+  exclusions,
+  setExclusions,
   site,
 }: PlantingSiteExclusionsProps): JSX.Element {
   const mapIcons = useMapIcons();
   const getRenderAttributes = useRenderAttributes();
 
-  const readOnlyBoundary = useMemo<ReadOnlyBoundary[] | undefined>(() => {
+  const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!site.boundary) {
       return undefined;
     }
@@ -61,10 +61,10 @@ export default function PlantingSiteExclusions({
         tutorialTitle={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE}
       />
       <EditableMap
-        boundary={boundary}
-        editMultiplePolygons
-        onBoundaryChanged={setBoundary}
-        readOnlyBoundaries={readOnlyBoundary}
+        allowEditMultiplePolygons
+        editableBoundary={exclusions}
+        onEditableBoundaryChanged={setExclusions}
+        readOnlyBoundary={readOnlyBoundary}
       />
     </Box>
   );

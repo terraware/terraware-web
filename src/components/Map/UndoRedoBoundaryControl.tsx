@@ -5,6 +5,7 @@ import { Button } from '@terraware/web-components';
 import { FeatureCollection } from 'geojson';
 import _ from 'lodash';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
+import { ReadOnlyBoundary } from './types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
@@ -20,21 +21,58 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export type UndoRedoBoundaryControlProps = {
-  boundary?: FeatureCollection;
-  onBoundaryChanged: (boundary?: FeatureCollection) => void;
+type StackData = {
+  editableBoundary?: FeatureCollection;
+  readOnlyBoundary?: ReadOnlyBoundary[];
 };
 
-const UndoRedoBoundaryControl = ({ boundary, onBoundaryChanged }: UndoRedoBoundaryControlProps): JSX.Element => {
+export type UndoRedoBoundaryControlProps = {
+  editableBoundary?: FeatureCollection;
+  onEditableBoundaryChanged?: (editableBoundary?: FeatureCollection) => void;
+  onReadOnlyBoundaryChanged?: (readOnlyBoundary?: ReadOnlyBoundary[]) => void;
+  readOnlyBoundary?: ReadOnlyBoundary[];
+};
+
+const UndoRedoBoundaryControl = ({
+  editableBoundary,
+  onEditableBoundaryChanged,
+  onReadOnlyBoundaryChanged,
+  readOnlyBoundary,
+}: UndoRedoBoundaryControlProps): JSX.Element => {
   const classes = useStyles();
   const theme = useTheme();
-  const [data, setData, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(boundary);
+  const [data, setData, undo, redo] = useUndoRedoState<StackData>({ editableBoundary, readOnlyBoundary });
 
   useEffect(() => {
-    if (!_.isEqual(boundary, data)) {
-      setData(boundary);
+    const newData: StackData = { editableBoundary, readOnlyBoundary };
+    if (!_.isEqual(newData, data)) {
+      setData(newData);
     }
-  }, [boundary, data, setData]);
+  }, [data, editableBoundary, readOnlyBoundary, setData]);
+
+  const onUndo = () => {
+    if (!undo) {
+      return;
+    }
+    onUpdate(undo());
+  };
+
+  const onRedo = () => {
+    if (!redo) {
+      return;
+    }
+    onUpdate(redo());
+  };
+
+  const onUpdate = (stackData?: StackData) => {
+    if (onEditableBoundaryChanged && !_.isEqual(editableBoundary, stackData?.editableBoundary)) {
+      onEditableBoundaryChanged(stackData?.editableBoundary);
+    }
+
+    if (onReadOnlyBoundaryChanged && !_.isEqual(readOnlyBoundary, stackData?.readOnlyBoundary)) {
+      onReadOnlyBoundaryChanged(stackData?.readOnlyBoundary);
+    }
+  };
 
   return (
     <Box
@@ -50,19 +88,9 @@ const UndoRedoBoundaryControl = ({ boundary, onBoundaryChanged }: UndoRedoBounda
         alignItems: 'center',
       }}
     >
-      <Button
-        className={classes.button}
-        icon='iconUndo'
-        onClick={() => undo && onBoundaryChanged(undo())}
-        disabled={!undo}
-      />
+      <Button className={classes.button} icon='iconUndo' onClick={onUndo} disabled={!undo} />
       <Box width='1px' height='20px' border={`1px solid ${theme.palette.TwClrBgTertiary}`} />
-      <Button
-        className={classes.button}
-        icon='iconRedo'
-        onClick={() => redo && onBoundaryChanged(redo())}
-        disabled={!redo}
-      />
+      <Button className={classes.button} icon='iconRedo' onClick={onRedo} disabled={!redo} />
     </Box>
   );
 };
