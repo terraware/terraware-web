@@ -19,7 +19,7 @@ test.beforeEach(async ({ context }, testInfo) => {
   ]);
 
   // Pick the new/fake "now" for the test.
-  const testDate = new Date("January 1 2024 12:00:00Z-08:00").valueOf();
+  const testDate = new Date('January 1 2024 12:00:00Z-08:00').valueOf();
 
   // Update the Date accordingly in your test pages
   await context.addInitScript(`{
@@ -38,7 +38,6 @@ test.beforeEach(async ({ context }, testInfo) => {
     const __DateNow = Date.now;
     Date.now = () => __DateNow() + __DateNowOffset;
   }`);
-
 });
 
 test('Add An Accession', async ({ page }, testInfo) => {
@@ -75,7 +74,7 @@ test('Add An Accession', async ({ page }, testInfo) => {
   await page.getByRole('button', { name: 'Save' }).click();
 
   await expect(page.getByRole('main')).toContainText('24-1-1-001');
-  
+
   await expect(page.getByRole('main')).toContainText('Coconut');
   await expect(page.getByRole('main')).toContainText('Awaiting Check-In');
   await expect(page.getByRole('main')).toContainText('garage');
@@ -156,6 +155,4 @@ test('Withdraw to Nursery', async ({ page }, testInfo) => {
   await page.goto('http://127.0.0.1:3000');
 
   await waitFor(page, '#home');
-
-
 });
