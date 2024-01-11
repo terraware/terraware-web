@@ -210,7 +210,9 @@ export default function Editor(props: EditorProps): JSX.Element {
           {currentStep === 'exclusion_areas' && (
             <Exclusions exclusions={exclusions} setExclusions={setExclusions} site={plantingSite} />
           )}
-          {currentStep === 'zone_boundaries' && <Zones zones={zones} setZones={setZones} site={plantingSite} />}
+          {currentStep === 'zone_boundaries' && (
+            <Zones exclusions={exclusions} zones={zones} setZones={setZones} site={plantingSite} />
+          )}
           {currentStep === 'subzone_boundaries' && <Subzones onChange={onChange} site={plantingSite} />}
         </Card>
       </Form>

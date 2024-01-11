@@ -3,21 +3,22 @@ import { Box } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
-import { ReadOnlyBoundary } from 'src/components/Map/types';
+import { GeometryFeature, ReadOnlyBoundary } from 'src/components/Map/types';
 import EditableMap, { RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
-import { toFeature } from 'src/components/Map/utils';
+import { cutPolygons, toFeature } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import useMapIcons from 'src/components/Map/useMapIcons';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
 export type ZonesProps = {
-  zones?: FeatureCollection;
+  exclusions?: FeatureCollection;
   setZones: (zones?: FeatureCollection) => void;
   site: PlantingSite;
+  zones?: FeatureCollection;
 };
 
 export default function Zones(props: ZonesProps): JSX.Element {
-  const { zones, setZones, site } = props;
+  const { exclusions, setZones, site, zones } = props;
   const mapIcons = useMapIcons();
   const getRenderAttributes = useRenderAttributes();
 
@@ -25,7 +26,19 @@ export default function Zones(props: ZonesProps): JSX.Element {
     if (!zones) {
       return undefined;
     }
+
+    const exclusionsBoundary = exclusions
+      ? [
+          {
+            featureCollection: exclusions!,
+            id: 'exclusions',
+            renderProperties: getRenderAttributes('exclusions'),
+          },
+        ]
+      : [];
+
     return [
+      ...exclusionsBoundary,
       {
         featureCollection: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
         id: 'site',
@@ -42,7 +55,7 @@ export default function Zones(props: ZonesProps): JSX.Element {
         renderProperties: getRenderAttributes('zone'),
       },
     ];
-  }, [getRenderAttributes, site.boundary, site.id, zones]);
+  }, [exclusions, getRenderAttributes, site.boundary, site.id, zones]);
 
   const description = useMemo<Description[]>(
     () => [
@@ -56,10 +69,23 @@ export default function Zones(props: ZonesProps): JSX.Element {
     [mapIcons]
   );
 
-  // TODO: split here
-  const onEditableBoundaryChanged = useCallback((featureCollection?: FeatureCollection, isUndoRedo?: boolean) => {
-    return;
-  }, []);
+  const onEditableBoundaryChanged = useCallback(
+    (featureCollection?: FeatureCollection, isUndoRedo?: boolean) => {
+      if (isUndoRedo || !zones) {
+        return;
+      }
+
+      const cutWith = featureCollection?.features?.[0]?.geometry;
+      if (cutWith) {
+        const newZones = cutPolygons(zones.features as GeometryFeature[], cutWith);
+        if (newZones) {
+          setZones({ type: 'FeatureCollection', features: newZones });
+        }
+      }
+      return;
+    },
+    [zones, setZones]
+  );
 
   const onUndoRedoReadOnlyBoundary = useCallback(
     (updatedData?: ReadOnlyBoundary[]) => {
@@ -79,6 +105,7 @@ export default function Zones(props: ZonesProps): JSX.Element {
         tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}
       />
       <EditableMap
+        clearOnEdit
         onEditableBoundaryChanged={onEditableBoundaryChanged}
         onUndoRedoReadOnlyBoundary={onUndoRedoReadOnlyBoundary}
         readOnlyBoundary={readOnlyBoundary}

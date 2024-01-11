@@ -26,6 +26,7 @@ export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
 
 export type EditableMapProps = {
   allowEditMultiplePolygons?: boolean;
+  clearOnEdit?: boolean;
   editableBoundary?: FeatureCollection;
   onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) => void;
   onUndoRedoReadOnlyBoundary?: (readOnlyBoundary?: ReadOnlyBoundary[]) => void;
@@ -36,6 +37,7 @@ export type EditableMapProps = {
 
 export default function EditableMap({
   allowEditMultiplePolygons,
+  clearOnEdit,
   editableBoundary,
   onEditableBoundaryChanged,
   onUndoRedoReadOnlyBoundary,
@@ -155,6 +157,7 @@ export default function EditableMap({
             <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
               allowEditMultiplePolygons={allowEditMultiplePolygons}
+              clearOnEdit={clearOnEdit}
               boundary={editableBoundary}
               onBoundaryChanged={onEditableBoundaryChanged}
               setMode={setMode}

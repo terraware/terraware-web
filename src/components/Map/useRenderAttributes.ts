@@ -3,11 +3,14 @@ import { useTheme } from '@mui/material';
 import { getRgbaFromHex } from 'src/utils/color';
 import { MapObject, MapSourceRenderProperties } from 'src/types/Map';
 
-export default function useRenderAttributes(): (type: MapObject) => MapSourceRenderProperties {
+// TODO: integrate exclusions as a first class MapObject (not there yet)
+export type RenderableObject = MapObject | 'exclusions';
+
+export default function useRenderAttributes(): (type: RenderableObject) => MapSourceRenderProperties {
   const theme = useTheme();
 
   const getRenderAttributes = useCallback(
-    (objectType: MapObject): MapSourceRenderProperties => {
+    (objectType: RenderableObject): MapSourceRenderProperties => {
       if (objectType === 'site') {
         return {
           fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
