@@ -270,7 +270,8 @@
 <a name='L205'></a><a href='#L205'>205</a>
 <a name='L206'></a><a href='#L206'>206</a>
 <a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -316,6 +317,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -483,7 +485,7 @@ import { TableColumnType } from '@terraware/web-components';
 import { Box, Grid } from '@mui/material';
 import _, { isArray } from 'lodash';
 import strings from 'src/strings';
-import { useQueryFilters } from 'src/utils/useQueryFilters';
+import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { InventoryFiltersUnion } from 'src/components/InventoryV2/InventoryFilter';
 import { APP_PATHS } from 'src/constants';
@@ -496,17 +498,17 @@ import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton'
 import isEnabled from 'src/features';
 &nbsp;
 interface InventoryTableProps {
-  results: SearchResponseElement[];
-  temporalSearchValue: string;
-  setTemporalSearchValue: React.Dispatch&lt;React.SetStateAction&lt;string&gt;&gt;;
+  allowSelectionProjectAssign?: boolean;
+  columns: () =&gt; TableColumnType[];
   filters: InventoryFiltersUnion;
+  isPresorted: boolean;
+  origin: OriginPage;
+  reloadData?: () =&gt; void;
+  results: SearchResponseElement[];
   setFilters: (f: InventoryFiltersUnion) =&gt; void;
   setSearchSortOrder: (sortOrder: SearchSortOrder) =&gt; void;
-  isPresorted: boolean;
-  columns: () =&gt; TableColumnType[];
-  reloadData?: () =&gt; void;
-  origin?: OriginPage;
-  allowSelectionProjectAssign?: boolean;
+  setTemporalSearchValue: React.Dispatch&lt;React.SetStateAction&lt;string&gt;&gt;;
+  temporalSearchValue: string;
 }
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >InventoryTable(</span>props: InventoryTableProps): JSX.Element {
@@ -523,35 +525,36 @@ export default function <span class="fstat-no" title="function not covered" >Inv
     origin,
     allowSelectionProjectAssign,
   } = <span class="cstat-no" title="statement not covered" >props;</span>
+&nbsp;
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;any[]&gt;([]);</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
-  const { queryFilters, setQueryFilters } = <span class="cstat-no" title="statement not covered" >useQueryFilters();</span>
+  const { sessionFilters, setSessionFilters } = <span class="cstat-no" title="statement not covered" >useSessionFilters(origin.toLowerCase());</span>
   const [withdrawTooltip, setWithdrawTooltip] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;();</span>
   const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
 &nbsp;
   // Sync query filters into view
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const { showEmptyBatches: filterShowEmptyBatches, ...restFilters } = <span class="cstat-no" title="statement not covered" >filters;</span>
-    const { showEmptyBatches: queryFilterShowEmptyBatches, ...restQueryFilters } = <span class="cstat-no" title="statement not covered" >queryFilters;</span>
+    const { showEmptyBatches: sessionFilterShowEmptyBatches, ...restSessionFilters } = <span class="cstat-no" title="statement not covered" >sessionFilters;</span>
 &nbsp;
-    let nextFilters: InventoryFiltersUnion = <span class="cstat-no" title="statement not covered" >{ ...restQueryFilters };</span>
-<span class="cstat-no" title="statement not covered" >    if (!_.isEqual(restFilters, restQueryFilters)) {</span>
-<span class="cstat-no" title="statement not covered" >      nextFilters = { ...restQueryFilters };</span>
+    let nextFilters: InventoryFiltersUnion = <span class="cstat-no" title="statement not covered" >{ ...restSessionFilters };</span>
+<span class="cstat-no" title="statement not covered" >    if (!_.isEqual(restFilters, restSessionFilters)) {</span>
+<span class="cstat-no" title="statement not covered" >      nextFilters = { ...restSessionFilters };</span>
     }
 &nbsp;
     // Since showEmptyBatches is a super special filter that unfortunately needs to
     // conform to SearchNodePayload (or refactor the ./Search and src/common/FilterGroup components), we need to change
     // the `true` and `false` values to `['true']` and `['false']`
-<span class="cstat-no" title="statement not covered" >    if (queryFilterShowEmptyBatches) {</span>
-<span class="cstat-no" title="statement not covered" >      nextFilters.showEmptyBatches = isArray(queryFilterShowEmptyBatches)</span>
-        ? queryFilterShowEmptyBatches.map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >`${value}`)</span>
-        : [`${queryFilterShowEmptyBatches}`];
+<span class="cstat-no" title="statement not covered" >    if (sessionFilterShowEmptyBatches) {</span>
+<span class="cstat-no" title="statement not covered" >      nextFilters.showEmptyBatches = isArray(sessionFilterShowEmptyBatches)</span>
+        ? sessionFilterShowEmptyBatches.map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >`${value}`)</span>
+        : [`${sessionFilterShowEmptyBatches}`];
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!_.isEqual(filters, nextFilters)) {</span>
 <span class="cstat-no" title="statement not covered" >      setFilters(nextFilters);</span>
     }
-  }, [filters, queryFilters, setFilters]);
+  }, [filters, sessionFilters, setFilters]);
 &nbsp;
   const withdrawInventory = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const path = <span class="cstat-no" title="statement not covered" >origin === 'Species' ? APP_PATHS.INVENTORY_WITHDRAW : APP_PATHS.BATCH_WITHDRAW;</span>
@@ -630,7 +633,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
           filters={filters}
           setFilters={<span class="fstat-no" title="function not covered" >(f</span>) =&gt; {
 <span class="cstat-no" title="statement not covered" >            setFilters(f);</span>
-<span class="cstat-no" title="statement not covered" >            setQueryFilters(f);</span>
+<span class="cstat-no" title="statement not covered" >            setSessionFilters(f);</span>
           }}
           origin={origin}
           showProjectsFilter={origin === 'Batches'}
@@ -691,7 +694,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-11T03:19:28.597Z
+                at 2024-01-11T20:18:23.624Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
