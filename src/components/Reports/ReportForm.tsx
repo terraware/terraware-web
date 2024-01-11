@@ -89,15 +89,14 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     void getPhotoCount();
   }, [draftReport.id]);
 
-  const handleAddRemoveLocation = (
-    selected: boolean,
-    index: number,
-    location: 'seedBanks' | 'nurseries' | 'plantingSites'
-  ) => {
-    if (onUpdateLocation) {
-      onUpdateLocation(index, 'selected', selected, location);
-    }
-  };
+  const handleAddRemoveLocation = useCallback(
+    (selected: boolean, index: number, location: 'seedBanks' | 'nurseries' | 'plantingSites') => {
+      if (onUpdateLocation) {
+        onUpdateLocation(index, 'selected', selected, location);
+      }
+    },
+    [onUpdateLocation]
+  );
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
   const mediumItemGridWidth = () => (isMobile || isTablet ? 12 : 8);
