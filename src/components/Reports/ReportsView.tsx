@@ -138,16 +138,9 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
       return '';
     }
 
-    const reportPeriods = reportsToComplete.map((report) => `${report.year}-Q${report.quarter}`).sort();
-
-    const dedupedPeriods: string[] = [];
-    for (const period of reportPeriods) {
-      if (!dedupedPeriods.includes(period)) {
-        dedupedPeriods.push(period);
-      }
-    }
-
-    return dedupedPeriods.join(', ');
+    return Array.from(new Set(reportsToComplete.map((report) => `${report.year}-Q${report.quarter}`)))
+      .sort()
+      .join(', ');
   }, [reportsToComplete]);
 
   return reportsSettings && !reportsSettings?.isConfigured ? (
