@@ -5,12 +5,12 @@ import { PlantingSite } from 'src/types/Tracking';
 import useMapIcons from 'src/components/Map/useMapIcons';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
-export type PlantingSiteBoundaryProps = {
+export type SubzonesProps = {
   onChange: (id: string, value: unknown) => void;
   site: PlantingSite;
 };
 
-export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): JSX.Element {
+export default function Subzones(props: SubzonesProps): JSX.Element {
   const mapIcons = useMapIcons();
 
   const description = useMemo<Description[]>(

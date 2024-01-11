@@ -9,17 +9,13 @@ import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import useMapIcons from 'src/components/Map/useMapIcons';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
-export type PlantingSiteExclusionsProps = {
+export type ExclusionsProps = {
   exclusions?: FeatureCollection;
   setExclusions: (exclusions?: FeatureCollection) => void;
   site: PlantingSite;
 };
 
-export default function PlantingSiteExclusions({
-  exclusions,
-  setExclusions,
-  site,
-}: PlantingSiteExclusionsProps): JSX.Element {
+export default function Exclusions({ exclusions, setExclusions, site }: ExclusionsProps): JSX.Element {
   const mapIcons = useMapIcons();
   const getRenderAttributes = useRenderAttributes();
 

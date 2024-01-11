@@ -10,13 +10,13 @@ import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import useMapIcons from 'src/components/Map/useMapIcons';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
-export type PlantingSiteBoundaryProps = {
+export type ZonesProps = {
   zones?: FeatureCollection;
   setZones: (zones?: FeatureCollection) => void;
   site: PlantingSite;
 };
 
-export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): JSX.Element {
+export default function Zones(props: ZonesProps): JSX.Element {
   const { zones, setZones, site } = props;
   const mapIcons = useMapIcons();
   const getRenderAttributes = useRenderAttributes();

@@ -7,15 +7,12 @@ import EditableMap from 'src/components/Map/EditableMapV2';
 import useMapIcons from 'src/components/Map/useMapIcons';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
-export type PlantingSiteBoundaryProps = {
+export type SiteBoundaryProps = {
   setSiteBoundary: (siteBoundary?: FeatureCollection) => void;
   siteBoundary?: FeatureCollection;
 };
 
-export default function PlantingSiteBoundary({
-  setSiteBoundary,
-  siteBoundary,
-}: PlantingSiteBoundaryProps): JSX.Element {
+export default function SiteBoundary({ setSiteBoundary, siteBoundary }: SiteBoundaryProps): JSX.Element {
   const [description, setDescription] = useState<Description[]>([]);
   const [mode, setMode] = useState<MapEditorMode>();
   const mapIcons = useMapIcons();

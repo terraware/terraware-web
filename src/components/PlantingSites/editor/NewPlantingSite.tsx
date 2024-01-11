@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { PlantingSite } from 'src/types/Tracking';
 import { SiteType } from 'src/types/PlantingSite';
 import { useOrganization } from 'src/providers';
-import PlantingSiteEditor from './PlantingSiteEditor';
+import PlantingSiteEditor from './Editor';
 
 type NewPlantingSiteProps = {
   reloadPlantingSites: () => void;
