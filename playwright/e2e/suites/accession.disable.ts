@@ -75,6 +75,7 @@ test('Add An Accession', async ({ page }, testInfo) => {
   await page.getByRole('button', { name: 'Save' }).click();
 
   await expect(page.getByRole('main')).toContainText('24-1-1-001');
+  
   await expect(page.getByRole('main')).toContainText('Coconut');
   await expect(page.getByRole('main')).toContainText('Awaiting Check-In');
   await expect(page.getByRole('main')).toContainText('garage');
