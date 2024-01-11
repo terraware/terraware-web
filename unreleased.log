@@ -1,3 +1,4 @@
+eb50629f17 SW-4678 Apply filter button shift to filter groups (#2026)
 09a1f66672 SW-4680 Handle StatusChanged batch history items (#2024)
 031aca063d Updated translations from Phrase (#2025)
 f71269ed47 SW-4544 Editable map intermediate effort with undo/redo (#2010)
