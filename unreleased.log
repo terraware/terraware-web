@@ -1,3 +1,4 @@
+09a1f66672 SW-4680 Handle StatusChanged batch history items (#2024)
 031aca063d Updated translations from Phrase (#2025)
 f71269ed47 SW-4544 Editable map intermediate effort with undo/redo (#2010)
 59b35d2131 SW-4678 Shift alignment of filter multiselect popover buttons (#2022)

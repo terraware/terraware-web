@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/98</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/80</span>
             </div>
         
             
@@ -316,7 +316,13 @@
 <a name='L251'></a><a href='#L251'>251</a>
 <a name='L252'></a><a href='#L252'>252</a>
 <a name='L253'></a><a href='#L253'>253</a>
-<a name='L254'></a><a href='#L254'>254</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -453,6 +459,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -500,6 +510,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -508,7 +521,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -705,7 +717,11 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 &nbsp;
   const findPreviousEvent = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (b</span>atch: BatchHistoryItem, allItems: BatchHistoryItem[] | null): BatchHistoryItem | undefined =&gt; {
-      const eventsOfSameType = <span class="cstat-no" title="statement not covered" >allItems?.filter(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >result.type === batch.type)</span>;</span>
+      const eventsOfSameType = <span class="cstat-no" title="statement not covered" >allItems?.filter(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >        batch.type === 'QuantityEdited' || batch.type === 'StatusChanged'</span>
+          ? result.type === 'QuantityEdited' || result.type === 'StatusChanged'
+          : result.type === batch.type
+      );
       let previousEv: BatchHistoryItem | undefined;
 <span class="cstat-no" title="statement not covered" >      eventsOfSameType?.forEach(<span class="fstat-no" title="function not covered" >(e</span>v) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (ev.version &amp;&amp; batch.version &amp;&amp; ev.version &lt; batch.version &amp;&amp; ev.version &gt; (previousEv?.version || 0)) {</span>
@@ -752,7 +768,10 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 <span class="cstat-no" title="statement not covered" >                    changedFields.push(strings.ESTIMATED_READY_DATE);</span>
                   }
                 }
-<span class="cstat-no" title="statement not covered" >                if (historyItem.type === 'QuantityEdited' &amp;&amp; (previousEv?.type === 'QuantityEdited' || !previousEv)) {</span>
+<span class="cstat-no" title="statement not covered" >                if (</span>
+                  (historyItem.type === 'QuantityEdited' || historyItem.type === 'StatusChanged') &amp;&amp;
+                  (previousEv?.type === 'QuantityEdited' || previousEv?.type === 'StatusChanged' || !previousEv)
+                ) {
 <span class="cstat-no" title="statement not covered" >                  if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {</span>
 <span class="cstat-no" title="statement not covered" >                    changedFields.push(strings.GERMINATING_QUANTITY);</span>
                   }
@@ -763,7 +782,6 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 <span class="cstat-no" title="statement not covered" >                    changedFields.push(strings.READY_QUANTITY);</span>
                   }
                 }
-&nbsp;
 <span class="cstat-no" title="statement not covered" >                return {</span>
                   ...historyItem,
                   editedByName: getUserDisplayName(userSelected),
@@ -829,7 +847,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-10T16:36:02.918Z
+                at 2024-01-11T03:14:23.389Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/85</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
@@ -427,7 +427,13 @@
 <a name='L362'></a><a href='#L362'>362</a>
 <a name='L363'></a><a href='#L363'>363</a>
 <a name='L364'></a><a href='#L364'>364</a>
-<a name='L365'></a><a href='#L365'>365</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -499,6 +505,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -902,7 +914,9 @@ export default function <span class="fstat-no" title="function not covered" >Eve
         )}
         {selectedEvent.modifiedFields.includes(strings.GERMINATING_QUANTITY) &amp;&amp; (
           &lt;&gt;
-            {(!previousEvent || previousEvent?.type === 'QuantityEdited') &amp;&amp; (
+            {(!previousEvent ||
+              previousEvent?.type === 'QuantityEdited' ||
+              previousEvent?.type === 'StatusChanged') &amp;&amp; (
               &lt;Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}&gt;
                 &lt;Textfield
                   id='germinationQuantityBefore'
@@ -913,7 +927,7 @@ export default function <span class="fstat-no" title="function not covered" >Eve
                 /&gt;
               &lt;/Grid&gt;
             )}
-            {selectedEvent.type === 'QuantityEdited' &amp;&amp; (
+            {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') &amp;&amp; (
               &lt;Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}&gt;
                 &lt;Textfield
                   id='germinationQuantityAfter'
@@ -928,7 +942,9 @@ export default function <span class="fstat-no" title="function not covered" >Eve
         )}
         {selectedEvent.modifiedFields.includes(strings.NOT_READY_QUANTITY) &amp;&amp; (
           &lt;&gt;
-            {(!previousEvent || previousEvent?.type === 'QuantityEdited') &amp;&amp; (
+            {(!previousEvent ||
+              previousEvent?.type === 'QuantityEdited' ||
+              previousEvent?.type === 'StatusChanged') &amp;&amp; (
               &lt;Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}&gt;
                 &lt;Textfield
                   id='notReadyQuantityBefore'
@@ -939,7 +955,7 @@ export default function <span class="fstat-no" title="function not covered" >Eve
                 /&gt;
               &lt;/Grid&gt;
             )}
-            {selectedEvent.type === 'QuantityEdited' &amp;&amp; (
+            {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') &amp;&amp; (
               &lt;Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}&gt;
                 &lt;Textfield
                   id='notReadQuantityAfter'
@@ -954,7 +970,9 @@ export default function <span class="fstat-no" title="function not covered" >Eve
         )}
         {selectedEvent.modifiedFields.includes(strings.READY_QUANTITY) &amp;&amp; (
           &lt;&gt;
-            {(!previousEvent || previousEvent?.type === 'QuantityEdited') &amp;&amp; (
+            {(!previousEvent ||
+              previousEvent?.type === 'QuantityEdited' ||
+              previousEvent?.type === 'StatusChanged') &amp;&amp; (
               &lt;Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}&gt;
                 &lt;Textfield
                   id='readyQuantityBefore'
@@ -965,7 +983,7 @@ export default function <span class="fstat-no" title="function not covered" >Eve
                 /&gt;
               &lt;/Grid&gt;
             )}
-            {selectedEvent.type === 'QuantityEdited' &amp;&amp; (
+            {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') &amp;&amp; (
               &lt;Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}&gt;
                 &lt;Textfield
                   id='readyQuantityAfter'
@@ -1162,7 +1180,7 @@ export default function <span class="fstat-no" title="function not covered" >Eve
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-10T16:36:02.918Z
+                at 2024-01-11T03:14:23.389Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
