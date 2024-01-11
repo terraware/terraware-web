@@ -61,9 +61,12 @@ export default function PlantingSiteBoundary(props: PlantingSiteBoundaryProps): 
     return;
   }, []);
 
-  const onUndoRedoReadOnlyBoundary = useCallback((currentReadOnlyBoundary?: ReadOnlyBoundary[]) => {
-    return;
-  }, []);
+  const onUndoRedoReadOnlyBoundary = useCallback(
+    (updatedData?: ReadOnlyBoundary[]) => {
+      setZones(updatedData?.find((data: ReadOnlyBoundary) => data.id === 'zone')?.featureCollection);
+    },
+    [setZones]
+  );
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
