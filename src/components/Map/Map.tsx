@@ -19,6 +19,7 @@ import {
   MapPopupRenderer,
   MapGeometry,
   MapViewStyles,
+  PopupInfo,
 } from 'src/types/Map';
 import { MapService } from 'src/services';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
@@ -83,13 +84,6 @@ export type MapImage = {
 const navControlStyle = {
   marginRight: '5px',
   marginBottom: '20px',
-};
-
-type PopupInfo = {
-  lng: number;
-  lat: number;
-  properties: any;
-  sourceId: string;
 };
 
 export type MapProps = {

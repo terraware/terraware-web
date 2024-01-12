@@ -1,6 +1,24 @@
 // flattened info for shapes relating to planting site data
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
+import { Feature, FeatureCollection, GeoJsonProperties, MultiPolygon, Polygon } from 'geojson';
+
+export type ReadOnlyBoundary = {
+  featureCollection: FeatureCollection;
+  id: string;
+  isInteractive?: boolean;
+};
+
+export type GeometryFeature = Feature<Polygon | MultiPolygon, GeoJsonProperties>;
+
+export type PopupInfo = {
+  active?: boolean;
+  id?: string | number;
+  lng: number;
+  lat: number;
+  properties: any;
+  sourceId: string;
+};
 
 export type MapGeometry = number[][][][];
 
@@ -95,7 +113,7 @@ export type MapOptions = {
  * Render a popup based on properties
  */
 export type MapPopupRenderer = {
-  render: (properties: MapSourceProperties) => JSX.Element | null;
+  render: (properties: MapSourceProperties, onClose?: () => void) => JSX.Element | null;
   style?: object;
   className?: string;
   anchor?: mapboxgl.Anchor;

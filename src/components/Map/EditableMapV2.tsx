@@ -6,6 +6,7 @@ import ReactMapGL, {
   LngLatBoundsLike,
   MapRef,
   NavigationControl,
+  Popup,
   Source,
 } from 'react-map-gl';
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
@@ -14,10 +15,9 @@ import { Box, useTheme } from '@mui/material';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import bbox from '@turf/bbox';
 import { FeatureCollection, MultiPolygon } from 'geojson';
-import { MapSourceRenderProperties, MapViewStyles } from 'src/types/Map';
+import { MapPopupRenderer, MapSourceRenderProperties, MapViewStyles, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
 import { getMapDrawingLayer, toMultiPolygon } from './utils';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
-import { ReadOnlyBoundary } from './types';
 import UndoRedoBoundaryControl from './UndoRedoBoundaryControl';
 
 export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
@@ -30,6 +30,8 @@ export type EditableMapProps = {
   editableBoundary?: FeatureCollection;
   onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) => void;
   onUndoRedoReadOnlyBoundary?: (readOnlyBoundary?: ReadOnlyBoundary[]) => void;
+  overridePopupInfo?: PopupInfo;
+  popupRenderer?: MapPopupRenderer;
   setMode?: (mode: MapEditorMode) => void;
   readOnlyBoundary?: RenderableReadOnlyBoundary[];
   style?: object;
@@ -41,24 +43,23 @@ export default function EditableMap({
   editableBoundary,
   onEditableBoundaryChanged,
   onUndoRedoReadOnlyBoundary,
+  overridePopupInfo,
+  popupRenderer,
   readOnlyBoundary,
   setMode,
   style,
 }: EditableMapProps): JSX.Element {
   const { mapId, refreshToken, token } = useMapboxToken();
+  const [editMode, setEditMode] = useState<MapEditorMode>();
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
+  const [interactiveLayerIds, setInteractiveLayerIds] = useState<string[]>([]);
+  const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const containerRef = useRef(null);
   const mapRef = useRef<MapRef | null>(null);
   const visible = useIsVisible(containerRef);
   const theme = useTheme();
   const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle();
-
-  useEffect(() => {
-    // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
-    // rendered if `firstVisible` is true. This accounts for cases in which the map is initially rendered hidden, and
-    // is improperly resized when it first becomes visible.
-    setFirstVisible((fv) => fv || visible);
-  }, [visible]);
+  let destroying = false;
 
   const onMapError = useCallback(
     (event: any) => {
@@ -104,6 +105,7 @@ export default function EditableMap({
     if (!readOnlyBoundary?.length) {
       return null;
     }
+
     return readOnlyBoundary!.map((data: RenderableReadOnlyBoundary) => {
       const drawingLayer: any = getMapDrawingLayer(data.renderProperties, data.id);
       return (
@@ -116,6 +118,111 @@ export default function EditableMap({
       );
     });
   }, [readOnlyBoundary]);
+
+  // close popup on click
+  const onPopupClose = useCallback(() => {
+    if (destroying) {
+      return; // otherwise errors out updating feature state while map is being destroyed
+    }
+    setPopupInfo((curr) => (curr ? { ...curr, active: false } : null));
+  }, [destroying]);
+
+  // clear popup state and set geometry as not selected (so rendering shows it as not selected)
+  const clearPopupInfo = useCallback(() => {
+    if (!popupInfo) {
+      return;
+    }
+    const { sourceId, id } = popupInfo;
+    mapRef?.current?.setFeatureState({ source: sourceId, id: `${id}` }, { select: false });
+    setPopupInfo(null);
+  }, [mapRef, popupInfo]);
+
+  // set new popup state and mark geometry as selected (renders as selected)
+  const initializePopupInfo = useCallback(
+    (info: PopupInfo) => {
+      setPopupInfo(info);
+      mapRef?.current?.setFeatureState({ source: info.sourceId, id: `${info.id}` }, { select: true });
+    },
+    [mapRef]
+  );
+
+  // renderer memoized
+  const renderedPopup = useMemo<JSX.Element | null>(() => {
+    if (!popupInfo || !popupRenderer) {
+      return null;
+    }
+    return popupRenderer.render(popupInfo.properties, onPopupClose);
+  }, [onPopupClose, popupInfo, popupRenderer]);
+
+  // map click to fetch geometry and show a popup at that location
+  const onMapClick = useCallback(
+    (event: any) => {
+      const { lat, lng } = event.lngLat;
+
+      // handle overlap with polygon editor clicks
+      if (editMode === 'CreatingBoundary') {
+        return;
+      }
+
+      if (event?.features[0]?.properties) {
+        const { id, properties, layer } = event.features[0];
+        const sourceId = layer.source;
+
+        if (!readOnlyBoundary?.find((b) => b.id === sourceId)) {
+          return;
+        }
+
+        clearPopupInfo();
+        initializePopupInfo({
+          id,
+          lng,
+          lat,
+          properties,
+          sourceId,
+          active: true,
+        });
+      }
+    },
+    [editMode, clearPopupInfo, initializePopupInfo, readOnlyBoundary]
+  );
+
+  useEffect(() => {
+    if (editMode) {
+      setMode?.(editMode);
+    }
+  }, [editMode, setMode]);
+
+  useEffect(() => {
+    // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
+    // rendered if `firstVisible` is true. This accounts for cases in which the map is initially rendered hidden, and
+    // is improperly resized when it first becomes visible.
+    setFirstVisible((fv) => fv || visible);
+  }, [visible]);
+
+  useEffect(() => {
+    if (!popupRenderer) {
+      // no interactive capabilities enabled
+      return;
+    }
+
+    setInteractiveLayerIds(readOnlyBoundary?.filter((b) => b.isInteractive).map((b) => `${b.id}-fill`) ?? []);
+  }, [popupRenderer, readOnlyBoundary]);
+
+  useEffect(() => {
+    // clear the popup when it is closed
+    if (popupInfo && !popupInfo.active) {
+      clearPopupInfo();
+    }
+  }, [clearPopupInfo, popupInfo]);
+
+  useEffect(() => {
+    if (overridePopupInfo) {
+      // this is to avoid racey interaction
+      setTimeout(() => {
+        initializePopupInfo(overridePopupInfo);
+      }, 0);
+    }
+  }, [initializePopupInfo, overridePopupInfo]);
 
   return (
     <Box
@@ -151,6 +258,11 @@ export default function EditableMap({
               ...style,
             }}
             initialViewState={initialViewState}
+            interactiveLayerIds={interactiveLayerIds}
+            onClick={onMapClick}
+            onRemove={() => {
+              destroying = true;
+            }}
           >
             {mapLayers}
             <FullscreenControl position='top-left' />
@@ -160,7 +272,7 @@ export default function EditableMap({
               clearOnEdit={clearOnEdit}
               boundary={editableBoundary}
               onBoundaryChanged={onEditableBoundaryChanged}
-              setMode={setMode}
+              setMode={setEditMode}
             />
             <UndoRedoBoundaryControl
               editableBoundary={editableBoundary}
@@ -174,6 +286,18 @@ export default function EditableMap({
               fitBoundsOptions={{ maxDuration: 1500 }}
               positionOptions={{ enableHighAccuracy: true }}
             />
+            {popupInfo && popupRenderer && renderedPopup && (
+              <Popup
+                anchor={popupRenderer.anchor ?? 'top'}
+                longitude={Number(popupInfo.lng)}
+                latitude={Number(popupInfo.lat)}
+                onClose={onPopupClose}
+                style={popupRenderer.style}
+                className={popupRenderer.className}
+              >
+                {renderedPopup}
+              </Popup>
+            )}
           </ReactMapGL>
         </>
       )}

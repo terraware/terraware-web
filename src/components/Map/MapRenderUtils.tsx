@@ -1,18 +1,46 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useMap } from 'react-map-gl';
 import { makeStyles } from '@mui/styles';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, IconButton, Typography, useTheme, Theme } from '@mui/material';
+import { Button, Icon } from '@terraware/web-components';
 import { MapPopupRenderer, MapSourceProperties } from 'src/types/Map';
 import strings from 'src/strings';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   popup: {
     '& > .mapboxgl-popup-content': {
       borderRadius: '8px',
       padding: '10px',
     },
   },
+  button: {
+    marginLeft: theme.spacing(2),
+    '&:focus': {
+      outline: 'none',
+    },
+  },
+  tooltip: {
+    '& .mapboxgl-popup-content': {
+      borderRadius: theme.spacing(1),
+      padding: 0,
+    },
+    '& .mapboxgl-popup-close-button': {
+      display: 'none',
+    },
+  },
 }));
+
+export const mapTooltipDialogStyle = (theme: Theme) => ({
+  tooltip: {
+    '& .mapboxgl-popup-content': {
+      borderRadius: theme.spacing(1),
+      padding: 0,
+    },
+    '& .mapboxgl-popup-close-button': {
+      display: 'none',
+    },
+  },
+});
 
 /**
  * Species / plants renderer
@@ -135,3 +163,70 @@ export function MapTooltip({ title, properties }: MapTooltipProps): JSX.Element 
     </>
   );
 }
+
+export type ButtonType = {
+  title: string;
+  onClick: () => void;
+};
+
+export type MapTooltipDialogProps = {
+  cancelButton?: ButtonType;
+  children: React.ReactNode;
+  onClose: () => void;
+  saveButton?: ButtonType;
+  title: string;
+};
+
+export const MapTooltipDialog = (props: MapTooltipDialogProps): JSX.Element => {
+  const { cancelButton, children, onClose, saveButton, title } = props;
+  const theme = useTheme();
+  const classes = useStyles();
+
+  return (
+    <Box borderRadius={theme.spacing(1)}>
+      <Box
+        borderRadius={theme.spacing(1, 1, 0, 0)}
+        display='flex'
+        justifyContent='space-between'
+        padding={theme.spacing(2)}
+        sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}
+      >
+        <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
+          {title}
+        </Typography>
+        <IconButton onClick={onClose} size='small'>
+          <Icon name='close' className='icon-close' />
+        </IconButton>
+      </Box>
+      {children}
+      <Box
+        borderRadius={theme.spacing(0, 0, 1, 1)}
+        display='flex'
+        justifyContent='flex-end'
+        padding={theme.spacing(2)}
+        sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}
+      >
+        {cancelButton && (
+          <Button
+            className={classes.button}
+            id='cancel'
+            key='cancel'
+            label={cancelButton.title}
+            onClick={cancelButton.onClick}
+            priority='secondary'
+            type='passive'
+          />
+        )}
+        {saveButton && (
+          <Button
+            className={classes.button}
+            id='save'
+            key='save'
+            label={saveButton.title}
+            onClick={saveButton.onClick}
+          />
+        )}
+      </Box>
+    </Box>
+  );
+};

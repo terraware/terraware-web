@@ -1,14 +1,21 @@
-import { useCallback, useMemo } from 'react';
-import { Box } from '@mui/material';
+import { useCallback, useMemo, useState } from 'react';
+import center from '@turf/center';
+import { Box, Typography, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Feature, FeatureCollection } from 'geojson';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
-import { GeometryFeature, ReadOnlyBoundary } from 'src/components/Map/types';
+import { GeometryFeature, MapPopupRenderer, MapSourceProperties, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
 import EditableMap, { RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
 import { cutPolygons, toFeature } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import useMapIcons from 'src/components/Map/useMapIcons';
+import { MapTooltipDialog, mapTooltipDialogStyle } from 'src/components/Map/MapRenderUtils';
 import StepTitleDescription, { Description } from './StepTitleDescription';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  ...mapTooltipDialogStyle(theme),
+}));
 
 export type ZonesProps = {
   exclusions?: FeatureCollection;
@@ -17,15 +24,38 @@ export type ZonesProps = {
   zones?: FeatureCollection;
 };
 
+const IdGenerator = (features: Feature[]): (() => number) => {
+  let nextId = 0;
+  const ids = features
+    .filter((f) => !isNaN(Number(f.id)))
+    .map((f) => f.id as number)
+    .sort();
+  if (ids.length) {
+    nextId = ids[ids.length - 1];
+  }
+
+  return () => {
+    nextId++;
+    return nextId;
+  };
+};
+
+const toZoneFeature = (feature: Feature, idGenerator: () => number) =>
+  toFeature(feature.geometry, feature.properties ?? {}, isNaN(Number(feature.id)) ? idGenerator() : feature.id!);
+
 export default function Zones(props: ZonesProps): JSX.Element {
   const { exclusions, setZones, site, zones } = props;
+  const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
+  const classes = useStyles();
   const mapIcons = useMapIcons();
   const getRenderAttributes = useRenderAttributes();
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
-    if (!zones) {
+    if (!zones?.features) {
       return undefined;
     }
+
+    const idGenerator = IdGenerator(zones.features);
 
     const exclusionsBoundary = exclusions
       ? [
@@ -47,11 +77,10 @@ export default function Zones(props: ZonesProps): JSX.Element {
       {
         featureCollection: {
           type: 'FeatureCollection',
-          // TODO: fetch id from existing feature if we came from an edit vs create site path
-          // the id should be stored in the feature's properties, and retrieved from there
-          features: zones!.features.map((feature: Feature, index: number) => ({ ...feature, id: `zone_${index}` })),
+          features: zones!.features.map((feature: Feature) => toZoneFeature(feature, idGenerator)),
         },
         id: 'zone',
+        isInteractive: true,
         renderProperties: getRenderAttributes('zone'),
       },
     ];
@@ -77,9 +106,39 @@ export default function Zones(props: ZonesProps): JSX.Element {
 
       const cutWith = featureCollection?.features?.[0]?.geometry;
       if (cutWith) {
-        const newZones = cutPolygons(zones.features as GeometryFeature[], cutWith);
-        if (newZones) {
-          setZones({ type: 'FeatureCollection', features: newZones });
+        const cutZones = cutPolygons(zones.features as GeometryFeature[], cutWith);
+
+        if (cutZones) {
+          const idGenerator = IdGenerator(cutZones);
+          const zonesWithIds = cutZones.map((zone) => toZoneFeature(zone, idGenerator)) as GeometryFeature[];
+
+          setZones({
+            type: 'FeatureCollection',
+            features: zonesWithIds,
+          });
+
+          const leftMostNewZone = zonesWithIds
+            .filter((_, index) => cutZones[index].id === undefined)
+            .map((zone) => ({
+              zone,
+              center: center(zone.geometry)?.geometry?.coordinates,
+            }))
+            .filter((data) => data.center)
+            .sort((data1, data2) => data1.center[0] - data2.center[0])[0];
+
+          if (leftMostNewZone) {
+            const { zone, center: mid } = leftMostNewZone;
+            setOverridePopupInfo({
+              id: zone.id,
+              lng: mid[0],
+              lat: mid[1],
+              properties: { id: zone.id },
+              sourceId: 'zone',
+              active: true,
+            });
+          } else {
+            setOverridePopupInfo(undefined);
+          }
         }
       }
       return;
@@ -92,6 +151,30 @@ export default function Zones(props: ZonesProps): JSX.Element {
       setZones(updatedData?.find((data: ReadOnlyBoundary) => data.id === 'zone')?.featureCollection);
     },
     [setZones]
+  );
+
+  const popupRenderer = useMemo(
+    (): MapPopupRenderer => ({
+      className: classes.tooltip,
+      render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
+        const { name, targetPlantingDensity } = properties;
+
+        const onUpdate = (nameVal: string, targetPlantingDensityVal: number) => {
+          // TODO
+          return;
+        };
+
+        return (
+          <TooltipContents
+            name={name}
+            onClose={() => onClose?.()}
+            onUpdate={onUpdate}
+            targetPlantingDensity={targetPlantingDensity}
+          />
+        );
+      },
+    }),
+    [classes.tooltip]
   );
 
   return (
@@ -108,8 +191,36 @@ export default function Zones(props: ZonesProps): JSX.Element {
         clearOnEdit
         onEditableBoundaryChanged={onEditableBoundaryChanged}
         onUndoRedoReadOnlyBoundary={onUndoRedoReadOnlyBoundary}
+        overridePopupInfo={overridePopupInfo}
+        popupRenderer={popupRenderer}
         readOnlyBoundary={readOnlyBoundary}
       />
     </Box>
   );
 }
+
+type TooltipContentsProps = {
+  name?: string;
+  onClose: () => void;
+  onUpdate: (name: string, targetPlantingDensity: number) => void;
+  targetPlantingDensity?: number;
+};
+
+const TooltipContents = ({ name, onClose, onUpdate, targetPlantingDensity }: TooltipContentsProps): JSX.Element => {
+  const save = () => {
+    return;
+  };
+
+  return (
+    <MapTooltipDialog
+      cancelButton={{ title: strings.CANCEL, onClick: onClose }}
+      onClose={onClose}
+      saveButton={{ title: strings.SAVE, onClick: save }}
+      title={strings.ZONE}
+    >
+      <Box>
+        <Typography>WIP</Typography>
+      </Box>
+    </MapTooltipDialog>
+  );
+};
