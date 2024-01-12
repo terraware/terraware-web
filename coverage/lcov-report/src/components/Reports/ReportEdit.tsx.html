@@ -652,19 +652,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -672,10 +665,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -687,6 +681,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -695,7 +696,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1138,30 +1138,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { BusySpinner, FormButton } from '@terraware/web-components';
-import TfMain from 'src/components/common/TfMain';
-import PageForm from 'src/components/common/PageForm';
-import strings from 'src/strings';
-import ReportForm from 'src/components/Reports/ReportForm';
+import { makeStyles } from '@mui/styles';
 import { Box, Typography, useTheme } from '@mui/material';
+import produce from 'immer';
+import { overWordLimit } from 'src/utils/text';
+import strings from 'src/strings';
 import ReportService from 'src/services/ReportService';
 import { Report, ReportFile } from 'src/types/Report';
-import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
-import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
-import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
 import { useOrganization, useUser } from 'src/providers';
-import produce from 'immer';
-import CannotEditReportDialog from './InvalidUserModal';
+import ReportForm from 'src/components/Reports/ReportForm';
+import TfMain from 'src/components/common/TfMain';
+import PageForm from 'src/components/common/PageForm';
+import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
+import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useReportFiles from 'src/components/Reports/useReportFiles';
+import CannotEditReportDialog from 'src/components/Reports/InvalidUserModal';
 import {
   buildCompletedDateValid,
   buildStartedDateValid,
   operationStartedDateValid,
-} from 'src/components/Reports/LocationSection';
-import { overWordLimit } from 'src/utils/text';
-import { makeStyles } from '@mui/styles';
+} from 'src/components/Reports/LocationSelection/util';
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   form: {
@@ -1189,6 +1189,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
   const [updatedReportFiles, setUpdatedReportFiles] = <span class="cstat-no" title="statement not covered" >useState&lt;ReportFile[]&gt;([]);</span>
   const [showAnnual, setShowAnnual] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [confirmSubmitDialogOpen, setConfirmSubmitDialogOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const [currentUserEditing, setCurrentUserEditing] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
 &nbsp;
   const initialReportFiles = <span class="cstat-no" title="statement not covered" >useReportFiles(report, setUpdatedReportFiles);</span>
 &nbsp;
@@ -1214,7 +1215,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
     };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (reportIdInt) {</span>
-<span class="cstat-no" title="statement not covered" >      getReport();</span>
+<span class="cstat-no" title="statement not covered" >      void getReport();</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);</span>
     }
@@ -1232,7 +1233,6 @@ export default function <span class="fstat-no" title="function not covered" >Rep
 <span class="cstat-no" title="statement not covered" >    await Promise.all(newReportFiles?.map(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >ReportService.uploadReportFile(reportIdInt, f))</span> ?? []);</span>
   };
 &nbsp;
-  const [currentUserEditing, setCurrentUserEditing] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const getReport = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
       const result = <span class="cstat-no" title="statement not covered" >await ReportService.getReport(reportIdInt);</span>
@@ -1681,7 +1681,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-12T20:53:55.966Z
+                at 2024-01-12T21:10:01.095Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
