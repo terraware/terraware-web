@@ -1,9 +1,9 @@
-import NewPlantingSiteCreate from './NewPlantingSiteCreate';
+import NewPlantingSite from './editor/NewPlantingSite';
 
 type PlantingSiteSimpleCreateProps = {
   reloadPlantingSites: () => void;
 };
 
 export default function PlantingSiteSimpleCreate(props: PlantingSiteSimpleCreateProps): JSX.Element {
-  return <NewPlantingSiteCreate siteType={'simple'} reloadPlantingSites={props.reloadPlantingSites} />;
+  return <NewPlantingSite siteType={'simple'} reloadPlantingSites={props.reloadPlantingSites} />;
 }

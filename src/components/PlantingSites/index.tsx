@@ -13,8 +13,8 @@ import {
 } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
 import PlantingSiteCreate from './PlantingSiteCreate';
-import PlantingSiteSimpleCreate from './createSite/PlantingSiteSimpleCreate';
-import PlantingSiteDetailedCreate from './createSite/PlantingSiteDetailedCreate';
+import PlantingSiteSimpleCreate from './PlantingSiteSimpleCreate';
+import PlantingSiteDetailedCreate from './PlantingSiteDetailedCreate';
 import PlantingSitesList from './PlantingSitesList';
 import PlantingSiteView from './PlantingSiteView';
 import PlantingSiteSubzoneView from './PlantingSiteSubzoneView';

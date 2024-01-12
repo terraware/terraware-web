@@ -14,14 +14,14 @@ import useForm from 'src/utils/useForm';
 import Card from 'src/components/common/Card';
 import { toMultiPolygonArray } from 'src/components/Map/utils';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import PlantingSiteCreateForm, { PlantingSiteCreateStep, PlantingSiteCreateStepType } from './PlantingSiteCreateForm';
+import PlantingSiteForm, { PlantingSiteStep, PlantingSiteStepType } from './PlantingSiteForm';
 import PlantingSiteDetails from './PlantingSiteDetails';
 import PlantingSiteBoundary from './PlantingSiteBoundary';
 import PlantingSiteExclusions from './PlantingSiteExclusions';
 import PlantingSiteZoneBoundaries from './PlantingSiteZoneBoundaries';
 import PlantingSiteSubzoneBoundaries from './PlantingSiteSubzoneBoundaries';
 
-type PlantingSiteCreateFlowProps = {
+type PlantingSiteEditorProps = {
   reloadPlantingSites: () => void;
   site: PlantingSite;
   siteType: SiteType;
@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProps): JSX.Element {
+export default function PlantingSiteEditor(props: PlantingSiteEditorProps): JSX.Element {
   const { reloadPlantingSites, site, siteType } = props;
   const { activeLocale } = useLocalization();
   const contentRef = useRef(null);
@@ -46,20 +46,20 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
 
   const [siteBoundary, setSiteBoundary] = useState<FeatureCollection | undefined>();
   const [exclusions, setExclusions] = useState<FeatureCollection | undefined>();
-  const [currentStep, setCurrentStep] = useState<PlantingSiteCreateStepType>('details');
-  const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<PlantingSiteCreateStepType, boolean>>(
-    {} as Record<PlantingSiteCreateStepType, boolean>
+  const [currentStep, setCurrentStep] = useState<PlantingSiteStepType>('details');
+  const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<PlantingSiteStepType, boolean>>(
+    {} as Record<PlantingSiteStepType, boolean>
   );
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
 
-  const steps = useMemo<PlantingSiteCreateStep[]>(() => {
+  const steps = useMemo<PlantingSiteStep[]>(() => {
     if (!activeLocale) {
       return [];
     }
 
-    const isCompleted = (optionalStep: PlantingSiteCreateStepType) => completedOptionalSteps[optionalStep] ?? false;
+    const isCompleted = (optionalStep: PlantingSiteStepType) => completedOptionalSteps[optionalStep] ?? false;
 
-    const simpleSiteSteps: PlantingSiteCreateStep[] = [
+    const simpleSiteSteps: PlantingSiteStep[] = [
       {
         type: 'details',
         label: strings.DETAILS,
@@ -100,7 +100,7 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
 
   const getCurrentStepIndex = (): number => {
     let stepIndex = 0;
-    steps.find((step: PlantingSiteCreateStep, index: number) => {
+    steps.find((step: PlantingSiteStep, index: number) => {
       if (currentStep === step.type) {
         stepIndex = index;
         return true;
@@ -157,7 +157,7 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
     // TODO: reset data here, confirm with user?
     setCurrentStep(steps[0].type);
     setPlantingSite({ ...site });
-    setCompletedOptionalSteps({} as Record<PlantingSiteCreateStepType, boolean>);
+    setCompletedOptionalSteps({} as Record<PlantingSiteStepType, boolean>);
   };
 
   return (
@@ -169,7 +169,7 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
           </Typography>
         </Box>
       </PageHeaderWrapper>
-      <PlantingSiteCreateForm
+      <PlantingSiteForm
         currentStep={currentStep}
         onCancel={onCancel}
         onSaveAndNext={onSaveAndNext}
@@ -191,7 +191,7 @@ export default function PlantingSiteCreateFlow(props: PlantingSiteCreateFlowProp
             <PlantingSiteSubzoneBoundaries onChange={onChange} site={plantingSite} />
           )}
         </Card>
-      </PlantingSiteCreateForm>
+      </PlantingSiteForm>
     </TfMain>
   );
 }
