@@ -97,7 +97,7 @@ export default function EditableMapDraw({
   // Need ts-ignore because the draw control's event types are added by the draw plugin and aren't
   // included in the type definitions for the first arguments of MapRef.on() and MapRef.off().
   const draw = useControl<MapboxDraw>(({ map }) => {
-    const initialMode = boundary ? 'simple_select' : 'draw_polygon';
+    const initialMode = 'simple_select';
 
     setDrawMode(initialMode);
     setMapRef(map);

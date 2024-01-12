@@ -89,7 +89,7 @@ export default function PlantingSiteCreateForm({
       additionalRightButtons={pageFormRightButtons}
       className={className}
     >
-      <Stepper activeStep={currentStepIndex}>
+      <Stepper activeStep={currentStepIndex} sx={{ margin: theme.spacing(0, 5) }}>
         {steps.map((step: PlantingSiteCreateStep, index: number) => {
           const stepProps: { completed?: boolean } = {};
           const labelProps: { optional?: React.ReactNode } = {};

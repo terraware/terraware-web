@@ -10,11 +10,10 @@ import ReactMapGL, {
 } from 'react-map-gl';
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import useMapboxToken from 'src/utils/useMapboxToken';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import bbox from '@turf/bbox';
 import { FeatureCollection } from 'geojson';
-import strings from 'src/strings';
 import { MapSourceRenderProperties, MapViewStyles } from 'src/types/Map';
 import { getMapDrawingLayer } from './utils';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
@@ -30,48 +29,21 @@ export type EditableMapProps = {
   editMultiplePolygons?: boolean;
   boundary?: FeatureCollection;
   onBoundaryChanged: (boundary?: FeatureCollection) => void;
+  setMode?: (mode: MapEditorMode) => void;
   readOnlyBoundaries?: ReadOnlyBoundary[];
   style?: object;
 };
-
-const polygonIcon = <button className='mapbox-gl-draw_polygon mapbox-gl-draw_ctrl-draw-btn' />;
-const trashIcon = <button className='mapbox-gl-draw_trash mapbox-gl-draw_ctrl-draw-btn' />;
-
-function instructionsForMode(mode: MapEditorMode | null): JSX.Element[] {
-  let instructions: string = '';
-
-  if (mode === 'ReplacingBoundary') {
-    instructions = strings.MAP_EDITOR_DRAWING_ADDITIONAL_FEATURE;
-  } else if (mode === 'CreatingBoundary') {
-    instructions = strings.MAP_EDITOR_DRAWING_FIRST_FEATURE;
-  } else if (mode === 'EditingBoundary') {
-    instructions = strings.MAP_EDITOR_EDITING_FEATURE;
-  } else if (mode === 'NoBoundary') {
-    instructions = strings.MAP_EDITOR_NO_FEATURES;
-  } else if (mode === 'BoundaryNotSelected') {
-    instructions = strings.MAP_EDITOR_NO_SELECTION;
-  } else if (mode === 'BoundarySelected') {
-    instructions = strings.MAP_EDITOR_SELECTED_FEATURE;
-  } else if (mode === null) {
-    instructions = strings.LOADING;
-  }
-
-  return strings.formatString(instructions, {
-    polygon: polygonIcon,
-    trash: trashIcon,
-  }) as JSX.Element[];
-}
 
 export default function EditableMap({
   editMultiplePolygons,
   boundary,
   onBoundaryChanged,
   readOnlyBoundaries,
+  setMode,
   style,
 }: EditableMapProps): JSX.Element {
   const { mapId, refreshToken, token } = useMapboxToken();
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
-  const [mode, setMode] = useState<MapEditorMode | null>(null);
   const containerRef = useRef(null);
   const mapRef = useRef<MapRef | null>(null);
   const visible = useIsVisible(containerRef);
@@ -133,13 +105,16 @@ export default function EditableMap({
       flexGrow={1}
       height='100%'
       width='100%'
-      sx={{ minHeight: 250, position: 'relative' }}
+      sx={{
+        minHeight: 250,
+        position: 'relative',
+        '& .mapboxgl-map': {
+          borderRadius: theme.spacing(2),
+        },
+      }}
     >
       {firstVisible && (
         <>
-          <Typography fontSize='16px' margin={theme.spacing(1, 0)} minHeight='4em'>
-            {instructionsForMode(mode)}
-          </Typography>
           <ReactMapGL
             key={mapId}
             onError={onMapError}
