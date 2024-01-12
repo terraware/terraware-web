@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1705102634239" clover="3.2.0">
-  <project timestamp="1705102634239" name="All files">
-    <metrics statements="16017" coveredstatements="471" conditionals="10269" coveredconditionals="137" methods="5047" coveredmethods="110" elements="31333" coveredelements="718" complexity="0" loc="16017" ncloc="16017" packages="127" files="630" classes="630"/>
+<coverage generated="1705103499643" clover="3.2.0">
+  <project timestamp="1705103499643" name="All files">
+    <metrics statements="16018" coveredstatements="471" conditionals="10269" coveredconditionals="137" methods="5048" coveredmethods="110" elements="31335" coveredelements="718" complexity="0" loc="16018" ncloc="16018" packages="127" files="630" classes="630"/>
     <package name="src">
       <metrics statements="255" coveredstatements="0" conditionals="201" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -17651,9 +17651,9 @@
       </file>
     </package>
     <package name="src.types">
-      <metrics statements="143" coveredstatements="16" conditionals="104" coveredconditionals="0" methods="41" coveredmethods="1"/>
+      <metrics statements="144" coveredstatements="16" conditionals="104" coveredconditionals="0" methods="42" coveredmethods="1"/>
       <file name="Accession.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Accession.ts">
-        <metrics statements="34" coveredstatements="5" conditionals="18" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="35" coveredstatements="5" conditionals="18" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="11" count="1" type="stmt"/>
         <line num="25" count="1" type="stmt"/>
         <line num="35" count="0" type="cond" truecount="0" falsecount="6"/>
@@ -17684,10 +17684,11 @@
         <line num="119" count="0" type="stmt"/>
         <line num="131" count="0" type="stmt"/>
         <line num="143" count="0" type="stmt"/>
-        <line num="154" count="0" type="stmt"/>
-        <line num="161" count="0" type="stmt"/>
-        <line num="169" count="0" type="stmt"/>
-        <line num="177" count="1" type="stmt"/>
+        <line num="155" count="0" type="stmt"/>
+        <line num="166" count="0" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="181" count="0" type="stmt"/>
+        <line num="189" count="1" type="stmt"/>
       </file>
       <file name="Batch.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Batch.ts">
         <metrics statements="31" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="7" coveredmethods="0"/>
