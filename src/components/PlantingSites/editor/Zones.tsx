@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from 'react';
-import center from '@turf/center';
 import { Box, Typography, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Feature, FeatureCollection } from 'geojson';
@@ -7,9 +6,9 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { GeometryFeature, MapPopupRenderer, MapSourceProperties, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
 import EditableMap, { RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
-import { cutPolygons, toFeature } from 'src/components/Map/utils';
+import { cutPolygons, leftMostFeature, toFeature } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
-import useMapIcons from 'src/components/Map/useMapIcons';
+import MapIcon from 'src/components/Map/MapIcon';
 import { MapTooltipDialog, mapTooltipDialogStyle } from 'src/components/Map/MapRenderUtils';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
@@ -47,7 +46,6 @@ export default function Zones(props: ZonesProps): JSX.Element {
   const { exclusions, setZones, site, zones } = props;
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const classes = useStyles();
-  const mapIcons = useMapIcons();
   const getRenderAttributes = useRenderAttributes();
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
@@ -92,10 +90,10 @@ export default function Zones(props: ZonesProps): JSX.Element {
       {
         text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_1,
         hasTutorial: true,
-        handlePrefix: (prefix: string) => strings.formatString(prefix, mapIcons.slice) as JSX.Element[],
+        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
       },
     ],
-    [mapIcons]
+    []
   );
 
   const onEditableBoundaryChanged = useCallback(
@@ -117,17 +115,10 @@ export default function Zones(props: ZonesProps): JSX.Element {
             features: zonesWithIds,
           });
 
-          const leftMostNewZone = zonesWithIds
-            .filter((_, index) => cutZones[index].id === undefined)
-            .map((zone) => ({
-              zone,
-              center: center(zone.geometry)?.geometry?.coordinates,
-            }))
-            .filter((data) => data.center)
-            .sort((data1, data2) => data1.center[0] - data2.center[0])[0];
+          const leftMostNewZone = leftMostFeature(zonesWithIds.filter((_, index) => cutZones[index].id === undefined));
 
           if (leftMostNewZone) {
-            const { zone, center: mid } = leftMostNewZone;
+            const { feature: zone, center: mid } = leftMostNewZone;
             setOverridePopupInfo({
               id: zone.id,
               lng: mid[0],

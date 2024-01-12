@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Box } from '@mui/material';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
-import useMapIcons from 'src/components/Map/useMapIcons';
+import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
 export type SubzonesProps = {
@@ -11,18 +11,16 @@ export type SubzonesProps = {
 };
 
 export default function Subzones(props: SubzonesProps): JSX.Element {
-  const mapIcons = useMapIcons();
-
   const description = useMemo<Description[]>(
     () => [
       { text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_0 },
       {
         text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,
         hasTutorial: true,
-        handlePrefix: (prefix: string) => strings.formatString(prefix, mapIcons.slice) as JSX.Element[],
+        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
       },
     ],
-    [mapIcons]
+    []
   );
 
   return (
