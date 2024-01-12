@@ -9,13 +9,13 @@ import ReactMapGL, {
   Popup,
   Source,
 } from 'react-map-gl';
-import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
-import useMapboxToken from 'src/utils/useMapboxToken';
 import { Box, useTheme } from '@mui/material';
-import { useIsVisible } from 'src/hooks/useIsVisible';
 import bbox from '@turf/bbox';
 import { FeatureCollection, MultiPolygon } from 'geojson';
 import { MapPopupRenderer, MapSourceRenderProperties, MapViewStyles, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
+import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
+import useMapboxToken from 'src/utils/useMapboxToken';
+import { useIsVisible } from 'src/hooks/useIsVisible';
 import { getMapDrawingLayer, toMultiPolygon } from './utils';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoBoundaryControl from './UndoRedoBoundaryControl';
@@ -140,8 +140,15 @@ export default function EditableMap({
   // set new popup state and mark geometry as selected (renders as selected)
   const initializePopupInfo = useCallback(
     (info: PopupInfo) => {
-      setPopupInfo(info);
-      mapRef?.current?.setFeatureState({ source: info.sourceId, id: `${info.id}` }, { select: true });
+      setPopupInfo((current) => {
+        // cannot call clear popup info to avoid infinite updates
+        if (current) {
+          const { sourceId, id } = current;
+          mapRef?.current?.setFeatureState({ source: sourceId, id: `${id}` }, { select: false });
+        }
+        mapRef?.current?.setFeatureState({ source: info.sourceId, id: `${info.id}` }, { select: true });
+        return info;
+      });
     },
     [mapRef]
   );
@@ -172,7 +179,6 @@ export default function EditableMap({
           return;
         }
 
-        clearPopupInfo();
         initializePopupInfo({
           id,
           lng,
@@ -183,7 +189,7 @@ export default function EditableMap({
         });
       }
     },
-    [editMode, clearPopupInfo, initializePopupInfo, readOnlyBoundary]
+    [editMode, initializePopupInfo, readOnlyBoundary]
   );
 
   useEffect(() => {
@@ -217,7 +223,7 @@ export default function EditableMap({
 
   useEffect(() => {
     if (overridePopupInfo) {
-      // this is to avoid racey interaction
+      // this is to avoid a racey interaction with double-clicks
       setTimeout(() => {
         initializePopupInfo(overridePopupInfo);
       }, 0);
