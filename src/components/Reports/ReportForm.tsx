@@ -1,16 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
-import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import ViewPhotos from './ViewPhotos';
-import SelectPhotos from '../common/SelectPhotos';
-import { ReportSeedBank } from 'src/types/Report';
 import { makeStyles } from '@mui/styles';
-import LocationSection from './LocationSection';
+import strings from 'src/strings';
+import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { ReportSeedBank } from 'src/types/Report';
 import ReportService from 'src/services/ReportService';
+import { useOrganization } from 'src/providers';
+import { useAppDispatch } from 'src/redux/store';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import SelectPhotos from 'src/components/common/SelectPhotos';
+import ViewPhotos from 'src/components/Reports/ViewPhotos';
+import LocationSection from 'src/components/Reports/LocationSelection';
 
 const MAX_PHOTOS = 30;
 
@@ -64,13 +70,19 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     onPhotoRemove,
     validate,
   } = props;
+
+  const dispatch = useAppDispatch();
   const theme = useTheme();
   const classes = useStyles();
   const { isMobile, isTablet } = useDeviceInfo();
+  const { selectedOrganization } = useOrganization();
 
   const [summaryOfProgress, setSummaryOfProgress] = useState(draftReport.summaryOfProgress ?? '');
   const [projectNotes, setProjectNotes] = useState(draftReport.notes ?? '');
   const [photoCount, setPhotoCount] = useState(0);
+
+  // We check the project name because a project can be deleted, and if that happens the ID will not be present
+  const isProjectReport = !!draftReport.projectName;
 
   useEffect(() => {
     const getPhotoCount = async () => {
@@ -82,21 +94,56 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
       }
     };
 
-    getPhotoCount();
+    void getPhotoCount();
   }, [draftReport.id]);
 
-  const handleAddRemoveLocation = (
-    selected: boolean,
-    index: number,
-    location: 'seedBanks' | 'nurseries' | 'plantingSites'
-  ) => {
-    if (onUpdateLocation) {
-      onUpdateLocation(index, 'selected', selected, location);
+  const handleAddRemoveLocation = useCallback(
+    (selected: boolean, index: number, location: 'seedBanks' | 'nurseries' | 'plantingSites') => {
+      if (onUpdateLocation) {
+        onUpdateLocation(index, 'selected', selected, location);
+      }
+    },
+    [onUpdateLocation]
+  );
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void dispatch(requestObservations(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestSpecies(selectedOrganization.id));
+      void dispatch(requestPlantings(selectedOrganization.id));
+      void dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
     }
-  };
+  }, [dispatch, selectedOrganization]);
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
   const mediumItemGridWidth = () => (isMobile || isTablet ? 12 : 8);
+
+  const LocationCheckbox = useCallback(
+    (
+      name: string,
+      selected: boolean,
+      id: string,
+      index: number,
+      location: 'seedBanks' | 'nurseries' | 'plantingSites'
+    ) => {
+      if (isProjectReport) {
+        return <Typography variant={'h6'}>{name}</Typography>;
+      }
+
+      return (
+        <Checkbox
+          id={id}
+          disabled={!editable}
+          name={name}
+          label={name}
+          value={selected}
+          onChange={(value) => handleAddRemoveLocation(value, index, location)}
+        />
+      );
+    },
+    [isProjectReport, editable, handleAddRemoveLocation]
+  );
 
   return (
     <Grid
@@ -233,14 +280,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
               {index !== 0 && <Grid item xs={12} className={classes.section} />}
               <Grid item xs={12}>
-                <Checkbox
-                  id={`seedbank-${index}`}
-                  disabled={!editable}
-                  name={seedbank.name}
-                  label={seedbank.name}
-                  value={seedbank.selected}
-                  onChange={(value) => handleAddRemoveLocation(value, index, 'seedBanks')}
-                />
+                {LocationCheckbox(seedbank.name, seedbank.selected, `seedbank-${index}`, index, 'seedBanks')}
               </Grid>
               {seedbank.selected && (
                 <LocationSection
@@ -254,6 +294,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
                   }
                   locationType='seedBank'
                   validate={validate}
+                  projectName={draftReport.projectName}
                 />
               )}
             </Grid>
@@ -273,14 +314,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
               {index !== 0 && <Grid item xs={12} className={classes.section} />}
               <Grid item xs={12}>
-                <Checkbox
-                  id={`nursery-${index}`}
-                  disabled={!editable}
-                  name={nursery.name}
-                  label={nursery.name}
-                  value={nursery.selected}
-                  onChange={(value) => handleAddRemoveLocation(value, index, 'nurseries')}
-                />
+                {LocationCheckbox(nursery.name, nursery.selected, `nursery-${index}`, index, 'nurseries')}
               </Grid>
               {nursery.selected && (
                 <LocationSection
@@ -294,6 +328,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
                   }
                   locationType='nursery'
                   validate={validate}
+                  projectName={draftReport.projectName}
                 />
               )}
             </Grid>
@@ -314,14 +349,13 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
               {index !== 0 && <Grid item xs={12} className={classes.section} />}
               <Grid item xs={12}>
-                <Checkbox
-                  id={`planting-site-${index}`}
-                  disabled={!editable}
-                  name={plantingSite.name}
-                  label={plantingSite.name}
-                  value={plantingSite.selected}
-                  onChange={(value) => handleAddRemoveLocation(value, index, 'plantingSites')}
-                />
+                {LocationCheckbox(
+                  plantingSite.name,
+                  plantingSite.selected,
+                  `planting-site-${index}`,
+                  index,
+                  'plantingSites'
+                )}
               </Grid>
               {plantingSite.selected && (
                 <LocationSection

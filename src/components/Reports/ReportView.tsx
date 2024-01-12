@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Button } from '@terraware/web-components';
 import TfMain from 'src/components/common/TfMain';
 import strings from 'src/strings';
-import ReportForm from './ReportForm';
 import { APP_PATHS } from 'src/constants';
-import { Box, Typography, useTheme } from '@mui/material';
 import { Report } from 'src/types/Report';
 import ReportService from 'src/services/ReportService';
-import { useHistory, useParams } from 'react-router-dom';
-import { Button } from '@terraware/web-components';
 import BackToLink from 'src/components/common/BackToLink';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
 import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
 import useReportFiles from 'src/components/Reports/useReportFiles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import ReportForm from './ReportForm';
 
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
-
-  const reportIdInt = parseInt(reportId, 10);
-
   const theme = useTheme();
-
   const { isMobile } = useDeviceInfo();
-
   const history = useHistory();
-
   const snackbar = useSnackbar();
 
   const [report, setReport] = useState<Report>();
+  const [showAnnual, setShowAnnual] = useState(false);
+  const [confirmEditDialogOpen, setConfirmEditDialogOpen] = useState(false);
+
+  const initialReportFiles = useReportFiles(report);
+
+  const reportIdInt = parseInt(reportId, 10);
+  const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
   useEffect(() => {
     const getReport = async () => {
@@ -41,23 +42,9 @@ export default function ReportView(): JSX.Element {
     };
 
     if (reportIdInt) {
-      getReport();
+      void getReport();
     }
   }, [reportIdInt, snackbar]);
-
-  const [showAnnual, setShowAnnual] = useState(false);
-
-  const [confirmEditDialogOpen, setConfirmEditDialogOpen] = useState(false);
-
-  const initialReportFiles = useReportFiles(report);
-
-  const startEdit = () => {
-    if (report?.lockedByUserId) {
-      setConfirmEditDialogOpen(true);
-    } else {
-      confirmEdit();
-    }
-  };
 
   const confirmEdit = async () => {
     // lock the report
@@ -68,6 +55,14 @@ export default function ReportView(): JSX.Element {
       history.replace({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', reportId) });
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
+    }
+  };
+
+  const startEdit = () => {
+    if (report?.lockedByUserId) {
+      setConfirmEditDialogOpen(true);
+    } else {
+      void confirmEdit();
     }
   };
 
@@ -103,7 +98,7 @@ export default function ReportView(): JSX.Element {
           padding={theme.spacing(4, 3)}
         >
           <Typography fontSize='24px' fontWeight={600}>
-            {report ? `Report (${report?.year}-Q${report?.quarter})` : ''}
+            {reportName}
           </Typography>
           <Box
             display='flex'

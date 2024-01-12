@@ -21,7 +21,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
-  if (batchHistoryItem.type === 'DetailsEdited' || batchHistoryItem.type === 'QuantityEdited') {
+  if (
+    batchHistoryItem.type === 'DetailsEdited' ||
+    batchHistoryItem.type === 'QuantityEdited' ||
+    batchHistoryItem.type === 'StatusChanged'
+  ) {
     return `${batchHistoryItem.modifiedFields.join(', ')} ${strings.CHANGE}`;
   }
   if (batchHistoryItem.type === 'IncomingWithdrawal') {

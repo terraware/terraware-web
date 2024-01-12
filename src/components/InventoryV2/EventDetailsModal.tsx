@@ -109,7 +109,9 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         )}
         {selectedEvent.modifiedFields.includes(strings.GERMINATING_QUANTITY) && (
           <>
-            {(!previousEvent || previousEvent?.type === 'QuantityEdited') && (
+            {(!previousEvent ||
+              previousEvent?.type === 'QuantityEdited' ||
+              previousEvent?.type === 'StatusChanged') && (
               <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
                   id='germinationQuantityBefore'
@@ -120,7 +122,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                 />
               </Grid>
             )}
-            {selectedEvent.type === 'QuantityEdited' && (
+            {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') && (
               <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
                   id='germinationQuantityAfter'
@@ -135,7 +137,9 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         )}
         {selectedEvent.modifiedFields.includes(strings.NOT_READY_QUANTITY) && (
           <>
-            {(!previousEvent || previousEvent?.type === 'QuantityEdited') && (
+            {(!previousEvent ||
+              previousEvent?.type === 'QuantityEdited' ||
+              previousEvent?.type === 'StatusChanged') && (
               <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
                   id='notReadyQuantityBefore'
@@ -146,7 +150,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                 />
               </Grid>
             )}
-            {selectedEvent.type === 'QuantityEdited' && (
+            {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') && (
               <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
                   id='notReadQuantityAfter'
@@ -161,7 +165,9 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         )}
         {selectedEvent.modifiedFields.includes(strings.READY_QUANTITY) && (
           <>
-            {(!previousEvent || previousEvent?.type === 'QuantityEdited') && (
+            {(!previousEvent ||
+              previousEvent?.type === 'QuantityEdited' ||
+              previousEvent?.type === 'StatusChanged') && (
               <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
                   id='readyQuantityBefore'
@@ -172,7 +178,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                 />
               </Grid>
             )}
-            {selectedEvent.type === 'QuantityEdited' && (
+            {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') && (
               <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
                 <Textfield
                   id='readyQuantityAfter'
