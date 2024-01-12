@@ -1,5 +1,9 @@
 import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
+import intersect from '@turf/intersect';
+import difference from '@turf/difference';
+import _ from 'lodash';
 import { MapSourceProperties, MapSourceRenderProperties } from 'src/types/Map';
+import { GeometryFeature } from './types';
 
 export function toMultiPolygon(geometry: Geometry): MultiPolygon | null {
   if (geometry.type === 'MultiPolygon') {
@@ -110,4 +114,38 @@ export const getMapDrawingLayer = (source: MapSourceRenderProperties, sourceId: 
         }
       : null,
   };
+};
+
+/**
+ * Cut source polygons into smaller polygons
+ * @param source
+ *  The source polygons that need to be split into smaller polygons
+ * @param cutWith
+ *  The polygon to use as the overlap check in order to cut polygons
+ * @returns
+ *  List of polygons that were cut as a result of overlaps with cutWith
+ *  Null if there was no overlap
+ */
+export const cutPolygons = (source: GeometryFeature[], cutWith: Geometry): GeometryFeature[] | null => {
+  if (cutWith.type !== 'Polygon' && cutWith.type !== 'MultiPolygon') {
+    return null;
+  }
+
+  const intersections = source.map((poly) => intersect(cutWith, poly));
+  if (!intersections.some((f) => f !== null)) {
+    return null;
+  }
+
+  const splitFeatures = intersections.reduce((acc, curr, index) => {
+    const originalFeature = source[index];
+    if (curr !== null) {
+      const subtracted = originalFeature.properties?.isFixed ? null : difference(originalFeature, curr);
+      if (subtracted !== null) {
+        return [...acc, subtracted, curr];
+      }
+    }
+    return [...acc, originalFeature];
+  }, [] as GeometryFeature[]);
+
+  return _.isEqual(splitFeatures, source) ? null : splitFeatures;
 };

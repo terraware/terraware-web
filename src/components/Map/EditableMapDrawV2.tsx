@@ -26,8 +26,9 @@ export type MapEditorMode =
   | 'ReplacingBoundary';
 
 type MapEditorProps = ConstructorParameters<typeof MapboxDraw>[0] & {
+  allowEditMultiplePolygons?: boolean;
   boundary?: FeatureCollection;
-  editMultiplePolygons?: boolean;
+  clearOnEdit?: boolean;
   onBoundaryChanged?: (boundary?: FeatureCollection) => void;
   setMode?: (mode: MapEditorMode) => void;
 };
@@ -69,12 +70,14 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
  * Makes a parent ReactMapGL component editable. This is a wrapper around the MapboxDraw control.
  * The editor supports drawing a boundary consisting of a single polygon.
  *
+ * @param allowEditMultiplePolygons
+ *  Whether to allow draw/creation of more than one polygon, otherwise clears previous polygon
+ *  upon a new one.
  * @param boundary
  *  Initial boundary. If this is specified, the editor will start out in EditingBoundary mode;
  *  otherwise it will start out in CreatingBoundary mode.
- * @param editMultiplePolygons
- *  Whether to allow draw/creation of more than one polygon, otherwise clears previous polygon
- *  upon a new one.
+ * @param clearOnEdit
+ *  Whether to clear the boundary in the editor after onChange callbacks are notified
  * @param onBoundaryChanged
  *  Called when the user adds, edits, or deletes the boundary. The boundary is always a
  *  MultiPolygon containing a single polygon.
@@ -83,8 +86,9 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
  *  Additional properties to pass to the MapboxDraw control.
  */
 export default function EditableMapDraw({
+  allowEditMultiplePolygons,
   boundary,
-  editMultiplePolygons,
+  clearOnEdit,
   onBoundaryChanged,
   setMode,
   ...otherProps
@@ -120,7 +124,7 @@ export default function EditableMapDraw({
 
   const fetchUpdatedFeatures = useCallback(
     (newFeatures: Feature[]): FeatureCollection | undefined => {
-      const existingFeatures = editMultiplePolygons
+      const existingFeatures = allowEditMultiplePolygons
         ? draw
             .getAll()
             .features.filter(
@@ -132,7 +136,7 @@ export default function EditableMapDraw({
       const features = [...existingFeatures, ...newFeatures];
       return features.length ? { type: 'FeatureCollection', features } : undefined;
     },
-    [draw, editMultiplePolygons]
+    [draw, allowEditMultiplePolygons]
   );
 
   const updateNotification = useCallback(
@@ -143,8 +147,11 @@ export default function EditableMapDraw({
 
       const updatedFeatures = fetchUpdatedFeatures(features);
       onBoundaryChanged(updatedFeatures);
+      if (clearOnEdit) {
+        draw.deleteAll();
+      }
     },
-    [fetchUpdatedFeatures, onBoundaryChanged]
+    [clearOnEdit, draw, fetchUpdatedFeatures, onBoundaryChanged]
   );
 
   const onCreate = useCallback(

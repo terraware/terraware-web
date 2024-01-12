@@ -21,7 +21,7 @@ export type PlantingSiteStep = {
   optional?: OptionalStep;
 };
 
-export type PlantingSiteFormProps = {
+export type FormProps = {
   children: React.ReactNode;
   className?: string;
   currentStep: PlantingSiteStepType;
@@ -32,7 +32,7 @@ export type PlantingSiteFormProps = {
   steps: PlantingSiteStep[];
 };
 
-export default function PlantingSiteForm({
+export default function Form({
   children,
   className,
   currentStep,
@@ -41,7 +41,7 @@ export default function PlantingSiteForm({
   onSaveAndClose,
   onStartOver,
   steps,
-}: PlantingSiteFormProps): JSX.Element {
+}: FormProps): JSX.Element {
   const theme = useTheme();
 
   const currentStepIndex = useMemo<number>(() => {

@@ -13,32 +13,35 @@ import useMapboxToken from 'src/utils/useMapboxToken';
 import { Box, useTheme } from '@mui/material';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import bbox from '@turf/bbox';
-import { FeatureCollection } from 'geojson';
+import { FeatureCollection, MultiPolygon } from 'geojson';
 import { MapSourceRenderProperties, MapViewStyles } from 'src/types/Map';
-import { getMapDrawingLayer } from './utils';
+import { getMapDrawingLayer, toMultiPolygon } from './utils';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
+import { ReadOnlyBoundary } from './types';
 import UndoRedoBoundaryControl from './UndoRedoBoundaryControl';
 
-export type ReadOnlyBoundary = {
-  featureCollection: FeatureCollection;
-  id: string;
+export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
   renderProperties: MapSourceRenderProperties;
 };
 
 export type EditableMapProps = {
-  editMultiplePolygons?: boolean;
-  boundary?: FeatureCollection;
-  onBoundaryChanged: (boundary?: FeatureCollection) => void;
+  allowEditMultiplePolygons?: boolean;
+  clearOnEdit?: boolean;
+  editableBoundary?: FeatureCollection;
+  onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) => void;
+  onUndoRedoReadOnlyBoundary?: (readOnlyBoundary?: ReadOnlyBoundary[]) => void;
   setMode?: (mode: MapEditorMode) => void;
-  readOnlyBoundaries?: ReadOnlyBoundary[];
+  readOnlyBoundary?: RenderableReadOnlyBoundary[];
   style?: object;
 };
 
 export default function EditableMap({
-  editMultiplePolygons,
-  boundary,
-  onBoundaryChanged,
-  readOnlyBoundaries,
+  allowEditMultiplePolygons,
+  clearOnEdit,
+  editableBoundary,
+  onEditableBoundaryChanged,
+  onUndoRedoReadOnlyBoundary,
+  readOnlyBoundary,
   setMode,
   style,
 }: EditableMapProps): JSX.Element {
@@ -67,10 +70,15 @@ export default function EditableMap({
   );
 
   const initialViewState = {
-    bounds: readOnlyBoundaries?.length
-      ? (bbox(
-          readOnlyBoundaries!.flatMap((b) => b.featureCollection.features).flatMap((feature) => feature.geometry)[0]
-        ) as LngLatBoundsLike)
+    bounds: readOnlyBoundary?.length
+      ? (bbox({
+          type: 'MultiPolygon',
+          coordinates: readOnlyBoundary!
+            .flatMap((b) => b.featureCollection.features)
+            .flatMap((feature) => toMultiPolygon(feature.geometry))
+            .filter((poly: MultiPolygon | null) => poly !== null)
+            .flatMap((poly: MultiPolygon | null) => poly!.coordinates),
+        }) as LngLatBoundsLike)
       : undefined,
     fitBoundsOptions: {
       animate: false,
@@ -78,13 +86,25 @@ export default function EditableMap({
     },
   };
 
-  const onUndoRedo = useCallback((data?: FeatureCollection) => void onBoundaryChanged(data), [onBoundaryChanged]);
+  const undoRedoEditableBoundary = useCallback(
+    (data?: FeatureCollection) => void onEditableBoundaryChanged(data, true),
+    [onEditableBoundaryChanged]
+  );
+
+  const undoRedoReadOnlyBoundary = useCallback(
+    (data?: ReadOnlyBoundary[]) => {
+      if (onUndoRedoReadOnlyBoundary) {
+        void onUndoRedoReadOnlyBoundary(data);
+      }
+    },
+    [onUndoRedoReadOnlyBoundary]
+  );
 
   const mapLayers = useMemo(() => {
-    if (!readOnlyBoundaries?.length) {
+    if (!readOnlyBoundary?.length) {
       return null;
     }
-    return readOnlyBoundaries!.map((data: ReadOnlyBoundary) => {
+    return readOnlyBoundary!.map((data: RenderableReadOnlyBoundary) => {
       const drawingLayer: any = getMapDrawingLayer(data.renderProperties, data.id);
       return (
         <Source type='geojson' key={data.id} data={data.featureCollection} id={data.id}>
@@ -95,7 +115,7 @@ export default function EditableMap({
         </Source>
       );
     });
-  }, [readOnlyBoundaries]);
+  }, [readOnlyBoundary]);
 
   return (
     <Box
@@ -136,12 +156,18 @@ export default function EditableMap({
             <FullscreenControl position='top-left' />
             <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
-              editMultiplePolygons={editMultiplePolygons}
-              boundary={boundary}
-              onBoundaryChanged={onBoundaryChanged}
+              allowEditMultiplePolygons={allowEditMultiplePolygons}
+              clearOnEdit={clearOnEdit}
+              boundary={editableBoundary}
+              onBoundaryChanged={onEditableBoundaryChanged}
               setMode={setMode}
             />
-            <UndoRedoBoundaryControl boundary={boundary} onBoundaryChanged={onUndoRedo} />
+            <UndoRedoBoundaryControl
+              editableBoundary={editableBoundary}
+              onEditableBoundaryChanged={undoRedoEditableBoundary}
+              onReadOnlyBoundaryChanged={undoRedoReadOnlyBoundary}
+              readOnlyBoundary={readOnlyBoundary}
+            />
             <NavigationControl position='bottom-right' showCompass={false} />
             <GeolocateControl
               position='bottom-right'
