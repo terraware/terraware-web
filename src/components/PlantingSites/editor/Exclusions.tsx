@@ -1,22 +1,44 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { FeatureCollection } from 'geojson';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import EditableMap, { RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
-import { toFeature } from 'src/components/Map/utils';
+import { toFeature, toMultiPolygonArray } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
 export type ExclusionsProps = {
-  exclusions?: FeatureCollection;
-  setExclusions: (exclusions?: FeatureCollection) => void;
+  onChange: (id: string, value: unknown) => void;
+  onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
   site: PlantingSite;
 };
 
-export default function Exclusions({ exclusions, setExclusions, site }: ExclusionsProps): JSX.Element {
+export default function Exclusions({ onChange, onValidate, site }: ExclusionsProps): JSX.Element {
+  const [exclusions, setExclusions] = useState<FeatureCollection | undefined>();
   const getRenderAttributes = useRenderAttributes();
+
+  useEffect(() => {
+    if (site.exclusion) {
+      setExclusions({
+        type: 'FeatureCollection',
+        features: [toFeature(site.exclusion!, {}, 0)],
+      });
+    }
+  }, [site.exclusion]);
+
+  useEffect(() => {
+    if (onValidate) {
+      if (exclusions) {
+        onChange('exclusion', {
+          type: 'MultiPolygon',
+          coordinates: toMultiPolygonArray(exclusions)!.flatMap((poly) => poly.coordinates),
+        });
+      }
+      onValidate(false, !!exclusions);
+    }
+  }, [onChange, onValidate, exclusions]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!site.boundary) {

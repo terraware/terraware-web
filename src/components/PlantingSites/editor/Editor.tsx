@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
-import { FeatureCollection } from 'geojson';
 import TfMain from 'src/components/common/TfMain';
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
@@ -12,7 +11,6 @@ import { useLocalization } from 'src/providers';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
 import Card from 'src/components/common/Card';
-import { toMultiPolygonArray } from 'src/components/Map/utils';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import Form, { PlantingSiteStep, PlantingSiteStepType } from './Form';
 import Details from './Details';
@@ -45,10 +43,10 @@ export default function Editor(props: EditorProps): JSX.Element {
   const snackbar = useSnackbar();
   const classes = useStyles();
 
+  const [onValidate, setOnValidate] = useState<
+    ((hasErrors: boolean, isOptionalCompleted?: boolean) => void) | undefined
+  >();
   const [showStartOver, setShowStartOver] = useState<boolean>(false);
-  const [siteBoundary, setSiteBoundary] = useState<FeatureCollection | undefined>();
-  const [exclusions, setExclusions] = useState<FeatureCollection | undefined>();
-  const [zones, setZones] = useState<FeatureCollection | undefined>();
   const [currentStep, setCurrentStep] = useState<PlantingSiteStepType>('details');
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<PlantingSiteStepType, boolean>>(
     {} as Record<PlantingSiteStepType, boolean>
@@ -119,53 +117,46 @@ export default function Editor(props: EditorProps): JSX.Element {
     goToPlantingSites();
   };
 
-  const saveSiteBoundary = (): boolean => {
-    if (!siteBoundary) {
-      // string is wip
-      snackbar.toastError('please draw a site boundary');
-      return false;
+  const saveSite = async (): Promise<PlantingSite | undefined> => {
+    // TODO save site and update site state
+    // return undefined if error and toast error
+    return plantingSite;
+  };
+
+  const onSave = (close: boolean) => {
+    // wait for component to return
+    if (onValidate) {
+      return;
     }
-    onChange('boundary', toMultiPolygonArray(siteBoundary)?.[0]);
-    setSiteBoundary(undefined);
-    return true;
-  };
-
-  const saveExclusionAreas = (): boolean => {
-    setCompletedOptionalSteps((current: Record<PlantingSiteStepType, boolean>) => ({
-      ...current,
-      exclusion_areas: exclusions ? true : false,
-    }));
-    return true;
-  };
-
-  const onSaveAndNext = () => {
-    // TODO: save data here, alert user if data is missing
-    if (currentStep === steps[steps.length - 1].type) {
-      // this is the final step
-      onSaveAndClose();
-    } else {
-      if (currentStep === 'site_boundary' && !saveSiteBoundary()) {
-        return;
+    setOnValidate(() => async (hasErrors: boolean, isOptionalCompleted?: boolean) => {
+      setOnValidate(undefined);
+      if (!hasErrors) {
+        const closeEditor = close || currentStep === steps[steps.length - 1].type;
+        const savedSite = await saveSite();
+        if (!savedSite) {
+          return;
+        }
+        if (closeEditor) {
+          snackbar.toastSuccess(strings.SAVED);
+          reloadPlantingSites();
+          // TODO go to saved site
+          goToPlantingSites();
+        } else {
+          // update state of optional step for the stepper visualization
+          if (isOptionalCompleted !== undefined) {
+            setCompletedOptionalSteps((current: Record<PlantingSiteStepType, boolean>) => ({
+              ...current,
+              [currentStep]: isOptionalCompleted,
+            }));
+          }
+          setCurrentStep(steps[getCurrentStepIndex() + 1].type);
+        }
       }
-      if (currentStep === 'exclusion_areas' && !saveExclusionAreas()) {
-        return;
-      }
-      setCurrentStep(steps[getCurrentStepIndex() + 1].type);
-    }
-  };
-
-  const onSaveAndClose = () => {
-    // TODO: save data here, alert user if data is missing
-    snackbar.toastSuccess(strings.SAVED);
-    reloadPlantingSites();
-    // TODO: if this is the last step, redirect user to newly created planting site
-    goToPlantingSites();
+    });
   };
 
   const onStartOver = () => {
     setCurrentStep('site_boundary');
-    setSiteBoundary(undefined);
-    setExclusions(undefined);
     setPlantingSite((current: PlantingSite) => ({
       ...current,
       boundary: undefined,
@@ -174,13 +165,6 @@ export default function Editor(props: EditorProps): JSX.Element {
     setCompletedOptionalSteps({} as Record<PlantingSiteStepType, boolean>);
     setShowStartOver(false);
   };
-
-  useEffect(() => {
-    if (siteBoundary && !site.plantingZones?.length) {
-      // TODO: process properties etc here
-      setZones(siteBoundary);
-    }
-  }, [siteBoundary, site.plantingZones?.length]);
 
   return (
     <TfMain>
@@ -195,24 +179,26 @@ export default function Editor(props: EditorProps): JSX.Element {
       <Form
         currentStep={currentStep}
         onCancel={onCancel}
-        onSaveAndNext={onSaveAndNext}
-        onSaveAndClose={onSaveAndClose}
+        onSaveAndNext={() => onSave(false)}
+        onSaveAndClose={() => onSave(true)}
         onStartOver={() => setShowStartOver(true)}
         steps={steps}
         className={classes.container}
       >
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}>
-          {currentStep === 'details' && <Details onChange={onChange} site={plantingSite} />}
+          {currentStep === 'details' && <Details onChange={onChange} onValidate={onValidate} site={plantingSite} />}
           {currentStep === 'site_boundary' && (
-            <SiteBoundary siteBoundary={siteBoundary} setSiteBoundary={setSiteBoundary} />
+            <SiteBoundary onChange={onChange} onValidate={onValidate} site={plantingSite} />
           )}
           {currentStep === 'exclusion_areas' && (
-            <Exclusions exclusions={exclusions} setExclusions={setExclusions} site={plantingSite} />
+            <Exclusions onChange={onChange} onValidate={onValidate} site={plantingSite} />
           )}
           {currentStep === 'zone_boundaries' && (
-            <Zones exclusions={exclusions} zones={zones} setZones={setZones} site={plantingSite} />
+            <Zones onChange={onChange} onValidate={onValidate} site={plantingSite} />
           )}
-          {currentStep === 'subzone_boundaries' && <Subzones onChange={onChange} site={plantingSite} />}
+          {currentStep === 'subzone_boundaries' && (
+            <Subzones onChange={onChange} onValidate={onValidate} site={plantingSite} />
+          )}
         </Card>
       </Form>
     </TfMain>

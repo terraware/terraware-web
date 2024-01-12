@@ -2772,6 +2772,7 @@ export interface components {
       areaHa?: number;
       boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
+      exclusion?: components["schemas"]["MultiPolygon"];
       /** Format: int64 */
       id: number;
       name: string;

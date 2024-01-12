@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Typography, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Feature, FeatureCollection } from 'geojson';
@@ -6,21 +6,21 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { GeometryFeature, MapPopupRenderer, MapSourceProperties, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
 import EditableMap, { RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
-import { cutPolygons, leftMostFeature, toFeature } from 'src/components/Map/utils';
+import { cutPolygons, leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
 import { MapTooltipDialog, mapTooltipDialogStyle } from 'src/components/Map/MapRenderUtils';
 import StepTitleDescription, { Description } from './StepTitleDescription';
+import { defaultZonePayload } from './utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   ...mapTooltipDialogStyle(theme),
 }));
 
 export type ZonesProps = {
-  exclusions?: FeatureCollection;
-  setZones: (zones?: FeatureCollection) => void;
+  onChange: (id: string, value: unknown) => void;
+  onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
   site: PlantingSite;
-  zones?: FeatureCollection;
 };
 
 const IdGenerator = (features: Feature[]): (() => number) => {
@@ -29,6 +29,7 @@ const IdGenerator = (features: Feature[]): (() => number) => {
     .filter((f) => !isNaN(Number(f.id)))
     .map((f) => f.id as number)
     .sort();
+
   if (ids.length) {
     nextId = ids[ids.length - 1];
   }
@@ -42,11 +43,51 @@ const IdGenerator = (features: Feature[]): (() => number) => {
 const toZoneFeature = (feature: Feature, idGenerator: () => number) =>
   toFeature(feature.geometry, feature.properties ?? {}, isNaN(Number(feature.id)) ? idGenerator() : feature.id!);
 
-export default function Zones(props: ZonesProps): JSX.Element {
-  const { exclusions, setZones, site, zones } = props;
+export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.Element {
+  const [zones, setZones] = useState<FeatureCollection | undefined>();
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const classes = useStyles();
   const getRenderAttributes = useRenderAttributes();
+
+  useEffect(() => {
+    if (site.plantingZones) {
+      const features = site.plantingZones.map((zone) => {
+        const { boundary, id, name, targetPlantingDensity } = zone;
+        return toFeature(boundary, { id, name, targetPlantingDensity }, id);
+      });
+      setZones({ type: 'FeatureCollection', features });
+    }
+  }, [site.plantingZones]);
+
+  useEffect(() => {
+    // TODO: use new BE API when it is ready, to populate the zones for creation with
+    // right now this onChange does nothing but allow us to move to next phase of subzones cutting
+    if (onValidate) {
+      let numZones = 0;
+      if (zones) {
+        const plantingZones = zones.features
+          .map((zone, index) => {
+            const { geometry, properties } = zone;
+            const multiPolygon = toMultiPolygon(geometry);
+
+            if (multiPolygon) {
+              return defaultZonePayload({
+                boundary: multiPolygon,
+                id: properties?.id ?? index,
+                name: properties?.name ?? '',
+                targetPlantingDensity: properties?.targetPlantingDensity ?? 0,
+              });
+            } else {
+              return undefined;
+            }
+          })
+          .filter((data) => !!data);
+        onChange('plantingZones', plantingZones);
+        numZones = plantingZones.length;
+      }
+      onValidate(zones === undefined, numZones > 1);
+    }
+  }, [onChange, onValidate, zones]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!zones?.features) {
@@ -55,10 +96,10 @@ export default function Zones(props: ZonesProps): JSX.Element {
 
     const idGenerator = IdGenerator(zones.features);
 
-    const exclusionsBoundary = exclusions
+    const exclusionsBoundary: RenderableReadOnlyBoundary[] = site.exclusion
       ? [
           {
-            featureCollection: exclusions!,
+            featureCollection: { type: 'FeatureCollection', features: [toFeature(site.exclusion!, {}, 0)] },
             id: 'exclusions',
             renderProperties: getRenderAttributes('exclusions'),
           },
@@ -82,7 +123,7 @@ export default function Zones(props: ZonesProps): JSX.Element {
         renderProperties: getRenderAttributes('zone'),
       },
     ];
-  }, [exclusions, getRenderAttributes, site.boundary, site.id, zones]);
+  }, [getRenderAttributes, site.boundary, site.exclusion, site.id, zones]);
 
   const description = useMemo<Description[]>(
     () => [

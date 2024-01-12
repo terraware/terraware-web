@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Box } from '@mui/material';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
@@ -7,10 +7,16 @@ import StepTitleDescription, { Description } from './StepTitleDescription';
 
 export type SubzonesProps = {
   onChange: (id: string, value: unknown) => void;
+  onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
   site: PlantingSite;
 };
 
-export default function Subzones(props: SubzonesProps): JSX.Element {
+export default function Subzones({ onValidate }: SubzonesProps): JSX.Element {
+  useEffect(() => {
+    // TODO implement all the subzones logic
+    onValidate?.(false);
+  }, [onValidate]);
+
   const description = useMemo<Description[]>(
     () => [
       { text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_0 },
