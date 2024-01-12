@@ -115,6 +115,18 @@ export const batchSubstrateLocalizedToEnum = (substrate: string): Batch['substra
   }
 };
 
+export function accessionNurserySubstrates(): { label: string; value: ViabilityTest['substrate'] | null }[] {
+  return [
+    { label: strings.MEDIA_MIX, value: 'Media Mix' },
+    { label: strings.SOIL, value: 'Soil' },
+    { label: strings.SAND, value: 'Sand' },
+    { label: strings.MOSS, value: 'Moss' },
+    { label: strings.PERLITE_VERMICULITE, value: 'Perlite/Vermiculite' },
+    { label: strings.OTHER, value: 'Other' },
+    { label: strings.NONE, value: 'None' },
+  ];
+}
+
 export function nurserySubstrates(): { label: string; value: Batch['substrate'] | null }[] {
   return [
     { label: strings.MEDIA_MIX, value: 'MediaMix' },
