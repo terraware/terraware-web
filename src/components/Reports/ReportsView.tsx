@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Container, Grid, Tab, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, List, ListItem, Tab, Typography, useTheme } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { TableColumnType } from '@terraware/web-components';
+import { Message, TableColumnType } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import Table from 'src/components/common/table';
 import ReportService from 'src/services/ReportService';
@@ -19,6 +19,7 @@ import { requestReportsSettings } from 'src/redux/features/reportsSettings/repor
 import PreSetupView from 'src/components/Reports/PreSetupView';
 import { APP_PATHS } from 'src/constants';
 import ReportSettingsEditFormFields from './ReportSettingsEditFormFields';
+import ReportLink from 'src/components/Reports/ReportLink';
 
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.REPORT, type: 'string' },
@@ -130,11 +131,52 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
     [theme]
   );
 
+  const reportsToComplete = useMemo(() => results.filter((report) => report.status !== 'Submitted'), [results]);
+
+  const reportPeriodsToComplete = useMemo(() => {
+    if (reportsToComplete.length === 0) {
+      return '';
+    }
+
+    return Array.from(new Set(reportsToComplete.map((report) => `${report.year}-Q${report.quarter}`)))
+      .sort()
+      .join(', ');
+  }, [reportsToComplete]);
+
   return reportsSettings && !reportsSettings?.isConfigured ? (
     <PreSetupView />
   ) : (
     <TfMain>
       <PageHeader title={strings.REPORTS} />
+
+      {reportsToComplete.length > 0 && (
+        <Box sx={{ marginBottom: theme.spacing(3) }}>
+          <Message
+            type='page'
+            priority='info'
+            title={strings.formatString(strings.COMPLETE_REPORTS, reportPeriodsToComplete)}
+            body={
+              <>
+                <Typography sx={{ margin: 0 }}>
+                  {strings.formatString(strings.COMPLETE_REPORTS_SUBTITLE, reportPeriodsToComplete)}
+                </Typography>
+
+                <List sx={{ listStyleType: 'disc', marginLeft: theme.spacing(4), marginTop: 0, padding: 0 }} dense>
+                  {reportsToComplete.map((report, index) => (
+                    <ListItem
+                      key={index}
+                      sx={{ display: 'list-item', color: theme.palette.TwClrTxtBrand, padding: 0 }}
+                      disableGutters
+                    >
+                      <ReportLink report={report} />
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            }
+          />
+        </Box>
+      )}
 
       <TabContext value={selectedTab}>
         <Box sx={tabHeaderProps}>
