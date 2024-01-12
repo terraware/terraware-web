@@ -44,6 +44,7 @@ export type LocationSectionProps = {
   onUpdateWorkers: (workersField: string, value: any) => void;
   locationType: 'seedBank' | 'nursery' | 'plantingSite';
   validate?: boolean;
+  projectName?: string;
 };
 
 const columns = (): TableColumnType[] => [
@@ -66,42 +67,15 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function LocationSection(props: LocationSectionProps): JSX.Element {
-  const { editable, location, onUpdateLocation, onUpdateWorkers, locationType, validate } = props;
+  const { editable, location, onUpdateLocation, onUpdateWorkers, locationType, validate, projectName } = props;
+
   const { isMobile, isTablet } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
-
-  const isSeedBank = locationType === 'seedBank';
-  const isNursery = locationType === 'nursery';
-  const isPlantingSite = locationType === 'plantingSite';
-
-  const [paidWorkers, setPaidWorkers] = useState<number | null>(location.workers?.paidWorkers ?? null);
-  const [femalePaidWorkers, setFemalePaidWorkers] = useState<number | null>(
-    location.workers?.femalePaidWorkers ?? null
-  );
-  const [volunteers, setVolunteers] = useState<number | null>(location.workers?.volunteers ?? null);
-  const [locationNotes, setLocationNotes] = useState(location.notes ?? '');
-
-  const smallItemGridWidth = () => (isMobile ? 12 : 4);
-  const mediumItemGridWidth = () => (isMobile || isTablet ? 12 : 8);
-
-  const getNotesLabel = () => {
-    if (isSeedBank) {
-      return strings.SEED_BANK_NOTES;
-    }
-    if (isNursery) {
-      return strings.ADDITIONAL_NURSERY_NOTES;
-    }
-    return strings.ADDITIONAL_PLANTING_SITES_NOTES;
-  };
-
-  const [allSpecies, setAllSpecies] = useState<Species[]>();
-  const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
-  const [plantingDensity, setPlantingDensity] = useState<Record<string, number | string>>();
-
   const defaultTimeZone = useDefaultTimeZone();
+
   const currentObservation = useAppSelector((state) =>
     selectCurrentObservation(state, location.id, defaultTimeZone.get().id)
   );
@@ -120,19 +94,46 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
   const reportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, location.id));
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, location.id));
 
+  const [paidWorkers, setPaidWorkers] = useState<number | null>(location.workers?.paidWorkers ?? null);
+  const [femalePaidWorkers, setFemalePaidWorkers] = useState<number | null>(
+    location.workers?.femalePaidWorkers ?? null
+  );
+  const [volunteers, setVolunteers] = useState<number | null>(location.workers?.volunteers ?? null);
+  const [locationNotes, setLocationNotes] = useState(location.notes ?? '');
+  const [allSpecies, setAllSpecies] = useState<Species[]>();
+  const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
+  const [plantingDensity, setPlantingDensity] = useState<Record<string, number | string>>();
+
+  const isSeedBank = locationType === 'seedBank';
+  const isNursery = locationType === 'nursery';
+  const isPlantingSite = locationType === 'plantingSite';
+
+  const smallItemGridWidth = () => (isMobile ? 12 : 4);
+  const mediumItemGridWidth = () => (isMobile || isTablet ? 12 : 8);
+
+  const getNotesLabel = () => {
+    if (isSeedBank) {
+      return strings.SEED_BANK_NOTES;
+    }
+    if (isNursery) {
+      return strings.ADDITIONAL_NURSERY_NOTES;
+    }
+    return strings.ADDITIONAL_PLANTING_SITES_NOTES;
+  };
+
   useEffect(() => {
     if (selectedOrganization) {
-      dispatch(requestObservations(selectedOrganization.id));
-      dispatch(requestObservationsResults(selectedOrganization.id));
-      dispatch(requestSpecies(selectedOrganization.id));
-      dispatch(requestPlantings(selectedOrganization.id));
-      dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
+      void dispatch(requestObservations(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestSpecies(selectedOrganization.id));
+      void dispatch(requestPlantings(selectedOrganization.id));
+      void dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
     if (plantingSite?.id) {
-      dispatch(requestSiteReportedPlants(plantingSite.id));
+      void dispatch(requestSiteReportedPlants(plantingSite.id));
     }
   }, [plantingSite?.id, dispatch]);
 
@@ -157,7 +158,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       }
     };
     if (isPlantingSite) {
-      populateSpecies();
+      void populateSpecies();
     }
   }, [isPlantingSite, selectedOrganization.id, location]);
 
@@ -337,14 +338,29 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
         </>
       )}
       {isSeedBank && (
-        <Grid item xs={12}>
-          <OverviewItemCard
-            isEditable={false}
-            title={strings.TOTAL_SEEDS_STORED}
-            contents={(location as ReportSeedBank).totalSeedsStored.toString() ?? '0'}
-            className={classes.infoCardStyle}
-          />
-        </Grid>
+        <>
+          <Grid item xs={smallItemGridWidth()}>
+            <OverviewItemCard
+              isEditable={false}
+              title={strings.TOTAL_SEEDS_STORED}
+              contents={(location as ReportSeedBank).totalSeedsStored.toString() ?? '0'}
+              className={classes.infoCardStyle}
+            />
+          </Grid>
+          {projectName && (
+            <>
+              <Grid item xs={smallItemGridWidth()}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.formatString(strings.TOTAL_SEEDS_STORED_FOR_PROJECT, projectName) as string}
+                  contents={(location as ReportSeedBank).totalSeedsStoredForProject?.toString() ?? '0'}
+                  className={classes.infoCardStyle}
+                />
+              </Grid>
+            </>
+          )}
+          {projectName && !isMobile && <Grid item xs={smallItemGridWidth()} />}
+        </>
       )}
       {isNursery && (
         <>
@@ -369,6 +385,18 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               className={classes.infoCardStyle}
             />
           </Grid>
+          {projectName && (
+            <Grid item xs={smallItemGridWidth()}>
+              <OverviewItemCard
+                isEditable={false}
+                title={
+                  strings.formatString(strings.TOTAL_NUMBER_OF_PLANTS_PROPAGATED_FOR_PROJECT, projectName) as string
+                }
+                contents={(location as ReportNursery).totalPlantsPropagatedForProject?.toString() ?? '0'}
+                className={classes.infoCardStyle}
+              />
+            </Grid>
+          )}
           <Grid item xs={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
@@ -377,6 +405,12 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
               className={classes.infoCardStyle}
             />
           </Grid>
+          {projectName && !isMobile && (
+            <>
+              <Grid item xs={smallItemGridWidth()} />
+              <Grid item xs={smallItemGridWidth()} />
+            </>
+          )}
         </>
       )}
       {isPlantingSite && (

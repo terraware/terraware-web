@@ -276,6 +276,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
                   }
                   locationType='seedBank'
                   validate={validate}
+                  projectName={draftReport.projectName}
                 />
               )}
             </Grid>
@@ -309,6 +310,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
                   }
                   locationType='nursery'
                   validate={validate}
+                  projectName={draftReport.projectName}
                 />
               )}
             </Grid>
