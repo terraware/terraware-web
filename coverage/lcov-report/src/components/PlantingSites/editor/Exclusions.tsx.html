@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -129,7 +129,29 @@
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -148,6 +170,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -195,25 +239,47 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { FeatureCollection } from 'geojson';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import EditableMap, { RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
-import { toFeature } from 'src/components/Map/utils';
+import { toFeature, toMultiPolygonArray } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 &nbsp;
 export type ExclusionsProps = {
-  exclusions?: FeatureCollection;
-  setExclusions: (exclusions?: FeatureCollection) =&gt; void;
+  onChange: (id: string, value: unknown) =&gt; void;
+  onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) =&gt; void;
   site: PlantingSite;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >Exclusions(</span>{ exclusions, setExclusions, site }: ExclusionsProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >Exclusions(</span>{ onChange, onValidate, site }: ExclusionsProps): JSX.Element {
+  const [exclusions, setExclusions] = <span class="cstat-no" title="statement not covered" >useState&lt;FeatureCollection | undefined&gt;();</span>
   const getRenderAttributes = <span class="cstat-no" title="statement not covered" >useRenderAttributes();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (site.exclusion) {</span>
+<span class="cstat-no" title="statement not covered" >      setExclusions({</span>
+        type: 'FeatureCollection',
+        features: [toFeature(site.exclusion!, {}, 0)],
+      });
+    }
+  }, [site.exclusion]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (onValidate) {</span>
+<span class="cstat-no" title="statement not covered" >      if (exclusions) {</span>
+<span class="cstat-no" title="statement not covered" >        onChange('exclusion', {</span>
+          type: 'MultiPolygon',
+          coordinates: toMultiPolygonArray(exclusions)!.flatMap(<span class="fstat-no" title="function not covered" >(p</span>oly) =&gt; <span class="cstat-no" title="statement not covered" >poly.coordinates)</span>,
+        });
+      }
+<span class="cstat-no" title="statement not covered" >      onValidate(false, !!exclusions);</span>
+    }
+  }, [onChange, onValidate, exclusions]);
 &nbsp;
   const readOnlyBoundary = <span class="cstat-no" title="statement not covered" >useMemo&lt;RenderableReadOnlyBoundary[] | undefined&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!site.boundary) {</span>
@@ -268,7 +334,7 @@ export default function <span class="fstat-no" title="function not covered" >Exc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-12T22:47:44.952Z
+                at 2024-01-12T23:37:13.752Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
