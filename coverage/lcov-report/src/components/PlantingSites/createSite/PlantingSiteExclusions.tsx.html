@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -122,7 +122,19 @@
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -143,6 +155,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -160,10 +174,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,7 +213,8 @@ import { PlantingSite } from 'src/types/Tracking';
 import EditableMap, { ReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
 import { toFeature } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
-import StepTitleDescription from './StepTitleDescription';
+import useMapIcons from 'src/components/Map/useMapIcons';
+import StepTitleDescription, { Description } from './StepTitleDescription';
 &nbsp;
 export type PlantingSiteExclusionsProps = {
   boundary?: FeatureCollection;
@@ -202,6 +227,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   setBoundary,
   site,
 }: PlantingSiteExclusionsProps): JSX.Element {
+  const mapIcons = <span class="cstat-no" title="statement not covered" >useMapIcons();</span>
   const getRenderAttributes = <span class="cstat-no" title="statement not covered" >useRenderAttributes();</span>
 &nbsp;
   const readOnlyBoundary = <span class="cstat-no" title="statement not covered" >useMemo&lt;ReadOnlyBoundary[] | undefined&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -218,14 +244,24 @@ export default function <span class="fstat-no" title="function not covered" >Pla
     ];
   }, [getRenderAttributes, site.boundary, site.id]);
 &nbsp;
+  const description = <span class="cstat-no" title="statement not covered" >useMemo&lt;Description[]&gt;(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
+      { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_0 },
+      {
+        text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_1,
+        hasTutorial: true,
+        handlePrefix: <span class="fstat-no" title="function not covered" >(p</span>refix: string) =&gt; <span class="cstat-no" title="statement not covered" >strings.formatString(prefix, mapIcons.polygon) as JSX.Element[],</span>
+        handleSuffix: <span class="fstat-no" title="function not covered" >(s</span>uffix: string) =&gt; <span class="cstat-no" title="statement not covered" >strings.formatString(suffix, '', strings.SAVE) as string,</span>
+      },
+      { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_2 },
+    ],
+    [mapIcons]
+  );
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
       &lt;StepTitleDescription
-        description={[
-          { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_0 },
-          { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_1, hasTutorial: true },
-          { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_2 },
-        ]}
+        description={description}
         title={strings.SITE_EXCLUSION_AREAS_OPTIONAL}
         tutorialDescription={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION}
         tutorialDocLinkKey='planting_site_create_exclusions_boundary_instructions_video'
@@ -247,7 +283,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-11T20:18:23.624Z
+                at 2024-01-12T20:42:20.193Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

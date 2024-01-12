@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/common/BackToLink.tsx</title>
+    <title>Code coverage report for src/components/Map/useMapIcons.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/common</a> BackToLink.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Map</a> useMapIcons.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -95,11 +95,7 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -119,54 +115,49 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Theme } from '@mui/material';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from 'react';
+import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Icon } from '@terraware/web-components';
-import Link from './Link';
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  backIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    marginRight: theme.spacing(1),
-  },
-  back: {
-    alignItems: 'center',
-    display: 'flex',
-    width: 'fit-content',
+  icon: {
+    backgroundColor: theme.palette.TwClrBaseWhite,
+    border: `1px solid ${theme.palette.TwClrBgTertiary}`,
+    borderRadius: theme.spacing(0.5),
+    margin: theme.spacing(0, 0.5),
+    width: '20px',
+    height: '20px',
   },
 }));
 &nbsp;
-type BackToLinkProps = {
-  id: string;
-  name: string;
-  to: string;
-  className?: string;
-  replace?: boolean;
-};
+export type MapIconType = 'polygon' | 'slice' | 'trash';
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >BackToLink(</span>{ id, name, to, className, replace }: BackToLinkProps): JSX.Element {
+type MapIcons = Record&lt;MapIconType, JSX.Element&gt;;
+&nbsp;
+export default function <span class="fstat-no" title="function not covered" >useMapIcons(</span>): MapIcons {
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Link id={id} to={to} className={`${classes.back} ${className || ''}`} replace={replace}&gt;
-      &lt;Icon name='caretLeft' className={classes.backIcon} size='small' /&gt;
-      {name}
-    &lt;/Link&gt;
-  );
+  const icons: MapIcons = <span class="cstat-no" title="statement not covered" >useMemo&lt;MapIcons&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const polygon = <span class="cstat-no" title="statement not covered" >&lt;button className={`mapbox-gl-draw_polygon mapbox-gl-draw_ctrl-draw-btn ${classes.icon}`} /&gt;;</span>
+    const slice = <span class="cstat-no" title="statement not covered" >&lt;button className={`mapbox-gl-draw_line mapbox-gl-draw_ctrl-draw-btn ${classes.icon}`} /&gt;;</span>
+    const trash = <span class="cstat-no" title="statement not covered" >&lt;button className={`mapbox-gl-draw_trash mapbox-gl-draw_ctrl-draw-btn ${classes.icon}`} /&gt;;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return { polygon, slice, trash };</span>
+  }, [classes]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return icons;</span>
 }
 &nbsp;</pre></td></tr></table></pre>
 

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -231,12 +231,7 @@
 <a name='L166'></a><a href='#L166'>166</a>
 <a name='L167'></a><a href='#L167'>167</a>
 <a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a>
-<a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L169'></a><a href='#L169'>169</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -255,17 +250,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -290,19 +286,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -410,36 +400,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Button } from '@terraware/web-components';
 import TfMain from 'src/components/common/TfMain';
 import strings from 'src/strings';
-import ReportForm from './ReportForm';
 import { APP_PATHS } from 'src/constants';
-import { Box, Typography, useTheme } from '@mui/material';
 import { Report } from 'src/types/Report';
 import ReportService from 'src/services/ReportService';
-import { useHistory, useParams } from 'react-router-dom';
-import { Button } from '@terraware/web-components';
 import BackToLink from 'src/components/common/BackToLink';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
 import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
 import useReportFiles from 'src/components/Reports/useReportFiles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import ReportForm from './ReportForm';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ReportView(</span>): JSX.Element {
   const { reportId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ reportId: string }&gt;();</span>
-&nbsp;
-  const reportIdInt = <span class="cstat-no" title="statement not covered" >parseInt(reportId, 10);</span>
-&nbsp;
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-&nbsp;
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-&nbsp;
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
-&nbsp;
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
 &nbsp;
   const [report, setReport] = <span class="cstat-no" title="statement not covered" >useState&lt;Report&gt;();</span>
+  const [showAnnual, setShowAnnual] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const [confirmEditDialogOpen, setConfirmEditDialogOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+&nbsp;
+  const initialReportFiles = <span class="cstat-no" title="statement not covered" >useReportFiles(report);</span>
+&nbsp;
+  const reportIdInt = <span class="cstat-no" title="statement not covered" >parseInt(reportId, 10);</span>
+  const reportName = <span class="cstat-no" title="statement not covered" >`Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const getReport = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -452,23 +443,9 @@ export default function <span class="fstat-no" title="function not covered" >Rep
     };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (reportIdInt) {</span>
-<span class="cstat-no" title="statement not covered" >      getReport();</span>
+<span class="cstat-no" title="statement not covered" >      void getReport();</span>
     }
   }, [reportIdInt, snackbar]);
-&nbsp;
-  const [showAnnual, setShowAnnual] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-&nbsp;
-  const [confirmEditDialogOpen, setConfirmEditDialogOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-&nbsp;
-  const initialReportFiles = <span class="cstat-no" title="statement not covered" >useReportFiles(report);</span>
-&nbsp;
-  const startEdit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (report?.lockedByUserId) {</span>
-<span class="cstat-no" title="statement not covered" >      setConfirmEditDialogOpen(true);</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      confirmEdit();</span>
-    }
-  };
 &nbsp;
   const confirmEdit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
     // lock the report
@@ -479,6 +456,14 @@ export default function <span class="fstat-no" title="function not covered" >Rep
 <span class="cstat-no" title="statement not covered" >      history.replace({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', reportId) });</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);</span>
+    }
+  };
+&nbsp;
+  const startEdit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (report?.lockedByUserId) {</span>
+<span class="cstat-no" title="statement not covered" >      setConfirmEditDialogOpen(true);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      void confirmEdit();</span>
     }
   };
 &nbsp;
@@ -514,7 +499,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
           padding={theme.spacing(4, 3)}
         &gt;
           &lt;Typography fontSize='24px' fontWeight={600}&gt;
-            {report ? `Report (${report?.year}-Q${report?.quarter})` : ''}
+            {reportName}
           &lt;/Typography&gt;
           &lt;Box
             display='flex'
@@ -589,7 +574,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-11T20:18:23.624Z
+                at 2024-01-12T20:42:20.193Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
