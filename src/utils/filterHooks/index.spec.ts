@@ -1,4 +1,4 @@
-import { FiltersType, denormalizeValue, filtersEqual } from './useQueryFilters';
+import { FiltersType, denormalizeValue, filtersEqual } from 'src/utils/filterHooks';
 
 describe('filtersEqual', () => {
   it('should make sure the query filters and filters are considered equal even if there are some slight mismatches', () => {
