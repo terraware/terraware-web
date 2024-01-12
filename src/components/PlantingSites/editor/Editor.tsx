@@ -11,7 +11,6 @@ import { useLocalization } from 'src/providers';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
 import Card from 'src/components/common/Card';
-import { toMultiPolygonArray } from 'src/components/Map/utils';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import Form, { PlantingSiteStep, PlantingSiteStepType } from './Form';
 import Details from './Details';
@@ -157,7 +156,6 @@ export default function Editor(props: EditorProps): JSX.Element {
   };
 
   const onStartOver = () => {
-    // TODO: reset data here, confirm with user?
     setCurrentStep('site_boundary');
     setPlantingSite((current: PlantingSite) => ({
       ...current,

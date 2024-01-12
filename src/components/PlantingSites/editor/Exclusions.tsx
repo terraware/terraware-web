@@ -6,7 +6,7 @@ import { PlantingSite } from 'src/types/Tracking';
 import EditableMap, { RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
 import { toFeature, toMultiPolygonArray } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
-import useMapIcons from 'src/components/Map/useMapIcons';
+import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 
 export type ExclusionsProps = {
@@ -17,7 +17,6 @@ export type ExclusionsProps = {
 
 export default function Exclusions({ onChange, onValidate, site }: ExclusionsProps): JSX.Element {
   const [exclusions, setExclusions] = useState<FeatureCollection | undefined>();
-  const mapIcons = useMapIcons();
   const getRenderAttributes = useRenderAttributes();
 
   useEffect(() => {
@@ -61,12 +60,12 @@ export default function Exclusions({ onChange, onValidate, site }: ExclusionsPro
       {
         text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_1,
         hasTutorial: true,
-        handlePrefix: (prefix: string) => strings.formatString(prefix, mapIcons.polygon) as JSX.Element[],
+        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
         handleSuffix: (suffix: string) => strings.formatString(suffix, '', strings.SAVE) as string,
       },
       { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_2 },
     ],
-    [mapIcons]
+    []
   );
 
   return (

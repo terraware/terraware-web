@@ -1,6 +1,7 @@
 import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
 import intersect from '@turf/intersect';
 import difference from '@turf/difference';
+import center from '@turf/center';
 import _ from 'lodash';
 import { GeometryFeature, MapSourceProperties, MapSourceRenderProperties } from 'src/types/Map';
 
@@ -158,4 +159,24 @@ export const cutPolygons = (source: GeometryFeature[], cutWith: Geometry): Geome
   }, [] as GeometryFeature[]);
 
   return _.isEqual(splitFeatures, source) ? null : splitFeatures;
+};
+
+/**
+ * Returns left most feature with it's center point.
+ * @param features
+ *   The features' geometries to consider.
+ * @returns
+ *   left most feature and it's center point if one exists
+ *   otherwise, null
+ */
+export const leftMostFeature = (features: GeometryFeature[]): { feature: GeometryFeature; center: number[] } | null => {
+  return (
+    features
+      .map((feature) => ({
+        feature,
+        center: center(feature.geometry)?.geometry?.coordinates,
+      }))
+      .filter((data) => data.center)
+      .sort((data1, data2) => data1.center[0] - data2.center[0])[0] ?? null
+  );
 };

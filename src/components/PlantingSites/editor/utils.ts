@@ -1,4 +1,3 @@
-import { MultiPolygon } from 'geojson';
 import { PlantingZone } from 'src/types/Tracking';
 
 export type DefaultZonePayload = Omit<PlantingZone, 'plantingSubzones' | 'areaHa'>;

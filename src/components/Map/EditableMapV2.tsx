@@ -59,7 +59,6 @@ export default function EditableMap({
   const visible = useIsVisible(containerRef);
   const theme = useTheme();
   const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle();
-  let destroying = false;
 
   const onMapError = useCallback(
     (event: any) => {
@@ -121,11 +120,8 @@ export default function EditableMap({
 
   // close popup on click
   const onPopupClose = useCallback(() => {
-    if (destroying) {
-      return; // otherwise errors out updating feature state while map is being destroyed
-    }
     setPopupInfo((curr) => (curr ? { ...curr, active: false } : null));
-  }, [destroying]);
+  }, []);
 
   // clear popup state and set geometry as not selected (so rendering shows it as not selected)
   const clearPopupInfo = useCallback(() => {
@@ -266,9 +262,6 @@ export default function EditableMap({
             initialViewState={initialViewState}
             interactiveLayerIds={interactiveLayerIds}
             onClick={onMapClick}
-            onRemove={() => {
-              destroying = true;
-            }}
           >
             {mapLayers}
             <FullscreenControl position='top-left' />

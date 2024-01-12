@@ -7,7 +7,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import { toFeature, toMultiPolygonArray } from 'src/components/Map/utils';
 import EditableMap from 'src/components/Map/EditableMapV2';
-import useMapIcons from 'src/components/Map/useMapIcons';
+import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { defaultZonePayload } from './utils';
 
@@ -21,7 +21,6 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
   const [description, setDescription] = useState<Description[]>([]);
   const [siteBoundary, setSiteBoundary] = useState<FeatureCollection | undefined>();
   const [mode, setMode] = useState<MapEditorMode>();
-  const mapIcons = useMapIcons();
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -57,7 +56,7 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
       {
         text: strings.SITE_BOUNDARY_DESCRIPTION_2,
         hasTutorial: true,
-        handlePrefix: (prefix: string) => strings.formatString(prefix, mapIcons.polygon) as JSX.Element[],
+        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
       },
     ];
 
@@ -66,11 +65,13 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
     } else if (mode === 'CreatingBoundary') {
       data.push({ text: strings.SITE_BOUNDARY_DESCRIPTION_3 });
     } else if (mode === 'EditingBoundary' || mode === 'BoundarySelected') {
-      data.push({ text: strings.formatString(strings.SITE_BOUNDARY_DESCRIPTION_4, mapIcons.trash) as JSX.Element[] });
+      data.push({
+        text: strings.formatString(strings.SITE_BOUNDARY_DESCRIPTION_4, <MapIcon icon='trash' />) as JSX.Element[],
+      });
     }
 
     setDescription(data);
-  }, [mapIcons, mode]);
+  }, [mode]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
