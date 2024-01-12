@@ -4,7 +4,7 @@ import { TableColumnType } from '@terraware/web-components';
 import { Box, Grid } from '@mui/material';
 import _, { isArray } from 'lodash';
 import strings from 'src/strings';
-import { useQueryFilters } from 'src/utils/useQueryFilters';
+import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { InventoryFiltersUnion } from 'src/components/InventoryV2/InventoryFilter';
 import { APP_PATHS } from 'src/constants';
@@ -17,17 +17,17 @@ import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton'
 import isEnabled from 'src/features';
 
 interface InventoryTableProps {
-  results: SearchResponseElement[];
-  temporalSearchValue: string;
-  setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
+  allowSelectionProjectAssign?: boolean;
+  columns: () => TableColumnType[];
   filters: InventoryFiltersUnion;
+  isPresorted: boolean;
+  origin: OriginPage;
+  reloadData?: () => void;
+  results: SearchResponseElement[];
   setFilters: (f: InventoryFiltersUnion) => void;
   setSearchSortOrder: (sortOrder: SearchSortOrder) => void;
-  isPresorted: boolean;
-  columns: () => TableColumnType[];
-  reloadData?: () => void;
-  origin?: OriginPage;
-  allowSelectionProjectAssign?: boolean;
+  setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
+  temporalSearchValue: string;
 }
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
@@ -44,35 +44,36 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     origin,
     allowSelectionProjectAssign,
   } = props;
+
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const history = useHistory();
-  const { queryFilters, setQueryFilters } = useQueryFilters();
+  const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
   const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
   const featureFlagProjects = isEnabled('Projects');
 
   // Sync query filters into view
   useEffect(() => {
     const { showEmptyBatches: filterShowEmptyBatches, ...restFilters } = filters;
-    const { showEmptyBatches: queryFilterShowEmptyBatches, ...restQueryFilters } = queryFilters;
+    const { showEmptyBatches: sessionFilterShowEmptyBatches, ...restSessionFilters } = sessionFilters;
 
-    let nextFilters: InventoryFiltersUnion = { ...restQueryFilters };
-    if (!_.isEqual(restFilters, restQueryFilters)) {
-      nextFilters = { ...restQueryFilters };
+    let nextFilters: InventoryFiltersUnion = { ...restSessionFilters };
+    if (!_.isEqual(restFilters, restSessionFilters)) {
+      nextFilters = { ...restSessionFilters };
     }
 
     // Since showEmptyBatches is a super special filter that unfortunately needs to
     // conform to SearchNodePayload (or refactor the ./Search and src/common/FilterGroup components), we need to change
     // the `true` and `false` values to `['true']` and `['false']`
-    if (queryFilterShowEmptyBatches) {
-      nextFilters.showEmptyBatches = isArray(queryFilterShowEmptyBatches)
-        ? queryFilterShowEmptyBatches.map((value) => `${value}`)
-        : [`${queryFilterShowEmptyBatches}`];
+    if (sessionFilterShowEmptyBatches) {
+      nextFilters.showEmptyBatches = isArray(sessionFilterShowEmptyBatches)
+        ? sessionFilterShowEmptyBatches.map((value) => `${value}`)
+        : [`${sessionFilterShowEmptyBatches}`];
     }
 
     if (!_.isEqual(filters, nextFilters)) {
       setFilters(nextFilters);
     }
-  }, [filters, queryFilters, setFilters]);
+  }, [filters, sessionFilters, setFilters]);
 
   const withdrawInventory = () => {
     const path = origin === 'Species' ? APP_PATHS.INVENTORY_WITHDRAW : APP_PATHS.BATCH_WITHDRAW;
@@ -151,7 +152,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           filters={filters}
           setFilters={(f) => {
             setFilters(f);
-            setQueryFilters(f);
+            setSessionFilters(f);
           }}
           origin={origin}
           showProjectsFilter={origin === 'Batches'}

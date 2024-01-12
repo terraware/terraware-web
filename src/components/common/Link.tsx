@@ -50,7 +50,6 @@ export default function Link(props: LinkProps): JSX.Element {
       component='button'
       className={classNameToUse}
       onClick={onClick}
-      target={target}
       id={id}
       disabled={disabled}
       sx={{
