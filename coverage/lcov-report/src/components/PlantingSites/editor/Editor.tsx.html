@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/PlantingSites/editor/PlantingSiteEditor.tsx</title>
+    <title>Code coverage report for src/components/PlantingSites/editor/Editor.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/PlantingSites/editor</a> PlantingSiteEditor.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/PlantingSites/editor</a> Editor.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -276,7 +276,15 @@
 <a name='L211'></a><a href='#L211'>211</a>
 <a name='L212'></a><a href='#L212'>212</a>
 <a name='L213'></a><a href='#L213'>213</a>
-<a name='L214'></a><a href='#L214'>214</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -328,6 +336,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -445,12 +454,19 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -489,7 +505,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo, useRef, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useMemo, useRef, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 import { FeatureCollection } from 'geojson';
@@ -505,15 +521,15 @@ import useForm from 'src/utils/useForm';
 import Card from 'src/components/common/Card';
 import { toMultiPolygonArray } from 'src/components/Map/utils';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import PlantingSiteForm, { PlantingSiteStep, PlantingSiteStepType } from './PlantingSiteForm';
-import PlantingSiteDetails from './PlantingSiteDetails';
-import PlantingSiteBoundary from './PlantingSiteBoundary';
-import PlantingSiteExclusions from './PlantingSiteExclusions';
-import PlantingSiteZoneBoundaries from './PlantingSiteZoneBoundaries';
-import PlantingSiteSubzoneBoundaries from './PlantingSiteSubzoneBoundaries';
+import Form, { PlantingSiteStep, PlantingSiteStepType } from './Form';
+import Details from './Details';
+import SiteBoundary from './SiteBoundary';
+import Exclusions from './Exclusions';
+import Zones from './Zones';
+import Subzones from './Subzones';
 import StartOverConfirmation from './StartOverConfirmation';
 &nbsp;
-type PlantingSiteEditorProps = {
+type EditorProps = {
   reloadPlantingSites: () =&gt; void;
   site: PlantingSite;
   siteType: SiteType;
@@ -527,7 +543,7 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
   },
 }));
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantingSiteEditor(</span>props: PlantingSiteEditorProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >Editor(</span>props: EditorProps): JSX.Element {
   const { reloadPlantingSites, site, siteType } = <span class="cstat-no" title="statement not covered" >props;</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
@@ -539,6 +555,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   const [showStartOver, setShowStartOver] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [siteBoundary, setSiteBoundary] = <span class="cstat-no" title="statement not covered" >useState&lt;FeatureCollection | undefined&gt;();</span>
   const [exclusions, setExclusions] = <span class="cstat-no" title="statement not covered" >useState&lt;FeatureCollection | undefined&gt;();</span>
+  const [zones, setZones] = <span class="cstat-no" title="statement not covered" >useState&lt;FeatureCollection | undefined&gt;();</span>
   const [currentStep, setCurrentStep] = <span class="cstat-no" title="statement not covered" >useState&lt;PlantingSiteStepType&gt;('details');</span>
   const [completedOptionalSteps, setCompletedOptionalSteps] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;PlantingSiteStepType, boolean&gt;&gt;(</span>
     {} as Record&lt;PlantingSiteStepType, boolean&gt;
@@ -666,6 +683,13 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >    setShowStartOver(false);</span>
   };
 &nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (siteBoundary &amp;&amp; !site.plantingZones?.length) {</span>
+      // TODO: process properties etc here
+<span class="cstat-no" title="statement not covered" >      setZones(siteBoundary);</span>
+    }
+  }, [siteBoundary, site.plantingZones?.length]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain&gt;
       {showStartOver &amp;&amp; &lt;StartOverConfirmation onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowStartOver(false)}</span> onConfirm={onStartOver} /&gt;}
@@ -676,7 +700,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           &lt;/Typography&gt;
         &lt;/Box&gt;
       &lt;/PageHeaderWrapper&gt;
-      &lt;PlantingSiteForm
+      &lt;Form
         currentStep={currentStep}
         onCancel={onCancel}
         onSaveAndNext={onSaveAndNext}
@@ -686,19 +710,19 @@ export default function <span class="fstat-no" title="function not covered" >Pla
         className={classes.container}
       &gt;
         &lt;Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}&gt;
-          {currentStep === 'details' &amp;&amp; &lt;PlantingSiteDetails onChange={onChange} site={plantingSite} /&gt;}
+          {currentStep === 'details' &amp;&amp; &lt;Details onChange={onChange} site={plantingSite} /&gt;}
           {currentStep === 'site_boundary' &amp;&amp; (
-            &lt;PlantingSiteBoundary boundary={siteBoundary} setBoundary={setSiteBoundary} /&gt;
+            &lt;SiteBoundary siteBoundary={siteBoundary} setSiteBoundary={setSiteBoundary} /&gt;
           )}
           {currentStep === 'exclusion_areas' &amp;&amp; (
-            &lt;PlantingSiteExclusions boundary={exclusions} setBoundary={setExclusions} site={plantingSite} /&gt;
+            &lt;Exclusions exclusions={exclusions} setExclusions={setExclusions} site={plantingSite} /&gt;
           )}
-          {currentStep === 'zone_boundaries' &amp;&amp; &lt;PlantingSiteZoneBoundaries onChange={onChange} site={plantingSite} /&gt;}
-          {currentStep === 'subzone_boundaries' &amp;&amp; (
-            &lt;PlantingSiteSubzoneBoundaries onChange={onChange} site={plantingSite} /&gt;
+          {currentStep === 'zone_boundaries' &amp;&amp; (
+            &lt;Zones exclusions={exclusions} zones={zones} setZones={setZones} site={plantingSite} /&gt;
           )}
+          {currentStep === 'subzone_boundaries' &amp;&amp; &lt;Subzones onChange={onChange} site={plantingSite} /&gt;}
         &lt;/Card&gt;
-      &lt;/PlantingSiteForm&gt;
+      &lt;/Form&gt;
     &lt;/TfMain&gt;
   );
 }
@@ -709,7 +733,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-12T21:57:19.067Z
+                at 2024-01-12T22:24:12.315Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

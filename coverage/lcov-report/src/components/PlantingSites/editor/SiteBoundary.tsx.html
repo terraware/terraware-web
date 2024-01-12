@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/PlantingSites/editor/PlantingSiteSubzoneBoundaries.tsx</title>
+    <title>Code coverage report for src/components/PlantingSites/editor/SiteBoundary.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/PlantingSites/editor</a> PlantingSiteSubzoneBoundaries.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/PlantingSites/editor</a> SiteBoundary.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -102,7 +102,26 @@
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -116,13 +135,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -133,6 +149,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,42 +169,65 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
+import { FeatureCollection } from 'geojson';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
+import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
+import EditableMap from 'src/components/Map/EditableMapV2';
 import useMapIcons from 'src/components/Map/useMapIcons';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 &nbsp;
-export type PlantingSiteBoundaryProps = {
-  onChange: (id: string, value: unknown) =&gt; void;
-  site: PlantingSite;
+export type SiteBoundaryProps = {
+  setSiteBoundary: (siteBoundary?: FeatureCollection) =&gt; void;
+  siteBoundary?: FeatureCollection;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantingSiteBoundary(</span>props: PlantingSiteBoundaryProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >SiteBoundary(</span>{ setSiteBoundary, siteBoundary }: SiteBoundaryProps): JSX.Element {
+  const [description, setDescription] = <span class="cstat-no" title="statement not covered" >useState&lt;Description[]&gt;([]);</span>
+  const [mode, setMode] = <span class="cstat-no" title="statement not covered" >useState&lt;MapEditorMode&gt;();</span>
   const mapIcons = <span class="cstat-no" title="statement not covered" >useMapIcons();</span>
 &nbsp;
-  const description = <span class="cstat-no" title="statement not covered" >useMemo&lt;Description[]&gt;(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
-      { text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_0 },
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const data: Description[] = <span class="cstat-no" title="statement not covered" >[</span>
+      { text: strings.SITE_BOUNDARY_DESCRIPTION_0 },
+      { text: strings.SITE_BOUNDARY_DESCRIPTION_1 },
       {
-        text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,
+        text: strings.SITE_BOUNDARY_DESCRIPTION_2,
         hasTutorial: true,
-        handlePrefix: <span class="fstat-no" title="function not covered" >(p</span>refix: string) =&gt; <span class="cstat-no" title="statement not covered" >strings.formatString(prefix, mapIcons.slice) as JSX.Element[],</span>
+        handlePrefix: <span class="fstat-no" title="function not covered" >(p</span>refix: string) =&gt; <span class="cstat-no" title="statement not covered" >strings.formatString(prefix, mapIcons.polygon) as JSX.Element[],</span>
       },
-    ],
-    [mapIcons]
-  );
+    ];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (!mode) {</span>
+<span class="cstat-no" title="statement not covered" >      data.push({ text: strings.LOADING });</span>
+    } else <span class="cstat-no" title="statement not covered" >if (mode === 'CreatingBoundary') {</span>
+<span class="cstat-no" title="statement not covered" >      data.push({ text: strings.SITE_BOUNDARY_DESCRIPTION_3 });</span>
+    } else <span class="cstat-no" title="statement not covered" >if (mode === 'EditingBoundary' || mode === 'BoundarySelected') {</span>
+<span class="cstat-no" title="statement not covered" >      data.push({ text: strings.formatString(strings.SITE_BOUNDARY_DESCRIPTION_4, mapIcons.trash) as JSX.Element[] });</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    setDescription(data);</span>
+  }, [mapIcons, mode]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Box display='flex' flexDirection='column'&gt;
+    &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
       &lt;StepTitleDescription
         description={description}
-        title={strings.SITE_SUBZONE_BOUNDARIES}
-        tutorialDescription={strings.ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION}
-        tutorialDocLinkKey='planting_site_create_subzone_boundary_instructions_video'
-        tutorialTitle={strings.ADDING_SUBZONE_BOUNDARIES}
+        dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
+        minHeight='192px'
+        title={strings.SITE_BOUNDARY}
+        tutorialDescription={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION}
+        tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
+        tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       /&gt;
+      &lt;EditableMap onEditableBoundaryChanged={setSiteBoundary} editableBoundary={siteBoundary} setMode={setMode} /&gt;
     &lt;/Box&gt;
   );
 }
@@ -187,7 +238,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-12T21:57:19.067Z
+                at 2024-01-12T22:24:12.315Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
