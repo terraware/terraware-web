@@ -1,5 +1,5 @@
 import strings from 'src/strings';
-import { labSubstrates, nurserySubstrates } from 'src/types/Accession';
+import { labSubstrates, accessionNurserySubstrates } from 'src/types/Accession';
 
 export const getFullTestType = (testType: 'Lab' | 'Nursery' | 'Cut') => {
   if (testType === 'Lab') {
@@ -15,7 +15,7 @@ export const getSubstratesAccordingToType = (type?: string) => {
   if (type === 'Lab') {
     return labSubstrates();
   } else if (type === 'Nursery') {
-    return nurserySubstrates();
+    return accessionNurserySubstrates();
   } else {
     return [];
   }
