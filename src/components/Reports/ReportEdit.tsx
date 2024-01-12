@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { BusySpinner, FormButton } from '@terraware/web-components';
-import TfMain from 'src/components/common/TfMain';
-import PageForm from 'src/components/common/PageForm';
-import strings from 'src/strings';
-import ReportForm from 'src/components/Reports/ReportForm';
+import { makeStyles } from '@mui/styles';
 import { Box, Typography, useTheme } from '@mui/material';
+import produce from 'immer';
+import { overWordLimit } from 'src/utils/text';
+import strings from 'src/strings';
 import ReportService from 'src/services/ReportService';
 import { Report, ReportFile } from 'src/types/Report';
-import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
-import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
-import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
 import { useOrganization, useUser } from 'src/providers';
-import produce from 'immer';
-import CannotEditReportDialog from './InvalidUserModal';
+import ReportForm from 'src/components/Reports/ReportForm';
+import TfMain from 'src/components/common/TfMain';
+import PageForm from 'src/components/common/PageForm';
+import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
+import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useReportFiles from 'src/components/Reports/useReportFiles';
+import CannotEditReportDialog from 'src/components/Reports/InvalidUserModal';
 import {
   buildCompletedDateValid,
   buildStartedDateValid,
   operationStartedDateValid,
-} from 'src/components/Reports/LocationSection';
-import { overWordLimit } from 'src/utils/text';
-import { makeStyles } from '@mui/styles';
+} from 'src/components/Reports/LocationSelection/util';
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -50,6 +50,7 @@ export default function ReportEdit(): JSX.Element {
   const [updatedReportFiles, setUpdatedReportFiles] = useState<ReportFile[]>([]);
   const [showAnnual, setShowAnnual] = useState(false);
   const [confirmSubmitDialogOpen, setConfirmSubmitDialogOpen] = useState(false);
+  const [currentUserEditing, setCurrentUserEditing] = useState(true);
 
   const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
 
@@ -75,7 +76,7 @@ export default function ReportEdit(): JSX.Element {
     };
 
     if (reportIdInt) {
-      getReport();
+      void getReport();
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
@@ -93,7 +94,6 @@ export default function ReportEdit(): JSX.Element {
     await Promise.all(newReportFiles?.map((f) => ReportService.uploadReportFile(reportIdInt, f)) ?? []);
   };
 
-  const [currentUserEditing, setCurrentUserEditing] = useState(true);
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
