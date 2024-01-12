@@ -186,7 +186,7 @@ export default function Editor(props: EditorProps): JSX.Element {
         className={classes.container}
       >
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}>
-          {currentStep === 'details' && <Details onChange={onChange} site={plantingSite} />}
+          {currentStep === 'details' && <Details onChange={onChange} onValidate={onValidate} site={plantingSite} />}
           {currentStep === 'site_boundary' && (
             <SiteBoundary onChange={onChange} onValidate={onValidate} site={plantingSite} />
           )}
@@ -196,7 +196,9 @@ export default function Editor(props: EditorProps): JSX.Element {
           {currentStep === 'zone_boundaries' && (
             <Zones onChange={onChange} onValidate={onValidate} site={plantingSite} />
           )}
-          {currentStep === 'subzone_boundaries' && <Subzones onChange={onChange} site={plantingSite} />}
+          {currentStep === 'subzone_boundaries' && (
+            <Subzones onChange={onChange} onValidate={onValidate} site={plantingSite} />
+          )}
         </Card>
       </Form>
     </TfMain>

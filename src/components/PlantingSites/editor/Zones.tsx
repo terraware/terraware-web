@@ -63,29 +63,29 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
     // TODO: use new BE API when it is ready, to populate the zones for creation with
     // right now this onChange does nothing but allow us to move to next phase of subzones cutting
     if (onValidate) {
+      let numZones = 0;
       if (zones) {
-        onChange(
-          'plantingZones',
-          zones.features
-            .map((zone, index) => {
-              const { geometry, properties } = zone;
-              const multiPolygon = toMultiPolygon(geometry);
+        const plantingZones = zones.features
+          .map((zone, index) => {
+            const { geometry, properties } = zone;
+            const multiPolygon = toMultiPolygon(geometry);
 
-              if (multiPolygon) {
-                return defaultZonePayload({
-                  boundary: multiPolygon,
-                  id: properties?.id ?? index,
-                  name: properties?.name ?? '',
-                  targetPlantingDensity: properties?.targetPlantingDensity ?? 0,
-                });
-              } else {
-                return undefined;
-              }
-            })
-            .filter((data) => !!data)
-        );
+            if (multiPolygon) {
+              return defaultZonePayload({
+                boundary: multiPolygon,
+                id: properties?.id ?? index,
+                name: properties?.name ?? '',
+                targetPlantingDensity: properties?.targetPlantingDensity ?? 0,
+              });
+            } else {
+              return undefined;
+            }
+          })
+          .filter((data) => !!data);
+        onChange('plantingZones', plantingZones);
+        numZones = plantingZones.length;
       }
-      onValidate(zones === undefined);
+      onValidate(zones === undefined, numZones > 1);
     }
   }, [onChange, onValidate, zones]);
 
