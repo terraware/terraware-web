@@ -33,30 +33,29 @@ const useStyles = makeStyles((theme) => ({
 export default function ReportEdit(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { reportId } = useParams<{ reportId: string }>();
-  const reportIdInt = parseInt(reportId, 10);
   const { user } = useUser();
-
   const theme = useTheme();
-
   const classes = useStyles();
-
   const history = useHistory();
-
   const snackbar = useSnackbar();
 
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
-
   const [photos, setPhotos] = useState<File[]>([]);
-
   const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
-
   const [report, setReport] = useState<Report>();
-
   const [validateFields, setValidateFields] = useState(false);
-
   const [busyState, setBusyState] = useState(false);
-
   const [idInView, setIdInView] = useState('');
+  const [newReportFiles, setNewReportFiles] = useState<File[]>([]);
+  const [updatedReportFiles, setUpdatedReportFiles] = useState<ReportFile[]>([]);
+  const [showAnnual, setShowAnnual] = useState(false);
+  const [confirmSubmitDialogOpen, setConfirmSubmitDialogOpen] = useState(false);
+
+  const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
+
+  const reportIdInt = parseInt(reportId, 10);
+  const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
+
   useEffect(() => {
     const el = document.getElementById(idInView);
     if (el) {
@@ -81,12 +80,6 @@ export default function ReportEdit(): JSX.Element {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
   }, [reportIdInt, snackbar]);
-
-  const [newReportFiles, setNewReportFiles] = useState<File[]>([]);
-
-  const [updatedReportFiles, setUpdatedReportFiles] = useState<ReportFile[]>([]);
-
-  const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
 
   const updateFiles = async () => {
     await Promise.all(
@@ -124,10 +117,6 @@ export default function ReportEdit(): JSX.Element {
       setShowInvalidUserModal(true);
     }
   }, [report, user, showInvalidUserModal, currentUserEditing]);
-
-  const [showAnnual, setShowAnnual] = useState(false);
-
-  const [confirmSubmitDialogOpen, setConfirmSubmitDialogOpen] = useState(false);
 
   const updatePhotos = async (iReportId: number) => {
     await ReportService.uploadReportPhotos(iReportId, photos);
@@ -498,7 +487,7 @@ export default function ReportEdit(): JSX.Element {
       {busyState && <BusySpinner withSkrim={true} />}
       <Box padding={theme.spacing(3)}>
         <Typography fontSize='24px' fontWeight={600}>
-          {report ? `Report (${report?.year}-Q${report?.quarter})` : ''}
+          {reportName}
         </Typography>
       </Box>
       {report && (
