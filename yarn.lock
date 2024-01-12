@@ -15201,6 +15201,13 @@ tslint-eslint-rules@^5.4.0:
     tslib "1.9.0"
     tsutils "^3.0.0"
 
+tslint-plugin-cypress@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/tslint-plugin-cypress/-/tslint-plugin-cypress-1.0.4.tgz#d4d063636aa036e9e2da287e8b18f10f40c44a97"
+  integrity sha512-Jnda+0veg1Ah27qSpzXaDpGFvqApugix8FazyMYhTCMO7S4H5LC0CnbeklT92PZ8cHbCwEuRLJghu1d1J+Z1zg==
+  dependencies:
+    tsutils "^3.0.0"
+
 tslint-react-hooks@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/tslint-react-hooks/-/tslint-react-hooks-2.2.2.tgz#4dc9b3986196802d45c11cc0bf6319a8116fe2ed"
