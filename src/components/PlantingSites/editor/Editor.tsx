@@ -163,7 +163,6 @@ export default function Editor(props: EditorProps): JSX.Element {
   };
 
   const onStartOver = () => {
-    // TODO: reset data here, confirm with user?
     setCurrentStep('site_boundary');
     setSiteBoundary(undefined);
     setExclusions(undefined);

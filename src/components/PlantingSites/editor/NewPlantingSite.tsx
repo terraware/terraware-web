@@ -15,7 +15,7 @@ export default function NewPlantingSite(props: NewPlantingSiteProps): JSX.Elemen
 
   const site = useMemo<PlantingSite>(
     () => ({
-      id: -1,
+      id: 0,
       name: '',
       organizationId: selectedOrganization.id,
       plantingSeasons: [],

@@ -5,7 +5,7 @@ import { Button } from '@terraware/web-components';
 import { FeatureCollection } from 'geojson';
 import _ from 'lodash';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
-import { ReadOnlyBoundary } from './types';
+import { ReadOnlyBoundary } from 'src/types/Map';
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {

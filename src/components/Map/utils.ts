@@ -1,9 +1,9 @@
 import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
 import intersect from '@turf/intersect';
 import difference from '@turf/difference';
+import center from '@turf/center';
 import _ from 'lodash';
-import { MapSourceProperties, MapSourceRenderProperties } from 'src/types/Map';
-import { GeometryFeature } from './types';
+import { GeometryFeature, MapSourceProperties, MapSourceRenderProperties } from 'src/types/Map';
 
 export function toMultiPolygon(geometry: Geometry): MultiPolygon | null {
   if (geometry.type === 'MultiPolygon') {
@@ -24,18 +24,18 @@ export function toMultiPolygonArray(featureCollection: FeatureCollection): Multi
 }
 
 export function toFeature(
-  multiPolygon: MultiPolygon,
+  poly: Geometry,
   properties: MapSourceProperties,
-  id: number
-): Feature & { id: number } {
+  id: string | number
+): Feature & { id: string | number } {
+  const idToUse = id === -1 ? 0 : id;
+  const geometry = toMultiPolygon(poly) || { type: 'MultiPolygon', coordinates: [] };
+
   return {
     type: 'Feature',
-    geometry: {
-      type: 'MultiPolygon',
-      coordinates: multiPolygon.coordinates,
-    },
-    properties,
-    id,
+    geometry,
+    properties: { ...properties, id: properties.id ?? idToUse },
+    id: idToUse,
   };
 }
 
@@ -141,11 +141,42 @@ export const cutPolygons = (source: GeometryFeature[], cutWith: Geometry): Geome
     if (curr !== null) {
       const subtracted = originalFeature.properties?.isFixed ? null : difference(originalFeature, curr);
       if (subtracted !== null) {
-        return [...acc, subtracted, curr];
+        const subtractedPolys = toMultiPolygon(subtracted.geometry);
+        if (subtractedPolys !== null && subtractedPolys.coordinates.length) {
+          // split disjoint polygons into separate features
+          const subtractedFeatures = subtractedPolys.coordinates.map((coords, coordsIndex) => {
+            const f = coordsIndex === 0 ? originalFeature : { ...originalFeature, properties: {}, id: undefined };
+            return {
+              ...f,
+              geometry: { type: 'MultiPolygon', coordinates: [coords] },
+            };
+          }) as GeometryFeature[];
+          return [...acc, ...subtractedFeatures, curr];
+        }
       }
     }
     return [...acc, originalFeature];
   }, [] as GeometryFeature[]);
 
   return _.isEqual(splitFeatures, source) ? null : splitFeatures;
+};
+
+/**
+ * Returns left most feature with it's center point.
+ * @param features
+ *   The features' geometries to consider.
+ * @returns
+ *   left most feature and it's center point if one exists
+ *   otherwise, null
+ */
+export const leftMostFeature = (features: GeometryFeature[]): { feature: GeometryFeature; center: number[] } | null => {
+  return (
+    features
+      .map((feature) => ({
+        feature,
+        center: center(feature.geometry)?.geometry?.coordinates,
+      }))
+      .filter((data) => data.center)
+      .sort((data1, data2) => data1.center[0] - data2.center[0])[0] ?? null
+  );
 };
