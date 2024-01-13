@@ -10,6 +10,7 @@ import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
+import DetectAppVersion from 'src/components/common/DetectAppVersion';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -86,6 +87,7 @@ export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Elemen
 
   return (
     <>
+      <DetectAppVersion />
       <SnackbarMessage snack={snackbar} onClose={handleMessageClose} />
     </>
   );
