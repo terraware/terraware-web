@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1705509752669" clover="3.2.0">
-  <project timestamp="1705509752669" name="All files">
-    <metrics statements="16018" coveredstatements="471" conditionals="10271" coveredconditionals="137" methods="5048" coveredmethods="110" elements="31337" coveredelements="718" complexity="0" loc="16018" ncloc="16018" packages="127" files="630" classes="630"/>
+<coverage generated="1705516089474" clover="3.2.0">
+  <project timestamp="1705516089474" name="All files">
+    <metrics statements="16014" coveredstatements="471" conditionals="10273" coveredconditionals="137" methods="5046" coveredmethods="110" elements="31333" coveredelements="718" complexity="0" loc="16014" ncloc="16014" packages="127" files="630" classes="630"/>
     <package name="src">
       <metrics statements="255" coveredstatements="0" conditionals="201" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9167,29 +9167,29 @@
       <metrics statements="23" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="5" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectAssignModal/index.tsx">
         <metrics statements="23" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="36" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.ProjectAssignTopBarButton">
@@ -9345,9 +9345,9 @@
         <line num="71" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
       </file>
       <file name="ProjectForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectNewView/flow/ProjectForm.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
@@ -9515,9 +9515,9 @@
       </file>
     </package>
     <package name="src.components.ProjectOverviewItemCard">
-      <metrics statements="14" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="0"/>
+      <metrics statements="14" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="7" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectOverviewItemCard/index.tsx">
-        <metrics statements="14" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="14" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
@@ -9535,13 +9535,13 @@
       </file>
     </package>
     <package name="src.components.ProjectView">
-      <metrics statements="41" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="14" coveredmethods="0"/>
+      <metrics statements="37" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="12" coveredmethods="0"/>
       <file name="DeleteConfirmationDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectView/DeleteConfirmationDialog.tsx">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectView/index.tsx">
-        <metrics statements="40" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="13" coveredmethods="0"/>
+        <metrics statements="36" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
@@ -9557,31 +9557,27 @@
         <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="40" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="61" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="71" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="88" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="106" count="0" type="stmt"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.Projects">
@@ -9640,7 +9636,7 @@
         <line num="99" count="0" type="stmt"/>
         <line num="102" count="0" type="stmt"/>
         <line num="128" count="0" type="stmt"/>
-        <line num="148" count="0" type="stmt"/>
+        <line num="147" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.RegionSelector">
