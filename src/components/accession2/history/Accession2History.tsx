@@ -5,6 +5,8 @@ import AccessionService, { AccessionHistoryEntry } from 'src/services/AccessionS
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import _ from 'lodash';
+import { APP_PATHS } from '../../../constants';
+import Link from 'src/components/common/Link';
 
 interface Accession2HistoryProps {
   accession: Accession;
@@ -28,8 +30,19 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
         snackbar.toastError();
       }
     };
-    loadHistory();
+    void loadHistory();
   }, [accession, snackbar, history]);
+
+  const HistoryText = (item: AccessionHistoryEntry) => (
+    <Typography fontWeight={500}>
+      {item.fullName || strings.NAME_UNKNOWN}&nbsp;{item.description}
+      {item.notes && (
+        <Typography fontSize={'14px'} fontWeight={300}>
+          {item.notes}
+        </Typography>
+      )}
+    </Typography>
+  );
 
   if (!history) {
     return (
@@ -60,14 +73,12 @@ export default function Accession2History(props: Accession2HistoryProps): JSX.El
           <Typography color={theme.palette.TwClrTxtSecondary} whiteSpace='pre' marginRight={theme.spacing(3)}>
             {item.date}
           </Typography>
-          <Typography fontWeight={500}>
-            {item.fullName || strings.NAME_UNKNOWN}&nbsp;{item.description}
-            {item.notes && (
-              <Typography fontSize={'14px'} fontWeight={300}>
-                {item.notes}
-              </Typography>
-            )}
-          </Typography>
+
+          {item.batchId ? (
+            <Link to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', `${item.batchId}`)}>{HistoryText(item)}</Link>
+          ) : (
+            HistoryText(item)
+          )}
         </Box>
       ))}
     </Box>
