@@ -5,7 +5,7 @@ import AccessionService, { AccessionHistoryEntry } from 'src/services/AccessionS
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 import _ from 'lodash';
-import { APP_PATHS } from '../../../constants';
+import { APP_PATHS } from 'src/constants';
 import Link from 'src/components/common/Link';
 
 interface Accession2HistoryProps {
