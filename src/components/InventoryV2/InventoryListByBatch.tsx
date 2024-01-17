@@ -161,7 +161,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
     updatedResult = updatedResult?.filter((result) => showEmptyBatches || !isBatchEmpty(result));
 
     if (updatedResult) {
-      if (!debouncedSearchTerm && !filters.facilityIds?.length) {
+      if (!debouncedSearchTerm && !filters.facilityIds?.length && !filters.projectIds?.length) {
         setShowResults(updatedResult.length > 0);
       }
       if (getRequestId('searchInventory') === requestId) {

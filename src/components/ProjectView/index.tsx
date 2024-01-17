@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
 import { Crumb, Page } from 'src/components/BreadCrumbs';
 import Card from 'src/components/common/Card';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import theme from 'src/theme';
 import { useLocalization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
@@ -18,6 +17,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useSnackbar from 'src/utils/useSnackbar';
 import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncThunks';
 import DeleteConfirmationDialog from 'src/components/ProjectView/DeleteConfirmationDialog';
+import TextField from 'src/components/common/Textfield/Textfield';
 
 export default function ProjectView(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -40,22 +40,6 @@ export default function ProjectView(): JSX.Element {
       void dispatch(requestProject(projectId));
     }
   }, [projectId, project, dispatch]);
-
-  const makeFieldLabel = (label: string) => (
-    <Typography color={theme.palette.TwClrTxtSecondary} sx={{ marginBottom: theme.spacing(1) }}>
-      {label}
-    </Typography>
-  );
-
-  const makeFieldValue = (value: string | undefined) => (
-    <Typography
-      color={theme.palette.TwClrTxt}
-      fontSize={theme.typography.h6.fontSize}
-      sx={{ marginBottom: theme.spacing(2) }}
-    >
-      {value}
-    </Typography>
-  );
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     switch (optionItem.value) {
@@ -118,12 +102,16 @@ export default function ProjectView(): JSX.Element {
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
         <Grid container>
           <Grid item xs={4}>
-            {makeFieldLabel(strings.NAME)}
-            {makeFieldValue(project?.name)}
+            <TextField label={strings.NAME} id='name' type='text' value={project?.name} display={true} />
           </Grid>
           <Grid item xs={8}>
-            {makeFieldLabel(strings.DESCRIPTION)}
-            {makeFieldValue(project?.description)}
+            <TextField
+              label={strings.DESCRIPTION}
+              id='description'
+              type='text'
+              value={project?.description}
+              display={true}
+            />
           </Grid>
         </Grid>
       </Card>

@@ -105,7 +105,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
     });
 
     if (updatedResult) {
-      if (!debouncedSearchTerm && !filters.facilityIds?.length) {
+      if (!debouncedSearchTerm && !filters.facilityIds?.length && !filters.speciesIds?.length) {
         setShowResults(updatedResult.length > 0);
       }
       if (getRequestId('searchInventory') === requestId) {
@@ -115,7 +115,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
 
   useEffect(() => {
-    onApplyFilters();
+    void onApplyFilters();
   }, [filters, onApplyFilters]);
 
   return (
