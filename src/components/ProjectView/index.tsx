@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
 import { Crumb, Page } from 'src/components/BreadCrumbs';
 import Card from 'src/components/common/Card';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import theme from 'src/theme';
 import { useLocalization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
