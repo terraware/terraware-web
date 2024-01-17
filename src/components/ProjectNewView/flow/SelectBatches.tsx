@@ -148,7 +148,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
     setFilters,
   } = useProjectEntitySelection<SearchResponseBatches>({
     currentFlowState: flowState,
-    thisFlowState: 'accessions',
+    thisFlowState: 'batches',
     setHasEntities: setHasBatches,
     setProjectEntities: setProjectBatches,
     onNext,

@@ -112,7 +112,7 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
     setFilters,
   } = useProjectEntitySelection<PlantingSiteSearchResult>({
     currentFlowState: flowState,
-    thisFlowState: 'accessions',
+    thisFlowState: 'plantingSites',
     setHasEntities: setHasPlantingSites,
     setProjectEntities: setProjectPlantingSites,
     onNext,
