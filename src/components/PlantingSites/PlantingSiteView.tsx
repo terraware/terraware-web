@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react';
-import TfMain from 'src/components/common/TfMain';
-import { Box, Typography, Grid, Theme, useTheme, List, ListItem } from '@mui/material';
-import { Button, DropdownItem } from '@terraware/web-components';
-import strings from 'src/strings';
-import { useDeviceInfo } from '@terraware/web-components/utils';
-import { APP_PATHS } from 'src/constants';
 import { useHistory, useParams } from 'react-router-dom';
+import { Box, Typography, Grid, Theme, useTheme, List, ListItem } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { DateTime } from 'luxon';
+import { Button, DropdownItem } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
+import strings from 'src/strings';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
+import { PlantingSeason } from 'src/types/Tracking';
+import { useProjects } from 'src/hooks/useProjects';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import PageSnackbar from '../PageSnackbar';
-import { makeStyles } from '@mui/styles';
+import PageSnackbar from 'src/components/PageSnackbar';
 import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones';
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -18,8 +22,6 @@ import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
 import DeletePlantingSiteModal from './DeletePlantingSiteModal';
-import { PlantingSeason } from 'src/types/Tracking';
-import { DateTime } from 'luxon';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -40,6 +42,8 @@ export default function PlantingSiteView(): JSX.Element {
   const tz = useLocationTimeZone().get(plantingSite);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [plantingSeasons, setPlantingSeasons] = useState<PlantingSeason[]>([]);
+  const projectsEnabled = isEnabled('Projects');
+  const { selectedProject } = useProjects(plantingSite);
 
   const gridSize = () => {
     if (isMobile) {
@@ -140,6 +144,17 @@ export default function PlantingSiteView(): JSX.Element {
                   </ListItem>
                 ))}
               </List>
+            </Grid>
+          )}
+          {projectsEnabled && (
+            <Grid item xs={gridSize()} display='flex'>
+              <TextField
+                display={true}
+                id='project'
+                label={strings.PROJECT}
+                type='text'
+                value={selectedProject?.name}
+              />
             </Grid>
           )}
         </Grid>

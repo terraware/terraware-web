@@ -251,7 +251,7 @@ export default function PlantingSeasonsEdit(props: Props): JSX.Element {
         <Fragment key={index}>
           <Grid item xs={5} rowSpacing={2}>
             <DatePicker
-              id={`season-${index}-startDate}`}
+              id={`season-${index}-startDate`}
               label=''
               onChange={(value) => onPlantingSeasonChanged(index, 'startDate', value)}
               aria-label='date-picker'

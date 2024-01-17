@@ -6,6 +6,7 @@ import useForm from 'src/utils/useForm';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import SeedBankService, { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useProjects } from 'src/hooks/useProjects';
 import {
   Accession2Address,
   Accession2GPS,
@@ -26,8 +27,7 @@ import { useOrganization } from 'src/providers';
 import { getSeedBank } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
-import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
-import { useProjects } from 'src/components/InventoryV2/form/useProjects';
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import isEnabled from 'src/features';
 
 const SubTitleStyle = {
