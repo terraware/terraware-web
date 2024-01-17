@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -162,7 +162,9 @@
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
 <a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,6 +189,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -264,6 +268,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Checkbox } from '@terraware/web-components';
 import { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
+import isEnabled from 'src/features';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import TimeZoneSelector from './TimeZoneSelector';
@@ -291,6 +296,7 @@ export default function <span class="fstat-no" title="function not covered" >Loc
   const [lastSelected, setLastSelected] = <span class="cstat-no" title="statement not covered" >useState&lt;TimeZoneEntity&gt;(location);</span>
   const [orgTZChecked, setOrgTZChecked] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(!!location.timeZone);</span>
   const [timeZone, setTimeZone] = <span class="cstat-no" title="statement not covered" >useState&lt;TimeZoneDescription&gt;(timeZoneFetcher.get(lastSelected));</span>
+  const detailedSitesEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('User Detailed Sites');</span>
 &nbsp;
   const setEffectiveTimeZone = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (v</span>alue: TimeZoneDescription | undefined) =&gt; {
@@ -302,13 +308,13 @@ export default function <span class="fstat-no" title="function not covered" >Loc
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (location?.id &amp;&amp; location?.id !== -1) {</span>
-      const fetchedTimeZone = <span class="cstat-no" title="statement not covered" >timeZoneFetcher.get(location);</span>
+<span class="cstat-no" title="statement not covered" >    if ((location?.id &amp;&amp; location?.id !== -1) || (location &amp;&amp; detailedSitesEnabled)) {</span>
+      const fetchedTimeZone = <span class="cstat-no" title="statement not covered" >timeZoneFetcher.get(location, true);</span>
 <span class="cstat-no" title="statement not covered" >      setLastSelected(location);</span>
 <span class="cstat-no" title="statement not covered" >      setTimeZone(fetchedTimeZone);</span>
 <span class="cstat-no" title="statement not covered" >      setEffectiveTimeZone(fetchedTimeZone);</span>
     }
-  }, [location, timeZoneFetcher, setEffectiveTimeZone]);
+  }, [detailedSitesEnabled, location, timeZoneFetcher, setEffectiveTimeZone]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!location?.timeZone) {</span>
@@ -367,7 +373,7 @@ export default function <span class="fstat-no" title="function not covered" >Loc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-17T23:32:01.532Z
+                at 2024-01-17T23:44:04.827Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
