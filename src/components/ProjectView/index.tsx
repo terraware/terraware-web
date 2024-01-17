@@ -103,13 +103,7 @@ export default function ProjectView(): JSX.Element {
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
         <Grid container>
           <Grid item xs={4}>
-            <TextField
-              label={strings.NAME}
-              id='name'
-              type='text'
-              value={project?.name}
-              display={true}
-            />
+            <TextField label={strings.NAME} id='name' type='text' value={project?.name} display={true} />
           </Grid>
           <Grid item xs={8}>
             <TextField

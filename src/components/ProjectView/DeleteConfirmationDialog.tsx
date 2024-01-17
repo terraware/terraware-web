@@ -31,7 +31,14 @@ export default function DeleteConfirmationDialog({
           onClick={onCancel}
           key='button-1'
         />,
-        <Button id='confirmDeleteProject' priority='primary' type='destructive' label={strings.DELETE} onClick={onSubmit} key='button-2' />,
+        <Button
+          id='confirmDeleteProject'
+          priority='primary'
+          type='destructive'
+          label={strings.DELETE}
+          onClick={onSubmit}
+          key='button-2'
+        />,
       ]}
     >
       <Typography fontSize='16px' fontWeight={400}>
