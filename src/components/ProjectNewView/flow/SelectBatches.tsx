@@ -233,7 +233,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
               <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
                 {strings.formatString(strings.SELECT_SEEDLINGS_BATCHES_FOR_PROJECT, project.name)}
               </Typography>
-              <Typography sx={{ fontSize: '14px', fontWeight: 400 }}>
+              <Typography sx={{ fontSize: '14px', fontWeight: 400, marginBottom: '24px' }}>
                 {strings.formatString(strings.SELECT_SEEDLINGS_BATCHES_FOR_PROJECT_DESCRIPTION, project.name)}
               </Typography>
             </Grid>

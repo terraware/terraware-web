@@ -254,7 +254,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
               <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
                 {strings.formatString(strings.SELECT_ACCESSIONS_FOR_PROJECT, project.name)}
               </Typography>
-              <Typography sx={{ fontSize: '14px', fontWeight: 400 }}>
+              <Typography sx={{ fontSize: '14px', fontWeight: 400, marginBottom: '32px' }}>
                 {strings.formatString(strings.SELECT_ACCESSIONS_FOR_PROJECT_DESCRIPTION, project.name)}
               </Typography>
             </Grid>
