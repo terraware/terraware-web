@@ -34,7 +34,7 @@ import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import isEnabled from 'src/features';
 import { SearchResponseElement } from 'src/types/Search';
-import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { Project } from 'src/types/Project';
 

@@ -16,6 +16,8 @@ import { stateName } from 'src/types/Accession';
 import isEnabled from 'src/features';
 import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useProjects } from 'src/hooks/useProjects';
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useSubLocations } from 'src/components/InventoryV2/form/useSubLocations';
 import SubLocationsDropdown from 'src/components/InventoryV2/form/SubLocationsDropdown';
 import { useAccessions } from 'src/components/InventoryV2/form/useAccessions';
@@ -24,8 +26,6 @@ import { useSpecies } from 'src/components/InventoryV2/form/useSpecies';
 import SpeciesDropdown from 'src/components/InventoryV2/form/SpeciesDropdown';
 import { useNurseries } from 'src/components/InventoryV2/form/useNurseries';
 import NurseryDropdownV2 from 'src/components/InventoryV2/form/NurseryDropdownV2';
-import { useProjects } from 'src/components/InventoryV2/form/useProjects';
-import ProjectsDropdown from 'src/components/InventoryV2/form/ProjectsDropdown';
 import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
 
 export interface BatchDetailsFormProps {

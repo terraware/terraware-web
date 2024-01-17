@@ -3,7 +3,6 @@ import TfMain from 'src/components/common/TfMain';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import PageForm from 'src/components/common/PageForm';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 import useForm from 'src/utils/useForm';
 import TrackingService, {
   PlantingSiteId,
@@ -13,20 +12,17 @@ import TrackingService, {
 import { APP_PATHS } from 'src/constants';
 import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import PageSnackbar from '../PageSnackbar';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones';
 import { useOrganization } from 'src/providers/hooks';
-import { TimeZoneDescription } from 'src/types/TimeZones';
-import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
 import Card from 'src/components/common/Card';
 import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';
 import { makeStyles } from '@mui/styles';
 import { MultiPolygon } from 'geojson';
-import PlantingSeasonsEdit from 'src/components/PlantingSites/PlantingSeasonsEdit';
+import DetailsInputForm from './DetailsInputForm';
 
 type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
@@ -41,20 +37,16 @@ const useStyles = makeStyles(() => ({
 
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
   const { reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const history = useHistory();
   const snackbar = useSnackbar();
-  const [nameError, setNameError] = useState('');
   const [loaded, setLoaded] = useState(false);
-  const selectedPlantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
-  const [effectiveTimeZone, setEffectiveTimeZone] = useState<TimeZoneDescription | undefined>();
-  const [plantingSeasonsValid, setPlantingSeasonsValid] = useState(true);
+  const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>(undefined);
   const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
-  const [showSaveValidationErrors, setShowSaveValidationErrors] = useState(false);
+  const selectedPlantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
@@ -71,14 +63,15 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
 
   useEffect(() => {
     setRecord({
+      boundary: selectedPlantingSite?.boundary,
+      description: selectedPlantingSite?.description,
       id: selectedPlantingSite?.id || -1,
       name: selectedPlantingSite?.name || '',
-      description: selectedPlantingSite?.description,
-      boundary: selectedPlantingSite?.boundary,
-      plantingZones: selectedPlantingSite?.plantingZones,
-      timeZone: selectedPlantingSite?.timeZone,
       organizationId: selectedOrganization.id,
       plantingSeasons: selectedPlantingSite?.plantingSeasons || [],
+      plantingZones: selectedPlantingSite?.plantingZones,
+      projectId: selectedPlantingSite?.projectId,
+      timeZone: selectedPlantingSite?.timeZone,
     });
   }, [selectedPlantingSite, setRecord, selectedOrganization.id]);
 
@@ -89,37 +82,45 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     history.push(plantingSitesLocation);
   };
 
-  const savePlantingSite = async () => {
-    if (!record.name) {
-      setNameError(strings.REQUIRED_FIELD);
-      return;
-    }
+  const onSave = () =>
+    new Promise((resolve) => {
+      setOnValidate(() => async (hasErrors: boolean) => {
+        if (hasErrors) {
+          setOnValidate(undefined);
+          resolve(false);
+          return;
+        }
+        const saved = await savePlantingSite();
+        if (!saved) {
+          setOnValidate(undefined);
+          resolve(false);
+        }
+      });
+    });
 
-    if (!plantingSeasonsValid) {
-      setShowSaveValidationErrors(true);
-      return;
-    }
-
+  const savePlantingSite = async (): Promise<boolean> => {
     let response;
     let id = record.id;
     if (record.id === -1) {
       const newPlantingSite: PlantingSitePostRequestBody = {
-        name: record.name,
-        description: record.description,
-        organizationId: record.organizationId,
-        timeZone: record.timeZone,
         boundary: record.boundary,
+        description: record.description,
+        name: record.name,
+        organizationId: record.organizationId,
         plantingSeasons,
+        projectId: record.projectId,
+        timeZone: record.timeZone,
       };
       response = await TrackingService.createPlantingSite(newPlantingSite);
       id = (response as PlantingSiteId).id;
     } else {
       const updatedPlantingSite: PlantingSitePutRequestBody = {
-        name: record.name,
-        description: record.description,
-        timeZone: record.timeZone,
         boundary: record.boundary,
+        description: record.description,
+        name: record.name,
         plantingSeasons,
+        projectId: record.projectId,
+        timeZone: record.timeZone,
       };
       response = await TrackingService.updatePlantingSite(record.id, updatedPlantingSite);
     }
@@ -128,18 +129,11 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reloadPlantingSites();
       goToPlantingSite(id);
+      return true;
     } else {
       snackbar.toastError();
+      return false;
     }
-  };
-
-  const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
-    setRecord((previousRecord: PlantingSite): PlantingSite => {
-      return {
-        ...previousRecord,
-        timeZone: newTimeZone ? newTimeZone.id : undefined,
-      };
-    });
   };
 
   const onBoundaryChanged = (newBoundary: MultiPolygon | null) => {
@@ -151,20 +145,13 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     });
   };
 
-  const gridSize = () => {
-    if (isMobile) {
-      return 12;
-    }
-    return 4;
-  };
-
   return (
     <TfMain>
       <PageForm
         cancelID='cancelCreatePlantingSite'
         saveID='saveCreatePlantingSite'
         onCancel={() => goToPlantingSite(record.id)}
-        onSave={savePlantingSite}
+        onSave={onSave}
         className={classes.form}
       >
         <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
@@ -194,53 +181,14 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                 </Box>
                 <PageSnackbar />
                 <Card flushMobile style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                  <Grid container display='flex' spacing={3} flexGrow={0}>
-                    <Grid item xs={gridSize()}>
-                      <TextField
-                        id='name'
-                        label={strings.NAME_REQUIRED}
-                        type='text'
-                        onChange={(value) => onChange('name', value)}
-                        value={record.name}
-                        errorText={record.name ? '' : nameError}
-                      />
-                    </Grid>
-                    <Grid item xs={gridSize()}>
-                      <TextField
-                        id='description'
-                        label={strings.DESCRIPTION}
-                        type='textarea'
-                        onChange={(value) => onChange('description', value)}
-                        value={record.description}
-                      />
-                    </Grid>
-                    <Grid item xs={gridSize()}>
-                      <LocationTimeZoneSelector
-                        location={record}
-                        onChangeTimeZone={onChangeTimeZone}
-                        onEffectiveTimeZone={setEffectiveTimeZone}
-                        tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
-                      />
-                    </Grid>
-                    {record?.plantingZones && effectiveTimeZone && (
-                      <Grid item xs={gridSize()}>
-                        <TextField
-                          label={strings.UPCOMING_PLANTING_SEASONS}
-                          id='upcomingPlantingSeasons'
-                          type='text'
-                          display={true}
-                        />
-                        <PlantingSeasonsEdit
-                          plantingSeasons={record.plantingSeasons}
-                          setPlantingSeasons={setPlantingSeasons}
-                          setPlantingSeasonsValid={setPlantingSeasonsValid}
-                          setShowSaveValidationErrors={setShowSaveValidationErrors}
-                          showSaveValidationErrors={showSaveValidationErrors}
-                          timeZone={effectiveTimeZone}
-                        />
-                      </Grid>
-                    )}
-                  </Grid>
+                  <DetailsInputForm
+                    onChange={onChange}
+                    onValidate={onValidate}
+                    plantingSeasons={plantingSeasons}
+                    record={record}
+                    setPlantingSeasons={setPlantingSeasons}
+                    setRecord={setRecord}
+                  />
                   <Grid container flexGrow={1}>
                     <Grid item xs={12} display='flex'>
                       {record?.plantingZones ? (
