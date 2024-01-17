@@ -112,7 +112,7 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
     setFilters,
   } = useProjectEntitySelection<PlantingSiteSearchResult>({
     currentFlowState: flowState,
-    thisFlowState: 'accessions',
+    thisFlowState: 'plantingSites',
     setHasEntities: setHasPlantingSites,
     setProjectEntities: setProjectPlantingSites,
     onNext,
@@ -178,7 +178,7 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
                   display: 'flex',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  marginBottom: theme.spacing(2),
+                  marginBottom: theme.spacing(0),
                 }}
               >
                 <ProjectEntitySearch
@@ -200,6 +200,7 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
                 id='selectPlantingSitesTable'
                 orderBy='name'
                 showCheckbox={true}
+                showTopBar={true}
               />
             </Grid>
           </Grid>

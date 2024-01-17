@@ -143,7 +143,6 @@ export default function ProjectsList(): JSX.Element {
                     rows={results}
                     orderBy='name'
                     Renderer={ProjectCellRenderer}
-                    showCheckbox
                     selectedRows={[]}
                     setSelectedRows={() => undefined}
                     controlledOnSelect={false}
