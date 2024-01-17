@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import TfMain from 'src/components/common/TfMain';
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
+import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import { SiteType } from 'src/types/PlantingSite';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
@@ -52,6 +52,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     {} as Record<PlantingSiteStepType, boolean>
   );
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
+  const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
 
   const steps = useMemo<PlantingSiteStep[]>(() => {
     if (!activeLocale) {
@@ -190,6 +191,8 @@ export default function Editor(props: EditorProps): JSX.Element {
             <Details
               onChange={onChange}
               onValidate={onValidate}
+              plantingSeasons={plantingSeasons}
+              setPlantingSeasons={setPlantingSeasons}
               setPlantingSite={setPlantingSite}
               site={plantingSite}
             />

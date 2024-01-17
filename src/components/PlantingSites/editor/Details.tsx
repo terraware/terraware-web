@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Box } from '@mui/material';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import DetailsInputForm from 'src/components/PlantingSites/DetailsInputForm';
@@ -6,13 +5,20 @@ import DetailsInputForm from 'src/components/PlantingSites/DetailsInputForm';
 export type DetailsProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean) => void;
+  plantingSeasons?: UpdatedPlantingSeason[];
+  setPlantingSeasons: (plantingSeasons: UpdatedPlantingSeason[]) => void;
   setPlantingSite: (setFn: (previousValue: PlantingSite) => PlantingSite) => void;
   site: PlantingSite;
 };
 
-export default function Details({ onChange, onValidate, setPlantingSite, site }: DetailsProps): JSX.Element {
-  const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
-
+export default function Details({
+  onChange,
+  onValidate,
+  plantingSeasons,
+  setPlantingSeasons,
+  setPlantingSite,
+  site,
+}: DetailsProps): JSX.Element {
   return (
     <Box display='flex' flexDirection='column'>
       <DetailsInputForm
