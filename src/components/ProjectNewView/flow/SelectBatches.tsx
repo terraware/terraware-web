@@ -148,7 +148,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
     setFilters,
   } = useProjectEntitySelection<SearchResponseBatches>({
     currentFlowState: flowState,
-    thisFlowState: 'accessions',
+    thisFlowState: 'batches',
     setHasEntities: setHasBatches,
     setProjectEntities: setProjectBatches,
     onNext,
@@ -233,7 +233,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
               <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
                 {strings.formatString(strings.SELECT_SEEDLINGS_BATCHES_FOR_PROJECT, project.name)}
               </Typography>
-              <Typography sx={{ fontSize: '14px', fontWeight: 400 }}>
+              <Typography sx={{ fontSize: '14px', fontWeight: 400, marginBottom: '24px' }}>
                 {strings.formatString(strings.SELECT_SEEDLINGS_BATCHES_FOR_PROJECT_DESCRIPTION, project.name)}
               </Typography>
             </Grid>
@@ -244,7 +244,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                   display: 'flex',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  marginBottom: theme.spacing(2),
+                  marginBottom: theme.spacing(0),
                 }}
               >
                 <ProjectEntitySearch
@@ -266,6 +266,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                 id='selectBatchesTable'
                 orderBy='batchNumber'
                 showCheckbox={true}
+                showTopBar={true}
               />
             </Grid>
           </Grid>

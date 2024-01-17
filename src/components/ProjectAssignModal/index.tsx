@@ -9,6 +9,7 @@ import { selectProjectRequest } from 'src/redux/features/projects/projectsSelect
 import useSnackbar from 'src/utils/useSnackbar';
 import { requestProjectAssign } from 'src/redux/features/projects/projectsAsyncThunks';
 import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
+import { Grid } from '@mui/material';
 
 type ProjectAssignableEntity = { id: number; projectId?: number };
 interface ProjectAssignModalProps<T extends ProjectAssignableEntity> {
@@ -78,7 +79,9 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
         <Button label={strings.SAVE} onClick={handleSave} key='button-2' id='saveButton' />,
       ]}
     >
-      <ProjectsDropdown availableProjects={availableProjects} record={entity} setRecord={handleUpdateProject} />
+      <Grid item xs={12} textAlign='left'>
+        <ProjectsDropdown availableProjects={availableProjects} record={entity} setRecord={handleUpdateProject} />
+      </Grid>
     </DialogBox>
   );
 }

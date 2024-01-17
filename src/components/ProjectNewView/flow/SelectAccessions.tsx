@@ -254,7 +254,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
               <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
                 {strings.formatString(strings.SELECT_ACCESSIONS_FOR_PROJECT, project.name)}
               </Typography>
-              <Typography sx={{ fontSize: '14px', fontWeight: 400 }}>
+              <Typography sx={{ fontSize: '14px', fontWeight: 400, marginBottom: '32px' }}>
                 {strings.formatString(strings.SELECT_ACCESSIONS_FOR_PROJECT_DESCRIPTION, project.name)}
               </Typography>
             </Grid>
@@ -265,7 +265,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
                   display: 'flex',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  marginBottom: theme.spacing(2),
+                  marginBottom: theme.spacing(0),
                 }}
               >
                 <ProjectEntitySearch
@@ -279,7 +279,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
             </Grid>
 
             <Grid item xs={12}>
-              <Box marginTop={theme.spacing(2)}>
+              <Box marginTop={theme.spacing(0)}>
                 <Table
                   columns={columns}
                   rows={entities}
@@ -288,6 +288,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
                   id='selectAccessionsTable'
                   orderBy='accessionNumber'
                   showCheckbox={true}
+                  showTopBar={true}
                 />
               </Box>
             </Grid>
