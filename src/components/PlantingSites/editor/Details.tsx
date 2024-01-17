@@ -1,27 +1,28 @@
-import { useEffect } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
+import { useState } from 'react';
+import { Box } from '@mui/material';
+import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
+import DetailsInputForm from 'src/components/PlantingSites/DetailsInputForm';
 
 export type DetailsProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean) => void;
+  setPlantingSite: (setFn: (previousValue: PlantingSite) => PlantingSite) => void;
   site: PlantingSite;
 };
 
-export default function Details({ onValidate }: DetailsProps): JSX.Element {
-  const theme = useTheme();
-
-  useEffect(() => {
-    // TODO implement all the Details logic
-    onValidate?.(false);
-  }, [onValidate]);
+export default function Details({ onChange, onValidate, setPlantingSite, site }: DetailsProps): JSX.Element {
+  const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
 
   return (
     <Box display='flex' flexDirection='column'>
-      <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
-        {strings.DETAILS}
-      </Typography>
+      <DetailsInputForm
+        onChange={onChange}
+        onValidate={onValidate}
+        plantingSeasons={plantingSeasons}
+        record={site}
+        setPlantingSeasons={setPlantingSeasons}
+        setRecord={setPlantingSite}
+      />
     </Box>
   );
 }
