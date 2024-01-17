@@ -60,7 +60,7 @@ export default function ProjectEditView(): JSX.Element {
 
   return (
     <TfMain>
-      <Typography variant={'h3'}>{project?.name}</Typography>
+      <Typography fontSize='24px' fontWeight={600}>{project?.name}</Typography>
 
       {project && (
         <ProjectForm<UpdateProjectRequest>
