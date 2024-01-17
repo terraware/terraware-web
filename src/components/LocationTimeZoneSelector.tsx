@@ -1,6 +1,7 @@
 import { Checkbox } from '@terraware/web-components';
 import { useCallback, useEffect, useState } from 'react';
 import strings from 'src/strings';
+import isEnabled from 'src/features';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import TimeZoneSelector from './TimeZoneSelector';
@@ -28,6 +29,7 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
   const [lastSelected, setLastSelected] = useState<TimeZoneEntity>(location);
   const [orgTZChecked, setOrgTZChecked] = useState<boolean>(!!location.timeZone);
   const [timeZone, setTimeZone] = useState<TimeZoneDescription>(timeZoneFetcher.get(lastSelected));
+  const detailedSitesEnabled = isEnabled('User Detailed Sites');
 
   const setEffectiveTimeZone = useCallback(
     (value: TimeZoneDescription | undefined) => {
@@ -39,13 +41,13 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
   );
 
   useEffect(() => {
-    if (location?.id && location?.id !== -1) {
-      const fetchedTimeZone = timeZoneFetcher.get(location);
+    if ((location?.id && location?.id !== -1) || (location && detailedSitesEnabled)) {
+      const fetchedTimeZone = timeZoneFetcher.get(location, true);
       setLastSelected(location);
       setTimeZone(fetchedTimeZone);
       setEffectiveTimeZone(fetchedTimeZone);
     }
-  }, [location, timeZoneFetcher, setEffectiveTimeZone]);
+  }, [detailedSitesEnabled, location, timeZoneFetcher, setEffectiveTimeZone]);
 
   useEffect(() => {
     if (!location?.timeZone) {

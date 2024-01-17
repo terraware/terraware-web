@@ -8,7 +8,7 @@ import isEnabled from 'src/features';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useProjects } from 'src/hooks/useProjects';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
-import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
+import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import PlantingSeasonsEdit from 'src/components/PlantingSites/PlantingSeasonsEdit';
 
 export type DetailsInputFormProps = {
