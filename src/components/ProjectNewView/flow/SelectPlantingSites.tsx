@@ -200,6 +200,7 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
                 id='selectPlantingSitesTable'
                 orderBy='name'
                 showCheckbox={true}
+                showTopBar={true}
               />
             </Grid>
           </Grid>

@@ -288,6 +288,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
                   id='selectAccessionsTable'
                   orderBy='accessionNumber'
                   showCheckbox={true}
+                  showTopBar={true}
                 />
               </Box>
             </Grid>

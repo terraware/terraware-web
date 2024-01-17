@@ -266,6 +266,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                 id='selectBatchesTable'
                 orderBy='batchNumber'
                 showCheckbox={true}
+                showTopBar={true}
               />
             </Grid>
           </Grid>
