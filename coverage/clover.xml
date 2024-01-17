@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1705501725723" clover="3.2.0">
-  <project timestamp="1705501725723" name="All files">
-    <metrics statements="16018" coveredstatements="471" conditionals="10269" coveredconditionals="137" methods="5048" coveredmethods="110" elements="31335" coveredelements="718" complexity="0" loc="16018" ncloc="16018" packages="127" files="630" classes="630"/>
+<coverage generated="1705509752669" clover="3.2.0">
+  <project timestamp="1705509752669" name="All files">
+    <metrics statements="16018" coveredstatements="471" conditionals="10271" coveredconditionals="137" methods="5048" coveredmethods="110" elements="31337" coveredelements="718" complexity="0" loc="16018" ncloc="16018" packages="127" files="630" classes="630"/>
     <package name="src">
       <metrics statements="255" coveredstatements="0" conditionals="201" coveredconditionals="0" methods="74" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2459,7 +2459,7 @@
       </file>
     </package>
     <package name="src.components.InventoryV2">
-      <metrics statements="815" coveredstatements="0" conditionals="679" coveredconditionals="0" methods="261" coveredmethods="0"/>
+      <metrics statements="815" coveredstatements="0" conditionals="681" coveredconditionals="0" methods="261" coveredmethods="0"/>
       <file name="BatchDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/BatchDetails.tsx">
         <metrics statements="26" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
@@ -2941,7 +2941,7 @@
         <line num="31" count="0" type="stmt"/>
       </file>
       <file name="InventoryListByBatch.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/InventoryListByBatch.tsx">
-        <metrics statements="44" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="13" coveredmethods="0"/>
+        <metrics statements="44" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
@@ -2978,7 +2978,7 @@
         <line num="153" count="0" type="stmt"/>
         <line num="161" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="163" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="164" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="164" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="165" count="0" type="stmt"/>
         <line num="167" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="168" count="0" type="stmt"/>
@@ -2988,7 +2988,7 @@
         <line num="189" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="InventoryListByNursery.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/InventoryV2/InventoryListByNursery.tsx">
-        <metrics statements="35" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="35" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
@@ -3017,7 +3017,7 @@
         <line num="103" count="0" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
         <line num="107" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="108" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="108" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="109" count="0" type="stmt"/>
         <line num="111" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="112" count="0" type="stmt"/>
