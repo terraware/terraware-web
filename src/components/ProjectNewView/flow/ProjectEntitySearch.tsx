@@ -75,7 +75,8 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
   }, [entitySpecificFilterConfigs, filters, projectEntityFilterConfig]);
 
   return (
-    <>
+    <Grid container>
+      <Grid item xs={12}>
       <Box display='flex' flexDirection='row' alignItems='center' gap={theme.spacing(1)}>
         <Box width='300px'>
           <Textfield
@@ -95,14 +96,10 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
         ))}
         <ProjectEntityFilter filterConfig={projectEntityFilterConfig} setFilters={setFilters} />
       </Box>
-      <Grid
-        display='flex'
-        flexDirection='row'
-        alignItems='center'
-        sx={{ marginTop: theme.spacing(0.5), marginLeft: theme.spacing(1) }}
-      >
+      </Grid>
+      <Grid item xs={12} display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
         <PillList data={filterPillData} onRemove={onRemovePillList} />
       </Grid>
-    </>
+    </Grid>
   );
 }

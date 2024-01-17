@@ -178,7 +178,7 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
                   display: 'flex',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  marginBottom: theme.spacing(2),
+                  marginBottom: theme.spacing(0),
                 }}
               >
                 <ProjectEntitySearch
