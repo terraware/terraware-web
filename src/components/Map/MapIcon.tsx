@@ -1,5 +1,6 @@
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Icon } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -29,6 +30,5 @@ export default function MapIcon({ icon }: MapIconProps): JSX.Element {
     return <button className={`mapbox-gl-draw_trash mapbox-gl-draw_ctrl-draw-btn ${classes.icon}`} />;
   }
 
-  // TODO, use slice icon asset
-  return <button className={`mapbox-gl-draw_line mapbox-gl-draw_ctrl-draw-btn ${classes.icon}`} />;
+  return <Icon className={classes.icon} name='iconSlice' />;
 }

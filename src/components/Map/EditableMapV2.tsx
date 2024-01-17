@@ -9,7 +9,8 @@ import ReactMapGL, {
   Popup,
   Source,
 } from 'react-map-gl';
-import { Box, useTheme } from '@mui/material';
+import { Box, useTheme, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import bbox from '@turf/bbox';
 import { FeatureCollection, MultiPolygon } from 'geojson';
 import { MapPopupRenderer, MapSourceRenderProperties, MapViewStyles, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
@@ -19,6 +20,21 @@ import { useIsVisible } from 'src/hooks/useIsVisible';
 import { getMapDrawingLayer, toMultiPolygon } from './utils';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoBoundaryControl from './UndoRedoBoundaryControl';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  sliceTool: {
+    '& .mapbox-gl-draw_polygon': {
+      backgroundImage: 'url("/assets/icon-slice.svg")',
+      backgroundColor: 'white',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      height: '20px',
+      width: '20px',
+      margin: '5px',
+    },
+  },
+}));
 
 export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
   renderProperties: MapSourceRenderProperties;
@@ -59,6 +75,7 @@ export default function EditableMap({
   const visible = useIsVisible(containerRef);
   const theme = useTheme();
   const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle();
+  const classes = useStyles();
 
   const onMapError = useCallback(
     (event: any) => {
@@ -228,6 +245,7 @@ export default function EditableMap({
 
   return (
     <Box
+      className={clearOnEdit ? classes.sliceTool : ''}
       ref={containerRef}
       display='flex'
       flexDirection='column'
