@@ -1,3 +1,4 @@
+891a3cfecf Bump web-components version in tw to pick up fixes (#2046)
 6c092839f6 SW-4719 Resurrect app version checker (#2038)
 1963c05a5d SW-4721 / SW-4722 / SW-4725 / SW-4726 / SW-4729 / SW-4738 / SW-4739 / SW-4746 / SW-4748 (#2042)
 d08e7fc726 SW-4742 Do not show empty batches screen when filters are applied (#2041)
