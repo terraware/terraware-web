@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import _ from 'lodash';
-import useQuery from '../../../utils/useQuery';
+import useQuery from 'src/utils/useQuery';
 import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
 import { SearchNodePayload, SearchCriteria, SearchSortOrder, SearchResponseElementWithId } from 'src/types/Search';
 import Button from 'src/components/common/button/Button';
@@ -322,28 +322,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [featureFlagProjects, orgPreferences, updateSearchColumnsBootstrap]);
 
   useEffect(() => {
-    // if url has stage=<accession state>, apply that filter
-    const stage = query.getAll('stage');
+    // if url has facilityId= or subLocationName=, apply each filter
     const facilityId = query.get('facilityId');
     const subLocationName = query.get('subLocationName');
     let newSearchCriteria = searchCriteria || {};
-    if (stage.length || query.has('stage')) {
-      delete newSearchCriteria.state;
-      const stageNames = ACCESSION_2_STATES.map((name) => stateName(name));
-      const stages = (stage || []).filter((stageName) => stageNames.indexOf(stageName) !== -1);
-      if (stages.length) {
-        newSearchCriteria = {
-          ...newSearchCriteria,
-          state: {
-            field: 'state',
-            values: stages,
-            type: 'Exact',
-            operation: 'field',
-          },
-        };
-      }
-      query.delete('stage');
-    }
+
     if (subLocationName || query.has('subLocationName')) {
       delete newSearchCriteria.subLocation_name;
       if (subLocationName) {
@@ -359,6 +342,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       }
       query.delete('subLocationName');
     }
+
     if ((facilityId || query.has('facilityId')) && selectedOrganization) {
       const seedBanks = getAllSeedBanks(selectedOrganization);
       delete newSearchCriteria.facility_name;
@@ -379,7 +363,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       query.delete('facilityId');
     }
 
-    if (stage.length || (facilityId && selectedOrganization) || subLocationName) {
+    if ((facilityId && selectedOrganization) || subLocationName) {
       history.replace(getLocation(location.pathname, location, query.toString()));
       setSearchCriteria(newSearchCriteria);
 

@@ -1,7 +1,7 @@
-import { createContext, useCallback } from 'react';
+import { createContext } from 'react';
+import { Organization } from 'src/types/Organization';
+import { FacilityType } from 'src/types/Facility';
 import { ProvidedLocalizationData, ProvidedOrganizationData, ProvidedUserData } from './DataTypes';
-import { Organization } from '../types/Organization';
-import { FacilityType } from '../types/Facility';
 
 export const UserContext = createContext<ProvidedUserData>({
   reloadUser: () => {
