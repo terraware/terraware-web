@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 import { Organization } from 'src/types/Organization';
+import { FacilityType } from 'src/types/Facility';
 import { ProvidedLocalizationData, ProvidedOrganizationData, ProvidedUserData } from './DataTypes';
 
 export const UserContext = createContext<ProvidedUserData>({
@@ -21,6 +22,18 @@ export const defaultSelectedOrg: Organization = {
   name: '',
   role: 'Contributor',
   totalUsers: 0,
+};
+
+export const isPlaceholderOrg = (id: number | undefined) => !id || id === defaultSelectedOrg.id;
+
+export const selectedOrgHasFacilityType = (organization: Organization, facilityType: FacilityType): boolean => {
+  if (!isPlaceholderOrg(organization?.id) && organization?.facilities) {
+    return organization.facilities.some((facility: any) => {
+      return facility.type === facilityType;
+    });
+  } else {
+    return false;
+  }
 };
 
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
