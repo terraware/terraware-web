@@ -14,6 +14,7 @@ import { makeStyles } from '@mui/styles';
 import bbox from '@turf/bbox';
 import { FeatureCollection, MultiPolygon } from 'geojson';
 import { MapPopupRenderer, MapSourceRenderProperties, MapViewStyles, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
+import { getRgbaFromHex } from 'src/utils/color';
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useIsVisible } from 'src/hooks/useIsVisible';
@@ -25,13 +26,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   sliceTool: {
     '& .mapbox-gl-draw_polygon': {
       backgroundImage: 'url("/assets/icon-slice.svg")',
-      backgroundColor: 'white',
+      backgroundColor: 'transparent',
       backgroundPosition: 'center',
-      backgroundSize: 'cover',
+      backgroundSize: '20px',
       backgroundRepeat: 'no-repeat',
-      height: '20px',
-      width: '20px',
-      margin: '5px',
+      height: '29px',
+      width: '29px',
+      padding: '9px',
+    },
+    '& .mapbox-gl-draw_polygon.active': {
+      backgroundColor: getRgbaFromHex(theme.palette.TwClrBaseGray100 as string, 0.5),
     },
   },
 }));
@@ -70,6 +74,7 @@ export default function EditableMap({
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
   const [interactiveLayerIds, setInteractiveLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
+  const [isOverridePopupEvent, setIsOverridePopupEvent] = useState<boolean>(false);
   const containerRef = useRef(null);
   const mapRef = useRef<MapRef | null>(null);
   const visible = useIsVisible(containerRef);
@@ -135,35 +140,27 @@ export default function EditableMap({
     });
   }, [readOnlyBoundary]);
 
-  // close popup on click
-  const onPopupClose = useCallback(() => {
-    setPopupInfo((curr) => (curr ? { ...curr, active: false } : null));
-  }, []);
-
   // clear popup state and set geometry as not selected (so rendering shows it as not selected)
   const clearPopupInfo = useCallback(() => {
-    if (!popupInfo) {
-      return;
-    }
-    const { sourceId, id } = popupInfo;
-    mapRef?.current?.setFeatureState({ source: sourceId, id: `${id}` }, { select: false });
-    setPopupInfo(null);
-  }, [mapRef, popupInfo]);
+    setPopupInfo((curr) => {
+      if (curr) {
+        const { sourceId, id } = curr;
+        // clear selection
+        mapRef?.current?.setFeatureState({ source: sourceId, id: `${id}` }, { select: false });
+      }
+      return null;
+    });
+  }, [mapRef]);
 
   // set new popup state and mark geometry as selected (renders as selected)
   const initializePopupInfo = useCallback(
     (info: PopupInfo) => {
-      setPopupInfo((current) => {
-        // cannot call clear popup info to avoid infinite updates
-        if (current) {
-          const { sourceId, id } = current;
-          mapRef?.current?.setFeatureState({ source: sourceId, id: `${id}` }, { select: false });
-        }
-        mapRef?.current?.setFeatureState({ source: info.sourceId, id: `${info.id}` }, { select: true });
-        return info;
-      });
+      clearPopupInfo();
+      // update selection
+      mapRef?.current?.setFeatureState({ source: info.sourceId, id: `${info.id}` }, { select: true });
+      setPopupInfo(info);
     },
-    [mapRef]
+    [clearPopupInfo, mapRef]
   );
 
   // renderer memoized
@@ -171,8 +168,8 @@ export default function EditableMap({
     if (!popupInfo || !popupRenderer) {
       return null;
     }
-    return popupRenderer.render(popupInfo.properties, onPopupClose);
-  }, [onPopupClose, popupInfo, popupRenderer]);
+    return popupRenderer.render(popupInfo.properties, clearPopupInfo);
+  }, [clearPopupInfo, popupInfo, popupRenderer]);
 
   // map click to fetch geometry and show a popup at that location
   const onMapClick = useCallback(
@@ -180,7 +177,7 @@ export default function EditableMap({
       const { lat, lng } = event.lngLat;
 
       // handle overlap with polygon editor clicks
-      if (editMode === 'CreatingBoundary') {
+      if (editMode === 'CreatingBoundary' || overridePopupInfo) {
         return;
       }
 
@@ -198,11 +195,10 @@ export default function EditableMap({
           lat,
           properties,
           sourceId,
-          active: true,
         });
       }
     },
-    [editMode, initializePopupInfo, readOnlyBoundary]
+    [editMode, initializePopupInfo, overridePopupInfo, readOnlyBoundary]
   );
 
   useEffect(() => {
@@ -227,21 +223,21 @@ export default function EditableMap({
     setInteractiveLayerIds(readOnlyBoundary?.filter((b) => b.isInteractive).map((b) => `${b.id}-fill`) ?? []);
   }, [popupRenderer, readOnlyBoundary]);
 
-  useEffect(() => {
-    // clear the popup when it is closed
-    if (popupInfo && !popupInfo.active) {
-      clearPopupInfo();
-    }
-  }, [clearPopupInfo, popupInfo]);
-
+  // If override popup is set in the component prop, update local state as well.
+  // Separate useEffect from clearing popup state due to dependencies.
   useEffect(() => {
     if (overridePopupInfo) {
-      // this is to avoid a racey interaction with double-clicks
-      setTimeout(() => {
-        initializePopupInfo(overridePopupInfo);
-      }, 0);
+      setIsOverridePopupEvent(true);
+      initializePopupInfo(overridePopupInfo);
     }
   }, [initializePopupInfo, overridePopupInfo]);
+
+  // If override popup is cleared in the component prop, clear local state as well.
+  useEffect(() => {
+    if (!overridePopupInfo) {
+      clearPopupInfo();
+    }
+  }, [clearPopupInfo, overridePopupInfo]);
 
   return (
     <Box
@@ -306,9 +302,27 @@ export default function EditableMap({
             {popupInfo && popupRenderer && renderedPopup && (
               <Popup
                 anchor={popupRenderer.anchor ?? 'top'}
+                key={popupInfo.id}
                 longitude={Number(popupInfo.lng)}
                 latitude={Number(popupInfo.lat)}
-                onClose={onPopupClose}
+                onClose={() => {
+                  /**
+                   * Callback when user clicks outside the popup box.
+                   * If this is triggered by user finishing drawing a
+                   * polygon, we need to popup a box on the new polygon.
+                   * Managed by state variable isOverridePopupEvent.
+                   */
+                  // clear popup info since mapbox will nuke the dom elements corresponding to this popup
+                  clearPopupInfo();
+                  if (isOverridePopupEvent && overridePopupInfo) {
+                    // initialize new popup for the polygon draw triggered event
+                    initializePopupInfo(overridePopupInfo);
+                    setIsOverridePopupEvent(false);
+                  } else {
+                    // do any cleanup as necessary
+                    popupRenderer.cleanup?.();
+                  }
+                }}
                 style={popupRenderer.style}
                 className={popupRenderer.className}
               >

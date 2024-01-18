@@ -183,7 +183,7 @@ export const MapTooltipDialog = (props: MapTooltipDialogProps): JSX.Element => {
   const classes = useStyles();
 
   return (
-    <Box borderRadius={theme.spacing(1)}>
+    <Box borderRadius={theme.spacing(1)} display='flex' flexDirection='column'>
       <Box
         borderRadius={theme.spacing(1, 1, 0, 0)}
         display='flex'
