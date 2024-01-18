@@ -192,14 +192,16 @@ export default function EditableMap({
           return;
         }
 
-        initializePopupInfo({
-          id,
-          lng,
-          lat,
-          properties,
-          sourceId,
-          active: true,
-        });
+        setTimeout(() => {
+          initializePopupInfo({
+            id,
+            lng,
+            lat,
+            properties,
+            sourceId,
+            active: true,
+          });
+        }, 0);
       }
     },
     [editMode, initializePopupInfo, readOnlyBoundary]
@@ -239,7 +241,7 @@ export default function EditableMap({
       // this is to avoid a racey interaction with double-clicks
       setTimeout(() => {
         initializePopupInfo(overridePopupInfo);
-      }, 0);
+      }, 1);
     }
   }, [initializePopupInfo, overridePopupInfo]);
 

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, Typography, Theme } from '@mui/material';
+import { Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Feature, FeatureCollection } from 'geojson';
+import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { GeometryFeature, MapPopupRenderer, MapSourceProperties, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
@@ -15,6 +16,16 @@ import { defaultZonePayload } from './utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   ...mapTooltipDialogStyle(theme),
+  box: {
+    minWidth: '300px',
+    '& .mapboxgl-popup-content': {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+  },
+  textInput: {
+    marginTop: theme.spacing(1.5),
+  },
 }));
 
 export type ZonesProps = {
@@ -47,6 +58,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
   const [zones, setZones] = useState<FeatureCollection | undefined>();
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const classes = useStyles();
+  const theme = useTheme();
   const getRenderAttributes = useRenderAttributes();
 
   useEffect(() => {
@@ -75,7 +87,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
                 boundary: multiPolygon,
                 id: properties?.id ?? index,
                 name: properties?.name ?? '',
-                targetPlantingDensity: properties?.targetPlantingDensity ?? 0,
+                targetPlantingDensity: properties?.targetPlantingDensity,
               });
             } else {
               return undefined;
@@ -120,10 +132,17 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         },
         id: 'zone',
         isInteractive: true,
-        renderProperties: getRenderAttributes('zone'),
+        renderProperties: {
+          ...getRenderAttributes('zone'),
+          annotation: {
+            textField: 'name',
+            textColor: theme.palette.TwClrBaseWhite as string,
+            textSize: 16,
+          },
+        },
       },
     ];
-  }, [getRenderAttributes, site.boundary, site.exclusion, site.id, zones]);
+  }, [getRenderAttributes, site.boundary, site.exclusion, site.id, theme.palette.TwClrBaseWhite, zones]);
 
   const description = useMemo<Description[]>(
     () => [
@@ -187,13 +206,24 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
 
   const popupRenderer = useMemo(
     (): MapPopupRenderer => ({
-      className: classes.tooltip,
+      className: `${classes.tooltip} ${classes.box}`,
       render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
         const { name, targetPlantingDensity } = properties;
 
         const onUpdate = (nameVal: string, targetPlantingDensityVal: number) => {
-          // TODO
-          return;
+          setZones((currentValue) => {
+            if (!currentValue) {
+              return currentValue;
+            }
+            const newValue = { ...currentValue };
+            const zone = currentValue.features.find((f) => f.id === properties.id);
+            if (zone?.properties) {
+              zone.properties.name = nameVal;
+              zone.properties.targetPlantingDensity = targetPlantingDensityVal;
+            }
+            return newValue;
+          });
+          onClose?.();
         };
 
         return (
@@ -206,7 +236,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         );
       },
     }),
-    [classes.tooltip]
+    [classes.box, classes.tooltip]
   );
 
   return (
@@ -239,9 +269,52 @@ type TooltipContentsProps = {
 };
 
 const TooltipContents = ({ name, onClose, onUpdate, targetPlantingDensity }: TooltipContentsProps): JSX.Element => {
+  const [zoneName, setZoneName] = useState<string>(name ?? '');
+  const [density, setDensity] = useState<number | undefined>(targetPlantingDensity || undefined);
+  const [nameError, setNameError] = useState<string>('');
+  const [densityError, setDensityError] = useState<string>('');
+  const [validate, setValidate] = useState<boolean>(false);
+  const theme = useTheme();
+  const classes = useStyles();
+
+  const validateInput = useCallback((): boolean => {
+    let hasErrors = false;
+
+    if (!zoneName) {
+      setNameError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    } else {
+      setNameError('');
+    }
+
+    if (!density) {
+      setDensityError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    } else if (Number(density) <= 0) {
+      setDensityError(strings.INVALID_VALUE);
+      hasErrors = true;
+    } else {
+      setDensityError('');
+    }
+
+    return !hasErrors;
+  }, [density, zoneName]);
+
   const save = () => {
-    return;
+    if (!validate) {
+      setValidate(true);
+    }
+
+    if (validateInput()) {
+      onUpdate(zoneName, density as number);
+    }
   };
+
+  useEffect(() => {
+    if (validate) {
+      validateInput();
+    }
+  }, [validate, validateInput]);
 
   return (
     <MapTooltipDialog
@@ -250,8 +323,26 @@ const TooltipContents = ({ name, onClose, onUpdate, targetPlantingDensity }: Too
       saveButton={{ title: strings.SAVE, onClick: save }}
       title={strings.ZONE}
     >
-      <Box>
-        <Typography>WIP</Typography>
+      <Box display='flex' flexDirection='column' padding={theme.spacing(2)}>
+        <Typography>{strings.PLANTING_SITE_ZONE_NAME_HELP}</Typography>
+        <Textfield
+          className={classes.textInput}
+          label={strings.NAME}
+          id='zone-name'
+          type='text'
+          onChange={(value) => setZoneName(value as string)}
+          value={zoneName}
+          errorText={nameError}
+        />
+        <Textfield
+          className={classes.textInput}
+          label={strings.TARGET_PLANTING_DENSITY}
+          id='target-planting-density'
+          type='number'
+          onChange={(value) => setDensity(value as number)}
+          value={density}
+          errorText={densityError}
+        />
       </Box>
     </MapTooltipDialog>
   );
