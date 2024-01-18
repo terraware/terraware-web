@@ -43,7 +43,7 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
       } else {
         const boundary = boundaryArray[0];
         onChange('boundary', boundary);
-        onChange('plantingZones', [defaultZonePayload({ boundary, id: 0, name: '', targetPlantingDensity: 0 })]);
+        onChange('plantingZones', [defaultZonePayload({ boundary, id: 0, name: '', targetPlantingDensity: 1500 })]);
         onValidate(false);
       }
     }

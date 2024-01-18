@@ -51,8 +51,15 @@ const IdGenerator = (features: Feature[]): (() => number) => {
   };
 };
 
-const toZoneFeature = (feature: Feature, idGenerator: () => number) =>
-  toFeature(feature.geometry, feature.properties ?? {}, isNaN(Number(feature.id)) ? idGenerator() : feature.id!);
+const toZoneFeature = (feature: Feature, idGenerator: () => number) => {
+  const id: number = isNaN(Number(feature.id)) ? idGenerator() : (feature.id! as number);
+  const properties = {
+    id,
+    name: feature.properties?.name ?? '',
+    targetPlantingDensity: feature.properties?.targetPlantingDensity ?? 1500,
+  };
+  return toFeature(feature.geometry, properties, id);
+};
 
 export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.Element {
   const [zones, setZones] = useState<FeatureCollection | undefined>();
@@ -87,7 +94,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
                 boundary: multiPolygon,
                 id: properties?.id ?? index,
                 name: properties?.name ?? '',
-                targetPlantingDensity: properties?.targetPlantingDensity,
+                targetPlantingDensity: properties?.targetPlantingDensity ?? 1500,
               });
             } else {
               return undefined;
@@ -183,9 +190,8 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
               id: zone.id,
               lng: mid[0],
               lat: mid[1],
-              properties: { id: zone.id },
+              properties: zone.properties,
               sourceId: 'zone',
-              active: true,
             });
           } else {
             setOverridePopupInfo(undefined);
@@ -207,8 +213,18 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
   const popupRenderer = useMemo(
     (): MapPopupRenderer => ({
       className: `${classes.tooltip} ${classes.box}`,
+      cleanup: () => {
+        if (overridePopupInfo) {
+          setOverridePopupInfo(undefined);
+        }
+      },
       render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
         const { name, targetPlantingDensity } = properties;
+
+        const close = () => {
+          setOverridePopupInfo(undefined);
+          onClose?.();
+        };
 
         const onUpdate = (nameVal: string, targetPlantingDensityVal: number) => {
           setZones((currentValue) => {
@@ -223,20 +239,20 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
             }
             return newValue;
           });
-          onClose?.();
+          close();
         };
 
         return (
           <TooltipContents
             name={name}
-            onClose={() => onClose?.()}
+            onClose={close}
             onUpdate={onUpdate}
             targetPlantingDensity={targetPlantingDensity}
           />
         );
       },
     }),
-    [classes.box, classes.tooltip]
+    [classes.box, classes.tooltip, overridePopupInfo]
   );
 
   return (
@@ -265,12 +281,12 @@ type TooltipContentsProps = {
   name?: string;
   onClose: () => void;
   onUpdate: (name: string, targetPlantingDensity: number) => void;
-  targetPlantingDensity?: number;
+  targetPlantingDensity: number;
 };
 
 const TooltipContents = ({ name, onClose, onUpdate, targetPlantingDensity }: TooltipContentsProps): JSX.Element => {
   const [zoneName, setZoneName] = useState<string>(name ?? '');
-  const [density, setDensity] = useState<number | undefined>(targetPlantingDensity || undefined);
+  const [density, setDensity] = useState<number>(targetPlantingDensity);
   const [nameError, setNameError] = useState<string>('');
   const [densityError, setDensityError] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
@@ -282,6 +298,9 @@ const TooltipContents = ({ name, onClose, onUpdate, targetPlantingDensity }: Too
 
     if (!zoneName) {
       setNameError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    } else if (zoneName.length > 15) {
+      setNameError(strings.ZONE_NAME_MAXIMUM_LENGTH);
       hasErrors = true;
     } else {
       setNameError('');

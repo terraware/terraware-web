@@ -12,7 +12,6 @@ export type ReadOnlyBoundary = {
 export type GeometryFeature = Feature<Polygon | MultiPolygon, GeoJsonProperties>;
 
 export type PopupInfo = {
-  active?: boolean;
   id?: string | number;
   lng: number;
   lat: number;
@@ -113,10 +112,11 @@ export type MapOptions = {
  * Render a popup based on properties
  */
 export type MapPopupRenderer = {
+  anchor?: mapboxgl.Anchor;
+  className?: string;
+  cleanup?: () => void;
   render: (properties: MapSourceProperties, onClose?: () => void) => JSX.Element | null;
   style?: object;
-  className?: string;
-  anchor?: mapboxgl.Anchor;
 };
 
 /**
