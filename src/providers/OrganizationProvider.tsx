@@ -5,11 +5,12 @@ import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { OrganizationService, PreferencesService } from 'src/services';
 import { Organization } from 'src/types/Organization';
-import { OrganizationContext } from './contexts';
+import { isPlaceholderOrg, OrganizationContext } from './contexts';
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
 import { defaultSelectedOrg } from './contexts';
 import { useUser } from './hooks';
 import { store } from 'src/redux/store';
+import { FacilityType } from '../types/Facility';
 
 export type OrganizationProviderProps = {
   children?: React.ReactNode;

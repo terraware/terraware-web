@@ -16,7 +16,7 @@ export default function AccessionByStatus({ label, status, quantity }: Props): J
   return (
     <Link
       id={`update-${status}`}
-      to={`${APP_PATHS.ACCESSIONS}?stage=${status}`}
+      to={`${APP_PATHS.ACCESSIONS}?accessions_filter_state=${status}`}
       style={{
         textDecoration: 'none',
         padding: '22px 10px 40px 10px',

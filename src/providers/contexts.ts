@@ -1,6 +1,7 @@
-import { createContext } from 'react';
+import { createContext, useCallback } from 'react';
 import { ProvidedLocalizationData, ProvidedOrganizationData, ProvidedUserData } from './DataTypes';
 import { Organization } from '../types/Organization';
+import { FacilityType } from '../types/Facility';
 
 export const UserContext = createContext<ProvidedUserData>({
   reloadUser: () => {
@@ -23,6 +24,18 @@ export const defaultSelectedOrg: Organization = {
   totalUsers: 0,
 };
 
+export const isPlaceholderOrg = (id: number | undefined) => !id || id === defaultSelectedOrg.id;
+
+export const selectedOrgHasFacilityType = (organization: Organization, facilityType: FacilityType): boolean => {
+  if (!isPlaceholderOrg(organization?.id) && organization?.facilities) {
+    return organization.facilities.some((facility: any) => {
+      return facility.type === facilityType;
+    });
+  } else {
+    return false;
+  }
+};
+
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
   organizations: [],
   orgPreferences: {},
@@ -38,6 +51,7 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     // no-op
     return;
   },
+
   selectedOrganization: defaultSelectedOrg,
   bootstrapped: false,
   orgPreferenceForId: -1,

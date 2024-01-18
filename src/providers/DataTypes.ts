@@ -2,6 +2,7 @@ import React from 'react';
 import { User } from 'src/types/User';
 import { Organization } from '../types/Organization';
 import { TimeZoneDescription } from '../types/TimeZones';
+import { FacilityType } from '../types/Facility';
 
 export type PreferencesType = { [key: string]: unknown };
 

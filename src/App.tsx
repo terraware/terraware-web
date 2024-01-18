@@ -4,8 +4,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import useStateLocation from './utils/useStateLocation';
-import { DEFAULT_SEED_SEARCH_FILTERS, DEFAULT_SEED_SEARCH_SORT_ORDER } from 'src/services/SeedBankService';
-import { SearchSortOrder, SearchCriteria } from 'src/types/Search';
 import ContactUs from 'src/components/ContactUs';
 import EditOrganization from 'src/components/EditOrganization';
 import Home from 'src/components/Home';
@@ -18,16 +16,12 @@ import People from 'src/components/People';
 import PersonDetails from 'src/components/Person';
 import SpeciesList from 'src/components/Species';
 import CheckIn from 'src/components/seeds/checkin';
-import Database from 'src/components/seeds/database';
-import { defaultPreset as DefaultColumns } from 'src/components/seeds/database/columns';
 import SeedSummary from 'src/components/seeds/summary';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
 import { APP_PATHS } from 'src/constants';
 import ErrorBoundary from 'src/ErrorBoundary';
-import { FacilityType } from 'src/types/Facility';
-import { Species } from './types/Species';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
@@ -54,10 +48,8 @@ import {
   SpeciesBulkWithdrawWrapperComponent,
 } from './components/Inventory/withdraw';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
-import { SpeciesService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
-import { defaultSelectedOrg } from 'src/providers/contexts';
 import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
@@ -73,6 +65,10 @@ import ProjectsRouter from 'src/components/Projects/Router';
 import { requestProjects } from './redux/features/projects/projectsThunks';
 import InventoryCreateView from './components/InventoryV2/InventoryCreateView';
 import ReportsRouter from 'src/components/Reports/Router';
+import AccessionsView from './components/AccessionsView';
+import { selectSpecies } from './redux/features/species/speciesSelectors';
+import { requestSpecies } from './redux/features/species/speciesThunks';
+import { isPlaceholderOrg, selectedOrgHasFacilityType } from './providers/contexts';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -141,8 +137,6 @@ const MINIMAL_USER_ROUTES: string[] = [
   APP_PATHS.OPT_IN,
 ];
 
-const isPlaceholderOrg = (id: number) => id === defaultSelectedOrg.id;
-
 function AppContent() {
   // manager hooks
   useAppVersion();
@@ -150,34 +144,13 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadOrganizations, orgPreferences } = useOrganization();
+  const { organizations, selectedOrganization, reloadOrganizations } = useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
-  const { userPreferences, reloadUserPreferences: reloadPreferences } = useUser();
-  const preferredWeightSystem = userPreferences.preferredWeightSystem as string;
-
-  // seedSearchCriteria describes which criteria to apply when searching accession data.
-  const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
-
-  // seedSearchSort describes which sort criterion to apply when searching accession data.
-  const [seedSearchSort, setSeedSearchSort] = useState<SearchSortOrder>(DEFAULT_SEED_SEARCH_SORT_ORDER);
-
-  // seedSearchColumns describes which accession columns to request when searching accession data.
-  const [seedSearchColumns, setSeedSearchColumns] = useState<string[]>(DefaultColumns(preferredWeightSystem).fields);
-
-  /*
-   * accessionsDisplayColumns describes which columns are displayed in the accessions list, and in which order.
-   * Differs from seedSearchSelectedColumns because the order matters. Also, sometimes the two lists won't have
-   * exactly the same columns. E.g. if the user adds the Withdrawal -> "Seeds Withdrawn" column,
-   * then seedSearchSelectedColumns will contain withdrawalQuantity and withdrawalUnits but this list will only
-   * contain withdrawalQuantity.
-   */
-  const [accessionsDisplayColumns, setAccessionsDisplayColumns] = useState<string[]>(
-    DefaultColumns(preferredWeightSystem).fields
-  );
+  const { reloadUserPreferences: reloadPreferences } = useUser();
 
   const history = useHistory();
-  const [species, setSpecies] = useState<Species[]>([]);
+  const species = useAppSelector(selectSpecies);
   const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const projects: Project[] | undefined = useAppSelector(selectProjects);
@@ -190,24 +163,13 @@ function AppContent() {
 
   const setDefaults = useCallback(() => {
     if (!isPlaceholderOrg(selectedOrganization.id)) {
-      const savedColumns = orgPreferences.accessionsColumns ? (orgPreferences.accessionsColumns as string[]) : [];
-      const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns(preferredWeightSystem).fields;
-      setAccessionsDisplayColumns(defaultColumns);
       setWithdrawalCreated(false);
     }
-  }, [selectedOrganization.id, preferredWeightSystem, orgPreferences.accessionsColumns]);
+  }, [selectedOrganization.id]);
 
   const reloadSpecies = useCallback(() => {
-    const populateSpecies = async () => {
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
-        const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
-        if (response.requestSucceeded && response.species) {
-          setSpecies(response.species);
-        }
-      }
-    };
-    void populateSpecies();
-  }, [selectedOrganization]);
+    void dispatch(requestSpecies(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
 
   const reloadTracking = useCallback(() => {
     const populatePlantingSites = () => {
@@ -216,7 +178,7 @@ function AppContent() {
       }
     };
     populatePlantingSites();
-  }, [dispatch, selectedOrganization.id, activeLocale]);
+  }, [selectedOrganization.id, dispatch, activeLocale]);
 
   const reloadProjects = useCallback(() => {
     const populateProjects = () => {
@@ -225,7 +187,7 @@ function AppContent() {
       }
     };
     populateProjects();
-  }, [dispatch, selectedOrganization.id, activeLocale]);
+  }, [selectedOrganization.id, dispatch, activeLocale]);
 
   useEffect(() => {
     setDefaults();
@@ -270,21 +232,11 @@ function AppContent() {
     }
   }, [type]);
 
-  const selectedOrgHasSpecies = (): boolean => species.length > 0;
+  const selectedOrgHasSpecies = (): boolean => (species || []).length > 0;
 
-  const selectedOrgHasFacilityType = (facilityType: FacilityType): boolean => {
-    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrganization.facilities) {
-      return selectedOrganization.facilities.some((facility: any) => {
-        return facility.type === facilityType;
-      });
-    } else {
-      return false;
-    }
-  };
+  const selectedOrgHasSeedBanks = (): boolean => selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank');
 
-  const selectedOrgHasSeedBanks = (): boolean => selectedOrgHasFacilityType('Seed Bank');
-
-  const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType('Nursery');
+  const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType(selectedOrganization, 'Nursery');
 
   const selectedOrgHasProjects = (): boolean => projects !== undefined && projects.length > 0;
 
@@ -388,19 +340,7 @@ function AppContent() {
               <CheckIn />
             </Route>
             <Route exact path={APP_PATHS.ACCESSIONS}>
-              <Database
-                searchCriteria={seedSearchCriteria}
-                setSearchCriteria={setSeedSearchCriteria}
-                searchSortOrder={seedSearchSort}
-                setSearchSortOrder={setSeedSearchSort}
-                searchColumns={seedSearchColumns}
-                setSearchColumns={setSeedSearchColumns}
-                displayColumnNames={accessionsDisplayColumns}
-                setDisplayColumnNames={setAccessionsDisplayColumns}
-                hasSeedBanks={selectedOrgHasSeedBanks()}
-                hasSpecies={selectedOrgHasSpecies()}
-                reloadData={reloadOrganizations}
-              />
+              <AccessionsView setWithdrawalCreated={setWithdrawalCreated} />
             </Route>
             <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
               <Accession2Create />
@@ -416,7 +356,7 @@ function AppContent() {
             </Route>
             <Route exact path={APP_PATHS.SPECIES}>
               {selectedOrgHasSpecies() ? (
-                <SpeciesList reloadData={reloadSpecies} species={species} />
+                <SpeciesList reloadData={reloadSpecies} species={species || []} />
               ) : (
                 <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />
               )}
@@ -488,19 +428,19 @@ function AppContent() {
               <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
             </Route>
             <Route path={APP_PATHS.INVENTORY_BATCH}>
-              <InventoryBatch origin='Batches' species={species} />
+              <InventoryBatch origin='Batches' species={species || []} />
             </Route>
             <Route path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}>
-              <InventoryBatch origin='Nursery' species={species} />
+              <InventoryBatch origin='Nursery' species={species || []} />
             </Route>
             <Route path={APP_PATHS.INVENTORY_BATCH_FOR_SPECIES}>
-              <InventoryBatch origin='Species' species={species} />
+              <InventoryBatch origin='Species' species={species || []} />
             </Route>
             <Route path={APP_PATHS.INVENTORY_ITEM_FOR_NURSERY}>
               <InventoryViewForNursery />
             </Route>
             <Route path={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES}>
-              <InventoryViewForSpecies species={species} />
+              <InventoryViewForSpecies species={species || []} />
             </Route>
             <Route path={APP_PATHS.BATCH_WITHDRAW}>
               <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
@@ -512,7 +452,7 @@ function AppContent() {
               <NurseryWithdrawals reloadTracking={reloadTracking} />
             </Route>
             <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-              <NurseryWithdrawalsDetails species={species} plantingSubzoneNames={plantingSubzoneNames} />
+              <NurseryWithdrawalsDetails species={species || []} plantingSubzoneNames={plantingSubzoneNames} />
             </Route>
             <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
               <NurseryReassignment />

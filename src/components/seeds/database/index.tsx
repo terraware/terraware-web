@@ -3,6 +3,7 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import _ from 'lodash';
 import useQuery from '../../../utils/useQuery';
 import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
 import { SearchNodePayload, SearchCriteria, SearchSortOrder, SearchResponseElementWithId } from 'src/types/Search';
@@ -42,6 +43,7 @@ import { sendMessage } from 'src/redux/features/message/messageSlice';
 import isEnabled from 'src/features';
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 import Card from 'src/components/common/Card';
+import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 
 interface StyleProps {
   isMobile: boolean;
@@ -146,16 +148,6 @@ type DatabaseProps = {
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
-  const { activeLocale } = useLocalization();
-  const { reloadUserPreferences } = useUser();
-  const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
-  const theme = useTheme();
-  const history = useHistory();
-  const query = useQuery();
-  const location = useStateLocation();
-  const featureFlagProjects = isEnabled('Projects');
   const {
     searchCriteria,
     setSearchCriteria,
@@ -169,6 +161,19 @@ export default function Database(props: DatabaseProps): JSX.Element {
     hasSpecies,
     reloadData,
   } = props;
+
+  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const { activeLocale } = useLocalization();
+  const { reloadUserPreferences } = useUser();
+  const { isMobile } = useDeviceInfo();
+  const classes = useStyles({ isMobile });
+  const theme = useTheme();
+  const history = useHistory();
+  const query = useQuery();
+  const location = useStateLocation();
+  const featureFlagProjects = isEnabled('Projects');
+  const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');
+
   const columns = columnsIndexed();
   const displayColumnDetails = displayColumnNames
     .filter((name) => (featureFlagProjects ? true : name !== 'project_name'))
@@ -509,6 +514,33 @@ export default function Database(props: DatabaseProps): JSX.Element {
     searchedLocaleRef.current = activeLocale;
   }, [activeLocale, setSearchCriteria]);
 
+  useEffect(() => {
+    if (Object.keys(sessionFilters).length === 0) {
+      return;
+    }
+
+    const nextSearchCriteria = {
+      ...searchCriteria,
+      // These filters need to be converted into SearchNodePayload
+      ...Object.keys(sessionFilters).reduce(
+        (newSearchCriteria, sessionFilterKey) => ({
+          ...newSearchCriteria,
+          [sessionFilterKey]: {
+            field: sessionFilterKey,
+            operation: 'field',
+            type: 'Exact',
+            values: sessionFilters[sessionFilterKey],
+          },
+        }),
+        {} as SearchNodePayload
+      ),
+    };
+
+    if (!_.isEqual(searchCriteria, nextSearchCriteria)) {
+      setSearchCriteria(nextSearchCriteria);
+    }
+  }, [searchCriteria, sessionFilters, setSearchCriteria]);
+
   const onSelect = (row: SearchResponseElementWithId) => {
     if (row.id) {
       const seedCollectionLocation = {
@@ -529,6 +561,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const onFilterChange = (newFilters: Record<string, SearchNodePayload>) => {
     setSearchCriteria(newFilters);
+
+    // Since this is an obvious "in" filter, add to query and session
+    if (newFilters.state) {
+      setSessionFilters({ state: newFilters.state.values });
+    }
   };
 
   const onOpenEditColumnsModal = () => {
