@@ -192,6 +192,8 @@ export default function EditableMap({
           return;
         }
 
+        // the timeouts are to avoid a race condition upon click vs double-click both of which have
+        // popup triggers but with a priority (this popup gets overridden by the one from zone creation)
         setTimeout(() => {
           initializePopupInfo({
             id,
