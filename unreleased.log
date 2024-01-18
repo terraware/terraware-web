@@ -1,3 +1,4 @@
+edd3deaa91 SW-4697 Use icon-slice asset in user detailed sites flow (#2047)
 fb7876acd9 SW-4633 Reuse planting site details input form in user detailed sites flow (#2045)
 084d37fae1 SW-4749 /SW-4751 Add project to planting site create/edit/view refactored component (#2044)
 891a3cfecf Bump web-components version in tw to pick up fixes (#2046)
