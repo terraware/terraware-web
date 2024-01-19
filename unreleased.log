@@ -1,3 +1,4 @@
+7de7aff1d0 Extract out feature selection on map click + validate duplicate zone names on input (#2054)
 9ac71a85c6 Updated translations from Phrase (#2055)
 638c7a60e0 SW-4649 Link to the batch within the accession history table when there is an associated batch (#2043)
 94f928c880 SW-4757 Show help page message for detailed site creation (#2051)
