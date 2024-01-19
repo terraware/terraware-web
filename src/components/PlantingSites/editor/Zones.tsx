@@ -6,7 +6,7 @@ import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { GeometryFeature, MapPopupRenderer, MapSourceProperties, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
-import EditableMap, { RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
+import EditableMap, { LayerFeature, RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
 import { cutPolygons, leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
@@ -211,7 +211,10 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
   );
 
   // Pick the first zone, we won't have overlapping zones.
-  const featureSelectorOnClick = useCallback((features: Feature[]): Feature | undefined => features[0], []);
+  const featureSelectorOnClick = useCallback(
+    (features: LayerFeature[]) => features.find((feature) => feature.layer?.source === 'zone'),
+    []
+  );
 
   const popupRenderer = useMemo(
     (): MapPopupRenderer => ({

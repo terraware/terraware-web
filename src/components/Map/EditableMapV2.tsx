@@ -4,7 +4,9 @@ import ReactMapGL, {
   GeolocateControl,
   Layer,
   LngLatBoundsLike,
+  MapLayerMouseEvent,
   MapRef,
+  MapboxGeoJSONFeature,
   NavigationControl,
   Popup,
   Source,
@@ -12,7 +14,7 @@ import ReactMapGL, {
 import { Box, useTheme, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import bbox from '@turf/bbox';
-import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
+import { FeatureCollection, MultiPolygon } from 'geojson';
 import { MapPopupRenderer, MapSourceRenderProperties, MapViewStyles, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
@@ -45,7 +47,8 @@ export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
 };
 
 // Callback to select one feature from among list of features on the map that overlap the click target.
-export type FeatureSelectorOnClick = (features: Feature[]) => Feature | undefined;
+export type LayerFeature = MapboxGeoJSONFeature;
+export type FeatureSelectorOnClick = (features: LayerFeature[]) => LayerFeature | undefined;
 
 export type EditableMapProps = {
   allowEditMultiplePolygons?: boolean;
@@ -178,7 +181,7 @@ export default function EditableMap({
 
   // map click to fetch geometry and show a popup at that location
   const onMapClick = useCallback(
-    (event: any) => {
+    (event: MapLayerMouseEvent) => {
       if (isOverridePopupEvent) {
         if (overridePopupInfo) {
           initializePopupInfo(overridePopupInfo);
@@ -191,12 +194,12 @@ export default function EditableMap({
         return;
       }
 
-      const feature = featureSelectorOnClick ? featureSelectorOnClick(event.features) : event.features[0];
+      const feature = featureSelectorOnClick?.(event.features);
 
       if (feature && feature.properties) {
         const { lat, lng } = event.lngLat;
         const { id, properties, layer } = feature;
-        const sourceId = layer.source;
+        const sourceId = layer.source as string;
 
         if (!readOnlyBoundary?.find((b) => b.id === sourceId)) {
           return;
