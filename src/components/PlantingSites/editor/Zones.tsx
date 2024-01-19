@@ -1,64 +1,30 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, Typography, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
-import { GeometryFeature, MapPopupRenderer, MapSourceProperties, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
-import EditableMap, { LayerFeature, RenderableReadOnlyBoundary } from 'src/components/Map/EditableMapV2';
+import {
+  GeometryFeature,
+  MapPopupRenderer,
+  MapSourceProperties,
+  PopupInfo,
+  ReadOnlyBoundary,
+  RenderableReadOnlyBoundary,
+} from 'src/types/Map';
+import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import { cutPolygons, leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
-import { MapTooltipDialog, mapTooltipDialogStyle } from 'src/components/Map/MapRenderUtils';
+import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import StepTitleDescription, { Description } from './StepTitleDescription';
-import { defaultZonePayload } from './utils';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  ...mapTooltipDialogStyle(theme),
-  box: {
-    minWidth: '300px',
-    '& .mapboxgl-popup-content': {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-  },
-  textInput: {
-    marginTop: theme.spacing(1.5),
-  },
-}));
+import { defaultZonePayload, IdGenerator, plantingZoneToFeature, toZoneFeature } from './utils';
+import useStyles from './useMapStyle';
 
 export type ZonesProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
   site: PlantingSite;
-};
-
-const IdGenerator = (features: Feature[]): (() => number) => {
-  let nextId = 0;
-  const ids = features
-    .filter((f) => !isNaN(Number(f.id)))
-    .map((f) => f.id as number)
-    .sort();
-
-  if (ids.length) {
-    nextId = ids[ids.length - 1];
-  }
-
-  return () => {
-    nextId++;
-    return nextId;
-  };
-};
-
-const toZoneFeature = (feature: Feature, idGenerator: () => number) => {
-  const id: number = isNaN(Number(feature.id)) ? idGenerator() : (feature.id! as number);
-  const properties = {
-    id,
-    name: feature.properties?.name ?? '',
-    targetPlantingDensity: feature.properties?.targetPlantingDensity ?? 1500,
-  };
-  return toFeature(feature.geometry, properties, id);
 };
 
 export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.Element {
@@ -70,10 +36,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
 
   useEffect(() => {
     if (site.plantingZones) {
-      const features = site.plantingZones.map((zone) => {
-        const { boundary, id, name, targetPlantingDensity } = zone;
-        return toFeature(boundary, { id, name, targetPlantingDensity }, id);
-      });
+      const features = site.plantingZones.map(plantingZoneToFeature);
       setZones({ type: 'FeatureCollection', features });
     }
   }, [site.plantingZones]);
@@ -232,7 +195,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
               return currentValue;
             }
             const newValue = { ...currentValue };
-            const zone = currentValue.features.find((f) => f.id === properties.id);
+            const zone = newValue.features.find((f) => f.id === properties.id);
             if (zone?.properties) {
               zone.properties.name = nameVal;
               zone.properties.targetPlantingDensity = targetPlantingDensityVal;
@@ -361,6 +324,7 @@ const TooltipContents = ({
       <Box display='flex' flexDirection='column' padding={theme.spacing(2)}>
         <Typography>{strings.PLANTING_SITE_ZONE_NAME_HELP}</Typography>
         <Textfield
+          autoFocus={true}
           className={classes.textInput}
           label={strings.NAME}
           id='zone-name'

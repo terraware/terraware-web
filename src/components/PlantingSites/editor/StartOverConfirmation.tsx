@@ -25,11 +25,17 @@ export default function StartOverConfirmation(props: StartOverConfirmationProps)
           priority='secondary'
           key='button-1'
         />,
-        <Button id='confirmStartOver' onClick={onConfirm} type='destructive' label={strings.YES} key='button-2' />,
+        <Button
+          id='confirmStartOver'
+          onClick={onConfirm}
+          type='destructive'
+          label={strings.START_OVER}
+          key='button-2'
+        />,
       ]}
       message={strings.START_OVER_WARNING}
     >
-      <Typography>{strings.ARE_YOU_SURE}</Typography>
+      <Typography>{strings.START_OVER_CONFIRMATION}</Typography>
     </DialogBox>
   );
 }

@@ -1,10 +1,7 @@
 import { useCallback } from 'react';
 import { useTheme } from '@mui/material';
 import { getRgbaFromHex } from 'src/utils/color';
-import { MapObject, MapSourceRenderProperties } from 'src/types/Map';
-
-// TODO: integrate exclusions as a first class MapObject (not there yet)
-export type RenderableObject = MapObject | 'exclusions';
+import { MapSourceRenderProperties, RenderableObject } from 'src/types/Map';
 
 export default function useRenderAttributes(): (type: RenderableObject) => MapSourceRenderProperties {
   const theme = useTheme();
