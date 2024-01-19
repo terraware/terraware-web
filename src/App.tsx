@@ -178,7 +178,7 @@ function AppContent() {
       }
     };
     populatePlantingSites();
-  }, [selectedOrganization.id, dispatch, activeLocale]);
+  }, [dispatch, selectedOrganization.id, activeLocale]);
 
   const reloadProjects = useCallback(() => {
     const populateProjects = () => {
