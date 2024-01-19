@@ -70,7 +70,9 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
     }
 
     const zoneIdGenerator = IdGenerator(zones.features);
-    const subzoneIdGenerator = IdGenerator(Object.values(subzones).flatMap((subzone) => subzone.features));
+    const subzoneIdGenerator = IdGenerator(
+      site.id === -1 ? [] : Object.values(subzones).flatMap((subzone) => subzone.features)
+    );
 
     const zonesData: RenderableReadOnlyBoundary = {
       featureCollection: {
@@ -114,7 +116,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
     };
 
     return [zonesData, subzonesData];
-  }, [getRenderAttributes, selectedZone, subzones, theme.palette.TwClrBaseWhite, zones]);
+  }, [getRenderAttributes, selectedZone, site.id, subzones, theme.palette.TwClrBaseWhite, zones]);
 
   const description = useMemo<Description[]>(
     () => [
@@ -149,7 +151,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         const cutSubzones = cutPolygons(subzones[selectedZone].features! as GeometryFeature[], cutWith);
 
         if (cutSubzones) {
-          const idGenerator = IdGenerator(cutSubzones);
+          const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) => sz.features));
           const subzonesWithIds = cutSubzones.map((subzone) =>
             toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone })
           ) as GeometryFeature[];
