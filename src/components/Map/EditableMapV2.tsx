@@ -15,7 +15,13 @@ import { Box, useTheme, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import bbox from '@turf/bbox';
 import { FeatureCollection, MultiPolygon } from 'geojson';
-import { MapPopupRenderer, MapSourceRenderProperties, MapViewStyles, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
+import {
+  MapPopupRenderer,
+  MapViewStyles,
+  PopupInfo,
+  ReadOnlyBoundary,
+  RenderableReadOnlyBoundary,
+} from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import useMapboxToken from 'src/utils/useMapboxToken';
@@ -42,19 +48,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
-  renderProperties: MapSourceRenderProperties;
-};
-
 // Callback to select one feature from among list of features on the map that overlap the click target.
 export type LayerFeature = MapboxGeoJSONFeature;
 export type FeatureSelectorOnClick = (features: LayerFeature[]) => LayerFeature | undefined;
+
+// data to highlight, example { source: 'zone', id: <zone-id> }
+export type HighlightData = { source: string; id: number };
 
 export type EditableMapProps = {
   allowEditMultiplePolygons?: boolean;
   clearOnEdit?: boolean;
   editableBoundary?: FeatureCollection;
   featureSelectorOnClick?: FeatureSelectorOnClick;
+  highlights?: HighlightData[];
   onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) => void;
   onUndoRedoReadOnlyBoundary?: (readOnlyBoundary?: ReadOnlyBoundary[]) => void;
   overridePopupInfo?: PopupInfo;
@@ -69,6 +75,7 @@ export default function EditableMap({
   clearOnEdit,
   editableBoundary,
   featureSelectorOnClick,
+  highlights,
   onEditableBoundaryChanged,
   onUndoRedoReadOnlyBoundary,
   overridePopupInfo,
@@ -83,6 +90,7 @@ export default function EditableMap({
   const [interactiveLayerIds, setInteractiveLayerIds] = useState<string[] | undefined>();
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [isOverridePopupEvent, setIsOverridePopupEvent] = useState<boolean>(false);
+  const [, setHighlightData] = useState<HighlightData[] | undefined>();
   const containerRef = useRef(null);
   const mapRef = useRef<MapRef | null>(null);
   const visible = useIsVisible(containerRef);
@@ -216,6 +224,21 @@ export default function EditableMap({
     },
     [featureSelectorOnClick, initializePopupInfo, isOverridePopupEvent, overridePopupInfo, readOnlyBoundary]
   );
+
+  useEffect(() => {
+    const applyHighlights = (data: HighlightData[], value: boolean) => {
+      data?.forEach((datum: HighlightData) => {
+        const { id, source } = datum;
+        mapRef?.current?.setFeatureState({ source, id }, { highlight: value });
+      });
+    };
+
+    setHighlightData((prev) => {
+      applyHighlights(prev ?? [], false);
+      applyHighlights(highlights ?? [], true);
+      return highlights;
+    });
+  }, [highlights, mapRef]);
 
   useEffect(() => {
     if (editMode) {

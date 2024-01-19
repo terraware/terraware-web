@@ -3,12 +3,6 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { Feature, FeatureCollection, GeoJsonProperties, MultiPolygon, Polygon } from 'geojson';
 
-export type ReadOnlyBoundary = {
-  featureCollection: FeatureCollection;
-  id: string;
-  isInteractive?: boolean;
-};
-
 export type GeometryFeature = Feature<Polygon | MultiPolygon, GeoJsonProperties>;
 
 export type PopupInfo = {
@@ -164,3 +158,17 @@ export const MapViewStyles: Record<MapViewStyle, string> = {
   Outdoors: 'mapbox://styles/mapbox/outdoors-v12?optimize=true',
   Satellite: 'mapbox://styles/mapbox/satellite-v9?optimize=true',
 };
+
+export type ReadOnlyBoundary = {
+  featureCollection: FeatureCollection;
+  highlights?: number[];
+  id: string;
+  isInteractive?: boolean;
+};
+
+export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
+  renderProperties: MapSourceRenderProperties;
+};
+
+// TODO: integrate exclusions as a first class MapObject (not there yet)
+export type RenderableObject = MapObject | 'exclusions';
