@@ -114,7 +114,6 @@ export type MapOptions = {
 export type MapPopupRenderer = {
   anchor?: mapboxgl.Anchor;
   className?: string;
-  cleanup?: () => void;
   render: (properties: MapSourceProperties, onClose?: () => void) => JSX.Element | null;
   style?: object;
 };
