@@ -1,3 +1,4 @@
+348b99f369 Updated translations from Phrase (#2052)
 dd9c1976bf SW-4696 Form to update zone names and target planting density on zone creation and selection (#2049)
 e63fa842a6 Use same postgres version for docker that we have in terraware-server, use local directory for database volume (#2048)
 edd3deaa91 SW-4697 Use icon-slice asset in user detailed sites flow (#2047)
