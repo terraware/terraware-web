@@ -41,9 +41,7 @@ export type PageSnackbarProps = {
 export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
-  const [originalPathname] = useState<string>(pathname);
   const [snackbar, setSnackbar] = useState<Snackbar | null>();
-  const [routeChanged, setRouteChanged] = useState<boolean>(false);
   const snackbarData = useAppSelector(selectSnackbar('page'));
 
   const handleClose = useCallback(() => {
@@ -55,17 +53,11 @@ export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Elemen
   }, [snackbarData]);
 
   useEffect(() => {
-    if (routeChanged) {
-      setRouteChanged(false);
+    if (!!pathname) {
+      // clear page messages on route change
       handleClose();
     }
-  }, [routeChanged, handleClose]);
-
-  useEffect(() => {
-    if (!!pathname) {
-      setRouteChanged(true);
-    }
-  }, [pathname, originalPathname]);
+  }, [handleClose, pathname]);
 
   const sendCloseMessage = () => {
     if (snackbar?.onCloseMessage) {

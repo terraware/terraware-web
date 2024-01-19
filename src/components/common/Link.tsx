@@ -5,7 +5,7 @@ import { Link as MuiLink, Theme } from '@mui/material';
 
 export type LinkProps = {
   children: ReactNode;
-  to?: string;
+  to?: string | { pathname: string | undefined } | undefined;
   onClick?: (e?: MouseEvent | SyntheticEvent) => void;
   className?: string;
   fontSize?: string | number;
