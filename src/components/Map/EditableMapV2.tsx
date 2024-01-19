@@ -72,7 +72,7 @@ export default function EditableMap({
   const { mapId, refreshToken, token } = useMapboxToken();
   const [editMode, setEditMode] = useState<MapEditorMode>();
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
-  const [interactiveLayerIds, setInteractiveLayerIds] = useState<string[]>([]);
+  const [interactiveLayerIds, setInteractiveLayerIds] = useState<string[] | undefined>();
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [isOverridePopupEvent, setIsOverridePopupEvent] = useState<boolean>(false);
   const containerRef = useRef(null);
@@ -174,14 +174,16 @@ export default function EditableMap({
   // map click to fetch geometry and show a popup at that location
   const onMapClick = useCallback(
     (event: any) => {
-      const { lat, lng } = event.lngLat;
-
-      // handle overlap with polygon editor clicks
-      if (editMode === 'CreatingBoundary' || overridePopupInfo) {
+      if (isOverridePopupEvent) {
+        if (overridePopupInfo) {
+          initializePopupInfo(overridePopupInfo);
+        }
+        setIsOverridePopupEvent(false);
         return;
       }
 
       if (event?.features[0]?.properties) {
+        const { lat, lng } = event.lngLat;
         const { id, properties, layer } = event.features[0];
         const sourceId = layer.source;
 
@@ -198,7 +200,7 @@ export default function EditableMap({
         });
       }
     },
-    [editMode, initializePopupInfo, overridePopupInfo, readOnlyBoundary]
+    [initializePopupInfo, isOverridePopupEvent, overridePopupInfo, readOnlyBoundary]
   );
 
   useEffect(() => {
@@ -215,29 +217,21 @@ export default function EditableMap({
   }, [visible]);
 
   useEffect(() => {
-    if (!popupRenderer) {
+    if (!popupRenderer || editMode === 'CreatingBoundary') {
       // no interactive capabilities enabled
-      return;
+      setInteractiveLayerIds(undefined);
+    } else {
+      setInteractiveLayerIds(readOnlyBoundary?.filter((b) => b.isInteractive).map((b) => `${b.id}-fill`));
     }
-
-    setInteractiveLayerIds(readOnlyBoundary?.filter((b) => b.isInteractive).map((b) => `${b.id}-fill`) ?? []);
-  }, [popupRenderer, readOnlyBoundary]);
+  }, [editMode, popupRenderer, readOnlyBoundary]);
 
   // If override popup is set in the component prop, update local state as well.
   // Separate useEffect from clearing popup state due to dependencies.
   useEffect(() => {
     if (overridePopupInfo) {
       setIsOverridePopupEvent(true);
-      initializePopupInfo(overridePopupInfo);
     }
-  }, [initializePopupInfo, overridePopupInfo]);
-
-  // If override popup is cleared in the component prop, clear local state as well.
-  useEffect(() => {
-    if (!overridePopupInfo) {
-      clearPopupInfo();
-    }
-  }, [clearPopupInfo, overridePopupInfo]);
+  }, [overridePopupInfo]);
 
   return (
     <Box
@@ -274,7 +268,7 @@ export default function EditableMap({
               ...style,
             }}
             initialViewState={initialViewState}
-            interactiveLayerIds={interactiveLayerIds}
+            interactiveLayerIds={interactiveLayerIds ?? []}
             onClick={onMapClick}
           >
             {mapLayers}
@@ -305,24 +299,7 @@ export default function EditableMap({
                 key={popupInfo.id}
                 longitude={Number(popupInfo.lng)}
                 latitude={Number(popupInfo.lat)}
-                onClose={() => {
-                  /**
-                   * Callback when user clicks outside the popup box.
-                   * If this is triggered by user finishing drawing a
-                   * polygon, we need to popup a box on the new polygon.
-                   * Managed by state variable isOverridePopupEvent.
-                   */
-                  // clear popup info since mapbox will nuke the dom elements corresponding to this popup
-                  clearPopupInfo();
-                  if (isOverridePopupEvent && overridePopupInfo) {
-                    // initialize new popup for the polygon draw triggered event
-                    initializePopupInfo(overridePopupInfo);
-                    setIsOverridePopupEvent(false);
-                  } else {
-                    // do any cleanup as necessary
-                    popupRenderer.cleanup?.();
-                  }
-                }}
+                onClose={clearPopupInfo}
                 style={popupRenderer.style}
                 className={popupRenderer.className}
               >

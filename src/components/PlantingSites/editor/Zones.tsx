@@ -213,16 +213,10 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
   const popupRenderer = useMemo(
     (): MapPopupRenderer => ({
       className: `${classes.tooltip} ${classes.box}`,
-      cleanup: () => {
-        if (overridePopupInfo) {
-          setOverridePopupInfo(undefined);
-        }
-      },
       render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
         const { name, targetPlantingDensity } = properties;
 
         const close = () => {
-          setOverridePopupInfo(undefined);
           onClose?.();
         };
 
@@ -252,7 +246,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         );
       },
     }),
-    [classes.box, classes.tooltip, overridePopupInfo]
+    [classes.box, classes.tooltip]
   );
 
   return (
