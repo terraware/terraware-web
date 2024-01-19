@@ -39,7 +39,7 @@ export default function Link(props: LinkProps): JSX.Element {
 
   if (to) {
     return (
-      <RouterLink to={to} className={classNameToUse} target={target} id={id} replace={replace}>
+      <RouterLink to={{ pathname: to }} className={classNameToUse} target={target} id={id} replace={replace}>
         {children}
       </RouterLink>
     );

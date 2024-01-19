@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
+import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import DetailsInputForm from 'src/components/PlantingSites/DetailsInputForm';
+import StepTitleDescription from './StepTitleDescription';
 
 export type DetailsProps = {
   onChange: (id: string, value: unknown) => void;
@@ -21,6 +23,7 @@ export default function Details({
 }: DetailsProps): JSX.Element {
   return (
     <Box display='flex' flexDirection='column'>
+      <StepTitleDescription description={[]} title={strings.DETAILS} />
       <DetailsInputForm
         onChange={onChange}
         onValidate={onValidate}

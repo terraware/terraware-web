@@ -1,17 +1,21 @@
 import { useMemo, useRef, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
-import TfMain from 'src/components/common/TfMain';
 import { Box, Typography, useTheme } from '@mui/material';
+import { Message } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import { SiteType } from 'src/types/PlantingSite';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import { useDocLinks } from 'src/docLinks';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
+import TfMain from 'src/components/common/TfMain';
+import TextWithLink from 'src/components/common/TextWithLink';
 import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import PageSnackbar from 'src/components/PageSnackbar';
 import Form, { PlantingSiteStep, PlantingSiteStepType } from './Form';
 import Details from './Details';
 import SiteBoundary from './SiteBoundary';
@@ -42,7 +46,9 @@ export default function Editor(props: EditorProps): JSX.Element {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const classes = useStyles();
+  const docLinks = useDocLinks();
 
+  const [showPageMessage, setShowPageMessage] = useState<boolean>(true);
   const [onValidate, setOnValidate] = useState<
     ((hasErrors: boolean, isOptionalCompleted?: boolean) => void) | undefined
   >();
@@ -167,6 +173,18 @@ export default function Editor(props: EditorProps): JSX.Element {
     setShowStartOver(false);
   };
 
+  const pageMessage = useMemo<JSX.Element | null>(() => {
+    if (showPageMessage && siteType === 'detailed' && currentStep === 'details') {
+      return (
+        <Box>
+          <TextWithLink href={docLinks.contact_us} target='_blank' text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
+        </Box>
+      );
+    } else {
+      return null;
+    }
+  }, [currentStep, docLinks, showPageMessage, siteType]);
+
   return (
     <TfMain>
       {showStartOver && <StartOverConfirmation onClose={() => setShowStartOver(false)} onConfirm={onStartOver} />}
@@ -186,6 +204,19 @@ export default function Editor(props: EditorProps): JSX.Element {
         steps={steps}
         className={classes.container}
       >
+        <PageSnackbar />
+        {pageMessage && (
+          <Box marginTop={theme.spacing(6)}>
+            <Message
+              body={pageMessage}
+              onClose={() => setShowPageMessage(false)}
+              priority='info'
+              showCloseButton
+              title={strings.PLANTING_SITE_CREATE_DETAILED_TITLE}
+              type='page'
+            />
+          </Box>
+        )}
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}>
           {currentStep === 'details' && (
             <Details

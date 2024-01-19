@@ -24,7 +24,7 @@ export default function DetailedPlantingSiteHelpModal(props: DetailedPlantingSit
       middleButtons={[<Button onClick={onClose} id='done' label={strings.DONE} key='button-1' />]}
     >
       <Typography>
-        <TextWithLink href={docLinks.contact_us} text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
+        <TextWithLink href={docLinks.contact_us} target='_blank' text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
       </Typography>
     </DialogBox>
   );

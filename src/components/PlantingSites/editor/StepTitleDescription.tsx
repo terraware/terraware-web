@@ -23,9 +23,9 @@ export type StepTitleDescriptionProps = {
   dontShowAgainPreferenceName?: string;
   minHeight?: string;
   title: string;
-  tutorialDescription: string;
-  tutorialDocLinkKey: DocType;
-  tutorialTitle: string;
+  tutorialDescription?: string;
+  tutorialDocLinkKey?: DocType;
+  tutorialTitle?: string;
 };
 
 export default function StepTitleDescription(props: StepTitleDescriptionProps): JSX.Element {
@@ -55,14 +55,16 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
 
   return (
     <Box marginBottom={theme.spacing(2)} display='flex' flexDirection='column' minHeight={minHeight}>
-      <VideoDialog
-        description={tutorialDescription}
-        link={docLinks[tutorialDocLinkKey]}
-        onClose={() => onClose()}
-        onDontShowAgain={dontShowModalAgain ? undefined : () => onClose(true)}
-        open={showModal}
-        title={tutorialTitle}
-      />
+      {tutorialDescription && tutorialDocLinkKey && tutorialTitle && (
+        <VideoDialog
+          description={tutorialDescription}
+          link={docLinks[tutorialDocLinkKey]}
+          onClose={() => onClose()}
+          onDontShowAgain={dontShowModalAgain ? undefined : () => onClose(true)}
+          open={showModal}
+          title={tutorialTitle}
+        />
+      )}
       <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
         {title}
       </Typography>

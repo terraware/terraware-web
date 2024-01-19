@@ -7,6 +7,7 @@ export interface TextWithLinkProps {
   handleSuffix?: (suffix: string) => string | JSX.Element[];
   href?: string;
   onClick?: () => void;
+  target?: string;
   text: string;
 }
 
@@ -26,6 +27,7 @@ export default function TextWithLink({
   handleSuffix,
   href,
   onClick,
+  target,
   text,
 }: TextWithLinkProps): JSX.Element {
   const linkStart = text.indexOf('[');
@@ -47,7 +49,7 @@ export default function TextWithLink({
   return (
     <>
       {handlePrefix ? handlePrefix(prefix) : prefix}
-      <Link className={className} to={href} onClick={onClick} fontSize={fontSize ?? '16px'}>
+      <Link className={className} to={href} onClick={onClick} fontSize={fontSize ?? '16px'} target={target}>
         {linkText}
       </Link>
       {handleSuffix ? handleSuffix(suffix) : suffix}
