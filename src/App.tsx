@@ -6,7 +6,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import useStateLocation from './utils/useStateLocation';
 import ContactUs from 'src/components/ContactUs';
 import EditOrganization from 'src/components/EditOrganization';
-import Home from 'src/components/Home';
+import Home from 'src/scenes/Home';
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import NavBar from 'src/components/NavBar';
