@@ -65,10 +65,10 @@ import ProjectsRouter from 'src/components/Projects/Router';
 import { requestProjects } from './redux/features/projects/projectsThunks';
 import InventoryCreateView from './components/InventoryV2/InventoryCreateView';
 import ReportsRouter from 'src/components/Reports/Router';
-import AccessionsView from './components/AccessionsView';
-import { selectSpecies } from './redux/features/species/speciesSelectors';
-import { requestSpecies } from './redux/features/species/speciesThunks';
-import { isPlaceholderOrg, selectedOrgHasFacilityType } from './providers/contexts';
+import AccessionsView from 'src/components/AccessionsView';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -178,7 +178,7 @@ function AppContent() {
       }
     };
     populatePlantingSites();
-  }, [selectedOrganization.id, dispatch, activeLocale]);
+  }, [dispatch, selectedOrganization.id, activeLocale]);
 
   const reloadProjects = useCallback(() => {
     const populateProjects = () => {

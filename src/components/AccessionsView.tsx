@@ -7,7 +7,7 @@ import { useOrganization, useUser } from 'src/providers';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/providers/contexts';
+import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 
 interface AccessionsViewProps {
   setWithdrawalCreated: (value: boolean) => void;
