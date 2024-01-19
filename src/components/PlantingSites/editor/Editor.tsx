@@ -177,7 +177,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     if (showPageMessage && siteType === 'detailed' && currentStep === 'details') {
       return (
         <Box>
-          <TextWithLink href={docLinks.contact_us} target='_blank' text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
+          <TextWithLink href={docLinks.contact_us} isExternal text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
         </Box>
       );
     } else {
