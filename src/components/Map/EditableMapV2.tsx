@@ -12,7 +12,7 @@ import ReactMapGL, {
 import { Box, useTheme, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import bbox from '@turf/bbox';
-import { FeatureCollection, MultiPolygon } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { MapPopupRenderer, MapSourceRenderProperties, MapViewStyles, PopupInfo, ReadOnlyBoundary } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
@@ -44,10 +44,14 @@ export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
   renderProperties: MapSourceRenderProperties;
 };
 
+// Callback to select one feature from among list of features on the map that overlap the click target.
+export type FeatureSelectorOnClick = (features: Feature[]) => Feature | undefined;
+
 export type EditableMapProps = {
   allowEditMultiplePolygons?: boolean;
   clearOnEdit?: boolean;
   editableBoundary?: FeatureCollection;
+  featureSelectorOnClick?: FeatureSelectorOnClick;
   onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) => void;
   onUndoRedoReadOnlyBoundary?: (readOnlyBoundary?: ReadOnlyBoundary[]) => void;
   overridePopupInfo?: PopupInfo;
@@ -61,6 +65,7 @@ export default function EditableMap({
   allowEditMultiplePolygons,
   clearOnEdit,
   editableBoundary,
+  featureSelectorOnClick,
   onEditableBoundaryChanged,
   onUndoRedoReadOnlyBoundary,
   overridePopupInfo,
@@ -182,9 +187,15 @@ export default function EditableMap({
         return;
       }
 
-      if (event?.features[0]?.properties) {
+      if (!event?.features) {
+        return;
+      }
+
+      const feature = featureSelectorOnClick ? featureSelectorOnClick(event.features) : event.features[0];
+
+      if (feature && feature.properties) {
         const { lat, lng } = event.lngLat;
-        const { id, properties, layer } = event.features[0];
+        const { id, properties, layer } = feature;
         const sourceId = layer.source;
 
         if (!readOnlyBoundary?.find((b) => b.id === sourceId)) {
@@ -200,7 +211,7 @@ export default function EditableMap({
         });
       }
     },
-    [initializePopupInfo, isOverridePopupEvent, overridePopupInfo, readOnlyBoundary]
+    [featureSelectorOnClick, initializePopupInfo, isOverridePopupEvent, overridePopupInfo, readOnlyBoundary]
   );
 
   useEffect(() => {

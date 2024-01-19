@@ -210,11 +210,14 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
     [setZones]
   );
 
+  // Pick the first zone, we won't have overlapping zones.
+  const featureSelectorOnClick = useCallback((features: Feature[]): Feature | undefined => features[0], []);
+
   const popupRenderer = useMemo(
     (): MapPopupRenderer => ({
       className: `${classes.tooltip} ${classes.box}`,
       render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
-        const { name, targetPlantingDensity } = properties;
+        const { id, name, targetPlantingDensity } = properties;
 
         const close = () => {
           onClose?.();
@@ -236,17 +239,24 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
           close();
         };
 
+        const zoneNamesInUse = new Set(
+          zones?.features
+            .filter((feature) => feature.properties && feature.properties.id !== id)
+            .map((feature) => (feature.properties && feature.properties.name) || '') ?? []
+        );
+
         return (
           <TooltipContents
             name={name}
             onClose={close}
             onUpdate={onUpdate}
             targetPlantingDensity={targetPlantingDensity}
+            zoneNamesInUse={zoneNamesInUse}
           />
         );
       },
     }),
-    [classes.box, classes.tooltip]
+    [classes.box, classes.tooltip, zones?.features]
   );
 
   return (
@@ -261,6 +271,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
       />
       <EditableMap
         clearOnEdit
+        featureSelectorOnClick={featureSelectorOnClick}
         onEditableBoundaryChanged={onEditableBoundaryChanged}
         onUndoRedoReadOnlyBoundary={onUndoRedoReadOnlyBoundary}
         overridePopupInfo={overridePopupInfo}
@@ -276,9 +287,16 @@ type TooltipContentsProps = {
   onClose: () => void;
   onUpdate: (name: string, targetPlantingDensity: number) => void;
   targetPlantingDensity: number;
+  zoneNamesInUse: Set<string>;
 };
 
-const TooltipContents = ({ name, onClose, onUpdate, targetPlantingDensity }: TooltipContentsProps): JSX.Element => {
+const TooltipContents = ({
+  name,
+  onClose,
+  onUpdate,
+  targetPlantingDensity,
+  zoneNamesInUse,
+}: TooltipContentsProps): JSX.Element => {
   const [zoneName, setZoneName] = useState<string>(name ?? '');
   const [density, setDensity] = useState<number>(targetPlantingDensity);
   const [nameError, setNameError] = useState<string>('');
@@ -288,30 +306,31 @@ const TooltipContents = ({ name, onClose, onUpdate, targetPlantingDensity }: Too
   const classes = useStyles();
 
   const validateInput = useCallback((): boolean => {
-    let hasErrors = false;
+    let hasNameErrors = true;
+    let hasDensityErrors = true;
 
     if (!zoneName) {
       setNameError(strings.REQUIRED_FIELD);
-      hasErrors = true;
+    } else if (zoneNamesInUse.has(zoneName)) {
+      setNameError(strings.ZONE_NAME_IN_USE);
     } else if (zoneName.length > 15) {
       setNameError(strings.ZONE_NAME_MAXIMUM_LENGTH);
-      hasErrors = true;
     } else {
       setNameError('');
+      hasNameErrors = false;
     }
 
     if (!density) {
       setDensityError(strings.REQUIRED_FIELD);
-      hasErrors = true;
     } else if (Number(density) <= 0) {
       setDensityError(strings.INVALID_VALUE);
-      hasErrors = true;
     } else {
       setDensityError('');
+      hasDensityErrors = false;
     }
 
-    return !hasErrors;
-  }, [density, zoneName]);
+    return !(hasNameErrors || hasDensityErrors);
+  }, [density, zoneName, zoneNamesInUse]);
 
   const save = () => {
     if (!validate) {
