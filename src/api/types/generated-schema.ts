@@ -752,6 +752,8 @@ export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     AccessionHistoryEntryPayload: {
+      /** Format: int64 */
+      batchId?: number;
       /** Format: date */
       date: string;
       /**
