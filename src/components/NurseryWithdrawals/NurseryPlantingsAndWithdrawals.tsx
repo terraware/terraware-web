@@ -90,7 +90,14 @@ export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: Nurse
           <Grid item xs={12}>
             <PageSnackbar />
           </Grid>
-          <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
+          <Box
+            ref={contentRef}
+            display='flex'
+            flexDirection='column'
+            flexGrow={1}
+            maxWidth='100%'
+            className={classes.tabs}
+          >
             <Tabs
               activeTab={activeTab}
               onTabChange={onTabChange}

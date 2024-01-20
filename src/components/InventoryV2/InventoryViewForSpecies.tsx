@@ -12,6 +12,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
 import InventorySummaryForSpecies from 'src/components/InventoryV2/view/InventorySummaryForSpecies';
 import InventorySeedlingsTableForSpecies from 'src/components/InventoryV2/view/InventorySeedlingsTableForSpecies';
+import Card from 'src/components/common/Card';
 
 interface InventoryViewForSpeciesProps {
   species: Species[];
@@ -76,21 +77,24 @@ export default function InventoryViewForSpecies(props: InventoryViewForSpeciesPr
           </Grid>
         </Grid>
       </PageHeaderWrapper>
-      <Grid container ref={contentRef}>
-        {speciesId && (
+      {speciesId && (
+        <Grid container ref={contentRef}>
           <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
             <InventorySummaryForSpecies speciesId={Number(speciesId)} modified={modified} />
-            <InventorySeedlingsTableForSpecies
-              speciesId={Number(speciesId)}
-              modified={modified}
-              setModified={setModified}
-              openBatchNumber={openBatchNumber}
-              onUpdateOpenBatch={setBatchNumber}
-              origin={'Species'}
-            />
+
+            <Card flushMobile style={{ marginTop: theme.spacing(3) }}>
+              <InventorySeedlingsTableForSpecies
+                speciesId={Number(speciesId)}
+                modified={modified}
+                setModified={setModified}
+                openBatchNumber={openBatchNumber}
+                onUpdateOpenBatch={setBatchNumber}
+                origin={'Species'}
+              />
+            </Card>
           </Grid>
-        )}
-      </Grid>
+        </Grid>
+      )}
     </TfMain>
   );
 }

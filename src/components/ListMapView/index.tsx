@@ -31,9 +31,6 @@ export default function ListMapView({ search, list, map, onView, style, initialV
   return (
     <Card
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
         ...style,
       }}
       flushMobile
@@ -42,7 +39,7 @@ export default function ListMapView({ search, list, map, onView, style, initialV
         {search}
         <ListMapSelector defaultView={initialView} view={view} onView={updateView} />
       </Box>
-      <Box display='flex' flexGrow={1} marginTop={theme.spacing(2)}>
+      <Box marginTop={theme.spacing(2)}>
         <Box flexGrow={1} flexDirection='column' display={view === 'list' ? 'flex' : 'none'}>
           {list}
         </Box>

@@ -15,6 +15,7 @@ import {
   useProjectEntitySelection,
 } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
 import ProjectEntitySearch from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
+import Card from 'src/components/common/Card';
 
 type SelectPlantingSitesProps = {
   project: CreateProjectRequest;
@@ -150,60 +151,58 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
           disableGutters
           sx={{
             paddingBottom: isMobile ? '185px' : '105px',
-            minWidth: 'fit-content',
+            marginTop: theme.spacing(4),
           }}
         >
-          <Grid
-            container
-            minWidth={isMobile ? 0 : 700}
-            sx={{
-              backgroundColor: theme.palette.TwClrBg,
-              borderRadius: theme.spacing(4),
-              padding: theme.spacing(3),
-              marginTop: theme.spacing(4),
-            }}
-          >
-            <Grid item xs={12}>
-              <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
-                {strings.formatString(strings.SELECT_PLANTING_SITES_FOR_PROJECT, project.name)}
-              </Typography>
-              <Typography sx={{ fontSize: '14px', fontWeight: 400 }}>
-                {strings.formatString(strings.SELECT_PLANTING_SITES_FOR_PROJECT_DESCRIPTION, project.name)}
-              </Typography>
-            </Grid>
+          <Card flushMobile>
+            <Grid
+              container
+              sx={{
+                backgroundColor: theme.palette.TwClrBg,
+              }}
+            >
+              <Grid item xs={12}>
+                <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
+                  {strings.formatString(strings.SELECT_PLANTING_SITES_FOR_PROJECT, project.name)}
+                </Typography>
+                <Typography sx={{ fontSize: '14px', fontWeight: 400 }}>
+                  {strings.formatString(strings.SELECT_PLANTING_SITES_FOR_PROJECT_DESCRIPTION, project.name)}
+                </Typography>
+              </Grid>
 
-            <Grid item xs={12}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  marginBottom: theme.spacing(0),
-                }}
-              >
-                <ProjectEntitySearch
-                  searchValue={temporalSearchValue || ''}
-                  onSearch={(value: string) => setTemporalSearchValue(value)}
-                  entitySpecificFilterConfigs={[]}
-                  filters={filters}
-                  setFilters={setFilters}
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    marginBottom: theme.spacing(0),
+                  }}
+                >
+                  <ProjectEntitySearch
+                    searchValue={temporalSearchValue || ''}
+                    onSearch={(value: string) => setTemporalSearchValue(value)}
+                    entitySpecificFilterConfigs={[]}
+                    filters={filters}
+                    setFilters={setFilters}
+                  />
+                </Box>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Table
+                  columns={columns}
+                  rows={entities}
+                  selectedRows={selectedRows}
+                  setSelectedRows={setSelectedRows}
+                  id='selectPlantingSitesTable'
+                  orderBy='name'
+                  showCheckbox={true}
+                  showTopBar={true}
                 />
-              </Box>
+              </Grid>
             </Grid>
-
-            <Grid item xs={12}>
-              <Table
-                columns={columns}
-                rows={entities}
-                selectedRows={selectedRows}
-                setSelectedRows={setSelectedRows}
-                id='selectPlantingSitesTable'
-                orderBy='name'
-                showCheckbox={true}
-                showTopBar={true}
-              />
-            </Grid>
-          </Grid>
+          </Card>
         </Container>
       </PageForm>
     </>

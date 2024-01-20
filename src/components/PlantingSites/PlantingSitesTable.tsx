@@ -13,6 +13,7 @@ import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { Project } from 'src/types/Project';
 import { PlantingSitesFilters } from 'src/components/PlantingSites/PlantingSitesList';
+import Card from 'src/components/common/Card';
 
 interface PlantingSitesTableProps {
   results: SearchResponseElement[];
@@ -94,13 +95,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   );
 
   return (
-    <Box
-      sx={{
-        backgroundColor: theme.palette.TwClrBg,
-        padding: theme.spacing(3),
-        borderRadius: '32px',
-      }}
-    >
+    <Card flushMobile>
       <Box display='flex' flexDirection='row' alignItems='center' gap={theme.spacing(1)}>
         <Box width='300px'>
           <Textfield
@@ -151,6 +146,6 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
           </Grid>
         </div>
       </Grid>
-    </Box>
+    </Card>
   );
 }

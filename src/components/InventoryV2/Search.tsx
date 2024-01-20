@@ -225,7 +225,7 @@ export default function Search<T extends { facilityInventories?: string }>(props
 
   return (
     <>
-      <Box display='flex' flexDirection='row' alignItems='center' gap={theme.spacing(1)}>
+      <Grid container display='flex' flexDirection='row' alignItems='center' gap={theme.spacing(1)}>
         <Box width='300px'>
           <Textfield
             placeholder={strings.SEARCH}
@@ -341,7 +341,7 @@ export default function Search<T extends { facilityInventories?: string }>(props
             </Popover>
           </Box>
         )}
-      </Box>
+      </Grid>
       <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
         <PillList data={filterPillData} onRemove={onRemovePillList} />
       </Grid>

@@ -43,6 +43,7 @@ import { useHistory } from 'react-router';
 import { APP_PATHS } from 'src/constants';
 import { SpeciesSearchResultRow } from './types';
 import { handlePromises } from 'src/services/utils';
+import Card from 'src/components/common/Card';
 
 type SpeciesListProps = {
   reloadData: () => void;
@@ -54,7 +55,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(3),
     backgroundColor: theme.palette.TwClrBg,
     borderRadius: '32px',
-    minWidth: 'fit-content',
   },
   pageTitle: {
     fontSize: '24px',
@@ -772,7 +772,9 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
           </Grid>
           <PageSnackbar />
         </PageHeaderWrapper>
-        <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
+      </Grid>
+      <Card flushMobile>
+        <Grid container>
           <Grid item xs={12} className={classes.searchBar}>
             <TextField
               placeholder={strings.SEARCH_BY_NAME_OR_FAMILY}
@@ -895,8 +897,8 @@ export default function SpeciesList({ reloadData, species }: SpeciesListProps): 
               onClick={onNewSpecies}
             />
           )}
-        </Container>
-      </Grid>
+        </Grid>
+      </Card>
     </TfMain>
   );
 }

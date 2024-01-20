@@ -388,7 +388,6 @@ const MyAccountContent = ({
             backgroundColor: theme.palette.TwClrBg,
             padding: theme.spacing(3),
             borderRadius: '32px',
-            minWidth: 'fit-content',
           }}
         >
           <Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}>

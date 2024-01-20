@@ -27,6 +27,7 @@ import { SearchService } from 'src/services';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { useUser, useOrganization, useLocalization } from 'src/providers/hooks';
 import { isTfContact } from 'src/utils/organization';
+import Card from 'src/components/common/Card';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -328,7 +329,7 @@ export default function PeopleList(): JSX.Element {
           />
         </>
       )}
-      <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
+      <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
           <Grid item xs={8}>
             <h1 className={classes.title}>{strings.PEOPLE}</h1>
@@ -343,54 +344,56 @@ export default function PeopleList(): JSX.Element {
           <PageSnackbar />
         </Grid>
       </PageHeaderWrapper>
-      <Grid container className={classes.contentContainer} ref={contentRef}>
-        <Grid item xs={12} marginBottom='16px'>
-          <TextField
-            placeholder={strings.SEARCH}
-            iconLeft='search'
-            label=''
-            id='search'
-            type='text'
-            className={classes.searchField}
-            onChange={(value) => onChangeSearch('search', value)}
-            value={temporalSearchValue}
-            iconRight='cancel'
-            onClickRightIcon={clearSearch}
-          />
-        </Grid>
+      <Card flushMobile>
+        <Grid container ref={contentRef}>
+          <Grid item xs={12} marginBottom='16px'>
+            <TextField
+              placeholder={strings.SEARCH}
+              iconLeft='search'
+              label=''
+              id='search'
+              type='text'
+              className={classes.searchField}
+              onChange={(value) => onChangeSearch('search', value)}
+              value={temporalSearchValue}
+              iconRight='cancel'
+              onClickRightIcon={clearSearch}
+            />
+          </Grid>
 
-        <Grid item xs={12}>
-          <div>
-            <Grid container spacing={4}>
-              <Grid item xs={12}>
-                {results && (
-                  <Table
-                    id='people-table'
-                    columns={columns}
-                    rows={results}
-                    orderBy='name'
-                    Renderer={TableCellRenderer}
-                    showCheckbox={true}
-                    selectedRows={selectedPeopleRows}
-                    setSelectedRows={setSelectedPeopleRows}
-                    showTopBar={true}
-                    topBarButtons={[
-                      {
-                        buttonType: 'destructive',
-                        ...(!isMobile && { buttonText: strings.REMOVE }),
-                        onButtonClick: removeSelectedPeopleFromOrg,
-                        icon: 'iconTrashCan',
-                        disabled: isRemovingTFContact,
-                        tooltipTitle: isRemovingTFContact ? strings.CANNOT_REMOVE_TF_CONTACT : undefined,
-                      },
-                    ]}
-                  />
-                )}
+          <Grid item xs={12}>
+            <div>
+              <Grid container spacing={4}>
+                <Grid item xs={12}>
+                  {results && (
+                    <Table
+                      id='people-table'
+                      columns={columns}
+                      rows={results}
+                      orderBy='name'
+                      Renderer={TableCellRenderer}
+                      showCheckbox={true}
+                      selectedRows={selectedPeopleRows}
+                      setSelectedRows={setSelectedPeopleRows}
+                      showTopBar={true}
+                      topBarButtons={[
+                        {
+                          buttonType: 'destructive',
+                          ...(!isMobile && { buttonText: strings.REMOVE }),
+                          onButtonClick: removeSelectedPeopleFromOrg,
+                          icon: 'iconTrashCan',
+                          disabled: isRemovingTFContact,
+                          tooltipTitle: isRemovingTFContact ? strings.CANNOT_REMOVE_TF_CONTACT : undefined,
+                        },
+                      ]}
+                    />
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-          </div>
+            </div>
+          </Grid>
         </Grid>
-      </Grid>
+      </Card>
     </TfMain>
   );
 }

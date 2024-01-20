@@ -26,6 +26,7 @@ import ProjectEntitySearch, {
 import { EntitySpecificFilterConfig } from 'src/components/ProjectNewView/flow/ProjectEntityFilter';
 import { stateName } from 'src/types/Accession';
 import { useLocalization } from 'src/providers';
+import Card from 'src/components/common/Card';
 
 type SelectAccessionsProps = {
   project: CreateProjectRequest;
@@ -237,62 +238,60 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
           disableGutters
           sx={{
             paddingBottom: isMobile ? '185px' : '105px',
-            minWidth: 'fit-content',
+            marginTop: theme.spacing(4),
           }}
         >
-          <Grid
-            container
-            minWidth={isMobile ? 0 : 700}
-            sx={{
-              backgroundColor: theme.palette.TwClrBg,
-              borderRadius: theme.spacing(4),
-              padding: theme.spacing(3),
-              marginTop: theme.spacing(4),
-            }}
-          >
-            <Grid item xs={12}>
-              <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
-                {strings.formatString(strings.SELECT_ACCESSIONS_FOR_PROJECT, project.name)}
-              </Typography>
-              <Typography sx={{ fontSize: '14px', fontWeight: 400, marginBottom: '32px' }}>
-                {strings.formatString(strings.SELECT_ACCESSIONS_FOR_PROJECT_DESCRIPTION, project.name)}
-              </Typography>
-            </Grid>
+          <Card flushMobile>
+            <Grid
+              container
+              sx={{
+                backgroundColor: theme.palette.TwClrBg,
+              }}
+            >
+              <Grid item xs={12}>
+                <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
+                  {strings.formatString(strings.SELECT_ACCESSIONS_FOR_PROJECT, project.name)}
+                </Typography>
+                <Typography sx={{ fontSize: '14px', fontWeight: 400, marginBottom: '32px' }}>
+                  {strings.formatString(strings.SELECT_ACCESSIONS_FOR_PROJECT_DESCRIPTION, project.name)}
+                </Typography>
+              </Grid>
 
-            <Grid item xs={12}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  marginBottom: theme.spacing(0),
-                }}
-              >
-                <ProjectEntitySearch
-                  searchValue={temporalSearchValue || ''}
-                  onSearch={(value: string) => setTemporalSearchValue(value)}
-                  entitySpecificFilterConfigs={entitySpecificFilterConfigs}
-                  filters={filters}
-                  setFilters={setFilters}
-                />
-              </Box>
-            </Grid>
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    marginBottom: theme.spacing(0),
+                  }}
+                >
+                  <ProjectEntitySearch
+                    searchValue={temporalSearchValue || ''}
+                    onSearch={(value: string) => setTemporalSearchValue(value)}
+                    entitySpecificFilterConfigs={entitySpecificFilterConfigs}
+                    filters={filters}
+                    setFilters={setFilters}
+                  />
+                </Box>
+              </Grid>
 
-            <Grid item xs={12}>
-              <Box marginTop={theme.spacing(0)}>
-                <Table
-                  columns={columns}
-                  rows={entities}
-                  selectedRows={selectedRows}
-                  setSelectedRows={setSelectedRows}
-                  id='selectAccessionsTable'
-                  orderBy='accessionNumber'
-                  showCheckbox={true}
-                  showTopBar={true}
-                />
-              </Box>
+              <Grid item xs={12}>
+                <Box marginTop={theme.spacing(0)}>
+                  <Table
+                    columns={columns}
+                    rows={entities}
+                    selectedRows={selectedRows}
+                    setSelectedRows={setSelectedRows}
+                    id='selectAccessionsTable'
+                    orderBy='accessionNumber'
+                    showCheckbox={true}
+                    showTopBar={true}
+                  />
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
+          </Card>
         </Container>
       </PageForm>
     </>

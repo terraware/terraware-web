@@ -173,7 +173,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
   }, [filters, onApplyFilters]);
 
   return (
-    <Card style={{ minWidth: 'fit-content' }}>
+    <Card flushMobile>
       {showResults ? (
         <InventoryTable
           results={searchResults || []}

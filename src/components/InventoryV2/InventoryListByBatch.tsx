@@ -175,7 +175,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   }, [filters, onApplyFilters]);
 
   return (
-    <Card style={{ minWidth: 'fit-content' }}>
+    <Card flushMobile>
       {showResults ? (
         <InventoryTable
           results={searchResults || []}
