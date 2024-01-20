@@ -107,61 +107,61 @@ export default function SeedBanksList({ organization }: SeedBanksListProps): JSX
 
   return (
     <TfMain>
-          <PageHeaderWrapper nextElement={contentRef.current}>
+      <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
-              <Grid item xs={8}>
-                <h1 className={classes.title}>{strings.SEED_BANKS}</h1>
-              </Grid>
-              <Grid item xs={4} className={classes.centered}>
-                {isAdmin(organization) &&
-                  (isMobile ? (
-                    <Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' />
-                  ) : (
-                    <Button
-                      id='new-facility'
-                      icon='plus'
-                      label={strings.ADD_SEED_BANK}
-                      onClick={goToNewSeedBank}
-                      size='medium'
-                    />
-                  ))}
-              </Grid>
-            </Grid>
-            <PageSnackbar />
-          </PageHeaderWrapper>
-          <Card flushMobile>
-            <Grid container ref={contentRef}>
-              <Grid item xs={12} className={classes.searchBar}>
-                <TextField
-                  placeholder={strings.SEARCH}
-                  iconLeft='search'
-                  label=''
-                  id='search'
-                  type='text'
-                  className={classes.searchField}
-                  onChange={(value) => onChangeSearch('search', value)}
-                  value={temporalSearchValue}
-                  iconRight='cancel'
-                  onClickRightIcon={clearSearch}
+          <Grid item xs={8}>
+            <h1 className={classes.title}>{strings.SEED_BANKS}</h1>
+          </Grid>
+          <Grid item xs={4} className={classes.centered}>
+            {isAdmin(organization) &&
+              (isMobile ? (
+                <Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' />
+              ) : (
+                <Button
+                  id='new-facility'
+                  icon='plus'
+                  label={strings.ADD_SEED_BANK}
+                  onClick={goToNewSeedBank}
+                  size='medium'
                 />
+              ))}
+          </Grid>
+        </Grid>
+        <PageSnackbar />
+      </PageHeaderWrapper>
+      <Card flushMobile>
+        <Grid container ref={contentRef}>
+          <Grid item xs={12} className={classes.searchBar}>
+            <TextField
+              placeholder={strings.SEARCH}
+              iconLeft='search'
+              label=''
+              id='search'
+              type='text'
+              className={classes.searchField}
+              onChange={(value) => onChangeSearch('search', value)}
+              value={temporalSearchValue}
+              iconRight='cancel'
+              onClickRightIcon={clearSearch}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <div>
+              <Grid container spacing={4}>
+                <Grid item xs={12}>
+                  <Table
+                    id='seed-banks-table'
+                    columns={columns}
+                    rows={results}
+                    orderBy='name'
+                    Renderer={SeedBanksCellRenderer}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <div>
-                  <Grid container spacing={4}>
-                    <Grid item xs={12}>
-                      <Table
-                        id='seed-banks-table'
-                        columns={columns}
-                        rows={results}
-                        orderBy='name'
-                        Renderer={SeedBanksCellRenderer}
-                      />
-                    </Grid>
-                  </Grid>
-                </div>
-              </Grid>
-            </Grid>
-          </Card>
+            </div>
+          </Grid>
+        </Grid>
+      </Card>
     </TfMain>
   );
 }

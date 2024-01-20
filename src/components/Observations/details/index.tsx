@@ -135,21 +135,21 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         <Grid item xs={12}>
           <AggregatedPlantsStats {...(details ?? {})} />
         </Grid>
+        <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Card flushMobile>
+            <Search {...searchProps} />
+            <Box marginTop={2}>
+              <Table
+                id='observation-details-table'
+                columns={columns}
+                rows={details?.plantingZones ?? []}
+                orderBy='plantingZoneName'
+                Renderer={ObservationDetailsRenderer(Number(plantingSiteId), Number(observationId))}
+              />
+            </Box>
+          </Card>
+        </Grid>
       </Grid>
-      <Box sx={{ marginTop: 3, maxWidth: '100%' }}>
-        <Card flushMobile>
-          <Search {...searchProps} />
-          <Box marginTop={2}>
-            <Table
-              id='observation-details-table'
-              columns={columns}
-              rows={details?.plantingZones ?? []}
-              orderBy='plantingZoneName'
-              Renderer={ObservationDetailsRenderer(Number(plantingSiteId), Number(observationId))}
-            />
-          </Box>
-        </Card>
-      </Box>
     </DetailsPage>
   );
 }
