@@ -41,7 +41,7 @@ type NurseryWithdrawalsProps = {
   reloadTracking: () => void;
 };
 
-export default function NurseryPlantingsAndWithdrawals({ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
+export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
   const classes = useStyles();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();

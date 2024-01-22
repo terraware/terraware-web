@@ -17,7 +17,7 @@ import strings from 'src/strings';
 import { requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import StatsWarningDialog from 'src/components/NurseryWithdrawals/StatsWarningModal';
+import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
 
 export const useStyles = makeStyles(() => ({
   popup: {

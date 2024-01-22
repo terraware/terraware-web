@@ -24,7 +24,6 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
 import OptInFeatures from './components/OptInFeatures';
-import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { PlantingSite } from 'src/types/Tracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import AppBootstrap from './AppBootstrap';
@@ -53,6 +52,7 @@ import NurseriesRouter from 'src/scenes/NurseriesRouter';
 import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
 import InventoryRouter from 'src/scenes/InventoryRouter';
 import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
+import NurseryRouter from 'src/scenes/NurseryRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -138,7 +138,6 @@ function AppContent() {
   const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const projects: Project[] | undefined = useAppSelector(selectProjects);
-  const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
   const [showNavBar, setShowNavBar] = useState(true);
   const featureFlagProjects = isEnabled('Projects');
 
@@ -188,19 +187,6 @@ function AppContent() {
   useEffect(() => {
     reloadProjects();
   }, [reloadProjects]);
-
-  useEffect(() => {
-    const subzones: Record<number, string> = {};
-    for (const plantingSite of plantingSites ?? []) {
-      for (const plantingZone of plantingSite.plantingZones ?? []) {
-        for (const subzone of plantingZone.plantingSubzones ?? []) {
-          subzones[subzone.id] = subzone.name;
-        }
-      }
-    }
-
-    setPlantingSubzoneNames(subzones);
-  }, [plantingSites]);
 
   useEffect(() => {
     if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
@@ -365,15 +351,11 @@ function AppContent() {
             <Route path={APP_PATHS.PLANTING_SITES}>
               <PlantingSites reloadTracking={reloadTracking} />
             </Route>
-            <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
-              <NurseryWithdrawals reloadTracking={reloadTracking} />
+
+            <Route path={'/nursery'}>
+              <NurseryRouter />
             </Route>
-            <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-              <NurseryWithdrawalsDetails species={species || []} plantingSubzoneNames={plantingSubzoneNames} />
-            </Route>
-            <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
-              <NurseryReassignment />
-            </Route>
+
             <Route exact path={APP_PATHS.CONTACT_US}>
               <ContactUs />
             </Route>

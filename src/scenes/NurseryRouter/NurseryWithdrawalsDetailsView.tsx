@@ -47,15 +47,15 @@ export interface WithdrawalSummary {
   hasReassignments: boolean;
 }
 
-type NurseryWithdrawalsDetailsProps = {
+type NurseryWithdrawalsDetailsViewProps = {
   species: Species[];
   plantingSubzoneNames: Record<number, string>;
 };
 
-export default function NurseryWithdrawalsDetails({
+export default function NurseryWithdrawalsDetailsView({
   species,
   plantingSubzoneNames,
-}: NurseryWithdrawalsDetailsProps): JSX.Element {
+}: NurseryWithdrawalsDetailsViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
