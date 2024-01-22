@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
@@ -15,6 +15,12 @@ const SpeciesView = () => {
   const reloadSpecies = useCallback(() => {
     void dispatch(requestSpecies(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
+
+  useEffect(() => {
+    if (!species) {
+      reloadSpecies();
+    }
+  }, [species, reloadSpecies]);
 
   if ((species || []).length === 0) {
     return <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />;
