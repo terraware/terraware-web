@@ -16,19 +16,19 @@ import strings from 'src/strings';
 import { roleName, Organization } from 'src/types/Organization';
 import { OrganizationUser, User } from 'src/types/User';
 import useForm from 'src/utils/useForm';
-import PageForm from '../common/PageForm';
-import TextField from '../common/Textfield/Textfield';
+import PageForm from '../../components/common/PageForm';
+import TextField from '../../components/common/Textfield/Textfield';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
 import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
 import DeleteOrgDialog from './DeleteOrgModal';
-import Checkbox from '../common/Checkbox';
+import Checkbox from '../../components/common/Checkbox';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import TitleDescription from '../common/TitleDescription';
+import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
+import TitleDescription from '../../components/common/TitleDescription';
 import { useLocalization, useUser } from 'src/providers';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
@@ -36,7 +36,7 @@ import { useTimeZones } from 'src/providers';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 import { weightSystems } from 'src/units';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
-import LocaleSelector from '../LocaleSelector';
+import LocaleSelector from '../../components/LocaleSelector';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
 import DeleteAccountModal from './DeleteAccountModal';
 import { Country } from 'src/types/Country';
@@ -49,7 +49,7 @@ type MyAccountProps = {
   reloadData?: () => void;
 };
 
-export default function MyAccount(props: MyAccountProps): JSX.Element | null {
+export default function MyAccountView(props: MyAccountProps): JSX.Element | null {
   const { user, reloadUser } = useUser();
 
   if (!user) {

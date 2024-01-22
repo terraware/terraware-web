@@ -30,7 +30,7 @@ import { isAdmin } from 'src/utils/organization';
  *     /observations/<planting-site-id>/<observation-id> will go to drilled down components (TODO)
  * Having this wrapper component allows us to pre-request data for all the views without being redundant.
  */
-export default function Observations(): JSX.Element {
+export default function ObservationsRouter(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [dispatched, setDispatched] = useState<boolean>(false);
   const snackbar = useSnackbar();
@@ -67,10 +67,10 @@ export default function Observations(): JSX.Element {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
-  return <ObservationsWrapper />;
+  return <ObservationsInnerRouter />;
 }
 
-const ObservationsWrapper = (): JSX.Element => {
+const ObservationsInnerRouter = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const [search, setSearch] = useState<string>('');

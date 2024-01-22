@@ -1,27 +1,26 @@
 import React from 'react';
 import strings from 'src/strings';
-import Button from '../common/button/Button';
-import DialogBox from '../common/DialogBox/DialogBox';
+import Button from '../../components/common/button/Button';
+import DialogBox from '../../components/common/DialogBox/DialogBox';
 
-export interface DeleteOrgDialogProps {
+export interface CannotRemoveOrgDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: () => void;
-  orgName: string;
 }
 
-export default function DeleteOrgDialog(props: DeleteOrgDialogProps): JSX.Element {
-  const { onClose, open, onSubmit, orgName } = props;
+export default function CannotRemoveOrgDialog(props: CannotRemoveOrgDialogProps): JSX.Element {
+  const { onClose, open, onSubmit } = props;
 
   return (
     <DialogBox
       onClose={onClose}
       open={open}
-      title={strings.DELETE_ORGANIZATION}
+      title={strings.CANNOT_REMOVE}
       size='medium'
       middleButtons={[
         <Button
-          id='cancelDeleteOrg'
+          id='cancelCannotRemoveOrg'
           label={strings.CANCEL}
           priority='secondary'
           type='passive'
@@ -29,15 +28,14 @@ export default function DeleteOrgDialog(props: DeleteOrgDialogProps): JSX.Elemen
           key='button-1'
         />,
         <Button
-          id='deleteOrg'
+          id='deleteCannotRemoveOrg'
           label={strings.DELETE}
           type='destructive'
-          icon='iconTrashCan'
           onClick={onSubmit}
           key='button-2'
         />,
       ]}
-      message={strings.formatString(strings.DELETE_ORGANIZATION_MSG, orgName)}
+      message={strings.CANNOT_REMOVE_MSG}
       skrim={true}
     />
   );

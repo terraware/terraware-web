@@ -19,7 +19,6 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
-import MyAccount from './components/MyAccount';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
@@ -30,7 +29,7 @@ import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
-import Observations from 'src/components/Observations';
+import ObservationsRouter from 'src/scenes/ObservationsRouter';
 import { getRgbaFromHex } from 'src/utils/color';
 import PlantingSites from 'src/components/PlantingSites';
 import isEnabled from 'src/features';
@@ -53,6 +52,7 @@ import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
 import InventoryRouter from 'src/scenes/InventoryRouter';
 import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
 import NurseryRouter from 'src/scenes/NurseryRouter';
+import MyAccountRouter from 'src/scenes/MyAccountRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -128,7 +128,7 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization, reloadOrganizations } = useOrganization();
+  const { organizations, selectedOrganization } = useOrganization();
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
   const { isProduction } = useEnvironment();
   const { reloadUserPreferences: reloadPreferences } = useUser();
@@ -236,12 +236,10 @@ function AppContent() {
     return (
       <>
         <Switch>
-          <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-            <MyAccount organizations={organizations} edit={true} reloadData={reloadOrganizations} />
+          <Route path={APP_PATHS.MY_ACCOUNT}>
+            <MyAccountRouter />
           </Route>
-          <Route exact path={APP_PATHS.MY_ACCOUNT}>
-            <MyAccount organizations={organizations} edit={false} />
-          </Route>
+
           <Route exact path={APP_PATHS.WELCOME}>
             <NoOrgLandingPage />
           </Route>
@@ -360,11 +358,8 @@ function AppContent() {
               <ContactUsView />
             </Route>
 
-            <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-              <MyAccount organizations={organizations} edit={true} reloadData={reloadOrganizations} />
-            </Route>
-            <Route exact path={APP_PATHS.MY_ACCOUNT}>
-              <MyAccount organizations={organizations} edit={false} />
+            <Route path={APP_PATHS.MY_ACCOUNT}>
+              <MyAccountRouter />
             </Route>
 
             <Route path={APP_PATHS.REPORTS}>
@@ -372,7 +367,7 @@ function AppContent() {
             </Route>
 
             <Route path={APP_PATHS.OBSERVATIONS}>
-              <Observations />
+              <ObservationsRouter />
             </Route>
 
             {!isProduction && (
