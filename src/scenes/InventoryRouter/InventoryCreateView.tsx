@@ -11,7 +11,7 @@ import BatchDetailsForm from 'src/scenes/InventoryRouter/form/BatchDetailsForm';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
 import { requestSaveBatch, SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
-import { InventoryListType, InventoryListTypes } from '../../components/InventoryV2';
+import { InventoryListType, InventoryListTypes } from 'src/scenes/InventoryRouter/InventoryV2View';
 
 export default function InventoryCreateView(): JSX.Element {
   const dispatch = useAppDispatch();
