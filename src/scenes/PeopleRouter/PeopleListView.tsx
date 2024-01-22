@@ -7,20 +7,20 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
-import TfMain from '../common/TfMain';
+import TfMain from '../../components/common/TfMain';
 import TableCellRenderer from './TableCellRenderer';
 import PageSnackbar from 'src/components/PageSnackbar';
 import RemovePeopleDialog from './RemovePeopleModal';
-import AssignNewOwnerDialog from '../MyAccount/AssignNewOwnerModal';
-import DeleteOrgDialog from '../MyAccount/DeleteOrgModal';
+import AssignNewOwnerDialog from '../../components/MyAccount/AssignNewOwnerModal';
+import DeleteOrgDialog from '../../components/MyAccount/DeleteOrgModal';
 import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
 import { OrganizationService, OrganizationUserService, Response } from 'src/services';
 import { Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
-import TextField from '../common/Textfield/Textfield';
+import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
+import TextField from '../../components/common/Textfield/Textfield';
 import useDebounce from 'src/utils/useDebounce';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { SearchService } from 'src/services';
@@ -60,7 +60,7 @@ const columns = (): TableColumnType[] => [
   { key: 'addedTime', name: strings.DATE_ADDED, type: 'date' },
 ];
 
-export default function PeopleList(): JSX.Element {
+export default function PeopleListView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { user } = useUser();
   const classes = useStyles();
