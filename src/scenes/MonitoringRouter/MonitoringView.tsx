@@ -1,17 +1,17 @@
-import { makeStyles } from '@mui/styles';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import EmptyMessage from '../common/EmptyMessage';
+import { useHistory, useParams } from 'react-router-dom';
+import { makeStyles } from '@mui/styles';
+import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import { useHistory, useParams } from 'react-router-dom';
+import EmptyMessage from 'src/components/common/EmptyMessage';
 import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
-import TfMain from '../common/TfMain';
-import Select from '../common/Select/Select';
+import TfMain from 'src/components/common/TfMain';
+import Select from 'src/components/common/Select/Select';
 import { Facility } from 'src/types/Facility';
 import { PreferencesService } from 'src/services';
-import SeedBankMonitoring from './SeedBankMonitoring';
-import Button from '../common/button/Button';
-import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
+import SeedBankMonitoring from 'src/components/Monitoring/SeedBankMonitoring';
+import Button from 'src/components/common/button/Button';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -64,7 +64,7 @@ type MonitoringProps = {
   reloadData: () => void;
 };
 
-export default function Monitoring(props: MonitoringProps): JSX.Element {
+export default function MonitoringView(props: MonitoringProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization.id;
   const { isDesktop, isMobile } = useDeviceInfo();
@@ -88,7 +88,7 @@ export default function Monitoring(props: MonitoringProps): JSX.Element {
   const setActiveSeedBank = useCallback(
     (seedBank: Facility | undefined) => {
       if (seedBank) {
-        history.push(APP_PATHS.SEED_BANK_MONITORING.replace(':seedBankId', seedBank.id.toString()));
+        history.push(APP_PATHS.MONITORING_SEED_BANK.replace(':seedBankId', seedBank.id.toString()));
       }
     },
     [history]

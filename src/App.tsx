@@ -27,7 +27,6 @@ import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import MyAccount from './components/MyAccount';
-import Monitoring from './components/Monitoring';
 import SeedBanks from './components/SeedBanks';
 import NewSeedBank from './components/NewSeedBank';
 import SeedBankDetails from './components/SeedBank';
@@ -69,6 +68,7 @@ import AccessionsView from 'src/components/AccessionsView';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
+import MonitoringRouter from 'src/scenes/MonitoringRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -339,6 +339,7 @@ function AppContent() {
             <Route exact path={APP_PATHS.CHECKIN}>
               <CheckIn />
             </Route>
+
             <Route exact path={APP_PATHS.ACCESSIONS}>
               <AccessionsView setWithdrawalCreated={setWithdrawalCreated} />
             </Route>
@@ -348,12 +349,11 @@ function AppContent() {
             <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
               <Accession2View />
             </Route>
-            <Route exact path={APP_PATHS.MONITORING}>
-              <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadOrganizations} />
+
+            <Route path={APP_PATHS.MONITORING}>
+              <MonitoringRouter />
             </Route>
-            <Route exact path={APP_PATHS.SEED_BANK_MONITORING}>
-              <Monitoring hasSeedBanks={selectedOrgHasSeedBanks()} reloadData={reloadOrganizations} />
-            </Route>
+
             <Route exact path={APP_PATHS.SPECIES}>
               {selectedOrgHasSpecies() ? (
                 <SpeciesList reloadData={reloadSpecies} species={species || []} />
