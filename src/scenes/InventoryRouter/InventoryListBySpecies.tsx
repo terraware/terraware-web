@@ -1,7 +1,9 @@
-import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
-import { CircularProgress, Container, Theme } from '@mui/material';
-import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { CircularProgress, Container, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { TableColumnType } from '@terraware/web-components';
+import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
+import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
@@ -9,16 +11,14 @@ import { useOrganization, useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { InventoryFiltersType } from 'src/components/Inventory/InventoryFiltersPopover';
 import {
   InventoryResult,
   FacilityInventoryResult,
   InventoryResultWithFacilityNames,
 } from 'src/scenes/InventoryRouter/InventoryV2View';
-import { makeStyles } from '@mui/styles';
-import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import Card from 'src/components/common/Card';
+import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
