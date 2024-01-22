@@ -30,7 +30,6 @@ import SeedBankDetails from './components/SeedBank';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
-import { Accession2Create, Accession2View } from './components/accession2';
 import OptInFeatures from './components/OptInFeatures';
 import Nurseries from './components/Nurseries';
 import NewNursery from './components/NewNursery';
@@ -61,13 +60,13 @@ import ProjectsRouter from 'src/components/Projects/Router';
 import { requestProjects } from './redux/features/projects/projectsThunks';
 import InventoryCreateView from './components/InventoryV2/InventoryCreateView';
 import ReportsRouter from 'src/components/Reports/Router';
-import AccessionsView from 'src/components/AccessionsView';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 import MonitoringRouter from 'src/scenes/MonitoringRouter';
 import SpeciesView from 'src/scenes/Species';
 import OrganizationRouter from 'src/scenes/OrganizationRouter';
+import AccessionsRouter from './scenes/AccessionsRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -332,21 +331,17 @@ function AppContent() {
             <Route exact path={APP_PATHS.HOME}>
               <Home />
             </Route>
+
             <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
               <SeedsDashboard />
             </Route>
+
             <Route exact path={APP_PATHS.CHECKIN}>
               <CheckIn />
             </Route>
 
-            <Route exact path={APP_PATHS.ACCESSIONS}>
-              <AccessionsView setWithdrawalCreated={setWithdrawalCreated} />
-            </Route>
-            <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
-              <Accession2Create />
-            </Route>
-            <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
-              <Accession2View />
+            <Route path={APP_PATHS.ACCESSIONS}>
+              <AccessionsRouter setWithdrawalCreated={setWithdrawalCreated} />
             </Route>
 
             <Route path={APP_PATHS.MONITORING}>

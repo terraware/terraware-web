@@ -5,8 +5,8 @@ import CollectedReceivedDate2 from './CollectedReceivedDate2';
 import CollectionSource from './CollectionSource';
 import Collectors2 from './Collectors2';
 import SeedBank2Selector from './SeedBank2Selector';
-import FacilitySelector from 'src/components/accession2/properties/FacilitySelector';
-import SubLocationSelector from 'src/components/accession2/properties/SubLocationSelector';
+import FacilitySelector from 'src/scenes/AccessionsRouter/properties/FacilitySelector';
+import SubLocationSelector from 'src/scenes/AccessionsRouter/properties/SubLocationSelector';
 
 export {
   Accession2Address,

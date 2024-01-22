@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { makeStyles } from '@mui/styles';
 import { ViabilityTestResult } from 'src/types/Accession';
 import { useLocalization } from '../../../providers';
-import { newChart } from '../../common/Chart';
+import { newChart } from '../../../components/common/Chart';
 import moment from 'moment-timezone';
 
 const useStyles = makeStyles(() => ({
