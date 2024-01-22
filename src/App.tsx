@@ -353,7 +353,7 @@ function AppContent() {
               <SeedBanksRouter />
             </Route>
 
-            <Route exact path={APP_PATHS.NURSERIES}>
+            <Route path={APP_PATHS.NURSERIES}>
               <NurseriesRouter />
             </Route>
 
