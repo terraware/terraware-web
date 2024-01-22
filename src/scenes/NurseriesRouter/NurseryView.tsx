@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import TextField from '../common/Textfield/Textfield';
+import TextField from '../../components/common/Textfield/Textfield';
 import useForm from 'src/utils/useForm';
-import PageForm from '../common/PageForm';
+import PageForm from '../../components/common/PageForm';
 import { Facility, PartialSubLocation } from 'src/types/Facility';
 import { FacilityService, SubLocationService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -15,10 +15,10 @@ import { getAllNurseries } from 'src/utils/organization';
 import TfMain from 'src/components/common/TfMain';
 import { useOrganization } from 'src/providers/hooks';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import LocationTimeZoneSelector from '../LocationTimeZoneSelector';
+import LocationTimeZoneSelector from '../../components/LocationTimeZoneSelector';
 import { CreateFacilityResponse } from 'src/services/FacilityService';
 import { DatePicker } from '@terraware/web-components';
-import NurserySubLocations from 'src/components/Nursery/NurserySubLocations';
+import NurserySubLocations from 'src/scenes/NurseriesRouter/NurserySubLocations';
 
 export default function NurseryView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();

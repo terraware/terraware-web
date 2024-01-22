@@ -4,13 +4,13 @@ import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { FacilityService } from 'src/services';
-import TextField from '../common/Textfield/Textfield';
-import Button from '../common/button/Button';
+import TextField from '../../components/common/Textfield/Textfield';
+import Button from '../../components/common/button/Button';
 import { Facility } from 'src/types/Facility';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import TfMain from '../common/TfMain';
-import PageSnackbar from '../PageSnackbar';
+import TfMain from '../../components/common/TfMain';
+import PageSnackbar from '../../components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function NurseryDetails(): JSX.Element {
+export default function NurseryDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { nurseryId } = useParams<{ nurseryId: string }>();

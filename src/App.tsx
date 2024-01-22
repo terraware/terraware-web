@@ -7,7 +7,6 @@ import useStateLocation from './utils/useStateLocation';
 import ContactUs from 'src/components/ContactUs';
 import Home from 'src/scenes/Home';
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
-import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import NavBar from 'src/components/NavBar';
 import CheckIn from 'src/scenes/CheckIn';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
@@ -25,10 +24,7 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
 import OptInFeatures from './components/OptInFeatures';
-import Nurseries from './components/Nurseries';
-import NewNursery from './components/NewNursery';
 import InventoryV2 from './components/InventoryV2';
-import NurseryDetails from './components/Nursery';
 import InventoryViewForSpecies from './components/InventoryV2/InventoryViewForSpecies';
 import InventoryViewForNursery from './components/InventoryV2/InventoryViewForNursery';
 import InventoryBatch from './components/InventoryV2/InventoryBatch';
@@ -62,7 +58,8 @@ import SpeciesView from 'src/scenes/Species';
 import OrganizationRouter from 'src/scenes/OrganizationRouter';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
-import SeedBanksRouter from './scenes/SeedBanksRouter';
+import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
+import NurseriesRouter from 'src/scenes/NurseriesRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -236,13 +233,6 @@ function AppContent() {
 
   const selectedOrgHasPlantingSites = (): boolean => plantingSites !== undefined && plantingSites.length > 0;
 
-  const getNurseriesView = (): JSX.Element => {
-    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasNurseries()) {
-      return <Nurseries organization={selectedOrganization} />;
-    }
-    return <EmptyStatePage pageName={'Nurseries'} />;
-  };
-
   const viewHasBackgroundImage = (): boolean => {
     if (
       location.pathname.startsWith(APP_PATHS.HOME) ||
@@ -363,11 +353,8 @@ function AppContent() {
               <SeedBanksRouter />
             </Route>
 
-            <Route exact path={APP_PATHS.NURSERIES_NEW}>
-              <NewNursery />
-            </Route>
-            <Route exact path={APP_PATHS.NURSERIES_EDIT}>
-              <NewNursery />
+            <Route exact path={APP_PATHS.NURSERIES}>
+              <NurseriesRouter />
             </Route>
 
             <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
@@ -375,12 +362,6 @@ function AppContent() {
             </Route>
             <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
               <PlantsDashboard />
-            </Route>
-            <Route path={APP_PATHS.NURSERIES_VIEW}>
-              <NurseryDetails />
-            </Route>
-            <Route exact path={APP_PATHS.NURSERIES}>
-              {getNurseriesView()}
             </Route>
             <Route exact path={APP_PATHS.INVENTORY}>
               <InventoryV2 hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
