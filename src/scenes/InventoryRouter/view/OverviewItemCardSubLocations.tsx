@@ -8,8 +8,8 @@ import { BatchData } from 'src/services/NurseryBatchService';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Batch } from 'src/types/Batch';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { useSubLocations } from 'src/components/InventoryV2/form/useSubLocations';
-import SubLocationsDropdown from 'src/components/InventoryV2/form/SubLocationsDropdown';
+import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
+import SubLocationsDropdown from 'src/scenes/InventoryRouter/form/SubLocationsDropdown';
 import { useOrganization } from 'src/providers';
 
 interface OverviewItemCardSubLocationsProps {

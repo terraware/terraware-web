@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useQuery from 'src/utils/useQuery';
 import { APP_PATHS } from 'src/constants';
-import BatchWithdrawFlow from './BatchWithdrawFlow';
+import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 
-type BatchBulkWithdrawWrapperComponentProps = {
+type BatchBulkWithdrawViewProps = {
   withdrawalCreatedCallback?: () => void;
 };
-export default function BatchBulkWithdrawWrapperComponent(
-  props: BatchBulkWithdrawWrapperComponentProps
-): JSX.Element | null {
+export default function BatchBulkWithdrawView(props: BatchBulkWithdrawViewProps): JSX.Element | null {
   const { withdrawalCreatedCallback } = props;
   const [batchIds, setBatchIds] = useState<string[]>();
   const [source, setSource] = useState<string | null>();

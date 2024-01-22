@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { NurseryBatchService } from 'src/services';
 import useQuery from 'src/utils/useQuery';
-import BatchWithdrawFlow from './BatchWithdrawFlow';
+import Index from '../../components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 
-type SpeciesBulkWithdrawWrapperComponentProps = {
+type SpeciesBulkWithdrawViewComponentProps = {
   withdrawalCreatedCallback?: () => void;
 };
-export default function SpeciesBulkWithdrawWrapperComponent(
-  props: SpeciesBulkWithdrawWrapperComponentProps
-): JSX.Element | null {
+export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewComponentProps): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
   const { withdrawalCreatedCallback } = props;
   const [speciesIds, setSpeciesIds] = useState<string[]>();
@@ -51,10 +49,6 @@ export default function SpeciesBulkWithdrawWrapperComponent(
   }, [speciesIds, history, selectedOrganization.id]);
 
   return batchIds ? (
-    <BatchWithdrawFlow
-      batchIds={batchIds}
-      sourcePage={source || undefined}
-      withdrawalCreatedCallback={withdrawalCreatedCallback}
-    />
+    <Index batchIds={batchIds} sourcePage={source || undefined} withdrawalCreatedCallback={withdrawalCreatedCallback} />
   ) : null;
 }

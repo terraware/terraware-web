@@ -1,4 +1,4 @@
-import InventoryTable from 'src/components/InventoryV2/InventoryTable';
+import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { CircularProgress, Container, Theme } from '@mui/material';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -10,7 +10,11 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { InventoryFiltersType } from 'src/components/Inventory/InventoryFiltersPopover';
-import { InventoryResult, FacilityInventoryResult, InventoryResultWithFacilityNames } from 'src/components/InventoryV2';
+import {
+  InventoryResult,
+  FacilityInventoryResult,
+  InventoryResultWithFacilityNames,
+} from 'src/scenes/InventoryRouter/InventoryV2View';
 import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';

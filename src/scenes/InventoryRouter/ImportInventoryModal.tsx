@@ -3,7 +3,7 @@ import { NurseryInventoryService, SpeciesService } from 'src/services';
 import { Facility } from 'src/types/Facility';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import ImportModal from '../common/ImportModal';
+import ImportModal from '../../components/common/ImportModal';
 import NurseryDropdown from './NurseryDropdown';
 import { useOrganization } from 'src/providers/hooks';
 

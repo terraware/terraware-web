@@ -17,9 +17,9 @@ import { getAllNurseries } from 'src/utils/organization';
 import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { Project } from 'src/types/Project';
-import InventoryFilters, { InventoryFiltersUnion } from 'src/components/InventoryV2/InventoryFilter';
-import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
-import { convertFilterGroupToMap, getNurseryName } from 'src/components/InventoryV2/FilterUtils';
+import InventoryFilters, { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
+import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
+import { convertFilterGroupToMap, getNurseryName } from 'src/scenes/InventoryRouter/FilterUtils';
 import isEnabled from 'src/features';
 import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
 

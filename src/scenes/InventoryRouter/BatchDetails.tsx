@@ -2,17 +2,17 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import Card from 'src/components/common/Card';
 import { Batch } from 'src/types/Batch';
-import OverviewItemCard from '../common/OverviewItemCard';
+import OverviewItemCard from '../../components/common/OverviewItemCard';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useEffect, useState } from 'react';
 import { NurseryBatchService } from 'src/services';
-import PhotosList from '../common/PhotosList';
+import PhotosList from '../../components/common/PhotosList';
 import useSnackbar from 'src/utils/useSnackbar';
 import { Button } from '@terraware/web-components';
 import BatchDetailsModal from './BatchDetailsModal';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
 import { batchSubstrateEnumToLocalized } from 'src/types/Accession';
-import ChangeQuantityModal from 'src/components/InventoryV2/view/ChangeQuantityModal';
+import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
 
 interface BatchDetailsProps {
   batch: Batch;

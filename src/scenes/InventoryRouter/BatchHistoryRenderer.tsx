@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
-import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
-import { RendererProps } from '../common/table/types';
+import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
+import { RendererProps } from '../../components/common/table/types';
 import { Theme } from '@mui/material';
 import Link from 'src/components/common/Link';
 import { getDateDisplayValue } from '@terraware/web-components/utils';

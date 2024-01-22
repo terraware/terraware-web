@@ -15,14 +15,14 @@ import { useOrganization } from 'src/providers';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import { isBatchEmpty } from 'src/components/InventoryV2/FilterUtils';
-import { InventoryFiltersUnion } from 'src/components/InventoryV2/InventoryFilter';
-import Search from 'src/components/InventoryV2/Search';
+import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
+import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
+import Search from 'src/scenes/InventoryRouter/Search';
 import BatchesCellRenderer from './BatchesCellRenderer';
 import BatchDetailsModal from './BatchDetailsModal';
 import BatchesExportModal from './BatchesExportModal';
 import DeleteBatchesModal from './DeleteBatchesModal';
-import { OriginPage } from '../InventoryBatch';
+import { OriginPage } from '../InventoryBatchView';
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 import isEnabled from 'src/features';
 

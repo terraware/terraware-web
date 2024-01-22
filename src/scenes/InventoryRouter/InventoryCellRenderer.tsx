@@ -9,8 +9,8 @@ import Link from 'src/components/common/Link';
 import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
 import useQuery from 'src/utils/useQuery';
-import ChangeQuantityModal from 'src/components/InventoryV2/view/ChangeQuantityModal';
-import QuantitiesMenu from 'src/components/InventoryV2/view/QuantitiesMenu';
+import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
+import QuantitiesMenu from 'src/scenes/InventoryRouter/view/QuantitiesMenu';
 
 const COLUMN_WIDTH = 250;
 

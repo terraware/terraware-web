@@ -10,15 +10,15 @@ import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import BackToLink from 'src/components/common/BackToLink';
-import InventorySummaryForSpecies from 'src/components/InventoryV2/view/InventorySummaryForSpecies';
-import InventorySeedlingsTableForSpecies from 'src/components/InventoryV2/view/InventorySeedlingsTableForSpecies';
 import Card from 'src/components/common/Card';
+import InventorySummaryForSpecies from 'src/scenes/InventoryRouter/view/InventorySummaryForSpecies';
+import InventorySeedlingsTableForSpecies from 'src/scenes/InventoryRouter/view/InventorySeedlingsTableForSpecies';
 
-interface InventoryViewForSpeciesProps {
+interface InventoryForSpeciesViewProps {
   species: Species[];
 }
 
-export default function InventoryViewForSpecies(props: InventoryViewForSpeciesProps): JSX.Element {
+export default function InventoryForSpeciesView(props: InventoryForSpeciesViewProps): JSX.Element {
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();

@@ -10,12 +10,12 @@ import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useQuery from 'src/utils/useQuery';
-import InventorySummaryForNursery from 'src/components/InventoryV2/view/InventorySummaryForNursery';
-import InventorySeedlingsTableForNursery from 'src/components/InventoryV2/view/InventorySeedlingsTableForNursery';
+import InventorySummaryForNursery from 'src/scenes/InventoryRouter/view/InventorySummaryForNursery';
+import InventorySeedlingsTableForNursery from 'src/scenes/InventoryRouter/view/InventorySeedlingsTableForNursery';
 import { getNurseryName } from './FilterUtils';
 import Card from 'src/components/common/Card';
 
-export default function InventoryViewForNursery(): JSX.Element {
+export default function InventoryForNurseryView(): JSX.Element {
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();
