@@ -31,16 +31,16 @@ import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesC
 import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
 import { getShortDate } from 'src/utils/dateFormatter';
 import HectaresPlantedCard from './components/HectaresPlantedCard';
-import EmptyMessage from '../common/EmptyMessage';
+import EmptyMessage from '../../components/common/EmptyMessage';
 import { useHistory } from 'react-router-dom';
-import PlantingSiteDensityCard from 'src/components/Plants/components/PlantingSiteDensityCard';
+import PlantingSiteDensityCard from 'src/scenes/PlantsDashboardRouter/components/PlantingSiteDensityCard';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import FormattedNumber from '../common/FormattedNumber';
-import ObservedNumberOfSpeciesCard from 'src/components/Plants/components/ObservedNumberOfSpeciesCard';
-import SimplePlantingSiteMap from 'src/components/Plants/components/SimplePlantingSiteMap';
+import FormattedNumber from '../../components/common/FormattedNumber';
+import ObservedNumberOfSpeciesCard from 'src/scenes/PlantsDashboardRouter/components/ObservedNumberOfSpeciesCard';
+import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import { isAfter } from 'src/utils/dateUtils';
 
-export default function PlantsDashboard(): JSX.Element {
+export default function PlantsDashboardView(): JSX.Element {
   const org = useOrganization();
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
