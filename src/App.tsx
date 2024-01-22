@@ -66,7 +66,7 @@ import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organiza
 import MonitoringRouter from 'src/scenes/MonitoringRouter';
 import SpeciesView from 'src/scenes/Species';
 import OrganizationRouter from 'src/scenes/OrganizationRouter';
-import AccessionsRouter from './scenes/AccessionsRouter';
+import AccessionsRouter from 'src/scenes/AccessionsRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
