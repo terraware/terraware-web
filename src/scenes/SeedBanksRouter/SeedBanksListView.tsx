@@ -6,18 +6,18 @@ import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
-import TfMain from '../common/TfMain';
+import TfMain from '../../components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { Facility } from 'src/types/Facility';
 import SeedBanksCellRenderer from './TableCellRenderer';
-import TextField from '../common/Textfield/Textfield';
+import TextField from '../../components/common/Textfield/Textfield';
 import { FacilityService } from 'src/services';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
 import { useTimeZones } from 'src/providers';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { isAdmin } from 'src/utils/organization';
@@ -55,7 +55,7 @@ const columns = (): TableColumnType[] => [
   { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
 ];
 
-export default function SeedBanksList({ organization }: SeedBanksListProps): JSX.Element {
+export default function SeedBanksListView({ organization }: SeedBanksListProps): JSX.Element {
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
   const classes = useStyles();

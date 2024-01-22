@@ -4,17 +4,17 @@ import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { FacilityService } from 'src/services';
-import TextField from '../common/Textfield/Textfield';
-import Button from '../common/button/Button';
+import TextField from '../../components/common/Textfield/Textfield';
+import Button from '../../components/common/button/Button';
 import { Facility } from 'src/types/Facility';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
-import TfMain from '../common/TfMain';
+import TfMain from '../../components/common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from 'src/providers/hooks';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import SeedBankSubLocations from 'src/components/SeedBank/SeedBankSubLocations';
+import SeedBankSubLocations from 'src/scenes/SeedBanksRouter/SeedBankSubLocations';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function SeedBankDetails(): JSX.Element {
+export default function SeedBankDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { seedBankId } = useParams<{ seedBankId: string }>();

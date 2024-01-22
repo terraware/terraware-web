@@ -3,9 +3,9 @@ import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
-import Button from '../common/button/Button';
-import Select from '../common/Select/Select';
-import DialogBox from '../common/DialogBox/DialogBox';
+import Button from '../../components/common/button/Button';
+import Select from '../../components/common/Select/Select';
+import DialogBox from '../../components/common/DialogBox/DialogBox';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { useOrganization } from 'src/providers/hooks';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { APP_PATHS } from 'src/constants';
-import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
-import { RendererProps } from '../common/table/types';
-import Link from '../common/Link';
+import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
+import { RendererProps } from '../../components/common/table/types';
+import Link from '../../components/common/Link';
 
 export default function SeedBanksCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index } = props;

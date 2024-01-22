@@ -21,9 +21,6 @@ import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import MyAccount from './components/MyAccount';
-import SeedBanks from './components/SeedBanks';
-import NewSeedBank from './components/NewSeedBank';
-import SeedBankDetails from './components/SeedBank';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
@@ -65,6 +62,7 @@ import SpeciesView from 'src/scenes/Species';
 import OrganizationRouter from 'src/scenes/OrganizationRouter';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
+import SeedBanksRouter from './scenes/SeedBanksRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -238,13 +236,6 @@ function AppContent() {
 
   const selectedOrgHasPlantingSites = (): boolean => plantingSites !== undefined && plantingSites.length > 0;
 
-  const getSeedBanksView = (): JSX.Element => {
-    if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasSeedBanks()) {
-      return <SeedBanks organization={selectedOrganization} />;
-    }
-    return <EmptyStatePage pageName={'SeedBanks'} />;
-  };
-
   const getNurseriesView = (): JSX.Element => {
     if (!isPlaceholderOrg(selectedOrganization.id) && selectedOrgHasNurseries()) {
       return <Nurseries organization={selectedOrganization} />;
@@ -367,24 +358,18 @@ function AppContent() {
                 />
               </Route>
             )}
-            <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
-              <NewSeedBank />
+
+            <Route path={APP_PATHS.SEED_BANKS}>
+              <SeedBanksRouter />
             </Route>
-            <Route exact path={APP_PATHS.SEED_BANKS_EDIT}>
-              <NewSeedBank />
-            </Route>
-            <Route path={APP_PATHS.SEED_BANKS_VIEW}>
-              <SeedBankDetails />
-            </Route>
-            <Route exact path={APP_PATHS.SEED_BANKS}>
-              {getSeedBanksView()}
-            </Route>
+
             <Route exact path={APP_PATHS.NURSERIES_NEW}>
               <NewNursery />
             </Route>
             <Route exact path={APP_PATHS.NURSERIES_EDIT}>
               <NewNursery />
             </Route>
+
             <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
               <PlantsDashboard />
             </Route>
