@@ -17,8 +17,8 @@ import { selectObservation } from 'src/redux/features/observations/observationsS
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import DetailsPage from 'src/components/Observations/common/DetailsPage';
-import AggregatedPlantsStats from 'src/components/Observations/common/AggregatedPlantsStats';
+import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import ObservationDetailsRenderer from './ObservationDetailsRenderer';
 
 const columns = (): TableColumnType[] => [

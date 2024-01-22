@@ -11,7 +11,7 @@ import strings from 'src/strings';
 import MapDateSelect from 'src/components/common/MapDateSelect';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { regexMatch } from 'src/utils/search';
-import TooltipContents from 'src/components/Observations/map/TooltipContents';
+import TooltipContents from 'src/scenes/ObservationsRouter/map/TooltipContents';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({

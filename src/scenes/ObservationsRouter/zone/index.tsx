@@ -14,11 +14,11 @@ import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations'
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import Search, { SearchFiltersProps } from 'src/components/common/SearchFiltersWrapper';
-import DetailsPage from 'src/components/Observations/common/DetailsPage';
-import AggregatedPlantsStats from 'src/components/Observations/common/AggregatedPlantsStats';
+import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
 import { isManagerOrHigher } from 'src/utils/organization';
-import ReplaceObservationPlotModal from 'src/components/Observations/replacePlot/ReplaceObservationPlotModal';
+import ReplaceObservationPlotModal from 'src/scenes/ObservationsRouter/replacePlot/ReplaceObservationPlotModal';
 
 const defaultColumns = (): TableColumnType[] => [
   { key: 'monitoringPlotName', name: strings.MONITORING_PLOT, type: 'string' },
