@@ -11,11 +11,11 @@ import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
 import AddSpeciesModal from './AddSpeciesModal';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
-import TextField from '../common/Textfield/Textfield';
+import TextField from '../../components/common/Textfield/Textfield';
 import SearchService from 'src/services/SearchService';
 import { FieldNodePayload, FieldOptionsMap, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import useForm from 'src/utils/useForm';
-import Icon from '../common/icon/Icon';
+import Icon from '../../components/common/icon/Icon';
 import ImportSpeciesModal from './ImportSpeciesModal';
 import CheckDataModal from './CheckDataModal';
 import SpeciesCellRenderer from './TableCellRenderer';
@@ -131,7 +131,7 @@ const CSV_FIELDS = [
   'ecosystemTypes.ecosystemType',
 ];
 
-export default function SpeciesList({ reloadData, species }: SpeciesListProps): JSX.Element {
+export default function SpeciesListView({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
