@@ -22,7 +22,7 @@ import { selectHasObservationsResults } from 'src/redux/features/observations/ob
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
-import OptInFeatures from './components/OptInFeatures';
+import OptInFeaturesView from 'src/scenes/OptInFeatures';
 import { PlantingSite } from 'src/types/Tracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import AppBootstrap from './AppBootstrap';
@@ -245,7 +245,7 @@ function AppContent() {
           </Route>
           {!isProduction && (
             <Route exact path={APP_PATHS.OPT_IN}>
-              <OptInFeatures refresh={reloadPreferences} />
+              <OptInFeaturesView refresh={reloadPreferences} />
             </Route>
           )}
           <Route path='*'>
@@ -372,7 +372,7 @@ function AppContent() {
 
             {!isProduction && (
               <Route exact path={APP_PATHS.OPT_IN}>
-                <OptInFeatures refresh={reloadPreferences} />
+                <OptInFeaturesView refresh={reloadPreferences} />
               </Route>
             )}
 
