@@ -542,7 +542,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const onFilterChange = (newFilters: Record<string, SearchNodePayload>) => {
-    console.log('newFilters', newFilters);
     setSearchCriteria(newFilters);
 
     // Since `state` is an obvious "in" filter, add to query and session, we can add other filters later
