@@ -16,7 +16,7 @@ import { isAdmin } from 'src/utils/organization';
 import isEnabled from '../features';
 
 type NavBarProps = {
-  setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowNavBar: (value: boolean) => void;
   backgroundTransparent?: boolean;
   withdrawalCreated?: boolean;
   hasPlantingSites?: boolean;
@@ -129,7 +129,10 @@ export default function NavBar({
   };
 
   return (
-    <Navbar setShowNavBar={setShowNavBar} backgroundTransparent={backgroundTransparent}>
+    <Navbar
+      setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
+      backgroundTransparent={backgroundTransparent}
+    >
       <NavItem
         label={strings.HOME}
         icon='home'

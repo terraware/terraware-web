@@ -1,59 +1,22 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CssBaseline, Slide, StyledEngineProvider, Theme } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import useStateLocation from './utils/useStateLocation';
-import ContactUsView from 'src/scenes/ContactUs';
-import Home from 'src/scenes/Home';
-import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
-import NavBar from 'src/components/NavBar';
-import CheckIn from 'src/scenes/CheckIn';
-import SeedsDashboard from 'src/scenes/SeedsDashboard';
+import { Provider } from 'react-redux';
+import { makeStyles } from '@mui/styles';
+import { APP_PATHS } from 'src/constants';
+import useStateLocation from 'src/utils/useStateLocation';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { getRgbaFromHex } from 'src/utils/color';
+import { store } from 'src/redux/store';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useAppVersion } from 'src/hooks/useAppVersion';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
-import { APP_PATHS } from 'src/constants';
-import ErrorBoundary from 'src/ErrorBoundary';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
-import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useEnvironment from 'src/utils/useEnvironment';
-import OptInFeaturesView from 'src/scenes/OptInFeatures';
-import { PlantingSite } from 'src/types/Tracking';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
-import AppBootstrap from './AppBootstrap';
-import { Provider } from 'react-redux';
-import { store } from './redux/store';
-import { useAppVersion } from './hooks/useAppVersion';
-import ObservationsRouter from 'src/scenes/ObservationsRouter';
-import { getRgbaFromHex } from 'src/utils/color';
-import PlantingSites from 'src/components/PlantingSites';
-import isEnabled from 'src/features';
-import { Project } from './types/Project';
-import { selectProjects } from './redux/features/projects/projectsSelectors';
-import ProjectsRouter from 'src/components/Projects/Router';
-import { requestProjects } from './redux/features/projects/projectsThunks';
-import ReportsRouter from 'src/components/Reports/Router';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
-import MonitoringRouter from 'src/scenes/MonitoringRouter';
-import SpeciesView from 'src/scenes/Species';
-import OrganizationRouter from 'src/scenes/OrganizationRouter';
-import AccessionsRouter from 'src/scenes/AccessionsRouter';
-import PeopleRouter from 'src/scenes/PeopleRouter';
-import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
-import NurseriesRouter from 'src/scenes/NurseriesRouter';
-import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
-import InventoryRouter from 'src/scenes/InventoryRouter';
-import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
-import NurseryRouter from 'src/scenes/NurseryRouter';
-import MyAccountRouter from 'src/scenes/MyAccountRouter';
-import RedirectsRouter from 'src/scenes/RedirectsRouter';
+import AppBootstrap from 'src/AppBootstrap';
+import NoOrgRouter from 'src/scenes/NoOrgRouter';
+import TerrawareRouter from 'src/scenes/TerrawareRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -92,27 +55,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
-  content: {
-    height: '100%',
-    overflow: 'auto',
-    '& > div, & > main': {
-      paddingTop: '96px',
-    },
-  },
-  contentWithNavBar: {
-    '& > div, & > main': {
-      paddingLeft: '220px',
-    },
-  },
-  navBarOpened: {
-    backdropFilter: 'blur(8px)',
-    background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
-    height: '100%',
-    alignItems: 'center',
-    position: 'fixed',
-    zIndex: 1300,
-    inset: '0px',
-  },
 }));
 
 const MINIMAL_USER_ROUTES: string[] = [
@@ -129,65 +71,11 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization } = useOrganization();
-  const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
-  const { isProduction } = useEnvironment();
-  const { reloadUserPreferences: reloadPreferences } = useUser();
+  const { organizations } = useOrganization();
 
   const history = useHistory();
-  const species = useAppSelector(selectSpecies);
-  const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
-  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
-  const projects: Project[] | undefined = useAppSelector(selectProjects);
+
   const [showNavBar, setShowNavBar] = useState(true);
-  const featureFlagProjects = isEnabled('Projects');
-
-  const dispatch = useAppDispatch();
-  const { activeLocale } = useLocalization();
-
-  const setDefaults = useCallback(() => {
-    if (!isPlaceholderOrg(selectedOrganization.id)) {
-      setWithdrawalCreated(false);
-    }
-  }, [selectedOrganization.id]);
-
-  const reloadSpecies = useCallback(() => {
-    void dispatch(requestSpecies(selectedOrganization.id));
-  }, [dispatch, selectedOrganization.id]);
-
-  const reloadTracking = useCallback(() => {
-    const populatePlantingSites = () => {
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
-        void dispatch(requestPlantingSites(selectedOrganization.id, activeLocale || undefined));
-      }
-    };
-    populatePlantingSites();
-  }, [dispatch, selectedOrganization.id, activeLocale]);
-
-  const reloadProjects = useCallback(() => {
-    const populateProjects = () => {
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
-        void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
-      }
-    };
-    populateProjects();
-  }, [selectedOrganization.id, dispatch, activeLocale]);
-
-  useEffect(() => {
-    setDefaults();
-  }, [setDefaults]);
-
-  useEffect(() => {
-    reloadSpecies();
-  }, [reloadSpecies]);
-
-  useEffect(() => {
-    reloadTracking();
-  }, [reloadTracking]);
-
-  useEffect(() => {
-    reloadProjects();
-  }, [reloadProjects]);
 
   useEffect(() => {
     if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
@@ -203,187 +91,6 @@ function AppContent() {
     }
   }, [type]);
 
-  const selectedOrgHasSpecies = (): boolean => (species || []).length > 0;
-
-  const selectedOrgHasSeedBanks = (): boolean => selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank');
-
-  const selectedOrgHasNurseries = (): boolean => selectedOrgHasFacilityType(selectedOrganization, 'Nursery');
-
-  const selectedOrgHasProjects = (): boolean => projects !== undefined && projects.length > 0;
-
-  const selectedOrgHasPlantingSites = (): boolean => plantingSites !== undefined && plantingSites.length > 0;
-
-  const viewHasBackgroundImage = (): boolean => {
-    if (
-      location.pathname.startsWith(APP_PATHS.HOME) ||
-      (location.pathname.startsWith(APP_PATHS.SPECIES) && !selectedOrgHasSpecies()) ||
-      (location.pathname.startsWith(APP_PATHS.ACCESSIONS) &&
-        (!selectedOrgHasSeedBanks() || !selectedOrgHasSpecies())) ||
-      (location.pathname.startsWith(APP_PATHS.MONITORING) && !selectedOrgHasSeedBanks()) ||
-      (location.pathname.startsWith(APP_PATHS.INVENTORY) && (!selectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||
-      (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
-      (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
-      (location.pathname.startsWith(APP_PATHS.OBSERVATIONS) && !hasObservationsResults) ||
-      (location.pathname.startsWith(APP_PATHS.PLANTING_SITES) && !selectedOrgHasPlantingSites()) ||
-      (location.pathname.startsWith(APP_PATHS.PROJECTS) && !selectedOrgHasProjects())
-    ) {
-      return true;
-    }
-
-    return false;
-  };
-
-  const getOrphanedUserContent = () => {
-    return (
-      <>
-        <Switch>
-          <Route path={APP_PATHS.MY_ACCOUNT}>
-            <MyAccountRouter />
-          </Route>
-
-          <Route exact path={APP_PATHS.WELCOME}>
-            <NoOrgLandingPage />
-          </Route>
-          {!isProduction && (
-            <Route exact path={APP_PATHS.OPT_IN}>
-              <OptInFeaturesView refresh={reloadPreferences} />
-            </Route>
-          )}
-          <Route path='*'>
-            <Redirect to={APP_PATHS.WELCOME} />
-          </Route>
-        </Switch>
-      </>
-    );
-  };
-
-  const getContent = () => (
-    <>
-      {type !== 'desktop' ? (
-        <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-          <div className={classes.navBarOpened}>
-            <NavBar
-              setShowNavBar={setShowNavBar}
-              withdrawalCreated={withdrawalCreated}
-              hasPlantingSites={selectedOrgHasPlantingSites()}
-            />
-          </div>
-        </Slide>
-      ) : (
-        <NavBar
-          setShowNavBar={setShowNavBar}
-          backgroundTransparent={viewHasBackgroundImage()}
-          withdrawalCreated={withdrawalCreated}
-          hasPlantingSites={selectedOrgHasPlantingSites()}
-        />
-      )}
-      <div
-        className={`${type === 'desktop' && showNavBar ? classes.contentWithNavBar : ''} ${
-          classes.content
-        } scrollable-content`}
-      >
-        <ErrorBoundary setShowNavBar={setShowNavBar}>
-          <Switch>
-            {/* Routes, in order of their appearance down the side NavBar */}
-            <Route exact path={APP_PATHS.HOME}>
-              <Home />
-            </Route>
-
-            <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
-              <SeedsDashboard />
-            </Route>
-
-            <Route exact path={APP_PATHS.CHECKIN}>
-              <CheckIn />
-            </Route>
-
-            <Route path={APP_PATHS.ACCESSIONS}>
-              <AccessionsRouter setWithdrawalCreated={setWithdrawalCreated} />
-            </Route>
-
-            <Route path={APP_PATHS.MONITORING}>
-              <MonitoringRouter />
-            </Route>
-
-            <Route exact path={APP_PATHS.SPECIES}>
-              <SpeciesView />
-            </Route>
-
-            <Route path={APP_PATHS.ORGANIZATION}>
-              <OrganizationRouter />
-            </Route>
-
-            <Route path={APP_PATHS.PEOPLE}>
-              <PeopleRouter />
-            </Route>
-
-            {featureFlagProjects && (
-              <Route path={APP_PATHS.PROJECTS}>
-                <ProjectsRouter
-                  reloadProjects={reloadProjects}
-                  isPlaceholderOrg={() => isPlaceholderOrg(selectedOrganization.id)}
-                  selectedOrgHasProjects={selectedOrgHasProjects}
-                />
-              </Route>
-            )}
-
-            <Route path={APP_PATHS.SEED_BANKS}>
-              <SeedBanksRouter />
-            </Route>
-
-            <Route path={APP_PATHS.NURSERIES}>
-              <NurseriesRouter />
-            </Route>
-
-            <Route path={APP_PATHS.PLANTS_DASHBOARD}>
-              <PlantsDashboardRouter />
-            </Route>
-
-            <Route path={APP_PATHS.INVENTORY}>
-              <InventoryRouter setWithdrawalCreated={setWithdrawalCreated} />
-            </Route>
-
-            <Route path={APP_PATHS.BATCH_WITHDRAW}>
-              <BatchBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
-            </Route>
-
-            <Route path={APP_PATHS.PLANTING_SITES}>
-              <PlantingSites reloadTracking={reloadTracking} />
-            </Route>
-
-            <Route path={'/nursery'}>
-              <NurseryRouter />
-            </Route>
-
-            <Route exact path={APP_PATHS.CONTACT_US}>
-              <ContactUsView />
-            </Route>
-
-            <Route path={APP_PATHS.MY_ACCOUNT}>
-              <MyAccountRouter />
-            </Route>
-
-            <Route path={APP_PATHS.REPORTS}>
-              <ReportsRouter />
-            </Route>
-
-            <Route path={APP_PATHS.OBSERVATIONS}>
-              <ObservationsRouter />
-            </Route>
-
-            {!isProduction && (
-              <Route exact path={APP_PATHS.OPT_IN}>
-                <OptInFeaturesView refresh={reloadPreferences} />
-              </Route>
-            )}
-
-            <RedirectsRouter />
-          </Switch>
-        </ErrorBoundary>
-      </div>
-    </>
-  );
-
   // Localized strings are stored outside of React's state, but there's a state change when they're
   // updated. Declare the dependency here so the app rerenders when the locale changes.
   useLocalization();
@@ -395,7 +102,13 @@ function AppContent() {
       <TopBar>
         <TopBarContent setShowNavBar={setShowNavBar} />
       </TopBar>
-      <div className={classes.container}>{organizations.length === 0 ? getOrphanedUserContent() : getContent()}</div>
+      <div className={classes.container}>
+        {organizations.length === 0 ? (
+          <NoOrgRouter />
+        ) : (
+          <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+        )}
+      </div>
     </StyledEngineProvider>
   );
 }
