@@ -10,10 +10,12 @@ const USER = {
 };
 
 const UPDATED_USER = {
-  id: 1,
-  firstName: 'Constanza',
-  lastName: 'Uanini',
   email: 'constanza@terraformation.com',
+  emailNotificationsEnabled: false,
+  firstName: 'Constanza',
+  globalRoles: [],
+  id: 1,
+  lastName: 'Uanini',
 };
 
 const PREFERENCES = {
