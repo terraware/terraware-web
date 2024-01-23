@@ -2,11 +2,13 @@
 import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import { useRouteMatch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { makeStyles } from '@mui/styles';
 import { APP_PATHS } from 'src/constants';
 import useStateLocation from 'src/utils/useStateLocation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { isAdmin } from 'src/utils/organization';
 import { getRgbaFromHex } from 'src/utils/color';
 import { store } from 'src/redux/store';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -17,6 +19,7 @@ import TopBarContent from 'src/components/TopBar/TopBarContent';
 import AppBootstrap from 'src/AppBootstrap';
 import NoOrgRouter from 'src/scenes/NoOrgRouter';
 import TerrawareRouter from 'src/scenes/TerrawareRouter';
+import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -71,9 +74,9 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations } = useOrganization();
-
+  const { organizations, selectedOrganization } = useOrganization();
   const history = useHistory();
+  const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
 
   const [showNavBar, setShowNavBar] = useState(true);
 
@@ -105,6 +108,8 @@ function AppContent() {
       <div className={classes.container}>
         {organizations.length === 0 ? (
           <NoOrgRouter />
+        ) : isAcceleratorRoute && isAdmin(selectedOrganization) ? (
+          <AcceleratorRouter />
         ) : (
           <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
         )}
