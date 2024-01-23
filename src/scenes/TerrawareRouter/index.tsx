@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { Slide, Theme } from '@mui/material';
-import NavBar from 'src/components/NavBar';
+import NavBar from 'src/scenes/TerrawareRouter/NavBar';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
 import useEnvironment from 'src/utils/useEnvironment';
