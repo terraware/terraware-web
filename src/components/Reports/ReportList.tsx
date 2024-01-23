@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 import TfMain from 'src/components/common/TfMain';
@@ -23,7 +23,6 @@ export default function ReportList(): JSX.Element {
   const contentRef = useRef(null);
   const [results, setResults] = useState<ListReport[]>([]);
   const { selectedOrganization } = useOrganization();
-  const theme = useTheme();
 
   useEffect(() => {
     const refreshSearch = async () => {

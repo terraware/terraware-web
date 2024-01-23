@@ -14,7 +14,7 @@ import TextField from '../common/Textfield/Textfield';
 import { FacilityService } from 'src/services';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { Box, Grid, Theme, useTheme } from '@mui/material';
+import { Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
