@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -230,14 +230,8 @@
 <a name='L165'></a><a href='#L165'>165</a>
 <a name='L166'></a><a href='#L166'>166</a>
 <a name='L167'></a><a href='#L167'>167</a>
-<a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a>
-<a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L168'></a><a href='#L168'>168</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -262,12 +256,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -383,9 +371,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -427,13 +413,14 @@ import TextField from '../common/Textfield/Textfield';
 import { FacilityService } from 'src/services';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { Box, Grid, Theme, useTheme } from '@mui/material';
+import { Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import { useTimeZones } from 'src/providers';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { isAdmin } from 'src/utils/organization';
+import Card from 'src/components/common/Card';
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   title: {
@@ -447,12 +434,6 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-end',
-    marginBottom: '32px',
-  },
-  contentContainer: {
-    backgroundColor: theme.palette.TwClrBg,
-    padding: theme.spacing(3),
-    borderRadius: '32px',
   },
   searchField: {
     width: '300px',
@@ -525,63 +506,61 @@ export default function <span class="fstat-no" title="function not covered" >See
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain&gt;
-      &lt;Box sx={{ paddingLeft: theme.spacing(3) }}&gt;
-        &lt;Grid container spacing={3} sx={{ marginTop: 0 }}&gt;
-          &lt;PageHeaderWrapper nextElement={contentRef.current}&gt;
-            &lt;Grid container spacing={3} sx={{ paddingLeft: theme.spacing(3) }}&gt;
-              &lt;Grid item xs={8}&gt;
-                &lt;h1 className={classes.title}&gt;{strings.SEED_BANKS}&lt;/h1&gt;
-              &lt;/Grid&gt;
-              &lt;Grid item xs={4} className={classes.centered}&gt;
-                {isAdmin(organization) &amp;&amp;
-                  (isMobile ? (
-                    &lt;Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' /&gt;
-                  ) : (
-                    &lt;Button
-                      id='new-facility'
-                      icon='plus'
-                      label={strings.ADD_SEED_BANK}
-                      onClick={goToNewSeedBank}
-                      size='medium'
-                    /&gt;
-                  ))}
-              &lt;/Grid&gt;
-            &lt;/Grid&gt;
-            &lt;PageSnackbar /&gt;
-          &lt;/PageHeaderWrapper&gt;
-          &lt;Grid container className={classes.contentContainer} ref={contentRef}&gt;
-            &lt;Grid item xs={12} className={classes.searchBar}&gt;
-              &lt;TextField
-                placeholder={strings.SEARCH}
-                iconLeft='search'
-                label=''
-                id='search'
-                type='text'
-                className={classes.searchField}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChangeSearch('search', value)}</span>
-                value={temporalSearchValue}
-                iconRight='cancel'
-                onClickRightIcon={clearSearch}
-              /&gt;
-            &lt;/Grid&gt;
-            &lt;Grid item xs={12}&gt;
-              &lt;div&gt;
-                &lt;Grid container spacing={4}&gt;
-                  &lt;Grid item xs={12}&gt;
-                    &lt;Table
-                      id='seed-banks-table'
-                      columns={columns}
-                      rows={results}
-                      orderBy='name'
-                      Renderer={SeedBanksCellRenderer}
-                    /&gt;
-                  &lt;/Grid&gt;
-                &lt;/Grid&gt;
-              &lt;/div&gt;
-            &lt;/Grid&gt;
+      &lt;PageHeaderWrapper nextElement={contentRef.current}&gt;
+        &lt;Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}&gt;
+          &lt;Grid item xs={8}&gt;
+            &lt;h1 className={classes.title}&gt;{strings.SEED_BANKS}&lt;/h1&gt;
+          &lt;/Grid&gt;
+          &lt;Grid item xs={4} className={classes.centered}&gt;
+            {isAdmin(organization) &amp;&amp;
+              (isMobile ? (
+                &lt;Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' /&gt;
+              ) : (
+                &lt;Button
+                  id='new-facility'
+                  icon='plus'
+                  label={strings.ADD_SEED_BANK}
+                  onClick={goToNewSeedBank}
+                  size='medium'
+                /&gt;
+              ))}
           &lt;/Grid&gt;
         &lt;/Grid&gt;
-      &lt;/Box&gt;
+        &lt;PageSnackbar /&gt;
+      &lt;/PageHeaderWrapper&gt;
+      &lt;Card flushMobile&gt;
+        &lt;Grid container ref={contentRef}&gt;
+          &lt;Grid item xs={12} className={classes.searchBar}&gt;
+            &lt;TextField
+              placeholder={strings.SEARCH}
+              iconLeft='search'
+              label=''
+              id='search'
+              type='text'
+              className={classes.searchField}
+              onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChangeSearch('search', value)}</span>
+              value={temporalSearchValue}
+              iconRight='cancel'
+              onClickRightIcon={clearSearch}
+            /&gt;
+          &lt;/Grid&gt;
+          &lt;Grid item xs={12}&gt;
+            &lt;div&gt;
+              &lt;Grid container spacing={4}&gt;
+                &lt;Grid item xs={12}&gt;
+                  &lt;Table
+                    id='seed-banks-table'
+                    columns={columns}
+                    rows={results}
+                    orderBy='name'
+                    Renderer={SeedBanksCellRenderer}
+                  /&gt;
+                &lt;/Grid&gt;
+              &lt;/Grid&gt;
+            &lt;/div&gt;
+          &lt;/Grid&gt;
+        &lt;/Grid&gt;
+      &lt;/Card&gt;
     &lt;/TfMain&gt;
   );
 }
@@ -592,7 +571,7 @@ export default function <span class="fstat-no" title="function not covered" >See
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-23T17:37:33.084Z
+                at 2024-01-24T00:12:28.659Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

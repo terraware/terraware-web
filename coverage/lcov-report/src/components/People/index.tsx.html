@@ -459,7 +459,10 @@
 <a name='L394'></a><a href='#L394'>394</a>
 <a name='L395'></a><a href='#L395'>395</a>
 <a name='L396'></a><a href='#L396'>396</a>
-<a name='L397'></a><a href='#L397'>397</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -489,6 +492,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -813,7 +817,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -884,6 +890,7 @@ import { SearchService } from 'src/services';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { useUser, useOrganization, useLocalization } from 'src/providers/hooks';
 import { isTfContact } from 'src/utils/organization';
+import Card from 'src/components/common/Card';
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   title: {
@@ -1185,7 +1192,7 @@ export default function <span class="fstat-no" title="function not covered" >Peo
           /&gt;
         &lt;/&gt;
       )}
-      &lt;PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}&gt;
+      &lt;PageHeaderWrapper nextElement={contentRef.current}&gt;
         &lt;Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}&gt;
           &lt;Grid item xs={8}&gt;
             &lt;h1 className={classes.title}&gt;{strings.PEOPLE}&lt;/h1&gt;
@@ -1200,54 +1207,56 @@ export default function <span class="fstat-no" title="function not covered" >Peo
           &lt;PageSnackbar /&gt;
         &lt;/Grid&gt;
       &lt;/PageHeaderWrapper&gt;
-      &lt;Grid container className={classes.contentContainer} ref={contentRef}&gt;
-        &lt;Grid item xs={12} marginBottom='16px'&gt;
-          &lt;TextField
-            placeholder={strings.SEARCH}
-            iconLeft='search'
-            label=''
-            id='search'
-            type='text'
-            className={classes.searchField}
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChangeSearch('search', value)}</span>
-            value={temporalSearchValue}
-            iconRight='cancel'
-            onClickRightIcon={clearSearch}
-          /&gt;
-        &lt;/Grid&gt;
+      &lt;Card flushMobile&gt;
+        &lt;Grid container ref={contentRef}&gt;
+          &lt;Grid item xs={12} marginBottom='16px'&gt;
+            &lt;TextField
+              placeholder={strings.SEARCH}
+              iconLeft='search'
+              label=''
+              id='search'
+              type='text'
+              className={classes.searchField}
+              onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChangeSearch('search', value)}</span>
+              value={temporalSearchValue}
+              iconRight='cancel'
+              onClickRightIcon={clearSearch}
+            /&gt;
+          &lt;/Grid&gt;
 &nbsp;
-        &lt;Grid item xs={12}&gt;
-          &lt;div&gt;
-            &lt;Grid container spacing={4}&gt;
-              &lt;Grid item xs={12}&gt;
-                {results &amp;&amp; (
-                  &lt;Table
-                    id='people-table'
-                    columns={columns}
-                    rows={results}
-                    orderBy='name'
-                    Renderer={TableCellRenderer}
-                    showCheckbox={true}
-                    selectedRows={selectedPeopleRows}
-                    setSelectedRows={setSelectedPeopleRows}
-                    showTopBar={true}
-                    topBarButtons={[
-                      {
-                        buttonType: 'destructive',
-                        ...(!isMobile &amp;&amp; { buttonText: strings.REMOVE }),
-                        onButtonClick: removeSelectedPeopleFromOrg,
-                        icon: 'iconTrashCan',
-                        disabled: isRemovingTFContact,
-                        tooltipTitle: isRemovingTFContact ? strings.CANNOT_REMOVE_TF_CONTACT : undefined,
-                      },
-                    ]}
-                  /&gt;
-                )}
+          &lt;Grid item xs={12}&gt;
+            &lt;div&gt;
+              &lt;Grid container spacing={4}&gt;
+                &lt;Grid item xs={12}&gt;
+                  {results &amp;&amp; (
+                    &lt;Table
+                      id='people-table'
+                      columns={columns}
+                      rows={results}
+                      orderBy='name'
+                      Renderer={TableCellRenderer}
+                      showCheckbox={true}
+                      selectedRows={selectedPeopleRows}
+                      setSelectedRows={setSelectedPeopleRows}
+                      showTopBar={true}
+                      topBarButtons={[
+                        {
+                          buttonType: 'destructive',
+                          ...(!isMobile &amp;&amp; { buttonText: strings.REMOVE }),
+                          onButtonClick: removeSelectedPeopleFromOrg,
+                          icon: 'iconTrashCan',
+                          disabled: isRemovingTFContact,
+                          tooltipTitle: isRemovingTFContact ? strings.CANNOT_REMOVE_TF_CONTACT : undefined,
+                        },
+                      ]}
+                    /&gt;
+                  )}
+                &lt;/Grid&gt;
               &lt;/Grid&gt;
-            &lt;/Grid&gt;
-          &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/Grid&gt;
         &lt;/Grid&gt;
-      &lt;/Grid&gt;
+      &lt;/Card&gt;
     &lt;/TfMain&gt;
   );
 }
@@ -1258,7 +1267,7 @@ export default function <span class="fstat-no" title="function not covered" >Peo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-23T17:37:33.084Z
+                at 2024-01-24T00:12:28.659Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

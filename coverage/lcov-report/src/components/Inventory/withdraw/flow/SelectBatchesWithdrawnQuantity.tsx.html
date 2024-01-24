@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -443,18 +443,7 @@
 <a name='L378'></a><a href='#L378'>378</a>
 <a name='L379'></a><a href='#L379'>379</a>
 <a name='L380'></a><a href='#L380'>380</a>
-<a name='L381'></a><a href='#L381'>381</a>
-<a name='L382'></a><a href='#L382'>382</a>
-<a name='L383'></a><a href='#L383'>383</a>
-<a name='L384'></a><a href='#L384'>384</a>
-<a name='L385'></a><a href='#L385'>385</a>
-<a name='L386'></a><a href='#L386'>386</a>
-<a name='L387'></a><a href='#L387'>387</a>
-<a name='L388'></a><a href='#L388'>388</a>
-<a name='L389'></a><a href='#L389'>389</a>
-<a name='L390'></a><a href='#L390'>390</a>
-<a name='L391'></a><a href='#L391'>391</a>
-<a name='L392'></a><a href='#L392'>392</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L381'></a><a href='#L381'>381</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -497,6 +486,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -798,11 +788,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -817,19 +802,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -858,6 +836,7 @@ import { makeStyles } from '@mui/styles';
 import { useOrganization } from 'src/providers';
 import Table from 'src/components/common/table';
 import isEnabled from 'src/features';
+import Card from 'src/components/common/Card';
 &nbsp;
 type SelectBatchesWithdrawnQuantityProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) =&gt; void;
@@ -1176,62 +1155,50 @@ export default function <span class="fstat-no" title="function not covered" >Sel
       )}
       &lt;Container
         maxWidth={false}
+        disableGutters
         sx={{
           paddingBottom: isMobile ? '185px' : '105px',
         }}
       &gt;
-        &lt;Grid container minWidth={isMobile ? 0 : 700} sx={{ flexDirection: 'column' }}&gt;
-          &lt;Grid item xs={12}&gt;
-            &lt;Typography sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(4, 3, 3) }}&gt;
-              {strings.SELECT_BATCHES}
-            &lt;/Typography&gt;
-          &lt;/Grid&gt;
-          {species &amp;&amp;
-            species.map(<span class="fstat-no" title="function not covered" >(i</span>Species: any) =&gt; {
-<span class="cstat-no" title="statement not covered" >              return (</span>
-                &lt;Grid
-                  key={iSpecies.id}
-                  display='flex'
-                  flexDirection='column'
-                  flexGrow={1}
-                  sx={{
-                    backgroundColor: theme.palette.TwClrBg,
-                    borderRadius: theme.spacing(4),
-                    padding: theme.spacing(3),
-                    margin: theme.spacing(0, 3, 3, 0),
-                  }}
-                &gt;
-                  &lt;Grid item xs={12}&gt;
-                    &lt;Typography
-                      variant='h2'
-                      sx={{ fontSize: '16px', fontWeight: 600, marginBottom: theme.spacing(2), paddingTop: 1 }}
-                    &gt;
-                      {iSpecies.scientificName} {iSpecies.commonName ? `(${iSpecies.commonName})` : null}
-                    &lt;/Typography&gt;
-                  &lt;/Grid&gt;
-                  &lt;Grid item xs={12} marginBottom={5}&gt;
-                    {record.length &gt; 0 &amp;&amp; (
-                      &lt;Table
-                        id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}
-                        columns={<span class="fstat-no" title="function not covered" >()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >                          (nurseryWithdrawal.purpose === OUTPLANT</span>
-                            ? outplantTableColumns()
-                            : defaultTableColumns()
-                          ).filter(<span class="fstat-no" title="function not covered" >(c</span>olumn) =&gt; (<span class="cstat-no" title="statement not covered" >featureFlagProjects ? column : column.key !== 'projectName')</span>)
-                        }
-                        rows={record.filter(<span class="fstat-no" title="function not covered" >(r</span>ec) =&gt; <span class="cstat-no" title="statement not covered" >rec.speciesId === iSpecies.id)</span>}
-                        Renderer={WithdrawalBatchesCellRenderer}
-                        orderBy={'batchId'}
-                        showPagination={false}
-                        onSelect={onEditHandler}
-                        controlledOnSelect={true}
-                      /&gt;
-                    )}
-                  &lt;/Grid&gt;
-                &lt;/Grid&gt;
-              );
-            })}
+        &lt;Grid item xs={12}&gt;
+          &lt;Typography sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(4, 3, 3) }}&gt;
+            {strings.SELECT_BATCHES}
+          &lt;/Typography&gt;
         &lt;/Grid&gt;
+        {species &amp;&amp;
+          species.map(<span class="fstat-no" title="function not covered" >(i</span>Species: any) =&gt; {
+<span class="cstat-no" title="statement not covered" >            return (</span>
+              &lt;Card flushMobile key={iSpecies.id} style={{ marginTop: theme.spacing(3) }}&gt;
+                &lt;Grid item xs={12}&gt;
+                  &lt;Typography
+                    variant='h2'
+                    sx={{ fontSize: '16px', fontWeight: 600, marginBottom: theme.spacing(2), paddingTop: 1 }}
+                  &gt;
+                    {iSpecies.scientificName} {iSpecies.commonName ? `(${iSpecies.commonName})` : null}
+                  &lt;/Typography&gt;
+                &lt;/Grid&gt;
+                &lt;Grid item xs={12} marginBottom={5}&gt;
+                  {record.length &gt; 0 &amp;&amp; (
+                    &lt;Table
+                      id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}
+                      columns={<span class="fstat-no" title="function not covered" >()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >                        (nurseryWithdrawal.purpose === OUTPLANT</span>
+                          ? outplantTableColumns()
+                          : defaultTableColumns()
+                        ).filter(<span class="fstat-no" title="function not covered" >(c</span>olumn) =&gt; (<span class="cstat-no" title="statement not covered" >featureFlagProjects ? column : column.key !== 'projectName')</span>)
+                      }
+                      rows={record.filter(<span class="fstat-no" title="function not covered" >(r</span>ec) =&gt; <span class="cstat-no" title="statement not covered" >rec.speciesId === iSpecies.id)</span>}
+                      Renderer={WithdrawalBatchesCellRenderer}
+                      orderBy={'batchId'}
+                      showPagination={false}
+                      onSelect={onEditHandler}
+                      controlledOnSelect={true}
+                    /&gt;
+                  )}
+                &lt;/Grid&gt;
+              &lt;/Card&gt;
+            );
+          })}
       &lt;/Container&gt;
     &lt;/PageForm&gt;
   );
@@ -1243,7 +1210,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-23T17:37:33.084Z
+                at 2024-01-24T00:12:28.659Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
