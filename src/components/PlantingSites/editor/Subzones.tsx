@@ -6,6 +6,7 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import {
   GeometryFeature,
+  MapEntityOptions,
   MapPopupRenderer,
   MapSourceProperties,
   PopupInfo,
@@ -16,7 +17,7 @@ import MapIcon from 'src/components/Map/MapIcon';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { cutPolygons, leftMostFeature } from 'src/components/Map/utils';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
-import EditableMap, { HighlightData, LayerFeature } from 'src/components/Map/EditableMapV2';
+import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import {
   IdGenerator,
@@ -79,11 +80,11 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         type: 'FeatureCollection',
         features: zones!.features.map((feature: Feature) => toZoneFeature(feature, zoneIdGenerator)),
       },
-      highlights: selectedZone ? [selectedZone] : undefined,
+      selectedId: selectedZone,
       id: 'zone',
       isInteractive: true,
       renderProperties: {
-        ...getRenderAttributes('zone'),
+        ...getRenderAttributes('draft-zone'),
         annotation: {
           textField: 'name',
           textColor: theme.palette.TwClrBaseWhite as string,
@@ -106,7 +107,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
       id: 'subzone',
       isInteractive: true,
       renderProperties: {
-        ...getRenderAttributes('subzone'),
+        ...getRenderAttributes('draft-subzone'),
         annotation: {
           textField: 'name',
           textColor: theme.palette.TwClrBaseWhite as string,
@@ -193,7 +194,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
       const subzonesData = updatedData?.find((data: ReadOnlyBoundary) => data.id === 'subzone');
 
       setZones(zonesData?.featureCollection);
-      setSelectedZone(zonesData?.highlights?.[0]);
+      setSelectedZone(zonesData?.selectedId);
 
       const subzoneFeatures: Feature[] = subzonesData?.featureCollection?.features ?? [];
       setSubzones(
@@ -225,11 +226,9 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
       }
       if (selectedZone === undefined || selectedZone !== zone.properties.id) {
         setSelectedZone(zone.properties.id);
-        return undefined; // nothing to select for a popup, just mark the active zone for subzone editing
-      } else {
-        // select the subzone
-        return subzone;
       }
+      // select the subzone under the click
+      return subzone;
     },
     [selectedZone]
   );
@@ -269,9 +268,9 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
     [classes.box, classes.tooltip, selectedZone]
   );
 
-  const highlights = useMemo<HighlightData[] | undefined>(() => {
+  const activeContext = useMemo<MapEntityOptions | undefined>(() => {
     if (selectedZone !== undefined) {
-      return [{ source: 'zone', id: selectedZone }];
+      return { select: [{ sourceId: 'zone', id: selectedZone }] };
     } else {
       return undefined;
     }
@@ -289,7 +288,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
       <EditableMap
         clearOnEdit
         featureSelectorOnClick={featureSelectorOnClick}
-        highlights={highlights}
+        activeContext={activeContext}
         onEditableBoundaryChanged={onEditableBoundaryChanged}
         onUndoRedoReadOnlyBoundary={onUndoRedoReadOnlyBoundary}
         overridePopupInfo={overridePopupInfo}

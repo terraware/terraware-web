@@ -103,7 +103,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         id: 'zone',
         isInteractive: true,
         renderProperties: {
-          ...getRenderAttributes('zone'),
+          ...getRenderAttributes('draft-zone'),
           annotation: {
             textField: 'name',
             textColor: theme.palette.TwClrBaseWhite as string,
