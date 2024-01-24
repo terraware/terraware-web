@@ -141,29 +141,26 @@ export default function ObservationPlantingZone(): JSX.Element {
           <Grid item xs={12}>
             <AggregatedPlantsStats {...(plantingZone ?? {})} />
           </Grid>
-          <Grid item xs={12}>
-            <Card
-              flushMobile
-              style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, minWidth: 'fit-content' }}
-            >
-              <Search search={search} onSearch={(value: string) => onSearch(value)} filtersProps={filtersProps} />
-              <Box marginTop={2}>
-                <Table
-                  id='observation-zone-table'
-                  columns={columns}
-                  rows={plantingZone?.plantingSubzones?.flatMap((subzone) => subzone.monitoringPlots) ?? []}
-                  orderBy='plantingZoneName'
-                  Renderer={ObservationPlantingZoneRenderer(
-                    Number(plantingSiteId),
-                    Number(observationId),
-                    Number(plantingZoneId),
-                    setReplaceObservationPlot
-                  )}
-                />
-              </Box>
-            </Card>
-          </Grid>
         </Grid>
+        <Box sx={{ marginTop: 3, maxWidth: '100%' }}>
+          <Card flushMobile>
+            <Search search={search} onSearch={(value: string) => onSearch(value)} filtersProps={filtersProps} />
+            <Box marginTop={2}>
+              <Table
+                id='observation-zone-table'
+                columns={columns}
+                rows={plantingZone?.plantingSubzones?.flatMap((subzone) => subzone.monitoringPlots) ?? []}
+                orderBy='plantingZoneName'
+                Renderer={ObservationPlantingZoneRenderer(
+                  Number(plantingSiteId),
+                  Number(observationId),
+                  Number(plantingZoneId),
+                  setReplaceObservationPlot
+                )}
+              />
+            </Box>
+          </Card>
+        </Box>
       </DetailsPage>
     </>
   );

@@ -19,6 +19,7 @@ import Table from 'src/components/common/table';
 import { useTimeZones } from 'src/providers';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { isAdmin } from 'src/utils/organization';
+import Card from 'src/components/common/Card';
 
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.NAME, type: 'string' },
@@ -104,43 +105,36 @@ export default function NurseriesList({ organization }: NurseriesListProps): JSX
           <PageSnackbar />
         </Grid>
       </PageHeaderWrapper>
-      <Grid
-        container
-        ref={contentRef}
-        sx={{
-          backgroundColor: theme.palette.TwClrBg,
-          borderRadius: '32px',
-          padding: theme.spacing(3),
-          minWidth: 'fit-content',
-        }}
-      >
-        <Grid item xs={12} marginBottom={theme.spacing(2)}>
-          <Box width='300px'>
-            <TextField
-              placeholder={strings.SEARCH}
-              iconLeft='search'
-              label=''
-              id='search'
-              type='text'
-              onChange={(value) => onChangeSearch('search', value)}
-              value={temporalSearchValue}
-              iconRight='cancel'
-              onClickRightIcon={clearSearch}
-            />
-          </Box>
+      <Card flushMobile>
+        <Grid container ref={contentRef}>
+          <Grid item xs={12} marginBottom={theme.spacing(2)}>
+            <Box width='300px'>
+              <TextField
+                placeholder={strings.SEARCH}
+                iconLeft='search'
+                label=''
+                id='search'
+                type='text'
+                onChange={(value) => onChangeSearch('search', value)}
+                value={temporalSearchValue}
+                iconRight='cancel'
+                onClickRightIcon={clearSearch}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            {results && (
+              <Table
+                id='nurseries-table'
+                columns={columns}
+                rows={results}
+                orderBy='name'
+                Renderer={NurseriesCellRenderer}
+              />
+            )}
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          {results && (
-            <Table
-              id='nurseries-table'
-              columns={columns}
-              rows={results}
-              orderBy='name'
-              Renderer={NurseriesCellRenderer}
-            />
-          )}
-        </Grid>
-      </Grid>
+      </Card>
     </TfMain>
   );
 }

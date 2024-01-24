@@ -13,6 +13,7 @@ import useQuery from 'src/utils/useQuery';
 import InventorySummaryForNursery from 'src/components/InventoryV2/view/InventorySummaryForNursery';
 import InventorySeedlingsTableForNursery from 'src/components/InventoryV2/view/InventorySeedlingsTableForNursery';
 import { getNurseryName } from './FilterUtils';
+import Card from 'src/components/common/Card';
 
 export default function InventoryViewForNursery(): JSX.Element {
   const query = useQuery();
@@ -66,14 +67,17 @@ export default function InventoryViewForNursery(): JSX.Element {
       <Grid container ref={contentRef}>
         <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
           <InventorySummaryForNursery modified={modified} nurseryId={nurseryId} />
-          <InventorySeedlingsTableForNursery
-            nurseryId={nurseryId}
-            modified={modified}
-            setModified={setModified}
-            onUpdateOpenBatch={setBatchNumber}
-            openBatchNumber={openBatchNumber}
-            origin={'Nursery'}
-          />
+
+          <Card flushMobile style={{ marginTop: theme.spacing(3) }}>
+            <InventorySeedlingsTableForNursery
+              nurseryId={nurseryId}
+              modified={modified}
+              setModified={setModified}
+              onUpdateOpenBatch={setBatchNumber}
+              openBatchNumber={openBatchNumber}
+              origin={'Nursery'}
+            />
+          </Card>
         </Grid>
       </Grid>
     </TfMain>

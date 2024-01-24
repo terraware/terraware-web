@@ -334,10 +334,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         xs={12}
         sx={{
           backgroundColor: theme.palette.TwClrBg,
-          borderRadius: '32px',
-          marginTop: theme.spacing(3),
-          minWidth: 'fit-content',
-          padding: theme.spacing(3),
         }}
       >
         {openNewBatchModal && (

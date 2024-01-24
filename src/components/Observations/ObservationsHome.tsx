@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CircularProgress, Grid } from '@mui/material';
+import { CircularProgress, Box } from '@mui/material';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
@@ -85,7 +85,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       isEmptyState={!plantingSites?.length || !observationsResults?.length}
       actionButton={actionButton}
     >
-      <Grid container display='flex' flexDirection='column'>
+      <Box>
         <ObservationsEventsNotification events={upcomingObservations} />
         {observationsResults === undefined ? (
           <CircularProgress sx={{ margin: 'auto' }} />
@@ -103,7 +103,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
             />
           </Card>
         )}
-      </Grid>
+      </Box>
     </PlantsPrimaryPage>
   );
 }

@@ -117,22 +117,20 @@ export default function PlantingSitesList(): JSX.Element {
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      <Grid display='flex' flexDirection={isMobile ? 'row' : 'column'} flexGrow={1}>
-        {plantingSites ? (
-          <Box display='flex' flexDirection='column'>
-            <PlantingSitesTable
-              results={searchResults || []}
-              temporalSearchValue={temporalSearchValue}
-              setTemporalSearchValue={setTemporalSearchValue}
-              setSearchSortOrder={(order: SearchSortOrder) => setSearchSortOrder(order)}
-              filters={filters}
-              setFilters={setFilters}
-            />
-          </Box>
-        ) : (
-          <CircularProgress sx={{ margin: 'auto' }} />
-        )}
-      </Grid>
+      {plantingSites ? (
+        <Box display='flex' flexDirection='column'>
+          <PlantingSitesTable
+            results={searchResults || []}
+            temporalSearchValue={temporalSearchValue}
+            setTemporalSearchValue={setTemporalSearchValue}
+            setSearchSortOrder={(order: SearchSortOrder) => setSearchSortOrder(order)}
+            filters={filters}
+            setFilters={setFilters}
+          />
+        </Box>
+      ) : (
+        <CircularProgress sx={{ margin: 'auto' }} />
+      )}
     </TfMain>
   );
 }

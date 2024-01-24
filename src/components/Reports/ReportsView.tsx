@@ -20,6 +20,7 @@ import PreSetupView from 'src/components/Reports/PreSetupView';
 import { APP_PATHS } from 'src/constants';
 import ReportSettingsEditFormFields from './ReportSettingsEditFormFields';
 import ReportLink from 'src/components/Reports/ReportLink';
+import Card from '../common/Card';
 
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.REPORT, type: 'string' },
@@ -189,37 +190,38 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
             <Tab label={strings.SETTINGS} value='settings' sx={tabStyles} />
           </TabList>
         </Box>
+        <Card flushMobile>
+          <TabPanel value='reports' sx={tabPanelProps}>
+            <Grid container>
+              <PageHeaderWrapper nextElement={contentRef.current}>
+                <Grid item xs={12} sx={{ paddingLeft: 3, marginBottom: 4 }}>
+                  <Typography sx={{ fontSize: '24px', fontWeight: 600 }}>{strings.REPORTS}</Typography>
+                </Grid>
+              </PageHeaderWrapper>
+              <Container
+                ref={contentRef}
+                maxWidth={false}
+                sx={{ padding: 3, borderRadius: 4, backgroundColor: theme.palette.TwClrBaseWhite }}
+              >
+                <Grid item xs={12}>
+                  <Table
+                    id='reports-table'
+                    columns={columns}
+                    rows={results}
+                    orderBy='name'
+                    Renderer={ReportsCellRenderer}
+                  />
+                </Grid>
+              </Container>
+            </Grid>
+          </TabPanel>
 
-        <TabPanel value='reports' sx={tabPanelProps}>
-          <Grid container>
-            <PageHeaderWrapper nextElement={contentRef.current}>
-              <Grid item xs={12} sx={{ paddingLeft: 3, marginBottom: 4 }}>
-                <Typography sx={{ fontSize: '24px', fontWeight: 600 }}>{strings.REPORTS}</Typography>
-              </Grid>
-            </PageHeaderWrapper>
-            <Container
-              ref={contentRef}
-              maxWidth={false}
-              sx={{ padding: 3, borderRadius: 4, backgroundColor: theme.palette.TwClrBaseWhite }}
-            >
-              <Grid item xs={12}>
-                <Table
-                  id='reports-table'
-                  columns={columns}
-                  rows={results}
-                  orderBy='name'
-                  Renderer={ReportsCellRenderer}
-                />
-              </Grid>
-            </Container>
-          </Grid>
-        </TabPanel>
-
-        <TabPanel value='settings' sx={tabPanelProps}>
-          <Grid container width={'100%'} sx={{ padding: '0' }}>
-            {reportsSettings && <ReportSettingsEditFormFields reportsSettings={reportsSettings} isEditing={false} />}
-          </Grid>
-        </TabPanel>
+          <TabPanel value='settings' sx={tabPanelProps}>
+            <Grid container width={'100%'} sx={{ padding: '0' }}>
+              {reportsSettings && <ReportSettingsEditFormFields reportsSettings={reportsSettings} isEditing={false} />}
+            </Grid>
+          </TabPanel>
+        </Card>
       </TabContext>
     </TfMain>
   );

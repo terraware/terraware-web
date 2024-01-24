@@ -11,6 +11,7 @@ import { makeStyles } from '@mui/styles';
 import { useOrganization } from 'src/providers';
 import Table from 'src/components/common/table';
 import isEnabled from 'src/features';
+import Card from 'src/components/common/Card';
 
 type SelectBatchesWithdrawnQuantityProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
@@ -329,62 +330,50 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
       )}
       <Container
         maxWidth={false}
+        disableGutters
         sx={{
           paddingBottom: isMobile ? '185px' : '105px',
         }}
       >
-        <Grid container minWidth={isMobile ? 0 : 700} sx={{ flexDirection: 'column' }}>
-          <Grid item xs={12}>
-            <Typography sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(4, 3, 3) }}>
-              {strings.SELECT_BATCHES}
-            </Typography>
-          </Grid>
-          {species &&
-            species.map((iSpecies: any) => {
-              return (
-                <Grid
-                  key={iSpecies.id}
-                  display='flex'
-                  flexDirection='column'
-                  flexGrow={1}
-                  sx={{
-                    backgroundColor: theme.palette.TwClrBg,
-                    borderRadius: theme.spacing(4),
-                    padding: theme.spacing(3),
-                    margin: theme.spacing(0, 3, 3, 0),
-                  }}
-                >
-                  <Grid item xs={12}>
-                    <Typography
-                      variant='h2'
-                      sx={{ fontSize: '16px', fontWeight: 600, marginBottom: theme.spacing(2), paddingTop: 1 }}
-                    >
-                      {iSpecies.scientificName} {iSpecies.commonName ? `(${iSpecies.commonName})` : null}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} marginBottom={5}>
-                    {record.length > 0 && (
-                      <Table
-                        id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}
-                        columns={() =>
-                          (nurseryWithdrawal.purpose === OUTPLANT
-                            ? outplantTableColumns()
-                            : defaultTableColumns()
-                          ).filter((column) => (featureFlagProjects ? column : column.key !== 'projectName'))
-                        }
-                        rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
-                        Renderer={WithdrawalBatchesCellRenderer}
-                        orderBy={'batchId'}
-                        showPagination={false}
-                        onSelect={onEditHandler}
-                        controlledOnSelect={true}
-                      />
-                    )}
-                  </Grid>
-                </Grid>
-              );
-            })}
+        <Grid item xs={12}>
+          <Typography sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(4, 3, 3) }}>
+            {strings.SELECT_BATCHES}
+          </Typography>
         </Grid>
+        {species &&
+          species.map((iSpecies: any) => {
+            return (
+              <Card flushMobile key={iSpecies.id} style={{ marginTop: theme.spacing(3) }}>
+                <Grid item xs={12}>
+                  <Typography
+                    variant='h2'
+                    sx={{ fontSize: '16px', fontWeight: 600, marginBottom: theme.spacing(2), paddingTop: 1 }}
+                  >
+                    {iSpecies.scientificName} {iSpecies.commonName ? `(${iSpecies.commonName})` : null}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} marginBottom={5}>
+                  {record.length > 0 && (
+                    <Table
+                      id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}
+                      columns={() =>
+                        (nurseryWithdrawal.purpose === OUTPLANT
+                          ? outplantTableColumns()
+                          : defaultTableColumns()
+                        ).filter((column) => (featureFlagProjects ? column : column.key !== 'projectName'))
+                      }
+                      rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
+                      Renderer={WithdrawalBatchesCellRenderer}
+                      orderBy={'batchId'}
+                      showPagination={false}
+                      onSelect={onEditHandler}
+                      controlledOnSelect={true}
+                    />
+                  )}
+                </Grid>
+              </Card>
+            );
+          })}
       </Container>
     </PageForm>
   );

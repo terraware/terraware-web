@@ -135,8 +135,8 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         <Grid item xs={12}>
           <AggregatedPlantsStats {...(details ?? {})} />
         </Grid>
-        <Grid item xs={12}>
-          <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, minWidth: 'fit-content' }}>
+        <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Card flushMobile>
             <Search {...searchProps} />
             <Box marginTop={2}>
               <Table

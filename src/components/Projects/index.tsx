@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Grid, Theme, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -18,17 +18,13 @@ import { useOrganization, useLocalization } from 'src/providers/hooks';
 import { Project } from 'src/types/Project';
 import ProjectsService from 'src/services/ProjectsService';
 import ProjectCellRenderer from 'src/components/Projects/ProjectCellRenderer';
+import Card from 'src/components/common/Card';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   title: {
     margin: 0,
     fontSize: '24px',
     fontWeight: 600,
-  },
-  contentContainer: {
-    backgroundColor: theme.palette.TwClrBg,
-    padding: theme.spacing(3),
-    borderRadius: '32px',
   },
   centered: {
     display: 'flex',
@@ -101,7 +97,7 @@ export default function ProjectsList(): JSX.Element {
 
   return (
     <TfMain>
-      <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
+      <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
           <Grid item xs={8}>
             <h1 className={classes.title}>{strings.PROJECTS}</h1>
@@ -116,43 +112,45 @@ export default function ProjectsList(): JSX.Element {
           <PageSnackbar />
         </Grid>
       </PageHeaderWrapper>
-      <Grid container className={classes.contentContainer} ref={contentRef}>
-        <Grid item xs={12} marginBottom='16px'>
-          <TextField
-            placeholder={strings.SEARCH}
-            iconLeft='search'
-            label=''
-            id='search'
-            type='text'
-            className={classes.searchField}
-            onChange={(value) => onChangeSearch('search', value)}
-            value={temporalSearchValue}
-            iconRight='cancel'
-            onClickRightIcon={clearSearch}
-          />
-        </Grid>
+      <Card flushMobile>
+        <Grid container ref={contentRef}>
+          <Grid item xs={12} marginBottom='16px'>
+            <TextField
+              placeholder={strings.SEARCH}
+              iconLeft='search'
+              label=''
+              id='search'
+              type='text'
+              className={classes.searchField}
+              onChange={(value) => onChangeSearch('search', value)}
+              value={temporalSearchValue}
+              iconRight='cancel'
+              onClickRightIcon={clearSearch}
+            />
+          </Grid>
 
-        <Grid item xs={12}>
-          <div>
-            <Grid container spacing={4}>
-              <Grid item xs={12}>
-                {results && (
-                  <Table
-                    id='projects-table'
-                    columns={columns}
-                    rows={results}
-                    orderBy='name'
-                    Renderer={ProjectCellRenderer}
-                    selectedRows={[]}
-                    setSelectedRows={() => undefined}
-                    controlledOnSelect={false}
-                  />
-                )}
+          <Grid item xs={12}>
+            <div>
+              <Grid container spacing={4}>
+                <Grid item xs={12}>
+                  {results && (
+                    <Table
+                      id='projects-table'
+                      columns={columns}
+                      rows={results}
+                      orderBy='name'
+                      Renderer={ProjectCellRenderer}
+                      selectedRows={[]}
+                      setSelectedRows={() => undefined}
+                      controlledOnSelect={false}
+                    />
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-          </div>
+            </div>
+          </Grid>
         </Grid>
-      </Grid>
+      </Card>
     </TfMain>
   );
 }

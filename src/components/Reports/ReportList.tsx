@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 import TfMain from 'src/components/common/TfMain';
@@ -9,6 +9,7 @@ import { ListReport } from 'src/types/Report';
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import ReportsCellRenderer from './TableCellRenderer';
 import { useOrganization } from 'src/providers';
+import Card from 'src/components/common/Card';
 
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.REPORT, type: 'string' },
@@ -22,7 +23,6 @@ export default function ReportList(): JSX.Element {
   const contentRef = useRef(null);
   const [results, setResults] = useState<ListReport[]>([]);
   const { selectedOrganization } = useOrganization();
-  const theme = useTheme();
 
   useEffect(() => {
     const refreshSearch = async () => {
@@ -41,16 +41,10 @@ export default function ReportList(): JSX.Element {
             <Typography sx={{ fontSize: '24px', fontWeight: 600 }}>{strings.REPORTS}</Typography>
           </Grid>
         </PageHeaderWrapper>
-        <Container
-          ref={contentRef}
-          maxWidth={false}
-          sx={{ padding: 3, borderRadius: 4, backgroundColor: theme.palette.TwClrBaseWhite }}
-        >
-          <Grid item xs={12}>
-            <Table id='reports-table' columns={columns} rows={results} orderBy='name' Renderer={ReportsCellRenderer} />
-          </Grid>
-        </Container>
       </Grid>
+      <Card flushMobile>
+        <Table id='reports-table' columns={columns} rows={results} orderBy='name' Renderer={ReportsCellRenderer} />
+      </Card>
     </TfMain>
   );
 }

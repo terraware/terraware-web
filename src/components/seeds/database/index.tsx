@@ -41,6 +41,7 @@ import { selectMessage } from 'src/redux/features/message/messageSelectors';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
 import isEnabled from 'src/features';
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
+import Card from 'src/components/common/Card';
 
 interface StyleProps {
   isMobile: boolean;
@@ -731,68 +732,63 @@ export default function Database(props: DatabaseProps): JSX.Element {
         </PageHeaderWrapper>
         <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
           {selectedOrganization && unfilteredResults ? (
-            <Grid container>
+            <Card flushMobile>
               {isOnboarded ? (
                 <>
-                  <Grid item xs={12}>
-                    <Box
-                      sx={{
-                        backgroundColor: theme.palette.TwClrBg,
-                        borderRadius: '32px',
-                        padding: theme.spacing(3),
-                        minWidth: 'fit-content',
-                      }}
-                    >
-                      {isOnboarded && availableFieldOptions && fieldOptions && (
-                        <Filters
-                          filters={searchCriteria}
-                          availableValues={availableFieldOptions}
-                          allValues={fieldOptions}
-                          columns={filterColumns}
-                          searchColumns={searchTermColumns}
-                          preExpFilterColumns={preExpFilterColumns}
-                          onChange={onFilterChange}
-                        />
-                      )}
+                  <Box
+                    sx={{
+                      backgroundColor: theme.palette.TwClrBg,
+                    }}
+                  >
+                    {isOnboarded && availableFieldOptions && fieldOptions && (
+                      <Filters
+                        filters={searchCriteria}
+                        availableValues={availableFieldOptions}
+                        allValues={fieldOptions}
+                        columns={filterColumns}
+                        searchColumns={searchTermColumns}
+                        preExpFilterColumns={preExpFilterColumns}
+                        onChange={onFilterChange}
+                      />
+                    )}
 
-                      {searchResults && (
-                        <Table
-                          columns={displayColumnDetails}
-                          rows={searchResults}
-                          orderBy={searchSortOrder.field}
-                          order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-                          Renderer={SearchCellRenderer}
-                          onSelect={onSelect}
-                          sortHandler={onSortChange}
-                          isInactive={isInactive}
-                          onReorderEnd={reorderSearchColumns}
-                          isPresorted
-                          {...(featureFlagProjects
-                            ? {
-                                selectedRows,
-                                setSelectedRows,
-                                showCheckbox: true,
-                                isClickable: () => false,
-                                showTopBar: true,
-                                topBarButtons: [
-                                  <ProjectAssignTopBarButton
-                                    key={1}
-                                    totalResultsCount={searchResults?.length}
-                                    selectAllRows={selectAllRows}
-                                    reloadData={reloadAccessions}
-                                    projectAssignPayloadCreator={() => ({
-                                      accessionIds: selectedRows.map((row) => Number(row.id)),
-                                    })}
-                                  />,
-                                ],
-                              }
-                            : {})}
-                        />
-                      )}
-                      {searchResults === undefined && <CircularProgress />}
-                      {searchResults === null && strings.GENERIC_ERROR}
-                    </Box>
-                  </Grid>
+                    {searchResults && (
+                      <Table
+                        columns={displayColumnDetails}
+                        rows={searchResults}
+                        orderBy={searchSortOrder.field}
+                        order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+                        Renderer={SearchCellRenderer}
+                        onSelect={onSelect}
+                        sortHandler={onSortChange}
+                        isInactive={isInactive}
+                        onReorderEnd={reorderSearchColumns}
+                        isPresorted
+                        {...(featureFlagProjects
+                          ? {
+                              selectedRows,
+                              setSelectedRows,
+                              showCheckbox: true,
+                              isClickable: () => false,
+                              showTopBar: true,
+                              topBarButtons: [
+                                <ProjectAssignTopBarButton
+                                  key={1}
+                                  totalResultsCount={searchResults?.length}
+                                  selectAllRows={selectAllRows}
+                                  reloadData={reloadAccessions}
+                                  projectAssignPayloadCreator={() => ({
+                                    accessionIds: selectedRows.map((row) => Number(row.id)),
+                                  })}
+                                />,
+                              ],
+                            }
+                          : {})}
+                      />
+                    )}
+                    {searchResults === undefined && <CircularProgress />}
+                    {searchResults === null && strings.GENERIC_ERROR}
+                  </Box>
                 </>
               ) : isAdmin(selectedOrganization) ? (
                 <>
@@ -813,7 +809,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                   />
                 </>
               )}
-            </Grid>
+            </Card>
           ) : (
             <div className={classes.spinnerContainer}>
               <CircularProgress />
