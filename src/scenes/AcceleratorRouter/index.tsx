@@ -6,7 +6,7 @@ import AcceleratorAdminView from './AcceleratorAdminView';
 const AcceleratorRouter = () => {
   return (
     <Switch>
-      <Route exact path={APP_PATHS.ACCELERATOR_ADMIN}>
+      <Route path={APP_PATHS.ACCELERATOR_ADMIN}>
         <AcceleratorAdminView />
       </Route>
     </Switch>
