@@ -54,9 +54,11 @@ export default function ProjectEditView(): JSX.Element {
     if (projectUpdateRequest.status === 'error') {
       snackbar.toastError();
     } else if (projectUpdateRequest.status === 'success') {
+      snackbar.toastSuccess(strings.PROJECT_EDITED_SUCCESS, strings.SAVED);
+      void dispatch(requestProject(projectId));
       goToProject();
     }
-  }, [projectUpdateRequest, snackbar, goToProject]);
+  }, [projectUpdateRequest, snackbar, goToProject, dispatch, projectId]);
 
   return (
     <TfMain>
