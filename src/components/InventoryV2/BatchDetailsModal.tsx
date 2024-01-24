@@ -210,7 +210,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
   };
 
   const marginTop = {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(0),
   };
 
   return record ? (
@@ -295,7 +295,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           <Divider />
         </Grid>
 
-        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={gridSize()}>
           <Dropdown
             id='substrate'
             label={strings.SUBSTRATE}
@@ -305,7 +305,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             fullWidth={true}
           />
         </Grid>
-        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
           {record.substrate === strings.OTHER && (
             <Textfield
               preserveNewlines={true}
@@ -317,7 +317,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             />
           )}
         </Grid>
-        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={gridSize()}>
           <Dropdown
             id='treatment'
             label={strings.TREATMENT}
@@ -327,7 +327,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
             fullWidth={true}
           />
         </Grid>
-        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
           {record.treatment === strings.OTHER && (
             <Textfield
               id='treatmentNotes'
@@ -341,7 +341,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         <Grid item xs={12} sx={marginTop}>
           <Divider />
         </Grid>
-        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={12}>
           <Textfield
             id='notes'
             value={record?.notes}
@@ -351,7 +351,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           />
         </Grid>
 
-        <Grid padding={theme.spacing(3, 0, 1, 2)} xs={12}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} xs={12}>
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
             {strings.PHOTOS}
           </Typography>
