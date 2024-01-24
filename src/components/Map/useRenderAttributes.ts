@@ -53,7 +53,7 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
           lineColor: theme.palette.TwClrBaseBlue300 as string,
           lineWidth: 2,
           selectLineColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.6),
-          selectLineWidth: 4,
+          selectLineWidth: 12,
         };
       } else if (objectType === 'permanentPlot') {
         return {
