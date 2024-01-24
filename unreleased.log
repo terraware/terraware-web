@@ -1,3 +1,4 @@
+697eb29e4d SW-4741 Lessen batch details modal spacing (#2085)
 70e375d32f SW-4750 Move accessions database into own view file, implement session / query filters for the accession state (#2050)
 d99955a543 SW-3514 Limit table area to viewport (#2059)
 68c0c3603f Updated translations from Phrase (#2058)
