@@ -1,6 +1,6 @@
 import { createContext } from 'react';
+import { Organization } from 'src/types/Organization';
 import { ProvidedLocalizationData, ProvidedOrganizationData, ProvidedUserData } from './DataTypes';
-import { Organization } from '../types/Organization';
 
 export const UserContext = createContext<ProvidedUserData>({
   reloadUser: () => {
@@ -38,6 +38,7 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     // no-op
     return;
   },
+
   selectedOrganization: defaultSelectedOrg,
   bootstrapped: false,
   orgPreferenceForId: -1,

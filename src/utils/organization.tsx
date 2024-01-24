@@ -1,6 +1,7 @@
 import { Facility, FacilityType } from 'src/types/Facility';
 import { HighOrganizationRolesValues, Organization, OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
+import { defaultSelectedOrg } from 'src/providers/contexts';
 
 export const getFacilitiesByType = (organization: Organization, type: FacilityType, locale?: string) => {
   let facilitiesByType: Facility[] = [];
@@ -42,4 +43,16 @@ export const getNurseryById = (organization: Organization, id: number): Facility
   const allNurseries = getAllNurseries(organization);
   const found = allNurseries.filter((nurs) => nurs.id.toString() === id.toString());
   return found[0];
+};
+
+export const isPlaceholderOrg = (id: number | undefined) => !id || id === defaultSelectedOrg.id;
+
+export const selectedOrgHasFacilityType = (organization: Organization, facilityType: FacilityType): boolean => {
+  if (!isPlaceholderOrg(organization?.id) && organization?.facilities) {
+    return organization.facilities.some((facility: any) => {
+      return facility.type === facilityType;
+    });
+  } else {
+    return false;
+  }
 };
