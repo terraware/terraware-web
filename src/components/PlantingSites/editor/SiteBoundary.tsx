@@ -20,16 +20,16 @@ export type SiteBoundaryProps = {
 
 const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
   !boundary
-  ? undefined
-  : {
-      type: 'FeatureCollection',
-      features: [toFeature(boundary, {}, id)],
-    }
-;
-
+    ? undefined
+    : {
+        type: 'FeatureCollection',
+        features: [toFeature(boundary, {}, id)],
+      };
 export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundaryProps): JSX.Element {
   const [description, setDescription] = useState<Description[]>([]);
-  const [siteBoundary, setSiteBoundary, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(featureSiteBoundary(site.id, site.boundary));
+  const [siteBoundary, setSiteBoundary, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(
+    featureSiteBoundary(site.id, site.boundary)
+  );
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
 

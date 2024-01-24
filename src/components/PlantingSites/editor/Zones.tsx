@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import _ from 'lodash';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
 import { Textfield } from '@terraware/web-components';
@@ -9,9 +10,9 @@ import {
   MapPopupRenderer,
   MapSourceProperties,
   PopupInfo,
-  ReadOnlyBoundary,
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
+import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import { cutPolygons, leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
@@ -27,19 +28,21 @@ export type ZonesProps = {
   site: PlantingSite;
 };
 
+const featureSiteZones = (site: PlantingSite): FeatureCollection | undefined => {
+  if (site.plantingZones) {
+    const features = site.plantingZones.map(plantingZoneToFeature);
+    return { type: 'FeatureCollection', features };
+  } else {
+    return undefined;
+  }
+};
+
 export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.Element {
-  const [zones, setZones] = useState<FeatureCollection | undefined>();
+  const [zones, setZones, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(featureSiteZones(site));
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const classes = useStyles();
   const theme = useTheme();
   const getRenderAttributes = useRenderAttributes();
-
-  useEffect(() => {
-    if (site.plantingZones) {
-      const features = site.plantingZones.map(plantingZoneToFeature);
-      setZones({ type: 'FeatureCollection', features });
-    }
-  }, [site.plantingZones]);
 
   useEffect(() => {
     // TODO: use new BE API when it is ready, to populate the zones for creation with
@@ -126,52 +129,44 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
     []
   );
 
-  const onEditableBoundaryChanged = useCallback(
-    (featureCollection?: FeatureCollection, isUndoRedo?: boolean) => {
-      if (isUndoRedo || !zones) {
-        return;
-      }
+  const onEditableBoundaryChanged = (featureCollection?: FeatureCollection) => {
+    if (!zones) {
+      return;
+    }
 
-      const cutWith = featureCollection?.features?.[0]?.geometry;
-      if (cutWith) {
-        const cutZones = cutPolygons(zones.features as GeometryFeature[], cutWith);
+    const cutWith = featureCollection?.features?.[0]?.geometry;
+    if (cutWith) {
+      const cutZones = cutPolygons(zones.features as GeometryFeature[], cutWith);
 
-        if (cutZones) {
-          const idGenerator = IdGenerator(cutZones);
-          const zonesWithIds = cutZones.map((zone) => toZoneFeature(zone, idGenerator)) as GeometryFeature[];
+      if (cutZones) {
+        const idGenerator = IdGenerator(cutZones);
+        const zonesWithIds = cutZones.map((zone) => toZoneFeature(zone, idGenerator)) as GeometryFeature[];
 
-          setZones({
-            type: 'FeatureCollection',
-            features: zonesWithIds,
+        setZones({
+          type: 'FeatureCollection',
+          features: zonesWithIds,
+        });
+
+        const leftMostNewZone = leftMostFeature(
+          zonesWithIds.filter((unused, index) => cutZones[index].id === undefined)
+        );
+
+        if (leftMostNewZone) {
+          const { feature: zone, center: mid } = leftMostNewZone;
+          setOverridePopupInfo({
+            id: zone.id,
+            lng: mid[0],
+            lat: mid[1],
+            properties: zone.properties,
+            sourceId: 'zone',
           });
-
-          const leftMostNewZone = leftMostFeature(zonesWithIds.filter((_, index) => cutZones[index].id === undefined));
-
-          if (leftMostNewZone) {
-            const { feature: zone, center: mid } = leftMostNewZone;
-            setOverridePopupInfo({
-              id: zone.id,
-              lng: mid[0],
-              lat: mid[1],
-              properties: zone.properties,
-              sourceId: 'zone',
-            });
-          } else {
-            setOverridePopupInfo(undefined);
-          }
+        } else {
+          setOverridePopupInfo(undefined);
         }
       }
-      return;
-    },
-    [zones, setZones]
-  );
-
-  const onUndoRedoReadOnlyBoundary = useCallback(
-    (updatedData?: ReadOnlyBoundary[]) => {
-      setZones(updatedData?.find((data: ReadOnlyBoundary) => data.id === 'zone')?.featureCollection);
-    },
-    [setZones]
-  );
+    }
+    return;
+  };
 
   // Pick the first zone, we won't have overlapping zones.
   const featureSelectorOnClick = useCallback(
@@ -190,18 +185,20 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         };
 
         const onUpdate = (nameVal: string, targetPlantingDensityVal: number) => {
-          setZones((currentValue) => {
-            if (!currentValue) {
-              return currentValue;
-            }
-            const newValue = { ...currentValue };
-            const zone = newValue.features.find((f) => f.id === properties.id);
-            if (zone?.properties) {
-              zone.properties.name = nameVal;
-              zone.properties.targetPlantingDensity = targetPlantingDensityVal;
-            }
-            return newValue;
-          });
+          if (!zones) {
+            return;
+          }
+          const updatedZones = _.cloneDeep(zones);
+          const zone = updatedZones.features.find((f) => f.id === properties.id);
+          if (!zone) {
+            return;
+          }
+          if (!zone.properties) {
+            zone.properties = {};
+          }
+          zone.properties.name = nameVal;
+          zone.properties.targetPlantingDensity = targetPlantingDensityVal;
+          setZones(updatedZones);
           close();
         };
 
@@ -222,7 +219,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         );
       },
     }),
-    [classes.box, classes.tooltip, zones?.features]
+    [classes.box, classes.tooltip, setZones, zones]
   );
 
   return (
@@ -239,6 +236,8 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         clearOnEdit
         featureSelectorOnClick={featureSelectorOnClick}
         onEditableBoundaryChanged={onEditableBoundaryChanged}
+        onRedo={redo}
+        onUndo={undo}
         overridePopupInfo={overridePopupInfo}
         popupRenderer={popupRenderer}
         readOnlyBoundary={readOnlyBoundary}
