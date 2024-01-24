@@ -21,7 +21,6 @@ import {
   MapPopupRenderer,
   MapViewStyles,
   PopupInfo,
-  ReadOnlyBoundary,
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
@@ -30,7 +29,7 @@ import useMapboxToken from 'src/utils/useMapboxToken';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import { getMapDrawingLayer, toMultiPolygon } from './utils';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
-import UndoRedoBoundaryControl from './UndoRedoBoundaryControl';
+import UndoRedoControl from './UndoRedoControl';
 
 const useStyles = makeStyles((theme: Theme) => ({
   sliceTool: {
@@ -61,7 +60,8 @@ export type EditableMapProps = {
   featureSelectorOnClick?: FeatureSelectorOnClick;
   activeContext?: MapEntityOptions;
   onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) => void;
-  onUndoRedoReadOnlyBoundary?: (readOnlyBoundary?: ReadOnlyBoundary[]) => void;
+  onRedo?: () => void;
+  onUndo?: () => void;
   overridePopupInfo?: PopupInfo;
   popupRenderer?: MapPopupRenderer;
   setMode?: (mode: MapEditorMode) => void;
@@ -76,7 +76,8 @@ export default function EditableMap({
   featureSelectorOnClick,
   activeContext,
   onEditableBoundaryChanged,
-  onUndoRedoReadOnlyBoundary,
+  onRedo,
+  onUndo,
   overridePopupInfo,
   popupRenderer,
   readOnlyBoundary,
@@ -122,20 +123,6 @@ export default function EditableMap({
       padding: 25,
     },
   };
-
-  const undoRedoEditableBoundary = useCallback(
-    (data?: FeatureCollection) => void onEditableBoundaryChanged(data, true),
-    [onEditableBoundaryChanged]
-  );
-
-  const undoRedoReadOnlyBoundary = useCallback(
-    (data?: ReadOnlyBoundary[]) => {
-      if (onUndoRedoReadOnlyBoundary) {
-        void onUndoRedoReadOnlyBoundary(data);
-      }
-    },
-    [onUndoRedoReadOnlyBoundary]
-  );
 
   const mapLayers = useMemo(() => {
     if (!readOnlyBoundary?.length) {
@@ -317,12 +304,7 @@ export default function EditableMap({
               onBoundaryChanged={onEditableBoundaryChanged}
               setMode={setEditMode}
             />
-            <UndoRedoBoundaryControl
-              editableBoundary={editableBoundary}
-              onEditableBoundaryChanged={undoRedoEditableBoundary}
-              onReadOnlyBoundaryChanged={undoRedoReadOnlyBoundary}
-              readOnlyBoundary={readOnlyBoundary}
-            />
+            <UndoRedoControl onRedo={onRedo} onUndo={onUndo} />
             <NavigationControl position='bottom-right' showCompass={false} />
             <GeolocateControl
               position='bottom-right'

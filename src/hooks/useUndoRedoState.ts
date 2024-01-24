@@ -24,7 +24,7 @@ export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, S
   const setData = useCallback(
     (value: T) => {
       setStack((curr: (T | undefined)[]) => {
-        const truncatedStack = curr.splice(0, stackIndex + 1);
+        const truncatedStack = curr.slice(0, stackIndex + 1);
         truncatedStack.push(value);
         return truncatedStack;
       });

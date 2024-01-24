@@ -290,7 +290,6 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         featureSelectorOnClick={featureSelectorOnClick}
         activeContext={activeContext}
         onEditableBoundaryChanged={onEditableBoundaryChanged}
-        onUndoRedoReadOnlyBoundary={onUndoRedoReadOnlyBoundary}
         overridePopupInfo={overridePopupInfo}
         popupRenderer={popupRenderer}
         readOnlyBoundary={readOnlyBoundary}

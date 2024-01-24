@@ -239,7 +239,6 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         clearOnEdit
         featureSelectorOnClick={featureSelectorOnClick}
         onEditableBoundaryChanged={onEditableBoundaryChanged}
-        onUndoRedoReadOnlyBoundary={onUndoRedoReadOnlyBoundary}
         overridePopupInfo={overridePopupInfo}
         popupRenderer={popupRenderer}
         readOnlyBoundary={readOnlyBoundary}

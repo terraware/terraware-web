@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { FeatureCollection } from 'geojson';
+import { FeatureCollection, MultiPolygon } from 'geojson';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
+import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import { toFeature, toMultiPolygonArray } from 'src/components/Map/utils';
 import EditableMap from 'src/components/Map/EditableMapV2';
@@ -17,20 +18,20 @@ export type SiteBoundaryProps = {
   site: PlantingSite;
 };
 
+const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
+  !boundary
+  ? undefined
+  : {
+      type: 'FeatureCollection',
+      features: [toFeature(boundary, {}, id)],
+    }
+;
+
 export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundaryProps): JSX.Element {
   const [description, setDescription] = useState<Description[]>([]);
-  const [siteBoundary, setSiteBoundary] = useState<FeatureCollection | undefined>();
+  const [siteBoundary, setSiteBoundary, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(featureSiteBoundary(site.id, site.boundary));
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
-
-  useEffect(() => {
-    if (site.boundary) {
-      setSiteBoundary({
-        type: 'FeatureCollection',
-        features: [toFeature(site.boundary!, {}, site.id)],
-      });
-    }
-  }, [site.boundary, site.id]);
 
   useEffect(() => {
     if (onValidate) {
@@ -84,7 +85,13 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       />
-      <EditableMap onEditableBoundaryChanged={setSiteBoundary} editableBoundary={siteBoundary} setMode={setMode} />
+      <EditableMap
+        editableBoundary={siteBoundary}
+        onEditableBoundaryChanged={setSiteBoundary}
+        onRedo={redo}
+        onUndo={undo}
+        setMode={setMode}
+      />
     </Box>
   );
 }
