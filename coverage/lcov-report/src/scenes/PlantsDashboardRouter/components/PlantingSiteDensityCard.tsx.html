@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Plants/components/HectaresPlantedCard.tsx</title>
+    <title>Code coverage report for src/scenes/PlantsDashboardRouter/components/PlantingSiteDensityCard.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/Plants/components</a> HectaresPlantedCard.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/PlantsDashboardRouter/components</a> PlantingSiteDensityCard.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -158,7 +158,8 @@
 <a name='L93'></a><a href='#L93'>93</a>
 <a name='L94'></a><a href='#L94'>94</a>
 <a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -173,19 +174,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -194,11 +182,25 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -256,52 +258,63 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
 import React, { useMemo } from 'react';
 import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
+import { getShortDate } from 'src/utils/dateFormatter';
+import { useLocalization } from 'src/providers';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
-import FormattedNumber from 'src/components/common/FormattedNumber';
-import Link from 'src/components/common/Link';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 &nbsp;
-type HectaresPlantedCardProps = {
+type PlantingSiteDensityCardProps = {
   plantingSiteId: number;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >HectaresPlantedCard(</span>{ plantingSiteId }: HectaresPlantedCardProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >PlantingSiteDensityCard(</span>{ plantingSiteId }: PlantingSiteDensityCardProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
+  const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
+  );
   const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
+  const locale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
-  const totalArea = <span class="cstat-no" title="statement not covered" >plantingSite?.areaHa ?? 0;</span>
-  const totalPlantedArea = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      plantingSite?.plantingZones
-        ?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.plantingSubzones)</span>
-        ?.reduce(<span class="fstat-no" title="function not covered" >(p</span>rev, curr) =&gt; (<span class="cstat-no" title="statement not covered" >curr.plantingCompleted ? +curr.areaHa + prev : prev)</span>, 0) ?? 0
-    );
+  const targetPlantingDensity = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const weightedSum =
+<span class="cstat-no" title="statement not covered" >      plantingSite?.plantingZones?.map(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.targetPlantingDensity * z.areaHa)</span>?.reduce(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a + b)</span> ?? 0;</span>
+<span class="cstat-no" title="statement not covered" >    return plantingSite?.areaHa ? weightedSum / +plantingSite.areaHa : 0;</span>
   }, [plantingSite]);
-  const percentagePlanted = <span class="cstat-no" title="statement not covered" >totalArea &gt; 0 ? Math.round((totalPlantedArea / totalArea) * 100) : 0;</span>
 &nbsp;
-  const numPlantingComplete =
-<span class="cstat-no" title="statement not covered" >    plantingSite?.plantingZones</span>
-      ?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.plantingSubzones)</span>
-      ?.filter(<span class="fstat-no" title="function not covered" >(s</span>ubzone) =&gt; <span class="cstat-no" title="statement not covered" >subzone.plantingCompleted)</span>.length ?? 0;
-  const numZones = <span class="cstat-no" title="statement not covered" >plantingSite?.plantingZones?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.plantingSubzones)</span>?.length ?? 0;</span>
+  const plantingDensity = <span class="cstat-no" title="statement not covered" >observation?.plantingDensity ?? 0;</span>
+  const percentageOfTargetDensity = <span class="cstat-no" title="statement not covered" >(100 * plantingDensity) / targetPlantingDensity;</span>
+&nbsp;
+  const siteReportedPlants = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectSiteReportedPlants(state, plantingSiteId))</span>;</span>
+  const numPlantedSinceObs = <span class="cstat-no" title="statement not covered" >siteReportedPlants?.plantsSinceLastObservation ?? 0;</span>
+&nbsp;
+  const newDensityEstimate = <span class="cstat-no" title="statement not covered" >plantingSite?.areaHa</span>
+    ? plantingDensity + numPlantedSinceObs / plantingSite.areaHa
+    : plantingDensity;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;OverviewItemCard
       isEditable={false}
       contents={
-        &lt;Box display='flex' flexDirection='column'&gt;
+        &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
           &lt;Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}&gt;
-            {strings.HECTARES_PLANTED_CARD_TITLE}
+            {observation?.completedTime
+              ? strings.formatString(
+                  strings.PLANTING_DENSITY_CARD_TITLE,
+                  getShortDate(observation.completedTime, locale.activeLocale)
+                )
+              : ''}
           &lt;/Typography&gt;
           &lt;Box display={'flex'} alignItems='baseline' sx={{ flexFlow: 'row wrap' }}&gt;
             &lt;Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}&gt;
-              &lt;FormattedNumber value={Math.round(totalPlantedArea) || 0} /&gt;
+              {Math.round(plantingDensity)}
             &lt;/Typography&gt;
             &lt;Typography fontSize='24px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}&gt;
-              {strings.HECTARES}
+              {strings.PLANTS_PER_HECTARE}
             &lt;/Typography&gt;
           &lt;/Box&gt;
           &lt;Typography
@@ -311,9 +324,9 @@ export default function <span class="fstat-no" title="function not covered" >Hec
             marginBottom={theme.spacing(2)}
             textAlign='center'
           &gt;
-            {strings.formatString(strings.PERCENTAGE_OF_SITE_PLANTED, percentagePlanted)}
+            {strings.formatString(strings.PERCENTAGE_OF_TARGET_PLANTING_DENSITY, Math.round(percentageOfTargetDensity))}
           &lt;/Typography&gt;
-          &lt;ProgressChart value={totalPlantedArea} target={totalArea} /&gt;
+          &lt;ProgressChart value={plantingDensity} target={targetPlantingDensity} /&gt;
           &lt;Typography
             fontSize='16px'
             fontWeight={600}
@@ -323,26 +336,16 @@ export default function <span class="fstat-no" title="function not covered" >Hec
             textAlign='right'
             color={theme.palette.TwClrBaseBlue500}
           &gt;
-            {strings.formatString(strings.TARGET_HECTARES_PLANTED, &lt;FormattedNumber value={totalArea || 0} /&gt;)}
+            {strings.formatString(strings.TARGET_DENSITY_PLANTS_PER_HECTARE, Math.round(targetPlantingDensity))}
           &lt;/Typography&gt;
-          &lt;Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}&gt;
-            {strings.HECTARES_PLANTED_DESCRIPTION_1}
+          &lt;Typography fontSize='12px' fontWeight={400}&gt;
+            {strings.PLANTING_DENSITY_DESCRIPTION}
           &lt;/Typography&gt;
-          &lt;Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}&gt;
-            {strings.HECTARES_PLANTED_DESCRIPTION_2}
-            &amp;nbsp;
-            {numPlantingComplete === numZones &amp;&amp; numZones
-              ? strings.formatString(strings.HECTARES_PLANTED_DESCRIPTION_3_COMPLETE, numZones)
-              : strings.formatString(strings.HECTARES_PLANTED_DESCRIPTION_3_INCOMPLETE, numPlantingComplete, numZones)}
-          &lt;/Typography&gt;
-          &lt;Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}&gt;
-            {strings.HECTARES_PLANTED_DESCRIPTION_4}
-          &lt;/Typography&gt;
-          &lt;Link to={APP_PATHS.NURSERY_WITHDRAWALS}&gt;
-            &lt;Typography fontSize='14px' fontWeight={500}&gt;
-              {strings.HECTARES_PLANTED_DESCRIPTION_LINK}
+          {numPlantedSinceObs &gt; 0 &amp;&amp; (
+            &lt;Typography fontSize='12px' fontWeight={400}&gt;
+              {strings.formatString(strings.PLANTING_DENSITY_UPDATE_DESCRIPTION, Math.round(newDensityEstimate))}
             &lt;/Typography&gt;
-          &lt;/Link&gt;
+          )}
         &lt;/Box&gt;
       }
     /&gt;
@@ -355,7 +358,7 @@ export default function <span class="fstat-no" title="function not covered" >Hec
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-25T22:05:55.295Z
+                at 2024-01-25T22:14:51.166Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

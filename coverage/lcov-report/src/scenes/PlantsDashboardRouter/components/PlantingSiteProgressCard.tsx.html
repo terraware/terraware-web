@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Plants/components/TotalMoratlityRateCard.tsx</title>
+    <title>Code coverage report for src/scenes/PlantsDashboardRouter/components/PlantingSiteProgressCard.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/components/Plants/components</a> TotalMoratlityRateCard.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/PlantsDashboardRouter/components</a> PlantingSiteProgressCard.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -101,20 +101,7 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a>
-<a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -129,17 +116,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -162,26 +140,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
-import { getShortDate } from 'src/utils/dateFormatter';
-import { useLocalization } from 'src/providers';
-import FormattedNumber from 'src/components/common/FormattedNumber';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import strings from 'src/strings';
+import React from 'react';
 import { useAppSelector } from 'src/redux/store';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 &nbsp;
-type TotalMortalityRateCardProps = {
+type PlantingSiteProgressCardProps = {
   plantingSiteId: number;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >TotalMortalityRateCard(</span>{ plantingSiteId }: TotalMortalityRateCardProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >PlantingSiteProgressCard(</span>{ plantingSiteId }: PlantingSiteProgressCardProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const locale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
-  const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
-  );
+  const reportedPlants = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectSiteReportedPlants(state, plantingSiteId))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;OverviewItemCard
@@ -189,21 +161,16 @@ export default function <span class="fstat-no" title="function not covered" >Tot
       contents={
         &lt;Box display='flex' flexDirection='column'&gt;
           &lt;Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}&gt;
-            {strings.formatString(
-              strings.MORTALITY_RATE_CARD_TITLE,
-              observation?.completedTime ? getShortDate(observation.completedTime, locale.activeLocale) : ''
-            )}
+            {strings.PLANTING_PROGRESS_CARD_TITLE}
           &lt;/Typography&gt;
-          &lt;Box display='flex' sx={{ flexFlow: 'row wrap' }}&gt;
-            &lt;Typography fontSize='84px' fontWeight={600} lineHeight={1}&gt;
-              &lt;FormattedNumber value={observation?.mortalityRate || 0} /&gt;
-            &lt;/Typography&gt;
-            &lt;Typography fontSize='84px' fontWeight={600} lineHeight={1}&gt;
-              %
-            &lt;/Typography&gt;
-          &lt;/Box&gt;
-          &lt;Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}&gt;
-            {strings.MORTALITY_RATE_CLARIFICATION}
+          &lt;Typography fontSize='84px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(3)}&gt;
+            &lt;FormattedNumber value={reportedPlants?.progressPercent ?? 0} /&gt;%
+          &lt;/Typography&gt;
+          &lt;Typography fontSize='12px' fontWeight={400} marginBottom={theme.spacing(1.5)}&gt;
+            {strings.PLANTING_PROGRESS_DESCRIPTION_1}
+          &lt;/Typography&gt;
+          &lt;Typography fontSize='12px' fontWeight={400}&gt;
+            {strings.PLANTING_PROGRESS_DESCRIPTION_2}
           &lt;/Typography&gt;
         &lt;/Box&gt;
       }
@@ -217,7 +184,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-25T22:05:55.295Z
+                at 2024-01-25T22:14:51.166Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
