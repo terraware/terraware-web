@@ -1,12 +1,12 @@
+import React from 'react';
 import { Container, Grid } from '@mui/material';
 import { Theme } from '@mui/material';
-import React from 'react';
+import { makeStyles } from '@mui/styles';
 import PageCard from 'src/components/common/PageCard';
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
-import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useUser, useOrganization } from 'src/providers/hooks';
 
