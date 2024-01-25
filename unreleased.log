@@ -1,3 +1,4 @@
+4c88d453dd SW-4761 Create Accelerator admin nav bar and stub out admin button (#2082)
 9956ee1028 SW-4761 Move the Navbar used in the main terraware portion of the site into the scenes/TerrawareRouter directory (#2081)
 9c3dbb4009 SW-4761 Create AcceleratorAdminRouter and stub out AcceleratorAdminView, only accessible to users that have the 'admin' or higher role (#2080)
 32df127a00 SW-4761 Create NoOrgRouter and TerrawareRouter which each provide clean separation of their included views (#2079)
