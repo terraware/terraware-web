@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/SeedBank/SeedBankSubLocations.tsx</title>
+    <title>Code coverage report for src/scenes/SeedBanksRouter/TableCellRenderer.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/SeedBank</a> SeedBankSubLocations.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/scenes/SeedBanksRouter</a> TableCellRenderer.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -85,13 +85,7 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -99,38 +93,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 import { APP_PATHS } from 'src/constants';
-import { ActiveStatuses } from 'src/types/Accession';
-import { PartialSubLocation } from 'src/types/Facility';
-import SubLocations from 'src/components/common/SubLocations';
+import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
+import { RendererProps } from '../../components/common/table/types';
+import Link from '../../components/common/Link';
 &nbsp;
-export type SeedBankSubLocationsProps = {
-  seedBankId?: number;
-  onEdit?: (subLocations: PartialSubLocation[]) =&gt; void;
-};
+export default function <span class="fstat-no" title="function not covered" >SeedBanksCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
+  const { column, row, value, index } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >SeedBankSubLocations(</span>{ seedBankId, onEdit }: SeedBankSubLocationsProps): JSX.Element {
-  const renderLink = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(f</span>acilityId: number, locationName: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return [</span>
-      `${APP_PATHS.ACCESSIONS}/?`,
-      `subLocationName=${encodeURIComponent(locationName)}`,
-      `facilityId=${facilityId}`,
-      ...ActiveStatuses().map(<span class="fstat-no" title="function not covered" >(s</span>tatus) =&gt; <span class="cstat-no" title="statement not covered" >`stage=${status}`)</span>,
-    ].join('&amp;');
-  }, []);
+  const createLinkToSeedBank = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>Value: React.ReactNode | unknown[]) =&gt; {</span>
+    const seedBankLocation = <span class="cstat-no" title="statement not covered" >{</span>
+      pathname: APP_PATHS.SEED_BANKS_VIEW.replace(':seedBankId', row.id.toString()),
+    };
+<span class="cstat-no" title="statement not covered" >    return &lt;Link to={seedBankLocation.pathname}&gt;{iValue as React.ReactNode}&lt;/Link&gt;;</span>
+  };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;SubLocations facilityType='seedbank' facilityId={seedBankId} onEdit={onEdit} renderLink={renderLink} /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >  if (column.key === 'name') {</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer index={index} column={column} value={createLinkToSeedBank(value)} row={row} /&gt;;</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return &lt;CellRenderer {...props} /&gt;;</span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -139,7 +136,7 @@ export default function <span class="fstat-no" title="function not covered" >See
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-25T21:46:53.589Z
+                at 2024-01-25T21:56:08.471Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
