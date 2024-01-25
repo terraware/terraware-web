@@ -14,7 +14,7 @@ import { IconName } from 'src/components/common/icon/icons';
 import { isContributor } from 'src/utils/organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import ImportInventoryModal, { downloadInventoryCsvTemplate } from '../Inventory/ImportInventoryModal';
+import ImportInventoryModal, { downloadInventoryCsvTemplate } from 'src/scenes/InventoryRouter/ImportInventoryModal';
 import PlantingSiteTypeSelect from '../PlantingSites/PlantingSiteTypeSelect';
 import { useOrganization } from 'src/providers/hooks';
 
