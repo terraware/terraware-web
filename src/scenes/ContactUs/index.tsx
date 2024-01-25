@@ -1,9 +1,9 @@
 import React from 'react';
 import { Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { IconName } from 'src/components/common/icon/icons';
 import PageCard from 'src/components/common/PageCard';
-import TfMain from './common/TfMain';
-import { makeStyles } from '@mui/styles';
+import TfMain from 'src/components/common/TfMain';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
 import strings from 'src/strings';
@@ -26,7 +26,7 @@ type ListItemContent = {
   buttonText: string;
   link: string;
 };
-export default function ContactUs(): JSX.Element {
+export default function ContactUsView(): JSX.Element {
   const classes = useStyles();
   const { isMobile } = useDeviceInfo();
   const docLinks = useDocLinks();

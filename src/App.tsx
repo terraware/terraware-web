@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import useStateLocation from './utils/useStateLocation';
-import ContactUs from 'src/components/ContactUs';
+import ContactUsView from 'src/scenes/ContactUs';
 import Home from 'src/scenes/Home';
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import NavBar from 'src/components/NavBar';
@@ -357,8 +357,9 @@ function AppContent() {
             </Route>
 
             <Route exact path={APP_PATHS.CONTACT_US}>
-              <ContactUs />
+              <ContactUsView />
             </Route>
+
             <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
               <MyAccount organizations={organizations} edit={true} reloadData={reloadOrganizations} />
             </Route>
