@@ -11,10 +11,10 @@ import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
-import TfMain from '../common/TfMain';
-import PageSnackbar from '../PageSnackbar';
+import TfMain from '../../components/common/TfMain';
+import PageSnackbar from '../../components/PageSnackbar';
 import NurseriesCellRenderer from './TableCellRenderer';
-import PageHeaderWrapper from '../common/PageHeaderWrapper';
+import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
 import Table from 'src/components/common/table';
 import { useTimeZones } from 'src/providers';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -31,7 +31,7 @@ type NurseriesListProps = {
   organization: Organization;
 };
 
-export default function NurseriesList({ organization }: NurseriesListProps): JSX.Element {
+export default function NurseriesListView({ organization }: NurseriesListProps): JSX.Element {
   const theme = useTheme();
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
