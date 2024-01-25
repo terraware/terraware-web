@@ -12,9 +12,9 @@ import { useAppSelector } from 'src/redux/store';
 import { selectObservationMonitoringPlot } from 'src/redux/features/observations/observationMonitoringPlotSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import Card from 'src/components/common/Card';
-import DetailsPage from 'src/components/Observations/common/DetailsPage';
-import SpeciesTotalPlantsChart from 'src/components/Observations/common/SpeciesTotalPlantsChart';
-import SpeciesMortalityRateChart from 'src/components/Observations/common/SpeciesMortalityRateChart';
+import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/SpeciesTotalPlantsChart';
+import SpeciesMortalityRateChart from 'src/scenes/ObservationsRouter/common/SpeciesMortalityRateChart';
 import MonitoringPlotPhotos from './MonitoringPlotPhotos';
 
 export default function ObservationMonitoringPlot(): JSX.Element {

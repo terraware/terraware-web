@@ -7,7 +7,7 @@ import strings from 'src/strings';
 import { ObservationState, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
 import { useOrganization } from 'src/providers';
 import { isManagerOrHigher } from 'src/utils/organization';
-import ReplaceObservationPlotModal from 'src/components/Observations/replacePlot/ReplaceObservationPlotModal';
+import ReplaceObservationPlotModal from 'src/scenes/ObservationsRouter/replacePlot/ReplaceObservationPlotModal';
 import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 
 const useStyles = makeStyles(() => ({
