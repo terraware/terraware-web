@@ -2,7 +2,7 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
-import Button from '../common/button/Button';
+import Button from '../../components/common/button/Button';
 import useSnackbar from 'src/utils/useSnackbar';
 import { SpeciesService } from 'src/services';
 

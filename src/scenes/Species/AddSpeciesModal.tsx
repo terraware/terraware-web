@@ -16,11 +16,11 @@ import {
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import Button from '../common/button/Button';
-import Checkbox from '../common/Checkbox';
-import DialogBox from '../common/DialogBox/DialogBox';
-import Select from '../common/Select/Select';
-import TextField from '../common/Textfield/Textfield';
+import Button from '../../components/common/button/Button';
+import Checkbox from '../../components/common/Checkbox';
+import DialogBox from '../../components/common/DialogBox/DialogBox';
+import Select from '../../components/common/Select/Select';
+import TextField from '../../components/common/Textfield/Textfield';
 import TooltipLearnMoreModal, {
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,

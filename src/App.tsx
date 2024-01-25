@@ -14,7 +14,6 @@ import NewPerson from 'src/components/Person/NewPerson';
 import Organization from 'src/components/Organization';
 import People from 'src/components/People';
 import PersonDetails from 'src/components/Person';
-import SpeciesList from 'src/components/Species';
 import CheckIn from 'src/scenes/CheckIn';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import ToastSnackbar from 'src/components/ToastSnackbar';
@@ -69,6 +68,7 @@ import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 import MonitoringRouter from 'src/scenes/MonitoringRouter';
+import SpeciesView from 'src/scenes/Species';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -355,12 +355,9 @@ function AppContent() {
             </Route>
 
             <Route exact path={APP_PATHS.SPECIES}>
-              {selectedOrgHasSpecies() ? (
-                <SpeciesList reloadData={reloadSpecies} species={species || []} />
-              ) : (
-                <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />
-              )}
+              <SpeciesView />
             </Route>
+
             <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
               <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadOrganizations} />
             </Route>
