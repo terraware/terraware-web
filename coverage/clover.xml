@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1706222698612" clover="3.2.0">
-  <project timestamp="1706222698613" name="All files">
-    <metrics statements="15711" coveredstatements="477" conditionals="10090" coveredconditionals="137" methods="4917" coveredmethods="110" elements="30718" coveredelements="724" complexity="0" loc="15711" ncloc="15711" packages="122" files="620" classes="620"/>
+<coverage generated="1706223244224" clover="3.2.0">
+  <project timestamp="1706223244224" name="All files">
+    <metrics statements="15711" coveredstatements="477" conditionals="10090" coveredconditionals="137" methods="4917" coveredmethods="110" elements="30718" coveredelements="724" complexity="0" loc="15711" ncloc="15711" packages="123" files="620" classes="620"/>
     <package name="src">
       <metrics statements="219" coveredstatements="0" conditionals="173" coveredconditionals="0" methods="66" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -77,9 +77,9 @@
         <line num="262" count="0" type="stmt"/>
         <line num="325" count="0" type="stmt"/>
         <line num="348" count="0" type="stmt"/>
-        <line num="422" count="0" type="stmt"/>
-        <line num="424" count="0" type="stmt"/>
-        <line num="437" count="0" type="stmt"/>
+        <line num="423" count="0" type="stmt"/>
+        <line num="425" count="0" type="stmt"/>
+        <line num="438" count="0" type="stmt"/>
       </file>
       <file name="AppBootstrap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/AppBootstrap.tsx">
         <metrics statements="14" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
@@ -432,7 +432,7 @@
       </file>
     </package>
     <package name="src.components">
-      <metrics statements="511" coveredstatements="0" conditionals="260" coveredconditionals="0" methods="171" coveredmethods="0"/>
+      <metrics statements="504" coveredstatements="0" conditionals="256" coveredconditionals="0" methods="168" coveredmethods="0"/>
       <file name="AddNewOrganizationModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AddNewOrganizationModal.tsx">
         <metrics statements="86" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="23" coveredmethods="0"/>
         <line num="29" count="0" type="stmt"/>
@@ -521,16 +521,6 @@
         <line num="281" count="0" type="stmt"/>
         <line num="282" count="0" type="stmt"/>
         <line num="295" count="0" type="stmt"/>
-      </file>
-      <file name="ContactUs.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ContactUs.tsx">
-        <metrics statements="7" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
       </file>
       <file name="ConvertedValue.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ConvertedValue.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -11528,6 +11518,19 @@
         <line num="115" count="0" type="stmt"/>
         <line num="141" count="0" type="stmt"/>
         <line num="198" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.scenes.ContactUs">
+      <metrics statements="7" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ContactUs/index.tsx">
+        <metrics statements="7" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.Home">
