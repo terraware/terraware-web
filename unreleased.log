@@ -1,3 +1,4 @@
+0992501de5 SW-4761 Create NurseriesRouter and move all nurseries related views (that exist within /nurseries path) and sub components to scenes directory (#2070)
 e0d4176338 SW-4761 Created SeedBanksRouter and moved all seed banks related views and sub components into scenes dir (#2069)
 a696d1a3ab SW-4761 Create PeopleRouter and put all people views and sub components into scenes directory (#2068)
 b26fe2d137 SW-4761 Create AccessionsRouter and move all accessions views and sub components to scenes directory (#2067)
