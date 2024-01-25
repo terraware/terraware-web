@@ -16,7 +16,7 @@ import People from 'src/components/People';
 import PersonDetails from 'src/components/Person';
 import SpeciesList from 'src/components/Species';
 import CheckIn from 'src/components/seeds/checkin';
-import SeedSummary from 'src/components/seeds/summary';
+import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
@@ -334,7 +334,7 @@ function AppContent() {
               <Home />
             </Route>
             <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
-              <SeedSummary />
+              <SeedsDashboard />
             </Route>
             <Route exact path={APP_PATHS.CHECKIN}>
               <CheckIn />

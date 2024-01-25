@@ -1,22 +1,22 @@
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Container, Grid, CircularProgress, Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Cookies from 'cookies-js';
-import React, { useEffect, useState } from 'react';
 import SeedBankService, { SummaryResponse } from 'src/services/SeedBankService';
 import TfMain from 'src/components/common/TfMain';
 import MainPaper from 'src/components/MainPaper';
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import PageHeader from '../PageHeader';
-import SummaryPaper from './SummaryPaper';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
-import AccessionByStatus from './AccessionByStatus';
-import { useHistory } from 'react-router-dom';
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
-import { AccessionState, stateName } from '../../../types/Accession';
+import { AccessionState, stateName } from 'src/types/Accession';
+import PageHeader from 'src/components/seeds/PageHeader';
+import SummaryPaper from 'src/scenes/SeedsDashboard/SummaryPaper';
+import AccessionByStatus from 'src/scenes/SeedsDashboard/AccessionByStatus';
 
 const useStyles = makeStyles((theme: Theme) => ({
   accessionsLink: {
