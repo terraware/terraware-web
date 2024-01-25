@@ -9,9 +9,6 @@ import Home from 'src/scenes/Home';
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import NavBar from 'src/components/NavBar';
-import NewPerson from 'src/components/Person/NewPerson';
-import People from 'src/components/People';
-import PersonDetails from 'src/components/Person';
 import CheckIn from 'src/scenes/CheckIn';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import ToastSnackbar from 'src/components/ToastSnackbar';
@@ -67,6 +64,7 @@ import MonitoringRouter from 'src/scenes/MonitoringRouter';
 import SpeciesView from 'src/scenes/Species';
 import OrganizationRouter from 'src/scenes/OrganizationRouter';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
+import PeopleRouter from 'src/scenes/PeopleRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -356,18 +354,10 @@ function AppContent() {
               <OrganizationRouter />
             </Route>
 
-            <Route exact path={APP_PATHS.PEOPLE_NEW}>
-              <NewPerson />
+            <Route path={APP_PATHS.PEOPLE}>
+              <PeopleRouter />
             </Route>
-            <Route exact path={APP_PATHS.PEOPLE_EDIT}>
-              <NewPerson />
-            </Route>
-            <Route path={APP_PATHS.PEOPLE_VIEW}>
-              <PersonDetails />
-            </Route>
-            <Route exact path={APP_PATHS.PEOPLE}>
-              <People />
-            </Route>
+
             {featureFlagProjects && (
               <Route path={APP_PATHS.PROJECTS}>
                 <ProjectsRouter

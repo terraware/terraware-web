@@ -1,6 +1,6 @@
 import strings from 'src/strings';
-import Button from '../common/button/Button';
-import DialogBox from '../common/DialogBox/DialogBox';
+import Button from '../../components/common/button/Button';
+import DialogBox from '../../components/common/DialogBox/DialogBox';
 
 export interface CannotRemovePeopleDialogProps {
   open: boolean;

@@ -12,7 +12,7 @@ import { makeStyles } from '@mui/styles';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
-import TfMain from '../common/TfMain';
+import TfMain from '../../components/common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
 import { useOrganization } from '../../providers/hooks';
 import { roleName } from '../../types/Organization';
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function PersonDetails(): JSX.Element {
+export default function PersonDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();

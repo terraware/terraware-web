@@ -1,8 +1,8 @@
 import React from 'react';
 import strings from 'src/strings';
-import Button from '../common/button/Button';
+import Button from '../../components/common/button/Button';
 import { OrganizationUser } from 'src/types/User';
-import DialogBox from '../common/DialogBox/DialogBox';
+import DialogBox from '../../components/common/DialogBox/DialogBox';
 
 export interface RemovePeopleDialogProps {
   open: boolean;
