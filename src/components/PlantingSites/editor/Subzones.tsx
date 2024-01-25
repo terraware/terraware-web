@@ -226,6 +226,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
       }
       if (selectedZone === undefined || selectedZone !== zone.properties.id) {
         setSelectedZone(zone.properties.id);
+        return undefined;
       } else {
         // select the subzone under the click
         return subzone;
