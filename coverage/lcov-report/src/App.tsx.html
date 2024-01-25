@@ -503,12 +503,7 @@
 <a name='L438'></a><a href='#L438'>438</a>
 <a name='L439'></a><a href='#L439'>439</a>
 <a name='L440'></a><a href='#L440'>440</a>
-<a name='L441'></a><a href='#L441'>441</a>
-<a name='L442'></a><a href='#L442'>442</a>
-<a name='L443'></a><a href='#L443'>443</a>
-<a name='L444'></a><a href='#L444'>444</a>
-<a name='L445'></a><a href='#L445'>445</a>
-<a name='L446'></a><a href='#L446'>446</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L441'></a><a href='#L441'>441</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -766,8 +761,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -856,9 +849,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -974,7 +964,6 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
-import MyAccount from './components/MyAccount';
 import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
@@ -985,7 +974,7 @@ import AppBootstrap from './AppBootstrap';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
-import Observations from 'src/components/Observations';
+import ObservationsRouter from 'src/scenes/ObservationsRouter';
 import { getRgbaFromHex } from 'src/utils/color';
 import PlantingSites from 'src/components/PlantingSites';
 import isEnabled from 'src/features';
@@ -1008,6 +997,7 @@ import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
 import InventoryRouter from 'src/scenes/InventoryRouter';
 import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
 import NurseryRouter from 'src/scenes/NurseryRouter';
+import MyAccountRouter from 'src/scenes/MyAccountRouter';
 &nbsp;
 interface StyleProps {
   isDesktop?: boolean;
@@ -1083,7 +1073,7 @@ function <span class="fstat-no" title="function not covered" >AppContent(</span>
   const { isDesktop, type } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles({ isDesktop });</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
-  const { organizations, selectedOrganization, reloadOrganizations } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
+  const { organizations, selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const [withdrawalCreated, setWithdrawalCreated] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const { isProduction } = <span class="cstat-no" title="statement not covered" >useEnvironment();</span>
   const { reloadUserPreferences: reloadPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
@@ -1191,12 +1181,10 @@ function <span class="fstat-no" title="function not covered" >AppContent(</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;&gt;
         &lt;Switch&gt;
-          &lt;Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}&gt;
-            &lt;MyAccount organizations={organizations} edit={true} reloadData={reloadOrganizations} /&gt;
+          &lt;Route path={APP_PATHS.MY_ACCOUNT}&gt;
+            &lt;MyAccountRouter /&gt;
           &lt;/Route&gt;
-          &lt;Route exact path={APP_PATHS.MY_ACCOUNT}&gt;
-            &lt;MyAccount organizations={organizations} edit={false} /&gt;
-          &lt;/Route&gt;
+&nbsp;
           &lt;Route exact path={APP_PATHS.WELCOME}&gt;
             &lt;NoOrgLandingPage /&gt;
           &lt;/Route&gt;
@@ -1315,11 +1303,8 @@ function <span class="fstat-no" title="function not covered" >AppContent(</span>
               &lt;ContactUsView /&gt;
             &lt;/Route&gt;
 &nbsp;
-            &lt;Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}&gt;
-              &lt;MyAccount organizations={organizations} edit={true} reloadData={reloadOrganizations} /&gt;
-            &lt;/Route&gt;
-            &lt;Route exact path={APP_PATHS.MY_ACCOUNT}&gt;
-              &lt;MyAccount organizations={organizations} edit={false} /&gt;
+            &lt;Route path={APP_PATHS.MY_ACCOUNT}&gt;
+              &lt;MyAccountRouter /&gt;
             &lt;/Route&gt;
 &nbsp;
             &lt;Route path={APP_PATHS.REPORTS}&gt;
@@ -1327,7 +1312,7 @@ function <span class="fstat-no" title="function not covered" >AppContent(</span>
             &lt;/Route&gt;
 &nbsp;
             &lt;Route path={APP_PATHS.OBSERVATIONS}&gt;
-              &lt;Observations /&gt;
+              &lt;ObservationsRouter /&gt;
             &lt;/Route&gt;
 &nbsp;
             {!isProduction &amp;&amp; (
@@ -1405,7 +1390,7 @@ export default function <span class="fstat-no" title="function not covered" >App
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-25T22:54:03.751Z
+                at 2024-01-25T23:03:48.808Z
             </div>
         <script src="../prettify.js"></script>
         <script>
