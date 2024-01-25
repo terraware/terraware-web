@@ -40,7 +40,7 @@ const columns = (): TableColumnType[] => [
   { key: 'notes', name: strings.NOTES, type: 'string' },
 ];
 
-export default function NurseryReassignment(): JSX.Element {
+export default function NurseryReassignmentView(): JSX.Element {
   const classes = useStyles();
   const query = useQuery();
   const { user } = useUser();

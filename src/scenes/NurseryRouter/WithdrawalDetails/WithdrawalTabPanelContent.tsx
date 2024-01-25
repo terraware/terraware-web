@@ -5,7 +5,7 @@ import OutplantWithdrawalTable from './sections/OutplantWithdrawalTable';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Delivery } from 'src/types/Tracking';
 import { Species } from 'src/types/Species';
-import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';
+import { WithdrawalSummary } from '../NurseryWithdrawalsDetailsView';
 import WithdrawalOverview from './WithdrawalOverview';
 
 type WithdrawalTabPanelContentProps = {

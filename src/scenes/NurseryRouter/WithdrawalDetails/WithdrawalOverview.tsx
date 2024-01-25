@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import { NurseryWithdrawal } from 'src/types/Batch';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { WithdrawalSummary } from '../NurseryWithdrawalsDetails';
+import { WithdrawalSummary } from '../NurseryWithdrawalsDetailsView';
 import { useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalPurpose, purposeLabel } from 'src/types/Batch';
 
