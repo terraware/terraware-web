@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1706215860915" clover="3.2.0">
-  <project timestamp="1706215860915" name="All files">
+<coverage generated="1706216449532" clover="3.2.0">
+  <project timestamp="1706216449533" name="All files">
     <metrics statements="16233" coveredstatements="477" conditionals="10411" coveredconditionals="137" methods="5097" coveredmethods="110" elements="31741" coveredelements="724" complexity="0" loc="16233" ncloc="16233" packages="129" files="632" classes="632"/>
     <package name="src">
       <metrics statements="236" coveredstatements="0" conditionals="201" coveredconditionals="0" methods="70" coveredmethods="0"/>
@@ -14546,44 +14546,6 @@
         <line num="99" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
     </package>
-    <package name="src.components.seeds.checkin">
-      <metrics statements="32" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="11" coveredmethods="0"/>
-      <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/seeds/checkin/index.tsx">
-        <metrics statements="32" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="11" coveredmethods="0"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="84" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="98" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="115" count="0" type="stmt"/>
-        <line num="141" count="0" type="stmt"/>
-        <line num="198" count="0" type="stmt"/>
-      </file>
-    </package>
     <package name="src.components.seeds.database">
       <metrics statements="414" coveredstatements="0" conditionals="252" coveredconditionals="0" methods="138" coveredmethods="0"/>
       <file name="DownloadReportModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/seeds/database/DownloadReportModal.tsx">
@@ -16254,6 +16216,44 @@
         <line num="17" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.scenes.CheckIn">
+      <metrics statements="32" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="11" coveredmethods="0"/>
+      <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/CheckIn/index.tsx">
+        <metrics statements="32" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="11" coveredmethods="0"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="84" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="198" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.Home">
