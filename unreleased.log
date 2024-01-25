@@ -1,3 +1,4 @@
+b26fe2d137 SW-4761 Create AccessionsRouter and move all accessions views and sub components to scenes directory (#2067)
 443a24ac91 SW-4761 Create OrganizationRouter and put organization related views into the scenes directory (#2066)
 a4229a2033 SW-4761 Move species view into scenes directory (#2065)
 24249cf826 SW-4761 Add monitoring router with monitoring views within (#2064)
