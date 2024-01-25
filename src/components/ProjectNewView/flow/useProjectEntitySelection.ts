@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { FieldNodePayload, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { FlowStates } from 'src/components/ProjectNewView';
 import { useOrganization } from 'src/providers';
 import useForm from 'src/utils/useForm';
@@ -14,11 +14,11 @@ interface UseProjectEntitySelectionProps<T extends SearchResponseElement> {
   onNext: () => void;
   getSearchResults: (
     organizationId: number,
-    searchFields: FieldNodePayload[],
+    searchFields: (FieldNodePayload | SearchNodePayload)[],
     searchSortOrder?: SearchSortOrder,
     filters?: ProjectEntityFilters
   ) => Promise<T[] | null>;
-  getSearchFields: (debouncedSearchTerm: string) => FieldNodePayload[];
+  getSearchFields: (debouncedSearchTerm: string) => (FieldNodePayload | SearchNodePayload)[];
 }
 
 export type ProjectEntityFilters = {
