@@ -23,7 +23,7 @@ import { Facility } from 'src/types/Facility';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { APP_PATHS } from 'src/constants';
 import TfMain from 'src/components/common/TfMain';
-import SelectSeedBankModal from '../../SeedBank/SelectSeedBankModal';
+import SelectSeedBankModal from '../../../scenes/SeedBanksRouter/SelectSeedBankModal';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportAccessionsModal from './ImportAccessionsModal';
