@@ -24,6 +24,7 @@ import {
   IdGenerator,
   plantingSubzoneToFeature,
   plantingZoneToFeature,
+  subzoneNameGenerator,
   toIdentifiableFeature,
   toZoneFeature,
 } from './utils';
@@ -160,10 +161,18 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
       const cutSubzones = cutPolygons(subzones[selectedZone].features! as GeometryFeature[], cutWith);
 
       if (cutSubzones && subzones) {
+        const usedNames: Set<string> = new Set(
+          (subzones[selectedZone].features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
+        );
         const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) => sz.features));
-        const subzonesWithIds = cutSubzones.map((subzone) =>
-          toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone })
-        ) as GeometryFeature[];
+        const subzonesWithIds = cutSubzones.map((subzone) => {
+          if (subzone && subzone.properties && !subzone.properties.name) {
+            const subzoneName = subzoneNameGenerator(usedNames);
+            subzone.properties.name = subzoneName;
+            usedNames.add(subzoneName);
+          }
+          return toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone });
+        }) as GeometryFeature[];
 
         const updatedSubzones = _.cloneDeep(subzones);
         setSubzones({
