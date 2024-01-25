@@ -2,11 +2,11 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import TfMain from '../common/TfMain';
+import TfMain from '../../components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import TextField from '../common/Textfield/Textfield';
-import Button from '../common/button/Button';
+import TextField from '../../components/common/Textfield/Textfield';
+import Button from '../../components/common/button/Button';
 import { organizationTypeLabel } from 'src/types/Organization';
 import { Country } from 'src/types/Country';
 import { LocationService, OrganizationUserService } from 'src/services';

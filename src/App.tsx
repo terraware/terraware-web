@@ -5,13 +5,11 @@ import { useHistory } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import useStateLocation from './utils/useStateLocation';
 import ContactUs from 'src/components/ContactUs';
-import EditOrganization from 'src/components/EditOrganization';
 import Home from 'src/scenes/Home';
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import NavBar from 'src/components/NavBar';
 import NewPerson from 'src/components/Person/NewPerson';
-import Organization from 'src/components/Organization';
 import People from 'src/components/People';
 import PersonDetails from 'src/components/Person';
 import CheckIn from 'src/scenes/CheckIn';
@@ -69,6 +67,7 @@ import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 import MonitoringRouter from 'src/scenes/MonitoringRouter';
 import SpeciesView from 'src/scenes/Species';
+import OrganizationRouter from 'src/scenes/OrganizationRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -358,12 +357,10 @@ function AppContent() {
               <SpeciesView />
             </Route>
 
-            <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
-              <EditOrganization organization={selectedOrganization} reloadOrganizationData={reloadOrganizations} />
+            <Route path={APP_PATHS.ORGANIZATION}>
+              <OrganizationRouter />
             </Route>
-            <Route exact path={APP_PATHS.ORGANIZATION}>
-              <Organization />
-            </Route>
+
             <Route exact path={APP_PATHS.PEOPLE_NEW}>
               <NewPerson />
             </Route>
