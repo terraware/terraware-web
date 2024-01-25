@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 import { Box, Typography, useTheme } from '@mui/material';
@@ -166,8 +167,11 @@ export default function Editor(props: EditorProps): JSX.Element {
     setCurrentStep('site_boundary');
     setPlantingSite((current: PlantingSite) => ({
       ...current,
-      boundary: undefined,
-      plantingZones: undefined,
+      // start over only resets the polygonal information
+      // edits to name, description, planting seasons and project are preserved
+      boundary: _.cloneDeep(site.boundary),
+      exclusion: _.cloneDeep(site.exclusion),
+      plantingZones: _.cloneDeep(site.plantingZones),
     }));
     setCompletedOptionalSteps({} as Record<PlantingSiteStepType, boolean>);
     setShowStartOver(false);

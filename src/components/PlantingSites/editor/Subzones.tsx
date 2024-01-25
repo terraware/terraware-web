@@ -4,7 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
+import { PlantingSite, PlantingSubzone, PlantingZone } from 'src/types/Tracking';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import {
   GeometryFeature,
@@ -16,7 +16,7 @@ import {
 } from 'src/types/Map';
 import MapIcon from 'src/components/Map/MapIcon';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
-import { cutPolygons, leftMostFeature, leftOrderedFeatures } from 'src/components/Map/utils';
+import { cutPolygons, leftMostFeature, leftOrderedFeatures, toMultiPolygon } from 'src/components/Map/utils';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import StepTitleDescription, { Description } from './StepTitleDescription';
@@ -48,7 +48,7 @@ const featureSiteSubzones = (site: PlantingSite): Record<number, FeatureCollecti
     {} as Record<number, FeatureCollection>
   );
 
-export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Element {
+export default function Subzones({ onChange, onValidate, site }: SubzonesProps): JSX.Element {
   const [selectedZone, setSelectedZone] = useState<number | undefined>(
     site.plantingZones?.length === 1 ? site.plantingZones?.[0]?.id : undefined
   );
@@ -74,9 +74,39 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
   );
 
   useEffect(() => {
-    // TODO
-    onValidate?.(false);
-  }, [onValidate]);
+    // return if we are not in save flow
+    if (!onValidate) {
+      return;
+    }
+    // subzones are children of zones, we need to repopuplate zones with new subzones information
+    // and update `plantingZones` in the site
+    const numZones = site.plantingZones?.length ?? 0;
+    let numSubzones = 0;
+    const plantingZones: PlantingZone[] | undefined = site.plantingZones?.map((zone) => {
+      const plantingSubzones: PlantingSubzone[] = (subzones?.[zone.id]?.features ?? [])
+        .map((subzone) => {
+          const { geometry, properties } = subzone;
+          const multiPolygon = toMultiPolygon(geometry);
+          if (multiPolygon && properties) {
+            return {
+              areaHa: 0, // TODO update with api requirements when ready, we shouldn't be calculating this on the client
+              boundary: multiPolygon,
+              fullName: properties.name!,
+              id: properties.id!,
+              name: properties.name!,
+              plantingCompleted: false,
+            };
+          } else {
+            return undefined;
+          }
+        })
+        .filter((subzone) => !!subzone) as PlantingSubzone[];
+      numSubzones += plantingSubzones.length;
+      return { ...zone, plantingSubzones };
+    });
+    onChange('plantingZones', plantingZones);
+    onValidate(plantingZones === undefined, numSubzones > numZones);
+  }, [onChange, onValidate, site, subzones, zones]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!zones) {
