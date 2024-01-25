@@ -109,7 +109,7 @@ function AppContent() {
         {organizations.length === 0 ? (
           <NoOrgRouter />
         ) : isAcceleratorRoute && isAdmin(selectedOrganization) ? (
-          <AcceleratorRouter />
+          <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
         ) : (
           <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
         )}
