@@ -41,7 +41,6 @@ import { store } from './redux/store';
 import { useAppVersion } from './hooks/useAppVersion';
 import Observations from 'src/components/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
-import PlantsDashboard from 'src/components/Plants';
 import PlantingSites from 'src/components/PlantingSites';
 import isEnabled from 'src/features';
 import { Project } from './types/Project';
@@ -60,6 +59,7 @@ import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
 import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import NurseriesRouter from 'src/scenes/NurseriesRouter';
+import PlantsDashboardRouter from './scenes/PlantsDashboardRouter';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -357,12 +357,10 @@ function AppContent() {
               <NurseriesRouter />
             </Route>
 
-            <Route exact path={APP_PATHS.PLANTS_DASHBOARD}>
-              <PlantsDashboard />
+            <Route path={APP_PATHS.PLANTS_DASHBOARD}>
+              <PlantsDashboardRouter />
             </Route>
-            <Route exact path={APP_PATHS.PLANTING_SITE_DASHBOARD}>
-              <PlantsDashboard />
-            </Route>
+
             <Route exact path={APP_PATHS.INVENTORY}>
               <InventoryV2 hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
             </Route>
