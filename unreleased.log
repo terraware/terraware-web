@@ -1,3 +1,4 @@
+2aa9d0bbe6 SW-4761 Remove unused inventory v1 components (#2073)
 d065f93464 SW-4761 Create InventoryRouter and put all related views and sub components into the scenes directory. Move and rename the BatchBulkWithdrawView to the scenes directory and put the BatchWithdrawFlow into its own component that is shared in a couple routes (#2072)
 e634c92609 SW-4761 Create PlantsDashboardRouter and move all related views and sub components to the scenes directory (#2071)
 0992501de5 SW-4761 Create NurseriesRouter and move all nurseries related views (that exist within /nurseries path) and sub components to scenes directory (#2070)
