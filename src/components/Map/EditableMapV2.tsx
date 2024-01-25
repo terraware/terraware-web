@@ -125,22 +125,62 @@ export default function EditableMap({
   };
 
   const mapLayers = useMemo(() => {
+    // measurements layer
+    const measurementLayers: any[] = [{
+      id: '_measurements-text',
+      type: 'symbol',
+      paint: {
+        'text-color': [
+          'case',
+          ['==', ['get', 'error'], true],
+          theme.palette.TwClrIcnWarning,
+          theme.palette.TwClrBaseWhite,
+        ],
+      },
+      layout: {
+        'text-field': '{label}',
+        'text-size': 14
+      }
+    }, {
+      id: '_measurements-poly',
+      type: 'line',
+      filter: [
+        'all',
+        ['==', '$type', 'Polygon'],
+      ],
+      paint: {
+        'line-color': 'white',
+        'line-dasharray': [0.1],
+        'line-width': 1,
+      },
+    }];
+
+    const measurements = [(
+      <Source id='_measurements' type='geojson' data={{ type: 'FeatureCollection', features: [] }}>
+        {measurementLayers.map(layer => (
+          <Layer key={layer.id} {...layer} />
+        ))}
+      </Source>
+    )];
+
     if (!readOnlyBoundary?.length) {
-      return null;
+      return editMode === 'BoundaryNotSelected' ? null : measurements;
     }
 
-    return readOnlyBoundary!.map((data: RenderableReadOnlyBoundary) => {
-      const drawingLayer: any = getMapDrawingLayer(data.renderProperties, data.id);
-      return (
-        <Source type='geojson' key={data.id} data={data.featureCollection} id={data.id}>
-          {drawingLayer.patternFill && <Layer {...drawingLayer.patternFill} />}
-          {drawingLayer.textAnnotation && <Layer {...drawingLayer.textAnnotation} />}
-          {drawingLayer.layerOutline && <Layer {...drawingLayer.layerOutline} />}
-          {drawingLayer.layer && <Layer {...drawingLayer.layer} />}
-        </Source>
-      );
-    });
-  }, [readOnlyBoundary]);
+    return [
+      ...(readOnlyBoundary ?? []).map((data: RenderableReadOnlyBoundary) => {
+        const drawingLayer: any = getMapDrawingLayer(data.renderProperties, data.id);
+        return (
+          <Source type='geojson' key={data.id} data={data.featureCollection} id={data.id}>
+            {drawingLayer.patternFill && <Layer {...drawingLayer.patternFill} />}
+            {drawingLayer.textAnnotation && <Layer {...drawingLayer.textAnnotation} />}
+            {drawingLayer.layerOutline && <Layer {...drawingLayer.layerOutline} />}
+            {drawingLayer.layer && <Layer {...drawingLayer.layer} />}
+          </Source>
+        );
+      }),
+    ];
+  }, [editMode, readOnlyBoundary, theme.palette.TwClrIcnWarning, theme.palette.TwClrBaseWhite]);
 
   // clear popup state and set geometry as not selected (so rendering shows it as not selected)
   const clearPopupInfo = useCallback(() => {
@@ -303,6 +343,7 @@ export default function EditableMap({
               boundary={editableBoundary}
               onBoundaryChanged={onEditableBoundaryChanged}
               setMode={setEditMode}
+mapObj={mapRef?.current}
             />
             <UndoRedoControl onRedo={onRedo} onUndo={onUndo} />
             <NavigationControl position='bottom-right' showCompass={false} />

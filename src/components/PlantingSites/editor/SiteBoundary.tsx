@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import { FeatureCollection, MultiPolygon } from 'geojson';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import { GeometryFeature } from 'src/types/Map';
 import useSnackbar from 'src/utils/useSnackbar';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
@@ -10,7 +11,7 @@ import { toFeature, toMultiPolygonArray } from 'src/components/Map/utils';
 import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
-import { defaultZonePayload } from './utils';
+import { defaultZonePayload, bboxAreaHectares } from './utils';
 
 export type SiteBoundaryProps = {
   onChange: (id: string, value: unknown) => void;
@@ -59,6 +60,7 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
         hasTutorial: true,
         handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
       },
+      { text: strings.SITE_BOUNDARY_DESCRIPTION_WARN, isWarning: true },
     ];
 
     if (!mode) {
@@ -74,12 +76,34 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
     setDescription(data);
   }, [mode]);
 
+  const onBoundaryChanged = (boundary?: FeatureCollection) => {
+    if (boundary) {
+      const { features } = boundary;
+      const feature = features[0];
+      if (feature && (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon')) {
+        if (!feature.properties) {
+          feature.properties = {};
+        }
+        const area = bboxAreaHectares(feature as GeometryFeature);
+        const tooLarge = area >= 20000;
+        if (tooLarge) {
+          feature.properties.error = true;
+          feature.properties.errorText = strings.SITE_BOUNDARY_TOO_LARGE;
+        } else {
+          delete feature.properties.error;
+          delete feature.properties.errorText;
+        }
+      }
+    }
+    setSiteBoundary(boundary);
+  };
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
-        minHeight='215px'
+        minHeight='230px'
         title={strings.SITE_BOUNDARY}
         tutorialDescription={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
@@ -87,7 +111,7 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
       />
       <EditableMap
         editableBoundary={siteBoundary}
-        onEditableBoundaryChanged={setSiteBoundary}
+        onEditableBoundaryChanged={onBoundaryChanged}
         onRedo={redo}
         onUndo={undo}
         setMode={setMode}
