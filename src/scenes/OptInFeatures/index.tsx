@@ -8,11 +8,11 @@ import { Feature, OPT_IN_FEATURES } from 'src/features';
 import TfMain from 'src/components/common/TfMain';
 import { getRgbaFromHex } from 'src/utils/color';
 
-type OptInFeaturesProps = {
+type OptInFeaturesViewProps = {
   refresh?: () => void;
 };
 
-export default function OptInFeatures({ refresh }: OptInFeaturesProps): JSX.Element {
+export default function OptInFeaturesView({ refresh }: OptInFeaturesViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [preferences, setPreferences] = useState<{ [key: string]: boolean }>();
