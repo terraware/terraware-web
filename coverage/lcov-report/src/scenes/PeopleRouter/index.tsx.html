@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/People/TableCellRenderer.tsx</title>
+    <title>Code coverage report for src/scenes/PeopleRouter/index.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/People</a> TableCellRenderer.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/scenes/PeopleRouter</a> index.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -86,8 +86,11 @@
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -95,43 +98,52 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
-import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
-import { RendererProps } from 'src/components/common/table/types';
-import Link from 'src/components/common/Link';
-import { isTfContact } from 'src/utils/organization';
+import NewPersonView from 'src/scenes/PeopleRouter/NewPersonView';
+import PersonDetailsView from 'src/scenes/PeopleRouter/PersonDetailsView';
+import PeopleListView from 'src/scenes/PeopleRouter/PeopleListView';
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >Renderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
-  const { column, row, value, index } = <span class="cstat-no" title="statement not covered" >props;</span>
+const PeopleRouter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;Switch&gt;
+      &lt;Route exact path={APP_PATHS.PEOPLE_NEW}&gt;
+        &lt;NewPersonView /&gt;
+      &lt;/Route&gt;
+      &lt;Route exact path={APP_PATHS.PEOPLE_EDIT}&gt;
+        &lt;NewPersonView /&gt;
+      &lt;/Route&gt;
+      &lt;Route path={APP_PATHS.PEOPLE_VIEW}&gt;
+        &lt;PersonDetailsView /&gt;
+      &lt;/Route&gt;
+      &lt;Route exact path={APP_PATHS.PEOPLE}&gt;
+        &lt;PeopleListView /&gt;
+      &lt;/Route&gt;
+    &lt;/Switch&gt;
+  );
+};
 &nbsp;
-  const createLinkToPerson = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>Value: React.ReactNode | unknown[]) =&gt; {</span>
-    const personLocation = <span class="cstat-no" title="statement not covered" >{</span>
-      pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', row.id.toString()),
-    };
-<span class="cstat-no" title="statement not covered" >    return &lt;Link to={personLocation.pathname}&gt;{iValue as React.ReactNode}&lt;/Link&gt;;</span>
-  };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'email' &amp;&amp; !isTfContact(row.role)) {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer index={index} column={column} value={createLinkToPerson(value)} row={row} /&gt;;</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;CellRenderer {...props} /&gt;;</span>
-}
+export default PeopleRouter;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -139,7 +151,7 @@ export default function <span class="fstat-no" title="function not covered" >Ren
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-25T21:38:00.299Z
+                at 2024-01-25T21:46:53.589Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
