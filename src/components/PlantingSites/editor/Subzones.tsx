@@ -16,7 +16,7 @@ import {
 } from 'src/types/Map';
 import MapIcon from 'src/components/Map/MapIcon';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
-import { cutPolygons, leftMostFeature } from 'src/components/Map/utils';
+import { cutPolygons, leftMostFeature, leftOrderedFeatures } from 'src/components/Map/utils';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import StepTitleDescription, { Description } from './StepTitleDescription';
@@ -165,7 +165,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
           (subzones[selectedZone].features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
         );
         const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) => sz.features));
-        const subzonesWithIds = cutSubzones.map((subzone) => {
+        const subzonesWithIds = leftOrderedFeatures(cutSubzones).map(({ feature: subzone }) => {
           if (subzone && subzone.properties && !subzone.properties.name) {
             const subzoneName = subzoneNameGenerator(usedNames);
             subzone.properties.name = subzoneName;
