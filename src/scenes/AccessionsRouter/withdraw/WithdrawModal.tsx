@@ -24,8 +24,8 @@ import { useOrganization } from 'src/providers/hooks';
 import { Facility } from 'src/types/Facility';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { makeStyles } from '@mui/styles';
-import CountWithdrawal from 'src/components/accession2/withdraw/CountWithdrawal';
-import WeightWithdrawal from 'src/components/accession2/withdraw/WeightWithdrawal';
+import CountWithdrawal from 'src/scenes/AccessionsRouter/withdraw/CountWithdrawal';
+import WeightWithdrawal from 'src/scenes/AccessionsRouter/withdraw/WeightWithdrawal';
 import { Unit } from 'src/units';
 
 const useStyles = makeStyles((theme: Theme) => ({

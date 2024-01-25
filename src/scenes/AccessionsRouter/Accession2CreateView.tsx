@@ -14,7 +14,7 @@ import {
   CollectedReceivedDate2,
   Collectors2,
   SeedBank2Selector,
-} from '../properties';
+} from './properties';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import PageForm from 'src/components/common/PageForm';

@@ -6,7 +6,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { Facility, SubLocation } from 'src/types/Facility';
 import { SubLocationService } from 'src/services';
-import { SubLocationSelector, FacilitySelector } from './';
+import { SubLocationSelector, FacilitySelector } from './index';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 
 type SeedBank2SelectorProps = {
