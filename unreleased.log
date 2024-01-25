@@ -1,3 +1,4 @@
+5da315bf6d SW-4761 Put OptInFeatures view into the scenes directory (#2077)
 62238f409d SW-4761 Create MyAccountRouter and put views and sub components into scenes directory. Move the observations router to the scenes directory (#2076)
 9bbb4db6f7 SW-4761 Put Contact Us view into scenes directory (#2075)
 a52256b46d SW-4761 Created NurseryRouter and moved all related views and sub components to the scenes directory (#2074)
