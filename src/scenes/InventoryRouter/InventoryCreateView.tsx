@@ -7,11 +7,11 @@ import { useUser } from 'src/providers';
 import PageForm from 'src/components/common/PageForm';
 import useSnackbar from 'src/utils/useSnackbar';
 import TfMain from 'src/components/common/TfMain';
-import BatchDetailsForm from 'src/components/InventoryV2/form/BatchDetailsForm';
+import BatchDetailsForm from 'src/scenes/InventoryRouter/form/BatchDetailsForm';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
 import { requestSaveBatch, SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
-import { InventoryListType, InventoryListTypes } from './';
+import { InventoryListType, InventoryListTypes } from 'src/scenes/InventoryRouter/InventoryV2View';
 
 export default function InventoryCreateView(): JSX.Element {
   const dispatch = useAppDispatch();

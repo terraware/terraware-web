@@ -163,7 +163,7 @@ const initializeTab = (queryTab: string | null, userPrefValue: string | undefine
   return InventoryListTypes.BATCHES_BY_SPECIES;
 };
 
-export default function Inventory(props: InventoryProps): JSX.Element {
+export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();

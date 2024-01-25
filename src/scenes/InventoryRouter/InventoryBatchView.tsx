@@ -58,7 +58,7 @@ const initializeTab = (tab: string | null): 'details' | 'history' => {
   return 'details';
 };
 
-export default function InventoryBatch({ origin, species }: InventoryBatchProps) {
+export default function InventoryBatchView({ origin, species }: InventoryBatchProps) {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const contentRef = useRef(null);

@@ -18,15 +18,15 @@ import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useProjects } from 'src/hooks/useProjects';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
-import { useSubLocations } from 'src/components/InventoryV2/form/useSubLocations';
-import SubLocationsDropdown from 'src/components/InventoryV2/form/SubLocationsDropdown';
-import { useAccessions } from 'src/components/InventoryV2/form/useAccessions';
-import AccessionsDropdown from 'src/components/InventoryV2/form/AccessionsDropdown';
-import { useSpecies } from 'src/components/InventoryV2/form/useSpecies';
-import SpeciesDropdown from 'src/components/InventoryV2/form/SpeciesDropdown';
-import { useNurseries } from 'src/components/InventoryV2/form/useNurseries';
-import NurseryDropdownV2 from 'src/components/InventoryV2/form/NurseryDropdownV2';
-import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
+import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
+import SubLocationsDropdown from 'src/scenes/InventoryRouter/form/SubLocationsDropdown';
+import { useAccessions } from 'src/scenes/InventoryRouter/form/useAccessions';
+import AccessionsDropdown from 'src/scenes/InventoryRouter/form/AccessionsDropdown';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import SpeciesDropdown from 'src/scenes/InventoryRouter/form/SpeciesDropdown';
+import { useNurseries } from 'src/scenes/InventoryRouter/form/useNurseries';
+import NurseryDropdownV2 from 'src/scenes/InventoryRouter/form/NurseryDropdownV2';
+import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 
 export interface BatchDetailsFormProps {
   doValidateBatch: boolean;

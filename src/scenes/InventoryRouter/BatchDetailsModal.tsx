@@ -21,7 +21,7 @@ import {
   nurserySubstratesLocalized,
   treatments,
 } from 'src/types/Accession';
-import SelectPhotos from '../common/SelectPhotos';
+import SelectPhotos from '../../components/common/SelectPhotos';
 import { makeStyles } from '@mui/styles';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
 import { isNumber } from 'src/types/utils';

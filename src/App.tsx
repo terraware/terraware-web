@@ -24,14 +24,6 @@ import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
 import OptInFeatures from './components/OptInFeatures';
-import InventoryV2 from './components/InventoryV2';
-import InventoryViewForSpecies from './components/InventoryV2/InventoryViewForSpecies';
-import InventoryViewForNursery from './components/InventoryV2/InventoryViewForNursery';
-import InventoryBatch from './components/InventoryV2/InventoryBatch';
-import {
-  BatchBulkWithdrawWrapperComponent,
-  SpeciesBulkWithdrawWrapperComponent,
-} from './components/Inventory/withdraw';
 import { NurseryWithdrawals, NurseryWithdrawalsDetails, NurseryReassignment } from './components/NurseryWithdrawals';
 import { PlantingSite } from 'src/types/Tracking';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
@@ -47,7 +39,6 @@ import { Project } from './types/Project';
 import { selectProjects } from './redux/features/projects/projectsSelectors';
 import ProjectsRouter from 'src/components/Projects/Router';
 import { requestProjects } from './redux/features/projects/projectsThunks';
-import InventoryCreateView from './components/InventoryV2/InventoryCreateView';
 import ReportsRouter from 'src/components/Reports/Router';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
@@ -59,7 +50,9 @@ import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
 import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import NurseriesRouter from 'src/scenes/NurseriesRouter';
-import PlantsDashboardRouter from './scenes/PlantsDashboardRouter';
+import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
+import InventoryRouter from 'src/scenes/InventoryRouter';
+import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -361,33 +354,14 @@ function AppContent() {
               <PlantsDashboardRouter />
             </Route>
 
-            <Route exact path={APP_PATHS.INVENTORY}>
-              <InventoryV2 hasNurseries={selectedOrgHasNurseries()} hasSpecies={selectedOrgHasSpecies()} />
+            <Route path={APP_PATHS.INVENTORY}>
+              <InventoryRouter setWithdrawalCreated={setWithdrawalCreated} />
             </Route>
-            <Route exact path={APP_PATHS.INVENTORY_NEW}>
-              <InventoryCreateView />
-            </Route>
-            <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
-              <SpeciesBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
-            </Route>
-            <Route path={APP_PATHS.INVENTORY_BATCH}>
-              <InventoryBatch origin='Batches' species={species || []} />
-            </Route>
-            <Route path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}>
-              <InventoryBatch origin='Nursery' species={species || []} />
-            </Route>
-            <Route path={APP_PATHS.INVENTORY_BATCH_FOR_SPECIES}>
-              <InventoryBatch origin='Species' species={species || []} />
-            </Route>
-            <Route path={APP_PATHS.INVENTORY_ITEM_FOR_NURSERY}>
-              <InventoryViewForNursery />
-            </Route>
-            <Route path={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES}>
-              <InventoryViewForSpecies species={species || []} />
-            </Route>
+
             <Route path={APP_PATHS.BATCH_WITHDRAW}>
-              <BatchBulkWithdrawWrapperComponent withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
+              <BatchBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
             </Route>
+
             <Route path={APP_PATHS.PLANTING_SITES}>
               <PlantingSites reloadTracking={reloadTracking} />
             </Route>

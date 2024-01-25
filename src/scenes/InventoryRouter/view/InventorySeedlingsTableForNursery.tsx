@@ -6,19 +6,20 @@ import { NurseryBatchService } from 'src/services';
 import isEnabled from 'src/features';
 import InventorySeedlingsTable, {
   InventorySeedlingsTableProps,
-} from 'src/components/InventoryV2/view/InventorySeedlingsTable';
+} from 'src/scenes/InventoryRouter/view/InventorySeedlingsTable';
 
-interface InventorySeedlingsTableForSpeciesProps
+interface InventorySeedlingsTableForNurseryProps
   extends Omit<
     InventorySeedlingsTableProps,
     'columns' | 'isSelectionBulkWithdrawable' | 'getFuzzySearchFields' | 'getBatchesSearch' | 'getBatchesExport'
   > {
-  speciesId: number;
+  nurseryId: number;
 }
 
 const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.SEEDLING_BATCH, type: 'string' },
   { key: 'project_name', name: strings.PROJECT, type: 'string' },
+  { key: 'species_scientificName', name: strings.SPECIES, type: 'string' },
   {
     key: 'germinatingQuantity',
     name: strings.GERMINATING,
@@ -34,23 +35,22 @@ const columns = (): TableColumnType[] => [
   { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
   { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
   { key: 'totalQuantityWithdrawn', name: strings.WITHDRAWN, type: 'string' },
-  { key: 'facility_name', name: strings.NURSERY, type: 'string' },
-  { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'string' },
-  { key: 'addedDate', name: strings.DATE_ADDED, type: 'string' },
+  { key: 'readyByDate', name: strings.EST_READY_DATE, type: 'date' },
+  { key: 'addedDate', name: strings.DATE_ADDED, type: 'date' },
   { key: 'withdraw', name: '', type: 'string' },
   { key: 'quantitiesMenu', name: '', type: 'string' },
 ];
 
-export default function InventorySeedlingsTableForSpecies(props: InventorySeedlingsTableForSpeciesProps): JSX.Element {
-  const featureFlagProjects = isEnabled('Projects');
+export default function InventorySeedlingsTableForNursery(props: InventorySeedlingsTableForNurseryProps): JSX.Element {
+  const facilityId = props.nurseryId;
 
-  const speciesId = props.speciesId;
+  const featureFlagProjects = isEnabled('Projects');
 
   const getFuzzySearchFields = useCallback(
     (debouncedSearchTerm: string): FieldNodePayload[] => [
       {
         operation: 'field',
-        field: 'facility_name',
+        field: 'species_scientificName',
         type: 'Fuzzy',
         values: [debouncedSearchTerm],
       },
@@ -65,58 +65,27 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
       searchFields: FieldNodePayload[],
       searchSortOrder: SearchSortOrder | undefined
     ): Promise<SearchResponseElement[] | null> => {
-      const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatchesForSpeciesById(
+      const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatchesForNursery(
         orgId,
         originId,
         searchFields,
         searchSortOrder
       );
-      return (
-        searchResponse?.map(
-          (sr: SearchResponseElement): SearchResponseElement => ({
-            ...sr,
-            facilityId: sr.facility_id,
-            species_id: speciesId,
-          })
-        ) || null
-      );
+      return searchResponse?.map((sr: SearchResponseElement): SearchResponseElement => ({ ...sr, facilityId })) || null;
     },
-    [speciesId]
+    [facilityId]
   );
 
-  const getBatchesExport = useCallback(
-    (
-      orgId: number,
-      originId: number,
-      searchFields: FieldNodePayload[],
-      searchSortOrder: SearchSortOrder | undefined
-    ): Promise<SearchResponseElement[] | null> =>
-      NurseryBatchService.exportBatchesForSpeciesById(orgId, originId, searchFields, searchSortOrder),
-    []
-  );
-
-  const areAllFromSameNursery = (selectedRows: SearchResponseElement[]) => {
-    if (!selectedRows.length) {
-      return false;
-    }
-    const initialNurseryId = selectedRows[0].facilityId;
-    const otherNursery = selectedRows.some((row) => `${row.facilityId}` !== `${initialNurseryId}`);
-    return !otherNursery;
-  };
-
-  const isSelectionBulkWithdrawable = useCallback(
-    (selectedRows: SearchResponseElement[]) => areAllFromSameNursery(selectedRows),
-    []
-  );
+  const isSelectionBulkWithdrawable = useCallback(() => true, []);
 
   return (
     <InventorySeedlingsTable
       {...props}
+      facilityId={facilityId}
       columns={() => (featureFlagProjects ? columns() : columns().filter((column) => column.key !== 'project_name'))}
       isSelectionBulkWithdrawable={isSelectionBulkWithdrawable}
       getFuzzySearchFields={getFuzzySearchFields}
       getBatchesSearch={getBatchesSearch}
-      getBatchesExport={getBatchesExport}
     />
   );
 }

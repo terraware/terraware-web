@@ -1,4 +1,4 @@
-import InventoryTable from 'src/components/InventoryV2/InventoryTable';
+import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { CircularProgress, Container, Theme } from '@mui/material';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -8,8 +8,8 @@ import NurseryInventoryService, { BE_SORTED_FIELDS, SearchInventoryParams } from
 import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { InventoryFiltersType } from 'src/components/InventoryV2/InventoryFilter';
-import { FacilitySpeciesInventoryResult } from 'src/components/InventoryV2';
+import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
+import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import { TableColumnType } from '@terraware/web-components';

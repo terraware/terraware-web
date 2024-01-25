@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 import strings from 'src/strings';
-import { OriginPage } from 'src/components/InventoryV2/InventoryBatch';
-import BatchDetailsForm from 'src/components/InventoryV2/form/BatchDetailsForm';
+import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
+import BatchDetailsForm from 'src/scenes/InventoryRouter/form/BatchDetailsForm';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { requestSaveBatch, SavableBatch } from '../../../redux/features/batches/batchesAsyncThunks';
 import { selectBatchesRequest } from '../../../redux/features/batches/batchesSelectors';
