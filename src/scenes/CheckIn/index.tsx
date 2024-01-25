@@ -10,10 +10,10 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
-import PageHeader from '../PageHeader';
+import PageHeader from 'src/components/seeds/PageHeader';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import TextField from '../../common/Textfield/Textfield';
+import TextField from 'src/components/common/Textfield/Textfield';
 import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({

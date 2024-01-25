@@ -15,7 +15,7 @@ import Organization from 'src/components/Organization';
 import People from 'src/components/People';
 import PersonDetails from 'src/components/Person';
 import SpeciesList from 'src/components/Species';
-import CheckIn from 'src/components/seeds/checkin';
+import CheckIn from 'src/scenes/CheckIn';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
