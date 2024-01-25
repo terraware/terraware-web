@@ -49,7 +49,10 @@ const featureSiteSubzones = (site: PlantingSite): Record<number, FeatureCollecti
   );
 
 export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Element {
-  const [selectedZone, setSelectedZone] = useState<number | undefined>();
+  const [selectedZone, setSelectedZone] = useState<number | undefined>(
+    site.plantingZones?.length === 1 ? site.plantingZones?.[0]?.id : undefined
+  );
+
   // map of zone id to subzones
   const [subzones, setSubzones, undo, redo] = useUndoRedoState<Record<number, FeatureCollection>>(
     featureSiteSubzones(site)
@@ -215,9 +218,11 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
       }
       if (selectedZone === undefined || selectedZone !== zone.properties.id) {
         setSelectedZone(zone.properties.id);
+        return undefined;
+      } else {
+        // select the subzone under the click
+        return subzone;
       }
-      // select the subzone under the click
-      return subzone;
     },
     [selectedZone]
   );

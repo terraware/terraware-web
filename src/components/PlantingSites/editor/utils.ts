@@ -31,19 +31,13 @@ export const defaultZonePayload = (payload: DefaultZonePayload): PlantingZone =>
  * Generates incremental ids, uses list of input features to determine next id
  */
 export const IdGenerator = (features: Feature[]): (() => number) => {
-  let nextId = 0;
-  const ids = features
-    .filter((f) => !isNaN(Number(f.id)))
-    .map((f) => f.id as number)
-    .sort();
-
-  if (ids.length) {
-    nextId = ids[ids.length - 1];
-  }
+  let nextId = features
+    .map((f) => Number(f.id))
+    .filter((id) => !isNaN(id))
+    .reduce((a, b) => Math.max(a, b), -1);
 
   return () => {
-    nextId++;
-    return nextId;
+    return ++nextId;
   };
 };
 
