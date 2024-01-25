@@ -5,6 +5,8 @@ export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
 
 export enum APP_PATHS {
+  ACCELERATOR = '/accelerator',
+  ACCELERATOR_ADMIN = '/accelerator/admin',
   ACCESSIONS = '/accessions',
   ACCESSIONS2_NEW = '/accessions/new',
   ACCESSIONS2_ITEM = '/accessions/:accessionId',
