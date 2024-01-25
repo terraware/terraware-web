@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
-import Navbar from 'src/components/common/Navbar/Navbar';
-import NavItem from 'src/components/common/Navbar/NavItem';
-import NavSection from 'src/components/common/Navbar/NavSection';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { NurseryWithdrawalService } from 'src/services';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import NavFooter from './common/Navbar/NavFooter';
 import { useOrganization } from 'src/providers/hooks';
-import LocaleSelector from './LocaleSelector';
 import ReportService, { Reports } from 'src/services/ReportService';
 import { isAdmin } from 'src/utils/organization';
-import isEnabled from '../features';
+import isEnabled from 'src/features';
+import Navbar from 'src/components/common/Navbar/Navbar';
+import NavItem from 'src/components/common/Navbar/NavItem';
+import NavSection from 'src/components/common/Navbar/NavSection';
+import LocaleSelector from 'src/components/LocaleSelector';
+import NavFooter from 'src/components/common/Navbar/NavFooter';
 
 type NavBarProps = {
   setShowNavBar: (value: boolean) => void;
