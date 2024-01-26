@@ -4,8 +4,9 @@ import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { NurseryWithdrawalService } from 'src/services';
+import { isAcceleratorAdmin } from 'src/types/User';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization, useUser } from 'src/providers/hooks';
 import ReportService, { Reports } from 'src/services/ReportService';
 import { isAdmin } from 'src/utils/organization';
 import isEnabled from 'src/features';
@@ -33,6 +34,7 @@ export default function NavBar({
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
   const featureFlagProjects = isEnabled('Projects');
+  const { user } = useUser();
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
   const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
@@ -133,6 +135,15 @@ export default function NavBar({
       setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
       backgroundTransparent={backgroundTransparent}
     >
+      {user && isAcceleratorAdmin(user) && (
+        <NavItem
+          label={strings.ACCELERATOR_ADMIN}
+          icon='home'
+          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_ADMIN)}
+          id='home'
+        />
+      )}
+
       <NavItem
         label={strings.HOME}
         icon='home'

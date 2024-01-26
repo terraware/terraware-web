@@ -6,12 +6,13 @@ import { useRouteMatch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { makeStyles } from '@mui/styles';
 import { APP_PATHS } from 'src/constants';
+import { isAcceleratorAdmin } from 'src/types/User';
 import useStateLocation from 'src/utils/useStateLocation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { isAdmin } from 'src/utils/organization';
 import { getRgbaFromHex } from 'src/utils/color';
 import { store } from 'src/redux/store';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useAppVersion } from 'src/hooks/useAppVersion';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
@@ -76,6 +77,7 @@ function AppContent() {
   const location = useStateLocation();
   const { organizations, selectedOrganization } = useOrganization();
   const history = useHistory();
+  const { user } = useUser();
   const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
 
   const [showNavBar, setShowNavBar] = useState(true);
@@ -108,7 +110,7 @@ function AppContent() {
       <div className={classes.container}>
         {organizations.length === 0 ? (
           <NoOrgRouter />
-        ) : isAcceleratorRoute && isAdmin(selectedOrganization) ? (
+        ) : isAcceleratorRoute && user && isAcceleratorAdmin(user) && isAdmin(selectedOrganization) ? (
           <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
         ) : (
           <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />

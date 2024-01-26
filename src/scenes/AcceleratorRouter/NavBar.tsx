@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -15,8 +15,6 @@ type NavBarProps = {
 export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
-
-  const isAcceleratorAdminRoute = useRouteMatch(APP_PATHS.ACCELERATOR_ADMIN);
 
   const navigate = (url: string) => {
     history.push(url);
@@ -41,12 +39,9 @@ export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarP
       backgroundTransparent={backgroundTransparent}
     >
       <NavItem
-        label={strings.ADMIN}
+        label={strings.BACK_TO_TERRAWARE}
         icon='home'
-        selected={!!isAcceleratorAdminRoute}
-        onClick={() => {
-          closeAndNavigateTo(APP_PATHS.HOME);
-        }}
+        onClick={() => closeAndNavigateTo(APP_PATHS.HOME)}
         id='home'
       />
 
@@ -54,9 +49,7 @@ export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarP
         <NavItem
           label={strings.CONTACT_US}
           icon='mail'
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.CONTACT_US);
-          }}
+          onClick={() => closeAndNavigateTo(APP_PATHS.CONTACT_US)}
           id='contactus'
         />
 

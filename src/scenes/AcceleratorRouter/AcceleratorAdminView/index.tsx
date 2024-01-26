@@ -1,8 +1,10 @@
 import React from 'react';
-import { Container } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import PageHeader from 'src/components/seeds/PageHeader';
 import TfMain from 'src/components/common/TfMain';
+import strings from 'src/strings';
+import { useUser } from 'src/providers';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {
@@ -11,13 +13,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 const AcceleratorAdminView = () => {
+  const { user } = useUser();
   const classes = useStyles();
 
   return (
     <TfMain>
-      <PageHeader subtitle={'Welcome to the accelerator admin dashboard'} page={'Accelerator Admin'} />
+      <PageHeader title={strings.ACCELERATOR_CONSOLE} />
       <Container maxWidth={false} className={classes.mainContainer}>
-        asdlfkjasldf
+        <Typography variant={'h4'}>Welcome{user ? `, ${user.firstName}` : ''}!</Typography>
       </Container>
     </TfMain>
   );

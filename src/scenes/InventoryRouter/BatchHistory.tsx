@@ -13,7 +13,7 @@ import {
   BatchHistoryPayload,
   getBatchHistoryTypesEnum,
 } from 'src/types/Batch';
-import { User } from 'src/types/User';
+import { OrganizationUser } from 'src/types/User';
 import { useOrganization } from 'src/providers';
 import { getUserDisplayName } from 'src/utils/user';
 import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
@@ -57,7 +57,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [results, setResults] = useState<BatchHistoryItemForTable[] | null>();
-  const [users, setUsers] = useState<Record<number, User> | undefined>({});
+  const [users, setUsers] = useState<Record<number, OrganizationUser> | undefined>({});
   const { selectedOrganization } = useOrganization();
   const [selectedEvent, setSelectedEvent] = useState<any>();
   const [openEventDetailsModal, setOpenEventDetailsModal] = useState<boolean>(false);
@@ -122,7 +122,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     const fetchUsers = async () => {
       const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
       if (response.requestSucceeded) {
-        const usersById: Record<number, User> = {};
+        const usersById: Record<number, OrganizationUser> = {};
         for (const user of response.users ?? []) {
           usersById[user.id] = user;
         }
