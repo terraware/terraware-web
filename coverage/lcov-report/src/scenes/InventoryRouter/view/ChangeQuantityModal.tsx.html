@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -214,7 +214,13 @@
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
 <a name='L151'></a><a href='#L151'>151</a>
-<a name='L152'></a><a href='#L152'>152</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,6 +257,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -390,7 +402,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
   const { type } = <span class="cstat-no" title="statement not covered" >modalValues;</span>
   const [saving, setSaving] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [movedValue, setMovedValue] = <span class="cstat-no" title="statement not covered" >useState&lt;number | undefined&gt;();</span>
-  const [validate, setValidate] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
+  const [errorText, setErrorText] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [record, setRecord] = <span class="cstat-no" title="statement not covered" >useForm({</span>
     ...row,
     germinatingQuantity: +row['germinatingQuantity(raw)'],
@@ -403,8 +415,14 @@ export default function <span class="fstat-no" title="function not covered" >Cha
   const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(user?.locale),</span> [user?.locale, numberFormatter]);</span>
 &nbsp;
   const onSubmit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setValidate(true);</span>
-<span class="cstat-no" title="statement not covered" >    if (movedValue === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >    if (movedValue === undefined || movedValue === 0) {</span>
+<span class="cstat-no" title="statement not covered" >      setErrorText(strings.REQUIRED_FIELD);</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (type === 'germinating' &amp;&amp; (movedValue as number) &gt; +row['germinatingQuantity(raw)']) {</span>
+<span class="cstat-no" title="statement not covered" >      setErrorText(strings.GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (type === 'not-ready' &amp;&amp; (movedValue as number) &gt; +row['notReadyQuantity(raw)']) {</span>
+<span class="cstat-no" title="statement not covered" >      setErrorText(strings.NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 <span class="cstat-no" title="statement not covered" >    setSaving(true);</span>
@@ -491,14 +509,14 @@ export default function <span class="fstat-no" title="function not covered" >Cha
             type={'number'}
           /&gt;
 &nbsp;
-          &lt;Box maxWidth='70px' marginLeft={2}&gt;
+          &lt;Box maxWidth='120px' marginLeft={2}&gt;
             &lt;Textfield
               value={movedValue}
               label={strings.MOVE}
               id={'movedValue'}
               type={'number'}
               onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChangeMovedValue(value)}</span>
-              errorText={validate &amp;&amp; movedValue === undefined ? strings.REQUIRED_FIELD : ''}
+              errorText={errorText}
             /&gt;
           &lt;/Box&gt;
           &lt;Box paddingLeft={1} paddingRight={3} paddingTop={4}&gt;
@@ -523,7 +541,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-26T14:19:02.860Z
+                at 2024-01-26T17:51:30.339Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

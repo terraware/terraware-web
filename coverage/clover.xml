@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1706278743331" clover="3.2.0">
-  <project timestamp="1706278743331" name="All files">
-    <metrics statements="15759" coveredstatements="478" conditionals="10109" coveredconditionals="137" methods="4934" coveredmethods="110" elements="30802" coveredelements="725" complexity="0" loc="15759" ncloc="15759" packages="128" files="627" classes="627"/>
+<coverage generated="1706291490812" clover="3.2.0">
+  <project timestamp="1706291490812" name="All files">
+    <metrics statements="15765" coveredstatements="478" conditionals="10115" coveredconditionals="137" methods="4934" coveredmethods="110" elements="30814" coveredelements="725" complexity="0" loc="15765" ncloc="15765" packages="128" files="627" classes="627"/>
     <package name="src">
       <metrics statements="173" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11689,7 +11689,7 @@
       </file>
     </package>
     <package name="src.scenes.InventoryRouter.view">
-      <metrics statements="341" coveredstatements="0" conditionals="191" coveredconditionals="0" methods="103" coveredmethods="0"/>
+      <metrics statements="347" coveredstatements="0" conditionals="197" coveredconditionals="0" methods="103" coveredmethods="0"/>
       <file name="BatchDetailsModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/view/BatchDetailsModal.tsx">
         <metrics statements="25" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -11746,7 +11746,7 @@
         <line num="12" count="0" type="stmt"/>
       </file>
       <file name="ChangeQuantityModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/view/ChangeQuantityModal.tsx">
-        <metrics statements="38" coveredstatements="0" conditionals="31" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="44" coveredstatements="0" conditionals="37" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
@@ -11758,33 +11758,39 @@
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="45" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="46" count="0" type="stmt"/>
-        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
         <line num="83" count="0" type="stmt"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
         <line num="88" count="0" type="stmt"/>
-        <line num="133" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
       </file>
       <file name="DeleteBatchesModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/view/DeleteBatchesModal.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
