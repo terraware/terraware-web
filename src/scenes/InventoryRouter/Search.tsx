@@ -87,7 +87,7 @@ export default function Search<T extends { facilityInventories?: string }>(props
 
   useEffect(() => {
     void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
-  }, [filters.facilityIds, dispatch, selectedOrganization.id, activeLocale]);
+  }, [dispatch, selectedOrganization.id, activeLocale]);
 
   useEffect(() => {
     if (origin !== 'Nursery' || !species?.length || !tableResults) {
