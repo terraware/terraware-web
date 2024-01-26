@@ -1,3 +1,4 @@
+a71e5f7ce7 SW-4728 Remove project filter if there are no projects within the accessions view (#2097)
 5ba88d2534 SW-4728 Do not show projects dropdown during project creation flow if there are no projects (#2096)
 3cda6a43f5 SW-4723 Add success toast when a project is updated, refresh project in state when it is updated (#2087)
 8fc74f222e SW-4727 Add OR clause for species name when searching for accessions within the new project flow (#2089)
