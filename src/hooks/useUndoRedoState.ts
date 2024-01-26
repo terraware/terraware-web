@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
+import _ from 'lodash';
 
-export type SetFn<T> = (data: T) => void;
+type Func<T> = (previousValue: T | undefined) => T | undefined;
+export type SetFn<T> = (data: Func<T> | T) => void;
 export type UndoFn<T> = (() => T | undefined) | undefined;
 export type RedoFn<T> = (() => T | undefined) | undefined;
 
@@ -19,18 +21,19 @@ export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, S
   const [stack, setStack] = useState<(T | undefined)[]>([initialValue]);
   const [stackIndex, setStackIndex] = useState<number>(0);
 
-  const data = useMemo<T | undefined>(() => stack[stackIndex], [stackIndex, stack]);
+  const data = useMemo<T | undefined>(() => _.cloneDeep(stack[stackIndex]), [stackIndex, stack]);
 
   const setData = useCallback(
-    (value: T) => {
+    (input: Func<T> | T) => {
+      const value = typeof input === 'function' ? (input as Func<T>)(_.cloneDeep(stack[stackIndex])) : input;
       setStack((curr: (T | undefined)[]) => {
         const truncatedStack = curr.slice(0, stackIndex + 1);
-        truncatedStack.push(value);
+        truncatedStack.push(_.cloneDeep(value));
         return truncatedStack;
       });
       setStackIndex((curr: number) => curr + 1);
     },
-    [stackIndex, setStack]
+    [stack, stackIndex, setStack]
   );
 
   const undo = useMemo(() => {
@@ -38,7 +41,7 @@ export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, S
       return () => {
         const undoneData = stack[stackIndex - 1];
         setStackIndex((curr: number) => curr - 1);
-        return undoneData;
+        return _.cloneDeep(undoneData);
       };
     } else {
       return undefined;
@@ -50,7 +53,7 @@ export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, S
       return () => {
         const redoneData = stack[stackIndex + 1];
         setStackIndex((curr: number) => curr + 1);
-        return redoneData;
+        return _.cloneDeep(redoneData);
       };
     } else {
       return undefined;

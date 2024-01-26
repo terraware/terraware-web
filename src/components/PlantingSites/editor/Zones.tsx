@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import _ from 'lodash';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
 import { Textfield } from '@terraware/web-components';
@@ -188,7 +187,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
           if (!zones) {
             return;
           }
-          const updatedZones = _.cloneDeep(zones);
+          const updatedZones = { ...zones };
           const zone = updatedZones.features.find((f) => f.id === properties.id);
           if (!zone) {
             return;
