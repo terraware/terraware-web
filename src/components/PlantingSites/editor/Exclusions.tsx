@@ -79,7 +79,6 @@ export default function Exclusions({ onChange, onValidate, site }: ExclusionsPro
         tutorialTitle={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE}
       />
       <EditableMap
-        allowEditMultiplePolygons
         editableBoundary={exclusions}
         onEditableBoundaryChanged={setExclusions}
         readOnlyBoundary={readOnlyBoundary}

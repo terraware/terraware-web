@@ -11,7 +11,7 @@ import {
 } from 'src/types/Search';
 import { getPromisesResponse } from './utils';
 import PhotoService from './PhotoService';
-import { User } from 'src/types/User';
+import { OrganizationUser } from 'src/types/User';
 import { getUserDisplayName } from 'src/utils/user';
 
 /**
@@ -555,7 +555,7 @@ const getBatchHistory = async (
   batchId: number,
   search?: string,
   filter?: Record<string, any>,
-  users?: Record<number, User>
+  users?: Record<number, OrganizationUser>
 ): Promise<Response & BatchHistoryData> => {
   const response: Response & BatchHistoryData = await httpBatchHistory.get<
     GetBatchHistoryResponsePayload,

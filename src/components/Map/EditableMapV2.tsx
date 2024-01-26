@@ -54,7 +54,6 @@ export type LayerFeature = MapboxGeoJSONFeature;
 export type FeatureSelectorOnClick = (features: LayerFeature[]) => LayerFeature | undefined;
 
 export type EditableMapProps = {
-  allowEditMultiplePolygons?: boolean;
   clearOnEdit?: boolean;
   editableBoundary?: FeatureCollection;
   featureSelectorOnClick?: FeatureSelectorOnClick;
@@ -70,7 +69,6 @@ export type EditableMapProps = {
 };
 
 export default function EditableMap({
-  allowEditMultiplePolygons,
   clearOnEdit,
   editableBoundary,
   featureSelectorOnClick,
@@ -338,7 +336,6 @@ export default function EditableMap({
             <FullscreenControl position='top-left' />
             <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
-              allowEditMultiplePolygons={allowEditMultiplePolygons}
               clearOnEdit={clearOnEdit}
               boundary={editableBoundary}
               onBoundaryChanged={onEditableBoundaryChanged}
