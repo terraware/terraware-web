@@ -1,7 +1,6 @@
 // flattened info for shapes relating to planting site data
 import React from 'react';
-import mapboxgl, { Expression } from 'mapbox-gl';
-import { LayerProps } from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
 import { Feature, FeatureCollection, GeoJsonProperties, MultiPolygon, Polygon } from 'geojson';
 
 export type GeometryFeature = Feature<Polygon | MultiPolygon, GeoJsonProperties>;
@@ -60,7 +59,7 @@ export type MapAnnotation = {
 
 export type MapPatternFill = {
   imageName: string;
-  opacityExpression?: Expression;
+  opacityExpression?: any[];
 };
 
 /**
@@ -163,7 +162,7 @@ export const MapViewStyles: Record<MapViewStyle, string> = {
 };
 
 export type ReadOnlyBoundary = {
-  data: FeatureCollection;
+  featureCollection: FeatureCollection;
   selectedId?: number;
   id: string;
   isInteractive?: boolean;
@@ -173,24 +172,5 @@ export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
   renderProperties: MapSourceRenderProperties;
 };
 
-export type RenderableError = {
-  id: string;
-  data: Feature | FeatureCollection;
-};
-
 // TODO: integrate exclusions as a first class MapObject (not there yet)
 export type RenderableObject = MapObject | 'exclusions' | 'draft-zone' | 'draft-subzone';
-
-export type MapDrawingLayer = {
-  id: string;
-  isInteractive?: boolean;
-  layer: LayerProps;
-  layerOutline: LayerProps;
-  patternFill: LayerProps | null;
-  textAnnotation: LayerProps | null;
-};
-
-export type MapErrorLayer = {
-  errorText: LayerProps;
-  errorPolygon: LayerProps;
-};

@@ -131,6 +131,6 @@ export const subzoneNameGenerator = (usedNames: Set<string>): string => {
 /**
  * Get area of bbox of polygon in hectares
  */
-export const boundingAreaHectares = (geometry: MultiPolygon): number => {
-  return parseFloat((area(bboxPolygon(bbox(geometry))) * SQ_M_TO_HECTARES).toFixed(2));
+export const bboxAreaHectares = (geometry: MultiPolygon): number => {
+  return area(bboxPolygon(bbox(geometry))) * SQ_M_TO_HECTARES;
 };

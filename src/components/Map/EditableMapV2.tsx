@@ -16,21 +16,18 @@ import { makeStyles } from '@mui/styles';
 import bbox from '@turf/bbox';
 import { FeatureCollection, MultiPolygon } from 'geojson';
 import {
-  MapDrawingLayer,
   MapEntityId,
   MapEntityOptions,
-  MapErrorLayer,
   MapPopupRenderer,
   MapViewStyles,
   PopupInfo,
-  RenderableError,
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useIsVisible } from 'src/hooks/useIsVisible';
-import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
+import { getMapDrawingLayer, toMultiPolygon } from './utils';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoControl from './UndoRedoControl';
 
@@ -57,27 +54,25 @@ export type LayerFeature = MapboxGeoJSONFeature;
 export type FeatureSelectorOnClick = (features: LayerFeature[]) => LayerFeature | undefined;
 
 export type EditableMapProps = {
-  activeContext?: MapEntityOptions;
   clearOnEdit?: boolean;
   editableBoundary?: FeatureCollection;
-  errorAnnotations?: RenderableError[];
   featureSelectorOnClick?: FeatureSelectorOnClick;
+  activeContext?: MapEntityOptions;
   onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) => void;
   onRedo?: () => void;
   onUndo?: () => void;
   overridePopupInfo?: PopupInfo;
   popupRenderer?: MapPopupRenderer;
-  readOnlyBoundary?: RenderableReadOnlyBoundary[];
   setMode?: (mode: MapEditorMode) => void;
+  readOnlyBoundary?: RenderableReadOnlyBoundary[];
   style?: object;
 };
 
 export default function EditableMap({
-  activeContext,
   clearOnEdit,
   editableBoundary,
-  errorAnnotations,
   featureSelectorOnClick,
+  activeContext,
   onEditableBoundaryChanged,
   onRedo,
   onUndo,
@@ -115,7 +110,7 @@ export default function EditableMap({
       ? (bbox({
           type: 'MultiPolygon',
           coordinates: readOnlyBoundary!
-            .flatMap((b) => b.data.features)
+            .flatMap((b) => b.featureCollection.features)
             .flatMap((feature) => toMultiPolygon(feature.geometry))
             .filter((poly: MultiPolygon | null) => poly !== null)
             .flatMap((poly: MultiPolygon | null) => poly!.coordinates),
@@ -132,10 +127,10 @@ export default function EditableMap({
       return null;
     }
 
-    return readOnlyBoundary!.map((boundaryData: RenderableReadOnlyBoundary) => {
-      const drawingLayer: MapDrawingLayer = getMapDrawingLayer(boundaryData.renderProperties, boundaryData.id);
+    return readOnlyBoundary!.map((data: RenderableReadOnlyBoundary) => {
+      const drawingLayer: any = getMapDrawingLayer(data.renderProperties, data.id);
       return (
-        <Source type='geojson' key={boundaryData.id} data={boundaryData.data} id={boundaryData.id}>
+        <Source type='geojson' key={data.id} data={data.featureCollection} id={data.id}>
           {drawingLayer.patternFill && <Layer {...drawingLayer.patternFill} />}
           {drawingLayer.textAnnotation && <Layer {...drawingLayer.textAnnotation} />}
           {drawingLayer.layerOutline && <Layer {...drawingLayer.layerOutline} />}
@@ -144,22 +139,6 @@ export default function EditableMap({
       );
     });
   }, [readOnlyBoundary]);
-
-  const errorLayers = useMemo(() => {
-    if (!errorAnnotations?.length) {
-      return null;
-    }
-
-    return errorAnnotations!.map((errorData: RenderableError) => {
-      const errorLayer: MapErrorLayer = getMapErrorLayer(theme, `${errorData.id}`);
-      return (
-        <Source type='geojson' key={errorData.id} data={errorData.data} id={`${errorData.id}`}>
-          {errorLayer.errorText && <Layer {...errorLayer.errorText} />}
-          {errorLayer.errorPolygon && <Layer {...errorLayer.errorPolygon} />}
-        </Source>
-      );
-    });
-  }, [errorAnnotations, theme]);
 
   // clear popup state and set geometry as not selected (so rendering shows it as not selected)
   const clearPopupInfo = useCallback(() => {
@@ -314,7 +293,6 @@ export default function EditableMap({
             onClick={onMapClick}
           >
             {mapLayers}
-            {errorLayers}
             <FullscreenControl position='top-left' />
             <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
