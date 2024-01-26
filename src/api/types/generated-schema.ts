@@ -3726,6 +3726,7 @@ export interface components {
       /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
       emailNotificationsEnabled: boolean;
       firstName?: string;
+      globalRoles: ("Super-Admin" | "Accelerator Admin")[];
       /**
        * Format: int64
        * @description User's unique ID. This should not be shown to the user, but is a required input to some API endpoints.
