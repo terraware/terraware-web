@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import _ from 'lodash';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
 import { Textfield } from '@terraware/web-components';
@@ -207,9 +206,8 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
           return toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone });
         }) as GeometryFeature[];
 
-        const updatedSubzones = _.cloneDeep(subzones);
         setSubzones({
-          ...updatedSubzones,
+          ...subzones,
           [selectedZone]: {
             type: 'FeatureCollection',
             features: subzonesWithIds,
@@ -271,7 +269,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
           if (!subzones) {
             return;
           }
-          const updatedSubzones = _.cloneDeep(subzones);
+          const updatedSubzones = { ...subzones };
           const subzone =
             selectedZone !== undefined
               ? updatedSubzones[selectedZone].features.find((f) => f.id === properties.id)
