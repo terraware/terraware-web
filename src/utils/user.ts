@@ -1,6 +1,6 @@
-import { User } from 'src/types/User';
+import { OrganizationUser, User } from 'src/types/User';
 
-export const getUserDisplayName = (user?: User): string => {
+export const getUserDisplayName = (user?: User | OrganizationUser): string => {
   if (user?.firstName && user?.lastName) {
     return `${user.firstName} ${user.lastName}`;
   }
