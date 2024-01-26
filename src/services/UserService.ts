@@ -50,14 +50,15 @@ const getUser = async (): Promise<UserResponse> => {
   const response: UserResponse = await httpCurrentUser.get<UserServerResponse, UserData>({}, (data) => ({
     user: data?.user
       ? {
-          id: data.user.id,
-          email: data.user.email,
-          firstName: data.user.firstName,
-          lastName: data.user.lastName,
-          emailNotificationsEnabled: data.user.emailNotificationsEnabled,
-          timeZone: data.user.timeZone,
-          locale: data.user.locale,
           countryCode: data.user.countryCode,
+          email: data.user.email,
+          emailNotificationsEnabled: data.user.emailNotificationsEnabled,
+          firstName: data.user.firstName,
+          globalRoles: data.user.globalRoles,
+          id: data.user.id,
+          lastName: data.user.lastName,
+          locale: data.user.locale,
+          timeZone: data.user.timeZone,
         }
       : undefined,
   }));

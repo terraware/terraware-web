@@ -4,7 +4,7 @@ import ErrorContent from './ErrorContent';
 interface Props {
   children: ReactNode;
   handler?: () => void;
-  setShowNavBar?: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowNavBar?: (value: boolean) => void;
 }
 
 interface State {
