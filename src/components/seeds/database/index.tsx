@@ -42,6 +42,9 @@ import isEnabled from 'src/features';
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 import Card from 'src/components/common/Card';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
+import { Project } from 'src/types/Project';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 
 interface StyleProps {
   isMobile: boolean;
@@ -172,6 +175,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const featureFlagProjects = isEnabled('Projects');
   const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');
 
+  const projects = useAppSelector(selectProjects);
+
   const columns = columnsIndexed();
   const displayColumnDetails = displayColumnNames
     .filter((name) => (featureFlagProjects ? true : name !== 'project_name'))
@@ -219,6 +224,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const closeMessageSelector = useAppSelector(selectMessage(`seeds.${SNACKBAR_PAGE_CLOSE_KEY}.ackWeightSystem`));
+
+  useEffect(() => {
+    void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+  }, [activeLocale, dispatch, selectedOrganization.id]);
 
   useEffect(() => {
     const updatePreferences = async () => {
@@ -452,12 +461,20 @@ export default function Database(props: DatabaseProps): JSX.Element {
         };
 
         const populateFieldOptions = async () => {
-          const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-          const allValues = await SeedBankService.searchFieldValues(
-            singleAndMultiChoiceFields,
-            {},
-            selectedOrganization.id
+          // Since the seed bank service doesn't return values for project IDs, we need to merge the values in
+          const singleAndMultiChoiceFields = filterSelectFields(
+            searchColumns.filter((column) => column !== 'project_name')
           );
+
+          const allValues =
+            (await SeedBankService.searchFieldValues(singleAndMultiChoiceFields, {}, selectedOrganization.id)) || {};
+
+          if (featureFlagProjects) {
+            allValues.project_name = {
+              partial: false,
+              values: (projects || []).map((project: Project) => project.name),
+            };
+          }
 
           if (activeRequests) {
             setFieldOptions(allValues);
