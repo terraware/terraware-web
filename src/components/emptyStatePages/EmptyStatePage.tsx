@@ -4,8 +4,8 @@ import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePag
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import AddSpeciesModal from '../Species/AddSpeciesModal';
-import ImportSpeciesModal, { downloadCsvTemplate } from '../Species/ImportSpeciesModal';
+import AddSpeciesModal from '../../scenes/Species/AddSpeciesModal';
+import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -14,7 +14,7 @@ import { IconName } from 'src/components/common/icon/icons';
 import { isContributor } from 'src/utils/organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import ImportInventoryModal, { downloadInventoryCsvTemplate } from '../Inventory/ImportInventoryModal';
+import ImportInventoryModal, { downloadInventoryCsvTemplate } from 'src/scenes/InventoryRouter/ImportInventoryModal';
 import PlantingSiteTypeSelect from '../PlantingSites/PlantingSiteTypeSelect';
 import { useOrganization } from 'src/providers/hooks';
 
