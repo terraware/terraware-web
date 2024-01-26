@@ -1,3 +1,5 @@
+8fc74f222e SW-4727 Add OR clause for species name when searching for accessions within the new project flow (#2089)
+d4a9630e19 Committing updated `yarn.lock` from recent `web-components` update (#2086)
 e557b2ff26 SW-4685 Handle invalid inventory status changes (#2092)
 8c5cc53503 Updated translations from Phrase (#2094)
 4a9fa78ecf SW-4709 Add side nav button between base terraware and accelerator admin area (#2083)
