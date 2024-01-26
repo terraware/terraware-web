@@ -489,7 +489,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         void populateFieldOptions();
       }
     },
-    [searchColumns, searchCriteria, searchSortOrder, selectedOrganization]
+    [featureFlagProjects, projects, searchColumns, searchCriteria, searchSortOrder, selectedOrganization]
   );
 
   useEffect(() => {
