@@ -1,7 +1,8 @@
 import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
-import intersect from '@turf/intersect';
-import difference from '@turf/difference';
 import center from '@turf/center';
+import difference from '@turf/difference';
+import intersect from '@turf/intersect';
+import union from '@turf/union';
 import _ from 'lodash';
 import { GeometryFeature, MapSourceProperties, MapSourceRenderProperties } from 'src/types/Map';
 
@@ -15,12 +16,20 @@ export function toMultiPolygon(geometry: Geometry): MultiPolygon | null {
   }
 }
 
-export function toMultiPolygonArray(featureCollection: FeatureCollection): MultiPolygon[] | undefined {
-  const polyArray = featureCollection.features
+export function unionMultiPolygons(featureCollection: FeatureCollection): MultiPolygon | null {
+  const polyArray: MultiPolygon[] = featureCollection.features
     .map((feature: Feature) => toMultiPolygon(feature.geometry))
     .filter((poly: MultiPolygon | null) => poly !== null) as MultiPolygon[];
 
-  return polyArray.length ? polyArray : undefined;
+  if (!polyArray.length) {
+    return null;
+  }
+
+  return polyArray.reduce((acc: MultiPolygon, curr: MultiPolygon): MultiPolygon => {
+    const unionResult = union(acc, curr);
+    const multiPolygon = unionResult ? toMultiPolygon(unionResult.geometry) : null;
+    return multiPolygon || curr;
+  });
 }
 
 export function toFeature(

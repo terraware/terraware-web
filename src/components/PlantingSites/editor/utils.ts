@@ -1,6 +1,11 @@
-import { Feature } from 'geojson';
+import { Feature, MultiPolygon } from 'geojson';
+import area from '@turf/area';
+import bbox from '@turf/bbox';
+import bboxPolygon from '@turf/bbox-polygon';
 import { PlantingSubzone, PlantingZone } from 'src/types/Tracking';
 import { toFeature } from 'src/components/Map/utils';
+
+const SQ_M_TO_HECTARES = 1 / 10000;
 
 export type DefaultZonePayload = Omit<PlantingZone, 'plantingSubzones' | 'areaHa'>;
 
@@ -121,4 +126,11 @@ export const subzoneNameGenerator = (usedNames: Set<string>): string => {
   } while (usedNames.has(nextName));
 
   return nextName;
+};
+
+/**
+ * Get area of bbox of polygon in hectares
+ */
+export const bboxAreaHectares = (geometry: MultiPolygon): number => {
+  return area(bboxPolygon(bbox(geometry))) * SQ_M_TO_HECTARES;
 };

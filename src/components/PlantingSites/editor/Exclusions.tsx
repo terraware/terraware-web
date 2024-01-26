@@ -5,7 +5,7 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { RenderableReadOnlyBoundary } from 'src/types/Map';
 import EditableMap from 'src/components/Map/EditableMapV2';
-import { toFeature, toMultiPolygonArray } from 'src/components/Map/utils';
+import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
@@ -31,13 +31,11 @@ export default function Exclusions({ onChange, onValidate, site }: ExclusionsPro
 
   useEffect(() => {
     if (onValidate) {
-      if (exclusions) {
-        onChange('exclusion', {
-          type: 'MultiPolygon',
-          coordinates: toMultiPolygonArray(exclusions)!.flatMap((poly) => poly.coordinates),
-        });
+      const boundary = exclusions ? unionMultiPolygons(exclusions) : null;
+      if (boundary) {
+        onChange('exclusion', boundary);
       }
-      onValidate(false, !!exclusions);
+      onValidate(false, !!boundary);
     }
   }, [onChange, onValidate, exclusions]);
 
