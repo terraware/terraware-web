@@ -4,24 +4,25 @@ import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-compone
 import { PillList } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
+import { SearchNodePayload } from 'src/types/Search';
+import { Facility, SubLocation } from 'src/types/Facility';
+import { Species } from 'src/types/Species';
+import { Project } from 'src/types/Project';
+import isEnabled from 'src/features';
+import useForm from 'src/utils/useForm';
+import { getAllNurseries } from 'src/utils/organization';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
-import { SearchNodePayload } from 'src/types/Search';
-import useForm from 'src/utils/useForm';
-import { Facility, SubLocation } from 'src/types/Facility';
-import { Species } from 'src/types/Species';
-import { getAllNurseries } from 'src/utils/organization';
 import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { Project } from 'src/types/Project';
+import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import InventoryFilters, { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { convertFilterGroupToMap, getNurseryName } from 'src/scenes/InventoryRouter/FilterUtils';
-import isEnabled from 'src/features';
-import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
+import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 
 const useStyles = makeStyles(() => ({
   popoverContainer: {
@@ -83,6 +84,10 @@ export default function Search<T extends { facilityInventories?: string }>(props
   useEffect(() => {
     void dispatch(requestSubLocations(filters.facilityIds ?? []));
   }, [filters.facilityIds, dispatch]);
+
+  useEffect(() => {
+    void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+  }, [filters.facilityIds, dispatch, selectedOrganization.id, activeLocale]);
 
   useEffect(() => {
     if (origin !== 'Nursery' || !species?.length || !tableResults) {
@@ -287,7 +292,7 @@ export default function Search<T extends { facilityInventories?: string }>(props
           </>
         )}
 
-        {featureFlagProjects && showProjectsFilter && (
+        {featureFlagProjects && showProjectsFilter && (projects || []).length > 0 && (
           <InventoryFilters
             filters={filters}
             setFilters={setFilters}
