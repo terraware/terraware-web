@@ -42,7 +42,10 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
         onValidate(true);
         return;
       } else {
-        const boundary = boundaryArray[0];
+        const boundary: MultiPolygon = {
+          type: 'MultiPolygon',
+          coordinates: boundaryArray!.flatMap((poly) => poly.coordinates),
+        };
         onChange('boundary', boundary);
         onChange('plantingZones', [defaultZonePayload({ boundary, id: 0, name: '', targetPlantingDensity: 1500 })]);
         onValidate(false);

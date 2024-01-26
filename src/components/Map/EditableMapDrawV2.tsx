@@ -26,7 +26,6 @@ export type MapEditorMode =
   | 'ReplacingBoundary';
 
 type MapEditorProps = ConstructorParameters<typeof MapboxDraw>[0] & {
-  allowEditMultiplePolygons?: boolean;
   boundary?: FeatureCollection;
   clearOnEdit?: boolean;
   onBoundaryChanged?: (boundary?: FeatureCollection) => void;
@@ -68,11 +67,8 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
 
 /**
  * Makes a parent ReactMapGL component editable. This is a wrapper around the MapboxDraw control.
- * The editor supports drawing a boundary consisting of a single polygon.
+ * The editor supports drawing one or more polygons.
  *
- * @param allowEditMultiplePolygons
- *  Whether to allow draw/creation of more than one polygon, otherwise clears previous polygon
- *  upon a new one.
  * @param boundary
  *  Initial boundary. If this is specified, the editor will start out in EditingBoundary mode;
  *  otherwise it will start out in CreatingBoundary mode.
@@ -86,7 +82,6 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
  *  Additional properties to pass to the MapboxDraw control.
  */
 export default function EditableMapDraw({
-  allowEditMultiplePolygons,
   boundary,
   clearOnEdit,
   onBoundaryChanged,
@@ -124,19 +119,16 @@ export default function EditableMapDraw({
 
   const fetchUpdatedFeatures = useCallback(
     (newFeatures: Feature[]): FeatureCollection | undefined => {
-      const existingFeatures = allowEditMultiplePolygons
-        ? draw
-            .getAll()
-            .features.filter(
-              (currentFeature: Feature) =>
-                !newFeatures.some((newFeature: Feature) => newFeature.id === currentFeature.id)
-            )
-        : [];
+      const existingFeatures = draw
+        .getAll()
+        .features.filter(
+          (currentFeature: Feature) => !newFeatures.some((newFeature: Feature) => newFeature.id === currentFeature.id)
+        );
 
       const features = [...existingFeatures, ...newFeatures];
       return features.length ? { type: 'FeatureCollection', features } : undefined;
     },
-    [draw, allowEditMultiplePolygons]
+    [draw]
   );
 
   const updateNotification = useCallback(
