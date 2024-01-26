@@ -5,6 +5,8 @@ export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
 
 export enum APP_PATHS {
+  ACCELERATOR = '/accelerator',
+  ACCELERATOR_ADMIN = '/accelerator/admin',
   ACCESSIONS = '/accessions',
   ACCESSIONS2_NEW = '/accessions/new',
   ACCESSIONS2_ITEM = '/accessions/:accessionId',
@@ -17,6 +19,7 @@ export enum APP_PATHS {
   ERROR_FAILED_TO_FETCH_ORG_DATA = '/error/cannot-fetch-org-data',
   HOME = '/home',
   MONITORING = '/monitoring',
+  MONITORING_SEED_BANK = '/monitoring/:seedBankId',
   NURSERIES = '/nurseries',
   NURSERIES_EDIT = '/nurseries/:nurseryId/edit',
   NURSERIES_NEW = '/nurseries/new',
@@ -58,7 +61,6 @@ export enum APP_PATHS {
   SEED_BANKS_EDIT = '/seedbanks/:seedBankId/edit',
   SEED_BANKS_NEW = '/seedbanks/new',
   SEED_BANKS_VIEW = '/seedbanks/:seedBankId',
-  SEED_BANK_MONITORING = '/monitoring/:seedBankId',
   SEEDS_DASHBOARD = '/seeds-dashboard',
   SPECIES = '/species',
   WELCOME = '/welcome',
