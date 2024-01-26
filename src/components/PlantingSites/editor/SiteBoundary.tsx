@@ -1,8 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { FeatureCollection, MultiPolygon } from 'geojson';
+import bbox from '@turf/bbox';
+import bboxPolygon from '@turf/bbox-polygon';
+import centroid from '@turf/centroid';
+import _ from 'lodash';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import { RenderableError } from 'src/types/Map';
 import useSnackbar from 'src/utils/useSnackbar';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
@@ -10,7 +15,7 @@ import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
-import { bboxAreaHectares, defaultZonePayload } from './utils';
+import { boundingAreaHectares, defaultZonePayload } from './utils';
 
 export type SiteBoundaryProps = {
   onChange: (id: string, value: unknown) => void;
@@ -40,17 +45,33 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
     [siteBoundary]
   );
 
+  const boundingArea = useMemo<number>(() => (boundary ? boundingAreaHectares(boundary) : 0), [boundary]);
+
   // check if bounding area is larger than 20K hectares
-  const boundingAreaTooLarge = useMemo<boolean>(
-    () => (boundary ? bboxAreaHectares(boundary) > 20000 : false),
-    [boundary]
-  );
+  const boundingAreaTooLarge = useMemo<boolean>(() => boundingArea > 20000, [boundingArea]);
+
+  const errorAnnotations = useMemo<RenderableError[] | undefined>(() => {
+    // if bounding area is too large, show error message at center of bounding box, also show the bounding box
+    if (boundary && boundingAreaTooLarge && mode === 'BoundaryNotSelected') {
+      const errors: RenderableError[] = [];
+      const bboxPoly = bboxPolygon(bbox(_.cloneDeep(boundary)));
+      const c = centroid(bboxPoly);
+      const errorText = strings.formatString(strings.SITE_BOUNDING_AREA_TOO_LARGE, boundingArea);
+      errors.push({ id: 'errorText', data: { type: 'FeatureCollection', features: [{...c, properties: { errorText } }] } });
+      errors.push({ id: 'errorBoundary', data: bboxPoly });
+      return errors;
+    } else {
+      return undefined;
+    }
+  }, [boundary, boundingArea, boundingAreaTooLarge, mode]);
 
   useEffect(() => {
     if (onValidate) {
       if (!boundary || boundingAreaTooLarge) {
         snackbar.toastError(
-          boundingAreaTooLarge ? strings.SITE_BOUNDING_AREA_TOO_LARGE : strings.SITE_BOUNDARY_ABSENT_WARNING
+          boundingAreaTooLarge
+            ? (strings.formatString(strings.SITE_BOUNDING_AREA_TOO_LARGE, boundingArea) as string)
+            : strings.SITE_BOUNDARY_ABSENT_WARNING
         );
         onValidate(true);
         return;
@@ -60,7 +81,7 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
         onValidate(false);
       }
     }
-  }, [boundary, boundingAreaTooLarge, onChange, onValidate, siteBoundary, snackbar]);
+  }, [boundary, boundingArea, boundingAreaTooLarge, onChange, onValidate, siteBoundary, snackbar]);
 
   useEffect(() => {
     const data: Description[] = [
@@ -87,6 +108,8 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
     setDescription(data);
   }, [mode]);
 
+useEffect(() => console.log('site', siteBoundary), [siteBoundary]);
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
@@ -100,6 +123,7 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
       />
       <EditableMap
         editableBoundary={siteBoundary}
+        errorAnnotations={errorAnnotations}
         onEditableBoundaryChanged={setSiteBoundary}
         onRedo={redo}
         onUndo={undo}

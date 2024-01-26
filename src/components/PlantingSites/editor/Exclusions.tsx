@@ -46,7 +46,7 @@ export default function Exclusions({ onChange, onValidate, site }: ExclusionsPro
 
     return [
       {
-        featureCollection: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
+        data: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
         id: 'site',
         renderProperties: getRenderAttributes('site'),
       },

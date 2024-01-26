@@ -118,7 +118,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
     );
 
     const zonesData: RenderableReadOnlyBoundary = {
-      featureCollection: {
+      data: {
         type: 'FeatureCollection',
         features: zones!.features.map((feature: Feature) => toZoneFeature(feature, zoneIdGenerator)),
       },
@@ -136,7 +136,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
     };
 
     const subzonesData: RenderableReadOnlyBoundary = {
-      featureCollection: {
+      data: {
         type: 'FeatureCollection',
         features: Object.keys(subzones ?? {}).flatMap((key: string) => {
           const zoneId = Number(key);

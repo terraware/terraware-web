@@ -83,7 +83,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
     const exclusionsBoundary: RenderableReadOnlyBoundary[] = site.exclusion
       ? [
           {
-            featureCollection: { type: 'FeatureCollection', features: [toFeature(site.exclusion!, {}, 0)] },
+            data: { type: 'FeatureCollection', features: [toFeature(site.exclusion!, {}, 0)] },
             id: 'exclusions',
             renderProperties: getRenderAttributes('exclusions'),
           },
@@ -93,12 +93,12 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
     return [
       ...exclusionsBoundary,
       {
-        featureCollection: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
+        data: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
         id: 'site',
         renderProperties: getRenderAttributes('site'),
       },
       {
-        featureCollection: {
+        data: {
           type: 'FeatureCollection',
           features: zones!.features.map((feature: Feature) => toZoneFeature(feature, idGenerator)),
         },

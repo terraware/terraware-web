@@ -1235,7 +1235,7 @@ SITE_BOUNDARY_DESCRIPTION_2,Use the drawing {0} tool to draw the boundary of you
 SITE_BOUNDARY_DESCRIPTION_WARN,"The boundary should fit in a bounding box of less than or equal to 20000 hectares, otherwise consider splitting the site into multiple planting sites.",
 SITE_BOUNDARY_DESCRIPTION_3,"Add points to your boundary by zooming in to where your planting site is, and then clicking on the map. Complete the boundary by either double-clicking or by clicking on the starting point again.",
 SITE_BOUNDARY_DESCRIPTION_4,"To edit this shape, click on it again. To remove it, click the {0} button.",
-SITE_BOUNDING_AREA_TOO_LARGE,Bounding area too large.,
+SITE_BOUNDING_AREA_TOO_LARGE,Bounding area {0} hectares is too large.,
 SITE_DETAIL,Site Detail,
 SITE_EXCLUSION_AREAS_DESCRIPTION_0,"Areas within the site boundary that are not plantable should be excluded. These exclusion areas will be removed from plantable area calculations and will not be monitored as a part of routine site observation. Example locations that should be excluded include roads, bodies of water, and outbuildings.",
 SITE_EXCLUSION_AREAS_DESCRIPTION_1,"Use the drawing {0} tool to draw the exclusion areas of your planting site. (Watch a [tutorial.]) If there are no areas to exclude, click ""{1}.""",

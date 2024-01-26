@@ -1,10 +1,17 @@
 import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
+import { Theme } from '@mui/material';
 import center from '@turf/center';
 import difference from '@turf/difference';
 import intersect from '@turf/intersect';
 import union from '@turf/union';
 import _ from 'lodash';
-import { GeometryFeature, MapSourceProperties, MapSourceRenderProperties } from 'src/types/Map';
+import {
+  GeometryFeature,
+  MapDrawingLayer,
+  MapErrorLayer,
+  MapSourceProperties,
+  MapSourceRenderProperties,
+} from 'src/types/Map';
 
 export function toMultiPolygon(geometry: Geometry): MultiPolygon | null {
   if (geometry.type === 'MultiPolygon') {
@@ -17,8 +24,8 @@ export function toMultiPolygon(geometry: Geometry): MultiPolygon | null {
 }
 
 export function unionMultiPolygons(featureCollection: FeatureCollection): MultiPolygon | null {
-  const polyArray: MultiPolygon[] = featureCollection.features
-    .map((feature: Feature) => toMultiPolygon(feature.geometry))
+  const polyArray: MultiPolygon[] = _.cloneDeep(featureCollection)
+    .features.map((feature: Feature) => toMultiPolygon(feature.geometry))
     .filter((poly: MultiPolygon | null) => poly !== null) as MultiPolygon[];
 
   if (!polyArray.length) {
@@ -61,7 +68,31 @@ export const getFillColor = (source: MapSourceRenderProperties, type: 'highlight
   }
 };
 
-export const getMapDrawingLayer = (source: MapSourceRenderProperties, sourceId: string) => {
+export const getMapErrorLayer = (theme: Theme, id: string): MapErrorLayer => ({
+  errorText: {
+    id: `error-text-${id}`,
+    type: 'symbol',
+    paint: {
+      'text-color': theme.palette.TwClrIcnWarning,
+    },
+    layout: {
+      'text-field': '{errorText}',
+      'text-size': 14,
+    },
+  },
+  errorPolygon: {
+    id: `error-line-${id}`,
+    type: 'line',
+    filter: ['all', ['==', '$type', 'Polygon']],
+    paint: {
+      'line-color': theme.palette.TwClrIcnWarning,
+      'line-dasharray': [0.2, 1],
+      'line-width': 1,
+    },
+  },
+});
+
+export const getMapDrawingLayer = (source: MapSourceRenderProperties, sourceId: string): MapDrawingLayer => {
   return {
     id: sourceId,
     isInteractive: source.isInteractive,
