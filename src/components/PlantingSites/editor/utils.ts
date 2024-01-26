@@ -6,7 +6,7 @@ export type DefaultZonePayload = Omit<PlantingZone, 'plantingSubzones' | 'areaHa
 
 export const defaultZonePayload = (payload: DefaultZonePayload): PlantingZone => {
   const { boundary, id, name, targetPlantingDensity } = payload;
-  const subzoneName = `subzone-${name}`;
+  const subzoneName = 'A';
 
   return {
     areaHa: 0,
@@ -31,19 +31,13 @@ export const defaultZonePayload = (payload: DefaultZonePayload): PlantingZone =>
  * Generates incremental ids, uses list of input features to determine next id
  */
 export const IdGenerator = (features: Feature[]): (() => number) => {
-  let nextId = 0;
-  const ids = features
-    .filter((f) => !isNaN(Number(f.id)))
-    .map((f) => f.id as number)
-    .sort();
-
-  if (ids.length) {
-    nextId = ids[ids.length - 1];
-  }
+  let nextId = features
+    .map((f) => Number(f.id))
+    .filter((id) => !isNaN(id))
+    .reduce((a, b) => Math.max(a, b), -1);
 
   return () => {
-    nextId++;
-    return nextId;
+    return ++nextId;
   };
 };
 
@@ -90,4 +84,41 @@ export const plantingZoneToFeature = (zone: PlantingZone): Feature => {
 export const plantingSubzoneToFeature = (subzone: PlantingSubzone): Feature => {
   const { boundary, id, name } = subzone;
   return toFeature(boundary, { id, name }, id);
+};
+
+/**
+ * generate string for number in alphabetical order looping through all alphabets
+ * 1 -> A, 2 -> B, 26 -> Z, 27 -> AA, etc.
+ * Source: https://codereview.stackexchange.com/questions/16124/implement-numbering-scheme-like-a-b-c-aa-ab-aaa-similar-to-converting
+ */
+export const alphabetName = (position: number): string => {
+  const baseChar = 'A'.charCodeAt(0);
+  let name = '';
+
+  do {
+    position -= 1;
+    name = String.fromCharCode(baseChar + (position % 26)) + name;
+    position = Math.floor(position / 26);
+  } while (position > 0);
+
+  return name;
+};
+
+/**
+ * Subzone name generator.
+ * Generates names in alphabetical order, whose values are in
+ * A - Z
+ * AA - AZ
+ * BA - BZ
+ * and so on.
+ */
+export const subzoneNameGenerator = (usedNames: Set<string>): string => {
+  let nextNameIndex = 0;
+  let nextName = '';
+
+  do {
+    nextName = alphabetName(++nextNameIndex);
+  } while (usedNames.has(nextName));
+
+  return nextName;
 };
