@@ -80,7 +80,6 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
     // subzones are children of zones, we need to repopuplate zones with new subzones information
     // and update `plantingZones` in the site
     const numZones = site.plantingZones?.length ?? 0;
-    let numSubzones = 0;
     const plantingZones: PlantingZone[] | undefined = site.plantingZones?.map((zone) => {
       const plantingSubzones: PlantingSubzone[] = (subzones?.[zone.id]?.features ?? [])
         .map((subzone) => {
@@ -100,9 +99,9 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
           }
         })
         .filter((subzone) => !!subzone) as PlantingSubzone[];
-      numSubzones += plantingSubzones.length;
       return { ...zone, plantingSubzones };
     });
+    const numSubzones = plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length ?? 0;
     onChange('plantingZones', plantingZones);
     onValidate(plantingZones === undefined, numSubzones > numZones);
   }, [onChange, onValidate, site, subzones, zones]);
