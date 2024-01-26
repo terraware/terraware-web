@@ -88,6 +88,7 @@ export default function DetailsInputForm({
           onChange={(value) => onChange('name', value)}
           value={record.name}
           errorText={record.name ? '' : nameError}
+          autoFocus={true}
         />
       </Grid>
       <Grid item xs={gridSize()}>

@@ -10,6 +10,13 @@ import MapboxDraw, {
   DrawUpdateEvent,
 } from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+import useMapboxDrawTheme from './useMapboxDrawTheme';
+import cheapRuler from 'cheap-ruler';
+import centroid from '@turf/centroid';
+
+import area from '@turf/area';
+import bbox from '@turf/bbox';
+import bboxPolygon from '@turf/bbox-polygon';
 
 /**
  * Flattened representation of the editor's current state. This is based on a combination of factors
@@ -26,11 +33,11 @@ export type MapEditorMode =
   | 'ReplacingBoundary';
 
 type MapEditorProps = ConstructorParameters<typeof MapboxDraw>[0] & {
-  allowEditMultiplePolygons?: boolean;
   boundary?: FeatureCollection;
   clearOnEdit?: boolean;
   onBoundaryChanged?: (boundary?: FeatureCollection) => void;
   setMode?: (mode: MapEditorMode) => void;
+mapObj?: any;
 };
 
 const defaultProps = {
@@ -68,11 +75,8 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
 
 /**
  * Makes a parent ReactMapGL component editable. This is a wrapper around the MapboxDraw control.
- * The editor supports drawing a boundary consisting of a single polygon.
+ * The editor supports drawing one or more polygons.
  *
- * @param allowEditMultiplePolygons
- *  Whether to allow draw/creation of more than one polygon, otherwise clears previous polygon
- *  upon a new one.
  * @param boundary
  *  Initial boundary. If this is specified, the editor will start out in EditingBoundary mode;
  *  otherwise it will start out in CreatingBoundary mode.
@@ -86,17 +90,19 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
  *  Additional properties to pass to the MapboxDraw control.
  */
 export default function EditableMapDraw({
-  allowEditMultiplePolygons,
   boundary,
   clearOnEdit,
   onBoundaryChanged,
   setMode,
+mapObj,
   ...otherProps
 }: MapEditorProps) {
   const [mapRef, setMapRef] = useState<MapRef>();
   const [drawMode, setDrawMode] = useState<DrawMode>();
   const [selection, setSelection] = useState<Feature>();
   const [initializedGeometry, setInitializedGeometry] = useState(false);
+  const [ruler, setRuler] = useState<any>();
+  const styles = useMapboxDrawTheme();
 
   // Need ts-ignore because the draw control's event types are added by the draw plugin and aren't
   // included in the type definitions for the first arguments of MapRef.on() and MapRef.off().
@@ -106,7 +112,13 @@ export default function EditableMapDraw({
     setDrawMode(initialMode);
     setMapRef(map);
 
-    return new MapboxDraw({ defaultMode: initialMode, ...defaultProps, ...otherProps });
+    return new MapboxDraw({
+      defaultMode: initialMode,
+      userProperties: true,
+      styles,
+      ...defaultProps,
+      ...otherProps,
+    });
   });
 
   const onModeChange = useCallback((event: DrawModeChangeEvent) => setDrawMode(event.mode), [setDrawMode]);
@@ -124,19 +136,16 @@ export default function EditableMapDraw({
 
   const fetchUpdatedFeatures = useCallback(
     (newFeatures: Feature[]): FeatureCollection | undefined => {
-      const existingFeatures = allowEditMultiplePolygons
-        ? draw
-            .getAll()
-            .features.filter(
-              (currentFeature: Feature) =>
-                !newFeatures.some((newFeature: Feature) => newFeature.id === currentFeature.id)
-            )
-        : [];
+      const existingFeatures = draw
+        .getAll()
+        .features.filter(
+          (currentFeature: Feature) => !newFeatures.some((newFeature: Feature) => newFeature.id === currentFeature.id)
+        );
 
       const features = [...existingFeatures, ...newFeatures];
       return features.length ? { type: 'FeatureCollection', features } : undefined;
     },
-    [draw, allowEditMultiplePolygons]
+    [draw]
   );
 
   const updateNotification = useCallback(
@@ -166,12 +175,66 @@ export default function EditableMapDraw({
 
   const onDelete = useCallback(() => onBoundaryChanged && onBoundaryChanged(undefined), [onBoundaryChanged]);
 
+  const onRender = useCallback(() => {
+    if (!mapObj || !draw) {
+      return;
+    }
+    const labelFeatures: Feature[] = [];
+    const all = draw.getAll();
+    if (all && all.features) {
+      all.features.forEach((feature: Feature) => {
+        switch (feature.geometry.type) {
+          case 'Point':
+            // label Points
+            if (feature.geometry.coordinates.length > 1) {
+              labelFeatures.push(point(feature.geometry.coordinates, {
+                type: 'point',
+                label: feature.geometry.coordinates[1].toFixed(6) + ', ' + feature.geometry.coordinates[0].toFixed(6)
+              } as any));
+            }
+            break;
+          case 'LineString':
+            // label Lines
+            if (feature.geometry.coordinates.length > 1) {
+              const length = ruler.lineDistance(feature.geometry.coordinates);
+              const label = `${length} m`;
+              const midpoint = ruler.along(feature.geometry.coordinates, length / 2);
+              labelFeatures.push(point(midpoint, {
+                type: 'line',
+                label: label
+              } as any));
+            }
+            break;
+          case 'Polygon':
+          case 'MultiPolygon':
+            // label Polygons
+            if (feature.geometry.coordinates.length > 0 && feature.geometry.coordinates[0].length > 3) {
+//              const area = ruler.area(feature.geometry.coordinates) / 10000;
+              const bbxpoly = bboxPolygon(bbox(feature.geometry));
+              const a = area(bbxpoly) * (1/10000);
+              const label = `${a.toFixed(2)}ha` +  (a >= 20000 ? ' (too large)' : '');
+              const c = centroid(feature as any);
+              labelFeatures.push({ ...c, properties: { type: 'area', label: label, error: a >= 20000 } as any});
+              labelFeatures.push({ ...bbxpoly, properties: { isBBox: true } });
+            }
+            break;
+        }
+      });
+    }
+    mapObj.getSource('_measurements')?.setData({
+      type: 'FeatureCollection',
+      features: labelFeatures
+    });
+  }, [draw, mapObj, ruler]);
+
+
   useEffect(() => {
     mapRef?.on('draw.create', onCreate);
     mapRef?.on('draw.delete', onDelete);
     mapRef?.on('draw.modechange', onModeChange);
     mapRef?.on('draw.selectionchange', onSelectionChange);
     mapRef?.on('draw.update', onUpdate);
+    mapRef?.on('draw.render', onRender);
 
     return () => {
       mapRef?.off('draw.create', onCreate);
@@ -179,8 +242,9 @@ export default function EditableMapDraw({
       mapRef?.off('draw.modechange', onModeChange);
       mapRef?.off('draw.selectionchange', onSelectionChange);
       mapRef?.off('draw.update', onUpdate);
+      mapRef?.off('draw.render', onRender);
     };
-  }, [mapRef, onCreate, onDelete, onModeChange, onSelectionChange, onUpdate]);
+  }, [mapRef, onCreate, onDelete, onModeChange, onRender, onSelectionChange, onUpdate]);
 
   useEffect(() => {
     if (setMode && initializedGeometry) {
@@ -244,5 +308,21 @@ export default function EditableMapDraw({
     mapRef?.on('draw.delete', switchToPolygonModeIfFeatureDeleted);
   }, [mapRef, populateGeometry, switchToPolygonModeIfFeatureDeleted]);
 
+  useEffect(() => {
+    if (!mapObj) {
+      return;
+    }
+    setRuler(new cheapRuler(mapObj.getCenter().lat, 'meters'));
+  }, [mapObj]);
+
   return null;
 }
+
+const point = (coords: number[], properties: any) => ({
+  type: 'Feature',
+  geometry: {
+    type: 'Point',
+    coordinates: coords,
+  },
+  properties,
+} as Feature);

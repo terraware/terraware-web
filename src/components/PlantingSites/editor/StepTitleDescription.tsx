@@ -12,10 +12,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export type Description = {
-  text: string | JSX.Element[];
   handlePrefix?: (prefix: string) => string | JSX.Element[];
   handleSuffix?: (suffix: string) => string | JSX.Element[];
   hasTutorial?: boolean;
+  isWarning?: boolean;
+  text: string | JSX.Element[];
 };
 
 export type StepTitleDescriptionProps = {
@@ -74,9 +75,9 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           alignItems='center'
           key={index}
           fontSize='14px'
-          fontWeight={400}
+          fontWeight={line.isWarning ? 600 : 400}
           lineHeight='20px'
-          color={theme.palette.TwClrTxt}
+          color={line.isWarning ? theme.palette.TwClrIcnWarning : theme.palette.TwClrTxt}
           margin={theme.spacing(1, 0)}
         >
           {line.hasTutorial ? (
