@@ -97,7 +97,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       }
       onView={setView}
       search={<Search {...searchProps} />}
-      style={view === 'map' ? {display: 'flex', flexGrow: 1, flexDirection: 'column'} : undefined}
+      style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
     />
   );
 }
