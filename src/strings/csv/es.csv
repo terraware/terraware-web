@@ -1,4 +1,6 @@
 key_name,es,comment
+ACCELERATOR_ADMIN,Administración del acelerador,
+ACCELERATOR_CONSOLE,Consola del acelerador,
 ACCEPT,Aceptar,
 ACCESSION,Accesión,
 ACCESSION_BY_STATUS,Accesión por Estado,
