@@ -1,3 +1,4 @@
+57865f2c69 SW-4758 Auto generate subzone names in increasing alphabetical order (#2090)
 9bc3246792 SW-4778 Refactor planting site editor undo/redo  (#2088)
 8d0f3a3409 SW-4777 Refactor zone/subzone edit to use selection styles specific to edit flow (#2084)
 07421aec09 SW-4728 Do not show projects filter in inventory table views when there are no projects, refresh projects when the component loads (#2098)
