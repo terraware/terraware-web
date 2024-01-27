@@ -1,3 +1,4 @@
+cb4d61f028 SW-4783 Update site with edited subzones upon save (#2091)
 57865f2c69 SW-4758 Auto generate subzone names in increasing alphabetical order (#2090)
 9bc3246792 SW-4778 Refactor planting site editor undo/redo  (#2088)
 8d0f3a3409 SW-4777 Refactor zone/subzone edit to use selection styles specific to edit flow (#2084)
