@@ -25,7 +25,7 @@ export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, S
 
   const setData = useCallback(
     (input: Func<T> | T) => {
-      const value = typeof input === 'function' ? (input as Func<T>)(_.cloneDeep(stack[stackIndex])) : input;
+      const value = typeof input === 'function' ? (input as Func<T>)(data) : input;
       setStack((curr: (T | undefined)[]) => {
         const truncatedStack = curr.slice(0, stackIndex + 1);
         truncatedStack.push(_.cloneDeep(value));
@@ -33,7 +33,7 @@ export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, S
       });
       setStackIndex((curr: number) => curr + 1);
     },
-    [stack, stackIndex, setStack]
+    [data, stackIndex, setStack]
   );
 
   const undo = useMemo(() => {
