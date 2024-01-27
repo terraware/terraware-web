@@ -16,6 +16,8 @@ import { makeStyles } from '@mui/styles';
 import bbox from '@turf/bbox';
 import { FeatureCollection, MultiPolygon } from 'geojson';
 import {
+  MapEntityId,
+  MapEntityOptions,
   MapPopupRenderer,
   MapViewStyles,
   PopupInfo,
@@ -52,15 +54,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 export type LayerFeature = MapboxGeoJSONFeature;
 export type FeatureSelectorOnClick = (features: LayerFeature[]) => LayerFeature | undefined;
 
-// data to highlight, example { source: 'zone', id: <zone-id> }
-export type HighlightData = { source: string; id: number };
-
 export type EditableMapProps = {
   allowEditMultiplePolygons?: boolean;
   clearOnEdit?: boolean;
   editableBoundary?: FeatureCollection;
   featureSelectorOnClick?: FeatureSelectorOnClick;
-  highlights?: HighlightData[];
+  activeContext?: MapEntityOptions;
   onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) => void;
   onUndoRedoReadOnlyBoundary?: (readOnlyBoundary?: ReadOnlyBoundary[]) => void;
   overridePopupInfo?: PopupInfo;
@@ -75,7 +74,7 @@ export default function EditableMap({
   clearOnEdit,
   editableBoundary,
   featureSelectorOnClick,
-  highlights,
+  activeContext,
   onEditableBoundaryChanged,
   onUndoRedoReadOnlyBoundary,
   overridePopupInfo,
@@ -90,7 +89,7 @@ export default function EditableMap({
   const [interactiveLayerIds, setInteractiveLayerIds] = useState<string[] | undefined>();
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [isOverridePopupEvent, setIsOverridePopupEvent] = useState<boolean>(false);
-  const [, setHighlightData] = useState<HighlightData[] | undefined>();
+  const [, setActiveContext] = useState<MapEntityOptions | undefined>();
   const containerRef = useRef(null);
   const mapRef = useRef<MapRef | null>(null);
   const visible = useIsVisible(containerRef);
@@ -226,19 +225,19 @@ export default function EditableMap({
   );
 
   useEffect(() => {
-    const applyHighlights = (data: HighlightData[], value: boolean) => {
-      data?.forEach((datum: HighlightData) => {
-        const { id, source } = datum;
-        mapRef?.current?.setFeatureState({ source, id }, { highlight: value });
+    const markActiveContext = (data: MapEntityId[], value: boolean) => {
+      data.forEach((datum) => {
+        const { id, sourceId: source } = datum;
+        mapRef?.current?.setFeatureState({ source, id }, { select: value });
       });
     };
 
-    setHighlightData((prev) => {
-      applyHighlights(prev ?? [], false);
-      applyHighlights(highlights ?? [], true);
-      return highlights;
+    setActiveContext((prev) => {
+      markActiveContext(prev?.select ?? [], false);
+      markActiveContext(activeContext?.select ?? [], true);
+      return activeContext;
     });
-  }, [highlights, mapRef]);
+  }, [activeContext, mapRef]);
 
   useEffect(() => {
     if (editMode) {

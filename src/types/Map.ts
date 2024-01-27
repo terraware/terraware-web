@@ -78,16 +78,17 @@ export type MapSourceBaseData = {
 };
 
 export type MapSourceRenderProperties = {
-  fillColor: string;
-  lineColor: string;
-  lineWidth: number;
-  isInteractive?: boolean;
-  // property name to render as a polygon annotation
   annotation?: MapAnnotation;
+  fillColor: string;
   highlightFillColor?: string;
   hoverFillColor?: string;
-  selectFillColor?: string;
+  isInteractive?: boolean;
+  lineColor: string;
+  lineWidth: number;
   patternFill?: MapPatternFill;
+  selectFillColor?: string;
+  selectLineColor?: string;
+  selectLineWidth?: number;
 };
 
 export type MapSource = MapSourceBaseData & MapSourceRenderProperties;
@@ -124,8 +125,9 @@ export type MapEntityId = {
  * map entity options
  */
 export type MapEntityOptions = {
-  highlight?: MapEntityId[];
   focus?: MapEntityId[];
+  highlight?: MapEntityId[];
+  select?: MapEntityId[];
 };
 
 /**
@@ -161,7 +163,7 @@ export const MapViewStyles: Record<MapViewStyle, string> = {
 
 export type ReadOnlyBoundary = {
   featureCollection: FeatureCollection;
-  highlights?: number[];
+  selectedId?: number;
   id: string;
   isInteractive?: boolean;
 };
@@ -171,4 +173,4 @@ export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
 };
 
 // TODO: integrate exclusions as a first class MapObject (not there yet)
-export type RenderableObject = MapObject | 'exclusions';
+export type RenderableObject = MapObject | 'exclusions' | 'draft-zone' | 'draft-subzone';

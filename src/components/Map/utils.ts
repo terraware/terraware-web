@@ -83,8 +83,20 @@ export const getMapDrawingLayer = (source: MapSourceRenderProperties, sourceId: 
       id: `${sourceId}-outline`,
       type: 'line',
       paint: {
-        'line-color': source.lineColor,
-        'line-width': source.lineWidth,
+        'line-color': [
+          // if feature is selected, use selectLineColor if defined
+          'case',
+          ['boolean', ['feature-state', 'select'], false],
+          source.selectLineColor ?? source.lineColor,
+          source.lineColor,
+        ],
+        'line-width': [
+          // if feature is selected, use selectLineWidth if defined
+          'case',
+          ['boolean', ['feature-state', 'select'], false],
+          source.selectLineWidth ?? source.lineWidth,
+          source.lineWidth,
+        ],
       },
     },
     textAnnotation: source.annotation
