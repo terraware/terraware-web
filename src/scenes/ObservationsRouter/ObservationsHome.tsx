@@ -85,7 +85,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       isEmptyState={!plantingSites?.length || !observationsResults?.length}
       actionButton={actionButton}
     >
-      <Box>
+      <Box display='flex' flexGrow={1} flexDirection='column'>
         <ObservationsEventsNotification events={upcomingObservations} />
         {observationsResults === undefined ? (
           <CircularProgress sx={{ margin: 'auto' }} />

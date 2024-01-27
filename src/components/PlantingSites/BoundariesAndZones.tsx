@@ -63,7 +63,7 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
       </Box>
       {plantingSite.boundary && (
         <ListMapView
-          style={{ padding: isMobile ? theme.spacing(0, 3, 3) : 0 }}
+          style={{ padding: isMobile ? theme.spacing(0, 3, 3) : 0, display: 'flex', flexDirection: 'column', flexGrow: 1 }}
           initialView='map'
           onView={(newView) => setView(newView)}
           search={<Search {...searchProps} />}

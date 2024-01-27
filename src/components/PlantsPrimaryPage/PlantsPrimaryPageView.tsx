@@ -124,7 +124,7 @@ export default function PlantsPrimaryPageView({
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      <Box ref={contentRef}>{children}</Box>
+      <Box ref={contentRef} display='flex' flexGrow={1}>{children}</Box>
     </TfMain>
   );
 }

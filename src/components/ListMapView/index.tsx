@@ -39,7 +39,7 @@ export default function ListMapView({ search, list, map, onView, style, initialV
         {search}
         <ListMapSelector defaultView={initialView} view={view} onView={updateView} />
       </Box>
-      <Box marginTop={theme.spacing(2)}>
+      <Box marginTop={theme.spacing(2)} display='flex' flexDirection='column' flexGrow={view === 'map' ? 1 : 0}>
         <Box flexGrow={1} flexDirection='column' display={view === 'list' ? 'flex' : 'none'}>
           {list}
         </Box>

@@ -9,6 +9,7 @@ import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
 import ListMapView from 'src/components/ListMapView';
+import { View } from 'src/components/common/ListMapSelector';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import OrgObservationsListView from './org/OrgObservationsListView';
 import ObservationMapView from './map/ObservationMapView';
@@ -25,6 +26,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
   const [status, setStatus] = useState<ObservationState[]>([]);
+  const [view, setView] = useState<View>();
 
   const observationsResults = useAppSelector((state) =>
     searchObservations(
@@ -79,7 +81,6 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   return (
     <ListMapView
       initialView='list'
-      search={<Search {...searchProps} />}
       list={
         <OrgObservationsListView observationsResults={observationsResults} plantingSiteId={selectedPlantingSiteId} />
       }
@@ -94,6 +95,9 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
           <AllPlantingSitesMapView />
         )
       }
+      onView={setView}
+      search={<Search {...searchProps} />}
+      style={view === 'map' ? {display: 'flex', flexGrow: 1, flexDirection: 'column'} : undefined}
     />
   );
 }
