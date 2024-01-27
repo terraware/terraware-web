@@ -7,13 +7,7 @@ import strings from 'src/strings';
 import Table from 'src/components/common/table';
 import { CreateProjectRequest } from 'src/types/Project';
 import { SeedBankService } from 'src/services';
-import {
-  FieldNodePayload,
-  SearchCriteria,
-  SearchNodePayload,
-  SearchResponseElement,
-  SearchSortOrder,
-} from 'src/types/Search';
+import { SearchCriteria, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
 import { FlowStates } from 'src/components/ProjectNewView';
 import {
@@ -112,7 +106,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
       const searchCriteria: SearchCriteria = searchFields.reduce(
         (acc, curr) => ({
           ...acc,
-          [curr.field]: curr,
+          [curr.operation]: curr,
         }),
         {} as SearchCriteria
       );
@@ -148,12 +142,15 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
   );
 
   const getSearchFields = useCallback(
-    (debouncedSearchTerm: string): FieldNodePayload[] => [
+    (debouncedSearchTerm: string): SearchNodePayload[] => [
       {
-        operation: 'field',
-        field: 'accessionNumber',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
+        operation: 'or',
+        children: ['accessionNumber', 'speciesName'].map((field: string) => ({
+          operation: 'field',
+          field,
+          type: 'Fuzzy',
+          values: [debouncedSearchTerm],
+        })),
       },
     ],
     []

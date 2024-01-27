@@ -98,6 +98,7 @@ interface Props {
 
 export default function Filters(props: Props): JSX.Element {
   const { columns, searchColumns, preExpFilterColumns, filters, availableValues, allValues, onChange } = props;
+
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isMobile, isDesktop });
   const [searchTerm, setSearchTerm] = React.useState(getSearchTermFromFilters(filters));
@@ -227,6 +228,13 @@ export default function Filters(props: Props): JSX.Element {
           onClickRightIcon={onClearSearch}
         />
         {preExpFilterColumns.map((preExpFilterColumn, index) => {
+          const valuesAvailable =
+            (allValues[preExpFilterColumn.key]?.values || []).filter((value: string | null) => !!value).length > 0;
+
+          if (!valuesAvailable) {
+            return null;
+          }
+
           const numPreExpSelected = getCurrentPreExpFilterValues(preExpFilterColumn, filters).length;
 
           return (

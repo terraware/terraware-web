@@ -23,7 +23,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
   const { type } = modalValues;
   const [saving, setSaving] = useState<boolean>(false);
   const [movedValue, setMovedValue] = useState<number | undefined>();
-  const [validate, setValidate] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string>('');
   const [record, setRecord] = useForm({
     ...row,
     germinatingQuantity: +row['germinatingQuantity(raw)'],
@@ -36,8 +36,14 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
 
   const onSubmit = async () => {
-    setValidate(true);
-    if (movedValue === undefined) {
+    if (movedValue === undefined || movedValue === 0) {
+      setErrorText(strings.REQUIRED_FIELD);
+      return;
+    } else if (type === 'germinating' && (movedValue as number) > +row['germinatingQuantity(raw)']) {
+      setErrorText(strings.GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
+      return;
+    } else if (type === 'not-ready' && (movedValue as number) > +row['notReadyQuantity(raw)']) {
+      setErrorText(strings.NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
       return;
     }
     setSaving(true);
@@ -124,14 +130,14 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
             type={'number'}
           />
 
-          <Box maxWidth='70px' marginLeft={2}>
+          <Box maxWidth='120px' marginLeft={2}>
             <Textfield
               value={movedValue}
               label={strings.MOVE}
               id={'movedValue'}
               type={'number'}
               onChange={(value) => onChangeMovedValue(value)}
-              errorText={validate && movedValue === undefined ? strings.REQUIRED_FIELD : ''}
+              errorText={errorText}
             />
           </Box>
           <Box paddingLeft={1} paddingRight={3} paddingTop={4}>

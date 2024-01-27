@@ -3,10 +3,14 @@ import { Grid, Box, useTheme } from '@mui/material';
 import { PillListItem, Textfield } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
 import strings from 'src/strings';
-import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
-import { useAppSelector } from 'src/redux/store';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import ProjectEntityFilter, { EntitySpecificFilterConfig } from './ProjectEntityFilter';
+import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
+import ProjectEntityFilter, {
+  EntitySpecificFilterConfig,
+} from 'src/components/ProjectNewView/flow/ProjectEntityFilter';
 
 interface ProjectEntitySearchProps {
   searchValue: string;
@@ -21,7 +25,10 @@ export type PillListItemWithEmptyValue = PillListItem<string> & { emptyValue: un
 export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JSX.Element | null {
   const { searchValue, onSearch, entitySpecificFilterConfigs, filters, setFilters } = props;
 
+  const dispatch = useAppDispatch();
   const theme = useTheme();
+  const { selectedOrganization } = useOrganization();
+  const { activeLocale } = useLocalization();
 
   const projects = useAppSelector(selectProjects);
 
@@ -35,44 +42,51 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
     [filterPillData, setFilters]
   );
 
-  const projectEntityFilterConfig: EntitySpecificFilterConfig = useMemo(
-    () => ({
-      label: strings.PROJECT,
-      initialSelection: filters.projectIds || [],
-      filterKey: 'projectIds',
-      options: projects?.map((project) => project.id) || [],
-      renderOption: (projectId: string | number) =>
-        (projects || []).find((project) => project.id === projectId)?.name || '',
-      pillModifier: (_filters: ProjectEntityFilters): PillListItemWithEmptyValue[] => {
-        const projectIds = _filters.projectIds || [];
-        if (projectIds.length === 0) {
-          return [];
-        }
-
-        return [
-          {
-            id: 'projectIds',
+  const projectEntityFilterConfig: EntitySpecificFilterConfig | undefined = useMemo(
+    () =>
+      projects?.length
+        ? {
             label: strings.PROJECT,
-            value: projectIds
-              .map((projectId: number) => (projects || []).find((project) => project.id === projectId))
-              .map((project) => project?.name)
-              .join(','),
-            emptyValue: [],
-          },
-        ];
-      },
-    }),
+            initialSelection: filters.projectIds || [],
+            filterKey: 'projectIds',
+            options: projects?.map((project) => project.id) || [],
+            renderOption: (projectId: string | number) =>
+              (projects || []).find((project) => project.id === projectId)?.name || '',
+            pillModifier: (_filters: ProjectEntityFilters): PillListItemWithEmptyValue[] => {
+              const projectIds = _filters.projectIds || [];
+              if (projectIds.length === 0) {
+                return [];
+              }
+
+              return [
+                {
+                  id: 'projectIds',
+                  label: strings.PROJECT,
+                  value: projectIds
+                    .map((projectId: number) => (projects || []).find((project) => project.id === projectId))
+                    .map((project) => project?.name)
+                    .join(','),
+                  emptyValue: [],
+                },
+              ];
+            },
+          }
+        : undefined,
     [filters.projectIds, projects]
   );
 
   useEffect(() => {
     const data: PillListItemWithEmptyValue[] = [
-      ...projectEntityFilterConfig.pillModifier(filters),
+      ...(projectEntityFilterConfig ? projectEntityFilterConfig.pillModifier(filters) : []),
       ...entitySpecificFilterConfigs.map((config) => config.pillModifier(filters)).flat(),
     ];
 
     setFilterPillData(data);
   }, [entitySpecificFilterConfigs, filters, projectEntityFilterConfig]);
+
+  useEffect(() => {
+    void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+  }, [activeLocale, dispatch, selectedOrganization.id]);
 
   return (
     <Grid container>
@@ -94,7 +108,9 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
           {entitySpecificFilterConfigs.map((filterConfig, index) => (
             <ProjectEntityFilter filterConfig={filterConfig} setFilters={setFilters} key={index} />
           ))}
-          <ProjectEntityFilter filterConfig={projectEntityFilterConfig} setFilters={setFilters} />
+          {projectEntityFilterConfig && (
+            <ProjectEntityFilter filterConfig={projectEntityFilterConfig} setFilters={setFilters} />
+          )}
         </Box>
       </Grid>
       <Grid item xs={12} display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
