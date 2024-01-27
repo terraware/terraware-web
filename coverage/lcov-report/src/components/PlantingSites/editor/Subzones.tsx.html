@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/52</span>
             </div>
         
             
@@ -433,7 +433,9 @@
 <a name='L368'></a><a href='#L368'>368</a>
 <a name='L369'></a><a href='#L369'>369</a>
 <a name='L370'></a><a href='#L370'>370</a>
-<a name='L371'></a><a href='#L371'>371</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -811,6 +813,7 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import {
   GeometryFeature,
+  MapEntityOptions,
   MapPopupRenderer,
   MapSourceProperties,
   PopupInfo,
@@ -821,7 +824,7 @@ import MapIcon from 'src/components/Map/MapIcon';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { cutPolygons, leftMostFeature } from 'src/components/Map/utils';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
-import EditableMap, { HighlightData, LayerFeature } from 'src/components/Map/EditableMapV2';
+import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import {
   IdGenerator,
@@ -884,11 +887,11 @@ export default function <span class="fstat-no" title="function not covered" >Sub
         type: 'FeatureCollection',
         features: zones!.features.map(<span class="fstat-no" title="function not covered" >(f</span>eature: Feature) =&gt; <span class="cstat-no" title="statement not covered" >toZoneFeature(feature, zoneIdGenerator))</span>,
       },
-      highlights: selectedZone ? [selectedZone] : undefined,
+      selectedId: selectedZone,
       id: 'zone',
       isInteractive: true,
       renderProperties: {
-        ...getRenderAttributes('zone'),
+        ...getRenderAttributes('draft-zone'),
         annotation: {
           textField: 'name',
           textColor: theme.palette.TwClrBaseWhite as string,
@@ -911,7 +914,7 @@ export default function <span class="fstat-no" title="function not covered" >Sub
       id: 'subzone',
       isInteractive: true,
       renderProperties: {
-        ...getRenderAttributes('subzone'),
+        ...getRenderAttributes('draft-subzone'),
         annotation: {
           textField: 'name',
           textColor: theme.palette.TwClrBaseWhite as string,
@@ -998,7 +1001,7 @@ export default function <span class="fstat-no" title="function not covered" >Sub
       const subzonesData = <span class="cstat-no" title="statement not covered" >updatedData?.find(<span class="fstat-no" title="function not covered" >(d</span>ata: ReadOnlyBoundary) =&gt; <span class="cstat-no" title="statement not covered" >data.id === 'subzone')</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      setZones(zonesData?.featureCollection);</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedZone(zonesData?.highlights?.[0]);</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedZone(zonesData?.selectedId);</span>
 &nbsp;
       const subzoneFeatures: Feature[] = <span class="cstat-no" title="statement not covered" >subzonesData?.featureCollection?.features ?? [];</span>
 <span class="cstat-no" title="statement not covered" >      setSubzones(</span>
@@ -1030,9 +1033,9 @@ export default function <span class="fstat-no" title="function not covered" >Sub
       }
 <span class="cstat-no" title="statement not covered" >      if (selectedZone === undefined || selectedZone !== zone.properties.id) {</span>
 <span class="cstat-no" title="statement not covered" >        setSelectedZone(zone.properties.id);</span>
-<span class="cstat-no" title="statement not covered" >        return undefined; </span>// nothing to select for a popup, just mark the active zone for subzone editing
+<span class="cstat-no" title="statement not covered" >        return undefined;</span>
       } else {
-        // select the subzone
+        // select the subzone under the click
 <span class="cstat-no" title="statement not covered" >        return subzone;</span>
       }
     },
@@ -1074,9 +1077,9 @@ export default function <span class="fstat-no" title="function not covered" >Sub
     [classes.box, classes.tooltip, selectedZone]
   );
 &nbsp;
-  const highlights = <span class="cstat-no" title="statement not covered" >useMemo&lt;HighlightData[] | undefined&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const activeContext = <span class="cstat-no" title="statement not covered" >useMemo&lt;MapEntityOptions | undefined&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (selectedZone !== undefined) {</span>
-<span class="cstat-no" title="statement not covered" >      return [{ source: 'zone', id: selectedZone }];</span>
+<span class="cstat-no" title="statement not covered" >      return { select: [{ sourceId: 'zone', id: selectedZone }] };</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      return undefined;</span>
     }
@@ -1094,7 +1097,7 @@ export default function <span class="fstat-no" title="function not covered" >Sub
       &lt;EditableMap
         clearOnEdit
         featureSelectorOnClick={featureSelectorOnClick}
-        highlights={highlights}
+        activeContext={activeContext}
         onEditableBoundaryChanged={onEditableBoundaryChanged}
         onUndoRedoReadOnlyBoundary={onUndoRedoReadOnlyBoundary}
         overridePopupInfo={overridePopupInfo}
@@ -1180,7 +1183,7 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-26T22:55:54.591Z
+                at 2024-01-27T00:07:44.419Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

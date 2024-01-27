@@ -413,8 +413,9 @@
 <a name='L348'></a><a href='#L348'>348</a>
 <a name='L349'></a><a href='#L349'>349</a>
 <a name='L350'></a><a href='#L350'>350</a>
-<a name='L351'></a><a href='#L351'>351</a>
-<a name='L352'></a><a href='#L352'>352</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L351'></a><a href='#L351'>351</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -447,9 +448,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -783,6 +781,8 @@ import { makeStyles } from '@mui/styles';
 import bbox from '@turf/bbox';
 import { FeatureCollection, MultiPolygon } from 'geojson';
 import {
+  MapEntityId,
+  MapEntityOptions,
   MapPopupRenderer,
   MapViewStyles,
   PopupInfo,
@@ -819,15 +819,12 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
 export type LayerFeature = MapboxGeoJSONFeature;
 export type FeatureSelectorOnClick = (features: LayerFeature[]) =&gt; LayerFeature | undefined;
 &nbsp;
-// data to highlight, example { source: 'zone', id: &lt;zone-id&gt; }
-export type HighlightData = { source: string; id: number };
-&nbsp;
 export type EditableMapProps = {
   allowEditMultiplePolygons?: boolean;
   clearOnEdit?: boolean;
   editableBoundary?: FeatureCollection;
   featureSelectorOnClick?: FeatureSelectorOnClick;
-  highlights?: HighlightData[];
+  activeContext?: MapEntityOptions;
   onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) =&gt; void;
   onUndoRedoReadOnlyBoundary?: (readOnlyBoundary?: ReadOnlyBoundary[]) =&gt; void;
   overridePopupInfo?: PopupInfo;
@@ -842,7 +839,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   clearOnEdit,
   editableBoundary,
   featureSelectorOnClick,
-  highlights,
+  activeContext,
   onEditableBoundaryChanged,
   onUndoRedoReadOnlyBoundary,
   overridePopupInfo,
@@ -857,7 +854,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const [interactiveLayerIds, setInteractiveLayerIds] = <span class="cstat-no" title="statement not covered" >useState&lt;string[] | undefined&gt;();</span>
   const [popupInfo, setPopupInfo] = <span class="cstat-no" title="statement not covered" >useState&lt;PopupInfo | null&gt;(null);</span>
   const [isOverridePopupEvent, setIsOverridePopupEvent] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-  const [, setHighlightData] = <span class="cstat-no" title="statement not covered" >useState&lt;HighlightData[] | undefined&gt;();</span>
+  const [, setActiveContext] = <span class="cstat-no" title="statement not covered" >useState&lt;MapEntityOptions | undefined&gt;();</span>
   const containerRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const mapRef = <span class="cstat-no" title="statement not covered" >useRef&lt;MapRef | null&gt;(null);</span>
   const visible = <span class="cstat-no" title="statement not covered" >useIsVisible(containerRef);</span>
@@ -993,19 +990,19 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const applyHighlights = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ata: HighlightData[], value: boolean) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      data?.forEach(<span class="fstat-no" title="function not covered" >(d</span>atum: HighlightData) =&gt; {</span>
-        const { id, source } = <span class="cstat-no" title="statement not covered" >datum;</span>
-<span class="cstat-no" title="statement not covered" >        mapRef?.current?.setFeatureState({ source, id }, { highlight: value });</span>
+    const markActiveContext = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ata: MapEntityId[], value: boolean) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      data.forEach(<span class="fstat-no" title="function not covered" >(d</span>atum) =&gt; {</span>
+        const { id, sourceId: source } = <span class="cstat-no" title="statement not covered" >datum;</span>
+<span class="cstat-no" title="statement not covered" >        mapRef?.current?.setFeatureState({ source, id }, { select: value });</span>
       });
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    setHighlightData(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      applyHighlights(prev ?? [], false);</span>
-<span class="cstat-no" title="statement not covered" >      applyHighlights(highlights ?? [], true);</span>
-<span class="cstat-no" title="statement not covered" >      return highlights;</span>
+<span class="cstat-no" title="statement not covered" >    setActiveContext(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      markActiveContext(prev?.select ?? [], false);</span>
+<span class="cstat-no" title="statement not covered" >      markActiveContext(activeContext?.select ?? [], true);</span>
+<span class="cstat-no" title="statement not covered" >      return activeContext;</span>
     });
-  }, [highlights, mapRef]);
+  }, [activeContext, mapRef]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (editMode) {</span>
@@ -1123,7 +1120,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-26T22:55:54.591Z
+                at 2024-01-27T00:07:44.419Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
