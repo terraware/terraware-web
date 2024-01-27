@@ -4,13 +4,13 @@ import { Feature, FeatureCollection } from 'geojson';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import {
   GeometryFeature,
   MapEntityOptions,
   MapPopupRenderer,
   MapSourceProperties,
   PopupInfo,
-  ReadOnlyBoundary,
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
 import MapIcon from 'src/components/Map/MapIcon';
@@ -34,31 +34,39 @@ export type SubzonesProps = {
   site: PlantingSite;
 };
 
+const featureSiteSubzones = (site: PlantingSite): Record<number, FeatureCollection> =>
+  (site.plantingZones ?? []).reduce(
+    (subzonesMap, zone) => {
+      subzonesMap[zone.id] = {
+        type: 'FeatureCollection',
+        features: zone.plantingSubzones.map(plantingSubzoneToFeature),
+      };
+      return subzonesMap;
+    },
+    {} as Record<number, FeatureCollection>
+  );
+
 export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Element {
   const [selectedZone, setSelectedZone] = useState<number | undefined>();
-  const [zones, setZones] = useState<FeatureCollection | undefined>();
   // map of zone id to subzones
-  const [subzones, setSubzones] = useState<Record<number, FeatureCollection>>({});
+  const [subzones, setSubzones, undo, redo] = useUndoRedoState<Record<number, FeatureCollection>>(
+    featureSiteSubzones(site)
+  );
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const classes = useStyles();
   const theme = useTheme();
   const getRenderAttributes = useRenderAttributes();
 
-  useEffect(() => {
-    if (site.plantingZones) {
-      const subzonesMap: Record<number, FeatureCollection> = {};
-      const features = site.plantingZones.map((zone) => {
-        const zoneFeature = plantingZoneToFeature(zone);
-        subzonesMap[zone.id] = {
-          type: 'FeatureCollection',
-          features: zone.plantingSubzones.map(plantingSubzoneToFeature),
-        };
-        return zoneFeature;
-      });
-      setZones({ type: 'FeatureCollection', features });
-      setSubzones(subzonesMap);
-    }
-  }, [site.plantingZones]);
+  const zones = useMemo<FeatureCollection | undefined>(
+    () =>
+      !site.plantingZones
+        ? undefined
+        : {
+            type: 'FeatureCollection',
+            features: site.plantingZones.map((zone) => plantingZoneToFeature(zone)),
+          },
+    [site]
+  );
 
   useEffect(() => {
     // TODO
@@ -72,7 +80,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
 
     const zoneIdGenerator = IdGenerator(zones.features);
     const subzoneIdGenerator = IdGenerator(
-      site.id === -1 ? [] : Object.values(subzones).flatMap((subzone) => subzone.features)
+      site.id === -1 ? [] : Object.values(subzones ?? {}).flatMap((subzone) => subzone.features)
     );
 
     const zonesData: RenderableReadOnlyBoundary = {
@@ -96,9 +104,9 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
     const subzonesData: RenderableReadOnlyBoundary = {
       featureCollection: {
         type: 'FeatureCollection',
-        features: Object.keys(subzones ?? []).flatMap((key: string) => {
+        features: Object.keys(subzones ?? {}).flatMap((key: string) => {
           const zoneId = Number(key);
-          const data = subzones[zoneId];
+          const data = subzones![zoneId];
           return data!.features.map((feature: Feature) =>
             toIdentifiableFeature(feature, subzoneIdGenerator, { parentId: zoneId })
           );
@@ -141,79 +149,49 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
   );
 
   // when we have a new polygon, add it to the subzones list after carving out the overlapping region in the zone.
-  const onEditableBoundaryChanged = useCallback(
-    (featureCollection?: FeatureCollection, isUndoRedo?: boolean) => {
-      if (isUndoRedo || !zones || selectedZone === undefined || !subzones[selectedZone]) {
-        return;
-      }
+  const onEditableBoundaryChanged = (featureCollection?: FeatureCollection) => {
+    if (!zones || selectedZone === undefined || !subzones || !subzones[selectedZone]) {
+      return;
+    }
 
-      const cutWith = featureCollection?.features?.[0]?.geometry;
-      if (cutWith) {
-        const cutSubzones = cutPolygons(subzones[selectedZone].features! as GeometryFeature[], cutWith);
+    const cutWith = featureCollection?.features?.[0]?.geometry;
+    if (cutWith) {
+      const cutSubzones = cutPolygons(subzones[selectedZone].features! as GeometryFeature[], cutWith);
 
-        if (cutSubzones) {
-          const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) => sz.features));
-          const subzonesWithIds = cutSubzones.map((subzone) =>
-            toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone })
-          ) as GeometryFeature[];
+      if (cutSubzones && subzones) {
+        const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) => sz.features));
+        const subzonesWithIds = cutSubzones.map((subzone) =>
+          toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone })
+        ) as GeometryFeature[];
 
-          setSubzones((current) => ({
-            ...current,
-            [selectedZone]: {
-              type: 'FeatureCollection',
-              features: subzonesWithIds,
-            },
-          }));
+        setSubzones({
+          ...subzones,
+          [selectedZone]: {
+            type: 'FeatureCollection',
+            features: subzonesWithIds,
+          },
+        });
 
-          const leftMostNewSubzone = leftMostFeature(
-            subzonesWithIds.filter((_, index) => cutSubzones[index].id === undefined)
-          );
+        const leftMostNewSubzone = leftMostFeature(
+          subzonesWithIds.filter((unused, index) => cutSubzones[index].id === undefined)
+        );
 
-          if (leftMostNewSubzone) {
-            const { feature: subzone, center: mid } = leftMostNewSubzone;
-            setOverridePopupInfo({
-              id: subzone.id,
-              lng: mid[0],
-              lat: mid[1],
-              properties: subzone.properties,
-              sourceId: 'subzone',
-            });
-          } else {
-            setOverridePopupInfo(undefined);
-          }
+        if (leftMostNewSubzone) {
+          const { feature: subzone, center: mid } = leftMostNewSubzone;
+          setOverridePopupInfo({
+            id: subzone.id,
+            lng: mid[0],
+            lat: mid[1],
+            properties: subzone.properties,
+            sourceId: 'subzone',
+          });
+        } else {
+          setOverridePopupInfo(undefined);
         }
       }
-      return;
-    },
-    [selectedZone, setSubzones, subzones, zones]
-  );
-
-  const onUndoRedoReadOnlyBoundary = useCallback(
-    (updatedData?: ReadOnlyBoundary[]) => {
-      const zonesData = updatedData?.find((data: ReadOnlyBoundary) => data.id === 'zone');
-      const subzonesData = updatedData?.find((data: ReadOnlyBoundary) => data.id === 'subzone');
-
-      setZones(zonesData?.featureCollection);
-      setSelectedZone(zonesData?.selectedId);
-
-      const subzoneFeatures: Feature[] = subzonesData?.featureCollection?.features ?? [];
-      setSubzones(
-        // set map of zone id to subzone features
-        subzoneFeatures.reduce(
-          (acc, feature) => {
-            const parentId = feature.properties!.parentId;
-            if (!acc[parentId]) {
-              acc[parentId] = { type: 'FeatureCollection', features: [] };
-            }
-            acc[parentId].features.push(feature);
-            return acc;
-          },
-          {} as Record<number, FeatureCollection>
-        )
-      );
-    },
-    [setSubzones, setZones]
-  );
+    }
+    return;
+  };
 
   // If we don't have a selected zone or clicked zone is not the last selected zone, select the zone.
   // Otherwise select the subzone.
@@ -246,17 +224,22 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         };
 
         const onUpdate = (nameVal: string) => {
-          setSubzones((currentValue: Record<number, FeatureCollection>) => {
-            const newValue = { ...currentValue };
-            const subzone =
-              selectedZone !== undefined
-                ? newValue[selectedZone].features.find((f) => f.id === properties.id)
-                : undefined;
-            if (subzone?.properties) {
-              subzone.properties.name = nameVal;
-            }
-            return newValue;
-          });
+          if (!subzones) {
+            return;
+          }
+          const updatedSubzones = { ...subzones };
+          const subzone =
+            selectedZone !== undefined
+              ? updatedSubzones[selectedZone].features.find((f) => f.id === properties.id)
+              : undefined; // should not happen
+          if (!subzone) {
+            return;
+          }
+          if (!subzone.properties) {
+            subzone.properties = {};
+          }
+          subzone.properties.name = nameVal;
+          setSubzones(updatedSubzones);
           close();
         };
 
@@ -267,7 +250,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         );
       },
     }),
-    [classes.box, classes.tooltip, selectedZone]
+    [classes.box, classes.tooltip, selectedZone, setSubzones, subzones]
   );
 
   const activeContext = useMemo<MapEntityOptions | undefined>(() => {
@@ -292,7 +275,8 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         featureSelectorOnClick={featureSelectorOnClick}
         activeContext={activeContext}
         onEditableBoundaryChanged={onEditableBoundaryChanged}
-        onUndoRedoReadOnlyBoundary={onUndoRedoReadOnlyBoundary}
+        onRedo={redo}
+        onUndo={undo}
         overridePopupInfo={overridePopupInfo}
         popupRenderer={popupRenderer}
         readOnlyBoundary={readOnlyBoundary}

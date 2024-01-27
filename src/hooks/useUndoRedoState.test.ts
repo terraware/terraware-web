@@ -111,4 +111,20 @@ describe('useUndoRedoState', () => {
     act(() => void setDataWith(result)({ name: 'roadrunner', age: 35 }));
     expect(redoWith(result)).toBeUndefined();
   });
+
+  test('should set data using callback function', () => {
+    const { result } = renderHook(() => useUndoRedoState<Person>({ name: 'bugs', age: 25 }));
+    const [, setData] = result.current;
+
+    act(() => {
+      setData((currentValue?: Person) => {
+        return { name: (currentValue?.name ?? '') + 'bunny', age: (currentValue?.age ?? 0) + 10 };
+      });
+    });
+
+    expect(dataWith(result)).toEqual({ name: 'bugsbunny', age: 35 });
+
+    act(() => void undoWith(result)());
+    expect(dataWith(result)).toEqual({ name: 'bugs', age: 25 });
+  });
 });
