@@ -15,7 +15,7 @@ import {
 } from 'src/types/Map';
 import MapIcon from 'src/components/Map/MapIcon';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
-import { cutPolygons, leftMostFeature } from 'src/components/Map/utils';
+import { cutPolygons, leftMostFeature, leftOrderedFeatures } from 'src/components/Map/utils';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import StepTitleDescription, { Description } from './StepTitleDescription';
@@ -23,6 +23,7 @@ import {
   IdGenerator,
   plantingSubzoneToFeature,
   plantingZoneToFeature,
+  subzoneNameGenerator,
   toIdentifiableFeature,
   toZoneFeature,
 } from './utils';
@@ -47,7 +48,10 @@ const featureSiteSubzones = (site: PlantingSite): Record<number, FeatureCollecti
   );
 
 export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Element {
-  const [selectedZone, setSelectedZone] = useState<number | undefined>();
+  const [selectedZone, setSelectedZone] = useState<number | undefined>(
+    site.plantingZones?.length === 1 ? site.plantingZones?.[0]?.id : undefined
+  );
+
   // map of zone id to subzones
   const [subzones, setSubzones, undo, redo] = useUndoRedoState<Record<number, FeatureCollection>>(
     featureSiteSubzones(site)
@@ -159,10 +163,18 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
       const cutSubzones = cutPolygons(subzones[selectedZone].features! as GeometryFeature[], cutWith);
 
       if (cutSubzones && subzones) {
+        const usedNames: Set<string> = new Set(
+          (subzones[selectedZone].features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
+        );
         const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) => sz.features));
-        const subzonesWithIds = cutSubzones.map((subzone) =>
-          toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone })
-        ) as GeometryFeature[];
+        const subzonesWithIds = leftOrderedFeatures(cutSubzones).map(({ feature: subzone }) => {
+          if (subzone && subzone.properties && !subzone.properties.name) {
+            const subzoneName = subzoneNameGenerator(usedNames);
+            subzone.properties.name = subzoneName;
+            usedNames.add(subzoneName);
+          }
+          return toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone });
+        }) as GeometryFeature[];
 
         setSubzones({
           ...subzones,
