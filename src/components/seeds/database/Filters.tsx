@@ -140,12 +140,15 @@ export default function Filters(props: Props): JSX.Element {
       const key = preExpFilterColumn.key;
 
       if (filters[key]) {
-        const notPresentFilter = filters[key].values[0] === null;
+        let notPresentFilterValue = '';
+        if (filters[key].values[0] === null && key === 'project_name') {
+          notPresentFilterValue = strings.NO_PROJECT;
+        }
 
         result.push({
           id: key,
           label: preExpFilterColumn.name as string,
-          value: notPresentFilter ? strings.NO_PROJECT : filters[key].values.join(', '),
+          value: notPresentFilterValue ?? filters[key].values.join(', '),
         });
       }
     });
