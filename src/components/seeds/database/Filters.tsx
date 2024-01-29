@@ -138,11 +138,14 @@ export default function Filters(props: Props): JSX.Element {
 
     preExpFilterColumns.forEach((preExpFilterColumn) => {
       const key = preExpFilterColumn.key;
+
       if (filters[key]) {
+        const notPresentFilter = filters[key].values[0] === null;
+
         result.push({
           id: key,
           label: preExpFilterColumn.name as string,
-          value: filters[key].values.join(', '),
+          value: notPresentFilter ? strings.NO_PROJECT : filters[key].values.join(', '),
         });
       }
     });
@@ -209,6 +212,12 @@ export default function Filters(props: Props): JSX.Element {
         }}
         options={preExpFilterOptions.map((opt) => opt.value!)}
         renderOption={(val) => preExpFilterOptions.find((opt) => opt.value === val)?.label ?? ''}
+        {...(preExpFilterColumn.key === 'project_name'
+          ? {
+              notPresentFilterLabel: strings.NO_PROJECT,
+              notPresentFilterShown: true,
+            }
+          : {})}
       />
     );
   };
