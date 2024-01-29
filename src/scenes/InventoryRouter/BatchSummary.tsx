@@ -1,20 +1,24 @@
 import React from 'react';
 import { Grid, useTheme } from '@mui/material';
 import strings from 'src/strings';
+import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Batch } from 'src/types/Batch';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Link from 'src/components/common/Link';
-import { APP_PATHS } from 'src/constants';
-import OverviewItemCardSubLocations from './view/OverviewItemCardSubLocations';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
+import OverviewItemCardSubLocations from 'src/scenes/InventoryRouter/view/OverviewItemCardSubLocations';
 
 interface BatchSummaryProps {
   batch: Batch;
+  reloadData: () => void;
 }
 
 export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
-  const { batch } = props;
+  const { batch, reloadData } = props;
   const { isMobile } = useDeviceInfo();
+  const featureFlagProjects = isEnabled('Projects');
 
   const theme = useTheme();
 
@@ -50,6 +54,16 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
       <Grid item xs={gridSize}>
         <OverviewItemCard isEditable={false} title={strings.DATE_ADDED} contents={batch.addedDate} />
       </Grid>
+
+      {featureFlagProjects && batch && (
+        <Grid item xs={gridSize}>
+          <ProjectOverviewItemCard<Batch>
+            entity={batch}
+            reloadData={reloadData}
+            projectAssignPayloadCreator={() => ({ batchIds: [batch.id] })}
+          />
+        </Grid>
+      )}
     </Grid>
   );
 }
