@@ -17,28 +17,29 @@ interface BatchSummaryProps {
 
 export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const { batch, reloadData } = props;
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isTablet } = useDeviceInfo();
   const featureFlagProjects = isEnabled('Projects');
 
   const theme = useTheme();
 
-  const gridSize = isMobile ? 12 : 2;
+  const overviewItemCount = featureFlagProjects ? 7 : 6;
+  const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
 
   return (
     <Grid container spacing={3} marginBottom={theme.spacing(4)}>
-      <Grid item xs={gridSize}>
+      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCardSubLocations batch={batch} />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard isEditable={false} title={strings.GERMINATION_RATE} contents={batch.germinationRate || '%'} />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard isEditable={false} title={strings.LOSS_RATE} contents={batch.lossRate || '%'} />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard isEditable={false} title={strings.TOTAL_WITHDRAWN} contents={batch.totalWithdrawn} />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard
           isEditable={false}
           title={strings.ACCESSION_ID}
@@ -51,12 +52,12 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
           }
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard isEditable={false} title={strings.DATE_ADDED} contents={batch.addedDate} />
       </Grid>
 
       {featureFlagProjects && batch && (
-        <Grid item xs={gridSize}>
+        <Grid item flexBasis={overviewGridSize} flexGrow={1}>
           <ProjectOverviewItemCard<Batch>
             entity={batch}
             reloadData={reloadData}
