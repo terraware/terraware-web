@@ -182,7 +182,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
         initialSelection: filters.statuses || [],
         filterKey: 'statuses',
         options: ACCESSION_2_STATES,
-        renderOption: (value: string | number) => stateName(`${value}` as AccessionState),
+        renderOption: (value: string | number | null) => stateName(`${value}` as AccessionState),
         pillModifier: (): PillListItemWithEmptyValue[] => {
           const statuses: AccessionState[] = filters.statuses || [];
           if (statuses.length === 0) {

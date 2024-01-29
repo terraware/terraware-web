@@ -164,7 +164,8 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
         initialSelection: filters.nurseryIds || [],
         filterKey: 'nurseryIds',
         options: nurseries.map((nursery) => nursery.id),
-        renderOption: (nurseryId: string | number) => nurseries.find((nursery) => nursery.id === nurseryId)?.name || '',
+        renderOption: (nurseryId: string | number | null) =>
+          nurseries.find((nursery) => nursery.id === nurseryId)?.name || '',
         pillModifier: (): PillListItemWithEmptyValue[] => {
           const nurseryIds = filters.nurseryIds || [];
           if (nurseryIds.length === 0) {

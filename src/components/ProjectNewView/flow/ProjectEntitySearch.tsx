@@ -50,7 +50,7 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
             initialSelection: filters.projectIds || [],
             filterKey: 'projectIds',
             options: projects?.map((project) => project.id) || [],
-            renderOption: (projectId: string | number) =>
+            renderOption: (projectId: string | number | null) =>
               (projects || []).find((project) => project.id === projectId)?.name || '',
             pillModifier: (_filters: ProjectEntityFilters): PillListItemWithEmptyValue[] => {
               const projectIds = _filters.projectIds || [];

@@ -48,7 +48,7 @@ export interface EntitySpecificFilterConfig {
   label: string;
   initialSelection: (string | number)[];
   options: (string | number)[];
-  renderOption: (value: string | number) => string;
+  renderOption: (value: string | number | null) => string;
   pillModifier: (filters: ProjectEntityFilters) => PillListItemWithEmptyValue[];
 }
 
@@ -71,7 +71,7 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
   const handleClose = useCallback(() => setAnchorEl(undefined), []);
 
   const handleConfirm = useCallback(
-    (selected: (number | string)[]) => {
+    (selected: (number | string | null)[]) => {
       handleClose();
       setFilters({ [filterKey]: selected });
     },
@@ -89,8 +89,9 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
       {isMobile && isOpen ? (
         <div className={classes.mobileContainer}>
           <FilterMultiSelect
-            label={label}
+            filterKey={filterKey}
             initialSelection={initialSelection}
+            label={label}
             onCancel={handleClose}
             onConfirm={(selected) => handleConfirm(selected)}
             options={options}
@@ -114,8 +115,9 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
           className={classes.popoverContainer}
         >
           <FilterMultiSelect
-            label={label}
+            filterKey={filterKey}
             initialSelection={initialSelection}
+            label={label}
             onCancel={handleClose}
             onConfirm={(selected) => handleConfirm(selected)}
             options={options}
