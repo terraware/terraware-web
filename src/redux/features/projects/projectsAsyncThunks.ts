@@ -27,7 +27,7 @@ export const requestProjectUpdate = createAsyncThunk(
 
 export const requestProjectDelete = createAsyncThunk(
   'projects/delete',
-  async (request: { projectId: number }, { rejectWithValue, dispatch }) => {
+  async (request: { projectId: number }, { rejectWithValue }) => {
     const response: Response2<DeleteProjectResponsePayload> = await ProjectsService.deleteProject(request.projectId);
 
     if (response !== null && response.requestSucceeded) {
