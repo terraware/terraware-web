@@ -109,7 +109,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
           field: 'project_id',
           operation: 'field',
           type: 'Exact',
-          values: projectIds.map((projectId: number) => `${projectId}`),
+          values: projectIds.map((id: number | null) => (id === null ? id : `${id}`)),
         });
       }
 

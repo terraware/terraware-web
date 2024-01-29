@@ -62,10 +62,13 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
                 {
                   id: 'projectIds',
                   label: strings.PROJECT,
-                  value: projectIds
-                    .map((projectId: number) => (projects || []).find((project) => project.id === projectId))
-                    .map((project) => project?.name)
-                    .join(','),
+                  value:
+                    projectIds[0] === null
+                      ? strings.NO_PROJECT
+                      : projectIds
+                          .map((projectId: number) => (projects || []).find((project) => project.id === projectId))
+                          .map((project) => project?.name)
+                          .join(','),
                   emptyValue: [],
                 },
               ];

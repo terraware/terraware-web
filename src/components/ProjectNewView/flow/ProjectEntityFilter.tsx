@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Icon from 'src/components/common/icon/Icon';
@@ -6,6 +6,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
 import { PillListItemWithEmptyValue } from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
+import strings from '../../../strings';
+import { useLocalization } from '../../../providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   dropdown: {
@@ -62,6 +64,7 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
   const { label, initialSelection, filterKey, options, renderOption } = filterConfig;
 
   const { isMobile } = useDeviceInfo();
+  const { activeLocale } = useLocalization();
   const classes = useStyles({ isMobile });
 
   const [anchorEl, setAnchorEl] = useState<undefined | HTMLElement>();
@@ -80,6 +83,17 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
 
   const isOpen = Boolean(anchorEl);
 
+  const notPresentFilterConfig = useMemo(
+    () =>
+      filterKey === 'projectIds' && activeLocale
+        ? {
+            notPresentFilterLabel: strings.NO_PROJECT,
+            notPresentFilterShown: true,
+          }
+        : {},
+    [filterKey, activeLocale]
+  );
+
   return (
     <div>
       <div className={classes.dropdown} onClick={handleClick}>
@@ -96,6 +110,7 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
             onConfirm={(selected) => handleConfirm(selected)}
             options={options}
             renderOption={renderOption}
+            {...notPresentFilterConfig}
           />
         </div>
       ) : (
@@ -122,6 +137,7 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
             onConfirm={(selected) => handleConfirm(selected)}
             options={options}
             renderOption={renderOption}
+            {...notPresentFilterConfig}
           />
         </Popover>
       )}

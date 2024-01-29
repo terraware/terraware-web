@@ -127,7 +127,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
           field: 'project_id',
           operation: 'field',
           type: 'Exact',
-          values: searchProjectIds.map((id: number) => `${id}`),
+          values: searchProjectIds.map((id: number | null) => (id === null ? id : `${id}`)),
         };
       }
 
