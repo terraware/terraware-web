@@ -65,9 +65,7 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
         <ListMapView
           style={{
             padding: isMobile ? theme.spacing(0, 3, 3) : 0,
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
+            ...(view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : {}),
           }}
           initialView='map'
           onView={(newView) => setView(newView)}

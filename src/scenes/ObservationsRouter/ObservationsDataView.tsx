@@ -18,15 +18,16 @@ export type ObservationsDataViewProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
   selectedPlantingSiteId: number;
   selectedPlantingSite?: PlantingSite;
+  setView: (view: View) => void;
+  view?: View;
 };
 
 export default function ObservationsDataView(props: ObservationsDataViewProps): JSX.Element {
-  const { selectedPlantingSiteId, selectedPlantingSite, setFilterOptions } = props;
+  const { selectedPlantingSiteId, selectedPlantingSite, setFilterOptions, setView, view } = props;
   const { ...searchProps }: SearchProps = props;
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
   const [status, setStatus] = useState<ObservationState[]>([]);
-  const [view, setView] = useState<View>();
 
   const observationsResults = useAppSelector((state) =>
     searchObservations(
