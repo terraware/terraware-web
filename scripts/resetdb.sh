@@ -12,6 +12,7 @@ restore_dump() {
     fi
 }
 
+rm -rf $HOME/docker/volumes/postgres/data
 docker-compose down --volumes
 docker-compose up -d postgres
 
