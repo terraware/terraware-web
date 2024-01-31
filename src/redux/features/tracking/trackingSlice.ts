@@ -34,6 +34,7 @@ export const trackingSlice = createSlice({
       const { error, locale, plantingSite } = data;
       state.error = error;
       if (plantingSite) {
+        // update state with planting site, resort with new information
         state.plantingSites = [
           ...(state.plantingSites ?? []).filter((site) => site.id !== plantingSite.id),
           plantingSite,
