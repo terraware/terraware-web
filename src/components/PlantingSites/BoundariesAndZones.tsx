@@ -34,10 +34,11 @@ export const useMapTooltipStyles = makeStyles(() => ({
 
 type BoundariesAndZonesProps = {
   plantingSite: PlantingSite;
+  setView?: (view: View) => void;
+  view?: View;
 };
 
-export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesProps): JSX.Element {
-  const [view, setView] = useState<View>('map');
+export default function BoundariesAndZones({ plantingSite, setView, view }: BoundariesAndZonesProps): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -55,7 +56,7 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
   );
 
   return (
-    <Box display='flex' flexGrow={plantingSite?.boundary ? 1 : 0} flexDirection='column'>
+    <Box sx={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}>
       <Box display='flex' flexGrow={0}>
         <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
           {strings.BOUNDARIES_AND_ZONES}
@@ -67,8 +68,8 @@ export default function BoundariesAndZones({ plantingSite }: BoundariesAndZonesP
             padding: isMobile ? theme.spacing(0, 3, 3) : 0,
             ...(view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : {}),
           }}
-          initialView='map'
-          onView={(newView) => setView(newView)}
+          initialView={'map'}
+          onView={(newView) => setView?.(newView)}
           search={<Search {...searchProps} />}
           list={<PlantingSiteDetailsTable data={data} plantingSite={plantingSite} />}
           map={<PlantingSiteMapView plantingSite={plantingSite} data={data} search={search.trim()} />}
