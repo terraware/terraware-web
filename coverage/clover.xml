@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1706317233678" clover="3.2.0">
-  <project timestamp="1706317233678" name="All files">
+<coverage generated="1706708780349" clover="3.2.0">
+  <project timestamp="1706708780349" name="All files">
     <metrics statements="15795" coveredstatements="502" conditionals="10157" coveredconditionals="140" methods="4941" coveredmethods="113" elements="30893" coveredelements="755" complexity="0" loc="15795" ncloc="15795" packages="128" files="627" classes="627"/>
     <package name="src">
       <metrics statements="173" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="46" coveredmethods="0"/>
@@ -3665,26 +3665,26 @@
       </file>
       <file name="Exclusions.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/editor/Exclusions.tsx">
         <metrics statements="20" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="8" coveredmethods="0"/>
-        <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
       </file>
       <file name="Form.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/PlantingSites/editor/Form.tsx">
         <metrics statements="19" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>

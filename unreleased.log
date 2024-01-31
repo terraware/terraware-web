@@ -1,3 +1,4 @@
+ab8522e395 SW-4793 Fix undo/redo in exclusions flow (#2100)
 a9e5083e89 SW-4788 Support drawing multiple disjoint polygons for site boundary (#2093)
 cb4d61f028 SW-4783 Update site with edited subzones upon save (#2091)
 57865f2c69 SW-4758 Auto generate subzone names in increasing alphabetical order (#2090)
