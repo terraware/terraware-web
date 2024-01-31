@@ -9,7 +9,7 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useProjects } from 'src/hooks/useProjects';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
-import PlantingSeasonsEdit from 'src/components/PlantingSites/PlantingSeasonsEdit';
+import PlantingSeasonsEdit from './PlantingSeasonsEdit';
 
 export type DetailsInputFormProps = {
   onChange: (id: string, value: unknown) => void;

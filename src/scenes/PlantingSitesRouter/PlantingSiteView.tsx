@@ -15,12 +15,12 @@ import { useProjects } from 'src/hooks/useProjects';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import PageSnackbar from 'src/components/PageSnackbar';
-import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones';
+import BoundariesAndZones from './BoundariesAndZones';
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
+import SimplePlantingSite from './SimplePlantingSite';
 import DeletePlantingSiteModal from './DeletePlantingSiteModal';
 
 const useStyles = makeStyles((theme: Theme) => ({

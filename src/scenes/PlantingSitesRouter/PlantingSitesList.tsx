@@ -4,21 +4,18 @@ import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { TrackingService } from 'src/services';
 import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { PlantingSitesFilters } from 'src/types/PlantingSite';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import PlantingSitesTable from 'src/components/PlantingSites/PlantingSitesTable';
-import PlantingSiteTypeSelect from 'src/components/PlantingSites/PlantingSiteTypeSelect';
+import PlantingSitesTable from './PlantingSitesTable';
+import PlantingSiteTypeSelect from './PlantingSiteTypeSelect';
 import { useOrganization, useTimeZones } from 'src/providers/hooks';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import useForm from 'src/utils/useForm';
-
-export type PlantingSitesFilters = {
-  projectIds?: number[];
-};
 
 export default function PlantingSitesList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
