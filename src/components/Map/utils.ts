@@ -1,9 +1,17 @@
 import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
-import intersect from '@turf/intersect';
-import difference from '@turf/difference';
+import { Theme } from '@mui/material';
 import center from '@turf/center';
+import difference from '@turf/difference';
+import intersect from '@turf/intersect';
+import union from '@turf/union';
 import _ from 'lodash';
-import { GeometryFeature, MapSourceProperties, MapSourceRenderProperties } from 'src/types/Map';
+import {
+  GeometryFeature,
+  MapDrawingLayer,
+  MapErrorLayer,
+  MapSourceProperties,
+  MapSourceRenderProperties,
+} from 'src/types/Map';
 
 export function toMultiPolygon(geometry: Geometry): MultiPolygon | null {
   if (geometry.type === 'MultiPolygon') {
@@ -15,12 +23,20 @@ export function toMultiPolygon(geometry: Geometry): MultiPolygon | null {
   }
 }
 
-export function toMultiPolygonArray(featureCollection: FeatureCollection): MultiPolygon[] | undefined {
-  const polyArray = featureCollection.features
-    .map((feature: Feature) => toMultiPolygon(feature.geometry))
+export function unionMultiPolygons(featureCollection: FeatureCollection): MultiPolygon | null {
+  const polyArray: MultiPolygon[] = _.cloneDeep(featureCollection)
+    .features.map((feature: Feature) => toMultiPolygon(feature.geometry))
     .filter((poly: MultiPolygon | null) => poly !== null) as MultiPolygon[];
 
-  return polyArray.length ? polyArray : undefined;
+  if (!polyArray.length) {
+    return null;
+  }
+
+  return polyArray.reduce((acc: MultiPolygon, curr: MultiPolygon): MultiPolygon => {
+    const unionResult = union(acc, curr);
+    const multiPolygon = unionResult ? toMultiPolygon(unionResult.geometry) : null;
+    return multiPolygon || curr;
+  });
 }
 
 export function toFeature(
@@ -52,7 +68,31 @@ export const getFillColor = (source: MapSourceRenderProperties, type: 'highlight
   }
 };
 
-export const getMapDrawingLayer = (source: MapSourceRenderProperties, sourceId: string) => {
+export const getMapErrorLayer = (theme: Theme, id: string): MapErrorLayer => ({
+  errorText: {
+    id: `error-text-${id}`,
+    type: 'symbol',
+    paint: {
+      'text-color': theme.palette.TwClrTxtDanger,
+    },
+    layout: {
+      'text-field': '{errorText}',
+      'text-size': 14,
+    },
+  },
+  errorPolygon: {
+    id: `error-line-${id}`,
+    type: 'line',
+    filter: ['all', ['==', '$type', 'Polygon']],
+    paint: {
+      'line-color': theme.palette.TwClrTxtDanger,
+      'line-dasharray': [3, 5],
+      'line-width': 1,
+    },
+  },
+});
+
+export const getMapDrawingLayer = (source: MapSourceRenderProperties, sourceId: string): MapDrawingLayer => {
   return {
     id: sourceId,
     isInteractive: source.isInteractive,

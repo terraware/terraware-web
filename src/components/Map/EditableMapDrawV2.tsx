@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { Feature, FeatureCollection } from 'geojson';
-import { MapRef, useControl } from 'react-map-gl';
+import { GeoJSONSource, MapRef, useControl } from 'react-map-gl';
 import MapboxDraw, {
   DrawCreateEvent,
   DrawMode,
@@ -28,6 +28,8 @@ export type MapEditorMode =
 type MapEditorProps = ConstructorParameters<typeof MapboxDraw>[0] & {
   boundary?: FeatureCollection;
   clearOnEdit?: boolean;
+  errorAnnotations?: Feature[];
+  errorSource?: GeoJSONSource;
   onBoundaryChanged?: (boundary?: FeatureCollection) => void;
   setMode?: (mode: MapEditorMode) => void;
 };
@@ -84,6 +86,8 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
 export default function EditableMapDraw({
   boundary,
   clearOnEdit,
+  errorAnnotations,
+  errorSource,
   onBoundaryChanged,
   setMode,
   ...otherProps
@@ -158,12 +162,17 @@ export default function EditableMapDraw({
 
   const onDelete = useCallback(() => onBoundaryChanged && onBoundaryChanged(undefined), [onBoundaryChanged]);
 
+  const onRender = useCallback(() => {
+    errorSource?.setData({ type: 'FeatureCollection', features: errorAnnotations ?? [] });
+  }, [errorAnnotations, errorSource]);
+
   useEffect(() => {
     mapRef?.on('draw.create', onCreate);
     mapRef?.on('draw.delete', onDelete);
     mapRef?.on('draw.modechange', onModeChange);
     mapRef?.on('draw.selectionchange', onSelectionChange);
     mapRef?.on('draw.update', onUpdate);
+    mapRef?.on('draw.render', onRender);
 
     return () => {
       mapRef?.off('draw.create', onCreate);
@@ -171,8 +180,9 @@ export default function EditableMapDraw({
       mapRef?.off('draw.modechange', onModeChange);
       mapRef?.off('draw.selectionchange', onSelectionChange);
       mapRef?.off('draw.update', onUpdate);
+      mapRef?.off('draw.render', onRender);
     };
-  }, [mapRef, onCreate, onDelete, onModeChange, onSelectionChange, onUpdate]);
+  }, [mapRef, onCreate, onDelete, onModeChange, onRender, onSelectionChange, onUpdate]);
 
   useEffect(() => {
     if (setMode && initializedGeometry) {
@@ -212,7 +222,6 @@ export default function EditableMapDraw({
 
   const populateGeometry = useCallback(() => {
     const currentFeatureCollection = { type: 'FeatureCollection', features: draw.getAll().features };
-
     if (!boundary?.features.length) {
       if (draw.getAll().features.some((feature: Feature) => featureHasCoordinates(feature))) {
         draw.deleteAll();
