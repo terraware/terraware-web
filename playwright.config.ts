@@ -36,7 +36,11 @@ export default defineConfig({
   },
 
   /* Configure projects for major browsers */
-  projects: [
+  projects: process.env.CI ? [
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },] : [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
