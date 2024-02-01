@@ -2,7 +2,12 @@ import React from 'react';
 import strings from 'src/strings';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
-import { SearchResponseAccession } from './flow/SelectAccessions';
+import { SearchResponseAccession } from 'src/components/ProjectNewView/flow/SelectAccessions';
+
+const singularOrPlural = (renderNumber: number, singular: string, plural: string): string =>
+  renderNumber === 1
+    ? (strings.formatString(singular, renderNumber.toString()) as string)
+    : (strings.formatString(plural, renderNumber.toString()) as string);
 
 export const getFormattedSuccessMessages = (
   projectName: string,
@@ -17,13 +22,25 @@ export const getFormattedSuccessMessages = (
       <p key='msg-title'>{strings.formatString(strings.PROJECT_ADDED_DETAILS, projectName)}</p>,
       <ul key='msg-body'>
         {!!projectAccessions?.length && (
-          <li>{strings.formatString(strings.PROJECT_ADDED_ACCESSIONS, projectAccessions.length.toString())}</li>
+          <li>
+            {singularOrPlural(
+              projectAccessions.length,
+              strings.PROJECT_ADDED_ACCESSION,
+              strings.PROJECT_ADDED_ACCESSIONS
+            )}
+          </li>
         )}
         {!!projectBatches?.length && (
-          <li>{strings.formatString(strings.PROJECT_ADDED_BATCHES, projectBatches.length.toString())}</li>
+          <li>{singularOrPlural(projectBatches.length, strings.PROJECT_ADDED_BATCH, strings.PROJECT_ADDED_BATCHES)}</li>
         )}
         {!!projectPlantingSites?.length && (
-          <li>{strings.formatString(strings.PROJECT_ADDED_PLANTING_SITES, projectPlantingSites.length.toString())}</li>
+          <li>
+            {singularOrPlural(
+              projectPlantingSites.length,
+              strings.PROJECT_ADDED_PLANTING_SITE,
+              strings.PROJECT_ADDED_PLANTING_SITES
+            )}
+          </li>
         )}
       </ul>,
     ];
