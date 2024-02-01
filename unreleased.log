@@ -1,3 +1,7 @@
+4eb43965bb SW-4740 Add project update card to batch summary (#2106)
+4da3203cf6 SW-4734 Use singular or plural forms of localized strings for project added toast body (#2104)
+553ef56b1f SW-4754 Rearrange 'assign to project' bulk action button (#2109)
+fb63d7a7e3 SW-4756 Remove year-quarter from reports message (#2110)
 ab8522e395 SW-4793 Fix undo/redo in exclusions flow (#2100)
 a9e5083e89 SW-4788 Support drawing multiple disjoint polygons for site boundary (#2093)
 cb4d61f028 SW-4783 Update site with edited subzones upon save (#2091)
