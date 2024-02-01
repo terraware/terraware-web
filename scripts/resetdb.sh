@@ -26,7 +26,7 @@ while [ $attempts_remaining -gt 0 ]; do
         break
     fi
 
-    ((attempts_remaining--))
+    ((attempts_remaining=attempts_remaining-1))
     sleep 1
 done
 
