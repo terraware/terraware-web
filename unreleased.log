@@ -1,3 +1,4 @@
+b731425cda SW-4737 Populate projects in state within useProjects hook if state has not been populated yet. Refresh projects in state when deleting a project. (#2105)
 18866332e2 SW-4801 Fix duplicate planting site create/update requests (#2115)
 4eb43965bb SW-4740 Add project update card to batch summary (#2106)
 4da3203cf6 SW-4734 Use singular or plural forms of localized strings for project added toast body (#2104)
