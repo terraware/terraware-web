@@ -1247,6 +1247,7 @@ SITE_SUBZONE_BOUNDARIES_DESCRIPTION_0,"Each Zone is divided into one or more Sub
 SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,Use the slice {0} tool to create subzone polygons within the zones. (Watch a [tutorial].),
 SITE_SUBZONE_BOUNDARIES_SELECT_A_ZONE,Select the zone to create subzones.,
 SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,Zone {0} is currently selected to create subzones.,
+SITE_WITH_NAME_EXISTS,Site with this name already exists.,
 SITE_ZONE_BOUNDARIES,Zone Boundaries,
 SITE_ZONE_BOUNDARIES_DESCRIPTION_0,"A Zone is a stratum of a Planting Site where planting and growing conditions are similar. Each planting site must have at least one zone and usually no more than five. An example of a Zone might be the slope of an east facing hill, where sunlight and soil conditions are similar.",
 SITE_ZONE_BOUNDARIES_DESCRIPTION_1,Use the slice {0} tool to create polygons within the site boundaries for zones. (Watch a [tutorial].),
