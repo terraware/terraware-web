@@ -16,6 +16,7 @@ export type Description = {
   handleSuffix?: (suffix: string) => string | JSX.Element[];
   hasTutorial?: boolean;
   isWarning?: boolean;
+  isBold?: boolean;
   text: string | JSX.Element[];
 };
 
@@ -74,8 +75,8 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           display='flex'
           alignItems='center'
           key={index}
-          fontSize='14px'
-          fontWeight={line.isWarning ? 600 : 400}
+          fontSize={line.isBold || line.isWarning ? '16px' : '14px'}
+          fontWeight={line.isBold ? 600 : 400}
           lineHeight='20px'
           color={line.isWarning ? theme.palette.TwClrIcnWarning : theme.palette.TwClrTxt}
           margin={theme.spacing(1, 0)}

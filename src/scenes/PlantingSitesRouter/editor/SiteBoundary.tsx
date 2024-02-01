@@ -91,7 +91,7 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
         hasTutorial: true,
         handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
       },
-      { text: strings.SITE_BOUNDARY_DESCRIPTION_WARN, isWarning: true },
+      { text: strings.SITE_BOUNDARY_DESCRIPTION_WARN, isWarning: true, isBold: true, },
     ];
 
     if (!mode) {
