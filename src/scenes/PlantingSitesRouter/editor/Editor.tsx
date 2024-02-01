@@ -61,6 +61,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
   const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
 
+  const isSimpleSite = useMemo<boolean>(() => siteType === 'simple', [siteType]);
+
   const steps = useMemo<PlantingSiteStep[]>(() => {
     if (!activeLocale) {
       return [];
@@ -84,7 +86,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       },
     ];
 
-    if (siteType === 'simple') {
+    if (isSimpleSite) {
       return simpleSiteSteps;
     }
 
@@ -101,7 +103,7 @@ export default function Editor(props: EditorProps): JSX.Element {
         optional: { completed: isCompleted('subzone_boundaries') },
       },
     ];
-  }, [activeLocale, siteType, completedOptionalSteps]);
+  }, [activeLocale, isSimpleSite, completedOptionalSteps]);
 
   const goToPlantingSites = () => {
     history.push(APP_PATHS.PLANTING_SITES);
@@ -178,7 +180,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   };
 
   const pageMessage = useMemo<JSX.Element | null>(() => {
-    if (showPageMessage && siteType === 'detailed' && currentStep === 'details') {
+    if (showPageMessage && !isSimpleSite && currentStep === 'details') {
       return (
         <Box>
           <TextWithLink href={docLinks.contact_us} isExternal text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
@@ -187,7 +189,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     } else {
       return null;
     }
-  }, [currentStep, docLinks, showPageMessage, siteType]);
+  }, [currentStep, docLinks, isSimpleSite, showPageMessage]);
 
   return (
     <TfMain>
@@ -233,7 +235,7 @@ export default function Editor(props: EditorProps): JSX.Element {
             />
           )}
           {currentStep === 'site_boundary' && (
-            <SiteBoundary onChange={onChange} onValidate={onValidate} site={plantingSite} />
+            <SiteBoundary isSimpleSite={isSimpleSite} onChange={onChange} onValidate={onValidate} site={plantingSite} />
           )}
           {currentStep === 'exclusion_areas' && (
             <Exclusions onChange={onChange} onValidate={onValidate} site={plantingSite} />

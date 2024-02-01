@@ -12,6 +12,7 @@ import {
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
+import useSnackbar from 'src/utils/useSnackbar';
 import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import { cutPolygons, leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
@@ -41,14 +42,24 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const classes = useStyles();
   const theme = useTheme();
+  const snackbar = useSnackbar();
   const getRenderAttributes = useRenderAttributes();
 
   useEffect(() => {
     // TODO: use new BE API when it is ready, to populate the zones for creation with
     // right now this onChange does nothing but allow us to move to next phase of subzones cutting
     if (onValidate) {
+      const missingZones = zones === undefined;
+
+      // check for missing zone names
+      const missingZoneNames = !missingZones && zones!.features.some((zone) => !zone?.properties?.name?.trim());
+      if (missingZoneNames) {
+        snackbar.toastError(strings.SITE_ZONE_NAMES_MISSING);
+      }
+
+      // populates zones
       let numZones = 0;
-      if (zones) {
+      if (!missingZoneNames && zones) {
         const plantingZones = zones.features
           .map((zone, index) => {
             const { geometry, properties } = zone;
@@ -69,9 +80,12 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         onChange('plantingZones', plantingZones);
         numZones = plantingZones.length;
       }
-      onValidate(zones === undefined, numZones > 1);
+
+      // callback with status of error and completion of this step
+      const completed = numZones > 1;
+      onValidate(missingZones || missingZoneNames, completed);
     }
-  }, [onChange, onValidate, zones]);
+  }, [onChange, onValidate, snackbar, zones]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!zones?.features) {

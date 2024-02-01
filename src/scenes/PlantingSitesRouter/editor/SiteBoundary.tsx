@@ -17,6 +17,7 @@ import StepTitleDescription, { Description } from './StepTitleDescription';
 import { boundingAreaHectares, defaultZonePayload } from './utils';
 
 export type SiteBoundaryProps = {
+  isSimpleSite: boolean;
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean) => void;
   site: PlantingSite;
@@ -30,7 +31,7 @@ const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollec
         features: [toFeature(boundary, {}, id)],
       };
 
-export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundaryProps): JSX.Element {
+export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site }: SiteBoundaryProps): JSX.Element {
   const [description, setDescription] = useState<Description[]>([]);
   const [siteBoundary, setSiteBoundary, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(
     featureSiteBoundary(site.id, site.boundary)
@@ -76,11 +77,13 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
         return;
       } else {
         onChange('boundary', boundary);
-        onChange('plantingZones', [defaultZonePayload({ boundary, id: 0, name: '', targetPlantingDensity: 1500 })]);
+        onChange('plantingZones', [
+          defaultZonePayload({ boundary, id: 0, name: isSimpleSite ? strings.ZONE : '', targetPlantingDensity: 1500 }),
+        ]);
         onValidate(false);
       }
     }
-  }, [boundary, boundingArea, boundingAreaTooLarge, onChange, onValidate, siteBoundary, snackbar]);
+  }, [boundary, boundingArea, boundingAreaTooLarge, isSimpleSite, onChange, onValidate, siteBoundary, snackbar]);
 
   useEffect(() => {
     const data: Description[] = [
@@ -91,7 +94,7 @@ export default function SiteBoundary({ onChange, onValidate, site }: SiteBoundar
         hasTutorial: true,
         handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
       },
-      { text: strings.SITE_BOUNDARY_DESCRIPTION_WARN, isWarning: true, isBold: true, },
+      { text: strings.SITE_BOUNDARY_DESCRIPTION_WARN, isWarning: true, isBold: true },
     ];
 
     if (!mode) {

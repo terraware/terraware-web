@@ -1253,6 +1253,7 @@ SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,Zone {0} is currently selected to create s
 SITE_ZONE_BOUNDARIES,Zone Boundaries,
 SITE_ZONE_BOUNDARIES_DESCRIPTION_0,"A Zone is a stratum of a Planting Site where planting and growing conditions are similar. Each planting site must have at least one zone and usually no more than five. An example of a Zone might be the slope of an east facing hill, where sunlight and soil conditions are similar.",
 SITE_ZONE_BOUNDARIES_DESCRIPTION_1,Use the slice {0} tool to create polygons within the site boundaries for zones. (Watch a [tutorial].),
+SITE_ZONE_NAMES_MISSING,On or more zones are missing names. Click on a zone to edit its name.,
 SKIP,Skip,
 SNACKBAR_MSG_CHANGES_SAVED,Changes saved just now.,
 SNACKBAR_MSG_NEW_SPECIES_ADDED,New species added just now.,
