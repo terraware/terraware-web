@@ -19,7 +19,7 @@ test.beforeEach(async ({ context }, testInfo) => {
 test('Create a Seedbank', async ({ page }, testInfo) => {
   await page.goto('http://127.0.0.1:3000');
 
-  const newSeedBankName = `My New Seed Bank-${new Date().getTime()}`
+  const newSeedBankName = `My New Seed Bank-${new Date().getTime()}`;
 
   await waitFor(page, '#home');
 
@@ -62,5 +62,4 @@ test('Create a Seedbank', async ({ page }, testInfo) => {
   await expect(page.getByRole('cell', { name: newSeedBankName, exact: true })).toBeVisible();
   await page.getByRole('link', { name: newSeedBankName }).click();
   await expect(page.getByRole('main')).toContainText('My Brand New Seed Bank!');
-
 });
