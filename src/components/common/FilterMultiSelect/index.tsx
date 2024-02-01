@@ -135,7 +135,7 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
                 } else {
                   setSelection([]);
                 }
-                setIsNotPresentFilterSelected(!isNotPresentFilterSelected);
+                setIsNotPresentFilterSelected(nextIsNotPresentFilterSelected);
               }}
               value={isNotPresentFilterSelected}
             />
