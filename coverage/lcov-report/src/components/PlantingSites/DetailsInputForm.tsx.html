@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -194,12 +194,7 @@
 <a name='L129'></a><a href='#L129'>129</a>
 <a name='L130'></a><a href='#L130'>130</a>
 <a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L132'></a><a href='#L132'>132</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -237,13 +232,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -370,18 +360,13 @@ export default function <span class="fstat-no" title="function not covered" >Det
   const [effectiveTimeZone, setEffectiveTimeZone] = <span class="cstat-no" title="statement not covered" >useState&lt;TimeZoneDescription | undefined&gt;();</span>
   const [plantingSeasonsValid, setPlantingSeasonsValid] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
   const [showSaveValidationErrors, setShowSaveValidationErrors] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-  const [validateInput, setValidateInput] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const { availableProjects } = <span class="cstat-no" title="statement not covered" >useProjects(record);</span>
   const detailedSitesEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('User Detailed Sites');</span>
   const projectsEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!onValidate &amp;&amp; !validateInput) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!onValidate) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!validateInput) {</span>
-<span class="cstat-no" title="statement not covered" >      setValidateInput(true);</span>
     }
 &nbsp;
     let hasErrors = <span class="cstat-no" title="statement not covered" >false;</span>
@@ -402,7 +387,7 @@ export default function <span class="fstat-no" title="function not covered" >Det
 <span class="cstat-no" title="statement not covered" >    if (onValidate) {</span>
 <span class="cstat-no" title="statement not covered" >      onValidate(hasErrors);</span>
     }
-  }, [onValidate, plantingSeasonsValid, record?.name, validateInput]);
+  }, [onValidate, plantingSeasonsValid, record?.name]);
 &nbsp;
   const onChangeTimeZone = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewTimeZone: TimeZoneDescription | undefined) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    onChange('timeZone', newTimeZone ? newTimeZone.id : undefined);</span>
@@ -478,7 +463,7 @@ export default function <span class="fstat-no" title="function not covered" >Det
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-01T16:39:59.901Z
+                at 2024-02-01T16:42:54.047Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
