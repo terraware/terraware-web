@@ -2,12 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { useLocalization, useOrganization } from 'src/providers';
-import { FieldOptionsMap } from 'src/types/Search';
+import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Card from 'src/components/common/Card';
 import ListMapView from 'src/components/ListMapView';
 import { FilterField } from 'src/components/common/FilterGroup';
-import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import Search, { FeaturedFilterConfig, SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import PlantingProgressList from './PlantingProgressList';
 import PlantingProgressMap from './PlantingProgressMap';
 import { View } from 'src/components/common/ListMapSelector';
@@ -15,6 +15,9 @@ import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import isEnabled from 'src/features';
+import { Project } from 'src/types/Project';
 
 const initialView: View = 'list';
 
@@ -23,19 +26,45 @@ type PlantingProgressProps = {
 };
 
 export default function PlantingProgress({ reloadTracking }: PlantingProgressProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
+  const featureFlagProjects = isEnabled('Projects');
+
+  const projects = useAppSelector(selectProjects);
+
+  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [search, setSearch] = useState<string>('');
-  const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [activeView, setActiveView] = useState<View>(initialView);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>(-1);
-  const dispatch = useAppDispatch();
-  const { selectedOrganization } = useOrganization();
+
+  const getProjectName = useCallback(
+    (projectId: number) => (projects?.find((project: Project) => project.id === projectId) || {}).name || '',
+    [projects]
+  );
+
+  const featuredFilters: FeaturedFilterConfig[] = !featureFlagProjects
+    ? []
+    : [
+        {
+          field: 'project_id',
+          options: (projects || [])?.map((project: Project) => project.id),
+          searchNodeCreator: (values: (number | string | null)[]) => ({
+            field: 'project_id',
+            operation: 'field',
+            type: 'Exact',
+            values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
+          }),
+          label: strings.PROJECTS,
+          renderOption: (id: number) => getProjectName(id),
+        },
+      ];
 
   useEffect(() => {
-    dispatch(requestObservationsResults(selectedOrganization.id));
+    void dispatch(requestObservationsResults(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
   const filterColumns = useMemo<FilterField[]>(
@@ -55,12 +84,19 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
       onSearch: (value: string) => setSearch(value),
       filtersProps: {
         filters,
-        setFilters: (value: Record<string, any>) => setFilters(value),
+        setFilters: (value: Record<string, any>) => {
+          setFilters(value);
+        },
         filterColumns,
         filterOptions,
+        pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
+          if (filterName === 'project_id') {
+            return values.map((value: unknown) => getProjectName(Number(value))).join(', ');
+          }
+        },
       },
     }),
-    [filters, filterColumns, filterOptions, search]
+    [search, filters, filterColumns, filterOptions, getProjectName]
   );
 
   const plantingCompleted = useMemo<boolean | undefined>(() => {
@@ -77,7 +113,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
 
   const reloadTrackingAndObservations = useCallback(() => {
     reloadTracking();
-    dispatch(requestObservationsResults(selectedOrganization.id));
+    void dispatch(requestObservationsResults(selectedOrganization.id));
   }, [selectedOrganization.id, dispatch, reloadTracking]);
 
   const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));
@@ -109,7 +145,14 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
         style={{ padding: isMobile ? theme.spacing(3) : theme.spacing(3, 0, 0) }}
         initialView={initialView}
         onView={setActiveView}
-        search={<SearchComponent view={activeView} onChangePlantingSite={setSelectedPlantingSiteId} {...searchProps} />}
+        search={
+          <SearchComponent
+            view={activeView}
+            onChangePlantingSite={setSelectedPlantingSiteId}
+            featuredFilters={featuredFilters}
+            {...searchProps}
+          />
+        }
         list={
           <PlantingProgressList
             search={search}
@@ -129,14 +172,16 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
 type SearchComponentProps = SearchProps & {
   view: View;
   onChangePlantingSite: (newSiteId: number) => void;
+  featuredFilters?: FeaturedFilterConfig[];
 };
 
 function SearchComponent(props: SearchComponentProps): JSX.Element {
-  const { search, onSearch, filtersProps, view, onChangePlantingSite } = props;
+  const { search, onSearch, filtersProps, view, onChangePlantingSite, featuredFilters } = props;
+
   return (
     <>
       <div style={{ display: view === 'list' ? 'flex' : 'none' }}>
-        <Search search={search} onSearch={onSearch} filtersProps={filtersProps} />
+        <Search search={search} onSearch={onSearch} filtersProps={filtersProps} featuredFilters={featuredFilters} />
       </div>
       <div style={{ display: view === 'map' ? 'flex' : 'none' }}>
         <PlantingSiteSelector onChange={onChangePlantingSite} />

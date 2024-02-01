@@ -39,6 +39,7 @@ export const selectPlantingProgress = createSelector(
     (state: RootState) => selectPlantings(state),
   ],
   (plantingSitesSearchResults, plantingSites, plantings) => {
+    console.log(plantingSitesSearchResults, plantings, plantingSites);
     if (plantingSitesSearchResults && plantings) {
       const plantingsBySubzone = getTotalPlantsBySubzone(plantings);
       const totalPlantsBySite = getTotalPlantsBySite(plantingSitesSearchResults);
@@ -46,6 +47,9 @@ export const selectPlantingProgress = createSelector(
         ?.filter((ps) => totalPlantsBySite[ps.id])
         .map((ps) => {
           return {
+            projectName:
+              plantingSitesSearchResults.find((pssr: PlantingSiteSearchResult) => `${ps.id}` === `${pssr.id}`)
+                ?.project_name || '',
             siteId: ps.id,
             siteName: ps.name,
             reported: ps.plantingZones?.flatMap((zone) =>
@@ -79,7 +83,7 @@ export const searchPlantingProgress = createSelector(
   ],
   (plantingProgress, query, plantingCompleted, siteNameSelected) => {
     return plantingProgress?.reduce((acc, curr) => {
-      const { siteId, siteName, totalPlants, reported } = curr;
+      const { siteId, siteName, totalPlants, reported, projectName } = curr;
       if (reported && reported.length > 0) {
         reported?.forEach((progress) => {
           const matchesQuery = !query || regexMatch(progress.subzoneName, query);
@@ -94,7 +98,7 @@ export const searchPlantingProgress = createSelector(
         plantingCompleted === undefined &&
         (siteNameSelected ? siteNameSelected === siteName : regexMatch(siteName, query))
       ) {
-        acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants });
+        acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants, projectName });
       }
       return acc;
     }, [] as any[]);

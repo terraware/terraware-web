@@ -59,6 +59,7 @@ export const requestPlantingSitesSearchResults = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response: PlantingSiteSearchResult[] | null = await TrackingService.searchPlantingSites(organizationId);
+      console.log('response', response);
       if (response) {
         dispatch(setPlantingSitesSearchResultsAction({ sites: response }));
       }

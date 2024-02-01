@@ -37,6 +37,11 @@ const columnsWithoutZones = (): TableColumnType[] => [
     type: 'string',
   },
   {
+    key: 'projectName',
+    name: strings.PROJECT,
+    type: 'string',
+  },
+  {
     key: 'totalSeedlingsSent',
     name: strings.TOTAL_SEEDLINGS_SENT,
     type: 'number',
@@ -58,6 +63,11 @@ const columnsWithZones = (): TableColumnType[] => [
   {
     key: 'siteName',
     name: strings.PLANTING_SITE,
+    type: 'string',
+  },
+  {
+    key: 'projectName',
+    name: strings.PROJECT,
     type: 'string',
   },
   {
@@ -227,6 +237,7 @@ const DetailsRenderer =
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row } = props;
 
+    console.log('row', row);
     const createLinkToWithdrawals = () => {
       const filterParam = row.subzoneName
         ? `subzoneName=${encodeURIComponent(row.subzoneName)}&siteName=${encodeURIComponent(row.siteName)}`
