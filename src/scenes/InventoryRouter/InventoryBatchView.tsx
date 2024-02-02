@@ -213,7 +213,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
       <Grid container ref={contentRef}>
         {batch && (
           <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <BatchSummary batch={batch} />
+            <BatchSummary batch={batch} reloadData={fetchBatch} />
             <Box display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
               <Tabs
                 activeTab={activeTab}
