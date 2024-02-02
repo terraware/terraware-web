@@ -116,7 +116,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         operation: 'field',
         field: 'project_id',
         type: 'Exact',
-        values: filters.projectIds.map((id) => id.toString()),
+        values: filters.projectIds.map((id) => (id === null ? id : id.toString())),
       });
     }
 
@@ -280,14 +280,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       withdrawTooltip = strings.NO_WITHDRAWABLE_QUANTITIES_FOUND;
     }
 
-    topBarButtons.push({
-      buttonType: 'passive',
-      buttonText: strings.WITHDRAW,
-      onButtonClick: () => bulkWithdrawSelectedRows(),
-      disabled: !bulkWithdrawable || !totalSelectedQuantity,
-      tooltipTitle: withdrawTooltip,
-    });
-
     if (featureFlagProjects) {
       topBarButtons.push(
         <ProjectAssignTopBarButton
@@ -299,6 +291,14 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         />
       );
     }
+
+    topBarButtons.push({
+      buttonType: 'passive',
+      buttonText: strings.WITHDRAW,
+      onButtonClick: () => bulkWithdrawSelectedRows(),
+      disabled: !bulkWithdrawable || !totalSelectedQuantity,
+      tooltipTitle: withdrawTooltip,
+    });
 
     return topBarButtons;
   };

@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
-import DetailsInputForm from 'src/components/PlantingSites/DetailsInputForm';
+import DetailsInputForm from 'src/scenes/PlantingSitesRouter/DetailsInputForm';
 import StepTitleDescription from './StepTitleDescription';
 
 export type DetailsProps = {

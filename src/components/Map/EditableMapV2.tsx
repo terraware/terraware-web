@@ -21,7 +21,6 @@ import {
   MapPopupRenderer,
   MapViewStyles,
   PopupInfo,
-  ReadOnlyBoundary,
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
@@ -30,7 +29,7 @@ import useMapboxToken from 'src/utils/useMapboxToken';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import { getMapDrawingLayer, toMultiPolygon } from './utils';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
-import UndoRedoBoundaryControl from './UndoRedoBoundaryControl';
+import UndoRedoControl from './UndoRedoControl';
 
 const useStyles = makeStyles((theme: Theme) => ({
   sliceTool: {
@@ -55,13 +54,13 @@ export type LayerFeature = MapboxGeoJSONFeature;
 export type FeatureSelectorOnClick = (features: LayerFeature[]) => LayerFeature | undefined;
 
 export type EditableMapProps = {
-  allowEditMultiplePolygons?: boolean;
   clearOnEdit?: boolean;
   editableBoundary?: FeatureCollection;
   featureSelectorOnClick?: FeatureSelectorOnClick;
   activeContext?: MapEntityOptions;
   onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) => void;
-  onUndoRedoReadOnlyBoundary?: (readOnlyBoundary?: ReadOnlyBoundary[]) => void;
+  onRedo?: () => void;
+  onUndo?: () => void;
   overridePopupInfo?: PopupInfo;
   popupRenderer?: MapPopupRenderer;
   setMode?: (mode: MapEditorMode) => void;
@@ -70,13 +69,13 @@ export type EditableMapProps = {
 };
 
 export default function EditableMap({
-  allowEditMultiplePolygons,
   clearOnEdit,
   editableBoundary,
   featureSelectorOnClick,
   activeContext,
   onEditableBoundaryChanged,
-  onUndoRedoReadOnlyBoundary,
+  onRedo,
+  onUndo,
   overridePopupInfo,
   popupRenderer,
   readOnlyBoundary,
@@ -122,20 +121,6 @@ export default function EditableMap({
       padding: 25,
     },
   };
-
-  const undoRedoEditableBoundary = useCallback(
-    (data?: FeatureCollection) => void onEditableBoundaryChanged(data, true),
-    [onEditableBoundaryChanged]
-  );
-
-  const undoRedoReadOnlyBoundary = useCallback(
-    (data?: ReadOnlyBoundary[]) => {
-      if (onUndoRedoReadOnlyBoundary) {
-        void onUndoRedoReadOnlyBoundary(data);
-      }
-    },
-    [onUndoRedoReadOnlyBoundary]
-  );
 
   const mapLayers = useMemo(() => {
     if (!readOnlyBoundary?.length) {
@@ -311,18 +296,12 @@ export default function EditableMap({
             <FullscreenControl position='top-left' />
             <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
-              allowEditMultiplePolygons={allowEditMultiplePolygons}
               clearOnEdit={clearOnEdit}
               boundary={editableBoundary}
               onBoundaryChanged={onEditableBoundaryChanged}
               setMode={setEditMode}
             />
-            <UndoRedoBoundaryControl
-              editableBoundary={editableBoundary}
-              onEditableBoundaryChanged={undoRedoEditableBoundary}
-              onReadOnlyBoundaryChanged={undoRedoReadOnlyBoundary}
-              readOnlyBoundary={readOnlyBoundary}
-            />
+            <UndoRedoControl onRedo={onRedo} onUndo={onUndo} />
             <NavigationControl position='bottom-right' showCompass={false} />
             <GeolocateControl
               position='bottom-right'

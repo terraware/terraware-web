@@ -9,7 +9,7 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useProjects } from 'src/hooks/useProjects';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
-import PlantingSeasonsEdit from 'src/components/PlantingSites/PlantingSeasonsEdit';
+import PlantingSeasonsEdit from './PlantingSeasonsEdit';
 
 export type DetailsInputFormProps = {
   onChange: (id: string, value: unknown) => void;
@@ -33,18 +33,13 @@ export default function DetailsInputForm({
   const [effectiveTimeZone, setEffectiveTimeZone] = useState<TimeZoneDescription | undefined>();
   const [plantingSeasonsValid, setPlantingSeasonsValid] = useState(true);
   const [showSaveValidationErrors, setShowSaveValidationErrors] = useState(false);
-  const [validateInput, setValidateInput] = useState<boolean>(false);
   const { availableProjects } = useProjects(record);
   const detailedSitesEnabled = isEnabled('User Detailed Sites');
   const projectsEnabled = isEnabled('Projects');
 
   useEffect(() => {
-    if (!onValidate && !validateInput) {
+    if (!onValidate) {
       return;
-    }
-
-    if (!validateInput) {
-      setValidateInput(true);
     }
 
     let hasErrors = false;
@@ -65,7 +60,7 @@ export default function DetailsInputForm({
     if (onValidate) {
       onValidate(hasErrors);
     }
-  }, [onValidate, plantingSeasonsValid, record?.name, validateInput]);
+  }, [onValidate, plantingSeasonsValid, record?.name]);
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
     onChange('timeZone', newTimeZone ? newTimeZone.id : undefined);
@@ -88,6 +83,7 @@ export default function DetailsInputForm({
           onChange={(value) => onChange('name', value)}
           value={record.name}
           errorText={record.name ? '' : nameError}
+          autoFocus={true}
         />
       </Grid>
       <Grid item xs={gridSize()}>

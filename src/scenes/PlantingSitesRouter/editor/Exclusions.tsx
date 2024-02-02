@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Box } from '@mui/material';
 import { FeatureCollection } from 'geojson';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { RenderableReadOnlyBoundary } from 'src/types/Map';
 import EditableMap from 'src/components/Map/EditableMapV2';
 import { toFeature, toMultiPolygonArray } from 'src/components/Map/utils';
@@ -17,7 +18,7 @@ export type ExclusionsProps = {
 };
 
 export default function Exclusions({ onChange, onValidate, site }: ExclusionsProps): JSX.Element {
-  const [exclusions, setExclusions] = useState<FeatureCollection | undefined>();
+  const [exclusions, setExclusions, undo, redo] = useUndoRedoState<FeatureCollection | undefined>();
   const getRenderAttributes = useRenderAttributes();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export default function Exclusions({ onChange, onValidate, site }: ExclusionsPro
         features: [toFeature(site.exclusion!, {}, 0)],
       });
     }
-  }, [site.exclusion]);
+  }, [setExclusions, site.exclusion]);
 
   useEffect(() => {
     if (onValidate) {
@@ -79,9 +80,10 @@ export default function Exclusions({ onChange, onValidate, site }: ExclusionsPro
         tutorialTitle={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE}
       />
       <EditableMap
-        allowEditMultiplePolygons
         editableBoundary={exclusions}
         onEditableBoundaryChanged={setExclusions}
+        onRedo={redo}
+        onUndo={undo}
         readOnlyBoundary={readOnlyBoundary}
       />
     </Box>

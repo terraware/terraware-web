@@ -182,13 +182,24 @@ export const cutPolygons = (source: GeometryFeature[], cutWith: Geometry): Geome
  *   otherwise, null
  */
 export const leftMostFeature = (features: GeometryFeature[]): { feature: GeometryFeature; center: number[] } | null => {
-  return (
-    features
-      .map((feature) => ({
-        feature,
-        center: center(feature.geometry)?.geometry?.coordinates,
-      }))
-      .filter((data) => data.center)
-      .sort((data1, data2) => data1.center[0] - data2.center[0])[0] ?? null
-  );
+  return leftOrderedFeatures(features)[0] ?? null;
+};
+
+/**
+ * Returns features ordered from left/bottom and progressing up/right
+ */
+export const leftOrderedFeatures = (features: GeometryFeature[]): { feature: GeometryFeature; center: number[] }[] => {
+  return features
+    .map((feature) => ({
+      feature,
+      center: center(feature.geometry)?.geometry?.coordinates,
+    }))
+    .filter((data) => data.center)
+    .sort((data1, data2) => {
+      if (data1.center[0] === data2.center[0]) {
+        return data1.center[1] - data2.center[1];
+      } else {
+        return data1.center[0] - data2.center[0];
+      }
+    });
 };

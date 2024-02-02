@@ -10,18 +10,20 @@ import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useLocalization } from 'src/providers';
 import { PlantingSeason } from 'src/types/Tracking';
 import { useProjects } from 'src/hooks/useProjects';
-import { useAppSelector } from 'src/redux/store';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { requestPlantingSite } from 'src/redux/features/tracking/trackingThunks';
 import PageSnackbar from 'src/components/PageSnackbar';
-import BoundariesAndZones from 'src/components/PlantingSites/BoundariesAndZones';
+import BoundariesAndZones from './BoundariesAndZones';
 import BackToLink from 'src/components/common/BackToLink';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import SimplePlantingSite from 'src/components/PlantingSites/SimplePlantingSite';
 import { View } from 'src/components/common/ListMapSelector';
+import SimplePlantingSite from './SimplePlantingSite';
 import DeletePlantingSiteModal from './DeletePlantingSiteModal';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -37,6 +39,8 @@ export default function PlantingSiteView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
+  const dispatch = useAppDispatch();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
   const history = useHistory();
@@ -74,6 +78,13 @@ export default function PlantingSiteView(): JSX.Element {
     () => view === 'map' || (plantingSite?.boundary !== undefined && plantingSite?.plantingZones === undefined),
     [plantingSite?.boundary, plantingSite?.plantingZones, view]
   );
+
+  useEffect(() => {
+    const siteId = Number(plantingSiteId);
+    if (!isNaN(siteId)) {
+      dispatch(requestPlantingSite(siteId, activeLocale));
+    }
+  }, [activeLocale, dispatch, plantingSiteId]);
 
   return (
     <TfMain>

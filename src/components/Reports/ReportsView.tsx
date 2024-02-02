@@ -134,17 +134,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
 
   const reportsToComplete = useMemo(() => results.filter((report) => report.status !== 'Submitted'), [results]);
 
-  const reportPeriodsToComplete = useMemo(() => {
-    if (reportsToComplete.length === 0) {
-      return '';
-    }
-
-    return Array.from(new Set(reportsToComplete.map((report) => `${report.year}-Q${report.quarter}`)))
-      .sort()
-      .join(', ');
-  }, [reportsToComplete]);
-
-  return reportsSettings && !reportsSettings?.isConfigured ? (
+  return reportsSettings && results.length === 0 && !reportsSettings?.isConfigured ? (
     <PreSetupView />
   ) : (
     <TfMain>
@@ -155,12 +145,10 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
           <Message
             type='page'
             priority='info'
-            title={strings.formatString(strings.COMPLETE_REPORTS, reportPeriodsToComplete)}
+            title={strings.COMPLETE_REPORTS}
             body={
               <>
-                <Typography sx={{ margin: 0 }}>
-                  {strings.formatString(strings.COMPLETE_REPORTS_SUBTITLE, reportPeriodsToComplete)}
-                </Typography>
+                <Typography sx={{ margin: 0 }}>{strings.COMPLETE_REPORTS_SUBTITLE}</Typography>
 
                 <List sx={{ listStyleType: 'disc', marginLeft: theme.spacing(4), marginTop: 0, padding: 0 }} dense>
                   {reportsToComplete.map((report, index) => (
