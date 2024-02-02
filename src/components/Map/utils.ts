@@ -80,7 +80,7 @@ export const getMapErrorLayer = (theme: Theme, id: string): MapErrorLayer => ({
       'text-size': 14,
     },
   },
-  errorPolygon: {
+  errorLine: {
     id: `error-line-${id}`,
     type: 'line',
     filter: ['all', ['==', '$type', 'Polygon']],
@@ -88,6 +88,15 @@ export const getMapErrorLayer = (theme: Theme, id: string): MapErrorLayer => ({
       'line-color': theme.palette.TwClrTxtDanger,
       'line-dasharray': [3, 5],
       'line-width': 1,
+    },
+  },
+  errorFill: {
+    id: `error-fill-${id}`,
+    type: 'fill',
+    filter: ['all', ['==', '$type', 'Polygon']],
+    paint: {
+      'fill-color': ['case', ['==', ['get', 'fill'], true], theme.palette.TwClrTxtDanger, 'transparent'],
+      'fill-opacity': ['case', ['==', ['get', 'fill'], true], 0.15, 0],
     },
   },
 });

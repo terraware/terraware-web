@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactMapGL, {
   FullscreenControl,
-  GeoJSONSource,
   GeolocateControl,
   Layer,
   LngLatBoundsLike,
@@ -120,6 +119,8 @@ export default function EditableMap({
             .filter((poly: MultiPolygon | null) => poly !== null)
             .flatMap((poly: MultiPolygon | null) => poly!.coordinates),
         }) as LngLatBoundsLike)
+      : editableBoundary
+      ? (bbox(editableBoundary) as LngLatBoundsLike)
       : undefined,
     fitBoundsOptions: {
       animate: false,
@@ -148,12 +149,17 @@ export default function EditableMap({
   const errorLayer = useMemo(() => {
     const drawingLayer: MapErrorLayer = getMapErrorLayer(theme, 'errorAnnotations');
     return (
-      <Source type='geojson' id='errorAnnotations' data={{ type: 'FeatureCollection', features: [] }}>
+      <Source
+        type='geojson'
+        id='errorAnnotations'
+        data={{ type: 'FeatureCollection', features: errorAnnotations ?? [] }}
+      >
         {drawingLayer.errorText && <Layer {...drawingLayer.errorText} />}
-        {drawingLayer.errorPolygon && <Layer {...drawingLayer.errorPolygon} />}
+        {drawingLayer.errorLine && <Layer {...drawingLayer.errorLine} />}
+        {drawingLayer.errorFill && <Layer {...drawingLayer.errorFill} />}
       </Source>
     );
-  }, [theme]);
+  }, [errorAnnotations, theme]);
 
   // clear popup state and set geometry as not selected (so rendering shows it as not selected)
   const clearPopupInfo = useCallback(() => {
@@ -253,13 +259,13 @@ export default function EditableMap({
   }, [visible]);
 
   useEffect(() => {
-    if (!popupRenderer || editMode === 'CreatingBoundary') {
+    if (!popupRenderer || editMode === 'CreatingBoundary' || errorAnnotations?.length) {
       // no interactive capabilities enabled
       setInteractiveLayerIds(undefined);
     } else {
       setInteractiveLayerIds(readOnlyBoundary?.filter((b) => b.isInteractive).map((b) => `${b.id}-fill`));
     }
-  }, [editMode, popupRenderer, readOnlyBoundary]);
+  }, [editMode, errorAnnotations, popupRenderer, readOnlyBoundary]);
 
   // If override popup is set in the component prop, update local state as well.
   // Separate useEffect from clearing popup state due to dependencies.
@@ -314,8 +320,6 @@ export default function EditableMap({
             <EditableMapDraw
               clearOnEdit={clearOnEdit}
               boundary={editableBoundary}
-              errorAnnotations={errorAnnotations}
-              errorSource={mapRef?.current?.getSource('errorAnnotations') as GeoJSONSource}
               onBoundaryChanged={onEditableBoundaryChanged}
               setMode={setEditMode}
             />

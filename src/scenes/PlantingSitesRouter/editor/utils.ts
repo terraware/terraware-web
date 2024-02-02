@@ -1,4 +1,4 @@
-import { Feature, MultiPolygon } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
@@ -131,6 +131,11 @@ export const subzoneNameGenerator = (usedNames: Set<string>): string => {
 /**
  * Get area of bbox of polygon in hectares
  */
-export const boundingAreaHectares = (geometry: MultiPolygon): number => {
+export const boundingAreaHectares = (geometry: MultiPolygon | Polygon): number => {
   return parseFloat((area(bboxPolygon(bbox(geometry))) * SQ_M_TO_HECTARES).toFixed(2));
 };
+
+/**
+ * empty boundary
+ */
+export const emptyBoundary = (): FeatureCollection => ({ type: 'FeatureCollection', features: [] });

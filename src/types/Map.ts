@@ -186,6 +186,7 @@ export type MapDrawingLayer = {
 };
 
 export type MapErrorLayer = {
+  errorFill: LayerProps;
+  errorLine: LayerProps;
   errorText: LayerProps;
-  errorPolygon: LayerProps;
 };
