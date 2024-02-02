@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/75</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
@@ -314,7 +314,9 @@
 <a name='L249'></a><a href='#L249'>249</a>
 <a name='L250'></a><a href='#L250'>250</a>
 <a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -375,6 +377,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -628,6 +632,8 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const [plantingSite, setPlantingSite, onChange] = <span class="cstat-no" title="statement not covered" >useForm({ ...site });</span>
   const [plantingSeasons, setPlantingSeasons] = <span class="cstat-no" title="statement not covered" >useState&lt;UpdatedPlantingSeason[]&gt;();</span>
 &nbsp;
+  const isSimpleSite = <span class="cstat-no" title="statement not covered" >useMemo&lt;boolean&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >siteType === 'simple',</span> [siteType]);</span>
+&nbsp;
   const steps = <span class="cstat-no" title="statement not covered" >useMemo&lt;PlantingSiteStep[]&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!activeLocale) {</span>
 <span class="cstat-no" title="statement not covered" >      return [];</span>
@@ -651,7 +657,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
       },
     ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (siteType === 'simple') {</span>
+<span class="cstat-no" title="statement not covered" >    if (isSimpleSite) {</span>
 <span class="cstat-no" title="statement not covered" >      return simpleSiteSteps;</span>
     }
 &nbsp;
@@ -668,7 +674,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
         optional: { completed: isCompleted('subzone_boundaries') },
       },
     ];
-  }, [activeLocale, siteType, completedOptionalSteps]);
+  }, [activeLocale, isSimpleSite, completedOptionalSteps]);
 &nbsp;
   const goToPlantingSites = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    history.push(APP_PATHS.PLANTING_SITES);</span>
@@ -745,7 +751,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   };
 &nbsp;
   const pageMessage = <span class="cstat-no" title="statement not covered" >useMemo&lt;JSX.Element | null&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (showPageMessage &amp;&amp; siteType === 'detailed' &amp;&amp; currentStep === 'details') {</span>
+<span class="cstat-no" title="statement not covered" >    if (showPageMessage &amp;&amp; !isSimpleSite &amp;&amp; currentStep === 'details') {</span>
 <span class="cstat-no" title="statement not covered" >      return (</span>
         &lt;Box&gt;
           &lt;TextWithLink href={docLinks.contact_us} isExternal text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} /&gt;
@@ -754,7 +760,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
     } else {
 <span class="cstat-no" title="statement not covered" >      return null;</span>
     }
-  }, [currentStep, docLinks, showPageMessage, siteType]);
+  }, [currentStep, docLinks, isSimpleSite, showPageMessage]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain&gt;
@@ -800,7 +806,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             /&gt;
           )}
           {currentStep === 'site_boundary' &amp;&amp; (
-            &lt;SiteBoundary onChange={onChange} onValidate={onValidate} site={plantingSite} /&gt;
+            &lt;SiteBoundary isSimpleSite={isSimpleSite} onChange={onChange} onValidate={onValidate} site={plantingSite} /&gt;
           )}
           {currentStep === 'exclusion_areas' &amp;&amp; (
             &lt;Exclusions onChange={onChange} onValidate={onValidate} site={plantingSite} /&gt;
@@ -823,7 +829,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-02T19:47:51.266Z
+                at 2024-02-02T19:57:53.947Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
