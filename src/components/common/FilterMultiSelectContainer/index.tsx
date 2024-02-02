@@ -45,19 +45,32 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type FilterMultiSelectContainerProps<T> = {
-  filters: T;
-  setFilters: (f: T) => void;
-  label: string;
   disabled?: boolean;
   filterKey: keyof T;
+  filters: T;
+  label: string;
+  notPresentFilterLabel?: string;
+  notPresentFilterShown?: boolean;
   options: number[];
   renderOption: (id: number) => string;
+  setFilters: (f: T) => void;
 };
 
-export default function FilterMultiSelectContainer<T extends Record<string, number[]>>(
+export default function FilterMultiSelectContainer<T extends Record<string, (number | null)[]>>(
   props: FilterMultiSelectContainerProps<T>
 ): JSX.Element {
-  const { filters, setFilters, label, disabled, filterKey, options, renderOption } = props;
+  const {
+    filters,
+    setFilters,
+    label,
+    disabled,
+    filterKey,
+    options,
+    renderOption,
+    notPresentFilterLabel,
+    notPresentFilterShown,
+  } = props;
+
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
 
@@ -76,15 +89,18 @@ export default function FilterMultiSelectContainer<T extends Record<string, numb
   const renderFilterMultiSelect = () => {
     return (
       <FilterMultiSelect
-        label={label}
+        filterKey={String(filterKey)}
         initialSelection={initialSelection}
+        label={label}
         onCancel={handleClose}
-        onConfirm={(selectedIds: number[]) => {
+        onConfirm={(selectedIds: (number | null)[]) => {
           handleClose();
           setFilters({ ...filters, [filterKey]: selectedIds });
         }}
         options={options}
         renderOption={renderOption}
+        notPresentFilterLabel={notPresentFilterLabel}
+        notPresentFilterShown={notPresentFilterShown}
       />
     );
   };

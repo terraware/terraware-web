@@ -160,7 +160,7 @@ export default function Filters(props: Props): JSX.Element {
     return result;
   }, [filters, columns, preExpFilterColumns]);
 
-  const onChangePreExpFilter = (preExpFilterColumn: DatabaseColumn, selectedValues: string[]) => {
+  const onChangePreExpFilter = (preExpFilterColumn: DatabaseColumn, selectedValues: (string | null)[]) => {
     let newFilters;
     if (selectedValues.length === 0) {
       newFilters = { ...filters };
@@ -199,10 +199,11 @@ export default function Filters(props: Props): JSX.Element {
 
     return (
       <FilterMultiSelect
-        label={preExpFilterColumn.name as string}
+        filterKey={preExpFilterColumn.key}
         initialSelection={getCurrentPreExpFilterValues(preExpFilterColumn, filters)}
+        label={preExpFilterColumn.name as string}
         onCancel={() => handlePreExpFilterClose(preExpFilterColumn.key)}
-        onConfirm={(selectedValues: string[]) => {
+        onConfirm={(selectedValues: (string | null)[]) => {
           handlePreExpFilterClose(preExpFilterColumn.key);
           onChangePreExpFilter(preExpFilterColumn, selectedValues);
         }}
@@ -334,13 +335,21 @@ function getSearchTermFilter(searchCols: DatabaseColumn[], searchTerm: string): 
   return { searchTermFilter: orNode };
 }
 
-function getPreExpFilter(col: DatabaseColumn, values: string[]): Record<string, SearchNodePayload> {
+function getPreExpFilter(col: DatabaseColumn, values: (string | null)[]): Record<string, SearchNodePayload> {
+  let _values: (string | null)[] = [];
+  const isNotPresentFilter = values.length === 1 && values[0] === null;
+  if (isNotPresentFilter) {
+    _values = [null];
+  } else {
+    _values = values as string[];
+  }
+
   return {
     [col.key]: {
       operation: 'field',
       field: col.key,
       type: 'Exact',
-      values,
+      values: _values,
     },
   };
 }

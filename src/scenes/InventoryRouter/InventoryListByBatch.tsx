@@ -115,7 +115,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
         operation: 'field',
         field: 'project_id',
         type: 'Exact',
-        values: filters.projectIds.map((id) => id.toString()),
+        values: filters.projectIds.map((id) => (id === null ? id : id.toString())),
       } as SearchNodePayload);
     }
 
