@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { Feature, FeatureCollection } from 'geojson';
-import { GeoJSONSource, MapRef, useControl } from 'react-map-gl';
+import { MapRef, useControl } from 'react-map-gl';
 import MapboxDraw, {
   DrawCreateEvent,
   DrawMode,
@@ -28,8 +28,6 @@ export type MapEditorMode =
 type MapEditorProps = ConstructorParameters<typeof MapboxDraw>[0] & {
   boundary?: FeatureCollection;
   clearOnEdit?: boolean;
-  errorAnnotations?: Feature[];
-  errorSource?: GeoJSONSource;
   onBoundaryChanged?: (boundary?: FeatureCollection) => void;
   setMode?: (mode: MapEditorMode) => void;
 };
@@ -86,8 +84,6 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
 export default function EditableMapDraw({
   boundary,
   clearOnEdit,
-  errorAnnotations,
-  errorSource,
   onBoundaryChanged,
   setMode,
   ...otherProps
@@ -95,7 +91,8 @@ export default function EditableMapDraw({
   const [mapRef, setMapRef] = useState<MapRef>();
   const [drawMode, setDrawMode] = useState<DrawMode>();
   const [selection, setSelection] = useState<Feature>();
-  const [initializedGeometry, setInitializedGeometry] = useState(false);
+  const [initializedGeometry, setInitializedGeometry] = useState<boolean>(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   // Need ts-ignore because the draw control's event types are added by the draw plugin and aren't
   // included in the type definitions for the first arguments of MapRef.on() and MapRef.off().
@@ -162,17 +159,12 @@ export default function EditableMapDraw({
 
   const onDelete = useCallback(() => onBoundaryChanged && onBoundaryChanged(undefined), [onBoundaryChanged]);
 
-  const onRender = useCallback(() => {
-    errorSource?.setData({ type: 'FeatureCollection', features: errorAnnotations ?? [] });
-  }, [errorAnnotations, errorSource]);
-
   useEffect(() => {
     mapRef?.on('draw.create', onCreate);
     mapRef?.on('draw.delete', onDelete);
     mapRef?.on('draw.modechange', onModeChange);
     mapRef?.on('draw.selectionchange', onSelectionChange);
     mapRef?.on('draw.update', onUpdate);
-    mapRef?.on('draw.render', onRender);
 
     return () => {
       mapRef?.off('draw.create', onCreate);
@@ -180,9 +172,8 @@ export default function EditableMapDraw({
       mapRef?.off('draw.modechange', onModeChange);
       mapRef?.off('draw.selectionchange', onSelectionChange);
       mapRef?.off('draw.update', onUpdate);
-      mapRef?.off('draw.render', onRender);
     };
-  }, [mapRef, onCreate, onDelete, onModeChange, onRender, onSelectionChange, onUpdate]);
+  }, [mapRef, onCreate, onDelete, onModeChange, onSelectionChange, onUpdate]);
 
   useEffect(() => {
     if (setMode && initializedGeometry) {
@@ -237,13 +228,19 @@ export default function EditableMapDraw({
 
   useEffect(() => {
     if (mapRef?.loaded()) {
-      populateGeometry();
+      setLoaded(true);
     } else {
-      mapRef?.on('load', populateGeometry);
+      mapRef?.on('load', () => setLoaded(true));
     }
 
     mapRef?.on('draw.delete', switchToPolygonModeIfFeatureDeleted);
-  }, [mapRef, populateGeometry, switchToPolygonModeIfFeatureDeleted]);
+  }, [mapRef, switchToPolygonModeIfFeatureDeleted]);
+
+  useEffect(() => {
+    if (loaded) {
+      populateGeometry();
+    }
+  }, [loaded, populateGeometry]);
 
   return null;
 }

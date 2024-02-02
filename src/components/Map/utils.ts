@@ -80,7 +80,7 @@ export const getMapErrorLayer = (theme: Theme, id: string): MapErrorLayer => ({
       'text-size': 14,
     },
   },
-  errorPolygon: {
+  errorLine: {
     id: `error-line-${id}`,
     type: 'line',
     filter: ['all', ['==', '$type', 'Polygon']],
