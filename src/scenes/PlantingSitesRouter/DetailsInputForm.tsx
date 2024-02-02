@@ -6,7 +6,11 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import isEnabled from 'src/features';
 import { TimeZoneDescription } from 'src/types/TimeZones';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useProjects } from 'src/hooks/useProjects';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import PlantingSeasonsEdit from './PlantingSeasonsEdit';
@@ -33,34 +37,54 @@ export default function DetailsInputForm({
   const [effectiveTimeZone, setEffectiveTimeZone] = useState<TimeZoneDescription | undefined>();
   const [plantingSeasonsValid, setPlantingSeasonsValid] = useState(true);
   const [showSaveValidationErrors, setShowSaveValidationErrors] = useState(false);
+  const [usedNames, setUsedNames] = useState<Set<string>>();
   const { availableProjects } = useProjects(record);
   const detailedSitesEnabled = isEnabled('User Detailed Sites');
   const projectsEnabled = isEnabled('Projects');
+  const { activeLocale } = useLocalization();
+  const { selectedOrganization } = useOrganization();
+  const dispatch = useAppDispatch();
+  const plantingSites = useAppSelector(selectPlantingSites);
+
+  useEffect(() => {
+    if (!plantingSites) {
+      dispatch(requestPlantingSites(selectedOrganization.id, activeLocale));
+    }
+  }, [activeLocale, dispatch, plantingSites, selectedOrganization.id]);
+
+  useEffect(() => {
+    const otherSiteNames = (plantingSites ?? []).filter((site) => site.id !== record.id).map((site) => site.name);
+    setUsedNames(new Set(otherSiteNames));
+  }, [plantingSites, record.id]);
 
   useEffect(() => {
     if (!onValidate) {
       return;
     }
 
-    let hasErrors = false;
+    let hasNameError = true;
+    let hasSeasonsError = true;
+
     if (!record.name) {
       setNameError(strings.REQUIRED_FIELD);
-      hasErrors = true;
+    } else if (usedNames?.has(record.name) === true) {
+      setNameError(strings.SITE_WITH_NAME_EXISTS);
     } else {
       setNameError('');
+      hasNameError = false;
     }
 
     if (!plantingSeasonsValid) {
       setShowSaveValidationErrors(true);
-      hasErrors = true;
     } else {
       setShowSaveValidationErrors(false);
+      hasSeasonsError = false;
     }
 
     if (onValidate) {
-      onValidate(hasErrors);
+      onValidate(hasNameError || hasSeasonsError);
     }
-  }, [onValidate, plantingSeasonsValid, record?.name]);
+  }, [onValidate, plantingSeasonsValid, record?.name, usedNames]);
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
     onChange('timeZone', newTimeZone ? newTimeZone.id : undefined);
@@ -82,7 +106,7 @@ export default function DetailsInputForm({
           type='text'
           onChange={(value) => onChange('name', value)}
           value={record.name}
-          errorText={record.name ? '' : nameError}
+          errorText={nameError}
           autoFocus={true}
         />
       </Grid>
