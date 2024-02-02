@@ -16,6 +16,7 @@ import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
+import { View } from 'src/components/common/ListMapSelector';
 import BoundariesAndZones from './BoundariesAndZones';
 import { useOrganization } from 'src/providers/hooks';
 import Card from 'src/components/common/Card';
@@ -46,6 +47,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const [loaded, setLoaded] = useState(false);
   const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>(undefined);
   const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
+  const [view, setView] = useState<View>('map');
   const selectedPlantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
 
   const defaultPlantingSite = (): PlantingSite => ({
@@ -158,9 +160,8 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
           {loaded && (
             <>
               <Grid
-                container
                 spacing={3}
-                flexGrow={1}
+                flexGrow={view === 'list' ? 0 : 1}
                 display='flex'
                 flexDirection='column'
                 marginTop={theme.spacing(3)}
@@ -189,15 +190,14 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                     setPlantingSeasons={setPlantingSeasons}
                     setRecord={setRecord}
                   />
-                  <Grid container flexGrow={1}>
-                    <Grid item xs={12} display='flex'>
-                      {record?.plantingZones ? (
-                        <BoundariesAndZones plantingSite={record} />
-                      ) : (
+                  {record?.plantingZones && <BoundariesAndZones plantingSite={record} setView={setView} view={view} />}
+                  {!record?.plantingZones && (
+                    <Grid container flexGrow={1}>
+                      <Grid item xs={12} display='flex'>
                         <PlantingSiteMapEditor onBoundaryChanged={onBoundaryChanged} plantingSite={record} />
-                      )}
+                      </Grid>
                     </Grid>
-                  </Grid>
+                  )}
                 </Card>
               </Grid>
             </>
