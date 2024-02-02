@@ -73,9 +73,9 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
     if (onValidate) {
       const missingZones = zones === undefined;
       const zonesTooSmall = !!zonesData?.errorAnnotations?.length;
-
       // check for missing zone names
       const missingZoneNames = !missingZones && zones!.features.some((zone) => !zone?.properties?.name?.trim());
+
       if (zonesTooSmall) {
         snackbar.toastError(strings.SITE_ZONE_BOUNDARIES_TOO_SMALL);
       } else if (missingZoneNames) {
@@ -84,7 +84,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
 
       // populates zones
       let numZones = 0;
-      if (!missingZoneNames && zones) {
+      if (!missingZoneNames && !zonesToSmall && zones) {
         const plantingZones = zones.features
           .map((zone, index) => {
             const { geometry, properties } = zone;
