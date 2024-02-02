@@ -3,7 +3,8 @@ import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import { PlantingSubzone, PlantingZone } from 'src/types/Tracking';
-import { toFeature } from 'src/components/Map/utils';
+import { GeometryFeature } from 'src/types/Map';
+import { cutPolygons, toFeature } from 'src/components/Map/utils';
 
 const SQ_M_TO_HECTARES = 1 / 10000;
 
@@ -139,3 +140,74 @@ export const boundingAreaHectares = (geometry: MultiPolygon | Polygon): number =
  * empty boundary
  */
 export const emptyBoundary = (): FeatureCollection => ({ type: 'FeatureCollection', features: [] });
+
+/**
+ * Utility to select updated feature by diffing old and new states of a feature collections
+ * @param previous
+ *  previous state of a feature collection
+ * @param latest
+ *  latest state of a feature collection
+ * @returns Updated feature if there are new features, otherwise existing feature if present else undefined
+ */
+export const getLatestFeature = (
+  previous?: FeatureCollection,
+  latest?: FeatureCollection
+): GeometryFeature | undefined => {
+  // pick the latest geometry that was drawn
+  const latestFeature =
+    latest?.features && latest.features.length > 1
+      ? latest?.features?.filter((f1) => !previous?.features?.find((f2) => f2.id === f1.id))?.[0]
+      : latest?.features?.[0];
+  return latestFeature as GeometryFeature;
+};
+
+/**
+ * Cut boundaries from an input feature collection of boundaries and an overlay cut geometry
+ * @param source
+ *  input feature collection to further divide into boundaries
+ * @param cutWith
+ *  polygon to use as the cutting boundary overlay
+ * @param errorText
+ *  error message to use in error annotations
+ * @param minimumSideDimension
+ *  minimum side of a square in meters, that needs to be contained within each cut zone (eg. 100 for 100m x 100m)
+ * @param onSuccess
+ *  callback on success, which accepts the new list of cut boundaries
+ * @param onError
+ *  callback when the cut geometries are too small, or there were no new cut geometries due to no overlap,
+ *  callback accepts list of error annotation features
+ */
+export type CutData = {
+  cutWithFeature?: GeometryFeature;
+  errorText: string;
+  minimumSideDimension: number;
+  source?: FeatureCollection;
+};
+export const cutOverlappingBoundaries = (
+  data: CutData,
+  onSuccess: (cutBoundaries: GeometryFeature[]) => void,
+  onError: (errorAnnotations: Feature[]) => void
+) => {
+  const { cutWithFeature, errorText, minimumSideDimension, source } = data;
+  if (!source || !cutWithFeature) {
+    onError([]);
+    return;
+  }
+
+  const minArea = minimumSideDimension * minimumSideDimension * SQ_M_TO_HECTARES;
+
+  // cut new polygons using the cut geometry overlapping the fixed boundaries
+  const cutBoundaries = cutPolygons(source!.features as GeometryFeature[], cutWithFeature!.geometry) || [];
+
+  // check if the cut polygons are too small to be boundaries (in which case, we won't create new fixed boundaries using the cut polygons)
+  // mark them as error annotations instead
+  const boundariesTooSmall = cutBoundaries
+    .filter((boundary) => boundingAreaHectares(boundary.geometry) < minArea) // (stopgap until we have BE supported API for size validation)
+    .map((boundary) => ({ ...boundary, properties: { errorText, fill: true } }));
+
+  if (cutBoundaries.length && !boundariesTooSmall.length) {
+    onSuccess(cutBoundaries);
+  } else {
+    onError(boundariesTooSmall);
+  }
+};

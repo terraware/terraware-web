@@ -14,15 +14,16 @@ import {
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import useSnackbar from 'src/utils/useSnackbar';
 import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
-import { cutPolygons, leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
+import { leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import {
-  boundingAreaHectares,
+  cutOverlappingBoundaries,
   defaultZonePayload,
   emptyBoundary,
+  getLatestFeature,
   IdGenerator,
   plantingZoneToFeature,
   toZoneFeature,
@@ -171,30 +172,11 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
   );
 
   const onEditableBoundaryChanged = (editableBoundary?: FeatureCollection) => {
-    if (!zones) {
-      return;
-    }
-
     // pick the latest geometry that was drawn
-    const cutWithFeature =
-      editableBoundary?.features && editableBoundary.features.length > 1
-        ? editableBoundary?.features?.filter(
-            (f1) => !zonesData?.editableBoundary?.features?.find((f2) => f2.id === f1.id)
-          )?.[0]
-        : editableBoundary?.features?.[0];
+    const cutWithFeature = getLatestFeature(zonesData?.editableBoundary, editableBoundary);
 
-    // cut new polygons using the edited geometry on the fixed zones
-    const cutZones = cutWithFeature?.geometry
-      ? cutPolygons(zones.features as GeometryFeature[], cutWithFeature!.geometry) || []
-      : [];
-
-    // check if the cut polygons are too small to be zones (in which case, we won't create new fixed zones using the cut polygons)
-    // mark them as error annotations instead
-    const zonesTooSmall = cutZones
-      .filter((zone) => boundingAreaHectares(zone.geometry) < 1) // 100m x 100m in hectares (stopgap until we have BE supported API for size validation)
-      .map((zone) => ({ ...zone, properties: { errorText: strings.SITE_ZONE_BOUNDARY_TOO_SMALL, fill: true } }));
-
-    if (cutZones.length && !zonesTooSmall.length) {
+    // update state with cut zones on success
+    const onSuccess = (cutZones: GeometryFeature[]) => {
       // if it is feasible to cut zones without making them too small, create new fixed zone boundaries and clear the cut geometry
       const idGenerator = IdGenerator(cutZones);
       const zonesWithIds = cutZones.map((zone) => toZoneFeature(zone, idGenerator)) as GeometryFeature[];
@@ -222,15 +204,30 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
       } else {
         setOverridePopupInfo(undefined);
       }
-    } else {
+    };
+
+    // update state with error annotations and keep existing editable boundary so user can edit/correct it
+    const onError = (errors: Feature[]) => {
       // no zones were cut either because there were no overlaps or they could have been too small
       // set error annotations that were created and keep the cut geometry in case user wants to re-edit the geometry
       setZonesData((prev) => ({
         ...prev,
         editableBoundary: cutWithFeature ? { type: 'FeatureCollection', features: [cutWithFeature] } : emptyBoundary(),
-        errorAnnotations: zonesTooSmall,
+        errorAnnotations: errors,
       }));
-    }
+    };
+
+    cutOverlappingBoundaries(
+      {
+        cutWithFeature,
+        errorText: strings.SITE_ZONE_BOUNDARY_TOO_SMALL,
+        minimumSideDimension: 100,
+        source: zones,
+      },
+      onSuccess,
+      onError
+    );
+
     return;
   };
 
