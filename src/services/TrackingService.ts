@@ -337,18 +337,18 @@ async function searchMonitoringPlots(
  * Exported functions
  */
 const TrackingService = {
-  listPlantingSites,
   createPlantingSite,
-  getPlantingSite,
-  updatePlantingSite,
   deletePlantingSite,
   getDelivery,
-  reassignPlantings,
-  getTotalPlantsInZones,
-  getTotalPlantsInSite,
+  getPlantingSite,
   getReportedPlants,
-  searchPlantingSites,
+  getTotalPlantsInSite,
+  getTotalPlantsInZones,
+  listPlantingSites,
+  reassignPlantings,
   searchMonitoringPlots,
+  searchPlantingSites,
+  updatePlantingSite,
 };
 
 export default TrackingService;
