@@ -1,3 +1,5 @@
+b97722043b Updated translations from Phrase (#2123)
+0c9864f189 SW-4686 Error handling when user drawn boundary is too large (#2113)
 3edac29f04 Updated translations from Phrase (#2122)
 ef138dad0e SW-4792 Use flex/grow for map views (#2099)
 6b3824936a SW-4800 Let user know if a site name is in use, when editing the site name (#2114)

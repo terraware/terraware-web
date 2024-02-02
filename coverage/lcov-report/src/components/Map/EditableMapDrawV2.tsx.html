@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/95</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/53</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/94</span>
             </div>
         
             
@@ -303,7 +303,13 @@
 <a name='L238'></a><a href='#L238'>238</a>
 <a name='L239'></a><a href='#L239'>239</a>
 <a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -397,6 +403,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -517,7 +524,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -533,12 +539,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -636,7 +648,8 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const [mapRef, setMapRef] = <span class="cstat-no" title="statement not covered" >useState&lt;MapRef&gt;();</span>
   const [drawMode, setDrawMode] = <span class="cstat-no" title="statement not covered" >useState&lt;DrawMode&gt;();</span>
   const [selection, setSelection] = <span class="cstat-no" title="statement not covered" >useState&lt;Feature&gt;();</span>
-  const [initializedGeometry, setInitializedGeometry] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const [initializedGeometry, setInitializedGeometry] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
+  const [loaded, setLoaded] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
 &nbsp;
   // Need ts-ignore because the draw control's event types are added by the draw plugin and aren't
   // included in the type definitions for the first arguments of MapRef.on() and MapRef.off().
@@ -757,7 +770,6 @@ export default function <span class="fstat-no" title="function not covered" >Edi
 &nbsp;
   const populateGeometry = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const currentFeatureCollection = <span class="cstat-no" title="statement not covered" >{ type: 'FeatureCollection', features: draw.getAll().features };</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!boundary?.features.length) {</span>
 <span class="cstat-no" title="statement not covered" >      if (draw.getAll().features.some(<span class="fstat-no" title="function not covered" >(f</span>eature: Feature) =&gt; <span class="cstat-no" title="statement not covered" >featureHasCoordinates(feature))</span>) {</span>
 <span class="cstat-no" title="statement not covered" >        draw.deleteAll();</span>
@@ -773,13 +785,19 @@ export default function <span class="fstat-no" title="function not covered" >Edi
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (mapRef?.loaded()) {</span>
-<span class="cstat-no" title="statement not covered" >      populateGeometry();</span>
+<span class="cstat-no" title="statement not covered" >      setLoaded(true);</span>
     } else {
-<span class="cstat-no" title="statement not covered" >      mapRef?.on('load', populateGeometry);</span>
+<span class="cstat-no" title="statement not covered" >      mapRef?.on('load', <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setLoaded(true))</span>;</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    mapRef?.on('draw.delete', switchToPolygonModeIfFeatureDeleted);</span>
-  }, [mapRef, populateGeometry, switchToPolygonModeIfFeatureDeleted]);
+  }, [mapRef, switchToPolygonModeIfFeatureDeleted]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (loaded) {</span>
+<span class="cstat-no" title="statement not covered" >      populateGeometry();</span>
+    }
+  }, [loaded, populateGeometry]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return null;</span>
 }
@@ -790,7 +808,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-02T17:50:25.260Z
+                at 2024-02-02T19:47:51.266Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
