@@ -18,6 +18,7 @@ import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent'
 import Card from 'src/components/common/Card';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import { View } from 'src/components/common/ListMapSelector';
 import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
 import ObservationsDataView from './ObservationsDataView';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
@@ -34,6 +35,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
+  const [view, setView] = useState<View>();
   const plantingSites = useAppSelector(selectPlantingSites);
   const observationsResults = useAppSelector((state) =>
     selectPlantingSiteObservationsResults(state, selectedPlantingSite?.id ?? -1, ['Completed', 'InProgress', 'Overdue'])
@@ -75,17 +77,18 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
 
   return (
     <PlantsPrimaryPage
-      title={strings.OBSERVATIONS}
-      onSelect={onSelect}
-      pagePath={APP_PATHS.OBSERVATIONS_SITE}
-      lastVisitedPreferenceName='plants.observations.lastVisitedPlantingSite'
-      plantsSitePreferences={plantsSitePreferences}
-      setPlantsSitePreferences={onPreferences}
+      actionButton={actionButton}
       allowAllAsSiteSelection={true}
       isEmptyState={!plantingSites?.length || !observationsResults?.length}
-      actionButton={actionButton}
+      lastVisitedPreferenceName='plants.observations.lastVisitedPlantingSite'
+      onSelect={onSelect}
+      pagePath={APP_PATHS.OBSERVATIONS_SITE}
+      plantsSitePreferences={plantsSitePreferences}
+      setPlantsSitePreferences={onPreferences}
+      style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
+      title={strings.OBSERVATIONS}
     >
-      <Box>
+      <Box display='flex' flexGrow={1} flexDirection='column'>
         <ObservationsEventsNotification events={upcomingObservations} />
         {observationsResults === undefined ? (
           <CircularProgress sx={{ margin: 'auto' }} />
@@ -93,6 +96,8 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
           <ObservationsDataView
             selectedPlantingSiteId={selectedPlantingSite.id}
             selectedPlantingSite={selectedPlantingSite}
+            setView={setView}
+            view={view}
             {...props}
           />
         ) : (

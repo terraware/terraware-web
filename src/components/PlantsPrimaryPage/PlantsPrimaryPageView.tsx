@@ -15,25 +15,27 @@ export type ButtonProps = {
 };
 
 export type PlantsPrimaryPageViewProps = {
-  title: string;
-  text?: string; // optional text to show at the bottom of the header
+  actionButton?: ButtonProps;
   children: React.ReactNode; // primary content for this page
+  isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
+  onSelect: (plantingSite: PlantingSite) => void; // planting site selected, id of -1 refers to All
   plantingSites: PlantingSite[] | undefined;
   selectedPlantingSiteId?: number;
-  onSelect: (plantingSite: PlantingSite) => void; // planting site selected, id of -1 refers to All
-  isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
-  actionButton?: ButtonProps;
+  style?: Record<string, string | number>;
+  text?: string; // optional text to show at the bottom of the header
+  title: string;
 };
 
 export default function PlantsPrimaryPageView({
-  title,
-  text,
+  actionButton,
   children,
+  isEmptyState,
+  onSelect,
   plantingSites,
   selectedPlantingSiteId,
-  onSelect,
-  isEmptyState,
-  actionButton,
+  style,
+  text,
+  title,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -124,7 +126,9 @@ export default function PlantsPrimaryPageView({
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      <Box ref={contentRef}>{children}</Box>
+      <Box ref={contentRef} sx={style}>
+        {children}
+      </Box>
     </TfMain>
   );
 }

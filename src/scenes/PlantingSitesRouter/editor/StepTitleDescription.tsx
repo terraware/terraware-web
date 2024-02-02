@@ -75,7 +75,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           display='flex'
           alignItems='center'
           key={index}
-          fontSize={line.isBold || line.isWarning ? '16px' : '14px'}
+          fontSize='14px'
           fontWeight={line.isBold ? 600 : 400}
           lineHeight='20px'
           color={line.isWarning ? theme.palette.TwClrIcnWarning : theme.palette.TwClrTxt}
