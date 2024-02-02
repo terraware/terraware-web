@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/66</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/60</span>
             </div>
         
             
@@ -276,7 +276,11 @@
 <a name='L211'></a><a href='#L211'>211</a>
 <a name='L212'></a><a href='#L212'>212</a>
 <a name='L213'></a><a href='#L213'>213</a>
-<a name='L214'></a><a href='#L214'>214</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -315,7 +319,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -333,6 +338,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -525,10 +533,11 @@ export const useMapTooltipStyles = <span class="cstat-no" title="statement not c
 &nbsp;
 type BoundariesAndZonesProps = {
   plantingSite: PlantingSite;
+  setView?: (view: View) =&gt; void;
+  view?: View;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >BoundariesAndZones(</span>{ plantingSite }: BoundariesAndZonesProps): JSX.Element {
-  const [view, setView] = <span class="cstat-no" title="statement not covered" >useState&lt;View&gt;('map');</span>
+export default function <span class="fstat-no" title="function not covered" >BoundariesAndZones(</span>{ plantingSite, setView, view }: BoundariesAndZonesProps): JSX.Element {
   const [search, setSearch] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -546,7 +555,7 @@ export default function <span class="fstat-no" title="function not covered" >Bou
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Box display='flex' flexGrow={plantingSite?.boundary ? 1 : 0} flexDirection='column'&gt;
+    &lt;Box sx={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}&gt;
       &lt;Box display='flex' flexGrow={0}&gt;
         &lt;Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}&gt;
           {strings.BOUNDARIES_AND_ZONES}
@@ -554,9 +563,12 @@ export default function <span class="fstat-no" title="function not covered" >Bou
       &lt;/Box&gt;
       {plantingSite.boundary &amp;&amp; (
         &lt;ListMapView
-          style={{ padding: isMobile ? theme.spacing(0, 3, 3) : 0 }}
-          initialView='map'
-          onView={<span class="fstat-no" title="function not covered" >(n</span>ewView) =&gt; <span class="cstat-no" title="statement not covered" >setView(newView)}</span>
+          style={{
+            padding: isMobile ? theme.spacing(0, 3, 3) : 0,
+            ...(view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : {}),
+          }}
+          initialView={'map'}
+          onView={<span class="fstat-no" title="function not covered" >(n</span>ewView) =&gt; <span class="cstat-no" title="statement not covered" >setView?.(newView)}</span>
           search={&lt;Search {...searchProps} /&gt;}
           list={&lt;PlantingSiteDetailsTable data={data} plantingSite={plantingSite} /&gt;}
           map={&lt;PlantingSiteMapView plantingSite={plantingSite} data={data} search={search.trim()} /&gt;}
@@ -709,7 +721,7 @@ const contextRenderer =
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-02T16:16:34.547Z
+                at 2024-02-02T16:36:27.849Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
