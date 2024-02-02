@@ -14,12 +14,20 @@ import {
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import useSnackbar from 'src/utils/useSnackbar';
 import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
-import { cutPolygons, leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
+import { leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import StepTitleDescription, { Description } from './StepTitleDescription';
-import { defaultZonePayload, IdGenerator, plantingZoneToFeature, toZoneFeature } from './utils';
+import {
+  cutOverlappingBoundaries,
+  defaultZonePayload,
+  emptyBoundary,
+  getLatestFeature,
+  IdGenerator,
+  plantingZoneToFeature,
+  toZoneFeature,
+} from './utils';
 import useStyles from './useMapStyle';
 
 export type ZonesProps = {
@@ -37,29 +45,46 @@ const featureSiteZones = (site: PlantingSite): FeatureCollection | undefined => 
   }
 };
 
+// data type for undo/redo state
+// needs to capture zone edit boundary, error annotations and zones created
+type Stack = {
+  editableBoundary?: FeatureCollection;
+  errorAnnotations?: Feature[];
+  fixedBoundaries?: FeatureCollection;
+};
+
 export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.Element {
-  const [zones, setZones, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(featureSiteZones(site));
+  const [zonesData, setZonesData, undo, redo] = useUndoRedoState<Stack>({
+    editableBoundary: emptyBoundary(),
+    errorAnnotations: [],
+    fixedBoundaries: featureSiteZones(site),
+  });
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const classes = useStyles();
   const theme = useTheme();
   const snackbar = useSnackbar();
   const getRenderAttributes = useRenderAttributes();
 
+  const zones = useMemo<FeatureCollection | undefined>(() => zonesData?.fixedBoundaries, [zonesData?.fixedBoundaries]);
+
   useEffect(() => {
     // TODO: use new BE API when it is ready, to populate the zones for creation with
     // right now this onChange does nothing but allow us to move to next phase of subzones cutting
     if (onValidate) {
       const missingZones = zones === undefined;
-
+      const zonesTooSmall = !!zonesData?.errorAnnotations?.length;
       // check for missing zone names
       const missingZoneNames = !missingZones && zones!.features.some((zone) => !zone?.properties?.name?.trim());
-      if (missingZoneNames) {
+
+      if (zonesTooSmall) {
+        snackbar.toastError(strings.SITE_ZONE_BOUNDARIES_TOO_SMALL);
+      } else if (missingZoneNames) {
         snackbar.toastError(strings.SITE_ZONE_NAMES_MISSING);
       }
 
       // populates zones
       let numZones = 0;
-      if (!missingZoneNames && zones) {
+      if (!missingZoneNames && !zonesTooSmall && zones) {
         const plantingZones = zones.features
           .map((zone, index) => {
             const { geometry, properties } = zone;
@@ -83,9 +108,9 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
 
       // callback with status of error and completion of this step
       const completed = numZones > 1;
-      onValidate(missingZones || missingZoneNames, completed);
+      onValidate(missingZones || missingZoneNames || zonesTooSmall, completed);
     }
-  }, [onChange, onValidate, snackbar, zones]);
+  }, [onChange, onValidate, snackbar, zones, zonesData?.errorAnnotations]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!zones?.features) {
@@ -138,46 +163,71 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         hasTutorial: true,
         handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
       },
+      {
+        text: strings.SITE_ZONE_BOUNDARIES_SIZE,
+        isBold: true,
+      },
     ],
     []
   );
 
-  const onEditableBoundaryChanged = (featureCollection?: FeatureCollection) => {
-    if (!zones) {
-      return;
-    }
+  const onEditableBoundaryChanged = (editableBoundary?: FeatureCollection) => {
+    // pick the latest geometry that was drawn
+    const cutWithFeature = getLatestFeature(zonesData?.editableBoundary, editableBoundary);
 
-    const cutWith = featureCollection?.features?.[0]?.geometry;
-    if (cutWith) {
-      const cutZones = cutPolygons(zones.features as GeometryFeature[], cutWith);
+    // update state with cut zones on success
+    const onSuccess = (cutZones: GeometryFeature[]) => {
+      // if it is feasible to cut zones without making them too small, create new fixed zone boundaries and clear the cut geometry
+      const idGenerator = IdGenerator(cutZones);
+      const zonesWithIds = cutZones.map((zone) => toZoneFeature(zone, idGenerator)) as GeometryFeature[];
 
-      if (cutZones) {
-        const idGenerator = IdGenerator(cutZones);
-        const zonesWithIds = cutZones.map((zone) => toZoneFeature(zone, idGenerator)) as GeometryFeature[];
-
-        setZones({
+      setZonesData({
+        editableBoundary: emptyBoundary(),
+        errorAnnotations: [],
+        fixedBoundaries: {
           type: 'FeatureCollection',
           features: zonesWithIds,
+        },
+      });
+
+      const leftMostNewZone = leftMostFeature(zonesWithIds.filter((unused, index) => cutZones[index].id === undefined));
+
+      if (leftMostNewZone) {
+        const { feature: zone, center: mid } = leftMostNewZone;
+        setOverridePopupInfo({
+          id: zone.id,
+          lng: mid[0],
+          lat: mid[1],
+          properties: zone.properties,
+          sourceId: 'zone',
         });
-
-        const leftMostNewZone = leftMostFeature(
-          zonesWithIds.filter((unused, index) => cutZones[index].id === undefined)
-        );
-
-        if (leftMostNewZone) {
-          const { feature: zone, center: mid } = leftMostNewZone;
-          setOverridePopupInfo({
-            id: zone.id,
-            lng: mid[0],
-            lat: mid[1],
-            properties: zone.properties,
-            sourceId: 'zone',
-          });
-        } else {
-          setOverridePopupInfo(undefined);
-        }
+      } else {
+        setOverridePopupInfo(undefined);
       }
-    }
+    };
+
+    // update state with error annotations and keep existing editable boundary so user can edit/correct it
+    const onError = (errors: Feature[]) => {
+      // no zones were cut either because there were no overlaps or they could have been too small
+      // set error annotations that were created and keep the cut geometry in case user wants to re-edit the geometry
+      setZonesData((prev) => ({
+        ...prev,
+        editableBoundary: cutWithFeature ? { type: 'FeatureCollection', features: [cutWithFeature] } : emptyBoundary(),
+        errorAnnotations: errors,
+      }));
+    };
+
+    cutOverlappingBoundaries(
+      {
+        cutWithFeature,
+        errorText: strings.SITE_ZONE_BOUNDARY_TOO_SMALL,
+        minimumSideDimension: 100,
+        source: zones,
+      },
+      onSuccess,
+      onError
+    );
+
     return;
   };
 
@@ -211,7 +261,10 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
           }
           zone.properties.name = nameVal;
           zone.properties.targetPlantingDensity = targetPlantingDensityVal;
-          setZones(updatedZones);
+          setZonesData((prev) => ({
+            ...prev,
+            fixeBoundaries: updatedZones,
+          }));
           close();
         };
 
@@ -232,7 +285,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         );
       },
     }),
-    [classes.box, classes.tooltip, setZones, zones]
+    [classes.box, classes.tooltip, setZonesData, zones]
   );
 
   return (
@@ -246,7 +299,8 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}
       />
       <EditableMap
-        clearOnEdit
+        editableBoundary={zonesData?.editableBoundary}
+        errorAnnotations={zonesData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}
         onEditableBoundaryChanged={onEditableBoundaryChanged}
         onRedo={redo}

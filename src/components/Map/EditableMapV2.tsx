@@ -156,6 +156,7 @@ export default function EditableMap({
       >
         {drawingLayer.errorText && <Layer {...drawingLayer.errorText} />}
         {drawingLayer.errorLine && <Layer {...drawingLayer.errorLine} />}
+        {drawingLayer.errorFill && <Layer {...drawingLayer.errorFill} />}
       </Source>
     );
   }, [errorAnnotations, theme]);

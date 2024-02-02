@@ -90,6 +90,15 @@ export const getMapErrorLayer = (theme: Theme, id: string): MapErrorLayer => ({
       'line-width': 1,
     },
   },
+  errorFill: {
+    id: `error-fill-${id}`,
+    type: 'fill',
+    filter: ['all', ['==', '$type', 'Polygon']],
+    paint: {
+      'fill-color': ['case', ['==', ['get', 'fill'], true], theme.palette.TwClrTxtDanger, 'transparent'],
+      'fill-opacity': ['case', ['==', ['get', 'fill'], true], 0.15, 0],
+    },
+  },
 });
 
 export const getMapDrawingLayer = (source: MapSourceRenderProperties, sourceId: string): MapDrawingLayer => {

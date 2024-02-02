@@ -77,13 +77,30 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
         return;
       } else {
         onChange('boundary', boundary);
-        onChange('plantingZones', [
-          defaultZonePayload({ boundary, id: 0, name: isSimpleSite ? strings.ZONE : '', targetPlantingDensity: 1500 }),
-        ]);
+        if (site.id !== -1) {
+          onChange('plantingZones', [
+            defaultZonePayload({
+              boundary,
+              id: 0,
+              name: isSimpleSite ? strings.ZONE : '',
+              targetPlantingDensity: 1500,
+            }),
+          ]);
+        }
         onValidate(false);
       }
     }
-  }, [boundary, boundingArea, boundingAreaTooLarge, isSimpleSite, onChange, onValidate, siteBoundary, snackbar]);
+  }, [
+    boundary,
+    boundingArea,
+    boundingAreaTooLarge,
+    isSimpleSite,
+    onChange,
+    onValidate,
+    site.id,
+    siteBoundary,
+    snackbar,
+  ]);
 
   useEffect(() => {
     const data: Description[] = [
