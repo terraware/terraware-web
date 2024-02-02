@@ -84,7 +84,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
 
       // populates zones
       let numZones = 0;
-      if (!missingZoneNames && !zonesToSmall && zones) {
+      if (!missingZoneNames && !zonesTooSmall && zones) {
         const plantingZones = zones.features
           .map((zone, index) => {
             const { geometry, properties } = zone;
