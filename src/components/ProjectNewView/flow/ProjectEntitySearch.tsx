@@ -50,7 +50,7 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
             initialSelection: filters.projectIds || [],
             filterKey: 'projectIds',
             options: projects?.map((project) => project.id) || [],
-            renderOption: (projectId: string | number) =>
+            renderOption: (projectId: string | number | null) =>
               (projects || []).find((project) => project.id === projectId)?.name || '',
             pillModifier: (_filters: ProjectEntityFilters): PillListItemWithEmptyValue[] => {
               const projectIds = _filters.projectIds || [];
@@ -62,10 +62,13 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
                 {
                   id: 'projectIds',
                   label: strings.PROJECT,
-                  value: projectIds
-                    .map((projectId: number) => (projects || []).find((project) => project.id === projectId))
-                    .map((project) => project?.name)
-                    .join(','),
+                  value:
+                    projectIds[0] === null
+                      ? strings.NO_PROJECT
+                      : projectIds
+                          .map((projectId: number) => (projects || []).find((project) => project.id === projectId))
+                          .map((project) => project?.name)
+                          .join(','),
                   emptyValue: [],
                 },
               ];

@@ -81,7 +81,7 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
           field: 'project_id',
           operation: 'field',
           type: 'Exact',
-          values: projectIds.map((projectId: number) => `${projectId}`),
+          values: projectIds.map((id: number | null) => (id === null ? id : `${id}`)),
         });
       }
 
