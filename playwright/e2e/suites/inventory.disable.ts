@@ -6,9 +6,6 @@ const waitFor = async (page, selector, timeout = 3000) => {
   await page.waitForSelector(selector, { timeout });
 };
 
-//ADE not sure what this is for?
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
 test.setTimeout(60000);
 test.beforeEach(async ({ context }, testInfo) => {
   // Make all requests look like they are associated with an existing login session
