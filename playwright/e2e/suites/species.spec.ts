@@ -19,7 +19,7 @@ test.beforeEach(async ({ context }, testInfo) => {
 test('Add A Species', async ({ page }, testInfo) => {
   await page.goto('http://127.0.0.1:3000');
 
-  const newSpeciesName = `Acacia koa-${new Date().getTime()}`;
+  const newSpeciesName = `Acacia koa-${process.env.TEST_WORKER_INDEX}`;
 
   await waitFor(page, '#home');
 
