@@ -116,7 +116,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         operation: 'field',
         field: 'project_id',
         type: 'Exact',
-        values: filters.projectIds.map((id) => id.toString()),
+        values: filters.projectIds.map((id) => (id === null ? id : id.toString())),
       });
     }
 
