@@ -107,7 +107,7 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
             return defaultZonePayload({
               boundary: zoneBoundary,
               id: index,
-              name: isSimpleSite || true ? `${strings.ZONE}${index || ''}` : '',
+              name: isSimpleSite ? `${strings.ZONE}${index || ''}` : '',
               targetPlantingDensity: 1500,
             });
           });
