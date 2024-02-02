@@ -79,15 +79,7 @@ export default function EditableMap({ boundary, onBoundaryChanged, style }: Edit
   };
 
   return (
-    <Box
-      ref={containerRef}
-      display='flex'
-      flexDirection='column'
-      flexGrow={1}
-      height='100%'
-      width='100%'
-      sx={{ minHeight: 250, position: 'relative' }}
-    >
+    <Box ref={containerRef} display='flex' flexDirection='column' flexGrow={1}>
       {firstVisible && (
         <>
           <Typography fontSize='16px' margin={theme.spacing(1, 0)} minHeight='4em'>
@@ -100,12 +92,11 @@ export default function EditableMap({ boundary, onBoundaryChanged, style }: Edit
             mapboxAccessToken={token}
             mapStyle={MapViewStyles[mapViewStyle]}
             style={{
-              position: 'relative',
-              width: '100%',
-              height: '100%',
               display: 'flex',
               flexGrow: '1',
               flexDirection: 'column',
+              height: 'auto',
+              minHeight: '436px',
               ...style,
             }}
             initialViewState={initialViewState}

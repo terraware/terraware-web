@@ -9,6 +9,7 @@ import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
 import ListMapView from 'src/components/ListMapView';
+import { View } from 'src/components/common/ListMapSelector';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import OrgObservationsListView from './org/OrgObservationsListView';
 import ObservationMapView from './map/ObservationMapView';
@@ -17,10 +18,12 @@ export type ObservationsDataViewProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
   selectedPlantingSiteId: number;
   selectedPlantingSite?: PlantingSite;
+  setView: (view: View) => void;
+  view?: View;
 };
 
 export default function ObservationsDataView(props: ObservationsDataViewProps): JSX.Element {
-  const { selectedPlantingSiteId, selectedPlantingSite, setFilterOptions } = props;
+  const { selectedPlantingSiteId, selectedPlantingSite, setFilterOptions, setView, view } = props;
   const { ...searchProps }: SearchProps = props;
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
@@ -79,7 +82,6 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   return (
     <ListMapView
       initialView='list'
-      search={<Search {...searchProps} />}
       list={
         <OrgObservationsListView observationsResults={observationsResults} plantingSiteId={selectedPlantingSiteId} />
       }
@@ -94,6 +96,9 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
           <AllPlantingSitesMapView />
         )
       }
+      onView={setView}
+      search={<Search {...searchProps} />}
+      style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
     />
   );
 }
