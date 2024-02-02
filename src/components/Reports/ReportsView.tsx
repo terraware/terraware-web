@@ -134,7 +134,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
 
   const reportsToComplete = useMemo(() => results.filter((report) => report.status !== 'Submitted'), [results]);
 
-  return reportsSettings && !reportsSettings?.isConfigured ? (
+  return reportsSettings && results.length === 0 && !reportsSettings?.isConfigured ? (
     <PreSetupView />
   ) : (
     <TfMain>

@@ -1,8 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import Icon from 'src/components/common/icon/Icon';
+import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import Icon from 'src/components/common/icon/Icon';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
 import { PillListItemWithEmptyValue } from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
@@ -48,7 +50,7 @@ export interface EntitySpecificFilterConfig {
   label: string;
   initialSelection: (string | number)[];
   options: (string | number)[];
-  renderOption: (value: string | number) => string;
+  renderOption: (value: string | number | null) => string;
   pillModifier: (filters: ProjectEntityFilters) => PillListItemWithEmptyValue[];
 }
 
@@ -62,6 +64,7 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
   const { label, initialSelection, filterKey, options, renderOption } = filterConfig;
 
   const { isMobile } = useDeviceInfo();
+  const { activeLocale } = useLocalization();
   const classes = useStyles({ isMobile });
 
   const [anchorEl, setAnchorEl] = useState<undefined | HTMLElement>();
@@ -71,7 +74,7 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
   const handleClose = useCallback(() => setAnchorEl(undefined), []);
 
   const handleConfirm = useCallback(
-    (selected: (number | string)[]) => {
+    (selected: (number | string | null)[]) => {
       handleClose();
       setFilters({ [filterKey]: selected });
     },
@@ -79,6 +82,17 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
   );
 
   const isOpen = Boolean(anchorEl);
+
+  const notPresentFilterConfig = useMemo(
+    () =>
+      filterKey === 'projectIds' && activeLocale
+        ? {
+            notPresentFilterLabel: strings.NO_PROJECT,
+            notPresentFilterShown: true,
+          }
+        : {},
+    [filterKey, activeLocale]
+  );
 
   return (
     <div>
@@ -89,12 +103,14 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
       {isMobile && isOpen ? (
         <div className={classes.mobileContainer}>
           <FilterMultiSelect
-            label={label}
+            filterKey={filterKey}
             initialSelection={initialSelection}
+            label={label}
             onCancel={handleClose}
             onConfirm={(selected) => handleConfirm(selected)}
             options={options}
             renderOption={renderOption}
+            {...notPresentFilterConfig}
           />
         </div>
       ) : (
@@ -114,12 +130,14 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
           className={classes.popoverContainer}
         >
           <FilterMultiSelect
-            label={label}
+            filterKey={filterKey}
             initialSelection={initialSelection}
+            label={label}
             onCancel={handleClose}
             onConfirm={(selected) => handleConfirm(selected)}
             options={options}
             renderOption={renderOption}
+            {...notPresentFilterConfig}
           />
         </Popover>
       )}

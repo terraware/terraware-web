@@ -3,7 +3,8 @@ import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectC
 
 export type InventoryFiltersType = {
   facilityIds?: number[];
-  projectIds?: number[];
+  // Allows for the "No Project" filter (also known as "not present" filter, IE the field is not present)
+  projectIds?: (number | null)[];
   speciesIds?: number[];
   subLocationsIds?: number[];
 };
@@ -16,27 +17,41 @@ type InventoryFiltersBooleanType = {
 export type InventoryFiltersUnion = InventoryFiltersType & InventoryFiltersBooleanType;
 
 type InventoryFilterProps = {
-  filters: InventoryFiltersType;
-  setFilters: (f: InventoryFiltersType) => void;
-  label: string;
   disabled?: boolean;
   filterKey: keyof InventoryFiltersType;
+  filters: InventoryFiltersType;
+  label: string;
+  notPresentFilterLabel?: string;
+  notPresentFilterShown?: boolean;
   options: number[];
   renderOption: (id: number) => string;
+  setFilters: (f: InventoryFiltersType) => void;
 };
 
 export default function InventoryFilter(props: InventoryFilterProps): JSX.Element {
-  const { filters, setFilters, label, disabled, filterKey, options, renderOption } = props;
+  const {
+    disabled,
+    filterKey,
+    filters,
+    label,
+    notPresentFilterLabel,
+    notPresentFilterShown,
+    options,
+    renderOption,
+    setFilters,
+  } = props;
 
   return (
     <FilterMultiSelectContainer<InventoryFiltersType>
-      filters={filters}
-      setFilters={setFilters}
-      label={label}
-      filterKey={filterKey}
-      options={options}
-      renderOption={renderOption}
       disabled={disabled}
+      filterKey={filterKey}
+      filters={filters}
+      label={label}
+      options={options}
+      notPresentFilterLabel={notPresentFilterLabel}
+      notPresentFilterShown={notPresentFilterShown}
+      renderOption={renderOption}
+      setFilters={setFilters}
     />
   );
 }
