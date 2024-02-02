@@ -132,7 +132,7 @@ export default function Search<T extends { facilityInventories?: string }>(props
   );
 
   const getProjectName = useCallback(
-    (projectId: number) => (projects || []).find((p) => p.id === projectId)?.name,
+    (projectId: number | null) => (projects || []).find((p) => p.id === projectId)?.name,
     [projects]
   );
 
@@ -160,10 +160,11 @@ export default function Search<T extends { facilityInventories?: string }>(props
     }
 
     if (showProjectsFilter && filters.projectIds?.length) {
+      const notPresentFilter = (filters.projectIds || [])[0] === null;
       data.push({
         id: 'projectIds',
         label: strings.PROJECTS,
-        value: filters.projectIds?.map(getProjectName).join(', ') ?? '',
+        value: notPresentFilter ? strings.NO_PROJECT : filters.projectIds?.map(getProjectName).join(', ') ?? '',
         emptyValue: [],
       });
     }
@@ -299,7 +300,9 @@ export default function Search<T extends { facilityInventories?: string }>(props
             label={strings.PROJECT}
             filterKey='projectIds'
             options={(projects || []).map((n: Project) => n.id)}
-            renderOption={(id: number) => (projects || []).find((n) => n.id === id)?.name ?? ''}
+            renderOption={(id: number) => (id ? (projects || []).find((n) => n.id === id)?.name ?? '' : '')}
+            notPresentFilterShown
+            notPresentFilterLabel={strings.NO_PROJECT}
           />
         )}
 

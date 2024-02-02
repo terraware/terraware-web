@@ -176,13 +176,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 showCheckbox={true}
                 showTopBar={true}
                 topBarButtons={[
-                  {
-                    buttonType: 'passive',
-                    buttonText: strings.WITHDRAW,
-                    onButtonClick: withdrawInventory,
-                    disabled: !isSelectionWithdrawable(),
-                    tooltipTitle: withdrawTooltip,
-                  },
                   ...(featureFlagProjects && allowSelectionProjectAssign
                     ? [
                         <ProjectAssignTopBarButton
@@ -194,6 +187,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                         />,
                       ]
                     : []),
+                  {
+                    buttonType: 'passive',
+                    buttonText: strings.WITHDRAW,
+                    onButtonClick: withdrawInventory,
+                    disabled: !isSelectionWithdrawable(),
+                    tooltipTitle: withdrawTooltip,
+                  },
                 ]}
                 sortHandler={onSortChange}
                 isPresorted={isPresorted}

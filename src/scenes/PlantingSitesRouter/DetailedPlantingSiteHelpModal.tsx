@@ -2,7 +2,7 @@ import strings from 'src/strings';
 import React from 'react';
 import { Typography } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
-import TextWithLink from '../common/TextWithLink';
+import TextWithLink from 'src/components/common/TextWithLink';
 import { useDocLinks } from 'src/docLinks';
 
 export type DetailedPlantingSiteHelpModalProps = {
