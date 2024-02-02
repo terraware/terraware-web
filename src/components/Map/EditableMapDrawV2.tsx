@@ -91,7 +91,8 @@ export default function EditableMapDraw({
   const [mapRef, setMapRef] = useState<MapRef>();
   const [drawMode, setDrawMode] = useState<DrawMode>();
   const [selection, setSelection] = useState<Feature>();
-  const [initializedGeometry, setInitializedGeometry] = useState(false);
+  const [initializedGeometry, setInitializedGeometry] = useState<boolean>(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   // Need ts-ignore because the draw control's event types are added by the draw plugin and aren't
   // included in the type definitions for the first arguments of MapRef.on() and MapRef.off().
@@ -212,7 +213,6 @@ export default function EditableMapDraw({
 
   const populateGeometry = useCallback(() => {
     const currentFeatureCollection = { type: 'FeatureCollection', features: draw.getAll().features };
-
     if (!boundary?.features.length) {
       if (draw.getAll().features.some((feature: Feature) => featureHasCoordinates(feature))) {
         draw.deleteAll();
@@ -228,13 +228,19 @@ export default function EditableMapDraw({
 
   useEffect(() => {
     if (mapRef?.loaded()) {
-      populateGeometry();
+      setLoaded(true);
     } else {
-      mapRef?.on('load', populateGeometry);
+      mapRef?.on('load', () => setLoaded(true));
     }
 
     mapRef?.on('draw.delete', switchToPolygonModeIfFeatureDeleted);
-  }, [mapRef, populateGeometry, switchToPolygonModeIfFeatureDeleted]);
+  }, [mapRef, switchToPolygonModeIfFeatureDeleted]);
+
+  useEffect(() => {
+    if (loaded) {
+      populateGeometry();
+    }
+  }, [loaded, populateGeometry]);
 
   return null;
 }
