@@ -9,19 +9,20 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import PlantsPrimaryPageView, { ButtonProps } from './PlantsPrimaryPageView';
 
 export type PlantsPrimaryPageProps = {
-  title: string;
-  text?: string;
+  actionButton?: ButtonProps;
+  allowAllAsSiteSelection?: boolean; // whether to support 'All' as a planting site selection
   children: React.ReactNode; // primary content for this page
+  isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
+  lastVisitedPreferenceName: string;
   onSelect: (plantingSite: PlantingSite) => void; // planting site selected, id of -1 refers to All
   pagePath: string;
-  lastVisitedPreferenceName: string;
   plantsSitePreferences?: Record<string, unknown>;
-  setPlantsSitePreferences: (preferences: Record<string, unknown>) => void;
-  allowAllAsSiteSelection?: boolean; // whether to support 'All' as a planting site selection
-  isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
   // this is to allow redux based components to pass in already selected data
   plantingSitesData?: PlantingSite[];
-  actionButton?: ButtonProps;
+  setPlantsSitePreferences: (preferences: Record<string, unknown>) => void;
+  style?: Record<string, string | number>;
+  title: string;
+  text?: string;
 };
 
 const allSitesOption = (organizationId: number): PlantingSite => ({
@@ -32,18 +33,19 @@ const allSitesOption = (organizationId: number): PlantingSite => ({
 });
 
 export default function PlantsPrimaryPage({
-  title,
-  text,
+  actionButton,
+  allowAllAsSiteSelection,
   children,
+  isEmptyState,
+  lastVisitedPreferenceName,
   onSelect,
   pagePath,
-  lastVisitedPreferenceName,
   plantsSitePreferences,
-  setPlantsSitePreferences,
-  allowAllAsSiteSelection,
-  isEmptyState,
   plantingSitesData,
-  actionButton,
+  setPlantsSitePreferences,
+  style,
+  title,
+  text,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -140,14 +142,15 @@ export default function PlantsPrimaryPage({
 
   return (
     <PlantsPrimaryPageView
-      title={title}
-      text={text}
+      actionButton={actionButton}
       children={children}
+      isEmptyState={isEmptyState}
+      onSelect={setActivePlantingSite}
       plantingSites={plantingSites}
       selectedPlantingSiteId={selectedPlantingSite?.id}
-      onSelect={setActivePlantingSite}
-      isEmptyState={isEmptyState}
-      actionButton={actionButton}
+      style={style}
+      title={title}
+      text={text}
     />
   );
 }
