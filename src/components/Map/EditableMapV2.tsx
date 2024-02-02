@@ -57,10 +57,10 @@ export type FeatureSelectorOnClick = (features: LayerFeature[]) => LayerFeature 
 
 export type EditableMapProps = {
   activeContext?: MapEntityOptions;
-  clearOnEdit?: boolean;
   editableBoundary?: FeatureCollection;
   errorAnnotations?: Feature[];
   featureSelectorOnClick?: FeatureSelectorOnClick;
+  isSliceTool?: boolean;
   onEditableBoundaryChanged: (boundary?: FeatureCollection, isUndoRedo?: boolean) => void;
   onRedo?: () => void;
   onUndo?: () => void;
@@ -73,10 +73,10 @@ export type EditableMapProps = {
 
 export default function EditableMap({
   activeContext,
-  clearOnEdit,
   editableBoundary,
   errorAnnotations,
   featureSelectorOnClick,
+  isSliceTool,
   onEditableBoundaryChanged,
   onRedo,
   onUndo,
@@ -277,7 +277,7 @@ export default function EditableMap({
 
   return (
     <Box
-      className={clearOnEdit ? classes.sliceTool : ''}
+      className={isSliceTool ? classes.sliceTool : ''}
       ref={containerRef}
       display='flex'
       flexDirection='column'
@@ -318,7 +318,6 @@ export default function EditableMap({
             <FullscreenControl position='top-left' />
             <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
-              clearOnEdit={clearOnEdit}
               boundary={editableBoundary}
               onBoundaryChanged={onEditableBoundaryChanged}
               setMode={setEditMode}

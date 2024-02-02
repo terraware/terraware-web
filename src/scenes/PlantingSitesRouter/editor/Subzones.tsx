@@ -14,12 +14,16 @@ import {
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
 import MapIcon from 'src/components/Map/MapIcon';
+import useSnackbar from 'src/utils/useSnackbar';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
-import { cutPolygons, leftMostFeature, leftOrderedFeatures, toMultiPolygon } from 'src/components/Map/utils';
+import { leftMostFeature, leftOrderedFeatures, toMultiPolygon } from 'src/components/Map/utils';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import {
+  cutOverlappingBoundaries,
+  emptyBoundary,
+  getLatestFeature,
   IdGenerator,
   plantingSubzoneToFeature,
   plantingZoneToFeature,
@@ -47,19 +51,34 @@ const featureSiteSubzones = (site: PlantingSite): Record<number, FeatureCollecti
     {} as Record<number, FeatureCollection>
   );
 
+// data type for undo/redo state
+// needs to capture subzone edit boundary, error annotations and subzones created by zone
+type Stack = {
+  editableBoundary?: FeatureCollection;
+  errorAnnotations?: Feature[];
+  fixedBoundaries?: Record<number, FeatureCollection>;
+};
+
 export default function Subzones({ onChange, onValidate, site }: SubzonesProps): JSX.Element {
-  const [selectedZone, setSelectedZone] = useState<number | undefined>(
-    site.plantingZones?.length === 1 ? site.plantingZones?.[0]?.id : undefined
-  );
+  const [selectedZone, setSelectedZone] = useState<number | undefined>(site.plantingZones?.[0]?.id);
 
   // map of zone id to subzones
-  const [subzones, setSubzones, undo, redo] = useUndoRedoState<Record<number, FeatureCollection>>(
-    featureSiteSubzones(site)
-  );
+  const [subzonesData, setSubzonesData, undo, redo] = useUndoRedoState<Stack>({
+    editableBoundary: emptyBoundary(),
+    errorAnnotations: [],
+    fixedBoundaries: featureSiteSubzones(site),
+  });
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const classes = useStyles();
   const theme = useTheme();
   const getRenderAttributes = useRenderAttributes();
+  const snackbar = useSnackbar();
+
+  // expose subzones as a constant for easier use
+  const subzones = useMemo<Record<number, FeatureCollection> | undefined>(
+    () => subzonesData?.fixedBoundaries,
+    [subzonesData?.fixedBoundaries]
+  );
 
   const zones = useMemo<FeatureCollection | undefined>(
     () =>
@@ -77,6 +96,15 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
     if (!onValidate) {
       return;
     }
+
+    // error out on save if there are subzones with less than minimum boundaries
+    const hasSubzoneSizeErrors = !!subzonesData?.errorAnnotations?.length;
+    if (hasSubzoneSizeErrors) {
+      snackbar.toastError(strings.SITE_SUBZONE_BOUNDARIES_TOO_SMALL);
+      onValidate(hasSubzoneSizeErrors);
+      return;
+    }
+
     // subzones are children of zones, we need to repopuplate zones with new subzones information
     // and update `plantingZones` in the site
     const numZones = site.plantingZones?.length ?? 0;
@@ -104,7 +132,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
     const numSubzones = plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length ?? 0;
     onChange('plantingZones', plantingZones);
     onValidate(plantingZones === undefined, numSubzones > numZones);
-  }, [onChange, onValidate, site, subzones, zones]);
+  }, [subzonesData?.errorAnnotations, onChange, onValidate, site, snackbar, subzones, zones]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!zones) {
@@ -134,7 +162,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
       },
     };
 
-    const subzonesData: RenderableReadOnlyBoundary = {
+    const subzonesBoundaries: RenderableReadOnlyBoundary = {
       data: {
         type: 'FeatureCollection',
         features: Object.keys(subzones ?? {}).flatMap((key: string) => {
@@ -157,7 +185,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
       },
     };
 
-    return [zonesData, subzonesData];
+    return [zonesData, subzonesBoundaries];
   }, [getRenderAttributes, selectedZone, site.id, subzones, theme.palette.TwClrBaseWhite, zones]);
 
   const description = useMemo<Description[]>(
@@ -184,16 +212,13 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
   );
 
   // when we have a new polygon, add it to the subzones list after carving out the overlapping region in the zone.
-  const onEditableBoundaryChanged = (featureCollection?: FeatureCollection) => {
-    if (!zones || selectedZone === undefined || !subzones || !subzones[selectedZone]) {
-      return;
-    }
+  const onEditableBoundaryChanged = (editableBoundary?: FeatureCollection) => {
+    // pick the latest geometry that was drawn
+    const cutWithFeature = getLatestFeature(subzonesData?.editableBoundary, editableBoundary);
 
-    const cutWith = featureCollection?.features?.[0]?.geometry;
-    if (cutWith) {
-      const cutSubzones = cutPolygons(subzones[selectedZone].features! as GeometryFeature[], cutWith);
-
-      if (cutSubzones && subzones) {
+    // update state with cut subzones on success
+    const onSuccess = (cutSubzones: GeometryFeature[]) => {
+      if (subzones && selectedZone !== undefined) {
         const usedNames: Set<string> = new Set(
           (subzones[selectedZone].features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
         );
@@ -207,13 +232,17 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
           return toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone });
         }) as GeometryFeature[];
 
-        setSubzones({
-          ...subzones,
-          [selectedZone]: {
-            type: 'FeatureCollection',
-            features: subzonesWithIds,
+        setSubzonesData((prev) => ({
+          editableBoundary: emptyBoundary(),
+          errorAnnotations: [],
+          fixedBoundaries: {
+            ...subzones,
+            [selectedZone]: {
+              type: 'FeatureCollection',
+              features: subzonesWithIds,
+            },
           },
-        });
+        }));
 
         const leftMostNewSubzone = leftMostFeature(
           subzonesWithIds.filter((unused, index) => cutSubzones[index].id === undefined)
@@ -232,7 +261,30 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
           setOverridePopupInfo(undefined);
         }
       }
-    }
+    };
+
+    // update state with error annotations and keep existing editable boundary so user can edit/correct it
+    const onError = (errors: Feature[]) => {
+      // no subzones were cut either because there were no overlaps or they could have been too small
+      // set error annotations that were created and keep the cut geometry in case user wants to re-edit the geometry
+      setSubzonesData((prev) => ({
+        ...prev,
+        editableBoundary: cutWithFeature ? { type: 'FeatureCollection', features: [cutWithFeature] } : emptyBoundary(),
+        errorAnnotations: errors,
+      }));
+    };
+
+    cutOverlappingBoundaries(
+      {
+        cutWithFeature,
+        errorText: strings.SITE_SUBZONE_BOUNDARY_TOO_SMALL,
+        minimumSideDimension: 25,
+        source: selectedZone !== undefined ? subzones?.[selectedZone] : undefined,
+      },
+      onSuccess,
+      onError
+    );
+
     return;
   };
 
@@ -282,7 +334,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
             subzone.properties = {};
           }
           subzone.properties.name = nameVal;
-          setSubzones(updatedSubzones);
+          setSubzonesData((prev) => ({ ...prev, fixedBoundaries: updatedSubzones }));
           close();
         };
 
@@ -293,7 +345,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
         );
       },
     }),
-    [classes.box, classes.tooltip, selectedZone, setSubzones, subzones]
+    [classes.box, classes.tooltip, selectedZone, setSubzonesData, subzones]
   );
 
   const activeContext = useMemo<MapEntityOptions | undefined>(() => {
@@ -315,8 +367,10 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
       />
       <EditableMap
         activeContext={activeContext}
-        clearOnEdit
+        editableBoundary={subzonesData?.editableBoundary}
+        errorAnnotations={subzonesData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}
+        isSliceTool
         onEditableBoundaryChanged={onEditableBoundaryChanged}
         onRedo={redo}
         onUndo={undo}

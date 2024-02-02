@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -33,6 +33,7 @@ export default function DetailsInputForm({
   setRecord,
 }: DetailsInputFormProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const [validateInput, setValidateInput] = useState<boolean>(false);
   const [nameError, setNameError] = useState('');
   const [effectiveTimeZone, setEffectiveTimeZone] = useState<TimeZoneDescription | undefined>();
   const [plantingSeasonsValid, setPlantingSeasonsValid] = useState(true);
@@ -46,22 +47,7 @@ export default function DetailsInputForm({
   const dispatch = useAppDispatch();
   const plantingSites = useAppSelector(selectPlantingSites);
 
-  useEffect(() => {
-    if (!plantingSites) {
-      dispatch(requestPlantingSites(selectedOrganization.id, activeLocale));
-    }
-  }, [activeLocale, dispatch, plantingSites, selectedOrganization.id]);
-
-  useEffect(() => {
-    const otherSiteNames = (plantingSites ?? []).filter((site) => site.id !== record.id).map((site) => site.name);
-    setUsedNames(new Set(otherSiteNames));
-  }, [plantingSites, record.id]);
-
-  useEffect(() => {
-    if (!onValidate) {
-      return;
-    }
-
+  const checkErrors = useCallback(() => {
     let hasNameError = true;
     let hasSeasonsError = true;
 
@@ -81,10 +67,34 @@ export default function DetailsInputForm({
       hasSeasonsError = false;
     }
 
-    if (onValidate) {
-      onValidate(hasNameError || hasSeasonsError);
+    return hasNameError || hasSeasonsError;
+  }, [plantingSeasonsValid, record.name, usedNames]);
+
+  useEffect(() => {
+    if (!plantingSites) {
+      dispatch(requestPlantingSites(selectedOrganization.id, activeLocale));
     }
-  }, [onValidate, plantingSeasonsValid, record?.name, usedNames]);
+  }, [activeLocale, dispatch, plantingSites, selectedOrganization.id]);
+
+  useEffect(() => {
+    const otherSiteNames = (plantingSites ?? []).filter((site) => site.id !== record.id).map((site) => site.name);
+    setUsedNames(new Set(otherSiteNames));
+  }, [plantingSites, record.id]);
+
+  useEffect(() => {
+    if (!onValidate) {
+      return;
+    }
+
+    setValidateInput(true);
+    onValidate(checkErrors());
+  }, [checkErrors, onValidate]);
+
+  useEffect(() => {
+    if (validateInput) {
+      checkErrors();
+    }
+  }, [checkErrors, validateInput]);
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
     onChange('timeZone', newTimeZone ? newTimeZone.id : undefined);

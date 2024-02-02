@@ -27,7 +27,6 @@ export type MapEditorMode =
 
 type MapEditorProps = ConstructorParameters<typeof MapboxDraw>[0] & {
   boundary?: FeatureCollection;
-  clearOnEdit?: boolean;
   onBoundaryChanged?: (boundary?: FeatureCollection) => void;
   setMode?: (mode: MapEditorMode) => void;
 };
@@ -72,8 +71,6 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
  * @param boundary
  *  Initial boundary. If this is specified, the editor will start out in EditingBoundary mode;
  *  otherwise it will start out in CreatingBoundary mode.
- * @param clearOnEdit
- *  Whether to clear the boundary in the editor after onChange callbacks are notified
  * @param onBoundaryChanged
  *  Called when the user adds, edits, or deletes the boundary. The boundary is always a
  *  MultiPolygon containing a single polygon.
@@ -81,13 +78,7 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
  * @param otherProps
  *  Additional properties to pass to the MapboxDraw control.
  */
-export default function EditableMapDraw({
-  boundary,
-  clearOnEdit,
-  onBoundaryChanged,
-  setMode,
-  ...otherProps
-}: MapEditorProps) {
+export default function EditableMapDraw({ boundary, onBoundaryChanged, setMode, ...otherProps }: MapEditorProps) {
   const [mapRef, setMapRef] = useState<MapRef>();
   const [drawMode, setDrawMode] = useState<DrawMode>();
   const [selection, setSelection] = useState<Feature>();
@@ -140,11 +131,8 @@ export default function EditableMapDraw({
 
       const updatedFeatures = fetchUpdatedFeatures(features);
       onBoundaryChanged(updatedFeatures);
-      if (clearOnEdit) {
-        draw.deleteAll();
-      }
     },
-    [clearOnEdit, draw, fetchUpdatedFeatures, onBoundaryChanged]
+    [fetchUpdatedFeatures, onBoundaryChanged]
   );
 
   const onCreate = useCallback(
