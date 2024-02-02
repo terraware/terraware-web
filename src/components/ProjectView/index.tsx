@@ -7,10 +7,10 @@ import { Crumb, Page } from 'src/components/BreadCrumbs';
 import Card from 'src/components/common/Card';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
-import { requestProject } from 'src/redux/features/projects/projectsThunks';
+import { requestProject, requestProjects } from 'src/redux/features/projects/projectsThunks';
 import Button from 'src/components/common/button/Button';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -26,6 +26,7 @@ export default function ProjectView(): JSX.Element {
   const history = useHistory();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
+  const { selectedOrganization } = useOrganization();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
 
@@ -70,9 +71,10 @@ export default function ProjectView(): JSX.Element {
     if (projectDeleteRequest.status === 'error') {
       snackbar.toastError();
     } else if (projectDeleteRequest.status === 'success') {
+      void dispatch(requestProjects(selectedOrganization.id));
       goToProjects();
     }
-  }, [projectDeleteRequest, snackbar, goToProjects]);
+  }, [selectedOrganization.id, projectDeleteRequest, snackbar, goToProjects, dispatch]);
 
   const rightComponent = useMemo(
     () => (
