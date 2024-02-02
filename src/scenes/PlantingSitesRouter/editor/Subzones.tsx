@@ -176,6 +176,8 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
                 zones?.features?.find((f) => f.id === selectedZone)?.properties?.name
               )
             : strings.SITE_SUBZONE_BOUNDARIES_SELECT_A_ZONE,
+        isBold: true,
+        isWarning: selectedZone === undefined,
       },
     ],
     [selectedZone, zones]
@@ -312,9 +314,9 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
         tutorialTitle={strings.ADDING_SUBZONE_BOUNDARIES}
       />
       <EditableMap
+        activeContext={activeContext}
         clearOnEdit
         featureSelectorOnClick={featureSelectorOnClick}
-        activeContext={activeContext}
         onEditableBoundaryChanged={onEditableBoundaryChanged}
         onRedo={redo}
         onUndo={undo}
