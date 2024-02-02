@@ -33,18 +33,13 @@ export default function DetailsInputForm({
   const [effectiveTimeZone, setEffectiveTimeZone] = useState<TimeZoneDescription | undefined>();
   const [plantingSeasonsValid, setPlantingSeasonsValid] = useState(true);
   const [showSaveValidationErrors, setShowSaveValidationErrors] = useState(false);
-  const [validateInput, setValidateInput] = useState<boolean>(false);
   const { availableProjects } = useProjects(record);
   const detailedSitesEnabled = isEnabled('User Detailed Sites');
   const projectsEnabled = isEnabled('Projects');
 
   useEffect(() => {
-    if (!onValidate && !validateInput) {
+    if (!onValidate) {
       return;
-    }
-
-    if (!validateInput) {
-      setValidateInput(true);
     }
 
     let hasErrors = false;
@@ -65,7 +60,7 @@ export default function DetailsInputForm({
     if (onValidate) {
       onValidate(hasErrors);
     }
-  }, [onValidate, plantingSeasonsValid, record?.name, validateInput]);
+  }, [onValidate, plantingSeasonsValid, record?.name]);
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
     onChange('timeZone', newTimeZone ? newTimeZone.id : undefined);
