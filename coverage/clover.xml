@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1706905324575" clover="3.2.0">
-  <project timestamp="1706905324575" name="All files">
-    <metrics statements="15922" coveredstatements="533" conditionals="10307" coveredconditionals="154" methods="4977" coveredmethods="120" elements="31206" coveredelements="807" complexity="0" loc="15922" ncloc="15922" packages="128" files="628" classes="628"/>
+<coverage generated="1706906996187" clover="3.2.0">
+  <project timestamp="1706906996188" name="All files">
+    <metrics statements="15937" coveredstatements="533" conditionals="10313" coveredconditionals="154" methods="4981" coveredmethods="120" elements="31231" coveredelements="807" complexity="0" loc="15937" ncloc="15937" packages="128" files="628" classes="628"/>
     <package name="src">
       <metrics statements="173" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -14035,7 +14035,7 @@
       </file>
     </package>
     <package name="src.scenes.PlantingSitesRouter.editor">
-      <metrics statements="482" coveredstatements="41" conditionals="269" coveredconditionals="14" methods="147" coveredmethods="9"/>
+      <metrics statements="497" coveredstatements="41" conditionals="275" coveredconditionals="14" methods="151" coveredmethods="9"/>
       <file name="Details.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/editor/Details.tsx">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="24" count="0" type="stmt"/>
@@ -14168,7 +14168,7 @@
         <line num="26" count="0" type="stmt"/>
       </file>
       <file name="SiteBoundary.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/editor/SiteBoundary.tsx">
-        <metrics statements="38" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <metrics statements="53" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="35" count="0" type="stmt"/>
@@ -14180,33 +14180,48 @@
         <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="51" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="55" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="58" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
-        <line num="69" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="78" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
-        <line num="80" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="81" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="87" count="0" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="95" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="103" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="105" count="0" type="stmt"/>
         <line num="106" count="0" type="stmt"/>
-        <line num="112" count="0" type="stmt"/>
-        <line num="117" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="119" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="120" count="0" type="stmt"/>
-        <line num="121" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
         <line num="122" count="0" type="stmt"/>
-        <line num="127" count="0" type="stmt"/>
-        <line num="130" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="133" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="135" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="137" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="138" count="0" type="stmt"/>
+        <line num="143" count="0" type="stmt"/>
+        <line num="146" count="0" type="stmt"/>
       </file>
       <file name="StartOverConfirmation.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/editor/StartOverConfirmation.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
