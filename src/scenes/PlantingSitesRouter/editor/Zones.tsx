@@ -75,10 +75,10 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
 
       // check for missing zone names
       const missingZoneNames = !missingZones && zones!.features.some((zone) => !zone?.properties?.name?.trim());
-      if (missingZoneNames) {
-        snackbar.toastError(strings.SITE_ZONE_NAMES_MISSING);
-      } else if (zonesTooSmall) {
+      if (zonesTooSmall) {
         snackbar.toastError(strings.SITE_ZONE_BOUNDARIES_TOO_SMALL);
+      } else if (missingZoneNames) {
+        snackbar.toastError(strings.SITE_ZONE_NAMES_MISSING);
       }
 
       // populates zones
