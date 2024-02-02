@@ -64,7 +64,7 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
         ];
       }
 
-      // check if individual polygons are of a minimum size (if site has multiple polygons)
+      // check if individual polygons are of a minimum size
       const individualPolygons: Polygon[] = boundary.coordinates.flatMap((coordinates: Position[][]) => ({
         type: 'Polygon',
         coordinates,
