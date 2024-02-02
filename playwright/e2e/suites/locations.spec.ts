@@ -19,7 +19,7 @@ test.beforeEach(async ({ context }, testInfo) => {
 test('Create a Seedbank', async ({ page }, testInfo) => {
   await page.goto('http://127.0.0.1:3000');
 
-  const newSeedBankName = `My New Seed Bank-${new Date().getTime()}`;
+  const newSeedBankName = `My New Seed Bank-${process.env.TEST_WORKER_INDEX}`;
 
   await waitFor(page, '#home');
 
