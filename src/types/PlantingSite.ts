@@ -35,3 +35,7 @@ export type UpdatePlantingSubzonePayload = components['schemas']['UpdatePlanting
 export type SiteType = 'simple' | 'detailed';
 
 export type NewPlantingSite = Omit<PlantingSite, 'id'>;
+
+export type PlantingSitesFilters = {
+  projectIds?: number[];
+};

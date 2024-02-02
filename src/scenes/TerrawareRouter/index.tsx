@@ -22,7 +22,7 @@ import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelecto
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import ProjectsRouter from 'src/components/Projects/Router';
-import PlantingSites from 'src/components/PlantingSites';
+import PlantingSites from 'src/scenes/PlantingSitesRouter';
 import ReportsRouter from 'src/components/Reports/Router';
 import Home from 'src/scenes/Home';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';

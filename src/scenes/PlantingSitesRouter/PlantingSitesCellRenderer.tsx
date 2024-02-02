@@ -1,9 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
-import CellRenderer, { TableRowType } from '../common/table/TableCellRenderer';
-import { RendererProps } from '../common/table/types';
 import { APP_PATHS } from 'src/constants';
-import Link from '../common/Link';
+import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import { RendererProps } from 'src/components/common/table/types';
+import Link from 'src/components/common/Link';
 
 const useStyles = makeStyles(() => ({
   text: {

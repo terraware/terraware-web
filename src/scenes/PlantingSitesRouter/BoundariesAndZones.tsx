@@ -9,7 +9,7 @@ import { ZoneAggregation } from 'src/types/Observations';
 import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { regexMatch } from 'src/utils/search';
-import { PlantingSiteMap } from '../Map';
+import { PlantingSiteMap } from 'src/components/Map';
 import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
