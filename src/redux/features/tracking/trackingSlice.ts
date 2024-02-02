@@ -4,28 +4,47 @@ import { PlantingSiteZone } from 'src/types/PlantingSite';
 import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsyncThunks';
 import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
 
-// Define a type for the slice state
-type Data = {
+// all sites data
+type SitesData = {
   error?: string;
   plantingSites?: PlantingSite[];
 };
 
+// single planting site
+type SiteData = {
+  error?: string;
+  locale?: string | null;
+  plantingSite?: PlantingSite;
+};
+
 // Define the initial state
-const initialState: Data = {};
+const initialState: SitesData = {};
 
 export const trackingSlice = createSlice({
   name: 'trackingSlice',
   initialState,
   reducers: {
-    setPlantingSitesAction: (state, action: PayloadAction<Data>) => {
-      const data: Data = action.payload;
+    setPlantingSitesAction: (state, action: PayloadAction<SitesData>) => {
+      const data: SitesData = action.payload;
       state.error = data.error;
       state.plantingSites = data.plantingSites;
+    },
+    setPlantingSiteAction: (state, action: PayloadAction<SiteData>) => {
+      const data: SiteData = action.payload;
+      const { error, locale, plantingSite } = data;
+      state.error = error;
+      if (plantingSite) {
+        // update state with planting site, resort with new information
+        state.plantingSites = [
+          ...(state.plantingSites ?? []).filter((site) => site.id !== plantingSite.id),
+          plantingSite,
+        ].sort((a, b) => a.name.localeCompare(b.name, locale || undefined));
+      }
     },
   },
 });
 
-export const { setPlantingSitesAction } = trackingSlice.actions;
+export const { setPlantingSiteAction, setPlantingSitesAction } = trackingSlice.actions;
 export const trackingReducer = trackingSlice.reducer;
 
 // Define a type for the search slice state

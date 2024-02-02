@@ -10,10 +10,12 @@ import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useLocalization } from 'src/providers';
 import { PlantingSeason } from 'src/types/Tracking';
 import { useProjects } from 'src/hooks/useProjects';
-import { useAppSelector } from 'src/redux/store';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { requestPlantingSite } from 'src/redux/features/tracking/trackingThunks';
 import PageSnackbar from 'src/components/PageSnackbar';
 import BoundariesAndZones from './BoundariesAndZones';
 import BackToLink from 'src/components/common/BackToLink';
@@ -36,6 +38,8 @@ export default function PlantingSiteView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
+  const dispatch = useAppDispatch();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
   const history = useHistory();
@@ -67,6 +71,13 @@ export default function PlantingSiteView(): JSX.Element {
       setPlantingSeasons(upcomingSeasons);
     }
   }, [plantingSite, tz.id]);
+
+  useEffect(() => {
+    const siteId = Number(plantingSiteId);
+    if (!isNaN(siteId)) {
+      dispatch(requestPlantingSite(siteId, activeLocale));
+    }
+  }, [activeLocale, dispatch, plantingSiteId]);
 
   return (
     <TfMain>
