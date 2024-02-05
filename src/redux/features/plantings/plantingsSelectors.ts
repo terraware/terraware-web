@@ -114,6 +114,7 @@ export const searchPlantingProgress = createSelector(
       const siteNameSelected: string | undefined = filters.siteName?.values[0];
 
       const projectIdsSelected: number[] | undefined = filters.project_id?.values.map((value: string) => Number(value));
+      const projectNotPresentSelected = (filters.project_id?.values || [])[0] === null;
 
       if (reported && reported.length > 0) {
         reported?.forEach((progress) => {
@@ -130,7 +131,9 @@ export const searchPlantingProgress = createSelector(
         plantingCompleted === undefined &&
         (siteNameSelected ? siteNameSelected === siteName : regexMatch(siteName, query))
       ) {
-        if (projectIdsSelected === undefined || projectIdsSelected.includes(Number(projectId))) {
+        if (projectNotPresentSelected && !projectId) {
+          acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants, projectName });
+        } else if (projectIdsSelected === undefined || projectIdsSelected.includes(Number(projectId))) {
           acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants, projectName });
         }
       }

@@ -46,22 +46,30 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
     [projects]
   );
 
-  const featuredFilters: FeaturedFilterConfig[] = !featureFlagProjects
-    ? []
-    : [
-        {
-          field: 'project_id',
-          options: (projects || [])?.map((project: Project) => `${project.id}`),
-          searchNodeCreator: (values: (number | string | null)[]) => ({
-            field: 'project_id',
-            operation: 'field',
-            type: 'Exact',
-            values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
-          }),
-          label: strings.PROJECTS,
-          renderOption: (id: string | number) => getProjectName(Number(id)),
-        },
-      ];
+  const featuredFilters: FeaturedFilterConfig[] = useMemo(
+    () =>
+      featureFlagProjects
+        ? [
+            {
+              field: 'project_id',
+              options: (projects || [])?.map((project: Project) => `${project.id}`),
+              searchNodeCreator: (values: (number | string | null)[]) => ({
+                field: 'project_id',
+                operation: 'field',
+                type: 'Exact',
+                values: values.map((value: number | string | null): string | null =>
+                  value === null ? value : `${value}`
+                ),
+              }),
+              label: strings.PROJECTS,
+              renderOption: (id: string | number) => getProjectName(Number(id)),
+              notPresentFilterShown: true,
+              notPresentFilterLabel: activeLocale ? strings.NO_PROJECT : '',
+            },
+          ]
+        : [],
+    [activeLocale, featureFlagProjects, getProjectName, projects]
+  );
 
   useEffect(() => {
     void dispatch(requestObservationsResults(selectedOrganization.id));
@@ -89,6 +97,10 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
         filterOptions,
         pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
           if (filterName === 'project_id') {
+            if (values.length === 1 && values[0] === null) {
+              return strings.NO_PROJECT;
+            }
+
             return values.map((value: unknown) => getProjectName(Number(value))).join(', ');
           }
         },
