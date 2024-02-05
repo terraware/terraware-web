@@ -3,16 +3,17 @@ import { Box, Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, PillList, Textfield, Tooltip } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
-import { FieldOptionsMap, FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import strings from 'src/strings';
+import theme from 'src/theme';
+import { FieldOptionsMap, FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((_theme: Theme) => ({
   popoverContainer: {
     '& .MuiPaper-root': {
-      border: `1px solid ${theme.palette.TwClrBaseGray300}`,
+      border: `1px solid ${_theme.palette.TwClrBaseGray300}`,
       borderRadius: '8px',
       overflow: 'visible',
       width: '480px',
@@ -30,8 +31,8 @@ export type FeaturedFilterConfig = {
   label: string;
   notPresentFilterLabel?: string;
   notPresentFilterShown?: boolean;
-  options: number[];
-  renderOption: (id: number) => string;
+  options: (number | string)[];
+  renderOption: (id: string | number) => string;
   searchNodeCreator: (values: (number | string | null)[]) => SearchNodePayload;
 };
 
@@ -49,7 +50,12 @@ export type SearchProps = SearchInputProps & {
   featuredFilters?: FeaturedFilterConfig[];
 };
 
-export default function Search({ search, onSearch, filtersProps, featuredFilters }: SearchProps): JSX.Element {
+export default function SearchFiltersWrapper({
+  search,
+  onSearch,
+  filtersProps,
+  featuredFilters,
+}: SearchProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -88,10 +94,8 @@ export default function Search({ search, onSearch, filtersProps, featuredFilters
             };
           })
         : [],
-    [filtersProps]
+    [featuredFilters, filtersProps]
   );
-
-  console.log('featuredFilters', featuredFilters);
 
   return (
     <>
@@ -117,35 +121,35 @@ export default function Search({ search, onSearch, filtersProps, featuredFilters
             }
 
             return (
-              <FilterMultiSelectContainer
-                key={index}
-                disabled={featuredFilter.options.length === 0}
-                filterKey={featuredFilter.field}
-                filters={Object.keys(filtersProps.filters).reduce(
-                  (acc, curr) => ({
-                    ...acc,
-                    [curr]: filtersProps.filters[curr].values,
-                  }),
-                  {} as Record<string, (number | null)[]>
-                )}
-                label={featuredFilter.label}
-                options={featuredFilter.options}
-                notPresentFilterLabel={featuredFilter.notPresentFilterLabel}
-                notPresentFilterShown={featuredFilter.notPresentFilterShown}
-                renderOption={featuredFilter.renderOption}
-                setFilters={(fs: Record<string, (number | null)[]>) => {
-                  const nextFilters: Record<string, SearchNodePayload> = Object.keys(fs).reduce(
+              <Box marginLeft={theme.spacing(2)} key={index}>
+                <FilterMultiSelectContainer
+                  disabled={featuredFilter.options.length === 0}
+                  filterKey={featuredFilter.field}
+                  filters={Object.keys(filtersProps.filters).reduce(
                     (acc, curr) => ({
                       ...acc,
-                      [curr]: featuredFilter.searchNodeCreator(fs[curr]),
+                      [curr]: filtersProps.filters[curr].values.map((value: string | number) => Number(value)),
                     }),
-                    {}
-                  );
+                    {} as Record<string, (number | null)[]>
+                  )}
+                  label={featuredFilter.label}
+                  options={featuredFilter.options}
+                  notPresentFilterLabel={featuredFilter.notPresentFilterLabel}
+                  notPresentFilterShown={featuredFilter.notPresentFilterShown}
+                  renderOption={featuredFilter.renderOption}
+                  setFilters={(fs: Record<string, (number | null)[]>) => {
+                    const nextFilters: Record<string, SearchNodePayload> = Object.keys(fs).reduce(
+                      (acc, curr) => ({
+                        ...acc,
+                        [curr]: featuredFilter.searchNodeCreator(fs[curr]),
+                      }),
+                      {}
+                    );
 
-                  console.log('nextFilters', nextFilters);
-                  filtersProps.setFilters(nextFilters);
-                }}
-              />
+                    filtersProps.setFilters(nextFilters);
+                  }}
+                />
+              </Box>
             );
           })}
 

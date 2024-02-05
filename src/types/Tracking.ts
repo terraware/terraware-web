@@ -10,10 +10,11 @@ export type PlantingSiteSearchResult = {
   boundary?: components['schemas']['MultiPolygon'];
   id: string;
   name: string;
-  numPlantingZones: string;
   numPlantingSubzones: string;
-  'totalPlants(raw)': string;
+  numPlantingZones: string;
+  project_id: number;
   project_name: string;
+  'totalPlants(raw)': string;
 };
 
 // geometry and types of geometries

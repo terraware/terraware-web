@@ -1,10 +1,12 @@
-import { RootState } from 'src/redux/rootReducer';
-import { selectPlantingSites, selectPlantingSitesSearchResults } from '../tracking/trackingSelectors';
-import { regexMatch } from 'src/utils/search';
 import { createSelector } from '@reduxjs/toolkit';
-import { PlantingSearchData } from './plantingsSlice';
+import strings from 'src/strings';
+import { regexMatch } from 'src/utils/search';
+import { RootState } from 'src/redux/rootReducer';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
-import { selectLatestObservation } from '../observations/observationsSelectors';
+import { SearchNodePayload } from 'src/types/Search';
+import { selectPlantingSites, selectPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingSelectors';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { PlantingSearchData } from './plantingsSlice';
 
 export const selectPlantings = (state: RootState) => state.plantings?.plantings;
 
@@ -39,17 +41,17 @@ export const selectPlantingProgress = createSelector(
     (state: RootState) => selectPlantings(state),
   ],
   (plantingSitesSearchResults, plantingSites, plantings) => {
-    console.log(plantingSitesSearchResults, plantings, plantingSites);
     if (plantingSitesSearchResults && plantings) {
       const plantingsBySubzone = getTotalPlantsBySubzone(plantings);
       const totalPlantsBySite = getTotalPlantsBySite(plantingSitesSearchResults);
       return plantingSites
         ?.filter((ps) => totalPlantsBySite[ps.id])
         .map((ps) => {
+          const plantingSiteProject = plantingSitesSearchResults.find(
+            (pssr: PlantingSiteSearchResult) => `${ps.id}` === `${pssr.id}`
+          );
+
           return {
-            projectName:
-              plantingSitesSearchResults.find((pssr: PlantingSiteSearchResult) => `${ps.id}` === `${pssr.id}`)
-                ?.project_name || '',
             siteId: ps.id,
             siteName: ps.name,
             reported: ps.plantingZones?.flatMap((zone) =>
@@ -67,6 +69,12 @@ export const selectPlantingProgress = createSelector(
                 }))
             ),
             totalPlants: totalPlantsBySite[ps.id],
+            ...(plantingSiteProject
+              ? {
+                  projectName: plantingSiteProject.project_name,
+                  projectId: plantingSiteProject.project_id,
+                }
+              : {}),
           };
         });
     }
@@ -74,22 +82,46 @@ export const selectPlantingProgress = createSelector(
 );
 
 // selector to search plantings
+export type PlantingProgress = {
+  plantingCompleted: boolean;
+  plantingSize: string;
+  projectName: string;
+  siteId: number;
+  siteName: string;
+  subzoneId: number;
+  subzoneName: string;
+  targetPlantingDensity: number;
+  totalPlants: number;
+  totalSeedlingsSent: number;
+  zoneId: number;
+  zoneName: string;
+};
+
 export const searchPlantingProgress = createSelector(
   [
-    (state: RootState, query: string, plantingCompleted?: boolean, siteName?: string) => selectPlantingProgress(state),
-    (state: RootState, query: string, plantingCompleted?: boolean, siteName?: string) => query,
-    (state: RootState, query: string, plantingCompleted?: boolean, siteName?: string) => plantingCompleted,
-    (state: RootState, query: string, plantingCompleted?: boolean, siteName?: string) => siteName,
+    (state: RootState, query: string, filters: Record<string, SearchNodePayload>) => selectPlantingProgress(state),
+    (state: RootState, query: string, filters: Record<string, SearchNodePayload>) => query,
+    (state: RootState, query: string, filters: Record<string, SearchNodePayload>) => filters,
   ],
-  (plantingProgress, query, plantingCompleted, siteNameSelected) => {
+  (plantingProgress, query, filters) => {
     return plantingProgress?.reduce((acc, curr) => {
-      const { siteId, siteName, totalPlants, reported, projectName } = curr;
+      const { siteId, siteName, totalPlants, reported, projectName, projectId } = curr;
+
+      const plantingCompleted: boolean | undefined = filters.plantingCompleted?.values[0]
+        ? filters.plantingCompleted?.values[0] === strings.YES
+        : undefined;
+
+      const siteNameSelected: string | undefined = filters.siteName?.values[0];
+
+      const projectIdsSelected: number[] | undefined = filters.project_id?.values.map((value: string) => Number(value));
+
       if (reported && reported.length > 0) {
         reported?.forEach((progress) => {
           const matchesQuery = !query || regexMatch(progress.subzoneName, query);
           const matchesPlantingCompleted =
             plantingCompleted === undefined || progress.plantingCompleted === plantingCompleted;
           const matchesSiteName = siteNameSelected === undefined || siteName === siteNameSelected;
+
           if (matchesQuery && matchesPlantingCompleted && matchesSiteName) {
             acc.push({ siteId, siteName, totalPlants, ...progress });
           }
@@ -98,10 +130,13 @@ export const searchPlantingProgress = createSelector(
         plantingCompleted === undefined &&
         (siteNameSelected ? siteNameSelected === siteName : regexMatch(siteName, query))
       ) {
-        acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants, projectName });
+        if (projectIdsSelected === undefined || projectIdsSelected.includes(Number(projectId))) {
+          acc.push({ siteId, siteName, totalSeedlingsSent: totalPlants, projectName });
+        }
       }
+
       return acc;
-    }, [] as any[]);
+    }, [] as Partial<PlantingProgress>[]);
   }
 );
 

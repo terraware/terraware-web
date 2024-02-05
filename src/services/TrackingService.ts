@@ -259,14 +259,15 @@ async function searchPlantingSites(
   const params: SearchRequestPayload = {
     fields: [
       'boundary',
+      'description',
       'id',
       'name',
-      'numPlantingZones',
       'numPlantingSubzones',
-      'description',
+      'numPlantingZones',
+      'project_name',
+      'project_id',
       'timeZone',
       'totalPlants(raw)',
-      'project_name',
     ],
     prefix: 'plantingSites',
     sortOrder: [sortOrder || defaultSortOrder],

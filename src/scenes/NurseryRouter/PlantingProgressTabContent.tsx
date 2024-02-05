@@ -51,7 +51,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
     : [
         {
           field: 'project_id',
-          options: (projects || [])?.map((project: Project) => project.id),
+          options: (projects || [])?.map((project: Project) => `${project.id}`),
           searchNodeCreator: (values: (number | string | null)[]) => ({
             field: 'project_id',
             operation: 'field',
@@ -59,7 +59,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
             values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
           }),
           label: strings.PROJECTS,
-          renderOption: (id: number) => getProjectName(id),
+          renderOption: (id: string | number) => getProjectName(Number(id)),
         },
       ];
 
@@ -84,9 +84,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
       onSearch: (value: string) => setSearch(value),
       filtersProps: {
         filters,
-        setFilters: (value: Record<string, any>) => {
-          setFilters(value);
-        },
+        setFilters,
         filterColumns,
         filterOptions,
         pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
@@ -98,18 +96,6 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
     }),
     [search, filters, filterColumns, filterOptions, getProjectName]
   );
-
-  const plantingCompleted = useMemo<boolean | undefined>(() => {
-    if (activeLocale && filters.plantingCompleted?.values?.length > 0) {
-      return filters.plantingCompleted.values[0] === strings.YES;
-    }
-  }, [filters, activeLocale]);
-
-  const siteName = useMemo<string | undefined>(() => {
-    if (filters.siteName?.values?.length > 0) {
-      return filters.siteName.values[0];
-    }
-  }, [filters]);
 
   const reloadTrackingAndObservations = useCallback(() => {
     reloadTracking();
@@ -153,14 +139,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
             {...searchProps}
           />
         }
-        list={
-          <PlantingProgressList
-            search={search}
-            plantingCompleted={plantingCompleted}
-            reloadTracking={reloadTrackingAndObservations}
-            siteName={siteName}
-          />
-        }
+        list={<PlantingProgressList filters={filters} search={search} reloadTracking={reloadTrackingAndObservations} />}
         map={
           <PlantingProgressMap plantingSiteId={selectedPlantingSiteId} reloadTracking={reloadTrackingAndObservations} />
         }

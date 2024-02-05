@@ -20,6 +20,7 @@ import StatsWarningDialog from './StatsWarningModal';
 import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { SearchNodePayload } from '../../types/Search';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -89,23 +90,19 @@ const columnsWithZones = (): TableColumnType[] => [
 ];
 
 export type PlantingProgressListProps = {
+  filters: Record<string, SearchNodePayload>;
   search: string;
-  plantingCompleted?: boolean;
   reloadTracking: () => void;
-  siteName?: string;
 };
 
 export default function PlantingProgressList({
+  filters,
   search,
-  plantingCompleted,
   reloadTracking,
-  siteName,
 }: PlantingProgressListProps): JSX.Element {
   const [hasZones, setHasZones] = useState<boolean | undefined>();
   const classes = useStyles();
-  const data = useAppSelector((state: any) =>
-    searchPlantingProgress(state, search.trim(), plantingCompleted, siteName)
-  );
+  const data = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), filters));
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
   const defaultTimeZone = useDefaultTimeZone();
@@ -237,7 +234,6 @@ const DetailsRenderer =
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row } = props;
 
-    console.log('row', row);
     const createLinkToWithdrawals = () => {
       const filterParam = row.subzoneName
         ? `subzoneName=${encodeURIComponent(row.subzoneName)}&siteName=${encodeURIComponent(row.siteName)}`

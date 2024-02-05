@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   dropdown: {
     cursor: 'pointer',
     border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
-    borderRadius: '4px',
+    borderRadius: '8px',
     width: '176px',
     height: '40px',
     padding: theme.spacing(1, 2, 1, 1),
@@ -51,7 +51,7 @@ type FilterMultiSelectContainerProps<T> = {
   label: string;
   notPresentFilterLabel?: string;
   notPresentFilterShown?: boolean;
-  options: number[];
+  options: (string | number)[];
   renderOption: (id: number) => string;
   setFilters: (f: T) => void;
 };
@@ -97,7 +97,7 @@ export default function FilterMultiSelectContainer<T extends Record<string, (num
           handleClose();
           setFilters({ ...filters, [filterKey]: selectedIds });
         }}
-        options={options}
+        options={options.map((option) => Number(option))}
         renderOption={renderOption}
         notPresentFilterLabel={notPresentFilterLabel}
         notPresentFilterShown={notPresentFilterShown}

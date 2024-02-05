@@ -7,7 +7,6 @@ export const requestPlantings = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response = await PlantingsService.listPlantings(organizationId, {});
-      console.log('response', response);
       const plantings = response?.flatMap((r) => (r as any).delivery.plantings);
       dispatch(setPlantingsAction({ plantings }));
     } catch (e) {
