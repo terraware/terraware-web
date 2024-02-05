@@ -158,6 +158,6 @@
     "tslint-react-hooks": "^2.2.2"
   },
   "resolutions": {
-    "fork-ts-checker-webpack-plugin": "^6.5.3"
+    "fork-ts-checker-webpack-plugin": "^9.0.0"
   }
 }
