@@ -2,9 +2,14 @@ import { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Box, CircularProgress } from '@mui/material';
 import { BusySpinner, TableColumnType } from '@terraware/web-components';
+import { TopBarButton } from '@terraware/web-components/components/table';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
+import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
 import {
   searchPlantingProgress,
   selectUpdatePlantingsCompleted,
@@ -13,14 +18,9 @@ import CellRenderer, { TableRowType } from 'src/components/common/table/TableCel
 import { RendererProps } from 'src/components/common/table/types';
 import Table from 'src/components/common/table';
 import Link from 'src/components/common/Link';
-import { TopBarButton } from '@terraware/web-components/components/table';
-import { requestUpdatePlantingsCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
-import useSnackbar from 'src/utils/useSnackbar';
-import StatsWarningDialog from './StatsWarningModal';
-import { selectZonesHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { SearchNodePayload } from '../../types/Search';
+import { SearchNodePayload } from 'src/types/Search';
+import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
 
 const useStyles = makeStyles(() => ({
   text: {

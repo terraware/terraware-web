@@ -6,7 +6,7 @@ import { PlantingSiteSearchResult } from 'src/types/Tracking';
 import { SearchNodePayload } from 'src/types/Search';
 import { selectPlantingSites, selectPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingSelectors';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { PlantingSearchData } from './plantingsSlice';
+import { PlantingSearchData } from 'src/redux/features/plantings/plantingsSlice';
 
 export const selectPlantings = (state: RootState) => state.plantings?.plantings;
 
