@@ -88,12 +88,10 @@ ALTER DATABASE terraware RENAME TO terrawareTEMP;
 To run the end-to-end tests:
 
 ```shell
-yarn server:reset  # start server and reset database state
-yarn start:dev     # start the frontend
-yarn cy            # run the tests in interactive mode
-# OR
-yarn cy:run && yarn e2e:report  # run the tests on the command line and generate a report
-yarn docker:stop   # don't forget to stop the server when you're done
+yarn server:reset   # start server and reset database state
+yarn start:dev      # start the frontend
+yarn playwright:run # run the tests on the command line and generate a report
+yarn docker:stop    # don't forget to stop the server when you're done
 ```
 
 ## Connecting to the Database
