@@ -5,12 +5,15 @@ import { SortOrder } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { NurseryWithdrawalService } from 'src/services';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useAppSelector } from 'src/redux/store';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { Project } from 'src/types/Project';
 import {
   AndNodePayload,
   FieldNodePayload,
@@ -22,14 +25,21 @@ import {
 } from 'src/types/Search';
 import Table from 'src/components/common/table';
 import { FilterField } from 'src/components/common/FilterGroup';
-import SearchFiltersWrapper, { SearchFiltersProps } from 'src/components/common/SearchFiltersWrapper';
+import SearchFiltersWrapper, {
+  FeaturedFilterConfig,
+  SearchFiltersProps,
+} from 'src/components/common/SearchFiltersWrapper';
 import WithdrawalLogRenderer from 'src/scenes/NurseryRouter/WithdrawalLogRenderer';
+import isEnabled from '../../features';
 
-const columns = (): TableColumnType[] => [
+const columns = (featureFlagProjects: boolean): TableColumnType[] => [
   { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
   { key: 'purpose', name: strings.PURPOSE, type: 'string' },
   { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
   { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
+  ...((featureFlagProjects
+    ? [{ key: 'project_names', name: strings.PROJECTS, type: 'string' }]
+    : []) as TableColumnType[]),
   { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
   { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
   { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
@@ -48,6 +58,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const subzoneParam = query.get('subzoneName');
   const siteParam = query.get('siteName');
+
+  const projects = useAppSelector(selectProjects);
+  const featureFlagProjects = isEnabled('Projects');
 
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
     field: 'withdrawnDate',
@@ -75,6 +88,11 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
+  const getProjectName = useCallback(
+    (projectId: number) => (projects?.find((project: Project) => project.id === projectId) || {}).name || '',
+    [projects]
+  );
+
   const filtersProps: SearchFiltersProps = useMemo(
     () => ({
       filters,
@@ -82,8 +100,42 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       filterColumns,
       filterOptions,
       noScroll: false,
+      pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
+        if (filterName === 'project_id') {
+          if (values.length === 1 && values[0] === null) {
+            return strings.NO_PROJECT;
+          }
+
+          return values.map((value: unknown) => getProjectName(Number(value))).join(', ');
+        }
+      },
     }),
-    [filterColumns, filterOptions, filters]
+    [filterColumns, filterOptions, filters, getProjectName]
+  );
+
+  const featuredFilters: FeaturedFilterConfig[] = useMemo(
+    () =>
+      featureFlagProjects
+        ? [
+            {
+              field: 'project_id',
+              options: (projects || [])?.map((project: Project) => `${project.id}`),
+              searchNodeCreator: (values: (number | string | null)[]) => ({
+                field: 'batchWithdrawals.batch_project_id',
+                operation: 'field',
+                type: 'Exact',
+                values: values.map((value: number | string | null): string | null =>
+                  value === null ? value : `${value}`
+                ),
+              }),
+              label: strings.PROJECTS,
+              renderOption: (id: string | number) => getProjectName(Number(id)),
+              notPresentFilterShown: true,
+              notPresentFilterLabel: activeLocale ? strings.NO_PROJECT : '',
+            },
+          ]
+        : [],
+    [activeLocale, featureFlagProjects, getProjectName, projects]
   );
 
   useEffect(() => {
@@ -229,13 +281,18 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   return (
     <Grid container>
       <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
-        <SearchFiltersWrapper search={searchValue} onSearch={setSearchValue} filtersProps={filtersProps} />
+        <SearchFiltersWrapper
+          search={searchValue}
+          onSearch={setSearchValue}
+          filtersProps={filtersProps}
+          featuredFilters={featuredFilters}
+        />
       </Grid>
 
       <Grid item xs={12}>
         <Table
           id='withdrawal-log'
-          columns={columns}
+          columns={() => columns(featureFlagProjects)}
           rows={searchResults || []}
           Renderer={WithdrawalLogRenderer}
           orderBy={searchSortOrder.field}
