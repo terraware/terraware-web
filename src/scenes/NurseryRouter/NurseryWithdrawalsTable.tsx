@@ -5,6 +5,7 @@ import { SortOrder } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useQuery from 'src/utils/useQuery';
@@ -30,7 +31,6 @@ import SearchFiltersWrapper, {
   SearchFiltersProps,
 } from 'src/components/common/SearchFiltersWrapper';
 import WithdrawalLogRenderer from 'src/scenes/NurseryRouter/WithdrawalLogRenderer';
-import isEnabled from '../../features';
 
 const columns = (featureFlagProjects: boolean): TableColumnType[] => [
   { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
@@ -49,23 +49,29 @@ const columns = (featureFlagProjects: boolean): TableColumnType[] => [
 export default function NurseryWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
-  const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
-  const [searchValue, setSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(searchValue, 250);
-  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  const featureFlagProjects = isEnabled('Projects');
+  const query = useQuery();
   const subzoneParam = query.get('subzoneName');
   const siteParam = query.get('siteName');
 
   const projects = useAppSelector(selectProjects);
-  const featureFlagProjects = isEnabled('Projects');
 
+  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
+  const [searchValue, setSearchValue] = useState('');
+  const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
     field: 'withdrawnDate',
     direction: 'Descending',
   } as SearchSortOrder);
+  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
+
+  const getProjectName = useCallback(
+    (projectId: number) => (projects?.find((project: Project) => project.id === projectId) || {}).name || '',
+    [projects]
+  );
 
   const filterColumns = useMemo<FilterField[]>(
     () =>
@@ -86,13 +92,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     [activeLocale]
   );
 
-  const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
-
-  const getProjectName = useCallback(
-    (projectId: number) => (projects?.find((project: Project) => project.id === projectId) || {}).name || '',
-    [projects]
-  );
-
   const filtersProps: SearchFiltersProps = useMemo(
     () => ({
       filters,
@@ -100,17 +99,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       filterColumns,
       filterOptions,
       noScroll: false,
-      pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
-        if (filterName === 'project_id') {
-          if (values.length === 1 && values[0] === null) {
-            return strings.NO_PROJECT;
-          }
-
-          return values.map((value: unknown) => getProjectName(Number(value))).join(', ');
-        }
-      },
     }),
-    [filterColumns, filterOptions, filters, getProjectName]
+    [filterColumns, filterOptions, filters]
   );
 
   const featuredFilters: FeaturedFilterConfig[] = useMemo(
@@ -132,6 +122,13 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
               renderOption: (id: string | number) => getProjectName(Number(id)),
               notPresentFilterShown: true,
               notPresentFilterLabel: activeLocale ? strings.NO_PROJECT : '',
+              pillValuesRenderer: (values: unknown[]): string | undefined => {
+                if (values.length === 1 && values[0] === null) {
+                  return strings.NO_PROJECT;
+                }
+
+                return values.map((value: unknown) => getProjectName(Number(value))).join(', ');
+              },
             },
           ]
         : [],
