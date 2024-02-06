@@ -2,8 +2,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import { SortOrder } from '@terraware/web-components';
+import { PillList } from '@terraware/web-components';
+import { TableColumnType } from '@terraware/web-components/components/table/types';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization, useOrganization } from 'src/providers';
+import useDebounce from 'src/utils/useDebounce';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { NurseryWithdrawalService } from 'src/services';
@@ -16,15 +21,10 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import WithdrawalLogRenderer from './WithdrawalLogRenderer';
-import useDebounce from 'src/utils/useDebounce';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { useLocalization, useOrganization } from 'src/providers';
-import { PillList } from '@terraware/web-components';
 import Table from 'src/components/common/table';
-import { TableColumnType } from '@terraware/web-components/components/table/types';
 import { FilterField } from 'src/components/common/FilterGroup';
-import SearchFiltersWrapper, { SearchFiltersProps } from '../../components/common/SearchFiltersWrapper';
+import SearchFiltersWrapper, { SearchFiltersProps } from 'src/components/common/SearchFiltersWrapper';
+import WithdrawalLogRenderer from 'src/scenes/NurseryRouter/WithdrawalLogRenderer';
 
 const columns = (): TableColumnType[] => [
   { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
