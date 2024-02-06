@@ -655,7 +655,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               </Grid>
             )}
 
-            {featureFlagProjects && (
+            {featureFlagProjects && (projects?.length || 0) > 0 && (
               <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                 <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
                   <ProjectsDropdown<{ projectId?: number }>
