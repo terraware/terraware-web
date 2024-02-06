@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import { SortOrder } from '@terraware/web-components';
-import { PillList } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
@@ -93,25 +92,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     };
     void getApiSearchResults();
   }, [selectedOrganization]);
-
-  const filterPillData = useMemo(
-    () =>
-      Object.keys(filters).map((key) => {
-        const removeFilter = (k: string) => {
-          const result = { ...filters };
-          delete result[k];
-          setFilters(result);
-        };
-
-        return {
-          id: key,
-          label: filterColumns.find((f) => key === f.name)?.label ?? '',
-          value: filters[key].values.join(', '),
-          onRemove: () => removeFilter(key),
-        };
-      }),
-    [filters, filterColumns]
-  );
 
   const onWithdrawalClicked = (withdrawal: any) => {
     history.push({
@@ -250,10 +230,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     <Grid container>
       <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
         <SearchFiltersWrapper search={searchValue} onSearch={setSearchValue} filtersProps={filtersProps} />
-      </Grid>
-
-      <Grid xs={12} display='flex'>
-        <PillList data={filterPillData} />
       </Grid>
 
       <Grid item xs={12}>
