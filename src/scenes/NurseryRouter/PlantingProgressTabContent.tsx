@@ -65,6 +65,13 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
               renderOption: (id: string | number) => getProjectName(Number(id)),
               notPresentFilterShown: true,
               notPresentFilterLabel: activeLocale ? strings.NO_PROJECT : '',
+              pillValuesRenderer: (values: unknown[]): string | undefined => {
+                if (values.length === 1 && values[0] === null) {
+                  return strings.NO_PROJECT;
+                }
+
+                return values.map((value: unknown) => getProjectName(Number(value))).join(', ');
+              },
             },
           ]
         : [],
@@ -95,18 +102,9 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
         setFilters,
         filterColumns,
         filterOptions,
-        pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
-          if (filterName === 'project_id') {
-            if (values.length === 1 && values[0] === null) {
-              return strings.NO_PROJECT;
-            }
-
-            return values.map((value: unknown) => getProjectName(Number(value))).join(', ');
-          }
-        },
       },
     }),
-    [search, filters, filterColumns, filterOptions, getProjectName]
+    [search, filters, filterColumns, filterOptions]
   );
 
   const reloadTrackingAndObservations = useCallback(() => {

@@ -34,6 +34,7 @@ export type FeaturedFilterConfig = {
   options: (number | string)[];
   renderOption: (id: string | number) => string;
   searchNodeCreator: (values: (number | string | null)[]) => SearchNodePayload;
+  pillValuesRenderer: (values: unknown[]) => string | undefined;
 };
 
 export type SearchFiltersProps = {
@@ -42,7 +43,6 @@ export type SearchFiltersProps = {
   filterOptions: FieldOptionsMap;
   filterColumns: FilterField[];
   optionsRenderer?: (filterName: string, values: FieldValuesPayload) => Option[] | undefined;
-  pillValuesRenderer?: (filterName: string, values: unknown[]) => string | undefined;
 };
 
 export type SearchProps = SearchInputProps & {
@@ -78,18 +78,22 @@ export default function SearchFiltersWrapper({
               filtersProps.setFilters(result);
             };
 
-            const pillValue =
-              filtersProps.pillValuesRenderer && filtersProps.pillValuesRenderer(key, filtersProps.filters[key].values);
-
+            let pillValue: string | undefined = filtersProps.filters[key]?.values.join(', ');
             let label = filtersProps.filterColumns.find((f) => key === f.name)?.label ?? '';
-            if (!label) {
-              label = (featuredFilters || []).find((ff: FeaturedFilterConfig) => ff.field === key)?.label ?? '';
+
+            // If the filter is coming from a featured filter, the pill value and label will come from featuredFilters
+            if (featuredFilters) {
+              const featuredFilter = featuredFilters.find((ff) => ff.field === key);
+              if (featuredFilter) {
+                pillValue = featuredFilter.pillValuesRenderer(filtersProps.filters[key].values);
+                label = featuredFilter.label;
+              }
             }
 
             return {
               id: key,
               label,
-              value: pillValue ?? filtersProps.filters[key].values.join(', '),
+              value: pillValue || '',
               onRemove: () => removeFilter(key),
             };
           })
@@ -120,18 +124,28 @@ export default function SearchFiltersWrapper({
               return null;
             }
 
+            // Since we are using the same `filters` object across both featured and regular filters, we need to exclude
+            // the regular filters when passing into the multi select container since it is only used with
+            // numerical values and regular filters can be string values
+            const filtersForFeaturedFilter = Object.keys(filtersProps.filters).reduce(
+              (acc, curr) => {
+                if (curr !== featuredFilter.field) {
+                  return acc;
+                }
+                return {
+                  ...acc,
+                  [curr]: filtersProps.filters[curr].values.map((value: string | number) => Number(value)),
+                };
+              },
+              {} as Record<string, (number | null)[]>
+            );
+
             return (
               <Box marginLeft={theme.spacing(2)} key={index}>
                 <FilterMultiSelectContainer
                   disabled={featuredFilter.options.length === 0}
                   filterKey={featuredFilter.field}
-                  filters={Object.keys(filtersProps.filters).reduce(
-                    (acc, curr) => ({
-                      ...acc,
-                      [curr]: filtersProps.filters[curr].values.map((value: string | number) => Number(value)),
-                    }),
-                    {} as Record<string, (number | null)[]>
-                  )}
+                  filters={filtersForFeaturedFilter}
                   label={featuredFilter.label}
                   options={featuredFilter.options}
                   notPresentFilterLabel={featuredFilter.notPresentFilterLabel}
@@ -146,7 +160,12 @@ export default function SearchFiltersWrapper({
                       {}
                     );
 
-                    filtersProps.setFilters(nextFilters);
+                    // Since this filter is only aware of featured filters, we need to recombine with the regular
+                    // filters when setting the filters in the implementer
+                    filtersProps.setFilters({
+                      ...filtersProps.filters,
+                      ...nextFilters,
+                    });
                   }}
                 />
               </Box>
