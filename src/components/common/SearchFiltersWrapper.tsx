@@ -103,124 +103,122 @@ export default function SearchFiltersWrapper({
   );
 
   return (
-    <>
-      <Grid container>
-        <Grid item xs={12} display='flex' alignItems='center'>
-          <Box width={isMobile ? '200px' : '300px'} display='inline-flex' flexDirection='column'>
-            <Textfield
-              placeholder={strings.SEARCH}
-              iconLeft='search'
-              label=''
-              id='search'
-              type='text'
-              onChange={(val) => onSearch(val as string)}
-              value={search}
-              iconRight='cancel'
-              onClickRightIcon={() => onSearch('')}
-            />
-          </Box>
+    <Grid container>
+      <Grid item xs={12} display='flex' alignItems='center'>
+        <Box width={isMobile ? '200px' : '300px'} display='inline-flex' flexDirection='column'>
+          <Textfield
+            placeholder={strings.SEARCH}
+            iconLeft='search'
+            label=''
+            id='search'
+            type='text'
+            onChange={(val) => onSearch(val as string)}
+            value={search}
+            iconRight='cancel'
+            onClickRightIcon={() => onSearch('')}
+          />
+        </Box>
 
-          {(featuredFilters || []).map((featuredFilter: FeaturedFilterConfig, index: number) => {
-            if (!filtersProps) {
-              return null;
-            }
+        {(featuredFilters || []).map((featuredFilter: FeaturedFilterConfig, index: number) => {
+          if (!filtersProps) {
+            return null;
+          }
 
-            // Since we are using the same `filters` object across both featured and regular filters, we need to exclude
-            // the regular filters when passing into the multi select container since it is only used with
-            // numerical values and regular filters can be string values
-            const filtersForFeaturedFilter = Object.keys(filtersProps.filters).reduce(
-              (acc, curr) => {
-                if (curr !== featuredFilter.field) {
-                  return acc;
-                }
-                return {
-                  ...acc,
-                  [curr]: filtersProps.filters[curr].values.map((value: string | number) => Number(value)),
-                };
-              },
-              {} as Record<string, (number | null)[]>
-            );
+          // Since we are using the same `filters` object across both featured and regular filters, we need to exclude
+          // the regular filters when passing into the multi select container since it is only used with
+          // numerical values and regular filters can be string values
+          const filtersForFeaturedFilter = Object.keys(filtersProps.filters).reduce(
+            (acc, curr) => {
+              if (curr !== featuredFilter.field) {
+                return acc;
+              }
+              return {
+                ...acc,
+                [curr]: filtersProps.filters[curr].values.map((value: string | number) => Number(value)),
+              };
+            },
+            {} as Record<string, (number | null)[]>
+          );
 
-            return (
-              <Box marginLeft={theme.spacing(2)} key={index}>
-                <FilterMultiSelectContainer
-                  disabled={featuredFilter.options.length === 0}
-                  filterKey={featuredFilter.field}
-                  filters={filtersForFeaturedFilter}
-                  label={featuredFilter.label}
-                  options={featuredFilter.options}
-                  notPresentFilterLabel={featuredFilter.notPresentFilterLabel}
-                  notPresentFilterShown={featuredFilter.notPresentFilterShown}
-                  renderOption={featuredFilter.renderOption}
-                  setFilters={(fs: Record<string, (number | null)[]>) => {
-                    const nextFilters: Record<string, SearchNodePayload> = Object.keys(fs).reduce(
-                      (acc, curr) => ({
-                        ...acc,
-                        [curr]: featuredFilter.searchNodeCreator(fs[curr]),
-                      }),
-                      {}
-                    );
+          return (
+            <Box marginLeft={theme.spacing(2)} key={index}>
+              <FilterMultiSelectContainer
+                disabled={featuredFilter.options.length === 0}
+                filterKey={featuredFilter.field}
+                filters={filtersForFeaturedFilter}
+                label={featuredFilter.label}
+                options={featuredFilter.options}
+                notPresentFilterLabel={featuredFilter.notPresentFilterLabel}
+                notPresentFilterShown={featuredFilter.notPresentFilterShown}
+                renderOption={featuredFilter.renderOption}
+                setFilters={(fs: Record<string, (number | null)[]>) => {
+                  const nextFilters: Record<string, SearchNodePayload> = Object.keys(fs).reduce(
+                    (acc, curr) => ({
+                      ...acc,
+                      [curr]: featuredFilter.searchNodeCreator(fs[curr]),
+                    }),
+                    {}
+                  );
 
-                    // Since this filter is only aware of featured filters, we need to recombine with the regular
-                    // filters when setting the filters in the implementer
-                    filtersProps.setFilters({
-                      ...filtersProps.filters,
-                      ...nextFilters,
-                    });
-                  }}
-                />
-              </Box>
-            );
-          })}
-
-          {filtersProps && (
-            <>
-              <Tooltip title={strings.FILTER}>
-                <Button
-                  id='filter-observations-button'
-                  onClick={(event) => event && handleFilterClick(event)}
-                  type='passive'
-                  priority='ghost'
-                  icon='filter'
-                />
-              </Tooltip>
-              <Popover
-                id='observations-filter-popover'
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={handleFilterClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
+                  // Since this filter is only aware of featured filters, we need to recombine with the regular
+                  // filters when setting the filters in the implementer
+                  filtersProps.setFilters({
+                    ...filtersProps.filters,
+                    ...nextFilters,
+                  });
                 }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
+              />
+            </Box>
+          );
+        })}
+
+        {filtersProps && (
+          <>
+            <Tooltip title={strings.FILTER}>
+              <Button
+                id='filter-observations-button'
+                onClick={(event) => event && handleFilterClick(event)}
+                type='passive'
+                priority='ghost'
+                icon='filter'
+              />
+            </Tooltip>
+            <Popover
+              id='observations-filter-popover'
+              open={Boolean(anchorEl)}
+              anchorEl={anchorEl}
+              onClose={handleFilterClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              className={classes.popoverContainer}
+            >
+              <FilterGroup
+                initialFilters={filtersProps.filters}
+                fields={filtersProps.filterColumns}
+                values={filtersProps.filterOptions || {}}
+                onConfirm={(fs) => {
+                  handleFilterClose();
+                  filtersProps.setFilters(fs);
                 }}
-                className={classes.popoverContainer}
-              >
-                <FilterGroup
-                  initialFilters={filtersProps.filters}
-                  fields={filtersProps.filterColumns}
-                  values={filtersProps.filterOptions || {}}
-                  onConfirm={(fs) => {
-                    handleFilterClose();
-                    filtersProps.setFilters(fs);
-                  }}
-                  onCancel={handleFilterClose}
-                  noScroll={filtersProps.noScroll === undefined}
-                  optionsRenderer={filtersProps.optionsRenderer}
-                />
-              </Popover>
-            </>
-          )}
-        </Grid>
-        {filterPillData.length > 0 && (
-          <Grid item xs={12} display='flex' marginTop={1}>
-            <PillList data={filterPillData} />
-          </Grid>
+                onCancel={handleFilterClose}
+                noScroll={filtersProps.noScroll === undefined}
+                optionsRenderer={filtersProps.optionsRenderer}
+              />
+            </Popover>
+          </>
         )}
       </Grid>
-    </>
+      {filterPillData.length > 0 && (
+        <Grid item xs={12} display='flex' marginTop={1}>
+          <PillList data={filterPillData} />
+        </Grid>
+      )}
+    </Grid>
   );
 }
