@@ -125,7 +125,6 @@ export default function FilterMultiSelectContainer<T extends Record<string, (num
         }}
         options={options.map((option) => Number(option))}
         optionsVisible={optionsVisible}
-        setOptionsVisible={setOptionsVisible}
         renderOption={renderOption}
         notPresentFilterLabel={notPresentFilterLabel}
         notPresentFilterShown={notPresentFilterShown}
