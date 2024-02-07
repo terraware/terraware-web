@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Icon from 'src/components/common/icon/Icon';
@@ -75,13 +75,39 @@ export default function FilterMultiSelectContainer<T extends Record<string, (num
   const classes = useStyles({ isMobile });
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [optionsVisible, setOptionsVisible] = useState(false);
+  /*
+    Admittedly, this is a bit confusing. Because the onBlur event within the MultiSelect bubbles up _before_ the
+    onClose event in the Popover, we need to store, within this component's state, whether or not the options _were_
+    visible before the blur event occurred. I tried many, many configurations where setOptionsVisible was passed into
+    the MultiSelect, but the onBlur would still fire before the child component could tell the parent component that
+    the options were no longer visible (using setOptionsVisible), which resulted in the options being close, the parent
+    component re-rendering, and then the onClose handler would think that the options aren't visible, so the Popover
+    should be closed, which resulted in not achieving the goal.
+   */
+  const [optionsWereVisibleBeforeBlur, setOptionsWereVisibleBeforeblur] = useState(false);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     if (!disabled) {
       setAnchorEl(event.currentTarget);
     }
   };
-  const handleClose = () => {
+
+  const handleClose = useCallback(() => {
     setAnchorEl(null);
+  }, []);
+
+  const hideOptionsOrClose = useCallback(() => {
+    if (optionsWereVisibleBeforeBlur) {
+      setOptionsVisible(false);
+      setOptionsWereVisibleBeforeblur(false);
+    } else {
+      setAnchorEl(null);
+    }
+  }, [optionsWereVisibleBeforeBlur]);
+
+  const onMultiSelectBlur = () => {
+    setOptionsWereVisibleBeforeblur(true);
   };
 
   const initialSelection = filters[filterKey] || [];
@@ -98,9 +124,12 @@ export default function FilterMultiSelectContainer<T extends Record<string, (num
           setFilters({ ...filters, [filterKey]: selectedIds });
         }}
         options={options.map((option) => Number(option))}
+        optionsVisible={optionsVisible}
+        setOptionsVisible={setOptionsVisible}
         renderOption={renderOption}
         notPresentFilterLabel={notPresentFilterLabel}
         notPresentFilterShown={notPresentFilterShown}
+        onBlur={onMultiSelectBlur}
       />
     );
   };
@@ -117,7 +146,7 @@ export default function FilterMultiSelectContainer<T extends Record<string, (num
         <Popover
           id='pre-exposed-filter-popover'
           open={Boolean(anchorEl)}
-          onClose={handleClose}
+          onClose={hideOptionsOrClose}
           anchorEl={anchorEl}
           anchorOrigin={{
             vertical: 'bottom',
