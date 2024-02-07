@@ -655,11 +655,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               </Grid>
             )}
 
-            {!isSingleBatch && featureFlagProjects && (projects?.length || 0) > 0 && (
+            {featureFlagProjects && !isSingleBatch && (availableProjects || []).length > 0 && (
               <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                 <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
                   <ProjectsDropdown<{ projectId?: number }>
                     availableProjects={availableProjects}
+                    label={strings.FILTER_BY_PROJECT}
                     record={projectRecord}
                     setRecord={(setFn) => {
                       const nextRecord = setFn(projectRecord);
