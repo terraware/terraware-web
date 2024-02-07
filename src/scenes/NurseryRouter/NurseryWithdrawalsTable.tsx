@@ -105,7 +105,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const featuredFilters: FeaturedFilterConfig[] = useMemo(
     () =>
-      featureFlagProjects
+      featureFlagProjects && activeLocale
         ? [
             {
               field: 'project_id',
@@ -121,7 +121,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
               label: strings.PROJECTS,
               renderOption: (id: string | number) => getProjectName(Number(id)),
               notPresentFilterShown: true,
-              notPresentFilterLabel: activeLocale ? strings.NO_PROJECT : '',
+              notPresentFilterLabel: strings.NO_PROJECT,
               pillValuesRenderer: (values: unknown[]): string | undefined => {
                 if (values.length === 1 && values[0] === null) {
                   return strings.NO_PROJECT;
