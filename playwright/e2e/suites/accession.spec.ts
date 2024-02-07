@@ -1,6 +1,5 @@
-import { expect, test } from '@playwright/test';
-
-import { addCookies, waitFor } from '../utils/utils';
+import { test, expect } from '@playwright/test';
+import { waitFor, addCookies } from '../utils/utils';
 
 test.setTimeout(60000);
 test.beforeEach(async ({ context }, testInfo) => {
