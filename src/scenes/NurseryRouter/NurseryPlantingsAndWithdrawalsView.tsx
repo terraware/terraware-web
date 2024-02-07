@@ -64,8 +64,8 @@ export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: N
   );
 
   useEffect(() => {
-    dispatch(requestPlantings(selectedOrganization.id));
-    dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
+    void dispatch(requestPlantings(selectedOrganization.id));
+    void dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
