@@ -1,3 +1,6 @@
+39155abfaa SW-4820 Update project label in withdrawal flow (#2134)
+1ad11d74fe SW-4820 Do not show the projects dropdown if the withdrawal is for a single batch (#2133)
+cebf38bc64 SW-4819 Remove the projects dropdown when there are no projects (#2132)
 eacd72af88 Refactor the SearchFiltersWrapper  (#2131)
 a568573e72 SW-4767 Implement the project featured filter in the nursery withdrawals view (#2130)
 eb29e876ac Remove superfluous react fragment (#2129)
