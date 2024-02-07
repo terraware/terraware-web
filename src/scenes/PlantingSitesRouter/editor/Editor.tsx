@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Message } from '@terraware/web-components';
+import { Button, Message } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import { SiteType } from 'src/types/PlantingSite';
@@ -206,7 +206,23 @@ export default function Editor(props: EditorProps): JSX.Element {
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      {isMobile && <Message body={strings.SITE_EDITOR_USE_DESKTOP} priority='info' type='page' />}
+      {isMobile && (
+        <Message
+          body={strings.SITE_EDITOR_USE_DESKTOP}
+          priority='info'
+          type='page'
+          pageButtons={[
+            <Button
+              key={0}
+              label={strings.GO_TO_PLANTING_SITES}
+              onClick={goToPlantingSites}
+              priority='secondary'
+              size='small'
+              type='passive'
+            />,
+          ]}
+        />
+      )}
       {!isMobile && (
         <Form
           currentStep={currentStep}
