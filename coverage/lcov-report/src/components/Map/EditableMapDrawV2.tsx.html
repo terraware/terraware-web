@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/100</span>
+                <span class='fraction'>0/98</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/92</span>
             </div>
         
             
@@ -297,20 +297,7 @@
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
 <a name='L234'></a><a href='#L234'>234</a>
-<a name='L235'></a><a href='#L235'>235</a>
-<a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a>
-<a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a>
-<a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a>
-<a name='L247'></a><a href='#L247'>247</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L235'></a><a href='#L235'>235</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -391,14 +378,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -451,9 +430,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -584,7 +560,6 @@ export type MapEditorMode =
 &nbsp;
 type MapEditorProps = ConstructorParameters&lt;typeof MapboxDraw&gt;[0] &amp; {
   boundary?: FeatureCollection;
-  clearOnEdit?: boolean;
   onBoundaryChanged?: (boundary?: FeatureCollection) =&gt; void;
   setMode?: (mode: MapEditorMode) =&gt; void;
 };
@@ -629,8 +604,6 @@ function <span class="fstat-no" title="function not covered" >featureHasCoordina
  * @param boundary
  *  Initial boundary. If this is specified, the editor will start out in EditingBoundary mode;
  *  otherwise it will start out in CreatingBoundary mode.
- * @param clearOnEdit
- *  Whether to clear the boundary in the editor after onChange callbacks are notified
  * @param onBoundaryChanged
  *  Called when the user adds, edits, or deletes the boundary. The boundary is always a
  *  MultiPolygon containing a single polygon.
@@ -638,13 +611,7 @@ function <span class="fstat-no" title="function not covered" >featureHasCoordina
  * @param otherProps
  *  Additional properties to pass to the MapboxDraw control.
  */
-export default function <span class="fstat-no" title="function not covered" >EditableMapDraw(</span>{
-  boundary,
-  clearOnEdit,
-  onBoundaryChanged,
-  setMode,
-  ...otherProps
-}: MapEditorProps) {
+export default function <span class="fstat-no" title="function not covered" >EditableMapDraw(</span>{ boundary, onBoundaryChanged, setMode, ...otherProps }: MapEditorProps) {
   const [mapRef, setMapRef] = <span class="cstat-no" title="statement not covered" >useState&lt;MapRef&gt;();</span>
   const [drawMode, setDrawMode] = <span class="cstat-no" title="statement not covered" >useState&lt;DrawMode&gt;();</span>
   const [selection, setSelection] = <span class="cstat-no" title="statement not covered" >useState&lt;Feature&gt;();</span>
@@ -697,11 +664,8 @@ export default function <span class="fstat-no" title="function not covered" >Edi
 &nbsp;
       const updatedFeatures = <span class="cstat-no" title="statement not covered" >fetchUpdatedFeatures(features);</span>
 <span class="cstat-no" title="statement not covered" >      onBoundaryChanged(updatedFeatures);</span>
-<span class="cstat-no" title="statement not covered" >      if (clearOnEdit) {</span>
-<span class="cstat-no" title="statement not covered" >        draw.deleteAll();</span>
-      }
     },
-    [clearOnEdit, draw, fetchUpdatedFeatures, onBoundaryChanged]
+    [fetchUpdatedFeatures, onBoundaryChanged]
   );
 &nbsp;
   const onCreate = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -808,7 +772,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-07T16:51:18.349Z
+                at 2024-02-07T17:20:43.369Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
