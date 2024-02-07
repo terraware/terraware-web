@@ -302,6 +302,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         editableBoundary={zonesData?.editableBoundary}
         errorAnnotations={zonesData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}
+        isSliceTool
         onEditableBoundaryChanged={onEditableBoundaryChanged}
         onRedo={redo}
         onUndo={undo}
@@ -389,7 +390,7 @@ const TooltipContents = ({
       <Box display='flex' flexDirection='column' padding={theme.spacing(2)}>
         <Typography>{strings.PLANTING_SITE_ZONE_NAME_HELP}</Typography>
         <Textfield
-          autoFocus={true}
+          autoFocus
           className={classes.textInput}
           label={strings.NAME}
           id='zone-name'
