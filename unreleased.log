@@ -1,3 +1,4 @@
+a4b5a90e79 SW-4825 Fit map to available height in planting progress map view  (#2135)
 39155abfaa SW-4820 Update project label in withdrawal flow (#2134)
 1ad11d74fe SW-4820 Do not show the projects dropdown if the withdrawal is for a single batch (#2133)
 cebf38bc64 SW-4819 Remove the projects dropdown when there are no projects (#2132)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1707331076468" clover="3.2.0">
-  <project timestamp="1707331076468" name="All files">
+<coverage generated="1707331361147" clover="3.2.0">
+  <project timestamp="1707331361147" name="All files">
     <metrics statements="15977" coveredstatements="533" conditionals="10356" coveredconditionals="154" methods="5006" coveredmethods="121" elements="31339" coveredelements="808" complexity="0" loc="15977" ncloc="15977" packages="129" files="630" classes="630"/>
     <package name="src">
       <metrics statements="173" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="46" coveredmethods="0"/>
@@ -12062,8 +12062,8 @@
         <line num="117" count="0" type="stmt"/>
         <line num="118" count="0" type="stmt"/>
         <line num="130" count="0" type="stmt"/>
-        <line num="168" count="0" type="stmt"/>
-        <line num="170" count="0" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="175" count="0" type="stmt"/>
       </file>
       <file name="ReassignmentRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/NurseryRouter/ReassignmentRenderer.tsx">
         <metrics statements="38" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="11" coveredmethods="0"/>
