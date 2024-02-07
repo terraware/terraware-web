@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Grid, Popover, Theme } from '@mui/material';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { makeStyles } from '@mui/styles';
-import { SortOrder, Tooltip } from '@terraware/web-components';
+import { Grid } from '@mui/material';
+import { SortOrder } from '@terraware/web-components';
+import { TableColumnType } from '@terraware/web-components/components/table/types';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization, useOrganization } from 'src/providers';
+import useDebounce from 'src/utils/useDebounce';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { NurseryWithdrawalService } from 'src/services';
@@ -18,28 +20,10 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import WithdrawalLogRenderer from './WithdrawalLogRenderer';
-import useDebounce from 'src/utils/useDebounce';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { useLocalization, useOrganization } from 'src/providers';
-import { Button, PillList } from '@terraware/web-components';
 import Table from 'src/components/common/table';
-import { TableColumnType } from '@terraware/web-components/components/table/types';
-import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  searchField: {
-    width: '300px',
-  },
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      border: `1px solid ${theme.palette.TwClrBaseGray300}`,
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: '480px',
-    },
-  },
-}));
+import { FilterField } from 'src/components/common/FilterGroup';
+import SearchFiltersWrapper, { SearchFiltersProps } from 'src/components/common/SearchFiltersWrapper';
+import WithdrawalLogRenderer from 'src/scenes/NurseryRouter/WithdrawalLogRenderer';
 
 const columns = (): TableColumnType[] => [
   { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
@@ -58,21 +42,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();
-  const classes = useStyles();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const subzoneParam = query.get('subzoneName');
   const siteParam = query.get('siteName');
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleFilterClose = () => {
-    setAnchorEl(null);
-  };
 
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
     field: 'withdrawnDate',
@@ -100,31 +75,23 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
+  const filtersProps: SearchFiltersProps = useMemo(
+    () => ({
+      filters,
+      setFilters,
+      filterColumns,
+      filterOptions,
+      noScroll: false,
+    }),
+    [filterColumns, filterOptions, filters]
+  );
+
   useEffect(() => {
     const getApiSearchResults = async () => {
       setFilterOptions(await NurseryWithdrawalService.getFilterOptions(selectedOrganization.id));
     };
-    getApiSearchResults();
+    void getApiSearchResults();
   }, [selectedOrganization]);
-
-  const filterPillData = useMemo(
-    () =>
-      Object.keys(filters).map((key) => {
-        const removeFilter = (k: string) => {
-          const result = { ...filters };
-          delete result[k];
-          setFilters(result);
-        };
-
-        return {
-          id: key,
-          label: filterColumns.find((f) => key === f.name)?.label ?? '',
-          value: filters[key].values.join(', '),
-          onRemove: () => removeFilter(key),
-        };
-      }),
-    [filters, filterColumns]
-  );
 
   const onWithdrawalClicked = (withdrawal: any) => {
     history.push({
@@ -248,7 +215,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [subzoneParam, query, history, location]);
 
   useEffect(() => {
-    onApplyFilters();
+    void onApplyFilters();
   }, [filters, onApplyFilters]);
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
@@ -262,55 +229,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   return (
     <Grid container>
       <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
-        <TextField
-          placeholder={strings.SEARCH}
-          iconLeft='search'
-          label=''
-          id='search'
-          type='text'
-          className={classes.searchField}
-          iconRight='cancel'
-          value={searchValue}
-          onChange={(value) => setSearchValue(value as string)}
-        />
-        <Tooltip title={strings.FILTER}>
-          <Button
-            id='filterNurseryWithdrawal'
-            onClick={(event) => event && handleFilterClick(event)}
-            type='passive'
-            priority='ghost'
-            icon='filter'
-          />
-        </Tooltip>
-        <Popover
-          id='simple-popover'
-          open={Boolean(anchorEl)}
-          anchorEl={anchorEl}
-          onClose={handleFilterClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-          className={classes.popoverContainer}
-        >
-          <FilterGroup
-            initialFilters={filters}
-            fields={filterColumns}
-            values={filterOptions || {}}
-            onConfirm={(fs) => {
-              handleFilterClose();
-              setFilters(fs);
-            }}
-            onCancel={handleFilterClose}
-          />
-        </Popover>
-      </Grid>
-      <Grid xs={12} display='flex'>
-        <PillList data={filterPillData} />
+        <SearchFiltersWrapper search={searchValue} onSearch={setSearchValue} filtersProps={filtersProps} />
       </Grid>
 
       <Grid item xs={12}>

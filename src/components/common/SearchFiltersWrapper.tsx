@@ -43,6 +43,7 @@ export type SearchFiltersProps = {
   filterOptions: FieldOptionsMap;
   filterColumns: FilterField[];
   optionsRenderer?: (filterName: string, values: FieldValuesPayload) => Option[] | undefined;
+  noScroll?: boolean;
 };
 
 export type SearchProps = SearchInputProps & {
@@ -207,7 +208,7 @@ export default function SearchFiltersWrapper({
                     filtersProps.setFilters(fs);
                   }}
                   onCancel={handleFilterClose}
-                  noScroll={true}
+                  noScroll={filtersProps.noScroll === undefined}
                   optionsRenderer={filtersProps.optionsRenderer}
                 />
               </Popover>
