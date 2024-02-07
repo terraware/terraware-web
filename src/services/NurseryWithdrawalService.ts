@@ -75,6 +75,22 @@ const uploadWithdrawalPhotos = async (
   return PhotoService.uploadPhotos(url, photos);
 };
 
+export type NurseryWithdrawalsSearchResponseElement = {
+  id: string;
+  delivery_id: string;
+  withdrawnDate: string;
+  purpose: string;
+  facility_name: string;
+  destinationName: string;
+  totalWithdrawn: string;
+  hasReassignments: string;
+  batchWithdrawals: {
+    batch_species_scientificName: string;
+    batch_project_id: string;
+    batch_project_name: string;
+  }[];
+};
+
 /**
  * List nursery withdrawals
  */
@@ -96,6 +112,8 @@ const listNurseryWithdrawals = async (
       'batchWithdrawals.batch_species_scientificName',
       'totalWithdrawn',
       'hasReassignments',
+      'batchWithdrawals.batch_project_id',
+      'batchWithdrawals.batch_project_name',
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder] : [{ field: 'id', direction: 'Ascending' }],
@@ -103,18 +121,22 @@ const listNurseryWithdrawals = async (
   };
   const deletedSpecies = [{ batch_species_scientificName: strings.DELETED_SPECIES }];
 
-  const data = await SearchService.search(searchParams);
+  const data: NurseryWithdrawalsSearchResponseElement[] | null = await SearchService.search(searchParams);
   if (data) {
     return data.map((datum) => {
       const { batchWithdrawals, ...remaining } = datum;
-      const speciesScientificNames = ((batchWithdrawals || deletedSpecies) as any[]).map(
-        (batchWithdrawal) => batchWithdrawal.batch_species_scientificName
-      );
+
       // replace batchWithdrawals with species_scientificNames, which is an array of species names
-      const deDupedNames = new Set(speciesScientificNames);
+      const speciesScientificNames = new Set(
+        (batchWithdrawals || deletedSpecies).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName)
+      );
+
+      const projectNames = new Set(batchWithdrawals.map((batchWithdrawal) => batchWithdrawal.batch_project_name));
+
       return {
         ...remaining,
-        speciesScientificNames: Array.from(deDupedNames).sort(),
+        speciesScientificNames: Array.from(speciesScientificNames).sort(),
+        project_names: Array.from(projectNames).sort(),
       };
     });
   }

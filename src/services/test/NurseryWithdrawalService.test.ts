@@ -1,7 +1,7 @@
 import { readData } from './utils';
-jest.mock('../SearchService');
 import SearchService from '../SearchService';
 import NurseryWithdrawalService from '../NurseryWithdrawalService';
+jest.mock('../SearchService');
 
 const search = SearchService.search as jest.MockedFunction<typeof SearchService.search>;
 
@@ -28,6 +28,7 @@ describe('Nursery withdrawals service', () => {
                 batch_species_scientificName: 'Abarema asplenifoliaasdfasdasdfa',
               },
             ],
+            project_names: [undefined],
           },
         ])
       );
@@ -44,15 +45,38 @@ describe('Nursery withdrawals service', () => {
           totalWithdrawn: '1,005',
           hasReassignments: 'true',
           speciesScientificNames: ['Abarema asplenifoliaasdfasdasdfa', 'Abelia macrotera var. deutziaefolia'],
+          project_names: [undefined],
         },
       ]);
     });
 
     it('should handle multiple items in the results list', async () => {
       search.mockImplementation(() => Promise.resolve(readData('nurseryWithdrawalsRaw.json')));
-      expect(await NurseryWithdrawalService.listNurseryWithdrawals(1, [])).toEqual(
-        readData('nurseryWithdrawalsProcessed.json')
-      );
+      expect(await NurseryWithdrawalService.listNurseryWithdrawals(1, [])).toEqual([
+        {
+          id: '59',
+          withdrawnDate: '2023-02-23',
+          purpose: 'Other',
+          facility_name: 'testOther',
+          totalWithdrawn: '1',
+          hasReassignments: 'false',
+          speciesScientificNames: ['Abarema asplenifoliaasdfasdasdfa'],
+          project_names: [undefined],
+        },
+        {
+          id: '56',
+          delivery_id: '24',
+          withdrawnDate: '2023-02-14',
+          purpose: 'Out Plant',
+          facility_name: 'testOutplant',
+          destinationName: 'testSite',
+          plantingSubzoneNames: 'PZ2-A9 (PZ2-B9)',
+          totalWithdrawn: '1,005',
+          hasReassignments: 'true',
+          speciesScientificNames: ['Abarema asplenifoliaasdfasdasdfa', 'Abelia macrotera var. deutziaefolia'],
+          project_names: [undefined],
+        },
+      ]);
     });
 
     it('should return null if search returned null data due to an error', async () => {
