@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react';
 import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
@@ -10,6 +10,7 @@ import { SiteType } from 'src/types/PlantingSite';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useDocLinks } from 'src/docLinks';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
 import TfMain from 'src/components/common/TfMain';
@@ -25,7 +26,7 @@ import Zones from './Zones';
 import Subzones from './Subzones';
 import StartOverConfirmation from './StartOverConfirmation';
 
-type EditorProps = {
+export type EditorProps = {
   reloadPlantingSites: () => void;
   site: PlantingSite;
   siteType: SiteType;
@@ -48,6 +49,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   const snackbar = useSnackbar();
   const classes = useStyles();
   const docLinks = useDocLinks();
+  const { isMobile } = useDeviceInfo();
 
   const [showPageMessage, setShowPageMessage] = useState<boolean>(true);
   const [onValidate, setOnValidate] = useState<
@@ -201,53 +203,63 @@ export default function Editor(props: EditorProps): JSX.Element {
           </Typography>
         </Box>
       </PageHeaderWrapper>
-      <Form
-        currentStep={currentStep}
-        onCancel={onCancel}
-        onSaveAndNext={() => onSave(false)}
-        onSaveAndClose={() => onSave(true)}
-        onStartOver={() => setShowStartOver(true)}
-        steps={steps}
-        className={classes.container}
-      >
+      <Grid item xs={12}>
         <PageSnackbar />
-        {pageMessage && (
-          <Box marginTop={theme.spacing(6)}>
-            <Message
-              body={pageMessage}
-              onClose={() => setShowPageMessage(false)}
-              priority='info'
-              showCloseButton
-              title={strings.PLANTING_SITE_CREATE_DETAILED_TITLE}
-              type='page'
-            />
-          </Box>
-        )}
-        <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}>
-          {currentStep === 'details' && (
-            <Details
-              onChange={onChange}
-              onValidate={onValidate}
-              plantingSeasons={plantingSeasons}
-              setPlantingSeasons={setPlantingSeasons}
-              setPlantingSite={setPlantingSite}
-              site={plantingSite}
-            />
+      </Grid>
+      {isMobile && <Message body={strings.SITE_EDITOR_USE_DESKTOP} priority='info' type='page' />}
+      {!isMobile && (
+        <Form
+          currentStep={currentStep}
+          onCancel={onCancel}
+          onSaveAndNext={() => onSave(false)}
+          onSaveAndClose={() => onSave(true)}
+          onStartOver={() => setShowStartOver(true)}
+          steps={steps}
+          className={classes.container}
+        >
+          {pageMessage && (
+            <Box marginTop={theme.spacing(6)}>
+              <Message
+                body={pageMessage}
+                onClose={() => setShowPageMessage(false)}
+                priority='info'
+                showCloseButton
+                title={strings.PLANTING_SITE_CREATE_DETAILED_TITLE}
+                type='page'
+              />
+            </Box>
           )}
-          {currentStep === 'site_boundary' && (
-            <SiteBoundary isSimpleSite={isSimpleSite} onChange={onChange} onValidate={onValidate} site={plantingSite} />
-          )}
-          {currentStep === 'exclusion_areas' && (
-            <Exclusions onChange={onChange} onValidate={onValidate} site={plantingSite} />
-          )}
-          {currentStep === 'zone_boundaries' && (
-            <Zones onChange={onChange} onValidate={onValidate} site={plantingSite} />
-          )}
-          {currentStep === 'subzone_boundaries' && (
-            <Subzones onChange={onChange} onValidate={onValidate} site={plantingSite} />
-          )}
-        </Card>
-      </Form>
+          <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}>
+            {currentStep === 'details' && (
+              <Details
+                onChange={onChange}
+                onValidate={onValidate}
+                plantingSeasons={plantingSeasons}
+                setPlantingSeasons={setPlantingSeasons}
+                setPlantingSite={setPlantingSite}
+                site={plantingSite}
+              />
+            )}
+            {currentStep === 'site_boundary' && (
+              <SiteBoundary
+                isSimpleSite={isSimpleSite}
+                onChange={onChange}
+                onValidate={onValidate}
+                site={plantingSite}
+              />
+            )}
+            {currentStep === 'exclusion_areas' && (
+              <Exclusions onChange={onChange} onValidate={onValidate} site={plantingSite} />
+            )}
+            {currentStep === 'zone_boundaries' && (
+              <Zones onChange={onChange} onValidate={onValidate} site={plantingSite} />
+            )}
+            {currentStep === 'subzone_boundaries' && (
+              <Subzones onChange={onChange} onValidate={onValidate} site={plantingSite} />
+            )}
+          </Card>
+        </Form>
+      )}
     </TfMain>
   );
 }
