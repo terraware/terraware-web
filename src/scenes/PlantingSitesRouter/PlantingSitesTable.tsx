@@ -47,6 +47,8 @@ const columns = (): TableColumnType[] => [
   { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
   { key: 'numPlantingSubzones', name: strings.SUBZONES, type: 'string' },
   { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
+  // TODO: update with BE prop
+  { key: 'draft', name: '', type: 'string' }, // don't show column header name
 ];
 
 export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.Element {
@@ -54,6 +56,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
 
   const theme = useTheme();
   const featureFlagProjects = isEnabled('Projects');
+  const featureFlagSites = isEnabled('User Detailed Sites');
 
   const projects = useAppSelector(selectProjects);
 
@@ -92,6 +95,11 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
     },
     [filterPillData, filters, setFilters]
   );
+
+  const tableColumns = useCallback(() => {
+    const columnsData = featureFlagProjects ? columns() : columns().filter((column) => column.key !== 'project_name');
+    return featureFlagSites ? columnsData : columnsData.filter((column) => column.key !== 'draft');
+  }, [featureFlagProjects, featureFlagSites]);
 
   return (
     <Card flushMobile>
@@ -132,9 +140,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             <Grid item xs={12}>
               <Table
                 id='planting-sites-table'
-                columns={() =>
-                  featureFlagProjects ? columns() : columns().filter((column) => column.key !== 'project_name')
-                }
+                columns={tableColumns}
                 rows={results}
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}
