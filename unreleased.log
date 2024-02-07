@@ -1,3 +1,8 @@
+eacd72af88 Refactor the SearchFiltersWrapper  (#2131)
+a568573e72 SW-4767 Implement the project featured filter in the nursery withdrawals view (#2130)
+eb29e876ac Remove superfluous react fragment (#2129)
+e0aa7f358f SW-4767 Refactor nursery withdrawals table to use the search filters wrapper, implement noScroll option into the wrapper so we can let the implementation decide since this table needs it and others don't (#2128)
+0844d8e7da SW-4767 Add projects filter to planting progress table (#2117)
 382d8cb252 SW-4790 Validate subzone minimum size contraints (#2125)
 37097bd02e Move some dependencies to dev dependencies (#2035)
 97304037c8 SW-4643 Add Playwright support and remove Cypress (#2119)
