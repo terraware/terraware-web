@@ -10,7 +10,7 @@ import strings from 'src/strings';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { PlantingSeason } from 'src/types/Tracking';
 import { useProjects } from 'src/hooks/useProjects';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -28,10 +28,11 @@ import DeletePlantingSiteModal from './DeletePlantingSiteModal';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
+    alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    minHeight: '50px',
   },
 }));
 
@@ -40,6 +41,7 @@ export default function PlantingSiteView(): JSX.Element {
   const classes = useStyles();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
+  const { user } = useUser();
   const dispatch = useAppDispatch();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
@@ -79,6 +81,18 @@ export default function PlantingSiteView(): JSX.Element {
     [plantingSite?.boundary, plantingSite?.plantingZones, view]
   );
 
+  /**
+   * Check if the planting site is editable.
+   * If the site is in draft state, the admin user that created this site can edit the site - others can't.
+   * Other sites are editable to all admins/owners.
+   */
+  const isEditable = useMemo<boolean>(() => {
+     const isDraft = false; // TODO: fetch draft status from site
+     const createdBy = 0; // TODO: fetch created by from site
+
+     return !!plantingSite && (!isDraft || createdBy === user?.id);
+  }, [plantingSite, user?.id]);
+
   useEffect(() => {
     const siteId = Number(plantingSiteId);
     if (!isNaN(siteId)) {
@@ -99,24 +113,26 @@ export default function PlantingSiteView(): JSX.Element {
           <Typography fontSize='20px' fontWeight={600}>
             {plantingSite?.name}
           </Typography>
-          <Box display='flex' alignItems='center'>
-            <Button
-              icon='iconEdit'
-              label={isMobile ? undefined : strings.EDIT_PLANTING_SITE}
-              priority='primary'
-              size='medium'
-              onClick={goToEditPlantingSite}
-            />
-            <OptionsMenu
-              size='small'
-              onOptionItemClick={(item: DropdownItem) => {
-                if (item.value === 'delete-planting-site') {
-                  setDeleteModalOpen(true);
-                }
-              }}
-              optionItems={[{ label: strings.DELETE, value: 'delete-planting-site', type: 'destructive' }]}
-            />
-          </Box>
+          {isEditable && (
+            <Box display='flex' alignItems='center'>
+              <Button
+                icon='iconEdit'
+                label={isMobile ? undefined : strings.EDIT_PLANTING_SITE}
+                priority='primary'
+                size='medium'
+                onClick={goToEditPlantingSite}
+              />
+              <OptionsMenu
+                size='small'
+                onOptionItemClick={(item: DropdownItem) => {
+                  if (item.value === 'delete-planting-site') {
+                    setDeleteModalOpen(true);
+                  }
+                }}
+                optionItems={[{ label: strings.DELETE, value: 'delete-planting-site', type: 'destructive' }]}
+              />
+            </Box>
+          )}
         </Grid>
         <Grid item xs={12}>
           <PageSnackbar />
