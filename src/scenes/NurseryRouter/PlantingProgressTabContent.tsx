@@ -106,12 +106,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
           : strings.PLANTING_PROGRESS_MAP_DESCRIPTION}
       </Typography>
       <ListMapView
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          flexGrow: 1,
-          padding: isMobile ? theme.spacing(3) : theme.spacing(3, 0, 0),
-        }}
+        style={{ padding: isMobile ? theme.spacing(3) : theme.spacing(3, 0, 0) }}
         initialView={initialView}
         onView={setActiveView}
         search={<SearchComponent view={activeView} onChangePlantingSite={setSelectedPlantingSiteId} {...searchProps} />}
