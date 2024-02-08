@@ -278,6 +278,8 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const hasErrors = () => {
     if (record) {
       const seedTestedError = record.testType !== 'Cut' ? !validateSeedsTested(record.seedsTested) : false;
+      const seedTestedError =
+        record.testType !== 'Cut' && record?.id === -1 ? !validateSeedsTested(record.seedsTested) : false;
       const seedsGerminatedError = !validateSeedsGerminated();
       const startDateError = !validateStartDate();
       const recordingDateError = !validateRecordingDate();
@@ -585,7 +587,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                     aria-label={strings.DATE}
                     value={record?.startDate}
                     onChange={(value) => onChangeDate('startDate', value)}
-                    disabled={readOnly}
+                    disabled={readOnly || record?.id !== -1}
                     errorText={viabilityFieldsErrors.startDate}
                     defaultTimeZone={tz.id}
                   />
@@ -607,7 +609,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       onChange={(value) => onChangeSeedsTested('seedsTested', value)}
                       id='seedsTested'
                       value={record?.seedsTested}
-                      disabled={readOnly}
+                      disabled={readOnly || record?.id !== -1}
                       errorText={viabilityFieldsErrors.seedsTested}
                     />
                   )}
