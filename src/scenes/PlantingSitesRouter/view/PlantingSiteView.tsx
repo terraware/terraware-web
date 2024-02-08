@@ -24,7 +24,7 @@ import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { View } from 'src/components/common/ListMapSelector';
 import SimplePlantingSite from './SimplePlantingSite';
-import DeletePlantingSiteModal from './DeletePlantingSiteModal';
+import DeletePlantingSiteModal from 'src/scenes/PlantingSitesRouter/edit/DeletePlantingSiteModal';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {

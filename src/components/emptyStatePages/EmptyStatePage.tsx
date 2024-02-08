@@ -15,7 +15,7 @@ import { isContributor } from 'src/utils/organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportInventoryModal, { downloadInventoryCsvTemplate } from 'src/scenes/InventoryRouter/ImportInventoryModal';
-import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/PlantingSiteTypeSelect';
+import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
 import { useOrganization } from 'src/providers/hooks';
 
 interface StyleProps {

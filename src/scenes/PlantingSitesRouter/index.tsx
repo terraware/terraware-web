@@ -12,11 +12,11 @@ import {
   selectPlantingSiteObservationsResultsError,
 } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
-import PlantingSiteCreate from './PlantingSiteCreate';
-import PlantingSitesList from './PlantingSitesList';
-import PlantingSiteView from './PlantingSiteView';
-import PlantingSiteSubzoneView from './PlantingSiteSubzoneView';
-import PlantingSiteZoneView from './PlantingSiteZoneView';
+import PlantingSiteCreate from './edit/PlantingSiteCreate';
+import PlantingSitesList from './view/PlantingSitesList';
+import PlantingSiteView from './view/PlantingSiteView';
+import PlantingSiteSubzoneView from './view/PlantingSiteSubzoneView';
+import PlantingSiteZoneView from './view/PlantingSiteZoneView';
 import PlantingSiteDraftCreate from './draft/PlantingSiteDraftCreate';
 import PlantingSiteDraftEdit from './draft/PlantingSiteDraftEdit';
 import PlantingSiteDraftView from './draft/PlantingSiteDraftView';
