@@ -312,6 +312,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
         const { id, name } = properties;
 
         const close = () => {
+          setOverridePopupInfo(undefined);
           onClose?.();
         };
 

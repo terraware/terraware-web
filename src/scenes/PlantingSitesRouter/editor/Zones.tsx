@@ -244,6 +244,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         const { id, name, targetPlantingDensity } = properties;
 
         const close = () => {
+          setOverridePopupInfo(undefined);
           onClose?.();
         };
 
