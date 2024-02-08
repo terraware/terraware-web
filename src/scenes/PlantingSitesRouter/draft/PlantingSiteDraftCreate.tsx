@@ -24,7 +24,7 @@ export default function PlantingSiteDraftCreate(props: PlantingSiteDraftCreatePr
     [selectedOrganization.id]
   );
 
-  const siteType = useMemo<SiteType>(() => query.has('detailed') ? 'detailed' : 'simple', [query]);
+  const siteType = useMemo<SiteType>(() => (query.has('detailed') ? 'detailed' : 'simple'), [query]);
 
   return <PlantingSiteEditor reloadPlantingSites={reloadPlantingSites} site={site} siteType={siteType} />;
 }

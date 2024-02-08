@@ -28,12 +28,12 @@ export default function PlantingSiteDraftEdit(props: PlantingSiteDraftEditProps)
   }, [activeLocale, dispatch, plantingSiteId]);
 
   const siteType = useMemo<SiteType>(() => {
-     // TODO: get planting site type when BE model has support
-     if (plantingSite) {
-       return 'simple';
-     } else {
-       return 'simple';
-     }
+    // TODO: get planting site type when BE model has support
+    if (plantingSite) {
+      return 'simple';
+    } else {
+      return 'simple';
+    }
   }, [plantingSite]);
 
   // TODO: handle error state?

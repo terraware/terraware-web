@@ -87,10 +87,10 @@ export default function PlantingSiteView(): JSX.Element {
    * Other sites are editable to all admins/owners.
    */
   const isEditable = useMemo<boolean>(() => {
-     const isDraft = false; // TODO: fetch draft status from site
-     const createdBy = 0; // TODO: fetch created by from site
+    const isDraft = false; // TODO: fetch draft status from site
+    const createdBy = 0; // TODO: fetch created by from site
 
-     return !!plantingSite && (!isDraft || createdBy === user?.id);
+    return !!plantingSite && (!isDraft || createdBy === user?.id);
   }, [plantingSite, user?.id]);
 
   useEffect(() => {
